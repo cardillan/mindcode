@@ -9,6 +9,7 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
 
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class AbstractAstBuilderTest extends AbstractTestBase {
@@ -19,23 +20,25 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
     }
 
     protected AstModule build(ExpectedMessages expectedMessages, InputFiles inputFiles) {
-        return process(expectedMessages, inputFiles, null, c -> c.getModule(inputFiles.getMainInputFile()));
+        return Objects.requireNonNull(
+                process(expectedMessages, inputFiles, null, c -> c.getModule(inputFiles.getMainInputFile()))
+        );
     }
 
-    protected void assertBuildsTo(ExpectedMessages expectedMessages, String source, AstMindcodeNode expected) {
+    protected void assertBuildsTo(ExpectedMessages expectedMessages, String source, AstModule expected) {
         AstMindcodeNode actual = build(expectedMessages, InputFiles.fromSource(source));
         Assertions.assertEquals(expected, actual);
     }
 
     protected void assertBuildsTo(ExpectedMessages expectedMessages, String source, List<AstMindcodeNode> expected) {
-        assertBuildsTo(expectedMessages, source, new AstModule(EMPTY, expected));
+        assertBuildsTo(expectedMessages, source, new AstModule(EMPTY, null, expected));
     }
 
     protected void assertBuildsTo(String source, List<AstMindcodeNode> expected) {
         assertBuildsTo(expectedMessages(), source, expected);
     }
 
-    protected void assertBuildsTo(String source, AstMindcodeNode expected) {
+    protected void assertBuildsTo(String source, AstModule expected) {
         assertBuildsTo(expectedMessages(), source, expected);
     }
 

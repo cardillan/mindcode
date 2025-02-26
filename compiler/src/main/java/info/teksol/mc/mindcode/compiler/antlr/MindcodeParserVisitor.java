@@ -50,6 +50,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstVariableDeclaration(MindcodeParser.AstVariableDeclarationContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astModuleDeclaration}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstModuleDeclaration(MindcodeParser.AstModuleDeclarationContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astEnhancedComment}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree

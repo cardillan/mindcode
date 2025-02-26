@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.ast;
 
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -674,6 +675,28 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         }
 
         @Test
+        void buildsModule() {
+            AstModuleDeclaration declaration = new AstModuleDeclaration(EMPTY, id("test"));
+            assertBuildsTo("""
+                            module test;
+                            var a = 1;
+                            """,
+                    new AstModule(EMPTY,
+                            declaration,
+                            List.of(
+                                    declaration,
+                                    new AstVariablesDeclaration(EMPTY,
+                                            List.of(),
+                                            List.of(
+                                                    new AstVariableSpecification(EMPTY, a, l1)
+                                            )
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
         void buildsParameters() {
             assertBuildsTo("""
                             /** Comment1 */
@@ -686,6 +709,30 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     new AstDocComment(EMPTY, "/** Comment2 */"),
                                     id("MIN"),
                                     new AstLiteralDecimal(EMPTY, "10")
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsRemoteVariables() {
+            AstModuleDeclaration declaration = new AstModuleDeclaration(EMPTY, id("test"));
+            assertBuildsTo("""
+                            module test;
+                            remote var a = 1;
+                            """,
+                    new AstModule(EMPTY,
+                            declaration,
+                            List.of(
+                                    declaration,
+                                    new AstVariablesDeclaration(EMPTY,
+                                            List.of(
+                                                    new AstVariableModifier(EMPTY, Modifier.REMOTE, null)
+                                            ),
+                                            List.of(
+                                                    new AstVariableSpecification(EMPTY, a, l1)
+                                            )
+                                    )
                             )
                     )
             );
@@ -1455,6 +1502,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             /** Comment3 */
                             inline def b(a...) a; end;
                             noinline void c(in a, out b, in out c, out in d) a + b; end;
+                            remote def d() end;
                             """,
                     List.of(
                             new AstFunctionDeclaration(EMPTY,
@@ -1463,16 +1511,14 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     DataType.VAR,
                                     List.of(),
                                     List.of(),
-                                    false,
-                                    false),
+                                    CallType.NONE),
                             new AstFunctionDeclaration(EMPTY,
                                     new AstDocComment(EMPTY, "/** Comment3 */"),
                                     b,
                                     DataType.VAR,
                                     List.of(new AstFunctionParameter(EMPTY, a, false, false, true)),
                                     List.of(a),
-                                    true,
-                                    false),
+                                    CallType.INLINE),
                             new AstFunctionDeclaration(EMPTY,
                                     null,
                                     c,
@@ -1484,8 +1530,14 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstFunctionParameter(EMPTY, d, true, true, false)
                                     ),
                                     List.of(new AstOperatorBinary(EMPTY, ADD, a, b)),
-                                    false,
-                                    true)
+                                    CallType.NOINLINE),
+                            new AstFunctionDeclaration(EMPTY,
+                                    null,
+                                    d,
+                                    DataType.VAR,
+                                    List.of(),
+                                    List.of(),
+                                    CallType.REMOTE)
                     )
             );
         }
@@ -1830,7 +1882,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         void buildsLibraryRequire() {
             assertBuildsTo("require math;",
                     List.of(
-                            new AstRequireLibrary(EMPTY, new AstIdentifier(EMPTY, "math"))
+                            new AstRequireLibrary(EMPTY, new AstIdentifier(EMPTY, "math"), null)
                     )
             );
         }
@@ -1844,7 +1896,22 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     expectedMessages().add(1, 9, "Error reading file '" + fileName + "'."),
                     "require \"" + fileName + "\";",
                     List.of(
-                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName))
+                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName), null)
+                    )
+            );
+        }
+
+        @Test
+        void buildsFileRequireRemote() {
+            // If this file exists, the test will fail
+            final String fileName = "s6zoH0%IbSsQH4!MOmpu%eDO-H!#Z81dr2xSYGds6xhTzx^V#ie7UNikF$xtYUAi";
+
+            assertBuildsTo(
+                    expectedMessages().add(1, 9, "Error reading file '" + fileName + "'."),
+                    "require \"" + fileName + "\" remote processor1;",
+                    List.of(
+                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName),
+                                    id("processor1"))
                     )
             );
         }

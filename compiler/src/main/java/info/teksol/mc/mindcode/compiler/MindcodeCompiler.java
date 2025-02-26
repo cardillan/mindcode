@@ -18,10 +18,7 @@ import info.teksol.mc.mindcode.compiler.antlr.MindcodeParser.AstModuleContext;
 import info.teksol.mc.mindcode.compiler.ast.AstBuilder;
 import info.teksol.mc.mindcode.compiler.ast.AstBuilderContext;
 import info.teksol.mc.mindcode.compiler.ast.ParserAbort;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstAllocation;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstProgram;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequire;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraphCreator;
@@ -70,6 +67,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
     private final Map<InputFile, AstModuleContext> parseTrees = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
+    private final Map<AstModule, List<AstRequire>> moduleRequirements = new HashMap<>();
+    private final Map<AstModule, List<AstIdentifier>> moduleProcessors = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
     private final ReturnStack returnStack;
     private final StackTracker stackTracker;
@@ -143,6 +142,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             while (!files.isEmpty()) {
                 InputFile inputFile = files.remove();
                 if (processedFiles.add(inputFile)) {
+                    requirements.clear();
+
                     long parseStart = System.nanoTime();
                     CommonTokenStream tokenStream = LexerParser.createTokenStream(messageConsumer, inputFile);
                     tokenStreams.put(inputFile, tokenStream);
@@ -156,6 +157,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                     modules.put(inputFile, module);
                     moduleList.addFirst(module);
                     parseTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
+
+                    moduleRequirements.put(module, List.copyOf(requirements));
 
                     // Requirements are added by the AstBuilder via AstBuilderContext
                     requirements.stream()

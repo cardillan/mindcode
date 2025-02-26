@@ -12,6 +12,7 @@ public enum Modifier {
     EXTERNAL        (MindcodeLexer.EXTERNAL),
     LINKED          (MindcodeLexer.LINKED),
     NOINIT          (MindcodeLexer.NOINIT),
+    REMOTE          (MindcodeLexer.REMOTE),
     VOLATILE        (MindcodeLexer.VOLATILE),
     ;
 
@@ -45,11 +46,12 @@ public enum Modifier {
 
     private static Map<Modifier, Set<Modifier>> compatibilityMap() {
         Map<Modifier, Set<Modifier>> map = new HashMap<>();
-        map.put(CACHED, Set.of(EXTERNAL, NOINIT));
+        map.put(CACHED, Set.of(EXTERNAL, NOINIT, REMOTE));
         map.put(EXTERNAL, Set.of(CACHED, NOINIT));
         map.put(LINKED, Set.of(NOINIT));
         map.put(NOINIT, Set.of(CACHED, EXTERNAL, LINKED, VOLATILE));
-        map.put(VOLATILE, Set.of(NOINIT));
+        map.put(REMOTE, Set.of(CACHED, VOLATILE));
+        map.put(VOLATILE, Set.of(NOINIT, REMOTE));
         return map;
     }
 }

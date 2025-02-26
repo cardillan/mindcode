@@ -11,10 +11,12 @@ import java.util.Objects;
 @AstNode(printFlat = true)
 public class AstRequireFile extends AstRequire {
     private final AstLiteralString file;
+    private final @Nullable AstIdentifier processor;
 
-    public AstRequireFile(SourcePosition sourcePosition, AstLiteralString file) {
+    public AstRequireFile(SourcePosition sourcePosition, AstLiteralString file, @Nullable AstIdentifier processor) {
         super(sourcePosition, file);
         this.file = Objects.requireNonNull(file);
+        this.processor = processor;
     }
 
     public AstLiteralString getFile() {
@@ -32,12 +34,17 @@ public class AstRequireFile extends AstRequire {
     }
 
     @Override
+    public @Nullable AstIdentifier getProcessor() {
+        return processor;
+    }
+
+    @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         AstRequireFile that = (AstRequireFile) o;
-        return file.equals(that.file);
+        return file.equals(that.file) && Objects.equals(processor, that.processor);
     }
 
     @Override
