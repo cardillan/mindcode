@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -19,19 +20,16 @@ public class AstFunctionDeclaration extends AstDeclaration {
     private final DataType dataType;
     private final List<AstFunctionParameter> parameters;
     private final List<AstMindcodeNode> body;
-    private final boolean inline;
-    private final boolean noinline;
+    private final CallType callType;
 
     public AstFunctionDeclaration(SourcePosition sourcePosition, @Nullable AstDocComment docComment, AstIdentifier identifier,
-            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body,
-            boolean inline, boolean noinline) {
+            DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body, CallType callType) {
         super(sourcePosition, children(list(identifier), parameters, body), docComment);
         this.identifier = identifier;
         this.dataType = dataType;
         this.parameters = parameters;
         this.body = body;
-        this.inline = inline;
-        this.noinline = noinline;
+        this.callType = callType;
     }
 
     public AstIdentifier getIdentifier() {
@@ -58,12 +56,20 @@ public class AstFunctionDeclaration extends AstDeclaration {
         return body;
     }
 
+    public CallType getCallType() {
+        return callType;
+    }
+
     public boolean isInline() {
-        return inline;
+        return callType == CallType.INLINE;
     }
 
     public boolean isNoinline() {
-        return noinline;
+        return callType == CallType.NOINLINE;
+    }
+
+    public boolean isRemote() {
+        return callType == CallType.REMOTE;
     }
 
     public boolean isVarargs() {
@@ -94,7 +100,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstFunctionDeclaration that = (AstFunctionDeclaration) o;
-        return inline == that.inline && noinline == that.noinline && identifier.equals(that.identifier) && dataType == that.dataType
+        return callType == that.callType && identifier.equals(that.identifier) && dataType == that.dataType
                && parameters.equals(that.parameters) && body.equals(that.body);
     }
 
@@ -104,8 +110,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
         result = 31 * result + dataType.hashCode();
         result = 31 * result + parameters.hashCode();
         result = 31 * result + body.hashCode();
-        result = 31 * result + Boolean.hashCode(inline);
-        result = 31 * result + Boolean.hashCode(noinline);
+        result = 31 * result + callType.hashCode();
         return result;
     }
 

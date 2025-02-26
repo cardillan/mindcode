@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
@@ -119,8 +120,7 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
                 DataType.VOID,
                 List.of(),
                 List.of(),
-                false,
-                false);
+                CallType.NONE);
     }
 }
 

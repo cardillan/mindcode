@@ -1029,7 +1029,7 @@ read from standard input, it is evaluated from the current directory.
 > Only command line tool allows you to use code from an external file. The web application cannot access your local 
 > files by specified path, and the `file` option is therefore disabled there.
 
-### Processor code
+### Combining code snippets
 
 A program will typically consist of just one code snippet. Using multiple code snippets is primarily used to 
 parametrize a common code shared between multiple processors, for example:

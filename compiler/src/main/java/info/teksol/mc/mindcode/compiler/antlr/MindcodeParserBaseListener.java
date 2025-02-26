@@ -89,6 +89,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstModuleDeclaration(MindcodeParser.AstModuleDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstModuleDeclaration(MindcodeParser.AstModuleDeclarationContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstEnhancedComment(MindcodeParser.AstEnhancedCommentContext ctx) { }
 	/**
 	 * {@inheritDoc}

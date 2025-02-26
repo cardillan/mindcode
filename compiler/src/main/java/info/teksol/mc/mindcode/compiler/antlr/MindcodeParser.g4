@@ -32,13 +32,14 @@ statement
     : expression                                                                        # astExpression
     | directive                                                                         # astDirective
     | variableDeclaration                                                               # astVariableDeclaration
+    | MODULE name = IDENTIFIER                                                          # astModuleDeclaration
     | ENHANCEDCOMMENT formattableContents*                                              # astEnhancedComment
     | ALLOCATE allocations                                                              # astAllocations
     | CONST name = IDENTIFIER ASSIGN value = expression                                 # astConstant
     | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
-    | REQUIRE file = STRING                                                             # astRequireFile
-    | REQUIRE library = IDENTIFIER                                                      # astRequireLibrary
-    | inline = (INLINE | NOINLINE)? type = (VOID | DEF) name = IDENTIFIER
+    | REQUIRE file = STRING (REMOTE processor = IDENTIFIER)?                            # astRequireFile
+    | REQUIRE library = IDENTIFIER (REMOTE processor = IDENTIFIER)?                     # astRequireLibrary
+    | callType = (INLINE | NOINLINE | REMOTE)? type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = astStatementList? END                             # astFunctionDeclaration
     | (label = IDENTIFIER COLON)? FOR iterators = iteratorsValuesGroups
         DO body = astStatementList? END                                                 # astForEachLoopStatement
@@ -72,13 +73,14 @@ variableDeclaration
     ;
 
 declModifier
-    : modifier = EXTERNAL (memory = IDENTIFIER)?
-    | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
+    : modifier = CACHED
+    | modifier = EXTERNAL (memory = IDENTIFIER)?
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET index = expression RBRACKET
+    | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
     | modifier = LINKED
-    | modifier = CACHED
-    | modifier = VOLATILE
     | modifier = NOINIT
+    | modifier = REMOTE
+    | modifier = VOLATILE
     ;
 
 // To be extended in the future with more types

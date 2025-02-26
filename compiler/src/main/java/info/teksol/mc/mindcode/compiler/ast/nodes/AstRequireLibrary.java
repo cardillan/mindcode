@@ -11,10 +11,12 @@ import java.util.Objects;
 @AstNode(printFlat = true)
 public class AstRequireLibrary extends AstRequire {
     private final AstIdentifier library;
+    private final @Nullable AstIdentifier processor;
 
-    public AstRequireLibrary(SourcePosition sourcePosition, AstIdentifier library) {
+    public AstRequireLibrary(SourcePosition sourcePosition, AstIdentifier library, @Nullable AstIdentifier processor) {
         super(sourcePosition, library);
         this.library = Objects.requireNonNull(library);
+        this.processor = processor;
     }
 
     public AstIdentifier getLibrary() {
@@ -32,12 +34,17 @@ public class AstRequireLibrary extends AstRequire {
     }
 
     @Override
+    public @Nullable AstIdentifier getProcessor() {
+        return processor;
+    }
+
+    @Override
     public boolean equals(@Nullable Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         AstRequireLibrary that = (AstRequireLibrary) o;
-        return library.equals(that.library);
+        return library.equals(that.library) && Objects.equals(processor, that.processor);
     }
 
     @Override

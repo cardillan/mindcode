@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.astcontext;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
@@ -24,10 +25,10 @@ class AstContextTest {
     private final CallGraph callGraph = CallGraph.createEmpty();
     private final AstFunctionDeclaration functionDeclaration1 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test1"), DataType.VAR,
-            List.of(), List.of(), false, false);
+            List.of(), List.of(), CallType.NONE);
     private final AstFunctionDeclaration functionDeclaration2 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test2"), DataType.VAR,
-            List.of(), List.of(), false, false);
+            List.of(), List.of(), CallType.NONE);
     private MindcodeFunction function1;
     private MindcodeFunction function2;
     private AstContext context;

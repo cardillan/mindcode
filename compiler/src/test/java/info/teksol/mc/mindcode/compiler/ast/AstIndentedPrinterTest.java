@@ -30,6 +30,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         """,
                 """
                         AstModule {
+                            declaration = null,
                             statements = [
                                 AstFunctionCall {
                                     object = null,
@@ -83,6 +84,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         """,
                 """
                         AstModule {
+                            declaration = null,
                             statements = [
                                 AstAllocations{allocations = AstAllocation{type = STACK, memory = AstIdentifier{name = "bank1", external = false}, range = AstRange {
                                     firstValue = AstLiteralDecimal{literal = "0", suppressWarning = false},
@@ -144,8 +146,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                             }
                                         }
                                     },
-                                    inline = false,
-                                    noinline = false
+                                    callType = NONE
                                 },
                                 AstFunctionCall {
                                     object = null,
@@ -172,6 +173,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
     @Test
     void printsWhileIfBreak() {
         assertPrints("""
+                        module test;
+                        
                         while true do
                             print("In loop");
                             if @unit.@dead === 0 then
@@ -183,7 +186,9 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                         """,
                 """
                         AstModule {
+                            declaration = AstModuleDeclaration{name = AstIdentifier{name = "test", external = false}},
                             statements = [
+                                AstModuleDeclaration{name = AstIdentifier{name = "test", external = false}},
                                 AstWhileLoopStatement {
                                     label = null,
                                     condition = AstLiteralBoolean{literal = "true", suppressWarning = false},

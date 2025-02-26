@@ -94,6 +94,7 @@ public class ERR {
     public static final String MLOG_OUT_STRING_NOT_ALLOWED = "A string literal passed to the '%s' function must not use an 'out' modifier.";
     public static final String MLOG_UNSPECIFIED_ARGUMENT = "All arguments to the '%s' function need to be specified.";
     public static final String MLOG_VARIABLE_WITHOUT_MODIFIERS = "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.";
+    public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
     public static final String PRINTF_REQUIRES_TARGET_8 = "The printf function requires language target 8 or higher.";

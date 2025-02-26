@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.ast;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
@@ -30,6 +31,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private final AstBuilderContext context;
     private final InputFile inputFile;
     private final CommonTokenStream tokenStream;
+
+    @Nullable AstModuleDeclaration moduleDeclaration;
 
     private AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream) {
         this.context = context;
@@ -179,7 +182,9 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //<editor-fold desc="Rules: basic structures">
     @Override
     public AstModule visitAstModule(MindcodeParser.AstModuleContext ctx) {
-        return new AstModule(pos(ctx), processBody(ctx.astStatementList()));
+        moduleDeclaration = null;
+        List<AstMindcodeNode> body = processBody(ctx.astStatementList());
+        return new AstModule(pos(ctx), moduleDeclaration, body);
     }
 
     @Override
@@ -272,15 +277,29 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstModuleDeclaration visitAstModuleDeclaration(AstModuleDeclarationContext ctx) {
+        AstModuleDeclaration declaration = new AstModuleDeclaration(pos(ctx), identifier(ctx.name));
+        if (moduleDeclaration != null) {
+            context.error(declaration, ERR.MULTIPLE_MODULE_DECLARATIONS);
+        } else {
+            moduleDeclaration = declaration;
+        }
+
+        return declaration;
+    }
+
+    @Override
     public AstRequireFile visitAstRequireFile(MindcodeParser.AstRequireFileContext ctx) {
-        AstRequireFile requirement = new AstRequireFile(pos(ctx), literalString(ctx.STRING()));
+        AstRequireFile requirement = new AstRequireFile(pos(ctx), literalString(ctx.STRING()),
+                identifierIfNonNull(ctx.processor));
         context.addRequirement(requirement);
         return requirement;
     }
 
     @Override
     public AstRequireLibrary visitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx) {
-        AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), identifier(ctx.library));
+        AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), identifier(ctx.library),
+                identifierIfNonNull(ctx.processor));
         context.addRequirement(requirement);
         return requirement;
     }
@@ -348,8 +367,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 dataType,
                 processParameterList(ctx.parameterList()),
                 processBody(ctx.body),
-                ctx.INLINE() != null,
-                ctx.NOINLINE() != null);
+                ctx.callType == null ? CallType.NONE : CallType.fromToken(ctx.callType.getType()));
     }
 
     private List<AstFunctionParameter> processParameterList(MindcodeParser.ParameterListContext ctx) {

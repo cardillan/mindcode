@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.ast.nodes;
 
 import info.teksol.mc.common.SourcePosition;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public abstract class AstRequire extends AstDeclaration {
@@ -13,4 +14,6 @@ public abstract class AstRequire extends AstDeclaration {
     public abstract boolean isLibrary();
 
     public abstract String getName();
+
+    public abstract @Nullable AstIdentifier getProcessor();
 }
