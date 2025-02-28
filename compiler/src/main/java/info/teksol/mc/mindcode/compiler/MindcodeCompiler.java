@@ -49,6 +49,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @NullMarked
 public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
@@ -66,9 +67,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     // Intermediate and final results
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
     private final Map<InputFile, AstModuleContext> parseTrees = new HashMap<>();
+    private final Map<InputFile, @Nullable AstIdentifier> processors = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
-    private final Map<AstModule, List<AstRequire>> moduleRequirements = new HashMap<>();
-    private final Map<AstModule, List<AstIdentifier>> moduleProcessors = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
     private final ReturnStack returnStack;
     private final StackTracker stackTracker;
@@ -124,14 +124,15 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     public void compile() {
-        compile(new LinkedList<>(inputFiles.getInputFiles()));
+        compile(inputFiles.getInputFiles());
     }
 
     public void compile(InputFile file) {
-        compile(new LinkedList<>(List.of(file)));
+        compile(List.of(file));
     }
 
-    private void compile(Queue<InputFile> files) {
+    private void compile(List<InputFile> files) {
+        Queue<ModulePlacement> inputs = files.stream().map(f -> new ModulePlacement(f, null)).collect(Collectors.toCollection(LinkedList::new));
         Set<InputFile> processedFiles = new HashSet<>();
         List<AstModule> moduleList = new LinkedList<>();
         RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, profile, inputFiles);
@@ -139,40 +140,59 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         long parseTime = 0;
         // Process all input files including files discovered through require directive.
         try {
-            while (!files.isEmpty()) {
-                InputFile inputFile = files.remove();
-                if (processedFiles.add(inputFile)) {
+            while (!inputs.isEmpty()) {
+                ModulePlacement input = inputs.remove();
+                if (processedFiles.add(input.inputFile)) {
                     requirements.clear();
 
                     long parseStart = System.nanoTime();
-                    CommonTokenStream tokenStream = LexerParser.createTokenStream(messageConsumer, inputFile);
-                    tokenStreams.put(inputFile, tokenStream);
+                    CommonTokenStream tokenStream = LexerParser.createTokenStream(messageConsumer, input.inputFile);
+                    tokenStreams.put(input.inputFile, tokenStream);
                     if (targetPhase == CompilationPhase.LEXER) continue;
 
-                    AstModuleContext parseTree = LexerParser.parseTree(messageConsumer, inputFile, tokenStream);
-                    parseTrees.put(inputFile, parseTree);
+                    AstModuleContext parseTree = LexerParser.parseTree(messageConsumer, input.inputFile, tokenStream);
+                    parseTrees.put(input.inputFile, parseTree);
                     if (targetPhase == CompilationPhase.PARSER) continue;
 
-                    AstModule module = AstBuilder.build(this, inputFile, tokenStream, parseTree);
-                    modules.put(inputFile, module);
+                    AstModule module = AstBuilder.build(this, input.inputFile, tokenStream, parseTree, input.remoteProcessor);
+                    modules.put(input.inputFile, module);
                     moduleList.addFirst(module);
                     parseTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
-                    moduleRequirements.put(module, List.copyOf(requirements));
-
                     // Requirements are added by the AstBuilder via AstBuilderContext
-                    requirements.stream()
-                            .map(requirementsProcessor::processRequirement)
-                            .filter(Objects::nonNull)
-                            .forEach(files::add);
+                    for (AstRequire requirement : requirements) {
+                        InputFile inputFile = requirementsProcessor.processRequirement(requirement);
+                        if (inputFile == null) continue;
+
+                        if (processors.containsKey(inputFile)) {
+                            if (requirement.getProcessor() != null || processors.get(inputFile) != null) {
+                                AstModule requiredModule = modules.get(inputFile);
+                                error(requirement, ERR.MULTIPLE_MODULE_INSTANTIATIONS,
+                                        requiredModule.getModuleName(), inputFile.getDistinctTitle());
+                            }
+                        } else {
+                            processors.put(inputFile, input.remoteProcessor);
+
+                            // Do not process requirements of modules representing remote processors
+                            if (input.remoteProcessor == null) {
+                                inputs.add(new ModulePlacement(inputFile, requirement.getProcessor()));
+                            }
+                        }
+                    }
                 }
             }
         } catch (ParserAbort ignored) {
             // The error has already been reported
         }
 
-        astProgram = new AstProgram(new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
+        if (!modules.isEmpty()) {
+            astProgram = new AstProgram(new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
+        }
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
+
+        if (astProgram == null) {
+            throw new MindcodeInternalError("Program is empty.");
+        }
 
         if (profile.getParseTreeLevel() > 0) {
             debug("Parse tree:");
@@ -194,7 +214,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         assembler = new CodeAssembler(this);
         compileTimeEvaluator = new CompileTimeEvaluator(this);
 
-        new CodeGenerator(this).generateCode(astProgram);
+        CodeGenerator.generateCode(this, astProgram);
 
         if (assembler.isInternalError() && !hasErrors()) {
             throw new MindcodeInternalError("Internal error encountered.");
@@ -211,7 +231,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         if (profile.optimizationsActive() && instructions.size() > 1) {
             final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
                     ? debugPrinterProvider.apply(profile.getDebugLevel()) : new NullDebugPrinter();
-            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer, arrayExpander);
+            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer, arrayExpander,
+                    !astProgram.isMainProgram());
             optimizer.setDebugPrinter(debugPrinter);
             instructions = optimizer.optimize(callGraph, instructions, rootAstContext);
             debugPrinter.print(this::debug);
@@ -431,5 +452,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     @Override
     public Variables variables() {
         return Objects.requireNonNull(variables);
+    }
+
+
+    private record ModulePlacement(InputFile inputFile, @Nullable AstIdentifier remoteProcessor) {
     }
 }

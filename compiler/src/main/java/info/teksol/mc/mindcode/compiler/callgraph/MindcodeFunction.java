@@ -25,6 +25,7 @@ public class MindcodeFunction {
 
     // Function properties
     private final AstFunctionDeclaration declaration;
+    private final boolean entryPoint;
     private final IntRange parameterCount;
     private Map<String, AstFunctionParameter> parameterMap = Map.of();
 
@@ -52,8 +53,9 @@ public class MindcodeFunction {
     private final Set<MindcodeFunction> recursiveCalls = new HashSet<>();
     private final Set<MindcodeFunction> indirectCalls = new HashSet<>();
 
-    MindcodeFunction(AstFunctionDeclaration declaration) {
+    MindcodeFunction(AstFunctionDeclaration declaration, boolean entryPoint) {
         this.declaration = Objects.requireNonNull(declaration);
+        this.entryPoint = entryPoint;
         parameterCount = declaration.getParameterCount();
     }
 
@@ -61,6 +63,7 @@ public class MindcodeFunction {
         this.prefix = prefix;
 
         declaration = other.declaration;
+        entryPoint = other.entryPoint;
         parameterCount = other.parameterCount;
         placementCount = other.placementCount;
         visited = other.visited;
@@ -100,6 +103,10 @@ public class MindcodeFunction {
                 : Stream.of(call).map(c -> functions.getExactMatch(c, -1)).filter(Objects::nonNull);
     }
 
+    public boolean isEntryPoint() {
+        return entryPoint;
+    }
+
     /// @return true if this is the main function
     public boolean isMain() {
         return declaration.getName().isEmpty();
@@ -108,11 +115,17 @@ public class MindcodeFunction {
     /// @return true if this function should be inlined
     public boolean isInline() {
         // Automatically inline all non-recursive functions called just once
-        return !isRecursive() && !declaration.isNoinline() && (inlined || declaration.isInline() || getPlacementCount() == 1);
+        return !isRecursive() && !isRemote() && !declaration.isNoinline() && (inlined || declaration.isInline() || getPlacementCount() == 1);
     }
 
-    public boolean isNoinline() {
-        return declaration.isNoinline();
+    /// @return true if this function is declared `remote`
+    public boolean isRemote() {
+        return declaration.isRemote();
+    }
+
+    /// @return true if this function cannot be inlined
+    public boolean cannotInline() {
+        return declaration.isNoinline() || declaration.isRemote();
     }
 
     public boolean isVarargs() {

@@ -213,7 +213,8 @@ public class Variables extends AbstractMessageEmitter {
                 return Objects.requireNonNull(globalVariables.get(identifier.getName()));
             }
             return registerGlobalVariable(identifier, LogicVariable.global(identifier,
-                    modifiers.containsKey(Modifier.VOLATILE), modifiers.containsKey(Modifier.NOINIT)));
+                    modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
+                    modifiers.containsKey(Modifier.NOINIT)));
         }
     }
 

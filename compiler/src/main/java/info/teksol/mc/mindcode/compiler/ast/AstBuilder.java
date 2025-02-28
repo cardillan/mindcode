@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.ast;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -31,17 +32,21 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private final AstBuilderContext context;
     private final InputFile inputFile;
     private final CommonTokenStream tokenStream;
+    private final @Nullable AstIdentifier remoteProcessor;
 
     @Nullable AstModuleDeclaration moduleDeclaration;
 
-    private AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream) {
+    private AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream,
+            @Nullable AstIdentifier remoteProcessor) {
         this.context = context;
         this.inputFile = inputFile;
         this.tokenStream = tokenStream;
+        this.remoteProcessor = remoteProcessor;
     }
 
-    public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream, ParseTree tree) {
-        AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream);
+    public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream, ParseTree tree,
+            @Nullable AstIdentifier remoteProcessor) {
+        AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream, remoteProcessor);
         return (AstModule) astBuilder.visitNonNull(tree);
     }
 
@@ -184,7 +189,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstModule visitAstModule(MindcodeParser.AstModuleContext ctx) {
         moduleDeclaration = null;
         List<AstMindcodeNode> body = processBody(ctx.astStatementList());
-        return new AstModule(pos(ctx), moduleDeclaration, body);
+        return new AstModule(pos(ctx), moduleDeclaration, body, remoteProcessor);
     }
 
     @Override
@@ -432,11 +437,10 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstWhileLoopStatement visitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx) {
-//        if (ctx.loop != null) {
-//            context.messageConsumer().accept(CompilerMessage.warn(pos(ctx.loop),
-//                    "The 'loop' keyword is deprecated. Use just 'while' instead."));
-//        }
-//
+        if (ctx.loop != null) {
+            context.warn(pos(ctx.loop), WARN.LOOP_KEYWORD_DEPRECATED);
+        }
+
         return new AstWhileLoopStatement(pos(ctx),
                 identifierIfNonNull(ctx.label),
                 visitAstExpression(ctx.condition),

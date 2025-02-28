@@ -331,6 +331,7 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
                     .flatMap(e -> e.getEnclosedElements().stream())
                     .filter(e -> e.getKind() == ElementKind.FIELD)
                     .map(VariableElement.class::cast)
+                    .filter(e -> !e.getModifiers().contains(Modifier.STATIC))
                     .filter(e -> !ignoredFields.contains(e.getSimpleName().toString()))
                     .toList();
 

@@ -73,7 +73,7 @@ class FunctionInliner extends BaseOptimizer {
             return null;
         }
         MindcodeFunction function = context.function();
-        if (function.isRecursive() || function.isInline() || function.isNoinline()) {
+        if (function.isRecursive() || function.isInline() || function.cannotInline()) {
             return null;
         }
 
@@ -174,7 +174,7 @@ class FunctionInliner extends BaseOptimizer {
             return null;
         }
         MindcodeFunction function = call.function();
-        if (function.isRecursive() || function.isInline() || function.isNoinline()) {
+        if (function.isRecursive() || function.isInline() || function.cannotInline()) {
             return null;
         }
 

@@ -41,6 +41,7 @@ class OptimizationContext {
     private final List<LogicInstruction> program;
     private final CallGraph callGraph;
     private final AstContext rootContext;
+    private final boolean remoteLibrary;
 
     private @Nullable FunctionDataFlow functionDataFlow;
     private @Nullable BitSet unreachableInstructions;
@@ -76,14 +77,15 @@ class OptimizationContext {
 
     OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile profile,
             InstructionProcessor instructionProcessor, List<LogicInstruction> program, CallGraph callGraph,
-            AstContext rootContext) {
+            AstContext rootAstContext, boolean remoteLibrary) {
         this.traceFile = traceFile;
         this.messageConsumer = messageConsumer;
         this.profile = profile;
         this.instructionProcessor = instructionProcessor;
         this.program = program;
         this.callGraph = callGraph;
-        this.rootContext = rootContext;
+        this.rootContext = rootAstContext;
+        this.remoteLibrary = remoteLibrary;
 
         expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
 
@@ -126,6 +128,10 @@ class OptimizationContext {
 
     AstContext getRootContext() {
         return rootContext;
+    }
+
+    public boolean isRemoteLibrary() {
+        return remoteLibrary;
     }
 
     int getModifications() {
@@ -218,6 +224,12 @@ class OptimizationContext {
         unreachableInstructions.set(0, program.size());
         Queue<Integer> heads = new ArrayDeque<>();
         heads.offer(0);
+        callGraph.getFunctions().stream()
+                .filter(f -> f.isEntryPoint() && f.getLabel() != null)
+                .map(MindcodeFunction::getLabel)
+                .map(label -> firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label)))
+                .filter(i -> i >= 0)
+                .forEach(heads::offer);
 
         MainLoop:
         while (!heads.isEmpty()) {

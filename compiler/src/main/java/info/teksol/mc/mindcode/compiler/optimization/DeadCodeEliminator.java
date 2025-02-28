@@ -54,6 +54,7 @@ class DeadCodeEliminator extends BaseOptimizer {
         return reads.stream()
                 .filter(s -> s.getType() != ArgumentType.BLOCK && !writes.containsKey(s))
                 .filter(LogicVariable::isGlobalVariable)        // Non-global variables are handled by Data Flow Optimization
+                .filter(Predicate.not(LogicVariable::isPreserved))
                 .collect(Collectors.toSet());
     }
 
@@ -148,7 +149,7 @@ class DeadCodeEliminator extends BaseOptimizer {
             instruction.outputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)
-                    .filter(Predicate.not(LogicVariable::isCompilerVariable))
+                    .filter(Predicate.not(LogicVariable::isPreserved))
                     .forEach(v -> addWrite(instruction, v));
         }
     }

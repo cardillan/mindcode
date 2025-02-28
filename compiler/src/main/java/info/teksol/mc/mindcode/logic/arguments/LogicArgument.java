@@ -86,8 +86,8 @@ public interface LogicArgument extends LogicReadable {
         return false;
     }
 
-    /// @return true if this is a special compiler-generated variable
-    default boolean isCompilerVariable() {
+    /// @return true if this variable must not be eliminated
+    default boolean isPreserved() {
         return false;
     }
 

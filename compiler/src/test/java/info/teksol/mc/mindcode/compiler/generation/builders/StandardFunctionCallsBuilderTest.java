@@ -1145,14 +1145,84 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesRecursiveInlineFunctions() {
-            assertGeneratesMessages(
-                    expectedMessages().add("Recursive function 'foo' declared 'inline'."),
+            assertGeneratesMessage(
+                    "Recursive function 'foo' declared 'inline'.",
                     """
                             allocate stack in cell1;
                             inline def foo(n)
                                 foo(n - 1);
                             end;
                             print(foo(1) + foo(2));
+                            """
+            );
+        }
+    }
+
+    @Nested
+    class RemoteFunctions {
+
+        @Test
+        void compilesRemoteVoidFunction() {
+            assertCompilesTo("""
+                        module test;
+                        
+                        remote void foo(in a, out b)
+                            b = 2 * a;
+                        end;
+                        """,
+                    createInstruction(INITVAR, ":foo:a", ":foo*retval", ":foo*finished", "null"),
+                    createInstruction(SETADDR, ":foo*address", label(0)),
+                    createInstruction(SET, "*mainProcessor", "@this"),
+                    createInstruction(WAIT, "1000000000000"),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
+                    createInstruction(SET, ":foo:b", tmp(0)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
+                    createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
+                    createInstruction(WAIT, "1000000000000")
+            );
+        }
+
+        @Test
+        void compilesRemoteDefFunction() {
+            assertCompilesTo("""
+                        module test;
+                        
+                        remote def foo(in out a)
+                            return a++ / 2;
+                        end;
+                        """,
+                    createInstruction(INITVAR, ":foo:a", ":foo*retval", ":foo*finished", "null"),
+                    createInstruction(SETADDR, ":foo*address", label(0)),
+                    createInstruction(SET, "*mainProcessor", "@this"),
+                    createInstruction(WAIT, "1000000000000"),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(0), ":foo:a"),
+                    createInstruction(OP, "add", ":foo:a", ":foo:a", "1"),
+                    createInstruction(OP, "div", tmp(1), tmp(0), "2"),
+                    createInstruction(SET, ":foo*retval", tmp(1)),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(SET, ":foo*retval", "null"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(WRITE, ":foo*retval", "*mainProcessor", q(":foo*retval")),
+                    createInstruction(WRITE, ":foo:a", "*mainProcessor", q(":foo:a")),
+                    createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
+                    createInstruction(WAIT, "1000000000000")
+            );
+        }
+
+        @Test
+        void refusesOverloadedRemoteFunctions() {
+            assertGeneratesMessage(
+                    "Remote function 'foo()' conflicts with remote function 'foo(a)': names of remote functions must be unique.",
+                    """
+                            module test;
+                            
+                            remote def foo(a) end;
+                            remote void foo() end;
                             """
             );
         }

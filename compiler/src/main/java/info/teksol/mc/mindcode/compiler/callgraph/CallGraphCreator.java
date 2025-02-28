@@ -2,39 +2,41 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstProgram;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @NullMarked
 public class CallGraphCreator extends AbstractMessageEmitter {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
+    private final AstProgram program;
     private final FunctionDefinitions functionDefinitions;
     private final List<MindcodeFunction> functions = new ArrayList<>();
+    private @Nullable AstModule activeModule;
     private MindcodeFunction activeFunction;
 
     public static CallGraph createCallGraph(CallGraphCreatorContext context, AstProgram program) {
-        return new CallGraphCreator(context).buildCallGraph(program);
+        return new CallGraphCreator(context, program).buildCallGraph();
     }
 
-    private CallGraphCreator(CallGraphCreatorContext context) {
+    private CallGraphCreator(CallGraphCreatorContext context, AstProgram program) {
         super(context.messageConsumer());
-        profile = context.compilerProfile();
-        processor = context.instructionProcessor();
-        functionDefinitions = new FunctionDefinitions(messageConsumer);
-        activeFunction = functionDefinitions.getMain();
+        this.profile = context.compilerProfile();
+        this.processor = context.instructionProcessor();
+        this.program = program;
+        this.functionDefinitions = new FunctionDefinitions(messageConsumer);
+        this.activeFunction = functionDefinitions.getMain();
     }
 
-    private CallGraph buildCallGraph(AstProgram program) {
+    private CallGraph buildCallGraph() {
         // Create functions from the AST tree
         visitNode(program);
 
@@ -51,6 +53,11 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private void visitNode(AstMindcodeNode nodeToVisit) {
         switch (nodeToVisit) {
+            case AstModule m -> {
+                activeModule = m;
+                nodeToVisit.getChildren().forEach(this::visitNode);
+                activeModule = null;
+            }
             case AstFunctionDeclaration n   -> visitFunctionDeclaration(n);
             case AstFunctionCall n          -> visitFunctionCall(n);
             default                         -> nodeToVisit.getChildren().forEach(this::visitNode);
@@ -58,10 +65,19 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     private void visitFunctionDeclaration(AstFunctionDeclaration functionDeclaration) {
-        MindcodeFunction previousFunction = activeFunction;
-        activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration);
-        functionDeclaration.getBody().forEach(this::visitNode);
-        activeFunction = previousFunction;
+        Objects.requireNonNull(activeModule, "No active module");
+
+        if (activeModule.getRemoteProcessor() == null) {
+            // Only process function bodies in non-remote modules
+            MindcodeFunction previousFunction = activeFunction;
+            activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration,
+                    !program.isMainProgram() && functionDeclaration.isRemote() && activeModule == program.getMainModule());
+            functionDeclaration.getBody().forEach(this::visitNode);
+            activeFunction = previousFunction;
+        } else if (functionDeclaration.isRemote()) {
+            // Add remote functions in remote modules
+            functionDefinitions.addFunctionDeclaration(functionDeclaration, false);
+        }
     }
 
     private void visitFunctionCall(AstFunctionCall functionCall) {
@@ -72,21 +88,22 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     /// Inspects the structure of function calls and sets function properties accordingly. Assigns a function prefix
     /// and labels to recursive and stackless functions.
     void buildCallTree() {
-        buildCallTreeAtRoot(functionDefinitions.getMain(), true);
+        List<MindcodeFunction> entryPoints = functionDefinitions.getFunctions().stream().filter(MindcodeFunction::isEntryPoint).toList();
+        buildCallTreeAtRoot(entryPoints, true);
 
         List<MindcodeFunction> unvisited = functions.stream().filter(f -> !f.isVisited()).toList();
         for (MindcodeFunction function : unvisited) {
             if (!function.isVisited()) {
-                buildCallTreeAtRoot(function, false);
+                buildCallTreeAtRoot(List.of(function), false);
             }
         }
 
         functions.stream().filter(f -> !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
     }
 
-    void buildCallTreeAtRoot(MindcodeFunction function, boolean trackUsages) {
+    void buildCallTreeAtRoot(List<MindcodeFunction> entryPoints, boolean trackUsages) {
         // Walk the call tree
-        visitFunction(function, trackUsages, 1);
+        entryPoints.forEach(function -> visitFunction(function, trackUsages, 1));
 
         // 1st level of indirect calls
         functions.forEach(outer ->
@@ -102,7 +119,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private void setupOutOfLineFunction(MindcodeFunction function) {
         function.setLabel(processor.nextLabel());
-        function.setPrefix(processor.nextFunctionPrefix());
+        function.setPrefix(function.isRemote() ? ":" + function.getName() : processor.nextFunctionPrefix());
         function.createParameters();
     }
 

@@ -93,6 +93,11 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // (in case of inline functions, they could get evaluated in the context of the function)
         arguments.forEach(FunctionArgument::getArgumentValue);
 
+        if (function.isEntryPoint()) {
+            error(call, ERR.FUNCTION_REMOTE_CALLED_LOCALLY, functionName);
+            return LogicVariable.INVALID;
+        }
+
         if (function.isVarargs()) {
             if (arguments.size() < parameterCount) {
                 error(call, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS,
