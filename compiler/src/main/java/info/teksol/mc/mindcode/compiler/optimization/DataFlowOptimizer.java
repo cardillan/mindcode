@@ -300,8 +300,18 @@ class DataFlowOptimizer extends BaseOptimizer {
         iterator.close();
         useless.addAll(variableStates.getUseless().values());
 
+        final VariableStates finalVariableStates = variableStates;
+
         if (!context.isFunction()) {
             // This is the main program context.
+
+            // If this is a remote module, all remote functions might get called
+            if (optimizationContext.isRemoteLibrary()) {
+                getCallGraph().getFunctions().stream()
+                        .filter(f -> f.isEntryPoint() && !f.isMain())
+                        .forEach(function -> finalVariableStates.updateAfterFunctionCall(function, null));
+            }
+
             // Variables that were not initialized might be expected to keep their value
             // on program restart (when reaching an end of instruction list/end instruction).
             // Marking them as read now will preserve the last assigned value.
@@ -327,16 +337,13 @@ class DataFlowOptimizer extends BaseOptimizer {
 //            }
         }
 
-        final VariableStates finalVariableStates = variableStates;
-
         if (context.isFunction()) {
-            // Changes to global variables outside of function are needed
+            // Changes to global variables are needed outside the function
             assert context.function() != null;
             optimizationContext.getFunctionWrites(context.function()).stream()
                     .filter(LogicVariable::isGlobalVariable)
                     .forEach(v -> finalVariableStates.valueRead(v, null, false, true));
         }
-
 
         finalVariableStates.print("Final states after processing top level context");
 
@@ -899,16 +906,23 @@ class DataFlowOptimizer extends BaseOptimizer {
                 && (instruction.getOpcode() == Opcode.CALL || instruction.getOpcode() == Opcode.CALLREC)) return false;
 
         return switch (variable.getType()) {
-            case COMPILER, FUNCTION_RETADDR, PARAMETER -> false;
+            case PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PARAMETER -> false;
+
             case LOCAL_VARIABLE, FUNCTION_RETVAL -> {
                 // Function output variables cannot be eliminated inside their functions - at this point we have no
                 // information whether they're read somewhere. Outside their functions they're processed normally
                 // (can be optimized freely).
+                // Output values in remote functions aren't protected either, since output values get copied to the
+                // main processor within the function and aren't accessed elsewhere.
                 // If they aren't read at all in the entire program, they'll be removed by DeadCodeEliminator.
                 AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION);
-                yield !variable.isOutput() || functionCtx == null || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix())
-                        || functionCtx.function() == null || functionCtx.function().isInline();
+                yield !variable.isOutput()
+                      || functionCtx == null || functionCtx.function() == null                  // Not inside a function
+                      || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix())     // Different function
+                      || functionCtx.function().isInline()
+                      || functionCtx.function().isEntryPoint();                                 // Is a remotely called function
             }
+
             // Includes global variables
             default -> true;
         };

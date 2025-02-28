@@ -15,8 +15,7 @@ import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
@@ -24,14 +23,20 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Supplier;
+
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.INITVAR;
 
 @NullMarked
 public class CodeGenerator extends AbstractMessageEmitter {
     // Stateless processing instances
     private final CodeGeneratorContext context;
+    private final AstProgram program;
     private final CompilerProfile profile;
     private final CallGraph callGraph;
     private final CompileTimeEvaluator evaluator;
@@ -44,9 +49,15 @@ public class CodeGenerator extends AbstractMessageEmitter {
     // Nesting level of code blocks
     private int nested = 0;
 
-    public CodeGenerator(CodeGeneratorContext context) {
+    public static void generateCode(CodeGeneratorContext context, AstProgram program) {
+        CodeGenerator codeGenerator = new CodeGenerator(context, program);
+        codeGenerator.generateCode();
+    }
+
+    private CodeGenerator(CodeGeneratorContext context, AstProgram program) {
         super(context.messageConsumer());
         this.context = context;
+        this.program = program;
         profile = context.compilerProfile();
         callGraph = context.callGraph();
         evaluator = context.compileTimeEvaluator();
@@ -98,7 +109,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         return result;
     }
 
-    public void generateCode(AstProgram program) {
+    private void generateCode() {
         variables.enterFunction(callGraph.getMain(), List.of());
         assembler.enterAstNode(program);
         visit(program, false);
@@ -110,9 +121,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
             callGraph.recursiveFunctions().filter(MindcodeFunction::isUsed).forEach(f -> error(f.getDeclaration().getIdentifier(),
                     ERR.FUNCTION_RECURSIVE_NO_STACK, f.getName()));
         }
-
-        AstContext astContext = assembler.getAstContext();
-        int endIndex = assembler.getInstructions().size();
 
         // Separate main program from function declarations
         assembler.createCompilerEnd();
@@ -126,10 +134,47 @@ public class CodeGenerator extends AbstractMessageEmitter {
         // Restore back just in case
         nested--;
 
-        addMissingPrintflush(astContext, endIndex);
+        addMissingPrintflush();
     }
 
-    private void addMissingPrintflush(AstContext astContext, int position) {
+    private void generateRemoteInitialization() {
+        initializeRemoteFunctionVariables(program);
+        assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.create("@this", false));
+        assembler.createRemoteEndlessLoop();
+    }
+
+    private void initializeRemoteFunctionVariables(AstProgram program) {
+        List<LogicArgument> variables = new ArrayList<>();
+        callGraph.getFunctions().stream()
+                .filter(f -> f.isRemote() && f.isEntryPoint())
+                .forEach(function -> collectFunctionVariables(function, variables));
+
+        while (variables.size() % 4 > 0) {
+            variables.add(LogicNull.NULL);
+        }
+
+        while (!variables.isEmpty()) {
+            assembler.createInstruction(INITVAR, variables.subList(0, 4));
+            variables.subList(0, 4).clear();
+        }
+
+        callGraph.getFunctions().stream()
+                .filter(f -> f.isRemote() && f.isEntryPoint())
+                .forEach(f -> assembler.createSetAddress(
+                        LogicVariable.fnAddress(f),
+                        Objects.requireNonNull(f.getLabel())));
+    }
+
+    private void collectFunctionVariables(MindcodeFunction function, List<LogicArgument> variables) {
+        function.getParameters().stream().filter(LogicVariable::isInput).forEach(variables::add);
+        variables.add(LogicVariable.fnRetVal(function));
+        variables.add(LogicVariable.fnFinished(function));
+    }
+
+    private @Nullable AstContext mainBodyContext;
+    private int mainBodyEndIndex;
+
+    private void addMissingPrintflush() {
         List<LogicInstruction> program = assembler.getInstructions();
         if (!profile.isAutoPrintflush()
                 || program.stream().noneMatch(ix -> ix instanceof PrintingInstruction)
@@ -138,8 +183,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
             return;
         }
 
-        program.add(position,
-                context.instructionProcessor().createPrintflush(astContext,
+        program.add(mainBodyEndIndex,
+                context.instructionProcessor().createPrintflush(Objects.requireNonNull(mainBodyContext),
                         LogicVariable.block(SourcePosition.EMPTY, "message1")));
 
         warn(WARN.MISSING_PRINTFLUSH_ADDED);
@@ -180,9 +225,10 @@ public class CodeGenerator extends AbstractMessageEmitter {
         }
 
         // Completely skip function declarations to prevent creating AST contexts for them
-        if (node instanceof AstFunctionDeclaration) {
-            return LogicVoid.VOID;
-        }
+        if (node instanceof AstFunctionDeclaration) return LogicVoid.VOID;
+
+        // Skip remote modules
+        if (node instanceof AstModule module && module.getRemoteProcessor() != null) return LogicVoid.VOID;
 
         if (node.getScope() == AstNodeScope.LOCAL) nested++;
         if (node instanceof AstAllocations || node instanceof AstParameter) allowUndeclaredLinks = true;
@@ -190,6 +236,15 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.enterAstNode(node);
         variables.enterAstNode();
         ValueStore result = nodeVisitor.visit(evaluator.evaluate(node, isLocalContext(), requireMlogConstant));
+
+        if (node == program.getMainModule()) {
+            mainBodyContext = assembler.getAstContext();
+            mainBodyEndIndex = assembler.getInstructions().size();
+            if (!program.isMainProgram()) {
+                generateRemoteInitialization();
+            }
+        }
+
         variables.exitAstNode();
         assembler.exitAstNode(node);
         if (node instanceof AstConstant || node instanceof AstParameter) requireMlogConstant = false;

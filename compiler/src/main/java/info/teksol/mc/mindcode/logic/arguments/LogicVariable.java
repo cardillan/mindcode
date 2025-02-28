@@ -19,12 +19,16 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress {
     // Looks like a variable, but translates to 0 in mlog.
     private static final LogicVariable UNUSED_VARIABLE = new LogicVariable(EMPTY,
-            TMP_VARIABLE, ValueMutability.IMMUTABLE, "0");
+            PRESERVED, ValueMutability.IMMUTABLE, "0");
 
-    public static final LogicVariable STACK_POINTER = LogicVariable.special("*sp");
-    public static final LogicVariable INVALID = LogicVariable.special("*invalid");
+    public static final LogicVariable STACK_POINTER = LogicVariable.preserved("*sp");
+    public static final LogicVariable MAIN_PROCESSOR = LogicVariable.globalPreserved("*mainProcessor");
+    public static final LogicVariable INVALID = LogicVariable.preserved("*invalid");
+
     private static final String RETURN_VALUE = "*retval";
     private static final String RETURN_ADDRESS = "*retaddr";
+    private static final String FUNCTION_ADDRESS = "*address";
+    private static final String FUNCTION_FINISHED = "*finished";
 
     protected final SourcePosition sourcePosition;
     protected final String functionPrefix;
@@ -35,6 +39,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     protected final boolean noinit;
     protected final boolean input;
     protected final boolean output;
+    protected final boolean optional;
 
     // Copy constructor
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability,
@@ -50,6 +55,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.noinit = noinit;
         this.input = input;
         this.output = output;
+        this.optional = false;
     }
 
     // For block/parameter
@@ -64,11 +70,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.noinit = false;
         this.input = false;
         this.output = false;
+        this.optional = false;
     }
 
     // Global/main
     protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog,
-            boolean isVolatile, boolean noinit) {
+            boolean isVolatile, boolean noinit, boolean optional) {
         super(argumentType, isVolatile ? ValueMutability.VOLATILE : ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = "";
@@ -79,6 +86,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.noinit = noinit;
         this.input = false;
         this.output = false;
+        this.optional = optional;
     }
 
     // Local/parameter
@@ -100,6 +108,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.noinit = false;
         this.input = input;
         this.output = output;
+        this.optional = false;
     }
 
     @Override
@@ -124,7 +133,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isGlobalVariable() {
-        return getType() == PARAMETER || getType() == GLOBAL_VARIABLE;
+        return getType() == PARAMETER || getType() == GLOBAL_VARIABLE || getType() == GLOBAL_PRESERVED;
     }
 
     @Override
@@ -143,8 +152,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
-    public boolean isCompilerVariable() {
-        return getType() == COMPILER;
+    public boolean isPreserved() {
+        return getType() == PRESERVED || getType() == GLOBAL_PRESERVED;
     }
 
     public String getName() {
@@ -159,6 +168,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return fullName;
     }
 
+    public LogicString getMlogString() {
+        return LogicString.create(sourcePosition, mlog);
+    }
+
     /// @return true if the parameter is effectively input
     @Override
     public boolean isInput() {
@@ -171,8 +184,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public boolean isOptional() {
-        // MUSTDO: better detection of transfer variables
-        return output && !input || mlog.endsWith("*r") || mlog.endsWith("*w");
+        return optional || output && !input;
     }
 
     @Override
@@ -202,24 +214,24 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable global(AstIdentifier identifier) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName(), "." + identifier.getName(), false, false);
+                identifier.getName(), "." + identifier.getName(), false, false, false);
     }
 
     public static LogicVariable global(AstIdentifier identifier, boolean volatileVar, boolean noinit) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName(), "." + identifier.getName(), volatileVar, noinit);
+                identifier.getName(), "." + identifier.getName(), volatileVar, noinit, false);
     }
 
     @SuppressWarnings("ConfusingMainMethod")
     public static LogicVariable main(AstIdentifier identifier) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE,
-                identifier.getName(), ":" + identifier.getName(), false, false);
+                identifier.getName(), ":" + identifier.getName(), false, false, false);
     }
 
     @SuppressWarnings("ConfusingMainMethod")
     public static LogicVariable main(AstIdentifier identifier, String mlogSuffix) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE,
-                identifier.getName(), ":" + identifier.getName() + mlogSuffix, false, false);
+                identifier.getName(), ":" + identifier.getName() + mlogSuffix, false, false, false);
     }
 
     public static LogicVariable local(AstIdentifier identifier, String functionName, String functionPrefix, String mlogSuffix) {
@@ -249,6 +261,18 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 function.getPrefix() + RETURN_VALUE, false, true);
     }
 
+    public static LogicVariable fnAddress(MindcodeFunction function) {
+        return new LogicVariable(EMPTY, PRESERVED,
+                function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_ADDRESS,
+                function.getPrefix() + FUNCTION_ADDRESS, false, true);
+    }
+
+    public static LogicVariable fnFinished(MindcodeFunction function) {
+        return new LogicVariable(EMPTY, PRESERVED,
+                function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED,
+                function.getPrefix() + FUNCTION_FINISHED, false, true);
+    }
+
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 functionName, functionPrefix, functionPrefix + RETURN_VALUE,
@@ -260,30 +284,32 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 functionPrefix + RETURN_ADDRESS);
     }
 
-    public static LogicVariable special(String name) {
-        return new LogicVariable(EMPTY, COMPILER, ValueMutability.MUTABLE, name);
+    public static LogicVariable preserved(String name) {
+        return new LogicVariable(EMPTY, PRESERVED, ValueMutability.MUTABLE, name);
+    }
+
+    public static LogicVariable globalPreserved(String name) {
+        return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE, name);
     }
 
     public static LogicVariable arrayElement(AstIdentifier identifier, int index) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName() + "[" + index + "]", "." + identifier.getName() + "*" + index, false, true);
+                identifier.getName() + "[" + index + "]", "." + identifier.getName() + "*" + index, false, true, false);
     }
 
     public static LogicVariable arrayReadAccess(String arrayName) {
-        String suffix = "*r";
-        return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
-                arrayName + suffix, arrayName + suffix, false, true);
+        String name = arrayName + "*r";
+        return new LogicVariable(EMPTY, GLOBAL_VARIABLE, name, name, false, true, true);
     }
 
     public static LogicVariable arrayWriteAccess(String arrayName) {
-        String suffix = "*w";
-        return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
-                arrayName + suffix, arrayName + suffix, false, true);
+        String name = arrayName + "*w";
+        return new LogicVariable(EMPTY, GLOBAL_VARIABLE, name, name, false, true, true);
     }
 
     public static LogicVariable arrayReturn(String arrayName, String suffix) {
         return new LogicVariable(EMPTY, FUNCTION_RETADDR,
-                arrayName + suffix, arrayName + suffix, false, true);
+                arrayName + suffix, arrayName + suffix, false, true, false);
     }
 
     /// Return the variable passed as an argument to unused instruction parameters.

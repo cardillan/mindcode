@@ -31,7 +31,7 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
     }
 
     protected void assertBuildsTo(ExpectedMessages expectedMessages, String source, List<AstMindcodeNode> expected) {
-        assertBuildsTo(expectedMessages, source, new AstModule(EMPTY, null, expected));
+        assertBuildsTo(expectedMessages, source, new AstModule(EMPTY, null, expected, null));
     }
 
     protected void assertBuildsTo(String source, List<AstMindcodeNode> expected) {

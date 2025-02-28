@@ -336,6 +336,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.READARR,     res("result"), block("cell1"), in("at"));
         add(list, V6,  MAX, S, NONE, Opcode.WRITEARR,    in("value"),   block("cell1"), in("at"));
         add(list, V6,  MAX, S, NONE, Opcode.REMARK,      in("remark"));
+        add(list, V6,  MAX, S, NONE, Opcode.INITVAR,     unused("a"), unused("b"), unused("c"), unused("d"));
 
         return List.copyOf(list);
     }

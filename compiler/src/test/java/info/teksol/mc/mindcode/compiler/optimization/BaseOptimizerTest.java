@@ -45,7 +45,7 @@ class BaseOptimizerTest extends AbstractTestBase {
     private final List<LogicInstruction> instructions = new ArrayList<>(List.of(ix0, ix1, ix2));
     private final OptimizationContext oc = new OptimizationContext(TraceFile.NULL_TRACE, m -> {},
             profile, ip, instructions, CallGraph.createEmpty(),
-            AstContext.createRootNode(profile));
+            AstContext.createRootNode(profile), false);
     private final DummyOptimizer test = new DummyOptimizer(oc);
 
     @Test

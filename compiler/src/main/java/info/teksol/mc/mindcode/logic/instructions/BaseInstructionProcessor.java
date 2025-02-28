@@ -150,6 +150,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case END         -> new EndInstruction(astContext);
             case FORMAT      -> new FormatInstruction(astContext, arguments, params);
             case GETLINK     -> new GetlinkInstruction(astContext, arguments, params);
+            case INITVAR     -> new InitVarInstruction(astContext, arguments, params);
             case JUMP        -> new JumpInstruction(astContext, arguments, params);
             case LABEL       -> new LabelInstruction(astContext, arguments, params);
             case LOOKUP      -> new LookupInstruction(astContext, arguments, params);
@@ -231,6 +232,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case NoOpInstruction ix -> { }
             case MultiLabelInstruction ix -> { }
             case LabelInstruction ix -> { }
+            case InitVarInstruction ix -> {
+                List<LogicArgument> args = new ArrayList<>(ix.getArgs());
+                args.addFirst(LogicVariable.unusedVariable());
+                consumer.accept(createInstruction(astContext, PACKCOLOR, args));
+            }
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));

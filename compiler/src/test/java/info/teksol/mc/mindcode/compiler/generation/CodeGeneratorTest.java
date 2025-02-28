@@ -181,4 +181,43 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                 createInstruction(LABEL, var(1002))
         );
     }
+
+    @Test
+    void compilesModuleWithRemoteFunctions() {
+        assertCompilesTo("""
+                        module test;
+                        
+                        remote void foo(in a, out b)
+                            b = 2 * a;
+                        end;
+                        
+                        remote def bar(in x)
+                            sin(x) * 2;
+                        end;
+                        """,
+                createInstruction(INITVAR, ":foo:a", ":foo*retval", ":foo*finished", ":bar:x"),
+                createInstruction(INITVAR, ":bar*retval", ":bar*finished", "null", "null"),
+                createInstruction(SETADDR, ":foo*address", label(0)),
+                createInstruction(SETADDR, ":bar*address", label(1)),
+                createInstruction(SET, "*mainProcessor", "@this"),
+                createInstruction(WAIT, "1000000000000"),
+                createInstruction(END),
+                createInstruction(LABEL, label(0)),
+                createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
+                createInstruction(SET, ":foo:b", tmp(0)),
+                createInstruction(LABEL, label(2)),
+                createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
+                createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
+                createInstruction(WAIT, "1000000000000"),
+                createInstruction(END),
+                createInstruction(LABEL, label(1)),
+                createInstruction(OP, "sin", tmp(1), ":bar:x"),
+                createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
+                createInstruction(SET, ":bar*retval", tmp(2)),
+                createInstruction(LABEL, label(3)),
+                createInstruction(WRITE, ":bar*retval", "*mainProcessor", q(":bar*retval")),
+                createInstruction(WRITE, "true", "*mainProcessor", q(":bar*finished")),
+                createInstruction(WAIT, "1000000000000")
+        );
+    }
 }

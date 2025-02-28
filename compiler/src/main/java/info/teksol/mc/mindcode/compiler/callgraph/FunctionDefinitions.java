@@ -26,12 +26,12 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
 
     public FunctionDefinitions(MessageConsumer messageConsumer) {
         super(messageConsumer);
-        main = new MindcodeFunction(createMain());
+        main = new MindcodeFunction(createMain(), true);
         functionList.add(main);
     }
 
-    public MindcodeFunction addFunctionDeclaration(AstFunctionDeclaration declaration) {
-        MindcodeFunction current = new MindcodeFunction(declaration);
+    public MindcodeFunction addFunctionDeclaration(AstFunctionDeclaration declaration, boolean entryPoint) {
+        MindcodeFunction current = new MindcodeFunction(declaration, entryPoint);
         functionList.add(current);
 
         List<MindcodeFunction> functions = functionMap.computeIfAbsent(declaration.getName(), k -> new ArrayList<>());
@@ -42,6 +42,10 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
     }
 
     private boolean conflicts(MindcodeFunction f1, MindcodeFunction f2) {
+        if (f1.isRemote() && f2.isRemote()) {
+            return true;
+        }
+
         if (!f1.getParameterCount().overlaps(f2.getParameterCount())) {
             return false;
         }
@@ -64,9 +68,13 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
     }
 
     private void reportConflict(MindcodeFunction current, MindcodeFunction previous) {
-        String defined = previous.getSourcePosition().inputFile() == current.getSourcePosition().inputFile()
-                ? "" :  " defined in " + previous.getSourcePosition().inputFile().getPath();
-        error(current.getSourcePosition(), ERR.FUNCTION_CONFLICT, current.format(), previous.format(), defined);
+        if (current.isRemote() && previous.isRemote()) {
+            error(current.getSourcePosition(), ERR.FUNCTION_CONFLICT_REMOTE, current.format(), previous.format());
+        } else {
+            String defined = previous.getSourcePosition().inputFile() == current.getSourcePosition().inputFile()
+                    ? "" : " defined in " + previous.getSourcePosition().inputFile().getPath();
+            error(current.getSourcePosition(), ERR.FUNCTION_CONFLICT, current.format(), previous.format(), defined);
+        }
     }
 
     public MindcodeFunction getMain() {

@@ -13,21 +13,37 @@ import java.util.Objects;
 @AstNode
 @NullMarked
 public class AstModule extends AstStatement {
+    /// Module declaration
     private final @Nullable AstModuleDeclaration declaration;
+
+    /// List of module statements. Module declaration, if any, is included in the list
     private final List<AstMindcodeNode> statements;
 
-    public AstModule(SourcePosition sourcePosition, @Nullable AstModuleDeclaration declaration, List<AstMindcodeNode> statements) {
+    /// Null for local modules. For remote modules, identifies the processor containing module code.
+    private final @Nullable AstIdentifier remoteProcessor;
+
+    public AstModule(SourcePosition sourcePosition, @Nullable AstModuleDeclaration declaration, List<AstMindcodeNode> statements,
+            @Nullable AstIdentifier remoteProcessor) {
         super(sourcePosition, children(list(declaration), statements));
         this.declaration = declaration;
         this.statements = statements;
+        this.remoteProcessor = remoteProcessor;
     }
 
     public @Nullable AstModuleDeclaration getDeclaration() {
         return declaration;
     }
 
+    public String getModuleName() {
+        return declaration == null ? "" : declaration.getModuleName();
+    }
+
     public List<AstMindcodeNode> getStatements() {
         return statements;
+    }
+
+    public @Nullable AstIdentifier getRemoteProcessor() {
+        return remoteProcessor;
     }
 
     @Override

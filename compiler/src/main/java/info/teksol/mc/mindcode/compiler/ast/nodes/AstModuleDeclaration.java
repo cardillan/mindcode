@@ -19,7 +19,7 @@ public class AstModuleDeclaration extends AstDeclaration {
         return name;
     }
 
-    public String getParameterName() {
+    public String getModuleName() {
         return name.getName();
     }
 

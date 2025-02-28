@@ -24,11 +24,22 @@ class DirectivePreprocessorTest {
 
     private AstProgram directive(String option, String... values) {
         return new AstProgram(EMPTY,
-                List.of(new AstModule(EMPTY,
-                        null,
-                        List.of(new AstDirectiveSet(EMPTY,
-                                new AstDirectiveValue(EMPTY, option),
-                                Stream.of(values).map(v -> new AstDirectiveValue(EMPTY, v)).toList())))));
+                List.of(
+                        new AstModule(EMPTY,
+                                null,
+                                List.of(
+                                        new AstDirectiveSet(EMPTY,
+                                                new AstDirectiveValue(EMPTY, option),
+                                                Stream.of(values).map(this::directiveValue).toList())
+                                ),
+                                null
+                        )
+                )
+        );
+    }
+
+    private AstDirectiveValue directiveValue(String value) {
+        return new AstDirectiveValue(EMPTY, value);
     }
 
     private void processDirective(MessageConsumer messageConsumer, CompilerProfile profile, String option, String... values) {

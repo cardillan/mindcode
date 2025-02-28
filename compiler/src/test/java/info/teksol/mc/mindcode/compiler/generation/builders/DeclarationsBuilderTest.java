@@ -845,5 +845,19 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     "Not enough capacity in external storage for 'c'.",
                     "external cell1[0 .. 1] a, b, c;");
         }
+
+        @Test
+        void refusesConflictingModifiers() {
+            assertGeneratesMessage(
+                    "Modifier 'noinit' is incompatible with previous modifiers.",
+                    "remote noinit var a = 10;");
+        }
+
+        @Test
+        void refusesUninitializedRemote() {
+            assertGeneratesMessage(
+                    "Variable declared as 'remote' must be initialized.",
+                    "remote var a;");
+        }
     }
 }

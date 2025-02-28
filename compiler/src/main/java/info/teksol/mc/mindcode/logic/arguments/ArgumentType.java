@@ -27,13 +27,16 @@ public enum ArgumentType {
     ARRAY,
 
     // User variables
+
     BLOCK,
     PARAMETER,                      // Program parameter
     GLOBAL_VARIABLE,                // Also array elements
     LOCAL_VARIABLE,
 
-    // Compiler generated variables
-    COMPILER,                       // Compiler support, e.g. stack pointer(s)
+    // Compiler variables
+
+    GLOBAL_PRESERVED,               // A global variable which must not be eliminated
+    PRESERVED,                      // Must not be eliminated
 
     TMP_VARIABLE,
     AST_VARIABLE,
@@ -45,6 +48,6 @@ public enum ArgumentType {
     ;
 
     public boolean isCompiler() {
-        return ordinal() >= COMPILER.ordinal();
+        return ordinal() >= GLOBAL_PRESERVED.ordinal();
     }
 }

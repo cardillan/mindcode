@@ -363,7 +363,7 @@ class DataFlowVariableStates {
         ///
         /// @param function    function to process
         /// @param instruction instruction that caused the call
-        public void updateAfterFunctionCall(MindcodeFunction function, LogicInstruction instruction) {
+        public void updateAfterFunctionCall(MindcodeFunction function, @Nullable LogicInstruction instruction) {
             modifications++;
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false, true));
             optimizationContext.getFunctionWrites(function).forEach(this::valueReset);

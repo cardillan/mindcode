@@ -59,7 +59,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                         outModifier = false
                                     }
                                 }
-                            ]
+                            ],
+                            remoteProcessor = null
                         }"""
         );
     }
@@ -165,7 +166,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                         outModifier = false
                                     }
                                 }
-                            ]
+                            ],
+                            remoteProcessor = null
                         }"""
         );
     }
@@ -235,7 +237,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                         outModifier = false
                                     }
                                 }
-                            ]
+                            ],
+                            remoteProcessor = null
                         }"""
         );
     }

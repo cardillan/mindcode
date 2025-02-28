@@ -14,7 +14,21 @@ public class AstProgram extends AstBaseMindcodeNode {
 
     public AstProgram(SourcePosition sourcePosition, List<AstModule> modules) {
         super(sourcePosition, children(modules));
+        if (modules.isEmpty()) throw new IllegalArgumentException("At least one module must be provided");
         this.modules = List.copyOf(modules);
+    }
+
+    public List<AstModule> getModules() {
+        return modules;
+    }
+
+    public AstModule getMainModule() {
+        return modules.getLast();
+    }
+
+    /// @return `true` if this program is a main program, and not a remotely callable module.
+    public boolean isMainProgram() {
+        return getMainModule().getDeclaration() == null;
     }
 
     @Override
@@ -25,10 +39,6 @@ public class AstProgram extends AstBaseMindcodeNode {
     @Override
     public AstNodeScope getScopeRestriction() {
         return AstNodeScope.GLOBAL;
-    }
-
-    public List<AstModule> getModules() {
-        return modules;
     }
 
     @Override

@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
+
 /// CodeAssembler provides means for creating code from AST tree: methods for creating individual instructions and
 /// methods for maintaining and tracking AST context. The AST context tracked by this instance is automatically
 /// injected into all created instructions, so that the caller doesn't have to handle that.
@@ -239,6 +241,12 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
             createEnd();
             clearSubcontextType();
         }
+    }
+
+    /// Creates an endless loop. Used by remote processors to wait until a remote call is initiated.
+    /// Current implementation uses a very long wait (over 30,000 years)
+    public void createRemoteEndlessLoop() {
+        createInstruction(WAIT, LogicNumber.create(1000000000000L));
     }
 
     public void createCustomInstruction(boolean safe, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {

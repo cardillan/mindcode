@@ -30,6 +30,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         AstDirectiveSetVisitor<ValueStore>,
         AstDocCommentVisitor<ValueStore>,
         AstFunctionDeclarationVisitor<ValueStore>,
+        AstModuleDeclarationVisitor<ValueStore>,
         AstParameterVisitor<ValueStore>,
         AstRequireFileVisitor<ValueStore>,
         AstRequireLibraryVisitor<ValueStore>,
@@ -127,6 +128,12 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     @Override
+    public ValueStore visitModuleDeclaration(AstModuleDeclaration node) {
+        // Module declarations are processed out of line
+        return LogicVoid.VOID;
+    }
+
+    @Override
     public ValueStore visitParameter(AstParameter node) {
         if (processor.isBlockName(node.getParameterName())) {
             error(node.getName(), ERR.VARIABLE_NAME_RESERVED_FOR_LINKS, node.getParameterName());
@@ -162,6 +169,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return LogicVoid.VOID;
     }
 
+    // Note: remote modules are not processed by code generator. Variables declared `remote` are created
+    //       as volatile variables.
     @Override
     public ValueStore visitVariablesDeclaration(AstVariablesDeclaration node) {
         Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
@@ -191,6 +200,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             case EXTERNAL -> error(element, ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
             case LINKED   -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
             case NOINIT   -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_NOINIT);
+            case REMOTE   -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_REMOTE);
             case VOLATILE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
         }
     }
@@ -223,10 +233,11 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     private void verifyArrayModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
+            case CACHED   -> error(element, ERR.ARRAY_CACHED);
             case LINKED   -> error(element, ERR.ARRAY_LINKED);
             case NOINIT   -> error(element, ERR.ARRAY_NOINIT);
+            case REMOTE   -> error(element, ERR.ARRAY_REMOTE);
             case VOLATILE -> error(element, ERR.ARRAY_VOLATILE);
-            case CACHED   -> error(element, ERR.ARRAY_CACHED);
         }
     }
 
@@ -261,6 +272,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
 
         if (specification.getExpressions().isEmpty()) {
+            if (modifiers.containsKey(Modifier.REMOTE)) {
+                error(specification, ERR.VARIABLE_REMOTE_MUST_BE_INITIALIZED);
+            }
+
             if (!modifiers.containsKey(Modifier.NOINIT)) {
                 // Initializes external cached variables by reading the value from memory block
                 variable.initialize(assembler);
@@ -272,7 +287,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             }
 
             if (modifiers.containsKey(Modifier.NOINIT)) {
-                error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALZIED);
+                error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALIZED);
             }
 
             // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
@@ -290,7 +305,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             return variables.createExternalVariable(specification.getIdentifier(), modifiers);
         } else if (modifiers.containsKey(Modifier.LINKED)) {
             return createLinkedVariable(modifiers, specification);
-        } else if (modifiers.isEmpty() || modifiers.containsKey(Modifier.NOINIT) || modifiers.containsKey(Modifier.VOLATILE)) {
+        } else if (modifiers.isEmpty() || modifiers.containsKey(Modifier.NOINIT)
+                   || modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE)) {
             // Local variables need to be created within the parent node, as the current node is the
             // AstVariablesDeclaration node. If the variable was created within the current node, it
             // would fall out of scope when AstVariablesDeclaration node processing finishes.

@@ -34,16 +34,18 @@ public class OptimizationCoordinator {
     private final InstructionProcessor instructionProcessor;
     private final MessageConsumer messageConsumer;
     private final LogicInstructionArrayExpander arrayExpander;
+    private final boolean remoteLibrary;
     private final CompilerProfile profile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private @Nullable OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
-            MessageConsumer messageConsumer, LogicInstructionArrayExpander arrayExpander) {
+            MessageConsumer messageConsumer, LogicInstructionArrayExpander arrayExpander, boolean remoteLibrary) {
         this.instructionProcessor = instructionProcessor;
         this.messageConsumer = messageConsumer;
         this.profile = profile;
         this.arrayExpander = arrayExpander;
+        this.remoteLibrary = remoteLibrary;
     }
 
     public static boolean isDebugOn() {
@@ -82,7 +84,7 @@ public class OptimizationCoordinator {
 
         try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
             optimizationContext = new OptimizationContext(traceFile, messageConsumer, profile, instructionProcessor,
-                    program, callGraph, rootAstContext);
+                    program, callGraph, rootAstContext, remoteLibrary);
 
             int count = codeSize();
             messageConsumer.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));

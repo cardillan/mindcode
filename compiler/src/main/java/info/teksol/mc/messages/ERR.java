@@ -33,6 +33,7 @@ public class ERR {
     public static final String ARRAY_SIZE_NOT_SPECIFIED = "Array size not specified.";
     public static final String ARRAY_SIZE_OUTSIDE_RANGE = "Array size out of range (1 .. %d).";
     public static final String ARRAY_UNSUPPORTED_OPERATION = "Unsupported array expression.";
+    public static final String ARRAY_REMOTE = "Arrays cannot be declared 'remote'.";
     public static final String ARRAY_VOLATILE = "Arrays cannot be declared 'volatile'.";
     public static final String ASCII_INVALID_ARGUMENT = "The argument to the 'ascii' function must be a non-empty string constant or literal.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
@@ -68,8 +69,10 @@ public class ERR {
     public static final String FUNCTION_CALL_UNRESOLVED = "Cannot resolve function '%s'.";
     public static final String FUNCTION_CALL_WRONG_NUMBER_OF_ARGS = "Function '%s': wrong number of arguments (expected %s, found %d).";
     public static final String FUNCTION_CONFLICT = "Function '%s' conflicts with function '%s'%s.";
+    public static final String FUNCTION_CONFLICT_REMOTE = "Remote function '%s' conflicts with remote function '%s': names of remote functions must be unique.";
     public static final String FUNCTION_RECURSIVE_INLINE = "Recursive function '%s' declared 'inline'.";
     public static final String FUNCTION_RECURSIVE_NO_STACK = "Function '%s' is recursive and no stack was allocated.";
+    public static final String FUNCTION_REMOTE_CALLED_LOCALLY = "Cannot call remote function '%s' locally.";
     public static final String FUNCTION_VARARGS_NOT_INLINE = "Varargs function '%s' must be declared 'inline'.";
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";
     public static final String INTERNAL_AMBIGUOUS_CODE = "%s: ambiguous source code (%d ambiguities found).";
@@ -95,6 +98,7 @@ public class ERR {
     public static final String MLOG_UNSPECIFIED_ARGUMENT = "All arguments to the '%s' function need to be specified.";
     public static final String MLOG_VARIABLE_WITHOUT_MODIFIERS = "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.";
     public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
+    public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of module '%s' (file '%s').";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
     public static final String PRINTF_REQUIRES_TARGET_8 = "The printf function requires language target 8 or higher.";
@@ -118,13 +122,15 @@ public class ERR {
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' is incompatible with previous modifiers.";
     public static final String VARIABLE_LOCAL_CANNOT_BE_NOINIT = "Local variable cannot be declared 'noinit'.";
+    public static final String VARIABLE_LOCAL_CANNOT_BE_REMOTE = "Local variable cannot be declared 'remote'.";
     public static final String VARIABLE_LOCAL_CANNOT_BE_VOLATILE = "Local variable cannot be declared 'volatile'.";
     public static final String VARIABLE_MISSING_MODIFIER = "Modifier '%s' used without '%s'.";
     public static final String VARIABLE_MULTIPLE_DECLARATIONS = "Multiple declarations of '%s'.";
     public static final String VARIABLE_NAME_RESERVED_FOR_LINKS = "Name '%s' is reserved for linked blocks.";
-    public static final String VARIABLE_NOINIT_CANNOT_BE_INITIALZIED = "Variable declared as 'noinit' cannot be initialized.";
+    public static final String VARIABLE_NOINIT_CANNOT_BE_INITIALIZED = "Variable declared as 'noinit' cannot be initialized.";
     public static final String VARIABLE_NOT_DEFINED = "Variable '%s' is not defined.";
     public static final String VARIABLE_NOT_RESOLVED = "Cannot resolve variable '%s'.";
+    public static final String VARIABLE_REMOTE_MUST_BE_INITIALIZED = "Variable declared as 'remote' must be initialized.";
     public static final String VARIABLE_REPEATED_MODIFIER = "Repeated modifier '%s'.";
     public static final String VOID_ARGUMENT = "Expression doesn't have any value. Using value-less expressions in function calls is deprecated.";
 }

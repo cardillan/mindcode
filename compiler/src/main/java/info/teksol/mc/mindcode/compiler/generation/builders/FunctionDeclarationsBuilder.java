@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
@@ -35,7 +36,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
     private void generateCodeForFunction(MindcodeFunction function) {
         enterFunction(function, List.of());
-        assembler.setActive(function.isUsed());
+        assembler.setActive(function.isUsed() || function.isEntryPoint());
         // TODO: replace getPlacementCount() with proper weight computation
         assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getPlacementCount());
         if (function.getLabel() != null) {
@@ -47,6 +48,8 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
         if (function.isRecursive()) {
             appendRecursiveFunctionDeclaration(function);
+        } else if (function.isRemote()) {
+            appendRemoteFunctionDeclaration(function);
         } else {
             appendStacklessFunctionDeclaration(function);
         }
@@ -58,31 +61,47 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         exitFunction(function);
     }
 
-    private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {
+    private void compileFunctionBody(MindcodeFunction function) {
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
                 : evaluateBody(function.getBody());
 
         if (!function.isVoid()) {
-            assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
+            assembler.createSet(LogicVariable.fnRetVal(function), valueStore.getValue(assembler));
         }
 
         assembler.createLabel(returnStack.getReturnLabel());
+
+    }
+
+    private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {
+        compileFunctionBody(function);
         assembler.createReturnRec(context.stackTracker().getStackMemory());
     }
 
-    private void appendStacklessFunctionDeclaration(MindcodeFunction function) {
-        ValueStore valueStore = function.isVoid()
-                ? visitBody(function.getBody())
-                : evaluateBody(function.getBody());
+    private void appendRemoteFunctionDeclaration(MindcodeFunction function) {
+        compileFunctionBody(function);
 
+        // Return value
         if (!function.isVoid()) {
-            assembler.createSet(LogicVariable.fnRetVal(function),  valueStore.getValue(assembler));
+            assembler.createWrite(LogicVariable.fnRetVal(function), LogicVariable.MAIN_PROCESSOR,
+                    LogicVariable.fnRetVal(function).getMlogString());
         }
 
-        assembler.createLabel(returnStack.getReturnLabel());
+        // Output parameters
+        function.getParameters().stream().filter(LogicVariable::isOutput)
+                .forEach(p -> assembler.createWrite(p, LogicVariable.MAIN_PROCESSOR,p.getMlogString()));
 
-        String functionPrefix = function.getPrefix();
-        assembler.createReturn(LogicVariable.fnRetAddr(functionPrefix));
+        // Finished flag
+        assembler.createWrite(LogicBoolean.TRUE, LogicVariable.MAIN_PROCESSOR,
+                LogicVariable.fnFinished(function).getMlogString());
+
+        // Endless wait
+        assembler.createRemoteEndlessLoop();
+    }
+
+    private void appendStacklessFunctionDeclaration(MindcodeFunction function) {
+        compileFunctionBody(function);
+        assembler.createReturn(LogicVariable.fnRetAddr(function.getPrefix()));
     }
 }

@@ -691,7 +691,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                                     new AstVariableSpecification(EMPTY, a, l1)
                                             )
                                     )
-                            )
+                            ),
+                            null
                     )
             );
         }
@@ -733,7 +734,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                                     new AstVariableSpecification(EMPTY, a, l1)
                                             )
                                     )
-                            )
+                            ),
+                            null
                     )
             );
         }
@@ -2120,11 +2122,10 @@ class AstBuilderTest extends AbstractAstBuilderTest {
             );
         }
 
-        //@Test
+        @Test
         void reportsDoWhileLoopDeprecation() {
-            assertGeneratesMessages(
-                    expectedMessages()
-                            .add(3, 1, "The 'loop' keyword is deprecated. Use just 'while' instead."),
+            assertGeneratesMessage(3, 1,
+                    "The 'loop' keyword is deprecated. Use 'while' instead of 'loop while'.",
                     """
                             do
                                 print(a);

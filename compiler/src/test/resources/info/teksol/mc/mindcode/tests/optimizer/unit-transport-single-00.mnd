@@ -107,7 +107,6 @@ else
         position = flag \ 100;
         CORE_X = position % @mapw;
         CORE_Y = position \ @mapw;
-        // §§§ B and not A --> B > A
         while (within(CORE_X, CORE_Y, RADIUS_WITHIN) == false) and (@unit.@dead == 0) do
             approach(CORE_X, CORE_Y, RADIUS_APPROACH);
         end;
