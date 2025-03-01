@@ -6,10 +6,7 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionParameter;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -26,12 +23,12 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
 
     public FunctionDefinitions(MessageConsumer messageConsumer) {
         super(messageConsumer);
-        main = new MindcodeFunction(createMain(), true);
+        main = new MindcodeFunction(createMain(), AstModule.DEFAULT, true);
         functionList.add(main);
     }
 
-    public MindcodeFunction addFunctionDeclaration(AstFunctionDeclaration declaration, boolean entryPoint) {
-        MindcodeFunction current = new MindcodeFunction(declaration, entryPoint);
+    public MindcodeFunction addFunctionDeclaration(AstFunctionDeclaration declaration, AstModule module, boolean entryPoint) {
+        MindcodeFunction current = new MindcodeFunction(declaration, module, entryPoint);
         functionList.add(current);
 
         List<MindcodeFunction> functions = functionMap.computeIfAbsent(declaration.getName(), k -> new ArrayList<>());

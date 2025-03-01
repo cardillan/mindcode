@@ -13,9 +13,12 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
@@ -29,8 +32,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
-
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.INITVAR;
 
 @NullMarked
 public class CodeGenerator extends AbstractMessageEmitter {
@@ -144,19 +145,12 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void initializeRemoteFunctionVariables(AstProgram program) {
-        List<LogicArgument> variables = new ArrayList<>();
+        List<LogicVariable> variables = new ArrayList<>();
         callGraph.getFunctions().stream()
                 .filter(f -> f.isRemote() && f.isEntryPoint())
                 .forEach(function -> collectFunctionVariables(function, variables));
 
-        while (variables.size() % 4 > 0) {
-            variables.add(LogicNull.NULL);
-        }
-
-        while (!variables.isEmpty()) {
-            assembler.createInstruction(INITVAR, variables.subList(0, 4));
-            variables.subList(0, 4).clear();
-        }
+        assembler.createVariables(variables);
 
         callGraph.getFunctions().stream()
                 .filter(f -> f.isRemote() && f.isEntryPoint())
@@ -165,8 +159,11 @@ public class CodeGenerator extends AbstractMessageEmitter {
                         Objects.requireNonNull(f.getLabel())));
     }
 
-    private void collectFunctionVariables(MindcodeFunction function, List<LogicArgument> variables) {
-        function.getParameters().stream().filter(LogicVariable::isInput).forEach(variables::add);
+    private void collectFunctionVariables(MindcodeFunction function, List<LogicVariable> variables) {
+        function.getParameters().stream()
+                .filter(FunctionParameter::isInput)
+                .map(LogicVariable.class::cast)
+                .forEach(variables::add);
         variables.add(LogicVariable.fnRetVal(function));
         variables.add(LogicVariable.fnFinished(function));
     }
@@ -231,7 +228,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (node instanceof AstModule module && module.getRemoteProcessor() != null) return LogicVoid.VOID;
 
         if (node.getScope() == AstNodeScope.LOCAL) nested++;
-        if (node instanceof AstAllocations || node instanceof AstParameter) allowUndeclaredLinks = true;
+        if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = true;
         if (node instanceof AstConstant || node instanceof AstParameter) requireMlogConstant = true;
         assembler.enterAstNode(node);
         variables.enterAstNode();
@@ -248,7 +245,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         variables.exitAstNode();
         assembler.exitAstNode(node);
         if (node instanceof AstConstant || node instanceof AstParameter) requireMlogConstant = false;
-        if (node instanceof AstAllocations || node instanceof AstParameter) allowUndeclaredLinks = false;
+        if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = false;
         if (node.getScope() == AstNodeScope.LOCAL) nested--;
 
         // Reset global scope warning after exiting code block.

@@ -10,10 +10,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
-import info.teksol.mc.mindcode.logic.instructions.CustomInstruction;
-import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
@@ -24,6 +21,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.INITVAR;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
 
 /// CodeAssembler provides means for creating code from AST tree: methods for creating individual instructions and
@@ -43,12 +41,19 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
     private boolean active = true;
 
+    private SideEffects sideEffects = BaseInstruction.NO_SIDE_EFFECTS;
+
     public CodeAssembler(CodeAssemblerContext context) {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
         variables = context.variables();
         astContext = context.rootAstContext();
+    }
+
+    public CodeAssembler applySideEffects(SideEffects sideEffects) {
+        this.sideEffects = Objects.requireNonNull(sideEffects);
+        return this;
     }
 
     public InstructionProcessor getProcessor() {
@@ -111,8 +116,9 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// This is the sole method that adds an instruction to the list.
     private LogicInstruction addInstruction(LogicInstruction instruction) {
         if (active) {
-            instructions.add(instruction);
+            instructions.add(instruction.withSideEffects(sideEffects));
         }
+        sideEffects = BaseInstruction.NO_SIDE_EFFECTS;
         return instruction;
     }
 
@@ -247,6 +253,23 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// Current implementation uses a very long wait (over 30,000 years)
     public void createRemoteEndlessLoop() {
         createInstruction(WAIT, LogicNumber.create(1000000000000L));
+    }
+
+    public void createVariables(List<LogicVariable> variables) {
+        List<LogicArgument> vars = new ArrayList<>(variables);
+
+        while (vars.size() % 4 > 0) {
+            vars.add(LogicNull.NULL);
+        }
+
+        while (!vars.isEmpty()) {
+            createInstruction(INITVAR, vars.subList(0, 4));
+            vars.subList(0, 4).clear();
+        }
+    }
+
+    public LogicLabel createNextLabel() {
+        return createLabel(nextLabel()).getLabel();
     }
 
     public void createCustomInstruction(boolean safe, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {

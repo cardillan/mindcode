@@ -15,10 +15,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 
@@ -34,8 +31,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         AstParameterVisitor<ValueStore>,
         AstRequireFileVisitor<ValueStore>,
         AstRequireLibraryVisitor<ValueStore>,
-        AstVariablesDeclarationVisitor<ValueStore>
-{
+        AstVariablesDeclarationVisitor<ValueStore> {
     public static final int MAX_INTERNAL_ARRAY_SIZE = 250;
     public static final int MAX_EXTERNAL_ARRAY_SIZE = 2048;
 
@@ -145,7 +141,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             error(node, ERR.LITERAL_NO_VALID_REPRESENTATION_PARAM,
                     node.getParameterName(), value.getLiteral());
             parameterValue = LogicNull.NULL;
-        }  else if (valueStore instanceof LogicValue value && isNonvolatileConstant(value)) {
+        } else if (valueStore instanceof LogicValue value && isNonvolatileConstant(value)) {
             parameterValue = value;
         } else {
             error(node.getValue(), ERR.EXPRESSION_NOT_CONSTANT_PARAM, node.getParameterName());
@@ -157,15 +153,63 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return LogicVoid.VOID;
     }
 
+    private void initializeRemoteProcessor(AstRequire node) {
+        assert node.getProcessor() != null;
+        LogicVariable processor = (LogicVariable) evaluate(node.getProcessor());
+
+        // Generate guard code for processor
+        LogicString mainProcessorMlog = LogicVariable.MAIN_PROCESSOR.getMlogString();
+        LogicVariable tmp = assembler.unprotectedTemp();
+        LogicLabel label = assembler.createNextLabel();
+        assembler.createRead(tmp, processor, mainProcessorMlog);
+        assembler.createJump(label, Condition.EQUAL, tmp, LogicNull.NULL);
+
+        assembler.createWrite(LogicBuiltIn.THIS, processor, mainProcessorMlog);
+
+        List<LogicVariable> variables = new ArrayList<>();
+
+        // Initialize function addresses and function parameters
+        // Create function output variables
+        callGraph.getFunctions().stream()
+                .filter(f -> f.getModule().getRemoteProcessor() == node.getProcessor() && f.isUsed())
+                .forEach(function -> {
+                    function.createRemoteParameters(assembler, processor);
+                    LogicVariable v = LogicVariable.fnAddress(function);
+                    assembler.createRead(v, processor, v.getMlogString());
+                    variables.add(LogicVariable.fnFinished(function));
+                    if (!function.isVoid()) {
+                        variables.add(LogicVariable.fnRetVal(function));
+                    }
+                    function.getLocalParameters().stream()
+                            .filter(FunctionParameter::isOutput)
+                            .map(LogicVariable.class::cast)
+                            .forEach(variables::add);
+                });
+
+        assembler.createVariables(variables);
+    }
+
     @Override
     public ValueStore visitRequireFile(AstRequireFile node) {
-        // Ignored - processed elsewhere
+        // When a processor is part of the declaration, evaluate it.
+        // It creates the variable representing the processor, if not already present.
+        if (node.getProcessor() != null) {
+            initializeRemoteProcessor(node);
+        }
+
+        // Requires have no value
         return LogicVoid.VOID;
     }
 
     @Override
     public ValueStore visitRequireLibrary(AstRequireLibrary node) {
-        // Ignored - processed elsewhere
+        // When a processor is part of the declaration, evaluate it.
+        // It creates the variable representing the processor, if not already present.
+        if (node.getProcessor() != null) {
+            initializeRemoteProcessor(node);
+        }
+
+        // Requires have no value
         return LogicVoid.VOID;
     }
 
@@ -198,9 +242,9 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     private void verifyLocalContextModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
             case EXTERNAL -> error(element, ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
-            case LINKED   -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
-            case NOINIT   -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_NOINIT);
-            case REMOTE   -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_REMOTE);
+            case LINKED -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
+            case NOINIT -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_NOINIT);
+            case REMOTE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_REMOTE);
             case VOLATILE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
         }
     }
@@ -233,10 +277,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     private void verifyArrayModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
-            case CACHED   -> error(element, ERR.ARRAY_CACHED);
-            case LINKED   -> error(element, ERR.ARRAY_LINKED);
-            case NOINIT   -> error(element, ERR.ARRAY_NOINIT);
-            case REMOTE   -> error(element, ERR.ARRAY_REMOTE);
+            case CACHED -> error(element, ERR.ARRAY_CACHED);
+            case LINKED -> error(element, ERR.ARRAY_LINKED);
+            case NOINIT -> error(element, ERR.ARRAY_NOINIT);
+            case REMOTE -> error(element, ERR.ARRAY_REMOTE);
             case VOLATILE -> error(element, ERR.ARRAY_VOLATILE);
         }
     }
@@ -293,7 +337,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
             // resolved in the scope containing the node. However, the expression needs to be evaluated
             // in local scope, as all executable code must be placed there.
-            ValueStore value = processInLocalScope( () -> evaluate(specification.getExpressions().getFirst()));
+            ValueStore value = processInLocalScope(() -> evaluate(specification.getExpressions().getFirst()));
             // Produces warning when the variable is a linked block
             ValueStore target = resolveLValue(specification.getIdentifier(), variable);
             target.setValue(assembler, value.getValue(assembler));
@@ -380,7 +424,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         if (variable.getType() == BLOCK && profile.isLinkedBlockGuards() && guardedBlockNames.add(variable.toMlog()) && !noinit) {
             LogicLabel label = assembler.nextLabel();
             assembler.createLabel(label);
-            assembler.createJump(label,Condition.EQUAL, variable, LogicNull.NULL);
+            assembler.createJump(label, Condition.EQUAL, variable, LogicNull.NULL);
         }
     }
 

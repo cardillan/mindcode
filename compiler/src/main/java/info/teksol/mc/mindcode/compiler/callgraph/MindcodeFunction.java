@@ -3,8 +3,12 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
+import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
@@ -25,11 +29,13 @@ public class MindcodeFunction {
 
     // Function properties
     private final AstFunctionDeclaration declaration;
+    private final AstModule module;
     private final boolean entryPoint;
     private final IntRange parameterCount;
     private Map<String, AstFunctionParameter> parameterMap = Map.of();
 
-    private List<LogicVariable> parameters = List.of();
+    private List<FunctionParameter> parameters = List.of();
+    private List<FunctionParameter> localParameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";
 
@@ -53,8 +59,9 @@ public class MindcodeFunction {
     private final Set<MindcodeFunction> recursiveCalls = new HashSet<>();
     private final Set<MindcodeFunction> indirectCalls = new HashSet<>();
 
-    MindcodeFunction(AstFunctionDeclaration declaration, boolean entryPoint) {
+    MindcodeFunction(AstFunctionDeclaration declaration, AstModule module, boolean entryPoint) {
         this.declaration = Objects.requireNonNull(declaration);
+        this.module = Objects.requireNonNull(module);
         this.entryPoint = entryPoint;
         parameterCount = declaration.getParameterCount();
     }
@@ -63,6 +70,7 @@ public class MindcodeFunction {
         this.prefix = prefix;
 
         declaration = other.declaration;
+        module = other.module;
         entryPoint = other.entryPoint;
         parameterCount = other.parameterCount;
         placementCount = other.placementCount;
@@ -101,6 +109,10 @@ public class MindcodeFunction {
         return isVarargs()
                 ? functions.getFunctions(call.getFunctionName()).stream()
                 : Stream.of(call).map(c -> functions.getExactMatch(c, -1)).filter(Objects::nonNull);
+    }
+
+    public AstModule getModule() {
+        return module;
     }
 
     public boolean isEntryPoint() {
@@ -171,13 +183,24 @@ public class MindcodeFunction {
     }
 
     /// @return list of parameters of the function as LogicVariable
-    public List<LogicVariable> getParameters() {
+    public List<FunctionParameter> getParameters() {
         return parameters;
     }
 
+    public List<FunctionParameter> getLocalParameters() {
+        return localParameters;
+    }
+
     /// @return function parameter at given index
-    public LogicVariable getParameter(int index) {
+    public FunctionParameter getParameter(int index) {
         return parameters.get(index);
+    }
+
+    /// Provides access to local parameters. Local parameters differ from remote parameters
+    /// for remote calls.
+    /// @return function local parameter at given index
+    public FunctionParameter getLocalParameter(int index) {
+        return localParameters.get(index);
     }
 
     public boolean isInputFunctionParameter(LogicVariable variable) {
@@ -335,7 +358,20 @@ public class MindcodeFunction {
                Collectors.toMap(AstFunctionParameter::getName, v -> v));
 
         parameters = getDeclaredParameters().stream()
-                .map(p -> LogicVariable.parameter(p, getName(), prefix)).toList();
+                .map(p -> (FunctionParameter) LogicVariable.parameter(p, getName(), prefix)).toList();
+        localParameters = parameters;
+    }
+
+    public void createRemoteParameters(CodeAssembler assembler, LogicVariable processor) {
+        parameters = getDeclaredParameters().stream()
+                .map(p -> (FunctionParameter) createRemoteParameter(p, assembler, processor))
+                .toList();
+    }
+
+    private RemoteVariable createRemoteParameter(AstFunctionParameter parameter, CodeAssembler assembler, LogicVariable processor) {
+        return new RemoteVariable(parameter.sourcePosition(), processor,
+                LogicString.create(parameter.sourcePosition(),prefix + ":" + parameter.getName()),
+                assembler.nextTemp(), parameter.isInput(), parameter.isOutput());
     }
 
     @Override

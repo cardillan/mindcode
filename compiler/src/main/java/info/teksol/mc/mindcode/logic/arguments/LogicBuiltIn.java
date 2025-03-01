@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 @NullMarked
 public class LogicBuiltIn extends AbstractArgument implements LogicValue {
     public static final LogicBuiltIn COUNTER = create("@counter", true);
+    public static final LogicBuiltIn THIS = create("@this", false);
     public static final LogicBuiltIn UNIT = create("@unit", true);
     public static final LogicBuiltIn WAIT = create("@wait", false);
 

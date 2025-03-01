@@ -11,8 +11,10 @@ import info.teksol.mc.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -93,7 +95,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // (in case of inline functions, they could get evaluated in the context of the function)
         arguments.forEach(FunctionArgument::getArgumentValue);
 
-        if (function.isEntryPoint()) {
+        if (function.isRemote() && function.getModule().getRemoteProcessor() == null) {
             error(call, ERR.FUNCTION_REMOTE_CALLED_LOCALLY, functionName);
             return LogicVariable.INVALID;
         }
@@ -113,7 +115,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
         validateUserFunctionArguments(function, arguments.subList(0, Math.min(parameterCount, arguments.size())));
 
-        if (function.isInline()) {
+        if (function.isRemote()) {
+            return handleRemoteFunctionCall(function, arguments);
+        } else if (function.isInline()) {
             return handleInlineFunctionCall(function, arguments);
         } else if (!function.isRecursive()) {
             return handleStacklessFunctionCall(function, arguments);
@@ -261,6 +265,41 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         return passReturnValue(function);
     }
 
+    private LogicValue handleRemoteFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
+        assert function.getModule().getRemoteProcessor() != null;
+
+        // Generate proper function parameters
+        LogicVariable processor = (LogicVariable) evaluate(function.getModule().getRemoteProcessor());
+
+        assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
+        setupFunctionParameters(function, arguments, false);
+        final boolean isVoid = function.isVoid();
+
+        LogicVariable finished = LogicVariable.fnFinished(function);
+
+        List<LogicVariable> outputs = new ArrayList<>();
+        function.getLocalParameters().stream()
+                .filter(FunctionParameter::isOutput)
+                .map(LogicVariable.class::cast)
+                .forEach(outputs::add);
+        if (!function.isVoid()) {
+            outputs.add(LogicVariable.fnRetVal(function));
+        }
+        SideEffects sideEffects = SideEffects.writes(outputs);
+
+        assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
+        assembler.createSet(finished, LogicBoolean.FALSE);
+        assembler.applySideEffects(sideEffects)
+                .createWrite(LogicVariable.fnAddress(function), processor, LogicString.create("@counter"));
+
+        LogicLabel label = assembler.createNextLabel();
+        assembler.createJump(label, Condition.EQUAL, finished, LogicNull.NULL);
+
+        assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
+        retrieveFunctionParameters(function, arguments, false);
+        return passReturnValue(function);
+    }
+
     /// Returns a predicate which detects misplaced input arguments. Such arguments need to be handled specifically
     /// in recursive function calls:
     ///
@@ -276,7 +315,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     /// @param argument argument being processed
     /// @param parameter parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced input argument
-    private boolean misplacedInput(MindcodeFunction function, FunctionArgument argument, LogicVariable functionParameter) {
+    private boolean misplacedInput(MindcodeFunction function, FunctionArgument argument, FunctionParameter functionParameter) {
         // TODO When function parameters become ValueStores, the isInputFunctionParameter
         //        will be called directly without casting
         return functionParameter.isInput()
@@ -293,7 +332,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         for (int index = 0; index < limit; index++) {
             FunctionArgument argument = arguments.get(index);
             if (function.getDeclaredParameter(index).isInput()) {
-                if (misplacedInput(function, argument, function.getParameters().get(index))) {
+                if (misplacedInput(function, argument, function.getParameter(index))) {
                     LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, argument.getValue(assembler));
                     argumentValues.offer(temp);
@@ -307,7 +346,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // Should FunctionArgument be incompatible with the parameter, an error would have been produced earlier
         for (int index = 0; index < limit; index++) {
             if (function.getDeclaredParameter(index).isInput()) {
-                assembler.createSet(function.getParameter(index), argumentValues.remove().getValue(assembler));
+                function.getParameter(index).setValue(assembler, argumentValues.remove().getValue(assembler));
             }
         }
     }
@@ -330,7 +369,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     /// @param argument argument being processed
     /// @param parameter parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced output argument
-    private boolean misplacedOutput(MindcodeFunction function, FunctionArgument argument, LogicVariable functionParameter) {
+    private boolean misplacedOutput(MindcodeFunction function, FunctionArgument argument, FunctionParameter functionParameter) {
         // TODO When function parameters become ValueStores, the isOutputFunctionParameter
         //        will be called directly without casting
         return argument.isOutput()
@@ -346,7 +385,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         for (int i = 0; i < arguments.size(); i++) {
             FunctionArgument argument = arguments.get(i);
             if (argument.isOutput()) {
-                LogicVariable parameter = function.getParameter(i);
+                FunctionParameter parameter = function.getLocalParameter(i);
                 if (misplacedOutput(function, argument, parameter)) {
                     LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, parameter.getValue(assembler));

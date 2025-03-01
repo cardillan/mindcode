@@ -250,7 +250,7 @@ public class Variables extends AbstractMessageEmitter {
         }
 
         if (allowUndeclaredLinks && isLinkedVariable(identifier)) {
-            return LogicVariable.block(identifier);
+            return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         }
 
         if (reportedErrors.add(identifier)) {

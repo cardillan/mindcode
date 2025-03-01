@@ -123,7 +123,7 @@ class DeadCodeEliminator extends BaseOptimizer {
                     .forEach(writes::add);
 
             // The instruction has side effects
-            instruction.sideEffects().apply(read -> {}, writes::add);
+            instruction.sideEffects().apply(read -> {}, writes::add, writes::add);
 
             return writes.stream().noneMatch(reads::contains);
         }
@@ -143,6 +143,7 @@ class DeadCodeEliminator extends BaseOptimizer {
 
         instruction.sideEffects().apply(
                 reads::add,
+                write -> addWrite(instruction, write),
                 write -> addWrite(instruction, write));
 
         if (instruction.getOpcode() != Opcode.CALL && instruction.getOpcode() != Opcode.CALLREC) {

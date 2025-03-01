@@ -15,28 +15,30 @@ public interface SideEffects {
     ///
     /// @param reads  consumer accepting variables that are read as a side effect
     /// @param writes consumer accepting variables that are written as a side effect
-    void apply(Consumer<LogicVariable> reads, Consumer<LogicVariable> writes);
+    /// @param resets consumer accepting variables that are reset (possibly modified) as a side effect
+    void apply(Consumer<LogicVariable> reads, Consumer<LogicVariable> writes, Consumer<LogicVariable> resets);
 
     /// Creates a side effect which does nothing
     static SideEffects none() {
-        return (reads, writes) -> {};
+        return (reads, writes, resets) -> {};
     }
 
     /// Creates a side effect which reads all variables from the list
     static SideEffects reads(Iterable<LogicVariable> variables) {
-        return (reads, writes) -> variables.forEach(reads);
+        return (reads, writes, resets) -> variables.forEach(reads);
     }
 
     /// Creates a side effect which writes all variables from the list
     static SideEffects writes(Iterable<LogicVariable> variables) {
-        return (reads, writes) -> variables.forEach(writes);
+        return (reads, writes, resets) -> variables.forEach(writes);
     }
 
-    /// Creates a side effect which reads all variables from the list
-    static SideEffects readsAndWrites(Iterable<LogicVariable> reads, Iterable<LogicVariable> writes) {
-        return (read, write) -> {
+    /// Creates a side effect with reads, writes and resets
+    static SideEffects of(Iterable<LogicVariable> reads, Iterable<LogicVariable> writes, Iterable<LogicVariable> resets) {
+        return (read, write, reset) -> {
             reads.forEach(read);
             writes.forEach(write);
+            resets.forEach(reset);
         };
     }
 }

@@ -36,8 +36,8 @@ class AstContextTest {
     @BeforeEach
     void setUp() {
         FunctionDefinitions functions = new FunctionDefinitions(m -> {});
-        function1 = functions.addFunctionDeclaration(functionDeclaration1, false);
-        function2 = functions.addFunctionDeclaration(functionDeclaration2, false);
+        function1 = functions.addFunctionDeclaration(functionDeclaration1, AstModule.DEFAULT, false);
+        function2 = functions.addFunctionDeclaration(functionDeclaration2, AstModule.DEFAULT, false);
 
         AstMindcodeNode node = new TestNode(AstContextType.FUNCTION, AstSubcontextType.BODY);
         context = root.createFunctionDeclaration(profile, function1, node, node.getContextType(),1.0);

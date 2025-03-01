@@ -70,13 +70,13 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         if (activeModule.getRemoteProcessor() == null) {
             // Only process function bodies in non-remote modules
             MindcodeFunction previousFunction = activeFunction;
-            activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration,
+            activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration, activeModule,
                     !program.isMainProgram() && functionDeclaration.isRemote() && activeModule == program.getMainModule());
             functionDeclaration.getBody().forEach(this::visitNode);
             activeFunction = previousFunction;
         } else if (functionDeclaration.isRemote()) {
             // Add remote functions in remote modules
-            functionDefinitions.addFunctionDeclaration(functionDeclaration, false);
+            functionDefinitions.addFunctionDeclaration(functionDeclaration, activeModule, false);
         }
     }
 
