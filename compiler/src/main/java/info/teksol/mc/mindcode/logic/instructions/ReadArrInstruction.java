@@ -49,6 +49,6 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
 
     @Override
     public SideEffects sideEffects() {
-        return SideEffects.readsAndWrites(getArray().getElements(), List.of(getArray().readVal));
+        return SideEffects.of(getArray().getElements(), List.of(), List.of(getArray().readVal));
     }
 }

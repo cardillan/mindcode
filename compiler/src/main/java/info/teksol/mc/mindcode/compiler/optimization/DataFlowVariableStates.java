@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -367,7 +368,7 @@ class DataFlowVariableStates {
             modifications++;
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false, true));
             optimizationContext.getFunctionWrites(function).forEach(this::valueReset);
-            function.getParameters().stream().filter(LogicVariable::isOutput).forEach(initialized::add);
+            function.getParameters().stream().filter(FunctionParameter::isOutput).map(LogicVariable.class::cast).forEach(initialized::add);
             initialized.add(LogicVariable.fnRetVal(function));
         }
 

@@ -13,9 +13,6 @@ param messages = message1;
 // Title printed to messages to help identify the processor purpose
 const title = "Drone mining\n";
 
-// Creates a variable representing a Mindustry block linked as message1
-linked message1;
-
 begin
     // Find a unit if we don't have one
     if @unit.@dead != 0 or @unit.@controller != @this then
@@ -46,6 +43,6 @@ begin
         println("Unit capacity: ", @unit.@itemCapacity);
         println("Total items: ", @unit.@totalItems);
         println("First item: ", @unit.@firstItem);
-        printflush(message1);
+        printflush(messages);
     end;
 end;

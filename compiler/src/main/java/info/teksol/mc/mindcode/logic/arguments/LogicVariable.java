@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionParameter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -16,7 +17,7 @@ import static info.teksol.mc.common.SourcePosition.EMPTY;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 
 @NullMarked
-public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress {
+public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress, FunctionParameter {
     // Looks like a variable, but translates to 0 in mlog.
     private static final LogicVariable UNUSED_VARIABLE = new LogicVariable(EMPTY,
             PRESERVED, ValueMutability.IMMUTABLE, "0");
@@ -156,6 +157,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return getType() == PRESERVED || getType() == GLOBAL_PRESERVED;
     }
 
+    @Override
     public String getName() {
         return name;
     }

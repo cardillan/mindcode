@@ -13,6 +13,9 @@ import java.util.Objects;
 @AstNode
 @NullMarked
 public class AstModule extends AstStatement {
+    public static AstModule DEFAULT = new AstModule(SourcePosition.EMPTY,
+            null, List.of(), null);
+
     /// Module declaration
     private final @Nullable AstModuleDeclaration declaration;
 

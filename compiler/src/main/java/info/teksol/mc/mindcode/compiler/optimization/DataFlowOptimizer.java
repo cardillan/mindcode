@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.Definition;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
@@ -291,7 +292,8 @@ class DataFlowOptimizer extends BaseOptimizer {
             optimizationContext.getFunctionReads(function).stream()
                     .filter(LogicVariable::isGlobalVariable)
                     .forEach(variableStates::markInitialized);
-            function.getParameters().stream().filter(LogicVariable::isInput).forEach(variableStates::markInitialized);
+            function.getParameters().stream().filter(FunctionParameter::isInput).map(LogicVariable.class::cast)
+                    .forEach(variableStates::markInitialized);
             variableStates.markInitialized(LogicVariable.fnRetAddr(function.getPrefix()));
         }
 
@@ -865,7 +867,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         // General side effects
         instruction.sideEffects().apply(
                 variable -> variableStates.valueRead(variable, instruction, false, reachable),
-//                variable -> variableStates.valueSet(variable, instruction, null, modifyInstructions));
+                variable -> variableStates.valueSet(variable, instruction, null, modifyInstructions),
                 variableStates::valueReset);
 
 

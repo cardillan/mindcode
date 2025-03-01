@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -134,7 +135,9 @@ class StackOptimizer extends BaseOptimizer {
 
         assert subcontext.function() != null;
         Set<LogicVariable> result = subcontext.function().getParameters()
-                .stream().filter(LogicVariable::isInput).collect(Collectors.toSet());
+                .stream().filter(FunctionParameter::isInput)
+                .map(LogicVariable.class::cast)
+                .collect(Collectors.toSet());
 
         contextStream(subcontext)
                 .filter(SetInstruction.class::isInstance)

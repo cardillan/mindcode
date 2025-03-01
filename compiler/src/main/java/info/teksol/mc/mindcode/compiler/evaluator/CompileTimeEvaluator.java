@@ -46,7 +46,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     ///
     /// @param node node to evaluate
     /// @param local `true` if the node is being evaluated in a local context
-    /// @param requireMlogConstant  `true` if the node is being required for an mlog constant. The value is not
+    /// @param requireMlogConstant  `true` if the evaluation is being required for an mlog constant. The value is not
     ///         unwrapped, so that proper error message can be generated if the value cannot be represented in mlog
     /// @return compile-time evaluation of the node
     public AstMindcodeNode evaluate(AstMindcodeNode node, boolean local, boolean requireMlogConstant) {

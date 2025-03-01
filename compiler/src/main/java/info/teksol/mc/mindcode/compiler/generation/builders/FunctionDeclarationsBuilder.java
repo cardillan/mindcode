@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -20,6 +21,10 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     public void compileFunction(MindcodeFunction function) {
+        // Do not compile functions from modules included remotely
+        if (function.getModule().getRemoteProcessor() != null) return;
+
+        // Unused function are compiled to report syntax errors, except libraries
         if (!function.isUsed() && function.getSourcePosition().isLibrary()) return;
 
         if (function.isInline()) {
@@ -89,7 +94,9 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         }
 
         // Output parameters
-        function.getParameters().stream().filter(LogicVariable::isOutput)
+        function.getParameters().stream()
+                .filter(FunctionParameter::isOutput)
+                .map(LogicVariable.class::cast)
                 .forEach(p -> assembler.createWrite(p, LogicVariable.MAIN_PROCESSOR,p.getMlogString()));
 
         // Finished flag
