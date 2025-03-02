@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the _Start with a new schematic_ button causing HTTP 404.
+* Fixed the schematics decompiler incorrectly processing factories with no unit plan selected.
 
 ### Deprecated
 
