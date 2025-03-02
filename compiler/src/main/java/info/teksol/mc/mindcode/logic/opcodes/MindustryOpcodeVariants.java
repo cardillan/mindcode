@@ -35,8 +35,10 @@ public class MindustryOpcodeVariants {
 
     private List<OpcodeVariant> initialize() {
         List<OpcodeVariant> list = new ArrayList<>();
-        add(list, V6,  MAX, S, NONE, Opcode.READ,       res("result"), block("cell1"), in("at"));
-        add(list, V6,  MAX, S, NONE, Opcode.WRITE,      in("value"),   block("cell1"), in("at"));
+        add(list, V6,   V7A, S, NONE, Opcode.READ,       res("result"), block("cell1"), in("at"));
+        add(list, V6,   V7A, S, NONE, Opcode.WRITE,      in("value"),   block("cell1"), in("at"));
+        add(list, V8A,  MAX, S, PROP, Opcode.READ,       res("result"), block("processor1"), in("name"));
+        add(list, V8A,  MAX, S, PROP, Opcode.WRITE,      in("value"),   block("processor1"), in("name"));
 
         add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("clear"),      in("r"), in("g"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.DRAW,       draw("color"),      in("r"), in("g"), in("b"), in("a"));

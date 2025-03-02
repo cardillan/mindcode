@@ -16,6 +16,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 
@@ -166,7 +167,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         assembler.createWrite(LogicBuiltIn.THIS, processor, mainProcessorMlog);
 
-        List<LogicVariable> variables = new ArrayList<>();
+        List<LogicVariable> outputs = new ArrayList<>();
 
         // Initialize function addresses and function parameters
         // Create function output variables
@@ -176,17 +177,26 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     function.createRemoteParameters(assembler, processor);
                     LogicVariable v = LogicVariable.fnAddress(function);
                     assembler.createRead(v, processor, v.getMlogString());
-                    variables.add(LogicVariable.fnFinished(function));
+
+                    outputs.add(LogicVariable.fnFinished(function));
                     if (!function.isVoid()) {
-                        variables.add(LogicVariable.fnRetVal(function));
+                        outputs.add(LogicVariable.fnRetVal(function));
                     }
                     function.getLocalParameters().stream()
                             .filter(FunctionParameter::isOutput)
                             .map(LogicVariable.class::cast)
-                            .forEach(variables::add);
+                            .forEach(outputs::add);
+
+                    Map<String, ValueStore> members = function.getDeclaration().getParameters()
+                            .stream()
+                            .filter(AstFunctionParameter::isOutput)
+                            .collect(Collectors.toMap(AstFunctionParameter::getName,
+                                    (parameter -> LogicVariable.parameter(parameter, function))));
+                    StructuredValueStore variable = new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
+                    variables.registerRemoteCallStore(function.getDeclaration().getIdentifier(), variable);
                 });
 
-        assembler.createVariables(variables);
+        assembler.createVariables(outputs);
     }
 
     @Override

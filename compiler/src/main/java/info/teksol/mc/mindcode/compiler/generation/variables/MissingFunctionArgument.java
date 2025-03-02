@@ -48,6 +48,11 @@ public class MissingFunctionArgument implements FunctionArgument {
     }
 
     @Override
+    public boolean isInput() {
+        return true;
+    }
+
+    @Override
     public boolean isOutput() {
         return false;
     }

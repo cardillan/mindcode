@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.Property;
+import info.teksol.mc.mindcode.compiler.generation.variables.StructuredValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -28,15 +29,23 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitMemberAccess(AstMemberAccess node) {
-        LogicValue target = resolveTarget(node.getObject(), ERR.CANNOT_INVOKE_PROPERTIES);
-        String propertyName = node.getMember().getName();
-        if (validateProperty(propertyName)) {
+        ValueStore target = resolveTarget(node.getObject(), true, ERR.CANNOT_INVOKE_PROPERTIES);
+        String name = node.getMember().getName();
+        if (target instanceof StructuredValueStore store) {
+            ValueStore member = store.getMember(name);
+            if (member == null) {
+                error(node.getMember(), ERR.REMOTE_UNKNOWN_PARAMETER, store.getName(), name);
+                return LogicVariable.INVALID;
+            } else {
+                return member;
+            }
+        } else if (validateProperty(name)) {
             return new Property(node.sourcePosition(),
                     assembler.defensiveCopy(target, ArgumentType.TMP_VARIABLE),
-                    propertyName,
+                    name,
                     assembler.unprotectedTemp());
         } else {
-            error(node.getMember(), ERR.PROPERTY_UNKNOWN, propertyName);
+            error(node.getMember(), ERR.PROPERTY_UNKNOWN, name);
             return LogicVariable.INVALID;
         }
     }
@@ -53,7 +62,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitPropertyAccess(AstPropertyAccess node) {
-        LogicValue target = resolveTarget(node.getObject(), ERR.CANNOT_INVOKE_PROPERTIES);
+        LogicValue target = (LogicValue) resolveTarget(node.getObject(), false, ERR.CANNOT_INVOKE_PROPERTIES);
         final LogicVariable resultVar = assembler.nextNodeResultTemp();
         assembler.createSensor(resultVar, target, evaluate(node.getProperty()).getValue(assembler));
         return resultVar;

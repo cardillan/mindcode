@@ -7,6 +7,7 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstEnhancedComment;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstReturnStatement;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -15,10 +16,18 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.ReturnStack;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.util.Lazy;
 import org.jspecify.annotations.NullMarked;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
+
+import static info.teksol.mc.messages.ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS;
 
 @NullMarked
 public class FunctionCallsBuilder extends AbstractBuilder implements
@@ -31,6 +40,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     private final Lazy<BuiltinFunctionMlogBuilder> mlogBuilder;
     private final Lazy<BuiltinFunctionTextOutputBuilder> textBuilder;
     private final Lazy<StandardFunctionCallsBuilder> callBuilder;
+    private final Map<String, Function<AstFunctionCall, ValueStore>> builtinHandlers;
 
     public FunctionCallsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
@@ -39,6 +49,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         mlogBuilder = new Lazy<>(() -> new BuiltinFunctionMlogBuilder(this));
         textBuilder = new Lazy<>(() -> new BuiltinFunctionTextOutputBuilder(this));
         callBuilder = new Lazy<>(() -> new StandardFunctionCallsBuilder(this));
+        builtinHandlers = createBuiltinFunctionHandlers();
     }
 
     @Override
@@ -52,7 +63,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         if (node.hasObject()) {
             return handleMethodCall(node);
         } else {
-            return handleFunctionCall(node);
+            return handleFunctionCall(node, false);
         }
     }
 
@@ -92,22 +103,56 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         return LogicVoid.VOID;
     }
 
-    private ValueStore handleFunctionCall(AstFunctionCall call) {
-        // Solve special cases
-        return switch (call.getFunctionName()) {
-            case "assertEquals" -> assertsBuilder.get().handleAssertEquals(call);
-            case "assertPrints" -> assertsBuilder.get().handleAssertPrints(call);
-            case "length"       -> varargsBuilder.get().handleLength(call);
-            case "min", "max"   -> varargsBuilder.get().handleMinMax(call);
-            case "mlog"         -> mlogBuilder.get().handleMlog(call, false);
-            case "mlogSafe"     -> mlogBuilder.get().handleMlog(call, true);
-            case "ascii"        -> textBuilder.get().handleAscii(call);
-            case "printf"       -> textBuilder.get().handlePrintf(call);
-            case "print"        -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT);
-            case "println"      -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN);
-            case "remark"       -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.REMARK);
-            default             -> callBuilder.get().handleFunctionCall(call);
-        };
+    private ValueStore handleFunctionCall(AstFunctionCall call, boolean async) {
+        Function<AstFunctionCall, ValueStore> handler = builtinHandlers.get(call.getFunctionName());
+        if (handler != null) {
+            if (async) {
+                error(call, ERR.FUNCTION_CALL_ASYNC_UNSUPPORTED, call.getFunctionName());
+            }
+            return handler.apply(call);
+        } else {
+            return callBuilder.get().handleFunctionCall(call, async);
+        }
+    }
+
+    private ValueStore handleAsync(AstFunctionCall call) {
+        if (call.getArguments().size() != 1) {
+            error(call, FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
+                    call.getFunctionName(), 1, call.getArguments().size());
+            return LogicNumber.ZERO;
+        }
+
+        AstExpression innerCall = Objects.requireNonNull(call.getArgument(0).getExpression());
+
+        if (innerCall instanceof AstFunctionCall asyncCall) {
+            handleFunctionCall(asyncCall, true);
+        } else {
+            error(call, ERR.ASYNC_WRONG_ARGUMENT, call.getFunctionName());
+            evaluate(innerCall);        // Report syntax errors here
+        }
+
+        return LogicVoid.VOID;
+    }
+
+    private Map<String, Function<AstFunctionCall, ValueStore>> createBuiltinFunctionHandlers() {
+        Map<String, Function<AstFunctionCall, ValueStore>> map = new HashMap<>();
+
+        map.put("assertEquals", call -> assertsBuilder.get().handleAssertEquals(call));
+        map.put("assertPrints", call -> assertsBuilder.get().handleAssertPrints(call));
+        map.put("async",        this::handleAsync);
+        map.put("await",        call -> callBuilder.get().handleAwait(call));
+        map.put("finished",     call -> callBuilder.get().handleFinished(call));
+        map.put("length",       call -> varargsBuilder.get().handleLength(call));
+        map.put("min",          call -> varargsBuilder.get().handleMinMax(call));
+        map.put("max",          call -> varargsBuilder.get().handleMinMax(call));
+        map.put("mlog",         call -> mlogBuilder.get().handleMlog(call, false));
+        map.put("mlogSafe",     call -> mlogBuilder.get().handleMlog(call, true));
+        map.put("ascii",        call -> textBuilder.get().handleAscii(call));
+        map.put("printf",       call -> textBuilder.get().handlePrintf(call));
+        map.put("print",        call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT));
+        map.put("println",      call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN));
+        map.put("remark",       call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.REMARK));
+        return map;
     }
 
     private ValueStore handleMethodCall(AstFunctionCall call) {

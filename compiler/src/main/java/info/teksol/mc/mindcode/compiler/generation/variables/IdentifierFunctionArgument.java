@@ -61,6 +61,11 @@ public class IdentifierFunctionArgument implements FunctionArgument {
     }
 
     @Override
+    public boolean isInput() {
+        return true;
+    }
+
+    @Override
     public boolean isOutput() {
         return false;
     }

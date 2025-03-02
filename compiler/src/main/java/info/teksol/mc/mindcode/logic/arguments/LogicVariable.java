@@ -242,10 +242,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 false, false);
     }
 
-    public static LogicVariable parameter(AstFunctionParameter parameter, String functionName, String functionPrefix) {
+    public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function) {
         AstIdentifier identifier = parameter.getIdentifier();
-        return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, functionName,
-                functionPrefix, identifier.getName(), functionPrefix + ":" + identifier.getName(),
+        return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, function.getName(),
+                function.getPrefix(), identifier.getName(), function.getPrefix() + ":" + identifier.getName(),
                 parameter.isInput(), parameter.isOutput());
     }
 

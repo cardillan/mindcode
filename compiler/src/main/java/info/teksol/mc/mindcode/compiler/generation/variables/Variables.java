@@ -95,6 +95,13 @@ public class Variables extends AbstractMessageEmitter {
         return variable;
     }
 
+    public void registerRemoteCallStore(AstIdentifier identifier, ValueStore variable) {
+        ValueStore existing = globalVariables.put(identifier.getName(), variable);
+        if (existing != null) {
+            error(existing, ERR.VARIABLE_MULTIPLE_DECLARATIONS_REMOTE, identifier.getName());
+        }
+    }
+
     /// Creates an implicit variable. Used in the relaxed syntax setting only. Analyzes the identifier to create
     ///  the correct variable type and put it into the correct variable list.
     ///
