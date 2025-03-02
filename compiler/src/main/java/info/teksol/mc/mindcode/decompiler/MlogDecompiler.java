@@ -193,14 +193,20 @@ public class MlogDecompiler {
     }
 
     private void decompile(MlogInstruction ix) {
+        if ((ix.getOpcode() == Opcode.READ || ix.getOpcode() == Opcode.WRITE) && !ix.getArg(2).toMlog().startsWith("\"")) {
+            switch (ix.getOpcode()) {
+                case READ -> cmdIndent(ix, 0, " = ", 1, "[", 2, "]");
+                case WRITE -> cmdIndent(ix, 1, "[", 2, "] = ", 0);
+            }
+            return;
+        }
+
         String decompiled = functionMapper.decompile(ix);
         if (decompiled == null) {
             switch (ix.getOpcode()) {
                 case JUMP   -> processJump(ix);
                 case OP     -> processOp(ix);
-                case READ   -> cmdIndent(ix, 0, " = ", 1, "[", 2, "]");
                 case SET    -> cmdIndent(ix, 0, " = ", 1);
-                case WRITE  -> cmdIndent(ix, 1, "[", 2, "] = ", 0);
                 default     -> error(ix);
             }
         } else {

@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import info.teksol.mc.mindcode.compiler.generation.variables.StructuredValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -77,11 +78,12 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         evaluator = context.compileTimeEvaluator();
     }
 
-    protected LogicValue resolveTarget(AstMindcodeNode node, @PrintFormat String message, Object... args) {
+    protected ValueStore resolveTarget(AstMindcodeNode node, boolean allowStructured, @PrintFormat String message, Object... args) {
         ValueStore valueStore = process(node, false);
         return switch(valueStore) {
-            case LogicVariable var    -> var;
-            case LogicBuiltIn builtIn -> builtIn;
+            case StructuredValueStore s when allowStructured -> s;
+            case LogicVariable v -> v;
+            case LogicBuiltIn b  -> b;
             default -> {
                 error(node, message, args);
                 yield LogicVariable.INVALID;

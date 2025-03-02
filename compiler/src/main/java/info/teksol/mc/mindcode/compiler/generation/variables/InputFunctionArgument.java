@@ -47,6 +47,11 @@ public class InputFunctionArgument implements FunctionArgument {
     }
 
     @Override
+    public boolean isInput() {
+        return argument.isInput();
+    }
+
+    @Override
     public boolean isOutput() {
         return argument.isOutput();
     }

@@ -10,8 +10,8 @@ import java.util.stream.Stream;
 @NullMarked
 public enum Opcode {
     // INPUT & OUTPUT
-    READ            ("read",            "Read a number from a linked memory cell."),
-    WRITE           ("write",           "Write a number to a linked memory cell."),
+    READ            ("read",            "Read a variable identified by a name from a linked processor."),
+    WRITE           ("write",           "Write a number to a variable identified by a name in a linked processor."),
     DRAW            ("draw",            "Add an operation to the drawing buffer. Does not display anything until drawflush is used."),
     PRINT           ("print",           "Add text to the print buffer. Does not display anything until printflush is used."),
     PRINTCHAR       ("printchar",       "Add a UTF-16 character or content icon to the print buffer.\nDoes not display anything until Print Flush is used."),

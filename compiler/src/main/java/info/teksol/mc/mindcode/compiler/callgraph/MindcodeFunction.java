@@ -358,7 +358,7 @@ public class MindcodeFunction {
                Collectors.toMap(AstFunctionParameter::getName, v -> v));
 
         parameters = getDeclaredParameters().stream()
-                .map(p -> (FunctionParameter) LogicVariable.parameter(p, getName(), prefix)).toList();
+                .map(p -> (FunctionParameter) LogicVariable.parameter(p, this)).toList();
         localParameters = parameters;
     }
 
