@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.2.0 - Future release
 
+### Fixed
+
+* Fixed the _Start with a new schematic_ button causing HTTP 404.
+
 ### Deprecated
 
 * Deprecated the `loop` keyword in `do while` loop.
