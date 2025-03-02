@@ -173,7 +173,7 @@ public class SchematicsIO {
         };
     }
 
-    private static UnitPlan selectUnitPlan(IntConfiguration integer, BlockType blockType) {
+    private static Configuration selectUnitPlan(IntConfiguration integer, BlockType blockType) {
         if (ConfigurationType.fromBlockType(blockType) != ConfigurationType.UNIT_PLAN) {
             throw new SchematicsInternalError("Block '%s' does not support UNIT_PLAN configuration.", blockType.name());
         }
@@ -183,7 +183,7 @@ public class SchematicsIO {
             throw new SchematicsInternalError("Invalid plan index %d for unit factory %s.", index, blockType.name());
         }
 
-        return index < 0 ? UnitPlan.EMPTY : new UnitPlan(blockType.unitPlans().get(index));
+        return index < 0 ? EmptyConfiguration.EMPTY : new UnitPlan(blockType.unitPlans().get(index));
     }
 
     private static Configuration mapConfig(BlockType block, int value, Position position) {

@@ -16,7 +16,7 @@ public enum ConfigurationType {
     LIQUID(LiquidConfiguration.class, () -> EmptyConfiguration.EMPTY),
     PROCESSOR(ProcessorConfiguration.class, () -> ProcessorConfiguration.EMPTY),
     TEXT(TextConfiguration.class, () -> TextConfiguration.EMPTY),
-    UNIT_PLAN(UnitPlan.class, () -> UnitPlan.EMPTY),
+    UNIT_PLAN(UnitPlan.class, () -> EmptyConfiguration.EMPTY),
     BLOCK(BlockConfiguration.class, () -> EmptyConfiguration.EMPTY),
     UNIT(UnitConfiguration.class, () -> EmptyConfiguration.EMPTY),
     UNIT_COMMAND(UnitCommandConfiguration.class, () -> EmptyConfiguration.EMPTY),
