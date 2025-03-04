@@ -25,6 +25,14 @@ public enum ProcessorVersion {
         this.minor = minor;
     }
 
+    public boolean atLeast(ProcessorVersion min) {
+        return ordinal() >= min.ordinal();
+    }
+
+    public boolean atMost(ProcessorVersion max) {
+        return ordinal() <= max.ordinal();
+    }
+
     public boolean matches(ProcessorVersion min, ProcessorVersion max) {
         return ordinal() >= min.ordinal() && ordinal() <= max.ordinal();
     }

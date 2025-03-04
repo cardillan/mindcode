@@ -547,6 +547,22 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class ModuleDeclarations {
+
+        @Test
+        void compilesModule() {
+            assertCompiles("module a;");
+        }
+
+        @Test
+        void reportsMultipleDeclarations() {
+            assertGeneratesMessage(
+                    "Multiple module declarations in one source file are not allowed.",
+                    "module a; module b;");
+        }
+    }
+
+    @Nested
     class ParameterDeclarations {
         @Test
         void compilesLiteralParameters() {

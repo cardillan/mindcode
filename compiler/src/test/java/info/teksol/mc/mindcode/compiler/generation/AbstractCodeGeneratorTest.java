@@ -28,6 +28,8 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
         return CompilationPhase.COMPILER;
     }
 
+    // INPUT FILES
+
     protected void compile(ExpectedMessages expectedMessages, InputFiles inputFiles, Consumer<MindcodeCompiler> testEvaluator) {
         process(expectedMessages, inputFiles, null, c -> {
             testEvaluator.accept(c);
@@ -36,12 +38,12 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
     }
 
     protected void compile(ExpectedMessages expectedMessages, String source, Consumer<MindcodeCompiler> testEvaluator) {
-        compile(expectedMessages, InputFiles.fromSource(source), testEvaluator);
+        compile(expectedMessages, createInputFiles(source), testEvaluator);
     }
 
     protected void assertCompilesTo(ExpectedMessages expectedMessages, String source, Predicate<LogicInstruction> filter,
             LogicInstruction... instruction) {
-        compile(expectedMessages, InputFiles.fromSource(source),
+        compile(expectedMessages, createInputFiles(source),
                 compiler -> evaluateResults(compiler, filter, List.of(instruction)));
     }
 
@@ -50,7 +52,7 @@ public class AbstractCodeGeneratorTest extends AbstractTestBase {
     }
 
     protected void assertCompilesTo(ExpectedMessages expectedMessages, String source, LogicInstruction... expected) {
-        compile(expectedMessages, InputFiles.fromSource(source),compiler -> evaluateResults(compiler, List.of(expected)));
+        compile(expectedMessages, createInputFiles(source),compiler -> evaluateResults(compiler, List.of(expected)));
     }
 
     protected void assertCompilesTo(String source, LogicInstruction... expected) {

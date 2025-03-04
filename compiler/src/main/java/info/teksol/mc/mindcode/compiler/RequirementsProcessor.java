@@ -44,6 +44,9 @@ public class RequirementsProcessor extends AbstractMessageEmitter {
     public @Nullable InputFile processRequirement(AstRequire requirement) {
         if (requirement.isLibrary()) {
             return loadLibrary((AstRequireLibrary) requirement);
+        } else if (inputFiles.hasPackagedFile(requirement.getName())) {
+            return inputFiles.registerFile(inputFiles.getBasePath().resolve(requirement.getName()),
+                    inputFiles.getPackagedFile(requirement.getName()));
         } else if (profile.isWebApplication()) {
             error(requirement, ERR.REQUIRE_WEBAPP_EXT_UNSUPPORTED);
             return null;

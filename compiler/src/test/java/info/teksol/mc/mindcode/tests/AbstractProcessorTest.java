@@ -158,7 +158,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     }
 
     protected void compileAndOutputCode(String title, String code, Path logFile) {
-        InputFiles inputFiles = InputFiles.fromSource(code);
+        InputFiles inputFiles = createInputFiles(code);
         MindcodeCompiler compiler = new MindcodeCompiler(expectedMessages(), createCompilerProfile(), inputFiles);
         compiler.compile();
         logCompilation(title, code, compiler.getOutput(), compiler.getInstructions().size());
@@ -180,7 +180,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     protected void testAndEvaluateCode(@Nullable String title, ExpectedMessages expectedMessages, String code,
             Map<String, MindustryBlock> blocks, RunEvaluator evaluator, @Nullable Path logFile) {
         process(expectedMessages,
-                InputFiles.fromSource(code),
+                createInputFiles(code),
                 emulator -> setupEmulator(emulator, blocks),
                 compiler -> {
                     assertFalse(compiler.hasErrors(), "Errors while compiling program.");

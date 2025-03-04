@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode;
 
-import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
@@ -100,7 +99,7 @@ public class DocGeneratorTest {
 
             AstModule node = build(expectedMessages()
                             .add("The 'loop' keyword is deprecated. Use just 'while' instead.").ignored(),
-                    InputFiles.fromSource(code));
+                    createInputFiles(code));
             processNode(node);
 
             writer.println();
@@ -350,7 +349,7 @@ public class DocGeneratorTest {
             MindcodeCompiler compiler = new MindcodeCompiler(CompilationPhase.ALL,
                     expectedMessages().add("The 'loop' keyword is deprecated. Use just 'while' instead.").ignored(),
                     profile,
-                    InputFiles.fromSource(code.toString()));
+                    createInputFiles(code.toString()));
 
             compiler.compile();
 

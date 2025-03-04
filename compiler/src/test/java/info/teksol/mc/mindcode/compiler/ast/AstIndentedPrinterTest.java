@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.ast;
 
-import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.generated.ast.AstIndentedPrinter;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
@@ -12,7 +11,7 @@ import org.junit.jupiter.api.Test;
 public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
 
     protected void assertPrints(ExpectedMessages expectedMessages, String source, String expected) {
-        AstMindcodeNode program = build(expectedMessages, InputFiles.fromSource(source));
+        AstMindcodeNode program = build(expectedMessages, createInputFiles(source));
         String actual = new AstIndentedPrinter().print(program);
         Assertions.assertEquals(expected, actual);
     }

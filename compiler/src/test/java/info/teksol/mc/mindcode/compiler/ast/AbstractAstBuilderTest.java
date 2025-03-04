@@ -26,7 +26,7 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
     }
 
     protected void assertBuildsTo(ExpectedMessages expectedMessages, String source, AstModule expected) {
-        AstMindcodeNode actual = build(expectedMessages, InputFiles.fromSource(source));
+        AstMindcodeNode actual = build(expectedMessages, createInputFiles(source));
         Assertions.assertEquals(expected, actual);
     }
 
@@ -43,7 +43,7 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
     }
 
     protected void assertBuilds(String source) {
-        build(expectedMessages(), InputFiles.fromSource(source));
+        build(expectedMessages(), createInputFiles(source));
     }
 
     // HELPER FUNCTIONS

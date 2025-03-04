@@ -36,7 +36,7 @@ public class ERR {
     public static final String ARRAY_UNSUPPORTED_OPERATION = "Unsupported array expression.";
     public static final String ARRAY_VOLATILE = "Arrays cannot be declared 'volatile'.";
     public static final String ASCII_INVALID_ARGUMENT = "The argument to the 'ascii' function must be a non-empty string constant or literal.";
-    public static final String ASYNC_OUTPUT_ARGUMENT = "Function '%s' is called asynchronously and cannot have output arguments.";
+    public static final String ASYNC_OUTPUT_ARGUMENT = "Function '%s': asynchronous calls to remote function cannot take output arguments.";
     public static final String ASYNC_WRONG_ARGUMENT = "The '%s' function requires a call of a remote function as an argument.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
@@ -101,13 +101,14 @@ public class ERR {
     public static final String MLOG_UNSPECIFIED_ARGUMENT = "All arguments to the '%s' function need to be specified.";
     public static final String MLOG_VARIABLE_WITHOUT_MODIFIERS = "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.";
     public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
-    public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of module '%s' (file '%s').";
+    public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of file '%s'.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
     public static final String PRINTF_REQUIRES_TARGET_8 = "The printf function requires language target 8 or higher.";
     public static final String PROPERTY_UNKNOWN = "Unknown property '%s'.";
     public static final String REMOTE_INVALID_USE = "Invalid use of remote function '%s' (specify one of output parameters to access function output values).";
     public static final String REMOTE_MULTIPLE_FUNCTIONS = "Cannot resolve remote function '%s'.";
+    public static final String REMOTE_REQUIRES_TARGET_8 = "Remote functionality requires target 8 or higher.";
     public static final String REMOTE_UNKNOWN_PARAMETER = "Function '%s': unknown output parameter '%s'.";
     public static final String REMOTE_WRONG_ARGUMENT = "The '%s' function requires a remote function name as an argument.";
     public static final String REQUIRE_ERROR_READING_FILE = "Error reading file '%s'.";

@@ -27,12 +27,12 @@ class CallGraphCreatorTest extends AbstractTestBase {
     }
 
     protected void assertBuildsCallGraph(ExpectedMessages expectedMessages, String source, CallGraph expected) {
-        CallGraph actual = buildCallGraph(expectedMessages, InputFiles.fromSource(source));
+        CallGraph actual = buildCallGraph(expectedMessages, createInputFiles(source));
         assertEquals(expected, actual);
     }
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String source) {
-        buildCallGraph(expectedMessages, InputFiles.fromSource(source));
+        buildCallGraph(expectedMessages, createInputFiles(source));
     }
 
 
@@ -49,7 +49,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void detectsRecursion() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         allocate stack in cell1;
                         def a()  a(); end;
                         a();
@@ -67,7 +67,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void detectsDoubleRecursion() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         allocate stack in cell1;
                         def a()  b(); end;
                         def b()  a(); end;
@@ -91,7 +91,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void detectsNonRecursiveCalls() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         allocate stack in cell1;
                         def a()  a(); b(); c(); end;
                         def b()  b(); end;
@@ -115,7 +115,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void detectsIndirectCalls() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         def a(n) n + 1;       end;
                         def b(n) a(n) + 1;    end;
                         def c(n) a(n) + b(n); end;
@@ -136,7 +136,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void computersReferencesCorrectly() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         void foo() bar(); bar(); end;
                         void bar() baz(); baz(); end;
                         void baz() println("Called"); end;
@@ -157,7 +157,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void computersReferencesCorrectlyForInlineFunctions1() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         inline void foo() bar(); bar(); end;
                         inline void bar() baz(); baz(); end;
                         inline void baz() println("Called"); end;
@@ -178,7 +178,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void computersReferencesCorrectlyForInlineFunctions2() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         void foo() bar(); bar(); end;
                         inline void bar() baz(); baz(); end;
                         inline void baz() println("Called"); end;
@@ -199,7 +199,7 @@ class CallGraphCreatorTest extends AbstractTestBase {
     @Test
     void computersReferencesCorrectlyForInlineFunctions3() {
         CallGraph graph = buildCallGraph(expectedMessages(),
-                InputFiles.fromSource("""
+                createInputFiles("""
                         inline void foo() bar(); bar(); end;
                         void bar() baz(); baz(); end;
                         inline void baz() println("Called"); end;

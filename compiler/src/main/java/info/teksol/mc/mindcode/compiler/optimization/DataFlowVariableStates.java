@@ -832,10 +832,10 @@ class DataFlowVariableStates {
         /// The value of this variable was changed inexactly (i.e. by a function call).
         boolean inexact;
 
-        ///  List of defining instructions
+        /// List of defining instructions
         final List<LogicInstruction> instructions;
 
-        ///  List of instructions depending on this version of the variable
+        /// List of instructions depending on this version of the variable
         final Set<@Nullable LogicInstruction> references = createIdentitySet(5);
 
         public Definition(LogicVariable variable, int counter) {

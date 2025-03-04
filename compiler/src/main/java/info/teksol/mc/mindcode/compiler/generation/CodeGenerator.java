@@ -6,6 +6,7 @@ import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
@@ -23,6 +24,7 @@ import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
@@ -46,6 +48,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     private final ComposedAstNodeVisitor<ValueStore> nodeVisitor;
     private final FunctionDeclarationsBuilder functionCompiler;
+    private final DeclarationsBuilder declarationsBuilder;
 
     // Nesting level of code blocks
     private int nested = 0;
@@ -69,11 +72,12 @@ public class CodeGenerator extends AbstractMessageEmitter {
             throw new MindcodeInternalError("Unhandled node " + node);
         });
 
+
         // Registration order is unimportant as long as multiple handlers do not handle the same node
         nodeVisitor.registerVisitor(new AssignmentsBuilder(this, context));
         nodeVisitor.registerVisitor(new BreakContinueStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new CaseExpressionsBuilder(this, context));
-        nodeVisitor.registerVisitor(new DeclarationsBuilder(this, context));
+        nodeVisitor.registerVisitor(declarationsBuilder = new DeclarationsBuilder(this, context));
         nodeVisitor.registerVisitor(new ForEachLoopStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new FunctionCallsBuilder(this, context));
         nodeVisitor.registerVisitor(new IdentifiersBuilder(this, context));
@@ -136,6 +140,13 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nested--;
 
         addMissingPrintflush();
+    }
+
+    /// Generates an error if the current target doesn't support remote calls or variables
+    void verifyMinimalRemoteTarget(AstMindcodeNode node) {
+        if (!profile.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+            error(node, ERR.REMOTE_REQUIRES_TARGET_8);
+        }
     }
 
     private void generateRemoteInitialization() {
@@ -222,10 +233,16 @@ public class CodeGenerator extends AbstractMessageEmitter {
         }
 
         // Completely skip function declarations to prevent creating AST contexts for them
-        if (node instanceof AstFunctionDeclaration) return LogicVoid.VOID;
+        if (node instanceof AstFunctionDeclaration declaration) {
+            if (declaration.isRemote()) verifyMinimalRemoteTarget(node);
+            return LogicVoid.VOID;
+        }
 
         // Skip remote modules
-        if (node instanceof AstModule module && module.getRemoteProcessor() != null) return LogicVoid.VOID;
+        if (node instanceof AstModule module && module.getRemoteProcessor() != null) {
+            createRemoteVariables(module);
+            return LogicVoid.VOID;
+        }
 
         if (node.getScope() == AstNodeScope.LOCAL) nested++;
         if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = true;
@@ -252,5 +269,14 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (node instanceof AstCodeBlock) codeInGlobalScopeWarning = false;
 
         return result;
+    }
+
+    private void createRemoteVariables(AstModule module) {
+        module.getChildren().stream()
+                .filter(AstVariablesDeclaration.class::isInstance)
+                .map(AstVariablesDeclaration.class::cast)
+                .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == Modifier.REMOTE))
+                .forEach(n -> declarationsBuilder.visitRemoteVariablesDeclaration(module, n));
+
     }
 }

@@ -120,6 +120,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitFunctionDeclaration(AstFunctionDeclaration node) {
+        if (node.isRemote()) {
+            verifyMinimalRemoteTarget(node);
+        }
+
         // Function declarations are processed out of line
         return LogicVoid.VOID;
     }
@@ -155,6 +159,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private void initializeRemoteProcessor(AstRequire node) {
+        verifyMinimalRemoteTarget(node);
+
         assert node.getProcessor() != null;
         LogicVariable processor = (LogicVariable) evaluate(node.getProcessor());
 
@@ -222,6 +228,34 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         // Requires have no value
         return LogicVoid.VOID;
     }
+
+    public void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node) {
+        Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
+
+        if (isLocalContext()) {
+            node.getModifiers().forEach(this::verifyLocalContextModifiers);
+        }
+
+        for (AstVariableSpecification specification : node.getVariables()) {
+            if (specification.isArray()) {
+                node.getModifiers().forEach(this::verifyArrayModifiers);
+                if (isLocalContext()) {
+                    error(specification, ERR.ARRAY_LOCAL);
+                }
+            } else {
+                assert module.getRemoteProcessor() != null;
+                LogicVariable processor = (LogicVariable) evaluate(module.getRemoteProcessor());
+                AstIdentifier identifier = specification.getIdentifier();
+                String name = identifier.getName();
+
+                RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor,
+                        LogicVariable.global(identifier).getMlogString(), assembler.nextTemp(), false, false);
+
+                variables.registerRemoteVariable(identifier, variable);
+            }
+        }
+    }
+
 
     // Note: remote modules are not processed by code generator. Variables declared `remote` are created
     //       as volatile variables.
@@ -400,6 +434,9 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             if (modifiers.containsKey(modifier)) {
                 error(astModifier, ERR.VARIABLE_REPEATED_MODIFIER, modifier.name().toLowerCase());
             } else if (modifier.isCompatibleWith(modifiers.keySet())) {
+                if (modifier == Modifier.REMOTE) {
+                    verifyMinimalRemoteTarget(astModifier);
+                }
                 modifiers.put(modifier, createParametrization(astModifier.getParametrization()));
             } else {
                 error(astModifier, ERR.VARIABLE_INCOMPATIBLE_MODIFIER, modifier.name().toLowerCase());

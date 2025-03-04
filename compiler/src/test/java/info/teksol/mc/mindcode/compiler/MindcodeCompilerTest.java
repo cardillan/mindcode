@@ -108,7 +108,7 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
 
     @Test
     public void producesAllOutputs() {
-        InputFiles inputFiles = InputFiles.fromSource("""
+        InputFiles inputFiles = createInputFiles("""
                 remark("This is a parameter");
                 param value = true;
                 if value then

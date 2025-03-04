@@ -28,6 +28,9 @@ public class InputFiles {
     /// Count of file names used.
     private final Map<String, AtomicInteger> fileNames = new HashMap<>();
 
+    /// Additional files packaged in by external process.
+    private final Map<String, String> packagedFiles = new HashMap<>();
+
     private InputFiles(Path basePath) {
         this.basePath = basePath;
     }
@@ -85,6 +88,18 @@ public class InputFiles {
 
     public InputFile getInputFile(Path path) {
         return standardFiles.get(path.toAbsolutePath().normalize());
+    }
+
+    public boolean hasPackagedFile(String name) {
+        return packagedFiles.containsKey(name);
+    }
+
+    public String getPackagedFile(String name) {
+        return packagedFiles.get(name);
+    }
+
+    public void addPackagedFile(String name, String code) {
+        packagedFiles.put(name, code);
     }
 
     private InputFileImpl createFile(Path path, boolean library, String code) {
