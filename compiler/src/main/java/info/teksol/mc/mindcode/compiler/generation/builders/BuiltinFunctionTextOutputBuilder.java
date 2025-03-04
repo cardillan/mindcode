@@ -12,7 +12,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.MissingValue;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -50,7 +50,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
     }
 
     public ValueStore handlePrintf(AstFunctionCall call) {
-        if (!processor.isSupported(Opcode.FORMAT)) {
+        if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
             error(call.getIdentifier(), PRINTF_REQUIRES_TARGET_8);
             return LogicVoid.VOID;
         }

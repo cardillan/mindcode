@@ -166,9 +166,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
                         if (processors.containsKey(inputFile)) {
                             if (requirement.getProcessor() != null || processors.get(inputFile) != null) {
-                                AstModule requiredModule = modules.get(inputFile);
-                                error(requirement, ERR.MULTIPLE_MODULE_INSTANTIATIONS,
-                                        requiredModule.getModuleName(), inputFile.getDistinctTitle());
+                                error(requirement, ERR.MULTIPLE_MODULE_INSTANTIATIONS, inputFile.getDistinctTitle());
                             }
                         } else {
                             processors.put(inputFile, input.remoteProcessor);

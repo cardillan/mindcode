@@ -11,7 +11,7 @@ public class StructuredValueStore extends CompoundValueStore {
     private final Map<String, ValueStore> members;
 
     public StructuredValueStore(SourcePosition sourcePosition, String name, Map<String, ValueStore> members) {
-        super(sourcePosition, ERR.REMOTE_INVALID_USE);
+        super(sourcePosition, ERR.REMOTE_INVALID_USE.formatted(name));
         this.name = name;
         this.members = members;
     }

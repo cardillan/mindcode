@@ -119,6 +119,11 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         return codeGenerator.processInLocalScope(process);
     }
 
+    /// Generates an error if the current target doesn't support remote calls or variables
+    protected void verifyMinimalRemoteTarget(AstMindcodeNode node) {
+        codeGenerator.verifyMinimalRemoteTarget(node);
+    }
+
     /// Processes the node by passing it to the proper builder according to node type. The builder creates
     /// code from the AST node and provides a `ValueStore` instance representing the output value of the node.
     ///

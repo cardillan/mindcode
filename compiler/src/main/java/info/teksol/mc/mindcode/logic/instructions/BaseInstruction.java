@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
@@ -187,10 +188,11 @@ public class BaseInstruction implements LogicInstruction {
 
     @Override
     public String toString() {
-        return getClass().getSimpleName() + "{" +
-                "astContext.id: " + astContext.id +
-                ", opcode='" + opcode + '\'' +
-                ", args=" + args +
-                '}';
+        return LogicInstructionPrinter.toStringSimple(this);
+//        return getClass().getSimpleName() + "{" +
+//                "astContext.id: " + astContext.id +
+//                ", opcode='" + opcode + '\'' +
+//                ", args=" + args +
+//                '}';
     }
 }

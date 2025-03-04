@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.ast;
 
-import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.Modifier;
@@ -236,7 +235,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         @Test
         void buildsConstantsWithDocComments() {
             AstModule module = build(expectedMessages(),
-                    InputFiles.fromSource("""
+                    createInputFiles("""
                             /** This is a doc comment */
                             const x = 10;
                             """
@@ -249,7 +248,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         @Test
         void buildsParametersWithDocComments() {
             AstModule module = build(expectedMessages(),
-                    InputFiles.fromSource("""
+                    createInputFiles("""
                             /** This is a doc comment */
                             param x = 10;
                             """
@@ -262,7 +261,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         @Test
         void buildsFunctionsWithDocComments() {
             AstModule module = build(expectedMessages(),
-                    InputFiles.fromSource("""
+                    createInputFiles("""
                             /** This is a doc comment */
                             def foo(x) end;
                             """

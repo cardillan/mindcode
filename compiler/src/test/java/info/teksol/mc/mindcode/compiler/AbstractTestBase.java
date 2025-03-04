@@ -47,6 +47,10 @@ public abstract class AbstractTestBase {
         // Do nothing by default
     }
 
+    protected InputFiles createInputFiles(String source) {
+        return InputFiles.fromSource(source);
+    }
+
     protected CompilerProfile createCompilerProfile() {
         return CompilerProfile.fullOptimizations(false)
                 .setProcessorVersion(getProcessorVersion())
@@ -90,7 +94,7 @@ public abstract class AbstractTestBase {
     }
 
     protected void assertGeneratesMessages(ExpectedMessages expectedMessages, String source) {
-        process(expectedMessages, InputFiles.fromSource(source), null, c -> null);
+        process(expectedMessages, createInputFiles(source), null, c -> null);
     }
 
     protected void assertGeneratesMessage(int line, int column, String message, String source) {

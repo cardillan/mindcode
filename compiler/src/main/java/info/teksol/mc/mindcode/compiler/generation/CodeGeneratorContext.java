@@ -14,6 +14,7 @@ public interface CodeGeneratorContext extends
         CodeAssemblerContext,
         CompileTimeEvaluatorContext,
         FunctionMapperContext {
+    boolean hasErrors();
     CompileTimeEvaluator compileTimeEvaluator();
     ReturnStack returnStack();
     StackTracker stackTracker();

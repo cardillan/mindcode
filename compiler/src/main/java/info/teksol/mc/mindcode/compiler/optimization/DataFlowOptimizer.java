@@ -110,10 +110,13 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (experimental() && currentPass > 1) {
             boolean updated = false;
             for (Definition definition : definitions) {
-                // Temporary: do not process multiple definitions
-                //if (dependencies.getDefinitions().size() != 1) continue;
-
                 LogicVariable variable = definition.variable;
+
+                // If some of the definitions are side effect, do not perform the optimization
+                if (definition.instructions.stream().anyMatch(ix -> ix.outputArgumentsStream().noneMatch(variable::equals))) {
+                    continue;
+                }
+
                 if (definition.getReference() instanceof SetInstruction set && set.getValue().equals(variable)) {
                     int setIndex = instructionIndex(set);
                     if (setIndex < 0) continue;
