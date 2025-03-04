@@ -186,7 +186,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private LogicValue handleInlineFunctionCall(MindcodeFunction inlineFunction, List<FunctionArgument> arguments) {
-        MindcodeFunction function = inlineFunction.prepareInlinedForCall(processor.nextFunctionPrefix());
+        MindcodeFunction function = inlineFunction.prepareInlinedForCall(processor.nextFunctionPrefix(inlineFunction));
         final int nonVarargCount = Math.min(function.getStandardParameterCount(), arguments.size());
 
         // Varargs handling and validation: vararg arguments can't be unspecified.
@@ -301,16 +301,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         if (async) return LogicVoid.VOID;
 
-        List<LogicVariable> outputs = new ArrayList<>();
-        function.getLocalParameters().stream()
-                .filter(FunctionParameter::isOutput)
-                .map(LogicVariable.class::cast)
-                .forEach(outputs::add);
-        if (!function.isVoid()) {
-            outputs.add(LogicVariable.fnRetVal(function));
-        }
-        SideEffects sideEffects = SideEffects.writes(outputs);
-
+        SideEffects sideEffects = createRemoteCallSideEffects(function);
         LogicLabel label = assembler.createNextLabel();
         assembler.applySideEffects(sideEffects)
                 .createJump(label, Condition.EQUAL, finished, LogicBoolean.FALSE);
@@ -348,15 +339,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
     }
 
-    public ValueStore handleFinished(AstFunctionCall call) {
-        MindcodeFunction function = verifyRemoteFunctionName(call);
-        return function == null ? LogicVariable.INVALID : LogicVariable.fnFinished(function);
-    }
-
-    public ValueStore handleAwait(AstFunctionCall call) {
-        MindcodeFunction function = verifyRemoteFunctionName(call);
-        if (function == null) return LogicVariable.INVALID;
-
+    private SideEffects createRemoteCallSideEffects(MindcodeFunction function) {
         List<LogicVariable> outputs = new ArrayList<>();
         function.getLocalParameters().stream()
                 .filter(FunctionParameter::isOutput)
@@ -365,7 +348,19 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         if (!function.isVoid()) {
             outputs.add(LogicVariable.fnRetVal(function));
         }
-        SideEffects sideEffects = SideEffects.writes(outputs);
+
+        return SideEffects.writes(outputs);
+    }
+
+    public ValueStore handleFinished(AstFunctionCall call) {
+        MindcodeFunction function = verifyRemoteFunctionName(call);
+        return function == null ? LogicVariable.INVALID : LogicVariable.fnFinished(function);
+    }
+
+    public ValueStore handleAwait(AstFunctionCall call) {
+        MindcodeFunction function = verifyRemoteFunctionName(call);
+        if (function == null) return LogicVariable.INVALID;
+        SideEffects sideEffects = createRemoteCallSideEffects(function);
 
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
         LogicLabel label = assembler.createNextLabel();

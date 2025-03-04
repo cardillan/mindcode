@@ -1,149 +1,149 @@
 jump 0 equal message1 null
-set :fn0:title "Example program.\nTrying to locate linked blocks"
-set :fn0:message message1
+set :findLinkedBlocks.0:title "Example program.\nTrying to locate linked blocks"
+set :findLinkedBlocks.0:message message1
 set *tmp0 9
-set :fn0:requested @large-logic-display
-set :fn0:name "Display"
-set :fn0:variable :display
-set :fn0:required true
+set :findLinkedBlocks.0:requested @large-logic-display
+set :findLinkedBlocks.0:name "Display"
+set :findLinkedBlocks.0:variable :display
+set :findLinkedBlocks.0:required true
 jump 36 always 0 0
-set :display :fn0:variable
+set :display :findLinkedBlocks.0:variable
 set *tmp0 16
-set :fn0:requested @message
-set :fn0:name "Message"
-set :fn0:variable :message
-set :fn0:required false
+set :findLinkedBlocks.0:requested @message
+set :findLinkedBlocks.0:name "Message"
+set :findLinkedBlocks.0:variable :message
+set :findLinkedBlocks.0:required false
 jump 36 always 0 0
-set :message :fn0:variable
+set :message :findLinkedBlocks.0:variable
 set *tmp0 23
-set :fn0:requested @switch
-set :fn0:name "Switch"
-set :fn0:variable :switch
-set :fn0:required false
+set :findLinkedBlocks.0:requested @switch
+set :findLinkedBlocks.0:name "Switch"
+set :findLinkedBlocks.0:variable :switch
+set :findLinkedBlocks.0:required false
 jump 36 always 0 0
-set :switch :fn0:variable
+set :switch :findLinkedBlocks.0:variable
 set *tmp0 30
-set :fn0:requested @memory-bank
-set :fn0:name "Memory"
-set :fn0:variable :memory
-set :fn0:required true
+set :findLinkedBlocks.0:requested @memory-bank
+set :findLinkedBlocks.0:name "Memory"
+set :findLinkedBlocks.0:variable :memory
+set :findLinkedBlocks.0:required true
 jump 36 always 0 0
-set :memory :fn0:variable
+set :memory :findLinkedBlocks.0:variable
 set *tmp0 38
-set :fn0:requested @memory-cell
-set :fn0:name "Memory"
-set :fn0:variable :memory
-set :fn0:required true
-set :fn0:variable null
+set :findLinkedBlocks.0:requested @memory-cell
+set :findLinkedBlocks.0:name "Memory"
+set :findLinkedBlocks.0:variable :memory
+set :findLinkedBlocks.0:required true
+set :findLinkedBlocks.0:variable null
 set @counter *tmp0
-set :memory :fn0:variable
-print :fn0:title
-set :fn0:n @links
-op greaterThan *tmp1 :fn0:n 0
+set :memory :findLinkedBlocks.0:variable
+print :findLinkedBlocks.0:title
+set :findLinkedBlocks.0:n @links
+op greaterThan *tmp1 :findLinkedBlocks.0:n 0
 jump 98 equal *tmp1 false
-op sub :fn0:n :fn0:n 1
-getlink *tmp2 :fn0:n
-set :fn0:block *tmp2
+op sub :findLinkedBlocks.0:n :findLinkedBlocks.0:n 1
+getlink *tmp2 :findLinkedBlocks.0:n
+set :findLinkedBlocks.0:block *tmp2
 print "\nFound: "
-print :fn0:block
-sensor *tmp3 :fn0:block @type
-set :fn0:type *tmp3
+print :findLinkedBlocks.0:block
+sensor *tmp3 :findLinkedBlocks.0:block @type
+set :findLinkedBlocks.0:type *tmp3
 set *tmp4 56
-set :fn0:requested @large-logic-display
-set :fn0:name "Display"
-set :fn0:variable :display
-set :fn0:required true
+set :findLinkedBlocks.0:requested @large-logic-display
+set :findLinkedBlocks.0:name "Display"
+set :findLinkedBlocks.0:variable :display
+set :findLinkedBlocks.0:required true
 jump 83 always 0 0
-set :display :fn0:variable
+set :display :findLinkedBlocks.0:variable
 set *tmp4 63
-set :fn0:requested @message
-set :fn0:name "Message"
-set :fn0:variable :message
-set :fn0:required false
+set :findLinkedBlocks.0:requested @message
+set :findLinkedBlocks.0:name "Message"
+set :findLinkedBlocks.0:variable :message
+set :findLinkedBlocks.0:required false
 jump 83 always 0 0
-set :message :fn0:variable
+set :message :findLinkedBlocks.0:variable
 set *tmp4 70
-set :fn0:requested @switch
-set :fn0:name "Switch"
-set :fn0:variable :switch
-set :fn0:required false
+set :findLinkedBlocks.0:requested @switch
+set :findLinkedBlocks.0:name "Switch"
+set :findLinkedBlocks.0:variable :switch
+set :findLinkedBlocks.0:required false
 jump 83 always 0 0
-set :switch :fn0:variable
+set :switch :findLinkedBlocks.0:variable
 set *tmp4 77
-set :fn0:requested @memory-bank
-set :fn0:name "Memory"
-set :fn0:variable :memory
-set :fn0:required true
+set :findLinkedBlocks.0:requested @memory-bank
+set :findLinkedBlocks.0:name "Memory"
+set :findLinkedBlocks.0:variable :memory
+set :findLinkedBlocks.0:required true
 jump 83 always 0 0
-set :memory :fn0:variable
+set :memory :findLinkedBlocks.0:variable
 set *tmp4 96
-set :fn0:requested @memory-cell
-set :fn0:name "Memory"
-set :fn0:variable :memory
-set :fn0:required true
-op equal *tmp5 :fn0:requested :fn0:type
+set :findLinkedBlocks.0:requested @memory-cell
+set :findLinkedBlocks.0:name "Memory"
+set :findLinkedBlocks.0:variable :memory
+set :findLinkedBlocks.0:required true
+op equal *tmp5 :findLinkedBlocks.0:requested :findLinkedBlocks.0:type
 jump 94 equal *tmp5 false
-set :fn0:variable :fn0:block
-op equal *tmp7 :fn0:requested @message
+set :findLinkedBlocks.0:variable :findLinkedBlocks.0:block
+op equal *tmp7 :findLinkedBlocks.0:requested @message
 jump 91 equal *tmp7 false
-set :fn0:message :fn0:block
-set *tmp8 :fn0:message
+set :findLinkedBlocks.0:message :findLinkedBlocks.0:block
+set *tmp8 :findLinkedBlocks.0:message
 jump 92 always 0 0
 set *tmp8 null
 set *tmp6 *tmp8
 jump 95 always 0 0
 set *tmp6 null
 set @counter *tmp4
-set :memory :fn0:variable
+set :memory :findLinkedBlocks.0:variable
 jump 41 always 0 0
-set :fn0:foundAll 1
+set :findLinkedBlocks.0:foundAll 1
 set *tmp9 105
-set :fn0:requested @large-logic-display
-set :fn0:name "Display"
-set :fn0:variable :display
-set :fn0:required true
+set :findLinkedBlocks.0:requested @large-logic-display
+set :findLinkedBlocks.0:name "Display"
+set :findLinkedBlocks.0:variable :display
+set :findLinkedBlocks.0:required true
 jump 132 always 0 0
-set :display :fn0:variable
+set :display :findLinkedBlocks.0:variable
 set *tmp9 112
-set :fn0:requested @message
-set :fn0:name "Message"
-set :fn0:variable :message
-set :fn0:required false
+set :findLinkedBlocks.0:requested @message
+set :findLinkedBlocks.0:name "Message"
+set :findLinkedBlocks.0:variable :message
+set :findLinkedBlocks.0:required false
 jump 132 always 0 0
-set :message :fn0:variable
+set :message :findLinkedBlocks.0:variable
 set *tmp9 119
-set :fn0:requested @switch
-set :fn0:name "Switch"
-set :fn0:variable :switch
-set :fn0:required false
+set :findLinkedBlocks.0:requested @switch
+set :findLinkedBlocks.0:name "Switch"
+set :findLinkedBlocks.0:variable :switch
+set :findLinkedBlocks.0:required false
 jump 132 always 0 0
-set :switch :fn0:variable
+set :switch :findLinkedBlocks.0:variable
 set *tmp9 126
-set :fn0:requested @memory-bank
-set :fn0:name "Memory"
-set :fn0:variable :memory
-set :fn0:required true
+set :findLinkedBlocks.0:requested @memory-bank
+set :findLinkedBlocks.0:name "Memory"
+set :findLinkedBlocks.0:variable :memory
+set :findLinkedBlocks.0:required true
 jump 132 always 0 0
-set :memory :fn0:variable
+set :memory :findLinkedBlocks.0:variable
 set *tmp9 143
-set :fn0:requested @memory-cell
-set :fn0:name "Memory"
-set :fn0:variable :memory
-set :fn0:required true
+set :findLinkedBlocks.0:requested @memory-cell
+set :findLinkedBlocks.0:name "Memory"
+set :findLinkedBlocks.0:variable :memory
+set :findLinkedBlocks.0:required true
 print "\n"
-print :fn0:name
+print :findLinkedBlocks.0:name
 print ":"
 print " "
-print :fn0:variable
-jump 141 equal :fn0:required false
-op and :fn0:foundAll :fn0:foundAll :fn0:variable
-set *tmp10 :fn0:foundAll
+print :findLinkedBlocks.0:variable
+jump 141 equal :findLinkedBlocks.0:required false
+op and :findLinkedBlocks.0:foundAll :findLinkedBlocks.0:foundAll :findLinkedBlocks.0:variable
+set *tmp10 :findLinkedBlocks.0:foundAll
 jump 142 always 0 0
 set *tmp10 null
 set @counter *tmp9
-set :memory :fn0:variable
-printflush :fn0:message
-op equal *tmp11 :fn0:foundAll false
+set :memory :findLinkedBlocks.0:variable
+printflush :findLinkedBlocks.0:message
+op equal *tmp11 :findLinkedBlocks.0:foundAll false
 jump 3 notEqual *tmp11 false
 assertequals :message message1 "Located message1 block"
 end

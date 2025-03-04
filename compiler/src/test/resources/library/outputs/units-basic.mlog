@@ -2,17 +2,17 @@ ubind null
 jump 4 notEqual @unit null
 set *tmp0 null
 jump 16 always 0 0
-set :fn0:first_unit @unit
+set :findFreeUnit.0:first_unit @unit
 sensor *tmp3 @unit @controlled
 jump 10 notEqual *tmp3 0
 ucontrol flag null 0 0 0 0
 set *tmp0 @unit
 jump 16 always 0 0
-sensor *tmp6 :fn0:first_unit @dead
+sensor *tmp6 :findFreeUnit.0:first_unit @dead
 jump 13 notEqual *tmp6 1
-set :fn0:first_unit @unit
+set :findFreeUnit.0:first_unit @unit
 ubind null
-jump 5 notEqual :fn0:first_unit @unit
+jump 5 notEqual :findFreeUnit.0:first_unit @unit
 set *tmp0 null
 print *tmp0
 print "\n"
@@ -20,33 +20,33 @@ ubind null
 jump 22 notEqual @unit null
 set *tmp11 null
 jump 49 always 0 0
-set :fn1:first_unit @unit
-set :fn1:best_unit null
-set :fn1:best_distance 10000000000
+set :findClosestUnit.0:first_unit @unit
+set :findClosestUnit.0:best_unit null
+set :findClosestUnit.0:best_distance 10000000000
 sensor *tmp14 @unit @controlled
 jump 36 notEqual *tmp14 0
 sensor *tmp17 @unit @x
 op sub *tmp18 *tmp17 null
 sensor *tmp19 @unit @y
 op sub *tmp20 *tmp19 null
-op len :fn1:distance *tmp18 *tmp20
-jump 39 greaterThanEq :fn1:distance :fn1:best_distance
-set :fn1:best_distance :fn1:distance
-set :fn1:best_unit @unit
+op len :findClosestUnit.0:distance *tmp18 *tmp20
+jump 39 greaterThanEq :findClosestUnit.0:distance :findClosestUnit.0:best_distance
+set :findClosestUnit.0:best_distance :findClosestUnit.0:distance
+set :findClosestUnit.0:best_unit @unit
 jump 39 always 0 0
-sensor *tmp25 :fn1:first_unit @dead
+sensor *tmp25 :findClosestUnit.0:first_unit @dead
 jump 39 notEqual *tmp25 1
-set :fn1:first_unit @unit
+set :findClosestUnit.0:first_unit @unit
 ubind null
-jump 25 notEqual :fn1:first_unit @unit
-jump 44 notEqual :fn1:best_unit null
+jump 25 notEqual :findClosestUnit.0:first_unit @unit
+jump 44 notEqual :findClosestUnit.0:best_unit null
 set *tmp11 null
 jump 49 always 0 0
-sensor *tmp32 :fn1:best_unit @controlled
+sensor *tmp32 :findClosestUnit.0:best_unit @controlled
 jump 18 notEqual *tmp32 0
-ubind :fn1:best_unit
+ubind :findClosestUnit.0:best_unit
 ucontrol flag null 0 0 0 0
-set *tmp11 :fn1:best_unit
+set *tmp11 :findClosestUnit.0:best_unit
 print *tmp11
 print "\n"
 ubind null

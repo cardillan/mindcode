@@ -15,23 +15,23 @@ public class InstructionProcessorFactory {
     private static final MessageConsumer nullMessageConsumer = msg -> {};
 
     public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer, CompilerProfile profile) {
-        return create(new InstructionProcessorParameters(messageConsumer,
-                profile.getProcessorVersion(), profile.getProcessorEdition()));
+        return create(new InstructionProcessorParameters(messageConsumer, profile.getProcessorVersion(),
+                profile.getProcessorEdition(), profile.isShortFunctionPrefix()));
     }
 
     public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer,
             ProcessorVersion version, ProcessorEdition edition) {
-        return create(new InstructionProcessorParameters(messageConsumer, version, edition));
+        return create(new InstructionProcessorParameters(messageConsumer, version, edition, false));
     }
 
     public static InstructionProcessor getInstructionProcessor(ProcessorVersion version, ProcessorEdition edition) {
-        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition));
+        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, false));
     }
 
     // To be used by unit tests - returns new, non-cached instances based off whatever processor is given
     public static InstructionProcessor getInstructionProcessor(ProcessorVersion version, ProcessorEdition edition,
             List<OpcodeVariant> opcodeVariants) {
-        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, opcodeVariants));
+        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, false, opcodeVariants));
     }
 
     private static InstructionProcessor create(InstructionProcessorParameters parameters) {

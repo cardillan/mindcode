@@ -39,6 +39,15 @@ Possible values for the `boundary-checks` directive are:
 * `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes 3 instructions.
 * `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes 4 instructions.
 
+## Option `function-prefix`
+
+Specifies which function prefix is used to generate mlog names of local variables. Possible values are:
+
+* `short`: the prefix is `:fn` followed by a number, starting at 0. Leads to short variable names, which are more easily readable when displayed in Mindustry interface, but it is not immediately apparent which function each variable belongs to.  
+* `long`: the prefix is composed of a function name and a number, starting at 0. Variable names may become long and often incompletely displayed in Mindustry interface, but the function name is part of variable name, making it easier to recognize each variable.   
+
+Note: the function prefix of remote functions is always `:` followed by the function name, with to additional number, regardless of this setting. 
+
 ## Option `goal`
 
 Use the `goal` option to specify whether Mindcode should prefer to generate smaller code, or faster code. Possible values are:

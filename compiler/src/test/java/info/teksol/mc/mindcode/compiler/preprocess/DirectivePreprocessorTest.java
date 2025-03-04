@@ -16,8 +16,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static info.teksol.mc.common.SourcePosition.EMPTY;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
 class DirectivePreprocessorTest {
@@ -88,6 +87,14 @@ class DirectivePreprocessorTest {
         profile.setOptimizationPasses(1);
         processDirective(profile, "passes", "10");
         assertEquals(10, profile.getOptimizationPasses());
+    }
+
+    @Test
+    void processesDirectiveFunctionPrefix() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setShortFunctionPrefix(true);
+        processDirective(profile, "function-prefix", "long");
+        assertFalse(profile.isShortFunctionPrefix());
     }
 
     @Test

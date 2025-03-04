@@ -11,10 +11,10 @@ Pass 1: speed optimization selection (cost limit 976):
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
-    29 print :fn0:b
-    30 print :fn0:c
-    31 print :fn0:d
--    * set *tmp0 :fn0:d
+    29 print :test.0:b
+    30 print :test.0:c
+    31 print :test.0:d
+-    * set *tmp0 :test.0:d
     32 label *label0
     33 assertprints "1248" "sort variables"
     34 stop
@@ -22,103 +22,103 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
  
      1 assertflush
-     2 set :fn0:step p
+     2 set :test.0:step p
      3 setaddr *tmp1 *label4
--    * set :fn0:i :fn0:a
+-    * set :test.0:i :test.0:a
      4 jump *label1 always
      5 multilabel *label4 marker0
-     6 set :fn0:a :fn0:i
+     6 set :test.0:a :test.0:i
      7 setaddr *tmp1 *label5
--    * set :fn0:i :fn0:b
+-    * set :test.0:i :test.0:b
      8 jump *label1 always
      9 multilabel *label5 marker0
-    10 set :fn0:b :fn0:i
+    10 set :test.0:b :test.0:i
     11 setaddr *tmp1 *label6
--    * set :fn0:i :fn0:c
+-    * set :test.0:i :test.0:c
     12 jump *label1 always
     13 multilabel *label6 marker0
-    14 set :fn0:c :fn0:i
+    14 set :test.0:c :test.0:i
     15 setaddr *tmp1 *label7
--    * set :fn0:i :fn0:d
+-    * set :test.0:i :test.0:d
     16 label *label1
-    17 set :fn0:i :fn0:step
-    18 op mul :fn0:step :fn0:step 2
+    17 set :test.0:i :test.0:step
+    18 op mul :test.0:step :test.0:step 2
 
 Modifications by Unroll iteration loop at line 6:5 (-2 instructions):
      0 set p 1
      1 assertflush
-     2 set :fn0:step p
+     2 set :test.0:step p
 -    * setaddr *tmp1 *label4
 -    * jump *label1 always
 -    * multilabel *label4 marker0
--    * set :fn0:a :fn0:i
+-    * set :test.0:a :test.0:i
 -    * setaddr *tmp1 *label5
 -    * jump *label1 always
 -    * multilabel *label5 marker0
--    * set :fn0:b :fn0:i
+-    * set :test.0:b :test.0:i
 -    * setaddr *tmp1 *label6
 -    * jump *label1 always
 -    * multilabel *label6 marker0
--    * set :fn0:c :fn0:i
+-    * set :test.0:c :test.0:i
 -    * setaddr *tmp1 *label7
 -    * label *label1
--    * set :fn0:i :fn0:step
--    * op mul :fn0:step :fn0:step 2
+-    * set :test.0:i :test.0:step
+-    * op mul :test.0:step :test.0:step 2
 -    * label *label2
 -    * multijump *tmp1 0 0 marker0
 -    * multilabel *label7 marker0
--    * set :fn0:d :fn0:i
+-    * set :test.0:d :test.0:i
 -    * label *label3
 +    3 label *label8
-+    4 set :fn0:i :fn0:step
-+    5 op mul :fn0:step :fn0:step 2
++    4 set :test.0:i :test.0:step
++    5 op mul :test.0:step :test.0:step 2
 +    6 label *label9
-+    7 set :fn0:a :fn0:i
++    7 set :test.0:a :test.0:i
 +    8 label *label12
-+    9 set :fn0:i :fn0:step
-+   10 op mul :fn0:step :fn0:step 2
++    9 set :test.0:i :test.0:step
++   10 op mul :test.0:step :test.0:step 2
 +   11 label *label13
-+   12 set :fn0:b :fn0:i
++   12 set :test.0:b :test.0:i
 +   13 label *label16
-+   14 set :fn0:i :fn0:step
-+   15 op mul :fn0:step :fn0:step 2
++   14 set :test.0:i :test.0:step
++   15 op mul :test.0:step :test.0:step 2
 +   16 label *label17
-+   17 set :fn0:c :fn0:i
++   17 set :test.0:c :test.0:i
 +   18 label *label20
-+   19 set :fn0:i :fn0:step
-+   20 op mul :fn0:step :fn0:step 2
++   19 set :test.0:i :test.0:step
++   20 op mul :test.0:step :test.0:step 2
 +   21 label *label21
-+   22 set :fn0:d :fn0:i
++   22 set :test.0:d :test.0:i
 +   23 label *label3
-    24 print :fn0:a
-    25 print :fn0:b
-    26 print :fn0:c
+    24 print :test.0:a
+    25 print :test.0:b
+    26 print :test.0:c
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
      1 assertflush
-     2 set :fn0:step p
+     2 set :test.0:step p
      3 label *label8
--    * set :fn0:i :fn0:step
--    * op mul :fn0:step :fn0:step 2
-+    4 set :fn0:i p
-+    5 op mul :fn0:step p 2
+-    * set :test.0:i :test.0:step
+-    * op mul :test.0:step :test.0:step 2
++    4 set :test.0:i p
++    5 op mul :test.0:step p 2
      6 label *label9
-     7 set :fn0:a :fn0:i
+     7 set :test.0:a :test.0:i
      8 label *label12
  
-    17 set :fn0:c :fn0:i
+    17 set :test.0:c :test.0:i
     18 label *label20
-    19 set :fn0:i :fn0:step
--    * op mul :fn0:step :fn0:step 2
+    19 set :test.0:i :test.0:step
+-    * op mul :test.0:step :test.0:step 2
     20 label *label21
-    21 set :fn0:d :fn0:i
+    21 set :test.0:d :test.0:i
     22 label *label3
-    23 print :fn0:a
-    24 print :fn0:b
-    25 print :fn0:c
--    * print :fn0:d
-+   26 print :fn0:i
+    23 print :test.0:a
+    24 print :test.0:b
+    25 print :test.0:c
+-    * print :test.0:d
++   26 print :test.0:i
     27 label *label0
     28 assertprints "1248" "sort variables"
     29 stop
@@ -126,32 +126,32 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
      0 set p 1
      1 assertflush
--    * set :fn0:step p
+-    * set :test.0:step p
      2 label *label8
-     3 set :fn0:i p
-     4 op mul :fn0:step p 2
+     3 set :test.0:i p
+     4 op mul :test.0:step p 2
      5 label *label9
--    * set :fn0:a :fn0:i
-+    6 set :fn0:a p
+-    * set :test.0:a :test.0:i
++    6 set :test.0:a p
      7 label *label12
-     8 set :fn0:i :fn0:step
--    * op mul :fn0:step :fn0:step 2
-+    9 op mul :fn0:step p 4
+     8 set :test.0:i :test.0:step
+-    * op mul :test.0:step :test.0:step 2
++    9 op mul :test.0:step p 4
     10 label *label13
-    11 set :fn0:b :fn0:i
+    11 set :test.0:b :test.0:i
     12 label *label16
  
     17 label *label20
-    18 set :fn0:i :fn0:step
+    18 set :test.0:i :test.0:step
     19 label *label21
--    * set :fn0:d :fn0:i
-+   20 set :fn0:d :fn0:step
+-    * set :test.0:d :test.0:i
++   20 set :test.0:d :test.0:step
     21 label *label3
-    22 print :fn0:a
-    23 print :fn0:b
-    24 print :fn0:c
--    * print :fn0:i
-+   25 print :fn0:step
+    22 print :test.0:a
+    23 print :test.0:b
+    24 print :test.0:c
+-    * print :test.0:i
++   25 print :test.0:step
     26 label *label0
     27 assertprints "1248" "sort variables"
     28 stop
@@ -160,54 +160,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
      0 set p 1
      1 assertflush
      2 label *label8
--    * set :fn0:i p
-     3 op mul :fn0:step p 2
+-    * set :test.0:i p
+     3 op mul :test.0:step p 2
      4 label *label9
-     5 set :fn0:a p
+     5 set :test.0:a p
  
-    10 set :fn0:b :fn0:i
+    10 set :test.0:b :test.0:i
     11 label *label16
-    12 set :fn0:i :fn0:step
--    * op mul :fn0:step :fn0:step 2
-+   13 op mul :fn0:step p 8
+    12 set :test.0:i :test.0:step
+-    * op mul :test.0:step :test.0:step 2
++   13 op mul :test.0:step p 8
     14 label *label17
-    15 set :fn0:c :fn0:i
+    15 set :test.0:c :test.0:i
     16 label *label20
--    * set :fn0:i :fn0:step
+-    * set :test.0:i :test.0:step
     17 label *label21
--    * set :fn0:d :fn0:step
+-    * set :test.0:d :test.0:step
     18 label *label3
--    * print :fn0:a
+-    * print :test.0:a
 +   19 print p
-    20 print :fn0:b
-    21 print :fn0:c
-    22 print :fn0:step
+    20 print :test.0:b
+    21 print :test.0:c
+    22 print :test.0:step
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
  
      2 label *label8
-     3 op mul :fn0:step p 2
+     3 op mul :test.0:step p 2
      4 label *label9
--    * set :fn0:a p
+-    * set :test.0:a p
      5 label *label12
-     6 set :fn0:i :fn0:step
-     7 op mul :fn0:step p 4
+     6 set :test.0:i :test.0:step
+     7 op mul :test.0:step p 4
  
     17 label *label3
     18 print p
-    19 print :fn0:b
--    * print :fn0:c
-+   20 print :fn0:i
-    21 print :fn0:step
+    19 print :test.0:b
+-    * print :test.0:c
++   20 print :test.0:i
+    21 print :test.0:step
     22 label *label0
     23 assertprints "1248" "sort variables"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
  
-    11 set :fn0:i :fn0:step
-    12 op mul :fn0:step p 8
+    11 set :test.0:i :test.0:step
+    12 op mul :test.0:step p 8
     13 label *label17
--    * set :fn0:c :fn0:i
+-    * set :test.0:c :test.0:i
     14 label *label20
     15 label *label21
     16 label *label3
@@ -216,41 +216,41 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
      0 set p 1
      1 assertflush
      2 label *label8
--    * op mul :fn0:step p 2
-+    3 op mul :fn0:i p 2
+-    * op mul :test.0:step p 2
++    3 op mul :test.0:i p 2
      4 label *label9
      5 label *label12
--    * set :fn0:i :fn0:step
-     6 op mul :fn0:step p 4
+-    * set :test.0:i :test.0:step
+     6 op mul :test.0:step p 4
      7 label *label13
-     8 set :fn0:b :fn0:i
+     8 set :test.0:b :test.0:i
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
      0 set p 1
      1 assertflush
      2 label *label8
--    * op mul :fn0:i p 2
-+    3 op mul :fn0:b p 2
+-    * op mul :test.0:i p 2
++    3 op mul :test.0:b p 2
      4 label *label9
      5 label *label12
-     6 op mul :fn0:step p 4
+     6 op mul :test.0:step p 4
      7 label *label13
--    * set :fn0:b :fn0:i
+-    * set :test.0:b :test.0:i
      8 label *label16
-     9 set :fn0:i :fn0:step
-    10 op mul :fn0:step p 8
+     9 set :test.0:i :test.0:step
+    10 op mul :test.0:step p 8
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-1 instructions):
  
-     3 op mul :fn0:b p 2
+     3 op mul :test.0:b p 2
      4 label *label9
      5 label *label12
--    * op mul :fn0:step p 4
-+    6 op mul :fn0:i p 4
+-    * op mul :test.0:step p 4
++    6 op mul :test.0:i p 4
      7 label *label13
      8 label *label16
--    * set :fn0:i :fn0:step
-     9 op mul :fn0:step p 8
+-    * set :test.0:i :test.0:step
+     9 op mul :test.0:step p 8
     10 label *label17
     11 label *label20
 
@@ -265,12 +265,12 @@ Final code before resolving virtual instructions:
 
 set p 1
 assertflush
-op mul :fn0:b p 2
-op mul :fn0:i p 4
-op mul :fn0:step p 8
+op mul :test.0:b p 2
+op mul :test.0:i p 4
+op mul :test.0:step p 8
 print p
-print :fn0:b
-print :fn0:i
-print :fn0:step
+print :test.0:b
+print :test.0:i
+print :test.0:step
 assertprints "1248" "sort variables"
 stop

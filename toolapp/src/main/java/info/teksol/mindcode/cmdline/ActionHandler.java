@@ -76,6 +76,12 @@ abstract class ActionHandler {
                 .type(Arguments.caseInsensitiveEnumType(Remarks.class))
                 .setDefault(defaults.getRemarks());
 
+        compiler.addArgument("--function-prefix")
+                .help("specifies the how the function prefix of local variables is generated (either a short common prefix " +
+                      "for all functions, or a potentially long prefix derived from function name)")
+                .type(Arguments.booleanType("short", "long"))
+                .setDefault(defaults.isShortFunctionPrefix());
+
         compiler.addArgument("--link-guards")
                 .help("when set to true, generates code to ensure each declared linked block is linked " +
                       "to the processor before the program runs")

@@ -90,7 +90,7 @@ Actions:
 usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
                 [-l [LOG]] [-a FILE [FILE ...]] [-y {STRICT,MIXED,RELAXED}]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-r {NONE,PASSIVE,ACTIVE}] [--link-guards {true,false}]
+                [-r {NONE,PASSIVE,ACTIVE}] [--function-prefix {short,long}] [--link-guards {true,false}]
                 [--boundary-checks {NONE,ASSERT,MINIMAL,SIMPLE,DESCRIBED}] [--printflush {true,false}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
                 [--no-signature] [--run] [--run-steps {1..1000000000}] [--trace-execution {true,false}]
@@ -154,6 +154,9 @@ compiler options:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
+  --function-prefix {short,long}
+                         specifies the how the function prefix of  local  variables  is generated (either a short common
+                         prefix for all functions, or a potentially long prefix derived from function name)
   --link-guards {true,false}
                          when set to true,  generates  code  to  ensure  each  declared  linked  block  is linked to the
                          processor before the program runs
@@ -305,7 +308,7 @@ named arguments:
 ```
 usage: mindcode cs [-h] [-c] [-l [LOG]] [-a TAG [TAG ...]] [-y {STRICT,MIXED,RELAXED}]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [-i {1..100000}] [-e {1..1000}] [-g {SIZE,SPEED,AUTO}]
-                [-r {NONE,PASSIVE,ACTIVE}] [--link-guards {true,false}]
+                [-r {NONE,PASSIVE,ACTIVE}] [--function-prefix {short,long}] [--link-guards {true,false}]
                 [--boundary-checks {NONE,ASSERT,MINIMAL,SIMPLE,DESCRIBED}] [--printflush {true,false}]
                 [--sort-variables [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} [{LINKED,PARAMS,GLOBALS,MAIN,LOCALS,ALL,NONE} ...]]]
                 [--no-signature] [-o LEVEL] [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
@@ -348,6 +351,9 @@ compiler options:
   -r, --remarks {NONE,PASSIVE,ACTIVE}
                          controls remarks  propagation  to  the  compiled  code:  none  (remarks  are  removed), passive
                          (remarks are not executed), or active (remarks are printed)
+  --function-prefix {short,long}
+                         specifies the how the function prefix of  local  variables  is generated (either a short common
+                         prefix for all functions, or a potentially long prefix derived from function name)
   --link-guards {true,false}
                          when set to true,  generates  code  to  ensure  each  declared  linked  block  is linked to the
                          processor before the program runs

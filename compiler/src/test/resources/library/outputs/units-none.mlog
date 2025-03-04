@@ -4,9 +4,9 @@ set :preface null
 set :unit_type null
 set :x null
 set :y null
-set :fn0:unit_type :unit_type
-set :fn0:initial_flag :initial_flag
-ubind :fn0:unit_type
+set :findFreeUnit.0:unit_type :unit_type
+set :findFreeUnit.0:initial_flag :initial_flag
+ubind :findFreeUnit.0:unit_type
 op equal *tmp1 @unit null
 jump 15 equal *tmp1 false
 set *tmp0 null
@@ -14,38 +14,38 @@ jump 40 always 0 0
 set *tmp2 null
 jump 16 always 0 0
 set *tmp2 null
-set :fn0:first_unit @unit
+set :findFreeUnit.0:first_unit @unit
 sensor *tmp3 @unit @controlled
 op equal *tmp4 *tmp3 0
 jump 25 equal *tmp4 false
-ucontrol flag :fn0:initial_flag 0 0 0 0
+ucontrol flag :findFreeUnit.0:initial_flag 0 0 0 0
 set *tmp0 @unit
 jump 40 always 0 0
 set *tmp5 null
 jump 34 always 0 0
-sensor *tmp6 :fn0:first_unit @dead
+sensor *tmp6 :findFreeUnit.0:first_unit @dead
 op equal *tmp7 *tmp6 1
 jump 32 equal *tmp7 false
 set *tmp9 @unit
-set :fn0:first_unit *tmp9
-set *tmp8 :fn0:first_unit
+set :findFreeUnit.0:first_unit *tmp9
+set *tmp8 :findFreeUnit.0:first_unit
 jump 33 always 0 0
 set *tmp8 null
 set *tmp5 *tmp8
-ubind :fn0:unit_type
-op notEqual *tmp10 :fn0:first_unit @unit
+ubind :findFreeUnit.0:unit_type
+op notEqual *tmp10 :findFreeUnit.0:first_unit @unit
 jump 17 notEqual *tmp10 false
 set *tmp0 null
 jump 40 always 0 0
 set *tmp0 null
 print *tmp0
 print "\n"
-set :fn1:x :x
-set :fn1:y :y
-set :fn1:unit_type :unit_type
-set :fn1:initial_flag :initial_flag
+set :findClosestUnit.0:x :x
+set :findClosestUnit.0:y :y
+set :findClosestUnit.0:unit_type :unit_type
+set :findClosestUnit.0:initial_flag :initial_flag
 jump 107 equal true false
-ubind :fn1:unit_type
+ubind :findClosestUnit.0:unit_type
 op equal *tmp12 @unit null
 jump 54 equal *tmp12 false
 set *tmp11 null
@@ -53,53 +53,53 @@ jump 108 always 0 0
 set *tmp13 null
 jump 55 always 0 0
 set *tmp13 null
-set :fn1:first_unit @unit
-set :fn1:best_unit null
-set :fn1:best_distance 10000000000
+set :findClosestUnit.0:first_unit @unit
+set :findClosestUnit.0:best_unit null
+set :findClosestUnit.0:best_distance 10000000000
 sensor *tmp14 @unit @controlled
 op equal *tmp15 *tmp14 0
 jump 77 equal *tmp15 false
 sensor *tmp17 @unit @x
-op sub *tmp18 *tmp17 :fn1:x
+op sub *tmp18 *tmp17 :findClosestUnit.0:x
 sensor *tmp19 @unit @y
-op sub *tmp20 *tmp19 :fn1:y
+op sub *tmp20 *tmp19 :findClosestUnit.0:y
 op len *tmp21 *tmp18 *tmp20
-set :fn1:distance *tmp21
-op lessThan *tmp22 :fn1:distance :fn1:best_distance
+set :findClosestUnit.0:distance *tmp21
+op lessThan *tmp22 :findClosestUnit.0:distance :findClosestUnit.0:best_distance
 jump 74 equal *tmp22 false
-set :fn1:best_distance :fn1:distance
+set :findClosestUnit.0:best_distance :findClosestUnit.0:distance
 set *tmp24 @unit
-set :fn1:best_unit *tmp24
-set *tmp23 :fn1:best_unit
+set :findClosestUnit.0:best_unit *tmp24
+set *tmp23 :findClosestUnit.0:best_unit
 jump 75 always 0 0
 set *tmp23 null
 set *tmp16 *tmp23
 jump 86 always 0 0
-sensor *tmp25 :fn1:first_unit @dead
+sensor *tmp25 :findClosestUnit.0:first_unit @dead
 op equal *tmp26 *tmp25 1
 jump 84 equal *tmp26 false
 set *tmp28 @unit
-set :fn1:first_unit *tmp28
-set *tmp27 :fn1:first_unit
+set :findClosestUnit.0:first_unit *tmp28
+set *tmp27 :findClosestUnit.0:first_unit
 jump 85 always 0 0
 set *tmp27 null
 set *tmp16 *tmp27
-ubind :fn1:unit_type
-op notEqual *tmp29 :fn1:first_unit @unit
+ubind :findClosestUnit.0:unit_type
+op notEqual *tmp29 :findClosestUnit.0:first_unit @unit
 jump 58 notEqual *tmp29 false
-op equal *tmp30 :fn1:best_unit null
+op equal *tmp30 :findClosestUnit.0:best_unit null
 jump 95 equal *tmp30 false
 set *tmp11 null
 jump 108 always 0 0
 set *tmp31 null
 jump 96 always 0 0
 set *tmp31 null
-sensor *tmp32 :fn1:best_unit @controlled
+sensor *tmp32 :findClosestUnit.0:best_unit @controlled
 op equal *tmp33 *tmp32 0
 jump 105 equal *tmp33 false
-ubind :fn1:best_unit
-ucontrol flag :fn1:initial_flag 0 0 0 0
-set *tmp11 :fn1:best_unit
+ubind :findClosestUnit.0:best_unit
+ucontrol flag :findClosestUnit.0:initial_flag 0 0 0 0
+set *tmp11 :findClosestUnit.0:best_unit
 jump 108 always 0 0
 set *tmp34 null
 jump 106 always 0 0
@@ -108,16 +108,16 @@ jump 46 always 0 0
 set *tmp11 null
 print *tmp11
 print "\n"
-set :fn2:unit_type :unit_type
-set :fn2:initial_flag :initial_flag
+set :waitForFreeUnit.0:unit_type :unit_type
+set :waitForFreeUnit.0:initial_flag :initial_flag
 jump 129 equal true false
-ubind :fn2:unit_type
+ubind :waitForFreeUnit.0:unit_type
 op notEqual *tmp36 @unit null
 jump 127 equal *tmp36 false
 sensor *tmp38 @unit @controlled
 op equal *tmp39 *tmp38 0
 jump 124 equal *tmp39 false
-ucontrol flag :fn2:initial_flag 0 0 0 0
+ucontrol flag :waitForFreeUnit.0:initial_flag 0 0 0 0
 set *tmp35 @unit
 jump 130 always 0 0
 set *tmp40 null
@@ -130,34 +130,34 @@ jump 112 always 0 0
 set *tmp35 null
 print *tmp35
 print "\n"
-set :fn3:message :message
-set :fn3:preface :preface
-set :fn3:unit_type :unit_type
-set :fn3:initial_flag :initial_flag
+set :waitForFreeUnit.1:message :message
+set :waitForFreeUnit.1:preface :preface
+set :waitForFreeUnit.1:unit_type :unit_type
+set :waitForFreeUnit.1:initial_flag :initial_flag
 jump 165 equal true false
-ubind :fn3:unit_type
+ubind :waitForFreeUnit.1:unit_type
 op equal *tmp42 @unit null
 jump 148 equal *tmp42 false
-print :fn3:preface
+print :waitForFreeUnit.1:preface
 print "No unit of type "
-print :fn3:unit_type
+print :waitForFreeUnit.1:unit_type
 print " "
 print "found."
-printflush :fn3:message
+printflush :waitForFreeUnit.1:message
 set *tmp43 null
 jump 164 always 0 0
 sensor *tmp44 @unit @controlled
 op notEqual *tmp45 *tmp44 0
 jump 159 equal *tmp45 false
-print :fn3:preface
+print :waitForFreeUnit.1:preface
 print "Looking for a free "
-print :fn3:unit_type
+print :waitForFreeUnit.1:unit_type
 print "."
 print ".."
-printflush :fn3:message
+printflush :waitForFreeUnit.1:message
 set *tmp46 null
 jump 163 always 0 0
-ucontrol flag :fn3:initial_flag 0 0 0 0
+ucontrol flag :waitForFreeUnit.1:initial_flag 0 0 0 0
 set *tmp41 @unit
 jump 166 always 0 0
 set *tmp46 null
