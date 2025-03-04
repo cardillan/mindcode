@@ -1,38 +1,38 @@
 jump 0 equal message1 null
-set :fn0:message message1
+set :findLinkedBlocks.0:message message1
 set :display null
 set :message null
 set :switch null
 set :memory null
 print "Example program.\nTrying to locate linked blocks"
-set :fn0:n @links
-jump 26 lessThanEq :fn0:n 0
-op sub :fn0:n :fn0:n 1
-getlink :fn0:block :fn0:n
+set :findLinkedBlocks.0:n @links
+jump 26 lessThanEq :findLinkedBlocks.0:n 0
+op sub :findLinkedBlocks.0:n :findLinkedBlocks.0:n 1
+getlink :findLinkedBlocks.0:block :findLinkedBlocks.0:n
 print "\nFound: "
-print :fn0:block
-sensor :fn0:type :fn0:block @type
-jump 16 notEqual @large-logic-display :fn0:type
-set :display :fn0:block
-jump 19 notEqual @message :fn0:type
-set :message :fn0:block
-set :fn0:message :fn0:block
-jump 21 notEqual @switch :fn0:type
-set :switch :fn0:block
-jump 23 notEqual @memory-bank :fn0:type
-set :memory :fn0:block
-jump 25 notEqual @memory-cell :fn0:type
-set :memory :fn0:block
-jump 9 greaterThan :fn0:n 0
+print :findLinkedBlocks.0:block
+sensor :findLinkedBlocks.0:type :findLinkedBlocks.0:block @type
+jump 16 notEqual @large-logic-display :findLinkedBlocks.0:type
+set :display :findLinkedBlocks.0:block
+jump 19 notEqual @message :findLinkedBlocks.0:type
+set :message :findLinkedBlocks.0:block
+set :findLinkedBlocks.0:message :findLinkedBlocks.0:block
+jump 21 notEqual @switch :findLinkedBlocks.0:type
+set :switch :findLinkedBlocks.0:block
+jump 23 notEqual @memory-bank :findLinkedBlocks.0:type
+set :memory :findLinkedBlocks.0:block
+jump 25 notEqual @memory-cell :findLinkedBlocks.0:type
+set :memory :findLinkedBlocks.0:block
+jump 9 greaterThan :findLinkedBlocks.0:n 0
 print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
 format :display
-op and :fn0:foundAll 1 :display
+op and :findLinkedBlocks.0:foundAll 1 :display
 format :message
 format :switch
 format :memory
-op and :fn0:foundAll :fn0:foundAll :memory
+op and :findLinkedBlocks.0:foundAll :findLinkedBlocks.0:foundAll :memory
 print :memory
-op and :fn0:foundAll :fn0:foundAll :memory
-printflush :fn0:message
-jump 2 equal :fn0:foundAll false
+op and :findLinkedBlocks.0:foundAll :findLinkedBlocks.0:foundAll :memory
+printflush :findLinkedBlocks.0:message
+jump 2 equal :findLinkedBlocks.0:foundAll false
 assertequals :message message1 "Located message1 block"

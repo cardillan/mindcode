@@ -45,6 +45,7 @@ public class CompilerProfile {
     private int instructionLimit = 1000;
     private int optimizationPasses = DEFAULT_WEBAPP_PASSES;
     private SyntacticMode syntacticMode = SyntacticMode.RELAXED;
+    private boolean shortFunctionPrefix = false;
     private boolean linkedBlockGuards = true;
     private GenerationGoal goal = GenerationGoal.AUTO;
     private RuntimeChecks boundaryChecks = RuntimeChecks.NONE;
@@ -213,6 +214,15 @@ public class CompilerProfile {
 
     public CompilerProfile setLinkedBlockGuards(boolean linkedBlockGuards) {
         this.linkedBlockGuards = linkedBlockGuards;
+        return this;
+    }
+
+    public boolean isShortFunctionPrefix() {
+        return shortFunctionPrefix;
+    }
+
+    public CompilerProfile setShortFunctionPrefix(boolean shortFunctionPrefix) {
+        this.shortFunctionPrefix = shortFunctionPrefix;
         return this;
     }
 

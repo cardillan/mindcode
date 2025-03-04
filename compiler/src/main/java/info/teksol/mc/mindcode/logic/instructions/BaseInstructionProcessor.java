@@ -9,6 +9,7 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.opcodes.*;
@@ -20,6 +21,7 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -34,11 +36,14 @@ import static info.teksol.mc.util.CollectionUtils.indexOf;
 public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
+    private final boolean shortFunctionPrefix;
     private final List<OpcodeVariant> opcodeVariants;
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
     private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
+    private final Map<String, AtomicInteger> functionPrefixCounter = new HashMap<>();
+    private final Set<String> functionPrefixes = new HashSet<>();
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int markerIndex = 0;
@@ -48,19 +53,21 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         public final MessageConsumer messageConsumer;
         public final ProcessorVersion version;
         public final ProcessorEdition edition;
+        public final boolean shortFunctionPrefix;
         public final List<OpcodeVariant> opcodeVariants;
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
-                ProcessorEdition edition, List<OpcodeVariant> opcodeVariants) {
+                ProcessorEdition edition, boolean shortFunctionPrefix, List<OpcodeVariant> opcodeVariants) {
             this.messageConsumer = messageConsumer;
             this.version = version;
             this.edition = edition;
+            this.shortFunctionPrefix = shortFunctionPrefix;
             this.opcodeVariants = opcodeVariants;
         }
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
-                ProcessorEdition edition) {
-            this(messageConsumer, version, edition, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
+                ProcessorEdition edition, boolean shortFunctionPrefix) {
+            this(messageConsumer, version, edition, shortFunctionPrefix, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
         }
     }
 
@@ -68,6 +75,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         super(parameters.messageConsumer);
         this.processorVersion = parameters.version;
         this.processorEdition = parameters.edition;
+        this.shortFunctionPrefix = parameters.shortFunctionPrefix;
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream().collect(Collectors.toMap(k -> k,
@@ -95,8 +103,18 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public String nextFunctionPrefix() {
-        return getFunctionPrefix() + functionIndex++;
+    public String nextFunctionPrefix(MindcodeFunction function) {
+        if (shortFunctionPrefix) {
+            return getFunctionPrefix() + functionIndex++;
+        } else {
+            AtomicInteger counter = functionPrefixCounter.computeIfAbsent(function.getName(), k -> new AtomicInteger(0));
+            while (true) {
+                String prefix = ':' + function.getName() + '.' + counter.getAndIncrement();
+                if (functionPrefixes.add(prefix)) {
+                    return prefix;
+                }
+            }
+        }
     }
 
     @Override

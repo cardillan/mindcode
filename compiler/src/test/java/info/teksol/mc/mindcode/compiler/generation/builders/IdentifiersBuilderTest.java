@@ -149,23 +149,23 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             noinline def foo(in out x) x++; end;
                             foo(out x[a]);
                             """,
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1001), "equal", "cell1", "null"),
-                    createInstruction(SET, var(10), ":a"),
-                    createInstruction(READ, var(11), "cell1", var(10)),
-                    createInstruction(SET, var(12), var(11)),
-                    createInstruction(SET, ":fn0:x", var(12)),
-                    createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
-                    createInstruction(CALL, var(1000), ":fn0*retval"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(WRITE, ":fn0:x", "cell1", var(10)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(1), "equal", "cell1", "null"),
+                    createInstruction(SET, tmp(10), ":a"),
+                    createInstruction(READ, tmp(11), "cell1", tmp(10)),
+                    createInstruction(SET, tmp(12), tmp(11)),
+                    createInstruction(SET, ":foo.0:x", tmp(12)),
+                    createInstruction(SETADDR, ":foo.0*retaddr", label(2)),
+                    createInstruction(CALL, label(0), ":foo.0*retval"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(WRITE, ":foo.0:x", "cell1", tmp(10)),
                     createInstruction(END),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, var(13), ":fn0:x"),
-                    createInstruction(OP, "add", ":fn0:x", ":fn0:x", "1"),
-                    createInstruction(SET, ":fn0*retval", var(13)),
-                    createInstruction(LABEL, var(1003)),
-                    createInstruction(RETURN, ":fn0*retaddr")
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(13), ":foo.0:x"),
+                    createInstruction(OP, "add", ":foo.0:x", ":foo.0:x", "1"),
+                    createInstruction(SET, ":foo.0*retval", tmp(13)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(RETURN, ":foo.0*retaddr")
             );
         }
     }
@@ -278,21 +278,21 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             noinline def foo(in out x) x++; end;
                             foo(out x[a]);
                             """,
-                    createInstruction(SET, var(0), ":a"),
-                    createInstruction(READARR, var(1), ".x[]", var(0)),
-                    createInstruction(SET, var(2), var(1)),
-                    createInstruction(SET, ":fn0:x", var(2)),
-                    createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
-                    createInstruction(CALL, var(1000), ":fn0*retval"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(WRITEARR, ":fn0:x", ".x[]", var(0)),
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(READARR, tmp(1), ".x[]", tmp(0)),
+                    createInstruction(SET, tmp(2), tmp(1)),
+                    createInstruction(SET, ":foo.0:x", tmp(2)),
+                    createInstruction(SETADDR, ":foo.0*retaddr", label(1)),
+                    createInstruction(CALL, label(0), ":foo.0*retval"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(WRITEARR, ":foo.0:x", ".x[]", tmp(0)),
                     createInstruction(END),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, var(3), ":fn0:x"),
-                    createInstruction(OP, "add", ":fn0:x", ":fn0:x", "1"),
-                    createInstruction(SET, ":fn0*retval", var(3)),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(RETURN, ":fn0*retaddr")
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(3), ":foo.0:x"),
+                    createInstruction(OP, "add", ":foo.0:x", ":foo.0:x", "1"),
+                    createInstruction(SET, ":foo.0*retval", tmp(3)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(RETURN, ":foo.0*retaddr")
             );
         }
     }

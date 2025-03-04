@@ -11,39 +11,39 @@ Final code before resolving virtual instructions:
     3:  jump *label4 equal display4 null
         label *label5
     4:  jump *label5 equal display5 null
-    5:  set :fn0:display display1
-    6:  setaddr :fn0*retaddr *label6
-    7:  call *label0 :fn0*retval
+    5:  set :displaySize.0:display display1
+    6:  setaddr :displaySize.0*retaddr *label6
+    7:  call *label0 :displaySize.0*retval
         label *label6
-    8:  set *tmp0 :fn0*retval
+    8:  set *tmp0 :displaySize.0*retval
     9:  assertequals 176 *tmp0 "large display size"
-   10:  set :fn0:display display5
-   11:  setaddr :fn0*retaddr *label7
-   12:  call *label0 :fn0*retval
+   10:  set :displaySize.0:display display5
+   11:  setaddr :displaySize.0*retaddr *label7
+   12:  call *label0 :displaySize.0*retval
         label *label7
-   13:  set *tmp1 :fn0*retval
+   13:  set *tmp1 :displaySize.0*retval
    14:  assertequals 80 *tmp1 "small display size"
    15:  set :x %336699cc
-   16:  set :fn1:packedColor :x
-   17:  op div *tmp2 :fn1:packedColor %00000001
-   18:  set :fn1:bits *tmp2
-   19:  op and *tmp3 :fn1:bits 4278190080
+   16:  set :unpackcolor.0:packedColor :x
+   17:  op div *tmp2 :unpackcolor.0:packedColor %00000001
+   18:  set :unpackcolor.0:bits *tmp2
+   19:  op and *tmp3 :unpackcolor.0:bits 4278190080
    20:  op div *tmp4 *tmp3 4278190080
-   21:  set :fn1:r *tmp4
-   22:  op and *tmp5 :fn1:bits 16711680
+   21:  set :unpackcolor.0:r *tmp4
+   22:  op and *tmp5 :unpackcolor.0:bits 16711680
    23:  op div *tmp6 *tmp5 16711680
-   24:  set :fn1:g *tmp6
-   25:  op and *tmp7 :fn1:bits 65280
+   24:  set :unpackcolor.0:g *tmp6
+   25:  op and *tmp7 :unpackcolor.0:bits 65280
    26:  op div *tmp8 *tmp7 65280
-   27:  set :fn1:b *tmp8
-   28:  op and *tmp9 :fn1:bits 255
+   27:  set :unpackcolor.0:b *tmp8
+   28:  op and *tmp9 :unpackcolor.0:bits 255
    29:  op div *tmp10 *tmp9 255
-   30:  set :fn1:a *tmp10
+   30:  set :unpackcolor.0:a *tmp10
         label *label8
-   31:  set :r :fn1:r
-   32:  set :g :fn1:g
-   33:  set :b :fn1:b
-   34:  set :a :fn1:a
+   31:  set :r :unpackcolor.0:r
+   32:  set :g :unpackcolor.0:g
+   33:  set :b :unpackcolor.0:b
+   34:  set :a :unpackcolor.0:a
    35:  assertequals 0.2 :r "red channel"
    36:  assertequals 0.4 :g "green channel"
    37:  assertequals 0.6 :b "blue channel"
@@ -78,8 +78,8 @@ Final code before resolving virtual instructions:
    57:  draw scale -1 1 0 0 0 0
    58:  draw translate -176 0 0 0 0 0
         label *label18
-   59:  set :fn12:display display1
-   60:  sensor *tmp12 :fn12:display @type
+   59:  set :rotateLeft.0:display display1
+   60:  sensor *tmp12 :rotateLeft.0:display @type
    61:  set *tmp13 *tmp12
    62:  jump *label22 equal *tmp13 @logic-display
    63:  jump *label21 always 0 0
@@ -103,8 +103,8 @@ Final code before resolving virtual instructions:
    75:  set *tmp11 null
         label *label20
         label *label19
-   76:  set :fn15:display display2
-   77:  sensor *tmp15 :fn15:display @type
+   76:  set :rotateRight.0:display display2
+   77:  sensor *tmp15 :rotateRight.0:display @type
    78:  set *tmp16 *tmp15
    79:  jump *label30 equal *tmp16 @logic-display
    80:  jump *label29 always 0 0
@@ -128,8 +128,8 @@ Final code before resolving virtual instructions:
    92:  set *tmp14 null
         label *label28
         label *label27
-   93:  set :fn18:display display3
-   94:  sensor *tmp18 :fn18:display @type
+   93:  set :upsideDown.0:display display3
+   94:  sensor *tmp18 :upsideDown.0:display @type
    95:  set *tmp19 *tmp18
    96:  jump *label38 equal *tmp19 @logic-display
    97:  jump *label37 always 0 0
@@ -153,8 +153,8 @@ Final code before resolving virtual instructions:
   109:  set *tmp17 null
         label *label36
         label *label35
-  110:  set :fn21:display display4
-  111:  sensor *tmp21 :fn21:display @type
+  110:  set :flipVertical.0:display display4
+  111:  sensor *tmp21 :flipVertical.0:display @type
   112:  set *tmp22 *tmp21
   113:  jump *label46 equal *tmp22 @logic-display
   114:  jump *label45 always 0 0
@@ -178,8 +178,8 @@ Final code before resolving virtual instructions:
   126:  set *tmp20 null
         label *label44
         label *label43
-  127:  set :fn24:display display5
-  128:  sensor *tmp24 :fn24:display @type
+  127:  set :flipHorizontal.0:display display5
+  128:  sensor *tmp24 :flipHorizontal.0:display @type
   129:  set *tmp25 *tmp24
   130:  jump *label54 equal *tmp25 @logic-display
   131:  jump *label53 always 0 0
@@ -209,14 +209,14 @@ Final code before resolving virtual instructions:
         label *label60
   146:  end
         label *label0
-  147:  sensor *tmp26 :fn0:display @type
-  148:  set :fn0:type *tmp26
-  149:  op equal *tmp27 :fn0:type @logic-display
+  147:  sensor *tmp26 :displaySize.0:display @type
+  148:  set :displaySize.0:type *tmp26
+  149:  op equal *tmp27 :displaySize.0:type @logic-display
   150:  jump *label62 equal *tmp27 false
   151:  set *tmp28 80
   152:  jump *label63 always 0 0
         label *label62
-  153:  op equal *tmp29 :fn0:type @large-logic-display
+  153:  op equal *tmp29 :displaySize.0:type @large-logic-display
   154:  jump *label64 equal *tmp29 false
   155:  set *tmp30 176
   156:  jump *label65 always 0 0
@@ -225,7 +225,7 @@ Final code before resolving virtual instructions:
         label *label65
   158:  set *tmp28 *tmp30
         label *label63
-  159:  set :fn0*retval *tmp28
+  159:  set :displaySize.0*retval *tmp28
         label *label61
-  160:  return :fn0*retaddr
+  160:  return :displaySize.0*retaddr
   161:  end

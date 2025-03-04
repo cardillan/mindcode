@@ -3,20 +3,20 @@ jump 1 equal display2 null
 jump 2 equal display3 null
 jump 3 equal display4 null
 jump 4 equal display5 null
-sensor :fn0:type display1 @type
-set :fn0*retval 80
-jump 11 equal :fn0:type @logic-display
-set :fn0*retval null
-jump 11 notEqual :fn0:type @large-logic-display
-set :fn0*retval 176
-assertequals 176 :fn0*retval "large display size"
-sensor :fn0:type display5 @type
-set :fn0*retval 80
-jump 18 equal :fn0:type @logic-display
-set :fn0*retval null
-jump 18 notEqual :fn0:type @large-logic-display
-set :fn0*retval 176
-assertequals 80 :fn0*retval "small display size"
+sensor :displaySize.0:type display1 @type
+set :displaySize.0*retval 80
+jump 11 equal :displaySize.0:type @logic-display
+set :displaySize.0*retval null
+jump 11 notEqual :displaySize.0:type @large-logic-display
+set :displaySize.0*retval 176
+assertequals 176 :displaySize.0*retval "large display size"
+sensor :displaySize.0:type display5 @type
+set :displaySize.0*retval 80
+jump 18 equal :displaySize.0:type @logic-display
+set :displaySize.0*retval null
+jump 18 notEqual :displaySize.0:type @large-logic-display
+set :displaySize.0*retval 176
+assertequals 80 :displaySize.0*retval "small display size"
 assertequals 0.2 0.2 "red channel"
 assertequals 0.4 0.4 "green channel"
 assertequals 0.6 0.6 "blue channel"

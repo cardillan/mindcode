@@ -119,7 +119,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private void setupOutOfLineFunction(MindcodeFunction function) {
         function.setLabel(processor.nextLabel());
-        function.setPrefix(function.isRemote() ? ":" + function.getName() : processor.nextFunctionPrefix());
+        function.setPrefix(function.isRemote() ? ":" + function.getName() : processor.nextFunctionPrefix(function));
         function.createParameters();
     }
 

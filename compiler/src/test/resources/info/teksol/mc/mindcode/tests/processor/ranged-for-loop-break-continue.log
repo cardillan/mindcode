@@ -12,7 +12,7 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
  
-    15 op equal *tmp4 :fn1:i 3
+    15 op equal *tmp4 :test.0:i 3
     16 jump *label7 equal *tmp4 false
     17 jump *label5 always
 -    * set *tmp5 null
@@ -20,10 +20,10 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
     19 label *label7
 -    * set *tmp5 null
     20 label *label8
-    21 print :fn1:i
+    21 print :test.0:i
     22 print "|"
  
-    28 op equal *tmp7 :fn1:i *tmp6
+    28 op equal *tmp7 :test.0:i *tmp6
     29 jump *label10 equal *tmp7 false
     30 jump *label6 always
 -    * set *tmp8 null
@@ -32,7 +32,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
 -    * set *tmp8 null
     33 label *label11
     34 label *label5
-    35 op add :fn1:i :fn1:i 1
+    35 op add :test.0:i :test.0:i 1
     36 jump *label4 always
     37 label *label6
 -    * set *tmp0 null
@@ -42,50 +42,50 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-     7 setaddr :fn0*retaddr *label3
-     8 call *label0 :fn0*retval
+     7 setaddr :d.0*retaddr *label3
+     8 call *label0 :d.0*retval
      9 label *label3
--    * set *tmp2 :fn0*retval
+-    * set *tmp2 :d.0*retval
 -    * set *tmp3 *tmp2
-+   10 set *tmp3 :fn0*retval
-    11 set :fn1:i *tmp1
++   10 set *tmp3 :d.0*retval
+    11 set :test.0:i *tmp1
     12 label *label4
-    13 jump *label6 greaterThanEq :fn1:i *tmp3
+    13 jump *label6 greaterThanEq :test.0:i *tmp3
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
-    11 set :fn1:i *tmp1
+    11 set :test.0:i *tmp1
     12 label *label4
-    13 jump *label6 greaterThanEq :fn1:i *tmp3
--    * op equal *tmp4 :fn1:i 3
+    13 jump *label6 greaterThanEq :test.0:i *tmp3
+-    * op equal *tmp4 :test.0:i 3
 -    * jump *label7 equal *tmp4 false
-+   14 jump *label7 notEqual :fn1:i 3
++   14 jump *label7 notEqual :test.0:i 3
     15 jump *label5 always
     16 jump *label8 always
     17 label *label7
  
-    23 call *label0 :fn0*retval
+    23 call *label0 :d.0*retval
     24 label *label9
-    25 set *tmp6 :fn0*retval
--    * op equal *tmp7 :fn1:i *tmp6
+    25 set *tmp6 :d.0*retval
+-    * op equal *tmp7 :test.0:i *tmp6
 -    * jump *label10 equal *tmp7 false
-+   26 jump *label10 notEqual :fn1:i *tmp6
++   26 jump *label10 notEqual :test.0:i *tmp6
     27 jump *label6 always
     28 jump *label11 always
     29 label *label10
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
-    13 jump *label6 greaterThanEq :fn1:i *tmp3
-    14 jump *label7 notEqual :fn1:i 3
+    13 jump *label6 greaterThanEq :test.0:i *tmp3
+    14 jump *label7 notEqual :test.0:i 3
     15 jump *label5 always
 -    * jump *label8 always
     16 label *label7
     17 label *label8
-    18 print :fn1:i
+    18 print :test.0:i
  
-    24 set *tmp6 :fn0*retval
-    25 jump *label10 notEqual :fn1:i *tmp6
+    24 set *tmp6 :d.0*retval
+    25 jump *label10 notEqual :test.0:i *tmp6
     26 jump *label6 always
 -    * jump *label11 always
     27 label *label10
@@ -94,131 +94,131 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    22 call *label0 :fn0*retval
+    22 call *label0 :d.0*retval
     23 label *label9
-    24 set *tmp6 :fn0*retval
--    * jump *label10 notEqual :fn1:i *tmp6
-+   25 jump *label10 notEqual :fn1:i :fn0*retval
+    24 set *tmp6 :d.0*retval
+-    * jump *label10 notEqual :test.0:i *tmp6
++   25 jump *label10 notEqual :test.0:i :d.0*retval
     26 jump *label6 always
     27 label *label10
     28 label *label11
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
-    21 setaddr :fn0*retaddr *label9
-    22 call *label0 :fn0*retval
+    21 setaddr :d.0*retaddr *label9
+    22 call *label0 :d.0*retval
     23 label *label9
--    * set *tmp6 :fn0*retval
-    24 jump *label10 notEqual :fn1:i :fn0*retval
+-    * set *tmp6 :d.0*retval
+    24 jump *label10 notEqual :test.0:i :d.0*retval
     25 jump *label6 always
     26 label *label10
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-    11 set :fn1:i *tmp1
+    11 set :test.0:i *tmp1
     12 label *label4
-    13 jump *label6 greaterThanEq :fn1:i *tmp3
+    13 jump *label6 greaterThanEq :test.0:i *tmp3
 +   14 label *label13
-    15 jump *label7 notEqual :fn1:i 3
+    15 jump *label7 notEqual :test.0:i 3
     16 jump *label5 always
     17 label *label7
  
     28 label *label11
     29 label *label5
-    30 op add :fn1:i :fn1:i 1
+    30 op add :test.0:i :test.0:i 1
 -    * jump *label4 always
-+   31 jump *label13 lessThan :fn1:i *tmp3
++   31 jump *label13 lessThan :test.0:i *tmp3
     32 label *label6
     33 label *label1
     34 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
-     2 setaddr :fn0*retaddr *label2
-     3 call *label0 :fn0*retval
+     2 setaddr :d.0*retaddr *label2
+     3 call *label0 :d.0*retval
      4 label *label2
--    * set *tmp1 :fn0*retval
-+    5 set :fn1:i :fn0*retval
-     6 set :fn0:n 10
-     7 setaddr :fn0*retaddr *label3
-     8 call *label0 :fn0*retval
+-    * set *tmp1 :d.0*retval
++    5 set :test.0:i :d.0*retval
+     6 set :d.0:n 10
+     7 setaddr :d.0*retaddr *label3
+     8 call *label0 :d.0*retval
      9 label *label3
-    10 set *tmp3 :fn0*retval
--    * set :fn1:i *tmp1
+    10 set *tmp3 :d.0*retval
+-    * set :test.0:i *tmp1
     11 label *label4
-    12 jump *label6 greaterThanEq :fn1:i *tmp3
+    12 jump *label6 greaterThanEq :test.0:i *tmp3
     13 label *label13
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
      9 label *label3
-    10 set *tmp3 :fn0*retval
+    10 set *tmp3 :d.0*retval
     11 label *label4
--    * jump *label6 greaterThanEq :fn1:i *tmp3
-+   12 jump *label6 greaterThanEq :fn1:i :fn0*retval
+-    * jump *label6 greaterThanEq :test.0:i *tmp3
++   12 jump *label6 greaterThanEq :test.0:i :d.0*retval
     13 label *label13
-    14 jump *label7 notEqual :fn1:i 3
+    14 jump *label7 notEqual :test.0:i 3
     15 jump *label5 always
 
 Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
  
     11 label *label4
-    12 jump *label6 greaterThanEq :fn1:i :fn0*retval
+    12 jump *label6 greaterThanEq :test.0:i :d.0*retval
     13 label *label13
--    * jump *label7 notEqual :fn1:i 3
+-    * jump *label7 notEqual :test.0:i 3
 -    * jump *label5 always
-+   14 jump *label5 equal :fn1:i 3
++   14 jump *label5 equal :test.0:i 3
     15 label *label7
     16 label *label8
-    17 print :fn1:i
+    17 print :test.0:i
  
-    20 setaddr :fn0*retaddr *label9
-    21 call *label0 :fn0*retval
+    20 setaddr :d.0*retaddr *label9
+    21 call *label0 :d.0*retval
     22 label *label9
--    * jump *label10 notEqual :fn1:i :fn0*retval
+-    * jump *label10 notEqual :test.0:i :d.0*retval
 -    * jump *label6 always
-+   23 jump *label6 equal :fn1:i :fn0*retval
++   23 jump *label6 equal :test.0:i :d.0*retval
     24 label *label10
     25 label *label11
     26 label *label5
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-    35 set :fn0*retval :fn0:n
+    35 set :d.0*retval :d.0:n
     36 label *label12
-    37 return :fn0*retaddr
+    37 return :d.0*retaddr
 -    * end
 
 Final code before resolving virtual instructions:
 
 assertflush
-set :fn0:n 1
-setaddr :fn0*retaddr *label2
-call *label0 :fn0*retval
+set :d.0:n 1
+setaddr :d.0*retaddr *label2
+call *label0 :d.0*retval
 label *label2
-set :fn1:i :fn0*retval
-set :fn0:n 10
-setaddr :fn0*retaddr *label3
-call *label0 :fn0*retval
+set :test.0:i :d.0*retval
+set :d.0:n 10
+setaddr :d.0*retaddr *label3
+call *label0 :d.0*retval
 label *label3
-set *tmp3 :fn0*retval
-jump *label6 greaterThanEq :fn1:i :fn0*retval
+set *tmp3 :d.0*retval
+jump *label6 greaterThanEq :test.0:i :d.0*retval
 label *label13
-jump *label5 equal :fn1:i 3
-print :fn1:i
+jump *label5 equal :test.0:i 3
+print :test.0:i
 print "|"
-set :fn0:n 5
-setaddr :fn0*retaddr *label9
-call *label0 :fn0*retval
+set :d.0:n 5
+setaddr :d.0*retaddr *label9
+call *label0 :d.0*retval
 label *label9
-jump *label6 equal :fn1:i :fn0*retval
+jump *label6 equal :test.0:i :d.0*retval
 label *label5
-op add :fn1:i :fn1:i 1
-jump *label13 lessThan :fn1:i *tmp3
+op add :test.0:i :test.0:i 1
+jump *label13 lessThan :test.0:i *tmp3
 label *label6
 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
 stop
 end
 label *label0
-set :fn0*retval :fn0:n
-return :fn0*retaddr
+set :d.0*retval :d.0:n
+return :d.0*retaddr

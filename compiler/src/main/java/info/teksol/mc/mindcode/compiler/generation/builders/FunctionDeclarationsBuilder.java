@@ -33,7 +33,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
                 return;
             }
 
-            generateCodeForFunction(function.prepareInlinedForCall(processor.nextFunctionPrefix()));
+            generateCodeForFunction(function.prepareInlinedForCall(processor.nextFunctionPrefix(function)));
         } else {
             generateCodeForFunction(function);
         }

@@ -118,6 +118,17 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         }
     }
 
+    private void setFunctionPrefix(CompilerProfile profile, AstDirectiveSet node) {
+        if (validateSingleValue(node)) {
+            String strValue = node.getValues().getFirst().getText();
+            switch (strValue) {
+                case "long"  -> profile.setShortFunctionPrefix(false);
+                case "short" -> profile.setShortFunctionPrefix(true);
+                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
+            }
+        }
+    }
+
     private void setGenerationGoal(CompilerProfile compilerProfile, AstDirectiveSet node) {
         if (validateSingleValue(node)) {
             String strValue = node.getValues().getFirst().getText();
@@ -308,6 +319,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("auto-printflush", this::setAutoPrintflush);
         map.put("boolean-eval", this::setShortCircuitEval);
         map.put("boundary-checks", this::setBoundaryChecks);
+        map.put("function-prefix", this::setFunctionPrefix);
         map.put("goal", this::setGenerationGoal);
         map.put("instruction-limit", this::setInstructionLimit);
         map.put("link-guards", this::setLinkGuards);

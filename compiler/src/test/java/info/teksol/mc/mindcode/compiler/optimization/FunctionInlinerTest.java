@@ -116,11 +116,11 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                             rand(10);
                         end;
                         """,
-                createInstruction(OP, "rand", ":fn0*retval", "10"),
-                createInstruction(SET, ":a", ":fn0*retval"),
-                createInstruction(OP, "rand", ":fn0*retval", "10"),
+                createInstruction(OP, "rand", ":foo.0*retval", "10"),
+                createInstruction(SET, ":a", ":foo.0*retval"),
+                createInstruction(OP, "rand", ":foo.0*retval", "10"),
                 createInstruction(PRINT, ":a"),
-                createInstruction(PRINT, ":fn0*retval")
+                createInstruction(PRINT, ":foo.0*retval")
         );
     }
 
@@ -146,8 +146,8 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         print(foo() + foo());
                         """,
                 createInstruction(OP, "rand", tmp(0), "10"),
-                createInstruction(OP, "rand", ":fn0*retval", "10"),
-                createInstruction(OP, "add", tmp(2), tmp(0), ":fn0*retval"),
+                createInstruction(OP, "rand", ":foo.0*retval", "10"),
+                createInstruction(OP, "add", tmp(2), tmp(0), ":foo.0*retval"),
                 createInstruction(PRINT, tmp(2))
         );
     }
@@ -196,19 +196,19 @@ class FunctionInlinerTest extends AbstractOptimizerTest<FunctionInliner> {
                         foo(1);
                         foo(2);
                         """,
-                createInstruction(SET, ":fn0:n", "1"),
-                createInstruction(SETADDR, ":fn0*retaddr", var(1001)),
-                createInstruction(CALL, var(1000), ":fn0*retval"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(SET, ":fn0:n", "2"),
-                createInstruction(SETADDR, ":fn0*retaddr", var(1002)),
-                createInstruction(CALL, var(1000), ":fn0*retval"),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, ":foo.0:n", "1"),
+                createInstruction(SETADDR, ":foo.0*retaddr", label(1)),
+                createInstruction(CALL, label(0), ":foo.0*retval"),
+                createInstruction(LABEL, label(1)),
+                createInstruction(SET, ":foo.0:n", "2"),
+                createInstruction(SETADDR, ":foo.0*retaddr", label(2)),
+                createInstruction(CALL, label(0), ":foo.0*retval"),
+                createInstruction(LABEL, label(2)),
                 createInstruction(END),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(OP, "mul", var(2), "2", ":fn0:n"),
-                createInstruction(PRINT, var(2)),
-                createInstruction(RETURN, ":fn0*retaddr")
+                createInstruction(LABEL, label(0)),
+                createInstruction(OP, "mul", tmp(2), "2", ":foo.0:n"),
+                createInstruction(PRINT, tmp(2)),
+                createInstruction(RETURN, ":foo.0*retaddr")
         );
     }
 

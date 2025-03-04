@@ -1396,10 +1396,16 @@ Implicit and explicit variable names used in source code are translated to mlog 
 * linked block and parameters: no modification to the variable name
 * global variables: `.variable` (a `.` prefix)
 * main variables: `:variable` (a `:` prefix)
-* local variables: `:fnX:variable` (a `:` prefix both to the function counter and a variable name)
+* local variables: `:fnX:variable` (a `:` prefix both to the function counter and a variable name) for short prefixes, or `:function.X:variable` (using actual function name and a numeric counter) for long prefixes.
+* array elements: `.array*index` (index corresponds to the numeric index of the element within the array)
 * temporary variables: `*tmpX` (`*tmp` + counter)
-* function return address/value: `:fnXX*retaddr`/`:fnXX*retval`
+* function return address/value: `:fnX*retaddr`/`:fnX*retval`
 * stack pointer: `*sp`
+* main processor: `*mainProcessor`
+* remote function parameters: `:function:parameter` (using actual function and parameter name)
+* remote function internal variables: `:function*variable`
+
+In short, global variables start with `.`, local variables start with `:` and compiler-generated variables start with or contain `*`.
 
 If the same main or local variable is declared multiple times in the same function (in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and subsequent declarations, separated by `.` (a dot):
 
