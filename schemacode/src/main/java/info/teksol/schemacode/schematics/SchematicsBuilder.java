@@ -63,6 +63,9 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
     public Schematic buildSchematics() {
         extractConstants();
 
+        // Add constants as modules
+        constants.forEach((k, v) -> inputFiles.addPackagedFile(k, v.getText(this)));
+
         List<AstSchematic> schematicsList = astDefinitions.definitions().stream()
                 .filter(AstSchematic.class::isInstance)
                 .map(AstSchematic.class::cast)
