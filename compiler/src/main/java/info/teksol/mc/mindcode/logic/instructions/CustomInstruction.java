@@ -16,6 +16,7 @@ import java.util.stream.IntStream;
 @NullMarked
 public class CustomInstruction implements LogicInstruction {
     private final boolean safe;
+    private final boolean text;
     private final String opcode;
     private final List<LogicArgument> args;
     private final @Nullable List<InstructionParameterType> params;
@@ -27,9 +28,11 @@ public class CustomInstruction implements LogicInstruction {
     // AstContext and marker are not considered by hashCode or equals!
     protected final AstContext astContext;
 
-    public CustomInstruction(AstContext astContext, boolean safe, String opcode, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
+    public CustomInstruction(AstContext astContext, boolean safe, boolean text, String opcode, List<LogicArgument> args,
+            @Nullable List<InstructionParameterType> params) {
         this.astContext = Objects.requireNonNull(astContext);
         this.safe = safe;
+        this.text = text;
         this.opcode = Objects.requireNonNull(opcode);
         this.args = List.copyOf(args);
         this.params = params;
@@ -48,6 +51,7 @@ public class CustomInstruction implements LogicInstruction {
     protected CustomInstruction(CustomInstruction other, AstContext astContext) {
         this.astContext = Objects.requireNonNull(astContext);
         this.safe = other.safe;
+        this.text = other.text;
         this.opcode = other.opcode;
         this.args = other.args;
         this.params = other.params;
@@ -88,6 +92,10 @@ public class CustomInstruction implements LogicInstruction {
     @Override
     public boolean isSafe() {
         return safe;
+    }
+
+    public boolean isText() {
+        return text;
     }
 
     @Override

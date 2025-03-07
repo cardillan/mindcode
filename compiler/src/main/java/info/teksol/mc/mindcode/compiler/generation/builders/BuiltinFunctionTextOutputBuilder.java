@@ -35,7 +35,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
         ValueStore result;
         if (validateStandardFunctionArguments(call, arguments, 1)) {
-            if (arguments.getFirst().getArgumentValue() instanceof LogicString str && !str.getValue().isEmpty()) {
+            if (arguments.getFirst().unwrap() instanceof LogicString str && !str.getValue().isEmpty()) {
                 result = LogicNumber.create(str.getValue().charAt(0));
             } else {
                 error(call, ASCII_INVALID_ARGUMENT);
@@ -65,7 +65,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
             return LogicVoid.VOID;
         }
 
-        if (arguments.getFirst().getArgumentValue() instanceof LogicString str) {
+        if (arguments.getFirst().unwrap() instanceof LogicString str) {
             long placeholders = PLACEHOLDER_MATCHER.matcher(str.format(processor)).results().count();
             if (placeholders == 0) {
                 warn(arguments.getFirst(), WARN.PRINTF_NO_PLACEHOLDERS);
@@ -101,7 +101,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         }
 
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-        ValueStore result = arguments.getFirst().getArgumentValue() instanceof FormattableContent formattable
+        ValueStore result = arguments.getFirst().unwrap() instanceof FormattableContent formattable
                 ? createFormattableOutput(formattable, false, formatter,
                     evaluateExpressionsUncached(formattable.getParts()),
                     arguments.subList(1, arguments.size()))
@@ -153,7 +153,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         // The non-formattable variant of the call
         // Just output an instruction for every argument
         arguments.forEach(argument -> formatter.createInstruction(assembler, argument.getValue(assembler)));
-        return arguments.getLast().getArgumentValue();
+        return arguments.getLast().unwrap();
     }
 
     public enum Formatter {

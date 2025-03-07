@@ -158,7 +158,7 @@ public abstract class AbstractTestBase {
     }
 
     protected final LogicInstruction customInstruction(String opcode, String... args) {
-        return new CustomInstruction(mockAstContext, false, opcode, _logic(args),null);
+        return new CustomInstruction(mockAstContext, false, false, opcode, _logic(args),null);
     }
 
     protected static String q(String str) {

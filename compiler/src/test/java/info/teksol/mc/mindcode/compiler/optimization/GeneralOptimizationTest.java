@@ -402,14 +402,14 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
     @Test
     void optimizesCustomInstructionOutputs() {
         assertCompilesTo("""
-                        inline def foo(in x)
-                            mlog("foo", in x, out y);
+                        inline def bar(in x)
+                            mlog("bar", in x, out y);
                             y;
                         end;
                         
-                        print(foo(10));
+                        print(bar(10));
                         """,
-                customInstruction("foo", "10", ":fn0:y"),
+                customInstruction("bar", "10", ":fn0:y"),
                 createInstruction(PRINT, ":fn0:y")
         );
     }

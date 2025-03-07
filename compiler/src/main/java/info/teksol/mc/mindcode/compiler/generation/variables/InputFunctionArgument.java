@@ -27,7 +27,7 @@ public class InputFunctionArgument implements FunctionArgument {
 
     /// Provides the value of the underlying argument
     @Override
-    public ValueStore getArgumentValue() {
+    public ValueStore unwrap() {
         return value;
     }
 

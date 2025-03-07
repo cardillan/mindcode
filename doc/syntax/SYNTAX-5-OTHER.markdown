@@ -225,16 +225,17 @@ In particular, some optimizers expect to work on code that was already processed
 
 Mindcode provides a mechanism of encoding a custom instruction not known to Mindcode. Using custom instructions is useful in only a few cases:
 
-1. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
-2. An instruction was not implemented correctly in Mindcode and a fix is not available.
-3. Mindustry got updated to allow new instructions created by mods, and there are mods with their own instructions.
+1. You want to use instructions provided by a Mindustry mod.
+2. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
+3. An instruction was not implemented correctly in Mindcode and a fix is not available.
 
 Custom instructions may interact with Mindustry World or provide information about Mindustry World. If an instruction alters the program flow (for example, if a new function call instruction was added to Mindustry Logic), it cannot be safely encoded using this mechanism. In addition, some custom instructions might break existing optimizations through their side effects. 
 
 Custom instructions are created using the `mlog()` function:
 
 * The first argument to the `mlog` function needs to be a string literal. This literal is the instruction code.
-* All other arguments must be either literals, or user variables.
+* All other arguments must be either keywords, literals, or user variables.
+  * Keyword: the keyword is used as an instruction argument (without the Mindcode specific `:` prefix). No `in` or `out` modifiers may be used. 
   * String literal: the text represented by the string literal is used as an instruction argument. If the `in` modifier is used, the string literal will be used as an argument including the enclosing double quotes.
   * Numeric literal: all other literals must not be marked with either modifier. The primary use for numeric literals is to provide fill-in values (typically zeroes) for unused instruction parameters.
   * User variable: the variable is used as an instruction argument. The argument must use the `in` and `out` modifier to inform Mindcode how the corresponding instruction argument behaves:
@@ -244,24 +245,27 @@ Custom instructions are created using the `mlog()` function:
 
 Mindcode assumes that a custom instruction interacts with the Mindustry World and cannot be safely removed from the program. This is not true for instructions which only return information about the Mindustry World, but do not modify or interact with it in any way. If you want to encode such an instruction, you can use the `mlogSafe()` function instead of `mlog()`.
 
+If the custom instruction modifies the print buffer (either by adding the text to it, or by flushing it), the `mlogText()` functions must be used instead of `mlog()`. This ensures the Print Merging optimization will handle the instruction correctly. 
+
 > [!TIP]
-> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` function always uses user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function. See the examples below.  
+> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` function always uses user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function. See the examples below. Furthermore, it is possible to use keywords as function arguments to inline functions.
      
 For better understanding, the creating of custom instructions will be demonstrated on existing instructions. 
 
 ## The `format` instruction
 
-The `format` instruction was introduced in Mindustry Logic 8. When compiling for mindustry Logic 7, the instruction isn't available. We can create it using this code:
+The `format` instruction was introduced in Mindustry Logic 8. When compiling for Mindustry Logic 7, the instruction isn't available. We can create it using this code:
 
 ```
 #set target = 7;
 inline void format(value)
-    mlog("format", in value);
+    mlogText("format", in value);
 end;
 
 param a = 10;
 println("The value is: {0}");
 format(a * 20);
+printflush(message1);
 ```
 
 Compiling this code produces the following output:
@@ -269,31 +273,28 @@ Compiling this code produces the following output:
 ```
 set a 10
 print "The value is: {0}\n"
-op mul __tmp0 a 20
-format __tmp0
+op mul :format.0:value a 20
+format :format.0:value
+printflush message1
 ```
 
 Considerations:
 
-* The Print Merging optimization under Mindustry Logic 8 language target knows and properly handles the `format` instruction. When replaced by a custom instruction, the Print Merger won't be aware of it and might produce incorrect code. It would be necessary to turn off Print Merging optimization, if the `format` instruction was introduced in this way.
+* By using the `mlogText()` function, we're making sure the Print Merging optimization handles the instruction correctly.
 * The processor emulator doesn't recognize custom instructions and won't handle them. The output produced by running the above code using the processor emulator would therefore be incorrect.
 
 ## The `draw print` instruction
 
-Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the Mindustry Logic 8 language target, this instruction is mapped to the `drawPrint()` function. Unfortunately, this instruction takes an additional keyword argument - alignment, which needs special treatment when defining a custom instruction. Each possible value of alignment needs to be handled separately.
+Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the Mindustry Logic 8 language target, this instruction is mapped to the `drawPrint()` function. We can create it explicitly through this:
 
 ```
 #set target = 7;
-inline void drawPrintCenter(x, y)
-    mlog("draw", "print", in x, in y, "center", 0, 0, 0);
+inline void drawPrint(x, y, alignment)
+    mlogText("draw", "print", in x, in y, alignment, 0, 0, 0);
 end;
 
-inline void drawPrintBottomLeft(x, y)
-    mlog("draw", "print", in x, in y, "bottomLeft", 0, 0, 0);
-end;
-
-drawPrintCenter(0, 10);
-drawPrintBottomLeft(0, 20);
+drawPrint(0, 10, :center);
+drawPrint(0, 20, :bottomLeft);
 ```
 
 Result:
@@ -305,8 +306,8 @@ draw print 0 20 bottomLeft 0 0 0
 
 Considerations:
 
-* The `draw print` instruction manipulates the text buffer and therefore interferes with the Print Merging optimization again. This optimization would need to be switched off.
-* A separate function for each possible alignment is required. Unused functions aren't compiled, so there isn't any cost in terms of instruction space to defining a function for each existing alignment, but it is tedious and cumbersome. Defining all possible variants for instructions that have several keyword arguments might become unfeasible.   
+* The `draw print` instruction manipulates the text buffer, so the `mlogText()` function is used.
+* The function expects a keyword as an argument. It is possible to create custom instructions expecting several keywords this way. However, Mindcode is unable to enforce that the keywords are passed as arguments at the right places at this moment.  
 
 ## The `ucontrol getBlock` instruction
 
@@ -327,43 +328,26 @@ print(building, type, floor);
 
 building = getBlock2(x, y, out type, out floor);
 print(building, type, floor);
+printflush(message1);
 ```
 
 compiles to
 
 ```
-op rand __tmp0 100 0
-op floor x __tmp0 0
-op rand __tmp2 200 0
-op floor y __tmp2 0
-ucontrol getBlock x y type building floor
-print building
-print type
-print floor
-ucontrol getBlock x y __fn0_type __fn0_building __fn0_floor
-print __fn0_building
-print __fn0_type
-print __fn0_floor
+op rand *tmp0 100 0
+op floor :x *tmp0 0
+op rand *tmp2 200 0
+op floor :y *tmp2 0
+ucontrol getBlock :x :y :type :building :floor
+print :building
+print :type
+print :floor
+ucontrol getBlock :x :y :getBlock2.0:type :getBlock2.0:building :getBlock2.0:floor
+print :getBlock2.0:building
+print :getBlock2.0:type
+print :getBlock2.0:floor
+printflush message1
 ```
-
-## The `jump` instruction
-
-The `jump` instruction is a control flow instruction, an as such producing it through the `mlog()` function will break the compiled code. Anyhow, Mindcode will allow the following code to be compiled:
-
-```
-mlog("jump", 50, "always");
-```
-
-producing 
-
-```
-jump 50 always
-```
-
-Considerations:
-
-* There aren't direct ways to obtain the targets for the `jump` instruction. Forcing the instruction to target the intended code might be very difficult (albeit not outright impossible when modifying the instruction to target labels instead).
-* Introducing jumps unrecognized by Mindcode would render most of the compiled code unsafe. Mindcode uses the knowledge of the program control flow to generate the code and make various optimizations. Introducing unrecognized control flow instructions would mean the compiled code and especially the optimizations are not correct.  
 
 ---
 

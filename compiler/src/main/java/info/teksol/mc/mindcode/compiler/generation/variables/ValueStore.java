@@ -23,6 +23,13 @@ import java.util.function.Consumer;
 @NullMarked
 public interface ValueStore extends SourceElement {
 
+    /// If this instance is a wrapper around an actual ValueStore instance (e.g. FunctionArgument implementations),
+    /// this method must return the actual ValueStore instance. If multiple layers of wrappers are employed, they are
+    /// all unwrapped at once.
+    default ValueStore unwrap() {
+        return this;
+    }
+
     /// Indicates the value can be represented by an mlog variable. Compound values (e.g. formattable string literal
     /// or a keyword) cannot be represented.
     default boolean isMlogRepresentable() {
@@ -43,7 +50,7 @@ public interface ValueStore extends SourceElement {
     /// @return true if this instance represents an l-value
     boolean isLvalue();
 
-    /// Generates code for initialization of a newly created value store. Most implementations do nothing.
+    /// Generates code for initialization of a newly created variable of this type. Most implementations do nothing.
     ///
     /// @param assembler assembler instance used to produce code for obtaining the value, if needed
     default void initialize(CodeAssembler assembler) {

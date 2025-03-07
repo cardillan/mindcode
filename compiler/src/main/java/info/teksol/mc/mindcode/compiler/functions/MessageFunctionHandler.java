@@ -17,7 +17,7 @@ public class MessageFunctionHandler extends StandardFunctionHandler {
 
     @Override
     protected FunctionArgument validateOutput(NamedParameter parameter, FunctionArgument argument) {
-        if (parameter.type().isOutput() && argument.getArgumentValue() instanceof LogicBuiltIn builtIn && LogicBuiltIn.WAIT.equals(builtIn)) {
+        if (parameter.type().isOutput() && argument.unwrap() instanceof LogicBuiltIn builtIn && LogicBuiltIn.WAIT.equals(builtIn)) {
             if (argument.hasInModifier()) {
                 error(argument, ERR.ARGUMENT_IN_MODIFIER_NOT_ALLOWED, parameter.name());
             }

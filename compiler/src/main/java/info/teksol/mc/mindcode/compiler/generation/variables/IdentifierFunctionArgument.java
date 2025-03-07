@@ -38,7 +38,7 @@ public class IdentifierFunctionArgument implements FunctionArgument {
 
     /// Provides the value of the underlying argument
     @Override
-    public ValueStore getArgumentValue() {
+    public ValueStore unwrap() {
         if (value == null) {
             value = valueSupplier.get();
         }
@@ -72,22 +72,22 @@ public class IdentifierFunctionArgument implements FunctionArgument {
 
     @Override
     public boolean isComplex() {
-        return getArgumentValue().isComplex();
+        return unwrap().isComplex();
     }
 
     @Override
     public boolean isLvalue() {
-        return getArgumentValue().isLvalue();
+        return unwrap().isLvalue();
     }
 
     @Override
     public LogicValue getValue(CodeAssembler assembler) {
-        return getArgumentValue().getValue(assembler);
+        return unwrap().getValue(assembler);
     }
 
     @Override
     public void readValue(CodeAssembler assembler, LogicVariable target) {
-        getArgumentValue().readValue(assembler, target);
+        unwrap().readValue(assembler, target);
     }
 
     @Override
