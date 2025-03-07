@@ -25,7 +25,7 @@ class MlogDecompilerTest {
     @Test
     void decompilesDrawPrint() {
         assertEquals("""
-                            drawPrint(x, y, bottom);
+                            drawPrint(x, y, :bottom);
                         """,
                 decompile("""
                         draw print x y bottom 0 0 0

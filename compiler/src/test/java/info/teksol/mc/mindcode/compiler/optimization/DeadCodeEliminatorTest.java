@@ -69,7 +69,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         .add("Variable 'MIN_TO_MAX' is not initialized.")
                         .add("Variable 'SHOOT' is not initialized."),
                 """
-                        target = uradar(enemy, ground, any, health, MIN_TO_MAX);
+                        target = uradar(:enemy, :ground, :any, :health, MIN_TO_MAX);
                         if target != null then
                             approach(target.@x, target.@y, 10);
                             if within(target.@x, target.@y, 10) then
@@ -108,13 +108,13 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         .add("Variable 'found' is not used.")
                         .add("Variable 'ENEMY' is not initialized."),
                 """
-                        ulocate(ore, @surge-alloy, out x, out y);
+                        ulocate(:ore, @surge-alloy, out x, out y);
                         approach(x, y, 4);
-                        outbuilding = ulocate(building, core, ENEMY, out x, out y, out found);
+                        outbuilding = ulocate(:building, :core, ENEMY, out x, out y, out found);
                         approach(x, y, 4);
-                        outbuilding = ulocate(spawn, out x, out y, out found);
+                        outbuilding = ulocate(:spawn, out x, out y, out found);
                         approach(x, y, 4);
-                        outbuilding = ulocate(damaged, out x, out y, out found);
+                        outbuilding = ulocate(:damaged, out x, out y, out found);
                         approach(x, y, 4);
                         """,
                 createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", var(0), var(1)),
@@ -148,8 +148,8 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         .add("Variable 'a' is not used.")
                         .add("Variable 'b' is not used."),
                 """
-                        ulocate(ore, @surge-alloy, out x, out y);
-                        ulocate(ore, @surge-alloy, out a, out b);
+                        ulocate(:ore, @surge-alloy, out x, out y);
+                        ulocate(:ore, @surge-alloy, out a, out b);
                         approach(x, y, 4);
                         """,
                 createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", "x", "y", var(0), var(1)),
@@ -167,7 +167,7 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         .add("Variable 'found' is not used.")
                         .add("Variable 'ENEMY' is not initialized."),
                 """
-                        outbuilding = ulocate(building, core, ENEMY, out x, out y, out found);
+                        outbuilding = ulocate(:building, :core, ENEMY, out x, out y, out found);
                         print(outbuilding);
                         """,
                 createInstruction(ULOCATE, "building", "core", "ENEMY", "@copper", "x", "y", "found", var(0)),

@@ -437,6 +437,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstKeyword(MindcodeParser.AstKeywordContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstKeyword(MindcodeParser.AstKeywordContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstOperatorBinaryAdd(MindcodeParser.AstOperatorBinaryAddContext ctx) { }
 	/**
 	 * {@inheritDoc}

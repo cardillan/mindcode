@@ -31,6 +31,10 @@ public abstract class CompoundValueStore implements ValueStore {
         return sourcePosition;
     }
 
+    public boolean isMlogRepresentable() {
+        return false;
+    }
+
     @Override
     public boolean isComplex() {
         // This class can never be used in a context where isComplex matters.

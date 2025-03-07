@@ -104,12 +104,12 @@ class MindcodeParserTest extends AbstractParserTest {
         @Test
         void parsesAssignments() {
             assertParses("""
-                    a=b;
-                    a=b=true;
-                    a+=b*=c**=d;
-                    a=b?c:d;
-                    a/=b?c:d;
-                    @var=x;
+                    a = b;
+                    a = b = true;
+                    a += b *= c **= d;
+                    a = b ? c : d;
+                    a /= b ? c : d;
+                    @var = x;
                     getblock(n).enabled = true;
                     a.b = 10;
                     

@@ -50,11 +50,16 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
                 // The error has been reported elsewhere
             } else if (!arg.hasValue()) {
                 error(arg, ERR.MLOG_UNSPECIFIED_ARGUMENT, call.getFunctionName());
+            } else if (arg.getArgumentValue() instanceof LogicKeyword keyword) {
+                if (arg.hasOutModifier() || arg.hasInModifier()) {
+                    error(arg, ERR.MLOG_IN_OUT_KEYWORD_NOT_ALLOWED, call.getFunctionName());
+                }
+                arguments.add(keyword);
             } else if (arg.getArgumentValue() instanceof LogicString str) {
                 if (arg.hasOutModifier()) {
                     error(arg, ERR.MLOG_OUT_STRING_NOT_ALLOWED, call.getFunctionName());
                 }
-                arguments.add(arg.hasInModifier() ? str : LogicKeyword.create(str.format(processor)));
+                arguments.add(arg.hasInModifier() ? str : LogicKeyword.create(str.sourcePosition(), str.format(processor)));
                 parameters.add(arg.hasInModifier() ? InstructionParameterType.INPUT : InstructionParameterType.UNSPECIFIED);
             } else if (arg.getArgumentValue() instanceof LogicLiteral lit) {
                 if (arg.hasOutModifier() || arg.hasInModifier()) {

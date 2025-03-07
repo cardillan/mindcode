@@ -623,6 +623,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstMindcodeNode visitAstKeyword(AstKeywordContext ctx) {
+        return new AstKeyword(pos(ctx), ctx.KEYWORD().getText());
+    }
+
+    @Override
     public AstLiteralString visitAstLiteralString(MindcodeParser.AstLiteralStringContext ctx) {
         return literalString(ctx.STRING());
     }

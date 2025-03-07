@@ -48,7 +48,7 @@ Add an operation to the drawing buffer. Does not display anything until drawflus
 |`linePoly(x, y, sides, radius, rotation)`|`draw linePoly x y sides radius rotation 0`|
 |`triangle(x, y, x2, y2, x3, y3)`|`draw triangle x y x2 y2 x3 y3`|
 |`image(x, y, image, size, rotation)`|`draw image x y image size rotation 0`|
-|`drawPrint(x, y, align)`|`draw print x y align 0 0 0`|
+|`drawPrint(x, y, :align)`|`draw print x y align 0 0 0`|
 |`translate(x, y)`|`draw translate x y 0 0 0 0`|
 |`scale(x, y)`|`draw scale x y 0 0 0 0`|
 |`rotate(degrees)`|`draw rotate 0 0 degrees 0 0 0`|
@@ -128,8 +128,8 @@ Locate units around a building with range.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = turret.radar(attr1, attr2, attr3, sort, order)`|`radar attr1 attr2 attr3 sort turret order result`|
-|`result = radar(attr1, attr2, attr3, sort, turret, order)`|`radar attr1 attr2 attr3 sort turret order result`|
+|`result = turret.radar(:attr1, :attr2, :attr3, :sort, order)`|`radar attr1 attr2 attr3 sort turret order result`|
+|`result = radar(:attr1, :attr2, :attr3, :sort, turret, order)`|`radar attr1 attr2 attr3 sort turret order result`|
 
 ## Instruction `sensor`
 
@@ -171,7 +171,7 @@ Look up an item/liquid/unit/block type by ID. Total counts of each type can be a
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = lookup(type, index)`|`lookup type result index`|
+|`result = lookup(:type, index)`|`lookup type result index`|
 
 ## Instruction `packcolor`
 
@@ -246,7 +246,7 @@ Locate units around the currently bound unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = uradar(attr1, attr2, attr3, sort, order)`|`uradar attr1 attr2 attr3 sort 0 order result`|
+|`result = uradar(:attr1, :attr2, :attr3, :sort, order)`|`uradar attr1 attr2 attr3 sort 0 order result`|
 
 ## Instruction `ulocate`
 
@@ -254,10 +254,10 @@ Locate a specific type of position/building anywhere on the map. Requires a boun
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`found = ulocate(ore, oreType, out outx, out outy)`|`ulocate ore core true oreType outx outy found 0`|
-|`building = ulocate(building, group, enemy, out outx, out outy, out found)`|`ulocate building group enemy @copper outx outy found building`|
-|`building = ulocate(spawn, out outx, out outy, out found)`|`ulocate spawn core true @copper outx outy found building`|
-|`building = ulocate(damaged, out outx, out outy, out found)`|`ulocate damaged core true @copper outx outy found building`|
+|`found = ulocate(:ore, oreType, out outx, out outy)`|`ulocate ore core true oreType outx outy found 0`|
+|`building = ulocate(:building, :group, enemy, out outx, out outy, out found)`|`ulocate building group enemy @copper outx outy found building`|
+|`building = ulocate(:spawn, out outx, out outy, out found)`|`ulocate spawn core true @copper outx outy found building`|
+|`building = ulocate(:damaged, out outx, out outy, out found)`|`ulocate damaged core true @copper outx outy found building`|
 # World processor
 
 These instructions are only available to the World Processor,
@@ -270,7 +270,7 @@ Get tile data at any location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = getblock(layer, x, y)`|`getblock layer result x y`|
+|`result = getblock(:layer, x, y)`|`getblock layer result x y`|
 
 ## Instruction `setblock`
 
@@ -278,9 +278,9 @@ Set tile data at any location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`setblock(floor, to, x, y)`|`setblock floor to x y 0 0`|
-|`setblock(ore, to, x, y)`|`setblock ore to x y 0 0`|
-|`setblock(block, to, x, y, team, rotation)`|`setblock block to x y team rotation`|
+|`setblock(:floor, to, x, y)`|`setblock floor to x y 0 0`|
+|`setblock(:ore, to, x, y)`|`setblock ore to x y 0 0`|
+|`setblock(:block, to, x, y, team, rotation)`|`setblock block to x y team rotation`|
 
 ## Instruction `spawn`
 
@@ -296,8 +296,8 @@ Apply or clear a status effect from a unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`applyStatus(status, unit, duration)`|`status false status unit duration`|
-|`clearStatus(status, unit)`|`status true status unit 0`|
+|`applyStatus(:status, unit, duration)`|`status false status unit duration`|
+|`clearStatus(:status, unit)`|`status true status unit 0`|
 
 ## Instruction `weathersense`
 
@@ -329,29 +329,29 @@ Set a game rule.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`setrule(currentWaveTime, value)`|`setrule currentWaveTime value 0 0 0 0`|
-|`setrule(waveTimer, value)`|`setrule waveTimer value 0 0 0 0`|
-|`setrule(waves, value)`|`setrule waves value 0 0 0 0`|
-|`setrule(wave, value)`|`setrule wave value 0 0 0 0`|
-|`setrule(waveSpacing, value)`|`setrule waveSpacing value 0 0 0 0`|
-|`setrule(waveSending, value)`|`setrule waveSending value 0 0 0 0`|
-|`setrule(attackMode, value)`|`setrule attackMode value 0 0 0 0`|
-|`setrule(enemyCoreBuildRadius, value)`|`setrule enemyCoreBuildRadius value 0 0 0 0`|
-|`setrule(dropZoneRadius, value)`|`setrule dropZoneRadius value 0 0 0 0`|
-|`setrule(unitCap, value)`|`setrule unitCap value 0 0 0 0`|
-|`setrule(mapArea, x, y, width, height)`|`setrule mapArea 0 x y width height`|
-|`setrule(lighting, value)`|`setrule lighting value 0 0 0 0`|
-|`setrule(ambientLight, value)`|`setrule ambientLight value 0 0 0 0`|
-|`setrule(solarMultiplier, value)`|`setrule solarMultiplier value 0 0 0 0`|
-|`setrule(buildSpeed, value, team)`|`setrule buildSpeed value team 0 0 0`|
-|`setrule(unitHealth, value, team)`|`setrule unitHealth value team 0 0 0`|
-|`setrule(unitBuildSpeed, value, team)`|`setrule unitBuildSpeed value team 0 0 0`|
-|`setrule(unitCost, value, team)`|`setrule unitCost value team 0 0 0`|
-|`setrule(unitDamage, value, team)`|`setrule unitDamage value team 0 0 0`|
-|`setrule(blockHealth, value, team)`|`setrule blockHealth value team 0 0 0`|
-|`setrule(blockDamage, value, team)`|`setrule blockDamage value team 0 0 0`|
-|`setrule(rtsMinWeight, value, team)`|`setrule rtsMinWeight value team 0 0 0`|
-|`setrule(rtsMinSquad, value, team)`|`setrule rtsMinSquad value team 0 0 0`|
+|`setrule(:currentWaveTime, value)`|`setrule currentWaveTime value 0 0 0 0`|
+|`setrule(:waveTimer, value)`|`setrule waveTimer value 0 0 0 0`|
+|`setrule(:waves, value)`|`setrule waves value 0 0 0 0`|
+|`setrule(:wave, value)`|`setrule wave value 0 0 0 0`|
+|`setrule(:waveSpacing, value)`|`setrule waveSpacing value 0 0 0 0`|
+|`setrule(:waveSending, value)`|`setrule waveSending value 0 0 0 0`|
+|`setrule(:attackMode, value)`|`setrule attackMode value 0 0 0 0`|
+|`setrule(:enemyCoreBuildRadius, value)`|`setrule enemyCoreBuildRadius value 0 0 0 0`|
+|`setrule(:dropZoneRadius, value)`|`setrule dropZoneRadius value 0 0 0 0`|
+|`setrule(:unitCap, value)`|`setrule unitCap value 0 0 0 0`|
+|`setrule(:mapArea, x, y, width, height)`|`setrule mapArea 0 x y width height`|
+|`setrule(:lighting, value)`|`setrule lighting value 0 0 0 0`|
+|`setrule(:ambientLight, value)`|`setrule ambientLight value 0 0 0 0`|
+|`setrule(:solarMultiplier, value)`|`setrule solarMultiplier value 0 0 0 0`|
+|`setrule(:buildSpeed, value, team)`|`setrule buildSpeed value team 0 0 0`|
+|`setrule(:unitHealth, value, team)`|`setrule unitHealth value team 0 0 0`|
+|`setrule(:unitBuildSpeed, value, team)`|`setrule unitBuildSpeed value team 0 0 0`|
+|`setrule(:unitCost, value, team)`|`setrule unitCost value team 0 0 0`|
+|`setrule(:unitDamage, value, team)`|`setrule unitDamage value team 0 0 0`|
+|`setrule(:blockHealth, value, team)`|`setrule blockHealth value team 0 0 0`|
+|`setrule(:blockDamage, value, team)`|`setrule blockDamage value team 0 0 0`|
+|`setrule(:rtsMinWeight, value, team)`|`setrule rtsMinWeight value team 0 0 0`|
+|`setrule(:rtsMinSquad, value, team)`|`setrule rtsMinSquad value team 0 0 0`|
 
 ## Instruction `message`
 
@@ -359,10 +359,10 @@ Display a message on the screen from the text buffer. If the success result vari
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`message(notify, out success)`|`message notify 0 success`|
-|`message(mission, out success)`|`message mission 0 success`|
-|`message(announce, duration, out success)`|`message announce duration success`|
-|`message(toast, duration, out success)`|`message toast duration success`|
+|`message(:notify, out success)`|`message notify 0 success`|
+|`message(:mission, out success)`|`message mission 0 success`|
+|`message(:announce, duration, out success)`|`message announce duration success`|
+|`message(:toast, duration, out success)`|`message toast duration success`|
 
 ## Instruction `cutscene`
 
@@ -370,9 +370,9 @@ Manipulate the player camera.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`cutscene(pan, x, y, speed)`|`cutscene pan x y speed 0`|
-|`cutscene(zoom, level)`|`cutscene zoom level 0 0 0`|
-|`cutscene(stop)`|`cutscene stop 0 0 0 0`|
+|`cutscene(:pan, x, y, speed)`|`cutscene pan x y speed 0`|
+|`cutscene(:zoom, level)`|`cutscene zoom level 0 0 0`|
+|`cutscene(:stop)`|`cutscene stop 0 0 0 0`|
 
 ## Instruction `effect`
 
@@ -380,39 +380,39 @@ Create a particle effect.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`effect(warn, x, y)`|`effect warn x y 0 0 0`|
-|`effect(cross, x, y)`|`effect cross x y 0 0 0`|
-|`effect(blockFall, x, y, blocktype)`|`effect blockFall x y 0 0 blocktype`|
-|`effect(placeBlock, x, y, size)`|`effect placeBlock x y size 0 0`|
-|`effect(placeBlockSpark, x, y, size)`|`effect placeBlockSpark x y size 0 0`|
-|`effect(breakBlock, x, y, size)`|`effect breakBlock x y size 0 0`|
-|`effect(spawn, x, y)`|`effect spawn x y 0 0 0`|
-|`effect(trail, x, y, size, color)`|`effect trail x y size color 0`|
-|`effect(breakProp, x, y, size, color)`|`effect breakProp x y size color 0`|
-|`effect(smokeCloud, x, y, color)`|`effect smokeCloud x y 0 color 0`|
-|`effect(vapor, x, y, color)`|`effect vapor x y 0 color 0`|
-|`effect(hit, x, y, color)`|`effect hit x y 0 color 0`|
-|`effect(hitSquare, x, y, color)`|`effect hitSquare x y 0 color 0`|
-|`effect(shootSmall, x, y, rotation, color)`|`effect shootSmall x y rotation color 0`|
-|`effect(shootBig, x, y, rotation, color)`|`effect shootBig x y rotation color 0`|
-|`effect(smokeSmall, x, y, color)`|`effect smokeSmall x y 0 color 0`|
-|`effect(smokeBig, x, y, color)`|`effect smokeBig x y 0 color 0`|
-|`effect(smokeColor, x, y, rotation, color)`|`effect smokeColor x y rotation color 0`|
-|`effect(smokeSquare, x, y, rotation, color)`|`effect smokeSquare x y rotation color 0`|
-|`effect(smokeSquareBig, x, y, rotation, color)`|`effect smokeSquareBig x y rotation color 0`|
-|`effect(spark, x, y, color)`|`effect spark x y 0 color 0`|
-|`effect(sparkBig, x, y, color)`|`effect sparkBig x y 0 color 0`|
-|`effect(sparkShoot, x, y, rotation, color)`|`effect sparkShoot x y rotation color 0`|
-|`effect(sparkShootBig, x, y, rotation, color)`|`effect sparkShootBig x y rotation color 0`|
-|`effect(drill, x, y, color)`|`effect drill x y 0 color 0`|
-|`effect(drillBig, x, y, color)`|`effect drillBig x y 0 color 0`|
-|`effect(lightBlock, x, y, size, color)`|`effect lightBlock x y size color 0`|
-|`effect(explosion, x, y, size)`|`effect explosion x y size 0 0`|
-|`effect(smokePuff, x, y, color)`|`effect smokePuff x y 0 color 0`|
-|`effect(sparkExplosion, x, y, color)`|`effect sparkExplosion x y 0 color 0`|
-|`effect(crossExplosion, x, y, size, color)`|`effect crossExplosion x y size color 0`|
-|`effect(wave, x, y, size, color)`|`effect wave x y size color 0`|
-|`effect(bubble, x, y)`|`effect bubble x y 0 0 0`|
+|`effect(:warn, x, y)`|`effect warn x y 0 0 0`|
+|`effect(:cross, x, y)`|`effect cross x y 0 0 0`|
+|`effect(:blockFall, x, y, blocktype)`|`effect blockFall x y 0 0 blocktype`|
+|`effect(:placeBlock, x, y, size)`|`effect placeBlock x y size 0 0`|
+|`effect(:placeBlockSpark, x, y, size)`|`effect placeBlockSpark x y size 0 0`|
+|`effect(:breakBlock, x, y, size)`|`effect breakBlock x y size 0 0`|
+|`effect(:spawn, x, y)`|`effect spawn x y 0 0 0`|
+|`effect(:trail, x, y, size, color)`|`effect trail x y size color 0`|
+|`effect(:breakProp, x, y, size, color)`|`effect breakProp x y size color 0`|
+|`effect(:smokeCloud, x, y, color)`|`effect smokeCloud x y 0 color 0`|
+|`effect(:vapor, x, y, color)`|`effect vapor x y 0 color 0`|
+|`effect(:hit, x, y, color)`|`effect hit x y 0 color 0`|
+|`effect(:hitSquare, x, y, color)`|`effect hitSquare x y 0 color 0`|
+|`effect(:shootSmall, x, y, rotation, color)`|`effect shootSmall x y rotation color 0`|
+|`effect(:shootBig, x, y, rotation, color)`|`effect shootBig x y rotation color 0`|
+|`effect(:smokeSmall, x, y, color)`|`effect smokeSmall x y 0 color 0`|
+|`effect(:smokeBig, x, y, color)`|`effect smokeBig x y 0 color 0`|
+|`effect(:smokeColor, x, y, rotation, color)`|`effect smokeColor x y rotation color 0`|
+|`effect(:smokeSquare, x, y, rotation, color)`|`effect smokeSquare x y rotation color 0`|
+|`effect(:smokeSquareBig, x, y, rotation, color)`|`effect smokeSquareBig x y rotation color 0`|
+|`effect(:spark, x, y, color)`|`effect spark x y 0 color 0`|
+|`effect(:sparkBig, x, y, color)`|`effect sparkBig x y 0 color 0`|
+|`effect(:sparkShoot, x, y, rotation, color)`|`effect sparkShoot x y rotation color 0`|
+|`effect(:sparkShootBig, x, y, rotation, color)`|`effect sparkShootBig x y rotation color 0`|
+|`effect(:drill, x, y, color)`|`effect drill x y 0 color 0`|
+|`effect(:drillBig, x, y, color)`|`effect drillBig x y 0 color 0`|
+|`effect(:lightBlock, x, y, size, color)`|`effect lightBlock x y size color 0`|
+|`effect(:explosion, x, y, size)`|`effect explosion x y size 0 0`|
+|`effect(:smokePuff, x, y, color)`|`effect smokePuff x y 0 color 0`|
+|`effect(:sparkExplosion, x, y, color)`|`effect sparkExplosion x y 0 color 0`|
+|`effect(:crossExplosion, x, y, size, color)`|`effect crossExplosion x y size color 0`|
+|`effect(:wave, x, y, size, color)`|`effect wave x y size color 0`|
+|`effect(:bubble, x, y)`|`effect bubble x y 0 0 0`|
 
 ## Instruction `explosion`
 
@@ -436,14 +436,14 @@ Lookup units, cores, players or buildings by index. Indices start at 0 and end a
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = fetch(unitCount, team, type)`|`fetch unitCount result team 0 type`|
-|`result = fetch(playerCount, team)`|`fetch playerCount result team 0 0`|
-|`result = fetch(coreCount, team)`|`fetch coreCount result team 0 0`|
-|`result = fetch(buildCount, team, type)`|`fetch buildCount result team 0 type`|
-|`result = fetch(unit, team, index, type)`|`fetch unit result team index type`|
-|`result = fetch(player, team, index)`|`fetch player result team index 0`|
-|`result = fetch(core, team, index)`|`fetch core result team index 0`|
-|`result = fetch(build, team, index, type)`|`fetch build result team index type`|
+|`result = fetch(:unitCount, team, type)`|`fetch unitCount result team 0 type`|
+|`result = fetch(:playerCount, team)`|`fetch playerCount result team 0 0`|
+|`result = fetch(:coreCount, team)`|`fetch coreCount result team 0 0`|
+|`result = fetch(:buildCount, team, type)`|`fetch buildCount result team 0 type`|
+|`result = fetch(:unit, team, index, type)`|`fetch unit result team index type`|
+|`result = fetch(:player, team, index)`|`fetch player result team index 0`|
+|`result = fetch(:core, team, index)`|`fetch core result team index 0`|
+|`result = fetch(:build, team, index, type)`|`fetch build result team index type`|
 
 ## Instruction `sync`
 
@@ -483,8 +483,8 @@ Plays a sound. Volume and pan can be a global value, or calculated based on posi
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`playsound(true, sound, volume, pitch, x, y, limit)`|`playsound true sound volume pitch 0 x y limit`|
-|`playsound(false, sound, volume, pitch, pan, limit)`|`playsound false sound volume pitch pan 0 0 limit`|
+|`playsound(:true, sound, volume, pitch, x, y, limit)`|`playsound true sound volume pitch 0 x y limit`|
+|`playsound(:false, sound, volume, pitch, pan, limit)`|`playsound false sound volume pitch pan 0 0 limit`|
 
 ## Instruction `setmarker`
 
@@ -492,28 +492,28 @@ Set a property for a marker. The ID used must be the same as in the Make Marker 
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`setmarker(remove, id)`|`setmarker remove id 0 0 0`|
-|`setmarker(world, id, boolean)`|`setmarker world id boolean 0 0`|
-|`setmarker(minimap, id, boolean)`|`setmarker minimap id boolean 0 0`|
-|`setmarker(autoscale, id, boolean)`|`setmarker autoscale id boolean 0 0`|
-|`setmarker(pos, id, x, y)`|`setmarker pos id x y 0`|
-|`setmarker(endPos, id, x, y)`|`setmarker endPos id x y 0`|
-|`setmarker(drawLayer, id, layer)`|`setmarker drawLayer id layer 0 0`|
-|`setmarker(color, id, color)`|`setmarker color id color 0 0`|
-|`setmarker(radius, id, radius)`|`setmarker radius id radius 0 0`|
-|`setmarker(stroke, id, stroke)`|`setmarker stroke id stroke 0 0`|
-|`setmarker(rotation, id, rotation)`|`setmarker rotation id rotation 0 0`|
-|`setmarker(shape, id, sides, fill, outline)`|`setmarker shape id sides fill outline`|
-|`setmarker(arc, id, from, to)`|`setmarker arc id from to 0`|
-|`setmarker(flushText, id, fetch)`|`setmarker flushText id fetch 0 0`|
-|`setmarker(fontSize, id, size)`|`setmarker fontSize id size 0 0`|
-|`setmarker(textHeight, id, height)`|`setmarker textHeight id height 0 0`|
-|`setmarker(labelFlags, id, background, outline)`|`setmarker labelFlags id background outline 0`|
-|`setmarker(texture, id, printFlush, name)`|`setmarker texture id printFlush name 0`|
-|`setmarker(textureSize, id, width, height)`|`setmarker textureSize id width height 0`|
-|`setmarker(posi, id, index, x, y)`|`setmarker posi id index x y`|
-|`setmarker(uvi, id, index, x, y)`|`setmarker uvi id index x y`|
-|`setmarker(colori, id, index, color)`|`setmarker colori id index color 0`|
+|`setmarker(:remove, id)`|`setmarker remove id 0 0 0`|
+|`setmarker(:world, id, boolean)`|`setmarker world id boolean 0 0`|
+|`setmarker(:minimap, id, boolean)`|`setmarker minimap id boolean 0 0`|
+|`setmarker(:autoscale, id, boolean)`|`setmarker autoscale id boolean 0 0`|
+|`setmarker(:pos, id, x, y)`|`setmarker pos id x y 0`|
+|`setmarker(:endPos, id, x, y)`|`setmarker endPos id x y 0`|
+|`setmarker(:drawLayer, id, layer)`|`setmarker drawLayer id layer 0 0`|
+|`setmarker(:color, id, color)`|`setmarker color id color 0 0`|
+|`setmarker(:radius, id, radius)`|`setmarker radius id radius 0 0`|
+|`setmarker(:stroke, id, stroke)`|`setmarker stroke id stroke 0 0`|
+|`setmarker(:rotation, id, rotation)`|`setmarker rotation id rotation 0 0`|
+|`setmarker(:shape, id, sides, fill, outline)`|`setmarker shape id sides fill outline`|
+|`setmarker(:arc, id, from, to)`|`setmarker arc id from to 0`|
+|`setmarker(:flushText, id, fetch)`|`setmarker flushText id fetch 0 0`|
+|`setmarker(:fontSize, id, size)`|`setmarker fontSize id size 0 0`|
+|`setmarker(:textHeight, id, height)`|`setmarker textHeight id height 0 0`|
+|`setmarker(:labelFlags, id, background, outline)`|`setmarker labelFlags id background outline 0`|
+|`setmarker(:texture, id, printFlush, name)`|`setmarker texture id printFlush name 0`|
+|`setmarker(:textureSize, id, width, height)`|`setmarker textureSize id width height 0`|
+|`setmarker(:posi, id, index, x, y)`|`setmarker posi id index x y`|
+|`setmarker(:uvi, id, index, x, y)`|`setmarker uvi id index x y`|
+|`setmarker(:colori, id, index, color)`|`setmarker colori id index color 0`|
 
 ## Instruction `makemarker`
 
@@ -521,7 +521,7 @@ Create a new logic marker in the world. An ID to identify this marker must be pr
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`makemarker(marker, id, x, y, replace)`|`makemarker marker id x y replace`|
+|`makemarker(:marker, id, x, y, replace)`|`makemarker marker id x y replace`|
 
 ## Instruction `localeprint`
 

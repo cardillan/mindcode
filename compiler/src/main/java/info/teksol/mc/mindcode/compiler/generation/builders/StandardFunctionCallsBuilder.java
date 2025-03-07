@@ -14,6 +14,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
+import info.teksol.mc.mindcode.compiler.generation.variables.InputFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
@@ -416,7 +417,12 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // Should FunctionArgument be incompatible with the parameter, an error would have been produced earlier
         for (int index = 0; index < limit; index++) {
             if (function.getDeclaredParameter(index).isInput()) {
-                function.getParameter(index).setValue(assembler, argumentValues.remove().getValue(assembler));
+                ValueStore argument = argumentValues.remove();
+                if (function.getDeclaration().isInline() && argument instanceof InputFunctionArgument arg && !arg.getArgumentValue().isMlogRepresentable()) {
+                    variables.replaceFunctionVariable(function.getDeclaredParameter(index).getIdentifier(), arg.getArgumentValue());
+                } else {
+                    function.getParameter(index).setValue(assembler, argument.getValue(assembler));
+                }
             }
         }
     }

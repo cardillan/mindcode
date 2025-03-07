@@ -80,7 +80,7 @@ end;
 print("[gold]Locating core...");
 printflush(message1);
 do
-    CORE = ulocate(building, core, false);
+    CORE = ulocate(:building, :core, false);
 while CORE == null;
 
 CORE_X = CORE.@x;

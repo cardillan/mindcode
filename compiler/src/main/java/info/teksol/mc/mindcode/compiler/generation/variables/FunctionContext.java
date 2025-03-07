@@ -23,6 +23,10 @@ public interface FunctionContext {
     /// Registers a new function variable.
     ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean allowRedefinition);
 
+    /// Replaces an existing function variable with a different definition. Used in inline function calls
+    /// to inject compound value stores into the function.
+    void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable);
+
     ///  Provides a loop stack for this function
     LoopStack loopStack();
 

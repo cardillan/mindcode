@@ -96,7 +96,7 @@ while true do
     update_fuel(fuel_many, ULD_IN_MANY, ULD_OUT_MANY);
 
     feed_mixers = throttle_blast(fuel_1 or fuel_2 or fuel_many, emerg_shutdown);
-    ULD_MIXER.config = feed_mixers?MIXER_IN:FUEL_OFF;
+    ULD_MIXER.config = feed_mixers ? MIXER_IN : FUEL_OFF;
 
     diff_generators();
     surplus = kilo(AVG_SURPLUS);
@@ -119,8 +119,8 @@ def kilo(val)
 end;
 
 def update_fuel(fuel, uld_in, uld_out)
-    uld_in.config = fuel?FUEL:FUEL_OFF;
-    uld_out.config = !fuel?FUEL:FUEL_OFF;
+    uld_in.config = fuel ? FUEL : FUEL_OFF;
+    uld_out.config = !fuel ? FUEL : FUEL_OFF;
 end;
 
 def calc_charge_req(reactor, time)
@@ -132,7 +132,7 @@ def calc_charge_req(reactor, time)
     time_left = 30 - secs;
     // Estimate of time left is 30 - secs
     // Linear estimate of impact reactor power draw is (1500 / 30 * time_left) * (0.5 * time left)
-    // that simplifes to:
+    // that simplifies to:
     charge_req = floor(time_left * time_left * 25);
     return charge_req;
 end;
@@ -257,7 +257,7 @@ def throttle_blast(reactors_fueled, emerg_shutdown)
 end;
 
 def check_radar(unit)
-    enemy_found = unit.radar(enemy, any, any, health, 1);
+    enemy_found = unit.radar(:enemy, :any, :any, :health, 1);
     if enemy_found != null then
         projector1.enabled = true;
         projector2.enabled = true;

@@ -15,7 +15,10 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
@@ -97,7 +100,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitConstant(AstConstant node) {
         ValueStore valueStore = evaluate(node.getValue());
-        if (valueStore instanceof LogicValue value && isNonvolatileConstant(value) || valueStore instanceof FormattableContent) {
+        if (valueStore instanceof LogicValue value && isNonvolatileConstant(value) || valueStore instanceof FormattableContent
+            || valueStore instanceof LogicKeyword) {
             variables.createConstant(node, valueStore);
         } else {
             error(node.getValue(), ERR.EXPRESSION_NOT_CONSTANT_CONST, node.getConstantName());
@@ -173,8 +177,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         assembler.createWrite(LogicBuiltIn.THIS, processor, mainProcessorMlog);
 
-        List<LogicVariable> outputs = new ArrayList<>();
-
         // Initialize function addresses and function parameters
         // Create function output variables
         callGraph.getFunctions().stream()
@@ -184,15 +186,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     LogicVariable v = LogicVariable.fnAddress(function);
                     assembler.createRead(v, processor, v.getMlogString());
 
-                    outputs.add(LogicVariable.fnFinished(function));
-                    if (!function.isVoid()) {
-                        outputs.add(LogicVariable.fnRetVal(function));
-                    }
-                    function.getLocalParameters().stream()
-                            .filter(FunctionParameter::isOutput)
-                            .map(LogicVariable.class::cast)
-                            .forEach(outputs::add);
-
                     Map<String, ValueStore> members = function.getDeclaration().getParameters()
                             .stream()
                             .filter(AstFunctionParameter::isOutput)
@@ -201,8 +194,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     StructuredValueStore variable = new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
                     variables.registerRemoteCallStore(function.getDeclaration().getIdentifier(), variable);
                 });
-
-        assembler.createVariables(outputs);
     }
 
     @Override

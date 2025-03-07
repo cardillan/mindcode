@@ -246,6 +246,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstSubarray(MindcodeParser.AstSubarrayContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astKeyword}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstKeyword(MindcodeParser.AstKeywordContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

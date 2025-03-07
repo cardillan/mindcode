@@ -7,11 +7,8 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.variables.IdentifierFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
-import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
@@ -116,16 +113,6 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
 
     LogicInstruction createSampleInstruction(Opcode opcode, List<LogicArgument> args) {
         return processor.createInstructionUnchecked(staticAstContext, opcode, args);
-    }
-
-    static LogicKeyword toKeyword(FunctionArgument argument) {
-        if (argument instanceof IdentifierFunctionArgument ifa) {
-            return ifa.getKeyword();
-        } else if (argument.getArgumentValue() instanceof LogicBoolean bool) {
-            return LogicKeyword.create(bool.toMlog());
-        } else {
-            return LogicKeyword.INVALID;
-        }
     }
 
     static String joinNamedArguments(List<NamedParameter> arguments) {

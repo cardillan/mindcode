@@ -37,7 +37,7 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
                         .add("Variable 'MIN_TO_MAX' is not initialized.")
                         .add("Variable 'SHOOT' is not initialized."),
                 """
-                        target = uradar(enemy, ground, any, health, MIN_TO_MAX);
+                        target = uradar(:enemy, :ground, :any, :health, MIN_TO_MAX);
                         if target != null then
                             approach(target.@x, target.@y, 10);
                             if within(target.@x, target.@y, 10) then
@@ -56,10 +56,10 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
                         .add("Variable 'y' is not used.")
                         .add("Variable 'building' is not used."),
                 """
-                        ulocate(ore, @surge-alloy, out x, out y);
-                        ulocate(building, core, ENEMY, out x, out y, out building);
-                        ulocate(spawn, out x, out y, out building);
-                        ulocate(damaged, out x, out y, out building);
+                        ulocate(:ore, @surge-alloy, out x, out y);
+                        ulocate(:building, :core, ENEMY, out x, out y, out building);
+                        ulocate(:spawn, out x, out y, out building);
+                        ulocate(:damaged, out x, out y, out building);
                         """
         );
     }

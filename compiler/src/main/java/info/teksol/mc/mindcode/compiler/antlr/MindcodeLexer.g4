@@ -157,6 +157,8 @@ IDENTIFIER              : Letter LetterOrDigit* ;
 EXTIDENTIFIER           : DOLLAR Letter LetterOrDigit* ;
 BUILTINIDENTIFIER       : AT Letter
                         | AT Letter LetterDigitDash* LetterOrDigit ;
+KEYWORD                 : COLON Letter
+                        | COLON Letter LetterDigitDash* LetterOrDigit ;
 
 // Literals
 

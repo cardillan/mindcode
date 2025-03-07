@@ -109,6 +109,10 @@ public class Variables extends AbstractMessageEmitter {
         }
     }
 
+    public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
+        functionContext.replaceFunctionVariable(identifier, variable);
+    }
+
     /// Creates an implicit variable. Used in the relaxed syntax setting only. Analyzes the identifier to create
     ///  the correct variable type and put it into the correct variable list.
     ///

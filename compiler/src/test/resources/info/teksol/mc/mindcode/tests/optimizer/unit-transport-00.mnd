@@ -156,7 +156,7 @@ if LINK_ID == 0 then
         printflush(message1);
         ubind(UNIT);
         if @unit.@controlled == 0 then
-            CORE = ulocate(building, core, false, out CORE_X, out CORE_Y);
+            CORE = ulocate(:building, :core, false, out CORE_X, out CORE_Y);
             flag(S_UNUSED);
         end;
     end;

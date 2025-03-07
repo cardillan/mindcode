@@ -122,6 +122,7 @@ lvalue
 //    rule introduces ambiguities into the grammar. We wan't to prevent them at all cost.
 expression
     : lvalue                                                                            # expLvalue
+    | KEYWORD                                                                           # astKeyword
     | END LPAREN RPAREN                                                                 # astFunctionCallEnd
     | function = IDENTIFIER args = argumentList                                         # astFunctionCall
     | object = expression DOT function = IDENTIFIER args = argumentList                 # astMethodCall

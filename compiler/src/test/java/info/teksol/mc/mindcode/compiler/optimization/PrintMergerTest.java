@@ -26,7 +26,7 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
     void skipsDrawPrint() {
         assertCompilesTo("""
                         print("a");
-                        drawPrint(0, 0, center);
+                        drawPrint(0, 0, :center);
                         print("b");
                         """,
                 createInstruction(PRINT, q("a")),
