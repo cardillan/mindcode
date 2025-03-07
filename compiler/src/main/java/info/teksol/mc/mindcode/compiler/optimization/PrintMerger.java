@@ -26,7 +26,7 @@ import java.util.List;
 /// print "Used: "
 /// print ratio
 /// print "%"`
-/// ```
+///```
 ///
 /// Which will get turned to
 ///
@@ -37,7 +37,7 @@ import java.util.List;
 /// print "\nUsed: "
 /// print ratio
 /// print "%"
-/// ```
+///```
 @NullMarked
 class PrintMerger extends BaseOptimizer {
 
@@ -57,24 +57,28 @@ class PrintMerger extends BaseOptimizer {
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 LogicInstruction current = iterator.next();
-                switch (current.getOpcode()) {
-                    case PRINT, PRINTCHAR -> printMerger.tryMerge(iterator, (PrintingInstruction) current);
-                    case REMARK           -> tryMergeRemark(iterator, (RemarkInstruction) current);
+                if (current instanceof CustomInstruction ix) {
+                    if (ix.isText()) reset();
+                } else {
+                    switch (current.getOpcode()) {
+                        case PRINT, PRINTCHAR -> printMerger.tryMerge(iterator, (PrintingInstruction) current);
+                        case REMARK -> tryMergeRemark(iterator, (RemarkInstruction) current);
 
-                    // Do not merge across jump, (active) label and printflush instructions
-                    // Function calls generate a label, so they prevent merging as well
-                    case DRAW -> {
-                        if (((DrawInstruction) current).getType().getKeyword().equals("print")) {
-                            // draw print flushes the text buffer
-                            reset();
+                        // Do not merge across jump, (active) label and printflush instructions
+                        // Function calls generate a label, so they prevent merging as well
+                        case DRAW -> {
+                            if (((DrawInstruction) current).getType().getKeyword().equals("print")) {
+                                // draw print flushes the text buffer
+                                reset();
+                            }
                         }
-                    }
-                    case LABEL  -> {
-                        if (isActive((LabelInstruction) current)) {
-                            reset();
+                        case LABEL -> {
+                            if (isActive((LabelInstruction) current)) {
+                                reset();
+                            }
                         }
+                        case JUMP, MULTILABEL, PRINTFLUSH, FORMAT, ASSERT_PRINTS, ASSERT_FLUSH -> reset();
                     }
-                    case JUMP, MULTILABEL, PRINTFLUSH, FORMAT, ASSERT_PRINTS, ASSERT_FLUSH -> reset();
                 }
             }
         }
@@ -177,7 +181,7 @@ class PrintMerger extends BaseOptimizer {
     // Format isn't used for remarks
     private void tryMergeRemark(LogicIterator iterator, RemarkInstruction current) {
         if (previous instanceof RemarkInstruction prev && prev.getAstContext() == current.getAstContext() &&
-                prev.getValue().isConstant() && current.getValue().isConstant()) {
+            prev.getValue().isConstant() && current.getValue().isConstant()) {
             RemarkInstruction merged = createRemark(current.getAstContext(),
                     LogicString.create(prev.getValue().format(instructionProcessor) + current.getValue().format(instructionProcessor)));
             removeInstruction(this.previous);
@@ -208,6 +212,6 @@ class PrintMerger extends BaseOptimizer {
 
     private boolean containsDangerousStrings(String text) {
         return text.endsWith("{") || text.startsWith("}")
-                || text.contains("{0}") || text.contains("{{") || text.contains("}}");
+               || text.contains("{0}") || text.contains("{{") || text.contains("}}");
     }
 }

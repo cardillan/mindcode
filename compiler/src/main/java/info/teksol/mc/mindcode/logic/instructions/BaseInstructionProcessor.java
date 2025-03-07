@@ -294,7 +294,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     @SuppressWarnings("unchecked")
     public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
         if (instruction instanceof CustomInstruction ix) {
-            return (T) new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
+            return (T) new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.isText(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
         } else {
             return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs)
                     .withSideEffects(instruction.sideEffects());

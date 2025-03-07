@@ -21,7 +21,7 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
         super(builder);
     }
 
-    public ValueStore handleMlog(AstFunctionCall call, boolean safe) {
+    public ValueStore handleMlog(AstFunctionCall call, boolean safe, boolean text) {
         if (call.getArguments().isEmpty()) {
             error(call, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS,
                     call.getFunctionName(), 1, call.getArguments().size());
@@ -36,7 +36,7 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
         }
 
         final String opcode;
-        if (args.getFirst().getArgumentValue() instanceof LogicString str) {
+        if (args.getFirst().unwrap() instanceof LogicString str) {
             opcode = str.format(processor);
         } else {
             error(args.getFirst(), ERR.MLOG_FIRST_ARGUMENT_NOT_LITERAL, call.getFunctionName());
@@ -46,22 +46,23 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
         List<LogicArgument> arguments = new ArrayList<>();
         List<InstructionParameterType> parameters = new ArrayList<>();
         for (FunctionArgument arg : args.subList(1, args.size())) {
-            if (arg.getArgumentValue() == LogicVariable.INVALID && !(arg instanceof MissingFunctionArgument)) {
+            if (arg.unwrap() == LogicVariable.INVALID && !(arg instanceof MissingFunctionArgument)) {
                 // The error has been reported elsewhere
             } else if (!arg.hasValue()) {
                 error(arg, ERR.MLOG_UNSPECIFIED_ARGUMENT, call.getFunctionName());
-            } else if (arg.getArgumentValue() instanceof LogicKeyword keyword) {
+            } else if (arg.unwrap() instanceof LogicKeyword keyword) {
                 if (arg.hasOutModifier() || arg.hasInModifier()) {
                     error(arg, ERR.MLOG_IN_OUT_KEYWORD_NOT_ALLOWED, call.getFunctionName());
                 }
                 arguments.add(keyword);
-            } else if (arg.getArgumentValue() instanceof LogicString str) {
+                parameters.add(InstructionParameterType.UNSPECIFIED);
+            } else if (arg.unwrap() instanceof LogicString str) {
                 if (arg.hasOutModifier()) {
                     error(arg, ERR.MLOG_OUT_STRING_NOT_ALLOWED, call.getFunctionName());
                 }
                 arguments.add(arg.hasInModifier() ? str : LogicKeyword.create(str.sourcePosition(), str.format(processor)));
                 parameters.add(arg.hasInModifier() ? InstructionParameterType.INPUT : InstructionParameterType.UNSPECIFIED);
-            } else if (arg.getArgumentValue() instanceof LogicLiteral lit) {
+            } else if (arg.unwrap() instanceof LogicLiteral lit) {
                 if (arg.hasOutModifier() || arg.hasInModifier()) {
                     error(arg, ERR.MLOG_IN_OUT_LITERAL_NOT_ALLOWED, call.getFunctionName());
                 }
@@ -85,7 +86,7 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
             }
         }
 
-        assembler.createCustomInstruction(safe, opcode, arguments, parameters);
+        assembler.createCustomInstruction(safe, text, opcode, arguments, parameters);
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         assembler.clearSubcontextType();
 

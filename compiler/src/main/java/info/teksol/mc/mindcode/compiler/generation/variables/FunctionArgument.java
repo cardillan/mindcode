@@ -16,12 +16,6 @@ public interface FunctionArgument extends ValueStore {
     /// @return `true` if an actual value was supplied with this argument
     boolean hasValue();
 
-    /// Provides the actual value of the argument. If the argument has no value, an invalid
-    /// placeholder is used.
-    ///
-    /// @return the value of this argument
-    ValueStore getArgumentValue();
-
     /// @return `true` if the `in` modifier was used with this argument
     boolean hasInModifier();
 

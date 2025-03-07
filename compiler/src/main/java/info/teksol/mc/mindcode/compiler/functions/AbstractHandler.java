@@ -139,19 +139,19 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
     }
 
     protected boolean isGlobalVariable(FunctionArgument argument) {
-        return argument.getArgumentValue() instanceof LogicVariable variable && variable.isGlobalVariable();
+        return argument.unwrap() instanceof LogicVariable variable && variable.isGlobalVariable();
     }
 
     private LogicKeyword toKeyword(FunctionArgument argument, boolean requireValidKeyword) {
-        if (argument.getArgumentValue() instanceof LogicKeyword keyword) {
+        if (argument.unwrap() instanceof LogicKeyword keyword) {
             return keyword;
         } else if (argument instanceof IdentifierFunctionArgument ifa) {
             if (requireValidKeyword) {
                 warn(argument.sourcePosition(), WARN.MISSING_MLOG_KEYWORD_PREFIX, ifa.getIdentifier().getName());
             }
             return ifa.getKeyword();
-        } else if (argument.getArgumentValue() instanceof LogicBoolean bool) {
-            return LogicKeyword.create(argument.getArgumentValue().sourcePosition(), bool.toMlog());
+        } else if (argument.unwrap() instanceof LogicBoolean bool) {
+            return LogicKeyword.create(argument.unwrap().sourcePosition(), bool.toMlog());
         } else {
             return LogicKeyword.INVALID;
         }

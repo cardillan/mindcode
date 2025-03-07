@@ -14,7 +14,6 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
-import info.teksol.mc.mindcode.compiler.generation.variables.InputFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
@@ -105,7 +104,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         // Make sure IdentifierFunctionArguments get evaluated now and not in a different context
         // (in case of inline functions, they could get evaluated in the context of the function)
-        arguments.forEach(FunctionArgument::getArgumentValue);
+        arguments.forEach(FunctionArgument::unwrap);
 
         if (function.isRemote() && function.getModule().getRemoteProcessor() == null) {
             error(call, ERR.FUNCTION_REMOTE_CALLED_LOCALLY, functionName);
@@ -247,7 +246,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // Add output function parameters passed in as input only arguments
         arguments.stream()
                 .filter(FunctionArgument::isInputOnly)
-                .map(FunctionArgument::getArgumentValue)
+                .map(FunctionArgument::unwrap)
                 .filter(LogicVariable.class::isInstance)
                 .map(LogicVariable.class::cast)
                 .filter(function::isOutputFunctionParameter)
@@ -390,9 +389,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // TODO When function parameters become ValueStores, the isInputFunctionParameter
         //        will be called directly without casting
         return functionParameter.isInput()
-               && argument.getArgumentValue() instanceof LogicVariable variable
+               && argument.unwrap() instanceof LogicVariable variable
                && function.isInputFunctionParameter(variable)
-               && !functionParameter.equals(argument.getArgumentValue());
+               && !functionParameter.equals(argument.unwrap());
     }
 
     private void setupFunctionParameters(MindcodeFunction function, List<FunctionArgument> arguments, boolean recursiveCall) {
@@ -418,8 +417,8 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         for (int index = 0; index < limit; index++) {
             if (function.getDeclaredParameter(index).isInput()) {
                 ValueStore argument = argumentValues.remove();
-                if (function.getDeclaration().isInline() && argument instanceof InputFunctionArgument arg && !arg.getArgumentValue().isMlogRepresentable()) {
-                    variables.replaceFunctionVariable(function.getDeclaredParameter(index).getIdentifier(), arg.getArgumentValue());
+                if (function.getDeclaration().isInline() && !argument.unwrap().isMlogRepresentable()) {
+                    variables.replaceFunctionVariable(function.getDeclaredParameter(index).getIdentifier(), argument.unwrap());
                 } else {
                     function.getParameter(index).setValue(assembler, argument.getValue(assembler));
                 }
@@ -449,9 +448,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // TODO When function parameters become ValueStores, the isOutputFunctionParameter
         //        will be called directly without casting
         return argument.isOutput()
-               && argument.getArgumentValue() instanceof LogicVariable variable
+               && argument.unwrap() instanceof LogicVariable variable
                && function.isOutputFunctionParameter(variable)
-               && !functionParameter.equals(argument.getArgumentValue());
+               && !functionParameter.equals(argument.unwrap());
     }
 
     private void retrieveFunctionParameters(MindcodeFunction function, List<FunctionArgument> arguments, boolean recursiveCall) {

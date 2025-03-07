@@ -28,7 +28,7 @@ public class MissingFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public ValueStore getArgumentValue() {
+    public ValueStore unwrap() {
         return LogicVariable.INVALID;
     }
 
