@@ -177,16 +177,6 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesFormattablesAsArguments() {
-            assertGeneratesMessage(
-                    "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.",
-                    """
-                            inline void foo(x) print(x); end;
-                            foo($"Hello");
-                            """);
-        }
-
-        @Test
         void refusesBlockNameAsFunctionOutputArgument() {
             assertGeneratesMessage(
                     "Assignment to constant or parameter 'message1' not allowed.",
@@ -607,9 +597,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesBlocksAndConstantsInUserFunctions() {
             assertCompilesTo("""
                             def foo(block)
-                              print(radar(enemy, any, any, distance, block, 1));
-                              print(block.radar(ally, flying, any, health, 1));
-                              print(radar(enemy, boss, any, distance, lancer1, 1));
+                              print(radar(:enemy, :any, :any, :distance, block, 1));
+                              print(block.radar(:ally, :flying, :any, :health, 1));
+                              print(radar(:enemy, :boss, :any, :distance, lancer1, 1));
                             end;
                             foo(lancer1);
                             """,
@@ -622,6 +612,17 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, var(3)),
                     createInstruction(SET, var(0), var(3)),
                     createInstruction(LABEL, var(1000))
+            );
+        }
+
+        @Test
+        void compilesFormattableStringAsInlineArgument() {
+            assertCompilesTo("""
+                            inline void foo(x) print(x); end;
+                            foo($"Hello");
+                            """,
+                    createInstruction(PRINT, q("Hello")),
+                    createInstruction(LABEL, label(0))
             );
         }
 
@@ -1167,7 +1168,6 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             b = 2 * a;
                         end;
                         """,
-                    createInstruction(INITVAR, ":foo:a", ":foo*retval", ":foo*finished", "null"),
                     createInstruction(SETADDR, ":foo*address", label(0)),
                     createInstruction(SET, "*mainProcessor", "@this"),
                     createInstruction(WAIT, "1000000000000"),
@@ -1191,7 +1191,6 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             return a++ / 2;
                         end;
                         """,
-                    createInstruction(INITVAR, ":foo:a", ":foo*retval", ":foo*finished", "null"),
                     createInstruction(SETADDR, ":foo*address", label(0)),
                     createInstruction(SET, "*mainProcessor", "@this"),
                     createInstruction(WAIT, "1000000000000"),
@@ -1344,7 +1343,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessages(expectedMessages()
                             .add("Invalid value 'fluffyBunny' for keyword parameter: allowed values are 'center'," +
                                     " 'top', 'bottom', 'left', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'."),
-                    "drawPrint(10, 10, fluffyBunny);");
+                    "drawPrint(10, 10, :fluffyBunny);");
         }
     }
 
@@ -1502,7 +1501,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesURadar() {
             assertCompilesTo("""
-                            target = uradar(enemy, ground, any, health, MIN_TO_MAX);
+                            target = uradar(:enemy, :ground, :any, :health, MIN_TO_MAX);
                             if target != null then
                                 approach(target.@x, target.@y, 10);
                                 if within(target.@x, target.@y, 10) then
@@ -1540,10 +1539,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesULocate() {
             assertCompilesTo("""
-                            ulocate(ore, @surge-alloy, out x, out y);
-                            building = ulocate(building, core, ENEMY, out x, out y);
-                            building = ulocate(spawn, out x, out y);
-                            building = ulocate(damaged, out x, out y);
+                            ulocate(:ore, @surge-alloy, out x, out y);
+                            building = ulocate(:building, :core, ENEMY, out x, out y);
+                            building = ulocate(:spawn, out x, out y);
+                            building = ulocate(:damaged, out x, out y);
                             """,
                     createInstruction(ULOCATE, "ore", "core", "true", "@surge-alloy", ":x", ":y", var(0), var(1)),
                     createInstruction(ULOCATE, "building", "core", ".ENEMY", "@copper", ":x", ":y", var(3), var(2)),
@@ -1558,10 +1557,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesRadar() {
             assertCompilesTo("""
-                            block = radar(enemy, any, any, distance, salvo1, 1);
-                            block = radar(ally, flying, any, health, lancer1, 1);
+                            block = radar(:enemy, :any, :any, :distance, salvo1, 1);
+                            block = radar(:ally, :flying, :any, :health, lancer1, 1);
                             src = salvo1;
-                            block = radar(enemy, any, any, distance, src, 1);
+                            block = radar(:enemy, :any, :any, :distance, src, 1);
                             """,
                     createInstruction(RADAR, "enemy", "any", "any", "distance", "salvo1", "1", var(0)),
                     createInstruction(SET, "block", var(0)),
@@ -1595,7 +1594,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             result = asin(a);
                             result = acos(a);
                             result = atan(a);
-                            result = lookup(block, index);
+                            result = lookup(:block, index);
                             result = packcolor(r, g, b, a);
                             wait(sec);
                             payEnter();
@@ -1670,7 +1669,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesNewDrawInstructions() {
             assertCompilesTo("""
-                            drawPrint(10, 10, topRight);
+                            drawPrint(10, 10, :topRight);
                             translate(3, 4);
                             scale(-1, 1);
                             rotate(90);
@@ -1717,28 +1716,28 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesSetMarker() {
             assertCompilesTo("""
-                            setmarker(remove, id);
-                            setmarker(world, id, boolean);
-                            setmarker(minimap, id, boolean);
-                            setmarker(autoscale, id, boolean);
-                            setmarker(pos, id, x, y);
-                            setmarker(endPos, id, x, y);
-                            setmarker(drawLayer, id, layer);
-                            setmarker(color, id, color);
-                            setmarker(radius, id, radius);
-                            setmarker(stroke, id, stroke);
-                            setmarker(rotation, id, rotation);
-                            setmarker(shape, id, sides, fill, outline);
-                            setmarker(arc, id, from, to);
-                            setmarker(flushText, id, fetch);
-                            setmarker(fontSize, id, size);
-                            setmarker(textHeight, id, height);
-                            setmarker(labelFlags, id, background, outline);
-                            setmarker(texture, id, printFlush, name);
-                            setmarker(textureSize, id, width, height);
-                            setmarker(posi, id, index, x, y);
-                            setmarker(uvi, id, index, x, y);
-                            setmarker(colori, id, index, color);
+                            setmarker(:remove, id);
+                            setmarker(:world, id, boolean);
+                            setmarker(:minimap, id, boolean);
+                            setmarker(:autoscale, id, boolean);
+                            setmarker(:pos, id, x, y);
+                            setmarker(:endPos, id, x, y);
+                            setmarker(:drawLayer, id, layer);
+                            setmarker(:color, id, color);
+                            setmarker(:radius, id, radius);
+                            setmarker(:stroke, id, stroke);
+                            setmarker(:rotation, id, rotation);
+                            setmarker(:shape, id, sides, fill, outline);
+                            setmarker(:arc, id, from, to);
+                            setmarker(:flushText, id, fetch);
+                            setmarker(:fontSize, id, size);
+                            setmarker(:textHeight, id, height);
+                            setmarker(:labelFlags, id, background, outline);
+                            setmarker(:texture, id, printFlush, name);
+                            setmarker(:textureSize, id, width, height);
+                            setmarker(:posi, id, index, x, y);
+                            setmarker(:uvi, id, index, x, y);
+                            setmarker(:colori, id, index, color);
                             """,
                     createInstruction(SETMARKER, "remove", ":id"),
                     createInstruction(SETMARKER, "world", ":id", ":boolean"),
@@ -1768,7 +1767,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesMakeMarker() {
             assertCompilesTo("""
-                            makemarker(shapeText, id, x, y, replace);
+                            makemarker(:shapeText, id, x, y, replace);
                             """,
                     createInstruction(MAKEMARKER, "shapeText", "id", "x", "y", "replace"),
                     createInstruction(END)
@@ -1802,7 +1801,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesGetBlock() {
             assertCompilesTo("""
-                            result = getblock(floor, x, y);
+                            result = getblock(:floor, x, y);
                             """,
                     createInstruction(GETBLOCK, "floor", var(0), "x", "y"),
                     createInstruction(SET, "result", var(0)),
@@ -1813,9 +1812,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesSetBlock() {
             assertCompilesTo("""
-                            setblock(floor, to, x, y);
-                            setblock(ore, to, x, y);
-                            setblock(block, to, x, y, team, rotation);
+                            setblock(:floor, to, x, y);
+                            setblock(:ore, to, x, y);
+                            setblock(:block, to, x, y, team, rotation);
                             """,
                     createInstruction(SETBLOCK, "floor", "to", "x", "y"),
                     createInstruction(SETBLOCK, "ore", "to", "x", "y"),
@@ -1838,8 +1837,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesStatus() {
             assertCompilesTo("""
-                            applyStatus(burning, unit, duration);
-                            clearStatus(freezing, unit);
+                            applyStatus(:burning, unit, duration);
+                            clearStatus(:freezing, unit);
                             """,
                     createInstruction(STATUS, "false", "burning", "unit", "duration"),
                     createInstruction(STATUS, "true", "freezing", "unit"),
@@ -1860,28 +1859,28 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesSetRule() {
             assertCompilesTo("""
-                            setrule(currentWaveTime, value);
-                            setrule(waveTimer, value);
-                            setrule(waves, value);
-                            setrule(wave, value);
-                            setrule(waveSpacing, value);
-                            setrule(waveSending, value);
-                            setrule(attackMode, value);
-                            setrule(enemyCoreBuildRadius, value);
-                            setrule(dropZoneRadius, value);
-                            setrule(unitCap, value);
-                            setrule(mapArea, x, y, width, height);
-                            setrule(lighting, value);
-                            setrule(ambientLight, value);
-                            setrule(solarMultiplier, value);
-                            setrule(buildSpeed, value, team);
-                            setrule(unitBuildSpeed, value, team);
-                            setrule(unitCost, value, team);
-                            setrule(unitDamage, value, team);
-                            setrule(blockHealth, value, team);
-                            setrule(blockDamage, value, team);
-                            setrule(rtsMinWeight, value, team);
-                            setrule(rtsMinSquad, value, team);
+                            setrule(:currentWaveTime, value);
+                            setrule(:waveTimer, value);
+                            setrule(:waves, value);
+                            setrule(:wave, value);
+                            setrule(:waveSpacing, value);
+                            setrule(:waveSending, value);
+                            setrule(:attackMode, value);
+                            setrule(:enemyCoreBuildRadius, value);
+                            setrule(:dropZoneRadius, value);
+                            setrule(:unitCap, value);
+                            setrule(:mapArea, x, y, width, height);
+                            setrule(:lighting, value);
+                            setrule(:ambientLight, value);
+                            setrule(:solarMultiplier, value);
+                            setrule(:buildSpeed, value, team);
+                            setrule(:unitBuildSpeed, value, team);
+                            setrule(:unitCost, value, team);
+                            setrule(:unitDamage, value, team);
+                            setrule(:blockHealth, value, team);
+                            setrule(:blockDamage, value, team);
+                            setrule(:rtsMinWeight, value, team);
+                            setrule(:rtsMinSquad, value, team);
                             """,
                     createInstruction(SETRULE, "currentWaveTime", "value"),
                     createInstruction(SETRULE, "waveTimer", "value"),
@@ -1912,10 +1911,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesMessage() {
             assertCompilesTo("""
-                            message(notify, @wait);
-                            message(mission, @wait);
-                            message(announce, duration, out result);
-                            message(toast, duration, out result);
+                            message(:notify, @wait);
+                            message(:mission, @wait);
+                            message(:announce, duration, out result);
+                            message(:toast, duration, out result);
                             """,
                     createInstruction(MESSAGE, "notify", "0", "@wait"),
                     createInstruction(MESSAGE, "mission", "0", "@wait"),
@@ -1928,9 +1927,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesCutscene() {
             assertCompilesTo("""
-                            cutscene(pan, x, y, speed);
-                            cutscene(zoom, level);
-                            cutscene(stop);
+                            cutscene(:pan, x, y, speed);
+                            cutscene(:zoom, level);
+                            cutscene(:stop);
                             """,
                     createInstruction(CUTSCENE, "pan", "x", "y", "speed"),
                     createInstruction(CUTSCENE, "zoom", "level"),
@@ -1962,14 +1961,14 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesFetch() {
             assertCompilesTo("""
-                            result = fetch(unitCount, team, type);
-                            result = fetch(playerCount, team);
-                            result = fetch(coreCount, team);
-                            result = fetch(buildCount, team, type);
-                            result = fetch(unit, team, index, type);
-                            result = fetch(player, team, index);
-                            result = fetch(core, team, index);
-                            result = fetch(build, team, index, type);
+                            result = fetch(:unitCount, team, type);
+                            result = fetch(:playerCount, team);
+                            result = fetch(:coreCount, team);
+                            result = fetch(:buildCount, team, type);
+                            result = fetch(:unit, team, index, type);
+                            result = fetch(:player, team, index);
+                            result = fetch(:core, team, index);
+                            result = fetch(:build, team, index, type);
                             """,
                     createInstruction(FETCH, "unitCount", var(0), ":team", "0", ":type"),
                     createInstruction(SET, ":result", var(0)),
@@ -2050,39 +2049,39 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesEffects() {
             assertCompilesTo("""
-                            effect(warn, x, y);
-                            effect(cross, x, y);
-                            effect(blockFall, x, y, @vault);
-                            effect(placeBlock, x, y, size);
-                            effect(placeBlockSpark, x, y, size);
-                            effect(breakBlock, x, y, size);
-                            effect(spawn, x, y);
-                            effect(trail, x, y, size, color);
-                            effect(breakProp, x, y, size, color);
-                            effect(smokeCloud, x, y, color);
-                            effect(vapor, x, y, color);
-                            effect(hit, x, y, color);
-                            effect(hitSquare, x, y, color);
-                            effect(shootSmall, x, y, rotation, color);
-                            effect(shootBig, x, y, rotation, color);
-                            effect(smokeSmall, x, y, color);
-                            effect(smokeBig, x, y, color);
-                            effect(smokeColor, x, y, rotation, color);
-                            effect(smokeSquare, x, y, rotation, color);
-                            effect(smokeSquareBig, x, y, rotation, color);
-                            effect(spark, x, y, color);
-                            effect(sparkBig, x, y, color);
-                            effect(sparkShoot, x, y, rotation, color);
-                            effect(sparkShootBig, x, y, rotation, color);
-                            effect(drill, x, y, color);
-                            effect(drillBig, x, y, color);
-                            effect(lightBlock, x, y, size, color);
-                            effect(explosion, x, y, size);
-                            effect(smokePuff, x, y, color);
-                            effect(sparkExplosion, x, y, color);
-                            effect(crossExplosion, x, y, size, color);
-                            effect(wave, x, y, size, color);
-                            effect(bubble, x, y);
+                            effect(:warn, x, y);
+                            effect(:cross, x, y);
+                            effect(:blockFall, x, y, @vault);
+                            effect(:placeBlock, x, y, size);
+                            effect(:placeBlockSpark, x, y, size);
+                            effect(:breakBlock, x, y, size);
+                            effect(:spawn, x, y);
+                            effect(:trail, x, y, size, color);
+                            effect(:breakProp, x, y, size, color);
+                            effect(:smokeCloud, x, y, color);
+                            effect(:vapor, x, y, color);
+                            effect(:hit, x, y, color);
+                            effect(:hitSquare, x, y, color);
+                            effect(:shootSmall, x, y, rotation, color);
+                            effect(:shootBig, x, y, rotation, color);
+                            effect(:smokeSmall, x, y, color);
+                            effect(:smokeBig, x, y, color);
+                            effect(:smokeColor, x, y, rotation, color);
+                            effect(:smokeSquare, x, y, rotation, color);
+                            effect(:smokeSquareBig, x, y, rotation, color);
+                            effect(:spark, x, y, color);
+                            effect(:sparkBig, x, y, color);
+                            effect(:sparkShoot, x, y, rotation, color);
+                            effect(:sparkShootBig, x, y, rotation, color);
+                            effect(:drill, x, y, color);
+                            effect(:drillBig, x, y, color);
+                            effect(:lightBlock, x, y, size, color);
+                            effect(:explosion, x, y, size);
+                            effect(:smokePuff, x, y, color);
+                            effect(:sparkExplosion, x, y, color);
+                            effect(:crossExplosion, x, y, size, color);
+                            effect(:wave, x, y, size, color);
+                            effect(:bubble, x, y);
                             """,
                     createInstruction(EFFECT, "warn", "x", "y"),
                     createInstruction(EFFECT, "cross", "x", "y"),

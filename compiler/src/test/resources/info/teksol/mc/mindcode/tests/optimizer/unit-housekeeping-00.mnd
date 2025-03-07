@@ -81,7 +81,7 @@ while true do
         if (controlled == 0) and switch1.@enabled then
             if items > 0 then
                 flag(1);
-                CORE = ulocate(building, core, false, out CORE_X, out CORE_Y);
+                CORE = ulocate(:building, :core, false, out CORE_X, out CORE_Y);
                 if within(CORE_X, CORE_Y, RADIUS_WITHIN) then
                     itemDrop(CORE, items);
                 else

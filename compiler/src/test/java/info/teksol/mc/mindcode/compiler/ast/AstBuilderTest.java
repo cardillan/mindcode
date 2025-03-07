@@ -1934,7 +1934,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         @Test
         void buildsNestedTernaryOperator() {
             assertBuildsTo("""
-                            a?b?c:d:e?f:g;
+                            a ? b ? c : d : e ? f : g;
                             """,
                     List.of(
                             new AstOperatorTernary(EMPTY,

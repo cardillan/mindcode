@@ -329,12 +329,12 @@ Mindustry allows your processors to control and receive information from any all
 One of the first thing you'll probably want to do is to locate your core, as it is the most important building in the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, just issue this command:
 
 ```
-found = ulocate(building, core, false, out core_x, out core_y, out core);
+found = ulocate(:building, :core, false, out core_x, out core_y, out core);
 ```
 
 Let's look at each argument here: 
 
-* `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it wasn't.  If you don't need it, use just `ulocate(building, core, false, out core_x, out core_y, out core)`.
+* `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it wasn't.  If you don't need it, use just `ulocate(:building, :core, false, out core_x, out core_y, out core)`.
 * `ulocate` is the name of the function we're calling.
 * `building` and `core` are constant values that specify what are we looking for, They must be specified exactly like this, you cannot, for example, store them in variable (e.g. `type = core; ulocate(building, type, false, out core_x, out core_y, out core)` won't work).
 * `false` specifies we're looking for our own core. Put `true` if you want to locate enemy one.
@@ -343,7 +343,7 @@ Let's look at each argument here:
 
 ```
 findFreeUnit(@poly, 1);
-ulocate(building, core, false, , , out core);
+ulocate(:building, :core, false, , , out core);
 println("Silicon status: ", core.@silicon);
 printflush(message1) ;
 ```

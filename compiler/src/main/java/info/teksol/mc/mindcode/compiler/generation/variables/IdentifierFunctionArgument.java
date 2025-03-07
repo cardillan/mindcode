@@ -33,7 +33,7 @@ public class IdentifierFunctionArgument implements FunctionArgument {
     }
 
     public LogicKeyword getKeyword() {
-        return LogicKeyword.create(identifier.getName());
+        return LogicKeyword.create(identifier.sourcePosition(), identifier.getName());
     }
 
     /// Provides the value of the underlying argument

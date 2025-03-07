@@ -124,10 +124,10 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
         assertCompilesTo("""
                         a = if @links > 5 then
                             print("Five");
-                            lookup(unit, 5);
+                            lookup(:unit, 5);
                         else
                             print("Ten");
-                            lookup(unit, 10);
+                            lookup(:unit, 10);
                         end;
                         print(a);
                         """,

@@ -1,11 +1,14 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
+import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import info.teksol.mc.mindcode.compiler.generation.variables.IdentifierFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -105,7 +108,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
 
         List<String> strArguments = arguments.stream()
                 .filter(a -> !a.type().isUnused() && !a.type().isFunctionName())
-                .map(a -> a.type().isOutput() ? "out " + a.name() : a.name())
+                .map(a -> a.type().isKeyword() || a.type().isSelector() ? ":" + a.name() : a.type().isOutput() ? "out " + a.name() : a.name())
                 .collect(Collectors.toList());
 
         str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");
@@ -139,6 +142,22 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         return argument.getArgumentValue() instanceof LogicVariable variable && variable.isGlobalVariable();
     }
 
+    private LogicKeyword toKeyword(FunctionArgument argument, boolean requireValidKeyword) {
+        if (argument.getArgumentValue() instanceof LogicKeyword keyword) {
+            return keyword;
+        } else if (argument instanceof IdentifierFunctionArgument ifa) {
+            if (requireValidKeyword) {
+                warn(argument.sourcePosition(), WARN.MISSING_MLOG_KEYWORD_PREFIX, ifa.getIdentifier().getName());
+            }
+            return ifa.getKeyword();
+        } else if (argument.getArgumentValue() instanceof LogicBoolean bool) {
+            return LogicKeyword.create(argument.getArgumentValue().sourcePosition(), bool.toMlog());
+        } else {
+            return LogicKeyword.INVALID;
+        }
+    }
+
+
     protected LogicKeyword validateKeyword(NamedParameter parameter, FunctionArgument argument, boolean requireValidKeyword) {
         if (argument.hasInModifier() || argument.hasOutModifier()) {
             error(argument, ERR.ARGUMENT_KEYWORD_IN_OUT_NOT_ALLOWED);
@@ -147,13 +166,14 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
 
         Collection<String> parameterValues = functionMapper.processor.getParameterValues(parameter.type());
 
-        LogicKeyword keyword = BaseFunctionMapper.toKeyword(argument);
+        LogicKeyword keyword = toKeyword(argument, requireValidKeyword);
         if (!keyword.getKeyword().isEmpty()) {
             if (!parameterValues.contains(keyword.getKeyword())) {
                 error(argument, ERR.ARGUMENT_KEYWORD_INVALID_VALUE, keyword.getKeyword(),
                         String.join("', '", parameterValues));
                 // Fill in one of the valid keywords to avoid further errors
-                return requireValidKeyword ? LogicKeyword.create(parameterValues.iterator().next()) : LogicKeyword.INVALID;
+                return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
+                        parameterValues.iterator().next()) : LogicKeyword.INVALID;
             }
 
             return keyword;
@@ -161,7 +181,8 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
             error(argument, ERR.ARGUMENT_KEYWORD_UNSPECIFIED_VALUE,
                     String.join("', '", parameterValues));
             // Fill in one of the valid keywords to avoid further errors
-            return requireValidKeyword ? LogicKeyword.create(parameterValues.iterator().next()) : LogicKeyword.INVALID;
+            return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
+                    parameterValues.iterator().next()) : LogicKeyword.INVALID;
         }
     }
 

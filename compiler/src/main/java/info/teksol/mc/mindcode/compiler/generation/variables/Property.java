@@ -54,13 +54,13 @@ public class Property implements ValueStore {
 
     @Override
     public void setValue(CodeAssembler assembler, LogicValue value) {
-        assembler.createControl(LogicKeyword.create(propertyName), object, value);
+        assembler.createControl(LogicKeyword.create(sourcePosition, propertyName), object, value);
     }
 
     @Override
     public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        assembler.createControl(LogicKeyword.create(propertyName), object, transferVariable);
+        assembler.createControl(LogicKeyword.create(sourcePosition, propertyName), object, transferVariable);
     }
 
     @Override
@@ -70,6 +70,6 @@ public class Property implements ValueStore {
 
     @Override
     public void storeValue(CodeAssembler assembler) {
-        assembler.createControl(LogicKeyword.create(propertyName), object, transferVariable);
+        assembler.createControl(LogicKeyword.create(sourcePosition, propertyName), object, transferVariable);
     }
 }

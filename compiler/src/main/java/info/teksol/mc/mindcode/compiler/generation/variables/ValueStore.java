@@ -23,6 +23,12 @@ import java.util.function.Consumer;
 @NullMarked
 public interface ValueStore extends SourceElement {
 
+    /// Indicates the value can be represented by an mlog variable. Compound values (e.g. formattable string literal
+    /// or a keyword) cannot be represented.
+    default boolean isMlogRepresentable() {
+        return true;
+    }
+
     /// Indicates the value is complex, i.e. doesn't represent a simple mlog variable. This means specific code
     /// needs to be generated to read/write the value. An example is an external memory element.
     boolean isComplex();

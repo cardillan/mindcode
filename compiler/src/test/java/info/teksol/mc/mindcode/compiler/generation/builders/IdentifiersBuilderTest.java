@@ -127,7 +127,7 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             allocate heap in cell1;
                             external x[10];
-                            ulocate(ore, x[a], out x[b], out x[c]);
+                            ulocate(:ore, x[a], out x[b], out x[c]);
                             """,
                     createInstruction(LABEL, var(1000)),
                     createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
@@ -259,7 +259,7 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
         void compilesArrayElementsAsInstructionParameters() {
             assertCompilesTo("""
                             var x[10];
-                            ulocate(ore, x[a], out x[b], out x[c]);
+                            ulocate(:ore, x[a], out x[b], out x[c]);
                             """,
                     createInstruction(SET, var(0), ":a"),
                     createInstruction(SET, var(2), ":b"),

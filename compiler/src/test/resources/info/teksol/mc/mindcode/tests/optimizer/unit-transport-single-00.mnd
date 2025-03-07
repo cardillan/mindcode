@@ -92,7 +92,7 @@ if LINK_ID == 0 then
     print("[gold]Locating core...");
     printflush(message1);
     // Use existing unit
-    CORE = ulocate(building, core, false, out CORE_X, out CORE_Y);
+    CORE = ulocate(:building, :core, false, out CORE_X, out CORE_Y);
 else
     print($"[gold]Locating vault #$LINK_ID...");
     printflush(message1);

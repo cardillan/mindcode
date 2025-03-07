@@ -749,24 +749,24 @@ Mindcode will report all conflicts of function declarations as errors, even if t
 A user defined function may have the same name as a Mindustry Logic function. User defined functions override Mindustry Logic functions of the same name. When a function call matches the user defined function, the user defined function will be called instead of Mindustry Logic function:
 
 ```
-def ulocate(ore, oreType)
+def ulocate(:ore, oreType)
     print("Calling user-defined function");
 end;
 
-found = ulocate(ore, @copper);                  // Calls the user-defined function
-found = ulocate(ore, @copper, out x, out y);    // Calls the Mindustry Logic function
+found = ulocate(:ore, @copper);                  // Calls the user-defined function
+found = ulocate(:ore, @copper, out x, out y);    // Calls the Mindustry Logic function
 ```
 
 If, however, the user defined ulocate function was defined with output variables as well, both calls would call the user-defined function:
 
 ```
-def ulocate(ore, oreType, out x, out y)
+def ulocate(:ore, oreType, out x, out y)
     print("Calling user-defined function");
     x = y = 0;
 end;
 
-found = ulocate(ore, @copper);                  // Calls the user-defined function
-found = ulocate(ore, @copper, out x, out y);    // Also calls the user-defined function
+found = ulocate(:ore, @copper);                  // Calls the user-defined function
+found = ulocate(:ore, @copper, out x, out y);    // Also calls the user-defined function
 ```
 
 It is not possible to call a Mindustry Logic function if a matching user-defined function exists.

@@ -408,6 +408,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstSubarray(MindcodeParser.AstSubarrayContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astKeyword}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstKeyword(MindcodeParser.AstKeywordContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astKeyword}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstKeyword(MindcodeParser.AstKeywordContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

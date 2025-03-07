@@ -79,6 +79,7 @@ public class ERR {
     public static final String FUNCTION_VARARGS_NOT_INLINE = "Varargs function '%s' must be declared 'inline'.";
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";
     public static final String INTERNAL_AMBIGUOUS_CODE = "%s: ambiguous source code (%d ambiguities found).";
+    public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals requires language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
     public static final String LITERAL_INVALID_CHAR_FORMAT = "Invalid format of character literal.";
@@ -95,6 +96,7 @@ public class ERR {
     public static final String METHOD_CALL_UNDEFINED = "Unknown function '%s'.";
     public static final String MLOG_FIRST_ARGUMENT_NOT_LITERAL = "First argument to the '%s' function must be a string literal.";
     public static final String MLOG_FIRST_ARGUMENT_NO_MODIFIERS = "First argument to the '%s' function must not use any modifier.";
+    public static final String MLOG_IN_OUT_KEYWORD_NOT_ALLOWED = "A keyword passed to the '%s' function must not use any modifier.";
     public static final String MLOG_IN_OUT_LITERAL_NOT_ALLOWED = "A literal passed to the '%s' function must not use any modifier.";
     public static final String MLOG_NO_LITERAL_OR_VARIABLE = "All arguments to the '%s' function must be literals or user variables.";
     public static final String MLOG_OUT_STRING_NOT_ALLOWED = "A string literal passed to the '%s' function must not use an 'out' modifier.";

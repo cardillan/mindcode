@@ -195,8 +195,6 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             sin(x) * 2;
                         end;
                         """,
-                createInstruction(INITVAR, ":foo:a", ":foo*retval", ":foo*finished", ":bar:x"),
-                createInstruction(INITVAR, ":bar*retval", ":bar*finished", "null", "null"),
                 createInstruction(SETADDR, ":foo*address", label(0)),
                 createInstruction(SETADDR, ":bar*address", label(1)),
                 createInstruction(SET, "*mainProcessor", "@this"),

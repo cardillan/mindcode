@@ -61,6 +61,10 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
         return variables.values();
     }
 
+    public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
+        variables.put(identifier.getName(), variable);
+    }
+
     @Override
     public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean implicitDeclaration) {
         ValueStore variable = createFunctionVariable(identifier, implicitDeclaration);

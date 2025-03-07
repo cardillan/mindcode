@@ -28,7 +28,7 @@ begin
     end;
 
     var dmgx, dmgy;
-    if ulocate(damaged, out dmgx, out dmgy) then
+    if ulocate(:damaged, out dmgx, out dmgy) then
         println($"${TITLE}Found damaged block at $dmgx, $dmgy");
         approach(dmgx, dmgy, 5);
         target(dmgx, dmgy, true);

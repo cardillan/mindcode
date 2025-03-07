@@ -40,6 +40,11 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
+    public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
+        throw new MindcodeInternalError("Trying to replace a local variable in global context:" + identifier);
+    }
+
+    @Override
     public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean allowRedefinition) {
         throw new MindcodeInternalError("Trying to register a local variable in global context:" + identifier);
     }

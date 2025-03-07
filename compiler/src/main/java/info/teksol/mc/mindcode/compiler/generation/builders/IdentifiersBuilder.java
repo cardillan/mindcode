@@ -1,9 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
-import info.teksol.mc.generated.ast.visitors.AstArrayAccessVisitor;
-import info.teksol.mc.generated.ast.visitors.AstBuiltInIdentifierVisitor;
-import info.teksol.mc.generated.ast.visitors.AstIdentifierVisitor;
-import info.teksol.mc.generated.ast.visitors.AstSubarrayVisitor;
+import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -32,6 +29,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         AstArrayAccessVisitor<ValueStore>,
         AstBuiltInIdentifierVisitor<ValueStore>,
         AstIdentifierVisitor<ValueStore>,
+        AstKeywordVisitor<ValueStore>,
         AstSubarrayVisitor<ValueStore>
 {
     private static final Set<ArgumentType> memoryExpressionTypes = Set.of(
@@ -66,6 +64,11 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     public ValueStore visitIdentifier(AstIdentifier identifier) {
         return variables.resolveVariable(identifier, isLocalContext(), allowUndeclaredLinks())
                 .withSourcePosition(identifier.sourcePosition());
+    }
+
+    @Override
+    public ValueStore visitKeyword(AstKeyword node) {
+        return LogicKeyword.create(node.sourcePosition(), node.getKeyword());
     }
 
     @Override

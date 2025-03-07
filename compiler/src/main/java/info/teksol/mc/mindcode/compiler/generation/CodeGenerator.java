@@ -14,7 +14,6 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
@@ -30,7 +29,6 @@ import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
@@ -150,33 +148,11 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void generateRemoteInitialization() {
-        initializeRemoteFunctionVariables(program);
+        callGraph.getFunctions().stream()
+                .filter(f -> f.isRemote() && f.isEntryPoint())
+                .forEach(f -> assembler.createSetAddress(LogicVariable.fnAddress(f), Objects.requireNonNull(f.getLabel())));
         assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.create("@this", false));
         assembler.createRemoteEndlessLoop();
-    }
-
-    private void initializeRemoteFunctionVariables(AstProgram program) {
-        List<LogicVariable> variables = new ArrayList<>();
-        callGraph.getFunctions().stream()
-                .filter(f -> f.isRemote() && f.isEntryPoint())
-                .forEach(function -> collectFunctionVariables(function, variables));
-
-        assembler.createVariables(variables);
-
-        callGraph.getFunctions().stream()
-                .filter(f -> f.isRemote() && f.isEntryPoint())
-                .forEach(f -> assembler.createSetAddress(
-                        LogicVariable.fnAddress(f),
-                        Objects.requireNonNull(f.getLabel())));
-    }
-
-    private void collectFunctionVariables(MindcodeFunction function, List<LogicVariable> variables) {
-        function.getParameters().stream()
-                .filter(FunctionParameter::isInput)
-                .map(LogicVariable.class::cast)
-                .forEach(variables::add);
-        variables.add(LogicVariable.fnRetVal(function));
-        variables.add(LogicVariable.fnFinished(function));
     }
 
     private @Nullable AstContext mainBodyContext;
