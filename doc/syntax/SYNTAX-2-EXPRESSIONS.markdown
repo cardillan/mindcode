@@ -400,7 +400,7 @@ x = x + y;
 
 ### Array assignments
 
-It is possible to assign arrays using the assignment operator, assuming both arrays have the same size. Assignments can be chained. Assignments between internal and external arrays are also supported, as well as subarrays. Examples:
+It is possible to assign arrays using the assignment operator, assuming both arrays have the same size. Assignments can be chained. Assignments between external, internal and remote arrays are supported, as well as subarrays. Examples:
 
 ```
 external cell1 a[10];

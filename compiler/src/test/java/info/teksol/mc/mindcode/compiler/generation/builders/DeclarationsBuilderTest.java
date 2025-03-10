@@ -858,8 +858,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesConflictingModifiers() {
             assertGeneratesMessage(
-                    "Modifier 'noinit' is incompatible with previous modifiers.",
-                    "remote noinit var a = 10;");
+                    "Modifier 'cached' is incompatible with previous modifiers.",
+                    "remote cached var a = 10;");
         }
     }
 }

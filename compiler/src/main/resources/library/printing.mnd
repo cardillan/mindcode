@@ -4,6 +4,8 @@
 //* To use the Printing library, use the `require printing;` statement. Some of the Printing library functions use
 //* Mindustry Logic 8 instructions and therefore require the `#set target = 8;` statement.
 
+module printing;
+
 require math;
 
 /**
@@ -206,7 +208,7 @@ end;
  * > The `print` and `format` instructions applied to numerical values round the value to the nearest integer
  * > when they differ from the integer value by less than `1e-6`. This makes it impossible to directly print
  * > (with sufficient precision) numerical values close to integer values in general, and values close to zero
- * > in particular. For example, `print(10 ** -50)` prints `0`. On the other hand, `printExact(10 ** -50)`
+ * > in particular. For example, `print(10 ** -50)` prints `0`. On the other hand, `printExactFast(10 ** -50)`
  * > outputs `1E-50`.
  *
  * > [!IMPORTANT]

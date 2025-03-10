@@ -22,6 +22,24 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
 
     @Test
+    void initializesRemoteVariables() {
+        assertOutputs("""
+                        module foo;
+                        remote v;
+                        remote a[10];
+                        """,
+                """
+                        set *mainProcessor @this
+                        wait 1e12
+                        end
+                        draw triangle .v .a*0 .a*1 .a*2 .a*3 .a*4
+                        draw triangle .a*5 .a*6 .a*7 .a*8 .a*9 0
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE)
+        );
+    }
+
+    @Test
     void resolvesAbsoluteAddressesOfLabels() {
         assertOutputs("""
                         while true do
@@ -38,7 +56,6 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         """.formatted(CompilerProfile.SIGNATURE)
         );
     }
-
 
     @Test
     void processesSortVariables() {
@@ -62,7 +79,6 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         """.formatted(CompilerProfile.SIGNATURE)
         );
     }
-
 
     @Test
     void resolvesDisabledRemarks() {

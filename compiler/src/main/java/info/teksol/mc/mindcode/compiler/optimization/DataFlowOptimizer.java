@@ -163,7 +163,10 @@ class DataFlowOptimizer extends BaseOptimizer {
             // TODO create mechanism to identify instructions without side effects
             //      Will be used by the DeadCodeEliminator too!
             switch (instruction.getOpcode()) {
-                case SET, SETADDR, OP, PACKCOLOR, READ -> {
+                case SET, SETADDR, OP, PACKCOLOR, READ, READARR -> {
+                    BaseResultInstruction ix = (BaseResultInstruction) instruction;
+                    if (ix.getResult().isVolatile()) break;
+
                     if (!keep.contains(instruction) || useless.contains(instruction)) {
                         int index = instructionIndex(instruction);
                         if (index >= 0) {

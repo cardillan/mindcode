@@ -19,10 +19,14 @@ Function reference for individual compiler versions:
 * [Function reference for Mindustry Logic 7.1](FUNCTIONS-71.markdown)
 * [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)
 
-For Mindustry Logic 8 and later, new mlog instructions and a Mindcode system library of functions are supported:
+Mindcode comes with a built-in library of useful functions:
+
+* [System Library](SYSTEM-LIBRARY.markdown)
+
+For Mindustry Logic 8 and later, new mlog instructions are supported:
 
 * [Mindustry Logic 8](MINDUSTRY-8.markdown)
-* [System Library](SYSTEM-LIBRARY.markdown)
+* [Remote functions and variables](REMOTE-CALLS.markdown)
 
 Schemacode, a schematic definition language, is covered here:
 
@@ -70,6 +74,10 @@ You can use the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks) to plac
 > end;
 > ```
 
+### Modules
+
+A source file contains either a program, or a module. Modules are declared using the `module` keyword, and are primarily used when defining remote functions and variables, supported in Mindustry 8. See [Remote functions and variables](REMOTE-CALLS.markdown) for more information.  
+
 ### Libraries and external files
 
 Mindcode language contains several [system libraries](SYSTEM-LIBRARY.markdown). To add a system library or an external file to compiled code, use the `require` statement:
@@ -83,7 +91,7 @@ The `require` statement can appear anywhere in the compiled code, although it is
 
 A file added though a `require` statement can also use a `require` statement. Circular dependencies between files are resolved and each file is compiled only once.
 
-In the web application, the `require` statement can only be used to import system libraries. Using the statement with external files is not supported.
+In the web application, the `require` statement can only be used to import system libraries, or source code contained in string values within a [Schemacode file](SCHEMACODE.markdown). Using the statement with external files is not supported.
 
 In the command-line tool, using the `require` statement with external files is analogous to the [`--append` command-line argument](TOOLS-CMDLINE.markdown#additional-input-files).
 
@@ -191,6 +199,7 @@ end;
 This is a list of Mindcode keywords:
 
 * `allocate`
+* `and`
 * `begin`
 * `break`
 * `cached`
@@ -211,13 +220,17 @@ This is a list of Mindcode keywords:
 * `inline`
 * `linked`
 * `loop`
+* `module`
 * `noinit`
 * `noinline`
+* `not`
 * `null`
+* `or`
 * `out`
 * `param`
-* `return`
+* `remote`
 * `require`
+* `return`
 * `stack`
 * `then`
 * `true`
@@ -233,6 +246,26 @@ The following keywords do not have any function in Mindcode, but are reserved fo
 * `elseif`
 
 Keywords cannot be used as function or variable names.
+
+## Mlog keywords
+
+Some mlog instructions expect a predefined set of possible string values at certain positions. Substituting variables for these string values is not supported. These string values are called _mlog keywords_. Examples of keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `group` in `ulocate building group enemy @copper outx outy found building`.
+
+Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable. 
+
+Some of these keywords do not occur in Mindcode, for example all possible `op` instructions are mapped to Mindcode functions and operators. In other cases, these keywords must be specified as arguments to the Mindustry Logic functions. To make the distinction between an mlog keyword and an identifier apparent in Mindcode, the keywords are prepended with a colon, e.g. `:building`. The function call corresponding to the `ulocate` instruction above is (see [functions](SYNTAX-4-FUNCTIONS.markdown) for more details):
+
+```
+building = ulocate(:building, :group, enemy, out outx, out outy, out found);
+```
+
+Mlog keywords can appear in these contexts in Mindcode:
+
+1. As an argument to Mindustry Logic function calls, at positions where a keyword is expected.
+2. As an argument to inline functions. Keyword passed in to an inline function may only be used as arguments to another inline or Mindustry Logic function calls.
+3. As a value of a constant definition. Such constants can, again, be only used as arguments to another inline or Mindustry Logic function calls.
+
+Mlog keywords were introduced in Mindcode 3.2.0. For backwards compatibility, it is possible to use a keyword without the `:` prefix in Mindustry Logic function calls. This way of specifying mlog keywords is deprecated, however, and generates a warning message. 
 
 ## Identifiers
 

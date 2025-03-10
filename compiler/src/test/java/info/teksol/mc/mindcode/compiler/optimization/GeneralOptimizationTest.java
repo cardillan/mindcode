@@ -484,4 +484,22 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(PRINT, "b")
         );
     }
+
+    @Test
+    void keepsVolatileVariables() {
+        assertCompilesTo("""
+                        volatile a = 10;
+                        print(a);
+                        a = 5;
+                        print(a);
+                        print(a = 20);
+                        """,
+                createInstruction(SET, ".a", "10"),
+                createInstruction(PRINT, ".a"),
+                createInstruction(SET, ".a", "5"),
+                createInstruction(PRINT, ".a"),
+                createInstruction(SET, ".a", "20"),
+                createInstruction(PRINT, "20")
+        );
+    }
 }

@@ -21,7 +21,7 @@ Activates/deactivates automatic flushing of print output. Possible values are:
 * `false`: Mindcode doesn't flush print output automatically.
 * `true` (the default value): When the program contains at least one `print` or `printchar` instruction, and no `printflush` or `draw print` instructions, Mindcode adds a `printflush message1` instruction at the end of the main program body, and generates a warning.
 
-This feature is meant for small, test scripts, where a call to `printflush()` is easily missed. This situation requires new compilation and code injection into mlof processor when detected.           
+This feature is meant for small, test scripts, where a call to `printflush()` is easily missed. This situation requires new compilation and code injection into mlog processor when detected.           
 
 ## Option `boundary-checks`
 
@@ -46,7 +46,7 @@ Specifies which function prefix is used to generate mlog names of local variable
 * `short`: the prefix is `:fn` followed by a number, starting at 0. Leads to short variable names, which are more easily readable when displayed in Mindustry interface, but it is not immediately apparent which function each variable belongs to.  
 * `long`: the prefix is composed of a function name and a number, starting at 0. Variable names may become long and often incompletely displayed in Mindustry interface, but the function name is part of variable name, making it easier to recognize each variable.   
 
-Note: the function prefix of remote functions is always `:` followed by the function name, with to additional number, regardless of this setting. 
+Note: the function prefix of remote functions is always `:` followed by the function name, with no additional number, regardless of this setting. 
 
 ## Option `goal`
 

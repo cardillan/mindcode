@@ -51,4 +51,4 @@ The system library is integrated into the compiler and as such is available to b
 
 ---
 
-[« Previous: Mindustry 8](MINDUSTRY-8.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schemacode »](SCHEMACODE.markdown)
+[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS-80.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Logic 8 »](MINDUSTRY-8.markdown)

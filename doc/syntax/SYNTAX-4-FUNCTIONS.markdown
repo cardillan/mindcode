@@ -9,7 +9,7 @@ There are several kinds of parameters a function can have:
 1. _Input parameter_: serve to pass an argument to the function by the caller.
 2. _Output parameter_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output argument are specified, they need to correspond to a global, main or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized - they're initialized by the function call.  
 3. _Input/output parameter_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
-4. _Keyword parameter_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined mlog keywords as an argument. For example the `uradar` functions requires one of the following keywords for each of its first three arguments: `any`, `enemy`, `ally`, `player`, `attacker`, `flying`, `boss`, `ground`. The constants are passed as-is, without any escaping or double quotes. It is not possible to store one of these values in a variable and pass the variable instead. Passing a value different to one of the supported values causes an error.
+4. _Keyword parameter_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined mlog keywords as an argument. For example the `uradar` functions requires one of the following keywords for each of its first three arguments: `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`. The colon is stripped from keywords when converting them to mlog. It is not possible to store one of these values in a variable and pass the variable instead. Passing a value different to one of the supported values for given function argument causes an error.
 
 Examples of function definitions and function calls:
 
@@ -48,6 +48,10 @@ println(global);
 ```
 
 outputs `20`, `10` and `20`. The change to the global variable will only happen when the function call is finished. This behavior is consistent for all types of user functions (inline, stackless and recursive).
+
+## Inline functions
+
+It is possible to pass mlog keywords and formattable string literals as arguments to user-defined functions declared `inline`. The corresponding function parameter must then be used accordingly within the function: mlog keywords need to be passed to a Mindustry Logic function, and formattable string literals need to be passed to a text output function which supports them. They can also be passed to another inline function.  
 
 # Mindustry Logic functions
 
@@ -444,6 +448,10 @@ write 63539 cell1 0
 read *tmp0 cell1 0
 printchar *tmp0
 ```
+
+## Remote calls
+
+The built-in functions `async()`, `finished()` and `await()` serve to 
 
 # System library functions
 

@@ -49,7 +49,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             "Function reference for Mindustry Logic 7.0", "FUNCTIONS-70.markdown",
             "Function reference for Mindustry Logic 7.1", "FUNCTIONS-71.markdown",
             "Function reference for Mindustry Logic 8.0", "FUNCTIONS-80.markdown",
-            "Mindustry 8", "MINDUSTRY-8.markdown",
+            "System Library", "SYSTEM-LIBRARY.markdown",
     };
 
     private static final AstContext STATIC_AST_CONTEXT = AstContext.createStaticRootNode();

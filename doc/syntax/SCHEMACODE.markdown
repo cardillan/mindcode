@@ -1076,4 +1076,4 @@ dimensions are specified as an attribute, a compilation error occurs.
 
 ---
 
-[« Previous: System Library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: IDE Integration »](TOOLS-IDE-INTEGRATION.markdown)
+[« Previous: Remote functions and variables](REMOTE-CALLS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: IDE Integration »](TOOLS-IDE-INTEGRATION.markdown)

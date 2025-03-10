@@ -46,11 +46,11 @@ public enum Modifier {
 
     private static Map<Modifier, Set<Modifier>> compatibilityMap() {
         Map<Modifier, Set<Modifier>> map = new HashMap<>();
-        map.put(CACHED, Set.of(EXTERNAL, NOINIT, REMOTE));
+        map.put(CACHED, Set.of(EXTERNAL, NOINIT));
         map.put(EXTERNAL, Set.of(CACHED, NOINIT));
         map.put(LINKED, Set.of(NOINIT));
-        map.put(NOINIT, Set.of(CACHED, EXTERNAL, LINKED, VOLATILE));
-        map.put(REMOTE, Set.of(CACHED, VOLATILE));
+        map.put(NOINIT, Set.of(CACHED, EXTERNAL, LINKED, REMOTE, VOLATILE));
+        map.put(REMOTE, Set.of(NOINIT, VOLATILE));
         map.put(VOLATILE, Set.of(NOINIT, REMOTE));
         return map;
     }

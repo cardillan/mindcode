@@ -253,6 +253,5 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 .map(AstVariablesDeclaration.class::cast)
                 .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == Modifier.REMOTE))
                 .forEach(n -> declarationsBuilder.visitRemoteVariablesDeclaration(module, n));
-
     }
 }

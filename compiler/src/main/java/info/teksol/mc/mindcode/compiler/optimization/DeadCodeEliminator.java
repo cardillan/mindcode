@@ -143,8 +143,8 @@ class DeadCodeEliminator extends BaseOptimizer {
 
         instruction.sideEffects().apply(
                 reads::add,
-                write -> addWrite(instruction, write),
-                write -> addWrite(instruction, write));
+                write -> {},
+                write -> {});
 
         if (instruction.getOpcode() != Opcode.CALL && instruction.getOpcode() != Opcode.CALLREC) {
             instruction.outputArgumentsStream()

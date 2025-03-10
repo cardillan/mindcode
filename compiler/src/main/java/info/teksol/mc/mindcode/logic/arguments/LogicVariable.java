@@ -264,13 +264,13 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable fnAddress(MindcodeFunction function) {
-        return new LogicVariable(EMPTY, PRESERVED,
+        return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_ADDRESS,
                 function.getPrefix() + FUNCTION_ADDRESS, false, true);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function) {
-        return new LogicVariable(EMPTY, PRESERVED,
+        return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED,
                 function.getPrefix() + FUNCTION_FINISHED, false, true);
     }

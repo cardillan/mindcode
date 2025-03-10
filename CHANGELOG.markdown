@@ -11,9 +11,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed the _Start with a new schematic_ button causing HTTP 404.
 * Fixed the schematics decompiler incorrectly processing factories with no unit plan selected.
 
+### Added
+
+* Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Mindustry Logic functions.
+* Added support for passing mlog keywords and formattable string literals as arguments to inline functions.
+* Added support for creating constants out of mlog keywords.
+* Added new [`mlogText()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions) for direct encoding of mlog instructions
+* The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables)
+
+#### Experimental features
+
+* Added support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown). 
+
+### Changed
+
+* All reads from and writes to variables declared `volatile` are preserved now. Volatile variables can be accessed from a remote processor safely.
+* Prefixes for local variables are created from function name by default. Use [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes. 
+
 ### Deprecated
 
 * Deprecated the `loop` keyword in `do while` loop.
+* Deprecated specifying mlog keywords without the `:` prefix in Mindustry Logic function calls. 
 
 ## 3.1.1 - 2025-03-15
 
@@ -36,6 +54,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for the new `printchar` instruction in compiler, optimizer and processor emulator.
 * Added [character literals](doc/syntax/SYNTAX.markdown#character-literals) (e.g. `'A'`). The value of the literal is the ASCII value of the character in quotes.
 * Added the [`ascii()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-ascii-function). The function returns the ASCII value of the first character of a string literal or constant.
+* Added the possibility to specify storage different from the heap when declaring external variables.  
 
 ### Changed
 

@@ -3,6 +3,8 @@
 //
 //* To use the Math library, use the `require math;` statement.
 
+module math;
+
 /**
  * The value that is closer than any other to _pi_ (&pi;), the ratio of the circumference
  * of a circle to its diameter. Provides better precision than `@pi`, and is compile-time

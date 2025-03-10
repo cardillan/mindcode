@@ -249,7 +249,7 @@ Variables are limited to a certain scope and are considered nonexistent outside 
 
 ## Implicit variables
 
-Implicit variables are only supported in the [`relaxed` syntax](SYNTAX.markdown#syntax-modes) , and are created when first encountered in the code. The kind and scope of the variable is determined by the name used for the variable:
+Implicit variables are only supported in the [`relaxed` syntax](SYNTAX.markdown#syntax-modes) , and are created when first encountered in the code. The kind and scope of the variable is determined by the name of the variable:
 
 * **Linked variables**: if the variable name corresponds to a known linked block, it is automatically regarded as a linked variable referring to that block, and its scope is global (e.g. `cell1` or `switch2`). To use a linked block not recognized by Mindcode (e.g. a block provided by a mod extension), an explicit declaration is required. 
 * **External variables**: if the variable name starts with the `$` prefix, the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global (e.g. `$Total`). See [External variables](#external-variables) for information on heap declaration.
@@ -308,9 +308,13 @@ Mindustry Logic doesn't provide a specialized mechanism for creating arrays out 
 
 Accessing individual elements of internal arrays is slower than accessing elements of external arrays, and consumes additional instruction space for jump tables. However, when Mindcode is able to resolve the index during compilation, the variable corresponding to the element is accessed directly, providing performance which can be even better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g. when unrolling all loops in the program), the jump tables might be eliminated entirely, keeping only the individual element variables in the resulting code. 
 
+## Remote arrays
+
+Remote arrays are internal arrays accessible from another processor. For more details, see [remote variables and arrays](REMOTE-CALLS.markdown#remote-variables).
+
 ## Subarrays
 
-For some operations, such as array assignments, list-iteration loops and function calls, it is possible to select a portion of the array for operation. The syntax for creating subarrays is: `array[range]`, where `range` is a constant range expression. It is possible to create subarrays from implicit, external and internal arrays: 
+For some operations, such as array assignments, list-iteration loops and function calls, it is possible to select a portion of the array for operation. The syntax for creating subarrays is: `array[range]`, where `range` is a constant range expression. It is possible to create subarrays from implicit, external, internal and remote arrays: 
 
 ```
 var a[10];
@@ -336,7 +340,7 @@ When an initial value is provided, it is assigned to the variable at the moment 
 When declaring global variables, these additional modifiers can be used:
 
 * `noinit`: this modifier suppresses the "uninitialized variable" warning for the declared variable. Uninitialized global variables retain the last value assigned to them in the last iteration of the program. This modifier cannot be used if the variable is assigned an initial value.
-* `volatile`: the compiler assumes that volatile variables can be changed externally and handles them correspondingly. The only known mechanism for external modification of a variables is the `sync` instruction, therefore variables used with this instruction should be declared `volatile`.
+* `volatile`: the compiler assumes that volatile variables can be changed externally (for example, by other processors) and handles them correspondingly. The only other known mechanism for external modification of a variable is the `sync` instruction, therefore variables used with this instruction should be declared `volatile`.
 
 Modifiers can be specified in any order.
 
@@ -463,7 +467,7 @@ A linked block or variable, a constant, a parameter or a global variable can be 
 External variables represent slots in the heap, which needs to be allocated first. The slots are assigned to variables in the order in which the variables appear in the source code, and don't subsequently change (explicit declaration of all external variables is the easiest way to specify fixed allocation order of external variables). External variables are declared using this syntax:
 
 ```
-[noinit] [cached] external [var] <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
+[noinit] [cached] external [memory [index|range]] [var] <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
 ```
 
 External variables must be declared in global scope and are therefore always global. Declared external variables can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
@@ -476,6 +480,10 @@ When an initial value is provided, it is assigned to the variable and written to
 * `noinit`: this modifier is only meaningful with the `cached` modifier. When used, the initial value of the variable is not read from the memory slot at all, the variable only allows to write new values to the memory slot. This modifier cannot be used if the variable is assigned an initial value.
 
 Cached variables are useful in situations where you want to store latest values in a memory to be reused when the processor is reset. `noinit` cached variables are useful for unidirectional sending of data between processors. In both cases, you can read from the variables without any performance penalty, but all writes are automatically propagated to the memory without any explicit code.
+
+A _storage clause_ can be specified after the `external` keyword. The storage clause consist of the name of the memory block (e.g. `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the external keyword are allocated in given memory block, starting at the given index/range. If more space than provided by given range is required for variables, an error is reported.
+
+When no storage clause is specified, the external variable is placed in heap.
 
 > [!IMPORTANT]
 > Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory. 
@@ -492,6 +500,7 @@ $dy = 1;
 // Explicity declared varaibles
 cached external a, b = 90;        
 noinit cached external c;
+external bank1[10] d = 10;
 c = a + b;
 ```
 
@@ -503,6 +512,8 @@ write 1 cell4 32
 write 1 cell4 33
 read .a cell4 34
 write 90 cell4 35
+jump 5 equal bank1 null
+write 10 bank1 10
 op add .c .a 90
 write .c cell4 36
 ```
@@ -512,7 +523,7 @@ write .c cell4 36
 It is possible to allocate an array of a fixed length from the heap. An external array consists of a fixed number of elements. Individual array elements are governed by the same rules as external variables. External arrays are declared using this syntax:
 
 ```
-external [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
+external [memory [index|range]] [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
 ```
 
 > [!TIP]
@@ -540,6 +551,8 @@ When initial values are provided, they are written to corresponding memory slots
 
 `external` is a modifier, and the `var` keyword is optional when `external` is used. When declaring external arrays, the `noinit` and `cached` modifiers cannot be used.
 
+A _storage clause_ can be specified after the `external` keyword, in the same way as when declaring external variables.
+
 ## Internal arrays
 
 [Internal arrays](#internal-arrays) are declared using this syntax:
@@ -551,7 +564,7 @@ When initial values are provided, they are written to corresponding memory slots
 > [!TIP]
 > The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g. `external var x[10];`.
 
-`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array. The initiali values are asigned directly to array element variables:
+`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array. The initial values are assigned directly to array element variables:
 
 ```
 var array[3] = (rand(10), rand(20), rand(30));
@@ -570,6 +583,10 @@ print .array*2
 ```
 
 Internal arrays must be declared in global scope and are therefore always global.
+
+## Remote variables and arrays
+
+Remote variables must be declared in remote modules. For more details, see [remote variables and arrays](REMOTE-CALLS.markdown#remote-variables).
 
 ## Program parameters
 
@@ -667,7 +684,8 @@ Constants must be declared in global scope and are therefore always global.  The
 * string values obtained by concatenating strings using the `+` operator,
 * linked variables,
 * linked blocks (only in relaxed syntax mode),
-* built-in variables, except built-in variables known not to be constant.
+* built-in variables, except built-in variables known not to be constant,
+* mlog keywords.
 
 Example:
 
@@ -1389,7 +1407,7 @@ begin
 end;
 ```
 
-## Mlog variable name generation
+# Mlog variable name generation
 
 Implicit and explicit variable names used in source code are translated to mlog using these rules:
 
@@ -1403,7 +1421,7 @@ Implicit and explicit variable names used in source code are translated to mlog 
 * stack pointer: `*sp`
 * main processor: `*mainProcessor`
 * remote function parameters: `:function:parameter` (using actual function and parameter name)
-* remote function internal variables: `:function*variable`
+* remote function internal variables (e.g. address or finished flag): `:function*variable`
 
 In short, global variables start with `.`, local variables start with `:` and compiler-generated variables start with or contain `*`.
 

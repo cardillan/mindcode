@@ -3,6 +3,8 @@
 //
 //* To use the Units library, use the `require units;`
 
+module units;
+
 /**
  * Finds and binds a free unit of given type. When such a unit is found, it is flagged by the given initial flag.
  * If no free unit of given type can be found (either because none exists, or because all existing units are occupied),

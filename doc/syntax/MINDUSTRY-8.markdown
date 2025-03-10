@@ -150,6 +150,66 @@ Value: 10
 ```
 The `format` instruction is also supported by the emulator, allowing you to experiment with the new print support right away in the web app.
 
+## `printchar` instruction
+
+The `printchar` instruction allows to output individual characters to the text buffer. The character is identified by its ASCII code. The ASCII code can be specified directly (`printchar(65);`), using Mindcode's character literal (`printchar('!');`) or using the `ascii()` function (`printchar(ascii("Today"));`).
+
+When an object is used as instruction argument, the corresponding icon is output instead: `printchar(@mega);`.
+
+```
+#set target = 8;
+for i in 0 ... 4 do
+    itemType = lookup(item, i);
+    printchar(itemType);
+    amount = vault1.sensor(itemType);
+    println(" ", amount);
+end;
+printflush(message1);
+```
+
+produces
+
+```
+print " {0}\n {0}\n {0}\n {0}\n"
+sensor :amount vault1 @copper
+format :amount
+sensor :amount vault1 @lead
+format :amount
+sensor :amount vault1 @metaglass
+format :amount
+sensor :amount vault1 @graphite
+format :amount
+printflush message1
+```
+
+## Reading and writing linked processor variables
+
+Mindustry 8 allows reading and writing variables of another processor, addressing them by name. This functionality is provided as an extension to the `read` and `write` instructions, which can take processors instead of memory cells/banks, and string values representing variable names instead of numerical index.
+
+This functionality is accessible in Mindcode via the new `read()` and `write()` methods:
+
+```
+#set target = 8;
+x = processor1.read("x");
+y = processor1.read("y");
+processor1.write(x + y, "z");
+```
+
+compiles into
+
+```
+read :x processor1 "x"
+read :y processor1 "y"
+op add *tmp2 :x :y
+write *tmp2 processor1 "z"
+```
+
+Unlike external variables, access to other processor's variables is not limited to numeric values. All possible variable values are correctly transferred using these new instructions.    
+
+### Remote functions and variables
+
+Thanks to the ability to access other processors' variables, Mindcode now supports remote functions and variables, described [in this file](REMOTE-CALLS.markdown).   
+
 ## New drawing commands
 
 ### `print draw`
@@ -178,7 +238,7 @@ Figuring out the correct transformations isn't always easy. Issuing incorrect on
 
 ### `weathersense`, `weatherset`
 
-Allows to determine whether given weather type is active, or acivate/deactivate it. Supported weathers are `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog` and `@suspend-particles`
+Allows to determine whether given weather type is active, or activate/deactivate it. Supported weathers are `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog` and `@suspend-particles`
 
 ### `message`
 
@@ -301,4 +361,4 @@ Adds a map locale property value to the text buffer.
 
 ---
 
-[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS-80.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: System Library »](SYSTEM-LIBRARY.markdown)
+[« Previous: System Library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Remote functions and variables »](REMOTE-CALLS.markdown)

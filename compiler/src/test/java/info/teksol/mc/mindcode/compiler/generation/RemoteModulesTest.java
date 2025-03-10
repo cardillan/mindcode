@@ -37,6 +37,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                 """
                         module test2;
                         
+                        remote array[10];
+                        
                         remote def baz(a, b, c)
                             return len(len(a * a + b * b), c * c);
                         end;
@@ -73,6 +75,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":foo*finished", "false"),
                     createInstruction(WRITE, ":foo*address", "processor1", q("@counter")),
                     createInstruction(LABEL, label(3)),
+                    createInstruction(WAIT, "1e-15"),
                     createInstruction(JUMP, label(3), "equal", ":foo*finished", "false"),
                     createInstruction(SET, ":a", ":foo:count"),
                     createInstruction(SET, ":z", ":foo*retval"),
@@ -100,6 +103,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(WRITE, ":foo*address", "processor1", q("@counter")),
                     createInstruction(PRINT, ":foo*finished"),
                     createInstruction(LABEL, label(3)),
+                    createInstruction(WAIT, "1e-15"),
                     createInstruction(JUMP, label(3), "equal", ":foo*finished", "false"),
                     createInstruction(SET, ":z", ":foo*retval"),
                     createInstruction(PRINT, ":z"),
@@ -117,13 +121,13 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             print(y, z, a);
                             """,
                     createInstruction(LABEL, label(3)),
-                    createInstruction(READ, tmp(1), "processor1", q("*mainProcessor")),
-                    createInstruction(JUMP, label(3), "equal", tmp(1), "null"),
+                    createInstruction(READ, tmp(11), "processor1", q("*mainProcessor")),
+                    createInstruction(JUMP, label(3), "equal", tmp(11), "null"),
                     createInstruction(WRITE, "@this", "processor1", q("*mainProcessor")),
                     createInstruction(READ, ":foo*address", "processor1", q(":foo*address")),
                     createInstruction(LABEL, label(4)),
-                    createInstruction(READ, tmp(4), "processor2", q("*mainProcessor")),
-                    createInstruction(JUMP, label(4), "equal", tmp(4), "null"),
+                    createInstruction(READ, tmp(14), "processor2", q("*mainProcessor")),
+                    createInstruction(JUMP, label(4), "equal", tmp(14), "null"),
                     createInstruction(WRITE, "@this", "processor2", q("*mainProcessor")),
                     createInstruction(READ, ":baz*address", "processor2", q(":baz*address")),
                     createInstruction(WRITE, "10", "processor2", q(":baz:a")),
@@ -132,12 +136,14 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, ":baz*finished", "false"),
                     createInstruction(WRITE, ":baz*address", "processor2", q("@counter")),
                     createInstruction(LABEL, label(5)),
+                    createInstruction(WAIT, "1e-15"),
                     createInstruction(JUMP, label(5), "equal", ":baz*finished", "false"),
                     createInstruction(SET, ":y", ":baz*retval"),
                     createInstruction(WRITE, "10", "processor1", q(":foo:a")),
                     createInstruction(SET, ":foo*finished", "false"),
                     createInstruction(WRITE, ":foo*address", "processor1", q("@counter")),
                     createInstruction(LABEL, label(6)),
+                    createInstruction(WAIT, "1e-15"),
                     createInstruction(JUMP, label(6), "equal", ":foo*finished", "false"),
                     createInstruction(SET, ":a", ":foo:count"),
                     createInstruction(SET, ":z", ":foo*retval"),
@@ -146,6 +152,60 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, ":a")
             );
         }
+
+        @Test
+        void compilesRemoteArrayAccess() {
+            assertCompilesTo("""
+                            require "remote2.mnd" remote processor1;
+                            for out i in array[0..2] do
+                                i = rand(100);
+                            end;
+                            array[floor(rand(10))]++;
+                            print(array[2..4]);
+                            """,
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(READ, tmp(10), "processor1", q("*mainProcessor")),
+                    createInstruction(JUMP, label(1), "equal", tmp(10), "null"),
+                    createInstruction(WRITE, "@this", "processor1", q("*mainProcessor")),
+                    createInstruction(SETADDR, tmp(11), label(5)),
+                    createInstruction(READ, tmp(0), "processor1", q(".array*0")),
+                    createInstruction(SET, ":i", tmp(0)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(5), "marker0"),
+                    createInstruction(WRITE, ":i", "processor1", q(".array*0")),
+                    createInstruction(SETADDR, tmp(11), label(6)),
+                    createInstruction(READ, tmp(1), "processor1", q(".array*1")),
+                    createInstruction(SET, ":i", tmp(1)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(6), "marker0"),
+                    createInstruction(WRITE, ":i", "processor1", q(".array*1")),
+                    createInstruction(SETADDR, tmp(11), label(7)),
+                    createInstruction(READ, tmp(2), "processor1", q(".array*2")),
+                    createInstruction(SET, ":i", tmp(2)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(OP, "rand", tmp(12), "100"),
+                    createInstruction(SET, ":i", tmp(12)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(MULTIJUMP, tmp(11), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(7), "marker0"),
+                    createInstruction(WRITE, ":i", "processor1", q(".array*2")),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(OP, "rand", tmp(13), "10"),
+                    createInstruction(OP, "floor", tmp(14), tmp(13)),
+                    createInstruction(SET, tmp(15), tmp(14)),
+                    createInstruction(READARR, tmp(16), ".array[]", tmp(15)),
+                    createInstruction(SET, tmp(17), tmp(16)),
+                    createInstruction(OP, "add", tmp(16), tmp(16), "1"),
+                    createInstruction(WRITEARR, tmp(16), ".array[]", tmp(15)),
+                    createInstruction(READ, tmp(2), "processor1", q(".array*2")),
+                    createInstruction(PRINT, tmp(2)),
+                    createInstruction(READ, tmp(3), "processor1", q(".array*3")),
+                    createInstruction(PRINT, tmp(3)),
+                    createInstruction(READ, tmp(4), "processor1", q(".array*4")),
+                    createInstruction(PRINT, tmp(4))
+            );
+        }
+
     }
 
     @Nested

@@ -12,7 +12,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public class SetAddressInstruction extends BaseInstruction {
+public class SetAddressInstruction extends BaseResultInstruction {
 
     SetAddressInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.SETADDR, args, params);

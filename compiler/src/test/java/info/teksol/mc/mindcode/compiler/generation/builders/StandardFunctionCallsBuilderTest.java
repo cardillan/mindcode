@@ -1170,7 +1170,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                         """,
                     createInstruction(SETADDR, ":foo*address", label(0)),
                     createInstruction(SET, "*mainProcessor", "@this"),
-                    createInstruction(WAIT, "1000000000000"),
+                    
+createInstruction(WAIT, "1e12"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
@@ -1178,7 +1179,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, label(1)),
                     createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
                     createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
-                    createInstruction(WAIT, "1000000000000")
+                    
+createInstruction(WAIT, "1e12")
             );
         }
 
@@ -1193,7 +1195,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                         """,
                     createInstruction(SETADDR, ":foo*address", label(0)),
                     createInstruction(SET, "*mainProcessor", "@this"),
-                    createInstruction(WAIT, "1000000000000"),
+                    
+createInstruction(WAIT, "1e12"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(SET, tmp(0), ":foo:a"),
@@ -1206,7 +1209,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(WRITE, ":foo*retval", "*mainProcessor", q(":foo*retval")),
                     createInstruction(WRITE, ":foo:a", "*mainProcessor", q(":foo:a")),
                     createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
-                    createInstruction(WAIT, "1000000000000")
+                    
+createInstruction(WAIT, "1e12")
             );
         }
 

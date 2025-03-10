@@ -154,14 +154,14 @@ duration = @time - start_time;
 println($"Elapsed: ${floor(duration)} ms");
 ```
 
-When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead. The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI.
+When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead. The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI. It is necessary to be aware that a number which was printed as `0` doesn't necessarily equal to zero.
 
-Mindcode provides the `printExact` function in the `maths` library There isn't a way to output such a small value directly. It is necessary to be aware that a number which was printed as `0` doesn't necessarily equal to zero.
+Mindcode provides the `printExactFast` and `printExactSlow` functions in the `printing` library, which can be used to output the exact numerical values of variables to the text buffer. However, these functions require Mindustry Logic 8 to compile.
 
 ## Using units
 
 > [!TIP]
-> The `units` system library contains functions you can use to search for and bind free units. For more information, see the [documentation](SYSTEM-LIBRARY.markdown#units-library).
+> The `units` system library contains functions you can use to search for and bind free units. For more information, see [System library](SYSTEM-LIBRARY.markdown#units-library).
 > 
 > The unit functions in the system library are based on the principles described here. 
 

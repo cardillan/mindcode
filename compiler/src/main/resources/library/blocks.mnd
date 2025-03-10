@@ -3,6 +3,8 @@
 //
 //* To use the Blocks library, use the `require blocks;` statement.
 
+module blocks;
+
 /**
  * Searches blocks linked to the processor for blocks of requested types, and assigns them to given variables if found.
  * The function tries to locate blocks repeatedly until all required blocks are found.

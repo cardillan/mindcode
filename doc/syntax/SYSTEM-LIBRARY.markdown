@@ -845,7 +845,7 @@ is used, which can take around 50 steps to output the entire number.
 > The `print` and `format` instructions applied to numerical values round the value to the nearest integer
 > when they differ from the integer value by less than `1e-6`. This makes it impossible to directly print
 > (with sufficient precision) numerical values close to integer values in general, and values close to zero
-> in particular. For example, `print(10 ** -50)` prints `0`. On the other hand, `printExact(10 ** -50)`
+> in particular. For example, `print(10 ** -50)` prints `0`. On the other hand, `printExactFast(10 ** -50)`
 > outputs `1E-50`.
 
 > [!IMPORTANT]
@@ -975,4 +975,4 @@ The system library is integrated into the compiler and as such is available to b
 
 ---
 
-[« Previous: Mindustry 8](MINDUSTRY-8.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Schemacode »](SCHEMACODE.markdown)
+[« Previous: Function reference for Mindustry Logic 8A](FUNCTIONS-80.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Logic 8 »](MINDUSTRY-8.markdown)
