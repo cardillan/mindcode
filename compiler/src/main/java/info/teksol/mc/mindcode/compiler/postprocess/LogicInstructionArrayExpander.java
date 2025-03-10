@@ -1,9 +1,12 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -22,7 +25,7 @@ public class LogicInstructionArrayExpander {
     private final InstructionProcessor processor;
     private boolean expanded = false;
 
-    private final Map<String, List<LogicInstruction>> jumpTables = new HashMap<>();
+    private final Map<String, List<LogicInstruction>> jumpTables = new TreeMap<>();
 
     public LogicInstructionArrayExpander(CompilerProfile profile, InstructionProcessor processor) {
         this.processor = processor;
@@ -171,9 +174,14 @@ public class LogicInstructionArrayExpander {
         LogicLabel marker = processor.nextMarker();
 
         result.add(processor.createEnd(astContext));
-        for (LogicVariable element : array.getElements()) {
+        for (ValueStore element : array.getElements()) {
             result.add(processor.createMultiLabel(astContext, processor.nextLabel(), marker));
-            result.add(processor.createSet(astContext, array.readVal, element));
+            switch (element) {
+                case LogicVariable value     -> result.add(processor.createSet(astContext, array.readVal, value));
+                case RemoteVariable variable -> result.add(processor.createRead(astContext, array.readVal,
+                        variable.getProcessor(), variable.getVariableName()));
+                default -> throw new MindcodeInternalError("Unhandled array element type");
+            }
             result.add(processor.createReturn(astContext, array.readRet));
         }
 
@@ -187,9 +195,14 @@ public class LogicInstructionArrayExpander {
         LogicLabel marker = processor.nextMarker();
 
         result.add(processor.createEnd(astContext));
-        for (LogicVariable element : array.getElements()) {
+        for (ValueStore element : array.getElements()) {
             result.add(processor.createMultiLabel(astContext, processor.nextLabel(), marker));
-            result.add(processor.createSet(astContext, element, array.writeVal));
+            switch (element) {
+                case LogicVariable value     -> result.add(processor.createSet(astContext, value, array.writeVal));
+                case RemoteVariable variable -> result.add(processor.createWrite(astContext, array.writeVal,
+                        variable.getProcessor(), variable.getVariableName()));
+                default -> throw new MindcodeInternalError("Unhandled array element type");
+            }
             result.add(processor.createReturn(astContext, array.writeRet));
         }
 

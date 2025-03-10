@@ -16,7 +16,6 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -64,7 +63,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         ValueStore targetValue = evaluate(targetNode);
         ValueStore eval = evaluate(valueNode);
 
-        if (targetValue instanceof ArrayStore<?> targetArray) {
+        if (targetValue instanceof ArrayStore targetArray) {
             return applyArrayOperation(node, targetArray, eval, operation, returnPriorValue);
         }
 
@@ -165,10 +164,9 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private ValueStore applyArrayOperation(AstExpression node, ArrayStore<?> target, ValueStore eval,
+    private ValueStore applyArrayOperation(AstExpression node, ArrayStore target, ValueStore eval,
             @Nullable Operation operation, boolean returnPriorValue) {
-        if (operation != null || !(eval instanceof ArrayStore<?> source)) {
+        if (operation != null || !(eval instanceof ArrayStore source)) {
             error(node, ERR.ARRAY_UNSUPPORTED_OPERATION);
             return target;
         }
@@ -182,39 +180,34 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         }
 
         if (source.getArrayType() == INTERNAL && target.getArrayType() == INTERNAL) {
-            copyInternalArrays((ArrayStore<@NonNull LogicVariable>) target,
-                    (ArrayStore<@NonNull LogicVariable>) source);
-        } else if (source.getArrayType() == INTERNAL && target.getArrayType() == EXTERNAL) {
-            for (int i = 0; i < size; i++) {
-                target.getElements().get(i).setValue(assembler, (LogicValue) source.getElements().get(i));
-            }
-        } else if (source.getArrayType() == EXTERNAL && target.getArrayType() == INTERNAL) {
-            for (int i = 0; i < size; i++) {
-                source.getElements().get(i).readValue(assembler, (LogicVariable) target.getElements().get(i));
-            }
-        } else {
+            copyInternalArrays(target, source);
+        } else if (source.getArrayType() == EXTERNAL && target.getArrayType() == EXTERNAL) {
             copyArraysUsingLoop(node, target, source);
+        } else {
+            for (int i = 0; i < size; i++) {
+                target.getElements().get(i).setValue(assembler, source.getElements().get(i).getValue(assembler));
+            }
         }
 
         return target;
     }
 
-    private void copyInternalArrays(ArrayStore<LogicVariable> target, ArrayStore<LogicVariable> source) {
+    private void copyInternalArrays(ArrayStore target, ArrayStore source) {
         int size = target.getSize();
         if (target.getStartOffset() <= source.getStartOffset()) {
             // Forward direction
             for (int i = 0; i < size; i++) {
-                target.getElements().get(i).setValue(assembler, source.getElements().get(i));
+                target.getElements().get(i).setValue(assembler, source.getElements().get(i).getValue(assembler));
             }
         } else {
             // Reverse direction
             for (int i = size - 1; i >= 0; i--) {
-                target.getElements().get(i).setValue(assembler, source.getElements().get(i));
+                target.getElements().get(i).setValue(assembler, source.getElements().get(i).getValue(assembler));
             }
         }
     }
 
-    private void copyArraysUsingLoop(AstExpression node, ArrayStore<?> target, ArrayStore<?> source) {
+    private void copyArraysUsingLoop(AstExpression node, ArrayStore target, ArrayStore source) {
         boolean reverse = target.getStartOffset() > source.getStartOffset();
         int size = target.getSize();
 

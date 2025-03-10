@@ -30,6 +30,10 @@ public class RemoteVariable implements FunctionParameter {
         this.output = output;
     }
 
+    public LogicVariable getProcessor() {
+        return processor;
+    }
+
     public LogicValue getVariableName() {
         return variableName;
     }

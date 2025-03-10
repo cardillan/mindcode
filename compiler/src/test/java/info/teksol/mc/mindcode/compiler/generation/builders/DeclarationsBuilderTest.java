@@ -531,13 +531,6 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesVolatileArray() {
-            assertGeneratesMessage(
-                    "Arrays cannot be declared 'volatile'.",
-                    "volatile a[10];");
-        }
-
-        @Test
         void refusesCachedArray() {
             assertGeneratesMessages(expectedMessages()
                             .add("Arrays cannot be declared 'cached'.")
@@ -867,13 +860,6 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Modifier 'noinit' is incompatible with previous modifiers.",
                     "remote noinit var a = 10;");
-        }
-
-        @Test
-        void refusesUninitializedRemote() {
-            assertGeneratesMessage(
-                    "Variable declared as 'remote' must be initialized.",
-                    "remote var a;");
         }
     }
 }

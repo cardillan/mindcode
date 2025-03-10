@@ -225,15 +225,21 @@ In particular, some optimizers expect to work on code that was already processed
 
 Mindcode provides a mechanism of encoding a custom instruction not known to Mindcode. Using custom instructions is useful in only a few cases:
 
-1. You want to use instructions provided by a Mindustry mod.
+1. You want to use a nonstandard instructions provided by some Mindustry mod.
 2. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
 3. An instruction was not implemented correctly in Mindcode and a fix is not available.
 
-Custom instructions may interact with Mindustry World or provide information about Mindustry World. If an instruction alters the program flow (for example, if a new function call instruction was added to Mindustry Logic), it cannot be safely encoded using this mechanism. In addition, some custom instructions might break existing optimizations through their side effects. 
+Custom instructions may interact with Mindustry World or provide information about Mindustry World. If an instruction alters the program flow (for example, if a new function call instruction was added to Mindustry Logic), it cannot be safely encoded using this mechanism.
 
-Custom instructions are created using the `mlog()` function:
+Custom instructions are created using one of these functions:
 
-* The first argument to the `mlog` function needs to be a string literal. This literal is the instruction code.
+* `mlog()`: creates a standard instruction. Mindcode assumes the instruction has some effect on the Mindustry world and will not remove the instruction during optimizations.  
+* `mlogSafe()`: creates an instruction which doesn't have an effect on the Mindustry world (for example, `set`, `packcolor` or `sensor` are such instructions). Mindcode may remove the instruction if the value(s) it produces are not used by the rest of the program.   
+* `mlogText()`: creates an instruction which manipulates the text buffer. Mindcode never removes the instruction, and furthermore handles it correctly during Print Merging optimizations.
+
+Each of these functions takes the following arguments:
+
+* The first argument to the function needs to be a string literal. This literal is the instruction code.
 * All other arguments must be either keywords, literals, or user variables.
   * Keyword: the keyword is used as an instruction argument (without the Mindcode specific `:` prefix). No `in` or `out` modifiers may be used. 
   * String literal: the text represented by the string literal is used as an instruction argument. If the `in` modifier is used, the string literal will be used as an argument including the enclosing double quotes.
@@ -243,14 +249,10 @@ Custom instructions are created using the `mlog()` function:
     * `out`: the argument represents an output value - the instruction produces a value and stores it in the variable.
     * `in out`: the argument represents an input/output value - the instruction both reads and uses the input value, and then updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
 
-Mindcode assumes that a custom instruction interacts with the Mindustry World and cannot be safely removed from the program. This is not true for instructions which only return information about the Mindustry World, but do not modify or interact with it in any way. If you want to encode such an instruction, you can use the `mlogSafe()` function instead of `mlog()`.
-
-If the custom instruction modifies the print buffer (either by adding the text to it, or by flushing it), the `mlogText()` functions must be used instead of `mlog()`. This ensures the Print Merging optimization will handle the instruction correctly. 
-
 > [!TIP]
-> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` function always uses user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function. See the examples below. Furthermore, it is possible to use keywords as function arguments to inline functions.
+> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` functions always use user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function - see the examples below. Furthermore, it is possible to use keywords as function arguments to inline functions.
      
-For better understanding, the creating of custom instructions will be demonstrated on existing instructions. 
+For better understanding, the creation of custom instructions will be demonstrated on existing instructions. 
 
 ## The `format` instruction
 

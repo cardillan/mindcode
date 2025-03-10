@@ -29,12 +29,10 @@ public class ERR {
     public static final String ARRAY_NON_INTEGER_INDEX = "Array index must be an integer.";
     public static final String ARRAY_NON_INTEGER_SIZE = "Array size must be an integer.";
     public static final String ARRAY_PARAMETER_NOT_MEMORY = "Cannot use value assigned to parameter '%s' to access external memory.";
-    public static final String ARRAY_REMOTE = "Arrays cannot be declared 'remote'.";
     public static final String ARRAY_SIZE_MISMATCH = "Number of initial values provided doesn't match the declared array size.";
     public static final String ARRAY_SIZE_NOT_SPECIFIED = "Array size not specified.";
     public static final String ARRAY_SIZE_OUTSIDE_RANGE = "Array size out of range (1 .. %d).";
     public static final String ARRAY_UNSUPPORTED_OPERATION = "Unsupported array expression.";
-    public static final String ARRAY_VOLATILE = "Arrays cannot be declared 'volatile'.";
     public static final String ASCII_INVALID_ARGUMENT = "The argument to the 'ascii' function must be a non-empty string constant or literal.";
     public static final String ASYNC_OUTPUT_ARGUMENT = "Function '%s': asynchronous calls to remote function cannot take output arguments.";
     public static final String ASYNC_WRONG_ARGUMENT = "The '%s' function requires a call of a remote function as an argument.";
@@ -141,7 +139,6 @@ public class ERR {
     public static final String VARIABLE_NOINIT_CANNOT_BE_INITIALIZED = "Variable declared as 'noinit' cannot be initialized.";
     public static final String VARIABLE_NOT_DEFINED = "Variable '%s' is not defined.";
     public static final String VARIABLE_NOT_RESOLVED = "Cannot resolve variable '%s'.";
-    public static final String VARIABLE_REMOTE_MUST_BE_INITIALIZED = "Variable declared as 'remote' must be initialized.";
     public static final String VARIABLE_REPEATED_MODIFIER = "Repeated modifier '%s'.";
     public static final String VOID_ARGUMENT = "Expression doesn't have any value. Using value-less expressions in function calls is deprecated.";
 }

@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -47,6 +48,11 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
 
     @Override
     public SideEffects sideEffects() {
-        return SideEffects.of(List.of(getArray().writeVal), List.of(), getArray().getElements());
+        List<LogicVariable> elements = getArray().getElements().stream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .toList();
+
+        return SideEffects.of(List.of(getArray().writeVal), List.of(), elements);
     }
 }

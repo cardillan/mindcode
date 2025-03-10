@@ -15,12 +15,12 @@ import java.util.function.Consumer;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 
 @NullMarked
-public class ExternalArray extends AbstractArrayStore<ExternalVariable> {
+public class ExternalArray extends AbstractArrayStore {
     private final LogicVariable memory;
     private final int baseIndex;
     private final LogicNumber baseIndexNumber;
 
-    public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int baseIndex, List<ExternalVariable> elements) {
+    public ExternalArray(SourcePosition sourcePosition, String name, LogicVariable memory, int baseIndex, List<ValueStore> elements) {
         super(sourcePosition, name, elements);
         this.memory = memory;
         this.baseIndex = baseIndex;
@@ -38,7 +38,7 @@ public class ExternalArray extends AbstractArrayStore<ExternalVariable> {
     }
 
     @Override
-    public ArrayStore<ExternalVariable> subarray(SourcePosition sourcePosition, int start, int end) {
+    public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
         return new ExternalArray(sourcePosition, name, memory, baseIndex + start, elements.subList(start, end));
     }
 

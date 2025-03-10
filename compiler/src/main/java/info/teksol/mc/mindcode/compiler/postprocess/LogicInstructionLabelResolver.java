@@ -1,8 +1,11 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.CompilerProfile;
@@ -10,6 +13,7 @@ import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
@@ -32,7 +36,7 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
-        return sortVariables(resolveLabels(program));
+        return sortVariables(resolveLabels(program, List.of()));
     }
 
     public List<LogicInstruction> sortVariables(List<LogicInstruction> program) {
@@ -111,9 +115,9 @@ public class LogicInstructionLabelResolver {
         };
     }
 
-    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program) {
+    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, List<LogicVariable> initVariables) {
         if (program.isEmpty()) {
-            return program;
+            return createVariables(initVariables);
         }
 
         // Save the last instruction before it is resolved
@@ -123,7 +127,28 @@ public class LogicInstructionLabelResolver {
         calculateAddresses(program);
         program = resolveAddresses(resolveVirtualInstructions(program));
 
-        if (last.endsCodePath() && profile.isSignature() && program.size() < profile.getInstructionLimit()) {
+        boolean addSignature;
+        if (!initVariables.isEmpty()) {
+            if (!last.endsCodePath()) {
+                program.add(processor.createEnd(last.getAstContext()));
+            }
+
+            Set<LogicVariable> missingVariables = new LinkedHashSet<>(initVariables);
+            program.stream()
+                    .mapMulti((LogicInstruction instruction, Consumer<LogicVariable> consumer)
+                            -> instruction.inputOutputArgumentsStream()
+                            .filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast)
+                            .forEach(consumer))
+                    .forEach(missingVariables::remove);
+
+            program.addAll(createVariables(missingVariables));
+            addSignature = true;
+        } else {
+            addSignature = last.endsCodePath();
+        }
+
+        if (addSignature && profile.isSignature() && program.size() < profile.getInstructionLimit()) {
             program.add(processor.createPrint(last.getAstContext(),
                     LogicString.create(CompilerProfile.SIGNATURE)));
         }
@@ -243,4 +268,26 @@ public class LogicInstructionLabelResolver {
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
         return program.stream().mapMulti(processor::resolve).toList();
     }
+
+    private List<LogicInstruction> createVariables(Collection<LogicVariable> variables) {
+        final int batchSize = 6;
+
+        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
+                .createSubcontext(AstContextType.ARRAY_INIT, AstSubcontextType.BASIC, 1.0);
+        List<LogicInstruction> result = new ArrayList<>();
+        List<LogicArgument> vars = new ArrayList<>(variables);
+
+        while (vars.size() % batchSize > 0) {
+            vars.add(LogicNumber.ZERO);
+        }
+
+        vars.addFirst(LogicKeyword.create("triangle"));
+        while (vars.size() > 1) {
+            result.add(processor.createInstruction(astContext, DRAW, vars.subList(0, batchSize + 1)));
+            vars.subList(1, batchSize + 1).clear();
+        }
+
+        return result;
+    }
+
 }

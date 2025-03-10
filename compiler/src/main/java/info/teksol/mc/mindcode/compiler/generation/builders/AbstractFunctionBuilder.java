@@ -53,7 +53,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
         if (!argument.hasModifier() && argument.getExpression() instanceof AstIdentifier identifier) {
             // If it is an array, expand it right here
             ValueStore valueStore = variables.findVariable(identifier, false);
-            if (valueStore instanceof ArrayStore<?> array) {
+            if (valueStore instanceof ArrayStore array) {
                 expandArray(argument, array, consumer);
             } else {
                 consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier));
@@ -64,7 +64,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
                 warn(argument, ERR.VOID_ARGUMENT);
             }
 
-            if (value instanceof ArrayStore<?> array) {
+            if (value instanceof ArrayStore array) {
                 expandArray(argument, array, consumer);
             } else {
                 consumer.accept(wrapArgumentValue(argument, value));
@@ -74,7 +74,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
         }
     }
 
-    protected void expandArray(AstFunctionArgument argument, ArrayStore<?> array, Consumer<FunctionArgument> consumer) {
+    protected void expandArray(AstFunctionArgument argument, ArrayStore array, Consumer<FunctionArgument> consumer) {
         array.getElements().stream().map(value -> wrapArgumentValue(argument, value)).forEach(consumer);
     }
 

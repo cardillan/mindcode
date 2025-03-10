@@ -223,22 +223,25 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     public void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node) {
         Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
 
+        assert module.getRemoteProcessor() != null;
+        LogicVariable processor = (LogicVariable) evaluate(module.getRemoteProcessor());
+
         if (isLocalContext()) {
             node.getModifiers().forEach(this::verifyLocalContextModifiers);
         }
 
         for (AstVariableSpecification specification : node.getVariables()) {
+            AstIdentifier identifier = specification.getIdentifier();
+            String name = identifier.getName();
+
             if (specification.isArray()) {
                 node.getModifiers().forEach(this::verifyArrayModifiers);
                 if (isLocalContext()) {
                     error(specification, ERR.ARRAY_LOCAL);
                 }
-            } else {
-                assert module.getRemoteProcessor() != null;
-                LogicVariable processor = (LogicVariable) evaluate(module.getRemoteProcessor());
-                AstIdentifier identifier = specification.getIdentifier();
-                String name = identifier.getName();
 
+                processArray(modifiers, specification, processor);
+            } else {
                 RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor,
                         LogicVariable.global(identifier).getMlogString(), assembler.nextTemp(), false, false);
 
@@ -248,8 +251,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
 
-    // Note: remote modules are not processed by code generator. Variables declared `remote` are created
-    //       as volatile variables.
+    // Note: remote modules are not processed by code generator. Any variables declared `remote` encountered here
+    //       are compiled as part of a remote processor code and are created as volatile variables.
     @Override
     public ValueStore visitVariablesDeclaration(AstVariablesDeclaration node) {
         Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
@@ -265,7 +268,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     error(specification, ERR.ARRAY_LOCAL);
                 }
 
-                processArray(modifiers, specification);
+                processArray(modifiers, specification, null);
             } else {
                 processVariable(modifiers, specification);
             }
@@ -284,7 +287,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
     }
 
-    private void processArray(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
+    private void processArray(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification,
+            @Nullable LogicVariable processor) {
         int declaredSize = getDeclaredArraySize(modifiers, specification);
         int initialSize = specification.getExpressions().size();
 
@@ -301,12 +305,19 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             declaredSize = initialSize;
         }
 
-        ArrayStore<?> array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers);
+        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers, processor);
 
         for (int i = 0; i < initialSize; i++) {
             AstExpression initExpression = specification.getExpressions().get(i);
             ValueStore initValue = processInLocalScope(() -> evaluate(initExpression));
             array.getElements().get(i).setValue(assembler, initValue.getValue(assembler));
+        }
+
+        if (modifiers.containsKey(Modifier.REMOTE) && processor == null) {
+            array.getElements().stream()
+                    .filter(LogicVariable.class::isInstance)
+                    .map(LogicVariable.class::cast)
+                    .forEach(context::addRemoteVariable);
         }
     }
 
@@ -315,8 +326,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             case CACHED -> error(element, ERR.ARRAY_CACHED);
             case LINKED -> error(element, ERR.ARRAY_LINKED);
             case NOINIT -> error(element, ERR.ARRAY_NOINIT);
-            case REMOTE -> error(element, ERR.ARRAY_REMOTE);
-            case VOLATILE -> error(element, ERR.ARRAY_VOLATILE);
         }
     }
 
@@ -352,7 +361,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         if (specification.getExpressions().isEmpty()) {
             if (modifiers.containsKey(Modifier.REMOTE)) {
-                error(specification, ERR.VARIABLE_REMOTE_MUST_BE_INITIALIZED);
+                context.addRemoteVariable((LogicVariable) variable);
             }
 
             if (!modifiers.containsKey(Modifier.NOINIT)) {

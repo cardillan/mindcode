@@ -255,7 +255,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             if (value instanceof DeferredValueStore deferredValueStore) {
                 ValueStore evaluated = deferredValueStore.value();
-                if (evaluated instanceof ArrayStore<?> arrayStore) {
+                if (evaluated instanceof ArrayStore arrayStore) {
                     values.addAll(0, arrayStore.getElements());
                     return values.removeFirst();
                 }

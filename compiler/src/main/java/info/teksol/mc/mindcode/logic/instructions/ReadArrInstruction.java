@@ -49,6 +49,11 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
 
     @Override
     public SideEffects sideEffects() {
-        return SideEffects.of(getArray().getElements(), List.of(), List.of(getArray().readVal));
+        List<LogicVariable> elements = getArray().getElements().stream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .toList();
+
+        return SideEffects.of(elements, List.of(), List.of(getArray().readVal));
     }
 }

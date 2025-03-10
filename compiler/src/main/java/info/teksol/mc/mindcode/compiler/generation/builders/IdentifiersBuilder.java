@@ -47,7 +47,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         ValueStore valueStore = evaluate(node.getArray());
         return switch (valueStore) {
             case LogicVariable memory   -> memoryArrayAccess(node, memory);
-            case ArrayStore<?> array    -> storeArrayAccess(node, array);
+            case ArrayStore array       -> storeArrayAccess(node, array);
             default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
         };
     }
@@ -76,7 +76,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         ValueStore valueStore = evaluate(node.getArray());
         return switch (valueStore) {
             case LogicVariable memory   -> memorySubarrayAccess(node, memory);
-            case ArrayStore<?> array    -> storeSubarrayAccess(node, array);
+            case ArrayStore array       -> storeSubarrayAccess(node, array);
             default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
         };
     }
@@ -92,8 +92,8 @@ public class IdentifiersBuilder extends AbstractBuilder implements
             return LogicVariable.INVALID;
         }
 
-        List<ExternalVariable> elements = IntStream.rangeClosed(range.min(), range.max())
-                .mapToObj(index -> new ExternalVariable(node.sourcePosition(), memory,
+        List<ValueStore> elements = IntStream.rangeClosed(range.min(), range.max())
+                .mapToObj(index -> (ValueStore) new ExternalVariable(node.sourcePosition(), memory,
                         LogicNumber.create(index), processor.nextTemp())).toList();
 
         return new ExternalArray(node.sourcePosition(), memory.getName(), memory, range.min(), elements);
@@ -112,7 +112,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         }
     }
 
-    private ValueStore storeArrayAccess(AstArrayAccess node, ArrayStore<?> array) {
+    private ValueStore storeArrayAccess(AstArrayAccess node, ArrayStore array) {
         ValueStore index = evaluate(node.getIndex());
 
         if (index instanceof LogicNumber number) {
@@ -133,7 +133,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         return array.getElement(assembler, node, index);
     }
 
-    private ValueStore storeSubarrayAccess(AstSubarray node, ArrayStore<?> array) {
+    private ValueStore storeSubarrayAccess(AstSubarray node, ArrayStore array) {
         IntRange range = parseSubarrayRange(node, array.getSize());
         return range == null ? LogicVariable.INVALID : array.subarray(node.sourcePosition(), range.min(), range.max() + 1);
     }

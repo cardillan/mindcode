@@ -25,6 +25,7 @@ public enum AstContextType {
     ARRAY_ACCESS    ("HEAP"),
     ALLOCATION      ("ALOC"),
 
+    ARRAY_INIT      ("IARR"),
     ARRAY_READ      ("RARR"),
     ARRAY_WRITE     ("WARR"),
     ;

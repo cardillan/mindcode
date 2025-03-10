@@ -37,6 +37,7 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolve
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -70,6 +71,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, @Nullable AstIdentifier> processors = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
+    private final List<LogicVariable> remoteVariables = new ArrayList<>();
     private final ReturnStack returnStack;
     private final StackTracker stackTracker;
     private @Nullable AstProgram astProgram;
@@ -254,7 +256,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
 
         // Label resolving
-        instructions = resolver.resolveLabels(instructions);
+        instructions = resolver.resolveLabels(instructions, remoteVariables);
 
         output = LogicInstructionPrinter.toString(instructionProcessor, instructions);
 
@@ -452,6 +454,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return Objects.requireNonNull(variables);
     }
 
+    public void addRemoteVariable(LogicVariable variable) {
+        remoteVariables.add(variable);
+    }
 
     private record ModulePlacement(InputFile inputFile, @Nullable AstIdentifier remoteProcessor) {
     }

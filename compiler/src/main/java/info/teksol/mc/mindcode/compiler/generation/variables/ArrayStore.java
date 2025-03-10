@@ -6,7 +6,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 
 import java.util.List;
 
-public interface ArrayStore<E extends ValueStore> extends ValueStore {
+public interface ArrayStore extends ValueStore {
 
     ArrayType getArrayType();
 
@@ -14,13 +14,13 @@ public interface ArrayStore<E extends ValueStore> extends ValueStore {
 
     int getSize();
 
-    List<E> getElements();
+    List<ValueStore> getElements();
 
-    ArrayStore<E> subarray(SourcePosition sourcePosition, int start, int end);
+    ArrayStore subarray(SourcePosition sourcePosition, int start, int end);
 
     ValueStore getElement(CodeAssembler assembler, AstExpression node, ValueStore index);
 
-    default ArrayStore<E> topArray() {
+    default ArrayStore topArray() {
         return this;
     }
 
@@ -30,6 +30,8 @@ public interface ArrayStore<E extends ValueStore> extends ValueStore {
     int getStartOffset();
 
     enum ArrayType {
-        INTERNAL, EXTERNAL
+        INTERNAL,
+        EXTERNAL,
+        REMOTE,
     }
 }

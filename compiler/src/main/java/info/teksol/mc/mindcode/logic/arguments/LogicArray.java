@@ -1,11 +1,13 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-///  Represents an internal/external array
+///  Represents an internal/remote array
 @NullMarked
 public class LogicArray extends AbstractArgument {
     protected final InternalArray array;
@@ -27,11 +29,19 @@ public class LogicArray extends AbstractArgument {
         writeRet = LogicVariable.arrayReturn(array.getName(), "*wret");
     }
 
+    public InternalArray getInternalArray() {
+        return array;
+    }
+
+    public ArrayStore.ArrayType getArrayType() {
+        return array.getArrayType();
+    }
+
     public String getArrayName() {
         return array.getName();
     }
 
-    public List<LogicVariable> getElements() {
+    public List<ValueStore> getElements() {
         return array.getElements();
     }
 
@@ -44,12 +54,16 @@ public class LogicArray extends AbstractArgument {
         return array.getSize();
     }
 
+    public String getInitJumpTableId() {
+        return getArrayName() + "-i";
+    }
+
     public String getReadJumpTableId() {
-        return getArrayName() + "r";
+        return getArrayName() + "-r";
     }
 
     public String getWriteJumpTableId() {
-        return getArrayName() + "w";
+        return getArrayName() + "-w";
     }
 
     public static LogicArray create(InternalArray array) {

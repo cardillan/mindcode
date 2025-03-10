@@ -294,9 +294,13 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE, name);
     }
 
-    public static LogicVariable arrayElement(AstIdentifier identifier, int index) {
+    public static String arrayVariableMlog(AstIdentifier identifier, int index) {
+        return "." + identifier.getName() + "*" + index;
+    }
+
+    public static LogicVariable arrayElement(AstIdentifier identifier, int index, boolean isVolatile) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName() + "[" + index + "]", "." + identifier.getName() + "*" + index, false, true, false);
+                identifier.getName() + "[" + index + "]", arrayVariableMlog(identifier, index), isVolatile, true, false);
     }
 
     public static LogicVariable arrayReadAccess(String arrayName) {

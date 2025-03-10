@@ -10,11 +10,11 @@ import java.util.List;
 ///
 /// @param <E> precise type representing the element of the array
 @NullMarked
-public abstract class AbstractArrayStore<E extends ValueStore> extends CompoundValueStore implements ArrayStore<E> {
+public abstract class AbstractArrayStore extends CompoundValueStore implements ArrayStore {
     protected final String name;
-    protected final List<E> elements;
+    protected final List<ValueStore> elements;
 
-    public AbstractArrayStore(SourcePosition sourcePosition, String name, List<E> elements) {
+    public AbstractArrayStore(SourcePosition sourcePosition, String name, List<ValueStore> elements) {
         super(sourcePosition, ERR.ARRAY_FORBIDDEN);
         this.name = name;
         this.elements = elements;
@@ -36,7 +36,7 @@ public abstract class AbstractArrayStore<E extends ValueStore> extends CompoundV
     }
 
     @Override
-    public List<E> getElements() {
+    public List<ValueStore> getElements() {
         return elements;
     }
 }

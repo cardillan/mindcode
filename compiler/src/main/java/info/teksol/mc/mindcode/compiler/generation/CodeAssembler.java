@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.INITVAR;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
 
 /// CodeAssembler provides means for creating code from AST tree: methods for creating individual instructions and
@@ -253,19 +252,6 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// Current implementation uses a very long wait (over 30,000 years)
     public void createRemoteEndlessLoop() {
         createInstruction(WAIT, LogicNumber.create(1000000000000L));
-    }
-
-    public void createVariables(List<LogicVariable> variables) {
-        List<LogicArgument> vars = new ArrayList<>(variables);
-
-        while (vars.size() % 4 > 0) {
-            vars.add(LogicNull.NULL);
-        }
-
-        while (!vars.isEmpty()) {
-            createInstruction(INITVAR, vars.subList(0, 4));
-            vars.subList(0, 4).clear();
-        }
     }
 
     public LogicLabel createNextLabel() {

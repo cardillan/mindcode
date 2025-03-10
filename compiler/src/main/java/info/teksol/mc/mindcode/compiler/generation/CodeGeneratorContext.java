@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapperContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -22,4 +23,6 @@ public interface CodeGeneratorContext extends
     @Nullable AstAllocation heapAllocation();
     CallGraph callGraph();
     Variables variables();
+
+    void addRemoteVariable(LogicVariable variable);
 }

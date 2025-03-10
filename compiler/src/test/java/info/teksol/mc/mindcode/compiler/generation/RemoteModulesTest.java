@@ -152,14 +152,6 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
     class Errors {
 
         @Test
-        void refusesRemoteArrays() {
-            assertGeneratesMessage(
-                    "Arrays cannot be declared 'remote'.",
-                    "module foo; remote a[10];"
-            );
-        }
-
-        @Test
         void refusesAsyncOnLogicFunction() {
             assertGeneratesMessage(
                     "Function 'printflush' cannot be called asynchronously.",
@@ -292,14 +284,6 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             foo(10);
                             var foo;
                             """
-            );
-        }
-
-        @Test
-        void refusesRemoteVariablesMustBeInitialized() {
-            assertGeneratesMessage(
-                    "Variable declared as 'remote' must be initialized.",
-                    "remote x;"
             );
         }
 

@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
-public interface ArrayAccessInstruction extends LogicInstruction{
+public interface ArrayAccessInstruction extends LogicInstruction {
 
     default LogicArray getArray() {
         return (LogicArray) getArg(1);

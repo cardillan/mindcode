@@ -1,14 +1,17 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicArray;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.function.Consumer;
@@ -17,35 +20,50 @@ import java.util.stream.IntStream;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 
 @NullMarked
-public class InternalArray extends AbstractArrayStore<LogicVariable> {
+public class InternalArray extends AbstractArrayStore {
+    private final boolean remote;
     private final int startOffset;
     private final LogicArray logicArray;
 
-    private InternalArray(SourcePosition sourcePosition, String name, List<LogicVariable> elements) {
+    private InternalArray(SourcePosition sourcePosition, String name, List<ValueStore> elements, boolean remote) {
         super(sourcePosition, name, elements);
+        this.remote = remote;
         startOffset = 0;
         logicArray = LogicArray.create(this);
     }
 
-    private InternalArray(SourcePosition sourcePosition, String name, int offset, List<LogicVariable> elements) {
+    private InternalArray(SourcePosition sourcePosition, String name, int offset, List<ValueStore> elements, boolean remote) {
         super(sourcePosition, name, elements);
+        this.remote = remote;
         startOffset = offset;
         logicArray = LogicArray.create(this, offset, offset + elements.size());
     }
 
-    public static InternalArray create(AstIdentifier identifier, int size) {
-        return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.range(0, size)
-                .mapToObj(index -> LogicVariable.arrayElement(identifier, index)).toList());
+    public static InternalArray create(AstIdentifier identifier, int size, boolean isVolatile, @Nullable LogicVariable processor) {
+        if (processor != null) {
+            CodeAssembler assembler = MindcodeCompiler.getContext().assembler();
+            return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.range(0, size)
+                    .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
+                            LogicString.create(LogicVariable.arrayVariableMlog(identifier, index)),
+                            assembler.nextTemp(), false, false)).toList(), true);
+        } else {
+            return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.range(0, size)
+                    .mapToObj(index -> (ValueStore) LogicVariable.arrayElement(identifier, index, isVolatile)).toList(), false);
+        }
     }
 
     public static InternalArray createInvalid(AstIdentifier identifier, int size) {
         return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.of(size)
-                .mapToObj(index -> LogicVariable.INVALID).toList());
+                .mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), false);
+    }
+
+    public LogicArray getLogicArray() {
+        return logicArray;
     }
 
     @Override
     public ArrayType getArrayType() {
-        return ArrayType.INTERNAL;
+        return remote ? ArrayType.REMOTE : ArrayType.INTERNAL;
     }
 
     @Override
@@ -54,8 +72,8 @@ public class InternalArray extends AbstractArrayStore<LogicVariable> {
     }
 
     @Override
-    public ArrayStore<LogicVariable> subarray(SourcePosition sourcePosition, int start, int end) {
-        return new InternalArray(sourcePosition, name, startOffset + start, elements.subList(start, end));
+    public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
+        return new InternalArray(sourcePosition, name, startOffset + start, elements.subList(start, end), remote);
     }
 
     @Override
@@ -66,7 +84,7 @@ public class InternalArray extends AbstractArrayStore<LogicVariable> {
 
     @Override
     public InternalArray withSourcePosition(SourcePosition sourcePosition) {
-        return new InternalArray(sourcePosition, name, elements);
+        return new InternalArray(sourcePosition, name, elements, remote);
     }
 
     private class InternalArrayElement implements ValueStore {

@@ -49,11 +49,14 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             external b[3];
                             a = b;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
-                    createInstruction(READ, ".a*0", "bank1", "0"),
-                    createInstruction(READ, ".a*1", "bank1", "1"),
-                    createInstruction(READ, ".a*2", "bank1", "2")
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
+                    createInstruction(READ, tmp(0), "bank1", "0"),
+                    createInstruction(SET, ".a*0", tmp(0)),
+                    createInstruction(READ, tmp(1), "bank1", "1"),
+                    createInstruction(SET, ".a*1", tmp(1)),
+                    createInstruction(READ, tmp(2), "bank1", "2"),
+                    createInstruction(SET, ".a*2", tmp(2))
             );
         }
 
