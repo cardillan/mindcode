@@ -61,7 +61,7 @@ Apart from the `printf()`, Mindcode supports new `format()` function, which just
 
 The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example to print numbers with thousands separators:
 
-```
+```Mindcode
 #set target = 8;
 
 // Formats a number into the text buffer, without external memory.
@@ -122,7 +122,7 @@ format max
 
 To prevent the new Print Merging optimization interfering with custom uses of the format instruction, it isn't used if a string constant containing a `{0}` substring, or some other specific substrings that might lead to the code creating `{0}` in the text buffer, are detected in the program. This leaves the placeholders `{1}` to `{9}` to be used freely by the user. It even allows interleaving the old-fashioned prints with the new `format` with no restrictions:
 
-```
+```Mindcode
 #set target = 8;
 param a = 10;               // prevent a from being propagated as a constant
 println("{2} {1}");         // if you use "{1} {0}" instead, the output will be the same, but different optimization will happen 
@@ -133,13 +133,13 @@ format("After");
 
 This program will compile to
 
-```
+```mlog
 set a 10
-print `{2} {1}\n`
-format `Before`
-print `Value: {0}\n`
+print "{2} {1}\n"
+format "Before"
+print "Value: {0}\n"
 format a
-format `After`
+format "After"
 ```
 
 and will output
@@ -148,6 +148,7 @@ and will output
 After Before
 Value: 10
 ```
+
 The `format` instruction is also supported by the emulator, allowing you to experiment with the new print support right away in the web app.
 
 ## `printchar` instruction
@@ -156,10 +157,10 @@ The `printchar` instruction allows to output individual characters to the text b
 
 When an object is used as instruction argument, the corresponding icon is output instead: `printchar(@mega);`.
 
-```
+```Mindcode
 #set target = 8;
 for i in 0 ... 4 do
-    itemType = lookup(item, i);
+    itemType = lookup(:item, i);
     printchar(itemType);
     amount = vault1.sensor(itemType);
     println(" ", amount);
@@ -169,7 +170,7 @@ printflush(message1);
 
 produces
 
-```
+```mlog
 print " {0}\n {0}\n {0}\n {0}\n"
 sensor :amount vault1 @copper
 format :amount
@@ -188,7 +189,7 @@ Mindustry 8 allows reading and writing variables of another processor, addressin
 
 This functionality is accessible in Mindcode via the new `read()` and `write()` methods:
 
-```
+```Mindcode
 #set target = 8;
 x = processor1.read("x");
 y = processor1.read("y");
@@ -197,7 +198,7 @@ processor1.write(x + y, "z");
 
 compiles into
 
-```
+```mlog
 read :x processor1 "x"
 read :y processor1 "y"
 op add *tmp2 :x :y

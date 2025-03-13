@@ -13,7 +13,7 @@ There are several kinds of parameters a function can have:
 
 Examples of function definitions and function calls:
 
-```
+```Mindcode
 // a: input parameter
 // b: output parameter
 // c: input/output parameter
@@ -35,7 +35,7 @@ bar();                    // Calling a function with no parameters
 
 All argument are passed by value, not by reference:
 
-```
+```Mindcode
 void foo(in out x)
     x = 20;
     println(x);
@@ -111,7 +111,7 @@ Currently, the property access syntax cannot be used with the new [`setprop`](FU
 
 The `sensor` method accepts an expression, not just constant property name, as an argument:
 
-```
+```Mindcode
 var amount = vault1.sensor(useTitanium ? @titanium : @copper);
 ```
 
@@ -123,7 +123,7 @@ Again, the `vault1` or `storage` in the examples can be a variable or a linked b
 
 The `min()` and `max()` functions in Mindcode can take two or more arguments:
 
-```
+```Mindcode
 print(min(a, b, c));
 var total = max(i, j, k, l);
 ```
@@ -144,7 +144,7 @@ The print function, which corresponds to the `print` instruction, is described i
 
 A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter - a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#variable-scope) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function should be declared `volatile`, as the value of the variable may apparently change by an external operation.
 
-```
+```Mindcode
 volatile var synced;
 sync(synced);
 var before = synced;
@@ -155,7 +155,7 @@ print(after - before);
 
 This snippet of code is meant to compute a difference in the value of `synced` caused by external synchronization, and produces this mlog code: 
 
-```
+```mlog
 sync .synced
 set .before .synced
 wait 1000
@@ -207,7 +207,7 @@ The `println()` function works the same, but outputs an additional newline chara
 
 The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide means to do it at runtime).
 
-```
+```Mindcode
 var x = 3;
 var y = 4;
 println("Position: $, $", x, y);      // No formatting - the first parameter isn't a formattable string literal
@@ -228,7 +228,7 @@ Compile-time formatting is supported by the `print()` and `println()` functions.
 
 Variables and expressions embedded in the formattable string literals are evaluated in the context of the function in which they're used:
 
-```
+```Mindcode
 const format = $"Position: $x, $y";
 var x = 10;               // Global variables
 
@@ -291,7 +291,7 @@ The `remark()` function has the same syntax as the `print()` function and suppor
 
 Example:
 
-```
+```Mindcode
 remark("Configurable options:");
 param MIN = 10;
 param MAX = 100;
@@ -306,7 +306,7 @@ end;
 
 produces
 
-```
+```mlog
 jump 2 always 0 0
 print "Configurable options:"
 set MIN 10
@@ -314,17 +314,16 @@ set MAX 100
 jump 6 always 0 0
 print "Don't modify anything below this line."
 set :i MIN
-jump 12 greaterThan MIN MAX
+jump 0 greaterThan MIN MAX
 print "Here is some actual code\n"
 printflush message1
 op add :i :i 1
 jump 8 lessThanEq :i MAX
-end
 ```
 
 Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get fully evaluated when possible:
 
-```
+```Mindcode
 for var i in 1 .. 3 do
     remark($"Iteration $i:");
     remark($"Setting cell1[$i] to ${i * i}");
@@ -334,7 +333,7 @@ end;
 
 compiles into
 
-```
+```mlog
 jump 3 always 0 0
 print "Iteration 1:"
 print "Setting cell1[1] to 1"
@@ -353,7 +352,7 @@ As you can see, remarks produced by two different `remark()` function calls are 
 
 If a region of code is unreachable and is optimized away, the remarks are also stripped:
 
-```
+```Mindcode
 const DEBUG = false;
 
 if DEBUG then
@@ -367,7 +366,7 @@ print("Hello");
 
 produces
 
-```
+```mlog
 jump 2 always 0 0
 print "Compiled for RELEASE"
 print "Hello"
@@ -379,7 +378,7 @@ In strict syntax mode, remarks can oly be used inside code blocks.
 
 An alternative way to create a remark is the enhanced comment:
 
-```
+```Mindcode
 /// This is an enhanced comment
 ```
 
@@ -387,7 +386,7 @@ which produces the same result as `remark("This is an enhanced comment")`. The t
 
 In strict syntax mode, enhanced comments are allowed outside code blocks:
 
-```
+```Mindcode
 #set syntax = strict;
 
 /// Configurable options:
@@ -408,7 +407,7 @@ end;
 
 If the enhanced comment is used at the end of a line containing a complete statement, the generated output is moved in front of the first such statement:
 
-```
+```Mindcode
 param MIN = 10;       /// Minimal value
 param MAX = 100;      /// Maximal value
 
@@ -417,7 +416,7 @@ print(MAX - MIN);
 
 produces:
 
-```
+```mlog
 jump 2 always 0 0
 print "Minimal value"
 set MIN 10
@@ -434,7 +433,7 @@ The `ascii()` function takes a string constant as an argument, and returns the A
 
 The function allows obtaining ASCII values from built-in string constants (icons) and using them with `printchar()`. Since the ASCII values are numbers, they can be stored in external variables:
 
-```
+```Mindcode
 #set target = 8;
 external cell1 a = ascii(ITEM_COAL);
 printchar(a);
@@ -442,7 +441,7 @@ printchar(a);
 
 compiles to 
 
-```
+```mlog
 jump 0 equal cell1 null
 write 63539 cell1 0
 read *tmp0 cell1 0
@@ -461,7 +460,7 @@ The system function discussed so far are supported directly by the compiler. Add
 
 You may declare your own functions using the `def` keyword:
 
-```
+```Mindcode
 def sum(x, y)
     x + y;
 end;    
@@ -469,7 +468,7 @@ end;
 
 Functions not returning any value must be declared using the `void` keyword:
 
-```
+```Mindcode
 void update(message, status)
     println($"Status: $status");
     println($"Game time: ${floor(@time) / 1000} sec");
@@ -479,7 +478,7 @@ end;
 
 Functions that do return a value must be declared using the `def` keyword, and they need to provide a return value on all possible code paths. The last statement executed on all code paths must be either an expression providing the function value, or a `return` statement providing the function value:
 
-```
+```Mindcode
 def foo(number)
     if number < 0 then
         println("negative");
@@ -501,7 +500,7 @@ end;
 
 Loops are statements, not expressions, and provide a value of `null`:
 
-```
+```Mindcode
 def foo(count)
     sum = 0;
     while count > 0 do
@@ -514,7 +513,7 @@ print(foo(10));       // Prints "null"
 
 As has been described above, function parameters in user function can be input, output or input/output. Use the `in` and `out` modifiers to properly mark the function parameters:
 
-```
+```Mindcode
 def function(in x, out y, in out z)
     // ...
 end; 
@@ -530,7 +529,7 @@ Function parameters and variables used in functions are local to the function. S
 
 Unless a function is declared as `void`, it has an output value. The output value is determined when the function ends (returns to the caller). This happens either when the end of function definition is reached, or when a `return` statement is executed. In the first case, the return value of a function is equal to the last expression evaluated by the function; in the second case, the return value is equal to the expression following the `return` keyword:
 
-```
+```Mindcode
 def foo(n)
     case n
         when 1 then return "One";
@@ -547,7 +546,7 @@ The output of this program is `One:Two:3`.
 
 Void functions are declared using the `void` keyword instead of `def` keyword. Void functions do not return any value. The `return` statement in a `void` function therefore must not specify a value:
 
-```
+```Mindcode
 void foo(n)
     if n > 10 then
         return;
@@ -561,7 +560,7 @@ end;
 
 Normal function are compiled once and called from other places in the program. Inline functions are compiled into every place they're called from, so there can be several copies of them in the compiled code. This leads to shorter code per call and faster execution. To create an inline function, use `inline` keyword:
 
-```
+```Mindcode
 inline void printtext(name, value, min, max)
     if value < min then
         println(name, " too low");
@@ -580,7 +579,7 @@ The compiler will automatically make a function inline when it is called just on
 
 To prevent inlining of a particular function, either directly by the compiler or later on by the optimizer, use the `noinline` keyword:
 
-```
+```Mindcode
 noinline void foo()
     print("This function is not inlined.");
 end;
@@ -592,7 +591,7 @@ foo();
 
 Functions calling themselves, or two (or more) functions calling each other are _recursive_. Recursive functions require a stack to keep track of the calls in progress and for storing local variables from different invocations of the function.
 
-```
+```Mindcode
 allocate stack in bank1;
 
 def fib(n)
@@ -621,7 +620,7 @@ When using recursive functions, some of their local variables and parameters may
 
 Stack needs to be allocated similarly to heap:
 
-```
+```Mindcode
 allocate stack in bank1[256...512];
 ```
 
@@ -636,7 +635,7 @@ Vararg functions are also called "variable arity" functions. These functions can
 
 In Mindcode, only functions declared `inline` may use vararg parameter. The vararg parameter must be always the last one, and is declared by appending `...` after the parameter name. The vararg argument may be used in a list iteration loop within the function, or may be passed to another function.
 
-```
+```Mindcode
 inline void foo(values...)
     for i in values do
         println(i);
@@ -659,7 +658,7 @@ foo(1, 2, 3);
 
 The vararg parameter may be passed to standard functions as well. For example
 
-```
+```Mindcode
 inline void foo(args...)
     println(min(args));
     println(max(args));
@@ -667,12 +666,13 @@ inline void foo(args...)
 end;
 
 foo(1, 2, 3, 4);
-foo(1, 2, 3, 4, 5);         // Causes error in the call to println($"Values...") function, as it expects exactly 4 arguments 
+
+// foo(1, 2, 3, 4, 5);         // Causes error in the call to println($"Values...") function, as it expects exactly 4 arguments 
 ```
 
 An `out` argument may also be passed via vararg to a function that accepts it: 
 
-```
+```Mindcode
 inline void foo(arg...)
     bar(arg);
 end;
@@ -683,8 +683,8 @@ end;
 
 foo(1, 2, out result);      // No error, places the sum into result
 foo(1, 2);                  // Also no error, the third argument to bar is optional
-foo(1);                     // Error - bar needs at least two arguments
-foo(1, 2, 3);               // Error - bar needs an out argument at the third position
+// foo(1);                  // Error - bar needs at least two arguments
+// foo(1, 2, 3);            // Error - bar needs an out argument at the third position
 ```
 
 > [!NOTE]
@@ -692,7 +692,7 @@ foo(1, 2, 3);               // Error - bar needs an out argument at the third po
 
 The vararg parameter may be mixed with ordinary variables or expressions, and used more than once, even in the same list iteration or function call:
 
-```
+```Mindcode
 inline void foo(arg...)
     bar(10, arg, 20, arg); 
 end;
@@ -710,7 +710,7 @@ foo(1, 2, 3);
 
 A `length()` function determines the number of arguments passed into the vararg parameter. `0` is returned when no argument was passed to the vararg parameter.
 
-```
+```Mindcode
 inline void foo(args...)
     println(length(args));
 end;
@@ -726,7 +726,7 @@ The function always takes just one argument. When the argument passed in is not 
 
 Mindcode supports function overloading. Several functions can have the same name, provided they differ in the number of arguments they take. For example:
 
-```
+```Mindcode
 void foo(x)
     println("This is foo(x)");
 end;
@@ -756,19 +756,19 @@ Mindcode will report all conflicts of function declarations as errors, even if t
 
 A user defined function may have the same name as a Mindustry Logic function. User defined functions override Mindustry Logic functions of the same name. When a function call matches the user defined function, the user defined function will be called instead of Mindustry Logic function:
 
-```
-def ulocate(:ore, oreType)
+```Mindcode
+inline def ulocate(ore, oreType)
     print("Calling user-defined function");
 end;
 
-found = ulocate(:ore, @copper);                  // Calls the user-defined function
+found = ulocate(:ore, @copper);                   // Calls the user-defined function
 found = ulocate(:ore, @copper, out x, out y);    // Calls the Mindustry Logic function
 ```
 
 If, however, the user defined ulocate function was defined with output variables as well, both calls would call the user-defined function:
 
-```
-def ulocate(:ore, oreType, out x, out y)
+```Mindcode
+inline def ulocate(ore, oreType, out x, out y)
     print("Calling user-defined function");
     x = y = 0;
 end;

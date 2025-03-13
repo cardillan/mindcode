@@ -143,7 +143,7 @@ This optimization consists of three types of modifications performed on blocks o
 
 The value of ternary expressions and if expressions is sometimes assigned to a user-defined variable. In these situations, the true and false branches of the if/ternary expression assign the value to a temporary variable, which is then assigned to the user variable. This optimization detects these situations and when possible, assigns the final value to the user variable directly in the true/false branches:
 
-```
+```Mindcode
 abs = if x < 0 then
     negative += 1;
     -x;
@@ -156,7 +156,7 @@ print(abs);
 
 produces this code:
 
-```
+```mlog
 jump 4 greaterThanEq :x 0
 op add :negative :negative 1
 op sub *tmp1 0 :x
@@ -193,13 +193,13 @@ ucontrol approach @thisx @thisy 12 0 0
 
 The optimization handles even nested `if` expressions, such as
 
-```
+```Mindcode
 print(a < 100 ? a < 10 ? "units" : "tens" : a < 1000 ? "hundreds" : "thousands");
 ```
 
 which produces 
 
-```
+```mlog
 jump 6 greaterThanEq :a 100
 jump 4 greaterThanEq :a 10
 print "units"
@@ -216,7 +216,7 @@ print "thousands"
 
 Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
 
-```
+```Mindcode
 x = rand(10) - 5;
 text = x < 0 ? "negative" : "positive";
 print("Value is ", text);
@@ -275,7 +275,7 @@ The instruction generator always generates true branch first. In some cases, the
 The additional instruction can be avoided when the true and false branches in the code are swapped. When this
 optimizer detects such a situation, it does exactly that:
 
-```
+```Mindcode
 if @unit.@dead === 0 then
     print("alive");
 else
@@ -285,7 +285,7 @@ end;
 
 Notice the `print "dead"` occurs before `print "alive"` now:
 
-```
+```mlog
 sensor *tmp0 @unit @dead
 jump 4 strictEqual *tmp0 0
 print "dead"
@@ -297,8 +297,7 @@ print "alive"
 
 The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
 
-```
-#set if-expression-optimization = none;
+```Mindcode
 y = if x < 0 then
     "negative";
 elsif x > 0 then
@@ -311,7 +310,7 @@ print("value is ", y);
 
 produces
 
-```
+```mlog
 set *tmp1 "negative"
 jump 5 lessThan :x 0
 set *tmp1 "zero"
@@ -351,7 +350,7 @@ The data flow analysis reveals cases where variables might not be properly initi
 
 Since Mindustry Logic executes the code repeatedly while preserving variable values, not initializing a variable might be a valid choice, relying on the fact that all variables are assigned a value of `null` by Mindustry at the beginning. If you intentionally leave a variable uninitialized, declare the variable using a `noinit` modifier, which suppresses the warning:
 
-```
+```Mindcode
 noinit var count;
 count++;
 print(count);
@@ -360,7 +359,7 @@ printflush(message1);
 
 Data Flow Optimization assumes that values assigned to variables detected as uninitialized might be reused on the next program execution. Assignments to uninitialized variables before calling the `end()` function are therefore protected, while assignments to initialized variables aren't - they will be overwritten on the next program execution anyway:
 
-```
+```Mindcode
 noinit var initialized;
 var foo = rand(10);
 if initialized == 0 then
@@ -377,7 +376,7 @@ print(foo);
 
 produces this code:
 
-```
+```mlog
 op rand .foo 10 0
 jump 5 notEqual .initialized 0
 print "Initializing..."
@@ -392,7 +391,7 @@ Notice the `initialized = 1` statement is preserved, while `foo = 1` is not.
 
 This protection is also applied to assignment to uninitialized variables made before calling a user function which, directly or indirectly, calls or may call the `end()` function:
 
-```
+```Mindcode
 #set unreachable-code-elimination = none;
 print(foo);
 foo = 5;
@@ -407,7 +406,7 @@ end;
 
 preserves both assignments to `foo`:
 
-```
+```mlog
 print :foo
 set :foo 5
 end
@@ -420,7 +419,7 @@ See also [`end()` function](SYNTAX-3-STATEMENTS.markdown#the-end-function).
 
 All assignments to variables (except global variables) are inspected and unnecessary assignments are removed. The assignment is unnecessary if the variable is not read after being assigned, or if it is not read before another assignment to the variable is made:
 
-```
+```Mindcode
 a = rand(10);
 a = rand(20);
 print(a);
@@ -429,7 +428,7 @@ a = rand(30);
 
 compiles to:
 
-```
+```mlog
 op rand :a 20 0
 print :a
 ```
@@ -442,7 +441,7 @@ An assignment can also become unnecessary due to other optimizations.
 
 When a variable is used in an instruction and the value of the variable is known to be a constant value, the variable itself is replaced by the constant value. This can in turn make the original assignment unnecessary. See for example:
 
-```
+```Mindcode
 a = 10;
 b = 20;
 c = @tick + b;
@@ -451,7 +450,7 @@ print($"$a, $b, $c.");
 
 produces
 
-```
+```mlog
 op add :c @tick 20
 print "10, 20, "
 print :c
@@ -463,7 +462,7 @@ print "."
 Constant propagation described above ensures that constant values are used instead of variables where possible. When a deterministic operation is performed on constant values (such as addition by the `op add` instruction), constant folding evaluates the expression and replaces the operation with the resulting value, eliminating an instruction.
 For example:
 
-```
+```Mindcode
 a = 10;
 b = 20;
 c = a + b;
@@ -472,7 +471,7 @@ print($"$a, $b, $c.");
 
 produces
 
-```
+```mlog
 print "10, 20, 30."
 ```
 
@@ -490,7 +489,7 @@ If the result of a constant expression doesn't have a valid mlog representation,
 
 The Data Flow Optimizer keeps track of expressions that have been evaluated. When the same expression is encountered for a second (third, fourth, ...) time, the result of the last computation is reused instead of evaluating the expression again. In the following code:
 
-```
+```Mindcode
 a = rand(10);
 b = a + 1;
 c = 2 * (a + 1);
@@ -501,7 +500,7 @@ print(a, b, c, d);
 the optimizer notices that the value `a + 1` was assigned to `b` after it was computed for the first time
 and reuses it in the subsequent instructions:
 
-```
+```mlog
 op rand :a 10 0
 op add :b :a 1
 op mul :c 2 :b
@@ -516,7 +515,7 @@ Again, not every possible opportunity is used. Instructions are not rearranged, 
 
 On the other hand, entire complex expressions are reused if they're identical. In the following code
 
-```
+```Mindcode
 a = rand(10);
 b = rand(10);
 x = 1 + sqrt(a * a + b * b);
@@ -526,7 +525,7 @@ print(x, y);
 
 the entire square root is evaluated only once:
 
-```
+```mlog
 op rand :a 10 0
 op rand :b 10 0
 op mul *tmp2 :a :a
@@ -545,7 +544,7 @@ Backpropagation is a separate optimization which allows to modify instructions p
 
 The results of this optimization can be demonstrated on this code:
 
-```
+```Mindcode
 #set optimization = experimental;
 i = rand(10);
 a = i;
@@ -556,12 +555,11 @@ print(a, b);
 
 which compiles to
 
-```
+```mlog
 op rand :a 10 0
-op rand :b 20 0
+op rand :i 20 0
 print :a
-print :b
-printflush message1
+print :i
 ```
 
 Of course, the source code typically doesn't contain such constructs, but this essentially is what some other optimizations, such as inlining function calls or unrolling a list iteration loop with modification may produce.
@@ -584,7 +582,7 @@ Loop hoisting is an optimization which tries to identify loop invariant code (i.
 
 For example, in the following code
 
-```
+```Mindcode
 param MAX = 10;
 for i in 0 ... MAX do
     print(2 * MAX);
@@ -593,7 +591,7 @@ end;
 
 the evaluation of `2 * MAX` is moved in front of the loop in the compiled code:
 
-```
+```mlog
 set MAX 10
 set :i 0
 op mul *tmp0 2 MAX
@@ -605,7 +603,7 @@ jump 4 lessThan :i MAX
 
 A loop condition is processed as well as a loop body, and invariant code in nested loops is hoisted all the way to the top when possible: 
 
-```
+```Mindcode
 param MAX = 10;
 for j in 0 ... MAX do
     i = 0;
@@ -618,7 +616,7 @@ end;
 
 compiles into
 
-```
+```mlog
 set MAX 10
 set :j 0
 op add *tmp0 MAX 10
@@ -634,7 +632,7 @@ jump 4 lessThan :j MAX
 
 Loop Hoisting is capable of handling some `if` expressions as well:
 
-```
+```Mindcode
 param MAX = 10;
 for i in 1 ... MAX do
     k = (MAX % 2 == 0) ? "Even" : "Odd";
@@ -645,7 +643,7 @@ print("end");
 
 produces
 
-```
+```mlog
 set MAX 10
 set :i 1
 set *tmp2 "Odd"
@@ -676,7 +674,7 @@ The loop optimization improves loops with the condition at the beginning by perf
 
 The result of the first two optimizations in the list can be seen here:
 
-```
+```Mindcode
 param LIMIT = 10;
 for i in 0 ... LIMIT do
     cell1[i] = 1;
@@ -686,7 +684,7 @@ print("Done.");
 
 produces 
 
-```
+```mlog
 set LIMIT 10
 set :i 0
 jump 6 greaterThanEq 0 LIMIT
@@ -700,7 +698,7 @@ Executing the entire loop (including the `i` variable initialization) takes 32 s
 
 The third modification is demonstrated here:
 
-```
+```Mindcode
 while switch1.enabled and switch2.enabled do
     print("Doing something.");
 end;
@@ -709,7 +707,7 @@ print("A switch has been reset.");
 
 which produces:
 
-```
+```mlog
 sensor *tmp0 switch1 @enabled
 sensor *tmp1 switch2 @enabled
 op land *tmp2 *tmp0 *tmp1
@@ -730,7 +728,7 @@ Loop unrolling is a [speed optimization](#optimization-for-speed), and as such i
 
 Loop unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in speedup of program execution, since the jump instruction representing a condition which terminates the loop, and oftentimes also instruction(s) that change the loop control variable value, can be removed from the unrolled loop and only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight" - contain very little instructions apart from the loop itself. The most dramatic practical example is probably something like this:
 
-```
+```Mindcode
 #set loop-unrolling = none;
 for i in 0 ... 10 do
     cell1[i] = 0;
@@ -767,7 +765,7 @@ The price for this speedup is the increased number of instructions themselves. S
 
 Apart from removing the superfluous instructions, loop unrolling also replaces variables with constant values. This can make further optimizations opportunities arise, especially for a Data Flow Optimizer and possibly for others. A not particularly practical, but nonetheless striking example is this program which computes the sum of numbers from 0 to 100:
 
-```
+```Mindcode
 sum = 0;
 for i in 0 .. 100 do
     sum += i;
@@ -777,7 +775,7 @@ print(sum);
 
 which compiles to:
 
-```
+```mlog
 print 5050
 ```
 
@@ -814,7 +812,7 @@ Furthermore:
 
 Examples of loops that can be unrolled on `basic` optimization level:
 
-```
+```Mindcode
 // Basic case
 for i in 0 .. 10 do
     cell1[i] = cell1[i + 1];
@@ -862,7 +860,7 @@ end;
 
 Examples of loops that can be unrolled on `advanced` optimization level:
 
-```
+```Mindcode
 // An operation different from add and sub is supported
 for i = 1; i < 100000; i <<= 1 do
     println(i);
@@ -888,7 +886,7 @@ end;
 
 Examples of loops that **cannot** be unrolled:
 
-```
+```Mindcode
 // LIMIT is a program parameter and as such the value assigned to it isn't considered constant
 param LIMIT = 10;
 for i in 0 ... LIMIT do
@@ -931,7 +929,7 @@ end;
 
 Nested loops can also be unrolled, and the optimizer prefers unrolling the inner loop:
 
-```
+```Mindcode
 k = 0;
 for i in 0 ... 100 do
     for j in 0 ... 100 do
@@ -944,7 +942,7 @@ Both loops are eligible for unrolling at the beginning, and the inner one is cho
 
 Sometimes unrolling an outer loop can make the inner loop eligible for unrolling too. In this case, the inner loop cannot be unrolled first, as it is not constant:
 
-```
+```Mindcode
 #set optimization = advanced;
 first = true;
 for i in 1 .. 5 do
@@ -963,7 +961,7 @@ In this example, the outer loop is unrolled first, after which each copy of the 
 independently. Further optimizations (including Print Merging) then compact the entire computation into a single 
 print instruction:
 
-```
+```mlog
 print "11 12 13 14 15 22 23 24 25 33 34 35 44 45 55"
 ```
 
@@ -1043,7 +1041,7 @@ The following conditions must be met for a case expression to be processed by th
 
 ### Example
 
-```
+```Mindcode
 value = floor(rand(20));
 text = case value
     when 0 then "None";
@@ -1058,7 +1056,7 @@ print(text);
 
 The above case expression is transformed to this:
 
-```
+```mlog
 op rand *tmp0 20 0
 op floor :value *tmp0 0
 jump 26 lessThan :value 0
@@ -1086,9 +1084,7 @@ jump 27 always 0 0
 set *tmp2 "Ten"
 jump 27 always 0 0
 set *tmp2 "I don't known this number!"
-set :text *tmp2
 print *tmp2
-end
 ```
 
 ## Return Optimization
@@ -1165,27 +1161,27 @@ This optimization merges together print instructions with string literal argumen
 
 Effectively, this optimization eliminates a `print` instruction by turning this
 
-```
+```Mindcode
 println("Items: ", items);
 println("Time: ", @time);
 ```
 into this:
 
-```
+```Mindcode
 print("Items: ", items);
-print("\nTime: ", @time "\n");
+print("\nTime: ", @time, "\n");
 ```
 
 All constant values - not just string constants - are merged. For example:
 
-```
+```Mindcode
 const MAX_VALUE = 10;
 println($"Step $i of $MAX_VALUE");
 ```
 
 produces
 
-```
+```mlog
 print "Step "
 print :i
 print " of 10\n"
@@ -1231,7 +1227,7 @@ The format instruction is used in optimization when these conditions are met:
 
 If the `{0}` placeholder is avoided, the formatting mechanism can be used freely in the code without any limitations and the print merging optimization with the format instruction can still happen. Just use placeholders starting at `{1}`:
 
-```
+```Mindcode
 #set target = 8;
 param a = 10;               // prevent a from being propagated as a constant
 println("{2} {1}");         // if you use "{0} {1}" instead - different optimization will happen 
@@ -1242,7 +1238,7 @@ format("After");
 
 This program will compile to
 
-```
+```mlog
 set a 10
 print "{2} {1}\n"
 format "Before"

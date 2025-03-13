@@ -51,7 +51,9 @@ When declaring remote variables these additional modifiers can be used:
 
 Modifiers can be specified in any order.
 
-```
+```Mindcode
+#set target = 8;
+
 // Remote variables, a unitialized, b initialized
 remote a, b = 10;         
 
@@ -66,7 +68,9 @@ Remote variables are available through remote access in code which imports the m
 
 Function to be called remotely must be declared using the `remote` keyword again:
 
-```
+```Mindcode
+#set target = 8;
+
 remote def foo(x, y, out z)
     z = x + y;
     return x * y;

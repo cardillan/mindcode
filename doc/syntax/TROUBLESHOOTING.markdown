@@ -60,7 +60,7 @@ It is possible to use the [`sort-variables`](SYNTAX-5-OTHER.markdown#option-sort
 
 An example of a program created with sorting variables:
 
-```
+```Mindcode
 #set sort-variables;
 
 param MIN = 10;

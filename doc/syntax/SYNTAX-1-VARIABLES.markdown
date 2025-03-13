@@ -220,7 +220,7 @@ Detailed information on individual kinds of variables and means of their declara
 
 Example:
 
-```
+```Mindcode
 var a = 10;
 var b = 20;
 print(a);
@@ -229,7 +229,7 @@ printflush(message1);
 
 compiles to
 
-```
+```mlog
 print 10
 printflush message1
 ```
@@ -258,7 +258,7 @@ Implicit variables are only supported in the [`relaxed` syntax](SYNTAX.markdown#
 
 An example code using implicit variables:
 
-```
+```Mindcode
 def foo(x)
     MAIN = x + 10;
     local = 10;
@@ -316,7 +316,8 @@ Remote arrays are internal arrays accessible from another processor. For more de
 
 For some operations, such as array assignments, list-iteration loops and function calls, it is possible to select a portion of the array for operation. The syntax for creating subarrays is: `array[range]`, where `range` is a constant range expression. It is possible to create subarrays from implicit, external, internal and remote arrays: 
 
-```
+```Mindcode
+allocate heap in bank1;
 var a[10];
 external $a[10];
 
@@ -346,7 +347,7 @@ Modifiers can be specified in any order.
 
 Example
 
-```
+```Mindcode
 noinit volatile var a;      // Uninitalized volatile global variable
 var b;                      // "Normal" global variable
 
@@ -387,7 +388,7 @@ A warning is generated if the name of the linked block used in linked variable d
 
 Example:
 
-```
+```Mindcode
 linked on = switch1, memory = cell1;    // These blocks are required
 noinit linked message1;                 // message1 is optional
 
@@ -409,7 +410,7 @@ end;
 
 When declaring a linked variable, Mindcode generates a guard code (single instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
 
-```
+```Mindcode
 linked output = message1;
 print("Here we are");
 printflush(output);
@@ -418,17 +419,16 @@ stopProcessor();
 
 compiles to
 
-```
+```mlog
 jump 0 equal message1 null
 print "Here we are"
 printflush message1
 stop
-print "Compiled by Mindcode - github.com/cardillan/mindcode"
 ```
 
 Additionally, guard code is generated for undeclared linked blocks used in the `allocate` declaration (e.g. `allocate heap in bank1;` will generate guard code for `bank1`). To disable guard code generation in this case, explicitly declare the variable using `noinit` keyword:
 
-```
+```Mindcode
 noinit linked bank1;
 allocate heap in bank1;
 ```
@@ -447,7 +447,7 @@ allocate heap in <memory>[<range>];
 
 for example:
 
-```
+```Mindcode
 allocate heap in cell4[50 ... 64];
 ```
 
@@ -490,7 +490,7 @@ When no storage clause is specified, the external variable is placed in heap.
 
 Examples:
 
-```
+```Mindcode
 allocate heap in cell4[32 ... 64];
 
 // Implicitly created varaibles
@@ -506,7 +506,7 @@ c = a + b;
 
 The above will compile to:
 
-```
+```mlog
 jump 0 equal cell4 null
 write 1 cell4 32
 write 1 cell4 33
@@ -531,14 +531,14 @@ external [memory [index|range]] [var] <variable1>[size] [= (<initial values>)] [
 
 `size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array:
 
-```
+```Mindcode
 allocate heap in cell1[32 .. 64];
 external $array[3] = (10, 20, 30);
 ```
 
 compiles into
 
-```
+```mlog
 jump 0 equal cell1 null
 write 10 cell1 32
 write 20 cell1 33
@@ -566,14 +566,14 @@ A _storage clause_ can be specified after the `external` keyword, in the same wa
 
 `size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array. The initial values are assigned directly to array element variables:
 
-```
+```Mindcode
 var array[3] = (rand(10), rand(20), rand(30));
 print(array);
 ```
 
 compiles into
 
-```
+```mlog
 op rand .array*0 10 0
 op rand .array*1 20 0
 op rand .array*2 30 0
@@ -623,7 +623,7 @@ If a numeric value is assigned to a parameter, and it isn't possible to [encode 
 
 Example (the optimization is turned off to prevent removing unused parameters):
 
-```
+```Mindcode
 #set optimization = none;
 param unitType = @flare;
 param target = vault1;
@@ -634,7 +634,7 @@ param userName = "Pete";
 
 This code, when compiled, produces the following instructions:
 
-```
+```mlog
 set unitType @flare
 set target vault1
 set maxUnits 10
@@ -650,7 +650,7 @@ end
 
 For example, let's say that a parameter is created to specify the percentage of container capacity usage at which some action should happen. Constraining the parameter to a range of `0 .. 100` ensures parameter values outside this range do not break the code:
 
-```
+```Mindcode
 param CUTOFF_PCT = 50;
 var cutoffPct = max(min(CUTOFF_PCT, 100), 0);
 print(cutoffPct);
@@ -658,7 +658,7 @@ print(cutoffPct);
 
 produces the following code:
 
-```
+```mlog
 set CUTOFF_PCT 50
 op min *tmp0 CUTOFF_PCT 100
 op max .cutoffPct *tmp0 0
@@ -689,7 +689,7 @@ Constants must be declared in global scope and are therefore always global.  The
 
 Example:
 
-```
+```Mindcode
 const DEBUG = true;
 const HIGH_SPEED = 50;
 const LOW_SPEED = HIGH_SPEED / 2;
@@ -704,12 +704,14 @@ If a numeric value is assigned to a constant, and it isn't possible to [encode t
 
 Among other uses, constants can be used to optionally exclude sections of code while compiling: 
 
-```
+```Mindcode
 const DEBUG = false;
-...
+
+// ...
+
 if DEBUG then
     println("State: ", state);
-    println("Item count: ", @unit.totalItems);
+    println("Item count: ", @unit.@totalItems);
 end;
 ```
 
@@ -721,7 +723,7 @@ Mindustry has a set of built-in icons that are represented by specific Unicode c
 
 Printing an icon is as easy as this:
 
-```
+```Mindcode
 println(ITEM_LEAD, " ", vault1.@lead);       // As a list of values
 println($"$ITEM_COAL ${vault1.@coal}");      // As formattable literal
 printflush(message1);
@@ -1359,7 +1361,7 @@ Mindustry Logic provides functions which allow you to access linked blocks, or e
 
 These functions return a reference to a block. This reference can be stored in a regular variable, which can then be used to perform operations on the block in the same way as linked variables:
 
-```
+```Mindcode
 var message = findMessage();
 
 begin
@@ -1381,7 +1383,7 @@ end;
 
 Mindcode provides a way to manipulate contents of memory blocks directly through linked variables or dynamically linked blocks using the array access syntax:
 
-```
+```Mindcode
 linked cell1, cell2;
 
 for var i in 0 .. 63 do
@@ -1393,7 +1395,7 @@ This code copies the entire contents of memory cell `cell1` to `cell2`.
 
 It is also possible to pass statically or dynamically linked blocks to (non-recursive) functions:
 
-```
+```Mindcode
 linked bank1, bank2;
 
 def copy(source, target, size)
@@ -1427,7 +1429,7 @@ In short, global variables start with `.`, local variables start with `:` and co
 
 If the same main or local variable is declared multiple times in the same function (in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and subsequent declarations, separated by `.` (a dot):
 
-```
+```Mindcode
 #set optimization = off;
 begin var i = 1; end;
 begin var i = 2; end;
@@ -1435,7 +1437,7 @@ begin var i = 2; end;
 
 compiles into
 
-```
+```mlog
 set :i 1
 set :i.1 2
 end

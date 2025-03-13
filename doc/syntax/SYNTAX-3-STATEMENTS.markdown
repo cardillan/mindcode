@@ -15,7 +15,7 @@ There are several types of loops:
 
 The `while` loop gets repeated as long as the condition remains true:
 
-```
+```Mindcode
 while @unit == null do
     ubind(@poly);
 end;
@@ -25,10 +25,10 @@ end;
 
 Similar to while loops, except the condition is placed at the end of the loop. Do-while loops therefore always execute at least once:
 
-```
+```Mindcode
 do
     ubind(@poly);
-loop while @unit == null;
+while @unit == null;
 ```
 
 > [!NOTE]
@@ -38,7 +38,7 @@ loop while @unit == null;
 
 Loop over a range of values, in an inclusive or exclusive fashion. The `..` range operator indicates an inclusive range:
 
-```
+```Mindcode
 for var n in 14 .. 18 do
     println(n);
 end;
@@ -49,7 +49,7 @@ printflush(message1);
 
 The `...` range operator indicates an exclusive range:
 
-```
+```Mindcode
 var sum = 0;
 for var addr in 0 ... 64 do
     sum += cell1[addr];
@@ -61,7 +61,7 @@ This loop will calculate the average of all 64 cells (0-based index) of `cell1`.
 
 It is also possible to use expressions to specify the ranges:
 
-```
+```Mindcode
 var sum = 0;
 for var n in firstIndex + 1 .. lastIndex - 1 do
     sum += cell1[n];
@@ -77,8 +77,8 @@ The range is evaluated before the loop begins. If the value of the upper bound c
 
 Loop over a fixed collection of values or expressions:
 
-```
-for var u in @mono, @poly, @mega do
+```Mindcode
+for u in @mono, @poly, @mega do
     ubind(u);
     if @unit != null then
         break;
@@ -92,7 +92,7 @@ Tries to bind a mono, poly or mega, in this order, ending the loop when successf
 
 The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic itself doesn't support dynamic arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated at the beginning of the iteration utilizing the expression. This loop
 
-```
+```Mindcode
 var n = 0;
 for var a in foo(), foo(), foo() do
     print(a, "\n");
@@ -107,7 +107,7 @@ prints values 1, 2, 3, as the `foo()` function call is evaluated at the beginnin
 
 The list iterator loop can use more loop variables to process several items from the list at once:
 
-```
+```Mindcode
 for var unit, count in
     @mono, 5, 
     @poly, 4,
@@ -124,7 +124,7 @@ The values in the list aren't organized into tuples. You can put them on separat
 
 If you use expressions based on the values of the loop control variables in the list, the results are generally undefined. Example:
 
-```
+```Mindcode
 var a = 1;
 var b = 2;
 for a, b in b, a do
@@ -138,7 +138,7 @@ This code prints out "22" and not "21", as might be expected.
 
 When an array or subarray is used in the value list (external or internal), the array elements are concatenated with the rest of the list:
 
-```
+```Mindcode
 var a[] = (1, 2, 3, 4, 5);
 external cell1 b[] = (6, 7, 8, 9);
 
@@ -169,7 +169,7 @@ end;
 
 If the elements of the list being iterated over are variables or arrays, it is possible to change their values by declaring the loop control variable with the `out` modifier:
 
-```
+```Mindcode
 var a = 1, b = 2, c = 3, d = 4;
 for var out i in a, b, c, d do
     print(i);
@@ -184,7 +184,7 @@ This code will print  "1234" on one line, followed by "2468" on the second line.
 
 It is possible to declare more than one variable in the loop as output:
 
-```
+```Mindcode
 var a = 1, b = 2, c = 3, d = 4;
 for var out i, out j in a, b, c, d do
     tmp = i;
@@ -199,7 +199,7 @@ This code swaps values of `a` and `c` with `b` and `d`, producing "2143" on outp
 
 It is also possible to use list iteration loop to initialize variables:
 
-```
+```Mindcode
 var index = 0;
 for var out i in a, b, c, d do
     i = ++index;
@@ -213,6 +213,7 @@ This code initializes values `a`, `b`, `c` and `d` to `1`, `2`, `3` and `4` resp
 If some of the elements in the list cannot be modified, it is an error if it is assigned to an `out` loop control variable:
 
 ```
+// Error - 'c + 1' is not a variable
 for var out i in a, b, c + 1, d do
     i = rand(10);
 end;
@@ -222,18 +223,18 @@ end;
 
 It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. THe only requirement is that all iterator group must be provided with data for the same number of iterations. 
 
-```
+```Mindcode
 var a[20], b[10];
 
 // Ten iterations in total: a has 20 elements, but feeds 2 iterators
 for var i, j in a; var out k in b do
-    b = i + j;
+    k = i + j;
 end;
 ```
 
 By combining subarrays and parallel iteration, arrays can be processed by list iteration loops in many ways. For example, it is possible to iterate over all adjacent pairs of elements in the array:
 
-```
+```Mindcode
 var a[10];
 
 var index = 0;
@@ -252,7 +253,7 @@ This code outputs `01 12 23 34 45 56 67 78 89 `.
 
 This can be used in, for example, a bubble sort algorithm:
 
-```
+```Mindcode
 const SIZE = 10;
 var a[SIZE];
 
@@ -286,7 +287,7 @@ end;
 
 The syntax is similar to C's, except for the absence of parenthesis and the `do` keyword:
 
-```
+```Mindcode
 // Visit every block in a given region, one at a time, starting from the bottom
 // left and ending at the upper right
 var dx = 1;
@@ -303,7 +304,7 @@ end;
 
 You can use a `break` or `continue` statement inside a loop in the usual sense (`break` exits the loop, `continue` skips the rest of the current iteration):
 
-```
+```Mindcode
 while not within(x, y, 6) do
     approach(x, y, 4);
     if @unit.@dead == 1 then
@@ -317,7 +318,7 @@ end;
 
 An unlabeled `break` statement exits the innermost `for` or `while` statement, however a labeled `break` can exit from an outer statement. It is necessary to mark the outer statement with a label, and then use the `break <label>` syntax, as shown here:
 
-```
+```Mindcode
 MainLoop:
 for var i in 1 .. 10 do
     for var j in 5 .. 20 do
@@ -342,7 +343,7 @@ Mindcode offers 3 types of conditionals: if/else expressions, the ternary operat
 
 In Mindcode, `if` is an expression, meaning it returns a value. The returned value is the last value of the branch. For example:
 
-```
+```Mindcode
 var result = if n == 0 then
     "ready";
 else
@@ -354,7 +355,7 @@ Depending on the value of `n`, `result` will contain the one of `ready` or `pend
 
 To handle more than two alternatives, you can use `elsif` as an alternative to nested `if` statements:
 
-```
+```Mindcode
 var text = if n > 0 then
     "positive";
 elsif n < 0 then
@@ -363,9 +364,10 @@ else
     "zero";
 end;
 ```
+
 is equivalent to
 
-```
+```Mindcode
 var text = if n > 0 then
     "positive";
 else
@@ -381,7 +383,7 @@ end;
 
 Case expression is another way of writing conditionals. Use case expression when you need to test a value against multiple different alternatives:
 
-```
+```Mindcode
 var status = case num_enemies
     when 0 then
         "chill";
@@ -396,7 +398,7 @@ end;
 
 Multiple comma-separated expressions can be listed after each `when` keyword. It is also possible to use range expressions, and even mix them with normal expression like this:
 
-```
+```Mindcode
 var text = case number
     when 0, 1, 2**3 .. 2**5, 42, -115 then
         "A number I like";

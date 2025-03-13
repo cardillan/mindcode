@@ -149,7 +149,7 @@ The requirement to declare variables explicitly helps to identify misspelled var
 
 Example of a code adhering to the strict syntax:
 
-```
+```Mindcode
 #set syntax = strict;
 
 // These are declarations and need to be present in the global scope:
@@ -249,14 +249,14 @@ Keywords cannot be used as function or variable names.
 
 ## Mlog keywords
 
-Some mlog instructions expect a predefined set of possible string values at certain positions. Substituting variables for these string values is not supported. These string values are called _mlog keywords_. Examples of keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `group` in `ulocate building group enemy @copper outx outy found building`.
+Some mlog instructions expect a predefined set of possible string values at certain positions. Substituting variables for these string values is not supported. These string values are called _mlog keywords_. Examples of keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`.
 
 Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable. 
 
 Some of these keywords do not occur in Mindcode, for example all possible `op` instructions are mapped to Mindcode functions and operators. In other cases, these keywords must be specified as arguments to the Mindustry Logic functions. To make the distinction between an mlog keyword and an identifier apparent in Mindcode, the keywords are prepended with a colon, e.g. `:building`. The function call corresponding to the `ulocate` instruction above is (see [functions](SYNTAX-4-FUNCTIONS.markdown) for more details):
 
-```
-building = ulocate(:building, :group, enemy, out outx, out outy, out found);
+```Mindcode
+building = ulocate(:building, :core, enemy, out outx, out outy, out found);
 ```
 
 Mlog keywords can appear in these contexts in Mindcode:
@@ -339,7 +339,7 @@ Character literals have a numeric value equal to the ASCII value of the enclosed
 
 Character literals are most useful with the Mindustry Logic 8 `printchar` instruction, for example:
 
-```
+```Mindcode
 #set target = 8;
 
 // Prints ABCDEFGHIJKLMNOPQRSTUVWXYZ

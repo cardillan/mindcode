@@ -137,7 +137,7 @@ Only these operations can be applied to string operands:
 
 Behavior of expressions producing side effects that may affect any other value in the same expression is intentionally not defined in Mindcode. Examples of such expressions are:
 
-```
+```Mindcode
 a = rand(0);
 print(++a + a++);
 cell1[++a] = ++a;
@@ -148,7 +148,7 @@ In each of these expressions, Mindcode is free to evaluate individual subexpress
 
 To get consistent behavior, these expressions need to be rewritten to eliminate side effects affecting other parts of the same expression, for example:
 
-```
+```Mindcode
 index = ++a;
 cell1[index] = ++a;
 
@@ -186,7 +186,7 @@ The full list of Mindcode operators in the order of precedence is as follows:
 
 Postfix and prefix operators can only be used with variables. They increment (`++`) or decrement (`--`) the variable by one. The prefix form evaluates to the new value, while the postfix form evaluates to the original value of the variable. This is important when the operator is used in a larger expression:
 
-```
+```Mindcode
 begin
     var i = 5;
     i++;
@@ -228,7 +228,7 @@ Addition and subtraction on numeric values work as usual.
 
 The `+` operator may be also used to concatenate string constants and/or literals:
 
-```
+```Mindcode
 const NAME = "John";
 message = formalGreeting ? "Good day, " + NAME : "Hey " + NAME + "!";
 println(message);
@@ -236,7 +236,7 @@ println(message);
 
 It is especially useful to embed icon string constants into larger strings, which would otherwise be impossible:
 
-```
+```Mindcode
 void displayLevel(container, title, item)
     println(title, container.sensor(item));
 end ;
@@ -248,7 +248,7 @@ displayLevel(vault1, ITEM_SAND + " level: ", @sand);
 
 Additionally, it is possible to use compile-time concatenation of a string and a non-string value, if both are constant:
 
-```
+```Mindcode
 const TOTAL = 10;
 const MESSAGE = " out of " + TOTAL;
 for i in 1 .. TOTAL do
@@ -323,7 +323,7 @@ This table lists some examples of comparing various values for equality:
 
 <details><summary>Show code used to generate data for this table.</summary>
 
-```
+```Mindcode
 inline def eval(b)
     b ? "true" : "false";
 end;
@@ -375,7 +375,7 @@ Boolean operators may be a little bit less effective, as additional operations m
 
 Ternary operator is a conditional operator and is equivalent to an `if` expression having exactly one expression in both true and false branches:
 
-```
+```Mindcode
 var message = value <= limit ? "ok" : "too high";
 ```
 
@@ -389,11 +389,13 @@ The compound assignment operators combine arithmetic operation with an assignmen
 
 Assignment operators are evaluated from right to left:
 
-```
+```Mindcode
 x += y *= 2;
 ```
+
 is the same as
-```
+
+```Mindcode
 y = y * 2;
 x = x + y;
 ```
@@ -402,7 +404,7 @@ x = x + y;
 
 It is possible to assign arrays using the assignment operator, assuming both arrays have the same size. Assignments can be chained. Assignments between external, internal and remote arrays are supported, as well as subarrays. Examples:
 
-```
+```Mindcode
 external cell1 a[10];
 var b[10];
 var c[20];
@@ -414,15 +416,15 @@ v[0 ... 10] = b;            // Possible, since the subarray has the same size as
 
 To use a memory cell/bank in array assignments, it is necessary to use subarrays even when accessing the entire memory cell/bank:
 
-```
+```Mindcode
 var a[64];
 a = cell1[0 ... 64];        // Copies the entire memory cell into the array
-a = cell1;                  // Error - not supported                    
+// a = cell1;               // Error - not supported                    
 ```
 
 By using subarrays, it is possible to copy overlapping regions of arrays, effectively shifting the array content up or down:
 
-```
+```Mindcode
 var a[10];
 a[0 ... 9] = a[1 ... 10];   // Shifts towards array start  
 a[1 ... 10] = a[0 ... 9];   // Shifts towards array end
@@ -449,7 +451,7 @@ If the result of a constant expression is a value which [cannot be encoded into 
 
 When evaluating expressions, it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
 
-```
+```Mindcode
 #set target = 7;
 print(10 ** 50);            // Cannot be evaluated
 print(10 ** (2 * 24));      // Multiplication can be evaluated, exponentiation cannot
@@ -458,7 +460,7 @@ print(log10(10 ** 45));     // Can be evaluated even though 10 ** 50 cannot
 
 produces
 
-```
+```mlog
 op pow *tmp0 10 50
 print *tmp0
 op pow *tmp1 10 48
@@ -485,7 +487,7 @@ Ranges cannot be assigned to variables and can only be used in several contexts:
 
 To illustrate how equality and relational operations work in Mindustry Logic, consider this example:
 
-```
+```Mindcode
 param a = 0.1;
 
 b = 1;

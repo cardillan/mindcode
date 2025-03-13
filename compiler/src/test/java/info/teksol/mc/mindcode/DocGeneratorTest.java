@@ -97,9 +97,7 @@ public class DocGeneratorTest {
             constants.clear();
             parameters.clear();
 
-            AstModule node = build(expectedMessages()
-                            .add("The 'loop' keyword is deprecated. Use just 'while' instead.").ignored(),
-                    createInputFiles(code));
+            AstModule node = build(expectedMessages(), createInputFiles(code));
             processNode(node);
 
             writer.println();

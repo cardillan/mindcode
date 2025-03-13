@@ -258,7 +258,7 @@ For better understanding, the creation of custom instructions will be demonstrat
 
 The `format` instruction was introduced in Mindustry Logic 8. When compiling for Mindustry Logic 7, the instruction isn't available. We can create it using this code:
 
-```
+```Mindcode
 #set target = 7;
 inline void format(value)
     mlogText("format", in value);
@@ -272,7 +272,7 @@ printflush(message1);
 
 Compiling this code produces the following output:
 
-```
+```mlog
 set a 10
 print "The value is: {0}\n"
 op mul :format.0:value a 20
@@ -289,7 +289,7 @@ Considerations:
 
 Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the Mindustry Logic 8 language target, this instruction is mapped to the `drawPrint()` function. We can create it explicitly through this:
 
-```
+```Mindcode
 #set target = 7;
 inline void drawPrint(x, y, alignment)
     mlogText("draw", "print", in x, in y, alignment, 0, 0, 0);
@@ -301,7 +301,7 @@ drawPrint(0, 20, :bottomLeft);
 
 Result:
 
-```
+```mlog
 draw print 0 10 center 0 0 0
 draw print 0 20 bottomLeft 0 0 0
 ```
@@ -315,7 +315,7 @@ Considerations:
 
 The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction which doesn't modify the Mindustry World and therefore is safe. Had it not be known by Mindcode, it could be defined like this:
 
-```
+```Mindcode
 // Using 'getBlock2' as a name to avoid clashing with the existing function name
 inline def getBlock2(x, y, out type, out floor)
     mlogSafe("ucontrol", "getBlock", in x, in y, out type, out building, out floor);
@@ -335,7 +335,7 @@ printflush(message1);
 
 compiles to
 
-```
+```mlog
 op rand *tmp0 100 0
 op floor :x *tmp0 0
 op rand *tmp2 200 0
