@@ -44,6 +44,11 @@ public class LogicInstructionLabelResolver {
             return program;
         }
 
+        int limit = profile.getInstructionLimit() - InstructionCounter.localSize(program) - 2;
+        if (limit <= 0) {
+            return program;
+        }
+
         HashSet<LogicArgument> allVariables = program.stream()
                 .flatMap(LogicInstruction::inputOutputArgumentsStream)
                 .filter(a -> a.isUserVariable() || a.getType() == ArgumentType.BLOCK)
@@ -51,24 +56,16 @@ public class LogicInstructionLabelResolver {
 
         List<LogicArgument> order = orderVariables(allVariables, profile.getSortVariables());
 
-        while (order.size() % 4 > 0) {
-            order.add(LogicNull.NULL);
-        }
+        AstContext astContext = program.getFirst().getAstContext();
+        List<LogicInstruction> variables = createVariables(astContext, order);
 
-        int limit = profile.getInstructionLimit() - InstructionCounter.localSize(program);
-        if (limit <= 0) {
-            return program;
-        }
-
-        int instructions = Math.min(limit, order.size() / 4);
+        int instructions = Math.min(limit, variables.size());
+        LogicLabel logicLabel = processor.nextLabel();
 
         List<LogicInstruction> result = new ArrayList<>();
-        AstContext astContext = program.getFirst().getAstContext();
-        for (int index = 0, i = 0; i++ < instructions; index += 5) {
-            order.add(index, LogicVariable.unusedVariable());
-            result.add(processor.createInstruction(astContext,  PACKCOLOR, order.subList(index, index + 5)));
-        }
-
+        result.add(processor.createJumpUnconditional(astContext, logicLabel));
+        result.addAll(variables.subList(0, instructions));
+        result.add(processor.createLabel(astContext, logicLabel));
         result.addAll(program);
         return result;
     }
@@ -115,9 +112,12 @@ public class LogicInstructionLabelResolver {
         };
     }
 
-    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, List<LogicVariable> initVariables) {
+    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, List<LogicArgument> initVariables) {
+        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
+                .createSubcontext(AstContextType.ARRAY_INIT, AstSubcontextType.BASIC, 1.0);
+
         if (program.isEmpty()) {
-            return createVariables(initVariables);
+            return createVariables(astContext, initVariables);
         }
 
         // Save the last instruction before it is resolved
@@ -133,7 +133,7 @@ public class LogicInstructionLabelResolver {
                 program.add(processor.createEnd(last.getAstContext()));
             }
 
-            Set<LogicVariable> missingVariables = new LinkedHashSet<>(initVariables);
+            Set<LogicArgument> missingVariables = new LinkedHashSet<>(initVariables);
             program.stream()
                     .mapMulti((LogicInstruction instruction, Consumer<LogicVariable> consumer)
                             -> instruction.inputOutputArgumentsStream()
@@ -142,7 +142,7 @@ public class LogicInstructionLabelResolver {
                             .forEach(consumer))
                     .forEach(missingVariables::remove);
 
-            program.addAll(createVariables(missingVariables));
+            program.addAll(createVariables(astContext, missingVariables));
             addSignature = true;
         } else {
             addSignature = last.endsCodePath();
@@ -269,11 +269,9 @@ public class LogicInstructionLabelResolver {
         return program.stream().mapMulti(processor::resolve).toList();
     }
 
-    private List<LogicInstruction> createVariables(Collection<LogicVariable> variables) {
+    private List<LogicInstruction> createVariables(AstContext astContext, Collection<LogicArgument> variables) {
         final int batchSize = 6;
 
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
-                .createSubcontext(AstContextType.ARRAY_INIT, AstSubcontextType.BASIC, 1.0);
         List<LogicInstruction> result = new ArrayList<>();
         List<LogicArgument> vars = new ArrayList<>(variables);
 

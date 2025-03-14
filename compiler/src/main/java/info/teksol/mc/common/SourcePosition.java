@@ -53,7 +53,7 @@ public record SourcePosition(InputFile inputFile,
     }
 
     public String formatForIde() {
-        return (inputFile == EMPTY_INPUT_FILE ? "" : inputFile.getAbsolutePath()) + ":" + line() + ":" + column();
+        return ((inputFile == EMPTY_INPUT_FILE || inputFile.getPath() == InputFiles.EMPTY_PATH ? "" : inputFile.getAbsolutePath()) + ":") + line() + ":" + column();
     }
 
     public String formatForLog() {
@@ -98,6 +98,10 @@ public record SourcePosition(InputFile inputFile,
 
     public SourcePosition nextLine() {
         return new SourcePosition(inputFile, line() + 1, 1);
+    }
+
+    public SourcePosition offsetLine(int offset) {
+        return new SourcePosition(inputFile, line() + offset, column());
     }
 
     @Override

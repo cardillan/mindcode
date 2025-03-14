@@ -43,8 +43,8 @@ Possible values for the `boundary-checks` directive are:
 
 Specifies which function prefix is used to generate mlog names of local variables. Possible values are:
 
-* `short`: the prefix is `:fn` followed by a number, starting at 0. Leads to short variable names, which are more easily readable when displayed in Mindustry interface, but it is not immediately apparent which function each variable belongs to.  
-* `long`: the prefix is composed of a function name and a number, starting at 0. Variable names may become long and often incompletely displayed in Mindustry interface, but the function name is part of variable name, making it easier to recognize each variable.   
+* `long` (the default value): the prefix is composed of a function name and a number, starting at 0. Variable names may become long and often will be incompletely displayed in Mindustry interface, but the function name is part of variable name, making it easier to recognize each variable.   
+* `short`: the prefix is `:fn` followed by a number, starting at 0. Leads to short variable names, which are more easily readable when displayed in Mindustry interface, but it is not immediately apparent which function each variable belongs to.
 
 Note: the function prefix of remote functions is always `:` followed by the function name, with no additional number, regardless of this setting. 
 
@@ -125,7 +125,7 @@ Active remarks can be used to easily add debugging output to a program that can 
 
 The **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in sufficiently large programs.
 
-This option can be used to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `packcolor` instruction is used, which can read - and therefore create - up to four variables per instruction. The result is not stored anywhere so that the variable-ordering code block doesn't change values of any variables, and therefore the behavior of the program remains unaltered, except for possible difference in timing.)
+This option can be used to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special non-executable block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `draw triangle` instruction is used, which can create up to six variables per instruction. Since the entire segment of `draw triangle` instruction is skipped, the behavior of the program remains unaltered, except for possible difference in timing.)
 
 The value assigned to the sort-variables directive is a list of variable categories:
 

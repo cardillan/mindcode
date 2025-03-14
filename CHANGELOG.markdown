@@ -27,7 +27,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * All reads from and writes to variables declared `volatile` are preserved now. Volatile variables can be accessed from a remote processor safely.
-* Prefixes for local variables are created from function name by default. Use [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes. 
+* Prefixes for local variables are created from function name by default. Use [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes.
+* Changed the `sort-variables` option to use `draw triangle` instructions to create variables in a defined order.
 
 ### Deprecated
 

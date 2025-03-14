@@ -10,7 +10,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /// This class hold all input files used in a compilation.
 @NullMarked
 public class InputFiles {
-    private static final Path EMPTY_PATH = Path.of("");
+    public static final Path EMPTY_PATH = Path.of("");
 
     /// Base path of the project. Path of the source file, or empty path when compiling a String.
     /// Always absolute.

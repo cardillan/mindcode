@@ -67,7 +67,8 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         print(MAX, A, i);
                         """,
                 """
-                        packcolor 0 MAX .A null null
+                        jump 2 always 0 0
+                        draw triangle MAX .A 0 0 0 0
                         set MAX 10
                         set .A 20
                         set :i 3
