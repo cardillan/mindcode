@@ -5,6 +5,7 @@ import info.teksol.mc.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -17,6 +18,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
@@ -31,6 +33,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 
 @NullMarked
@@ -47,6 +50,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
     private final ComposedAstNodeVisitor<ValueStore> nodeVisitor;
     private final FunctionDeclarationsBuilder functionCompiler;
     private final DeclarationsBuilder declarationsBuilder;
+
+    private LogicLabel remoteWaitLabel = LogicLabel.INVALID;
 
     // Nesting level of code blocks
     private int nested = 0;
@@ -140,6 +145,10 @@ public class CodeGenerator extends AbstractMessageEmitter {
         addMissingPrintflush();
     }
 
+    public  LogicLabel getRemoteWaitLabel() {
+        return remoteWaitLabel;
+    }
+
     /// Generates an error if the current target doesn't support remote calls or variables
     void verifyMinimalRemoteTarget(AstMindcodeNode node) {
         if (!profile.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
@@ -152,7 +161,17 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 .filter(f -> f.isRemote() && f.isEntryPoint())
                 .forEach(f -> assembler.createSetAddress(LogicVariable.fnAddress(f), Objects.requireNonNull(f.getLabel())));
         assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.create("@this", false));
-        assembler.createRemoteEndlessLoop();
+        remoteWaitLabel = assembler.nextLabel().withoutStateTransfer();
+        assembler.createLabel(remoteWaitLabel);
+        findBackgroundProcessFunction().ifPresent(functionCompiler::placeFunctionBody);
+        assembler.suspendExecution();
+    }
+
+    private Optional<MindcodeFunction> findBackgroundProcessFunction() {
+        return callGraph.getFunctions().stream()
+                .filter(f -> f.getDeclaration().getCallType() == CallType.NONE && !f.isRecursive() &&
+                             f.isVoid() && f.getParameters().isEmpty() && f.getName().equals("backgroundProcess"))
+                .findFirst();
     }
 
     private @Nullable AstContext mainBodyContext;

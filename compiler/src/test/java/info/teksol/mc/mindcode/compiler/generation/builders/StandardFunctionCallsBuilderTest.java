@@ -1170,17 +1170,16 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                         """,
                     createInstruction(SETADDR, ":foo*address", label(0)),
                     createInstruction(SET, "*mainProcessor", "@this"),
-                    
-createInstruction(WAIT, "1e12"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(WAIT, "1e12"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
                     createInstruction(SET, ":foo:b", tmp(0)),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
                     createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
-                    
-createInstruction(WAIT, "1e12")
+                    createInstruction(JUMP, label(1), "always")
             );
         }
 
@@ -1195,22 +1194,21 @@ createInstruction(WAIT, "1e12")
                         """,
                     createInstruction(SETADDR, ":foo*address", label(0)),
                     createInstruction(SET, "*mainProcessor", "@this"),
-                    
-createInstruction(WAIT, "1e12"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(WAIT, "1e12"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(SET, tmp(0), ":foo:a"),
                     createInstruction(OP, "add", ":foo:a", ":foo:a", "1"),
                     createInstruction(OP, "div", tmp(1), tmp(0), "2"),
                     createInstruction(SET, ":foo*retval", tmp(1)),
-                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(SET, ":foo*retval", "null"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(WRITE, ":foo*retval", "*mainProcessor", q(":foo*retval")),
                     createInstruction(WRITE, ":foo:a", "*mainProcessor", q(":foo:a")),
                     createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
-                    
-createInstruction(WAIT, "1e12")
+                    createInstruction(JUMP, label(1), "always")
             );
         }
 

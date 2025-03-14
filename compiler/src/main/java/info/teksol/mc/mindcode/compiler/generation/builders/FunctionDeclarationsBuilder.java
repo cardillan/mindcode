@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
@@ -39,6 +40,15 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         }
     }
 
+    /// Used to compile function body when the function is called implicitly
+    public void placeFunctionBody(MindcodeFunction function) {
+        enterFunction(function, List.of());
+        returnStack.enterFunction(processor.nextLabel(), LogicVoid.VOID);
+        compileFunctionBody(function);
+        returnStack.exitFunction();
+        exitFunction(function);
+    }
+
     private void generateCodeForFunction(MindcodeFunction function) {
         enterFunction(function, List.of());
         assembler.setActive(function.isUsed() || function.isEntryPoint());
@@ -76,7 +86,6 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         }
 
         assembler.createLabel(returnStack.getReturnLabel());
-
     }
 
     private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {
@@ -103,8 +112,10 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         assembler.createWrite(LogicBoolean.TRUE, LogicVariable.MAIN_PROCESSOR,
                 LogicVariable.fnFinished(function).getMlogString());
 
-        // Endless wait
-        assembler.createRemoteEndlessLoop();
+        // Jump to remote wait
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
+        assembler.createJumpUnconditional(getRemoteWaitLabel());
+        assembler.clearSubcontextType();
     }
 
     private void appendStacklessFunctionDeclaration(MindcodeFunction function) {

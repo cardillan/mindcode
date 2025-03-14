@@ -722,9 +722,13 @@ class DataFlowOptimizer extends BaseOptimizer {
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
                     && (context.matches(AstContextType.RETURN, FLOW_CONTROL) ||
                         !getLabelInstruction(jump.getTarget()).belongsTo(localContext))) {
-                VariableStates copy = variableStates.copy("nonlocal jump");
-                copy.print("*** Storing variable states for label " + jump.getTarget().toMlog());
-                labelStates.computeIfAbsent(jump.getTarget(), ix -> new ArrayList<>()).add(copy);
+
+                if (jump.getTarget().isStateTransfer()) {
+                    VariableStates copy = variableStates.copy("nonlocal jump");
+                    copy.print("*** Storing variable states for label " + jump.getTarget().toMlog());
+                    labelStates.computeIfAbsent(jump.getTarget(), ix -> new ArrayList<>()).add(copy);
+                }
+
                 if (jump.isUnconditional()) {
                     variableStates.setDead(false);
                 }

@@ -198,25 +198,76 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                 createInstruction(SETADDR, ":foo*address", label(0)),
                 createInstruction(SETADDR, ":bar*address", label(1)),
                 createInstruction(SET, "*mainProcessor", "@this"),
+                createInstruction(LABEL, label(2)),
                 createInstruction(WAIT, "1e12"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
                 createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
                 createInstruction(SET, ":foo:b", tmp(0)),
-                createInstruction(LABEL, label(2)),
+                createInstruction(LABEL, label(3)),
                 createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
                 createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
-                createInstruction(WAIT, "1e12"),
+                createInstruction(JUMP, label(2), "always"),
                 createInstruction(END),
                 createInstruction(LABEL, label(1)),
                 createInstruction(OP, "sin", tmp(1), ":bar:x"),
                 createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
                 createInstruction(SET, ":bar*retval", tmp(2)),
-                createInstruction(LABEL, label(3)),
+                createInstruction(LABEL, label(4)),
                 createInstruction(WRITE, ":bar*retval", "*mainProcessor", q(":bar*retval")),
                 createInstruction(WRITE, "true", "*mainProcessor", q(":bar*finished")),
-                
-createInstruction(WAIT, "1e12")
+                createInstruction(JUMP, label(2), "always")
+        );
+    }
+
+    @Test
+    void compilesModuleWithRemoteFunctionsAndBackgroundProcess() {
+        assertCompilesTo("""
+                        module test;
+                        
+                        var invocations = -1;
+                        
+                        remote void foo(in a, out b)
+                            b = 2 * a;
+                        end;
+                        
+                        remote def bar(in x)
+                            sin(x) * 2;
+                        end;
+                        
+                        void backgroundProcess()
+                            print($"Number of invocations: ${++invocations}");
+                            printflush(message1);
+                        end;
+                        """,
+                createInstruction(SET, ".invocations", "-1"),
+                createInstruction(SETADDR, ":foo*address", label(0)),
+                createInstruction(SETADDR, ":bar*address", label(1)),
+                createInstruction(SET, "*mainProcessor", "@this"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(OP, "add", ".invocations", ".invocations", "1"),
+                createInstruction(PRINT, q("Number of invocations: ")),
+                createInstruction(PRINT, ".invocations"),
+                createInstruction(PRINTFLUSH, "message1"),
+                createInstruction(LABEL, label(4)),
+                createInstruction(WAIT, "1e12"),
+                createInstruction(END),
+                createInstruction(LABEL, label(0)),
+                createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
+                createInstruction(SET, ":foo:b", tmp(0)),
+                createInstruction(LABEL, label(5)),
+                createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
+                createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
+                createInstruction(JUMP, label(3), "always"),
+                createInstruction(END),
+                createInstruction(LABEL, label(1)),
+                createInstruction(OP, "sin", tmp(1), ":bar:x"),
+                createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
+                createInstruction(SET, ":bar*retval", tmp(2)),
+                createInstruction(LABEL, label(6)),
+                createInstruction(WRITE, ":bar*retval", "*mainProcessor", q(":bar*retval")),
+                createInstruction(WRITE, "true", "*mainProcessor", q(":bar*finished")),
+                createInstruction(JUMP, label(3), "always")
         );
     }
 }

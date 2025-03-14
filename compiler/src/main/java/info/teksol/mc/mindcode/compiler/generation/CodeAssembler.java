@@ -248,10 +248,16 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         }
     }
 
-    /// Creates an endless loop. Used by remote processors to wait until a remote call is initiated.
+    /// Suspends code execution. Used by remote processors to wait until a remote call is initiated.
     /// Current implementation uses a very long wait (over 30,000 years)
-    public void createRemoteEndlessLoop() {
+    public void suspendExecution() {
         createInstruction(WAIT, LogicNumber.create(processor, "1e12"));
+    }
+
+    /// Yields the execution for the rest of the tick. Used when waiting for a remote processor to update variables
+    /// or provide results.
+    public void yieldExecution() {
+        createInstruction(WAIT, LogicNumber.create(processor, "1e-15"));
     }
 
     public LogicLabel createNextLabel() {

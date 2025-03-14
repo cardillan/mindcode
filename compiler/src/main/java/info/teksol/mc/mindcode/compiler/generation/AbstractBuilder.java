@@ -124,6 +124,10 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         codeGenerator.verifyMinimalRemoteTarget(node);
     }
 
+    protected LogicLabel getRemoteWaitLabel() {
+        return codeGenerator.getRemoteWaitLabel();
+    }
+
     /// Processes the node by passing it to the proper builder according to node type. The builder creates
     /// code from the AST node and provides a `ValueStore` instance representing the output value of the node.
     ///

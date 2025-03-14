@@ -17,7 +17,6 @@ import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -304,8 +303,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         SideEffects sideEffects = createRemoteCallSideEffects(function);
         LogicLabel label = assembler.createNextLabel();
-        assembler.applySideEffects(sideEffects)
-                .createInstruction(Opcode.WAIT, LogicNumber.create(this.processor, "1e-15"));
+        assembler.applySideEffects(sideEffects).yieldExecution();
         assembler.createJump(label, Condition.EQUAL, finished, LogicBoolean.FALSE);
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
@@ -366,8 +364,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
         LogicLabel label = assembler.createNextLabel();
-        assembler.applySideEffects(sideEffects)
-                .createInstruction(Opcode.WAIT, LogicNumber.create(this.processor, "1e-15"));
+        assembler.applySideEffects(sideEffects).yieldExecution();
         assembler.createJump(label, Condition.EQUAL, LogicVariable.fnFinished(function), LogicBoolean.FALSE);
         assembler.clearSubcontextType();
         return LogicVariable.fnRetVal(function);

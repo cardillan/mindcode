@@ -6,11 +6,17 @@ import org.jspecify.annotations.NullMarked;
 public class LogicLabel extends AbstractArgument implements LogicAddress {
     private final String label;
     private final int address;
+    private final boolean stateTransfer;
 
-    private LogicLabel(String label, int address) {
+    private LogicLabel(String label, int address, boolean stateTransfer) {
         super(ArgumentType.LABEL, ValueMutability.IMMUTABLE);
         this.label = label;
         this.address = address;
+        this.stateTransfer = stateTransfer;
+    }
+
+    public boolean isStateTransfer() {
+        return stateTransfer;
     }
 
     public int getAddress() {
@@ -29,12 +35,16 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
                 '}';
     }
 
+    public LogicLabel withoutStateTransfer() {
+        return new LogicLabel(label, address, false);
+    }
+
     public static LogicLabel symbolic(String name) {
-        return new LogicLabel(name, -1);
+        return new LogicLabel(name, -1, true);
     }
 
     public static LogicLabel absolute(int address) {
-        return new LogicLabel(String.valueOf(address), address);
+        return new LogicLabel(String.valueOf(address), address, true);
     }
 
     public static final LogicLabel INVALID = symbolic("invalid");
