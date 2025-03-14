@@ -21,6 +21,10 @@ public class MindustryOpcodeVariants {
                 .toList();
     }
 
+    public static List<OpcodeVariant> getAllOpcodeVariants() {
+        return List.copyOf(data.variants);
+    }
+
     ///////////////////////////////////////////////////////////////
 
     private final List<OpcodeVariant> variants = initialize();

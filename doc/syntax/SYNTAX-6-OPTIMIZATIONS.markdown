@@ -726,7 +726,7 @@ Loop unrolling is a [speed optimization](#optimization-for-speed), and as such i
 
 ### The fundamentals of loop unrolling
 
-Loop unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in speedup of program execution, since the jump instruction representing a condition which terminates the loop, and oftentimes also instruction(s) that change the loop control variable value, can be removed from the unrolled loop and only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight" - contain very little instructions apart from the loop itself. The most dramatic practical example is probably something like this:
+Loop unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in speedup of program execution, since the jump instruction representing a condition which terminates the loop, and oftentimes also instruction(s) that change the loop control variable value, can be removed from the unrolled loop and only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight" - contain very little instructions apart from the loop itself. The most dramatic practical example is probably something like this (let's see it first without loop unrolling):
 
 ```Mindcode
 #set loop-unrolling = none;
@@ -737,7 +737,7 @@ end;
 
 This code clears the first ten slots of a memory cell. Without loop unrolling, the code would look like this:
 
-```
+```mlog
 set :i 0
 write 0 cell1 :i
 op add :i :i 1
@@ -746,7 +746,13 @@ jump 1 lessThan :i 10
 
 It takes 31 instruction executions to perform this code. With loop unrolling, though, the code is changed to this:
 
+```Mindcode
+for i in 0 ... 10 do
+    cell1[i] = 0;
+end;
 ```
+
+```mlog
 write 0 cell1 0
 write 0 cell1 1
 write 0 cell1 2

@@ -38,7 +38,7 @@ Example of syntax highlighting with the given settings:
 
 ![image](https://github.com/user-attachments/assets/d0969248-7357-4e89-8f51-8fdc04a8427c)
 
-Unfortunately syntax highlighting doesn't highlight the leading `@` character in Mindustry Logic built-in values and the leading `$` character of formattable string literals, but otherwise is reasonably good.
+Unfortunately the syntax highlighting doesn't correctly recognize some literals, but otherwise is reasonably good.
 
 ## Visual Studio Code
 
@@ -48,6 +48,6 @@ Unfortunately syntax highlighting doesn't highlight the leading `@` character in
 
 Download the extension from the [Visual Studio marketplace](https://marketplace.visualstudio.com/items?itemName=TomSchi.mindcode).
 
-Unfortunately, the latest addition to Mindcode syntax aren't supported by this extension.
+Unfortunately, recent additions to Mindcode syntax aren't supported by this extension.
 
 [« Previous: Schemacode](SCHEMACODE.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Command line tool »](TOOLS-CMDLINE.markdown)

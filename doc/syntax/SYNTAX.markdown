@@ -247,26 +247,6 @@ The following keywords do not have any function in Mindcode, but are reserved fo
 
 Keywords cannot be used as function or variable names.
 
-## Mlog keywords
-
-Some mlog instructions expect a predefined set of possible string values at certain positions. Substituting variables for these string values is not supported. These string values are called _mlog keywords_. Examples of keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`.
-
-Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable. 
-
-Some of these keywords do not occur in Mindcode, for example all possible `op` instructions are mapped to Mindcode functions and operators. In other cases, these keywords must be specified as arguments to the Mindustry Logic functions. To make the distinction between an mlog keyword and an identifier apparent in Mindcode, the keywords are prepended with a colon, e.g. `:building`. The function call corresponding to the `ulocate` instruction above is (see [functions](SYNTAX-4-FUNCTIONS.markdown) for more details):
-
-```Mindcode
-building = ulocate(:building, :core, enemy, out outx, out outy, out found);
-```
-
-Mlog keywords can appear in these contexts in Mindcode:
-
-1. As an argument to Mindustry Logic function calls, at positions where a keyword is expected.
-2. As an argument to inline functions. Keyword passed in to an inline function may only be used as arguments to another inline or Mindustry Logic function calls.
-3. As a value of a constant definition. Such constants can, again, be only used as arguments to another inline or Mindustry Logic function calls.
-
-Mlog keywords were introduced in Mindcode 3.2.0. For backwards compatibility, it is possible to use a keyword without the `:` prefix in Mindustry Logic function calls. This way of specifying mlog keywords is deprecated, however, and generates a warning message. 
-
 ## Identifiers
 
 Identifiers are names of variables, constants, and functions. Identifiers in Mindcode are case-sensitive. They consist of basic alphanumeric characters (i.e. letters a-z, A-Z and digits 0-9, accented characters aren't allowed) and underscores. The first character must be an underscore or a letter. `_foo` and `bar_baz9` are valid identifiers, `9to5` and `français` are not.
@@ -281,6 +261,29 @@ Built-in variables and constants can be used as-is in Mindcode, e.g. `@time` or 
 
 > [!TIP]
 > Mindcode has a list of built-in variables and handles some of them specifically, but any unknown built-in values in the source code are compiled in as-is. When Mindustry Logic introduces a new built-in variable, it can be used right away without waiting for a new version of Mindcode to be released, as long as the new built-in variable doesn't need some special handling by the compiler.    
+
+## Mlog keywords
+
+Some mlog instructions expect a predefined set of possible string values at certain positions. Substituting variables for these string values is not supported. These string values are called _mlog keywords_. Examples of keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`.
+
+Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable.
+
+Some of these keywords do not occur in Mindcode, for example all possible `op` instructions are mapped to Mindcode functions and operators. In other cases, these keywords must be specified as arguments to the Mindustry Logic functions. To make the distinction between an mlog keyword and an identifier apparent in Mindcode, the keywords are prepended with a colon, e.g. `:building`. The function call corresponding to the `ulocate` instruction above is (see [functions](SYNTAX-4-FUNCTIONS.markdown) for more details):
+
+```Mindcode
+building = ulocate(:building, :core, enemy, out outx, out outy, out found);
+```
+
+> [!TIP]
+> Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:bottomLeft`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
+
+Mlog keywords can appear in these contexts in Mindcode:
+
+1. As an argument to Mindustry Logic function calls, at positions where a keyword is expected.
+2. As an argument to inline functions. Keyword passed in to an inline function may only be used as arguments to another inline or Mindustry Logic function calls.
+3. As a value of a constant definition. Such constants can, again, be only used as arguments to another inline or Mindustry Logic function calls.
+
+Mlog keywords were introduced in Mindcode 3.2.0. For backwards compatibility, it is possible to use a keyword without the `:` prefix in Mindustry Logic function calls. This way of specifying mlog keywords is deprecated, however, and generates a warning message.
 
 ## Literals
 

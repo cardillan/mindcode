@@ -16,8 +16,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Mindustry Logic functions.
 * Added support for passing mlog keywords and formattable string literals as arguments to inline functions.
 * Added support for creating constants out of mlog keywords.
-* Added new [`mlogText()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions) for direct encoding of mlog instructions
-* The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables)
+* Added known mlog keywords to the file type definitions of the [provided Intellij IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
+* Added new [`mlogText()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions) for direct encoding of mlog instructions.
+* The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables).
 
 #### Experimental features
 
@@ -56,14 +57,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the [`ascii()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-ascii-function). The function returns the ASCII value of the first character of a string literal or constant.
 * Added the possibility to specify storage different from the heap when declaring external variables.  
 
+#### Experimental features
+
+* Added the "backpropagation" optimization to Data Flow Optimization (closes [#151](https://github.com/cardillan/mindcode/issues/151)).
+* Added support for compiling in runtime checks for checking internal array elements are not accessed out of bounds. One of the methods uses the MlogAssertions mod, which is currently only available for Mindustry 7.
+
 ### Changed
 
 * The default optimization level in both the web application and command line compiler is now `experimental`.
-
-### Experimental features
-
-* Added the "backpropagation" optimization to Data Flow Optimization (closes [#151](https://github.com/cardillan/mindcode/issues/151)).
-* Added support for compiling in runtime checks for checking internal array elements are not accessed out of bounds. One of the methods uses the MlogAssertions mod, which is currently only available for Mindustry 7.    
 
 ## 3.0.0 - 2025-01-26
 
@@ -134,7 +135,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
     * Added `lerp()` function for linear interpolation between two values
 * Added new `--excerpt` command-line option, allowing to specify only a part of the input file to be compiled.
 
-### Experimental features
+#### Experimental features
 
 * Added support for explicit variable declarations.
 * Newly defined `relaxed`, `mixed` and `strict` syntax modes.

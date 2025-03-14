@@ -1,7 +1,9 @@
 package info.teksol.mindcode.ide.idea;
 
-import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
+import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.mindcode.logic.opcodes.FunctionMapping;
+import info.teksol.mc.mindcode.logic.opcodes.MindustryOpcodeVariants;
 import info.teksol.schemacode.grammar.SchemacodeLexer;
 import org.antlr.v4.runtime.Vocabulary;
 import org.junit.jupiter.api.Test;
@@ -24,12 +26,14 @@ public class CreateIdeaSettingsTest {
     private static final String TEMPLATES = "src/test/resources/ide/idea";
     private static final String SETTINGS = "../support/idea";
 
+    private final List<String> mlog = getMlogKeywords();
     private final List<String> mindcode = getKeywords(MindcodeLexer.VOCABULARY);
     private final List<String> schemacode = getKeywords(SchemacodeLexer.VOCABULARY);
     private final List<String> combined = Stream.concat(mindcode.stream(), schemacode.stream())
             .distinct().sorted().toList();
     private final List<String> builtins = LVar.allVars().stream().map(LVar::name).distinct().sorted().toList();
 
+    private final String mlogKeywords = String.join(";", mlog);
     private final String mindcodeKeywords = String.join(";", mindcode);
     private final String schemacodeKeywords = String.join(";", schemacode);
     private final String combinedKeywords = String.join(";", combined);
@@ -41,6 +45,19 @@ public class CreateIdeaSettingsTest {
                 .filter(l -> l != null && l.matches("'#?\\w+'"))
                 .map(l -> l.substring(1, l.length() - 1))
                 .filter(k -> !k.equals("elif") && !k.equals("elseif"))
+                .toList();
+    }
+
+    private static List<String> getMlogKeywords() {
+        return MindustryOpcodeVariants.getAllOpcodeVariants().stream()
+                .filter(o -> o.functionMapping() != FunctionMapping.NONE)
+                .flatMap(opcodeVariant -> opcodeVariant.namedParameters().stream())
+                .filter(p -> (p.type().isKeyword() || p.type().isSelector()) && !p.type().isFunctionName())
+                .flatMap(p -> p.type().getAllowedValues().isEmpty() ? Stream.of(p.name())
+                        : p.type().getAllowedValues().stream().flatMap(v -> v.values.stream()))
+                .sorted()
+                .distinct()
+                .map(s -> ':' + s)
                 .toList();
     }
 
@@ -117,6 +134,7 @@ public class CreateIdeaSettingsTest {
 
     private String replacePatterns(String contents) {
         return contents
+                .replace("${mlog-keywords}", mlogKeywords)
                 .replace("${mindcode-keywords}", mindcodeKeywords)
                 .replace("${schemacode-keywords}", schemacodeKeywords)
                 .replace("${combined-keywords}", combinedKeywords)

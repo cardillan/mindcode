@@ -13,6 +13,7 @@
     </options>
     <keywords keywords="${combined-keywords}" ignore_case="false" />
     <keywords2 keywords="${mindustry-builtins}" ignore_case="false" />
+    <keywords3 keywords="${mlog-keywords}" ignore_case="false" />
   </highlighting>
   <extensionMap>
     <mapping ext="sdf" />
