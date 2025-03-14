@@ -1829,6 +1829,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     true,
                                     a,
                                     new AstRange(EMPTY, number(0), number(64), true),
+                                    false,
                                     List.of(call(id("print"), arg(a))))
                     )
             );
@@ -1851,6 +1852,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstOperatorBinary(EMPTY, ADD, b, number(10)),
                                             new AstOperatorBinary(EMPTY, Operation.SUB, c, number(20)),
                                             false),
+                                    false,
                                     List.of(a)
                             )
                     )
@@ -1858,10 +1860,10 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void buildsRangedForLoopWithoutBody() {
+        void buildsRangedForLoopDescendingWithoutBody() {
             assertBuildsTo("""
                             Label:
-                            for var a in b ... c do
+                            for var a in b ... c descending do
                             end;
                             """,
                     List.of(
@@ -1870,6 +1872,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     true,
                                     a,
                                     new AstRange(EMPTY, b, c, true),
+                                    true,
                                     List.of()
                             )
                     )

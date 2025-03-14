@@ -988,7 +988,10 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesMissingDo() {
-            assertGeneratesMessageRegex(1, 19, "Parse error: .*",
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 19, "Parse error: .*")
+                            .addRegex(1, 22, "Parse error: .*"),
                     "for i in 0 ... 10 a; end;");
         }
 

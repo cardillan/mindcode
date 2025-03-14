@@ -43,11 +43,6 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         ValueStore lowerValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getFirstValue()));
         ValueStore upperValue = variables.excludeVariablesFromTracking(() -> evaluate(node.getRange().getLastValue()));
 
-        // Store the upper value in a temporary variable registered in parent.
-        LogicValue fixedUpperBound = assembler.defensiveCopy(upperValue, ArgumentType.TMP_VARIABLE);
-
-        // Condition for variable exceeding the upper bound of the range
-        Condition condition = outsideRangeCondition(node.getRange());
         if (node.hasDeclaration()) {
             if (node.getVariable() instanceof AstIdentifier identifier) {
                 variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Map.of());
@@ -57,7 +52,32 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         }
 
         ValueStore loopControlVariable = resolveLValue(node.getVariable());
-        loopControlVariable.setValue(assembler, lowerValue.getValue(assembler));
+
+        LogicValue fixedFinalBound;
+        Condition condition;
+
+        if (node.isDescending()) {
+            // Store the lower value in a temporary variable registered in parent.
+            fixedFinalBound = assembler.defensiveCopy(lowerValue, ArgumentType.TMP_VARIABLE);
+
+            condition = Condition.LESS_THAN;
+
+            if (node.getRange().isExclusive()) {
+                loopControlVariable.writeValue(assembler,
+                        target -> assembler.createOp(Operation.SUB, target, upperValue.getValue(assembler), LogicNumber.ONE));
+            } else {
+                loopControlVariable.setValue(assembler, upperValue.getValue(assembler));
+            }
+        } else {
+            // Store the upper value in a temporary variable registered in parent.
+            fixedFinalBound = assembler.defensiveCopy(upperValue, ArgumentType.TMP_VARIABLE);
+
+            // Condition for variable exceeding the upper bound of the range
+            condition = outsideRangeCondition(node.getRange());
+
+            loopControlVariable.setValue(assembler, lowerValue.getValue(assembler));
+        }
+
 
         final LogicLabel beginLabel = assembler.nextLabel();
         LoopLabels loopLabels = enterLoop(node);
@@ -65,7 +85,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         // Condition
         assembler.setSubcontextType(AstSubcontextType.CONDITION, multiplier);
         assembler.createLabel(beginLabel);
-        assembler.createJump(loopLabels.breakLabel(), condition, loopControlVariable.getValue(assembler), fixedUpperBound);
+        assembler.createJump(loopLabels.breakLabel(), condition, loopControlVariable.getValue(assembler), fixedFinalBound);
 
         // Loop body
         assembler.setSubcontextType(AstSubcontextType.BODY, multiplier);
@@ -78,8 +98,8 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
         // Update
         assembler.setSubcontextType(AstSubcontextType.UPDATE, multiplier);
         LogicValue oldValue = loopControlVariable.getValue(assembler);
-        loopControlVariable.writeValue(assembler,
-                tmp -> assembler.createOp(Operation.ADD, tmp, oldValue, LogicNumber.ONE));
+        loopControlVariable.writeValue(assembler, target -> assembler.createOp(
+                node.isDescending() ? Operation.SUB : Operation.ADD, target, oldValue, LogicNumber.ONE));
 
         // Flow control
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, multiplier);

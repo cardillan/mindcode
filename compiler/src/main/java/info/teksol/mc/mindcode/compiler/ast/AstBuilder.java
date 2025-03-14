@@ -432,6 +432,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 ctx.type != null,
                 visitAstExpression(ctx.control),
                 visitAstRange(ctx.range),
+                ctx.DESCENDING() != null,
                 processBody(ctx.body));
     }
 

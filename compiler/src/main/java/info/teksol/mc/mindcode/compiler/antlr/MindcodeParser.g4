@@ -46,8 +46,8 @@ statement
     | (label = IDENTIFIER COLON)? FOR init = declarationOrExpressionList?
         SEMICOLON condition = expression? SEMICOLON update = expressionList?
         DO body = astStatementList? END                                                 # astIteratedForLoopStatement
-    | (label = IDENTIFIER COLON)? FOR type = typeSpec? control = lvalue IN range = astRange
-        DO body = astStatementList? END                                                 # astRangedForLoopStatement
+    | (label = IDENTIFIER COLON)? FOR type = typeSpec? control = lvalue
+        IN range = astRange DESCENDING? DO body = astStatementList? END                 # astRangedForLoopStatement
     | (label = IDENTIFIER COLON)?
         WHILE condition = expression DO body = astStatementList? END                    # astWhileLoopStatement
     | (label = IDENTIFIER COLON)?
@@ -285,7 +285,7 @@ iteratorsValuesGroups
     ;
 
 astIteratorsValuesGroup
-    : iteratorGroup IN expressionList
+    : iteratorGroup IN expressionList DESCENDING?
     ;
 
 iteratorGroup

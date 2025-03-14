@@ -35,6 +35,7 @@ CACHED                  : 'cached' ;
 CASE                    : 'case' ;
 CONST                   : 'const' ;
 CONTINUE                : 'continue' ;
+DESCENDING              : 'descending' ;
 DEF                     : 'def' ;
 DO                      : 'do' ;
 ELIF                    : 'elif' ;

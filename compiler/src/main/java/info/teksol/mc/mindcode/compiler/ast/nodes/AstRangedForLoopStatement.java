@@ -13,14 +13,16 @@ public class AstRangedForLoopStatement extends AstLabeledStatement {
     private final boolean declaration;
     private final AstExpression variable;
     private final AstRange range;
+    private final boolean descending;
     private final List<AstMindcodeNode> body;
 
     public AstRangedForLoopStatement(SourcePosition sourcePosition, @Nullable AstIdentifier loopLabel,
-            boolean declaration, AstExpression variable, AstRange range, List<AstMindcodeNode> body) {
+            boolean declaration, AstExpression variable, AstRange range, boolean descending, List<AstMindcodeNode> body) {
         super(sourcePosition, loopLabel, children(list(variable, range), body));
         this.declaration = declaration;
         this.variable = variable;
         this.range = range;
+        this.descending = descending;
         this.body = body;
     }
 
@@ -34,6 +36,10 @@ public class AstRangedForLoopStatement extends AstLabeledStatement {
 
     public AstRange getRange() {
         return range;
+    }
+
+    public boolean isDescending() {
+        return descending;
     }
 
     public List<AstMindcodeNode> getBody() {
