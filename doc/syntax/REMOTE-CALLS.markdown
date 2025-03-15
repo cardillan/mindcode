@@ -121,16 +121,19 @@ end;
 The above module compiles into this mlog:
 
 ```mlog
-set :foo*address 6
+set .invocations -1
+set :foo*address 9
 set *mainProcessor @this
-print "Number of method calls: 0"
+op add .invocations .invocations 1
+print "Number of method calls: "
+print .invocations
 printflush message1
 wait 1e12
-end
+jump 3 always 0 0
 op mul :foo:b 2 :foo:a
 write :foo:b *mainProcessor ":foo:b"
 write true *mainProcessor ":foo*finished"
-jump 2 always 0 0
+jump 3 always 0 0
 ```
 
 ## Main processor code

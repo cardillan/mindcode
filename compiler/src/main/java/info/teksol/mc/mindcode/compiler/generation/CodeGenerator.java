@@ -10,6 +10,8 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
@@ -161,10 +163,18 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 .filter(f -> f.isRemote() && f.isEntryPoint())
                 .forEach(f -> assembler.createSetAddress(LogicVariable.fnAddress(f), Objects.requireNonNull(f.getLabel())));
         assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.create("@this", false));
+
+        assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
         remoteWaitLabel = assembler.nextLabel().withoutStateTransfer();
         assembler.createLabel(remoteWaitLabel);
+        assembler.setSubcontextType(AstSubcontextType.BODY, 1.0);
         findBackgroundProcessFunction().ifPresent(functionCompiler::placeFunctionBody);
         assembler.suspendExecution();
+        assembler.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
+        assembler.createJumpUnconditional(remoteWaitLabel);
+        assembler.clearSubcontextType();
+        assembler.clearContextType(program);
     }
 
     private Optional<MindcodeFunction> findBackgroundProcessFunction() {
