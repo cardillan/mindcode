@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.1.1 - 2025-03-15
+
+### Fixed
+
+* Fixed web app page not loading ([#227](https://github.com/cardillan/mindcode/issues/227)).
+
 ## 3.1.0 - 2025-02-20
 
 ### Fixed

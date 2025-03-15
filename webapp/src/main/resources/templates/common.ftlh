@@ -7,7 +7,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Mindcode: a Mindustry Logic high-level language</title>
-    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://kit.fontawesome.com/592e5a7a8a.js" crossorigin="anonymous"></script>
     <style>
         .textarea-container {
