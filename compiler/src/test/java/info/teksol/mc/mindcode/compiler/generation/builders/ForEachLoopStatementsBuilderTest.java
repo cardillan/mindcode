@@ -11,6 +11,83 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
 
     @Nested
+    class DescendingIterations {
+        @Test
+        void compilesBasicParallelIterations() {
+            assertCompilesTo("""
+                            for i in 1, 2; j in 3, 4 descending do print(i+j); end;
+                            """,
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":j", "4"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3), "marker0"),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(SET, ":i", "2"),
+                    createInstruction(SET, ":j", "3"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(1), ":i", ":j"),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(4), "marker0"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesOutputParallelIteration() {
+            assertCompilesTo("""
+                            for i in 1, 2; out j in a, b descending do j = i; end;
+                            """,
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":j", ":b"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3), "marker0"),
+                    createInstruction(SET, ":b", ":j"),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(SET, ":i", "2"),
+                    createInstruction(SET, ":j", ":a"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":j", ":i"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(4), "marker0"),
+                    createInstruction(SET, ":a", ":j"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesUnevenParallelIteration() {
+            assertCompilesTo("""
+                            for i, j in 1, 2, 3, 4 descending; out k in a, b do k = i + j; end;
+                            """,
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(SET, ":j", "4"),
+                    createInstruction(SET, ":i", "3"),
+                    createInstruction(SET, ":k", ":a"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3), "marker0"),
+                    createInstruction(SET, ":a", ":k"),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(SET, ":j", "2"),
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":k", ":b"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(1), ":i", ":j"),
+                    createInstruction(SET, ":k", tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                    createInstruction(MULTILABEL, label(4), "marker0"),
+                    createInstruction(SET, ":b", ":k"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+    }
+
+    @Nested
     class ForEachLoopsInputIterators {
         @Test
         void compilesBasicForEachLoop() {

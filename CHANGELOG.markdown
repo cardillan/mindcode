@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for creating constants out of mlog keywords.
 * Added known mlog keywords to the file type definitions of the [provided Intellij IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
 * Added new [`mlogText()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions) for direct encoding of mlog instructions.
+* Added support for descending iteration order to [Range Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) and [List Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#descending-iteration-order) ([#174](https://github.com/cardillan/mindcode/issues/174)).
 * The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables).
 
 #### Experimental features
@@ -26,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* **Breaking:** new keywords were added to the language: `descending`, `module` and `remote`. Code that uses any of these keywords  as a function or variable name will not compile and the variable or function will have to be renamed.
 * All reads from and writes to variables declared `volatile` are preserved now. Volatile variables can be accessed from a remote processor safely.
 * Prefixes for local variables are created from function name by default. Use [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes.
 * Changed the `sort-variables` option to use `draw triangle` instructions to create variables in a defined order.

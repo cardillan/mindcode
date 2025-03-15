@@ -12,7 +12,7 @@ This documentation covers the basics of Mindcode syntax:
 * [Advanced features](SYNTAX-5-OTHER.markdown)
 * [Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
 
-Function reference for individual compiler versions:
+Function reference for individual [Mindcode targets](SYNTAX-5-OTHER.markdown#option-target):
 
 * [Function reference for Mindustry Logic 6.0](FUNCTIONS-60.markdown)
 * [Function reference for Mindustry Logic 7.0](FUNCTIONS-70.markdown)
@@ -207,6 +207,7 @@ This is a list of Mindcode keywords:
 * `const`
 * `continue`
 * `def`
+* `descending`
 * `do`
 * `else`
 * `elsif`
@@ -264,18 +265,21 @@ Built-in variables and constants can be used as-is in Mindcode, e.g. `@time` or 
 
 ## Mlog keywords
 
-Some mlog instructions expect a predefined set of possible string values at certain positions. Substituting variables for these string values is not supported. These string values are called _mlog keywords_. Examples of keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`.
+Some mlog instructions expect one of a predefined set of keywords at certain positions. These keywords are called _mlog keywords_, to distinguish them from Mindcode's own keywords. Mindustry Logic doesn't support substituting  mlog keywords with variables, and therefore neither Mindcode does. 
 
-Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable.
+Examples of mlog keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`. Note that Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable.
 
-Some of these keywords do not occur in Mindcode, for example all possible `op` instructions are mapped to Mindcode functions and operators. In other cases, these keywords must be specified as arguments to the Mindustry Logic functions. To make the distinction between an mlog keyword and an identifier apparent in Mindcode, the keywords are prepended with a colon, e.g. `:building`. The function call corresponding to the `ulocate` instruction above is (see [functions](SYNTAX-4-FUNCTIONS.markdown) for more details):
+> [!TIP]
+> Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:bottomLeft`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
+
+Some of these keywords do not occur in Mindcode, for example all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to the Mindustry Logic functions. To make the distinction between an mlog keyword and an identifier apparent in Mindcode, the keywords are prepended with a colon, e.g. `:building`. The function call corresponding to the `ulocate` instruction above is:
 
 ```Mindcode
 building = ulocate(:building, :core, enemy, out outx, out outy, out found);
 ```
 
-> [!TIP]
-> Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:bottomLeft`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
+> [!NOTE]
+> Mlog keywords are prepended with a colon in Mindcode, but appear without the colon in mlog. On the other hand, names of local variables in Mindcode are prepended with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.  
 
 Mlog keywords can appear in these contexts in Mindcode:
 

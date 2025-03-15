@@ -2,7 +2,7 @@ Name                                     Instructions    Steps   Coverage   Sour
 assignments-in-expressions.mnd:                    13       13     100.0%   3E55A40DD17DEC43   0A69980C719323F4
 complex-case-expression.mnd:                       51      298      98.0%   E6AA465B5328A02F   DEE1746163F32E89
 equality-comparisons.mnd:                          85       81      95.2%   16DB5681427420C5   7ADE2A2FE44482A9
-executes-sort-variables.mnd:                       13       12      92.3%   4C7203D3E687BCFA   5B39886D3E6A1E3A
+executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   5B39886D3E6A1E3A
 expression-evaluation-compile-time.mnd:            71       71     100.0%   AF03DAE2294C2967   E2B18324776278B7
 expression-evaluation-runtime.mnd:                139      139     100.0%   735EEFE2E08AC90A   BCD18BDB1C5C5837
 fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   F27824FD4C9C2F3F

@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
 import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
@@ -16,6 +15,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.EACH;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.LOOP;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static java.util.Objects.requireNonNull;
 
@@ -48,7 +49,7 @@ class LoopOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        forEachContext(AstContextType.LOOP, BASIC, loop -> {
+        forEachContext(c -> c.matches(LOOP, EACH) && c.matches(BASIC), loop -> {
             processLoop(loop, true, 0);
             return null;
         });
@@ -57,7 +58,7 @@ class LoopOptimizer extends BaseOptimizer {
 
     @Override
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
-        return forEachContext(AstContextType.LOOP, BASIC,
+        return forEachContext(c -> c.matches(LOOP, EACH) && c.matches(BASIC),
                 loop -> processLoop(loop, false, costLimit));
     }
 

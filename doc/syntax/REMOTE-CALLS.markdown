@@ -83,9 +83,9 @@ All remote functions are active entry points for the compiler and thus are alway
 
 ### Background process
 
-When waiting for a remote call, the remote processor is idle. It is possible to define a function to be executed while waiting for a remote call. This function is executed after the remote module initializes, and subsequently whenever a remote call finishes. If the background function ever terminates (or if it is not defined at all), a `wait` instruction is used to wait for the next remote call.
+When waiting for a remote call, the remote processor is by default idle. It is possible to define a function to be executed while waiting for a remote call. This function is executed after the remote module initializes, and subsequently whenever a remote call finishes. If the background function ever terminates (or if it is not defined at all), a `wait` instruction is used to wait for the next remote call.
 
-When a remote call occurs while the background function still executes, the background process is terminated and the remote function starts executing immediately. There's no cleanup process. It is up to the programmer to make sure the background function can be safely terminated at any time and reentered.
+When a remote call occurs while the background function still executes, the background process is terminated and the remote function starts executing immediately. There's no cleanup process, it is up to the programmer to make sure the background function can be safely terminated at any time and reentered.
 
 The background process must be contained in a function named `backgroundProcess`. The function declaration needs to have these properties:
 
@@ -244,28 +244,22 @@ It is also possible to start an asynchronous remote call and use remote variable
 
 ## Performance of remote calls
 
-Instructions in Mindustry Logic processors aren't executed in parallel. Instead, in each tick all processors are visited sequentially and a number of instructions corresponding to given processor's _instructions per tick_ rate is executed. This means that when a synchronous remote call is made, it is never finished earlier than on the next tick. Even if the call returned immediately, a synchronous remote call will take a full tick. A synchronous remote call consist of these steps:
-
-1. Main processor sets up the parameters (if any) and sets the remote `@counter` to the function address.
-2. Remote processor executes the function, sets up output values in the main processor and sets the `finished` flag. 
-3. Main processor reads the `finished` flag, finds out the call has ended and continues executing its code.
-
-It is possible that each of these steps fits into one tick. In this case, either steps 1 and 2 get executed in the same tick, or steps 2 and 3 get executed in the same tick. Depending on processor speed and the complexity of the function and its parameters, some of these steps may take longer than one tick, but even if the code is very short, or the processor very fast, the performance penalty is always at least a tick. Performing many short calls to remote functions might therefore very detrimental to the performance of your program.  
+Instructions in Mindustry Logic processors aren't really executed in parallel. Instead, in each tick all processors are visited sequentially and a number of instructions corresponding to given processor's _instructions per tick_ rate is executed. This means that when a synchronous remote call is made, even if the call returned immediately, the call will always take at least a full tick. Performing many short calls to remote functions might therefore very detrimental to the performance of your program.  
 
 > [!IMPORTANT]
-> The faster the processor, the more instructions get executed in a single tick, and the bigger impact it has. Unboosted micro-processor executes 2 instructions per tick, and the overhead of even short remote calls is almost negligible (at most one instruction execution will be lost on each call). Fully boosted hyper-processor executes 62.5 instructions per seconds, and frequent short remote calls could reduce the effectivity of the hyper-processor by 90% or more. World processors with instruction rates at several hundred IPTs could be affected even more.
+> The faster the processor, the more instructions get executed in a single tick, and the bigger the impact from the delay of a remote call. Unboosted micro-processor executes 2 instructions per tick, and the overhead of even short remote calls is almost negligible (at most one instruction execution will be lost on each call). Fully boosted hyper-processor executes 62.5 instructions per seconds, and frequent short remote calls could reduce the effectivity of the hyper-processor by 90% or more. World processors with instruction rates at several hundred IPTs could be affected even more.
 > 
-> Additional consideration is frame rate. Processor updates aren't actually driven by ticks, but by frame updates. A frame rate higher than 60 FPS means there are fewer instructions wasted per remote call, while lower frame rates mean more instructions wasted. Even code which performs well under 60 FPS might develop performance problems when the frame rate drops.
+> Additional factor is the frame rate: processor updates aren't actually driven by ticks, but by frame updates. A frame rate higher than 60 FPS means there are fewer instructions wasted per remote call, while lower frame rates mean more instructions wasted. Even code which performs well under 60 FPS might develop performance problems when the frame rate drops.
 
 ### Managing the execution quota
 
 Code generated by Mindcode utilizes the `wait` instruction when waiting for a remote procedure call to finish, and when the remote module waits for another call to serve. The `wait` instruction terminates the processor's execution in the current frame, saving up unspent execution quora. Up to four ticks of unspent instructions can be saved this way. When normal execution resumes, the unspent quota is spread over several ticks to provide a boost to the processor execution (a half of the remaining unspent execution quota is used up in each subsequent tick which doesn't contain `wait` or another yielding instruction - the others are `stop` and `message`).
 
-When the interval between remote calls is longer than a single tick, and the duration of the remote calls is also longer than a single tick, synchronous remote calls might even provide execution boosts, leading to faster execution than running the code on a single processor. Getting the timing "just right" can be very tricky, though.  
+When the interval between remote calls is longer than a single tick, and the duration of the remote calls is also longer than a single tick, synchronous remote calls might even provide execution boosts, leading to faster execution than running an equivalent code on a single processor. Getting the timing just right to consistently utilize this effect can be very tricky, though.  
 
-Code in remote processors accrues execution quota when waiting for next remote call. Code in main processor accrues execution quota when waiting for the return from a remote call during synchronous calls and when using the `await()` function on asynchronous calls.
+Code in a remote processors accrues execution quota when waiting for next remote call. Code in a main processor accrues execution quota when waiting for the return from a remote call during synchronous calls and when using the `await()` function on asynchronous calls.
 
-Note: the execution quota only accrues when `wait` instruction are being executed. If there is a background process defined, no execution quota accrues while it is being run (unless the background process contains some `wait` instructions placed there by the programmer).     
+Note: the execution quota only accrues when `wait` instruction are being executed. If there is a background process defined, no execution quota accrues while it is being run (unless the background process itself contains some `wait` instructions).     
 
 # Arbitrary remote variable access
 
@@ -317,7 +311,6 @@ RemoteTest2 = """
     end;
     """
 ```
-
 
 ---
 

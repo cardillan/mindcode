@@ -257,7 +257,7 @@ def throttle_blast(reactors_fueled, emerg_shutdown)
 end;
 
 def check_radar(unit)
-    enemy_found = unit.radar(enemy, any, any, health, 1);
+    enemy_found = unit.radar(:enemy, :any, :any, :health, 1);
     if enemy_found != null then
         projector1.enabled = true;
         projector2.enabled = true;

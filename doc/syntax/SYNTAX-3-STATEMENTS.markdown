@@ -68,10 +68,23 @@ for var n in firstIndex + 1 .. lastIndex - 1 do
 end;
 ```
 
-The range is evaluated before the loop begins. If the value of the upper bound changes while the loop executes, it isn't reflected while the loop executes. To have the condition fully evaluated on each iteration, use a [C-style loop](#c-style-loops) or a [while loop](#while-loops).   
+The range is evaluated before the loop begins. If the value of the upper bound changes while the loop executes, it isn't reflected while the loop executes. To have the condition fully evaluated on each iteration, use a [C-style loop](#c-style-loops) or a [while loop](#while-loops).
+
+It is possible to iterate the range in descending order by specifying `descending`:
+
+```Mindcode
+for var n in 14 ... 18 descending do
+    println(n);
+end;
+printflush(message1);
+
+// prints 17, 16, 15 and 14 on separate lines
+```
+
+The `descending` keyword just reverses the order of loop iterations. The range still needs to specify the lower bound first and the upper bound second. If the range is exclusive (as in the example above), the iteration starts at the upper bound value decreased by one.
 
 > [!IMPORTANT]
-> Currently, range iteration loops can only increment the value by 1, and only support increasing values. If the start value is greater than the end value, the loop body won't get executed at all. 
+> Currently, range iteration loops can only increment/decrement the value by 1. If the start value is greater than the end value, the loop body won't get executed at all, both in ascending and descending iteration order. 
 
 ## List Iteration Loops
 
@@ -180,7 +193,7 @@ println();
 print(a, b, c, d);
 ```
 
-This code will print  "1234" on one line, followed by "2468" on the second line.
+This code will print "1234" on one line, followed by "2468" on the second line.
 
 It is possible to declare more than one variable in the loop as output:
 
@@ -280,6 +293,72 @@ println();
 
 for var i in a do
     println(i);
+end;
+```
+
+### Descending iteration order
+
+It is possible to execute the loop in descending order by specifying `descending` keyword.
+
+```Mindcode
+// This code prints "4321"
+for var i in 1, 2, 3, 4 descending do
+    print(i);
+end;
+```
+
+In case of parallel iterations, each group of iterators can be processed in ascending or descending order separately:
+
+```Mindcode
+var a[10], b[10];
+
+for var i in a descending; var out k in b do
+    k = 2 * i;
+end;
+```
+
+In case of multiple iterators, the `descending` keyword reverses the order of iterations. Individual iterators get assigned the same values, just in descending order:
+
+```Mindcode
+// Prints "12345678"
+for var i, j in 1, 2, 3, 4, 5, 6, 7, 8 do
+    print(i, j);
+end;
+printflush(message1);
+
+// Prints "78563412"
+for var i, j in 1, 2, 3, 4, 5, 6, 7, 8 descending do
+    print(i, j);
+end;
+printflush(message1);
+```
+
+Descending iteration order is especially useful with varargs, where it provides the only means to access arrays in reverse order:
+
+```Mindcode
+const SIZE = 10;
+
+var array[SIZE];
+
+begin
+    for var i in 0 ... SIZE do
+        array[i] = i;
+    end;
+
+    reverse(out array);
+    
+    print(array);
+    printflush(message1);
+end;
+
+inline void reverse(array...)
+    // We need to stop in the middle, otherwise the elements would get swapped twice
+    var count = length(array) \ 2;
+    for var out i in array; var out j in array descending do
+        if --count >= 0 then
+            var t = i; i = j; j = t;
+        end;
+    end;
 end;
 ```
 

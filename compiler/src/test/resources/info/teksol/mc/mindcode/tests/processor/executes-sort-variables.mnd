@@ -2,14 +2,15 @@
 param p = 1;
 
 def test()
-    step = p;
-    for out i in a, b, c, d do
+    var step = p;
+    for var out i in a, b, c, d do
         i = step;
         step *= 2;
     end;
     print(a, b, c, d);
 end;
 
-assertPrints("1248", test(), "sort variables");
-
-stopProcessor();
+begin
+    assertPrints("1248", test(), "sort variables");
+    stopProcessor();
+end;

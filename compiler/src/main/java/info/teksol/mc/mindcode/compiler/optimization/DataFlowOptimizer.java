@@ -384,6 +384,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         } else {
             result = switch (context.contextType()) {
                 case LOOP   -> processLoopContext(context, variableStates, modifyInstructions);
+                case EACH   -> processLoopContext(context, variableStates, modifyInstructions);
                 case IF     -> processIfContext(context, variableStates, modifyInstructions);
                 case CASE   -> processCaseContext(context, variableStates, modifyInstructions);
                 default     -> processDefaultContext(localContext, context, variableStates, modifyInstructions);

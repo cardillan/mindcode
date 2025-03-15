@@ -14,6 +14,8 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.EACH;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.LOOP;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
 /// This optimizer moves loop invariant code in front of given loop.
@@ -36,7 +38,7 @@ class LoopHoisting extends BaseOptimizer {
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
         int previous = count;
-        forEachContext(AstContextType.LOOP, BASIC, loop -> {
+        forEachContext(c -> c.matches(LOOP, EACH) && c.matches(BASIC), loop -> {
             moveInvariants(loop);
             return null;
         });

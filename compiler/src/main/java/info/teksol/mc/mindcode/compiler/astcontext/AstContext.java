@@ -148,6 +148,15 @@ public final class AstContext {
         return this.contextType == contextType;
     }
 
+    public boolean matches(AstContextType... contextTypes) {
+        for (AstContextType contextType : contextTypes) {
+            if (this.contextType == contextType) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean matches(AstContextType contextType, AstSubcontextType subcontextType) {
         return this.contextType == contextType && this.subcontextType == subcontextType;
     }
@@ -198,6 +207,20 @@ public final class AstContext {
         AstContext found = null;
         while (current != null) {
             if (current.contextType == contextType) {
+                found = current;
+            }
+            current = current.parent;
+        }
+
+        return found;
+    }
+
+    public @Nullable AstContext findTopContextOfTypes(AstContextType... contextTypes) {
+        EnumSet<AstContextType> types = EnumSet.copyOf(Arrays.asList(contextTypes));
+        AstContext current = this;
+        AstContext found = null;
+        while (current != null) {
+            if (types.contains(current.contextType)) {
                 found = current;
             }
             current = current.parent;

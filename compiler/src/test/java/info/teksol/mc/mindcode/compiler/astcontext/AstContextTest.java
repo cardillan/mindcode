@@ -158,7 +158,7 @@ class AstContextTest {
     }
 
     @Test
-    void findTopContextOfType() {
+    void findTopContextOfTypes() {
         AstMindcodeNode node = new TestNode(root.contextType(), root.subcontextType());
         AstContext child = context.createChild(profile, node, root.contextType());
 

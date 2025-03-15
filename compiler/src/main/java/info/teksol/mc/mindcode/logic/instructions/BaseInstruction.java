@@ -172,6 +172,10 @@ public class BaseInstruction implements LogicInstruction {
         return astContext.findTopContextOfType(contextType);
     }
 
+    public @Nullable AstContext findTopContextOfTypes(AstContextType... contextTypes) {
+        return astContext.findTopContextOfTypes(contextTypes);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

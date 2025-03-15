@@ -91,15 +91,4 @@ public class InterceptorTest extends AbstractInterceptorTest {
                 "F", "F"
         );
     }
-
-    @Test
-    void solveCurrentProblem() {
-        testAssertions("""
-                        #set target = 8;
-                        require printing;
-                        begin
-                            assertPrints("9,009,099", printNumber(9009099), "printNumber(9009099)");
-                        end;
-                        """);
-    }
 }

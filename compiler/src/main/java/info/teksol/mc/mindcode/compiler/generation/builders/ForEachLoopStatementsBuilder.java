@@ -16,9 +16,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -52,9 +50,12 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
         private IterationGroup processIteratorGroup(AstIteratorsValuesGroup group) {
             return new IterationGroup(
-                    group.getIterators().stream().map(iterator -> processIterator(group, iterator)).toList(),
+                    group.getIterators().stream().map(iterator -> processIterator(group, iterator))
+                            .collect(Collectors.toCollection(ArrayList::new)),
                     group.getValues().getExpressions().stream().mapMulti(this::processValue)
-                            .collect(Collectors.toCollection(LinkedList::new)));
+                            .collect(Collectors.toCollection(ArrayList::new)),
+                    group.isDescending()
+            );
         }
 
         private Iterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
@@ -225,12 +226,19 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
     private final class IterationGroup {
         private final List<Iterator> iterators;
         private final LinkedList<ValueStore> values;
+        private final boolean descending;
         private int consumedValues = 0;
         private int missing = 0;
 
-        private IterationGroup(List<Iterator> iterators, LinkedList<ValueStore> values) {
-            this.iterators = iterators;
-            this.values = values;
+        private IterationGroup(ArrayList<Iterator> iterators, ArrayList<ValueStore> values, boolean descending) {
+            this.iterators = descending ? reverse(iterators) : iterators;
+            this.values = new LinkedList<>(descending ? reverse(values) : values);
+            this.descending = descending;
+        }
+
+        private static <T> ArrayList<T> reverse(ArrayList<T> list) {
+            Collections.reverse(list);
+            return list;
         }
 
         boolean hasMoreData() {
@@ -256,7 +264,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             if (value instanceof DeferredValueStore deferredValueStore) {
                 ValueStore evaluated = deferredValueStore.value();
                 if (evaluated instanceof ArrayStore arrayStore) {
-                    values.addAll(0, arrayStore.getElements());
+                    if (descending) {
+                        values.addAll(0, reverse(new ArrayList<>(arrayStore.getElements())));
+                    } else {
+                        values.addAll(0, arrayStore.getElements());
+                    }
                     return values.removeFirst();
                 }
             }

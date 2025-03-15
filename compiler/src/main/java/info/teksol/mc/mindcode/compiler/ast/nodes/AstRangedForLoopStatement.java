@@ -52,7 +52,7 @@ public class AstRangedForLoopStatement extends AstLabeledStatement {
         if (!super.equals(o)) return false;
 
         AstRangedForLoopStatement that = (AstRangedForLoopStatement) o;
-        return declaration == that.declaration && variable.equals(that.variable) && range.equals(that.range) && body.equals(that.body);
+        return declaration == that.declaration && descending == that.descending && variable.equals(that.variable) && range.equals(that.range) && body.equals(that.body);
     }
 
     @Override
@@ -61,8 +61,8 @@ public class AstRangedForLoopStatement extends AstLabeledStatement {
         result = 31 * result + Boolean.hashCode(declaration);
         result = 31 * result + variable.hashCode();
         result = 31 * result + range.hashCode();
+        result = 31 * result + Boolean.hashCode(descending);
         result = 31 * result + body.hashCode();
         return result;
     }
-
 }

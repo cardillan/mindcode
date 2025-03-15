@@ -15,6 +15,7 @@ public enum AstContextType {
     IF              ("IF  ", true),
     CASE            ("CASE", true),
     LOOP            ("LOOP", true),
+    EACH            ("EACH", true),
     BREAK           ("BREA", true),
     CONTINUE        ("CONT", true),
 

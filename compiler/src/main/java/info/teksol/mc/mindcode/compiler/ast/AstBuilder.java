@@ -405,7 +405,9 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstIteratorsValuesGroup(pos(ctx),
                 ctx.iteratorGroup().type != null,
                 ctx.iteratorGroup().astIterator().stream().map(this::visitAstIterator).toList(),
-                new AstExpressionList(pos(ctx.expressionList()), processExpressionList(ctx.expressionList())));
+                new AstExpressionList(pos(ctx.expressionList()), processExpressionList(ctx.expressionList())),
+                ctx.DESCENDING() != null
+        );
     }
 
     @Override

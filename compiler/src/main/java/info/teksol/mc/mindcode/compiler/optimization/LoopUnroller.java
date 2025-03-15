@@ -19,6 +19,8 @@ import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.EACH;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.LOOP;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static info.teksol.mc.util.CollectionUtils.resultIn;
 import static java.util.Objects.requireNonNull;
@@ -50,7 +52,7 @@ class LoopUnroller extends BaseOptimizer {
     @Override
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
         invocations++;
-        return forEachContext(AstContextType.LOOP, BASIC,
+        return forEachContext(c -> c.matches(LOOP, EACH) && c.matches(BASIC),
                 loop -> findPossibleUnrolling(loop, costLimit));
     }
 

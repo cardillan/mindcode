@@ -1100,7 +1100,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                                     false,
                                                     List.of(new AstIterator(EMPTY, a, false)),
                                                     new AstExpressionList(EMPTY,
-                                                            List.of(number(10), number(20), number(30)))
+                                                            List.of(number(10), number(20), number(30))),
+                                                    false
                                             )
                                     ),
                                     List.of(call(id("print"), arg(a)))
@@ -1113,7 +1114,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         void buildsMultipleIteratorsForEachLoop() {
             assertBuildsTo("""
                             Label:
-                            for var a, b in 10, 20, 30, 40 do
+                            for var a, b in 10, 20, 30, 40 descending do
                                 print(a + b);
                             end;
                             """,
@@ -1129,7 +1130,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                                     ),
                                                     new AstExpressionList(EMPTY,
                                                             List.of(number(10), number(20), number(30), number(40))
-                                                    )
+                                                    ),
+                                                    true
                                             )
                                     ),
                                     List.of(
@@ -1160,7 +1162,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                                             new AstIterator(EMPTY, id("i"), true),
                                                             new AstIterator(EMPTY, id("j"), true)
                                                     ),
-                                                    new AstExpressionList(EMPTY, List.of(a, b, c, d))
+                                                    new AstExpressionList(EMPTY, List.of(a, b, c, d)),
+                                                    false
                                             )
                                     ),
                                     List.of(new AstAssignment(EMPTY, null, id("j"), id("i")))
@@ -1184,7 +1187,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                                     false,
                                                     List.of(new AstIterator(EMPTY, a, false)),
                                                     new AstExpressionList(EMPTY,
-                                                            List.of(builtIn("@mono"), builtIn("@poly"), builtIn("@mega")))
+                                                            List.of(builtIn("@mono"), builtIn("@poly"), builtIn("@mega"))),
+                                                    false
                                             )
                                     ),
                                     List.of(call(id("print"), arg(a)))
@@ -1196,7 +1200,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         @Test
         void buildsParallelForEachLoop() {
             assertBuildsTo("""
-                            for var a in 1, 2; var out b in c, d do
+                            for var a in 1, 2; var out b in c, d descending do
                                 b = a;
                             end;
                             """,
@@ -1207,12 +1211,14 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstIteratorsValuesGroup(EMPTY,
                                                     true,
                                                     List.of(new AstIterator(EMPTY, a, false)),
-                                                    new AstExpressionList(EMPTY, List.of(number(1), number(2)))
+                                                    new AstExpressionList(EMPTY, List.of(number(1), number(2))),
+                                                    false
                                             ),
                                             new AstIteratorsValuesGroup(EMPTY,
                                                     true,
                                                     List.of(new AstIterator(EMPTY, b, true)),
-                                                    new AstExpressionList(EMPTY, List.of(c, d))
+                                                    new AstExpressionList(EMPTY, List.of(c, d)),
+                                                    true
                                             )
                                     ),
                                     List.of(new AstAssignment(EMPTY, null, b, a))

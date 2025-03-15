@@ -88,7 +88,7 @@ class StackOptimizer extends BaseOptimizer {
 
                     // 2. Preserve all variables which are part of the same loop as the call. As the loops are
                     // hierarchical, we can inspect just the topmost loop.
-                    contextStream(call.findTopContextOfType(AstContextType.LOOP))
+                    contextStream(call.findTopContextOfTypes(AstContextType.LOOP, AstContextType.EACH))
                             .filter(ix -> !(ix instanceof PushOrPopInstruction))
                             .flatMap(LogicInstruction::inputArgumentsStream)
                             .filter(LogicVariable.class::isInstance)
