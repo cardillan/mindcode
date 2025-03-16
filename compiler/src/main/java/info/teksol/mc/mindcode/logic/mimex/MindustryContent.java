@@ -18,6 +18,11 @@ public interface MindustryContent extends MindustryObject {
     /// @return name of the content (includes the "@" prefix)
     String name();
 
+    /// Provides the ID of the object. Used by the sensor @id instruction. -1 means no ID and gets translated to null.
+    ///
+    /// @return numeric id of the object
+    int id();
+
     /// Formats the object for output. Used when printing the object to the text buffer.
     ///
     /// @return text representation of the object

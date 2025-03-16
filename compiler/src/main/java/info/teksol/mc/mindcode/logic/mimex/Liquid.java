@@ -16,7 +16,7 @@ public record Liquid(
     }
 
     public static int count() {
-        return MindustryContents.LIQUID_MAP.size();
+        return MindustryContents.logicCount(MindustryContents.LIQUID_MAP);
     }
 
     public static @Nullable Liquid forId(int id) {

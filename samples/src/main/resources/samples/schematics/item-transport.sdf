@@ -1,0 +1,168 @@
+schematic
+    name = "Item Transport"
+    description = """
+        Simple item transport schematics. Requires Mindustry BE.
+
+        Uses one of four predefined types of units for transport. Utilizes a separate processor
+        and a new Mindcode remote call mechanism to switch to a more preferred unit type
+        once it becomes available. The task to find a better unit runs in parallel on the second processor,
+        allowing the item transport to run uninterrupted.
+        """
+
+    @micro-processor     at ( 0,  0) processor
+        links * end
+        mindcode = Main
+    end
+p0-vault1:
+    @vault               at ( 0,  1)
+p0-sorter1:
+    @sorter              at ( 0,  4)
+p0-processor1:
+    @micro-processor     at ( 1,  0) processor
+        mindcode = UnitMonitor
+    end
+p0-message1:
+    @message             at ( 2,  0) text ""
+end
+
+
+UnitMonitor = """
+    #set target = 8;
+    #set syntax = strict;
+
+    module UnitMonitor;
+
+    require units;
+
+    // Unit types in preferred order
+    // Change or add new units as necessary
+    var types[5] = (@mega, @poly, @zenith, @flare, @mono);
+
+    // Tries to find a unit better than the one currently held (use null when no unit is held)
+    // Returns when a unit is found.
+    // Never returns if the best unit is already held.
+    remote def findUnit(currentUnit)
+        var currentType = currentUnit.@type;
+        while true do
+            for var type in types do
+                if type == currentType then break; end;
+                var unit = findFreeUnit(type, 0);
+                if unit != null then return unit; end;
+            end;
+        end;
+    end;
+    """
+
+Main = """
+    #set target = 8;
+    #set syntax = strict;
+
+    require "UnitMonitor" remote processor1;
+
+    // This declaration ensures all these blocks are available before the code continues
+    linked sorter1, message1;
+    linked storage = vault1;
+
+    // Unique flag to mark our units
+    const FLAG = 1764335678894;
+
+    noinit var core;
+
+    // This is the main program body. Functions are defined below.
+    begin
+        message("Initializing...");
+        do
+            var unit = findUnit(null);
+
+            // Needs to bind the unit, it is bound by the remote processor at this moment
+            ubind(unit);
+            flag(FLAG);
+
+            // Core must always be here: if it is not, the unit is not functional
+            core = ulocate(:building, :core, false);
+        while core == null;
+
+        // Start searching for a better unit
+        async(findUnit(@unit));
+
+        while true do
+            moveItems();
+
+            // Try to see whether a better unit has been found
+            if finished(findUnit) then
+                var unit = await(findUnit);
+
+                // There might have been a delay: verify the unit is valid
+                if unit.@dead == 0 and unit.@controlled == 0 then
+                    // Free old unit
+                    flag(null);
+                    unbind();
+
+                    // Switch to the new unit
+                    ubind(unit);
+                    flag(FLAG);
+                end;
+
+                // Start looking again
+                async(findUnit(@unit));
+            end;
+        end;
+    end;
+
+
+    // Prints the message to message1
+    void message(text)
+        print(text);
+        printflush(message1);
+    end;
+
+    // If a unit is lost, restarts the entire program
+    void checkUnit()
+        if @unit.@dead or @unit.@controller != @this then
+            end();
+        end;
+    end;
+
+    // Moves the unit to within 5 tiles from the building, waits till it gets there
+    void moveTo(building)
+        var x = building.@x;
+        var y = building.@y;
+        do
+            approach(x, y, 3);
+            checkUnit();
+        while !within(x, y, 5);
+    end;
+
+    // Returns false when unit is lost
+    void moveItems()
+        var capacity = @unit.@itemCapacity;
+        var item;
+
+        message("Moving to core");
+        moveTo(core);
+
+        do
+            item = sorter1.@config;
+            message(item == null ? "Please select item to transport" : "Taking items");
+
+            // If the unit carries incompatible items, drop them
+            if @unit.@firstItem != null and @unit.@firstItem != item then
+                itemDrop(@air, capacity);
+            end;
+
+            itemTake(core, item, capacity);
+            checkUnit();
+        while @unit.@totalItems != capacity;
+
+        message("Moving to vault");
+        moveTo(storage);
+
+        // Drop to storage. If the container is full, wait until it is possible to drop all
+        // Stop trying when item selection changes
+        message("Dropping items");
+        do
+            itemDrop(storage, capacity);
+            checkUnit();
+        while item == sorter1.@config and @unit.@totalItems > 0;
+    end;
+    """

@@ -35,6 +35,7 @@ public class Samples {
                 "slow:overdrive-dome-supply",
                 "worker-recall-station",
                 "scrap-to-metaglass-2",
+                "item-transport",
                 "payload-source",
                 "slow:mandelbrot-generator"
         );

@@ -22,6 +22,7 @@
             <@com.sample name="overdrive-dome-supply"   >Supplying Overdrive Dome</@com.sample>
             <@com.sample name="worker-recall-station"   >Unit Recall Station</@com.sample>
             <@com.sample name="scrap-to-metaglass-2"    >Scrap to Metaglass</@com.sample>
+            <@com.sample name="item-transport"          >Item transport</@com.sample>
             <@com.sample name="payload-source"          >Payload source</@com.sample>
             <@com.sample name="mandelbrot-generator"    >Mandelbrot Generator</@com.sample>
         </ul>

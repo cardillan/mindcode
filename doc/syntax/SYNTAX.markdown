@@ -265,7 +265,7 @@ Built-in variables and constants can be used as-is in Mindcode, e.g. `@time` or 
 
 ## Mlog keywords
 
-Some mlog instructions expect one of a predefined set of keywords at certain positions. These keywords are called _mlog keywords_, to distinguish them from Mindcode's own keywords. Mindustry Logic doesn't support substituting  mlog keywords with variables, and therefore neither Mindcode does. 
+Some mlog instructions expect one of a predefined set of keywords at certain positions. These keywords are called _mlog keywords_, to distinguish them from Mindcode's own keywords. Mindustry Logic doesn't support substituting  mlog keywords with variables, and therefore neither Mindcode does. (It is, however, possible to use mlog keywords as arguments to inline functions, see below). 
 
 Examples of mlog keywords are `add` in `op add result a 10`, or the first occurrence of `building` and `core` in `ulocate building core enemy @copper outx outy found building`. Note that Mindustry Logic doesn't distinguish between an mlog keyword and a variable identifier: the first occurrence of `building` in the example instruction is an mlog keyword, while the second occurrence is a variable.
 
@@ -284,8 +284,10 @@ building = ulocate(:building, :core, enemy, out outx, out outy, out found);
 Mlog keywords can appear in these contexts in Mindcode:
 
 1. As an argument to Mindustry Logic function calls, at positions where a keyword is expected.
-2. As an argument to inline functions. Keyword passed in to an inline function may only be used as arguments to another inline or Mindustry Logic function calls.
-3. As a value of a constant definition. Such constants can, again, be only used as arguments to another inline or Mindustry Logic function calls.
+2. As an argument to inline functions. Keyword passed in to an inline function may only be used as arguments to another inline or Mindustry Logic function.
+3. As a value of a constant definition. Such constants can, again, be only used as arguments to an inline or Mindustry Logic function.
+
+As has already been mentioned, it's not possible to store an mlog keyword in a variable.
 
 Mlog keywords were introduced in Mindcode 3.2.0. For backwards compatibility, it is possible to use a keyword without the `:` prefix in Mindustry Logic function calls. This way of specifying mlog keywords is deprecated, however, and generates a warning message.
 

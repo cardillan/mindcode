@@ -31,7 +31,7 @@ public record BlockType(
     }
 
     public static int count() {
-        return MindustryContents.BLOCK_ID_MAP.size();
+        return MindustryContents.logicCount(MindustryContents.BLOCK_MAP);
     }
 
     public static BlockType existing(String name) {

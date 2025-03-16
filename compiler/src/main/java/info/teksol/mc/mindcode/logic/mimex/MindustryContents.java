@@ -42,6 +42,10 @@ public class MindustryContents {
         return ALL_CONSTANTS.get(name);
     }
 
+    static int logicCount(Map<String, ? extends MindustryContent> objects) {
+        return (int) objects.values().stream().filter(o -> o.id() > 0).count() + 1;
+    }
+
     public static int getId(String name) {
         MindustryContent content = ALL_CONSTANTS.get(name);
         return content == null ? -1 : content.id();

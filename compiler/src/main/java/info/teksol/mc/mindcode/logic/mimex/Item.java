@@ -16,7 +16,7 @@ public record Item(
     }
 
     public static int count() {
-        return MindustryContents.ITEM_MAP.size();
+        return MindustryContents.logicCount(MindustryContents.ITEM_MAP);
     }
 
     public static @Nullable Item forId(int id) {

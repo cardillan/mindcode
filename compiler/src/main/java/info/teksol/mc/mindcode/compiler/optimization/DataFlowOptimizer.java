@@ -797,7 +797,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             trace("*" + counter + " Processing instruction ix#" + instructionIndex(instruction) +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
-            if (counter == -1) {
+            if (counter == 311) {
                 trace("Breakpoint");
             }
         }

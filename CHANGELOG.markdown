@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed the _Start with a new schematic_ button causing HTTP 404.
 * Fixed the schematics decompiler incorrectly processing factories with no unit plan selected.
+* Fixed wrong values of  `@blockCount`, `@unitCount`, `@itemCount` and `@liquidCount` variables in processor emulator. (Currently assigned values correspond to Mindustry Logic 8 regardless of the compiler target). 
 
 ### Added
 
@@ -20,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added new [`mlogText()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions) for direct encoding of mlog instructions.
 * Added support for descending iteration order to [Range Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) and [List Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#descending-iteration-order) ([#174](https://github.com/cardillan/mindcode/issues/174)).
 * The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables).
+* Added a new [Item Transport sample](http://mindcode.herokuapp.com/schematics?s=item-transport). The sample demonstrates the use of a simple remote call scheme for acquiring units.
 
 #### Experimental features
 

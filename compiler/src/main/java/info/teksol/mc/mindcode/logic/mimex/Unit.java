@@ -16,7 +16,7 @@ public record Unit(
     }
 
     public static int count() {
-        return MindustryContents.UNIT_MAP.size();
+        return MindustryContents.logicCount(MindustryContents.UNIT_MAP);
     }
 
     public static @Nullable Unit forId(int id) {
