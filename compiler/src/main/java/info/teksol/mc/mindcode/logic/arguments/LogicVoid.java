@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -26,24 +25,42 @@ public enum LogicVoid implements LogicValue {
     }
 
     @Override
-    public boolean isImmutable() {
-        return false;
-    }
-
-    @Override
-    public String format(@Nullable InstructionProcessor instructionProcessor) {
-        throw new MindcodeInternalError("void doesn't have a text representation.");
-    }
-
-    @Override
     public boolean isLvalue() {
         return false;
     }
 
     @Override
+    public boolean isNumericLiteral() {
+        return true;
+    }
+
+    @Override
     public String toMlog() {
-        // TODO After introducing types, VOID materializing in code will be an error
-        //throw new MindcodeInternalError("attempt to evaluate void");
         return "null";
+    }
+
+    @Override
+    public String format(@Nullable InstructionProcessor instructionProcessor) {
+        return "null";
+    }
+
+    @Override
+    public double getDoubleValue() {
+        return 0.0;
+    }
+
+    @Override
+    public long getLongValue() {
+        return 0;
+    }
+
+    @Override
+    public @Nullable Object getObject() {
+        return null;
+    }
+
+    @Override
+    public boolean isObject() {
+        return true;
     }
 }
