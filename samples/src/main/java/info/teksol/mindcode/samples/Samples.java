@@ -36,7 +36,7 @@ public class Samples {
                 "worker-recall-station",
                 "scrap-to-metaglass-2",
                 "item-transport",
-                "payload-source",
+                "payload-hub",
                 "slow:mandelbrot-generator"
         );
 

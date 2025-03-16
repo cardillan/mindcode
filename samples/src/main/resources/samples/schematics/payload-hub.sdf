@@ -1,0 +1,73 @@
+schematic
+    name = "Payload Hub"
+    description = """
+        Controls the Payload Source block so that the units or blocks are created only when a switch is clicked, one at a time.
+        When the switch below the Payload Void is activated, all units selected in the Payload Source block are acquired
+        (even when flagged or controlled by other processors) and brought to the Payload Void to be destroyed.
+
+        Usage: configure the Payload Source to produce the desired output, and click the button to generate one instance.
+        Click the Payload Void button to destroy selected units.
+        """
+
+p0-source1, p1-source1:
+    @payload-source      at ( 0,  1) facing north
+p0-message1:
+    @message             at ( 1,  0)
+    @micro-processor     at ( 2,  0) processor
+        links p0-* end
+        mindcode = payloadSource
+    end
+p0-switch1:
+    @switch              at ( 3,  0) disabled
+
+
+p1-void1:
+    @payload-void        at ( 5,  1)
+p1-message1:
+    @message             at ( 6,  0)
+    @micro-processor     at ( 7,  0) processor
+        links p1-* end
+        mindcode = payloadVoid
+    end
+p1-switch1:
+    @switch              at ( 8,  0) disabled
+end
+
+payloadSource = """
+    source1.enabled = false;
+    print("Selected item: ", source1.@config);
+    printflush(message1);
+    if switch1.@enabled then
+        switch1.enabled = false;
+        timescale = source1.@timescale;
+        source1.enabled = true;
+        wait(0.5 / timescale);
+        source1.enabled = false;
+        cfg = source1.@config;
+        source1.config = null;
+        source1.config = cfg;
+    end;
+    """
+
+payloadVoid = """
+    noinit preferred, distance;
+    print("Unit to destroy: ", source1.@config);
+    printflush(message1);
+    if switch1.@enabled then
+        ubind(source1.@config);
+        if @unit == null then
+            switch1.enabled = false;
+        else
+            if preferred.@dead then
+                preferred = @unit;
+            end;
+            if @unit == preferred then
+                distance = 0;
+                move(void1.@x, void1.@y);
+                payEnter();
+            else
+                approach(void1.@x, void1.@y, ++distance * 2 * @unit.@size);
+            end;
+        end;
+    end;
+    """

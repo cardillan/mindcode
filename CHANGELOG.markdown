@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed the _Start with a new schematic_ button causing HTTP 404.
 * Fixed the schematics decompiler incorrectly processing factories with no unit plan selected.
-* Fixed wrong values of  `@blockCount`, `@unitCount`, `@itemCount` and `@liquidCount` variables in processor emulator. (Currently assigned values correspond to Mindustry Logic 8 regardless of the compiler target). 
+* Fixed wrong values of  `@blockCount`, `@unitCount`, `@itemCount` and `@liquidCount` variables in processor emulator (currently assigned values correspond to Mindustry Logic 8 regardless of the compiler target). 
 
 ### Added
 
@@ -25,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 #### Experimental features
 
-* Added support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown). 
+* Added support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown) ([#218](https://github.com/cardillan/mindcode/issues/218)).
 
 ### Changed
 

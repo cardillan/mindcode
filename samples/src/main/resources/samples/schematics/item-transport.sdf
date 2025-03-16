@@ -9,20 +9,23 @@ schematic
         allowing the item transport to run uninterrupted.
         """
 
-    @micro-processor     at ( 0,  0) processor
-        links * end
+    @micro-processor     at ( 1,  0) processor
+        links p0-* end
         mindcode = Main
+    end
+p0-processor1:
+    @micro-processor     at ( 2,  0) processor
+        links p1-* end
+        mindcode = UnitMonitor
     end
 p0-vault1:
     @vault               at ( 0,  1)
 p0-sorter1:
     @sorter              at ( 0,  4)
-p0-processor1:
-    @micro-processor     at ( 1,  0) processor
-        mindcode = UnitMonitor
-    end
 p0-message1:
-    @message             at ( 2,  0) text ""
+    @message             at ( 1,  4) text ""
+p1-message1:
+    @message             at ( 2,  4) text ""
 end
 
 
@@ -31,6 +34,8 @@ UnitMonitor = """
     #set syntax = strict;
 
     module UnitMonitor;
+
+    linked noinit message1;
 
     require units;
 
@@ -43,11 +48,19 @@ UnitMonitor = """
     // Never returns if the best unit is already held.
     remote def findUnit(currentUnit)
         var currentType = currentUnit.@type;
+        print("Trying to find unit better than ", currentUnit);
+        printflush(message1);
         while true do
             for var type in types do
                 if type == currentType then break; end;
+                print("Finding unit: ", type);
+                printflush(message1);
                 var unit = findFreeUnit(type, 0);
-                if unit != null then return unit; end;
+                if unit != null then
+                    print("Returning unit: ", unit);
+                    printflush(message1);
+                    return unit;
+                 end;
             end;
         end;
     end;
@@ -90,10 +103,11 @@ Main = """
 
             // Try to see whether a better unit has been found
             if finished(findUnit) then
+                // Obtain the result of the remote call
                 var unit = await(findUnit);
 
                 // There might have been a delay: verify the unit is valid
-                if unit.@dead == 0 and unit.@controlled == 0 then
+                if !unit.@dead and (unit.@controller == processor1 or !unit.@controlled) then
                     // Free old unit
                     flag(null);
                     unbind();
