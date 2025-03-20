@@ -59,6 +59,45 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
         }
     }
 
+
+    @Nested
+    class MemberErrors {
+        @Test
+        void refusesUnknownProperty() {
+            assertGeneratesMessages(expectedMessages().add("Unknown property 'foo'."),
+                    """
+                            vault1.foo = true;
+                            """);
+        }
+
+        @Test
+        void refusesFormattable() {
+            assertGeneratesMessages(expectedMessages().add("Cannot invoke properties on this expression."),
+                    """
+                            $"alora".enabled = false;
+                            """);
+        }
+
+        @Test
+        void refusesArray() {
+            assertGeneratesMessages(expectedMessages().add("Cannot invoke properties on this expression."),
+                    """
+                            var a[2];
+                            a.enabled = true;
+                            """);
+        }
+
+        @Test
+        void refusesExternalArrayElement() {
+            assertGeneratesMessages(expectedMessages().add("Cannot invoke properties on this expression."),
+                    """
+                            allocate heap in cell1;
+                            external a[2];
+                            a[1].enabled = false;
+                            """);
+        }
+    }
+
     @Nested
     class PropertyAccess {
         @Test
@@ -81,23 +120,68 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, "id", var(1))
             );
         }
+
+        @Test
+        void compilesArrayElementPropertyAccess() {
+            assertCompilesTo("""
+                            var a[2];
+                            for i in 0 ... 2 do
+                                a[i] = getlink(i);
+                                print(a[i].@type);
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "greaterThanEq", ":i", "2"),
+                    createInstruction(SET, tmp(0), ":i"),
+                    createInstruction(GETLINK, tmp(2), ":i"),
+                    createInstruction(WRITEARR, tmp(2), ".a[]", tmp(0)),
+                    createInstruction(SET, tmp(3), ":i"),
+                    createInstruction(READARR, tmp(4), ".a[]", tmp(3)),
+                    createInstruction(SENSOR, tmp(5), tmp(4), "@type"),
+                    createInstruction(PRINT, tmp(5)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
     }
 
     @Nested
-    class Errors {
+    class PropertyErrors {
         @Test
         void refusesUnknownProperty() {
-            assertGeneratesMessages(expectedMessages().add("Unknown property 'foo'."),
+            assertGeneratesMessages(expectedMessages().add("Built-in variable '@foo' not recognized."),
                     """
-                            a = vault1.foo;
+                            a = vault1.@foo;
                             """);
         }
 
         @Test
-        void refusesInvalidExpression() {
+        void refusesFormattable() {
             assertGeneratesMessages(expectedMessages().add("Cannot invoke properties on this expression."),
                     """
-                            $"alora".enabled = true;
+                            x = $"alora".@enabled;
+                            """);
+        }
+
+        @Test
+        void refusesArray() {
+            assertGeneratesMessages(expectedMessages().add("Cannot invoke properties on this expression."),
+                    """
+                            var a[2];
+                            print(a.@enabled);
+                            """);
+        }
+
+        @Test
+        void refusesExternalArrayElement() {
+            assertGeneratesMessages(expectedMessages().add("Cannot invoke properties on this expression."),
+                    """
+                            allocate heap in cell1;
+                            external a[2];
+                            print(a[1].@enabled);
                             """);
         }
     }

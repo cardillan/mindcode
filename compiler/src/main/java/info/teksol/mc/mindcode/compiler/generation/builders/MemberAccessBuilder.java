@@ -12,7 +12,6 @@ import info.teksol.mc.mindcode.compiler.generation.variables.Property;
 import info.teksol.mc.mindcode.compiler.generation.variables.StructuredValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
@@ -62,9 +61,9 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitPropertyAccess(AstPropertyAccess node) {
-        LogicValue target = (LogicValue) resolveTarget(node.getObject(), false, ERR.CANNOT_INVOKE_PROPERTIES);
+        ValueStore target = resolveTarget(node.getObject(), false, ERR.CANNOT_INVOKE_PROPERTIES);
         final LogicVariable resultVar = assembler.nextNodeResultTemp();
-        assembler.createSensor(resultVar, target, evaluate(node.getProperty()).getValue(assembler));
+        assembler.createSensor(resultVar, target.getValue(assembler), evaluate(node.getProperty()).getValue(assembler));
         return resultVar;
     }
 }

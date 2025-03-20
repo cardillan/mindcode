@@ -87,12 +87,12 @@ public class InternalArray extends AbstractArrayStore {
         return new InternalArray(sourcePosition, name, elements, remote);
     }
 
-    private class InternalArrayElement implements ValueStore {
+    public class InternalArrayElement implements ValueStore {
         private final AstExpression node;
         private final LogicValue index;
         private final LogicVariable transferVariable;
 
-        public InternalArrayElement(AstExpression node, LogicValue index, LogicVariable transferVariable) {
+        private InternalArrayElement(AstExpression node, LogicValue index, LogicVariable transferVariable) {
             this.node = node;
             this.index = index;
             this.transferVariable = transferVariable;
