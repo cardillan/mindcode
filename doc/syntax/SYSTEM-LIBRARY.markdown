@@ -56,9 +56,9 @@ To use the Blocks library, use the `require blocks;` statement.
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Linking two blocks             |         23 |         23 |
-| Linking four blocks            |         32 |         32 |
-| Linking six blocks             |         41 |         41 |
+| Linking two blocks             |         27 |         27 |
+| Linking four blocks            |         40 |         40 |
+| Linking six blocks             |         53 |         53 |
 
 Searches blocks linked to the processor for blocks of requested types, and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.

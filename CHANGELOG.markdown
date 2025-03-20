@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed errors when trying to invoke properties on internal array elements ([#228](https://github.com/cardillan/mindcode/issues/228)).
+* Fixed wrong optimization of list iteration loops  ([#229](https://github.com/cardillan/mindcode/issues/229)).
 
 ## 3.2.0 - 2025-03-16
 

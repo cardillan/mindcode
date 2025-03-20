@@ -204,6 +204,7 @@ public class OptimizationCoordinator {
                 optimizationContext.finish();
 
                 if (result == OptimizationResult.REALIZED) {
+                    optimizationContext.debugPrintProgram(String.format("%n*** Performing Data Flow optimization after %s ***%n", selectedAction), true);
                     Optimizer optimizer = optimizers.get(Optimization.DATA_FLOW_OPTIMIZATION);
                     if (optimizer != null) {
                         optimizer.optimize(phase, pass);

@@ -6,23 +6,31 @@ set :switch null
 set :memory null
 print "Example program.\nTrying to locate linked blocks"
 set :findLinkedBlocks.0:n @links
-jump 26 lessThanEq :findLinkedBlocks.0:n 0
+jump 34 lessThanEq :findLinkedBlocks.0:n 0
 op sub :findLinkedBlocks.0:n :findLinkedBlocks.0:n 1
 getlink :findLinkedBlocks.0:block :findLinkedBlocks.0:n
 print "\nFound: "
 print :findLinkedBlocks.0:block
 sensor :findLinkedBlocks.0:type :findLinkedBlocks.0:block @type
-jump 16 notEqual @large-logic-display :findLinkedBlocks.0:type
-set :display :findLinkedBlocks.0:block
-jump 19 notEqual @message :findLinkedBlocks.0:type
-set :message :findLinkedBlocks.0:block
+set :findLinkedBlocks.0:variable :display
+jump 17 notEqual @large-logic-display :findLinkedBlocks.0:type
+set :findLinkedBlocks.0:variable :findLinkedBlocks.0:block
+set :display :findLinkedBlocks.0:variable
+set :findLinkedBlocks.0:variable :message
+jump 22 notEqual @message :findLinkedBlocks.0:type
+set :findLinkedBlocks.0:variable :findLinkedBlocks.0:block
 set :findLinkedBlocks.0:message :findLinkedBlocks.0:block
-jump 21 notEqual @switch :findLinkedBlocks.0:type
-set :switch :findLinkedBlocks.0:block
-jump 23 notEqual @memory-bank :findLinkedBlocks.0:type
-set :memory :findLinkedBlocks.0:block
-jump 25 notEqual @memory-cell :findLinkedBlocks.0:type
-set :memory :findLinkedBlocks.0:block
+set :message :findLinkedBlocks.0:variable
+set :findLinkedBlocks.0:variable :switch
+jump 26 notEqual @switch :findLinkedBlocks.0:type
+set :findLinkedBlocks.0:variable :findLinkedBlocks.0:block
+set :switch :findLinkedBlocks.0:variable
+set :findLinkedBlocks.0:variable :memory
+jump 30 notEqual @memory-bank :findLinkedBlocks.0:type
+set :findLinkedBlocks.0:variable :findLinkedBlocks.0:block
+jump 32 notEqual @memory-cell :findLinkedBlocks.0:type
+set :findLinkedBlocks.0:variable :findLinkedBlocks.0:block
+set :memory :findLinkedBlocks.0:variable
 jump 9 greaterThan :findLinkedBlocks.0:n 0
 print "\nDisplay: {0}\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nMemory: "
 format :display

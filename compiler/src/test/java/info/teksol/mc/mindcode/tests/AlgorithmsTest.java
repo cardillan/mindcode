@@ -80,9 +80,10 @@ public class AlgorithmsTest extends AbstractProcessorTest {
     DynamicNode computesScriptTests() {
         final List<DynamicTest> result = new ArrayList<>();
         final List<String> fileNames = List.of(
-                "memory-read-write.mnd",
+                "array-reversion.mnd",
                 "compute-recursive-fibonacci.mnd",
-                "compute-sum-of-primes.mnd"
+                "compute-sum-of-primes.mnd",
+                "memory-read-write.mnd"
         );
 
         return DynamicContainer.dynamicContainer("Script tests",

@@ -110,19 +110,19 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         end;
                         """,
                 createInstruction(SET, ":a", "1"),
-                createInstruction(SETADDR, var(0), var(1003)),
-                createInstruction(SET, ":i", "1"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(MULTILABEL, var(1003), "marker0"),
-                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SETADDR, tmp(0), label(3)),
+                createInstruction(SET, ":i", ":a"),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(MULTILABEL, label(3), "marker0"),
+                createInstruction(SETADDR, tmp(0), label(4)),
                 createInstruction(SET, ":a", "2"),
                 createInstruction(SET, ":i", "2"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(LABEL, label(0)),
                 createInstruction(OP, "mul", ":k", "2", ":a"),
                 createInstruction(PRINT, ":i"),
                 createInstruction(PRINT, ":k"),
-                createInstruction(MULTIJUMP, var(0), "0", "0", "marker0"),
-                createInstruction(MULTILABEL, var(1004), "marker0")
+                createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
+                createInstruction(MULTILABEL, label(4), "marker0")
         );
     }
 

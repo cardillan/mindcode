@@ -1,0 +1,22 @@
+const SIZE = 10;
+
+var array[SIZE];
+
+begin
+    for var i in 0 ... SIZE do
+        array[i] = i;
+    end;
+
+    reverse(out array);
+
+    assertPrints("9876543210", print(array), "reverse array");
+end;
+
+inline void reverse(array...)
+    // We need to stop in the middle, otherwise the elements would get swapped twice
+    var count = length(array) \ 2;
+    for var out i in array; var out j in array descending do
+        if --count < 0 then break; end;
+        var t = i; i = j; j = t;
+    end;
+end;
