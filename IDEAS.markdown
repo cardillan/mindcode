@@ -38,18 +38,6 @@ The specific options would probably have to be stored in AST contexts.
 
 ## Syntax extensions
 
-### Internal arrays
-
-Individual elements of internal arrays will be stored in processor variables. Accessing the elements via a dynamic index will be realized through compiler-defined functions. When used together with loop unrolling or data flow optimization, they might be very useful - and as fast as regular variables.
-
-* Array name is not a variable - neither an l-value nor an r-value.
-  * No pointers to arrays
-* Arrays, not lists - no add/remove, no inherent size
-* Virtual instructions for array access.
-* Maybe array assignments, esp. for same sized arrays
-* Out-of-bound access checks: compiler directive
-* For each syntax over arrays - support modification of the underlying array through `out` control loop variables
-
 ## Function pointers
 
 > [!NOTE]

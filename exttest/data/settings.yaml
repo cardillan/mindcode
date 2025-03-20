@@ -183,7 +183,7 @@ all-sources:
   - source: "C:\Home\golem-old\mindcode\breakout.mnd"
     samples: 1200
 
-  - source: "C:\Home\golem-old\mindcode\detector.mnd"
+  - source: "C:\Home\golem\schematics\detector.mnd"
     samples: 100
 
   - source: "C:\Home\golem-old\mindcode\factory-monitor.mnd"

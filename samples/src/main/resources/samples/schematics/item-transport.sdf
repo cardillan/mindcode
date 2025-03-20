@@ -41,7 +41,7 @@ UnitMonitor = """
 
     // Unit types in preferred order
     // Change or add new units as necessary
-    var types[5] = (@mega, @poly, @zenith, @flare, @mono);
+    var types[5] = (@mega, @poly, @horizon, @flare, @mono);
 
     // Tries to find a unit better than the one currently held (use null when no unit is held)
     // Returns when a unit is found.
@@ -142,7 +142,7 @@ Main = """
         var x = building.@x;
         var y = building.@y;
         do
-            approach(x, y, 3);
+            approach(x, y, 5);
             checkUnit();
         while !within(x, y, 5);
     end;

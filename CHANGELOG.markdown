@@ -14,7 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Mindustry Logic functions.
+* Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Mindustry Logic functions ([#215](https://github.com/cardillan/mindcode/issues/215)).
 * Added support for passing mlog keywords and formattable string literals as arguments to inline functions.
 * Added support for creating constants out of mlog keywords.
 * Added known mlog keywords to the file type definitions of the [provided Intellij IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 

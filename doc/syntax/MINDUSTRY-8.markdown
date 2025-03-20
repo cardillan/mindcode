@@ -209,7 +209,7 @@ Unlike external variables, access to other processor's variables is not limited 
 
 ### Remote functions and variables
 
-Thanks to the ability to access other processors' variables, Mindcode now supports remote functions and variables, described [in this file](REMOTE-CALLS.markdown).   
+Thanks to the ability to access other processors' variables, Mindcode now supports remote functions and variables, as described [here](REMOTE-CALLS.markdown).   
 
 ## New drawing commands
 
