@@ -1,12 +1,12 @@
    307 instructions before optimizations.
-    30 instructions eliminated by Temp Variables Elimination.
+    32 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
     50 instructions eliminated by Dead Code Elimination (5 iterations).
      9 instructions eliminated by Jump Normalization (3 iterations).
     17 instructions eliminated by Jump Optimization (3 iterations).
     22 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
      2 instructions eliminated by Expression Optimization (2 iterations).
-     9 instructions eliminated by Data Flow Optimization (7 iterations).
+     7 instructions eliminated by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
      3 instructions eliminated by Jump Straightening (3 iterations).
@@ -340,7 +340,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructi
     82 label *label16
     83 label *label14
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-30 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-32 instructions):
  
      8 set .CONV1 .CONV2
      9 set .MEMORY .CONV1
@@ -534,18 +534,28 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-30 ins
 -    * set .BATCH_TXT *tmp80
 -    * op add *tmp81 :batches .BATCH
 -    * set :limit *tmp81
+-    * set *tmp82 :lastCell
+-    * write 0 .MEMORY *tmp82
 +  246 op max .BATCH *tmp78 .EFF_MIN_BATCH
 +  247 op mul .BATCH_TXT .BATCH 10
 +  248 op add :limit :batches .BATCH
-   249 set *tmp82 :lastCell
-   250 write 0 .MEMORY *tmp82
-   251 set :ratePerMin 0
++  249 write 0 .MEMORY :lastCell
+   250 set :ratePerMin 0
 -    * set *tmp84 @time
 -    * set :startTime *tmp84
-+  252 set :startTime @time
-   253 jump *label59 always
-   254 label *label58
-   255 label *label59
++  251 set :startTime @time
+   252 jump *label59 always
+   253 label *label58
+   254 label *label59
+ 
+   280 jump *label19 always
+   281 label *label21
+   282 control enabled switch1 0
+-    * set *tmp91 :lastCell
+-    * write 0 .MEMORY *tmp91
++  283 write 0 .MEMORY :lastCell
+   284 write 0 .MEMORY 0
+   285 end
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 instructions):
  
@@ -800,15 +810,15 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-17 ins
    218 op max .BATCH *tmp78 .EFF_MIN_BATCH
    219 op mul .BATCH_TXT .BATCH 10
  
-   243 print " "
-   244 print "ms"
-   245 printflush message1
+   242 print " "
+   243 print "ms"
+   244 printflush message1
 -    * op notEqual *tmp88 .LINKS @links
 -    * jump *label60 equal *tmp88 false
-+  246 jump *label60 equal .LINKS @links
-   247 end
-   248 jump *label61 always
-   249 label *label60
++  245 jump *label60 equal .LINKS @links
+   246 end
+   247 jump *label61 always
+   248 label *label60
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-21 instructions):
  
@@ -908,21 +918,21 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    194 label *label55
    195 op sub *tmp74 @time :startTime
  
-   203 write 0 .MEMORY *tmp82
-   204 set :ratePerMin 0
-   205 set :startTime @time
+   202 write 0 .MEMORY :lastCell
+   203 set :ratePerMin 0
+   204 set :startTime @time
 -    * jump *label59 always
-   206 label *label58
-   207 label *label59
-   208 print "Batch size: [green]"
+   205 label *label58
+   206 label *label59
+   207 print "Batch size: [green]"
  
-   225 printflush message1
-   226 jump *label60 equal .LINKS @links
-   227 end
+   224 printflush message1
+   225 jump *label60 equal .LINKS @links
+   226 end
 -    * jump *label61 always
-   228 label *label60
-   229 label *label61
-   230 label *label20
+   227 label *label60
+   228 label *label61
+   229 label *label20
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
@@ -936,15 +946,15 @@ Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-
    139 op add *tmp53 .BATCH .BATCH_STEP
    140 op min .BATCH *tmp53 .EFF_MAX_BATCH
  
-   215 print "] ms"
-   216 print "\n"
-   217 op sub *tmp85 @time :start
+   214 print "] ms"
+   215 print "\n"
+   216 op sub *tmp85 @time :start
 -    * op div *tmp86 *tmp85 2
 -    * op floor *tmp87 *tmp86
-+  218 op idiv *tmp87 *tmp85 2
-   219 print "[lightgray]Loop time: "
-   220 print *tmp87
-   221 print " "
++  217 op idiv *tmp87 *tmp85 2
+   218 print "[lightgray]Loop time: "
+   219 print *tmp87
+   220 print " "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1005,25 +1015,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    140 op min .BATCH *tmp53 .EFF_MAX_BATCH
    141 op mul .BATCH_TXT .BATCH 10
    142 label *label40
- 
-   199 op mul .BATCH_TXT .BATCH 10
-   200 op add :limit :batches .BATCH
-   201 set *tmp82 :lastCell
--    * write 0 .MEMORY *tmp82
-+  202 write 0 .MEMORY :lastCell
-   203 set :ratePerMin 0
-   204 set :startTime @time
-   205 label *label58
- 
-   230 label *label21
-   231 control enabled switch1 0
-   232 set *tmp91 :lastCell
--    * write 0 .MEMORY *tmp91
-+  233 write 0 .MEMORY :lastCell
-   234 write 0 .MEMORY 0
-   235 end
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
      3 label *label0
      4 set .CONV4 null
@@ -1077,22 +1070,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    132 op mul *tmp48 :rate 166.66666666666666
    133 write *tmp48 .MEMORY :lastCell
    134 op idiv :ratePerMin :rate 0.0000016666666666666667
- 
-   195 op max .BATCH *tmp78 .EFF_MIN_BATCH
-   196 op mul .BATCH_TXT .BATCH 10
-   197 op add :limit :batches .BATCH
--    * set *tmp82 :lastCell
-   198 write 0 .MEMORY :lastCell
-   199 set :ratePerMin 0
-   200 set :startTime @time
- 
-   225 jump *label19 always
-   226 label *label21
-   227 control enabled switch1 0
--    * set *tmp91 :lastCell
-   228 write 0 .MEMORY :lastCell
-   229 write 0 .MEMORY 0
-   230 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  

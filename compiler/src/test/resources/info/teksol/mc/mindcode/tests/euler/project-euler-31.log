@@ -1,9 +1,9 @@
     96 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination.
+     5 instructions eliminated by Temp Variables Elimination.
      4 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Jump Optimization (3 iterations).
      2 instructions eliminated by Single Step Elimination (4 iterations).
-    22 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+    18 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions modified by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
      2 instructions eliminated by Loop Unrolling (4 iterations).
@@ -45,141 +45,109 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
     89 label *label18
     90 op add :ways.0:i :ways.0:i 1
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
- 
-    60 label *label17
-    61 jump *label19 greaterThanEq :ways.0:i 8
-    62 set *tmp6 :ways.0:i
--    * read *tmp7 bank1 *tmp6
--    * set :ways.0:p *tmp7
-+   63 read :ways.0:p bank1 *tmp6
-    64 op lessThanEq *tmp8 :ways.0:p :ways.0:amount
-    65 jump *label20 equal *tmp8 false
-    66 op sub *tmp10 :ways.0:amount :ways.0:p
-
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
- 
-    48 stop
-    49 end
-    50 label *label0
--    * op equal *tmp4 :ways.0:amount 0
--    * jump *label15 equal *tmp4 false
-+   51 jump *label15 notEqual :ways.0:amount 0
-    52 set :ways.0*retval 1
-    53 jump *label14 always
-    54 jump *label16 always
- 
-    60 jump *label19 greaterThanEq :ways.0:i 8
-    61 set *tmp6 :ways.0:i
-    62 read :ways.0:p bank1 *tmp6
--    * op lessThanEq *tmp8 :ways.0:p :ways.0:amount
--    * jump *label20 equal *tmp8 false
-+   63 jump *label20 greaterThan :ways.0:p :ways.0:amount
-    64 op sub *tmp10 :ways.0:amount :ways.0:p
-    65 push bank1 :ways.0:amount
-    66 push bank1 :ways.0:index
-
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
- 
-    51 jump *label15 notEqual :ways.0:amount 0
-    52 set :ways.0*retval 1
-    53 jump *label14 always
--    * jump *label16 always
-    54 label *label15
-    55 label *label16
-    56 set :ways.0:result 0
- 
-    79 pop bank1 :ways.0:amount
-    80 set *tmp11 :ways.0*retval
-    81 op add :ways.0:result :ways.0:result *tmp11
--    * jump *label21 always
-    82 label *label20
-    83 label *label21
-    84 label *label18
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-    33 set :value 1
-    34 label *label2
-    35 set *tmp1 :index
--    * write :value bank1 *tmp1
-+   36 write :value bank1 :index
-    37 op add :index :index 1
-    38 label *label3
-    39 multijump *tmp0 0 0 marker0
- 
-    44 callrec bank1 *label0 *label13 :ways.0*retval
-    45 label *label13
-    46 set *tmp3 :ways.0*retval
--    * assertequals 41 *tmp3 "Project Euler 31"
-+   47 assertequals 41 :ways.0*retval "Project Euler 31"
-    48 stop
-    49 end
-    50 label *label0
- 
-    58 label *label17
-    59 jump *label19 greaterThanEq :ways.0:i 8
-    60 set *tmp6 :ways.0:i
--    * read :ways.0:p bank1 *tmp6
-+   61 read :ways.0:p bank1 :ways.0:i
-    62 jump *label20 greaterThan :ways.0:p :ways.0:amount
-    63 op sub *tmp10 :ways.0:amount :ways.0:p
-    64 push bank1 :ways.0:amount
- 
-    67 push bank1 :ways.0:i
-    68 push bank1 :ways.0:p
-    69 push bank1 *tmp5
--    * set :ways.0:amount *tmp10
-+   70 op sub :ways.0:amount :ways.0:amount :ways.0:p
-    71 set :ways.0:index :ways.0:i
-    72 callrec bank1 *label0 *label22 :ways.0*retval
-    73 label *label22
- 
-    78 pop bank1 :ways.0:index
-    79 pop bank1 :ways.0:amount
-    80 set *tmp11 :ways.0*retval
--    * op add :ways.0:result :ways.0:result *tmp11
-+   81 op add :ways.0:result :ways.0:result :ways.0*retval
-    82 label *label20
-    83 label *label21
-    84 label *label18
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
     32 setaddr *tmp0 *label12
     33 set :value 1
     34 label *label2
 -    * set *tmp1 :index
-    35 write :value bank1 :index
+-    * write :value bank1 *tmp1
++   35 write :value bank1 :index
     36 op add :index :index 1
     37 label *label3
+    38 multijump *tmp0 0 0 marker0
  
     42 set :ways.0:index 1
     43 callrec bank1 *label0 *label13 :ways.0*retval
     44 label *label13
 -    * set *tmp3 :ways.0*retval
-    45 assertequals 41 :ways.0*retval "Project Euler 31"
+-    * assertequals 41 *tmp3 "Project Euler 31"
++   45 assertequals 41 :ways.0*retval "Project Euler 31"
     46 stop
     47 end
+    48 label *label0
  
-    55 set :ways.0:i :ways.0:index
-    56 label *label17
-    57 jump *label19 greaterThanEq :ways.0:i 8
+    57 set :ways.0:i :ways.0:index
+    58 label *label17
+    59 jump *label19 greaterThanEq :ways.0:i 8
 -    * set *tmp6 :ways.0:i
+-    * read *tmp7 bank1 *tmp6
+-    * set :ways.0:p *tmp7
++   60 read :ways.0:p bank1 :ways.0:i
+    61 op lessThanEq *tmp8 :ways.0:p :ways.0:amount
+    62 jump *label20 equal *tmp8 false
+    63 op sub *tmp10 :ways.0:amount :ways.0:p
+ 
+    77 pop bank1 :ways.0:result
+    78 pop bank1 :ways.0:index
+    79 pop bank1 :ways.0:amount
+-    * set *tmp11 :ways.0*retval
+-    * op add :ways.0:result :ways.0:result *tmp11
++   80 op add :ways.0:result :ways.0:result :ways.0*retval
+    81 jump *label21 always
+    82 label *label20
+    83 label *label21
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    46 stop
+    47 end
+    48 label *label0
+-    * op equal *tmp4 :ways.0:amount 0
+-    * jump *label15 equal *tmp4 false
++   49 jump *label15 notEqual :ways.0:amount 0
+    50 set :ways.0*retval 1
+    51 jump *label14 always
+    52 jump *label16 always
+ 
+    57 label *label17
+    58 jump *label19 greaterThanEq :ways.0:i 8
+    59 read :ways.0:p bank1 :ways.0:i
+-    * op lessThanEq *tmp8 :ways.0:p :ways.0:amount
+-    * jump *label20 equal *tmp8 false
++   60 jump *label20 greaterThan :ways.0:p :ways.0:amount
+    61 op sub *tmp10 :ways.0:amount :ways.0:p
+    62 push bank1 :ways.0:amount
+    63 push bank1 :ways.0:index
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
+ 
+    49 jump *label15 notEqual :ways.0:amount 0
+    50 set :ways.0*retval 1
+    51 jump *label14 always
+-    * jump *label16 always
+    52 label *label15
+    53 label *label16
+    54 set :ways.0:result 0
+ 
+    75 pop bank1 :ways.0:index
+    76 pop bank1 :ways.0:amount
+    77 op add :ways.0:result :ways.0:result :ways.0*retval
+-    * jump *label21 always
+    78 label *label20
+    79 label *label21
+    80 label *label18
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    64 push bank1 :ways.0:i
+    65 push bank1 :ways.0:p
+    66 push bank1 *tmp5
+-    * set :ways.0:amount *tmp10
++   67 op sub :ways.0:amount :ways.0:amount :ways.0:p
+    68 set :ways.0:index :ways.0:i
+    69 callrec bank1 *label0 *label22 :ways.0*retval
+    70 label *label22
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+ 
+    57 jump *label19 greaterThanEq :ways.0:i 8
     58 read :ways.0:p bank1 :ways.0:i
     59 jump *label20 greaterThan :ways.0:p :ways.0:amount
 -    * op sub *tmp10 :ways.0:amount :ways.0:p
     60 push bank1 :ways.0:amount
     61 push bank1 :ways.0:index
     62 push bank1 :ways.0:result
- 
-    73 pop bank1 :ways.0:result
-    74 pop bank1 :ways.0:index
-    75 pop bank1 :ways.0:amount
--    * set *tmp11 :ways.0*retval
-    76 op add :ways.0:result :ways.0:result :ways.0*retval
-    77 label *label20
-    78 label *label21
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  

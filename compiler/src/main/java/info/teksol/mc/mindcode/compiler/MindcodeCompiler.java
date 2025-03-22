@@ -51,6 +51,7 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NullMarked
@@ -259,6 +260,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         // Label resolving
         instructions = resolver.resolveLabels(instructions, remoteVariables);
 
+        // Set of all user variables in the program
+        generateUnusedVolatileWarnings();
+
         output = LogicInstructionPrinter.toString(instructionProcessor, instructions);
 
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
@@ -275,6 +279,18 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms.",
                     parseTime, compileTime, optimizeTime);
         }
+    }
+
+    private void generateUnusedVolatileWarnings() {
+        Set<LogicArgument> existing = instructions.stream()
+                .flatMap(ix -> ix.inputOutputArgumentsStream().filter(LogicArgument::isUserVariable))
+                .collect(Collectors.toSet());
+
+        assert variables != null;
+        variables.getVolatileVariables().stream()
+                .filter(Predicate.not(existing::contains))
+                .sorted(Comparator.comparing(LogicVariable::sourcePosition))
+                .forEach(v -> warn(v.sourcePosition(), WARN.VOLATILE_VARIABLE_NOT_USED, v.getName()));
     }
 
     private Processor createEmulator() {

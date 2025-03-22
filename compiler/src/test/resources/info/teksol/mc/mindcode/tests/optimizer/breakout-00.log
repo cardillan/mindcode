@@ -1,10 +1,10 @@
    145 instructions before optimizations.
-     5 instructions eliminated by Temp Variables Elimination.
+     8 instructions eliminated by Temp Variables Elimination.
     20 instructions eliminated by Dead Code Elimination (5 iterations).
      2 instructions eliminated by Jump Normalization (3 iterations).
      5 instructions eliminated by Jump Optimization (3 iterations).
      8 instructions eliminated by Single Step Elimination (4 iterations).
-    41 instructions eliminated by Data Flow Optimization (4 passes, 13 iterations).
+    38 instructions eliminated by Data Flow Optimization (4 passes, 13 iterations).
      3 instructions eliminated by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
    126 instructions added by Loop Unrolling (5 iterations).
@@ -144,7 +144,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructi
    129 jump *label30 always
    130 label *label29
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-8 instructions):
  
      5 jump *label2 equal true false
      6 set :paddleWidth 40
@@ -165,19 +165,46 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
     15 set :brickCount 6
     16 set :i 0
     17 label *label3
+    18 jump *label5 greaterThanEq :i 6
+-    * set *tmp6 :i
+-    * write 1 BRICKS *tmp6
++   19 write 1 BRICKS :i
+    20 label *label4
+    21 op add :i :i 1
+    22 jump *label3 always
  
-    47 label *label10
-    48 op add :ballX :ballX :ballVX
-    49 op add :ballY :ballY :ballVY
+    46 label *label10
+    47 op add :ballX :ballX :ballVX
+    48 op add :ballY :ballY :ballVY
 -    * op add *tmp15 :ballX 5
 -    * set :ballXEnd *tmp15
 -    * op add *tmp16 :ballY 5
 -    * set :ballYEnd *tmp16
-+   50 op add :ballXEnd :ballX 5
-+   51 op add :ballYEnd :ballY 5
-    52 op lessThan *tmp17 :ballX 0
-    53 op greaterThan *tmp18 :ballXEnd 176
-    54 op or *tmp19 *tmp17 *tmp18
++   49 op add :ballXEnd :ballX 5
++   50 op add :ballYEnd :ballY 5
+    51 op lessThan *tmp17 :ballX 0
+    52 op greaterThan *tmp18 :ballXEnd 176
+    53 op or *tmp19 *tmp17 *tmp18
+ 
+    91 label *label24
+    92 op lessThan *tmp38 :x 176
+    93 jump *label26 equal *tmp38 false
+-    * set *tmp39 :brickPtr
+-    * read *tmp40 BRICKS *tmp39
++   94 read *tmp40 BRICKS :brickPtr
+    95 jump *label27 equal *tmp40 false
+    96 draw rect :x :y 57.666666666666664 9
+    97 op greaterThan *tmp42 :ballXEnd :x
+ 
+   104 op lessThan *tmp49 :ballY *tmp48
+   105 op land *tmp50 *tmp47 *tmp49
+   106 jump *label29 equal *tmp50 false
+-    * set *tmp52 :brickPtr
+-    * write 0 BRICKS *tmp52
++  107 write 0 BRICKS :brickPtr
+   108 op sub :brickCount :brickCount 1
+   109 set :brickWidthPlusBallSizeMinus1 62.666666666666664
+   110 op sub *tmp54 :x 4
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-2 instructions):
  
@@ -189,116 +216,116 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-2 ins
      6 op div *tmp0 :paddleWidth 2
      7 op sub :paddleX 88 *tmp0
  
-    22 jump *label3 always
-    23 label *label5
-    24 label *label6
+    21 jump *label3 always
+    22 label *label5
+    23 label *label6
 -    * jump *label8 equal true false
-    25 draw clear 0 0 0
-    26 draw rect :paddleX 10 :paddleWidth 5
-    27 draw rect :ballX :ballY 5 5
+    24 draw clear 0 0 0
+    25 draw rect :paddleX 10 :paddleWidth 5
+    26 draw rect :ballX :ballY 5 5
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 instructions):
  
-    28 sensor *tmp8 PADDLECONTROLLER @enabled
-    29 jump *label9 equal *tmp8 false
-    30 op sub *tmp10 176 :paddleWidth
+    27 sensor *tmp8 PADDLECONTROLLER @enabled
+    28 jump *label9 equal *tmp8 false
+    29 op sub *tmp10 176 :paddleWidth
 -    * op lessThan *tmp11 :paddleX *tmp10
 -    * jump *label11 equal *tmp11 false
-+   31 jump *label11 greaterThanEq :paddleX *tmp10
-    32 op add :paddleX :paddleX 3
-    33 jump *label12 always
-    34 label *label11
-    35 label *label12
-    36 jump *label10 always
-    37 label *label9
--    * op greaterThan *tmp13 :paddleX 0
--    * jump *label13 equal *tmp13 false
-+   38 jump *label13 lessThanEq :paddleX 0
-    39 op sub :paddleX :paddleX 3
-    40 jump *label14 always
-    41 label *label13
- 
-    53 jump *label16 always
-    54 label *label15
-    55 label *label16
--    * op greaterThan *tmp21 :ballYEnd 176
--    * jump *label17 equal *tmp21 false
-+   56 jump *label17 lessThanEq :ballYEnd 176
-    57 op mul :ballVY :ballVY -1
-    58 jump *label18 always
-    59 label *label17
- 
-    81 set :brickPtr 0
-    82 set :y 126
-    83 label *label21
--    * op greaterThan *tmp37 :y 106
--    * jump *label23 equal *tmp37 false
-+   84 jump *label23 lessThanEq :y 106
-    85 set :x 1
-    86 label *label24
--    * op lessThan *tmp38 :x 176
--    * jump *label26 equal *tmp38 false
-+   87 jump *label26 greaterThanEq :x 176
-    88 set *tmp39 :brickPtr
-    89 read *tmp40 BRICKS *tmp39
-    90 jump *label27 equal *tmp40 false
-
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-8 instructions):
- 
-    30 op sub *tmp10 176 :paddleWidth
-    31 jump *label11 greaterThanEq :paddleX *tmp10
-    32 op add :paddleX :paddleX 3
--    * jump *label12 always
++   30 jump *label11 greaterThanEq :paddleX *tmp10
+    31 op add :paddleX :paddleX 3
+    32 jump *label12 always
     33 label *label11
     34 label *label12
     35 jump *label10 always
     36 label *label9
-    37 jump *label13 lessThanEq :paddleX 0
+-    * op greaterThan *tmp13 :paddleX 0
+-    * jump *label13 equal *tmp13 false
++   37 jump *label13 lessThanEq :paddleX 0
     38 op sub :paddleX :paddleX 3
+    39 jump *label14 always
+    40 label *label13
+ 
+    52 jump *label16 always
+    53 label *label15
+    54 label *label16
+-    * op greaterThan *tmp21 :ballYEnd 176
+-    * jump *label17 equal *tmp21 false
++   55 jump *label17 lessThanEq :ballYEnd 176
+    56 op mul :ballVY :ballVY -1
+    57 jump *label18 always
+    58 label *label17
+ 
+    80 set :brickPtr 0
+    81 set :y 126
+    82 label *label21
+-    * op greaterThan *tmp37 :y 106
+-    * jump *label23 equal *tmp37 false
++   83 jump *label23 lessThanEq :y 106
+    84 set :x 1
+    85 label *label24
+-    * op lessThan *tmp38 :x 176
+-    * jump *label26 equal *tmp38 false
++   86 jump *label26 greaterThanEq :x 176
+    87 read *tmp40 BRICKS :brickPtr
+    88 jump *label27 equal *tmp40 false
+    89 draw rect :x :y 57.666666666666664 9
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-8 instructions):
+ 
+    29 op sub *tmp10 176 :paddleWidth
+    30 jump *label11 greaterThanEq :paddleX *tmp10
+    31 op add :paddleX :paddleX 3
+-    * jump *label12 always
+    32 label *label11
+    33 label *label12
+    34 jump *label10 always
+    35 label *label9
+    36 jump *label13 lessThanEq :paddleX 0
+    37 op sub :paddleX :paddleX 3
 -    * jump *label14 always
-    39 label *label13
-    40 label *label14
-    41 label *label10
+    38 label *label13
+    39 label *label14
+    40 label *label10
  
-    48 op or *tmp19 *tmp17 *tmp18
-    49 jump *label15 equal *tmp19 false
-    50 op mul :ballVX :ballVX -1
+    47 op or *tmp19 *tmp17 *tmp18
+    48 jump *label15 equal *tmp19 false
+    49 op mul :ballVX :ballVX -1
 -    * jump *label16 always
-    51 label *label15
-    52 label *label16
-    53 jump *label17 lessThanEq :ballYEnd 176
-    54 op mul :ballVY :ballVY -1
+    50 label *label15
+    51 label *label16
+    52 jump *label17 lessThanEq :ballYEnd 176
+    53 op mul :ballVY :ballVY -1
 -    * jump *label18 always
-    55 label *label17
-    56 label *label18
-    57 op greaterThan *tmp23 :ballXEnd :paddleX
+    54 label *label17
+    55 label *label18
+    56 op greaterThan *tmp23 :ballXEnd :paddleX
  
-    71 op div *tmp36 *tmp35 10
-    72 op add :ballVX :ballVX *tmp36
-    73 op sub :paddleWidth :paddleWidth 1
+    70 op div *tmp36 *tmp35 10
+    71 op add :ballVX :ballVX *tmp36
+    72 op sub :paddleWidth :paddleWidth 1
 -    * jump *label20 always
-    74 label *label19
-    75 label *label20
-    76 set :brickPtr 0
+    73 label *label19
+    74 label *label20
+    75 set :brickPtr 0
  
-   109 label *label31
-   110 op mul :ballVX :ballVX -1
-   111 label *label32
+   106 label *label31
+   107 op mul :ballVX :ballVX -1
+   108 label *label32
 -    * jump *label30 always
-   112 label *label29
-   113 label *label30
+   109 label *label29
+   110 label *label30
 -    * jump *label28 always
-   114 label *label27
-   115 label *label28
-   116 op add :brickPtr :brickPtr 1
+   111 label *label27
+   112 label *label28
+   113 op add :brickPtr :brickPtr 1
  
-   127 op or *tmp62 *tmp60 *tmp61
-   128 jump *label33 equal *tmp62 false
-   129 jump *label8 always
+   124 op or *tmp62 *tmp60 *tmp61
+   125 jump *label33 equal *tmp62 false
+   126 jump *label8 always
 -    * jump *label34 always
-   130 label *label33
-   131 label *label34
-   132 drawflush DISPLAY
+   127 label *label33
+   128 label *label34
+   129 drawflush DISPLAY
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -313,40 +340,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      9 set :ballY 88
     10 op rand *tmp2 10
  
-    16 label *label3
-    17 jump *label5 greaterThanEq :i 6
-    18 set *tmp6 :i
--    * write 1 BRICKS *tmp6
-+   19 write 1 BRICKS :i
-    20 label *label4
-    21 op add :i :i 1
-    22 jump *label3 always
- 
-    81 label *label24
-    82 jump *label26 greaterThanEq :x 176
-    83 set *tmp39 :brickPtr
--    * read *tmp40 BRICKS *tmp39
-+   84 read *tmp40 BRICKS :brickPtr
-    85 jump *label27 equal *tmp40 false
-    86 draw rect :x :y 57.666666666666664 9
-    87 op greaterThan *tmp42 :ballXEnd :x
- 
-    95 op land *tmp50 *tmp47 *tmp49
-    96 jump *label29 equal *tmp50 false
-    97 set *tmp52 :brickPtr
--    * write 0 BRICKS *tmp52
-+   98 write 0 BRICKS :brickPtr
-    99 op sub :brickCount :brickCount 1
-   100 set :brickWidthPlusBallSizeMinus1 62.666666666666664
-   101 op sub *tmp54 :x 4
-   102 op greaterThan *tmp55 :ballX *tmp54
+    97 set :brickWidthPlusBallSizeMinus1 62.666666666666664
+    98 op sub *tmp54 :x 4
+    99 op greaterThan *tmp55 :ballX *tmp54
 -    * op add *tmp56 :x :brickWidthPlusBallSizeMinus1
-+  103 op add *tmp56 :x 62.666666666666664
-   104 op lessThan *tmp57 :ballX *tmp56
-   105 op land *tmp58 *tmp55 *tmp57
-   106 jump *label31 equal *tmp58 false
++  100 op add *tmp56 :x 62.666666666666664
+   101 op lessThan *tmp57 :ballX *tmp56
+   102 op land *tmp58 *tmp55 *tmp57
+   103 jump *label31 equal *tmp58 false
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
      3 draw color 255 255 255 255
      4 label *label0
@@ -356,26 +359,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
      7 set :ballX 88
      8 set :ballY 88
  
-    14 set :i 0
-    15 label *label3
-    16 jump *label5 greaterThanEq :i 6
--    * set *tmp6 :i
-    17 write 1 BRICKS :i
-    18 label *label4
-    19 op add :i :i 1
- 
-    78 set :x 1
-    79 label *label24
-    80 jump *label26 greaterThanEq :x 176
--    * set *tmp39 :brickPtr
-    81 read *tmp40 BRICKS :brickPtr
-    82 jump *label27 equal *tmp40 false
-    83 draw rect :x :y 57.666666666666664 9
- 
-    91 op lessThan *tmp49 :ballY *tmp48
-    92 op land *tmp50 *tmp47 *tmp49
     93 jump *label29 equal *tmp50 false
--    * set *tmp52 :brickPtr
     94 write 0 BRICKS :brickPtr
     95 op sub :brickCount :brickCount 1
 -    * set :brickWidthPlusBallSizeMinus1 62.666666666666664

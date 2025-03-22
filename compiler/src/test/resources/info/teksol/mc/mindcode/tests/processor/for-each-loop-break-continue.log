@@ -1,9 +1,9 @@
     63 instructions before optimizations.
-     3 instructions eliminated by Temp Variables Elimination.
+     5 instructions eliminated by Temp Variables Elimination.
      5 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Jump Optimization (4 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     6 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+     4 instructions eliminated by Data Flow Optimization (6 iterations).
     58 instructions added by Loop Unrolling (4 iterations).
      1 loops unrolled by Loop Unrolling.
     13 instructions eliminated by Jump Straightening (4 iterations).
@@ -44,7 +44,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
     72 assertprints "1|2|5|8|12|" "iterated-for-loop-break-continue"
     73 stop
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
      7 setaddr :d.0*retaddr *label7
      8 call *label0 :d.0*retval
@@ -75,84 +75,66 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 inst
     35 jump *label2 always
     36 multilabel *label12 marker0
     37 setaddr *tmp1 *label14
-
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
- 
-    42 call *label0 :d.0*retval
-    43 label *label15
-    44 set *tmp5 :d.0*retval
--    * op equal *tmp6 *tmp5 3
--    * jump *label16 equal *tmp6 false
-+   45 jump *label16 notEqual *tmp5 3
-    46 jump *label3 always
-    47 jump *label17 always
-    48 label *label16
- 
-    54 call *label0 :d.0*retval
-    55 label *label18
-    56 set *tmp8 :d.0*retval
--    * op equal *tmp9 *tmp8 12
--    * jump *label19 equal *tmp9 false
-+   57 jump *label19 notEqual *tmp8 12
-    58 jump *label4 always
-    59 jump *label20 always
-    60 label *label19
-
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
- 
-    44 set *tmp5 :d.0*retval
-    45 jump *label16 notEqual *tmp5 3
-    46 jump *label3 always
--    * jump *label17 always
-    47 label *label16
-    48 label *label17
-    49 print :test.0:i
- 
-    55 set *tmp8 :d.0*retval
-    56 jump *label19 notEqual *tmp8 12
-    57 jump *label4 always
--    * jump *label20 always
-    58 label *label19
-    59 label *label20
-    60 label *label3
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-    42 call *label0 :d.0*retval
-    43 label *label15
-    44 set *tmp5 :d.0*retval
--    * jump *label16 notEqual *tmp5 3
-+   45 jump *label16 notEqual :d.0*retval 3
-    46 jump *label3 always
-    47 label *label16
-    48 label *label17
- 
-    53 call *label0 :d.0*retval
-    54 label *label18
-    55 set *tmp8 :d.0*retval
--    * jump *label19 notEqual *tmp8 12
-+   56 jump *label19 notEqual :d.0*retval 12
-    57 jump *label4 always
-    58 label *label19
-    59 label *label20
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
     41 setaddr :d.0*retaddr *label15
     42 call *label0 :d.0*retval
     43 label *label15
 -    * set *tmp5 :d.0*retval
+-    * op equal *tmp6 *tmp5 3
++   44 op equal *tmp6 :d.0*retval 3
+    45 jump *label16 equal *tmp6 false
+    46 jump *label3 always
+    47 jump *label17 always
+ 
+    53 setaddr :d.0*retaddr *label18
+    54 call *label0 :d.0*retval
+    55 label *label18
+-    * set *tmp8 :d.0*retval
+-    * op equal *tmp9 *tmp8 12
++   56 op equal *tmp9 :d.0*retval 12
+    57 jump *label19 equal *tmp9 false
+    58 jump *label4 always
+    59 jump *label20 always
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+    41 setaddr :d.0*retaddr *label15
+    42 call *label0 :d.0*retval
+    43 label *label15
+-    * op equal *tmp6 :d.0*retval 3
+-    * jump *label16 equal *tmp6 false
++   44 jump *label16 notEqual :d.0*retval 3
+    45 jump *label3 always
+    46 jump *label17 always
+    47 label *label16
+ 
+    52 setaddr :d.0*retaddr *label18
+    53 call *label0 :d.0*retval
+    54 label *label18
+-    * op equal *tmp9 :d.0*retval 12
+-    * jump *label19 equal *tmp9 false
++   55 jump *label19 notEqual :d.0*retval 12
+    56 jump *label4 always
+    57 jump *label20 always
+    58 label *label19
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
+ 
+    43 label *label15
     44 jump *label16 notEqual :d.0*retval 3
     45 jump *label3 always
+-    * jump *label17 always
     46 label *label16
+    47 label *label17
+    48 print :test.0:i
  
-    51 setaddr :d.0*retaddr *label18
-    52 call *label0 :d.0*retval
     53 label *label18
--    * set *tmp8 :d.0*retval
     54 jump *label19 notEqual :d.0*retval 12
     55 jump *label4 always
+-    * jump *label20 always
     56 label *label19
+    57 label *label20
+    58 label *label3
 
 Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
      0 assertflush

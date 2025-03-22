@@ -1,9 +1,9 @@
     39 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination.
+     2 instructions eliminated by Temp Variables Elimination.
      5 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Jump Optimization (4 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
-     2 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     1 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
      2 instructions eliminated by Jump Straightening (4 iterations).
@@ -40,7 +40,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
     39 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
     40 stop
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
  
      7 setaddr :d.0*retaddr *label3
      8 call *label0 :d.0*retval
@@ -51,6 +51,16 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
     11 set :test.0:i *tmp1
     12 label *label4
     13 jump *label6 greaterThanEq :test.0:i *tmp3
+ 
+    23 setaddr :d.0*retaddr *label9
+    24 call *label0 :d.0*retval
+    25 label *label9
+-    * set *tmp6 :d.0*retval
+-    * op equal *tmp7 :test.0:i *tmp6
++   26 op equal *tmp7 :test.0:i :d.0*retval
+    27 jump *label10 equal *tmp7 false
+    28 jump *label6 always
+    29 jump *label11 always
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
@@ -64,15 +74,15 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
     16 jump *label8 always
     17 label *label7
  
+    22 setaddr :d.0*retaddr *label9
     23 call *label0 :d.0*retval
     24 label *label9
-    25 set *tmp6 :d.0*retval
--    * op equal *tmp7 :test.0:i *tmp6
+-    * op equal *tmp7 :test.0:i :d.0*retval
 -    * jump *label10 equal *tmp7 false
-+   26 jump *label10 notEqual :test.0:i *tmp6
-    27 jump *label6 always
-    28 jump *label11 always
-    29 label *label10
++   25 jump *label10 notEqual :test.0:i :d.0*retval
+    26 jump *label6 always
+    27 jump *label11 always
+    28 label *label10
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
@@ -84,34 +94,13 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     17 label *label8
     18 print :test.0:i
  
-    24 set *tmp6 :d.0*retval
-    25 jump *label10 notEqual :test.0:i *tmp6
-    26 jump *label6 always
--    * jump *label11 always
-    27 label *label10
-    28 label *label11
-    29 label *label5
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-    22 call *label0 :d.0*retval
     23 label *label9
-    24 set *tmp6 :d.0*retval
--    * jump *label10 notEqual :test.0:i *tmp6
-+   25 jump *label10 notEqual :test.0:i :d.0*retval
-    26 jump *label6 always
-    27 label *label10
-    28 label *label11
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
- 
-    21 setaddr :d.0*retaddr *label9
-    22 call *label0 :d.0*retval
-    23 label *label9
--    * set *tmp6 :d.0*retval
     24 jump *label10 notEqual :test.0:i :d.0*retval
     25 jump *label6 always
+-    * jump *label11 always
     26 label *label10
+    27 label *label11
+    28 label *label5
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  

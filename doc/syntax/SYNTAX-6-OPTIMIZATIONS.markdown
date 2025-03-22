@@ -7,13 +7,13 @@ The information on compiler optimizations is a bit technical. It might be useful
 
 ## Temporary Variables Elimination
 
-The compiler sometimes creates temporary variables whose only function is to store output value of an instruction before passing it somewhere else. This optimization removes all assignments from temporary variables that carry over the output value of the preceding instruction. The `set` instruction is removed, while the preceding instruction is updated to replace the temporary variable with the target variable used in the set statement.
+The compiler sometimes creates temporary variables whose only function is to carry some value to another instruction. This optimization removes such temporary variables that only carry the value to an adjacent instruction. The `set` instruction is removed, while the adjacent instruction is updated to replace the temporary variable with the other variable used in the `set` instruction.
 
 The optimization is performed only when the following conditions are met:
 
-* The `set` instruction assigns from a temporary variable.
-* The temporary variable is used in exactly one other instruction. The other instruction immediately precedes the instruction producing the temporary variable.
-* All arguments of the other instruction referencing the temporary variable are output ones.
+* The `set` instruction assigns/reads a temporary variable.
+* The temporary variable is used in exactly one other instruction, adjacent to the `set` instruction.
+* All arguments of the other instruction referencing the temporary variable are either input ones (the `set` instruction precedes the other instruction) or output ones (the `set` instruction follows the other instruction).
 
 An additional optimization is performed when an instruction has a temporary output variable which isn't read by any other instruction. In this case, the unused output variable is replaced by `0` (literal zero value). Such an instruction will be executed correctly by Mindustry Logic, but to new variable will be allocated for the replaced argument.   
 
@@ -31,10 +31,10 @@ The optimization is performed only when the following conditions are met:
 
 ## Dead Code Elimination
 
-This optimization inspects the entire code and removes all instructions that write to variables, if none of the variables written to are actually read anywhere in the code.
+This optimization inspects the entire code and removes all instructions that write to non-volatile variables, if none of the variables written to are actually read anywhere in the code.
 
 Dead Code Elimination also inspects your code and prints out suspicious variables:
-* _Unused variables_: those are the variables that were eliminated.
+* _Unused variables_: those are the variables that are unused and possibly were eliminated.
 * _Uninitialized variables_: those are global variables that are read by the program, but never written to. (The [Data Flow Optimization](#data-flow-optimization) detects uninitialized local and function variables.)
 
 Both cases deserve a closer inspection, as they might indicate a problem with your program.

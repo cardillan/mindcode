@@ -1,10 +1,10 @@
    171 instructions before optimizations.
-    11 instructions eliminated by Temp Variables Elimination.
+    12 instructions eliminated by Temp Variables Elimination.
      2 instructions eliminated by Case Expression Optimization.
     10 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Optimization (3 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
-    18 instructions eliminated by Data Flow Optimization (5 iterations).
+    17 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
      8 instructions eliminated by Jump Straightening (3 iterations).
@@ -154,7 +154,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-5 instructi
     65 jump *label6 always
     66 label *label11
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-12 instructions):
  
     11 print "\n"
     12 print "Configuring..."
@@ -201,19 +201,20 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 ins
    132 set .BAR_LENGTH 56
 -    * op div *tmp23 .BAR_LENGTH 200
 -    * set .MULTIPLICATOR *tmp23
+-    * set *tmp24 .SWITCH
+-    * control enabled *tmp24 0
 +  133 op div .MULTIPLICATOR .BAR_LENGTH 200
-   134 set *tmp24 .SWITCH
-   135 control enabled *tmp24 0
-   136 label *label24
-   137 sensor *tmp26 .SWITCH @enabled
-   138 op equal *tmp27 *tmp26 0
-   139 jump *label26 equal *tmp27 false
++  134 control enabled .SWITCH 0
+   135 label *label24
+   136 sensor *tmp26 .SWITCH @enabled
+   137 op equal *tmp27 *tmp26 0
+   138 jump *label26 equal *tmp27 false
 -    * set *tmp28 @time
 -    * set :start *tmp28
-+  140 set :start @time
-   141 draw clear 0 0 80
-   142 draw color 255 255 255 255
-   143 draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
++  139 set :start @time
+   140 draw clear 0 0 80
+   141 draw color 255 255 255 255
+   142 draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-8 instructions):
  
@@ -289,15 +290,15 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
     18 getlink :block :n
     19 sensor *tmp5 :block @type
  
-   126 control enabled *tmp24 0
-   127 label *label24
-   128 sensor *tmp26 .SWITCH @enabled
+   125 control enabled .SWITCH 0
+   126 label *label24
+   127 sensor *tmp26 .SWITCH @enabled
 -    * op equal *tmp27 *tmp26 0
 -    * jump *label26 equal *tmp27 false
-+  129 jump *label26 notEqual *tmp26 0
-   130 set :start @time
-   131 draw clear 0 0 80
-   132 draw color 255 255 255 255
++  128 jump *label26 notEqual *tmp26 0
+   129 set :start @time
+   130 draw clear 0 0 80
+   131 draw color 255 255 255 255
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
@@ -356,58 +357,56 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    122 set .BAR_LENGTH 56
 -    * op div .MULTIPLICATOR .BAR_LENGTH 200
 +  123 op div .MULTIPLICATOR 56 200
-   124 set *tmp24 .SWITCH
--    * control enabled *tmp24 0
-+  125 control enabled .SWITCH 0
-   126 label *label24
-   127 sensor *tmp26 .SWITCH @enabled
-   128 jump *label26 notEqual *tmp26 0
-   129 set :start @time
-   130 draw clear 0 0 80
-   131 draw color 255 255 255 255
+   124 control enabled .SWITCH 0
+   125 label *label24
+   126 sensor *tmp26 .SWITCH @enabled
+ 
+   128 set :start @time
+   129 draw clear 0 0 80
+   130 draw color 255 255 255 255
 -    * draw image .ICON_X .ICON_Y4 @titanium .ICON_SIZE 0
 -    * draw image .ICON_X .ICON_Y3 @silicon .ICON_SIZE 0
 -    * draw image .ICON_X .ICON_Y2 @copper .ICON_SIZE 0
 -    * draw image .ICON_X .ICON_Y1 @lead .ICON_SIZE 0
-+  132 draw image 11 68 @titanium 16 0
-+  133 draw image 11 49 @silicon 16 0
-+  134 draw image 11 30 @copper 16 0
-+  135 draw image 11 11 @lead 16 0
-   136 draw color 0 128 0 255
-   137 sensor *tmp29 .TITANIUM @totalItems
++  131 draw image 11 68 @titanium 16 0
++  132 draw image 11 49 @silicon 16 0
++  133 draw image 11 30 @copper 16 0
++  134 draw image 11 11 @lead 16 0
+   135 draw color 0 128 0 255
+   136 sensor *tmp29 .TITANIUM @totalItems
 -    * op mul *tmp30 *tmp29 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y4 *tmp30 .BAR_HEIGHT
-+  138 op mul *tmp30 *tmp29 0.28
-+  139 draw rect 20 61 *tmp30 14
-   140 sensor *tmp31 .SILICON @totalItems
++  137 op mul *tmp30 *tmp29 0.28
++  138 draw rect 20 61 *tmp30 14
+   139 sensor *tmp31 .SILICON @totalItems
 -    * op mul *tmp32 *tmp31 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y3 *tmp32 .BAR_HEIGHT
-+  141 op mul *tmp32 *tmp31 0.28
-+  142 draw rect 20 42 *tmp32 14
-   143 sensor *tmp33 .COPPER @totalItems
++  140 op mul *tmp32 *tmp31 0.28
++  141 draw rect 20 42 *tmp32 14
+   142 sensor *tmp33 .COPPER @totalItems
 -    * op mul *tmp34 *tmp33 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y2 *tmp34 .BAR_HEIGHT
-+  144 op mul *tmp34 *tmp33 0.28
-+  145 draw rect 20 23 *tmp34 14
-   146 sensor *tmp35 .LEAD @totalItems
++  143 op mul *tmp34 *tmp33 0.28
++  144 draw rect 20 23 *tmp34 14
+   145 sensor *tmp35 .LEAD @totalItems
 -    * op mul *tmp36 *tmp35 .MULTIPLICATOR
 -    * draw rect .BAR_X .BAR_Y1 *tmp36 .BAR_HEIGHT
-+  147 op mul *tmp36 *tmp35 0.28
-+  148 draw rect 20 4 *tmp36 14
-   149 draw color 0 255 0 255
++  146 op mul *tmp36 *tmp35 0.28
++  147 draw rect 20 4 *tmp36 14
+   148 draw color 0 255 0 255
 -    * draw lineRect .BAR_X .BAR_Y4 .BAR_LENGTH .BAR_HEIGHT
 -    * draw lineRect .BAR_X .BAR_Y3 .BAR_LENGTH .BAR_HEIGHT
 -    * draw lineRect .BAR_X .BAR_Y2 .BAR_LENGTH .BAR_HEIGHT
 -    * draw lineRect .BAR_X .BAR_Y1 .BAR_LENGTH .BAR_HEIGHT
-+  150 draw lineRect 20 61 56 14
-+  151 draw lineRect 20 42 56 14
-+  152 draw lineRect 20 23 56 14
-+  153 draw lineRect 20 4 56 14
-   154 drawflush .DISPLAY
-   155 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
-   156 op sub *tmp37 @time :start
++  149 draw lineRect 20 61 56 14
++  150 draw lineRect 20 42 56 14
++  151 draw lineRect 20 23 56 14
++  152 draw lineRect 20 4 56 14
+   153 drawflush .DISPLAY
+   154 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
+   155 op sub *tmp37 @time :start
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-18 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
 -    * set .EXPECTED_FLOW_STR null
 -    * set :flow_str null
      0 set .SWITCH null
@@ -436,7 +435,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op add .BAR_Y4 42 19
 -    * set .BAR_LENGTH 56
 -    * op div .MULTIPLICATOR 56 200
--    * set *tmp24 .SWITCH
    107 control enabled .SWITCH 0
    108 label *label24
    109 sensor *tmp26 .SWITCH @enabled

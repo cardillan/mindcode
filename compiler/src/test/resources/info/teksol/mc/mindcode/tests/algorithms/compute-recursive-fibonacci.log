@@ -1,81 +1,68 @@
     45 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination.
+     3 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Jump Optimization (3 iterations).
      2 instructions eliminated by If Expression Optimization (2 iterations).
-     4 instructions eliminated by Data Flow Optimization (4 iterations).
+     2 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination.
      4 instructions eliminated by Stack Optimization.
     32 instructions after optimizations.
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
- 
-    29 pop bank1 *tmp4
-    30 pop bank1 :fib.0:n
-    31 set *tmp6 :fib.0*retval
--    * op add *tmp7 *tmp4 *tmp6
--    * set *tmp2 *tmp7
-+   32 op add *tmp2 *tmp4 *tmp6
-    33 label *label5
-    34 set :fib.0*retval *tmp2
-    35 label *label3
-
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
- 
-     8 stop
-     9 end
-    10 label *label0
--    * op lessThan *tmp1 :fib.0:n 2
--    * jump *label4 equal *tmp1 false
-+   11 jump *label4 greaterThanEq :fib.0:n 2
-    12 set *tmp2 :fib.0:n
-    13 jump *label5 always
-    14 label *label4
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-     4 callrec bank1 *label0 *label2 :fib.0*retval
-     5 label *label2
-     6 set *tmp0 :fib.0*retval
--    * assertequals 55 *tmp0 "fib(10)"
-+    7 assertequals 55 :fib.0*retval "fib(10)"
-     8 stop
-     9 end
-    10 label *label0
- 
-    14 label *label4
-    15 op sub *tmp3 :fib.0:n 1
-    16 push bank1 :fib.0:n
--    * set :fib.0:n *tmp3
-+   17 op sub :fib.0:n :fib.0:n 1
-    18 callrec bank1 *label0 *label6 :fib.0*retval
-    19 label *label6
-    20 pop bank1 :fib.0:n
- 
-    22 op sub *tmp5 :fib.0:n 2
-    23 push bank1 :fib.0:n
-    24 push bank1 *tmp4
--    * set :fib.0:n *tmp5
-+   25 op sub :fib.0:n :fib.0:n 2
-    26 callrec bank1 *label0 *label7 :fib.0*retval
-    27 label *label7
-    28 pop bank1 *tmp4
-    29 pop bank1 :fib.0:n
-    30 set *tmp6 :fib.0*retval
--    * op add *tmp2 *tmp4 *tmp6
-+   31 op add *tmp2 *tmp4 :fib.0*retval
-    32 label *label5
-    33 set :fib.0*retval *tmp2
-    34 label *label3
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
      3 set :fib.0:n 10
      4 callrec bank1 *label0 *label2 :fib.0*retval
      5 label *label2
 -    * set *tmp0 :fib.0*retval
-     6 assertequals 55 :fib.0*retval "fib(10)"
+-    * assertequals 55 *tmp0 "fib(10)"
++    6 assertequals 55 :fib.0*retval "fib(10)"
      7 stop
      8 end
+     9 label *label0
+ 
+    27 label *label7
+    28 pop bank1 *tmp4
+    29 pop bank1 :fib.0:n
+-    * set *tmp6 :fib.0*retval
+-    * op add *tmp7 *tmp4 *tmp6
+-    * set *tmp2 *tmp7
++   30 op add *tmp2 *tmp4 :fib.0*retval
+    31 label *label5
+    32 set :fib.0*retval *tmp2
+    33 label *label3
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     7 stop
+     8 end
+     9 label *label0
+-    * op lessThan *tmp1 :fib.0:n 2
+-    * jump *label4 equal *tmp1 false
++   10 jump *label4 greaterThanEq :fib.0:n 2
+    11 set *tmp2 :fib.0:n
+    12 jump *label5 always
+    13 label *label4
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    13 label *label4
+    14 op sub *tmp3 :fib.0:n 1
+    15 push bank1 :fib.0:n
+-    * set :fib.0:n *tmp3
++   16 op sub :fib.0:n :fib.0:n 1
+    17 callrec bank1 *label0 *label6 :fib.0*retval
+    18 label *label6
+    19 pop bank1 :fib.0:n
+ 
+    21 op sub *tmp5 :fib.0:n 2
+    22 push bank1 :fib.0:n
+    23 push bank1 *tmp4
+-    * set :fib.0:n *tmp5
++   24 op sub :fib.0:n :fib.0:n 2
+    25 callrec bank1 *label0 *label7 :fib.0*retval
+    26 label *label7
+    27 pop bank1 *tmp4
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
     11 set *tmp2 :fib.0:n
     12 jump *label5 always
@@ -91,14 +78,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     20 push bank1 :fib.0:n
     21 push bank1 *tmp4
     22 op sub :fib.0:n :fib.0:n 2
- 
-    24 label *label7
-    25 pop bank1 *tmp4
-    26 pop bank1 :fib.0:n
--    * set *tmp6 :fib.0*retval
-    27 op add *tmp2 *tmp4 :fib.0*retval
-    28 label *label5
-    29 set :fib.0*retval *tmp2
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  

@@ -19,6 +19,7 @@ public class WARN {
     public static final String VARIABLE_NOT_DEFINED = "Variable '%s' is not defined.";
     public static final String VARIABLE_NOT_INITIALIZED = "Variable '%s' is not initialized.";
     public static final String VARIABLE_NOT_USED = "Variable '%s' is not used.";
+    public static final String VOLATILE_VARIABLE_NOT_USED = "Volatile variable '%s' is unused.";
     public static final String VOID_EXPRESSION_DEPRECATED = "Expression doesn't have any value. Using value-less expressions in assignments is deprecated.";
     public static final String VOID_RETURN = "Expression doesn't have any value. Using value-less expressions in return statements is deprecated.";
 }

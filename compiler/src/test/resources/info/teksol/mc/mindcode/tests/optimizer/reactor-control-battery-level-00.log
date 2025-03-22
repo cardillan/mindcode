@@ -1,10 +1,10 @@
    135 instructions before optimizations.
-    17 instructions eliminated by Temp Variables Elimination.
+    28 instructions eliminated by Temp Variables Elimination.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      1 instructions eliminated by Jump Normalization (3 iterations).
      1 instructions eliminated by Jump Optimization (3 iterations).
      1 instructions eliminated by Single Step Elimination (4 iterations).
-   537 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+   526 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      2 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
   1021 instructions added by Loop Unrolling (4 iterations).
@@ -33,341 +33,259 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructi
     41 op add :wait :wait .DELAY
     42 sensor *tmp9 battery1 @powerNetIn
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-17 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-28 instructions):
  
-    19 set .ACCU_PROD 0
-    20 set :index 0
-    21 set .SPACING 100
+     5 set :addr 0
+     6 label *label0
+     7 jump *label2 greaterThanEq :addr 512
+-    * set *tmp0 :addr
+-    * write 0 bank1 *tmp0
++    8 write 0 bank1 :addr
+     9 label *label1
+    10 op add :addr :addr 1
+    11 jump *label0 always
+ 
+    18 set .ACCU_PROD 0
+    19 set :index 0
+    20 set .SPACING 100
 -    * op min *tmp2 .SAMPLES .SPACING
 -    * set .SAMPLES *tmp2
-+   22 op min .SAMPLES .SAMPLES .SPACING
-    23 set .HALF 0.5
-    24 op mul *tmp3 .DELAY .SAMPLES
++   21 op min .SAMPLES .SAMPLES .SPACING
+    22 set .HALF 0.5
+    23 op mul *tmp3 .DELAY .SAMPLES
 -    * op div *tmp4 *tmp3 1000
 -    * set .SECONDS *tmp4
-+   25 op div .SECONDS *tmp3 1000
-    26 set :index 0
-    27 set :loops 0
++   24 op div .SECONDS *tmp3 1000
+    25 set :index 0
+    26 set :loops 0
 -    * set *tmp5 @time
 -    * set :wait *tmp5
-+   28 set :wait @time
-    29 label *label3
-    30 jump *label5 equal true false
-    31 op equal *tmp6 :loops 0
-    32 jump *label6 equal *tmp6 false
++   27 set :wait @time
+    28 label *label3
+    29 jump *label5 equal true false
+    30 op equal *tmp6 :loops 0
+    31 jump *label6 equal *tmp6 false
 -    * set *tmp8 @time
 -    * set :wait *tmp8
-+   33 set :wait @time
-    34 jump *label7 always
-    35 label *label6
-    36 label *label7
-    37 op add :wait :wait .DELAY
++   32 set :wait @time
+    33 jump *label7 always
+    34 label *label6
+    35 label *label7
+    36 op add :wait :wait .DELAY
 -    * sensor *tmp9 battery1 @powerNetIn
 -    * set :powerNetIn *tmp9
 -    * sensor *tmp10 battery1 @powerNetOut
 -    * set :powerNetOut *tmp10
 -    * sensor *tmp11 battery1 @powerNetStored
 -    * set :powerNetStored *tmp11
-+   38 sensor :powerNetIn battery1 @powerNetIn
-+   39 sensor :powerNetOut battery1 @powerNetOut
-+   40 sensor :powerNetStored battery1 @powerNetStored
-    41 set :tmp :index
-    42 set *tmp12 :tmp
-    43 read *tmp13 bank1 *tmp12
- 
-    47 write :powerNetOut bank1 *tmp14
-    48 op div *tmp16 .ACCU_CONS .SAMPLES
-    49 op add *tmp17 *tmp16 .HALF
++   37 sensor :powerNetIn battery1 @powerNetIn
++   38 sensor :powerNetOut battery1 @powerNetOut
++   39 sensor :powerNetStored battery1 @powerNetStored
+    40 set :tmp :index
+-    * set *tmp12 :tmp
+-    * read *tmp13 bank1 *tmp12
++   41 read *tmp13 bank1 :tmp
+    42 op sub .ACCU_CONS .ACCU_CONS *tmp13
+    43 op add .ACCU_CONS .ACCU_CONS :powerNetOut
+-    * set *tmp14 :tmp
+-    * write :powerNetOut bank1 *tmp14
++   44 write :powerNetOut bank1 :tmp
+    45 op div *tmp16 .ACCU_CONS .SAMPLES
+    46 op add *tmp17 *tmp16 .HALF
 -    * op floor *tmp18 *tmp17
 -    * set :consumption *tmp18
-+   50 op floor :consumption *tmp17
-    51 set *tmp19 .CONSUMPTION_INDEX
-    52 write :consumption bank1 *tmp19
+-    * set *tmp19 .CONSUMPTION_INDEX
+-    * write :consumption bank1 *tmp19
 -    * op add *tmp21 :tmp .SPACING
 -    * set :tmp *tmp21
-+   53 op add :tmp :tmp .SPACING
-    54 set *tmp22 :tmp
-    55 read *tmp23 bank1 *tmp22
-    56 op sub .ACCU_PROD .ACCU_PROD *tmp23
- 
-    59 write :powerNetIn bank1 *tmp24
-    60 op div *tmp26 .ACCU_PROD .SAMPLES
-    61 op add *tmp27 *tmp26 .HALF
+-    * set *tmp22 :tmp
+-    * read *tmp23 bank1 *tmp22
++   47 op floor :consumption *tmp17
++   48 write :consumption bank1 .CONSUMPTION_INDEX
++   49 op add :tmp :tmp .SPACING
++   50 read *tmp23 bank1 :tmp
+    51 op sub .ACCU_PROD .ACCU_PROD *tmp23
+    52 op add .ACCU_PROD .ACCU_PROD :powerNetIn
+-    * set *tmp24 :tmp
+-    * write :powerNetIn bank1 *tmp24
++   53 write :powerNetIn bank1 :tmp
+    54 op div *tmp26 .ACCU_PROD .SAMPLES
+    55 op add *tmp27 *tmp26 .HALF
 -    * op floor *tmp28 *tmp27
 -    * set :production *tmp28
-+   62 op floor :production *tmp27
-    63 set *tmp29 .PRODUCTION_INDEX
-    64 write :production bank1 *tmp29
-    65 op sub *tmp31 .ACCU_PROD .ACCU_CONS
-    66 op div *tmp32 *tmp31 .SAMPLES
-    67 op add *tmp33 *tmp32 .HALF
+-    * set *tmp29 .PRODUCTION_INDEX
+-    * write :production bank1 *tmp29
++   56 op floor :production *tmp27
++   57 write :production bank1 .PRODUCTION_INDEX
+    58 op sub *tmp31 .ACCU_PROD .ACCU_CONS
+    59 op div *tmp32 *tmp31 .SAMPLES
+    60 op add *tmp33 *tmp32 .HALF
 -    * op floor *tmp34 *tmp33
 -    * set :net_power *tmp34
-+   68 op floor :net_power *tmp33
-    69 set *tmp35 .NET_POWER_INDEX
-    70 write :net_power bank1 *tmp35
+-    * set *tmp35 .NET_POWER_INDEX
+-    * write :net_power bank1 *tmp35
 -    * op add *tmp37 :tmp .SPACING
 -    * set :tmp *tmp37
-+   71 op add :tmp :tmp .SPACING
-    72 set *tmp38 :tmp
+-    * set *tmp38 :tmp
 -    * read *tmp39 bank1 *tmp38
 -    * set :last *tmp39
-+   73 read :last bank1 *tmp38
-    74 set *tmp40 :tmp
-    75 write :powerNetStored bank1 *tmp40
+-    * set *tmp40 :tmp
+-    * write :powerNetStored bank1 *tmp40
 -    * op sub *tmp42 :powerNetStored :last
 -    * set :diff *tmp42
-+   76 op sub :diff :powerNetStored :last
-    77 op div *tmp43 :diff .SECONDS
-    78 op add *tmp44 *tmp43 .HALF
++   61 op floor :net_power *tmp33
++   62 write :net_power bank1 .NET_POWER_INDEX
++   63 op add :tmp :tmp .SPACING
++   64 read :last bank1 :tmp
++   65 write :powerNetStored bank1 :tmp
++   66 op sub :diff :powerNetStored :last
+    67 op div *tmp43 :diff .SECONDS
+    68 op add *tmp44 *tmp43 .HALF
 -    * op floor *tmp45 *tmp44
 -    * set :battery_change *tmp45
-+   79 op floor :battery_change *tmp44
-    80 set *tmp46 .BATTERY_CHANGE_INDEX
-    81 write :battery_change bank1 *tmp46
-    82 op add *tmp48 :index 1
+-    * set *tmp46 .BATTERY_CHANGE_INDEX
+-    * write :battery_change bank1 *tmp46
++   69 op floor :battery_change *tmp44
++   70 write :battery_change bank1 .BATTERY_CHANGE_INDEX
+    71 op add *tmp48 :index 1
 -    * op mod *tmp49 *tmp48 .SAMPLES
 -    * set :index *tmp49
-+   83 op mod :index *tmp48 .SAMPLES
-    84 print "Measured interval: [green]"
-    85 print .SECONDS
-    86 print "["
++   72 op mod :index *tmp48 .SAMPLES
+    73 print "Measured interval: [green]"
+    74 print .SECONDS
+    75 print "["
  
-   106 print "["
-   107 print "]"
-   108 set :loops 0
+    95 print "["
+    96 print "]"
+    97 set :loops 0
 -    * set *tmp50 @time
 -    * set :start *tmp50
-+  109 set :start @time
-   110 label *label8
-   111 op greaterThanEq *tmp51 @time :start
-   112 op lessThan *tmp52 @time :wait
++   98 set :start @time
+    99 label *label8
+   100 op greaterThanEq *tmp51 @time :start
+   101 op lessThan *tmp52 @time :wait
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
-    27 set :loops 0
-    28 set :wait @time
-    29 label *label3
+    26 set :loops 0
+    27 set :wait @time
+    28 label *label3
 -    * jump *label5 equal true false
-    30 op equal *tmp6 :loops 0
-    31 jump *label6 equal *tmp6 false
-    32 set :wait @time
+    29 op equal *tmp6 :loops 0
+    30 jump *label6 equal *tmp6 false
+    31 set :wait @time
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
-    27 set :loops 0
-    28 set :wait @time
-    29 label *label3
+    26 set :loops 0
+    27 set :wait @time
+    28 label *label3
 -    * op equal *tmp6 :loops 0
 -    * jump *label6 equal *tmp6 false
-+   30 jump *label6 notEqual :loops 0
-    31 set :wait @time
-    32 jump *label7 always
-    33 label *label6
++   29 jump *label6 notEqual :loops 0
+    30 set :wait @time
+    31 jump *label7 always
+    32 label *label6
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    29 label *label3
-    30 jump *label6 notEqual :loops 0
-    31 set :wait @time
+    28 label *label3
+    29 jump *label6 notEqual :loops 0
+    30 set :wait @time
 -    * jump *label7 always
-    32 label *label6
-    33 label *label7
-    34 op add :wait :wait .DELAY
+    31 label *label6
+    32 label *label7
+    33 op add :wait :wait .DELAY
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
-     6 label *label0
-     7 jump *label2 greaterThanEq :addr 512
-     8 set *tmp0 :addr
--    * write 0 bank1 *tmp0
-+    9 write 0 bank1 :addr
-    10 label *label1
-    11 op add :addr :addr 1
-    12 jump *label0 always
- 
-    17 set .BATTERY_CHANGE_INDEX 511
-    18 set .ACCU_CONS 0
-    19 set .ACCU_PROD 0
+    16 set .BATTERY_CHANGE_INDEX 511
+    17 set .ACCU_CONS 0
+    18 set .ACCU_PROD 0
 -    * set :index 0
-    20 set .SPACING 100
+    19 set .SPACING 100
 -    * op min .SAMPLES .SAMPLES .SPACING
-+   21 op min .SAMPLES 40 100
-    22 set .HALF 0.5
++   20 op min .SAMPLES 40 100
+    21 set .HALF 0.5
 -    * op mul *tmp3 .DELAY .SAMPLES
 -    * op div .SECONDS *tmp3 1000
-+   23 op mul *tmp3 150 40
-+   24 op div .SECONDS 6000 1000
-    25 set :index 0
-    26 set :loops 0
-    27 set :wait @time
++   22 op mul *tmp3 150 40
++   23 op div .SECONDS 6000 1000
+    24 set :index 0
+    25 set :loops 0
+    26 set :wait @time
  
-    30 set :wait @time
-    31 label *label6
-    32 label *label7
+    29 set :wait @time
+    30 label *label6
+    31 label *label7
 -    * op add :wait :wait .DELAY
-+   33 op add :wait :wait 150
-    34 sensor :powerNetIn battery1 @powerNetIn
-    35 sensor :powerNetOut battery1 @powerNetOut
-    36 sensor :powerNetStored battery1 @powerNetStored
-    37 set :tmp :index
--    * set *tmp12 :tmp
--    * read *tmp13 bank1 *tmp12
-+   38 set *tmp12 :index
-+   39 read *tmp13 bank1 :tmp
-    40 op sub .ACCU_CONS .ACCU_CONS *tmp13
-    41 op add .ACCU_CONS .ACCU_CONS :powerNetOut
--    * set *tmp14 :tmp
--    * write :powerNetOut bank1 *tmp14
++   32 op add :wait :wait 150
+    33 sensor :powerNetIn battery1 @powerNetIn
+    34 sensor :powerNetOut battery1 @powerNetOut
+    35 sensor :powerNetStored battery1 @powerNetStored
+    36 set :tmp :index
+-    * read *tmp13 bank1 :tmp
++   37 read *tmp13 bank1 :index
+    38 op sub .ACCU_CONS .ACCU_CONS *tmp13
+    39 op add .ACCU_CONS .ACCU_CONS :powerNetOut
+-    * write :powerNetOut bank1 :tmp
 -    * op div *tmp16 .ACCU_CONS .SAMPLES
 -    * op add *tmp17 *tmp16 .HALF
-+   42 set *tmp14 :index
-+   43 write :powerNetOut bank1 :tmp
-+   44 op div *tmp16 .ACCU_CONS 40
-+   45 op add *tmp17 *tmp16 0.5
-    46 op floor :consumption *tmp17
--    * set *tmp19 .CONSUMPTION_INDEX
--    * write :consumption bank1 *tmp19
++   40 write :powerNetOut bank1 :index
++   41 op div *tmp16 .ACCU_CONS 40
++   42 op add *tmp17 *tmp16 0.5
+    43 op floor :consumption *tmp17
+-    * write :consumption bank1 .CONSUMPTION_INDEX
 -    * op add :tmp :tmp .SPACING
-+   47 set *tmp19 508
-+   48 write :consumption bank1 .CONSUMPTION_INDEX
-+   49 op add :tmp :index 100
-    50 set *tmp22 :tmp
--    * read *tmp23 bank1 *tmp22
-+   51 read *tmp23 bank1 :tmp
-    52 op sub .ACCU_PROD .ACCU_PROD *tmp23
-    53 op add .ACCU_PROD .ACCU_PROD :powerNetIn
-    54 set *tmp24 :tmp
--    * write :powerNetIn bank1 *tmp24
++   44 write :consumption bank1 508
++   45 op add :tmp :index 100
+    46 read *tmp23 bank1 :tmp
+    47 op sub .ACCU_PROD .ACCU_PROD *tmp23
+    48 op add .ACCU_PROD .ACCU_PROD :powerNetIn
+    49 write :powerNetIn bank1 :tmp
 -    * op div *tmp26 .ACCU_PROD .SAMPLES
 -    * op add *tmp27 *tmp26 .HALF
-+   55 write :powerNetIn bank1 :tmp
-+   56 op div *tmp26 .ACCU_PROD 40
-+   57 op add *tmp27 *tmp26 0.5
-    58 op floor :production *tmp27
--    * set *tmp29 .PRODUCTION_INDEX
--    * write :production bank1 *tmp29
-+   59 set *tmp29 509
-+   60 write :production bank1 .PRODUCTION_INDEX
-    61 op sub *tmp31 .ACCU_PROD .ACCU_CONS
++   50 op div *tmp26 .ACCU_PROD 40
++   51 op add *tmp27 *tmp26 0.5
+    52 op floor :production *tmp27
+-    * write :production bank1 .PRODUCTION_INDEX
++   53 write :production bank1 509
+    54 op sub *tmp31 .ACCU_PROD .ACCU_CONS
 -    * op div *tmp32 *tmp31 .SAMPLES
 -    * op add *tmp33 *tmp32 .HALF
-+   62 op div *tmp32 *tmp31 40
-+   63 op add *tmp33 *tmp32 0.5
-    64 op floor :net_power *tmp33
--    * set *tmp35 .NET_POWER_INDEX
--    * write :net_power bank1 *tmp35
++   55 op div *tmp32 *tmp31 40
++   56 op add *tmp33 *tmp32 0.5
+    57 op floor :net_power *tmp33
+-    * write :net_power bank1 .NET_POWER_INDEX
 -    * op add :tmp :tmp .SPACING
-+   65 set *tmp35 510
-+   66 write :net_power bank1 .NET_POWER_INDEX
-+   67 op add :tmp :tmp 100
-    68 set *tmp38 :tmp
--    * read :last bank1 *tmp38
-+   69 read :last bank1 :tmp
-    70 set *tmp40 :tmp
--    * write :powerNetStored bank1 *tmp40
-+   71 write :powerNetStored bank1 :tmp
-    72 op sub :diff :powerNetStored :last
++   58 write :net_power bank1 510
++   59 op add :tmp :tmp 100
+    60 read :last bank1 :tmp
+    61 write :powerNetStored bank1 :tmp
+    62 op sub :diff :powerNetStored :last
 -    * op div *tmp43 :diff .SECONDS
 -    * op add *tmp44 *tmp43 .HALF
-+   73 op div *tmp43 :diff 6
-+   74 op add *tmp44 *tmp43 0.5
-    75 op floor :battery_change *tmp44
--    * set *tmp46 .BATTERY_CHANGE_INDEX
--    * write :battery_change bank1 *tmp46
-+   76 set *tmp46 511
-+   77 write :battery_change bank1 .BATTERY_CHANGE_INDEX
-    78 op add *tmp48 :index 1
++   63 op div *tmp43 :diff 6
++   64 op add *tmp44 *tmp43 0.5
+    65 op floor :battery_change *tmp44
+-    * write :battery_change bank1 .BATTERY_CHANGE_INDEX
++   66 write :battery_change bank1 511
+    67 op add *tmp48 :index 1
 -    * op mod :index *tmp48 .SAMPLES
-+   79 op mod :index *tmp48 40
-    80 print "Measured interval: [green]"
++   68 op mod :index *tmp48 40
+    69 print "Measured interval: [green]"
 -    * print .SECONDS
-+   81 print 6
-    82 print "["
-    83 print "] seconds"
-    84 print "\n"
++   70 print 6
+    71 print "["
+    72 print "] seconds"
+    73 print "\n"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-18 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-12 instructions):
 -    * set .DELAY 150
 -    * set .SAMPLES 40
      0 printflush message1
      1 print "Initializing..."
      2 printflush message1
-     3 set :addr 0
-     4 label *label0
-     5 jump *label2 greaterThanEq :addr 512
--    * set *tmp0 :addr
-     6 write 0 bank1 :addr
-     7 label *label1
-     8 op add :addr :addr 1
- 
-    14 set .BATTERY_CHANGE_INDEX 511
-    15 set .ACCU_CONS 0
-    16 set .ACCU_PROD 0
--    * set .SPACING 100
--    * op min .SAMPLES 40 100
--    * set .HALF 0.5
--    * op mul *tmp3 150 40
--    * op div .SECONDS 6000 1000
-    17 set :index 0
-    18 set :loops 0
-    19 set :wait @time
- 
-    27 sensor :powerNetOut battery1 @powerNetOut
-    28 sensor :powerNetStored battery1 @powerNetStored
-    29 set :tmp :index
--    * set *tmp12 :index
--    * read *tmp13 bank1 :tmp
-+   30 read *tmp13 bank1 :index
-    31 op sub .ACCU_CONS .ACCU_CONS *tmp13
-    32 op add .ACCU_CONS .ACCU_CONS :powerNetOut
--    * set *tmp14 :index
--    * write :powerNetOut bank1 :tmp
-+   33 write :powerNetOut bank1 :index
-    34 op div *tmp16 .ACCU_CONS 40
-    35 op add *tmp17 *tmp16 0.5
-    36 op floor :consumption *tmp17
--    * set *tmp19 508
--    * write :consumption bank1 .CONSUMPTION_INDEX
-+   37 write :consumption bank1 508
-    38 op add :tmp :index 100
--    * set *tmp22 :tmp
-    39 read *tmp23 bank1 :tmp
-    40 op sub .ACCU_PROD .ACCU_PROD *tmp23
-    41 op add .ACCU_PROD .ACCU_PROD :powerNetIn
--    * set *tmp24 :tmp
-    42 write :powerNetIn bank1 :tmp
-    43 op div *tmp26 .ACCU_PROD 40
-    44 op add *tmp27 *tmp26 0.5
-    45 op floor :production *tmp27
--    * set *tmp29 509
--    * write :production bank1 .PRODUCTION_INDEX
-+   46 write :production bank1 509
-    47 op sub *tmp31 .ACCU_PROD .ACCU_CONS
-    48 op div *tmp32 *tmp31 40
-    49 op add *tmp33 *tmp32 0.5
-    50 op floor :net_power *tmp33
--    * set *tmp35 510
--    * write :net_power bank1 .NET_POWER_INDEX
--    * op add :tmp :tmp 100
--    * set *tmp38 :tmp
-+   51 write :net_power bank1 510
-+   52 op add :tmp :index 200
-    53 read :last bank1 :tmp
--    * set *tmp40 :tmp
-    54 write :powerNetStored bank1 :tmp
-    55 op sub :diff :powerNetStored :last
-    56 op div *tmp43 :diff 6
-    57 op add *tmp44 *tmp43 0.5
-    58 op floor :battery_change *tmp44
--    * set *tmp46 511
--    * write :battery_change bank1 .BATTERY_CHANGE_INDEX
-+   59 write :battery_change bank1 511
-    60 op add *tmp48 :index 1
-    61 op mod :index *tmp48 40
-    62 print "Measured interval: [green]"
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-5 instructions):
  
      8 op add :addr :addr 1
      9 jump *label0 always
@@ -378,7 +296,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-5
 -    * set .BATTERY_CHANGE_INDEX 511
     11 set .ACCU_CONS 0
     12 set .ACCU_PROD 0
+-    * set .SPACING 100
+-    * op min .SAMPLES 40 100
+-    * set .HALF 0.5
+-    * op mul *tmp3 150 40
+-    * op div .SECONDS 6000 1000
     13 set :index 0
+    14 set :loops 0
+    15 set :wait @time
  
     22 sensor :powerNetIn battery1 @powerNetIn
     23 sensor :powerNetOut battery1 @powerNetOut
@@ -387,6 +312,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-5
     25 read *tmp13 bank1 :index
     26 op sub .ACCU_CONS .ACCU_CONS *tmp13
     27 op add .ACCU_CONS .ACCU_CONS :powerNetOut
+ 
+    44 op add *tmp33 *tmp32 0.5
+    45 op floor :net_power *tmp33
+    46 write :net_power bank1 510
+-    * op add :tmp :tmp 100
++   47 op add :tmp :index 200
+    48 read :last bank1 :tmp
+    49 write :powerNetStored bank1 :tmp
+    50 op sub :diff :powerNetStored :last
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  

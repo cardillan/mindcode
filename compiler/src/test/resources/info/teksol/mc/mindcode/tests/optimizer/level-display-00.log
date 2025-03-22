@@ -1,10 +1,10 @@
    136 instructions before optimizations.
-    16 instructions eliminated by Temp Variables Elimination.
+    19 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
      8 instructions eliminated by Dead Code Elimination (3 iterations).
      4 instructions eliminated by Jump Optimization (3 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
-     9 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      2 instructions added by Loop Optimization (2 iterations).
      5 loops improved by Loop Optimization.
      5 instructions eliminated by Jump Straightening (3 iterations).
@@ -110,7 +110,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructi
     73 printflush .MESSAGE
     74 label *label1
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-16 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 instructions):
  
      8 op or *tmp2 *tmp0 *tmp1
      9 jump *label2 equal *tmp2 false
@@ -167,40 +167,41 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-16 ins
     88 draw clear 0 0 80
     89 draw color .R0 .G0 .B0 255
     90 draw rect 10 10 156 156
-    91 set *tmp24 .CURRENT_INDEX
+-    * set *tmp24 .CURRENT_INDEX
 -    * read *tmp25 .MEMORY *tmp24
 -    * set :head *tmp25
-+   92 read :head .MEMORY *tmp24
-    93 set *tmp26 :head
+-    * set *tmp26 :head
 -    * read *tmp27 .MEMORY *tmp26
 -    * set :last *tmp27
-+   94 read :last .MEMORY *tmp26
-    95 print "\nIndex: "
-    96 print :head
-    97 print "\nValue: "
++   91 read :head .MEMORY .CURRENT_INDEX
++   92 read :last .MEMORY :head
+    93 print "\nIndex: "
+    94 print :head
+    95 print "\nValue: "
  
-   103 jump *label24 equal *tmp28 false
-   104 op sub :head :head 1
-   105 set *tmp29 :head
+   100 op greaterThan *tmp28 :x 10
+   101 jump *label24 equal *tmp28 false
+   102 op sub :head :head 1
+-    * set *tmp29 :head
 -    * read *tmp30 .MEMORY *tmp29
 -    * set :value *tmp30
 -    * op sub *tmp31 :x 5
 -    * set :x1 *tmp31
-+  106 read :value .MEMORY *tmp29
-+  107 op sub :x1 :x 5
-   108 draw line :x :last :x1 :value
-   109 set :x :x1
-   110 set :last :value
++  103 read :value .MEMORY :head
++  104 op sub :x1 :x 5
+   105 draw line :x :last :x1 :value
+   106 set :x :x1
+   107 set :last :value
  
-   118 print *tmp32
-   119 op div *tmp33 @time FREQ
-   120 op ceil *tmp34 *tmp33
+   115 print *tmp32
+   116 op div *tmp33 @time FREQ
+   117 op ceil *tmp34 *tmp33
 -    * op mul *tmp35 FREQ *tmp34
 -    * set :wait *tmp35
-+  121 op mul :wait FREQ *tmp34
-   122 set :loops 0
-   123 label *label25
-   124 op lessThan *tmp36 @time :wait
++  118 op mul :wait FREQ *tmp34
+   119 set :loops 0
+   120 label *label25
+   121 op lessThan *tmp36 @time :wait
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-5 instructions):
  
@@ -264,25 +265,25 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-4 inst
     80 print "Item/Liquid/Energy Level Display"
     81 draw clear 0 0 80
  
-    92 draw color .R1 .G1 .B1 255
-    93 set :x 159
-    94 label *label22
+    90 draw color .R1 .G1 .B1 255
+    91 set :x 159
+    92 label *label22
 -    * op greaterThan *tmp28 :x 10
 -    * jump *label24 equal *tmp28 false
-+   95 jump *label24 lessThanEq :x 10
-    96 op sub :head :head 1
-    97 set *tmp29 :head
-    98 read :value .MEMORY *tmp29
++   93 jump *label24 lessThanEq :x 10
+    94 op sub :head :head 1
+    95 read :value .MEMORY :head
+    96 op sub :x1 :x 5
  
-   113 op mul :wait FREQ *tmp34
-   114 set :loops 0
-   115 label *label25
+   110 op mul :wait FREQ *tmp34
+   111 set :loops 0
+   112 label *label25
 -    * op lessThan *tmp36 @time :wait
 -    * jump *label27 equal *tmp36 false
-+  116 jump *label27 greaterThanEq @time :wait
-   117 op add :loops :loops 1
-   118 label *label26
-   119 jump *label25 always
++  113 jump *label27 greaterThanEq @time :wait
+   114 op add :loops :loops 1
+   115 label *label26
+   116 jump *label25 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
@@ -312,47 +313,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      5 label *label0
      6 op equal *tmp0 .MEMORY null
      7 op equal *tmp1 .DISPLAY null
- 
-    80 draw color .R0 .G0 .B0 255
-    81 draw rect 10 10 156 156
-    82 set *tmp24 .CURRENT_INDEX
--    * read :head .MEMORY *tmp24
-+   83 read :head .MEMORY .CURRENT_INDEX
-    84 set *tmp26 :head
--    * read :last .MEMORY *tmp26
-+   85 read :last .MEMORY :head
-    86 print "\nIndex: "
-    87 print :head
-    88 print "\nValue: "
- 
-    93 jump *label24 lessThanEq :x 10
-    94 op sub :head :head 1
-    95 set *tmp29 :head
--    * read :value .MEMORY *tmp29
-+   96 read :value .MEMORY :head
-    97 op sub :x1 :x 5
-    98 draw line :x :last :x1 :value
-    99 set :x :x1
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
- 
-    79 draw clear 0 0 80
-    80 draw color .R0 .G0 .B0 255
-    81 draw rect 10 10 156 156
--    * set *tmp24 .CURRENT_INDEX
-    82 read :head .MEMORY .CURRENT_INDEX
--    * set *tmp26 :head
-    83 read :last .MEMORY :head
-    84 print "\nIndex: "
-    85 print :head
- 
-    90 label *label22
-    91 jump *label24 lessThanEq :x 10
-    92 op sub :head :head 1
--    * set *tmp29 :head
-    93 read :value .MEMORY :head
-    94 op sub :x1 :x 5
-    95 draw line :x :last :x1 :value
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (+1 instructions):
  

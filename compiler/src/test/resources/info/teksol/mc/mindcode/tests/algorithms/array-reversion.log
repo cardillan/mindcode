@@ -1,11 +1,11 @@
    114 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination.
+     2 instructions eliminated by Temp Variables Elimination.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      5 instructions eliminated by Jump Normalization (5 iterations).
      1 instructions eliminated by Jump Optimization (5 iterations).
     17 instructions eliminated by Single Step Elimination (3 passes, 17 iterations).
     30 instructions eliminated by Expression Optimization (4 iterations).
-    76 instructions eliminated by Data Flow Optimization (4 passes, 33 iterations).
+    75 instructions eliminated by Data Flow Optimization (4 passes, 33 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      1 loops improved by Loop Optimization.
     51 instructions added by Loop Unrolling (6 iterations).
@@ -33,141 +33,131 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructi
     85 set :reverse.0:t :reverse.0:i
     86 set :reverse.0:i :reverse.0:j
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
- 
-     6 op add :i :i 1
-     7 jump *label0 always
-     8 label *label2
--    * op idiv *tmp2 10 2
--    * set :reverse.0:count *tmp2
-+    9 op idiv :reverse.0:count 10 2
-    10 setaddr *tmp3 *label7
-    11 set :reverse.0:i .array*0
-    12 set :reverse.0:j .array*9
-
-Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    75 set :reverse.0:j .array*0
-    76 label *label4
-    77 op sub :reverse.0:count :reverse.0:count 1
--    * op lessThan *tmp4 :reverse.0:count 0
--    * jump *label17 equal *tmp4 false
-+   78 jump *label17 greaterThanEq :reverse.0:count 0
-    79 jump *label6 always
-    80 jump *label18 always
-    81 label *label17
-
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
- 
-    77 op sub :reverse.0:count :reverse.0:count 1
-    78 jump *label17 greaterThanEq :reverse.0:count 0
-    79 jump *label6 always
--    * jump *label18 always
-    80 label *label17
-    81 label *label18
-    82 set :reverse.0:t :reverse.0:i
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-     1 label *label0
-     2 jump *label2 greaterThanEq :i 10
-     3 set *tmp0 :i
--    * writearr :i .array[] *tmp0
-+    4 writearr :i .array[] :i
-     5 label *label1
-     6 op add :i :i 1
-     7 jump *label0 always
- 
-    13 jump *label4 always
-    14 multilabel *label7 marker0
-    15 set .array*0 :reverse.0:i
--    * set .array*9 :reverse.0:j
-+   16 set .array*9 :reverse.0:t
-    17 setaddr *tmp3 *label8
-    18 set :reverse.0:i .array*1
-    19 set :reverse.0:j .array*8
-    20 jump *label4 always
-    21 multilabel *label8 marker0
-    22 set .array*1 :reverse.0:i
--    * set .array*8 :reverse.0:j
-+   23 set .array*8 :reverse.0:t
-    24 setaddr *tmp3 *label9
-    25 set :reverse.0:i .array*2
-    26 set :reverse.0:j .array*7
-    27 jump *label4 always
-    28 multilabel *label9 marker0
-    29 set .array*2 :reverse.0:i
--    * set .array*7 :reverse.0:j
-+   30 set .array*7 :reverse.0:t
-    31 setaddr *tmp3 *label10
-    32 set :reverse.0:i .array*3
-    33 set :reverse.0:j .array*6
-    34 jump *label4 always
-    35 multilabel *label10 marker0
-    36 set .array*3 :reverse.0:i
--    * set .array*6 :reverse.0:j
-+   37 set .array*6 :reverse.0:t
-    38 setaddr *tmp3 *label11
-    39 set :reverse.0:i .array*4
-    40 set :reverse.0:j .array*5
-    41 jump *label4 always
-    42 multilabel *label11 marker0
-    43 set .array*4 :reverse.0:i
--    * set .array*5 :reverse.0:j
-+   44 set .array*5 :reverse.0:t
-    45 setaddr *tmp3 *label12
-    46 set :reverse.0:i .array*5
-    47 set :reverse.0:j .array*4
-    48 jump *label4 always
-    49 multilabel *label12 marker0
-    50 set .array*5 :reverse.0:i
--    * set .array*4 :reverse.0:j
-+   51 set .array*4 :reverse.0:t
-    52 setaddr *tmp3 *label13
-    53 set :reverse.0:i .array*6
-    54 set :reverse.0:j .array*3
-    55 jump *label4 always
-    56 multilabel *label13 marker0
-    57 set .array*6 :reverse.0:i
--    * set .array*3 :reverse.0:j
-+   58 set .array*3 :reverse.0:t
-    59 setaddr *tmp3 *label14
-    60 set :reverse.0:i .array*7
-    61 set :reverse.0:j .array*2
-    62 jump *label4 always
-    63 multilabel *label14 marker0
-    64 set .array*7 :reverse.0:i
--    * set .array*2 :reverse.0:j
-+   65 set .array*2 :reverse.0:t
-    66 setaddr *tmp3 *label15
-    67 set :reverse.0:i .array*8
-    68 set :reverse.0:j .array*1
-    69 jump *label4 always
-    70 multilabel *label15 marker0
-    71 set .array*8 :reverse.0:i
--    * set .array*1 :reverse.0:j
-+   72 set .array*1 :reverse.0:t
-    73 setaddr *tmp3 *label16
-    74 set :reverse.0:i .array*9
-    75 set :reverse.0:j .array*0
- 
-    86 multijump *tmp3 0 0 marker0
-    87 multilabel *label16 marker0
-    88 set .array*9 :reverse.0:i
--    * set .array*0 :reverse.0:j
-+   89 set .array*0 :reverse.0:t
-    90 label *label6
-    91 label *label3
-    92 assertflush
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
      0 set :i 0
      1 label *label0
      2 jump *label2 greaterThanEq :i 10
 -    * set *tmp0 :i
-     3 writearr :i .array[] :i
+-    * writearr :i .array[] *tmp0
++    3 writearr :i .array[] :i
      4 label *label1
      5 op add :i :i 1
+     6 jump *label0 always
+     7 label *label2
+-    * op idiv *tmp2 10 2
+-    * set :reverse.0:count *tmp2
++    8 op idiv :reverse.0:count 10 2
+     9 setaddr *tmp3 *label7
+    10 set :reverse.0:i .array*0
+    11 set :reverse.0:j .array*9
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    74 set :reverse.0:j .array*0
+    75 label *label4
+    76 op sub :reverse.0:count :reverse.0:count 1
+-    * op lessThan *tmp4 :reverse.0:count 0
+-    * jump *label17 equal *tmp4 false
++   77 jump *label17 greaterThanEq :reverse.0:count 0
+    78 jump *label6 always
+    79 jump *label18 always
+    80 label *label17
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+    76 op sub :reverse.0:count :reverse.0:count 1
+    77 jump *label17 greaterThanEq :reverse.0:count 0
+    78 jump *label6 always
+-    * jump *label18 always
+    79 label *label17
+    80 label *label18
+    81 set :reverse.0:t :reverse.0:i
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+    12 jump *label4 always
+    13 multilabel *label7 marker0
+    14 set .array*0 :reverse.0:i
+-    * set .array*9 :reverse.0:j
++   15 set .array*9 :reverse.0:t
+    16 setaddr *tmp3 *label8
+    17 set :reverse.0:i .array*1
+    18 set :reverse.0:j .array*8
+    19 jump *label4 always
+    20 multilabel *label8 marker0
+    21 set .array*1 :reverse.0:i
+-    * set .array*8 :reverse.0:j
++   22 set .array*8 :reverse.0:t
+    23 setaddr *tmp3 *label9
+    24 set :reverse.0:i .array*2
+    25 set :reverse.0:j .array*7
+    26 jump *label4 always
+    27 multilabel *label9 marker0
+    28 set .array*2 :reverse.0:i
+-    * set .array*7 :reverse.0:j
++   29 set .array*7 :reverse.0:t
+    30 setaddr *tmp3 *label10
+    31 set :reverse.0:i .array*3
+    32 set :reverse.0:j .array*6
+    33 jump *label4 always
+    34 multilabel *label10 marker0
+    35 set .array*3 :reverse.0:i
+-    * set .array*6 :reverse.0:j
++   36 set .array*6 :reverse.0:t
+    37 setaddr *tmp3 *label11
+    38 set :reverse.0:i .array*4
+    39 set :reverse.0:j .array*5
+    40 jump *label4 always
+    41 multilabel *label11 marker0
+    42 set .array*4 :reverse.0:i
+-    * set .array*5 :reverse.0:j
++   43 set .array*5 :reverse.0:t
+    44 setaddr *tmp3 *label12
+    45 set :reverse.0:i .array*5
+    46 set :reverse.0:j .array*4
+    47 jump *label4 always
+    48 multilabel *label12 marker0
+    49 set .array*5 :reverse.0:i
+-    * set .array*4 :reverse.0:j
++   50 set .array*4 :reverse.0:t
+    51 setaddr *tmp3 *label13
+    52 set :reverse.0:i .array*6
+    53 set :reverse.0:j .array*3
+    54 jump *label4 always
+    55 multilabel *label13 marker0
+    56 set .array*6 :reverse.0:i
+-    * set .array*3 :reverse.0:j
++   57 set .array*3 :reverse.0:t
+    58 setaddr *tmp3 *label14
+    59 set :reverse.0:i .array*7
+    60 set :reverse.0:j .array*2
+    61 jump *label4 always
+    62 multilabel *label14 marker0
+    63 set .array*7 :reverse.0:i
+-    * set .array*2 :reverse.0:j
++   64 set .array*2 :reverse.0:t
+    65 setaddr *tmp3 *label15
+    66 set :reverse.0:i .array*8
+    67 set :reverse.0:j .array*1
+    68 jump *label4 always
+    69 multilabel *label15 marker0
+    70 set .array*8 :reverse.0:i
+-    * set .array*1 :reverse.0:j
++   71 set .array*1 :reverse.0:t
+    72 setaddr *tmp3 *label16
+    73 set :reverse.0:i .array*9
+    74 set :reverse.0:j .array*0
+ 
+    85 multijump *tmp3 0 0 marker0
+    86 multilabel *label16 marker0
+    87 set .array*9 :reverse.0:i
+-    * set .array*0 :reverse.0:j
++   88 set .array*0 :reverse.0:t
+    89 label *label6
+    90 label *label3
+    91 assertflush
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
  
     80 label *label18
     81 set :reverse.0:t :reverse.0:i

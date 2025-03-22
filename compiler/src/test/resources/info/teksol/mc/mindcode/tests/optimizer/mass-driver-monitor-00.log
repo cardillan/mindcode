@@ -1,12 +1,12 @@
    318 instructions before optimizations.
-    35 instructions eliminated by Temp Variables Elimination.
+    39 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
     25 instructions eliminated by Dead Code Elimination (5 iterations).
     22 instructions eliminated by Jump Optimization (4 iterations).
     12 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-    19 instructions eliminated by Data Flow Optimization (3 passes, 8 iterations).
+    15 instructions eliminated by Data Flow Optimization (3 passes, 8 iterations).
      5 instructions modified by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (4 iterations).
@@ -213,7 +213,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructi
    217 label *label24
    218 label *label18
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-39 instructions):
  
      9 jump *label2 equal *tmp0 false
     10 print "Mass Driver Monitor"
@@ -386,88 +386,106 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-35 ins
    202 op notEqual *tmp69 .MEMORY null
    203 jump *label37 equal *tmp69 false
    204 set :n 0
+   205 label *label39
+   206 op lessThan *tmp71 :n @links
+   207 jump *label41 equal *tmp71 false
+-    * set *tmp72 :n
+-    * write 0 .MEMORY *tmp72
++  208 write 0 .MEMORY :n
+   209 label *label40
+   210 op add :n :n 1
+   211 jump *label39 always
  
-   220 sensor *tmp76 .SWITCH @enabled
-   221 op equal *tmp77 *tmp76 0
-   222 jump *label44 equal *tmp77 false
+   213 jump *label38 always
+   214 label *label37
+   215 label *label38
+-    * set *tmp74 .SWITCH
+-    * control enabled *tmp74 0
++  216 control enabled .SWITCH 0
+   217 label *label42
+   218 sensor *tmp76 .SWITCH @enabled
+   219 op equal *tmp77 *tmp76 0
+   220 jump *label44 equal *tmp77 false
 -    * set *tmp78 @time
 -    * set :start *tmp78
-+  223 set :start @time
-   224 draw color 0 0 80 255
-   225 draw rect :clx :cly :clw :clh
-   226 draw rect :crx :cry :crw :crh
++  221 set :start @time
+   222 draw color 0 0 80 255
+   223 draw rect :clx :cly :clw :clh
+   224 draw rect :crx :cry :crw :crh
  
-   230 label *label45
-   231 op lessThan *tmp79 :n @links
-   232 jump *label47 equal *tmp79 false
+   228 label *label45
+   229 op lessThan *tmp79 :n @links
+   230 jump *label47 equal *tmp79 false
 -    * getlink *tmp80 :n
 -    * set :driver *tmp80
-+  233 getlink :driver :n
-   234 sensor *tmp81 :driver @type
-   235 op equal *tmp82 *tmp81 @mass-driver
-   236 jump *label48 equal *tmp82 false
++  231 getlink :driver :n
+   232 sensor *tmp81 :driver @type
+   233 op equal *tmp82 *tmp81 @mass-driver
+   234 jump *label48 equal *tmp82 false
 -    * op idiv *tmp84 :index 8
 -    * set :column *tmp84
 -    * op mod *tmp85 :index 8
 -    * set :row *tmp85
-+  237 op idiv :column :index 8
-+  238 op mod :row :index 8
-   239 op mul *tmp86 :column .BAR_SPACE
++  235 op idiv :column :index 8
++  236 op mod :row :index 8
+   237 op mul *tmp86 :column .BAR_SPACE
 -    * op add *tmp87 .OFFSET_X *tmp86
 -    * set :x *tmp87
-+  240 op add :x .OFFSET_X *tmp86
-   241 op mul *tmp88 :row .BAR_GAP
++  238 op add :x .OFFSET_X *tmp86
+   239 op mul *tmp88 :row .BAR_GAP
 -    * op add *tmp89 .OFFSET_Y *tmp88
 -    * set :y *tmp89
-+  242 op add :y .OFFSET_Y *tmp88
-   243 draw color 0 0 80 255
-   244 op sub *tmp90 :x 1
-   245 op sub *tmp91 :y 1
++  240 op add :y .OFFSET_Y *tmp88
+   241 draw color 0 0 80 255
+   242 op sub *tmp90 :x 1
+   243 op sub *tmp91 :y 1
  
-   248 op add *tmp92 :x 7
-   249 op add *tmp93 :y 7
-   250 draw image *tmp92 *tmp93 @mass-driver 16 0
+   246 op add *tmp92 :x 7
+   247 op add *tmp93 :y 7
+   248 draw image *tmp92 *tmp93 @mass-driver 16 0
 -    * op add *tmp94 :x 16
 -    * set :x *tmp94
 -    * sensor *tmp95 :driver @totalItems
 -    * set :items *tmp95
-+  251 op add :x :x 16
-+  252 sensor :items :driver @totalItems
-   253 set *tmp96 :n
-   254 read *tmp97 .MEMORY *tmp96
+-    * set *tmp96 :n
+-    * read *tmp97 .MEMORY *tmp96
 -    * op max *tmp98 *tmp97 :items
 -    * set :maxx *tmp98
-+  255 op max :maxx *tmp97 :items
-   256 set *tmp99 :n
-   257 write :maxx .MEMORY *tmp99
-   258 op greaterThan *tmp101 :maxx .MAX
-   259 jump *label50 equal *tmp101 false
+-    * set *tmp99 :n
+-    * write :maxx .MEMORY *tmp99
++  249 op add :x :x 16
++  250 sensor :items :driver @totalItems
++  251 read *tmp97 .MEMORY :n
++  252 op max :maxx *tmp97 :items
++  253 write :maxx .MEMORY :n
+   254 op greaterThan *tmp101 :maxx .MAX
+   255 jump *label50 equal *tmp101 false
 -    * op mul *tmp103 2 CAPACITY
 -    * set .MAX *tmp103
 -    * op div *tmp104 .BAR_LENGTH .MAX
 -    * set .MUL *tmp104
-+  260 op mul .MAX 2 CAPACITY
-+  261 op div .MUL .BAR_LENGTH .MAX
-   262 jump *label51 always
-   263 label *label50
-   264 label *label51
++  256 op mul .MAX 2 CAPACITY
++  257 op div .MUL .BAR_LENGTH .MAX
+   258 jump *label51 always
+   259 label *label50
+   260 label *label51
  
-   290 op add *tmp113 :x .HALF_BAR
-   291 draw lineRect *tmp113 :y .HALF_BAR .BAR_WIDTH
-   292 label *label57
+   286 op add *tmp113 :x .HALF_BAR
+   287 draw lineRect *tmp113 :y .HALF_BAR .BAR_WIDTH
+   288 label *label57
 -    * op add *tmp114 :index 1
 -    * set :index *tmp114
-+  293 op add :index :index 1
-   294 jump *label49 always
-   295 label *label48
-   296 label *label49
-   297 label *label46
++  289 op add :index :index 1
+   290 jump *label49 always
+   291 label *label48
+   292 label *label49
+   293 label *label46
 -    * op add *tmp115 :n 1
 -    * set :n *tmp115
-+  298 op add :n :n 1
-   299 jump *label45 always
-   300 label *label47
-   301 drawflush .DISPLAY
++  294 op add :n :n 1
+   295 jump *label45 always
+   296 label *label47
+   297 drawflush .DISPLAY
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-4 instructions):
  
@@ -643,71 +661,71 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-22 ins
 -    * op lessThan *tmp71 :n @links
 -    * jump *label41 equal *tmp71 false
 +  188 jump *label41 greaterThanEq :n @links
-   189 set *tmp72 :n
-   190 write 0 .MEMORY *tmp72
-   191 label *label40
+   189 write 0 .MEMORY :n
+   190 label *label40
+   191 op add :n :n 1
  
-   199 control enabled *tmp74 0
-   200 label *label42
-   201 sensor *tmp76 .SWITCH @enabled
+   197 control enabled .SWITCH 0
+   198 label *label42
+   199 sensor *tmp76 .SWITCH @enabled
 -    * op equal *tmp77 *tmp76 0
 -    * jump *label44 equal *tmp77 false
-+  202 jump *label44 notEqual *tmp76 0
-   203 set :start @time
-   204 draw color 0 0 80 255
-   205 draw rect :clx :cly :clw :clh
++  200 jump *label44 notEqual *tmp76 0
+   201 set :start @time
+   202 draw color 0 0 80 255
+   203 draw rect :clx :cly :clw :clh
  
-   208 set :index FROM_INDEX
-   209 set :n 0
-   210 label *label45
+   206 set :index FROM_INDEX
+   207 set :n 0
+   208 label *label45
 -    * op lessThan *tmp79 :n @links
 -    * jump *label47 equal *tmp79 false
-+  211 jump *label47 greaterThanEq :n @links
-   212 getlink :driver :n
-   213 sensor *tmp81 :driver @type
++  209 jump *label47 greaterThanEq :n @links
+   210 getlink :driver :n
+   211 sensor *tmp81 :driver @type
 -    * op equal *tmp82 *tmp81 @mass-driver
 -    * jump *label48 equal *tmp82 false
-+  214 jump *label48 notEqual *tmp81 @mass-driver
-   215 op idiv :column :index 8
-   216 op mod :row :index 8
-   217 op mul *tmp86 :column .BAR_SPACE
++  212 jump *label48 notEqual *tmp81 @mass-driver
+   213 op idiv :column :index 8
+   214 op mod :row :index 8
+   215 op mul *tmp86 :column .BAR_SPACE
  
-   233 op max :maxx *tmp97 :items
-   234 set *tmp99 :n
-   235 write :maxx .MEMORY *tmp99
+   229 read *tmp97 .MEMORY :n
+   230 op max :maxx *tmp97 :items
+   231 write :maxx .MEMORY :n
 -    * op greaterThan *tmp101 :maxx .MAX
 -    * jump *label50 equal *tmp101 false
-+  236 jump *label50 lessThanEq :maxx .MAX
-   237 op mul .MAX 2 CAPACITY
-   238 op div .MUL .BAR_LENGTH .MAX
-   239 jump *label51 always
-   240 label *label50
-   241 label *label51
++  232 jump *label50 lessThanEq :maxx .MAX
+   233 op mul .MAX 2 CAPACITY
+   234 op div .MUL .BAR_LENGTH .MAX
+   235 jump *label51 always
+   236 label *label50
+   237 label *label51
 -    * op lessThanEq *tmp105 .MAX CAPACITY
 -    * jump *label52 equal *tmp105 false
-+  242 jump *label52 greaterThan .MAX CAPACITY
-   243 draw color 0 128 0 255
-   244 jump *label53 always
-   245 label *label52
++  238 jump *label52 greaterThan .MAX CAPACITY
+   239 draw color 0 128 0 255
+   240 jump *label53 always
+   241 label *label52
  
-   247 label *label53
-   248 op mul *tmp107 :items .MUL
-   249 draw rect :x :y *tmp107 .BAR_WIDTH
+   243 label *label53
+   244 op mul *tmp107 :items .MUL
+   245 draw rect :x :y *tmp107 .BAR_WIDTH
 -    * op notEqual *tmp108 .MEMORY null
 -    * jump *label54 equal *tmp108 false
-+  250 jump *label54 equal .MEMORY null
-   251 draw color 220 220 220 255
-   252 op mul *tmp110 :maxx .MUL
-   253 draw lineRect :x :y *tmp110 .BAR_WIDTH
-   254 jump *label55 always
-   255 label *label54
-   256 label *label55
++  246 jump *label54 equal .MEMORY null
+   247 draw color 220 220 220 255
+   248 op mul *tmp110 :maxx .MUL
+   249 draw lineRect :x :y *tmp110 .BAR_WIDTH
+   250 jump *label55 always
+   251 label *label54
+   252 label *label55
 -    * op lessThanEq *tmp111 .MAX CAPACITY
 -    * jump *label56 equal *tmp111 false
-+  257 jump *label56 greaterThan .MAX CAPACITY
-   258 draw color 0 255 0 255
-   259 draw lineRect :x :y .BAR_LENGTH .BAR_WIDTH
-   260 jump *label57 always
++  253 jump *label56 greaterThan .MAX CAPACITY
+   254 draw color 0 255 0 255
+   255 draw lineRect :x :y .BAR_LENGTH .BAR_WIDTH
+   256 jump *label57 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-7 instructions):
  
@@ -735,37 +753,37 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    176 label *label34
    177 label *label24
  
-   189 op add :n :n 1
-   190 jump *label39 always
-   191 label *label41
+   188 op add :n :n 1
+   189 jump *label39 always
+   190 label *label41
 -    * jump *label38 always
-   192 label *label37
-   193 label *label38
-   194 set *tmp74 .SWITCH
+   191 label *label37
+   192 label *label38
+   193 control enabled .SWITCH 0
  
-   232 jump *label50 lessThanEq :maxx .MAX
-   233 op mul .MAX 2 CAPACITY
-   234 op div .MUL .BAR_LENGTH .MAX
+   228 jump *label50 lessThanEq :maxx .MAX
+   229 op mul .MAX 2 CAPACITY
+   230 op div .MUL .BAR_LENGTH .MAX
 -    * jump *label51 always
-   235 label *label50
-   236 label *label51
-   237 jump *label52 greaterThan .MAX CAPACITY
+   231 label *label50
+   232 label *label51
+   233 jump *label52 greaterThan .MAX CAPACITY
  
-   246 draw color 220 220 220 255
-   247 op mul *tmp110 :maxx .MUL
-   248 draw lineRect :x :y *tmp110 .BAR_WIDTH
+   242 draw color 220 220 220 255
+   243 op mul *tmp110 :maxx .MUL
+   244 draw lineRect :x :y *tmp110 .BAR_WIDTH
 -    * jump *label55 always
-   249 label *label54
-   250 label *label55
-   251 jump *label56 greaterThan .MAX CAPACITY
+   245 label *label54
+   246 label *label55
+   247 jump *label56 greaterThan .MAX CAPACITY
  
-   259 draw lineRect *tmp113 :y .HALF_BAR .BAR_WIDTH
-   260 label *label57
-   261 op add :index :index 1
+   255 draw lineRect *tmp113 :y .HALF_BAR .BAR_WIDTH
+   256 label *label57
+   257 op add :index :index 1
 -    * jump *label49 always
-   262 label *label48
-   263 label *label49
-   264 label *label46
+   258 label *label48
+   259 label *label49
+   260 label *label46
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -931,70 +949,46 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    182 jump *label37 equal .MEMORY null
    183 set :n 0
    184 label *label39
-   185 jump *label41 greaterThanEq :n @links
-   186 set *tmp72 :n
--    * write 0 .MEMORY *tmp72
-+  187 write 0 .MEMORY :n
-   188 label *label40
-   189 op add :n :n 1
-   190 jump *label39 always
  
-   192 label *label37
-   193 label *label38
-   194 set *tmp74 .SWITCH
--    * control enabled *tmp74 0
-+  195 control enabled .SWITCH 0
-   196 label *label42
-   197 sensor *tmp76 .SWITCH @enabled
-   198 jump *label44 notEqual *tmp76 0
- 
-   225 op add :x :x 16
-   226 sensor :items :driver @totalItems
-   227 set *tmp96 :n
--    * read *tmp97 .MEMORY *tmp96
-+  228 read *tmp97 .MEMORY :n
-   229 op max :maxx *tmp97 :items
-   230 set *tmp99 :n
--    * write :maxx .MEMORY *tmp99
-+  231 write :maxx .MEMORY :n
-   232 jump *label50 lessThanEq :maxx .MAX
-   233 op mul .MAX 2 CAPACITY
+   227 write :maxx .MEMORY :n
+   228 jump *label50 lessThanEq :maxx .MAX
+   229 op mul .MAX 2 CAPACITY
 -    * op div .MUL .BAR_LENGTH .MAX
-+  234 op div .MUL 60 .MAX
-   235 label *label50
-   236 label *label51
-   237 jump *label52 greaterThan .MAX CAPACITY
++  230 op div .MUL 60 .MAX
+   231 label *label50
+   232 label *label51
+   233 jump *label52 greaterThan .MAX CAPACITY
  
-   241 draw color 128 128 0 255
-   242 label *label53
-   243 op mul *tmp107 :items .MUL
+   237 draw color 128 128 0 255
+   238 label *label53
+   239 op mul *tmp107 :items .MUL
 -    * draw rect :x :y *tmp107 .BAR_WIDTH
-+  244 draw rect :x :y *tmp107 14
-   245 jump *label54 equal .MEMORY null
-   246 draw color 220 220 220 255
-   247 op mul *tmp110 :maxx .MUL
++  240 draw rect :x :y *tmp107 14
+   241 jump *label54 equal .MEMORY null
+   242 draw color 220 220 220 255
+   243 op mul *tmp110 :maxx .MUL
 -    * draw lineRect :x :y *tmp110 .BAR_WIDTH
-+  248 draw lineRect :x :y *tmp110 14
-   249 label *label54
-   250 label *label55
-   251 jump *label56 greaterThan .MAX CAPACITY
-   252 draw color 0 255 0 255
++  244 draw lineRect :x :y *tmp110 14
+   245 label *label54
+   246 label *label55
+   247 jump *label56 greaterThan .MAX CAPACITY
+   248 draw color 0 255 0 255
 -    * draw lineRect :x :y .BAR_LENGTH .BAR_WIDTH
-+  253 draw lineRect :x :y 60 14
-   254 jump *label57 always
-   255 label *label56
-   256 draw color 255 255 0 255
++  249 draw lineRect :x :y 60 14
+   250 jump *label57 always
+   251 label *label56
+   252 draw color 255 255 0 255
 -    * draw lineRect :x :y .HALF_BAR .BAR_WIDTH
 -    * op add *tmp113 :x .HALF_BAR
 -    * draw lineRect *tmp113 :y .HALF_BAR .BAR_WIDTH
-+  257 draw lineRect :x :y 30 14
-+  258 op add *tmp113 :x 30
-+  259 draw lineRect *tmp113 :y 30 14
-   260 label *label57
-   261 op add :index :index 1
-   262 label *label48
++  253 draw lineRect :x :y 30 14
++  254 op add *tmp113 :x 30
++  255 draw lineRect *tmp113 :y 30 14
+   256 label *label57
+   257 op add :index :index 1
+   258 label *label48
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-18 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-14 instructions):
  
     67 jump *label17 notEqual *tmp10 @logic-display
     68 set .OFFSET_X 2
@@ -1068,32 +1062,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    166 set .MAX CAPACITY
    167 op div .MUL 60 CAPACITY
    168 jump *label37 equal .MEMORY null
-   169 set :n 0
-   170 label *label39
-   171 jump *label41 greaterThanEq :n @links
--    * set *tmp72 :n
-   172 write 0 .MEMORY :n
-   173 label *label40
-   174 op add :n :n 1
- 
-   176 label *label41
-   177 label *label37
-   178 label *label38
--    * set *tmp74 .SWITCH
-   179 control enabled .SWITCH 0
-   180 label *label42
-   181 sensor *tmp76 .SWITCH @enabled
- 
-   208 draw image *tmp92 *tmp93 @mass-driver 16 0
-   209 op add :x :x 16
-   210 sensor :items :driver @totalItems
--    * set *tmp96 :n
-   211 read *tmp97 .MEMORY :n
-   212 op max :maxx *tmp97 :items
--    * set *tmp99 :n
-   213 write :maxx .MEMORY :n
-   214 jump *label50 lessThanEq :maxx .MAX
-   215 op mul .MAX 2 CAPACITY
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  

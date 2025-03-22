@@ -413,96 +413,68 @@ class DataFlowOptimizer extends BaseOptimizer {
         int currentContext = 0;
         boolean propagateUninitialized = false;
 
-        List<AstContext> leadingContexts = localContext.findSubcontexts(ITR_LEADING);
-        List<AstContext> trailingContexts = localContext.findSubcontexts(ITR_TRAILING);
+        if (children.stream().anyMatch(c -> c.matches(ITR_LEADING,ITR_TRAILING))) {
+            throw new MindcodeInternalError("Unexpected structure of non-list iteration loop");
+        }
 
-        if (!leadingContexts.isEmpty()) {
-            if (children.get(currentContext).matches(INIT)) {
-                variableStates = processContext(localContext, children.getFirst(), variableStates, modifyInstructions);
-                currentContext++;
-            }
+        if (!children.isEmpty() && children.getFirst().matches(INIT)) {
+            variableStates = processContext(localContext, children.getFirst(), variableStates, modifyInstructions);
+            currentContext++;
+        }
 
-            if (!children.get(currentContext).matches(ITR_LEADING)) {
-                // We can't just ignore code we don't understand
-                throw new MindcodeInternalError("Unexpected structure of list iteration loop");
-            }
+        int savedPosition = iterator.nextIndex();
 
-            // Merge all final states of leading list iterator subcontexts together: the loop body is processed
-            // with the final value of every iterator subcontext.
-            // First context is without merging to the previous one
-            variableStates = processContext(localContext, leadingContexts.getFirst(), variableStates, modifyInstructions);
-            for (int index = 1; index < leadingContexts.size(); ) {
-                AstContext context = leadingContexts.get(index++);
-                iterator.setNextIndex(firstInstructionIndex(context));
-                VariableStates copy = variableStates.copy("leading loop iterator");
-                variableStates = processContext(localContext, context, variableStates, modifyInstructions);
-                variableStates = variableStates.merge(copy, true, "leading loop iterator");
-            }
-
-            // Skip iterator contexts
-            while (children.get(currentContext).matches(ITR_LEADING, ITR_TRAILING)) {
-                currentContext++;
-            }
+        // Acquiring variable states before entering the loop. Note we don't advance currentContext here
+        if (children.get(currentContext).matches(CONDITION)) {
+            // Evaluate the initial condition context fully for LoopOptimizer in isolation
+            VariableStates copy = processDefaultContext(localContext, children.get(currentContext),
+                    variableStates.isolatedCopy(), false);
+            optimizationContext.storeLoopVariables(localContext, copy);
         } else {
-            if (!children.isEmpty() && children.getFirst().matches(INIT)) {
-                variableStates = processContext(localContext, children.getFirst(), variableStates, modifyInstructions);
-                currentContext++;
+            // No condition, the loop is entered directly: store variable states right before entering the body
+            // for the first time
+            optimizationContext.storeLoopVariables(localContext, variableStates.isolatedCopy());
+        }
+
+        // If there are two CONDITION contexts, the first one gets executed only once
+        // We'll process it here, similarly to the INIT context
+        if (children.stream().filter(ctx -> ctx.matches(CONDITION)).count() > 1) {
+            if (!children.get(currentContext).matches(CONDITION)) {
+                // There are two CONDITION contexts, currentContext must point to the first one
+                throw new MindcodeInternalError("Expected CONDITION context, found " + children.get(currentContext));
             }
+            iterator.setNextIndex(savedPosition);
+            variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
+        }
 
-            int savedPosition = iterator.nextIndex();
+        // If the condition is before the body, and it is not known that the condition will be true upon the first
+        // execution of the loop, we need to merge initial states after first pass through the body, as the body
+        // might not be executed at all.
+        boolean openingCondition = children.stream()
+                .map(AstContext::subcontextType)
+                .filter(in(BODY, CONDITION))
+                .findFirst().orElseThrow() == CONDITION;
 
-            // Acquiring variable states before entering the loop. Note we don't advance currentContext here
-            if (children.get(currentContext).matches(CONDITION)) {
-                // Evaluate the initial condition context fully for LoopOptimizer in isolation
-                VariableStates copy = processDefaultContext(localContext, children.get(currentContext),
-                        variableStates.isolatedCopy(), false);
-                optimizationContext.storeLoopVariables(localContext, copy);
+        if (openingCondition) {
+            // Evaluate the condition
+            AstContext conditionContext = children.stream()
+                    .filter(resultIn(AstContext::subcontextType, CONDITION))
+                    .findFirst().orElseThrow();
+            OptimizationContext.LogicList condition = contextInstructions(conditionContext);
+            long jumps = condition.stream().filter(ix -> ix instanceof JumpInstruction).count();
+            LogicInstruction last = condition.getLast();
+            if (jumps == 0) {
+                // There are no jumps in the context
+                // Value is already assigned:
+                // propagateUninitialized = false;
+            } else if (jumps == 1 && last instanceof JumpInstruction jump) {
+                // If the jump evaluates to false, it means it doesn't skip over the loop body
+                LogicBoolean initialValue = optimizationContext.evaluateLoopConditionJump(jump, localContext);
+                propagateUninitialized = initialValue != LogicBoolean.FALSE;
             } else {
-                // No condition, the loop is entered directly: store variable states right before entering the body
-                // for the first time
-                optimizationContext.storeLoopVariables(localContext, variableStates.isolatedCopy());
-            }
-
-            // If there are two CONDITION contexts, the first one gets executed only once
-            // We'll process it here, similarly to the INIT context
-            if (children.stream().filter(ctx -> ctx.matches(CONDITION)).count() > 1) {
-                if (!children.get(currentContext).matches(CONDITION)) {
-                    // There are two CONDITION contexts, currentContext must point to the first one
-                    throw new MindcodeInternalError("Expected CONDITION context, found " + children.get(currentContext));
-                }
-                iterator.setNextIndex(savedPosition);
-                variableStates = processContext(localContext, children.get(currentContext++), variableStates, modifyInstructions);
-            }
-
-            // If the condition is before the body, and it is not known that the condition will be true upon the first
-            // execution of the loop, we need to merge initial states after first pass through the body, as the body
-            // might not be executed at all.
-            boolean openingCondition = children.stream()
-                    .map(AstContext::subcontextType)
-                    .filter(in(BODY, CONDITION))
-                    .findFirst().orElseThrow() == CONDITION;
-
-            if (openingCondition) {
-                // Evaluate the condition
-                AstContext conditionContext = children.stream()
-                        .filter(resultIn(AstContext::subcontextType, CONDITION))
-                        .findFirst().orElseThrow();
-                OptimizationContext.LogicList condition = contextInstructions(conditionContext);
-                long jumps = condition.stream().filter(ix -> ix instanceof JumpInstruction).count();
-                LogicInstruction last = condition.getLast();
-                if (jumps == 0) {
-                    // There are no jumps in the context
-                    // Value is already assigned:
-                    // propagateUninitialized = false;
-                } else if (jumps == 1 && last instanceof JumpInstruction jump) {
-                    // If the jump evaluates to false, it means it doesn't skip over the loop body
-                    LogicBoolean initialValue = optimizationContext.evaluateLoopConditionJump(jump, localContext);
-                    propagateUninitialized = initialValue != LogicBoolean.FALSE;
-                } else {
-                    // We don't understand the condition structure, and therefore cannot guarantee the loop will be executed at least once
-                    // Variable that are initialized in the loop body, but not before the loop, need to remain uninitialized
-                    propagateUninitialized = true;
-                }
+                // We don't understand the condition structure, and therefore cannot guarantee the loop will be executed at least once
+                // Variable that are initialized in the loop body, but not before the loop, need to remain uninitialized
+                propagateUninitialized = true;
             }
         }
 
@@ -525,14 +497,6 @@ class DataFlowOptimizer extends BaseOptimizer {
                 if (!children.get(j).matches(ITR_TRAILING)) {
                     // Do not modify instructions on the first iteration
                     variableStates = processContext(localContext, children.get(j), variableStates, pass > 0);
-                }
-            }
-
-            if (!trailingContexts.isEmpty()) {
-                // First context is without merging to the previous one
-                for (AstContext context : trailingContexts) {
-                    iterator.setNextIndex(firstInstructionIndex(context));
-                    variableStates = processContext(localContext, context, variableStates, modifyInstructions);
                 }
             }
 
@@ -875,7 +839,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             trace("*" + counter + " Processing instruction ix#" + instructionIndex(instruction) +
                     ": " + LogicInstructionPrinter.toString(instructionProcessor, instruction));
 
-            if (counter == 311) {
+            if (counter == -1) {
                 trace("Breakpoint");
             }
         }

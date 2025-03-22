@@ -1,5 +1,5 @@
    637 instructions before optimizations.
-    57 instructions eliminated by Temp Variables Elimination.
+    60 instructions eliminated by Temp Variables Elimination.
      4 instructions eliminated by Case Expression Optimization.
     85 instructions eliminated by Dead Code Elimination (6 iterations).
      1 instructions eliminated by Jump Normalization (5 iterations).
@@ -7,7 +7,7 @@
     32 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions eliminated by Expression Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (2 passes, 4 iterations).
-     9 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     6 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
     11 instructions eliminated by Jump Straightening (5 iterations).
@@ -646,7 +646,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 4 (-4 instructi
    526 label *label90
    527 label *label86
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-57 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-60 instructions):
  
      9 op equal *tmp0 :reactors 0
     10 jump *label3 equal *tmp0 false
@@ -985,20 +985,43 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-57 ins
    536 op add :reactors :reactors 1
 -    * op lessThanEq *tmp207 :reactors .REACTORS_ON
 -    * set :enabled *tmp207
+-    * set *tmp208 :block
+-    * control enabled *tmp208 :enabled
 +  537 op lessThanEq :enabled :reactors .REACTORS_ON
-   538 set *tmp208 :block
-   539 control enabled *tmp208 :enabled
-   540 jump *label109 equal :enabled false
++  538 control enabled :block :enabled
+   539 jump *label109 equal :enabled false
+   540 sensor *tmp211 :block @timescale
+   541 op add :boosts :boosts *tmp211
  
-   583 jump *label116 always
-   584 label *label115
-   585 label *label116
+   548 jump *label112 equal *tmp205 @overdrive-dome
+   549 jump *label111 always
+   550 label *label112
+-    * set *tmp212 :block
+-    * control enabled *tmp212 .OVERDRIVE
++  551 control enabled :block .OVERDRIVE
+   552 jump *label106 always
+   553 label *label111
+   554 jump *label114 equal *tmp205 @conduit
+ 
+   560 jump *label114 equal *tmp205 @armored-conveyor
+   561 jump *label113 always
+   562 label *label114
+-    * set *tmp214 :block
+-    * control enabled *tmp214 :startup
++  563 control enabled :block :startup
+   564 jump *label106 always
+   565 label *label113
+   566 label *label106
+ 
+   580 jump *label116 always
+   581 label *label115
+   582 label *label116
 -    * op min *tmp223 .REACTORS_ON :reactors
 -    * set .REACTORS_ON *tmp223
-+  586 op min .REACTORS_ON .REACTORS_ON :reactors
-   587 op equal *tmp224 cell1 null
-   588 jump *label117 equal *tmp224 false
-   589 set .STARTUPS 0
++  583 op min .REACTORS_ON .REACTORS_ON :reactors
+   584 op equal *tmp224 cell1 null
+   585 jump *label117 equal *tmp224 false
+   586 set .STARTUPS 0
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
@@ -1095,25 +1118,25 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-11 in
    526 op add :reactors :reactors 1
    527 op lessThanEq :enabled :reactors .REACTORS_ON
  
-   536 jump *label106 always
-   537 label *label107
-   538 jump *label112 equal *tmp205 @overdrive-projector
+   535 jump *label106 always
+   536 label *label107
+   537 jump *label112 equal *tmp205 @overdrive-projector
 -    * jump *label112 equal *tmp205 @overdrive-dome
 -    * jump *label111 always
-+  539 jump *label111 notEqual *tmp205 @overdrive-dome
-   540 label *label112
-   541 set *tmp212 :block
-   542 control enabled *tmp212 .OVERDRIVE
++  538 jump *label111 notEqual *tmp205 @overdrive-dome
+   539 label *label112
+   540 control enabled :block .OVERDRIVE
+   541 jump *label106 always
  
-   548 jump *label114 equal *tmp205 @conveyor
-   549 jump *label114 equal *tmp205 @titanium-conveyor
-   550 jump *label114 equal *tmp205 @plastanium-conveyor
+   546 jump *label114 equal *tmp205 @conveyor
+   547 jump *label114 equal *tmp205 @titanium-conveyor
+   548 jump *label114 equal *tmp205 @plastanium-conveyor
 -    * jump *label114 equal *tmp205 @armored-conveyor
 -    * jump *label113 always
-+  551 jump *label113 notEqual *tmp205 @armored-conveyor
-   552 label *label114
-   553 set *tmp214 :block
-   554 control enabled *tmp214 :startup
++  549 jump *label113 notEqual *tmp205 @armored-conveyor
+   550 label *label114
+   551 control enabled :block :startup
+   552 jump *label106 always
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-25 instructions):
  
@@ -1310,25 +1333,25 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-25 ins
    468 set .OUTPUT_3 1
    469 jump *label102 always
  
-   536 op add :n :n 1
-   537 jump *label103 always
-   538 label *label105
+   533 op add :n :n 1
+   534 jump *label103 always
+   535 label *label105
 -    * op notEqual *tmp216 cell2 null
 -    * jump *label115 equal *tmp216 false
-+  539 jump *label115 equal cell2 null
-   540 write :reactors cell2 0
-   541 write .REACTORS_ON cell2 2
-   542 write .OVERDRIVE cell2 3
++  536 jump *label115 equal cell2 null
+   537 write :reactors cell2 0
+   538 write .REACTORS_ON cell2 2
+   539 write .OVERDRIVE cell2 3
  
-   548 label *label115
-   549 label *label116
-   550 op min .REACTORS_ON .REACTORS_ON :reactors
+   545 label *label115
+   546 label *label116
+   547 op min .REACTORS_ON .REACTORS_ON :reactors
 -    * op equal *tmp224 cell1 null
 -    * jump *label117 equal *tmp224 false
-+  551 jump *label117 notEqual cell1 null
-   552 set .STARTUPS 0
-   553 set .RESETS 0
-   554 set .COMMITS 0
++  548 jump *label117 notEqual cell1 null
+   549 set .STARTUPS 0
+   550 set .RESETS 0
+   551 set .COMMITS 0
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-28 instructions):
  
@@ -1515,29 +1538,29 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
    453 label *label42
    454 print "\n"
  
-   482 jump *label109 equal :enabled false
-   483 sensor *tmp211 :block @timescale
-   484 op add :boosts :boosts *tmp211
+   481 jump *label109 equal :enabled false
+   482 sensor *tmp211 :block @timescale
+   483 op add :boosts :boosts *tmp211
 -    * jump *label110 always
-   485 label *label109
-   486 label *label110
-   487 jump *label106 always
+   484 label *label109
+   485 label *label110
+   486 jump *label106 always
  
-   503 label *label114
-   504 set *tmp214 :block
-   505 control enabled *tmp214 :startup
+   500 jump *label113 notEqual *tmp205 @armored-conveyor
+   501 label *label114
+   502 control enabled :block :startup
 -    * jump *label106 always
-   506 label *label113
-   507 label *label106
-   508 label *label104
+   503 label *label113
+   504 label *label106
+   505 label *label104
  
-   517 op add :reactors :reactors *tmp221
-   518 read *tmp222 cell2 4
-   519 op add :boosts :boosts *tmp222
+   514 op add :reactors :reactors *tmp221
+   515 read *tmp222 cell2 4
+   516 op add :boosts :boosts *tmp222
 -    * jump *label116 always
-   520 label *label115
-   521 label *label116
-   522 op min .REACTORS_ON .REACTORS_ON :reactors
+   517 label *label115
+   518 label *label116
+   519 op min .REACTORS_ON .REACTORS_ON :reactors
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -1616,35 +1639,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    468 set *tmp202 @links
    469 set :n .START
    470 label *label103
- 
-   476 op add :reactors :reactors 1
-   477 op lessThanEq :enabled :reactors .REACTORS_ON
-   478 set *tmp208 :block
--    * control enabled *tmp208 :enabled
-+  479 control enabled :block :enabled
-   480 jump *label109 equal :enabled false
-   481 sensor *tmp211 :block @timescale
-   482 op add :boosts :boosts *tmp211
- 
-   488 jump *label111 notEqual *tmp205 @overdrive-dome
-   489 label *label112
-   490 set *tmp212 :block
--    * control enabled *tmp212 .OVERDRIVE
-+  491 control enabled :block .OVERDRIVE
-   492 jump *label106 always
-   493 label *label111
-   494 jump *label114 equal *tmp205 @conduit
- 
-   500 jump *label113 notEqual *tmp205 @armored-conveyor
-   501 label *label114
-   502 set *tmp214 :block
--    * control enabled *tmp214 :startup
-+  503 control enabled :block :startup
-   504 label *label113
-   505 label *label106
-   506 label *label104
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
      3 jump *label0 equal cell1 null
      4 set .START 0
@@ -1686,30 +1682,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
    362 op sub :p :battery_change 2500
    363 op mul *tmp158 :p 0.00472972972972973
    364 op add *tmp159 -5 *tmp158
- 
-   471 label *label108
-   472 op add :reactors :reactors 1
-   473 op lessThanEq :enabled :reactors .REACTORS_ON
--    * set *tmp208 :block
-   474 control enabled :block :enabled
-   475 jump *label109 equal :enabled false
-   476 sensor *tmp211 :block @timescale
- 
-   482 jump *label112 equal *tmp205 @overdrive-projector
-   483 jump *label111 notEqual *tmp205 @overdrive-dome
-   484 label *label112
--    * set *tmp212 :block
-   485 control enabled :block .OVERDRIVE
-   486 jump *label106 always
-   487 label *label111
- 
-   493 jump *label114 equal *tmp205 @plastanium-conveyor
-   494 jump *label113 notEqual *tmp205 @armored-conveyor
-   495 label *label114
--    * set *tmp214 :block
-   496 control enabled :block :startup
-   497 label *label113
-   498 label *label106
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  

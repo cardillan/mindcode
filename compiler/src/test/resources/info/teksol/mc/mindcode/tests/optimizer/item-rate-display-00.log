@@ -1,9 +1,9 @@
    205 instructions before optimizations.
-    26 instructions eliminated by Temp Variables Elimination.
+    34 instructions eliminated by Temp Variables Elimination.
     16 instructions eliminated by Dead Code Elimination (3 iterations).
     12 instructions eliminated by Jump Optimization (4 iterations).
     11 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
-   136 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
+   128 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      6 loops improved by Loop Optimization.
    670 instructions added by Loop Unrolling (6 iterations).
@@ -112,7 +112,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-16 instruct
    194 write :maximum COORD POSITION
    195 op sub *tmp66 @time :start
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-26 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-34 instructions):
  
     13 set .INDEX 256
     14 set .SIZE 511
@@ -121,364 +121,376 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-26 ins
 -    * set .SKIP_SIZE *tmp1
 -    * op mul *tmp2 POSITION 30
 -    * set .SHIFT *tmp2
-+   16 op sub .SKIP_SIZE *tmp0 1
-+   17 op mul .SHIFT POSITION 30
-    18 set *tmp3 .INDEX
-    19 read *tmp4 MEMORY *tmp3
+-    * set *tmp3 .INDEX
+-    * read *tmp4 MEMORY *tmp3
 -    * op sub *tmp5 *tmp4 .SHIFT
 -    * set :ptr *tmp5
-+   20 op sub :ptr *tmp4 .SHIFT
-    21 op lessThan *tmp6 :ptr .INDEX
-    22 jump *label0 equal *tmp6 false
-    23 op add :ptr :ptr .SKIP_SIZE
- 
-    25 label *label0
-    26 label *label1
-    27 set *tmp8 :ptr
++   16 op sub .SKIP_SIZE *tmp0 1
++   17 op mul .SHIFT POSITION 30
++   18 read *tmp4 MEMORY .INDEX
++   19 op sub :ptr *tmp4 .SHIFT
+    20 op lessThan *tmp6 :ptr .INDEX
+    21 jump *label0 equal *tmp6 false
+    22 op add :ptr :ptr .SKIP_SIZE
+    23 jump *label1 always
+    24 label *label0
+    25 label *label1
+-    * set *tmp8 :ptr
 -    * read *tmp9 MEMORY *tmp8
 -    * set :maximum *tmp9
-+   28 read :maximum MEMORY *tmp8
-    29 set :n 0
-    30 label *label2
-    31 jump *label4 greaterThanEq :n 29
++   26 read :maximum MEMORY :ptr
+    27 set :n 0
+    28 label *label2
+    29 jump *label4 greaterThanEq :n 29
 -    * op sub *tmp10 :ptr 1
 -    * set :ptr *tmp10
-+   32 op sub :ptr :ptr 1
-    33 op lessThanEq *tmp11 :ptr .INDEX
-    34 jump *label5 equal *tmp11 false
++   30 op sub :ptr :ptr 1
+    31 op lessThanEq *tmp11 :ptr .INDEX
+    32 jump *label5 equal *tmp11 false
 -    * op sub *tmp13 .SIZE 1
 -    * set :ptr *tmp13
-+   35 op sub :ptr .SIZE 1
-    36 jump *label6 always
-    37 label *label5
-    38 label *label6
-    39 set *tmp14 :ptr
-    40 read *tmp15 MEMORY *tmp14
++   33 op sub :ptr .SIZE 1
+    34 jump *label6 always
+    35 label *label5
+    36 label *label6
+-    * set *tmp14 :ptr
+-    * read *tmp15 MEMORY *tmp14
 -    * op max *tmp16 :maximum *tmp15
 -    * set :maximum *tmp16
-+   41 op max :maximum :maximum *tmp15
-    42 label *label3
-    43 op add :n :n 1
-    44 jump *label2 always
-    45 label *label4
++   37 read *tmp15 MEMORY :ptr
++   38 op max :maximum :maximum *tmp15
+    39 label *label3
+    40 op add :n :n 1
+    41 jump *label2 always
+    42 label *label4
 -    * op mul *tmp17 :maximum SMOOTH
 -    * set :maximum *tmp17
-+   46 op mul :maximum :maximum SMOOTH
-    47 label *label7
-    48 sensor *tmp18 switch1 @enabled
-    49 op equal *tmp19 *tmp18 0
-    50 jump *label9 equal *tmp19 false
-    51 print "Item Rate Display"
++   43 op mul :maximum :maximum SMOOTH
+    44 label *label7
+    45 sensor *tmp18 switch1 @enabled
+    46 op equal *tmp19 *tmp18 0
+    47 jump *label9 equal *tmp19 false
+    48 print "Item Rate Display"
 -    * set *tmp20 @time
 -    * set :start *tmp20
-+   52 set :start @time
-    53 sensor *tmp21 COORD @dead
-    54 op equal *tmp22 *tmp21 0
-    55 jump *label10 equal *tmp22 false
++   49 set :start @time
+    50 sensor *tmp21 COORD @dead
+    51 op equal *tmp22 *tmp21 0
+    52 jump *label10 equal *tmp22 false
  
-    58 op lessThan *tmp24 :n TOTAL
-    59 jump *label14 equal *tmp24 false
-    60 set *tmp25 :n
+    54 label *label12
+    55 op lessThan *tmp24 :n TOTAL
+    56 jump *label14 equal *tmp24 false
+-    * set *tmp25 :n
 -    * read *tmp26 COORD *tmp25
 -    * set :m *tmp26
-+   61 read :m COORD *tmp25
-    62 print "\n"
-    63 print "Coord: [gold]"
-    64 print :m
-    65 print "["
-    66 print "]"
++   57 read :m COORD :n
+    58 print "\n"
+    59 print "Coord: [gold]"
+    60 print :m
+    61 print "["
+    62 print "]"
 -    * op max *tmp27 :maximum :m
 -    * set :maximum *tmp27
-+   67 op max :maximum :maximum :m
-    68 label *label13
-    69 op add :n :n 1
-    70 jump *label12 always
++   63 op max :maximum :maximum :m
+    64 label *label13
+    65 op add :n :n 1
+    66 jump *label12 always
  
-    72 jump *label11 always
-    73 label *label10
-    74 label *label11
+    68 jump *label11 always
+    69 label *label10
+    70 label *label11
 -    * op div *tmp28 150 :maximum
 -    * set :scale *tmp28
-+   75 op div :scale 150 :maximum
-    76 op ceil *tmp29 :maximum
-    77 print "\n"
-    78 print "Maximum: [green]"
++   71 op div :scale 150 :maximum
+    72 op ceil *tmp29 :maximum
+    73 print "\n"
+    74 print "Maximum: [green]"
  
-    90 draw rect 10 10 156 156
-    91 set *tmp31 .INDEX
-    92 read *tmp32 MEMORY *tmp31
+    84 draw clear 0 0 80
+    85 draw color 0 80 0 255
+    86 draw rect 10 10 156 156
+-    * set *tmp31 .INDEX
+-    * read *tmp32 MEMORY *tmp31
 -    * op sub *tmp33 *tmp32 .SHIFT
 -    * set :head *tmp33
-+   93 op sub :head *tmp32 .SHIFT
-    94 op lessThan *tmp34 :head .INDEX
-    95 jump *label15 equal *tmp34 false
-    96 op add :head :head .SKIP_SIZE
++   87 read *tmp32 MEMORY .INDEX
++   88 op sub :head *tmp32 .SHIFT
+    89 op lessThan *tmp34 :head .INDEX
+    90 jump *label15 equal *tmp34 false
+    91 op add :head :head .SKIP_SIZE
  
-   109 op sub :head :head 1
-   110 op lessThanEq *tmp39 :head .INDEX
-   111 jump *label20 equal *tmp39 false
+    98 label *label17
+    99 op lessThan *tmp36 :i SMOOTH
+   100 jump *label19 equal *tmp36 false
+-    * set *tmp37 :head
+-    * read *tmp38 MEMORY *tmp37
++  101 read *tmp38 MEMORY :head
+   102 op add :value :value *tmp38
+   103 op sub :head :head 1
+   104 op lessThanEq *tmp39 :head .INDEX
+   105 jump *label20 equal *tmp39 false
 -    * op sub *tmp41 .SIZE 1
 -    * set :head *tmp41
-+  112 op sub :head .SIZE 1
-   113 jump *label21 always
-   114 label *label20
-   115 label *label21
++  106 op sub :head .SIZE 1
+   107 jump *label21 always
+   108 label *label20
+   109 label *label21
  
-   118 jump *label17 always
-   119 label *label19
-   120 op mul *tmp42 :value :scale
+   112 jump *label17 always
+   113 label *label19
+   114 op mul *tmp42 :value :scale
 -    * op add *tmp43 10 *tmp42
 -    * set :last *tmp43
-+  121 op add :last 10 *tmp42
-   122 set :newMax :value
-   123 draw color 80 255 80 255
-   124 set :x 159
- 
-   126 label *label22
-   127 jump *label24 greaterThanEq :n 29
-   128 set *tmp44 :tail
++  115 op add :last 10 *tmp42
+   116 set :newMax :value
+   117 draw color 80 255 80 255
+   118 set :x 159
+   119 set :n 0
+   120 label *label22
+   121 jump *label24 greaterThanEq :n 29
+-    * set *tmp44 :tail
 -    * read *tmp45 MEMORY *tmp44
 -    * set :t *tmp45
-+  129 read :t MEMORY *tmp44
-   130 set *tmp46 :head
+-    * set *tmp46 :head
 -    * read *tmp47 MEMORY *tmp46
 -    * set :h *tmp47
-+  131 read :h MEMORY *tmp46
-   132 op sub *tmp48 :value :t
++  122 read :t MEMORY :tail
++  123 read :h MEMORY :head
+   124 op sub *tmp48 :value :t
 -    * op add *tmp49 *tmp48 :h
 -    * set :value *tmp49
-+  133 op add :value *tmp48 :h
-   134 op sub :head :head 1
-   135 op lessThanEq *tmp50 :head .INDEX
-   136 jump *label25 equal *tmp50 false
++  125 op add :value *tmp48 :h
+   126 op sub :head :head 1
+   127 op lessThanEq *tmp50 :head .INDEX
+   128 jump *label25 equal *tmp50 false
 -    * op sub *tmp52 .SIZE 1
 -    * set :head *tmp52
-+  137 op sub :head .SIZE 1
-   138 jump *label26 always
-   139 label *label25
-   140 label *label26
-   141 op sub :tail :tail 1
-   142 op lessThanEq *tmp53 :tail .INDEX
-   143 jump *label27 equal *tmp53 false
++  129 op sub :head .SIZE 1
+   130 jump *label26 always
+   131 label *label25
+   132 label *label26
+   133 op sub :tail :tail 1
+   134 op lessThanEq *tmp53 :tail .INDEX
+   135 jump *label27 equal *tmp53 false
 -    * op sub *tmp55 .SIZE 1
 -    * set :tail *tmp55
-+  144 op sub :tail .SIZE 1
-   145 jump *label28 always
-   146 label *label27
-   147 label *label28
-   148 op mul *tmp56 :value :scale
++  136 op sub :tail .SIZE 1
+   137 jump *label28 always
+   138 label *label27
+   139 label *label28
+   140 op mul *tmp56 :value :scale
 -    * op add *tmp57 10 *tmp56
 -    * set :y *tmp57
 -    * op sub *tmp58 :x 5
 -    * set :x1 *tmp58
-+  149 op add :y 10 *tmp56
-+  150 op sub :x1 :x 5
-   151 draw line :x :last :x1 :y
-   152 set :x :x1
-   153 set :last :y
++  141 op add :y 10 *tmp56
++  142 op sub :x1 :x 5
+   143 draw line :x :last :x1 :y
+   144 set :x :x1
+   145 set :last :y
 -    * op max *tmp59 :newMax :value
 -    * set :newMax *tmp59
-+  154 op max :newMax :newMax :value
-   155 label *label23
-   156 op add :n :n 1
-   157 jump *label22 always
-   158 label *label24
-   159 draw color 255 255 255 255
-   160 draw lineRect 10 10 156 156
++  146 op max :newMax :newMax :value
+   147 label *label23
+   148 op add :n :n 1
+   149 jump *label22 always
+   150 label *label24
+   151 draw color 255 255 255 255
+   152 draw lineRect 10 10 156 156
 -    * op max *tmp60 :newMax :maximum
 -    * set :maximum *tmp60
-+  161 op max :maximum :newMax :maximum
-   162 op mul *tmp61 3 :newMax
-   163 op lessThan *tmp62 *tmp61 :maximum
-   164 jump *label29 equal *tmp62 false
++  153 op max :maximum :newMax :maximum
+   154 op mul *tmp61 3 :newMax
+   155 op lessThan *tmp62 *tmp61 :maximum
+   156 jump *label29 equal *tmp62 false
 -    * op mul *tmp64 1.5 :newMax
 -    * set :maximum *tmp64
-+  165 op mul :maximum 1.5 :newMax
-   166 jump *label30 always
-   167 label *label29
-   168 label *label30
++  157 op mul :maximum 1.5 :newMax
+   158 jump *label30 always
+   159 label *label29
+   160 label *label30
  
-   176 print "ms"
-   177 op div *tmp68 @time FREQ
-   178 op ceil *tmp69 *tmp68
+   168 print "ms"
+   169 op div *tmp68 @time FREQ
+   170 op ceil *tmp69 *tmp68
 -    * op mul *tmp70 FREQ *tmp69
 -    * set :wait *tmp70
-+  179 op mul :wait FREQ *tmp69
-   180 set :loops 0
-   181 label *label31
-   182 op lessThan *tmp71 @time :wait
++  171 op mul :wait FREQ *tmp69
+   172 set :loops 0
+   173 label *label31
+   174 op lessThan *tmp71 @time :wait
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-12 instructions):
  
-    18 set *tmp3 .INDEX
-    19 read *tmp4 MEMORY *tmp3
-    20 op sub :ptr *tmp4 .SHIFT
+    17 op mul .SHIFT POSITION 30
+    18 read *tmp4 MEMORY .INDEX
+    19 op sub :ptr *tmp4 .SHIFT
 -    * op lessThan *tmp6 :ptr .INDEX
 -    * jump *label0 equal *tmp6 false
-+   21 jump *label0 greaterThanEq :ptr .INDEX
-    22 op add :ptr :ptr .SKIP_SIZE
-    23 jump *label1 always
-    24 label *label0
++   20 jump *label0 greaterThanEq :ptr .INDEX
+    21 op add :ptr :ptr .SKIP_SIZE
+    22 jump *label1 always
+    23 label *label0
  
-    29 label *label2
-    30 jump *label4 greaterThanEq :n 29
-    31 op sub :ptr :ptr 1
+    27 label *label2
+    28 jump *label4 greaterThanEq :n 29
+    29 op sub :ptr :ptr 1
 -    * op lessThanEq *tmp11 :ptr .INDEX
 -    * jump *label5 equal *tmp11 false
-+   32 jump *label5 greaterThan :ptr .INDEX
-    33 op sub :ptr .SIZE 1
-    34 jump *label6 always
-    35 label *label5
++   30 jump *label5 greaterThan :ptr .INDEX
+    31 op sub :ptr .SIZE 1
+    32 jump *label6 always
+    33 label *label5
  
-    44 op mul :maximum :maximum SMOOTH
-    45 label *label7
-    46 sensor *tmp18 switch1 @enabled
+    41 op mul :maximum :maximum SMOOTH
+    42 label *label7
+    43 sensor *tmp18 switch1 @enabled
 -    * op equal *tmp19 *tmp18 0
 -    * jump *label9 equal *tmp19 false
-+   47 jump *label9 notEqual *tmp18 0
-    48 print "Item Rate Display"
-    49 set :start @time
-    50 sensor *tmp21 COORD @dead
++   44 jump *label9 notEqual *tmp18 0
+    45 print "Item Rate Display"
+    46 set :start @time
+    47 sensor *tmp21 COORD @dead
 -    * op equal *tmp22 *tmp21 0
 -    * jump *label10 equal *tmp22 false
-+   51 jump *label10 notEqual *tmp21 0
-    52 set :n 0
-    53 label *label12
++   48 jump *label10 notEqual *tmp21 0
+    49 set :n 0
+    50 label *label12
 -    * op lessThan *tmp24 :n TOTAL
 -    * jump *label14 equal *tmp24 false
-+   54 jump *label14 greaterThanEq :n TOTAL
-    55 set *tmp25 :n
-    56 read :m COORD *tmp25
-    57 print "\n"
++   51 jump *label14 greaterThanEq :n TOTAL
+    52 read :m COORD :n
+    53 print "\n"
+    54 print "Coord: [gold]"
  
-    86 set *tmp31 .INDEX
-    87 read *tmp32 MEMORY *tmp31
-    88 op sub :head *tmp32 .SHIFT
+    81 draw rect 10 10 156 156
+    82 read *tmp32 MEMORY .INDEX
+    83 op sub :head *tmp32 .SHIFT
 -    * op lessThan *tmp34 :head .INDEX
 -    * jump *label15 equal *tmp34 false
-+   89 jump *label15 greaterThanEq :head .INDEX
-    90 op add :head :head .SKIP_SIZE
-    91 jump *label16 always
-    92 label *label15
++   84 jump *label15 greaterThanEq :head .INDEX
+    85 op add :head :head .SKIP_SIZE
+    86 jump *label16 always
+    87 label *label15
  
-    95 set :value 0
-    96 set :i 0
-    97 label *label17
+    90 set :value 0
+    91 set :i 0
+    92 label *label17
 -    * op lessThan *tmp36 :i SMOOTH
 -    * jump *label19 equal *tmp36 false
-+   98 jump *label19 greaterThanEq :i SMOOTH
-    99 set *tmp37 :head
-   100 read *tmp38 MEMORY *tmp37
-   101 op add :value :value *tmp38
-   102 op sub :head :head 1
++   93 jump *label19 greaterThanEq :i SMOOTH
+    94 read *tmp38 MEMORY :head
+    95 op add :value :value *tmp38
+    96 op sub :head :head 1
 -    * op lessThanEq *tmp39 :head .INDEX
 -    * jump *label20 equal *tmp39 false
-+  103 jump *label20 greaterThan :head .INDEX
-   104 op sub :head .SIZE 1
-   105 jump *label21 always
-   106 label *label20
++   97 jump *label20 greaterThan :head .INDEX
+    98 op sub :head .SIZE 1
+    99 jump *label21 always
+   100 label *label20
  
-   124 op sub *tmp48 :value :t
-   125 op add :value *tmp48 :h
-   126 op sub :head :head 1
+   116 op sub *tmp48 :value :t
+   117 op add :value *tmp48 :h
+   118 op sub :head :head 1
 -    * op lessThanEq *tmp50 :head .INDEX
 -    * jump *label25 equal *tmp50 false
-+  127 jump *label25 greaterThan :head .INDEX
-   128 op sub :head .SIZE 1
-   129 jump *label26 always
-   130 label *label25
-   131 label *label26
-   132 op sub :tail :tail 1
++  119 jump *label25 greaterThan :head .INDEX
+   120 op sub :head .SIZE 1
+   121 jump *label26 always
+   122 label *label25
+   123 label *label26
+   124 op sub :tail :tail 1
 -    * op lessThanEq *tmp53 :tail .INDEX
 -    * jump *label27 equal *tmp53 false
-+  133 jump *label27 greaterThan :tail .INDEX
-   134 op sub :tail .SIZE 1
-   135 jump *label28 always
-   136 label *label27
++  125 jump *label27 greaterThan :tail .INDEX
+   126 op sub :tail .SIZE 1
+   127 jump *label28 always
+   128 label *label27
  
-   150 draw lineRect 10 10 156 156
-   151 op max :maximum :newMax :maximum
-   152 op mul *tmp61 3 :newMax
+   142 draw lineRect 10 10 156 156
+   143 op max :maximum :newMax :maximum
+   144 op mul *tmp61 3 :newMax
 -    * op lessThan *tmp62 *tmp61 :maximum
 -    * jump *label29 equal *tmp62 false
-+  153 jump *label29 greaterThanEq *tmp61 :maximum
-   154 op mul :maximum 1.5 :newMax
-   155 jump *label30 always
-   156 label *label29
++  145 jump *label29 greaterThanEq *tmp61 :maximum
+   146 op mul :maximum 1.5 :newMax
+   147 jump *label30 always
+   148 label *label29
  
-   168 op mul :wait FREQ *tmp69
-   169 set :loops 0
-   170 label *label31
+   160 op mul :wait FREQ *tmp69
+   161 set :loops 0
+   162 label *label31
 -    * op lessThan *tmp71 @time :wait
 -    * jump *label33 equal *tmp71 false
-+  171 jump *label33 greaterThanEq @time :wait
-   172 op add :loops :loops 1
-   173 label *label32
-   174 jump *label31 always
++  163 jump *label33 greaterThanEq @time :wait
+   164 op add :loops :loops 1
+   165 label *label32
+   166 jump *label31 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-8 instructions):
  
-    20 op sub :ptr *tmp4 .SHIFT
-    21 jump *label0 greaterThanEq :ptr .INDEX
-    22 op add :ptr :ptr .SKIP_SIZE
+    19 op sub :ptr *tmp4 .SHIFT
+    20 jump *label0 greaterThanEq :ptr .INDEX
+    21 op add :ptr :ptr .SKIP_SIZE
 -    * jump *label1 always
-    23 label *label0
-    24 label *label1
-    25 set *tmp8 :ptr
+    22 label *label0
+    23 label *label1
+    24 read :maximum MEMORY :ptr
  
-    30 op sub :ptr :ptr 1
-    31 jump *label5 greaterThan :ptr .INDEX
-    32 op sub :ptr .SIZE 1
+    28 op sub :ptr :ptr 1
+    29 jump *label5 greaterThan :ptr .INDEX
+    30 op sub :ptr .SIZE 1
 -    * jump *label6 always
-    33 label *label5
-    34 label *label6
-    35 set *tmp14 :ptr
+    31 label *label5
+    32 label *label6
+    33 read *tmp15 MEMORY :ptr
  
-    62 op add :n :n 1
-    63 jump *label12 always
-    64 label *label14
+    58 op add :n :n 1
+    59 jump *label12 always
+    60 label *label14
 -    * jump *label11 always
-    65 label *label10
-    66 label *label11
-    67 op div :scale 150 :maximum
+    61 label *label10
+    62 label *label11
+    63 op div :scale 150 :maximum
  
-    85 op sub :head *tmp32 .SHIFT
-    86 jump *label15 greaterThanEq :head .INDEX
-    87 op add :head :head .SKIP_SIZE
+    80 op sub :head *tmp32 .SHIFT
+    81 jump *label15 greaterThanEq :head .INDEX
+    82 op add :head :head .SKIP_SIZE
 -    * jump *label16 always
-    88 label *label15
-    89 label *label16
-    90 set :tail :head
+    83 label *label15
+    84 label *label16
+    85 set :tail :head
  
-    98 op sub :head :head 1
-    99 jump *label20 greaterThan :head .INDEX
-   100 op sub :head .SIZE 1
+    92 op sub :head :head 1
+    93 jump *label20 greaterThan :head .INDEX
+    94 op sub :head .SIZE 1
 -    * jump *label21 always
-   101 label *label20
-   102 label *label21
-   103 label *label18
+    95 label *label20
+    96 label *label21
+    97 label *label18
  
-   121 op sub :head :head 1
-   122 jump *label25 greaterThan :head .INDEX
-   123 op sub :head .SIZE 1
+   113 op sub :head :head 1
+   114 jump *label25 greaterThan :head .INDEX
+   115 op sub :head .SIZE 1
 -    * jump *label26 always
-   124 label *label25
-   125 label *label26
-   126 op sub :tail :tail 1
-   127 jump *label27 greaterThan :tail .INDEX
-   128 op sub :tail .SIZE 1
+   116 label *label25
+   117 label *label26
+   118 op sub :tail :tail 1
+   119 jump *label27 greaterThan :tail .INDEX
+   120 op sub :tail .SIZE 1
 -    * jump *label28 always
-   129 label *label27
-   130 label *label28
-   131 op mul *tmp56 :value :scale
+   121 label *label27
+   122 label *label28
+   123 op mul *tmp56 :value :scale
  
-   145 op mul *tmp61 3 :newMax
-   146 jump *label29 greaterThanEq *tmp61 :maximum
-   147 op mul :maximum 1.5 :newMax
+   137 op mul *tmp61 3 :newMax
+   138 jump *label29 greaterThanEq *tmp61 :maximum
+   139 op mul :maximum 1.5 :newMax
 -    * jump *label30 always
-   148 label *label29
-   149 label *label30
-   150 write :maximum COORD POSITION
+   140 label *label29
+   141 label *label30
+   142 write :maximum COORD POSITION
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -490,175 +502,80 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   15 op sub *tmp0 511 256
 +   16 op sub .SKIP_SIZE 255 1
     17 op mul .SHIFT POSITION 30
--    * set *tmp3 .INDEX
--    * read *tmp4 MEMORY *tmp3
-+   18 set *tmp3 256
-+   19 read *tmp4 MEMORY .INDEX
-    20 op sub :ptr *tmp4 .SHIFT
+-    * read *tmp4 MEMORY .INDEX
++   18 read *tmp4 MEMORY 256
+    19 op sub :ptr *tmp4 .SHIFT
 -    * jump *label0 greaterThanEq :ptr .INDEX
 -    * op add :ptr :ptr .SKIP_SIZE
-+   21 jump *label0 greaterThanEq :ptr 256
-+   22 op add :ptr :ptr 254
-    23 label *label0
-    24 label *label1
-    25 set *tmp8 :ptr
--    * read :maximum MEMORY *tmp8
-+   26 read :maximum MEMORY :ptr
-    27 set :n 0
-    28 label *label2
-    29 jump *label4 greaterThanEq :n 29
-    30 op sub :ptr :ptr 1
++   20 jump *label0 greaterThanEq :ptr 256
++   21 op add :ptr :ptr 254
+    22 label *label0
+    23 label *label1
+    24 read :maximum MEMORY :ptr
+ 
+    26 label *label2
+    27 jump *label4 greaterThanEq :n 29
+    28 op sub :ptr :ptr 1
 -    * jump *label5 greaterThan :ptr .INDEX
 -    * op sub :ptr .SIZE 1
-+   31 jump *label5 greaterThan :ptr 256
-+   32 op sub :ptr 511 1
-    33 label *label5
-    34 label *label6
-    35 set *tmp14 :ptr
--    * read *tmp15 MEMORY *tmp14
-+   36 read *tmp15 MEMORY :ptr
-    37 op max :maximum :maximum *tmp15
-    38 label *label3
-    39 op add :n :n 1
++   29 jump *label5 greaterThan :ptr 256
++   30 op sub :ptr 511 1
+    31 label *label5
+    32 label *label6
+    33 read *tmp15 MEMORY :ptr
  
-    51 label *label12
-    52 jump *label14 greaterThanEq :n TOTAL
-    53 set *tmp25 :n
--    * read :m COORD *tmp25
-+   54 read :m COORD :n
-    55 print "\n"
-    56 print "Coord: [gold]"
-    57 print :m
- 
-    80 draw clear 0 0 80
-    81 draw color 0 80 0 255
-    82 draw rect 10 10 156 156
--    * set *tmp31 .INDEX
--    * read *tmp32 MEMORY *tmp31
-+   83 set *tmp31 256
-+   84 read *tmp32 MEMORY .INDEX
-    85 op sub :head *tmp32 .SHIFT
+    76 draw clear 0 0 80
+    77 draw color 0 80 0 255
+    78 draw rect 10 10 156 156
+-    * read *tmp32 MEMORY .INDEX
++   79 read *tmp32 MEMORY 256
+    80 op sub :head *tmp32 .SHIFT
 -    * jump *label15 greaterThanEq :head .INDEX
 -    * op add :head :head .SKIP_SIZE
-+   86 jump *label15 greaterThanEq :head 256
-+   87 op add :head :head 254
-    88 label *label15
-    89 label *label16
-    90 set :tail :head
++   81 jump *label15 greaterThanEq :head 256
++   82 op add :head :head 254
+    83 label *label15
+    84 label *label16
+    85 set :tail :head
  
-    93 label *label17
-    94 jump *label19 greaterThanEq :i SMOOTH
-    95 set *tmp37 :head
--    * read *tmp38 MEMORY *tmp37
-+   96 read *tmp38 MEMORY :head
-    97 op add :value :value *tmp38
-    98 op sub :head :head 1
+    90 read *tmp38 MEMORY :head
+    91 op add :value :value *tmp38
+    92 op sub :head :head 1
 -    * jump *label20 greaterThan :head .INDEX
 -    * op sub :head .SIZE 1
-+   99 jump *label20 greaterThan :head 256
-+  100 op sub :head 511 1
-   101 label *label20
-   102 label *label21
-   103 label *label18
++   93 jump *label20 greaterThan :head 256
++   94 op sub :head 511 1
+    95 label *label20
+    96 label *label21
+    97 label *label18
  
-   113 label *label22
-   114 jump *label24 greaterThanEq :n 29
-   115 set *tmp44 :tail
--    * read :t MEMORY *tmp44
-+  116 read :t MEMORY :tail
-   117 set *tmp46 :head
--    * read :h MEMORY *tmp46
-+  118 read :h MEMORY :head
-   119 op sub *tmp48 :value :t
-   120 op add :value *tmp48 :h
-   121 op sub :head :head 1
+   111 op sub *tmp48 :value :t
+   112 op add :value *tmp48 :h
+   113 op sub :head :head 1
 -    * jump *label25 greaterThan :head .INDEX
 -    * op sub :head .SIZE 1
-+  122 jump *label25 greaterThan :head 256
-+  123 op sub :head 511 1
-   124 label *label25
-   125 label *label26
-   126 op sub :tail :tail 1
++  114 jump *label25 greaterThan :head 256
++  115 op sub :head 511 1
+   116 label *label25
+   117 label *label26
+   118 op sub :tail :tail 1
 -    * jump *label27 greaterThan :tail .INDEX
 -    * op sub :tail .SIZE 1
-+  127 jump *label27 greaterThan :tail 256
-+  128 op sub :tail 511 1
-   129 label *label27
-   130 label *label28
-   131 op mul *tmp56 :value :scale
++  119 jump *label27 greaterThan :tail 256
++  120 op sub :tail 511 1
+   121 label *label27
+   122 label *label28
+   123 op mul *tmp56 :value :scale
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-11 instructions):
- 
-    11 printflush message1
-    12 draw stroke 1
-    13 set .INDEX 256
--    * set .SIZE 511
--    * op sub *tmp0 511 256
--    * op sub .SKIP_SIZE 255 1
-    14 op mul .SHIFT POSITION 30
--    * set *tmp3 256
--    * read *tmp4 MEMORY .INDEX
-+   15 read *tmp4 MEMORY 256
-    16 op sub :ptr *tmp4 .SHIFT
-    17 jump *label0 greaterThanEq :ptr 256
-    18 op add :ptr :ptr 254
-    19 label *label0
-    20 label *label1
--    * set *tmp8 :ptr
-    21 read :maximum MEMORY :ptr
-    22 set :n 0
-    23 label *label2
- 
-    27 op sub :ptr 511 1
-    28 label *label5
-    29 label *label6
--    * set *tmp14 :ptr
-    30 read *tmp15 MEMORY :ptr
-    31 op max :maximum :maximum *tmp15
-    32 label *label3
- 
-    44 set :n 0
-    45 label *label12
-    46 jump *label14 greaterThanEq :n TOTAL
--    * set *tmp25 :n
-    47 read :m COORD :n
-    48 print "\n"
-    49 print "Coord: [gold]"
- 
-    73 draw clear 0 0 80
-    74 draw color 0 80 0 255
-    75 draw rect 10 10 156 156
--    * set *tmp31 256
--    * read *tmp32 MEMORY .INDEX
-+   76 read *tmp32 MEMORY 256
-    77 op sub :head *tmp32 .SHIFT
-    78 jump *label15 greaterThanEq :head 256
-    79 op add :head :head 254
- 
-    84 set :i 0
-    85 label *label17
-    86 jump *label19 greaterThanEq :i SMOOTH
--    * set *tmp37 :head
-    87 read *tmp38 MEMORY :head
-    88 op add :value :value *tmp38
-    89 op sub :head :head 1
- 
-   103 set :n 0
-   104 label *label22
-   105 jump *label24 greaterThanEq :n 29
--    * set *tmp44 :tail
-   106 read :t MEMORY :tail
--    * set *tmp46 :head
-   107 read :h MEMORY :head
-   108 op sub *tmp48 :value :t
-   109 op add :value *tmp48 :h
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
  
     10 print "\n"
     11 printflush message1
     12 draw stroke 1
 -    * set .INDEX 256
+-    * set .SIZE 511
+-    * op sub *tmp0 511 256
+-    * op sub .SKIP_SIZE 255 1
     13 op mul .SHIFT POSITION 30
     14 read *tmp4 MEMORY 256
     15 op sub :ptr *tmp4 .SHIFT

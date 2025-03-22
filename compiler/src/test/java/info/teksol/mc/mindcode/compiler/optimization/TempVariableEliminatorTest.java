@@ -38,6 +38,20 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     }
 
     @Test
+    void optimizesMultipleSubstitutions() {
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(SET, tmp1, a),
+                        createInstruction(SET, tmp2, b),
+                        createInstruction(OP, add, c, tmp1, tmp2)
+                ),
+                List.of(
+                        createInstruction(OP, add, c, a, b)
+                )
+        );
+    }
+
+    @Test
     void ignoresNontemporaryVariables() {
         assertOptimizesTo(
                 List.of(
@@ -169,6 +183,17 @@ class TempVariableEliminatorTest extends AbstractOptimizerTest<TempVariableElimi
     void ignoresTerminalGetlink() {
         assertDoesNotOptimize(
                 createInstruction(GETLINK, a, P0)
+        );
+    }
+
+    @Test
+    void optimizesVolatileVariables() {
+        assertCompilesTo("""
+                        volatile var x = 0;
+                        cell1[x] = x;
+                        """,
+                createInstruction(SET, ".x", "0"),
+                createInstruction(WRITE, ".x", "cell1", ".x")
         );
     }
 

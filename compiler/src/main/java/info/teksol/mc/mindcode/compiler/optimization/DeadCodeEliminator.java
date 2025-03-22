@@ -84,8 +84,8 @@ class DeadCodeEliminator extends BaseOptimizer {
         final Set<LogicVariable> uselessWrites = new HashSet<>(writes.keySet());
         uselessWrites.removeAll(reads);
         for (LogicVariable key : uselessWrites) {
-            // Preserve global and main variable assignments unless advanced
-            //if ((key.isGlobalVariable() || key.isMainVariable()) && !advanced()) continue;
+            // Preserve volatile variables
+            if (key.isVolatile()) continue;
 
             // Remove instructions with all writes unread
             Objects.requireNonNull(writes.get(key)).stream()
