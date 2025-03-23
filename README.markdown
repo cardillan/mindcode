@@ -79,7 +79,7 @@ If you don't know much about Mindustry Logic, you can read more information abou
 You can also get help on these Discord servers:
 
 * [Logic channel on the Mindustry server](https://discord.gg/YkMMPMYABE)
-* [Mindustry Logic server](https://discord.gg/8MxwZjDk)
+* [Mindustry Logic server](https://discord.gg/TbkC728p)
 
 ## Contributing
 

@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.Condition;
@@ -14,6 +14,7 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.IF;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static java.util.Objects.requireNonNull;
 
@@ -26,11 +27,59 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        forEachContext(AstContextType.IF, BASIC, returningNull(this::optimizeIfExpression));
+        forEachContext(IF, BASIC, returningNull(this::optimizeIfExpression));
         return false;
     }
 
+    private boolean isNestedIfExpression(LogicList falseBranch) {
+        AstContext astContext = falseBranch.getAstContext();
+        if (astContext == null || !astContext.matches(IF, BODY)) {
+            throw new MindcodeInternalError("Invalid context structure");
+        }
+
+        return astContext.children().size() == 1
+               && astContext.children().getFirst().matches(IF, BASIC);
+    }
+
+    private boolean isLinearSubcontext(@Nullable AstContext context, AstContext subcontext) {
+        while (subcontext != null) {
+            if (subcontext == context) return true;
+            if (!subcontext.isLinear()) return false;
+            subcontext = subcontext.parent();
+        }
+
+        throw new MindcodeInternalError("Invalid context structure");
+    }
+
+    /// Determines whether the IF context has a supported structure:
+    /// 1. If the conditions are chained (using nesting), there's a final else branch
+    /// 2. The last real instruction in each branch is not nested in another control structure
+    private boolean isSupportedIfElseExpression(AstContext ifExpression) {
+        if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)
+            || !hasExpectedStructure(ifExpression))
+            return false;
+
+        // Check true branch
+        LogicList trueBranch = contextInstructions(ifExpression.child(1));
+        LogicInstruction trueInstruction = getLastRealInstruction(trueBranch);
+        if (trueInstruction == null || !isLinearSubcontext(trueBranch.getAstContext(), trueInstruction.getAstContext())) {
+            return false;
+        }
+
+        LogicList falseBranch = contextInstructions(ifExpression.child(3));
+        if (isNestedIfExpression(falseBranch)) {
+            return isSupportedIfElseExpression(ifExpression.child(3).children().getFirst());
+        } else {
+            LogicInstruction falseInstruction = getLastRealInstruction(trueBranch);
+            return falseInstruction != null && isLinearSubcontext(trueBranch.getAstContext(), falseInstruction.getAstContext());
+        }
+    }
+
     private void optimizeIfExpression(AstContext ifExpression) {
+        if (!isSupportedIfElseExpression(ifExpression)) {
+            return;
+        }
+
         AstContext conditionContext = ifExpression.findSubcontext(CONDITION);
         LogicList condition = contextInstructions(conditionContext);
         if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)

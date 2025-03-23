@@ -9,11 +9,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed errors when trying to invoke properties on internal array elements ([#228](https://github.com/cardillan/mindcode/issues/228)).
-* Fixed wrong optimization of list iteration loops  ([#229](https://github.com/cardillan/mindcode/issues/229)).
-
+* Fixed wrong optimization of list iteration loops ([#229](https://github.com/cardillan/mindcode/issues/229)).
+* Fixed incorrect optimization of `if` expressions ([#230](https://github.com/cardillan/mindcode/issues/230)).
+ 
 ### Added
 
-* Added a warning when a variable declared volatile is not used anywhere in a program, precluding remote access to such a variable.  
+* Added a warning when a variable declared volatile is not used anywhere in a program, which would preclude remote access to such a variable.  
 
 ### Changed
 

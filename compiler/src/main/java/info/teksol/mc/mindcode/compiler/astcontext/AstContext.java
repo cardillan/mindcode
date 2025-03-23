@@ -294,7 +294,7 @@ public final class AstContext {
         return false;
     }
 
-    private boolean isLinear() {
+    public boolean isLinear() {
         if (contextType == AstContextType.CALL) {
             return subcontextType == AstSubcontextType.SYSTEM_CALL
                     || subcontextType == AstSubcontextType.ARGUMENTS

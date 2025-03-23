@@ -180,7 +180,7 @@ all-sources:
   - source: impact-reactor-logic.mnd
     samples: 125
 
-  - source: "C:\Home\golem-old\mindcode\breakout.mnd"
+  - source: "C:\Home\golem\benchmarks\breakout.mnd"
     samples: 1200
 
   - source: "C:\Home\golem\schematics\detector.mnd"

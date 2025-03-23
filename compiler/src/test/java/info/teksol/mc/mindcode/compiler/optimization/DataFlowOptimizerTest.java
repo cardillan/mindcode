@@ -972,10 +972,6 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
 
         @Test
         public void preservesVariableStateAcrossPushAndPop() {
-            // Explanation of the test:
-            // The recursive call foo(m, n - 1) modifies :fn0:n (it is set to n - 1 when passing new value to the recursive call)
-            // Data Flow analysis of push/pop should determine the value of n remains unchanged after the call
-            // Because of this, it subsequently determines the __tmp1 variable in loop condition can be replaced by :fn0:n
             assertCompilesTo("""
                             allocate stack in bank1[0...512];
                             def foo(n)
@@ -994,12 +990,16 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(PRINT, ":foo.0*retval"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(SET, ":foo.0*retval", "null"),
-                    createInstruction(JUMP, label(5), "lessThanEq", ":foo.0:n", "0"),
+                    createInstruction(JUMP, label(4), "lessThanEq", ":foo.0:n", "0"),
                     createInstruction(OP, "sub", ":foo.0:n", ":foo.0:n", "1"),
                     createInstruction(CALLREC, "bank1", label(0), label(6), ":foo.0*retval"),
                     createInstruction(LABEL, label(6)),
+                    createInstruction(SET, tmp(2), ":foo.0*retval"),
+                    createInstruction(JUMP, label(5), "always"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(2), "null"),
                     createInstruction(LABEL, label(5)),
+                    createInstruction(SET, ":foo.0*retval", tmp(2)),
                     createInstruction(RETURNREC, "bank1")
             );
         }
@@ -1715,20 +1715,18 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                                 end;
                             end;
                             """,
-                    createInstruction(OP, "rand", var(0), "10"),
-                    createInstruction(OP, "greaterThan", "a", var(0), "5"),
-                    createInstruction(OP, "greaterThan", "b", "a", "5"),
-                    createInstruction(OP, "lessThan", var(3), "a", "5"),
-                    createInstruction(OP, "or", "c", "b", var(3)),
-                    createInstruction(SET, "d", "a"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "c", "false"),
-                    createInstruction(OP, "add", "d", "d", "1"),
-                    createInstruction(OP, "lessThan", var(4), "d", "5"),
-                    createInstruction(OP, "or", "c", "b", var(4)),
-                    createInstruction(JUMP, var(1000), "always")
-
-
+                    createInstruction(OP, "rand", tmp(0), "10"),
+                    createInstruction(OP, "greaterThan", ":a", tmp(0), "5"),
+                    createInstruction(OP, "greaterThan", ":b", ":a", "5"),
+                    createInstruction(OP, "lessThan", tmp(3), ":a", "5"),
+                    createInstruction(OP, "or", ":c", ":b", tmp(3)),
+                    createInstruction(SET, ":d", ":a"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", ":c", "false"),
+                    createInstruction(OP, "add", ":d", ":d", "1"),
+                    createInstruction(OP, "lessThan", tmp(6), ":d", "5"),
+                    createInstruction(OP, "or", ":c", ":b", tmp(6)),
+                    createInstruction(JUMP, label(0), "always")
             );
         }
     }

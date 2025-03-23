@@ -2,7 +2,7 @@ allocate stack in bank1[0...512];
 param ARRAY = bank2;
 param FINAL = bank3;
 
-def quicksort(left, right) 
+void quicksort(left, right)
     if right > left then
         pivot_index = left + (right - left) \ 2;
         new_pivot_index = partition(left, right, pivot_index);

@@ -91,4 +91,20 @@ public class InterceptorTest extends AbstractInterceptorTest {
                 "F", "F"
         );
     }
+
+    @Test
+    void solveCurrentProblem() {
+        testCode("""
+                        param x = 1;
+                        y = 3;
+                        if x > 5 then
+                            y = 1;
+                        elsif x > 3 then
+                            y = 2;
+                        end;
+                        print(y);
+                        """,
+                "3"
+        );
+    }
 }

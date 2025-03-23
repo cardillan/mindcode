@@ -1,10 +1,8 @@
 allocate stack in bank1[0...512];
 
 def foo(n)
-    if n > 0 then
-        foo(n - 1);
-    end;
+    n > 0 ? foo(n - 1) : 10;
 end;
 
-assertEquals(null, foo(1), "recursive-function-condition");
+assertEquals(10, foo(1), "recursive-function-condition");
 stopProcessor();
