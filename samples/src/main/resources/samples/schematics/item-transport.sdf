@@ -3,7 +3,7 @@ schematic
     description = """
         Simple item transport schematics. Requires Mindustry BE.
 
-        Uses one of four predefined types of units for transport. Utilizes a separate processor
+        Uses one of five predefined types of units for transport. Utilizes a separate processor
         and a new Mindcode remote call mechanism to switch to a more preferred unit type
         once it becomes available. The task to find a better unit runs in parallel on the second processor,
         allowing the item transport to run uninterrupted.
