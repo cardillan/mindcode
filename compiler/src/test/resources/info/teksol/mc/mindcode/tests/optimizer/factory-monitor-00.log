@@ -2083,17 +2083,17 @@ getlink :block :n
 sensor *tmp8 :block @type
 jump *label7 notEqual *tmp8 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp8 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label12 equal *tmp8 @logic-display
 jump *label11 notEqual *tmp8 @large-logic-display
 label *label12
 set .DISPLAY :block
-jump *label6 always 0 0
+jump *label6 always
 label *label11
 jump *label13 notEqual *tmp8 @silicon-smelter
 set .TYPE @silicon-smelter
@@ -2105,7 +2105,7 @@ op div .MUL3 100 .CAPACITY
 set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @silicon
-jump *label6 always 0 0
+jump *label6 always
 label *label13
 jump *label15 notEqual *tmp8 @silicon-crucible
 set .TYPE @silicon-crucible
@@ -2117,7 +2117,7 @@ op div .MUL3 100 .CAPACITY
 set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @silicon
-jump *label6 always 0 0
+jump *label6 always
 label *label15
 jump *label17 notEqual *tmp8 @kiln
 set .TYPE @kiln
@@ -2129,7 +2129,7 @@ op div .MUL3 100 .CAPACITY
 set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @metaglass
-jump *label6 always 0 0
+jump *label6 always
 label *label17
 jump *label19 notEqual *tmp8 @phase-weaver
 set .TYPE @phase-weaver
@@ -2141,7 +2141,7 @@ op div .MUL3 100 .CAPACITY
 set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @phase-fabric
-jump *label6 always 0 0
+jump *label6 always
 label *label19
 jump *label21 notEqual *tmp8 @pyratite-mixer
 set .TYPE @pyratite-mixer
@@ -2153,7 +2153,7 @@ op div .MUL3 100 .CAPACITY
 set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @pyratite
-jump *label6 always 0 0
+jump *label6 always
 label *label21
 jump *label23 notEqual *tmp8 @blast-mixer
 set .TYPE @blast-mixer
@@ -2165,7 +2165,7 @@ op div .MUL3 100 .CAPACITY
 set .MUL2 .MUL3
 set .MUL1 .MUL3
 set .OUTPUT @blast-compound
-jump *label6 always 0 0
+jump *label6 always
 label *label23
 jump *label25 notEqual *tmp8 @plastanium-compressor
 set .TYPE @plastanium-compressor
@@ -2178,7 +2178,7 @@ set .MUL1 .MUL3
 sensor *tmp24 :block @liquidCapacity
 op div .MUL2 250 *tmp24
 set .OUTPUT @plastanium
-jump *label6 always 0 0
+jump *label6 always
 label *label25
 print "\n  {0} not supported"
 format :block
@@ -2227,7 +2227,7 @@ op add *tmp40 2 *tmp41
 label *label34
 op sub :clh *tmp40 *tmp36
 set :crh :clh
-jump *label30 always 0 0
+jump *label30 always
 label *label29
 set .OFFSET_X 5
 set .OFFSET_Y 4
@@ -2254,7 +2254,7 @@ set :clx 91
 set :clw 84
 set :cly *tmp53
 set :clh :crh
-jump *label36 always 0 0
+jump *label36 always
 label *label35
 set :clx 0
 op sub :clw 93 2
@@ -2279,7 +2279,7 @@ jump *label46 greaterThanEq TO_INDEX 16
 op mod *tmp83 TO_INDEX 8
 op mul *tmp84 *tmp83 22
 op add :crh 4 *tmp84
-jump *label46 always 0 0
+jump *label46 always
 label *label45
 set :crx 0
 set :crw 91
@@ -2288,17 +2288,17 @@ set :crh :clh
 label *label46
 label *label36
 label *label30
-control enabled .SWITCH 0 0 0 0
+control enabled .SWITCH 0
 sensor *tmp89 .SWITCH @enabled
 jump __start__ notEqual *tmp89 0
 label *label86
 set :start @time
 print "Universal Factory Monitor\nMonitoring: "
 print .TYPE
-draw color 0 0 80 255 0 0
-draw rect :clx :cly :clw :clh 0 0
-draw rect :crx :cry :crw :crh 0 0
-draw stroke 2 0 0 0 0 0
+draw color 0 0 80 255
+draw rect :clx :cly :clw :clh
+draw rect :crx :cry :crw :crh
+draw stroke 2
 set :index FROM_INDEX
 set *tmp92 @links
 set :n 0
@@ -2351,44 +2351,44 @@ op land *tmp129 *tmp127 *tmp128
 jump *label67 equal *tmp129 false
 set :icon .TYPE
 label *label67
-draw color 255 255 255 255 0 0
+draw color 255 255 255 255
 jump *label69 equal :e false
 jump *label71 lessThanEq :power 0
 op add *tmp134 :x 7
 op add *tmp135 :y 7
-draw image *tmp134 *tmp135 :icon 16 0 0
-jump *label70 always 0 0
+draw image *tmp134 *tmp135 :icon 16 0
+jump *label70 always
 label *label71
-draw color 255 80 80 255 0 0
+draw color 255 80 80 255
 op add *tmp136 :y 3
-draw rect :x *tmp136 14 8 0 0
-draw color 0 0 0 255 0 0
+draw rect :x *tmp136 14 8
+draw color 0 0 0 255
 op add *tmp137 :x 2
 op add *tmp138 :y 5
-draw rect *tmp137 *tmp138 8 4 0 0
+draw rect *tmp137 *tmp138 8 4
 op add *tmp139 :x 12
-draw rect *tmp139 *tmp136 2 2 0 0
+draw rect *tmp139 *tmp136 2 2
 op add *tmp142 :y 9
-draw rect *tmp139 *tmp142 2 2 0 0
-draw color 255 80 80 255 0 0
+draw rect *tmp139 *tmp142 2 2
+draw color 255 80 80 255
 op add *tmp143 :x 4
 op add *tmp144 :y 6
-draw rect *tmp143 *tmp144 2 2 0 0
-jump *label70 always 0 0
+draw rect *tmp143 *tmp144 2 2
+jump *label70 always
 label *label69
-draw color 255 80 80 255 0 0
-draw stroke 3 0 0 0 0 0
+draw color 255 80 80 255
+draw stroke 3
 op add *tmp145 :x 2
 op add *tmp146 :y 12
 op add *tmp147 :x 12
 op add *tmp148 :y 2
-draw line *tmp145 *tmp146 *tmp147 *tmp148 0 0
-draw line *tmp145 *tmp148 *tmp147 *tmp146 0 0
-draw color 0 0 0 255 0 0
+draw line *tmp145 *tmp146 *tmp147 *tmp148
+draw line *tmp145 *tmp148 *tmp147 *tmp146
+draw color 0 0 0 255
 op sub *tmp153 :x 1
 op sub *tmp154 :y 1
-draw lineRect *tmp153 *tmp154 16 16 0 0
-draw stroke 2 0 0 0 0 0
+draw lineRect *tmp153 *tmp154 16 16
+draw stroke 2
 label *label70
 op add :x :x 16
 op equal *tmp156 :power 0
@@ -2398,14 +2398,14 @@ jump *label73 equal *tmp158 false
 set :red 255
 set :green 0
 set :blue 0
-jump *label74 always 0 0
+jump *label74 always
 label *label73
 jump *label75 equal :showout false
 set :red 255
 set :green 0
 set :blue 255
 set :minimum :output
-jump *label76 always 0 0
+jump *label76 always
 label *label75
 set :red 255
 op greaterThanEq *tmp162 :boost EXPECTED_BOOST
@@ -2428,12 +2428,12 @@ set :boost EXPECTED_BOOST
 label *label81
 op mul *tmp172 61 :boost
 op idiv :length *tmp172 EXPECTED_BOOST
-draw color :red :green :blue 128 0 0
+draw color :red :green :blue 128
 op mul *tmp174 :minimum :length
 op idiv *tmp175 *tmp174 100
-draw rect :x :y *tmp175 14 0 0
-draw color :red :green :blue 255 0 0
-draw lineRect :x :y :length 14 0 0
+draw rect :x :y *tmp175 14
+draw color :red :green :blue 255
+draw lineRect :x :y :length 14
 op add :index :index 1
 label *label57
 op add :n :n 1
@@ -2441,7 +2441,7 @@ jump *label85 lessThan :n *tmp92
 label *label54
 drawflush .DISPLAY
 op sub *tmp177 @time :start
-op floor *tmp178 *tmp177 0
+op floor *tmp178 *tmp177
 print "\nDraw time: {0} ms"
 format *tmp178
 printflush .MESSAGE

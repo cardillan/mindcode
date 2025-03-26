@@ -650,68 +650,68 @@ set :start @time
 ubind @mono
 sensor *tmp9 @unit @flag
 jump *label4 notEqual *tmp9 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label4
 ubind @poly
 sensor *tmp13 @unit @flag
 jump *label7 notEqual *tmp13 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label7
 ubind @mega
 sensor *tmp17 @unit @flag
 jump *label10 notEqual *tmp17 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label10
 ubind @quad
 sensor *tmp21 @unit @flag
 jump *label13 notEqual *tmp21 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label13
 ubind @oct
 sensor *tmp25 @unit @flag
 jump *label16 notEqual *tmp25 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label16
 ubind @flare
 sensor *tmp29 @unit @flag
 jump *label19 notEqual *tmp29 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label19
 ubind @horizon
 sensor *tmp33 @unit @flag
 jump *label22 notEqual *tmp33 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label22
 ubind @zenith
 sensor *tmp37 @unit @flag
 jump *label25 notEqual *tmp37 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label25
 ubind @antumbra
 sensor *tmp41 @unit @flag
 jump *label28 notEqual *tmp41 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label28
 ubind @eclipse
 sensor *tmp45 @unit @flag
 jump *label31 notEqual *tmp45 .QUERY_FLAG
-ucontrol flag .ANSWER_FLAG 0 0 0 0
+ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label31
 print "Remote vault [gold]#{0}[]\nQueries serviced: [green]{0}[]\n[lightgray]Loop time: {0} ms\n"
 format LINK_ID
 format .SERVICED
 op sub *tmp48 @time :start
-op floor *tmp49 *tmp48 0
+op floor *tmp49 *tmp48
 format *tmp49
 printflush message1
-jump *label0 always 0 0
+jump *label0 always

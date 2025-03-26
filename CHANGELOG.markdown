@@ -4,6 +4,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.3.0 - Future release
+
+### Fixed
+
+### Added
+
+* Added a new remarks mode - `comments`. In this mode, remarks are compiled as mlog comments (`# comment`).
+
+### Changed
+
+* The `noinit` modifier is no longer disallowed for local variables.
+
 ## 3.2.1 - 2025-03-23
 
 ### Fixed
@@ -459,13 +471,11 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed slightly wrong (too low) cost estimation in the
-  [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization.
+* Fixed slightly wrong (too low) cost estimation in the [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization.
 
 ### Added
 
-* New [`remark()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remarks), as described
-  [here](https://github.com/cardillan/mindcode/issues/140).
+* New [`remark()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#remarks), as described [here](https://github.com/cardillan/mindcode/issues/140).
 
 ### Changed
 

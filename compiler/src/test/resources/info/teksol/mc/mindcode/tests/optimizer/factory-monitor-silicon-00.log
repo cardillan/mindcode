@@ -1727,11 +1727,11 @@ label __start__
 set FROM_INDEX 0
 set TO_INDEX 8
 set EXPECTED_BOOST 1.5
-draw clear 0 0 80 0 0 0
+draw clear 0 0 80
 jump *label0 equal bank1 null
 set .BAR_LENGTH 53
 set .BAR_SPACE 74
-jump *label1 always 0 0
+jump *label1 always
 label *label0
 set .BAR_LENGTH 61
 set .BAR_SPACE 88
@@ -1756,16 +1756,16 @@ set :lastRate null
 set :flow_str null
 set :expected_flow_str null
 set :icon null
-control enabled switch1 0 0 0 0
+control enabled switch1 0
 sensor *tmp14 switch1 @enabled
 jump __start__ notEqual *tmp14 0
 label *label73
 set :start @time
 print "Silicon Factory Monitor"
 set :factories 0
-draw color 0 0 80 255 0 0
-draw rect 0 *tmp5 *tmp3 :clh 0 0
-draw stroke 2 0 0 0 0 0
+draw color 0 0 80 255
+draw rect 0 *tmp5 *tmp3 :clh
+draw stroke 2
 set :index FROM_INDEX
 set :n 0
 jump *label13 greaterThanEq 0 @links
@@ -1803,59 +1803,59 @@ set :icon @silicon
 label *label22
 op mul *tmp43 :index 22
 op add :y 4 *tmp43
-draw color 0 0 80 255 0 0
+draw color 0 0 80 255
 op sub *tmp46 :y 1
-draw rect 4 *tmp46 .BAR_SPACE 16 0 0
+draw rect 4 *tmp46 .BAR_SPACE 16
 op greaterThan *tmp47 :minimum 26
 op equal *tmp48 :showa 0
 op land *tmp49 *tmp47 *tmp48
 jump *label24 equal *tmp49 false
 set :icon @silicon-crucible
 label *label24
-draw color 255 255 255 255 0 0
+draw color 255 255 255 255
 jump *label26 equal :e false
 jump *label28 lessThanEq :power 0
 op add *tmp55 :y 7
-draw image 12 *tmp55 :icon 16 0 0
-jump *label27 always 0 0
+draw image 12 *tmp55 :icon 16 0
+jump *label27 always
 label *label28
-draw color 255 80 80 255 0 0
+draw color 255 80 80 255
 op add *tmp56 :y 3
-draw rect 5 *tmp56 14 8 0 0
-draw color 0 0 0 255 0 0
+draw rect 5 *tmp56 14 8
+draw color 0 0 0 255
 op add *tmp58 :y 5
-draw rect 7 *tmp58 8 4 0 0
-draw rect 17 *tmp56 2 2 0 0
+draw rect 7 *tmp58 8 4
+draw rect 17 *tmp56 2 2
 op add *tmp62 :y 9
-draw rect 17 *tmp62 2 2 0 0
-draw color 255 80 80 255 0 0
+draw rect 17 *tmp62 2 2
+draw color 255 80 80 255
 op add *tmp64 :y 6
-draw rect 9 *tmp64 2 2 0 0
-jump *label27 always 0 0
+draw rect 9 *tmp64 2 2
+jump *label27 always
 label *label26
-draw color 255 80 80 255 0 0
-draw stroke 3 0 0 0 0 0
+draw color 255 80 80 255
+draw stroke 3
 op add *tmp66 :y 12
 op add *tmp68 :y 2
-draw line 7 *tmp66 17 *tmp68 0 0
-draw line 7 *tmp68 17 *tmp66 0 0
-draw color 0 0 0 255 0 0
-draw lineRect 4 *tmp46 16 16 0 0
-draw stroke 2 0 0 0 0 0
+draw line 7 *tmp66 17 *tmp68
+draw line 7 *tmp68 17 *tmp66
+draw color 0 0 0 255
+draw lineRect 4 *tmp46 16 16
+draw stroke 2
 label *label27
 op mul *tmp76 :power :e
 jump *label30 notEqual *tmp76 0
 set :red 255
 set :green 0
 set :blue 0
-jump *label31 always 0 0
+jump *label31 always
 label *label30
 jump *label32 equal :showa false
 set :red 255
 set :green 0
 set :blue 255
 set :minimum :a
-jump *label33 always 0 0
+jump *label33 always
 label *label32
 set :red 255
 op greaterThan *tmp80 :minimum 20
@@ -1879,12 +1879,12 @@ set :boost EXPECTED_BOOST
 label *label38
 op mul *tmp91 .BAR_LENGTH :boost
 op idiv :length *tmp91 EXPECTED_BOOST
-draw color :red :green :blue 128 0 0
+draw color :red :green :blue 128
 op mul *tmp93 :minimum :length
 op idiv *tmp94 *tmp93 30
-draw rect 21 :y *tmp94 14 0 0
-draw color :red :green :blue 255 0 0
-draw lineRect 21 :y :length 14 0 0
+draw rect 21 :y *tmp94 14
+draw color :red :green :blue 255
+draw lineRect 21 :y :length 14
 op add :index :index 1
 op add :factories :factories 1
 label *label14
@@ -1921,52 +1921,52 @@ label *label49
 op add :x 5 .BAR_SPACE
 op mul *tmp118 :index 22
 op add :y 4 *tmp118
-draw color 0 0 80 255 0 0
+draw color 0 0 80 255
 op sub *tmp120 :x 1
 op sub *tmp121 :y 1
-draw rect *tmp120 *tmp121 .BAR_SPACE 16 0 0
+draw rect *tmp120 *tmp121 .BAR_SPACE 16
 op greaterThan *tmp122 :minimum 6
 op equal *tmp123 :showa 0
 op land *tmp124 *tmp122 *tmp123
 jump *label51 equal *tmp124 false
 set :icon @pyratite-mixer
 label *label51
-draw color 255 255 255 255 0 0
+draw color 255 255 255 255
 jump *label53 equal :e false
 jump *label55 lessThanEq :power 0
 op add *tmp129 :x 7
 op add *tmp130 :y 7
-draw image *tmp129 *tmp130 :icon 16 0 0
-jump *label54 always 0 0
+draw image *tmp129 *tmp130 :icon 16 0
+jump *label54 always
 label *label55
-draw color 255 80 80 255 0 0
+draw color 255 80 80 255
 op add *tmp131 :y 3
-draw rect :x *tmp131 14 8 0 0
-draw color 0 0 0 255 0 0
+draw rect :x *tmp131 14 8
+draw color 0 0 0 255
 op add *tmp132 :x 2
 op add *tmp133 :y 5
-draw rect *tmp132 *tmp133 8 4 0 0
+draw rect *tmp132 *tmp133 8 4
 op add *tmp134 :x 12
-draw rect *tmp134 *tmp131 2 2 0 0
+draw rect *tmp134 *tmp131 2 2
 op add *tmp137 :y 9
-draw rect *tmp134 *tmp137 2 2 0 0
-draw color 255 80 80 255 0 0
+draw rect *tmp134 *tmp137 2 2
+draw color 255 80 80 255
 op add *tmp138 :x 4
 op add *tmp139 :y 6
-draw rect *tmp138 *tmp139 2 2 0 0
-jump *label54 always 0 0
+draw rect *tmp138 *tmp139 2 2
+jump *label54 always
 label *label53
-draw color 255 80 80 255 0 0
-draw stroke 3 0 0 0 0 0
+draw color 255 80 80 255
+draw stroke 3
 op add *tmp140 :x 2
 op add *tmp141 :y 12
 op add *tmp142 :x 12
 op add *tmp143 :y 2
-draw line *tmp140 *tmp141 *tmp142 *tmp143 0 0
-draw line *tmp140 *tmp143 *tmp142 *tmp141 0 0
-draw color 0 0 0 255 0 0
-draw lineRect *tmp120 *tmp121 16 16 0 0
-draw stroke 2 0 0 0 0 0
+draw line *tmp140 *tmp141 *tmp142 *tmp143
+draw line *tmp140 *tmp143 *tmp142 *tmp141
+draw color 0 0 0 255
+draw lineRect *tmp120 *tmp121 16 16
+draw stroke 2
 label *label54
 op add :x .BAR_SPACE 21
 op mul *tmp151 :power :e
@@ -1974,7 +1974,7 @@ jump *label57 notEqual *tmp151 0
 set :red 255
 set :green 0
 set :blue 0
-jump *label58 always 0 0
+jump *label58 always
 label *label57
 set :red 255
 op greaterThanEq *tmp155 :boost EXPECTED_BOOST
@@ -1996,12 +1996,12 @@ set :boost EXPECTED_BOOST
 label *label63
 op mul *tmp165 .BAR_LENGTH :boost
 op idiv :length *tmp165 EXPECTED_BOOST
-draw color :red :green :blue 128 0 0
+draw color :red :green :blue 128
 op mul *tmp167 :minimum :length
 op idiv *tmp168 *tmp167 10
-draw rect :x :y *tmp168 14 0 0
-draw color :red :green :blue 255 0 0
-draw lineRect :x :y :length 14 0 0
+draw rect :x :y *tmp168 14
+draw color :red :green :blue 255
+draw lineRect :x :y :length 14
 op add :index :index 1
 label *label43
 op add :n :n 1
@@ -2015,19 +2015,19 @@ op mul *tmp178 EXPECTED_BOOST :factories
 op div :expected_flow *tmp178 11.25
 op idiv :expected_flow_str :expected_flow 0.0002777777777777778
 set :lastRate :rate
-draw color 0 0 80 255 0 0
-draw rect 156 0 16 176 0 0
-draw color 255 128 128 255 0 0
-draw rect 164 4 8 84 0 0
-draw color 128 255 128 255 0 0
-draw rect 164 89 8 84 0 0
-draw stroke 1 0 0 0 0 0
-draw color 255 0 0 255 0 0
-draw lineRect 164 4 8 84 0 0
-draw color 0 255 0 255 0 0
-draw lineRect 164 89 8 84 0 0
-draw color 0 0 80 255 0 0
-draw rect 164 4 2 170 0 0
+draw color 0 0 80 255
+draw rect 156 0 16 176
+draw color 255 128 128 255
+draw rect 164 4 8 84
+draw color 128 255 128 255
+draw rect 164 89 8 84
+draw stroke 1
+draw color 255 0 0 255
+draw lineRect 164 4 8 84
+draw color 0 255 0 255
+draw lineRect 164 89 8 84
+draw color 0 0 80 255
+draw rect 164 4 2 170
 op sub *tmp182 :rate :expected_flow
 op mul *tmp183 84 *tmp182
 op div *tmp184 *tmp183 :expected_flow
@@ -2036,7 +2036,7 @@ op max *tmp186 :pos 4
 op min :pos *tmp186 170
 op add :pos1 :pos 7
 op sub :pos2 :pos 7
-draw color 255 255 16 255 0 0
+draw color 255 255 16 255
 draw triangle 156 :pos1 164 :pos 156 :pos2
 op idiv :flow_str :rate 0.0002777777777777778
 label *label69
@@ -2047,7 +2047,7 @@ format :flow_str
 label *label65
 drawflush display1
 op sub *tmp192 @time :start
-op floor *tmp193 *tmp192 0
+op floor *tmp193 *tmp192
 print "\nUpdate time: {0} ms"
 format *tmp193
 printflush message1

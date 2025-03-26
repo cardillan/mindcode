@@ -2306,12 +2306,12 @@ label *label7
 ubind UNIT
 jump *label10 equal @unit null
 set :rebindUnit.0:first_unit @unit
-jump *label9 always 0 0
+jump *label9 always
 label *label10
 print "[salmon]No unit of type {0} found. 1"
 format UNIT
 printflush message1
-jump *label7 always 0 0
+jump *label7 always
 label *label9
 label *label12
 sensor *tmp11 @unit @controller
@@ -2329,7 +2329,7 @@ ubind UNIT
 jump *label21 notEqual @unit null
 print "[salmon]No unit of type {0} found. 2"
 format UNIT
-jump *label22 always 0 0
+jump *label22 always
 label *label21
 sensor *tmp21 @unit @controlled
 jump *label17 equal *tmp21 0
@@ -2337,7 +2337,7 @@ print "[salmon]Looking for a free {0}..."
 format UNIT
 label *label22
 printflush message1
-jump *label18 always 0 0
+jump *label18 always
 label *label17
 label *label6
 sensor *tmp4 @unit @dead
@@ -2347,7 +2347,7 @@ label *label5
 sensor .UNIT_CAPACITY @unit @itemCapacity
 sensor *tmp25 @unit @speed
 op div .SPEED_SEC *tmp25 10
-ucontrol flag 1 0 0 0 0
+ucontrol flag 1
 label *label25
 set .CONTAINER null
 set .DROP_TARGET null
@@ -2365,7 +2365,7 @@ jump *label134 greaterThan :n 0
 label *label30
 jump *label33 notEqual .CONTAINER null
 print "[salmon]No destination.\n"
-jump *label34 always 0 0
+jump *label34 always
 label *label33
 op notEqual *tmp36 .DROP_TARGET null
 sensor *tmp37 .DROP_TARGET @itemCapacity
@@ -2377,7 +2377,7 @@ format .CONTAINER
 format .DROP_TARGET
 label *label34
 printflush message1
-jump *label25 always 0 0
+jump *label25 always
 label *label27
 set .CORE_Y null
 set .CORE_X null
@@ -2386,20 +2386,20 @@ jump *label37 notEqual LINK_ID 0
 print "[gold]Locating core..."
 printflush message1
 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
-jump *label38 always 0 0
+jump *label38 always
 label *label37
 print "[gold]Locating vault #{0}..."
 format LINK_ID
 printflush message1
 op add .QUERY_FLAG 99999900 LINK_ID
 set :flag .QUERY_FLAG
-ucontrol flag .QUERY_FLAG 0 0 0 0
+ucontrol flag .QUERY_FLAG
 sensor *tmp47 @unit @dead
 op strictEqual *tmp48 *tmp47 0
 op land *tmp49 true *tmp48
 jump *label41 equal *tmp49 false
 label *label141
-ucontrol stop 0 0 0 0 0
+ucontrol stop
 sensor :flag @unit @flag
 op equal *tmp46 :flag .QUERY_FLAG
 sensor *tmp47 @unit @dead
@@ -2411,15 +2411,15 @@ jump *label42 equal :flag .QUERY_FLAG
 op idiv :position :flag 100
 op mod .CORE_X :position @mapw
 op idiv .CORE_Y :position @mapw
-ucontrol within .CORE_X .CORE_Y 8 *tmp56 0
+ucontrol within .CORE_X .CORE_Y 8 *tmp56
 op equal *tmp57 *tmp56 false
 sensor *tmp58 @unit @dead
 op equal *tmp59 *tmp58 0
 op land *tmp60 *tmp57 *tmp59
 jump *label46 equal *tmp60 false
 label *label142
-ucontrol approach .CORE_X .CORE_Y 6 0 0
-ucontrol within .CORE_X .CORE_Y 8 *tmp56 0
+ucontrol approach .CORE_X .CORE_Y 6
+ucontrol within .CORE_X .CORE_Y 8 *tmp56
 op equal *tmp57 *tmp56 false
 sensor *tmp58 @unit @dead
 op equal *tmp59 *tmp58 0
@@ -2471,7 +2471,7 @@ set .REMOTE_MARGIN .LOAD_LEVEL
 set .DIRECTION "[] from vault #"
 jump *label57 notEqual LINK_ID 0
 set .DIRECTION "[] from core"
-jump *label57 always 0 0
+jump *label57 always
 label *label56
 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
 set .SRC .CONTAINER
@@ -2505,7 +2505,7 @@ jump *label64 notEqual .DROP_TARGET null
 set .DROP_TARGET .CORE
 set .DROP_X .CORE_X
 set .DROP_Y .CORE_Y
-jump *label65 always 0 0
+jump *label65 always
 label *label64
 sensor .DROP_X .DROP_TARGET @x
 sensor .DROP_Y .DROP_TARGET @y
@@ -2514,7 +2514,7 @@ set .LAST_ITEM @mono
 set :iter 0
 set :loop_time 0
 set :state 1
-ucontrol stop 0 0 0 0 0
+ucontrol stop
 label *label66
 set :start @time
 sensor *tmp109 @unit @dead
@@ -2527,7 +2527,7 @@ ubind UNIT
 jump *label75 notEqual @unit null
 print "[salmon]No unit of type {0} found. 2"
 format UNIT
-jump *label76 always 0 0
+jump *label76 always
 label *label75
 sensor *tmp118 @unit @controlled
 jump *label71 equal *tmp118 0
@@ -2535,9 +2535,9 @@ print "[salmon]Looking for a free {0}..."
 format UNIT
 label *label76
 printflush message1
-jump *label72 always 0 0
+jump *label72 always
 label *label71
-ucontrol flag 1 0 0 0 0
+ucontrol flag 1
 set :state 1
 label *label69
 sensor .ITEM .SORTER @config
@@ -2557,59 +2557,59 @@ jump *label84 notEqual :state 1
 sensor *tmp128 @unit @firstItem
 jump *label86 notEqual *tmp128 .ITEM
 set :state 3
-jump *label87 always 0 0
+jump *label87 always
 label *label86
 sensor *tmp131 @unit @totalItems
 jump *label88 notEqual *tmp131 0
 set :state 2
-jump *label89 always 0 0
+jump *label89 always
 label *label88
 set .MSG "\nUnloading previous items: [green]"
-ucontrol approach .DROP_X .DROP_Y 6 0 0
-ucontrol within .DROP_X .DROP_Y 8 *tmp134 0
+ucontrol approach .DROP_X .DROP_Y 6
+ucontrol within .DROP_X .DROP_Y 8 *tmp134
 jump *label90 equal *tmp134 false
-ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY 0 0 0
+ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
 label *label90
 label *label89
 label *label87
 label *label84
 jump *label92 notEqual :state 2
-ucontrol within .SRC_X .SRC_Y 8 *tmp138 0
+ucontrol within .SRC_X .SRC_Y 8 *tmp138
 jump *label94 equal *tmp138 false
 sensor *tmp140 .SRC .ITEM
 op sub *tmp141 *tmp140 .LOAD_LEVEL
 op max :max_load *tmp141 0
-ucontrol itemTake .SRC .ITEM :max_load 0 0
+ucontrol itemTake .SRC .ITEM :max_load
 sensor *tmp143 @unit @totalItems
 jump *label96 lessThan *tmp143 .UNIT_CAPACITY
 set :state 3
-jump *label95 always 0 0
+jump *label95 always
 label *label96
 set .MSG "\nLoading items: [green]"
-jump *label95 always 0 0
+jump *label95 always
 label *label94
-ucontrol approach .SRC_X .SRC_Y 6 0 0
+ucontrol approach .SRC_X .SRC_Y 6
 set .MSG "\nGoing to source: [green]"
 set :show_state 2
 label *label95
 label *label92
 jump *label98 notEqual :state 3
-ucontrol within .DST_X .DST_Y 8 *tmp148 0
+ucontrol within .DST_X .DST_Y 8 *tmp148
 jump *label100 equal *tmp148 false
 sensor *tmp150 .DST .ITEM
 op sub *tmp151 .DROP_LEVEL *tmp150
 op max :max_drop *tmp151 0
-ucontrol itemDrop .DST :max_drop 0 0 0
+ucontrol itemDrop .DST :max_drop
 sensor *tmp153 @unit @totalItems
 jump *label102 greaterThan *tmp153 0
 set :state 2
-ucontrol approach .SRC_X .SRC_Y 6 0 0
-jump *label101 always 0 0
+ucontrol approach .SRC_X .SRC_Y 6
+jump *label101 always
 label *label102
 set .MSG "\nDropping items: [green]"
-jump *label101 always 0 0
+jump *label101 always
 label *label100
-ucontrol approach .DST_X .DST_Y 6 0 0
+ucontrol approach .DST_X .DST_Y 6
 set .MSG "\nGoing to destination: [green]"
 set :show_state 3
 label *label101
@@ -2649,7 +2649,7 @@ op idiv *tmp174 *tmp173 .SPEED_SEC
 op div *tmp175 *tmp174 10
 print "[]  arriving in [gold]{0} sec[]\n"
 format *tmp175
-jump *label115 always 0 0
+jump *label115 always
 label *label114
 jump *label116 notEqual :show_state 3
 sensor *tmp178 @unit @x
@@ -2663,7 +2663,7 @@ print "[]  arriving in [gold]{0} sec[]\n"
 format *tmp184
 label *label116
 label *label115
-op floor *tmp185 :loop_time 0
+op floor *tmp185 :loop_time
 print "[lightgray]Loop time: {0} ms[]\n"
 format *tmp185
 printflush message1
@@ -2675,12 +2675,12 @@ sensor *tmp192 .DST @dead
 jump *label68 notEqual *tmp192 0
 sensor *tmp195 .SORTER @dead
 jump *label68 notEqual *tmp195 0
-jump *label105 always 0 0
+jump *label105 always
 label *label104
 op add :iter :iter 1
 label *label105
 op sub :loop_time @time :start
-jump *label66 always 0 0
+jump *label66 always
 label *label68
 sensor *tmp199 .SORTER @dead
 op strictEqual *tmp200 *tmp199 0
@@ -2701,7 +2701,7 @@ op strictEqual *tmp207 *tmp205 0
 op equal *tmp206 *tmp207 false
 op or *tmp208 *tmp203 *tmp206
 jump __start__ equal *tmp208 false
-control enabled switch1 false 0 0 0
+control enabled switch1 false
 sensor *tmp211 switch1 @enabled
 jump __start__ notEqual *tmp211 false
 label *label137

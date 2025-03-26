@@ -522,19 +522,19 @@ print :block
 sensor *tmp8 :block @type
 jump *label7 notEqual *tmp8 @large-logic-display
 set .DISPLAY :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp8 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label11 notEqual *tmp8 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label11
 jump *label13 notEqual *tmp8 @memory-bank
 set .MEMORY :block
-jump *label6 always 0 0
+jump *label6 always
 label *label13
 jump *label15 notEqual *tmp8 @memory-cell
 set .MEMORY :block
@@ -562,36 +562,36 @@ read .B0 .MEMORY 5
 read .R1 .MEMORY 6
 read .G1 .MEMORY 7
 read .B1 .MEMORY 8
-draw stroke 1 0 0 0 0 0
+draw stroke 1
 sensor *tmp21 .SWITCH @enabled
 jump *label21 notEqual *tmp21 0
 label *label32
 set :start @time
 print "Item/Liquid/Energy Level Display\nIndex: {0}\nValue: "
-draw clear 0 0 80 0 0 0
-draw color .R0 .G0 .B0 255 0 0
-draw rect 10 10 156 156 0 0
+draw clear 0 0 80
+draw color .R0 .G0 .B0 255
+draw rect 10 10 156 156
 read :head .MEMORY .CURRENT_INDEX
 read :last .MEMORY :head
 format :head
 print :last
-draw color .R1 .G1 .B1 255 0 0
+draw color .R1 .G1 .B1 255
 set :x 159
 label *label30
 op sub :head :head 1
 read :value .MEMORY :head
 op sub :x1 :x 5
-draw line :x :last :x1 :value 0 0
+draw line :x :last :x1 :value
 set :x :x1
 set :last :value
 jump *label30 greaterThan :x1 10
-draw color 255 255 255 255 0 0
-draw lineRect 10 10 156 156 0 0
+draw color 255 255 255 255
+draw lineRect 10 10 156 156
 op sub *tmp32 @time :start
 print "\nTime: "
 print *tmp32
 op div *tmp33 @time FREQ
-op ceil *tmp34 *tmp33 0
+op ceil *tmp34 *tmp33
 op mul :wait FREQ *tmp34
 set :loops 0
 jump *label27 greaterThanEq @time :wait
@@ -606,4 +606,4 @@ printflush .MESSAGE
 sensor *tmp21 .SWITCH @enabled
 jump *label32 equal *tmp21 0
 label *label21
-control enabled switch1 0 0 0 0
+control enabled switch1 0

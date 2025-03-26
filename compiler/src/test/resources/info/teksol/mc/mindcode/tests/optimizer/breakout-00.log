@@ -1541,15 +1541,15 @@ Final code before resolving virtual instructions:
 set BRICKS bank1
 set DISPLAY display1
 set PADDLECONTROLLER switch1
-draw color 255 255 255 255 0 0
+draw color 255 255 255 255
 label *label0
 set :paddleWidth 40
 op sub :paddleX 88 20
 set :ballX 88
 set :ballY 88
-op rand *tmp2 10 0
+op rand *tmp2 10
 op sub :ballVX *tmp2 5
-op rand *tmp4 10 0
+op rand *tmp4 10
 op sub :ballVY *tmp4 5
 set :brickCount 6
 write 1 BRICKS 0
@@ -1559,15 +1559,15 @@ write 1 BRICKS 3
 write 1 BRICKS 4
 write 1 BRICKS 5
 label *label6
-draw clear 0 0 0 0 0 0
-draw rect :paddleX 10 :paddleWidth 5 0 0
-draw rect :ballX :ballY 5 5 0 0
+draw clear 0 0 0
+draw rect :paddleX 10 :paddleWidth 5
+draw rect :ballX :ballY 5 5
 sensor *tmp8 PADDLECONTROLLER @enabled
 jump *label9 equal *tmp8 false
 op sub *tmp10 176 :paddleWidth
 jump *label10 greaterThanEq :paddleX *tmp10
 op add :paddleX :paddleX 3
-jump *label10 always 0 0
+jump *label10 always
 label *label9
 jump *label13 lessThanEq :paddleX 0
 op sub :paddleX :paddleX 3
@@ -1606,7 +1606,7 @@ op sub :paddleWidth :paddleWidth 1
 label *label19
 read *tmp40 BRICKS 0
 jump *label84 equal *tmp40 false
-draw rect 1 126 57.666666666666664 9 0 0
+draw rect 1 126 57.666666666666664 9
 op greaterThan *tmp42 :ballXEnd 1
 op lessThan *tmp44 :ballX 59.666666666666664
 op land *tmp45 *tmp42 *tmp44
@@ -1622,7 +1622,7 @@ op lessThan *tmp57 :ballX 63.666666666666664
 op land *tmp58 *tmp55 *tmp57
 jump *label80 equal *tmp58 false
 op mul :ballVY :ballVY -1
-jump *label81 always 0 0
+jump *label81 always
 label *label80
 op mul :ballVX :ballVX -1
 label *label81
@@ -1630,7 +1630,7 @@ label *label82
 label *label84
 read *tmp40 BRICKS 1
 jump *label92 equal *tmp40 false
-draw rect 59.666666666666664 126 57.666666666666664 9 0 0
+draw rect 59.666666666666664 126 57.666666666666664 9
 op greaterThan *tmp42 :ballXEnd 59.666666666666664
 op lessThan *tmp44 :ballX 118.33333333333333
 op land *tmp45 *tmp42 *tmp44
@@ -1646,7 +1646,7 @@ op lessThan *tmp57 :ballX 122.33333333333333
 op land *tmp58 *tmp55 *tmp57
 jump *label88 equal *tmp58 false
 op mul :ballVY :ballVY -1
-jump *label89 always 0 0
+jump *label89 always
 label *label88
 op mul :ballVX :ballVX -1
 label *label89
@@ -1654,7 +1654,7 @@ label *label90
 label *label92
 read *tmp40 BRICKS 2
 jump *label100 equal *tmp40 false
-draw rect 118.33333333333333 126 57.666666666666664 9 0 0
+draw rect 118.33333333333333 126 57.666666666666664 9
 op greaterThan *tmp42 :ballXEnd 118.33333333333333
 op lessThan *tmp44 :ballX 177
 op land *tmp45 *tmp42 *tmp44
@@ -1670,7 +1670,7 @@ op lessThan *tmp57 :ballX 181
 op land *tmp58 *tmp55 *tmp57
 jump *label96 equal *tmp58 false
 op mul :ballVY :ballVY -1
-jump *label97 always 0 0
+jump *label97 always
 label *label96
 op mul :ballVX :ballVX -1
 label *label97
@@ -1678,7 +1678,7 @@ label *label98
 label *label100
 read *tmp40 BRICKS 3
 jump *label112 equal *tmp40 false
-draw rect 1 116 57.666666666666664 9 0 0
+draw rect 1 116 57.666666666666664 9
 op greaterThan *tmp42 :ballXEnd 1
 op lessThan *tmp44 :ballX 59.666666666666664
 op land *tmp45 *tmp42 *tmp44
@@ -1694,7 +1694,7 @@ op lessThan *tmp57 :ballX 63.666666666666664
 op land *tmp58 *tmp55 *tmp57
 jump *label108 equal *tmp58 false
 op mul :ballVY :ballVY -1
-jump *label109 always 0 0
+jump *label109 always
 label *label108
 op mul :ballVX :ballVX -1
 label *label109
@@ -1702,7 +1702,7 @@ label *label110
 label *label112
 read *tmp40 BRICKS 4
 jump *label120 equal *tmp40 false
-draw rect 59.666666666666664 116 57.666666666666664 9 0 0
+draw rect 59.666666666666664 116 57.666666666666664 9
 op greaterThan *tmp42 :ballXEnd 59.666666666666664
 op lessThan *tmp44 :ballX 118.33333333333333
 op land *tmp45 *tmp42 *tmp44
@@ -1718,7 +1718,7 @@ op lessThan *tmp57 :ballX 122.33333333333333
 op land *tmp58 *tmp55 *tmp57
 jump *label116 equal *tmp58 false
 op mul :ballVY :ballVY -1
-jump *label117 always 0 0
+jump *label117 always
 label *label116
 op mul :ballVX :ballVX -1
 label *label117
@@ -1726,7 +1726,7 @@ label *label118
 label *label120
 read *tmp40 BRICKS 5
 jump *label128 equal *tmp40 false
-draw rect 118.33333333333333 116 57.666666666666664 9 0 0
+draw rect 118.33333333333333 116 57.666666666666664 9
 op greaterThan *tmp42 :ballXEnd 118.33333333333333
 op lessThan *tmp44 :ballX 177
 op land *tmp45 *tmp42 *tmp44
@@ -1742,7 +1742,7 @@ op lessThan *tmp57 :ballX 181
 op land *tmp58 *tmp55 *tmp57
 jump *label124 equal *tmp58 false
 op mul :ballVY :ballVY -1
-jump *label125 always 0 0
+jump *label125 always
 label *label124
 op mul :ballVX :ballVX -1
 label *label125
@@ -1753,4 +1753,4 @@ op equal *tmp61 :brickCount 0
 op or *tmp62 *tmp60 *tmp61
 jump *label0 notEqual *tmp62 false
 drawflush DISPLAY
-jump *label6 always 0 0
+jump *label6 always

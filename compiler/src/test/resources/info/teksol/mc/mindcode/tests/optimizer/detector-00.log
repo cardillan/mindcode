@@ -670,7 +670,7 @@ sensor *tmp2 switch1 @enabled
 jump *label3 equal *tmp2 false
 op mod *tmp4 :page 7
 op add :page *tmp4 1
-control enabled switch1 false 0 0 0
+control enabled switch1 false
 label *label3
 print "Property detector - page {0}/7\n"
 format :page
@@ -689,31 +689,31 @@ format *tmp14
 sensor *tmp15 .BLOCK @itemCapacity
 format *tmp15
 sensor *tmp16 .BLOCK @totalLiquids
-op floor *tmp17 *tmp16 0
+op floor *tmp17 *tmp16
 format *tmp17
 sensor *tmp18 .BLOCK @liquidCapacity
 format *tmp18
-jump *label6 always 0 0
+jump *label6 always
 label *label8
 jump *label10 notEqual :page 2
 print "power:\ntotalPower: {0}\npowerCapacity: {0}\npowerNetStored: {0}\npowerNetCapacity: {0}\npowerNetIn: {0}\npowerNetOut: {0}\n"
 sensor *tmp19 .BLOCK @totalPower
-op floor *tmp20 *tmp19 0
+op floor *tmp20 *tmp19
 format *tmp20
 sensor *tmp21 .BLOCK @powerCapacity
 format *tmp21
 sensor *tmp22 .BLOCK @powerNetStored
-op floor *tmp23 *tmp22 0
+op floor *tmp23 *tmp22
 format *tmp23
 sensor *tmp24 .BLOCK @powerNetCapacity
 format *tmp24
 sensor *tmp25 .BLOCK @powerNetIn
-op floor *tmp26 *tmp25 0
+op floor *tmp26 *tmp25
 format *tmp26
 sensor *tmp27 .BLOCK @powerNetOut
-op floor *tmp28 *tmp27 0
+op floor *tmp28 *tmp27
 format *tmp28
-jump *label6 always 0 0
+jump *label6 always
 label *label10
 jump *label12 notEqual :page 3
 print "combat:\nammo: {0}\nammoCapacity: {0}\nhealth: {0}\nmaxHealth: {0}\n"
@@ -725,7 +725,7 @@ sensor *tmp31 .BLOCK @health
 format *tmp31
 sensor *tmp32 .BLOCK @maxHealth
 format *tmp32
-jump *label6 always 0 0
+jump *label6 always
 label *label12
 jump *label14 notEqual :page 4
 print "status:\nheat: {0}\nefficiency: {0}\ntimescale: {0}\ndead: {0}\nrange: {0}\n"
@@ -739,7 +739,7 @@ sensor *tmp36 .BLOCK @dead
 format *tmp36
 sensor *tmp37 .BLOCK @range
 format *tmp37
-jump *label6 always 0 0
+jump *label6 always
 label *label14
 jump *label16 notEqual :page 5
 print "position:\nrotation: {0}\nx: {0}\ny: {0}\nsize: {0}\n"
@@ -751,7 +751,7 @@ sensor *tmp40 .BLOCK @y
 format *tmp40
 sensor *tmp41 .BLOCK @size
 format *tmp41
-jump *label6 always 0 0
+jump *label6 always
 label *label16
 jump *label18 notEqual :page 6
 print "unit:\nshootX: {0}\nshootY: {0}\nshooting: {0}\nboosting: {0}\nmineX: {0}\nmineY: {0}\nmining: {0}\npayloadCount: {0}\npayloadType: {0}\ncontrolled: {0}\ncontroller: {0}\n"
@@ -777,7 +777,7 @@ sensor *tmp51 .BLOCK @controlled
 format *tmp51
 sensor *tmp52 .BLOCK @controller
 format *tmp52
-jump *label6 always 0 0
+jump *label6 always
 label *label18
 jump *label6 notEqual :page 7
 print "other:\nteam: {0}\ntype: {0}\nflag: {0}\nname: {0}\nconfig: {0}\nenabled: {0}\nconfigure: {0}\n"
@@ -794,9 +794,9 @@ sensor *tmp58 .BLOCK @enabled
 format *tmp58
 sensor *tmp59 .BLOCK @configure
 format *tmp59
-jump *label6 always 0 0
+jump *label6 always
 label *label5
 print "No linked block found.\n"
 label *label6
 printflush message1
-jump *label0 always 0 0
+jump *label0 always

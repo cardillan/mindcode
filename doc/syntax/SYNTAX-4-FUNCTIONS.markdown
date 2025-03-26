@@ -286,6 +286,7 @@ Apart from the `printf()`, Mindcode supports a new `format()` function, which ju
 The `remark()` function has the same syntax as the `print()` function and supports both the plain text output and compile-time formatting modes just like the `print()` function does. It also produces `print` instructions, but the way these instructions are generated into the code can be controlled using the [`remarks` option](SYNTAX-5-OTHER.markdown#option-remarks):
 
 * `none`: remarks are suppressed in the compiled code - they do not appear there at all.
+* `comments`: remarks are output as mlog comments into the compiled code. Expressions in remarks are output as separate comments with the mlog name of the variable holding the value of the expression.
 * `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statement themselves aren't executed. This is the default value.
 * `active`: remarks are included in the compiled code and are executed, producing actual output to the text buffer.
 
@@ -324,6 +325,7 @@ jump 8 lessThanEq :i MAX
 Remarks may also allow for better orientation in compiled code, especially as expressions inside remarks will get fully evaluated when possible:
 
 ```Mindcode
+#set remarks = comments;
 for var i in 1 .. 3 do
     remark($"Iteration $i:");
     remark($"Setting cell1[$i] to ${i * i}");
@@ -334,17 +336,14 @@ end;
 compiles into
 
 ```mlog
-jump 3 always 0 0
-print "Iteration 1:"
-print "Setting cell1[1] to 1"
+# Iteration 1:
+# Setting cell1[1] to 1
 write 1 cell1 1
-jump 7 always 0 0
-print "Iteration 2:"
-print "Setting cell1[2] to 4"
+# Iteration 2:
+# Setting cell1[2] to 4
 write 4 cell1 2
-jump 11 always 0 0
-print "Iteration 3:"
-print "Setting cell1[3] to 9"
+# Iteration 3:
+# Setting cell1[3] to 9
 write 9 cell1 3
 ```
 

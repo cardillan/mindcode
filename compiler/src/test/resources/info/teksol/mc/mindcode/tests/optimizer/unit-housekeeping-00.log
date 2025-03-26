@@ -627,25 +627,25 @@ sensor *tmp2 switch2 @enabled
 jump *label3 equal *tmp2 false
 jump *label6 notEqual .UNIT @flare
 set *tmp4 @mono
-jump *label5 always 0 0
+jump *label5 always
 label *label6
 jump *label8 notEqual .UNIT @mono
 set *tmp4 @poly
-jump *label5 always 0 0
+jump *label5 always
 label *label8
 jump *label10 notEqual .UNIT @poly
 set *tmp4 @mega
-jump *label5 always 0 0
+jump *label5 always
 label *label10
 jump *label12 notEqual .UNIT @mega
 set *tmp4 @flare
-jump *label5 always 0 0
+jump *label5 always
 label *label12
 set *tmp4 null
 label *label5
 set .UNIT *tmp4
 set :first_unit null
-control enabled switch2 false 0 0 0
+control enabled switch2 false
 print *tmp4
 print ": gathering information..."
 label *label3
@@ -654,7 +654,7 @@ jump *label14 notEqual @unit null
 print .UNIT
 print ": no active unit found."
 printflush message1
-jump *label0 always 0 0
+jump *label0 always
 label *label14
 op strictEqual *tmp9 @unit :first_unit
 op strictEqual *tmp10 :first_unit null
@@ -691,17 +691,17 @@ print :index
 jump *label25 notEqual :controlled @ctrlProcessor
 sensor :controller @unit @controller
 sensor *tmp35 :controller @x
-op floor :x *tmp35 0
+op floor :x *tmp35
 sensor *tmp37 :controller @y
-op floor :y *tmp37 0
+op floor :y *tmp37
 print ", {0};"
 format :x
 print :y
-jump *label24 always 0 0
+jump *label24 always
 label *label25
 jump *label27 notEqual :controlled @ctrlPlayer
 print ", player"
-jump *label24 always 0 0
+jump *label24 always
 label *label27
 jump *label29 notEqual :controlled @ctrlCommand
 print ", command"
@@ -722,26 +722,26 @@ sensor *tmp44 switch1 @enabled
 op land *tmp45 *tmp43 *tmp44
 jump *label35 equal *tmp45 false
 jump *label37 lessThanEq :items 0
-ucontrol flag 1 0 0 0 0
+ucontrol flag 1
 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
-ucontrol within .CORE_X .CORE_Y 8 *tmp51 0
+ucontrol within .CORE_X .CORE_Y 8 *tmp51
 jump *label39 equal *tmp51 false
-ucontrol itemDrop .CORE :items 0 0 0
-jump *label38 always 0 0
+ucontrol itemDrop .CORE :items
+jump *label38 always
 label *label39
-ucontrol approach .CORE_X .CORE_Y 4 0 0
-jump *label38 always 0 0
+ucontrol approach .CORE_X .CORE_Y 4
+jump *label38 always
 label *label37
 jump *label41 equal :flag 0
-ucontrol within @thisx @thisy 8 *tmp55 0
+ucontrol within @thisx @thisy 8 *tmp55
 jump *label43 equal *tmp55 false
-ucontrol flag 0 0 0 0 0
-jump *label44 always 0 0
+ucontrol flag 0
+jump *label44 always
 label *label43
-ucontrol approach @thisx @thisy 4 0 0
+ucontrol approach @thisx @thisy 4
 label *label44
 label *label41
 label *label38
 label *label35
 op add :index :index 1
-jump *label0 always 0 0
+jump *label0 always

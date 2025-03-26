@@ -579,7 +579,7 @@ sensor :item .SORTER @config
 jump *label8 greaterThanEq .MILLIS 10000
 op add .MILLIS .MILLIS 1000
 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
-jump *label9 always 0 0
+jump *label9 always
 label *label8
 read :last_total .BANK :index
 label *label9

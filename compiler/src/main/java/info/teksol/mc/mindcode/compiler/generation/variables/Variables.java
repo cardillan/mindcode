@@ -133,7 +133,7 @@ public class Variables extends AbstractMessageEmitter {
         } else if (isGlobalVariable(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.global(identifier));
         } else {
-            return functionContext.registerFunctionVariable(identifier, VariableScope.FUNCTION, true);
+            return functionContext.registerFunctionVariable(identifier, VariableScope.FUNCTION, false, true);
         }
     }
 
@@ -233,7 +233,8 @@ public class Variables extends AbstractMessageEmitter {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
                 return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
             }
-            return functionContext.registerFunctionVariable(identifier, scope, false);
+            return functionContext.registerFunctionVariable(identifier, scope,
+                    modifiers.containsKey(Modifier.NOINIT), false);
         } else {
             if (globalVariables.containsKey(name)) {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);

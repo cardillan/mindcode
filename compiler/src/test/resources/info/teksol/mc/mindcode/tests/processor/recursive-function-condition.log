@@ -99,7 +99,7 @@ op sub :foo.0:n :foo.0:n 1
 callrec bank1 *label0 *label6 :foo.0*retval
 label *label6
 set *tmp2 :foo.0*retval
-jump *label5 always 0 0
+jump *label5 always
 label *label4
 set *tmp2 10
 label *label5

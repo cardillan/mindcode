@@ -1438,17 +1438,17 @@ format :block
 sensor *tmp6 :block @type
 jump *label7 notEqual *tmp6 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp6 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label12 equal *tmp6 @logic-display
 jump *label11 notEqual *tmp6 @large-logic-display
 label *label12
 set .DISPLAY :block
-jump *label6 always 0 0
+jump *label6 always
 label *label11
 jump *label14 equal *tmp6 @memory-bank
 jump *label13 notEqual *tmp6 @memory-cell
@@ -1492,7 +1492,7 @@ op add *tmp20 2 *tmp21
 label *label22
 op sub :clh *tmp20 *tmp16
 set :crh :clh
-jump *label18 always 0 0
+jump *label18 always
 label *label17
 set .OFFSET_X 5
 set .OFFSET_Y 4
@@ -1519,7 +1519,7 @@ op add *tmp38 4 *tmp40
 label *label28
 op sub :clh *tmp38 *tmp33
 set :crh :clh
-jump *label24 always 0 0
+jump *label24 always
 label *label23
 set :clx 0
 set :crx 0
@@ -1563,15 +1563,15 @@ op add :n :n 1
 jump *label60 lessThan :n @links
 label *label41
 label *label37
-control enabled .SWITCH 0 0 0 0
+control enabled .SWITCH 0
 sensor *tmp76 .SWITCH @enabled
 jump __start__ notEqual *tmp76 0
 label *label62
 set :start @time
-draw color 0 0 80 255 0 0
-draw rect :clx :cly :clw :clh 0 0
-draw rect :crx :cry :crw :crh 0 0
-draw stroke 2 0 0 0 0 0
+draw color 0 0 80 255
+draw rect :clx :cly :clw :clh
+draw rect :crx :cry :crw :crh
+draw stroke 2
 set :index FROM_INDEX
 set :n 0
 jump *label47 greaterThanEq 0 @links
@@ -1585,14 +1585,14 @@ op mul *tmp86 :column .BAR_SPACE
 op add :x .OFFSET_X *tmp86
 op mul *tmp88 :row .BAR_GAP
 op add :y .OFFSET_Y *tmp88
-draw color 0 0 80 255 0 0
+draw color 0 0 80 255
 op sub *tmp90 :x 1
 op sub *tmp91 :y 1
-draw rect *tmp90 *tmp91 .BAR_SPACE 16 0 0
-draw color 255 255 255 255 0 0
+draw rect *tmp90 *tmp91 .BAR_SPACE 16
+draw color 255 255 255 255
 op add *tmp92 :x 7
 op add *tmp93 :y 7
-draw image *tmp92 *tmp93 @mass-driver 16 0 0
+draw image *tmp92 *tmp93 @mass-driver 16 0
 op add :x :x 16
 sensor :items :driver @totalItems
 read *tmp97 .MEMORY :n
@@ -1603,27 +1603,27 @@ op mul .MAX 2 CAPACITY
 op div .MUL 60 .MAX
 label *label50
 jump *label52 greaterThan .MAX CAPACITY
-draw color 0 128 0 255 0 0
-jump *label53 always 0 0
+draw color 0 128 0 255
+jump *label53 always
 label *label52
-draw color 128 128 0 255 0 0
+draw color 128 128 0 255
 label *label53
 op mul *tmp107 :items .MUL
-draw rect :x :y *tmp107 14 0 0
+draw rect :x :y *tmp107 14
 jump *label54 equal .MEMORY null
-draw color 220 220 220 255 0 0
+draw color 220 220 220 255
 op mul *tmp110 :maxx .MUL
-draw lineRect :x :y *tmp110 14 0 0
+draw lineRect :x :y *tmp110 14
 label *label54
 jump *label56 greaterThan .MAX CAPACITY
-draw color 0 255 0 255 0 0
-draw lineRect :x :y 60 14 0 0
-jump *label57 always 0 0
+draw color 0 255 0 255
+draw lineRect :x :y 60 14
+jump *label57 always
 label *label56
-draw color 255 255 0 255 0 0
-draw lineRect :x :y 30 14 0 0
+draw color 255 255 0 255
+draw lineRect :x :y 30 14
 op add *tmp113 :x 30
-draw lineRect *tmp113 :y 30 14 0 0
+draw lineRect *tmp113 :y 30 14
 label *label57
 op add :index :index 1
 label *label48
@@ -1633,7 +1633,7 @@ label *label47
 drawflush .DISPLAY
 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
 op sub *tmp116 @time :start
-op floor *tmp117 *tmp116 0
+op floor *tmp117 *tmp116
 format *tmp117
 printflush .MESSAGE
 sensor *tmp76 .SWITCH @enabled

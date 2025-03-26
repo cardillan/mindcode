@@ -92,7 +92,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     // Local/parameter
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String functionName,
-            String functionPrefix, String name, String mlog, boolean input, boolean output) {
+            String functionPrefix, String name, String mlog, boolean noinit, boolean input, boolean output) {
         super(argumentType, ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
@@ -106,7 +106,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.fullName = functionName + "." + name;
         this.mlog = mlog;
         this.isVolatile = false;
-        this.noinit = false;
+        this.noinit = noinit;
         this.input = input;
         this.output = output;
         this.optional = false;
@@ -231,22 +231,22 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @SuppressWarnings("ConfusingMainMethod")
-    public static LogicVariable main(AstIdentifier identifier, String mlogSuffix) {
+    public static LogicVariable main(AstIdentifier identifier, String mlogSuffix, boolean noinit) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE,
-                identifier.getName(), ":" + identifier.getName() + mlogSuffix, false, false, false);
+                identifier.getName(), ":" + identifier.getName() + mlogSuffix, false, noinit, false);
     }
 
-    public static LogicVariable local(AstIdentifier identifier, String functionName, String functionPrefix, String mlogSuffix) {
+    public static LogicVariable local(AstIdentifier identifier, String functionName, String functionPrefix, String mlogSuffix, boolean noinit) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, functionName,
                 functionPrefix, identifier.getName(), functionPrefix + ":" + identifier.getName() + mlogSuffix,
-                false, false);
+                noinit, false, false);
     }
 
     public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function) {
         AstIdentifier identifier = parameter.getIdentifier();
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, function.getName(),
                 function.getPrefix(), identifier.getName(), function.getPrefix() + ":" + identifier.getName(),
-                parameter.isInput(), parameter.isOutput());
+                false, parameter.isInput(), parameter.isOutput());
     }
 
     public static LogicVariable temporary(String name) {
@@ -260,25 +260,25 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(MindcodeFunction function) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE,
-                function.getPrefix() + RETURN_VALUE, false, true);
+                function.getPrefix() + RETURN_VALUE, false, false, true);
     }
 
     public static LogicVariable fnAddress(MindcodeFunction function) {
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_ADDRESS,
-                function.getPrefix() + FUNCTION_ADDRESS, false, true);
+                function.getPrefix() + FUNCTION_ADDRESS, false, false, true);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function) {
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED,
-                function.getPrefix() + FUNCTION_FINISHED, false, true);
+                function.getPrefix() + FUNCTION_FINISHED, false, false, true);
     }
 
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 functionName, functionPrefix, functionPrefix + RETURN_VALUE,
-                functionPrefix + RETURN_VALUE,false, true);
+                functionPrefix + RETURN_VALUE, false, false, true);
     }
 
     public static LogicVariable fnRetAddr(String functionPrefix) {

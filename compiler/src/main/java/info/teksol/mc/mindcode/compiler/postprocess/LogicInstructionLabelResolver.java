@@ -159,6 +159,7 @@ public class LogicInstructionLabelResolver {
     private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
         return switch (profile.getRemarks()) {
             case ACTIVE     -> resolveRemarksActive(program);
+            case COMMENTS   -> program;
             case NONE       -> resolveRemarksNone(program);
             case PASSIVE    -> resolveRemarksPassive(program);
         };

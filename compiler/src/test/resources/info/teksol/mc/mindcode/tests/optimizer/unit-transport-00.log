@@ -4094,7 +4094,7 @@ label *label13
 jump *label10 notEqual .CONTAINER null
 print "[salmon]No vault or container."
 printflush message1
-jump *label8 always 0 0
+jump *label8 always
 label *label10
 set .CORE null
 jump *label19 notEqual LINK_ID 0
@@ -4105,11 +4105,11 @@ ubind UNIT
 sensor *tmp36 @unit @controlled
 jump *label24 notEqual *tmp36 0
 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
-ucontrol flag .S_UNUSED 0 0 0 0
+ucontrol flag .S_UNUSED
 label *label24
 jump *label219 equal .CORE null
 set .DISCARD_UNIT_MAX_ITEMS .UNIT_CAPACITY
-jump *label20 always 0 0
+jump *label20 always
 label *label19
 printflush message2
 print "[green]Locating vault #{0}..."
@@ -4126,13 +4126,13 @@ ubind UNIT
 sensor *tmp43 @unit @controlled
 jump *label223 notEqual *tmp43 0
 label *label31
-ucontrol flag .QUERY_FLAG 0 0 0 0
+ucontrol flag .QUERY_FLAG
 sensor *tmp46 @unit @dead
 op equal *tmp47 *tmp46 0
 op land *tmp48 true *tmp47
 jump *label34 equal *tmp48 false
 label *label224
-ucontrol stop 0 0 0 0 0
+ucontrol stop
 sensor :flag @unit @flag
 op equal *tmp45 :flag .QUERY_FLAG
 sensor *tmp46 @unit @dead
@@ -4146,15 +4146,15 @@ op mod .CORE_X :position @mapw
 op idiv .CORE_Y :position @mapw
 sensor *tmp55 @unit @dead
 op equal *tmp56 *tmp55 0
-ucontrol within .CORE_X .CORE_Y 8 *tmp57 0
+ucontrol within .CORE_X .CORE_Y 8 *tmp57
 op equal *tmp58 *tmp57 false
 op land *tmp59 *tmp56 *tmp58
 jump *label39 equal *tmp59 false
 label *label225
-ucontrol approach .CORE_X .CORE_Y 6 0 0
+ucontrol approach .CORE_X .CORE_Y 6
 sensor *tmp55 @unit @dead
 op equal *tmp56 *tmp55 0
-ucontrol within .CORE_X .CORE_Y 8 *tmp57 0
+ucontrol within .CORE_X .CORE_Y 8 *tmp57
 op equal *tmp58 *tmp57 false
 op land *tmp59 *tmp56 *tmp58
 jump *label225 notEqual *tmp59 false
@@ -4168,7 +4168,7 @@ printflush message2
 set .CORE null
 label *label40
 label *label35
-ucontrol flag .S_UNUSED 0 0 0 0
+ucontrol flag .S_UNUSED
 jump *label220 equal .CORE null
 set .DISCARD_UNIT_MAX_ITEMS 0
 label *label20
@@ -4213,7 +4213,7 @@ set .DST_REMOTE_WAIT 0
 set .DIRECTION " from vault #"
 jump *label48 notEqual LINK_ID 0
 set .DIRECTION " from core"
-jump *label48 always 0 0
+jump *label48 always
 label *label47
 op greaterThan .SHOW_REMOTE_LEVEL LINK_ID 0
 set .SRC .CONTAINER
@@ -4274,7 +4274,7 @@ op add .PARK_Y .CORE_Y 15
 label *label60
 op equal *tmp130 LINK_ID 0
 op mul .PARK_ITEM_LIMIT *tmp130 .UNIT_CAPACITY
-jump *label56 always 0 0
+jump *label56 always
 label *label55
 sensor .DROP_X .DROP_TARGET @x
 sensor .DROP_Y .DROP_TARGET @y
@@ -4307,7 +4307,7 @@ set .CORR_SIGN "[]([green]+"
 set :corr_per_min 0
 set .SPEED_UNIT_TXT "[])/min"
 set .AUTO_ALLOCATION_TXT "\n=== [gold]Gathering statistics[] ==="
-jump *label62 always 0 0
+jump *label62 always
 label *label61
 set .CORR_SIGN "[]"
 set :corr_per_min ""
@@ -4326,7 +4326,7 @@ jump *label221 equal @unit null
 label *label68
 sensor *tmp139 switch1 @enabled
 jump *label69 equal *tmp139 false
-control enabled switch1 false 0 0 0
+control enabled switch1 false
 set .EFF_AUTO_ALLOCATION false
 set .AUTO_ALLOCATION_TXT ""
 op add *tmp142 .TARGET 1
@@ -4338,7 +4338,7 @@ set .WAIT_LIMIT 30000
 label *label69
 sensor *tmp144 switch2 @enabled
 jump *label71 equal *tmp144 false
-control enabled switch2 false 0 0 0
+control enabled switch2 false
 jump *label73 greaterThanEq .TARGET 1
 set .EFF_AUTO_ALLOCATION true
 set .TARGET 1
@@ -4347,7 +4347,7 @@ set .INC_LIMIT 0
 set .CORR_SIGN "[]([green]+"
 set :corr_per_min 0
 set .SPEED_UNIT_TXT "[])/min"
-jump *label74 always 0 0
+jump *label74 always
 label *label73
 set .EFF_AUTO_ALLOCATION false
 op sub *tmp149 .TARGET 1
@@ -4383,67 +4383,67 @@ label *label85
 set .LAST_ITEM .ITEM
 jump *label88 notEqual .ITEM @blast-compound
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label88
 jump *label90 notEqual .ITEM @coal
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label90
 jump *label92 notEqual .ITEM @copper
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label92
 jump *label94 notEqual .ITEM @graphite
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label94
 jump *label96 notEqual .ITEM @lead
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label96
 jump *label98 notEqual .ITEM @metaglass
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label98
 jump *label100 notEqual .ITEM @phase-fabric
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label100
 jump *label102 notEqual .ITEM @plastanium
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label102
 jump *label104 notEqual .ITEM @pyratite
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label104
 jump *label106 notEqual .ITEM @sand
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label106
 jump *label108 notEqual .ITEM @scrap
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label108
 jump *label110 notEqual .ITEM @silicon
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label110
 jump *label112 notEqual .ITEM @spore-pod
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label112
 jump *label114 notEqual .ITEM @surge-alloy
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label114
 jump *label116 notEqual .ITEM @thorium
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label116
 jump *label118 notEqual .ITEM @titanium
 set .ITEM_ICON "[]"
-jump *label87 always 0 0
+jump *label87 always
 label *label118
 set .ITEM_ICON null
 label *label87
@@ -4464,7 +4464,7 @@ op greaterThan *tmp177 :wait_time .WAIT_LIMIT
 op or *tmp178 *tmp176 *tmp177
 jump *label120 equal *tmp178 false
 op div *tmp180 :wait_time 100
-op ceil *tmp181 *tmp180 0
+op ceil *tmp181 *tmp180
 op div :wait_time_str *tmp181 10
 op sub :elapsed_ticks @tick .TRANSFER_START
 set .TRANSFER_START @tick
@@ -4515,7 +4515,7 @@ op div :total_flow_per_ms *tmp219 3
 label *label130
 op div *tmp221 :total_flow_per_ms :items_per_ms_unit
 op add *tmp222 *tmp221 OVERALLOCATION_LOW
-op ceil :new_target *tmp222 0
+op ceil :new_target *tmp222
 op mul :level_boost 2 :trigger
 op add *tmp225 :new_target :level_boost
 op min :new_target *tmp225 MAX_UNITS
@@ -4525,7 +4525,7 @@ op min :new_change *tmp228 .INC_LIMIT
 set .INC_LIMIT 6
 op lessThanEq *tmp230 :new_change 0
 op mul .DEC_LIMIT *tmp230 -1
-jump *label129 always 0 0
+jump *label129 always
 label *label128
 op idiv *tmp232 :wait_time .WAIT_LIMIT
 op mul *tmp233 -1 *tmp232
@@ -4536,7 +4536,7 @@ set .DEC_LIMIT -1
 label *label129
 op add *tmp237 :active :new_change
 op max .TARGET *tmp237 1
-jump *label127 always 0 0
+jump *label127 always
 label *label126
 set .INC_LIMIT 0
 set .DEC_LIMIT 0
@@ -4559,7 +4559,7 @@ format :active
 format .TARGET
 format UNIT
 print :items_in_transit
-jump *label137 always 0 0
+jump *label137 always
 label *label136
 print "\nUsing [salmon]{0}/{0}[] units ({0}) [gold]+"
 format :active
@@ -4597,7 +4597,7 @@ print "\nUnit throughput: [green]{0}[]/min\nMin/last round: [green]{0}[]/[green]
 format :items_per_min_unit
 format :turnaround_str
 format :elapsed_str
-jump *label149 always 0 0
+jump *label149 always
 label *label148
 print "\nLast round: [green]{0}[] s"
 format :elapsed_str
@@ -4626,7 +4626,7 @@ jump *label158 lessThanEq .CHANGE 0
 sensor *tmp272 @unit @controlled
 jump *label160 notEqual *tmp272 0
 op sub .CHANGE .CHANGE 1
-ucontrol flag 1 0 0 0 0
+ucontrol flag 1
 label *label160
 label *label158
 sensor *tmp275 @unit @controller
@@ -4648,28 +4648,28 @@ jump *label172 notEqual :state 1
 sensor *tmp292 @unit @totalItems
 jump *label174 notEqual *tmp292 0
 set :state 2
-jump *label175 always 0 0
+jump *label175 always
 label *label174
 sensor *tmp295 @unit @firstItem
 jump *label176 notEqual *tmp295 .ITEM
 set :state 4
-jump *label177 always 0 0
+jump *label177 always
 label *label176
-ucontrol approach .DROP_X .DROP_Y 6 0 0
-ucontrol within .DROP_X .DROP_Y 8 *tmp298 0
+ucontrol approach .DROP_X .DROP_Y 6
+ucontrol within .DROP_X .DROP_Y 8 *tmp298
 jump *label178 equal *tmp298 false
-ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY 0 0 0
+ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
 label *label178
 print "[]\nUnloading previous items: [green]"
 label *label177
 label *label175
 label *label172
 jump *label180 notEqual :state 2
-ucontrol approach .SRC_X .SRC_Y 6 0 0
-ucontrol within .SRC_X .SRC_Y 8 *tmp302 0
+ucontrol approach .SRC_X .SRC_Y 6
+ucontrol within .SRC_X .SRC_Y 8 *tmp302
 jump *label182 equal *tmp302 false
 set :state 3
-jump *label183 always 0 0
+jump *label183 always
 label *label182
 sensor *tmp304 @unit @x
 op sub *tmp305 .SRC_X *tmp304
@@ -4686,29 +4686,29 @@ jump *label184 notEqual :state 3
 sensor *tmp313 .SRC .ITEM
 op sub :max_load *tmp313 .LOAD_LEVEL
 jump *label186 lessThan :max_load .LOAD_PACK
-ucontrol itemTake .SRC .ITEM :max_load 0 0
+ucontrol itemTake .SRC .ITEM :max_load
 label *label186
 sensor *tmp317 @unit @totalItems
 jump *label188 lessThan *tmp317 .UNIT_CAPACITY
 set :state 4
-jump *label189 always 0 0
+jump *label189 always
 label *label188
 print "[]\nWaiting at source: [green]"
-ucontrol approach .SRC_X .SRC_Y 6 0 0
+ucontrol approach .SRC_X .SRC_Y 6
 op add :wait_time :wait_time :loop_time_ms
 op mul *tmp320 :loop_time_ms .SRC_REMOTE_WAIT
 op add :remote_wait_time :remote_wait_time *tmp320
 label *label189
 label *label184
 jump *label190 notEqual :state 4
-ucontrol approach .DST_X .DST_Y 6 0 0
-ucontrol within .DST_X .DST_Y 8 *tmp323 0
+ucontrol approach .DST_X .DST_Y 6
+ucontrol within .DST_X .DST_Y 8 *tmp323
 jump *label192 equal *tmp323 false
 sensor *tmp325 @unit @totalItems
 op add :transferred :transferred *tmp325
 op add :transfers :transfers 1
 set :state 5
-jump *label193 always 0 0
+jump *label193 always
 label *label192
 sensor *tmp326 @unit @x
 op sub *tmp327 .DST_X *tmp326
@@ -4725,12 +4725,12 @@ jump *label194 notEqual :state 5
 sensor *tmp335 .DST .ITEM
 op sub :max_drop .DROP_LEVEL *tmp335
 jump *label196 lessThan :max_drop .DROP_PACK
-ucontrol itemDrop .DST :max_drop 0 0 0
+ucontrol itemDrop .DST :max_drop
 label *label196
 sensor *tmp339 @unit @totalItems
 jump *label198 greaterThan *tmp339 0
 set :state 2
-ucontrol approach .SRC_X .SRC_Y 6 0 0
+ucontrol approach .SRC_X .SRC_Y 6
 sensor *tmp343 @unit @x
 op sub *tmp344 .SRC_X *tmp343
 sensor *tmp345 @unit @y
@@ -4740,10 +4740,10 @@ op idiv *tmp348 *tmp347 .SPEED_SEC
 op div *tmp349 *tmp348 10
 print "[]\n[gold]{0} sec[] to source: [green]"
 format *tmp349
-jump *label199 always 0 0
+jump *label199 always
 label *label198
 print "[]\nWaiting at destination: [green]"
-ucontrol approach .DST_X .DST_Y 6 0 0
+ucontrol approach .DST_X .DST_Y 6
 op add :wait_time :wait_time :loop_time_ms
 op mul *tmp350 :loop_time_ms .DST_REMOTE_WAIT
 op add :remote_wait_time :remote_wait_time *tmp350
@@ -4753,22 +4753,22 @@ sensor :items @unit @totalItems
 op add :items_in_transit :items_in_transit :items
 jump *label202 notEqual :state 6
 print "[]\nParking: [green]"
-ucontrol approach .DROP_X .DROP_Y 6 0 0
-ucontrol within .DROP_X .DROP_Y 8 *tmp354 0
+ucontrol approach .DROP_X .DROP_Y 6
+ucontrol within .DROP_X .DROP_Y 8 *tmp354
 jump *label203 equal *tmp354 false
-ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY 0 0 0
+ucontrol itemDrop .DROP_TARGET .UNIT_CAPACITY
 sensor :items @unit @totalItems
 jump *label203 greaterThan :items .PARK_ITEM_LIMIT
-ucontrol move .PARK_X .PARK_Y 0 0 0
+ucontrol move .PARK_X .PARK_Y
 set :state .S_UNUSED
-jump *label203 always 0 0
+jump *label203 always
 label *label202
 op add :active :active 1
 label *label203
 print :items
 print .ITEM_ICON
-ucontrol flag :state 0 0 0 0
-jump *label63 always 0 0
+ucontrol flag :state
+jump *label63 always
 label *label65
 sensor *tmp359 .SORTER @dead
 op strictEqual *tmp361 *tmp359 0
@@ -4803,5 +4803,5 @@ op or *tmp372 *tmp370 *tmp371
 jump *label228 equal *tmp372 false
 label *label215
 label *label211
-control enabled switch1 false 0 0 0
-control enabled switch2 false 0 0 0
+control enabled switch1 false
+control enabled switch2 false

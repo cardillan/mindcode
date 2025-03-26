@@ -728,11 +728,11 @@ print :block
 sensor *tmp6 :block @type
 jump *label7 notEqual *tmp6 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp6 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label12 equal *tmp6 @memory-bank
 jump *label11 notEqual *tmp6 @memory-cell
@@ -760,11 +760,11 @@ set :startIndex 0
 sensor *tmp13 .TARGET_MEMORY @type
 jump *label18 notEqual *tmp13 @memory-cell
 set *tmp12 64
-jump *label17 always 0 0
+jump *label17 always
 label *label18
 jump *label20 notEqual *tmp13 @memory-bank
 set *tmp12 512
-jump *label17 always 0 0
+jump *label17 always
 label *label20
 set *tmp12 0
 label *label17
@@ -821,7 +821,7 @@ op idiv *tmp52 :rate 0.0002777777777777778
 format *tmp52
 format :startIndex
 format :index
-op floor *tmp53 :time 0
+op floor *tmp53 :time
 format *tmp53
 printflush message1
 set :prevTick :currTick
@@ -829,4 +829,4 @@ set :prev :curr
 sensor *tmp23 switch1 @enabled
 jump *label43 equal *tmp23 0
 label *label26
-control enabled switch1 0 0 0 0
+control enabled switch1 0

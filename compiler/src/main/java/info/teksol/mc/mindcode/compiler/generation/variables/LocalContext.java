@@ -66,8 +66,8 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
     }
 
     @Override
-    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean implicitDeclaration) {
-        ValueStore variable = createFunctionVariable(identifier, implicitDeclaration);
+    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean noinit, boolean implicitDeclaration) {
+        ValueStore variable = createFunctionVariable(identifier, noinit, implicitDeclaration);
         ValueStore existing = variables.put(identifier.getName(), variable);
         if (existing != null) {
             throw new MindcodeInternalError("Repeated registration of function variable (existing variable: %s, AST identifier: %s).",
@@ -95,7 +95,7 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
         throw new MindcodeInternalError("Unsupported local variable type");
     }
 
-    private ValueStore createFunctionVariable(AstIdentifier identifier, boolean implicitDeclaration) {
+    private ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration) {
         int i = variableReuses.computeIfAbsent(identifier.getName(), k -> new AtomicInteger(0)).getAndIncrement();
         if (implicitDeclaration && i > 0) {
             error(identifier, ERR.VARIABLE_NOT_RESOLVED, identifier.getName());
@@ -104,9 +104,9 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
         String suffix = i == 0 ? "" : "." + i;
 
         if (function.isMain()) {
-            return LogicVariable.main(identifier, suffix);
+            return LogicVariable.main(identifier, suffix, noinit);
         } else {
-            return LogicVariable.local(identifier, function.getName(), function.getPrefix(), suffix);
+            return LogicVariable.local(identifier, function.getName(), function.getPrefix(), suffix, noinit);
         }
     }
 

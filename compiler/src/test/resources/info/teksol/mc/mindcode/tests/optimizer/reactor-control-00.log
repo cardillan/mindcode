@@ -2129,7 +2129,7 @@ sensor *tmp5 :block @type
 jump *label8 notEqual *tmp5 @impact-reactor
 set .START :n
 op add :reactors :reactors 1
-jump *label7 always 0 0
+jump *label7 always
 label *label8
 jump *label11 equal *tmp5 @overdrive-projector
 jump *label10 notEqual *tmp5 @overdrive-dome
@@ -2163,17 +2163,17 @@ jump *label15 notEqual .MODE 0
 set .REASON "Processor reset"
 label *label15
 op notEqual *tmp24 .MODE 0
-control enabled switch1 *tmp24 0 0 0
+control enabled switch1 *tmp24
 set :failure_cnt 0
 set :boosts 0
 set :nextStart 0
 op add :nextDecommit @time 6000
 label *label16
 sensor *tmp26 battery1 @totalPower
-op floor :battery_level *tmp26 0
+op floor :battery_level *tmp26
 op idiv :battery_level_str :battery_level 1000
 sensor *tmp29 battery1 @powerNetStored
-op floor :total_battery *tmp29 0
+op floor :total_battery *tmp29
 op idiv :total_battery_str :total_battery 1000
 sensor :consumption battery1 @powerNetOut
 read :production bank1 509
@@ -2185,13 +2185,13 @@ op mul :required_capacity 100000 :reactors
 op greaterThanEq :enough_battery :total_capacity :required_capacity
 op sub *tmp40 :required_capacity :total_capacity
 op div *tmp41 *tmp40 1000
-op ceil :missing_battery *tmp41 0
+op ceil :missing_battery *tmp41
 jump *label19 equal .MODE 0
 sensor *tmp45 switch1 @enabled
 jump *label21 notEqual *tmp45 false
 set .MODE 0
 set .REASON "Manual power off"
-jump *label22 always 0 0
+jump *label22 always
 label *label21
 op mul :min_consumption .REACTORS_ON 1200
 op lessThan :failure1 :consumption :min_consumption
@@ -2207,13 +2207,13 @@ read *tmp57 cell2 1
 op add *tmp58 10 *tmp57
 jump *label24 lessThanEq :failure_cnt *tmp58
 set .MODE 0
-control enabled switch1 false 0 0 0
+control enabled switch1 false
 set .REASON "Unknown -- out of power?"
 print "Consumption: {0}\nMin. consumption: "
 format :consumption
 print :min_consumption
 printflush message2
-jump *label24 always 0 0
+jump *label24 always
 label *label23
 set :failure_cnt 0
 label *label24
@@ -2221,15 +2221,15 @@ label *label22
 label *label19
 jump *label28 notEqual .MODE 0
 set *tmp62 "[salmon]SHUTDOWN[]"
-jump *label27 always 0 0
+jump *label27 always
 label *label28
 jump *label30 notEqual .MODE 1
 set *tmp62 "[gold]STARTUP[]"
-jump *label27 always 0 0
+jump *label27 always
 label *label30
 jump *label32 notEqual .MODE 2
 set *tmp62 "[green]RUNNING[]"
-jump *label27 always 0 0
+jump *label27 always
 label *label32
 set *tmp62 null
 label *label27
@@ -2241,7 +2241,7 @@ jump *label34 equal .OVERDRIVE false
 op mul *tmp65 100 :boosts
 op div *tmp66 *tmp65 .REACTORS_ON
 op add *tmp67 *tmp66 0.5
-op floor *tmp68 *tmp67 0
+op floor *tmp68 *tmp67
 op div :multiplier *tmp68 100
 print " ([gold]{0}x[])"
 format :multiplier
@@ -2284,14 +2284,14 @@ set :nextStart 0
 set :failure_cnt 0
 set .GENERATOR true
 set .REASON "Unknown -- out of power?"
-jump *label42 always 0 0
+jump *label42 always
 label *label43
 jump *label47 notEqual .MODE 1
 jump *label49 equal .OUTPUT_1 false
 sensor *tmp87 battery3 @powerNetOut
 jump *label50 equal .OUTPUT_2 false
 sensor *tmp87 battery4 @powerNetOut
-jump *label50 always 0 0
+jump *label50 always
 label *label49
 sensor *tmp87 battery2 @powerNetOut
 label *label50
@@ -2301,10 +2301,10 @@ jump *label53 notEqual .REACTORS_ON 0
 jump *label55 lessThan :total_battery 25000
 set .REACTORS_ON 1
 op add :nextStart @time 2000
-jump *label42 always 0 0
+jump *label42 always
 label *label55
 print "\nRequired startup energy: [gold]25 K[]"
-jump *label42 always 0 0
+jump *label42 always
 label *label53
 op add *tmp96 .OUTPUT_1 .OUTPUT_2
 op add :outputs *tmp96 .OUTPUT_3
@@ -2356,7 +2356,7 @@ op add :nextDecommit @time 6000
 set .COOLANT_FLAG 0
 set .FUEL_FLAG 0
 set .GENERATOR false
-jump *label42 always 0 0
+jump *label42 always
 label *label47
 jump *label73 notEqual .MODE 2
 sensor *tmp131 tank1 @totalLiquids
@@ -2364,7 +2364,7 @@ op lessThan *tmp132 *tmp131 750
 op land *tmp133 .COOLANT_FLAG *tmp132
 jump *label75 equal *tmp133 false
 set .MODE 0
-control enabled switch1 false 0 0 0
+control enabled switch1 false
 set .REASON "Cryo level too low"
 label *label75
 sensor *tmp136 vault1 @blast-compound
@@ -2372,7 +2372,7 @@ op lessThan *tmp137 *tmp136 700
 op land *tmp138 .FUEL_FLAG *tmp137
 jump *label77 equal *tmp138 false
 set .MODE 0
-control enabled switch1 false 0 0 0
+control enabled switch1 false
 set .REASON "Blast compound level too low"
 label *label77
 sensor *tmp141 tank1 @totalLiquids
@@ -2417,7 +2417,7 @@ op add .RESETS .RESETS *tmp172
 set .OVERDRIVE true
 set .REACTORS_ON :reactors
 op add :nextDecommit @time 6000
-jump *label80 always 0 0
+jump *label80 always
 label *label85
 op lessThan *tmp174 :battery_level 47500
 op lessThan *tmp175 :battery_change -100
@@ -2428,25 +2428,25 @@ label *label87
 jump *label89 lessThanEq @time :nextDecommit
 jump *label91 equal .OVERDRIVE false
 set .OVERDRIVE false
-jump *label92 always 0 0
+jump *label92 always
 label *label91
 op sub *tmp182 .REACTORS_ON 1
 op max .REACTORS_ON *tmp182 1
 set .CAN_COMMIT true
 label *label92
 op add :nextDecommit @time 6000
-jump *label80 always 0 0
+jump *label80 always
 label *label89
 jump *label80 greaterThanEq :total_battery :commit_level
 op add .REACTORS_ON .REACTORS_ON 1
 op add .COMMITS .COMMITS 1
 set .CAN_COMMIT false
-jump *label80 always 0 0
+jump *label80 always
 label *label79
 sensor *tmp187 switch2 @enabled
 jump *label95 equal *tmp187 false
 print "\n[salmon]Load adapting not possible.[]"
-jump *label96 always 0 0
+jump *label96 always
 label *label95
 print "\n[gold]Load adapting not active.[]"
 label *label96
@@ -2462,7 +2462,7 @@ jump *label99 notEqual .OUTPUT_2 0
 jump *label101 lessThanEq :total_battery 47500
 set .OUTPUT_2 1
 set .OUTPUT_3 1
-jump *label102 always 0 0
+jump *label102 always
 label *label101
 print "\n*** [gold]Surge tower 2 offline[] ***"
 label *label102
@@ -2474,11 +2474,11 @@ format .STARTUPS
 format .RESETS
 print .COMMITS
 printflush message1
-control enabled diode1 .OUTPUT_1 0 0 0
-control enabled diode2 .OUTPUT_2 0 0 0
-control enabled diode3 .OUTPUT_3 0 0 0
-control enabled generator1 .GENERATOR 0 0 0
-control enabled generator2 .GENERATOR 0 0 0
+control enabled diode1 .OUTPUT_1
+control enabled diode2 .OUTPUT_2
+control enabled diode3 .OUTPUT_3
+control enabled generator1 .GENERATOR
+control enabled generator2 .GENERATOR
 op equal :startup .MODE 1
 set :reactors 0
 set :boosts 0
@@ -2491,17 +2491,17 @@ sensor *tmp205 :block @type
 jump *label107 notEqual *tmp205 @impact-reactor
 op add :reactors :reactors 1
 op lessThanEq :enabled :reactors .REACTORS_ON
-control enabled :block :enabled 0 0 0
+control enabled :block :enabled
 jump *label106 equal :enabled false
 sensor *tmp211 :block @timescale
 op add :boosts :boosts *tmp211
-jump *label106 always 0 0
+jump *label106 always
 label *label107
 jump *label112 equal *tmp205 @overdrive-projector
 jump *label111 notEqual *tmp205 @overdrive-dome
 label *label112
-control enabled :block .OVERDRIVE 0 0 0
-jump *label106 always 0 0
+control enabled :block .OVERDRIVE
+jump *label106 always
 label *label111
 jump *label114 equal *tmp205 @conduit
 jump *label114 equal *tmp205 @pulse-conduit
@@ -2511,7 +2511,7 @@ jump *label114 equal *tmp205 @titanium-conveyor
 jump *label114 equal *tmp205 @plastanium-conveyor
 jump *label113 notEqual *tmp205 @armored-conveyor
 label *label114
-control enabled :block :startup 0 0 0
+control enabled :block :startup
 label *label113
 label *label106
 op add :n :n 1
@@ -2531,7 +2531,7 @@ jump *label117 notEqual cell1 null
 set .STARTUPS 0
 set .RESETS 0
 set .COMMITS 0
-jump *label16 always 0 0
+jump *label16 always
 label *label117
 write .MODE cell1 0
 write .OUTPUT_1 cell1 1
@@ -2544,4 +2544,4 @@ write .CAN_COMMIT cell1 7
 write .STARTUPS cell1 8
 write .RESETS cell1 9
 write .COMMITS cell1 10
-jump *label16 always 0 0
+jump *label16 always

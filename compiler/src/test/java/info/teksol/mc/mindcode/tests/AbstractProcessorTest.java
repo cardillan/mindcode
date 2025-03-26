@@ -14,7 +14,6 @@ import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
@@ -146,7 +145,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
                 .collect(Collectors.toCollection(ArrayList::new));
 
         data.add("\nFinal code before resolving virtual instructions:\n");
-        data.add(LogicInstructionPrinter.toString(compiler.instructionProcessor(), instructions));
+        instructions.stream().map(LogicInstruction::toString).forEach(data::add);
+        data.add("");
         String joined = String.join("\n", data)
                 .replaceAll("\\R", System.lineSeparator());
 

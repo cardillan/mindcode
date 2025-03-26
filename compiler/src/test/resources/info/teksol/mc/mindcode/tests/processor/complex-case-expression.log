@@ -320,7 +320,7 @@ call *label0 :d.0*retval
 label *label10
 jump *label8 notEqual :test.0:i :d.0*retval
 set *tmp4 "A"
-jump *label7 always 0 0
+jump *label7 always
 label *label8
 set :d.0:n 2
 setaddr :d.0*retaddr *label13
@@ -335,10 +335,10 @@ jump *label12 equal :test.0:i :d.0*retval
 jump *label11 notEqual :test.0:i 4
 label *label12
 set *tmp4 "B"
-jump *label7 always 0 0
+jump *label7 always
 label *label11
 jump *label15 notEqual :test.0:i 5
-jump *label5 always 0 0
+jump *label5 always
 label *label15
 set :d.0:n 6
 setaddr :d.0*retaddr *label20
@@ -350,13 +350,13 @@ setaddr :d.0*retaddr *label21
 call *label0 :d.0*retval
 label *label21
 jump *label18 lessThanEq :test.0:i :d.0*retval
-jump *label17 always 0 0
+jump *label17 always
 label *label18
 set *tmp4 "C"
-jump *label7 always 0 0
+jump *label7 always
 label *label17
 jump *label22 notEqual :test.0:i 10
-jump *label6 always 0 0
+jump *label6 always
 label *label22
 set *tmp4 "D"
 label *label7

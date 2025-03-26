@@ -281,7 +281,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         switch (element.getModifier()) {
             case EXTERNAL -> error(element, ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
             case LINKED -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
-            case NOINIT -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_NOINIT);
             case REMOTE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_REMOTE);
             case VOLATILE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
         }

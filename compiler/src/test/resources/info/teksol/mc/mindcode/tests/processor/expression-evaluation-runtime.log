@@ -1978,34 +1978,34 @@ op and *tmp85 3 *tmp6
 assertequals 2 *tmp85 "and"
 op xor *tmp88 3 *tmp6
 assertequals 1 *tmp88 "xor"
-op not *tmp91 zero 0
+op not *tmp91 zero
 assertequals -1 *tmp91 "not 1"
 op add *tmp92 zero 65535
-op not *tmp94 *tmp92 0
+op not *tmp94 *tmp92
 assertequals -65536 *tmp94 "not 2"
 op add *tmp97 zero 0xabcdefabcdef
-op not *tmp99 *tmp97 0
+op not *tmp99 *tmp97
 assertequals -188900977659376 *tmp99 "not 3"
 op max *tmp102 2 *tmp9
 assertequals 4 *tmp102 "max"
 op min *tmp105 2 *tmp9
 assertequals 2 *tmp105 "min"
 op add *tmp106 zero -2
-op abs *tmp108 *tmp106 0
+op abs *tmp108 *tmp106
 assertequals 2 *tmp108 "abs"
 op add *tmp109 zero 2.718281828459045
-op log *tmp111 *tmp109 0
+op log *tmp111 *tmp109
 assertequals 1 *tmp111 "log"
 op add *tmp112 zero 10
-op log10 *tmp114 *tmp112 0
+op log10 *tmp114 *tmp112
 assertequals 1 *tmp114 "log10"
 op add *tmp115 zero 2.5
-op floor *tmp117 *tmp115 0
+op floor *tmp117 *tmp115
 assertequals 2 *tmp117 "floor"
-op ceil *tmp120 *tmp115 0
+op ceil *tmp120 *tmp115
 assertequals 3 *tmp120 "ceil"
 op add *tmp121 zero 16
-op sqrt *tmp123 *tmp121 0
+op sqrt *tmp123 *tmp121
 assertequals 4 *tmp123 "sqrt"
 op angle *tmp126 1 *tmp48
 assertequals 45 *tmp126 "angle"

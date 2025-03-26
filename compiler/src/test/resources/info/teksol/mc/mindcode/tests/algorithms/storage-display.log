@@ -8981,839 +8981,839 @@ Modifications by Final phase, Single Step Elimination, iteration 1 (-21 instruct
 
 Final code before resolving virtual instructions:
 
-draw stroke 2 0 0 0 0 0
-draw color 0 0 80 255 0 0
-draw rect 0 0 23 176 0 0
-draw color 0 0 80 255 0 0
-draw rect 93 0 16 176 0 0
-draw color 255 255 255 255 0 0
-draw image 15 159 @sand 16 0 0
-draw image 15 139 @copper 16 0 0
-draw image 15 119 @lead 16 0 0
-draw image 15 99 @coal 16 0 0
-draw image 15 79 @titanium 16 0 0
-draw image 15 59 @thorium 16 0 0
-draw image 15 39 @scrap 16 0 0
-draw image 15 19 @graphite 16 0 0
-draw color 255 255 255 255 0 0
-draw image 101 159 @metaglass 16 0 0
-draw image 101 139 @silicon 16 0 0
-draw image 101 119 @pyratite 16 0 0
-draw image 101 99 @blast-compound 16 0 0
-draw image 101 79 @plastanium 16 0 0
-draw image 101 59 @phase-fabric 16 0 0
-draw image 101 39 @surge-alloy 16 0 0
-draw image 101 19 @spore-pod 16 0 0
+draw stroke 2
+draw color 0 0 80 255
+draw rect 0 0 23 176
+draw color 0 0 80 255
+draw rect 93 0 16 176
+draw color 255 255 255 255
+draw image 15 159 @sand 16 0
+draw image 15 139 @copper 16 0
+draw image 15 119 @lead 16 0
+draw image 15 99 @coal 16 0
+draw image 15 79 @titanium 16 0
+draw image 15 59 @thorium 16 0
+draw image 15 39 @scrap 16 0
+draw image 15 19 @graphite 16 0
+draw color 255 255 255 255
+draw image 101 159 @metaglass 16 0
+draw image 101 139 @silicon 16 0
+draw image 101 119 @pyratite 16 0
+draw image 101 99 @blast-compound 16 0
+draw image 101 79 @plastanium 16 0
+draw image 101 59 @phase-fabric 16 0
+draw image 101 39 @surge-alloy 16 0
+draw image 101 19 @spore-pod 16 0
 drawflush display1
 set :y 152
-draw color 0 0 80 255 0 0
-draw rect 23 0 70 176 0 0
+draw color 0 0 80 255
+draw rect 23 0 70 176
 set :index 0
 setaddr *tmp10 *label30
 set :item @sand
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label30 marker1
 setaddr *tmp10 *label31
 set :item @copper
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label31 marker1
 setaddr *tmp10 *label32
 set :item @lead
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label32 marker1
 setaddr *tmp10 *label33
 set :item @coal
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label33 marker1
 setaddr *tmp10 *label34
 set :item @titanium
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label34 marker1
 setaddr *tmp10 *label35
 set :item @thorium
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label35 marker1
 setaddr *tmp10 *label36
 set :item @scrap
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label36 marker1
 setaddr *tmp10 *label37
 set :item @graphite
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label37 marker1
 setaddr *tmp10 *label38
 set :item @metaglass
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label38 marker1
 setaddr *tmp10 *label39
 set :item @silicon
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label39 marker1
 setaddr *tmp10 *label40
 set :item @pyratite
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label40 marker1
 setaddr *tmp10 *label41
 set :item @blast-compound
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label41 marker1
 setaddr *tmp10 *label42
 set :item @plastanium
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label42 marker1
 setaddr *tmp10 *label43
 set :item @phase-fabric
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label43 marker1
 setaddr *tmp10 *label44
 set :item @surge-alloy
-jump *label27 always 0 0
+jump *label27 always
 multilabel *label44 marker1
 setaddr *tmp10 *label45
 set :item @spore-pod
 label *label27
-draw image 0 0 :item 16 0 0
+draw image 0 0 :item 16 0
 jump *label46 greaterThanEq :index 8
-draw color 0 255 0 255 0 0
+draw color 0 255 0 255
 multijump *label372 5 0 *label524
 multilabel *label372 *label524
-jump *label382 always 0 0
+jump *label382 always
 multilabel *label373 *label524
-jump *label384 always 0 0
+jump *label384 always
 multilabel *label374 *label524
-jump *label386 always 0 0
+jump *label386 always
 multilabel *label375 *label524
-jump *label388 always 0 0
+jump *label388 always
 multilabel *label376 *label524
-jump *label390 always 0 0
+jump *label390 always
 multilabel *label377 *label524
-jump *label392 always 0 0
+jump *label392 always
 multilabel *label378 *label524
-jump *label394 always 0 0
+jump *label394 always
 multilabel *label379 *label524
-jump *label396 always 0 0
+jump *label396 always
 multilabel *label380 *label524
-jump *label398 always 0 0
+jump *label398 always
 multilabel *label381 *label524
-jump *label400 always 0 0
+jump *label400 always
 label *label382
 op sub *tmp26 :y 1
-draw lineRect 70 *tmp26 9 14 0 0
+draw lineRect 70 *tmp26 9 14
 multijump *label409 4 0 *label525
 label *label384
 op add *tmp31 :y 12
-draw line 77 :y 77 *tmp31 0 0
+draw line 77 :y 77 *tmp31
 multijump *label409 4 0 *label525
 label *label386
-draw line 71 :y 78 :y 0 0
+draw line 71 :y 78 :y
 op add *tmp33 :y 6
-draw line 71 :y 71 *tmp33 0 0
-draw line 71 *tmp33 78 *tmp33 0 0
+draw line 71 :y 71 *tmp33
+draw line 71 *tmp33 78 *tmp33
 op add *tmp40 :y 12
-draw line 78 *tmp33 78 *tmp40 0 0
-draw line 71 *tmp40 78 *tmp40 0 0
+draw line 78 *tmp33 78 *tmp40
+draw line 71 *tmp40 78 *tmp40
 multijump *label409 4 0 *label525
 label *label388
 op add *tmp46 :y 12
-draw line 78 :y 78 *tmp46 0 0
-draw line 71 :y 78 :y 0 0
+draw line 78 :y 78 *tmp46
+draw line 71 :y 78 :y
 op add *tmp48 :y 6
-draw line 71 *tmp48 78 *tmp48 0 0
-draw line 71 *tmp46 78 *tmp46 0 0
+draw line 71 *tmp48 78 *tmp48
+draw line 71 *tmp46 78 *tmp46
 multijump *label409 4 0 *label525
 label *label390
 op add *tmp56 :y 12
-draw line 78 :y 78 *tmp56 0 0
+draw line 78 :y 78 *tmp56
 op add *tmp57 :y 6
-draw line 71 *tmp57 78 *tmp57 0 0
-draw line 71 *tmp57 71 *tmp56 0 0
+draw line 71 *tmp57 78 *tmp57
+draw line 71 *tmp57 71 *tmp56
 multijump *label409 4 0 *label525
 label *label392
-draw line 71 :y 78 :y 0 0
+draw line 71 :y 78 :y
 op add *tmp65 :y 6
-draw line 78 :y 78 *tmp65 0 0
-draw line 71 *tmp65 78 *tmp65 0 0
+draw line 78 :y 78 *tmp65
+draw line 71 *tmp65 78 *tmp65
 op add *tmp70 :y 12
-draw line 71 *tmp65 71 *tmp70 0 0
-draw line 71 *tmp70 78 *tmp70 0 0
+draw line 71 *tmp65 71 *tmp70
+draw line 71 *tmp70 78 *tmp70
 multijump *label409 4 0 *label525
 label *label394
 op add *tmp74 :y 12
-draw line 71 :y 71 *tmp74 0 0
-draw line 71 :y 78 :y 0 0
+draw line 71 :y 71 *tmp74
+draw line 71 :y 78 :y
 op add *tmp78 :y 6
-draw line 78 :y 78 *tmp78 0 0
-draw line 71 *tmp78 78 *tmp78 0 0
-draw line 71 *tmp74 78 *tmp74 0 0
+draw line 78 :y 78 *tmp78
+draw line 71 *tmp78 78 *tmp78
+draw line 71 *tmp74 78 *tmp74
 multijump *label409 4 0 *label525
 label *label396
 op add *tmp89 :y 12
-draw line 77 :y 77 *tmp89 0 0
-draw line 71 *tmp89 77 *tmp89 0 0
+draw line 77 :y 77 *tmp89
+draw line 71 *tmp89 77 *tmp89
 multijump *label409 4 0 *label525
 label *label398
 op sub *tmp97 :y 1
-draw lineRect 70 *tmp97 9 14 0 0
+draw lineRect 70 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 71 *tmp98 78 *tmp98 0 0
+draw line 71 *tmp98 78 *tmp98
 multijump *label409 4 0 *label525
 label *label400
-draw line 71 :y 78 :y 0 0
+draw line 71 :y 78 :y
 op add *tmp104 :y 12
-draw line 78 :y 78 *tmp104 0 0
+draw line 78 :y 78 *tmp104
 op add *tmp105 :y 6
-draw line 71 *tmp105 78 *tmp105 0 0
-draw line 71 *tmp105 71 *tmp104 0 0
-draw line 71 *tmp104 78 *tmp104 0 0
+draw line 71 *tmp105 78 *tmp105
+draw line 71 *tmp105 71 *tmp104
+draw line 71 *tmp104 78 *tmp104
 multijump *label409 4 0 *label525
 multilabel *label409 *label525
-jump *label419 always 0 0
+jump *label419 always
 multilabel *label410 *label525
-jump *label421 always 0 0
+jump *label421 always
 multilabel *label411 *label525
-jump *label423 always 0 0
+jump *label423 always
 multilabel *label412 *label525
-jump *label425 always 0 0
+jump *label425 always
 multilabel *label413 *label525
-jump *label427 always 0 0
+jump *label427 always
 multilabel *label414 *label525
-jump *label429 always 0 0
+jump *label429 always
 multilabel *label415 *label525
-jump *label431 always 0 0
+jump *label431 always
 multilabel *label416 *label525
-jump *label433 always 0 0
+jump *label433 always
 multilabel *label417 *label525
-jump *label435 always 0 0
+jump *label435 always
 multilabel *label418 *label525
-jump *label437 always 0 0
+jump *label437 always
 label *label419
 op sub *tmp26 :y 1
-draw lineRect 59 *tmp26 9 14 0 0
+draw lineRect 59 *tmp26 9 14
 multijump *label446 3 0 *label526
 label *label421
 op add *tmp31 :y 12
-draw line 66 :y 66 *tmp31 0 0
+draw line 66 :y 66 *tmp31
 multijump *label446 3 0 *label526
 label *label423
-draw line 60 :y 67 :y 0 0
+draw line 60 :y 67 :y
 op add *tmp33 :y 6
-draw line 60 :y 60 *tmp33 0 0
-draw line 60 *tmp33 67 *tmp33 0 0
+draw line 60 :y 60 *tmp33
+draw line 60 *tmp33 67 *tmp33
 op add *tmp40 :y 12
-draw line 67 *tmp33 67 *tmp40 0 0
-draw line 60 *tmp40 67 *tmp40 0 0
+draw line 67 *tmp33 67 *tmp40
+draw line 60 *tmp40 67 *tmp40
 multijump *label446 3 0 *label526
 label *label425
 op add *tmp46 :y 12
-draw line 67 :y 67 *tmp46 0 0
-draw line 60 :y 67 :y 0 0
+draw line 67 :y 67 *tmp46
+draw line 60 :y 67 :y
 op add *tmp48 :y 6
-draw line 60 *tmp48 67 *tmp48 0 0
-draw line 60 *tmp46 67 *tmp46 0 0
+draw line 60 *tmp48 67 *tmp48
+draw line 60 *tmp46 67 *tmp46
 multijump *label446 3 0 *label526
 label *label427
 op add *tmp56 :y 12
-draw line 67 :y 67 *tmp56 0 0
+draw line 67 :y 67 *tmp56
 op add *tmp57 :y 6
-draw line 60 *tmp57 67 *tmp57 0 0
-draw line 60 *tmp57 60 *tmp56 0 0
+draw line 60 *tmp57 67 *tmp57
+draw line 60 *tmp57 60 *tmp56
 multijump *label446 3 0 *label526
 label *label429
-draw line 60 :y 67 :y 0 0
+draw line 60 :y 67 :y
 op add *tmp65 :y 6
-draw line 67 :y 67 *tmp65 0 0
-draw line 60 *tmp65 67 *tmp65 0 0
+draw line 67 :y 67 *tmp65
+draw line 60 *tmp65 67 *tmp65
 op add *tmp70 :y 12
-draw line 60 *tmp65 60 *tmp70 0 0
-draw line 60 *tmp70 67 *tmp70 0 0
+draw line 60 *tmp65 60 *tmp70
+draw line 60 *tmp70 67 *tmp70
 multijump *label446 3 0 *label526
 label *label431
 op add *tmp74 :y 12
-draw line 60 :y 60 *tmp74 0 0
-draw line 60 :y 67 :y 0 0
+draw line 60 :y 60 *tmp74
+draw line 60 :y 67 :y
 op add *tmp78 :y 6
-draw line 67 :y 67 *tmp78 0 0
-draw line 60 *tmp78 67 *tmp78 0 0
-draw line 60 *tmp74 67 *tmp74 0 0
+draw line 67 :y 67 *tmp78
+draw line 60 *tmp78 67 *tmp78
+draw line 60 *tmp74 67 *tmp74
 multijump *label446 3 0 *label526
 label *label433
 op add *tmp89 :y 12
-draw line 66 :y 66 *tmp89 0 0
-draw line 60 *tmp89 66 *tmp89 0 0
+draw line 66 :y 66 *tmp89
+draw line 60 *tmp89 66 *tmp89
 multijump *label446 3 0 *label526
 label *label435
 op sub *tmp97 :y 1
-draw lineRect 59 *tmp97 9 14 0 0
+draw lineRect 59 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 60 *tmp98 67 *tmp98 0 0
+draw line 60 *tmp98 67 *tmp98
 multijump *label446 3 0 *label526
 label *label437
-draw line 60 :y 67 :y 0 0
+draw line 60 :y 67 :y
 op add *tmp104 :y 12
-draw line 67 :y 67 *tmp104 0 0
+draw line 67 :y 67 *tmp104
 op add *tmp105 :y 6
-draw line 60 *tmp105 67 *tmp105 0 0
-draw line 60 *tmp105 60 *tmp104 0 0
-draw line 60 *tmp104 67 *tmp104 0 0
+draw line 60 *tmp105 67 *tmp105
+draw line 60 *tmp105 60 *tmp104
+draw line 60 *tmp104 67 *tmp104
 multijump *label446 3 0 *label526
 multilabel *label446 *label526
-jump *label456 always 0 0
+jump *label456 always
 multilabel *label447 *label526
-jump *label458 always 0 0
+jump *label458 always
 multilabel *label448 *label526
-jump *label460 always 0 0
+jump *label460 always
 multilabel *label449 *label526
-jump *label462 always 0 0
+jump *label462 always
 multilabel *label450 *label526
-jump *label464 always 0 0
+jump *label464 always
 multilabel *label451 *label526
-jump *label466 always 0 0
+jump *label466 always
 multilabel *label452 *label526
-jump *label468 always 0 0
+jump *label468 always
 multilabel *label453 *label526
-jump *label470 always 0 0
+jump *label470 always
 multilabel *label454 *label526
-jump *label472 always 0 0
+jump *label472 always
 multilabel *label455 *label526
-jump *label474 always 0 0
+jump *label474 always
 label *label456
 op sub *tmp26 :y 1
-draw lineRect 48 *tmp26 9 14 0 0
+draw lineRect 48 *tmp26 9 14
 multijump *label483 2 0 *label527
 label *label458
 op add *tmp31 :y 12
-draw line 55 :y 55 *tmp31 0 0
+draw line 55 :y 55 *tmp31
 multijump *label483 2 0 *label527
 label *label460
-draw line 49 :y 56 :y 0 0
+draw line 49 :y 56 :y
 op add *tmp33 :y 6
-draw line 49 :y 49 *tmp33 0 0
-draw line 49 *tmp33 56 *tmp33 0 0
+draw line 49 :y 49 *tmp33
+draw line 49 *tmp33 56 *tmp33
 op add *tmp40 :y 12
-draw line 56 *tmp33 56 *tmp40 0 0
-draw line 49 *tmp40 56 *tmp40 0 0
+draw line 56 *tmp33 56 *tmp40
+draw line 49 *tmp40 56 *tmp40
 multijump *label483 2 0 *label527
 label *label462
 op add *tmp46 :y 12
-draw line 56 :y 56 *tmp46 0 0
-draw line 49 :y 56 :y 0 0
+draw line 56 :y 56 *tmp46
+draw line 49 :y 56 :y
 op add *tmp48 :y 6
-draw line 49 *tmp48 56 *tmp48 0 0
-draw line 49 *tmp46 56 *tmp46 0 0
+draw line 49 *tmp48 56 *tmp48
+draw line 49 *tmp46 56 *tmp46
 multijump *label483 2 0 *label527
 label *label464
 op add *tmp56 :y 12
-draw line 56 :y 56 *tmp56 0 0
+draw line 56 :y 56 *tmp56
 op add *tmp57 :y 6
-draw line 49 *tmp57 56 *tmp57 0 0
-draw line 49 *tmp57 49 *tmp56 0 0
+draw line 49 *tmp57 56 *tmp57
+draw line 49 *tmp57 49 *tmp56
 multijump *label483 2 0 *label527
 label *label466
-draw line 49 :y 56 :y 0 0
+draw line 49 :y 56 :y
 op add *tmp65 :y 6
-draw line 56 :y 56 *tmp65 0 0
-draw line 49 *tmp65 56 *tmp65 0 0
+draw line 56 :y 56 *tmp65
+draw line 49 *tmp65 56 *tmp65
 op add *tmp70 :y 12
-draw line 49 *tmp65 49 *tmp70 0 0
-draw line 49 *tmp70 56 *tmp70 0 0
+draw line 49 *tmp65 49 *tmp70
+draw line 49 *tmp70 56 *tmp70
 multijump *label483 2 0 *label527
 label *label468
 op add *tmp74 :y 12
-draw line 49 :y 49 *tmp74 0 0
-draw line 49 :y 56 :y 0 0
+draw line 49 :y 49 *tmp74
+draw line 49 :y 56 :y
 op add *tmp78 :y 6
-draw line 56 :y 56 *tmp78 0 0
-draw line 49 *tmp78 56 *tmp78 0 0
-draw line 49 *tmp74 56 *tmp74 0 0
+draw line 56 :y 56 *tmp78
+draw line 49 *tmp78 56 *tmp78
+draw line 49 *tmp74 56 *tmp74
 multijump *label483 2 0 *label527
 label *label470
 op add *tmp89 :y 12
-draw line 55 :y 55 *tmp89 0 0
-draw line 49 *tmp89 55 *tmp89 0 0
+draw line 55 :y 55 *tmp89
+draw line 49 *tmp89 55 *tmp89
 multijump *label483 2 0 *label527
 label *label472
 op sub *tmp97 :y 1
-draw lineRect 48 *tmp97 9 14 0 0
+draw lineRect 48 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 49 *tmp98 56 *tmp98 0 0
+draw line 49 *tmp98 56 *tmp98
 multijump *label483 2 0 *label527
 label *label474
-draw line 49 :y 56 :y 0 0
+draw line 49 :y 56 :y
 op add *tmp104 :y 12
-draw line 56 :y 56 *tmp104 0 0
+draw line 56 :y 56 *tmp104
 op add *tmp105 :y 6
-draw line 49 *tmp105 56 *tmp105 0 0
-draw line 49 *tmp105 49 *tmp104 0 0
-draw line 49 *tmp104 56 *tmp104 0 0
+draw line 49 *tmp105 56 *tmp105
+draw line 49 *tmp105 49 *tmp104
+draw line 49 *tmp104 56 *tmp104
 multijump *label483 2 0 *label527
 multilabel *label483 *label527
-jump *label493 always 0 0
+jump *label493 always
 multilabel *label484 *label527
-jump *label495 always 0 0
+jump *label495 always
 multilabel *label485 *label527
-jump *label497 always 0 0
+jump *label497 always
 multilabel *label486 *label527
-jump *label499 always 0 0
+jump *label499 always
 multilabel *label487 *label527
-jump *label501 always 0 0
+jump *label501 always
 multilabel *label488 *label527
-jump *label503 always 0 0
+jump *label503 always
 multilabel *label489 *label527
-jump *label505 always 0 0
+jump *label505 always
 multilabel *label490 *label527
-jump *label507 always 0 0
+jump *label507 always
 multilabel *label491 *label527
-jump *label509 always 0 0
+jump *label509 always
 multilabel *label492 *label527
-jump *label511 always 0 0
+jump *label511 always
 label *label493
 op sub *tmp26 :y 1
-draw lineRect 37 *tmp26 9 14 0 0
-jump *label516 always 0 0
+draw lineRect 37 *tmp26 9 14
+jump *label516 always
 label *label495
 op add *tmp31 :y 12
-draw line 44 :y 44 *tmp31 0 0
-jump *label516 always 0 0
+draw line 44 :y 44 *tmp31
+jump *label516 always
 label *label497
-draw line 38 :y 45 :y 0 0
+draw line 38 :y 45 :y
 op add *tmp33 :y 6
-draw line 38 :y 38 *tmp33 0 0
-draw line 38 *tmp33 45 *tmp33 0 0
+draw line 38 :y 38 *tmp33
+draw line 38 *tmp33 45 *tmp33
 op add *tmp40 :y 12
-draw line 45 *tmp33 45 *tmp40 0 0
-draw line 38 *tmp40 45 *tmp40 0 0
-jump *label516 always 0 0
+draw line 45 *tmp33 45 *tmp40
+draw line 38 *tmp40 45 *tmp40
+jump *label516 always
 label *label499
 op add *tmp46 :y 12
-draw line 45 :y 45 *tmp46 0 0
-draw line 38 :y 45 :y 0 0
+draw line 45 :y 45 *tmp46
+draw line 38 :y 45 :y
 op add *tmp48 :y 6
-draw line 38 *tmp48 45 *tmp48 0 0
-draw line 38 *tmp46 45 *tmp46 0 0
-jump *label516 always 0 0
+draw line 38 *tmp48 45 *tmp48
+draw line 38 *tmp46 45 *tmp46
+jump *label516 always
 label *label501
 op add *tmp56 :y 12
-draw line 45 :y 45 *tmp56 0 0
+draw line 45 :y 45 *tmp56
 op add *tmp57 :y 6
-draw line 38 *tmp57 45 *tmp57 0 0
-draw line 38 *tmp57 38 *tmp56 0 0
-jump *label516 always 0 0
+draw line 38 *tmp57 45 *tmp57
+draw line 38 *tmp57 38 *tmp56
+jump *label516 always
 label *label503
-draw line 38 :y 45 :y 0 0
+draw line 38 :y 45 :y
 op add *tmp65 :y 6
-draw line 45 :y 45 *tmp65 0 0
-draw line 38 *tmp65 45 *tmp65 0 0
+draw line 45 :y 45 *tmp65
+draw line 38 *tmp65 45 *tmp65
 op add *tmp70 :y 12
-draw line 38 *tmp65 38 *tmp70 0 0
-draw line 38 *tmp70 45 *tmp70 0 0
-jump *label516 always 0 0
+draw line 38 *tmp65 38 *tmp70
+draw line 38 *tmp70 45 *tmp70
+jump *label516 always
 label *label505
 op add *tmp74 :y 12
-draw line 38 :y 38 *tmp74 0 0
-draw line 38 :y 45 :y 0 0
+draw line 38 :y 38 *tmp74
+draw line 38 :y 45 :y
 op add *tmp78 :y 6
-draw line 45 :y 45 *tmp78 0 0
-draw line 38 *tmp78 45 *tmp78 0 0
-draw line 38 *tmp74 45 *tmp74 0 0
-jump *label516 always 0 0
+draw line 45 :y 45 *tmp78
+draw line 38 *tmp78 45 *tmp78
+draw line 38 *tmp74 45 *tmp74
+jump *label516 always
 label *label507
 op add *tmp89 :y 12
-draw line 44 :y 44 *tmp89 0 0
-draw line 38 *tmp89 44 *tmp89 0 0
-jump *label516 always 0 0
+draw line 44 :y 44 *tmp89
+draw line 38 *tmp89 44 *tmp89
+jump *label516 always
 label *label509
 op sub *tmp97 :y 1
-draw lineRect 37 *tmp97 9 14 0 0
+draw lineRect 37 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 38 *tmp98 45 *tmp98 0 0
-jump *label516 always 0 0
+draw line 38 *tmp98 45 *tmp98
+jump *label516 always
 label *label511
-draw line 38 :y 45 :y 0 0
+draw line 38 :y 45 :y
 op add *tmp104 :y 12
-draw line 45 :y 45 *tmp104 0 0
+draw line 45 :y 45 *tmp104
 op add *tmp105 :y 6
-draw line 38 *tmp105 45 *tmp105 0 0
-draw line 38 *tmp105 38 *tmp104 0 0
-draw line 38 *tmp104 45 *tmp104 0 0
-jump *label516 always 0 0
+draw line 38 *tmp105 45 *tmp105
+draw line 38 *tmp105 38 *tmp104
+draw line 38 *tmp104 45 *tmp104
+jump *label516 always
 label *label516
 op add *tmp122 :y 12
-draw line 33 :y 33 *tmp122 0 0
-jump *label47 always 0 0
+draw line 33 :y 33 *tmp122
+jump *label47 always
 label *label46
-draw color 0 255 0 255 0 0
+draw color 0 255 0 255
 multijump *label531 5 0 *label683
 multilabel *label531 *label683
-jump *label541 always 0 0
+jump *label541 always
 multilabel *label532 *label683
-jump *label543 always 0 0
+jump *label543 always
 multilabel *label533 *label683
-jump *label545 always 0 0
+jump *label545 always
 multilabel *label534 *label683
-jump *label547 always 0 0
+jump *label547 always
 multilabel *label535 *label683
-jump *label549 always 0 0
+jump *label549 always
 multilabel *label536 *label683
-jump *label551 always 0 0
+jump *label551 always
 multilabel *label537 *label683
-jump *label553 always 0 0
+jump *label553 always
 multilabel *label538 *label683
-jump *label555 always 0 0
+jump *label555 always
 multilabel *label539 *label683
-jump *label557 always 0 0
+jump *label557 always
 multilabel *label540 *label683
-jump *label559 always 0 0
+jump *label559 always
 label *label541
 op sub *tmp26 :y 1
-draw lineRect 156 *tmp26 9 14 0 0
+draw lineRect 156 *tmp26 9 14
 multijump *label568 4 0 *label684
 label *label543
 op add *tmp31 :y 12
-draw line 163 :y 163 *tmp31 0 0
+draw line 163 :y 163 *tmp31
 multijump *label568 4 0 *label684
 label *label545
-draw line 157 :y 164 :y 0 0
+draw line 157 :y 164 :y
 op add *tmp33 :y 6
-draw line 157 :y 157 *tmp33 0 0
-draw line 157 *tmp33 164 *tmp33 0 0
+draw line 157 :y 157 *tmp33
+draw line 157 *tmp33 164 *tmp33
 op add *tmp40 :y 12
-draw line 164 *tmp33 164 *tmp40 0 0
-draw line 157 *tmp40 164 *tmp40 0 0
+draw line 164 *tmp33 164 *tmp40
+draw line 157 *tmp40 164 *tmp40
 multijump *label568 4 0 *label684
 label *label547
 op add *tmp46 :y 12
-draw line 164 :y 164 *tmp46 0 0
-draw line 157 :y 164 :y 0 0
+draw line 164 :y 164 *tmp46
+draw line 157 :y 164 :y
 op add *tmp48 :y 6
-draw line 157 *tmp48 164 *tmp48 0 0
-draw line 157 *tmp46 164 *tmp46 0 0
+draw line 157 *tmp48 164 *tmp48
+draw line 157 *tmp46 164 *tmp46
 multijump *label568 4 0 *label684
 label *label549
 op add *tmp56 :y 12
-draw line 164 :y 164 *tmp56 0 0
+draw line 164 :y 164 *tmp56
 op add *tmp57 :y 6
-draw line 157 *tmp57 164 *tmp57 0 0
-draw line 157 *tmp57 157 *tmp56 0 0
+draw line 157 *tmp57 164 *tmp57
+draw line 157 *tmp57 157 *tmp56
 multijump *label568 4 0 *label684
 label *label551
-draw line 157 :y 164 :y 0 0
+draw line 157 :y 164 :y
 op add *tmp65 :y 6
-draw line 164 :y 164 *tmp65 0 0
-draw line 157 *tmp65 164 *tmp65 0 0
+draw line 164 :y 164 *tmp65
+draw line 157 *tmp65 164 *tmp65
 op add *tmp70 :y 12
-draw line 157 *tmp65 157 *tmp70 0 0
-draw line 157 *tmp70 164 *tmp70 0 0
+draw line 157 *tmp65 157 *tmp70
+draw line 157 *tmp70 164 *tmp70
 multijump *label568 4 0 *label684
 label *label553
 op add *tmp74 :y 12
-draw line 157 :y 157 *tmp74 0 0
-draw line 157 :y 164 :y 0 0
+draw line 157 :y 157 *tmp74
+draw line 157 :y 164 :y
 op add *tmp78 :y 6
-draw line 164 :y 164 *tmp78 0 0
-draw line 157 *tmp78 164 *tmp78 0 0
-draw line 157 *tmp74 164 *tmp74 0 0
+draw line 164 :y 164 *tmp78
+draw line 157 *tmp78 164 *tmp78
+draw line 157 *tmp74 164 *tmp74
 multijump *label568 4 0 *label684
 label *label555
 op add *tmp89 :y 12
-draw line 163 :y 163 *tmp89 0 0
-draw line 157 *tmp89 163 *tmp89 0 0
+draw line 163 :y 163 *tmp89
+draw line 157 *tmp89 163 *tmp89
 multijump *label568 4 0 *label684
 label *label557
 op sub *tmp97 :y 1
-draw lineRect 156 *tmp97 9 14 0 0
+draw lineRect 156 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 157 *tmp98 164 *tmp98 0 0
+draw line 157 *tmp98 164 *tmp98
 multijump *label568 4 0 *label684
 label *label559
-draw line 157 :y 164 :y 0 0
+draw line 157 :y 164 :y
 op add *tmp104 :y 12
-draw line 164 :y 164 *tmp104 0 0
+draw line 164 :y 164 *tmp104
 op add *tmp105 :y 6
-draw line 157 *tmp105 164 *tmp105 0 0
-draw line 157 *tmp105 157 *tmp104 0 0
-draw line 157 *tmp104 164 *tmp104 0 0
+draw line 157 *tmp105 164 *tmp105
+draw line 157 *tmp105 157 *tmp104
+draw line 157 *tmp104 164 *tmp104
 multijump *label568 4 0 *label684
 multilabel *label568 *label684
-jump *label578 always 0 0
+jump *label578 always
 multilabel *label569 *label684
-jump *label580 always 0 0
+jump *label580 always
 multilabel *label570 *label684
-jump *label582 always 0 0
+jump *label582 always
 multilabel *label571 *label684
-jump *label584 always 0 0
+jump *label584 always
 multilabel *label572 *label684
-jump *label586 always 0 0
+jump *label586 always
 multilabel *label573 *label684
-jump *label588 always 0 0
+jump *label588 always
 multilabel *label574 *label684
-jump *label590 always 0 0
+jump *label590 always
 multilabel *label575 *label684
-jump *label592 always 0 0
+jump *label592 always
 multilabel *label576 *label684
-jump *label594 always 0 0
+jump *label594 always
 multilabel *label577 *label684
-jump *label596 always 0 0
+jump *label596 always
 label *label578
 op sub *tmp26 :y 1
-draw lineRect 145 *tmp26 9 14 0 0
+draw lineRect 145 *tmp26 9 14
 multijump *label605 3 0 *label685
 label *label580
 op add *tmp31 :y 12
-draw line 152 :y 152 *tmp31 0 0
+draw line 152 :y 152 *tmp31
 multijump *label605 3 0 *label685
 label *label582
-draw line 146 :y 153 :y 0 0
+draw line 146 :y 153 :y
 op add *tmp33 :y 6
-draw line 146 :y 146 *tmp33 0 0
-draw line 146 *tmp33 153 *tmp33 0 0
+draw line 146 :y 146 *tmp33
+draw line 146 *tmp33 153 *tmp33
 op add *tmp40 :y 12
-draw line 153 *tmp33 153 *tmp40 0 0
-draw line 146 *tmp40 153 *tmp40 0 0
+draw line 153 *tmp33 153 *tmp40
+draw line 146 *tmp40 153 *tmp40
 multijump *label605 3 0 *label685
 label *label584
 op add *tmp46 :y 12
-draw line 153 :y 153 *tmp46 0 0
-draw line 146 :y 153 :y 0 0
+draw line 153 :y 153 *tmp46
+draw line 146 :y 153 :y
 op add *tmp48 :y 6
-draw line 146 *tmp48 153 *tmp48 0 0
-draw line 146 *tmp46 153 *tmp46 0 0
+draw line 146 *tmp48 153 *tmp48
+draw line 146 *tmp46 153 *tmp46
 multijump *label605 3 0 *label685
 label *label586
 op add *tmp56 :y 12
-draw line 153 :y 153 *tmp56 0 0
+draw line 153 :y 153 *tmp56
 op add *tmp57 :y 6
-draw line 146 *tmp57 153 *tmp57 0 0
-draw line 146 *tmp57 146 *tmp56 0 0
+draw line 146 *tmp57 153 *tmp57
+draw line 146 *tmp57 146 *tmp56
 multijump *label605 3 0 *label685
 label *label588
-draw line 146 :y 153 :y 0 0
+draw line 146 :y 153 :y
 op add *tmp65 :y 6
-draw line 153 :y 153 *tmp65 0 0
-draw line 146 *tmp65 153 *tmp65 0 0
+draw line 153 :y 153 *tmp65
+draw line 146 *tmp65 153 *tmp65
 op add *tmp70 :y 12
-draw line 146 *tmp65 146 *tmp70 0 0
-draw line 146 *tmp70 153 *tmp70 0 0
+draw line 146 *tmp65 146 *tmp70
+draw line 146 *tmp70 153 *tmp70
 multijump *label605 3 0 *label685
 label *label590
 op add *tmp74 :y 12
-draw line 146 :y 146 *tmp74 0 0
-draw line 146 :y 153 :y 0 0
+draw line 146 :y 146 *tmp74
+draw line 146 :y 153 :y
 op add *tmp78 :y 6
-draw line 153 :y 153 *tmp78 0 0
-draw line 146 *tmp78 153 *tmp78 0 0
-draw line 146 *tmp74 153 *tmp74 0 0
+draw line 153 :y 153 *tmp78
+draw line 146 *tmp78 153 *tmp78
+draw line 146 *tmp74 153 *tmp74
 multijump *label605 3 0 *label685
 label *label592
 op add *tmp89 :y 12
-draw line 152 :y 152 *tmp89 0 0
-draw line 146 *tmp89 152 *tmp89 0 0
+draw line 152 :y 152 *tmp89
+draw line 146 *tmp89 152 *tmp89
 multijump *label605 3 0 *label685
 label *label594
 op sub *tmp97 :y 1
-draw lineRect 145 *tmp97 9 14 0 0
+draw lineRect 145 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 146 *tmp98 153 *tmp98 0 0
+draw line 146 *tmp98 153 *tmp98
 multijump *label605 3 0 *label685
 label *label596
-draw line 146 :y 153 :y 0 0
+draw line 146 :y 153 :y
 op add *tmp104 :y 12
-draw line 153 :y 153 *tmp104 0 0
+draw line 153 :y 153 *tmp104
 op add *tmp105 :y 6
-draw line 146 *tmp105 153 *tmp105 0 0
-draw line 146 *tmp105 146 *tmp104 0 0
-draw line 146 *tmp104 153 *tmp104 0 0
+draw line 146 *tmp105 153 *tmp105
+draw line 146 *tmp105 146 *tmp104
+draw line 146 *tmp104 153 *tmp104
 multijump *label605 3 0 *label685
 multilabel *label605 *label685
-jump *label615 always 0 0
+jump *label615 always
 multilabel *label606 *label685
-jump *label617 always 0 0
+jump *label617 always
 multilabel *label607 *label685
-jump *label619 always 0 0
+jump *label619 always
 multilabel *label608 *label685
-jump *label621 always 0 0
+jump *label621 always
 multilabel *label609 *label685
-jump *label623 always 0 0
+jump *label623 always
 multilabel *label610 *label685
-jump *label625 always 0 0
+jump *label625 always
 multilabel *label611 *label685
-jump *label627 always 0 0
+jump *label627 always
 multilabel *label612 *label685
-jump *label629 always 0 0
+jump *label629 always
 multilabel *label613 *label685
-jump *label631 always 0 0
+jump *label631 always
 multilabel *label614 *label685
-jump *label633 always 0 0
+jump *label633 always
 label *label615
 op sub *tmp26 :y 1
-draw lineRect 134 *tmp26 9 14 0 0
+draw lineRect 134 *tmp26 9 14
 multijump *label642 2 0 *label686
 label *label617
 op add *tmp31 :y 12
-draw line 141 :y 141 *tmp31 0 0
+draw line 141 :y 141 *tmp31
 multijump *label642 2 0 *label686
 label *label619
-draw line 135 :y 142 :y 0 0
+draw line 135 :y 142 :y
 op add *tmp33 :y 6
-draw line 135 :y 135 *tmp33 0 0
-draw line 135 *tmp33 142 *tmp33 0 0
+draw line 135 :y 135 *tmp33
+draw line 135 *tmp33 142 *tmp33
 op add *tmp40 :y 12
-draw line 142 *tmp33 142 *tmp40 0 0
-draw line 135 *tmp40 142 *tmp40 0 0
+draw line 142 *tmp33 142 *tmp40
+draw line 135 *tmp40 142 *tmp40
 multijump *label642 2 0 *label686
 label *label621
 op add *tmp46 :y 12
-draw line 142 :y 142 *tmp46 0 0
-draw line 135 :y 142 :y 0 0
+draw line 142 :y 142 *tmp46
+draw line 135 :y 142 :y
 op add *tmp48 :y 6
-draw line 135 *tmp48 142 *tmp48 0 0
-draw line 135 *tmp46 142 *tmp46 0 0
+draw line 135 *tmp48 142 *tmp48
+draw line 135 *tmp46 142 *tmp46
 multijump *label642 2 0 *label686
 label *label623
 op add *tmp56 :y 12
-draw line 142 :y 142 *tmp56 0 0
+draw line 142 :y 142 *tmp56
 op add *tmp57 :y 6
-draw line 135 *tmp57 142 *tmp57 0 0
-draw line 135 *tmp57 135 *tmp56 0 0
+draw line 135 *tmp57 142 *tmp57
+draw line 135 *tmp57 135 *tmp56
 multijump *label642 2 0 *label686
 label *label625
-draw line 135 :y 142 :y 0 0
+draw line 135 :y 142 :y
 op add *tmp65 :y 6
-draw line 142 :y 142 *tmp65 0 0
-draw line 135 *tmp65 142 *tmp65 0 0
+draw line 142 :y 142 *tmp65
+draw line 135 *tmp65 142 *tmp65
 op add *tmp70 :y 12
-draw line 135 *tmp65 135 *tmp70 0 0
-draw line 135 *tmp70 142 *tmp70 0 0
+draw line 135 *tmp65 135 *tmp70
+draw line 135 *tmp70 142 *tmp70
 multijump *label642 2 0 *label686
 label *label627
 op add *tmp74 :y 12
-draw line 135 :y 135 *tmp74 0 0
-draw line 135 :y 142 :y 0 0
+draw line 135 :y 135 *tmp74
+draw line 135 :y 142 :y
 op add *tmp78 :y 6
-draw line 142 :y 142 *tmp78 0 0
-draw line 135 *tmp78 142 *tmp78 0 0
-draw line 135 *tmp74 142 *tmp74 0 0
+draw line 142 :y 142 *tmp78
+draw line 135 *tmp78 142 *tmp78
+draw line 135 *tmp74 142 *tmp74
 multijump *label642 2 0 *label686
 label *label629
 op add *tmp89 :y 12
-draw line 141 :y 141 *tmp89 0 0
-draw line 135 *tmp89 141 *tmp89 0 0
+draw line 141 :y 141 *tmp89
+draw line 135 *tmp89 141 *tmp89
 multijump *label642 2 0 *label686
 label *label631
 op sub *tmp97 :y 1
-draw lineRect 134 *tmp97 9 14 0 0
+draw lineRect 134 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 135 *tmp98 142 *tmp98 0 0
+draw line 135 *tmp98 142 *tmp98
 multijump *label642 2 0 *label686
 label *label633
-draw line 135 :y 142 :y 0 0
+draw line 135 :y 142 :y
 op add *tmp104 :y 12
-draw line 142 :y 142 *tmp104 0 0
+draw line 142 :y 142 *tmp104
 op add *tmp105 :y 6
-draw line 135 *tmp105 142 *tmp105 0 0
-draw line 135 *tmp105 135 *tmp104 0 0
-draw line 135 *tmp104 142 *tmp104 0 0
+draw line 135 *tmp105 142 *tmp105
+draw line 135 *tmp105 135 *tmp104
+draw line 135 *tmp104 142 *tmp104
 multijump *label642 2 0 *label686
 multilabel *label642 *label686
-jump *label652 always 0 0
+jump *label652 always
 multilabel *label643 *label686
-jump *label654 always 0 0
+jump *label654 always
 multilabel *label644 *label686
-jump *label656 always 0 0
+jump *label656 always
 multilabel *label645 *label686
-jump *label658 always 0 0
+jump *label658 always
 multilabel *label646 *label686
-jump *label660 always 0 0
+jump *label660 always
 multilabel *label647 *label686
-jump *label662 always 0 0
+jump *label662 always
 multilabel *label648 *label686
-jump *label664 always 0 0
+jump *label664 always
 multilabel *label649 *label686
-jump *label666 always 0 0
+jump *label666 always
 multilabel *label650 *label686
-jump *label668 always 0 0
+jump *label668 always
 multilabel *label651 *label686
-jump *label670 always 0 0
+jump *label670 always
 label *label652
 op sub *tmp26 :y 1
-draw lineRect 123 *tmp26 9 14 0 0
-jump *label675 always 0 0
+draw lineRect 123 *tmp26 9 14
+jump *label675 always
 label *label654
 op add *tmp31 :y 12
-draw line 130 :y 130 *tmp31 0 0
-jump *label675 always 0 0
+draw line 130 :y 130 *tmp31
+jump *label675 always
 label *label656
-draw line 124 :y 131 :y 0 0
+draw line 124 :y 131 :y
 op add *tmp33 :y 6
-draw line 124 :y 124 *tmp33 0 0
-draw line 124 *tmp33 131 *tmp33 0 0
+draw line 124 :y 124 *tmp33
+draw line 124 *tmp33 131 *tmp33
 op add *tmp40 :y 12
-draw line 131 *tmp33 131 *tmp40 0 0
-draw line 124 *tmp40 131 *tmp40 0 0
-jump *label675 always 0 0
+draw line 131 *tmp33 131 *tmp40
+draw line 124 *tmp40 131 *tmp40
+jump *label675 always
 label *label658
 op add *tmp46 :y 12
-draw line 131 :y 131 *tmp46 0 0
-draw line 124 :y 131 :y 0 0
+draw line 131 :y 131 *tmp46
+draw line 124 :y 131 :y
 op add *tmp48 :y 6
-draw line 124 *tmp48 131 *tmp48 0 0
-draw line 124 *tmp46 131 *tmp46 0 0
-jump *label675 always 0 0
+draw line 124 *tmp48 131 *tmp48
+draw line 124 *tmp46 131 *tmp46
+jump *label675 always
 label *label660
 op add *tmp56 :y 12
-draw line 131 :y 131 *tmp56 0 0
+draw line 131 :y 131 *tmp56
 op add *tmp57 :y 6
-draw line 124 *tmp57 131 *tmp57 0 0
-draw line 124 *tmp57 124 *tmp56 0 0
-jump *label675 always 0 0
+draw line 124 *tmp57 131 *tmp57
+draw line 124 *tmp57 124 *tmp56
+jump *label675 always
 label *label662
-draw line 124 :y 131 :y 0 0
+draw line 124 :y 131 :y
 op add *tmp65 :y 6
-draw line 131 :y 131 *tmp65 0 0
-draw line 124 *tmp65 131 *tmp65 0 0
+draw line 131 :y 131 *tmp65
+draw line 124 *tmp65 131 *tmp65
 op add *tmp70 :y 12
-draw line 124 *tmp65 124 *tmp70 0 0
-draw line 124 *tmp70 131 *tmp70 0 0
-jump *label675 always 0 0
+draw line 124 *tmp65 124 *tmp70
+draw line 124 *tmp70 131 *tmp70
+jump *label675 always
 label *label664
 op add *tmp74 :y 12
-draw line 124 :y 124 *tmp74 0 0
-draw line 124 :y 131 :y 0 0
+draw line 124 :y 124 *tmp74
+draw line 124 :y 131 :y
 op add *tmp78 :y 6
-draw line 131 :y 131 *tmp78 0 0
-draw line 124 *tmp78 131 *tmp78 0 0
-draw line 124 *tmp74 131 *tmp74 0 0
-jump *label675 always 0 0
+draw line 131 :y 131 *tmp78
+draw line 124 *tmp78 131 *tmp78
+draw line 124 *tmp74 131 *tmp74
+jump *label675 always
 label *label666
 op add *tmp89 :y 12
-draw line 130 :y 130 *tmp89 0 0
-draw line 124 *tmp89 130 *tmp89 0 0
-jump *label675 always 0 0
+draw line 130 :y 130 *tmp89
+draw line 124 *tmp89 130 *tmp89
+jump *label675 always
 label *label668
 op sub *tmp97 :y 1
-draw lineRect 123 *tmp97 9 14 0 0
+draw lineRect 123 *tmp97 9 14
 op add *tmp98 :y 6
-draw line 124 *tmp98 131 *tmp98 0 0
-jump *label675 always 0 0
+draw line 124 *tmp98 131 *tmp98
+jump *label675 always
 label *label670
-draw line 124 :y 131 :y 0 0
+draw line 124 :y 131 :y
 op add *tmp104 :y 12
-draw line 131 :y 131 *tmp104 0 0
+draw line 131 :y 131 *tmp104
 op add *tmp105 :y 6
-draw line 124 *tmp105 131 *tmp105 0 0
-draw line 124 *tmp105 124 *tmp104 0 0
-draw line 124 *tmp104 131 *tmp104 0 0
-jump *label675 always 0 0
+draw line 124 *tmp105 131 *tmp105
+draw line 124 *tmp105 124 *tmp104
+draw line 124 *tmp104 131 *tmp104
+jump *label675 always
 label *label675
 op add *tmp122 :y 12
-draw line 119 :y 119 *tmp122 0 0
+draw line 119 :y 119 *tmp122
 label *label47
 op add :index :index 1
 op sub :y :y 20
 jump *label50 notEqual :index 8
 drawflush display1
 set :y 152
-draw color 0 0 80 255 0 0
-draw rect 109 0 176 176 0 0
+draw color 0 0 80 255
+draw rect 109 0 176 176
 label *label50
 multijump *tmp10 0 0 marker1
 multilabel *label45 marker1

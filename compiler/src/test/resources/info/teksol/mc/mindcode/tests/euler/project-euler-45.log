@@ -194,12 +194,12 @@ label *label0
 jump *label3 greaterThanEq :pn :hn
 op add :pn :pn :p
 op add :p :p 3
-jump *label0 always 0 0
+jump *label0 always
 label *label3
 jump *label2 greaterThanEq :hn :pn
 op add :hn :hn :h
 op add :h :h 4
-jump *label0 always 0 0
+jump *label0 always
 label *label2
 assertequals 1533776805 :hn "Project Euler 45"
 stop

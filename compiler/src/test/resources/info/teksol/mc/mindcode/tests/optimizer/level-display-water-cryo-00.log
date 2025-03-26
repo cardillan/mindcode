@@ -503,16 +503,16 @@ print :block
 sensor *tmp10 :block @type
 jump *label7 notEqual *tmp10 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp10 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label11 notEqual *tmp10 @liquid-tank
 set .TANK_CRYO .TANK_WATER
 set .TANK_WATER :block
-jump *label6 always 0 0
+jump *label6 always
 label *label11
 jump *label13 notEqual *tmp10 @logic-display
 set .DISPLAY :block
@@ -538,18 +538,18 @@ op or *tmp2 *tmp0 *tmp1
 op equal *tmp3 .DISPLAY null
 op or *tmp4 *tmp2 *tmp3
 jump *label22 notEqual *tmp4 false
-control enabled .SWITCH 0 0 0 0
+control enabled .SWITCH 0
 sensor *tmp18 .SWITCH @enabled
 jump __start__ notEqual *tmp18 0
 label *label24
 set :start_time @time
-draw clear 0 0 0 0 0 0
-draw color 255 255 255 255 0 0
-draw image 20 10 @water 16 0 0
-draw image 60 10 @cryofluid 16 0 0
-draw color 90 100 170 255 0 0
-draw rect 14 20 12 55 0 0
-draw color 255 255 16 255 0 0
+draw clear 0 0 0
+draw color 255 255 255 255
+draw image 20 10 @water 16 0
+draw image 60 10 @cryofluid 16 0
+draw color 90 100 170 255
+draw rect 14 20 12 55
+draw color 255 255 16 255
 sensor :water .TANK_WATER @totalLiquids
 op mul *tmp22 :water 0.03666666666666667
 op add :pos *tmp22 20
@@ -557,9 +557,9 @@ op add *tmp24 :pos 7
 op sub *tmp25 :pos 7
 draw triangle 6 *tmp24 14 :pos 6 *tmp25
 draw triangle 34 *tmp24 26 :pos 34 *tmp25
-draw color 110 200 230 255 0 0
-draw rect 54 20 12 55 0 0
-draw color 255 255 16 255 0 0
+draw color 110 200 230 255
+draw rect 54 20 12 55
+draw color 255 255 16 255
 sensor :cryo .TANK_CRYO @totalLiquids
 op mul *tmp29 :cryo 0.03666666666666667
 op add :pos *tmp29 20

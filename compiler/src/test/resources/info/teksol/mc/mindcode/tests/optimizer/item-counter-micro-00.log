@@ -1289,12 +1289,12 @@ sensor *tmp3 :block @type
 jump *label7 notEqual *tmp3 @memory-cell
 set .MEMORY :block
 set :lastCell 63
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp3 @memory-bank
 set .MEMORY :block
 set :lastCell 511
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label11 notEqual *tmp3 @plastanium-conveyor
 set .CONV4 .CONV3
@@ -1309,18 +1309,18 @@ jump *label13 notEqual .LINKED 0
 print "Item Counter\n[salmon]No plastanium conveyor attached (maximum: 4, found: {0})"
 format .LINKED
 printflush message1
-jump *label0 always 0 0
+jump *label0 always
 label *label13
 jump *label15 lessThanEq .LINKED 4
 print "Item Counter\n[salmon]Too many plastanium conveyors attached (maximum: 4, found: {0})"
 format .LINKED
 printflush message1
-jump *label0 always 0 0
+jump *label0 always
 label *label15
 jump *label2 notEqual .MEMORY null
 print "Item Counter\n[salmon]No memory attached."
 printflush message1
-jump *label0 always 0 0
+jump *label0 always
 label *label2
 op idiv *tmp12 MIN_BATCH 10
 op max .EFF_MIN_BATCH *tmp12 1
@@ -1331,7 +1331,7 @@ op mul .BATCH_TXT .EFF_MIN_BATCH 10
 read :total .MEMORY 0
 op idiv :batches :total 10
 op add :limit :batches .EFF_MIN_BATCH
-control enabled switch1 0 0 0 0
+control enabled switch1 0
 set :b4 0
 set :b3 0
 set :b2 0
@@ -1395,7 +1395,7 @@ jump *label56 greaterThanEq :b4 :a4
 op add :batches :batches 1
 label *label56
 op sub *tmp74 @time :startTime
-op floor :elapsed *tmp74 0
+op floor :elapsed *tmp74
 jump *label58 lessThan :elapsed 10000
 op idiv *tmp78 .BATCH 5
 op max .BATCH *tmp78 .EFF_MIN_BATCH
@@ -1418,6 +1418,6 @@ label *label60
 sensor *tmp22 switch1 @enabled
 jump *label62 equal *tmp22 0
 label *label21
-control enabled switch1 0 0 0 0
+control enabled switch1 0
 write 0 .MEMORY :lastCell
 write 0 .MEMORY 0

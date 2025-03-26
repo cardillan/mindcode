@@ -667,12 +667,12 @@ sensor *tmp5 :block @type
 jump *label7 notEqual *tmp5 @memory-cell
 set .MEMORY :block
 set :lastCell 63
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp5 @memory-bank
 set .MEMORY :block
 set :lastCell 511
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label11 notEqual *tmp5 @plastanium-conveyor
 set .FIRST_BLOCK :n
@@ -694,7 +694,7 @@ set :batch .EFF_MIN_BATCH
 set :startTime @time
 set :ratePerMin 0
 op add :limit :total .EFF_MIN_BATCH
-control enabled switch1 0 0 0 0
+control enabled switch1 0
 sensor *tmp18 switch1 @enabled
 jump *label15 notEqual *tmp18 0
 label *label35
@@ -730,7 +730,7 @@ label *label19
 jump *label33 lessThan :n @links
 label *label18
 op sub *tmp48 @time :startTime
-op floor :elapsed *tmp48 0
+op floor :elapsed *tmp48
 jump *label27 lessThan :elapsed 10000
 op idiv *tmp52 :batch 90
 op mul *tmp53 *tmp52 10
@@ -745,13 +745,13 @@ format :ratePerMin
 format :batch
 format :elapsed
 op sub *tmp58 @time :start
-op floor *tmp59 *tmp58 0
+op floor *tmp59 *tmp58
 format *tmp59
 printflush message1
 sensor *tmp18 switch1 @enabled
 jump *label35 equal *tmp18 0
 label *label15
-control enabled switch1 0 0 0 0
+control enabled switch1 0
 write 0 .MEMORY :lastCell
 set :n 0
 jump __start__ greaterThanEq 0 @links

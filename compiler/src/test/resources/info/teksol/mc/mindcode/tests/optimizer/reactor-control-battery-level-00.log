@@ -8152,7 +8152,7 @@ op add .ACCU_CONS .ACCU_CONS :powerNetOut
 write :powerNetOut bank1 :index
 op div *tmp16 .ACCU_CONS 40
 op add *tmp17 *tmp16 0.5
-op floor :consumption *tmp17 0
+op floor :consumption *tmp17
 write :consumption bank1 508
 op add :tmp :index 100
 read *tmp23 bank1 :tmp
@@ -8161,12 +8161,12 @@ op add .ACCU_PROD .ACCU_PROD :powerNetIn
 write :powerNetIn bank1 :tmp
 op div *tmp26 .ACCU_PROD 40
 op add *tmp27 *tmp26 0.5
-op floor :production *tmp27 0
+op floor :production *tmp27
 write :production bank1 509
 op sub *tmp31 .ACCU_PROD .ACCU_CONS
 op div *tmp32 *tmp31 40
 op add *tmp33 *tmp32 0.5
-op floor :net_power *tmp33 0
+op floor :net_power *tmp33
 write :net_power bank1 510
 op add :tmp :index 200
 read :last bank1 :tmp
@@ -8174,7 +8174,7 @@ write :powerNetStored bank1 :tmp
 op sub :diff :powerNetStored :last
 op div *tmp43 :diff 6
 op add *tmp44 *tmp43 0.5
-op floor :battery_change *tmp44 0
+op floor :battery_change *tmp44
 write :battery_change bank1 511
 op add *tmp48 :index 1
 op mod :index *tmp48 40
@@ -8199,4 +8199,4 @@ label *label10
 print "\n[lightgray]Loops: "
 print :loops
 printflush message1
-jump *label3 always 0 0
+jump *label3 always

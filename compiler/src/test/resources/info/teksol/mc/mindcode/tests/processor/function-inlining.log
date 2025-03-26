@@ -4853,7 +4853,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-15 instructions):
 Final code before resolving virtual instructions:
 
 assertflush
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 11 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -4907,10 +4907,10 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 print *tmp10
 print "|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|"
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 21 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -4964,9 +4964,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 31 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5020,9 +5020,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 41 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5076,9 +5076,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 12 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5132,9 +5132,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 22 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5188,9 +5188,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 32 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5244,9 +5244,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 42 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5300,9 +5300,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 13 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5356,9 +5356,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 23 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5412,9 +5412,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 33 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5468,9 +5468,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 43 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5524,9 +5524,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 14 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5580,9 +5580,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 24 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5636,9 +5636,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 34 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5692,9 +5692,9 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
-op rand :foo.0:r 10 0
+op rand :foo.0:r 10
 op add *tmp6 44 :foo.0:r
 op add :foo.0:sum *tmp6 *tmp6
 op add :foo.0:sum :foo.0:sum *tmp6
@@ -5748,7 +5748,7 @@ op add :foo.0:sum :foo.0:sum *tmp6
 op mul *tmp7 50 :foo.0:r
 op sub *tmp8 :foo.0:sum *tmp7
 op add *tmp9 *tmp8 0.5
-op floor *tmp10 *tmp9 0
+op floor *tmp10 *tmp9
 format *tmp10
 assertprints "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"
 stop

@@ -129,7 +129,6 @@ public class ERR {
     public static final String UNDEFINED_LOOP_LABEL = "Undefined loop label '%s'.";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' is incompatible with previous modifiers.";
-    public static final String VARIABLE_LOCAL_CANNOT_BE_NOINIT = "Local variable cannot be declared 'noinit'.";
     public static final String VARIABLE_LOCAL_CANNOT_BE_REMOTE = "Local variable cannot be declared 'remote'.";
     public static final String VARIABLE_LOCAL_CANNOT_BE_VOLATILE = "Local variable cannot be declared 'volatile'.";
     public static final String VARIABLE_MISSING_MODIFIER = "Modifier '%s' used without '%s'.";

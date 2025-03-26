@@ -426,7 +426,7 @@ op sub *tmp2 .DY 10
 op len *tmp3 0 *tmp2
 op mul *tmp4 100 *tmp3
 op add *tmp5 *tmp4 0.5
-op floor *tmp6 *tmp5 0
+op floor *tmp6 *tmp5
 op div *tmp7 *tmp6 100
 op sub :distance *tmp7 2
 ubind UNIT
@@ -447,7 +447,7 @@ printflush message1
 sensor *tmp10 switch1 @enabled
 jump *label19 equal *tmp10 false
 label *label5
-control enabled switch1 false 0 0 0
+control enabled switch1 false
 sensor *tmp13 @unit @controlled
 jump *label8 equal *tmp13 0
 label *label20
@@ -458,33 +458,33 @@ ubind UNIT
 sensor *tmp13 @unit @controlled
 jump *label20 notEqual *tmp13 0
 label *label8
-ucontrol flag 1 0 0 0 0
-ucontrol within 10 10 1 *tmp15 0
+ucontrol flag 1
+ucontrol within 10 10 1 *tmp15
 jump *label11 notEqual *tmp15 false
 label *label21
 print "Moving to start"
 printflush message1
-ucontrol move 10 10 0 0 0
-ucontrol within 10 10 1 *tmp15 0
+ucontrol move 10 10
+ucontrol within 10 10 1 *tmp15
 jump *label21 equal *tmp15 false
 label *label11
 print "Moving to destination"
 printflush message1
 set :start @time
-ucontrol move 10 .DY 0 0 0
-ucontrol within 10 .DY 1 *tmp18 0
+ucontrol move 10 .DY
+ucontrol within 10 .DY 1 *tmp18
 jump *label14 notEqual *tmp18 false
 label *label22
-ucontrol move 10 .DY 0 0 0
-ucontrol within 10 .DY 1 *tmp18 0
+ucontrol move 10 .DY
+ucontrol within 10 .DY 1 *tmp18
 jump *label22 equal *tmp18 false
 label *label14
 set :finish @time
 op sub *tmp24 10 .DY
-op abs *tmp25 *tmp24 0
+op abs *tmp25 *tmp24
 op div *tmp26 *tmp25 2
-ucontrol move 0 *tmp26 0 0 0
-ucontrol flag 0 0 0 0 0
+ucontrol move 0 *tmp26
+ucontrol flag 0
 op sub :elapsed :finish :start
 op div *tmp28 :distance :elapsed
 op idiv *tmp30 *tmp28 0.00001

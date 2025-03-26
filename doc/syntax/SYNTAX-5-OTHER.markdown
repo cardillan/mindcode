@@ -114,10 +114,13 @@ A more complex code can usually benefit from more optimization passes. On the ot
 This option controls the way remarks, generated through the [remark() function](SYNTAX-4-FUNCTIONS.markdown#remarks), are propagated to the compiled code. Remarks are written into the compiled code as `print` instructions. Possible values of the `remarks` option are:
 
 * `none`: remarks are suppressed in the compiled code - they do not appear there at all.
+* `comments`: remarks are output as mlog comments into the compiled code. Expressions in remarks are output as separate comments with the mlog name of the variable holding the value of the expression.
 * `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statement themselves aren't executed. This is the default value.
 * `active`: remarks are included in the compiled code and are executed, producing actual output to the text buffer.
 
-Passive remarks can be used for putting instructions or comments in the compiled code, or to mark a specific portion of the code. Remarks in a loop may help identifying individual iterations when the loop is unrolled, for example.
+Converting remarks to comments may improve code readability. Remarks in a loop may help identifying individual iterations when the loop is unrolled, for example. However, when the code is inserted into an mlog processor, the comments are not preserved.
+
+Passive remarks can be used for putting instructions or comments in the compiled code in a way which is still visible in the game UI.
 
 Active remarks can be used to easily add debugging output to a program that can be deactivated using a compiler option (potentially through a command line switch without modifying the source code).
 

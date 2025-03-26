@@ -735,25 +735,25 @@ print :block
 sensor *tmp5 :block @type
 jump *label7 notEqual *tmp5 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp5 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label11 notEqual *tmp5 @memory-bank
 set .MEMORY :block
 set .START_INDEX 264
 set .END_INDEX 511
 set .SIZE 248
-jump *label6 always 0 0
+jump *label6 always
 label *label11
 jump *label13 notEqual *tmp5 @memory-cell
 set .MEMORY :block
 set .START_INDEX 40
 set .END_INDEX 63
 set .SIZE 24
-jump *label6 always 0 0
+jump *label6 always
 label *label13
 jump *label16 equal *tmp5 @vault
 jump *label15 notEqual *tmp5 @container
@@ -767,7 +767,7 @@ set .B0 0
 set .R1 80
 set .G1 255
 set .B1 80
-jump *label6 always 0 0
+jump *label6 always
 label *label15
 jump *label18 equal *tmp5 @battery
 jump *label17 notEqual *tmp5 @battery-large
@@ -781,7 +781,7 @@ set .B0 0
 set .R1 255
 set .G1 255
 set .B1 80
-jump *label6 always 0 0
+jump *label6 always
 label *label17
 jump *label20 equal *tmp5 @liquid-tank
 jump *label19 notEqual *tmp5 @liquid-container
@@ -795,7 +795,7 @@ set .B0 192
 set .R1 192
 set .G1 192
 set .B1 255
-jump *label6 always 0 0
+jump *label6 always
 label *label19
 jump *label22 equal *tmp5 @power-node
 jump *label22 equal *tmp5 @power-node-large
@@ -825,7 +825,7 @@ op or *tmp9 *tmp7 *tmp8
 jump *label23 equal *tmp9 false
 print "\nNo memory or container."
 printflush .MESSAGE
-jump *label0 always 0 0
+jump *label0 always
 label *label23
 printflush .MESSAGE
 write .START_INDEX .MEMORY 0
@@ -840,7 +840,7 @@ read *tmp19 .MEMORY 1
 op max *tmp20 .START_INDEX *tmp19
 op min :index *tmp20 .END_INDEX
 set :nextTick @tick
-control enabled .SWITCH 0 0 0 0
+control enabled .SWITCH 0
 sensor *tmp25 .SWITCH @enabled
 jump __start__ notEqual *tmp25 0
 label *label39

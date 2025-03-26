@@ -613,33 +613,33 @@ getlink :block :n
 sensor *tmp5 :block @type
 jump *label7 notEqual *tmp5 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp5 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label11 notEqual *tmp5 @mass-driver
 sensor *tmp8 :block @firstItem
 jump *label14 notEqual *tmp8 @titanium
 set .TITANIUM :block
-jump *label6 always 0 0
+jump *label6 always
 label *label14
 jump *label16 notEqual *tmp8 @silicon
 set .SILICON :block
-jump *label6 always 0 0
+jump *label6 always
 label *label16
 jump *label18 notEqual *tmp8 @copper
 set .COPPER :block
-jump *label6 always 0 0
+jump *label6 always
 label *label18
 jump *label6 notEqual *tmp8 @lead
 set .LEAD :block
-jump *label6 always 0 0
+jump *label6 always
 label *label11
 jump *label22 notEqual *tmp5 @logic-display
 set .DISPLAY :block
-jump *label6 always 0 0
+jump *label6 always
 label *label22
 print "\n{0} is not supported."
 format :block
@@ -664,39 +664,39 @@ op or *tmp14 *tmp12 *tmp13
 op equal *tmp15 .LEAD null
 op or *tmp16 *tmp14 *tmp15
 jump *label0 notEqual *tmp16 false
-control enabled .SWITCH 0 0 0 0
+control enabled .SWITCH 0
 sensor *tmp26 .SWITCH @enabled
 jump __start__ notEqual *tmp26 0
 label *label28
 set :start @time
-draw clear 0 0 80 0 0 0
-draw color 255 255 255 255 0 0
-draw image 11 68 @titanium 16 0 0
-draw image 11 49 @silicon 16 0 0
-draw image 11 30 @copper 16 0 0
-draw image 11 11 @lead 16 0 0
-draw color 0 128 0 255 0 0
+draw clear 0 0 80
+draw color 255 255 255 255
+draw image 11 68 @titanium 16 0
+draw image 11 49 @silicon 16 0
+draw image 11 30 @copper 16 0
+draw image 11 11 @lead 16 0
+draw color 0 128 0 255
 sensor *tmp29 .TITANIUM @totalItems
 op mul *tmp30 *tmp29 0.28
-draw rect 20 61 *tmp30 14 0 0
+draw rect 20 61 *tmp30 14
 sensor *tmp31 .SILICON @totalItems
 op mul *tmp32 *tmp31 0.28
-draw rect 20 42 *tmp32 14 0 0
+draw rect 20 42 *tmp32 14
 sensor *tmp33 .COPPER @totalItems
 op mul *tmp34 *tmp33 0.28
-draw rect 20 23 *tmp34 14 0 0
+draw rect 20 23 *tmp34 14
 sensor *tmp35 .LEAD @totalItems
 op mul *tmp36 *tmp35 0.28
-draw rect 20 4 *tmp36 14 0 0
-draw color 0 255 0 255 0 0
-draw lineRect 20 61 56 14 0 0
-draw lineRect 20 42 56 14 0 0
-draw lineRect 20 23 56 14 0 0
-draw lineRect 20 4 56 14 0 0
+draw rect 20 4 *tmp36 14
+draw color 0 255 0 255
+draw lineRect 20 61 56 14
+draw lineRect 20 42 56 14
+draw lineRect 20 23 56 14
+draw lineRect 20 4 56 14
 drawflush .DISPLAY
 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
 op sub *tmp37 @time :start
-op floor *tmp38 *tmp37 0
+op floor *tmp38 *tmp37
 print *tmp38
 printflush .MESSAGE
 sensor *tmp26 .SWITCH @enabled

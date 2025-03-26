@@ -169,14 +169,14 @@ inline def chooseUnitType()
     while true do
         printflush(null);       // empty text buffer
         println("[gold]Looking for suitable unit type:[]");
-        remark("chooseUnitType: $UNIT_TYPE");
+        remark($"chooseUnitType: $UNIT_TYPE");
         if areUnitsAvailable(UNIT_TYPE, true) then
             return UNIT_TYPE;
         end;
 
         for type in @flare, @poly, @mega, @mono do
             if type != UNIT_TYPE then
-                remark("chooseUnitType: $type");
+                remark($"chooseUnitType: $type");
                 if areUnitsAvailable(type, true) then
                     printflush(null);
                     return type;

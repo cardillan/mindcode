@@ -10,6 +10,7 @@ import java.util.stream.Stream;
 @NullMarked
 public enum Remarks {
     NONE,
+    COMMENTS,
     PASSIVE,
     ACTIVE,
     ;

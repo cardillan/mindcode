@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.postprocess;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
@@ -23,8 +24,13 @@ public class LogicInstructionPrinter {
     public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
         final StringBuilder buffer = new StringBuilder();
         instructions.forEach((instruction) -> {
-            buffer.append(instruction.getMlogOpcode());
-            addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+            if (instruction instanceof RemarkInstruction rem) {
+                buffer.append("# ");
+                buffer.append(rem.getValue() instanceof LogicString str ? str.getValue() : rem.getValue().toMlog());
+            } else {
+                buffer.append(instruction.getMlogOpcode());
+                addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+            }
             buffer.append("\n");
         });
 

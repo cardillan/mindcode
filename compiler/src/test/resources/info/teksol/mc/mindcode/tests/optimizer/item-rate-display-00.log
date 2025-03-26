@@ -3845,7 +3845,7 @@ set FREQ 1000
 printflush message1
 print "Item Rate Display\n[gold]Initializing...[]\n"
 printflush message1
-draw stroke 1 0 0 0 0 0
+draw stroke 1
 op mul .SHIFT POSITION 30
 read *tmp4 MEMORY 256
 op sub :ptr *tmp4 .SHIFT
@@ -4047,14 +4047,14 @@ jump *label35 lessThan :n TOTAL
 label *label14
 label *label10
 op div :scale 150 :maximum
-op ceil *tmp29 :maximum 0
+op ceil *tmp29 :maximum
 print "\nMaximum: [green]{0}[]\nScale: [green]{0}[]"
 format *tmp29
-op floor *tmp30 :scale 0
+op floor *tmp30 :scale
 format *tmp30
-draw clear 0 0 80 0 0 0
-draw color 0 80 0 255 0 0
-draw rect 10 10 156 156 0 0
+draw clear 0 0 80
+draw color 0 80 0 255
+draw rect 10 10 156 156
 read *tmp32 MEMORY 256
 op sub :head *tmp32 .SHIFT
 jump *label15 greaterThanEq :head 256
@@ -4077,7 +4077,7 @@ label *label19
 op mul *tmp42 :value :scale
 op add :last 10 *tmp42
 set :newMax :value
-draw color 80 255 80 255 0 0
+draw color 80 255 80 255
 read :t MEMORY :tail
 read :h MEMORY :head
 op sub *tmp48 :value :t
@@ -4092,7 +4092,7 @@ op sub :tail 511 1
 label *label43
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 159 :last 154 :y 0 0
+draw line 159 :last 154 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4109,7 +4109,7 @@ op sub :tail 511 1
 label *label49
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 154 :last 149 :y 0 0
+draw line 154 :last 149 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4126,7 +4126,7 @@ op sub :tail 511 1
 label *label55
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 149 :last 144 :y 0 0
+draw line 149 :last 144 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4143,7 +4143,7 @@ op sub :tail 511 1
 label *label61
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 144 :last 139 :y 0 0
+draw line 144 :last 139 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4160,7 +4160,7 @@ op sub :tail 511 1
 label *label67
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 139 :last 134 :y 0 0
+draw line 139 :last 134 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4177,7 +4177,7 @@ op sub :tail 511 1
 label *label73
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 134 :last 129 :y 0 0
+draw line 134 :last 129 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4194,7 +4194,7 @@ op sub :tail 511 1
 label *label79
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 129 :last 124 :y 0 0
+draw line 129 :last 124 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4211,7 +4211,7 @@ op sub :tail 511 1
 label *label85
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 124 :last 119 :y 0 0
+draw line 124 :last 119 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4228,7 +4228,7 @@ op sub :tail 511 1
 label *label91
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 119 :last 114 :y 0 0
+draw line 119 :last 114 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4245,7 +4245,7 @@ op sub :tail 511 1
 label *label97
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 114 :last 109 :y 0 0
+draw line 114 :last 109 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4262,7 +4262,7 @@ op sub :tail 511 1
 label *label103
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 109 :last 104 :y 0 0
+draw line 109 :last 104 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4279,7 +4279,7 @@ op sub :tail 511 1
 label *label109
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 104 :last 99 :y 0 0
+draw line 104 :last 99 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4296,7 +4296,7 @@ op sub :tail 511 1
 label *label115
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 99 :last 94 :y 0 0
+draw line 99 :last 94 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4313,7 +4313,7 @@ op sub :tail 511 1
 label *label121
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 94 :last 89 :y 0 0
+draw line 94 :last 89 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4330,7 +4330,7 @@ op sub :tail 511 1
 label *label127
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 89 :last 84 :y 0 0
+draw line 89 :last 84 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4347,7 +4347,7 @@ op sub :tail 511 1
 label *label133
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 84 :last 79 :y 0 0
+draw line 84 :last 79 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4364,7 +4364,7 @@ op sub :tail 511 1
 label *label139
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 79 :last 74 :y 0 0
+draw line 79 :last 74 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4381,7 +4381,7 @@ op sub :tail 511 1
 label *label145
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 74 :last 69 :y 0 0
+draw line 74 :last 69 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4398,7 +4398,7 @@ op sub :tail 511 1
 label *label151
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 69 :last 64 :y 0 0
+draw line 69 :last 64 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4415,7 +4415,7 @@ op sub :tail 511 1
 label *label157
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 64 :last 59 :y 0 0
+draw line 64 :last 59 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4432,7 +4432,7 @@ op sub :tail 511 1
 label *label163
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 59 :last 54 :y 0 0
+draw line 59 :last 54 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4449,7 +4449,7 @@ op sub :tail 511 1
 label *label169
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 54 :last 49 :y 0 0
+draw line 54 :last 49 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4466,7 +4466,7 @@ op sub :tail 511 1
 label *label175
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 49 :last 44 :y 0 0
+draw line 49 :last 44 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4483,7 +4483,7 @@ op sub :tail 511 1
 label *label181
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 44 :last 39 :y 0 0
+draw line 44 :last 39 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4500,7 +4500,7 @@ op sub :tail 511 1
 label *label187
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 39 :last 34 :y 0 0
+draw line 39 :last 34 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4517,7 +4517,7 @@ op sub :tail 511 1
 label *label193
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 34 :last 29 :y 0 0
+draw line 34 :last 29 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4534,7 +4534,7 @@ op sub :tail 511 1
 label *label199
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 29 :last 24 :y 0 0
+draw line 29 :last 24 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4551,7 +4551,7 @@ op sub :tail 511 1
 label *label205
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 24 :last 19 :y 0 0
+draw line 24 :last 19 :y
 set :last :y
 op max :newMax :newMax :value
 read :t MEMORY :tail
@@ -4560,10 +4560,10 @@ op sub *tmp48 :value :t
 op add :value *tmp48 :h
 op mul *tmp56 :value :scale
 op add :y 10 *tmp56
-draw line 19 :last 14 :y 0 0
+draw line 19 :last 14 :y
 op max :newMax :newMax :value
-draw color 255 255 255 255 0 0
-draw lineRect 10 10 156 156 0 0
+draw color 255 255 255 255
+draw lineRect 10 10 156 156
 op max :maximum :newMax :maximum
 op mul *tmp61 3 :newMax
 jump *label29 greaterThanEq *tmp61 :maximum
@@ -4571,11 +4571,11 @@ op mul :maximum 1.5 :newMax
 label *label29
 write :maximum COORD POSITION
 op sub *tmp66 @time :start
-op floor *tmp67 *tmp66 0
+op floor *tmp67 *tmp66
 print "\n[lightgray]Loop time: {0} ms"
 format *tmp67
 op div *tmp68 @time FREQ
-op ceil *tmp69 *tmp68 0
+op ceil *tmp69 *tmp68
 op mul :wait FREQ *tmp69
 set :loops 0
 jump *label33 greaterThanEq @time :wait
@@ -4590,4 +4590,4 @@ printflush message1
 sensor *tmp18 switch1 @enabled
 jump *label214 equal *tmp18 0
 label *label9
-control enabled switch1 0 0 0 0
+control enabled switch1 0

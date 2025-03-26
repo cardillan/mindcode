@@ -45,7 +45,7 @@ public class GlobalContext implements FunctionContext {
     }
 
     @Override
-    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean allowRedefinition) {
+    public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean noinit, boolean allowRedefinition) {
         throw new MindcodeInternalError("Trying to register a local variable in global context:" + identifier);
     }
 

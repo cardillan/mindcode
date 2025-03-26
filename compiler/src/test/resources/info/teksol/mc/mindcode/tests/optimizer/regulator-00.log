@@ -1161,18 +1161,18 @@ format :block
 sensor *tmp5 :block @type
 jump *label7 notEqual *tmp5 @message
 set .MESSAGE :block
-jump *label6 always 0 0
+jump *label6 always
 label *label7
 jump *label9 notEqual *tmp5 @switch
 set .SWITCH :block
-jump *label6 always 0 0
+jump *label6 always
 label *label9
 jump *label12 equal *tmp5 @sorter
 jump *label12 equal *tmp5 @inverted-sorter
 jump *label11 notEqual *tmp5 @unloader
 label *label12
 set .SORTER :block
-jump *label6 always 0 0
+jump *label6 always
 label *label11
 jump *label14 equal *tmp5 @vault
 jump *label14 equal *tmp5 @container
@@ -1184,7 +1184,7 @@ set .CONTAINER :block
 set .SENSOR @totalItems
 set .MAXIMUM @itemCapacity
 op add .START :n 1
-jump *label6 always 0 0
+jump *label6 always
 label *label13
 jump *label16 equal *tmp5 @liquid-tank
 jump *label16 equal *tmp5 @liquid-container
@@ -1194,7 +1194,7 @@ set .CONTAINER :block
 set .SENSOR @totalLiquids
 set .MAXIMUM @liquidCapacity
 op add .START :n 1
-jump *label6 always 0 0
+jump *label6 always
 label *label15
 jump *label18 equal *tmp5 @battery
 jump *label17 notEqual *tmp5 @battery-large
@@ -1203,7 +1203,7 @@ set .CONTAINER :block
 set .SENSOR @totalPower
 set .MAXIMUM @powerCapacity
 op add .START :n 1
-jump *label6 always 0 0
+jump *label6 always
 label *label17
 jump *label20 equal *tmp5 @power-node
 jump *label20 equal *tmp5 @power-node-large
@@ -1236,7 +1236,7 @@ jump *label27 equal .ON false
 set .ACTIVE_TEXT "\nCurrently active:[green]"
 label *label27
 set .CYCLES 0
-control enabled .SWITCH 0 0 0 0
+control enabled .SWITCH 0
 sensor *tmp23 .SWITCH @enabled
 jump __start__ notEqual *tmp23 0
 label *label54
@@ -1249,7 +1249,7 @@ jump *label31 equal *tmp29 false
 set :item .SENSOR
 print "Measuring [gold]total[] in "
 print .CONTAINER
-jump *label32 always 0 0
+jump *label32 always
 label *label31
 print "Measuring [gold]{0}[] in "
 format :item
@@ -1267,7 +1267,7 @@ op xor .ON .INVERTED true
 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
 jump *label34 equal .ON false
 set .ACTIVE_TEXT "\nCurrently active:[green]"
-jump *label34 always 0 0
+jump *label34 always
 label *label33
 jump *label40 lessThan :pct PCT_HIGH
 jump *label43 equal .STATE false
@@ -1287,7 +1287,7 @@ jump *label47 equal .INVERTED false
 print "\nActivate above [green]{0}%[]\nDeactivate below [salmon]{0}%[]"
 format PCT_HIGH
 format PCT_LOW
-jump *label48 always 0 0
+jump *label48 always
 label *label47
 print "\nActivate below [green]{0}%[]\nDeactivate above [salmon]{0}%[]"
 format PCT_LOW
@@ -1298,7 +1298,7 @@ set :n .START
 jump *label51 greaterThanEq .START @links
 label *label53
 getlink :block :n
-control enabled :block .ON 0 0 0
+control enabled :block .ON
 print "\n    "
 print :block
 op add :n :n 1
@@ -1307,7 +1307,7 @@ label *label51
 print "[]\n# of cycles: {0}\n[lightgray]Loop: {0} ms"
 format .CYCLES
 op sub *tmp54 @time :start
-op floor *tmp55 *tmp54 0
+op floor *tmp55 *tmp54
 format *tmp55
 printflush .MESSAGE
 sensor *tmp23 .SWITCH @enabled
