@@ -2,7 +2,6 @@ package info.teksol.mindcode.cmdline;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.profile.CompilerProfile;
@@ -63,7 +62,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
         files.addArgument("--excerpt")
-                .help("Allows to specify a portion of the input file as input, parts outside the specified excerpt are ignored. " +
+                .help("Allows to specify a portion of the input file for processing, parts outside the specified excerpt are ignored. " +
                       "The excerpt needs to be specified as 'line:column-line:column' (':column' may be omitted if it is equal to 1), " +
                       "giving two positions inside the main input file separated by a dash. The start position must precede " +
                       "the end position.")
@@ -75,6 +74,8 @@ public class CompileMindcodeAction extends ActionHandler {
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate())
                 .nargs("?")
                 .setDefault(new File("-"));
+
+        addInputOutputOptions(files, defaults);
 
         files.addArgument("-a", "--append")
                 .help("Additional Mindcode source file to be compiled along with the input file. Such additional files may " +
@@ -93,29 +94,36 @@ public class CompileMindcodeAction extends ActionHandler {
     }
 
     void addRunOptions(Subparser subparser, CompilerProfile defaults) {
-        ArgumentGroup runOptions = subparser.addArgumentGroup("run options")
+        ArgumentGroup container = subparser.addArgumentGroup("run options")
                 .description("""
                         Options to specify if and how to run the compiled code on an emulated processor. The emulated \
                         processor is much faster than Mindustry processors, but can't run instructions which obtain information \
                         from the Mindustry World. Sole exceptions are memory cells (cell1 to cell9) and memory banks \
                         (bank1 to bank9), which can be read and written.""");
 
-        runOptions.addArgument("--run")
+        createArgument(container, defaults,
+                CompilerProfile::isRun,
+                (profile, arguments, name) -> profile.setRun(arguments.getBoolean(name)),
+                "--run")
                 .help("run the compiled code on an emulated processor.")
                 .action(Arguments.storeTrue());
 
-        runOptions.addArgument("--run-steps")
+        createArgument(container, defaults,
+                CompilerProfile::getStepLimit,
+                (profile, arguments, name) -> profile.setStepLimit(arguments.getInt(name)),
+                "--run-steps")
                 .help("the maximum number of instruction executions to emulate, the execution stops when this limit is reached.")
                 .choices(Arguments.range(1, 1_000_000_000))
-                .type(Integer.class)
-                .setDefault(defaults.getStepLimit());
+                .type(Integer.class);
 
         for (ExecutionFlag flag : ExecutionFlag.LIST) {
             if (flag.isSettable()) {
-                runOptions.addArgument("--" + flag.getOptionName())
+                createArgument(container, defaults,
+                        profile -> profile.getExecutionFlags().contains(flag),
+                        (profile, arguments, name) -> profile.setExecutionFlag(flag, arguments.getBoolean(name)),
+                        "--" + flag.getOptionName())
                         .help(flag.getDescription())
-                        .type(Arguments.booleanType())
-                        .dest(flag.name());
+                        .type(Arguments.booleanType());
             }
         }
     }
@@ -139,7 +147,7 @@ public class CompileMindcodeAction extends ActionHandler {
 
         final File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
         final File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
-        final PositionFormatter positionFormatter = SourcePosition::formatForIde;
+        final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
 
         ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);
         MindcodeCompiler compiler = new MindcodeCompiler(messageLogger, compilerProfile, inputFiles);

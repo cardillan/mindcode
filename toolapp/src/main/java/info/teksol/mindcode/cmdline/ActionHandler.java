@@ -12,10 +12,8 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
-import net.sourceforge.argparse4j.inf.ArgumentGroup;
-import net.sourceforge.argparse4j.inf.Namespace;
-import net.sourceforge.argparse4j.inf.Subparser;
-import net.sourceforge.argparse4j.inf.Subparsers;
+import net.sourceforge.argparse4j.inf.*;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -24,10 +22,14 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 abstract class ActionHandler {
+    private final List<BiConsumer<CompilerProfile, Namespace>> optionSetters = new ArrayList<>();
 
     abstract Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults);
 
@@ -39,72 +41,118 @@ abstract class ActionHandler {
         addDebugOptions(subparser, defaults);
     }
 
+    protected interface OptionSetter {
+        void set(CompilerProfile profile, Namespace arguments, String optionName);
+    }
+
+    protected Argument createArgument(ArgumentContainer container, CompilerProfile defaults,
+            Function<CompilerProfile, Object> optionGetter, OptionSetter optionSetter, String... nameOrFlags) {
+        Argument argument = container.addArgument(nameOrFlags);
+        String optionName = extractOptionName(nameOrFlags);
+        optionSetters.add((profile, arguments) -> optionSetter.set(profile, arguments, optionName));
+        return argument.dest(optionName).setDefault(optionGetter.apply(defaults));
+    }
+
+    protected String extractOptionName(String... nameOrFlags) {
+        return nameOrFlags[nameOrFlags.length - 1].substring(2);
+    }
+
     void addCompilerOptions(Subparser subparser, CompilerProfile defaults) {
-        ArgumentGroup compiler = subparser.addArgumentGroup("compiler options");
+        ArgumentGroup container = subparser.addArgumentGroup("compiler options");
 
-        compiler.addArgument("-y", "--syntax")
-                .help("specifies syntactic mode used to compile the source code")
-                .type(Arguments.caseInsensitiveEnumType(SyntacticMode.class))
-                .setDefault(defaults.getSyntacticMode());
-
-        compiler.addArgument("-t", "--target")
+        createArgument(container, defaults,
+                CompilerProfile::getTarget,
+                (profile, arguments, name) -> profile.setTarget(arguments.get(name)),
+                "-t", "--target")
                 .help("selects target processor version and edition ('w' suffix specifies the world processor)")
                 .type(String.class)
-                .choices(new CaseInsensitiveChoices(ProcessorVersion.getPossibleVersions()))
-                .setDefault("7w");
+                .choices(new CaseInsensitiveChoices(ProcessorVersion.getPossibleVersions()));
 
-        compiler.addArgument("-i", "--instruction-limit")
+        createArgument(container, defaults,
+                CompilerProfile::getSyntacticMode,
+                (profile, arguments, name) -> profile.setSyntacticMode(arguments.get(name)),
+                "-y", "--syntax")
+                .help("specifies syntactic mode used to compile the source code")
+                .type(LowerCaseEnumArgumentType.forEnum(SyntacticMode.class));
+
+        createArgument(container, defaults,
+                CompilerProfile::getInstructionLimit,
+                (profile, arguments, name) -> profile.setInstructionLimit(arguments.getInt(name)),
+                "-i", "--instruction-limit")
                 .help("sets the maximal number of instructions for the speed optimizations")
-                .choices(Arguments.range(1, CompilerProfile.MAX_INSTRUCTIONS))
                 .type(Integer.class)
-                .setDefault(CompilerProfile.DEFAULT_INSTRUCTIONS);
+                .choices(Arguments.range(1, CompilerProfile.MAX_INSTRUCTIONS));
 
-        compiler.addArgument("-e", "--passes")
+        createArgument(container, defaults,
+                CompilerProfile::getGoal,
+                (profile, arguments, name) -> profile.setGoal(arguments.get(name)),
+                "-g", "--goal")
+                .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
+                .type(LowerCaseEnumArgumentType.forEnum(GenerationGoal.class));
+
+        createArgument(container, defaults,
+                CompilerProfile::getOptimizationPasses,
+                (profile, arguments, name) -> profile.setOptimizationPasses(arguments.getInt(name)),
+                "-e", "--passes")
                 .help("sets maximal number of optimization passes to be made")
                 .choices(Arguments.range(1, CompilerProfile.MAX_PASSES))
-                .type(Integer.class)
-                .setDefault(CompilerProfile.DEFAULT_CMDLINE_PASSES);
+                .type(Integer.class);
 
-        compiler.addArgument("-g", "--goal")
-                .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
-                .type(Arguments.caseInsensitiveEnumType(GenerationGoal.class))
-                .setDefault(defaults.getGoal());
-
-        compiler.addArgument("-r", "--remarks")
+        createArgument(container, defaults,
+                CompilerProfile::getRemarks,
+                (profile, arguments, name) -> profile.setRemarks(arguments.get(name)),
+                "-r", "--remarks")
                 .help("controls remarks propagation to the compiled code: none (remarks are removed), " +
-                        "passive (remarks are not executed), or active (remarks are printed)")
-                .type(Arguments.caseInsensitiveEnumType(Remarks.class))
-                .setDefault(defaults.getRemarks());
+                      "passive (remarks are not executed), or active (remarks are printed)")
+                .type(LowerCaseEnumArgumentType.forEnum(Remarks.class));
 
-        compiler.addArgument("--function-prefix")
+        createArgument(container, defaults,
+                CompilerProfile::getBoundaryChecks,
+                (profile, arguments, name) -> profile.setBoundaryChecks(arguments.get(name)),
+                "--boundary-checks")
+                .help("governs the runtime checks generated by compiler to catch indexes out of bounds when " +
+                      "accessing internal array elements")
+                .type(LowerCaseEnumArgumentType.forEnum(RuntimeChecks.class));
+
+        createArgument(container, defaults,
+                CompilerProfile::isShortFunctionPrefix,
+                (profile, arguments, name) -> profile.setShortFunctionPrefix(arguments.getBoolean(name)),
+                "--function-prefix")
                 .help("specifies the how the function prefix of local variables is generated (either a short common prefix " +
                       "for all functions, or a potentially long prefix derived from function name)")
-                .type(Arguments.booleanType("short", "long"))
-                .setDefault(defaults.isShortFunctionPrefix());
+                .type(Arguments.booleanType("short", "long"));
 
-        compiler.addArgument("--link-guards")
+        createArgument(container, defaults,
+                CompilerProfile::isLinkedBlockGuards,
+                (profile, arguments, name) -> profile.setLinkedBlockGuards(arguments.getBoolean(name)),
+                "--link-guards")
                 .help("when set to true, generates code to ensure each declared linked block is linked " +
                       "to the processor before the program runs")
-                .type(Arguments.booleanType())
-                .setDefault(defaults.isLinkedBlockGuards());
+                .type(Arguments.booleanType());
 
-        compiler.addArgument("--boundary-checks")
-                .help("governs the runtime checks generated by compiler to catch indexes out of bounds when " +
-                        "accessing internal array elements")
-                .type(Arguments.caseInsensitiveEnumType(RuntimeChecks.class))
-                .setDefault(defaults.getBoundaryChecks());
+        createArgument(container, defaults,
+                CompilerProfile::isSignature,
+                (profile, arguments, name) -> profile.setSignature(arguments.getBoolean(name)),
+                "--no-signature")
+                .help("prevents appending a signature \"" + CompilerProfile.SIGNATURE + "\" at the end of the final code")
+                .action(Arguments.storeFalse());
 
-        compiler.addArgument("--printflush")
+        createArgument(container, defaults,
+                CompilerProfile::isAutoPrintflush,
+                (profile, arguments, name) -> profile.setAutoPrintflush(arguments.getBoolean(name)),
+                "--printflush")
                 .help("when set to true, automatically adds a 'printflush message' instruction at the end of the program if one is missing")
-                .type(Arguments.booleanType())
-                .setDefault(defaults.isAutoPrintflush());
+                .type(Arguments.booleanType());
 
-        compiler.addArgument("--sort-variables")
+        createArgument(container, defaults,
+                CompilerProfile::getSortVariables,
+                (profile, arguments, name) -> profile.setSortVariables(normalizeSortVariables(arguments.get(name))),
+                "--sort-variables")
                 .help("prepends the final code with instructions which ensure variables are created inside the processor" +
                       " in a defined order. The variables are sorted according to their categories in order, and then alphabetically. " +
                       " Category ALL represents all remaining, not-yet processed variables. When --sort-variables is given without" +
                       " specifying any category, " + SortCategory.usefulCategories() + " are used.")
-                .type(Arguments.caseInsensitiveEnumType(SortCategory.class))
+                .type(LowerCaseEnumArgumentType.forEnum(SortCategory.class))
                 .nargs("*")
                 .setDefault(List.of(SortCategory.NONE));
         /*
@@ -112,87 +160,141 @@ abstract class ActionHandler {
                 .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
                         "aliased (a memory block may be accessed through different variables), or restricted " +
                         "(a memory block will never be accessed through different variables)")
-                .type(Arguments.caseInsensitiveEnumType(MemoryModel.class))
+                .type(LowerCaseEnumArgumentType.forEnum(MemoryModel.class))
                 .setDefault(defaults.getMemoryModel());
         */
+    }
 
-        compiler.addArgument("--no-signature")
-                .help("prevents appending a signature \"" + CompilerProfile.SIGNATURE + "\" at the end of the final code")
-                .action(Arguments.storeTrue());
+    private List<SortCategory> normalizeSortVariables(@Nullable List<SortCategory> sortVariables) {
+        if (sortVariables == null || sortVariables.isEmpty()) {
+            return SortCategory.getAllCategories();
+        } else if (sortVariables.equals(List.of(SortCategory.NONE))) {
+            return List.of();
+        } else {
+            return sortVariables;
+        }
     }
 
     void addOptimizationOptions(Subparser subparser, CompilerProfile defaults) {
-        ArgumentGroup optimizations = subparser.addArgumentGroup("optimization levels")
+        ArgumentGroup container = subparser.addArgumentGroup("optimization levels")
                 .description("Options to specify global and individual optimization levels. " +
-                        "Individual optimizers use global level when not explicitly set. Available optimization levels " +
-                        "are {none,basic,advanced}.");
+                             "Individual optimizers use global level when not explicitly set. Available optimization levels " +
+                             "are {none,basic,advanced}.");
 
-        optimizations.addArgument("-o", "--optimization")
+        createArgument(container, defaults,
+                profile -> OptimizationLevel.EXPERIMENTAL,
+                (profile, arguments, name) -> profile.setAllOptimizationLevels(arguments.get(name)),
+                "-o", "--optimization")
                 .help("sets global optimization level for all optimizers")
-                .type(Arguments.caseInsensitiveEnumType(OptimizationLevel.class))
-                .metavar("LEVEL")
-                .setDefault(OptimizationLevel.EXPERIMENTAL);
+                .type(LowerCaseEnumArgumentType.forEnum(OptimizationLevel.class))
+                .metavar("LEVEL");
 
         for (Optimization optimization : Optimization.LIST) {
-            optimizations.addArgument("--" + optimization.getOptionName())
+            createArgument(container, defaults,
+                    profile -> null,
+                    (profile, arguments, name) -> {
+                        OptimizationLevel value = arguments.get(name);
+                        if (value != null) {
+                            profile.setOptimizationLevel(optimization, value);
+                        }
+                    },
+                    "--" + optimization.getOptionName())
                     .help("optimization level of " + optimization.getDescription())
-                    .type(Arguments.caseInsensitiveEnumType(OptimizationLevel.class))
-                    .dest(optimization.name())
+                    .type(LowerCaseEnumArgumentType.forEnum(OptimizationLevel.class))
                     .metavar("LEVEL");
         }
     }
 
+    void addInputOutputOptions(ArgumentContainer container, CompilerProfile defaults) {
+        createArgument(container, defaults,
+                CompilerProfile::getFileReferences,
+                (profile, arguments, name) -> profile.setFileReferences(arguments.get(name)),
+                "--file-references")
+                .help("specifies the format in which a reference to a location in a source file is output on console and into the log")
+                .type(LowerCaseEnumArgumentType.forEnum(FileReferences.class));
+    }
+
     void addDebugOptions(Subparser subparser, CompilerProfile defaults) {
-        ArgumentGroup debug = subparser.addArgumentGroup("debug output options");
+        ArgumentGroup container = subparser.addArgumentGroup("debug output options");
 
-        debug.addArgument("-p", "--parse-tree")
+        createArgument(container, defaults,
+                CompilerProfile::getParseTreeLevel,
+                (profile, arguments, name) -> profile.setParseTreeLevel(arguments.getInt(name)),
+                "-p", "--parse-tree")
                 .help("sets the detail level of parse tree output into the log file, 0 = off")
-                .choices(Arguments.range(0, 2))
                 .type(Integer.class)
-                .setDefault(defaults.getParseTreeLevel());
+                .choices(Arguments.range(0, 2));
 
-        debug.addArgument("-d", "--debug-messages")
+        createArgument(container, defaults,
+                CompilerProfile::getDebugLevel,
+                (profile, arguments, name) -> profile.setDebugLevel(arguments.getInt(name)),
+                "-d", "--debug-messages")
                 .help("sets the detail level of debug messages, 0 = off")
                 .choices(Arguments.range(0, 3))
                 .type(Integer.class)
                 .setDefault(defaults.getDebugLevel());
 
-        debug.addArgument("-u", "--print-unresolved")
+        createArgument(container, defaults,
+                CompilerProfile::getFinalCodeOutput,
+                (profile, arguments, name) -> profile.setFinalCodeOutput(arguments.get(name)),
+                "-u", "--print-unresolved")
                 .help("activates output of the unresolved code (before virtual instructions resolution) of given type" +
-                        " (instruction numbers are included in the output)")
-                .type(Arguments.caseInsensitiveEnumType(FinalCodeOutput.class))
+                      " (instruction numbers are included in the output)")
+                .type(LowerCaseEnumArgumentType.forEnum(FinalCodeOutput.class))
                 .nargs("?")
-                .setConst(FinalCodeOutput.PLAIN)
-                .setDefault(defaults.getFinalCodeOutput());
+                .setConst(FinalCodeOutput.PLAIN);
 
-        debug.addArgument("-s", "--stacktrace")
-                .help("prints stack trace into stderr when an exception occurs")
+        createArgument(container, defaults,
+                CompilerProfile::isPrintStackTrace,
+                (profile, arguments, name) -> profile.setPrintStackTrace(arguments.getBoolean(name)),
+                "-s", "--stacktrace")
+                .help("outputs a stack trace onto stderr when an unhandled exception occurs")
                 .action(Arguments.storeTrue());
     }
 
-    static CompilerProfile createCompilerProfile(Namespace arguments) {
+    protected CompilerProfile createCompilerProfile(Namespace arguments) {
+        CompilerProfile profile = CompilerProfile.fullOptimizations(false);
+        for (BiConsumer<CompilerProfile, Namespace> setter : optionSetters) {
+            setter.accept(profile, arguments);
+        }
+        return profile;
+    }
+
+    protected CompilerProfile createCompilerProfileX(Namespace arguments) {
         CompilerProfile profile = CompilerProfile.fullOptimizations(false);
 
-        // Setup optimization levels
+        //profile.setMemoryModel(arguments.get("memory_model"));
+        profile.setAutoPrintflush(arguments.getBoolean("printflush"));
+        profile.setBoundaryChecks(arguments.get("boundary_checks"));
+        profile.setDebugLevel(arguments.getInt("debug_messages"));
+
+        ExecutionFlag.LIST.stream()
+                .filter(flag -> arguments.get(flag.name()) != null)
+                .forEachOrdered(flag -> profile.setExecutionFlag(flag, arguments.get(flag.name())));
+
+        profile.setFileReferences(arguments.get("file_references"));
+        profile.setFinalCodeOutput(arguments.get("print_unresolved"));
+        profile.setGoal(arguments.get("goal"));
+        profile.setInstructionLimit(arguments.get("instruction_limit"));
+        profile.setLinkedBlockGuards(arguments.getBoolean("link_guards"));
+
         profile.setAllOptimizationLevels(arguments.get("optimization"));
         Optimization.LIST.stream()
                 .filter(opt -> arguments.get(opt.name()) != null)
                 .forEachOrdered(opt -> profile.setOptimizationLevel(opt, arguments.get(opt.name())));
+
+        profile.setOptimizationPasses(arguments.get("passes"));
+        profile.setParseTreeLevel(arguments.getInt("parse_tree"));
+        profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
 
         String target = arguments.getString("target").toLowerCase();
         String processor = target.endsWith("w") ? target.substring(0, target.length() - 1) : target;
         ProcessorEdition edition = target.endsWith("w") ? ProcessorEdition.W : ProcessorEdition.S;
         profile.setProcessorVersionEdition(ProcessorVersion.byCode(processor), edition);
 
-        profile.setParseTreeLevel(arguments.getInt("parse_tree"));
-        profile.setDebugLevel(arguments.getInt("debug_messages"));
-        profile.setInstructionLimit(arguments.get("instruction_limit"));
-        profile.setOptimizationPasses(arguments.get("passes"));
-        profile.setGoal(arguments.get("goal"));
         profile.setRemarks(arguments.get("remarks"));
-        //profile.setMemoryModel(arguments.get("memory_model"));
-        profile.setFinalCodeOutput(arguments.get("print_unresolved"));
-        profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
+        profile.setShortFunctionPrefix(arguments.getBoolean("function_prefix"));
+        profile.setSignature(!arguments.getBoolean("no_signature"));
 
         List<SortCategory> sortVariables = arguments.get("sort_variables");
         if (sortVariables == null || sortVariables.isEmpty()) {
@@ -203,18 +305,12 @@ abstract class ActionHandler {
             profile.setSortVariables(sortVariables);
         }
 
-        if (arguments.getBoolean("no_signature")) {
-            profile.setSignature(false);
-        }
+        profile.setSyntacticMode(arguments.get("syntax"));
 
         if (arguments.get("run") != null) {
             profile.setRun(arguments.getBoolean("run"));
             profile.setStepLimit(arguments.getInt("run_steps"));
         }
-
-        ExecutionFlag.LIST.stream()
-                .filter(flag -> arguments.get(flag.name()) != null)
-                .forEachOrdered(flag -> profile.setExecutionFlag(flag, arguments.get(flag.name())));
 
         return profile;
     }

@@ -293,6 +293,7 @@ The `remark()` function has the same syntax as the `print()` function and suppor
 Example:
 
 ```Mindcode
+#set remarks = passive;
 remark("Configurable options:");
 param MIN = 10;
 param MAX = 100;
@@ -352,6 +353,7 @@ As you can see, remarks produced by two different `remark()` function calls are 
 If a region of code is unreachable and is optimized away, the remarks are also stripped:
 
 ```Mindcode
+#set remarks = passive;
 const DEBUG = false;
 
 if DEBUG then
@@ -407,6 +409,7 @@ end;
 If the enhanced comment is used at the end of a line containing a complete statement, the generated output is moved in front of the first such statement:
 
 ```Mindcode
+#set remarks = passive;
 param MIN = 10;       /// Minimal value
 param MAX = 100;      /// Maximal value
 

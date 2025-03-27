@@ -1,11 +1,10 @@
 package info.teksol.mc.profile;
 
+import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @NullMarked
 public enum GenerationGoal {
@@ -17,9 +16,7 @@ public enum GenerationGoal {
     private static final Map<String, GenerationGoal> VALUE_MAP = createValueMap();
 
     private static Map<String, GenerationGoal> createValueMap() {
-        return Stream.of(GenerationGoal.values())
-                .collect(Collectors.toMap(e -> e.name().toLowerCase(),
-                        e -> e));
+        return EnumUtils.createValueMap(values());
     }
 
     public static @Nullable GenerationGoal byName(String level) {

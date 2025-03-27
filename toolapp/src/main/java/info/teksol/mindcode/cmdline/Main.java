@@ -88,6 +88,14 @@ public class Main {
             handler.handle(namespace);
         }
 
+        public CompilerProfile createCompilerProfile(Namespace arguments) {
+            return handler.createCompilerProfile(arguments);
+        }
+
+        ActionHandler getHandler() {
+            return handler;
+        }
+
         static Action fromShortcut(String shortcut) {
             for (Action a : Action.values()) {
                 if (shortcut.equals(a.shortcut)) {

@@ -8,12 +8,17 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
+* Fixed some command-line options not having an effect in the command-line tool ([#231](https://github.com/cardillan/mindcode/issues/231)).
+
 ### Added
 
 * Added a new remarks mode - `comments`. In this mode, remarks are compiled as mlog comments (`# comment`).
+* Added a new [`--file-references` command-line option](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#file-references).
+* Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
 
 ### Changed
 
+* Underscores in command-line options were changed to hyphens by default. For backwards compatibility, the command-line parser still recognizes option names with underscores.      
 * The `noinit` modifier is no longer disallowed for local variables.
 
 ## 3.2.1 - 2025-03-23

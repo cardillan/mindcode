@@ -1,11 +1,10 @@
 package info.teksol.mc.profile;
 
+import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @NullMarked
 public enum Remarks {
@@ -18,9 +17,7 @@ public enum Remarks {
     private static final Map<String, Remarks> VALUE_MAP = createValueMap();
 
     private static Map<String, Remarks> createValueMap() {
-        return Stream.of(Remarks.values())
-                .collect(Collectors.toMap(e -> e.name().toLowerCase(),
-                        e -> e));
+        return EnumUtils.createValueMap(values());
     }
 
     public static @Nullable Remarks byName(String level) {

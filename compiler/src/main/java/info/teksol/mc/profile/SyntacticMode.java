@@ -1,11 +1,10 @@
 package info.teksol.mc.profile;
 
+import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @NullMarked
 public enum SyntacticMode {
@@ -17,9 +16,7 @@ public enum SyntacticMode {
     private static final Map<String, SyntacticMode> VALUE_MAP = createValueMap();
 
     private static Map<String, SyntacticMode> createValueMap() {
-        return Stream.of(SyntacticMode.values())
-                .collect(Collectors.toMap(e -> e.name().toLowerCase(),
-                        e -> e));
+        return EnumUtils.createValueMap(values());
     }
 
     public static @Nullable SyntacticMode byName(String level) {

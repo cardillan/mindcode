@@ -1,5 +1,6 @@
 package info.teksol.mc.profile;
 
+import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -31,7 +32,7 @@ public enum SortCategory {
     private static final List<SortCategory> ALL_CATEGORIES = List.of(values());
 
     private static Map<String, SortCategory> createValueMap() {
-        return Arrays.stream(values()).collect(Collectors.toMap(v -> v.name().toLowerCase(), v -> v));
+        return EnumUtils.createValueMap(values());
     }
 
     public static @Nullable SortCategory byName(String category) {

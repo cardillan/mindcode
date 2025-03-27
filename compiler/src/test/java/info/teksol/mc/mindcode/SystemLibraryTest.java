@@ -2,17 +2,13 @@ package info.teksol.mc.mindcode;
 
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.processor.Assertion;
 import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
-import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mc.profile.FinalCodeOutput;
-import info.teksol.mc.profile.Remarks;
-import info.teksol.mc.profile.SyntacticMode;
+import info.teksol.mc.profile.*;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
@@ -114,7 +110,7 @@ public class SystemLibraryTest {
 
         String messages = messageConsumer.getMessages().stream()
                 .filter(MindcodeMessage::isStable)
-                .map(m -> m.formatMessage(SourcePosition::formatForIde))
+                .map(m -> m.formatMessage(sp -> sp.formatForIde(FileReferences.WINDOWS_URI)))
                 .collect(Collectors.joining("\n"));
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + "-" + level.name().toLowerCase() + ".log"),
                 normalizeLineEndings(messages), StandardCharsets.UTF_8);

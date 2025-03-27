@@ -279,7 +279,7 @@ building = ulocate(:building, :core, enemy, out outx, out outy, out found);
 ```
 
 > [!NOTE]
-> Mlog keywords are prepended with a colon in Mindcode, but appear without the colon in mlog. On the other hand, names of local variables in Mindcode are prepended with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.  
+> Mlog keywords are prepended with a colon in Mindcode, but appear without the colon in mlog. On the other hand, names of local variables in Mindcode have no prefix, but are prepended with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.  
 
 Mlog keywords can appear in these contexts in Mindcode:
 
@@ -344,9 +344,9 @@ If the result of a compile-time evaluated expression lies within the range of co
 
 Mindcode supports character literals. These consists of a single character enclosed in single quotes: `'a'`. It is possible to use both single- and double quotes in a character literal, i.e. `'\''` and `'"'` respectively.
 
-Character literals have a numeric value equal to the ASCII value of the enclosed character. When converting the literal to mlog, the numeric value is used, as Mindustry Logic doesn't support character literals - `'A'` is equivalent to `65`, for example.
+Character literals have a numeric value equal to the ASCII value of the enclosed character. When converting the literal to mlog, the numeric value is used, as Mindustry Logic doesn't support character literals - `'A'` is equivalent to `65`, `'B'` to `66`, and so on.
 
-Character literals are most useful with the Mindustry Logic 8 `printchar` instruction, for example:
+Character literals are most useful when combined with the Mindustry Logic 8 `printchar` instruction:
 
 ```Mindcode
 #set target = 8;
@@ -357,7 +357,7 @@ for ch in 'A' .. 'Z' do
 end;
 ```
 
-It is also possible to output double quotes to the text buffer using this `printchar('"');` (or `printchar(34);`, which is equivalent, but less readable). There's no other way to print double quotes in Mindustry Logic. 
+It is also possible to output double quotes to the text buffer using this `printchar('"');` (or `printchar(34);`, which is equivalent, but less obvious). There's no other way to print double quotes in Mindustry Logic. 
 
 ### String literals
 
@@ -374,7 +374,7 @@ Formattable string literals are a special case of string literals which can only
 
 `$"A formattable string literal."`
 
-Concatenation of strings with the formattable string literal is supported through the string interpolation:
+Concatenation of strings with the formattable string literal is supported through string interpolation:
 
 ```
 const FORMAT = $"$ITEM_COAL coal: ${vault1.@coal}";

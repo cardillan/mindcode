@@ -6,6 +6,8 @@ import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.FileReferences;
+import info.teksol.mc.profile.Remarks;
 import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -16,6 +18,7 @@ import org.junit.jupiter.api.parallel.ExecutionMode;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +34,7 @@ public class DocValidatorTest {
 
     private CompilerProfile createCompilerProfile() {
         return new CompilerProfile(false, OptimizationLevel.EXPERIMENTAL)
+                .setRemarks(Remarks.COMMENTS)
                 .setAutoPrintflush(false)
                 .setSignature(false)
                 .setRun(false);
@@ -84,7 +88,8 @@ public class DocValidatorTest {
 
     private void validateCode(List<Executable> assertions, File file, int line, String source, @Nullable String mlog) {
         ListMessageLogger messageConsumer = new ListMessageLogger();
-        InputFiles inputFiles = InputFiles.fromSource(source);
+        InputFiles inputFiles = InputFiles.create();
+        inputFiles.registerFile(file.toPath(), source);
         CompilerProfile profile = createCompilerProfile();
         MindcodeCompiler compiler = new MindcodeCompiler(messageConsumer, profile, inputFiles);
         compiler.compile();
@@ -93,14 +98,17 @@ public class DocValidatorTest {
                 .filter(MindcodeMessage::isErrorOrWarning)
                 .filter(m -> !m.message().matches("Variable '.*' is not used\\."))
                 .filter(m -> !m.message().matches("Variable '.*' is not initialized\\."))
-                .map(m -> m.formatMessage(sp -> sp.offsetLine(line).formatForIde()))
+                .map(m -> m.formatMessage(sp -> sp.offsetLine(line).formatForIde(FileReferences.WINDOWS_URI)))
                 .collect(Collectors.joining("\n"));
 
         assertions.add(() -> assertTrue(message.isEmpty(), "Found errors or warnings in " + file.getName() + " at line " + line + ":\n" + message));
 
         if (mlog != null) {
+            URI uri = file.toURI().normalize();
+            String uriString = System.getProperty("os.name").toLowerCase().startsWith("win")
+                    ? uri.toString().replaceAll("file:/", "file:///") : uri.toString();
             assertions.add(() -> assertEquals(mlog, compiler.getOutput().trim(),
-                    "Compiler output doesn't match mlog block in " + file.getName() + " at line " + line));
+                    "Compiler output doesn't match mlog block in " + uriString + ":" + line));
         }
     }
 }

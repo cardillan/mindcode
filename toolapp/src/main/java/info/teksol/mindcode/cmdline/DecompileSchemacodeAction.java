@@ -9,18 +9,31 @@ import info.teksol.schemacode.schematics.DirectionLevel;
 import info.teksol.schemacode.schematics.Schematic;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
-import net.sourceforge.argparse4j.inf.Namespace;
-import net.sourceforge.argparse4j.inf.Subparser;
-import net.sourceforge.argparse4j.inf.Subparsers;
+import net.sourceforge.argparse4j.inf.*;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 public class DecompileSchemacodeAction extends ActionHandler {
+    private final List<BiConsumer<Decompiler, Namespace>> optionSetters = new ArrayList<>();
+
+    protected interface OptionSetter {
+        void set(Decompiler profile, Namespace arguments, String optionName);
+    }
+
+    protected Argument createArgument(ArgumentContainer container, String optionName,
+            OptionSetter optionSetter, String... nameOrFlags) {
+        Argument argument = container.addArgument(nameOrFlags);
+        optionSetters.add((profile, arguments) -> optionSetter.set(profile, arguments, optionName));
+        return argument.dest(optionName);
+    }
 
     @Override
-    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
+    Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile profile) {
         Subparser subparser = subparsers.addParser(Action.DECOMPILE_SCHEMA.getShortcut())
                 .aliases("decompile-schema", "decompile-schematic")
                 .description("Decompile a binary msch file into schematic definition file.")
@@ -35,55 +48,70 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
-        subparser.addArgument("-p", "--relative-positions")
+        createArgument(subparser, "positions",
+                (decompiler, arguments, name) -> decompiler.setRelativePositions(arguments.getBoolean(name)),
+                "-p", "--relative-positions")
                 .help("use relative coordinates for block positions where possible")
-                .dest("positions")
                 .action(Arguments.storeTrue())
                 .setDefault(false);
 
-        subparser.addArgument("-P", "--absolute-positions")
+        createArgument(subparser, "positions",
+                (decompiler, arguments, name) -> decompiler.setRelativePositions(arguments.getBoolean(name)),
+                "-P", "--absolute-positions")
                 .help("use absolute coordinates for block positions")
-                .dest("positions")
                 .action(Arguments.storeFalse())
                 .setDefault(false);
 
-        subparser.addArgument("-c", "--relative-connections")
+        createArgument(subparser, "connections",
+                (decompiler, arguments, name) -> decompiler.setRelativeConnections(arguments.getBoolean(name)),
+                "-c", "--relative-connections")
                 .help("use relative coordinates for connections")
-                .dest("connections")
                 .action(Arguments.storeTrue())
                 .setDefault(true);
 
-        subparser.addArgument("-C", "--absolute-connections")
+        createArgument(subparser, "connections",
+                (decompiler, arguments, name) -> decompiler.setRelativeConnections(arguments.getBoolean(name)),
+                "-C", "--absolute-connections")
                 .help("use absolute coordinates for connections")
-                .dest("connections")
                 .action(Arguments.storeFalse())
                 .setDefault(true);
 
-        subparser.addArgument("-l", "--relative-links")
+        createArgument(subparser, "links",
+                (decompiler, arguments, name) -> decompiler.setRelativeLinks(arguments.getBoolean(name)),
+                "-l", "--relative-links")
                 .help("use relative coordinates for processor links")
-                .dest("links")
                 .action(Arguments.storeTrue())
                 .setDefault(false);
 
-        subparser.addArgument("-L", "--absolute-links")
+        createArgument(subparser, "links",
+                (decompiler, arguments, name) -> decompiler.setRelativeLinks(arguments.getBoolean(name)),
+                "-L", "--absolute-links")
                 .help("use absolute coordinates for processor links")
                 .dest("links")
                 .action(Arguments.storeFalse())
                 .setDefault(false);
 
-        subparser.addArgument("-s", "--sort-order")
+        createArgument(subparser, "sort-order",
+                (decompiler, arguments, name) -> decompiler.setBlockOrder(arguments.get(name)),
+                "-s", "--sort-order")
                 .help("specifies how to order blocks in the decompiled schematic definition file")
-                .type(Arguments.caseInsensitiveEnumType(BlockOrder.class))
+                .type(LowerCaseEnumArgumentType.forEnum(BlockOrder.class))
                 .setDefault(BlockOrder.ORIGINAL);
 
-        subparser.addArgument("-d", "--direction")
+        createArgument(subparser, "direction",
+                (decompiler, arguments, name) -> decompiler.setDirectionLevel(arguments.get(name)),
+                "-d", "--direction")
                 .help("specifies when to include direction clause in decompiled schematic definition file: " +
                         "only for blocks affected by rotation, only for block with non-default direction, " +
                         "or for all blocks")
-                .type(Arguments.caseInsensitiveEnumType(DirectionLevel.class))
+                .type(LowerCaseEnumArgumentType.forEnum(DirectionLevel.class))
                 .setDefault(DirectionLevel.ROTATABLE);
 
         return subparser;
+    }
+
+    void configureDecompiler(Decompiler decompiler, Namespace arguments) {
+        optionSetters.forEach(setter -> setter.accept(decompiler, arguments));
     }
 
     @Override
@@ -94,11 +122,7 @@ public class DecompileSchemacodeAction extends ActionHandler {
         try (FileInputStream fis = new FileInputStream(input)) {
             Schematic schematic = SchematicsIO.read(fis);
             Decompiler decompiler = new Decompiler(schematic);
-            decompiler.setRelativePositions(arguments.getBoolean("positions"));
-            decompiler.setRelativeConnections(arguments.getBoolean("connections"));
-            decompiler.setRelativeLinks(arguments.getBoolean("links"));
-            decompiler.setBlockOrder(arguments.get("sort_order"));
-            decompiler.setDirectionLevel(arguments.get("direction"));
+            configureDecompiler(decompiler, arguments);
             String schemaDefinition = decompiler.buildCode();
 
             writeOutput(output, schemaDefinition);

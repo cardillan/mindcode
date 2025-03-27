@@ -44,6 +44,7 @@ public class CompilerProfile {
     private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
     private int instructionLimit = 1000;
     private int optimizationPasses = DEFAULT_WEBAPP_PASSES;
+    private FileReferences fileReferences = FileReferences.PATH;
     private SyntacticMode syntacticMode = SyntacticMode.RELAXED;
     private boolean shortFunctionPrefix = false;
     private boolean linkedBlockGuards = true;
@@ -78,6 +79,7 @@ public class CompilerProfile {
     /// @param level          the global optimization level to be applied across all optimization types.
     public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
+        this.optimizationPasses = webApplication ? DEFAULT_WEBAPP_PASSES : DEFAULT_CMDLINE_PASSES;
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }
@@ -91,6 +93,7 @@ public class CompilerProfile {
     ///                        is configured with an advanced level if specified.
     public CompilerProfile(boolean webApplication, Optimization... optimizations) {
         this.webApplication = webApplication;
+        this.optimizationPasses = webApplication ? DEFAULT_WEBAPP_PASSES : DEFAULT_CMDLINE_PASSES;
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         Set<Optimization> optimSet = Set.of(optimizations);
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
@@ -123,6 +126,24 @@ public class CompilerProfile {
 
     public int getTraceLimit() {
         return webApplication ? 1000 : 10_000;
+    }
+
+    public String getTarget() {
+        String suffix = processorEdition == ProcessorEdition.W ? "w" : "";
+        return switch (processorVersion) {
+            case V6 -> "6";
+            case V7 -> "7.0" + suffix;
+            case V7A -> "7" + suffix;
+            case V8A -> "8" + suffix;
+            case MAX -> "8" + suffix;
+        };
+    }
+
+    public CompilerProfile setTarget(String target) {
+        String processor = target.endsWith("w") ? target.substring(0, target.length() - 1) : target;
+        ProcessorEdition edition = target.endsWith("w") ? ProcessorEdition.W : ProcessorEdition.S;
+        setProcessorVersionEdition(ProcessorVersion.byCode(processor), edition);
+        return this;
     }
 
     public ProcessorVersion getProcessorVersion() {
@@ -187,6 +208,15 @@ public class CompilerProfile {
 
     public CompilerProfile setOptimizationPasses(int optimizationPasses) {
         this.optimizationPasses = optimizationPasses;
+        return this;
+    }
+
+    public FileReferences getFileReferences() {
+        return fileReferences;
+    }
+
+    public CompilerProfile setFileReferences(FileReferences fileReferences) {
+        this.fileReferences = fileReferences;
         return this;
     }
 

@@ -4,6 +4,7 @@ import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
 import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.mindcode.logic.opcodes.FunctionMapping;
 import info.teksol.mc.mindcode.logic.opcodes.MindustryOpcodeVariants;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.schemacode.grammar.SchemacodeLexer;
 import org.antlr.v4.runtime.Vocabulary;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,7 @@ import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
@@ -26,6 +28,7 @@ public class CreateIdeaSettingsTest {
     private static final String TEMPLATES = "src/test/resources/ide/idea";
     private static final String SETTINGS = "../support/idea";
 
+    private final List<String> opcodes = Stream.of(Opcode.values()).filter(o -> !o.isVirtual()).map(Opcode::getOpcode).toList();
     private final List<String> mlog = getMlogKeywords();
     private final List<String> mindcode = getKeywords(MindcodeLexer.VOCABULARY);
     private final List<String> schemacode = getKeywords(SchemacodeLexer.VOCABULARY);
@@ -33,7 +36,9 @@ public class CreateIdeaSettingsTest {
             .distinct().sorted().toList();
     private final List<String> builtins = LVar.allVars().stream().map(LVar::name).distinct().sorted().toList();
 
-    private final String mlogKeywords = String.join(";", mlog);
+    private final String mlogOpcodes = String.join(";", opcodes);
+    private final String pureMlogKeywords = String.join(";", mlog);
+    private final String mlogKeywords = mlog.stream().map(":"::concat).collect(Collectors.joining(";"));
     private final String mindcodeKeywords = String.join(";", mindcode);
     private final String schemacodeKeywords = String.join(";", schemacode);
     private final String combinedKeywords = String.join(";", combined);
@@ -57,7 +62,6 @@ public class CreateIdeaSettingsTest {
                         : p.type().getAllowedValues().stream().flatMap(v -> v.values.stream()))
                 .sorted()
                 .distinct()
-                .map(s -> ':' + s)
                 .toList();
     }
 
@@ -68,6 +72,7 @@ public class CreateIdeaSettingsTest {
                         loadFile("IntelliJ IDEA Global Settings"),
                         loadFile("installed.txt"),
                         loadFile("filetypes/Mindcode.xml"),
+                        loadFile("filetypes/mlog.xml"),
                         loadFile("filetypes/Schema Definition File.xml")
                 )
         );
@@ -134,6 +139,8 @@ public class CreateIdeaSettingsTest {
 
     private String replacePatterns(String contents) {
         return contents
+                .replace("${mlog-opcodes}", mlogOpcodes)
+                .replace("${pure-mlog-keywords}", pureMlogKeywords)
                 .replace("${mlog-keywords}", mlogKeywords)
                 .replace("${mindcode-keywords}", mindcodeKeywords)
                 .replace("${schemacode-keywords}", schemacodeKeywords)

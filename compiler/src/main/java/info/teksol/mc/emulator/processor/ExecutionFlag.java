@@ -37,7 +37,6 @@ public enum ExecutionFlag {
     private final String description;
     private final boolean settable;
     private final boolean active;
-    private final String optionName;
 
     ExecutionFlag(String description, boolean settable, boolean active) {
         if (!settable && !active) {
@@ -46,7 +45,6 @@ public enum ExecutionFlag {
         this.description = description;
         this.settable = settable;
         this.active = active;
-        this.optionName = name().toLowerCase().replace('_', '-');
     }
 
     ExecutionFlag(String description) {
@@ -58,7 +56,7 @@ public enum ExecutionFlag {
     }
 
     public String getOptionName() {
-        return optionName;
+        return name().toLowerCase().replace('_', '-');
     }
 
     public boolean isSettable() {

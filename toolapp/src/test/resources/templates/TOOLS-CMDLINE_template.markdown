@@ -14,13 +14,15 @@ The command line tool supports three different actions. The action is specified 
 * `cs` or `compile-schematic`: builds a schematic from Schemacode source into a binary `.msch` file.
 * `ds` or `decompile-schematic`: decompiles a binary `.msch` file to Schemacode source.
 
+Command-line arguments (e.g. `--remarks`) are case-sensitive. Values of command-line options (e.g. `none`) are generally case-insensitive. It is possible to use both `--remarks none` and `--remarks NONE`, although the lower-case specification is preferred. All multi-word command-ine options use _kebab-case_ convention. 
+
 ## Input/output files
 
 All actions take the name of input file and the name of output file as an argument. When the given input or output is a text file, the argument is optional and when not specified, the standard input/output is used. Use `-` to explicitly specify standard input or output for input or output file.
 
 ### Input file excerpt
 
-Mindcode accepts the `--excerpt` command line option followed by a `line:column-line:column` specification of the portion of the input file to load for compiling (both line and column indexes starting at 1). For example, `--excerpt 8:5-15:17` selects text starting at line 8, column 5 and ending at line 15, column 17 from the input file. Some IDEs can be configured to produce these values corresponding to the selected text, giving teh ability to compile just the selected text using Mindcode.
+When performing the _Compile Mindcode_ action, Mindcode accepts the `--excerpt` command line option followed by a `line:column-line:column` specification of the portion of the input file to load for compiling (both line and column indexes starting at 1). For example, `--excerpt 8:5-15:17` selects text starting at line 8, column 5 and ending at line 15, column 17 from the input file. Some IDEs can be configured to produce these values corresponding to the selected text, giving teh ability to compile just the selected text using Mindcode.
 
 The `--excerpt` option is applied only to the main input file, not to the files added through the `--append` command line option or `require` directive.
 

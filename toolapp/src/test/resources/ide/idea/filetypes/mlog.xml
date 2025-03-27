@@ -1,0 +1,17 @@
+<filetype binary="false" default_extension="mlog" description="mlog code" name="mlog">
+  <highlighting>
+    <options>
+      <option name="LINE_COMMENT" value="#" />
+      <option name="COMMENT_START" value="" />
+      <option name="COMMENT_END" value="" />
+      <option name="HEX_PREFIX" value="0x" />
+      <option name="NUM_POSTFIXES" value="" />
+    </options>
+    <keywords keywords="${mlog-opcodes}" ignore_case="false" />
+    <keywords2 keywords="${mindustry-builtins}" ignore_case="false" />
+    <keywords3 keywords="${pure-mlog-keywords}" ignore_case="false" />
+  </highlighting>
+  <extensionMap>
+    <mapping ext="mlog" />
+  </extensionMap>
+</filetype>

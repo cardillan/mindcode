@@ -1,5 +1,6 @@
 package info.teksol.mc.common;
 
+import info.teksol.mc.profile.FileReferences;
 import org.antlr.v4.runtime.Token;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
@@ -22,15 +23,50 @@ public record SourcePosition(InputFile inputFile,
                              TextFilePosition token) implements Comparable<SourcePosition> {
 
     private static final InputFile EMPTY_INPUT_FILE = new InputFile() {
-        @Override public int getId() { return Integer.MIN_VALUE; }
-        @Override public boolean isStandaloneSource() { return false; }
-        @Override public boolean isLibrary() { return false; }
-        @Override public String getCode() { return ""; }
-        @Override public Path getPath() { return Path.of(""); }
-        @Override public Path getRelativePath() { return Path.of(""); }
-        @Override public String getAbsolutePath() { return ""; }
-        @Override public String getDistinctPath() { return ""; }
-        @Override public String getDistinctTitle() { return ""; }
+        @Override
+        public int getId() {
+            return Integer.MIN_VALUE;
+        }
+
+        @Override
+        public boolean isStandaloneSource() {
+            return false;
+        }
+
+        @Override
+        public boolean isLibrary() {
+            return false;
+        }
+
+        @Override
+        public String getCode() {
+            return "";
+        }
+
+        @Override
+        public Path getPath() {
+            return Path.of("");
+        }
+
+        @Override
+        public Path getRelativePath() {
+            return Path.of("");
+        }
+
+        @Override
+        public String getAbsolutePath() {
+            return "";
+        }
+
+        @Override
+        public String getDistinctPath() {
+            return "";
+        }
+
+        @Override
+        public String getDistinctTitle() {
+            return "";
+        }
     };
 
     public static SourcePosition EMPTY = new SourcePosition(EMPTY_INPUT_FILE, 1, 1);
@@ -52,8 +88,27 @@ public record SourcePosition(InputFile inputFile,
         return token.column();
     }
 
-    public String formatForIde() {
-        return ((inputFile == EMPTY_INPUT_FILE || inputFile.getPath() == InputFiles.EMPTY_PATH ? "" : inputFile.getAbsolutePath()) + ":") + line() + ":" + column();
+    public String formatForIde(FileReferences fileReferences) {
+        return ((inputFile == EMPTY_INPUT_FILE || inputFile.getPath() == InputFiles.EMPTY_PATH ? "" : reference(fileReferences, inputFile.getPath())) + ":")
+               + line() + ":" + column();
+    }
+
+    private String reference(FileReferences fileReferences, Path path) {
+        return switch(fileReferences) {
+            case PATH -> path.toAbsolutePath().toString();
+            case URI -> path.toUri().normalize().toString();
+            case WINDOWS_URI -> toWindowsUri(path.toUri().normalize().toString());
+        };
+    }
+
+    private String toWindowsUri(String reference) {
+        if (System.getProperty("os.name").toLowerCase().contains("win")) {
+            if (reference.startsWith("file:///")) return reference;
+            if (reference.startsWith("file://")) return reference.replaceFirst("file://", "file:///");
+            return reference.replaceFirst("file:/", "file:///");
+        } else {
+            return reference;
+        }
     }
 
     public String formatForLog() {

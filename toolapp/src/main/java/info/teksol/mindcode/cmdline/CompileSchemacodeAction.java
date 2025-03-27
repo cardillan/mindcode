@@ -3,7 +3,6 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
@@ -53,14 +52,18 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .type(Arguments.fileType().verifyCanCreate())
                 .setDefault(new File("-"));
 
+        addInputOutputOptions(files, defaults);
+
         ArgumentGroup schematics = subparser.addArgumentGroup("schematic creation");
 
-        schematics.addArgument("-a", "--add-tag")
+        createArgument(schematics, defaults,
+                CompilerProfile::getAdditionalTags,
+                (profile, arguments, name) -> profile.setAdditionalTags(arguments.get(name)),
+                "-a", "--add-tag")
                 .help("defines additional tag(s) to add to the schematic, plain text and symbolic icon names are supported")
                 .metavar("TAG")
                 .type(String.class)
-                .nargs("+")
-                .setDefault(List.of());
+                .nargs("+");
 
         addAllCompilerOptions(subparser, defaults);
 
@@ -70,7 +73,6 @@ public class CompileSchemacodeAction extends ActionHandler {
     @Override
     void handle(Namespace arguments) {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);
-        compilerProfile.setAdditionalTags(arguments.get("add_tag"));
         final File file = arguments.get("input");
         final Path basePath = isStdInOut(file) ? Paths.get("") : file.toPath().toAbsolutePath().normalize().getParent();
         final InputFiles inputFiles = InputFiles.create(basePath);
@@ -81,7 +83,7 @@ public class CompileSchemacodeAction extends ActionHandler {
         final File output = resolveOutputFile(file, arguments.get("output"), ".msch");
         final File logFile = resolveOutputFile(file, arguments.get("log"), ".log");
         final boolean mlogToStdErr = isStdInOut(output);
-        final PositionFormatter positionFormatter = SourcePosition::formatForIde;
+        final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
 
         if (!result.hasErrors()) {
             writeOutput(output, result.output());
