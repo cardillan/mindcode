@@ -2,6 +2,7 @@ Name                                     Instructions    Steps   Coverage   Sour
 array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   AAE56F03143D7240
 compute-recursive-fibonacci.mnd:                   32     2477      96.8%   BDE1C81A7769E0CB   AAF072A7A1F075F6
 compute-sum-of-primes.mnd:                        434     1884      99.7%   B6615E97E02F94A9   0F170092A29DBCAC
+digit-counts.mnd:                                  79     2797     100.0%   4395C6D90051BC6D   ABF02313FA30D6DA
 memory-read-write.mnd:                              5        5     100.0%   D9539CC21D8111B7   8B4165EC6B0E2D00
 sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   B866D753C40FB38B
 sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   58C8232EF2FCBF22

@@ -17,23 +17,13 @@ public class PrintCharInstruction extends BaseInstruction implements PrintingIns
         super(astContext, Opcode.PRINTCHAR, args, params);
     }
 
-    protected PrintCharInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public PrintCharInstruction copy() {
-        return new PrintCharInstruction(this, astContext, sideEffects);
+    protected PrintCharInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public PrintCharInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new PrintCharInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public PrintCharInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new PrintCharInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new PrintCharInstruction(this, astContext);
     }
 
     public final LogicValue getValue() {

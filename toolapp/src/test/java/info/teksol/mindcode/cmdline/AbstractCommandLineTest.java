@@ -450,6 +450,12 @@ public abstract class AbstractCommandLineTest {
         @Nested
         class PrintUnresolvedArgumentTest {
             @Test
+            public void shortArgumentNone() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("-u none");
+                assertEquals(FinalCodeOutput.NONE, profile.getFinalCodeOutput());
+            }
+
+            @Test
             public void shortArgumentPlain() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-u plain");
                 assertEquals(FinalCodeOutput.PLAIN, profile.getFinalCodeOutput());
@@ -471,6 +477,12 @@ public abstract class AbstractCommandLineTest {
             public void shortArgumentDeepAst() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-u deep-ast");
                 assertEquals(FinalCodeOutput.DEEP_AST, profile.getFinalCodeOutput());
+            }
+
+            @Test
+            public void longArgumentNone() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--print-unresolved none");
+                assertEquals(FinalCodeOutput.NONE, profile.getFinalCodeOutput());
             }
 
             @Test

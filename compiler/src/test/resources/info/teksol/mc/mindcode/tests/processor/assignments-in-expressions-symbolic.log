@@ -1,0 +1,121 @@
+    23 instructions before optimizations.
+     1 instructions eliminated by Temp Variables Elimination.
+     3 instructions eliminated by Dead Code Elimination (3 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     4 instructions eliminated by Data Flow Optimization (6 iterations).
+    13 instructions after optimizations.
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-3 instructions):
+ 
+    12 set :test.0:res *tmp3
+    13 jump *label1 equal :test.0:res false
+    14 print "yes"
+-    * set *tmp4 "yes"
+    15 jump *label2 always
+    16 label *label1
+-    * set *tmp4 null
+    17 label *label2
+    18 print :test.0:res
+-    * set *tmp2 :test.0:res
+    19 label *label0
+    20 assertprints "yes1" "assignments in conditions"
+    21 stop
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
+ 
+     8 op add *tmp1 .B .B
+     9 assertequals 4 *tmp1 "(B += 1) + B"
+    10 assertflush
+-    * op lessThan *tmp3 a b
+-    * set :test.0:res *tmp3
++   11 op lessThan :test.0:res a b
+    12 jump *label1 equal :test.0:res false
+    13 print "yes"
+    14 jump *label2 always
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+    11 op lessThan :test.0:res a b
+    12 jump *label1 equal :test.0:res false
+    13 print "yes"
+-    * jump *label2 always
+    14 label *label1
+    15 label *label2
+    16 print :test.0:res
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+     0 set a 1
+     1 set b 2
+     2 set .A a
+-    * set .B .A
+-    * op add .A .A 1
++    3 set .B a
++    4 op add .A a 1
+     5 op add *tmp0 .A .A
+     6 assertequals 4 *tmp0 "A + (A += 1)"
+     7 op add .B .B 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
+     0 set a 1
+     1 set b 2
+-    * set .A a
+     2 set .B a
+     3 op add .A a 1
+     4 op add *tmp0 .A .A
+     5 assertequals 4 *tmp0 "A + (A += 1)"
+-    * op add .B .B 1
++    6 op add .B a 1
+     7 op add *tmp1 .B .B
+     8 assertequals 4 *tmp1 "(B += 1) + B"
+     9 assertflush
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+     0 set a 1
+     1 set b 2
+-    * set .B a
+     2 op add .A a 1
+     3 op add *tmp0 .A .A
+     4 assertequals 4 *tmp0 "A + (A += 1)"
+     5 op add .B a 1
+-    * op add *tmp1 .B .B
+-    * assertequals 4 *tmp1 "(B += 1) + B"
++    6 op add *tmp1 .A .A
++    7 assertequals 4 *tmp0 "(B += 1) + B"
+     8 assertflush
+     9 op lessThan :test.0:res a b
+    10 jump *label1 equal :test.0:res false
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2 instructions):
+ 
+     2 op add .A a 1
+     3 op add *tmp0 .A .A
+     4 assertequals 4 *tmp0 "A + (A += 1)"
+-    * op add .B a 1
+-    * op add *tmp1 .A .A
+     5 assertequals 4 *tmp0 "(B += 1) + B"
+     6 assertflush
+     7 op lessThan :test.0:res a b
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    13 label *label0
+    14 assertprints "yes1" "assignments in conditions"
+    15 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set a 1
+set b 2
+op add .A a 1
+op add *tmp0 .A .A
+assertequals 4 *tmp0 "A + (A += 1)"
+assertequals 4 *tmp0 "(B += 1) + B"
+assertflush
+op lessThan :test.0:res a b
+jump *label1 equal :test.0:res false
+print "yes"
+label *label1
+print :test.0:res
+assertprints "yes1" "assignments in conditions"
+stop

@@ -18,23 +18,13 @@ public class DrawInstruction extends BaseInstruction {
         super(astContext, Opcode.DRAW, args, params);
     }
 
-    protected DrawInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public DrawInstruction copy() {
-        return new DrawInstruction(this, astContext, sideEffects);
+    protected DrawInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public DrawInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new DrawInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public DrawInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new DrawInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new DrawInstruction(this, astContext);
     }
 
     public final LogicKeyword getType() {

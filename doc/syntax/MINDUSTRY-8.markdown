@@ -213,7 +213,7 @@ Thanks to the ability to access other processors' variables, Mindcode now suppor
 
 ## New drawing commands
 
-### `print draw`
+### `draw print`
 
 Prints the contents of the text buffer onto the display. So, instead of `printflush(message1);` you'll use `drawPrint(x, y, alignment); drawflush(display1);` to output the text on the display instead of a message block.
 

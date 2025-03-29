@@ -26,17 +26,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4
      3 setaddr *tmp1 *label4
 -    * set :test.0:i :test.0:a
      4 jump *label1 always
-     5 multilabel *label4 marker0
+     5 multilabel *label4
      6 set :test.0:a :test.0:i
      7 setaddr *tmp1 *label5
 -    * set :test.0:i :test.0:b
      8 jump *label1 always
-     9 multilabel *label5 marker0
+     9 multilabel *label5
     10 set :test.0:b :test.0:i
     11 setaddr *tmp1 *label6
 -    * set :test.0:i :test.0:c
     12 jump *label1 always
-    13 multilabel *label6 marker0
+    13 multilabel *label6
     14 set :test.0:c :test.0:i
     15 setaddr *tmp1 *label7
 -    * set :test.0:i :test.0:d
@@ -50,23 +50,23 @@ Modifications by Unroll iteration loop at line 6:5 (-2 instructions):
      2 set :test.0:step p
 -    * setaddr *tmp1 *label4
 -    * jump *label1 always
--    * multilabel *label4 marker0
+-    * multilabel *label4
 -    * set :test.0:a :test.0:i
 -    * setaddr *tmp1 *label5
 -    * jump *label1 always
--    * multilabel *label5 marker0
+-    * multilabel *label5
 -    * set :test.0:b :test.0:i
 -    * setaddr *tmp1 *label6
 -    * jump *label1 always
--    * multilabel *label6 marker0
+-    * multilabel *label6
 -    * set :test.0:c :test.0:i
 -    * setaddr *tmp1 *label7
 -    * label *label1
 -    * set :test.0:i :test.0:step
 -    * op mul :test.0:step :test.0:step 2
 -    * label *label2
--    * multijump *tmp1 0 0 marker0
--    * multilabel *label7 marker0
+-    * multijump *tmp1 0 0
+-    * multilabel *label7
 -    * set :test.0:d :test.0:i
 -    * label *label3
 +    3 label *label8

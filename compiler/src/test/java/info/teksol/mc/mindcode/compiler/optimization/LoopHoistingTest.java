@@ -113,7 +113,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SETADDR, tmp(0), label(3)),
                 createInstruction(SET, ":i", ":a"),
                 createInstruction(JUMP, label(0), "always"),
-                createInstruction(MULTILABEL, label(3), "marker0"),
+                createInstruction(MULTILABEL, label(3)),
                 createInstruction(SETADDR, tmp(0), label(4)),
                 createInstruction(SET, ":a", "2"),
                 createInstruction(SET, ":i", "2"),
@@ -121,8 +121,8 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "mul", ":k", "2", ":a"),
                 createInstruction(PRINT, ":i"),
                 createInstruction(PRINT, ":k"),
-                createInstruction(MULTIJUMP, tmp(0), "0", "0", "marker0"),
-                createInstruction(MULTILABEL, label(4), "marker0")
+                createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                createInstruction(MULTILABEL, label(4))
         );
     }
 
@@ -152,12 +152,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "rand", ".B", "20"),
                 createInstruction(SET, ":i", "0"),
                 createInstruction(OP, "mul", ":y", "2", ".B"),
+                createInstruction(SET, ":foo.0:n", "10"),
                 createInstruction(JUMP, "__start__", "greaterThanEq", "0", ".A"),
                 createInstruction(LABEL, label(9)),
                 createInstruction(OP, "mul", ":x", "2", ".A"),
-                createInstruction(SET, ":foo.0:n", "10"),
                 createInstruction(SETADDR, ":foo.0*retaddr", label(5)),
-                createInstruction(CALL, label(1), ":foo.0*retval"),
+                createInstruction(CALL, label(1), "*invalid", ":foo.0*retval"),
                 createInstruction(LABEL, label(5)),
                 createInstruction(PRINT, ":x"),
                 createInstruction(PRINT, ":y"),
@@ -171,7 +171,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, ":foo.0:n"),
                 createInstruction(SET, ":bar.0:x", ":foo.0:n"),
                 createInstruction(SETADDR, ":bar.0*retaddr", label(8)),
-                createInstruction(CALL, label(0), ":bar.0*retval"),
+                createInstruction(CALL, label(0), "*invalid", ":bar.0*retval"),
                 createInstruction(LABEL, label(8)),
                 createInstruction(RETURN, ":foo.0*retaddr")
         );
@@ -271,7 +271,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "count", "10"),
                 createInstruction(SETADDR, ":foo.0*retaddr", label(1)),
-                createInstruction(CALL, label(0), ":foo.0*retval"),
+                createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
                 createInstruction(LABEL, label(1)),
                 createInstruction(OP, "add", tmp(1), ":foo.0:x", ":foo.0:y"),
                 createInstruction(PRINT, tmp(1)),
@@ -279,7 +279,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(JUMP, "__start__", "greaterThan", "1", "count"),
                 createInstruction(LABEL, label(7)),
                 createInstruction(SETADDR, ":foo.0*retaddr", label(5)),
-                createInstruction(CALL, label(0), ":foo.0*retval"),
+                createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
                 createInstruction(LABEL, label(5)),
                 createInstruction(OP, "add", tmp(3), ":foo.0:x", ":foo.0:y"),
                 createInstruction(PRINT, tmp(3)),
@@ -336,14 +336,14 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SETADDR, var(0), var(1003)),
                 createInstruction(SET, ":i", "1"),
                 createInstruction(JUMP, var(1000), "always"),
-                createInstruction(MULTILABEL, var(1003), "marker0"),
+                createInstruction(MULTILABEL, var(1003)),
                 createInstruction(SETADDR, var(0), var(1004)),
                 createInstruction(SET, ":i", "A"),
                 createInstruction(LABEL, var(1000)),
                 createInstruction(PRINT, ":i"),
                 createInstruction(PRINT, var(1)),
-                createInstruction(MULTIJUMP, var(0), "0", "0", "marker0"),
-                createInstruction(MULTILABEL, var(1004), "marker0")
+                createInstruction(MULTIJUMP, var(0), "0", "0"),
+                createInstruction(MULTILABEL, var(1004))
         );
     }
 
@@ -361,7 +361,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SET, ":i", "1"),
                 createInstruction(SET, ":j", "2"),
                 createInstruction(JUMP, var(1000), "always"),
-                createInstruction(MULTILABEL, var(1003), "marker0"),
+                createInstruction(MULTILABEL, var(1003)),
                 createInstruction(SETADDR, var(0), var(1004)),
                 createInstruction(OP, "mul", ":i", "2", "A"),
                 createInstruction(OP, "mul", ":j", "4", "A"),
@@ -371,8 +371,8 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(PRINT, var(3)),
                 createInstruction(PRINT, var(4)),
                 createInstruction(PRINT, var(5)),
-                createInstruction(MULTIJUMP, var(0), "0", "0", "marker0"),
-                createInstruction(MULTILABEL, var(1004), "marker0")
+                createInstruction(MULTIJUMP, var(0), "0", "0"),
+                createInstruction(MULTILABEL, var(1004))
         );
     }
 
@@ -507,13 +507,13 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         """,
                 createInstruction(SET, ":bar.0:s", "1"),
                 createInstruction(SETADDR, ":bar.0*retaddr", label(2)),
-                createInstruction(CALL, label(0), ":bar.0*retval"),
+                createInstruction(CALL, label(0), "*invalid", ":bar.0*retval"),
                 createInstruction(LABEL, label(2)),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
                 createInstruction(OP, "add", ":foo.0:n", "10", ":bar.0:s"),
                 createInstruction(SETADDR, ":foo.0*retaddr", label(4)),
-                createInstruction(CALL, label(1), ":foo.0*retval"),
+                createInstruction(CALL, label(1), "*invalid", ":foo.0*retval"),
                 createInstruction(LABEL, label(4)),
                 createInstruction(RETURN, ":bar.0*retaddr"),
                 createInstruction(LABEL, label(1)),

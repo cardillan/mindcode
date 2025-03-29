@@ -12,7 +12,7 @@ Final code before resolving virtual instructions:
     6:  set :findLinkedBlocks.0:variable :display
     7:  set :findLinkedBlocks.0:required true
     8:  jump *label5 always 0 0
-        multilabel *label8 marker0
+        multilabel *label8
     9:  set :display :findLinkedBlocks.0:variable
    10:  setaddr *tmp0 *label9
    11:  set :findLinkedBlocks.0:requested @message
@@ -20,7 +20,7 @@ Final code before resolving virtual instructions:
    13:  set :findLinkedBlocks.0:variable :message
    14:  set :findLinkedBlocks.0:required false
    15:  jump *label5 always 0 0
-        multilabel *label9 marker0
+        multilabel *label9
    16:  set :message :findLinkedBlocks.0:variable
    17:  setaddr *tmp0 *label10
    18:  set :findLinkedBlocks.0:requested @switch
@@ -28,7 +28,7 @@ Final code before resolving virtual instructions:
    20:  set :findLinkedBlocks.0:variable :switch
    21:  set :findLinkedBlocks.0:required false
    22:  jump *label5 always 0 0
-        multilabel *label10 marker0
+        multilabel *label10
    23:  set :switch :findLinkedBlocks.0:variable
    24:  setaddr *tmp0 *label11
    25:  set :findLinkedBlocks.0:requested @memory-bank
@@ -36,7 +36,7 @@ Final code before resolving virtual instructions:
    27:  set :findLinkedBlocks.0:variable :memory
    28:  set :findLinkedBlocks.0:required true
    29:  jump *label5 always 0 0
-        multilabel *label11 marker0
+        multilabel *label11
    30:  set :memory :findLinkedBlocks.0:variable
    31:  setaddr *tmp0 *label12
    32:  set :findLinkedBlocks.0:requested @memory-cell
@@ -46,8 +46,8 @@ Final code before resolving virtual instructions:
         label *label5
    36:  set :findLinkedBlocks.0:variable null
         label *label6
-   37:  multijump *tmp0 0 0 marker0
-        multilabel *label12 marker0
+   37:  multijump *tmp0 0 0
+        multilabel *label12
    38:  set :memory :findLinkedBlocks.0:variable
         label *label7
    39:  print :findLinkedBlocks.0:title
@@ -68,7 +68,7 @@ Final code before resolving virtual instructions:
    53:  set :findLinkedBlocks.0:variable :display
    54:  set :findLinkedBlocks.0:required true
    55:  jump *label16 always 0 0
-        multilabel *label19 marker1
+        multilabel *label19
    56:  set :display :findLinkedBlocks.0:variable
    57:  setaddr *tmp4 *label20
    58:  set :findLinkedBlocks.0:requested @message
@@ -76,7 +76,7 @@ Final code before resolving virtual instructions:
    60:  set :findLinkedBlocks.0:variable :message
    61:  set :findLinkedBlocks.0:required false
    62:  jump *label16 always 0 0
-        multilabel *label20 marker1
+        multilabel *label20
    63:  set :message :findLinkedBlocks.0:variable
    64:  setaddr *tmp4 *label21
    65:  set :findLinkedBlocks.0:requested @switch
@@ -84,7 +84,7 @@ Final code before resolving virtual instructions:
    67:  set :findLinkedBlocks.0:variable :switch
    68:  set :findLinkedBlocks.0:required false
    69:  jump *label16 always 0 0
-        multilabel *label21 marker1
+        multilabel *label21
    70:  set :switch :findLinkedBlocks.0:variable
    71:  setaddr *tmp4 *label22
    72:  set :findLinkedBlocks.0:requested @memory-bank
@@ -92,7 +92,7 @@ Final code before resolving virtual instructions:
    74:  set :findLinkedBlocks.0:variable :memory
    75:  set :findLinkedBlocks.0:required true
    76:  jump *label16 always 0 0
-        multilabel *label22 marker1
+        multilabel *label22
    77:  set :memory :findLinkedBlocks.0:variable
    78:  setaddr *tmp4 *label23
    79:  set :findLinkedBlocks.0:requested @memory-cell
@@ -117,8 +117,8 @@ Final code before resolving virtual instructions:
    94:  set *tmp6 null
         label *label25
         label *label17
-   95:  multijump *tmp4 0 0 marker1
-        multilabel *label23 marker1
+   95:  multijump *tmp4 0 0
+        multilabel *label23
    96:  set :memory :findLinkedBlocks.0:variable
         label *label18
         label *label14
@@ -131,7 +131,7 @@ Final code before resolving virtual instructions:
   102:  set :findLinkedBlocks.0:variable :display
   103:  set :findLinkedBlocks.0:required true
   104:  jump *label28 always 0 0
-        multilabel *label31 marker2
+        multilabel *label31
   105:  set :display :findLinkedBlocks.0:variable
   106:  setaddr *tmp9 *label32
   107:  set :findLinkedBlocks.0:requested @message
@@ -139,7 +139,7 @@ Final code before resolving virtual instructions:
   109:  set :findLinkedBlocks.0:variable :message
   110:  set :findLinkedBlocks.0:required false
   111:  jump *label28 always 0 0
-        multilabel *label32 marker2
+        multilabel *label32
   112:  set :message :findLinkedBlocks.0:variable
   113:  setaddr *tmp9 *label33
   114:  set :findLinkedBlocks.0:requested @switch
@@ -147,7 +147,7 @@ Final code before resolving virtual instructions:
   116:  set :findLinkedBlocks.0:variable :switch
   117:  set :findLinkedBlocks.0:required false
   118:  jump *label28 always 0 0
-        multilabel *label33 marker2
+        multilabel *label33
   119:  set :switch :findLinkedBlocks.0:variable
   120:  setaddr *tmp9 *label34
   121:  set :findLinkedBlocks.0:requested @memory-bank
@@ -155,7 +155,7 @@ Final code before resolving virtual instructions:
   123:  set :findLinkedBlocks.0:variable :memory
   124:  set :findLinkedBlocks.0:required true
   125:  jump *label28 always 0 0
-        multilabel *label34 marker2
+        multilabel *label34
   126:  set :memory :findLinkedBlocks.0:variable
   127:  setaddr *tmp9 *label35
   128:  set :findLinkedBlocks.0:requested @memory-cell
@@ -176,8 +176,8 @@ Final code before resolving virtual instructions:
   141:  set *tmp10 null
         label *label37
         label *label29
-  142:  multijump *tmp9 0 0 marker2
-        multilabel *label35 marker2
+  142:  multijump *tmp9 0 0
+        multilabel *label35
   143:  set :memory :findLinkedBlocks.0:variable
         label *label30
   144:  printflush :findLinkedBlocks.0:message

@@ -17,23 +17,13 @@ public class DrawflushInstruction extends BaseInstruction {
         super(astContext, Opcode.DRAWFLUSH, args, params);
     }
 
-    protected DrawflushInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public DrawflushInstruction copy() {
-        return new DrawflushInstruction(this, astContext, sideEffects);
+    protected DrawflushInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public DrawflushInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new DrawflushInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public DrawflushInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new DrawflushInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new DrawflushInstruction(this, astContext);
     }
 
 

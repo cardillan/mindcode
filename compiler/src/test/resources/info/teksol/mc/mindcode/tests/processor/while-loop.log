@@ -21,14 +21,14 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
  
      2 setaddr :d.0*retaddr *label2
-     3 call *label0 :d.0*retval
+     3 call *label0 *invalid :d.0*retval
      4 label *label2
 -    * set *tmp1 :d.0*retval
 -    * set :test.0:j *tmp1
 +    5 set :test.0:j :d.0*retval
      6 set :d.0:n :test.0:j
      7 setaddr :d.0*retaddr *label3
-     8 call *label0 :d.0*retval
+     8 call *label0 *invalid :d.0*retval
      9 label *label3
 -    * set *tmp2 :d.0*retval
 -    * set :test.0:i *tmp2
@@ -51,13 +51,13 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 inst
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     3 call *label0 :d.0*retval
+     3 call *label0 *invalid :d.0*retval
      4 label *label2
      5 set :test.0:j :d.0*retval
 -    * set :d.0:n :test.0:j
 +    6 set :d.0:n :d.0*retval
      7 setaddr :d.0*retaddr *label3
-     8 call *label0 :d.0*retval
+     8 call *label0 *invalid :d.0*retval
      9 label *label3
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
@@ -100,12 +100,12 @@ Final code before resolving virtual instructions:
 assertflush
 set :d.0:n 0
 setaddr :d.0*retaddr *label2
-call *label0 :d.0*retval
+call *label0 *invalid :d.0*retval
 label *label2
 set :test.0:j :d.0*retval
 set :d.0:n :d.0*retval
 setaddr :d.0*retaddr *label3
-call *label0 :d.0*retval
+call *label0 *invalid :d.0*retval
 label *label3
 set :test.0:i :d.0*retval
 jump *label6 greaterThanEq :d.0*retval 10

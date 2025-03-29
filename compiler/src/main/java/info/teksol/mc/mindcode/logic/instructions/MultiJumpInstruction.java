@@ -1,7 +1,10 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.LogicAddress;
+import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -16,23 +19,13 @@ public class MultiJumpInstruction extends BaseInstruction implements MultiTarget
         super(astContext, Opcode.MULTIJUMP, args, params);
     }
 
-    protected MultiJumpInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public MultiJumpInstruction copy() {
-        return new MultiJumpInstruction(this, astContext, sideEffects);
+    protected MultiJumpInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public MultiJumpInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new MultiJumpInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public MultiJumpInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new MultiJumpInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new MultiJumpInstruction(this, astContext);
     }
 
     @Override
@@ -50,10 +43,6 @@ public class MultiJumpInstruction extends BaseInstruction implements MultiTarget
 
     public final LogicNumber getOffset() {
         return (LogicNumber) getArg(2);
-    }
-
-    public final LogicLabel getMarker() {
-        return (LogicLabel) getArg(3);
     }
 
     @Override

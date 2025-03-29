@@ -4,7 +4,6 @@ import info.teksol.mc.mindcode.compiler.AbstractTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.GenerationGoal;
-import info.teksol.mc.profile.MemoryModel;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -44,10 +43,6 @@ class DiffDebugPrinterTest extends AbstractTestBase {
 
         @Override
         public void setGoal(GenerationGoal goal) {
-        }
-
-        @Override
-        public void setMemoryModel(MemoryModel memoryModel) {
         }
 
         @Override

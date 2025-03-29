@@ -1,0 +1,12 @@
+Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
+array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   0F089451ADA88999
+compute-recursive-fibonacci.mnd:                   35     2654      97.1%   BDE1C81A7769E0CB   2CFEF0753C275227
+compute-sum-of-primes.mnd:                        434     1884      99.7%   B6615E97E02F94A9   687BD437363C3FA0
+digit-counts.mnd:                                  79     2797     100.0%   4395C6D90051BC6D   2174CD3F3104A54C
+memory-read-write.mnd:                              5        5     100.0%   D9539CC21D8111B7   82A82E36F5346C4E
+sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   6124F735933EA5BA
+sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   5B2F472E9674CD7C
+sorting with insert-sort.mnd:                      27    26064     100.0%   0AF6F57A5EBA45E2   FD766C8BEFADA926
+sorting with quick-sort.mnd:                       69    49133      98.5%   24EED06D28A2DCC0   85F2096D4F8B09E7
+sorting with select-sort.mnd:                      30    35153     100.0%   3F4EE1C8DB9B8B18   A77975AF5671D6A9
+storage-display.mnd:                              655      776      24.5%   F7D56DB08E60751D   C899A0D57404159A

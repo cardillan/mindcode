@@ -26,8 +26,8 @@ public interface ContextfulInstructionCreator {
         return (CallRecInstruction) createInstruction(CALLREC, stack, callAddr, retAddr, returnValue);
     }
 
-    default CallInstruction createCallStackless(LogicAddress address, LogicVariable returnValue) {
-        return (CallInstruction) createInstruction(CALL, address, returnValue);
+    default CallInstruction createCallStackless(LogicAddress address, LogicVariable retAddr, LogicVariable returnValue) {
+        return (CallInstruction) createInstruction(CALL, address, retAddr, returnValue);
     }
 
     default ControlInstruction createControl(LogicKeyword property, LogicValue target, LogicValue value) {
@@ -63,19 +63,19 @@ public interface ContextfulInstructionCreator {
     }
 
     default MultiCallInstruction createMultiCall(LogicLabel target, LogicVariable offset, LogicLabel marker) {
-        return (MultiCallInstruction) createInstruction(MULTICALL, target, offset, marker);
+        return (MultiCallInstruction) createInstruction(MULTICALL, target, offset).setMarker(marker);
     }
 
     default MultiJumpInstruction createMultiJump(LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, value, offset, marker);
+        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, value, offset).setMarker(marker);
     }
 
     default MultiJumpInstruction createMultiJump(LogicVariable target, LogicLabel marker) {
-        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO, marker);
+        return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO).setMarker(marker);
     }
 
     default MultiLabelInstruction createMultiLabel(LogicLabel label, LogicLabel marker) {
-        return (MultiLabelInstruction) createInstruction(MULTILABEL, label, marker);
+        return (MultiLabelInstruction) createInstruction(MULTILABEL, label).setMarker(marker);
     }
 
     default NoOpInstruction createNoOp() {

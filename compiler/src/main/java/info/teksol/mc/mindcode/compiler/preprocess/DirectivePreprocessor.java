@@ -23,13 +23,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.IntConsumer;
 
 /// Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
 @NullMarked
 public class DirectivePreprocessor extends AbstractMessageEmitter implements AstDirectiveSetVisitor<@Nullable Void> {
     private final CompilerProfile profile;
-    private final Map<String, BiConsumer<CompilerProfile, AstDirectiveSet>> OPTION_HANDLERS = createOptionHandlers();
+    private final Map<String, Consumer<AstDirectiveSet>> OPTION_HANDLERS = createOptionHandlers();
 
     private DirectivePreprocessor(PreprocessorContext context) {
         super(context.messageConsumer());
@@ -43,28 +45,19 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
 
     private void visitNode(AstMindcodeNode node) {
         if (node instanceof AstDirectiveSet directive) {
-            processDirective(directive);
+            visitDirectiveSet(directive);
         } else {
             node.getChildren().forEach(this::visitNode);
         }
     }
 
-    private void processDirective(AstDirectiveSet directive) {
-        BiConsumer<CompilerProfile, AstDirectiveSet> handler = OPTION_HANDLERS.get(directive.getOption().getText());
-        if (handler == null) {
-            error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN, directive.getOption().getText());
-        } else {
-            handler.accept(profile, directive);
-        }
-    }
-
     @Override
     public Void visitDirectiveSet(@NonNull AstDirectiveSet directive) {
-        BiConsumer<CompilerProfile, AstDirectiveSet> handler = OPTION_HANDLERS.get(directive.getOption().getText());
+        Consumer<AstDirectiveSet> handler = OPTION_HANDLERS.get(directive.getOption().getText());
         if (handler == null) {
             error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN, directive.getOption().getText());
         } else {
-            handler.accept(profile, directive);
+            handler.accept(directive);
         }
         return null;
     }
@@ -83,159 +76,11 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         return !node.getValues().isEmpty();
     }
 
-    private void setAllOptimizationsLevel(CompilerProfile profile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            OptimizationLevel optLevel = OptimizationLevel.byName(strValue);
-            if (optLevel != null) {
-                profile.setAllOptimizationLevels(optLevel);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setBoundaryChecks(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            RuntimeChecks boundaryChecks = RuntimeChecks.byName(strValue);
-            if (boundaryChecks != null) {
-                profile.setBoundaryChecks(boundaryChecks);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setExecutionFlag(ExecutionFlag flag, CompilerProfile profile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            switch (strValue) {
-                case "true"  -> profile.setExecutionFlag(flag, true);
-                case "false" -> profile.setExecutionFlag(flag, false);
-                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setFunctionPrefix(CompilerProfile profile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            switch (strValue) {
-                case "long"  -> profile.setShortFunctionPrefix(false);
-                case "short" -> profile.setShortFunctionPrefix(true);
-                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setGenerationGoal(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            GenerationGoal goal = GenerationGoal.byName(strValue);
-            if (goal != null) {
-                profile.setGoal(goal);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setInstructionLimit(CompilerProfile compilerProfile, AstDirectiveSet node) {
+    private void setProfile(AstDirectiveSet node) {
         if (validateSingleValue(node)) {
             String strValue = node.getValues().getFirst().getText();
             try {
-                int limit = Integer.parseInt(strValue);
-                if (limit >= 1 && limit <= CompilerProfile.MAX_INSTRUCTIONS) {
-                    compilerProfile.setInstructionLimit(limit);
-                    return;
-                }
-            } catch (NumberFormatException ignored) {
-            }
-            firstValueError(node, ERR.DIRECTIVE_VALUE_OUT_OF_RANGE,
-                    strValue, node.getOption().getText(), CompilerProfile.MAX_INSTRUCTIONS);
-        }
-    }
-
-    private void setMemoryModel(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            MemoryModel memoryModel = MemoryModel.byName(strValue);
-            if (memoryModel != null) {
-                profile.setMemoryModel(memoryModel);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setLinkGuards(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            switch (strValue) {
-                case "true"  -> profile.setLinkedBlockGuards(true);
-                case "false" -> profile.setLinkedBlockGuards(false);
-                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setAutoPrintflush(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            switch (strValue) {
-                case "true"  -> profile.setAutoPrintflush(true);
-                case "false" -> profile.setAutoPrintflush(false);
-                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setOptimizationLevel(Optimization optimization, CompilerProfile profile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String level = node.getValues().getFirst().getText();
-            OptimizationLevel optLevel = OptimizationLevel.byName(level);
-            if (optLevel != null) {
-                profile.setOptimizationLevel(optimization, optLevel);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, level, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setOptimizationPasses(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            try {
-                int passes = Integer.parseInt(strValue);
-                if (passes >= 1 && passes <= CompilerProfile.MAX_PASSES) {
-                    compilerProfile.setOptimizationPasses(passes);
-                    return;
-                }
-            } catch (NumberFormatException ignored) {
-            }
-            firstValueError(node, ERR.DIRECTIVE_VALUE_OUT_OF_RANGE,
-                    strValue, node.getOption().getText(), CompilerProfile.MAX_PASSES);
-        }
-    }
-
-    private void setPrintUnresolved(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            FinalCodeOutput finalCodeOutput = FinalCodeOutput.byName(strValue);
-            if (finalCodeOutput != null) {
-                profile.setFinalCodeOutput(finalCodeOutput);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setProfile(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            try {
-                compilerProfile.decode(strValue);
+                profile.decode(strValue);
                 return;
             } catch (NumberFormatException ignored) {
             }
@@ -243,30 +88,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         }
     }
 
-    private void setRemarks(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            Remarks remarks = Remarks.byName(strValue);
-            if (remarks != null) {
-                profile.setRemarks(remarks);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setShortCircuitEval(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            switch (strValue) {
-                case "short" -> compilerProfile.setShortCircuitEval(true);
-                case "full"  -> compilerProfile.setShortCircuitEval(false);
-                default      -> firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setSortVariables(CompilerProfile compilerProfile, AstDirectiveSet node) {
+    private void setSortVariables(AstDirectiveSet node) {
         List<SortCategory> sortCategories = new ArrayList<>();
         for (AstDirectiveValue value : node.getValues()) {
             SortCategory sortCategory = SortCategory.byName(value.getText());
@@ -278,27 +100,15 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         }
 
         if (sortCategories.isEmpty()) {
-            compilerProfile.setSortVariables(SortCategory.getAllCategories());
+            profile.setSortVariables(SortCategory.getAllCategories());
         } else if (sortCategories.equals(List.of(SortCategory.NONE))) {
-            compilerProfile.setSortVariables(List.of());
+            profile.setSortVariables(List.of());
         } else {
-            compilerProfile.setSortVariables(sortCategories);
+            profile.setSortVariables(sortCategories);
         }
     }
 
-    private void setSyntax(CompilerProfile compilerProfile, AstDirectiveSet node) {
-        if (validateSingleValue(node)) {
-            String strValue = node.getValues().getFirst().getText();
-            SyntacticMode syntacticMode = SyntacticMode.byName(strValue);
-            if (syntacticMode != null) {
-                profile.setSyntacticMode(syntacticMode);
-            } else {
-                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
-            }
-        }
-    }
-
-    private void setTarget(CompilerProfile profile, AstDirectiveSet node) {
+    private void setTarget(AstDirectiveSet node) {
         if (validateSingleValue(node)) {
             String strValue = node.getValues().getFirst().getText();
             ProcessorEdition edition = ProcessorEdition.byCode(strValue.charAt(strValue.length() - 1));
@@ -314,30 +124,79 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         }
     }
 
-    private Map<String, BiConsumer<CompilerProfile, AstDirectiveSet>> createOptionHandlers() {
-        Map<String,BiConsumer<CompilerProfile, AstDirectiveSet>> map = new HashMap<>();
-        map.put("auto-printflush", this::setAutoPrintflush);
-        map.put("boolean-eval", this::setShortCircuitEval);
-        map.put("boundary-checks", this::setBoundaryChecks);
-        map.put("function-prefix", this::setFunctionPrefix);
-        map.put("goal", this::setGenerationGoal);
-        map.put("instruction-limit", this::setInstructionLimit);
-        map.put("link-guards", this::setLinkGuards);
-        map.put("memory-model", this::setMemoryModel);
-        map.put("optimization", this::setAllOptimizationsLevel);
-        map.put("passes", this::setOptimizationPasses);
-        map.put("print-unresolved", this::setPrintUnresolved);
-        map.put("profile", this::setProfile);
-        map.put("remarks", this::setRemarks);
-        map.put("sort-variables", this::setSortVariables);
-        map.put("syntax", this::setSyntax);
-        map.put("target", this::setTarget);
-        for (Optimization opt : Optimization.LIST) {
-            map.put(opt.getOptionName(), (profile, level) -> setOptimizationLevel(opt, profile, level));
+    private void setIntOption(AstDirectiveSet node, IntConsumer optionSetter, int minValue, int maxValue) {
+        if (validateSingleValue(node)) {
+            String strValue = node.getValues().getFirst().getText();
+            try {
+                int value = Integer.parseInt(strValue);
+                if (value >= minValue && value <= maxValue) {
+                    optionSetter.accept(value);
+                    return;
+                }
+            } catch (NumberFormatException ignored) {
+            }
+            firstValueError(node, ERR.DIRECTIVE_VALUE_OUT_OF_RANGE, strValue, node.getOption().getText(), minValue, maxValue);
         }
+    }
+
+    private <E> void setEnumOption(AstDirectiveSet node, Function<String, @Nullable E> convertor,
+                Consumer<E> optionSetter) {
+        if (validateSingleValue(node)) {
+            String strValue = node.getValues().getFirst().getText();
+            E value = convertor.apply(strValue);
+            if (value != null) {
+                optionSetter.accept(value);
+            } else {
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
+            }
+        }
+    }
+
+    private void setBooleanOption(AstDirectiveSet node, Consumer<Boolean> optionSetter, String trueValue, String falseValue) {
+        if (validateSingleValue(node)) {
+            String strValue = node.getValues().getFirst().getText();
+            if (strValue.equals(trueValue)) {
+                optionSetter.accept(true);
+            } else if (strValue.equals(falseValue)) {
+                optionSetter.accept(false);
+            } else {
+                firstValueError(node, ERR.DIRECTIVE_INVALID_VALUE, strValue, node.getOption().getText());
+            }
+        }
+    }
+
+    private void setBooleanOption(AstDirectiveSet node, Consumer<Boolean> optionSetter) {
+        setBooleanOption(node, optionSetter, "true", "false");
+    }
+
+    private Map<String, Consumer<AstDirectiveSet>> createOptionHandlers() {
+        Map<String, Consumer<AstDirectiveSet>> map = new HashMap<>();
+
+        map.put("auto-printflush",      node -> setBooleanOption(node, profile::setAutoPrintflush));
+        map.put("boolean-eval",         node -> setBooleanOption(node, profile::setShortCircuitEval, "short", "full"));
+        map.put("boundary-checks",      node -> setEnumOption(node, RuntimeChecks::byName, profile::setBoundaryChecks));
+        map.put("function-prefix",      node -> setBooleanOption(node, profile::setShortFunctionPrefix, "short", "long"));
+        map.put("goal",                 node -> setEnumOption(node, GenerationGoal::byName, profile::setGoal));
+        map.put("instruction-limit",    node -> setIntOption(node, profile::setInstructionLimit, 1, CompilerProfile.MAX_INSTRUCTIONS));
+        map.put("link-guards",          node -> setBooleanOption(node, profile::setLinkedBlockGuards));
+        map.put("optimization",         node -> setEnumOption(node, OptimizationLevel::byName, profile::setAllOptimizationLevels));
+        map.put("passes",               node -> setIntOption(node, profile::setOptimizationPasses, 1, CompilerProfile.MAX_PASSES));
+        map.put("print-unresolved",     node -> setEnumOption(node, FinalCodeOutput::byName, profile::setFinalCodeOutput));
+        map.put("profile",              this::setProfile);
+        map.put("remarks",              node -> setEnumOption(node, Remarks::byName, profile::setRemarks));
+        map.put("sort-variables",       this::setSortVariables);
+        map.put("symbolic-labels",      node ->  setBooleanOption(node, profile::setSymbolicLabels));
+        map.put("syntax",               node ->  setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode));
+        map.put("target",               this::setTarget);
+
+        for (Optimization optimization : Optimization.LIST) {
+            map.put(optimization.getOptionName(), node ->  setEnumOption(node,
+                    OptimizationLevel::byName, value -> profile.setOptimizationLevel(optimization,value)));
+        }
+
         for (ExecutionFlag flag : ExecutionFlag.values()) {
             if (flag.isSettable()) {
-                map.put(flag.getOptionName(), (profile, level) -> setExecutionFlag(flag, profile, level));
+                map.put(flag.getOptionName(), node ->  setBooleanOption(node, value -> profile.setExecutionFlag(flag, value)));
             }
         }
 

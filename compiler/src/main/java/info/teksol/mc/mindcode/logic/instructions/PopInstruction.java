@@ -16,23 +16,13 @@ public class PopInstruction extends BaseInstruction implements PushOrPopInstruct
         super(astContext, Opcode.POP, args, params);
     }
 
-    protected PopInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public PopInstruction copy() {
-        return new PopInstruction(this, astContext, sideEffects);
+    protected PopInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public PopInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new PopInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public PopInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new PopInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new PopInstruction(this, astContext);
     }
 
 }

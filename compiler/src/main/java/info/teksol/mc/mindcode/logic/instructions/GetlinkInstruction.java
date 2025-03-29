@@ -18,23 +18,13 @@ public class GetlinkInstruction extends BaseResultInstruction {
         super(astContext, Opcode.GETLINK, args, params);
     }
 
-    protected GetlinkInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public GetlinkInstruction copy() {
-        return new GetlinkInstruction(this, astContext, sideEffects);
+    protected GetlinkInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public GetlinkInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new GetlinkInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public GetlinkInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new GetlinkInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new GetlinkInstruction(this, astContext);
     }
 
     @Override

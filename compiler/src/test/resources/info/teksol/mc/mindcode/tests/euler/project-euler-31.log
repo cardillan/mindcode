@@ -55,7 +55,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 +   35 write :value bank1 :index
     36 op add :index :index 1
     37 label *label3
-    38 multijump *tmp0 0 0 marker0
+    38 multijump *tmp0 0 0
  
     42 set :ways.0:index 1
     43 callrec bank1 *label0 *label13 :ways.0*retval
@@ -176,39 +176,39 @@ Modifications by Unroll iteration loop at line 4:1 (-2 instructions):
 -    * setaddr *tmp0 *label5
 -    * set :value 200
 -    * jump *label2 always
--    * multilabel *label5 marker0
+-    * multilabel *label5
 -    * setaddr *tmp0 *label6
 -    * set :value 100
 -    * jump *label2 always
--    * multilabel *label6 marker0
+-    * multilabel *label6
 -    * setaddr *tmp0 *label7
 -    * set :value 50
 -    * jump *label2 always
--    * multilabel *label7 marker0
+-    * multilabel *label7
 -    * setaddr *tmp0 *label8
 -    * set :value 20
 -    * jump *label2 always
--    * multilabel *label8 marker0
+-    * multilabel *label8
 -    * setaddr *tmp0 *label9
 -    * set :value 10
 -    * jump *label2 always
--    * multilabel *label9 marker0
+-    * multilabel *label9
 -    * setaddr *tmp0 *label10
 -    * set :value 5
 -    * jump *label2 always
--    * multilabel *label10 marker0
+-    * multilabel *label10
 -    * setaddr *tmp0 *label11
 -    * set :value 2
 -    * jump *label2 always
--    * multilabel *label11 marker0
+-    * multilabel *label11
 -    * setaddr *tmp0 *label12
 -    * set :value 1
 -    * label *label2
 -    * write :value bank1 :index
 -    * op add :index :index 1
 -    * label *label3
--    * multijump *tmp0 0 0 marker0
--    * multilabel *label12 marker0
+-    * multijump *tmp0 0 0
+-    * multilabel *label12
 -    * label *label4
 +    4 set :value 200
 +    5 label *label24

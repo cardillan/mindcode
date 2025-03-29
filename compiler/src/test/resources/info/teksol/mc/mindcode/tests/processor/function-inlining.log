@@ -61,22 +61,22 @@ Pass 1: speed optimization selection (cost limit 888):
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructions):
  
      2 setaddr :bar.0*retaddr *label3
-     3 call *label1 :bar.0*retval
+     3 call *label1 *invalid :bar.0*retval
      4 label *label3
 -    * set *tmp1 :bar.0*retval
      5 set :bar.0:s 2
      6 setaddr :bar.0*retaddr *label4
-     7 call *label1 :bar.0*retval
+     7 call *label1 *invalid :bar.0*retval
      8 label *label4
 -    * set *tmp2 :bar.0*retval
      9 set :bar.0:s 3
     10 setaddr :bar.0*retaddr *label5
-    11 call *label1 :bar.0*retval
+    11 call *label1 *invalid :bar.0*retval
     12 label *label5
 -    * set *tmp3 :bar.0*retval
     13 set :bar.0:s 4
     14 setaddr :bar.0*retaddr *label6
-    15 call *label1 :bar.0*retval
+    15 call *label1 *invalid :bar.0*retval
     16 label *label6
     17 set *tmp4 :bar.0*retval
 -    * set *tmp0 *tmp4
@@ -85,19 +85,19 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructi
     20 stop
  
     48 setaddr :foo.0*retaddr *label12
-    49 call *label0 :foo.0*retval
+    49 call *label0 *invalid :foo.0*retval
     50 label *label12
 -    * set *tmp12 :foo.0*retval
     51 op add *tmp13 20 :bar.0:s
     52 set :foo.0:n *tmp13
     53 setaddr :foo.0*retaddr *label13
-    54 call *label0 :foo.0*retval
+    54 call *label0 *invalid :foo.0*retval
     55 label *label13
 -    * set *tmp14 :foo.0*retval
     56 op add *tmp15 30 :bar.0:s
     57 set :foo.0:n *tmp15
     58 setaddr :foo.0*retaddr *label14
-    59 call *label0 :foo.0*retval
+    59 call *label0 *invalid :foo.0*retval
     60 label *label14
 -    * set *tmp16 :foo.0*retval
     61 op add *tmp17 40 :bar.0:s
@@ -107,7 +107,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructi
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructions):
  
     14 setaddr :bar.0*retaddr *label6
-    15 call *label1 :bar.0*retval
+    15 call *label1 *invalid :bar.0*retval
     16 label *label6
 -    * set *tmp4 :bar.0*retval
     17 label *label2
@@ -116,7 +116,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-1 instructi
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-1 instructions):
  
-    63 call *label0 :foo.0*retval
+    63 call *label0 *invalid :foo.0*retval
     64 label *label15
     65 set *tmp18 :foo.0*retval
 -    * set :bar.0*retval *tmp18
@@ -127,7 +127,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-1 instructi
 Modifications by Initial phase, Dead Code Elimination, iteration 4 (-1 instructions):
  
     62 setaddr :foo.0*retaddr *label15
-    63 call *label0 :foo.0*retval
+    63 call *label0 *invalid :foo.0*retval
     64 label *label15
 -    * set *tmp18 :foo.0*retval
     65 label *label11
@@ -163,25 +163,25 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 -    * set :foo.0:n *tmp11
 +   43 op add :foo.0:n 10 :bar.0:s
     44 setaddr :foo.0*retaddr *label12
-    45 call *label0 :foo.0*retval
+    45 call *label0 *invalid :foo.0*retval
     46 label *label12
 -    * op add *tmp13 20 :bar.0:s
 -    * set :foo.0:n *tmp13
 +   47 op add :foo.0:n 20 :bar.0:s
     48 setaddr :foo.0*retaddr *label13
-    49 call *label0 :foo.0*retval
+    49 call *label0 *invalid :foo.0*retval
     50 label *label13
 -    * op add *tmp15 30 :bar.0:s
 -    * set :foo.0:n *tmp15
 +   51 op add :foo.0:n 30 :bar.0:s
     52 setaddr :foo.0*retaddr *label14
-    53 call *label0 :foo.0*retval
+    53 call *label0 *invalid :foo.0*retval
     54 label *label14
 -    * op add *tmp17 40 :bar.0:s
 -    * set :foo.0:n *tmp17
 +   55 op add :foo.0:n 40 :bar.0:s
     56 setaddr :foo.0*retaddr *label15
-    57 call *label0 :foo.0*retval
+    57 call *label0 *invalid :foo.0*retval
     58 label *label15
 
 Modifications by Iterated phase, Loop Hoisting, pass 1, iteration 1:
@@ -912,90 +912,90 @@ Modifications by Inline function 'bar' defined at line 10:1 (+26 instructions):
      0 assertflush
      1 set :bar.0:s 1
 -    * setaddr :bar.0*retaddr *label3
--    * call *label1 :bar.0*retval
+-    * call *label1 *invalid :bar.0*retval
 -    * label *label3
 +    2 label *label118
 +    3 op add :foo.0:n 10 :bar.0:s
 +    4 setaddr :foo.0*retaddr *label119
-+    5 call *label0 :foo.0*retval
++    5 call *label0 *invalid :foo.0*retval
 +    6 label *label119
 +    7 op add :foo.0:n 20 :bar.0:s
 +    8 setaddr :foo.0*retaddr *label120
-+    9 call *label0 :foo.0*retval
++    9 call *label0 *invalid :foo.0*retval
 +   10 label *label120
 +   11 op add :foo.0:n 30 :bar.0:s
 +   12 setaddr :foo.0*retaddr *label121
-+   13 call *label0 :foo.0*retval
++   13 call *label0 *invalid :foo.0*retval
 +   14 label *label121
 +   15 op add :foo.0:n 40 :bar.0:s
 +   16 setaddr :foo.0*retaddr *label122
-+   17 call *label0 :foo.0*retval
++   17 call *label0 *invalid :foo.0*retval
 +   18 label *label122
 +   19 label *label123
     20 set :bar.0:s 2
 -    * setaddr :bar.0*retaddr *label4
--    * call *label1 :bar.0*retval
+-    * call *label1 *invalid :bar.0*retval
 -    * label *label4
 +   21 label *label124
 +   22 op add :foo.0:n 10 :bar.0:s
 +   23 setaddr :foo.0*retaddr *label125
-+   24 call *label0 :foo.0*retval
++   24 call *label0 *invalid :foo.0*retval
 +   25 label *label125
 +   26 op add :foo.0:n 20 :bar.0:s
 +   27 setaddr :foo.0*retaddr *label126
-+   28 call *label0 :foo.0*retval
++   28 call *label0 *invalid :foo.0*retval
 +   29 label *label126
 +   30 op add :foo.0:n 30 :bar.0:s
 +   31 setaddr :foo.0*retaddr *label127
-+   32 call *label0 :foo.0*retval
++   32 call *label0 *invalid :foo.0*retval
 +   33 label *label127
 +   34 op add :foo.0:n 40 :bar.0:s
 +   35 setaddr :foo.0*retaddr *label128
-+   36 call *label0 :foo.0*retval
++   36 call *label0 *invalid :foo.0*retval
 +   37 label *label128
 +   38 label *label129
     39 set :bar.0:s 3
 -    * setaddr :bar.0*retaddr *label5
--    * call *label1 :bar.0*retval
+-    * call *label1 *invalid :bar.0*retval
 -    * label *label5
 +   40 label *label130
 +   41 op add :foo.0:n 10 :bar.0:s
 +   42 setaddr :foo.0*retaddr *label131
-+   43 call *label0 :foo.0*retval
++   43 call *label0 *invalid :foo.0*retval
 +   44 label *label131
 +   45 op add :foo.0:n 20 :bar.0:s
 +   46 setaddr :foo.0*retaddr *label132
-+   47 call *label0 :foo.0*retval
++   47 call *label0 *invalid :foo.0*retval
 +   48 label *label132
 +   49 op add :foo.0:n 30 :bar.0:s
 +   50 setaddr :foo.0*retaddr *label133
-+   51 call *label0 :foo.0*retval
++   51 call *label0 *invalid :foo.0*retval
 +   52 label *label133
 +   53 op add :foo.0:n 40 :bar.0:s
 +   54 setaddr :foo.0*retaddr *label134
-+   55 call *label0 :foo.0*retval
++   55 call *label0 *invalid :foo.0*retval
 +   56 label *label134
 +   57 label *label135
     58 set :bar.0:s 4
 -    * setaddr :bar.0*retaddr *label6
--    * call *label1 :bar.0*retval
+-    * call *label1 *invalid :bar.0*retval
 -    * label *label6
 +   59 label *label136
 +   60 op add :foo.0:n 10 :bar.0:s
 +   61 setaddr :foo.0*retaddr *label137
-+   62 call *label0 :foo.0*retval
++   62 call *label0 *invalid :foo.0*retval
 +   63 label *label137
 +   64 op add :foo.0:n 20 :bar.0:s
 +   65 setaddr :foo.0*retaddr *label138
-+   66 call *label0 :foo.0*retval
++   66 call *label0 *invalid :foo.0*retval
 +   67 label *label138
 +   68 op add :foo.0:n 30 :bar.0:s
 +   69 setaddr :foo.0*retaddr *label139
-+   70 call *label0 :foo.0*retval
++   70 call *label0 *invalid :foo.0*retval
 +   71 label *label139
 +   72 op add :foo.0:n 40 :bar.0:s
 +   73 setaddr :foo.0*retaddr *label140
-+   74 call *label0 :foo.0*retval
++   74 call *label0 *invalid :foo.0*retval
 +   75 label *label140
 +   76 label *label141
     77 label *label2
@@ -1008,19 +1008,19 @@ Modifications by Inline function 'bar' defined at line 10:1 (+26 instructions):
 -    * label *label1
 -    * op add :foo.0:n 10 :bar.0:s
 -    * setaddr :foo.0*retaddr *label12
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label12
 -    * op add :foo.0:n 20 :bar.0:s
 -    * setaddr :foo.0*retaddr *label13
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label13
 -    * op add :foo.0:n 30 :bar.0:s
 -    * setaddr :foo.0*retaddr *label14
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label14
 -    * op add :foo.0:n 40 :bar.0:s
 -    * setaddr :foo.0*retaddr *label15
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label15
 -    * label *label11
 -    * return :bar.0*retaddr
@@ -1033,22 +1033,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add :foo.0:n 10 :bar.0:s
 +    3 op add :foo.0:n 10 1
      4 setaddr :foo.0*retaddr *label119
-     5 call *label0 :foo.0*retval
+     5 call *label0 *invalid :foo.0*retval
      6 label *label119
 -    * op add :foo.0:n 20 :bar.0:s
 +    7 op add :foo.0:n 20 1
      8 setaddr :foo.0*retaddr *label120
-     9 call *label0 :foo.0*retval
+     9 call *label0 *invalid :foo.0*retval
     10 label *label120
 -    * op add :foo.0:n 30 :bar.0:s
 +   11 op add :foo.0:n 30 1
     12 setaddr :foo.0*retaddr *label121
-    13 call *label0 :foo.0*retval
+    13 call *label0 *invalid :foo.0*retval
     14 label *label121
 -    * op add :foo.0:n 40 :bar.0:s
 +   15 op add :foo.0:n 40 1
     16 setaddr :foo.0*retaddr *label122
-    17 call *label0 :foo.0*retval
+    17 call *label0 *invalid :foo.0*retval
     18 label *label122
     19 label *label123
     20 set :bar.0:s 2
@@ -1056,22 +1056,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add :foo.0:n 10 :bar.0:s
 +   22 op add :foo.0:n 10 2
     23 setaddr :foo.0*retaddr *label125
-    24 call *label0 :foo.0*retval
+    24 call *label0 *invalid :foo.0*retval
     25 label *label125
 -    * op add :foo.0:n 20 :bar.0:s
 +   26 op add :foo.0:n 20 2
     27 setaddr :foo.0*retaddr *label126
-    28 call *label0 :foo.0*retval
+    28 call *label0 *invalid :foo.0*retval
     29 label *label126
 -    * op add :foo.0:n 30 :bar.0:s
 +   30 op add :foo.0:n 30 2
     31 setaddr :foo.0*retaddr *label127
-    32 call *label0 :foo.0*retval
+    32 call *label0 *invalid :foo.0*retval
     33 label *label127
 -    * op add :foo.0:n 40 :bar.0:s
 +   34 op add :foo.0:n 40 2
     35 setaddr :foo.0*retaddr *label128
-    36 call *label0 :foo.0*retval
+    36 call *label0 *invalid :foo.0*retval
     37 label *label128
     38 label *label129
     39 set :bar.0:s 3
@@ -1079,22 +1079,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add :foo.0:n 10 :bar.0:s
 +   41 op add :foo.0:n 10 3
     42 setaddr :foo.0*retaddr *label131
-    43 call *label0 :foo.0*retval
+    43 call *label0 *invalid :foo.0*retval
     44 label *label131
 -    * op add :foo.0:n 20 :bar.0:s
 +   45 op add :foo.0:n 20 3
     46 setaddr :foo.0*retaddr *label132
-    47 call *label0 :foo.0*retval
+    47 call *label0 *invalid :foo.0*retval
     48 label *label132
 -    * op add :foo.0:n 30 :bar.0:s
 +   49 op add :foo.0:n 30 3
     50 setaddr :foo.0*retaddr *label133
-    51 call *label0 :foo.0*retval
+    51 call *label0 *invalid :foo.0*retval
     52 label *label133
 -    * op add :foo.0:n 40 :bar.0:s
 +   53 op add :foo.0:n 40 3
     54 setaddr :foo.0*retaddr *label134
-    55 call *label0 :foo.0*retval
+    55 call *label0 *invalid :foo.0*retval
     56 label *label134
     57 label *label135
     58 set :bar.0:s 4
@@ -1102,22 +1102,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op add :foo.0:n 10 :bar.0:s
 +   60 op add :foo.0:n 10 4
     61 setaddr :foo.0*retaddr *label137
-    62 call *label0 :foo.0*retval
+    62 call *label0 *invalid :foo.0*retval
     63 label *label137
 -    * op add :foo.0:n 20 :bar.0:s
 +   64 op add :foo.0:n 20 4
     65 setaddr :foo.0*retaddr *label138
-    66 call *label0 :foo.0*retval
+    66 call *label0 *invalid :foo.0*retval
     67 label *label138
 -    * op add :foo.0:n 30 :bar.0:s
 +   68 op add :foo.0:n 30 4
     69 setaddr :foo.0*retaddr *label139
-    70 call *label0 :foo.0*retval
+    70 call *label0 *invalid :foo.0*retval
     71 label *label139
 -    * op add :foo.0:n 40 :bar.0:s
 +   72 op add :foo.0:n 40 4
     73 setaddr :foo.0*retaddr *label140
-    74 call *label0 :foo.0*retval
+    74 call *label0 *invalid :foo.0*retval
     75 label *label140
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
@@ -1127,7 +1127,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
      2 op add :foo.0:n 10 1
      3 setaddr :foo.0*retaddr *label119
  
-    16 call *label0 :foo.0*retval
+    16 call *label0 *invalid :foo.0*retval
     17 label *label122
     18 label *label123
 -    * set :bar.0:s 2
@@ -1135,7 +1135,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     20 op add :foo.0:n 10 2
     21 setaddr :foo.0*retaddr *label125
  
-    34 call *label0 :foo.0*retval
+    34 call *label0 *invalid :foo.0*retval
     35 label *label128
     36 label *label129
 -    * set :bar.0:s 3
@@ -1143,7 +1143,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     38 op add :foo.0:n 10 3
     39 setaddr :foo.0*retaddr *label131
  
-    52 call *label0 :foo.0*retval
+    52 call *label0 *invalid :foo.0*retval
     53 label *label134
     54 label *label135
 -    * set :bar.0:s 4
@@ -1156,7 +1156,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
      1 label *label118
      2 op add :foo.0:n 10 1
 -    * setaddr :foo.0*retaddr *label119
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label119
 +    3 label *label142
 +    4 op rand :foo.0:r 10
@@ -1322,7 +1322,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 +  164 label *label245
    165 op add :foo.0:n 20 1
 -    * setaddr :foo.0*retaddr *label120
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label120
 +  166 label *label246
 +  167 op rand :foo.0:r 10
@@ -1488,7 +1488,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 +  327 label *label349
    328 op add :foo.0:n 30 1
 -    * setaddr :foo.0*retaddr *label121
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label121
 +  329 label *label350
 +  330 op rand :foo.0:r 10
@@ -1654,7 +1654,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 +  490 label *label453
    491 op add :foo.0:n 40 1
 -    * setaddr :foo.0*retaddr *label122
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label122
 +  492 label *label454
 +  493 op rand :foo.0:r 10
@@ -1822,7 +1822,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
    655 label *label124
    656 op add :foo.0:n 10 2
 -    * setaddr :foo.0*retaddr *label125
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label125
 +  657 label *label558
 +  658 op rand :foo.0:r 10
@@ -1988,7 +1988,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 +  818 label *label661
    819 op add :foo.0:n 20 2
 -    * setaddr :foo.0*retaddr *label126
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label126
 +  820 label *label662
 +  821 op rand :foo.0:r 10
@@ -2154,7 +2154,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 +  981 label *label765
    982 op add :foo.0:n 30 2
 -    * setaddr :foo.0*retaddr *label127
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label127
 +  983 label *label766
 +  984 op rand :foo.0:r 10
@@ -2320,7 +2320,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 + 1144 label *label869
   1145 op add :foo.0:n 40 2
 -    * setaddr :foo.0*retaddr *label128
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label128
 + 1146 label *label870
 + 1147 op rand :foo.0:r 10
@@ -2488,7 +2488,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1309 label *label130
   1310 op add :foo.0:n 10 3
 -    * setaddr :foo.0*retaddr *label131
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label131
 + 1311 label *label974
 + 1312 op rand :foo.0:r 10
@@ -2654,7 +2654,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 + 1472 label *label1077
   1473 op add :foo.0:n 20 3
 -    * setaddr :foo.0*retaddr *label132
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label132
 + 1474 label *label1078
 + 1475 op rand :foo.0:r 10
@@ -2820,7 +2820,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 + 1635 label *label1181
   1636 op add :foo.0:n 30 3
 -    * setaddr :foo.0*retaddr *label133
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label133
 + 1637 label *label1182
 + 1638 op rand :foo.0:r 10
@@ -2986,7 +2986,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 + 1798 label *label1285
   1799 op add :foo.0:n 40 3
 -    * setaddr :foo.0*retaddr *label134
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label134
 + 1800 label *label1286
 + 1801 op rand :foo.0:r 10
@@ -3154,7 +3154,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
   1963 label *label136
   1964 op add :foo.0:n 10 4
 -    * setaddr :foo.0*retaddr *label137
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label137
 + 1965 label *label1390
 + 1966 op rand :foo.0:r 10
@@ -3320,7 +3320,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 + 2126 label *label1493
   2127 op add :foo.0:n 20 4
 -    * setaddr :foo.0*retaddr *label138
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label138
 + 2128 label *label1494
 + 2129 op rand :foo.0:r 10
@@ -3486,7 +3486,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 + 2289 label *label1597
   2290 op add :foo.0:n 30 4
 -    * setaddr :foo.0*retaddr *label139
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label139
 + 2291 label *label1598
 + 2292 op rand :foo.0:r 10
@@ -3652,7 +3652,7 @@ Modifications by Inline function 'foo' defined at line 1:1 (+836 instructions):
 + 2452 label *label1701
   2453 op add :foo.0:n 40 4
 -    * setaddr :foo.0*retaddr *label140
--    * call *label0 :foo.0*retval
+-    * call *label0 *invalid :foo.0*retval
 -    * label *label140
 + 2454 label *label1702
 + 2455 op rand :foo.0:r 10

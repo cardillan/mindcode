@@ -43,9 +43,31 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
     public static final String SCRIPTS_BASE_DIRECTORY = "src/test/resources/info/teksol/mc/mindcode/tests";
 
+    private final String logSuffix;
+    private final boolean symbolicLabels;
+
+    public AbstractProcessorTest() {
+        this.symbolicLabels = getClass().getSimpleName().contains("SymbolicLabels");
+        logSuffix = symbolicLabels ? "-symbolic.log" : ".log";
+    }
+
     @Override
     protected CompilationPhase getTargetPhase() {
         return CompilationPhase.EMULATOR;
+    }
+
+    @Override
+    protected CompilerProfile createCompilerProfile() {
+        return super.createCompilerProfile()
+                .setDebugLevel(3)
+                // Messes out code coverage otherwise
+                .setSignature(false)
+                // Do not remove end instructions
+                .setOptimizationLevel(Optimization.JUMP_THREADING, OptimizationLevel.BASIC)
+                // Do not merge constants in print statements
+                .setOptimizationLevel(Optimization.PRINT_MERGING, OptimizationLevel.BASIC)
+                .setExecutionFlag(ExecutionFlag.DUMP_VARIABLES_ON_STOP, false)
+                .setSymbolicLabels(symbolicLabels);
     }
 
     protected abstract String getScriptsDirectory();
@@ -121,19 +143,6 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         return Files.readString(path);
     }
 
-    @Override
-    protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile()
-                .setDebugLevel(3)
-                // Messes out code coverage otherwise
-                .setSignature(false)
-                // Do not remove end instructions
-                .setOptimizationLevel(Optimization.JUMP_THREADING, OptimizationLevel.BASIC)
-                // Do not merge constants in print statements
-                .setOptimizationLevel(Optimization.PRINT_MERGING, OptimizationLevel.BASIC)
-                .setExecutionFlag(ExecutionFlag.DUMP_VARIABLES_ON_STOP, false);
-    }
-
     private void writeLogFile(@Nullable Path logFile, MindcodeCompiler compiler, List<LogicInstruction> instructions) {
         if (logFile == null) {
             return;
@@ -166,7 +175,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     }
 
     protected void compileAndOutputFile(String fileName) throws IOException {
-        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         compileAndOutputCode(fileName, readFile(fileName), logFile);
     }
 
@@ -239,31 +248,31 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
     protected void testAndEvaluateFile(String fileName, Map<String, MindustryBlock> blocks,
             ExpectedMessages expectedMessages, RunEvaluator evaluator) throws IOException {
-        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages, readFile(fileName), blocks, evaluator, logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
             Map<String, MindustryBlock> blocks, RunEvaluator evaluator) throws IOException {
-        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), codeDecorator.apply(readFile(fileName)), blocks, evaluator, logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, Function<String, String> codeDecorator,
             Map<String, MindustryBlock> blocks, List<String> expectedOutputs) throws IOException {
-        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), codeDecorator.apply(readFile(fileName)), blocks,
                 outputEvaluator(expectedOutputs), logFile);
     }
 
     protected void testAndEvaluateFile(String fileName, List<String> expectedOutputs) throws IOException {
-        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), readFile(fileName), Map.of(),
                 outputEvaluator(expectedOutputs), logFile);
     }
 
     protected void testAndEvaluateFile(String fileName) throws IOException {
-        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log");
+        Path logFile = Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix);
         testAndEvaluateCode(fileName, expectedMessages(), readFile(fileName), Map.of(), assertEvaluator(), logFile);
     }
 

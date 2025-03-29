@@ -18,23 +18,13 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
         super(astContext, Opcode.WRITEARR, args, params);
     }
 
-    protected WriteArrInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public WriteArrInstruction copy() {
-        return new WriteArrInstruction(this, astContext, sideEffects);
+    protected WriteArrInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public WriteArrInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new WriteArrInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public WriteArrInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new WriteArrInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new WriteArrInstruction(this, astContext);
     }
 
     @Override

@@ -20,23 +20,13 @@ public class OpInstruction extends BaseResultInstruction {
         super(astContext, Opcode.OP, args, params);
     }
 
-    protected OpInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public OpInstruction copy() {
-        return new OpInstruction(this, astContext, sideEffects);
+    protected OpInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public OpInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new OpInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public OpInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new OpInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new OpInstruction(this, astContext);
     }
 
     @Override

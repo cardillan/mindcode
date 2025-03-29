@@ -18,23 +18,13 @@ public class ControlInstruction extends BaseInstruction {
         super(astContext, Opcode.CONTROL, args, params);
     }
 
-    protected ControlInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public ControlInstruction copy() {
-        return new ControlInstruction(this, astContext, sideEffects);
+    protected ControlInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public ControlInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new ControlInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public ControlInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new ControlInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new ControlInstruction(this, astContext);
     }
 
     public final LogicKeyword getProperty() {

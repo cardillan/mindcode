@@ -320,7 +320,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-63 ins
    217 op angleDiff *tmp129 45 *tmp127
    218 assertequals 90 *tmp129 "angleDiff"
  
-   254 call *label3 :assertEqualsRound.0*retval
+   254 call *label3 *invalid :assertEqualsRound.0*retval
    255 label *label51
    256 set :d.42:n 8
 -    * op add *tmp131 zero :d.42:n
@@ -751,7 +751,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    217 op angleDiff *tmp129 45 *tmp127
    218 assertequals 90 *tmp129 "angleDiff"
  
-   254 call *label3 :assertEqualsRound.0*retval
+   254 call *label3 *invalid :assertEqualsRound.0*retval
    255 label *label51
    256 set :d.42:n 8
 -    * op add *tmp130 zero :d.42:n
@@ -1149,7 +1149,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
    173 op angleDiff *tmp129 45 *tmp127
  
    209 setaddr :assertEqualsRound.0*retaddr *label51
-   210 call *label3 :assertEqualsRound.0*retval
+   210 call *label3 *invalid :assertEqualsRound.0*retval
    211 label *label51
 -    * set :d.42:n 8
    212 op add *tmp130 zero 8
@@ -1446,7 +1446,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-5
    143 assertequals 45 *tmp126 "angle"
  
    182 setaddr :assertEqualsRound.0*retaddr *label51
-   183 call *label3 :assertEqualsRound.0*retval
+   183 call *label3 *invalid :assertEqualsRound.0*retval
    184 label *label51
 -    * op add *tmp130 zero 8
    185 label *label52
@@ -1562,7 +1562,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    149 set :assertEqualsRound.0:actual 1
    150 set :assertEqualsRound.0:title "sin"
 -    * setaddr :assertEqualsRound.0*retaddr *label46
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label46
 +  151 label *label73
 +  152 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -1576,7 +1576,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    160 set :assertEqualsRound.0:actual -1
    161 set :assertEqualsRound.0:title "cos"
 -    * setaddr :assertEqualsRound.0*retaddr *label47
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label47
 +  162 label *label76
 +  163 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -1590,7 +1590,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    171 set :assertEqualsRound.0:actual 0.9999999999999999
    172 set :assertEqualsRound.0:title "tan"
 -    * setaddr :assertEqualsRound.0*retaddr *label48
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label48
 +  173 label *label79
 +  174 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -1604,7 +1604,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    182 set :assertEqualsRound.0:actual 90
    183 set :assertEqualsRound.0:title "asin"
 -    * setaddr :assertEqualsRound.0*retaddr *label49
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label49
 +  184 label *label82
 +  185 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -1618,7 +1618,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    193 set :assertEqualsRound.0:actual 0
    194 set :assertEqualsRound.0:title "acos"
 -    * setaddr :assertEqualsRound.0*retaddr *label50
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label50
 +  195 label *label85
 +  196 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -1632,7 +1632,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    204 set :assertEqualsRound.0:actual 45
    205 set :assertEqualsRound.0:title "atan"
 -    * setaddr :assertEqualsRound.0*retaddr *label51
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label51
 +  206 label *label88
 +  207 op mul :round.0:x :assertEqualsRound.0:actual 100000000

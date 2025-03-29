@@ -4,198 +4,198 @@ Final code before resolving virtual instructions:
     0:  assertflush
     1:  set :printNumber.0:number null
     2:  setaddr :printNumber.0*retaddr *label8
-    3:  call *label3 :printNumber.0*retval
+    3:  call *label3 *invalid :printNumber.0*retval
         label *label8
     4:  assertprints "0" "printNumber(null)"
     5:  assertflush
     6:  set :printNumber.0:number 1
     7:  setaddr :printNumber.0*retaddr *label9
-    8:  call *label3 :printNumber.0*retval
+    8:  call *label3 *invalid :printNumber.0*retval
         label *label9
     9:  assertprints "1" "printNumber(1)"
    10:  assertflush
    11:  set :printNumber.0:number 1.5
    12:  setaddr :printNumber.0*retaddr *label10
-   13:  call *label3 :printNumber.0*retval
+   13:  call *label3 *invalid :printNumber.0*retval
         label *label10
    14:  assertprints "1" "printNumber(1.5)"
    15:  assertflush
    16:  set :printNumber.0:number -1.5
    17:  setaddr :printNumber.0*retaddr *label11
-   18:  call *label3 :printNumber.0*retval
+   18:  call *label3 *invalid :printNumber.0*retval
         label *label11
    19:  assertprints "-1" "printNumber(-1.5)"
    20:  assertflush
    21:  set :printNumber.0:number 1234567
    22:  setaddr :printNumber.0*retaddr *label12
-   23:  call *label3 :printNumber.0*retval
+   23:  call *label3 *invalid :printNumber.0*retval
         label *label12
    24:  assertprints "1,234,567" "printNumber(1234567)"
    25:  assertflush
    26:  set :printNumber.0:number -1234567
    27:  setaddr :printNumber.0*retaddr *label13
-   28:  call *label3 :printNumber.0*retval
+   28:  call *label3 *invalid :printNumber.0*retval
         label *label13
    29:  assertprints "-1,234,567" "printNumber(-1234567)"
    30:  assertflush
    31:  set :printNumber.0:number 9009099
    32:  setaddr :printNumber.0*retaddr *label14
-   33:  call *label3 :printNumber.0*retval
+   33:  call *label3 *invalid :printNumber.0*retval
         label *label14
    34:  assertprints "9,009,099" "printNumber(9009099)"
    35:  assertflush
    36:  set :printBinaryNumber.0:number 0b1001
    37:  set :printBinaryNumber.0:digits 0
    38:  setaddr :printBinaryNumber.0*retaddr *label15
-   39:  call *label4 :printBinaryNumber.0*retval
+   39:  call *label4 *invalid :printBinaryNumber.0*retval
         label *label15
    40:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
    41:  assertflush
    42:  set :printBinaryNumber.0:number 0b1010
    43:  set :printBinaryNumber.0:digits 6
    44:  setaddr :printBinaryNumber.0*retaddr *label16
-   45:  call *label4 :printBinaryNumber.0*retval
+   45:  call *label4 *invalid :printBinaryNumber.0*retval
         label *label16
    46:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
    47:  assertflush
    48:  set :printHexNumber.0:number 0xABCDEF
    49:  set :printHexNumber.0:digits 0
    50:  setaddr :printHexNumber.0*retaddr *label17
-   51:  call *label5 :printHexNumber.0*retval
+   51:  call *label5 *invalid :printHexNumber.0*retval
         label *label17
    52:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
    53:  assertflush
    54:  set :printHexNumber.0:number 0x1234567890
    55:  set :printHexNumber.0:digits 0
    56:  setaddr :printHexNumber.0*retaddr *label18
-   57:  call *label5 :printHexNumber.0*retval
+   57:  call *label5 *invalid :printHexNumber.0*retval
         label *label18
    58:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
    59:  assertflush
    60:  set :printHexNumber.0:number 0xAABBCC
    61:  set :printHexNumber.0:digits 8
    62:  setaddr :printHexNumber.0*retaddr *label19
-   63:  call *label5 :printHexNumber.0*retval
+   63:  call *label5 *invalid :printHexNumber.0*retval
         label *label19
    64:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
    65:  assertflush
    66:  set :printExactFast.0:n null
    67:  setaddr :printExactFast.0*retaddr *label20
-   68:  call *label6 :printExactFast.0*retval
+   68:  call *label6 *invalid :printExactFast.0*retval
         label *label20
    69:  assertprints "null" "printExactFast(null)"
    70:  assertflush
    71:  set :printExactFast.0:n 0
    72:  setaddr :printExactFast.0*retaddr *label21
-   73:  call *label6 :printExactFast.0*retval
+   73:  call *label6 *invalid :printExactFast.0*retval
         label *label21
    74:  assertprints "0" "printExactFast(0)"
    75:  assertflush
    76:  set :printExactFast.0:n 1
    77:  setaddr :printExactFast.0*retaddr *label22
-   78:  call *label6 :printExactFast.0*retval
+   78:  call *label6 *invalid :printExactFast.0*retval
         label *label22
    79:  assertprints "1" "printExactFast(1)"
    80:  assertflush
    81:  set :printExactFast.0:n 1.0000001
    82:  setaddr :printExactFast.0*retaddr *label23
-   83:  call *label6 :printExactFast.0*retval
+   83:  call *label6 *invalid :printExactFast.0*retval
         label *label23
    84:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
    85:  assertflush
    86:  set :printExactFast.0:n 3.00000007
    87:  setaddr :printExactFast.0*retaddr *label24
-   88:  call *label6 :printExactFast.0*retval
+   88:  call *label6 *invalid :printExactFast.0*retval
         label *label24
    89:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
    90:  assertflush
    91:  set :printExactFast.0:n 3E50
    92:  setaddr :printExactFast.0*retaddr *label25
-   93:  call *label6 :printExactFast.0*retval
+   93:  call *label6 *invalid :printExactFast.0*retval
         label *label25
    94:  assertprints "3E50" "printExactFast(3e50)"
    95:  assertflush
    96:  set :printExactFast.0:n 1.0123456789
    97:  setaddr :printExactFast.0*retaddr *label26
-   98:  call *label6 :printExactFast.0*retval
+   98:  call *label6 *invalid :printExactFast.0*retval
         label *label26
    99:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
   100:  assertflush
   101:  set :printExactFast.0:n 10000001E13
   102:  setaddr :printExactFast.0*retaddr *label27
-  103:  call *label6 :printExactFast.0*retval
+  103:  call *label6 *invalid :printExactFast.0*retval
         label *label27
   104:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
   105:  assertflush
   106:  set :printExactFast.0:n 12345E-54
   107:  setaddr :printExactFast.0*retaddr *label28
-  108:  call *label6 :printExactFast.0*retval
+  108:  call *label6 *invalid :printExactFast.0*retval
         label *label28
   109:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
   110:  assertflush
   111:  set :printExactFast.0:n -12345E-54
   112:  setaddr :printExactFast.0*retaddr *label29
-  113:  call *label6 :printExactFast.0*retval
+  113:  call *label6 *invalid :printExactFast.0*retval
         label *label29
   114:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
   115:  assertflush
   116:  set :printExactSlow.0:n null
   117:  setaddr :printExactSlow.0*retaddr *label30
-  118:  call *label7 :printExactSlow.0*retval
+  118:  call *label7 *invalid :printExactSlow.0*retval
         label *label30
   119:  assertprints "null" "printExactSlow(null)"
   120:  assertflush
   121:  set :printExactSlow.0:n 0
   122:  setaddr :printExactSlow.0*retaddr *label31
-  123:  call *label7 :printExactSlow.0*retval
+  123:  call *label7 *invalid :printExactSlow.0*retval
         label *label31
   124:  assertprints "0" "printExactSlow(0)"
   125:  assertflush
   126:  set :printExactSlow.0:n 1
   127:  setaddr :printExactSlow.0*retaddr *label32
-  128:  call *label7 :printExactSlow.0*retval
+  128:  call *label7 *invalid :printExactSlow.0*retval
         label *label32
   129:  assertprints "1.000000000000000" "printExactSlow(1)"
   130:  assertflush
   131:  set :printExactSlow.0:n 1.0000001
   132:  setaddr :printExactSlow.0*retaddr *label33
-  133:  call *label7 :printExactSlow.0*retval
+  133:  call *label7 *invalid :printExactSlow.0*retval
         label *label33
   134:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
   135:  assertflush
   136:  set :printExactSlow.0:n 3.00000007
   137:  setaddr :printExactSlow.0*retaddr *label34
-  138:  call *label7 :printExactSlow.0*retval
+  138:  call *label7 *invalid :printExactSlow.0*retval
         label *label34
   139:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
   140:  assertflush
   141:  set :printExactSlow.0:n 3E50
   142:  setaddr :printExactSlow.0*retaddr *label35
-  143:  call *label7 :printExactSlow.0*retval
+  143:  call *label7 *invalid :printExactSlow.0*retval
         label *label35
   144:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
   145:  assertflush
   146:  set :printExactSlow.0:n 1.0123456789
   147:  setaddr :printExactSlow.0*retaddr *label36
-  148:  call *label7 :printExactSlow.0*retval
+  148:  call *label7 *invalid :printExactSlow.0*retval
         label *label36
   149:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
   150:  assertflush
   151:  set :printExactSlow.0:n 10000001E13
   152:  setaddr :printExactSlow.0*retaddr *label37
-  153:  call *label7 :printExactSlow.0*retval
+  153:  call *label7 *invalid :printExactSlow.0*retval
         label *label37
   154:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
   155:  assertflush
   156:  set :printExactSlow.0:n 12345E-54
   157:  setaddr :printExactSlow.0*retaddr *label38
-  158:  call *label7 :printExactSlow.0*retval
+  158:  call *label7 *invalid :printExactSlow.0*retval
         label *label38
   159:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
   160:  assertflush
   161:  set :printExactSlow.0:n -12345E-54
   162:  setaddr :printExactSlow.0*retaddr *label39
-  163:  call *label7 :printExactSlow.0*retval
+  163:  call *label7 *invalid :printExactSlow.0*retval
         label *label39
   164:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
   165:  stop

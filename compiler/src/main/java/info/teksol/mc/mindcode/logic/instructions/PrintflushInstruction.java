@@ -17,23 +17,13 @@ public class PrintflushInstruction extends BaseInstruction {
         super(astContext, Opcode.PRINTFLUSH, args, params);
     }
 
-    protected PrintflushInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public PrintflushInstruction copy() {
-        return new PrintflushInstruction(this, astContext, sideEffects);
+    protected PrintflushInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public PrintflushInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new PrintflushInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public PrintflushInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new PrintflushInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new PrintflushInstruction(this, astContext);
     }
 
 

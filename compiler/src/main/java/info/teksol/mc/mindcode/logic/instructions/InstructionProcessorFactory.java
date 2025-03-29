@@ -16,22 +16,28 @@ public class InstructionProcessorFactory {
 
     public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer, CompilerProfile profile) {
         return create(new InstructionProcessorParameters(messageConsumer, profile.getProcessorVersion(),
-                profile.getProcessorEdition(), profile.isShortFunctionPrefix()));
+                profile.getProcessorEdition(), profile.isShortFunctionPrefix(), true));
+    }
+
+    public static InstructionProcessor getInstructionProcessorNoValidate(MessageConsumer messageConsumer, CompilerProfile profile) {
+        return create(new InstructionProcessorParameters(messageConsumer, profile.getProcessorVersion(),
+                profile.getProcessorEdition(), profile.isShortFunctionPrefix(), false));
     }
 
     public static InstructionProcessor getInstructionProcessor(MessageConsumer messageConsumer,
             ProcessorVersion version, ProcessorEdition edition) {
-        return create(new InstructionProcessorParameters(messageConsumer, version, edition, false));
+        return create(new InstructionProcessorParameters(messageConsumer, version, edition, false, false));
     }
 
     public static InstructionProcessor getInstructionProcessor(ProcessorVersion version, ProcessorEdition edition) {
-        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, false));
+        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, false, true));
     }
 
     // To be used by unit tests - returns new, non-cached instances based off whatever processor is given
     public static InstructionProcessor getInstructionProcessor(ProcessorVersion version, ProcessorEdition edition,
             List<OpcodeVariant> opcodeVariants) {
-        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition, false, opcodeVariants));
+        return create(new InstructionProcessorParameters(nullMessageConsumer, version, edition,
+                false, true, opcodeVariants));
     }
 
     private static InstructionProcessor create(InstructionProcessorParameters parameters) {

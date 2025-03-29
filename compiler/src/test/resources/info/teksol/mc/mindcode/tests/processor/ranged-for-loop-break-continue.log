@@ -43,7 +43,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
  
      7 setaddr :d.0*retaddr *label3
-     8 call *label0 :d.0*retval
+     8 call *label0 *invalid :d.0*retval
      9 label *label3
 -    * set *tmp2 :d.0*retval
 -    * set *tmp3 *tmp2
@@ -53,7 +53,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
     13 jump *label6 greaterThanEq :test.0:i *tmp3
  
     23 setaddr :d.0*retaddr *label9
-    24 call *label0 :d.0*retval
+    24 call *label0 *invalid :d.0*retval
     25 label *label9
 -    * set *tmp6 :d.0*retval
 -    * op equal *tmp7 :test.0:i *tmp6
@@ -75,7 +75,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 inst
     17 label *label7
  
     22 setaddr :d.0*retaddr *label9
-    23 call *label0 :d.0*retval
+    23 call *label0 *invalid :d.0*retval
     24 label *label9
 -    * op equal *tmp7 :test.0:i :d.0*retval
 -    * jump *label10 equal *tmp7 false
@@ -124,13 +124,13 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
      2 setaddr :d.0*retaddr *label2
-     3 call *label0 :d.0*retval
+     3 call *label0 *invalid :d.0*retval
      4 label *label2
 -    * set *tmp1 :d.0*retval
 +    5 set :test.0:i :d.0*retval
      6 set :d.0:n 10
      7 setaddr :d.0*retaddr *label3
-     8 call *label0 :d.0*retval
+     8 call *label0 *invalid :d.0*retval
      9 label *label3
     10 set *tmp3 :d.0*retval
 -    * set :test.0:i *tmp1
@@ -162,7 +162,7 @@ Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
     17 print :test.0:i
  
     20 setaddr :d.0*retaddr *label9
-    21 call *label0 :d.0*retval
+    21 call *label0 *invalid :d.0*retval
     22 label *label9
 -    * jump *label10 notEqual :test.0:i :d.0*retval
 -    * jump *label6 always
@@ -183,12 +183,12 @@ Final code before resolving virtual instructions:
 assertflush
 set :d.0:n 1
 setaddr :d.0*retaddr *label2
-call *label0 :d.0*retval
+call *label0 *invalid :d.0*retval
 label *label2
 set :test.0:i :d.0*retval
 set :d.0:n 10
 setaddr :d.0*retaddr *label3
-call *label0 :d.0*retval
+call *label0 *invalid :d.0*retval
 label *label3
 set *tmp3 :d.0*retval
 jump *label6 greaterThanEq :test.0:i :d.0*retval
@@ -198,7 +198,7 @@ print :test.0:i
 print "|"
 set :d.0:n 5
 setaddr :d.0*retaddr *label9
-call *label0 :d.0*retval
+call *label0 *invalid :d.0*retval
 label *label9
 jump *label6 equal :test.0:i :d.0*retval
 label *label5

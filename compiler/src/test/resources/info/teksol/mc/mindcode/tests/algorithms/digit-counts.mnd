@@ -1,0 +1,28 @@
+const SIZE = 10;
+param LIMIT = 100;
+
+var array[SIZE];
+
+begin
+    for var out a in array do a = 0; end;
+
+    for var i in 0 ... LIMIT do
+        countDigits(i);
+    end;
+
+    assertPrints("10-20-20-20-20-20-20-20-20-20", printArray(), "digit counts");
+end;
+
+void countDigits(number)
+    do
+        array[number % 10]++;
+        number \= 10;
+    while number > 0;
+end;
+
+void printArray()
+    print(array[0]);
+    for var i in 1 ... SIZE do
+        print("-", array[i]);
+    end;
+end;

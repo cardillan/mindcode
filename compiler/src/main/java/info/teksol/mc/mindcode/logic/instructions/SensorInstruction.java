@@ -18,23 +18,13 @@ public class SensorInstruction extends BaseResultInstruction {
         super(astContext, Opcode.SENSOR, args, params);
     }
 
-    protected SensorInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public SensorInstruction copy() {
-        return new SensorInstruction(this, astContext, sideEffects);
+    protected SensorInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public SensorInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new SensorInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public SensorInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new SensorInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new SensorInstruction(this, astContext);
     }
 
     @Override

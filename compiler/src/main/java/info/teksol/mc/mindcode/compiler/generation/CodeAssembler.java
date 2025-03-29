@@ -10,7 +10,10 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import info.teksol.mc.mindcode.logic.instructions.CustomInstruction;
+import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
@@ -40,19 +43,12 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// Indicates whether the assembler is active. An inactive assembler ignores generated instructions.
     private boolean active = true;
 
-    private SideEffects sideEffects = BaseInstruction.NO_SIDE_EFFECTS;
-
     public CodeAssembler(CodeAssemblerContext context) {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
         variables = context.variables();
         astContext = context.rootAstContext();
-    }
-
-    public CodeAssembler applySideEffects(SideEffects sideEffects) {
-        this.sideEffects = Objects.requireNonNull(sideEffects);
-        return this;
     }
 
     public InstructionProcessor getProcessor() {
@@ -115,9 +111,8 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     /// This is the sole method that adds an instruction to the list.
     private LogicInstruction addInstruction(LogicInstruction instruction) {
         if (active) {
-            instructions.add(instruction.withSideEffects(sideEffects));
+            instructions.add(instruction);
         }
-        sideEffects = BaseInstruction.NO_SIDE_EFFECTS;
         return instruction;
     }
 
@@ -256,8 +251,8 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
 
     /// Yields the execution for the rest of the tick. Used when waiting for a remote processor to update variables
     /// or provide results.
-    public void yieldExecution() {
-        createInstruction(WAIT, LogicNumber.create(processor, "1e-15"));
+    public LogicInstruction createYieldExecution() {
+        return createInstruction(WAIT, LogicNumber.create(processor, "1e-15"));
     }
 
     public LogicLabel createNextLabel() {

@@ -38,11 +38,11 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.FinalCodeOutput;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -252,7 +252,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code
-        if (profile.getFinalCodeOutput() != null) {
+        if (profile.getFinalCodeOutput() != FinalCodeOutput.NONE) {
             debug("\nFinal code before resolving virtual instructions:\n");
             debug(LogicInstructionPrinter.toString(profile.getFinalCodeOutput(), instructionProcessor, instructions));
         }
@@ -263,7 +263,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         // Set of all user variables in the program
         generateUnusedVolatileWarnings();
 
-        output = LogicInstructionPrinter.toString(instructionProcessor, instructions);
+        output = LogicInstructionPrinter.toString(instructionProcessor, generateSymbolicLabels(instructions), profile.isSymbolicLabels());
 
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
 
@@ -291,6 +291,42 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                 .filter(Predicate.not(existing::contains))
                 .sorted(Comparator.comparing(LogicVariable::sourcePosition))
                 .forEach(v -> warn(v.sourcePosition(), WARN.VOLATILE_VARIABLE_NOT_USED, v.getName()));
+    }
+
+    private List<LogicInstruction> generateSymbolicLabels(List<LogicInstruction> instructions) {
+        if (profile.isSymbolicLabels()) {
+            final String labelPrefix = "label_";
+            assert instructionProcessor != null;
+            assert rootAstContext != null;
+
+            BitSet labels = new BitSet(instructions.size());
+            List<LogicInstruction> result = new ArrayList<>();
+            for (LogicInstruction instruction : instructions) {
+                if (instruction instanceof JumpInstruction jump) {
+                    labels.set(jump.getTarget().getAddress());
+                }
+            }
+
+            int counter = 0;
+            for (LogicInstruction instruction : instructions) {
+                if (!(instruction instanceof RemarkInstruction)) {
+                    if (labels.get(counter)) {
+                        result.add(instructionProcessor.createLabel(rootAstContext, LogicLabel.symbolic(labelPrefix + counter)));
+                    }
+
+                    counter++;
+                    if (instruction instanceof JumpInstruction jump) {
+                        result.add(jump.withTarget(LogicLabel.symbolic(labelPrefix + jump.getTarget().getAddress())));
+                        continue;
+                    }
+                }
+                result.add(instruction);
+            }
+
+            return result;
+        } else {
+            return instructions;
+        }
     }
 
     private Processor createEmulator() {

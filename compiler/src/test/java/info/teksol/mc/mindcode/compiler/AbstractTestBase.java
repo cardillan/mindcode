@@ -116,7 +116,8 @@ public abstract class AbstractTestBase {
     // Instruction creation
 
     protected final CompilerProfile profile = createCompilerProfile();
-    protected final InstructionProcessor ip = InstructionProcessorFactory.getInstructionProcessor(ExpectedMessages.throwOnMessage(), profile);
+    protected final InstructionProcessor ip = InstructionProcessorFactory.getInstructionProcessorNoValidate(
+            ExpectedMessages.throwOnMessage(), profile);
 
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
     protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);

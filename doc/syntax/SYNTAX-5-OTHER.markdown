@@ -76,10 +76,6 @@ Use the `link-guards` option to specify whether Mindcode should generate _guard 
 
 For more details on guard code and rules for generating it, see [Guard code for linked variables](SYNTAX-1-VARIABLES.markdown#guard-code-for-linked-variables).
 
-## Option `memory-model`
-
-This option has been added to support future enhancements of Mindcode. Setting the option doesn't have any effect at this moment.
-
 ## Option `optimization`
 
 Use the `optimization` option to set the optimization level of the compiler:
@@ -123,6 +119,23 @@ Converting remarks to comments may improve code readability. Remarks in a loop m
 Passive remarks can be used for putting instructions or comments in the compiled code in a way which is still visible in the game UI.
 
 Active remarks can be used to easily add debugging output to a program that can be deactivated using a compiler option (potentially through a command line switch without modifying the source code).
+
+## Option `symbolic-labels`
+
+Activates/deactivates using symbolic labels for jump instruction targets. Possible values are:
+
+* `false` (the default value): the compiled code contains absolute instruction addresses in `jump` instructions. 
+* `true`: the compiled code contains symbolic labels in `jump` instructions. Where possible, dependency on absolute instruction addresses is removed.
+
+Using symbolic labels allows modifications to the text representation of the resulting program, including additions and removals of instructions. When symbolic labels are not used, adding/removing an instruction may cause jump instructions targets to become invalid, damaging the program.
+
+> [!WARNING]
+> Some more complex programs may still depend on absolute positions of instructions in the resulting code, even if all `jump` instructions do use symbolic labels. Adding/removing instructions in the compiled code of such programs may still render it incorrect. At this moment, the following constructs rely on absolute instruction addresses:
+> 
+> * recursive function calls,
+> * remote function calls,
+> * random array access,
+> * `case` expressions optimized to use jump tables.
 
 ## Option `sort-variables`
 

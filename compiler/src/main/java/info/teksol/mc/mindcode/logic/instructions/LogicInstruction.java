@@ -13,8 +13,6 @@ import java.util.Map;
 @NullMarked
 public interface LogicInstruction extends MlogInstruction {
 
-    LogicInstruction copy();
-
     AstContext getAstContext();
 
     default SourcePosition sourcePosition() {
@@ -23,10 +21,11 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction withContext(AstContext astContext);
 
-    /// Provides side effects of this instruction
-    SideEffects sideEffects();
+    Object getInfo(InstructionInfo instructionInfo);
 
-    LogicInstruction withSideEffects(SideEffects sideEffects);
+    LogicInstruction setInfo(InstructionInfo instructionInfo, Object value);
+
+    LogicInstruction copyInfo(LogicInstruction other);
 
     boolean belongsTo(@Nullable AstContext astContext);
 
@@ -39,10 +38,6 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     default @Nullable LogicVariable getResult() {
-        return null;
-    }
-
-    default @Nullable LogicLabel getMarker() {
         return null;
     }
 
@@ -69,5 +64,22 @@ public interface LogicInstruction extends MlogInstruction {
     /// @return real size of the instruction
     default int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
         return getOpcode().getSize();
+    }
+
+    /// Provides side effects of this instruction
+    default SideEffects sideEffects() {
+        return (SideEffects) getInfo(InstructionInfo.SIDE_EFFECTS);
+    }
+
+    default LogicInstruction setSideEffects(SideEffects sideEffects) {
+        return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
+    }
+
+    default LogicLabel getMarker() {
+        return (LogicLabel) getInfo(InstructionInfo.MARKER);
+    }
+
+    default LogicInstruction setMarker(LogicLabel marker) {
+        return setInfo(InstructionInfo.MARKER, marker);
     }
 }

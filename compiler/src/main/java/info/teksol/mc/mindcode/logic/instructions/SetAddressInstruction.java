@@ -18,23 +18,13 @@ public class SetAddressInstruction extends BaseResultInstruction {
         super(astContext, Opcode.SETADDR, args, params);
     }
 
-    protected SetAddressInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public SetAddressInstruction copy() {
-        return new SetAddressInstruction(this, astContext, sideEffects);
+    protected SetAddressInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public SetAddressInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new SetAddressInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public SetAddressInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new SetAddressInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new SetAddressInstruction(this, astContext);
     }
 
     public final LogicVariable getResult() {

@@ -42,7 +42,7 @@ public class ERR {
     public static final String DIRECTIVE_MULTIPLE_VALUES = "Multiple values specified for option '%s'.";
     public static final String DIRECTIVE_NO_VALUE = "No value specified for option '%s'.";
     public static final String DIRECTIVE_UNKNOWN = "Unknown compiler directive '%s'.";
-    public static final String DIRECTIVE_VALUE_OUT_OF_RANGE = "Invalid value '%s' of compiler directive '%s' (expected integer between 1 and  %d).";
+    public static final String DIRECTIVE_VALUE_OUT_OF_RANGE = "Invalid value '%s' of compiler directive '%s' (expected integer between %d and  %d).";
     public static final String ENHANCED_COMMENTS_NO_PLACEHOLDERS = "Formattable placeholders not supported in enhanced comments.";
     public static final String EXPRESSION_NOT_CONSTANT_CONST = "Value assigned to constant '%s' is not a constant expression.";
     public static final String EXPRESSION_NOT_CONSTANT_PARAM = "Value assigned to parameter '%s' is not a constant expression.";

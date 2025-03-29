@@ -14,11 +14,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added a new remarks mode - `comments`. In this mode, remarks are compiled as mlog comments (`# comment`).
 * Added a new [`--file-references` command-line option](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#file-references).
+* Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
 * Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
 
 ### Changed
 
-* Underscores in command-line options were changed to hyphens by default. For backwards compatibility, the command-line parser still recognizes option names with underscores.      
+* **Breaking**: underscores in multi-word command-line options were changed to hyphens.      
 * The `noinit` modifier is no longer disallowed for local variables.
 
 ## 3.2.1 - 2025-03-23

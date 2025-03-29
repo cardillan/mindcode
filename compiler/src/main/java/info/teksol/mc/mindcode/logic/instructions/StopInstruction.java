@@ -13,23 +13,13 @@ public class StopInstruction extends BaseInstruction {
         super(astContext, Opcode.STOP, List.of(), List.of());
     }
 
-    protected StopInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public StopInstruction copy() {
-        return new StopInstruction(this, astContext, sideEffects);
+    protected StopInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public StopInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new StopInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public StopInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new StopInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new StopInstruction(this, astContext);
     }
 
     @Override

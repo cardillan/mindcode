@@ -9,6 +9,7 @@ import java.util.function.Consumer;
 /// variables other than function arguments to be read or written when the instruction is executed.
 @NullMarked
 public interface SideEffects {
+    SideEffects NONE = SideEffects.none();
 
     /// Applies the side effect by passing read variables into the `reads` consumer and written variables
     /// into the `writes` consumer. The actual values being read or written aren't known.

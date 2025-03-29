@@ -63,25 +63,25 @@ Final code before resolving virtual instructions:
    50:  assertequals -0.5 *tmp25 "frac(-1.5)"
    51:  set :sign.0:x 0
    52:  setaddr :sign.0*retaddr *label12
-   53:  call *label0 :sign.0*retval
+   53:  call *label0 *invalid :sign.0*retval
         label *label12
    54:  set *tmp27 :sign.0*retval
    55:  assertequals 0 *tmp27 "sign(0)"
    56:  set :sign.0:x 0.0000001
    57:  setaddr :sign.0*retaddr *label13
-   58:  call *label0 :sign.0*retval
+   58:  call *label0 *invalid :sign.0*retval
         label *label13
    59:  set *tmp28 :sign.0*retval
    60:  assertequals 0 *tmp28 "sign(1e-7)"
    61:  set :sign.0:x 0.00001
    62:  setaddr :sign.0*retaddr *label14
-   63:  call *label0 :sign.0*retval
+   63:  call *label0 *invalid :sign.0*retval
         label *label14
    64:  set *tmp29 :sign.0*retval
    65:  assertequals 1 *tmp29 "sign(1e-5)"
    66:  set :sign.0:x -5
    67:  setaddr :sign.0*retaddr *label15
-   68:  call *label0 :sign.0*retval
+   68:  call *label0 *invalid :sign.0*retval
         label *label15
    69:  set *tmp30 :sign.0*retval
    70:  assertequals -1 *tmp30 "sign(-5)"
@@ -192,14 +192,14 @@ Final code before resolving virtual instructions:
   157:  setaddr *tmp73 *label38
   158:  set :sum.1:i 3
   159:  jump *label35 always 0 0
-        multilabel *label38 marker0
+        multilabel *label38
   160:  setaddr *tmp73 *label39
   161:  set :sum.1:i 4
         label *label35
   162:  op add :sum.1:sum :sum.1:sum :sum.1:i
         label *label36
-  163:  multijump *tmp73 0 0 marker0
-        multilabel *label39 marker0
+  163:  multijump *tmp73 0 0
+        multilabel *label39
         label *label37
   164:  set *tmp71 :sum.1:sum
         label *label34
@@ -215,14 +215,14 @@ Final code before resolving virtual instructions:
   173:  setaddr *tmp77 *label45
   174:  set :avg.1:i 3
   175:  jump *label42 always 0 0
-        multilabel *label45 marker1
+        multilabel *label45
   176:  setaddr *tmp77 *label46
   177:  set :avg.1:i 4
         label *label42
   178:  op add :avg.1:sum :avg.1:sum :avg.1:i
         label *label43
-  179:  multijump *tmp77 0 0 marker1
-        multilabel *label46 marker1
+  179:  multijump *tmp77 0 0
+        multilabel *label46
         label *label44
   180:  op add *tmp78 2 2
   181:  op div *tmp79 :avg.1:sum *tmp78
@@ -331,7 +331,7 @@ Final code before resolving virtual instructions:
   272:  set :median.0:x3 6
   273:  set :median.0:x4 8
   274:  setaddr :median.0*retaddr *label58
-  275:  call *label1 :median.0*retval
+  275:  call *label1 *invalid :median.0*retval
         label *label58
   276:  set *tmp125 :median.0*retval
   277:  assertequals 5 *tmp125 "median(2,4,6,8)"
@@ -340,7 +340,7 @@ Final code before resolving virtual instructions:
   280:  set :median.0:x3 4
   281:  set :median.0:x4 2
   282:  setaddr :median.0*retaddr *label59
-  283:  call *label1 :median.0*retval
+  283:  call *label1 *invalid :median.0*retval
         label *label59
   284:  set *tmp126 :median.0*retval
   285:  assertequals 5 *tmp126 "median(8,6,4,2)"
@@ -349,7 +349,7 @@ Final code before resolving virtual instructions:
   288:  set :median.0:x3 2
   289:  set :median.0:x4 6
   290:  setaddr :median.0*retaddr *label60
-  291:  call *label1 :median.0*retval
+  291:  call *label1 *invalid :median.0*retval
         label *label60
   292:  set *tmp127 :median.0*retval
   293:  assertequals 5 *tmp127 "median(4,8,2,6)"
@@ -358,7 +358,7 @@ Final code before resolving virtual instructions:
   296:  set :median.0:x3 4
   297:  set :median.0:x4 8
   298:  setaddr :median.0*retaddr *label61
-  299:  call *label1 :median.0*retval
+  299:  call *label1 *invalid :median.0*retval
         label *label61
   300:  set *tmp128 :median.0*retval
   301:  assertequals 5 *tmp128 "median(2,6,4,8)"
@@ -367,7 +367,7 @@ Final code before resolving virtual instructions:
   304:  set :median.0:x3 8
   305:  set :median.0:x4 4
   306:  setaddr :median.0*retaddr *label62
-  307:  call *label1 :median.0*retval
+  307:  call *label1 *invalid :median.0*retval
         label *label62
   308:  set *tmp129 :median.0*retval
   309:  assertequals 5 *tmp129 "median(6,2,8,4)"
@@ -377,7 +377,7 @@ Final code before resolving virtual instructions:
   313:  set :median.1:x4 4
   314:  set :median.1:x5 5
   315:  setaddr :median.1*retaddr *label63
-  316:  call *label2 :median.1*retval
+  316:  call *label2 *invalid :median.1*retval
         label *label63
   317:  set *tmp130 :median.1*retval
   318:  assertequals 3 *tmp130 "median(1,2,3,4,5)"
@@ -387,7 +387,7 @@ Final code before resolving virtual instructions:
   322:  set :median.1:x4 2
   323:  set :median.1:x5 1
   324:  setaddr :median.1*retaddr *label64
-  325:  call *label2 :median.1*retval
+  325:  call *label2 *invalid :median.1*retval
         label *label64
   326:  set *tmp131 :median.1*retval
   327:  assertequals 3 *tmp131 "median(5,4,3,2,1)"
@@ -397,7 +397,7 @@ Final code before resolving virtual instructions:
   331:  set :median.1:x4 1
   332:  set :median.1:x5 1
   333:  setaddr :median.1*retaddr *label65
-  334:  call *label2 :median.1*retval
+  334:  call *label2 *invalid :median.1*retval
         label *label65
   335:  set *tmp132 :median.1*retval
   336:  assertequals 1 *tmp132 "median(1,1,1,1,1)"
@@ -407,7 +407,7 @@ Final code before resolving virtual instructions:
   340:  set :median.1:x4 1
   341:  set :median.1:x5 5
   342:  setaddr :median.1*retaddr *label66
-  343:  call *label2 :median.1*retval
+  343:  call *label2 *invalid :median.1*retval
         label *label66
   344:  set *tmp133 :median.1*retval
   345:  assertequals 1 *tmp133 "median(1,1,1,1,5)"
@@ -417,7 +417,7 @@ Final code before resolving virtual instructions:
   349:  set :median.1:x4 5
   350:  set :median.1:x5 5
   351:  setaddr :median.1*retaddr *label67
-  352:  call *label2 :median.1*retval
+  352:  call *label2 *invalid :median.1*retval
         label *label67
   353:  set *tmp134 :median.1*retval
   354:  assertequals 1 *tmp134 "median(1,1,1,5,5)"
@@ -427,7 +427,7 @@ Final code before resolving virtual instructions:
   358:  set :median.1:x4 5
   359:  set :median.1:x5 5
   360:  setaddr :median.1*retaddr *label68
-  361:  call *label2 :median.1*retval
+  361:  call *label2 *invalid :median.1*retval
         label *label68
   362:  set *tmp135 :median.1*retval
   363:  assertequals 5 *tmp135 "median(1,1,5,5,5)"
@@ -437,7 +437,7 @@ Final code before resolving virtual instructions:
   367:  set :median.1:x4 5
   368:  set :median.1:x5 5
   369:  setaddr :median.1*retaddr *label69
-  370:  call *label2 :median.1*retval
+  370:  call *label2 *invalid :median.1*retval
         label *label69
   371:  set *tmp136 :median.1*retval
   372:  assertequals 5 *tmp136 "median(1,5,5,5,5)"
@@ -447,7 +447,7 @@ Final code before resolving virtual instructions:
   376:  set :median.1:x4 5
   377:  set :median.1:x5 5
   378:  setaddr :median.1*retaddr *label70
-  379:  call *label2 :median.1*retval
+  379:  call *label2 *invalid :median.1*retval
         label *label70
   380:  set *tmp137 :median.1*retval
   381:  assertequals 5 *tmp137 "median(5,5,5,5,5)"
@@ -457,23 +457,23 @@ Final code before resolving virtual instructions:
   385:  setaddr *tmp140 *label76
   386:  set :_median.0:i 1
   387:  jump *label73 always 0 0
-        multilabel *label76 marker2
+        multilabel *label76
   388:  setaddr *tmp140 *label77
   389:  set :_median.0:i 1
   390:  jump *label73 always 0 0
-        multilabel *label77 marker2
+        multilabel *label77
   391:  setaddr *tmp140 *label78
   392:  set :_median.0:i 1
   393:  jump *label73 always 0 0
-        multilabel *label78 marker2
+        multilabel *label78
   394:  setaddr *tmp140 *label79
   395:  set :_median.0:i 1
   396:  jump *label73 always 0 0
-        multilabel *label79 marker2
+        multilabel *label79
   397:  setaddr *tmp140 *label80
   398:  set :_median.0:i 1
   399:  jump *label73 always 0 0
-        multilabel *label80 marker2
+        multilabel *label80
   400:  setaddr *tmp140 *label81
   401:  set :_median.0:i 1
         label *label73
@@ -483,23 +483,23 @@ Final code before resolving virtual instructions:
   405:  setaddr *tmp142 *label86
   406:  set :_isMedian.0:i 1
   407:  jump *label83 always 0 0
-        multilabel *label86 marker3
+        multilabel *label86
   408:  setaddr *tmp142 *label87
   409:  set :_isMedian.0:i 1
   410:  jump *label83 always 0 0
-        multilabel *label87 marker3
+        multilabel *label87
   411:  setaddr *tmp142 *label88
   412:  set :_isMedian.0:i 1
   413:  jump *label83 always 0 0
-        multilabel *label88 marker3
+        multilabel *label88
   414:  setaddr *tmp142 *label89
   415:  set :_isMedian.0:i 1
   416:  jump *label83 always 0 0
-        multilabel *label89 marker3
+        multilabel *label89
   417:  setaddr *tmp142 *label90
   418:  set :_isMedian.0:i 1
   419:  jump *label83 always 0 0
-        multilabel *label90 marker3
+        multilabel *label90
   420:  setaddr *tmp142 *label91
   421:  set :_isMedian.0:i 1
         label *label83
@@ -520,8 +520,8 @@ Final code before resolving virtual instructions:
   433:  set *tmp144 *tmp146
         label *label93
         label *label84
-  434:  multijump *tmp142 0 0 marker3
-        multilabel *label91 marker3
+  434:  multijump *tmp142 0 0
+        multilabel *label91
         label *label85
   435:  op sub *tmp147 :_isMedian.0:gt :_isMedian.0:lt
   436:  op abs *tmp148 *tmp147 0
@@ -567,8 +567,8 @@ Final code before resolving virtual instructions:
   468:  set *tmp156 *tmp158
         label *label101
         label *label74
-  469:  multijump *tmp140 0 0 marker2
-        multilabel *label81 marker2
+  469:  multijump *tmp140 0 0
+        multilabel *label81
         label *label75
   470:  op div *tmp159 :_median.0:best :_median.0:count
   471:  set *tmp139 *tmp159
@@ -582,23 +582,23 @@ Final code before resolving virtual instructions:
   477:  setaddr *tmp162 *label109
   478:  set :_median.1:i 1
   479:  jump *label106 always 0 0
-        multilabel *label109 marker4
+        multilabel *label109
   480:  setaddr *tmp162 *label110
   481:  set :_median.1:i 1
   482:  jump *label106 always 0 0
-        multilabel *label110 marker4
+        multilabel *label110
   483:  setaddr *tmp162 *label111
   484:  set :_median.1:i 1
   485:  jump *label106 always 0 0
-        multilabel *label111 marker4
+        multilabel *label111
   486:  setaddr *tmp162 *label112
   487:  set :_median.1:i 1
   488:  jump *label106 always 0 0
-        multilabel *label112 marker4
+        multilabel *label112
   489:  setaddr *tmp162 *label113
   490:  set :_median.1:i 1
   491:  jump *label106 always 0 0
-        multilabel *label113 marker4
+        multilabel *label113
   492:  setaddr *tmp162 *label114
   493:  set :_median.1:i 5
         label *label106
@@ -608,23 +608,23 @@ Final code before resolving virtual instructions:
   497:  setaddr *tmp164 *label119
   498:  set :_isMedian.1:i 1
   499:  jump *label116 always 0 0
-        multilabel *label119 marker5
+        multilabel *label119
   500:  setaddr *tmp164 *label120
   501:  set :_isMedian.1:i 1
   502:  jump *label116 always 0 0
-        multilabel *label120 marker5
+        multilabel *label120
   503:  setaddr *tmp164 *label121
   504:  set :_isMedian.1:i 1
   505:  jump *label116 always 0 0
-        multilabel *label121 marker5
+        multilabel *label121
   506:  setaddr *tmp164 *label122
   507:  set :_isMedian.1:i 1
   508:  jump *label116 always 0 0
-        multilabel *label122 marker5
+        multilabel *label122
   509:  setaddr *tmp164 *label123
   510:  set :_isMedian.1:i 1
   511:  jump *label116 always 0 0
-        multilabel *label123 marker5
+        multilabel *label123
   512:  setaddr *tmp164 *label124
   513:  set :_isMedian.1:i 5
         label *label116
@@ -645,8 +645,8 @@ Final code before resolving virtual instructions:
   525:  set *tmp166 *tmp168
         label *label126
         label *label117
-  526:  multijump *tmp164 0 0 marker5
-        multilabel *label124 marker5
+  526:  multijump *tmp164 0 0
+        multilabel *label124
         label *label118
   527:  op sub *tmp169 :_isMedian.1:gt :_isMedian.1:lt
   528:  op abs *tmp170 *tmp169 0
@@ -692,8 +692,8 @@ Final code before resolving virtual instructions:
   560:  set *tmp178 *tmp180
         label *label134
         label *label107
-  561:  multijump *tmp162 0 0 marker4
-        multilabel *label114 marker4
+  561:  multijump *tmp162 0 0
+        multilabel *label114
         label *label108
   562:  op div *tmp181 :_median.1:best :_median.1:count
   563:  set *tmp161 *tmp181
@@ -707,23 +707,23 @@ Final code before resolving virtual instructions:
   569:  setaddr *tmp184 *label142
   570:  set :_median.2:i 1
   571:  jump *label139 always 0 0
-        multilabel *label142 marker6
+        multilabel *label142
   572:  setaddr *tmp184 *label143
   573:  set :_median.2:i 1
   574:  jump *label139 always 0 0
-        multilabel *label143 marker6
+        multilabel *label143
   575:  setaddr *tmp184 *label144
   576:  set :_median.2:i 1
   577:  jump *label139 always 0 0
-        multilabel *label144 marker6
+        multilabel *label144
   578:  setaddr *tmp184 *label145
   579:  set :_median.2:i 1
   580:  jump *label139 always 0 0
-        multilabel *label145 marker6
+        multilabel *label145
   581:  setaddr *tmp184 *label146
   582:  set :_median.2:i 5
   583:  jump *label139 always 0 0
-        multilabel *label146 marker6
+        multilabel *label146
   584:  setaddr *tmp184 *label147
   585:  set :_median.2:i 5
         label *label139
@@ -733,23 +733,23 @@ Final code before resolving virtual instructions:
   589:  setaddr *tmp186 *label152
   590:  set :_isMedian.2:i 1
   591:  jump *label149 always 0 0
-        multilabel *label152 marker7
+        multilabel *label152
   592:  setaddr *tmp186 *label153
   593:  set :_isMedian.2:i 1
   594:  jump *label149 always 0 0
-        multilabel *label153 marker7
+        multilabel *label153
   595:  setaddr *tmp186 *label154
   596:  set :_isMedian.2:i 1
   597:  jump *label149 always 0 0
-        multilabel *label154 marker7
+        multilabel *label154
   598:  setaddr *tmp186 *label155
   599:  set :_isMedian.2:i 1
   600:  jump *label149 always 0 0
-        multilabel *label155 marker7
+        multilabel *label155
   601:  setaddr *tmp186 *label156
   602:  set :_isMedian.2:i 5
   603:  jump *label149 always 0 0
-        multilabel *label156 marker7
+        multilabel *label156
   604:  setaddr *tmp186 *label157
   605:  set :_isMedian.2:i 5
         label *label149
@@ -770,8 +770,8 @@ Final code before resolving virtual instructions:
   617:  set *tmp188 *tmp190
         label *label159
         label *label150
-  618:  multijump *tmp186 0 0 marker7
-        multilabel *label157 marker7
+  618:  multijump *tmp186 0 0
+        multilabel *label157
         label *label151
   619:  op sub *tmp191 :_isMedian.2:gt :_isMedian.2:lt
   620:  op abs *tmp192 *tmp191 0
@@ -817,8 +817,8 @@ Final code before resolving virtual instructions:
   652:  set *tmp200 *tmp202
         label *label167
         label *label140
-  653:  multijump *tmp184 0 0 marker6
-        multilabel *label147 marker6
+  653:  multijump *tmp184 0 0
+        multilabel *label147
         label *label141
   654:  op div *tmp203 :_median.2:best :_median.2:count
   655:  set *tmp183 *tmp203
@@ -832,23 +832,23 @@ Final code before resolving virtual instructions:
   661:  setaddr *tmp206 *label175
   662:  set :_median.3:i 1
   663:  jump *label172 always 0 0
-        multilabel *label175 marker8
+        multilabel *label175
   664:  setaddr *tmp206 *label176
   665:  set :_median.3:i 1
   666:  jump *label172 always 0 0
-        multilabel *label176 marker8
+        multilabel *label176
   667:  setaddr *tmp206 *label177
   668:  set :_median.3:i 1
   669:  jump *label172 always 0 0
-        multilabel *label177 marker8
+        multilabel *label177
   670:  setaddr *tmp206 *label178
   671:  set :_median.3:i 5
   672:  jump *label172 always 0 0
-        multilabel *label178 marker8
+        multilabel *label178
   673:  setaddr *tmp206 *label179
   674:  set :_median.3:i 5
   675:  jump *label172 always 0 0
-        multilabel *label179 marker8
+        multilabel *label179
   676:  setaddr *tmp206 *label180
   677:  set :_median.3:i 5
         label *label172
@@ -858,23 +858,23 @@ Final code before resolving virtual instructions:
   681:  setaddr *tmp208 *label185
   682:  set :_isMedian.3:i 1
   683:  jump *label182 always 0 0
-        multilabel *label185 marker9
+        multilabel *label185
   684:  setaddr *tmp208 *label186
   685:  set :_isMedian.3:i 1
   686:  jump *label182 always 0 0
-        multilabel *label186 marker9
+        multilabel *label186
   687:  setaddr *tmp208 *label187
   688:  set :_isMedian.3:i 1
   689:  jump *label182 always 0 0
-        multilabel *label187 marker9
+        multilabel *label187
   690:  setaddr *tmp208 *label188
   691:  set :_isMedian.3:i 5
   692:  jump *label182 always 0 0
-        multilabel *label188 marker9
+        multilabel *label188
   693:  setaddr *tmp208 *label189
   694:  set :_isMedian.3:i 5
   695:  jump *label182 always 0 0
-        multilabel *label189 marker9
+        multilabel *label189
   696:  setaddr *tmp208 *label190
   697:  set :_isMedian.3:i 5
         label *label182
@@ -895,8 +895,8 @@ Final code before resolving virtual instructions:
   709:  set *tmp210 *tmp212
         label *label192
         label *label183
-  710:  multijump *tmp208 0 0 marker9
-        multilabel *label190 marker9
+  710:  multijump *tmp208 0 0
+        multilabel *label190
         label *label184
   711:  op sub *tmp213 :_isMedian.3:gt :_isMedian.3:lt
   712:  op abs *tmp214 *tmp213 0
@@ -942,8 +942,8 @@ Final code before resolving virtual instructions:
   744:  set *tmp222 *tmp224
         label *label200
         label *label173
-  745:  multijump *tmp206 0 0 marker8
-        multilabel *label180 marker8
+  745:  multijump *tmp206 0 0
+        multilabel *label180
         label *label174
   746:  op div *tmp225 :_median.3:best :_median.3:count
   747:  set *tmp205 *tmp225
@@ -957,23 +957,23 @@ Final code before resolving virtual instructions:
   753:  setaddr *tmp228 *label208
   754:  set :_median.4:i 1
   755:  jump *label205 always 0 0
-        multilabel *label208 marker10
+        multilabel *label208
   756:  setaddr *tmp228 *label209
   757:  set :_median.4:i 1
   758:  jump *label205 always 0 0
-        multilabel *label209 marker10
+        multilabel *label209
   759:  setaddr *tmp228 *label210
   760:  set :_median.4:i 5
   761:  jump *label205 always 0 0
-        multilabel *label210 marker10
+        multilabel *label210
   762:  setaddr *tmp228 *label211
   763:  set :_median.4:i 5
   764:  jump *label205 always 0 0
-        multilabel *label211 marker10
+        multilabel *label211
   765:  setaddr *tmp228 *label212
   766:  set :_median.4:i 5
   767:  jump *label205 always 0 0
-        multilabel *label212 marker10
+        multilabel *label212
   768:  setaddr *tmp228 *label213
   769:  set :_median.4:i 5
         label *label205
@@ -983,23 +983,23 @@ Final code before resolving virtual instructions:
   773:  setaddr *tmp230 *label218
   774:  set :_isMedian.4:i 1
   775:  jump *label215 always 0 0
-        multilabel *label218 marker11
+        multilabel *label218
   776:  setaddr *tmp230 *label219
   777:  set :_isMedian.4:i 1
   778:  jump *label215 always 0 0
-        multilabel *label219 marker11
+        multilabel *label219
   779:  setaddr *tmp230 *label220
   780:  set :_isMedian.4:i 5
   781:  jump *label215 always 0 0
-        multilabel *label220 marker11
+        multilabel *label220
   782:  setaddr *tmp230 *label221
   783:  set :_isMedian.4:i 5
   784:  jump *label215 always 0 0
-        multilabel *label221 marker11
+        multilabel *label221
   785:  setaddr *tmp230 *label222
   786:  set :_isMedian.4:i 5
   787:  jump *label215 always 0 0
-        multilabel *label222 marker11
+        multilabel *label222
   788:  setaddr *tmp230 *label223
   789:  set :_isMedian.4:i 5
         label *label215
@@ -1020,8 +1020,8 @@ Final code before resolving virtual instructions:
   801:  set *tmp232 *tmp234
         label *label225
         label *label216
-  802:  multijump *tmp230 0 0 marker11
-        multilabel *label223 marker11
+  802:  multijump *tmp230 0 0
+        multilabel *label223
         label *label217
   803:  op sub *tmp235 :_isMedian.4:gt :_isMedian.4:lt
   804:  op abs *tmp236 *tmp235 0
@@ -1067,8 +1067,8 @@ Final code before resolving virtual instructions:
   836:  set *tmp244 *tmp246
         label *label233
         label *label206
-  837:  multijump *tmp228 0 0 marker10
-        multilabel *label213 marker10
+  837:  multijump *tmp228 0 0
+        multilabel *label213
         label *label207
   838:  op div *tmp247 :_median.4:best :_median.4:count
   839:  set *tmp227 *tmp247
@@ -1082,23 +1082,23 @@ Final code before resolving virtual instructions:
   845:  setaddr *tmp250 *label241
   846:  set :_median.5:i 1
   847:  jump *label238 always 0 0
-        multilabel *label241 marker12
+        multilabel *label241
   848:  setaddr *tmp250 *label242
   849:  set :_median.5:i 5
   850:  jump *label238 always 0 0
-        multilabel *label242 marker12
+        multilabel *label242
   851:  setaddr *tmp250 *label243
   852:  set :_median.5:i 5
   853:  jump *label238 always 0 0
-        multilabel *label243 marker12
+        multilabel *label243
   854:  setaddr *tmp250 *label244
   855:  set :_median.5:i 5
   856:  jump *label238 always 0 0
-        multilabel *label244 marker12
+        multilabel *label244
   857:  setaddr *tmp250 *label245
   858:  set :_median.5:i 5
   859:  jump *label238 always 0 0
-        multilabel *label245 marker12
+        multilabel *label245
   860:  setaddr *tmp250 *label246
   861:  set :_median.5:i 5
         label *label238
@@ -1108,23 +1108,23 @@ Final code before resolving virtual instructions:
   865:  setaddr *tmp252 *label251
   866:  set :_isMedian.5:i 1
   867:  jump *label248 always 0 0
-        multilabel *label251 marker13
+        multilabel *label251
   868:  setaddr *tmp252 *label252
   869:  set :_isMedian.5:i 5
   870:  jump *label248 always 0 0
-        multilabel *label252 marker13
+        multilabel *label252
   871:  setaddr *tmp252 *label253
   872:  set :_isMedian.5:i 5
   873:  jump *label248 always 0 0
-        multilabel *label253 marker13
+        multilabel *label253
   874:  setaddr *tmp252 *label254
   875:  set :_isMedian.5:i 5
   876:  jump *label248 always 0 0
-        multilabel *label254 marker13
+        multilabel *label254
   877:  setaddr *tmp252 *label255
   878:  set :_isMedian.5:i 5
   879:  jump *label248 always 0 0
-        multilabel *label255 marker13
+        multilabel *label255
   880:  setaddr *tmp252 *label256
   881:  set :_isMedian.5:i 5
         label *label248
@@ -1145,8 +1145,8 @@ Final code before resolving virtual instructions:
   893:  set *tmp254 *tmp256
         label *label258
         label *label249
-  894:  multijump *tmp252 0 0 marker13
-        multilabel *label256 marker13
+  894:  multijump *tmp252 0 0
+        multilabel *label256
         label *label250
   895:  op sub *tmp257 :_isMedian.5:gt :_isMedian.5:lt
   896:  op abs *tmp258 *tmp257 0
@@ -1192,8 +1192,8 @@ Final code before resolving virtual instructions:
   928:  set *tmp266 *tmp268
         label *label266
         label *label239
-  929:  multijump *tmp250 0 0 marker12
-        multilabel *label246 marker12
+  929:  multijump *tmp250 0 0
+        multilabel *label246
         label *label240
   930:  op div *tmp269 :_median.5:best :_median.5:count
   931:  set *tmp249 *tmp269
@@ -1207,23 +1207,23 @@ Final code before resolving virtual instructions:
   937:  setaddr *tmp272 *label274
   938:  set :_median.6:i 5
   939:  jump *label271 always 0 0
-        multilabel *label274 marker14
+        multilabel *label274
   940:  setaddr *tmp272 *label275
   941:  set :_median.6:i 5
   942:  jump *label271 always 0 0
-        multilabel *label275 marker14
+        multilabel *label275
   943:  setaddr *tmp272 *label276
   944:  set :_median.6:i 5
   945:  jump *label271 always 0 0
-        multilabel *label276 marker14
+        multilabel *label276
   946:  setaddr *tmp272 *label277
   947:  set :_median.6:i 5
   948:  jump *label271 always 0 0
-        multilabel *label277 marker14
+        multilabel *label277
   949:  setaddr *tmp272 *label278
   950:  set :_median.6:i 5
   951:  jump *label271 always 0 0
-        multilabel *label278 marker14
+        multilabel *label278
   952:  setaddr *tmp272 *label279
   953:  set :_median.6:i 5
         label *label271
@@ -1233,23 +1233,23 @@ Final code before resolving virtual instructions:
   957:  setaddr *tmp274 *label284
   958:  set :_isMedian.6:i 5
   959:  jump *label281 always 0 0
-        multilabel *label284 marker15
+        multilabel *label284
   960:  setaddr *tmp274 *label285
   961:  set :_isMedian.6:i 5
   962:  jump *label281 always 0 0
-        multilabel *label285 marker15
+        multilabel *label285
   963:  setaddr *tmp274 *label286
   964:  set :_isMedian.6:i 5
   965:  jump *label281 always 0 0
-        multilabel *label286 marker15
+        multilabel *label286
   966:  setaddr *tmp274 *label287
   967:  set :_isMedian.6:i 5
   968:  jump *label281 always 0 0
-        multilabel *label287 marker15
+        multilabel *label287
   969:  setaddr *tmp274 *label288
   970:  set :_isMedian.6:i 5
   971:  jump *label281 always 0 0
-        multilabel *label288 marker15
+        multilabel *label288
   972:  setaddr *tmp274 *label289
   973:  set :_isMedian.6:i 5
         label *label281
@@ -1270,8 +1270,8 @@ Final code before resolving virtual instructions:
   985:  set *tmp276 *tmp278
         label *label291
         label *label282
-  986:  multijump *tmp274 0 0 marker15
-        multilabel *label289 marker15
+  986:  multijump *tmp274 0 0
+        multilabel *label289
         label *label283
   987:  op sub *tmp279 :_isMedian.6:gt :_isMedian.6:lt
   988:  op abs *tmp280 *tmp279 0
@@ -1317,8 +1317,8 @@ Final code before resolving virtual instructions:
  1020:  set *tmp288 *tmp290
         label *label299
         label *label272
- 1021:  multijump *tmp272 0 0 marker14
-        multilabel *label279 marker14
+ 1021:  multijump *tmp272 0 0
+        multilabel *label279
         label *label273
  1022:  op div *tmp291 :_median.6:best :_median.6:count
  1023:  set *tmp271 *tmp291
@@ -1332,35 +1332,35 @@ Final code before resolving virtual instructions:
  1029:  setaddr *tmp294 *label307
  1030:  set :_median.7:i 1
  1031:  jump *label304 always 0 0
-        multilabel *label307 marker16
+        multilabel *label307
  1032:  setaddr *tmp294 *label308
  1033:  set :_median.7:i 2
  1034:  jump *label304 always 0 0
-        multilabel *label308 marker16
+        multilabel *label308
  1035:  setaddr *tmp294 *label309
  1036:  set :_median.7:i 3
  1037:  jump *label304 always 0 0
-        multilabel *label309 marker16
+        multilabel *label309
  1038:  setaddr *tmp294 *label310
  1039:  set :_median.7:i 4
  1040:  jump *label304 always 0 0
-        multilabel *label310 marker16
+        multilabel *label310
  1041:  setaddr *tmp294 *label311
  1042:  set :_median.7:i 5
  1043:  jump *label304 always 0 0
-        multilabel *label311 marker16
+        multilabel *label311
  1044:  setaddr *tmp294 *label312
  1045:  set :_median.7:i 6
  1046:  jump *label304 always 0 0
-        multilabel *label312 marker16
+        multilabel *label312
  1047:  setaddr *tmp294 *label313
  1048:  set :_median.7:i 7
  1049:  jump *label304 always 0 0
-        multilabel *label313 marker16
+        multilabel *label313
  1050:  setaddr *tmp294 *label314
  1051:  set :_median.7:i 8
  1052:  jump *label304 always 0 0
-        multilabel *label314 marker16
+        multilabel *label314
  1053:  setaddr *tmp294 *label315
  1054:  set :_median.7:i 9
         label *label304
@@ -1370,35 +1370,35 @@ Final code before resolving virtual instructions:
  1058:  setaddr *tmp296 *label320
  1059:  set :_isMedian.7:i 1
  1060:  jump *label317 always 0 0
-        multilabel *label320 marker17
+        multilabel *label320
  1061:  setaddr *tmp296 *label321
  1062:  set :_isMedian.7:i 2
  1063:  jump *label317 always 0 0
-        multilabel *label321 marker17
+        multilabel *label321
  1064:  setaddr *tmp296 *label322
  1065:  set :_isMedian.7:i 3
  1066:  jump *label317 always 0 0
-        multilabel *label322 marker17
+        multilabel *label322
  1067:  setaddr *tmp296 *label323
  1068:  set :_isMedian.7:i 4
  1069:  jump *label317 always 0 0
-        multilabel *label323 marker17
+        multilabel *label323
  1070:  setaddr *tmp296 *label324
  1071:  set :_isMedian.7:i 5
  1072:  jump *label317 always 0 0
-        multilabel *label324 marker17
+        multilabel *label324
  1073:  setaddr *tmp296 *label325
  1074:  set :_isMedian.7:i 6
  1075:  jump *label317 always 0 0
-        multilabel *label325 marker17
+        multilabel *label325
  1076:  setaddr *tmp296 *label326
  1077:  set :_isMedian.7:i 7
  1078:  jump *label317 always 0 0
-        multilabel *label326 marker17
+        multilabel *label326
  1079:  setaddr *tmp296 *label327
  1080:  set :_isMedian.7:i 8
  1081:  jump *label317 always 0 0
-        multilabel *label327 marker17
+        multilabel *label327
  1082:  setaddr *tmp296 *label328
  1083:  set :_isMedian.7:i 9
         label *label317
@@ -1419,8 +1419,8 @@ Final code before resolving virtual instructions:
  1095:  set *tmp298 *tmp300
         label *label330
         label *label318
- 1096:  multijump *tmp296 0 0 marker17
-        multilabel *label328 marker17
+ 1096:  multijump *tmp296 0 0
+        multilabel *label328
         label *label319
  1097:  op sub *tmp301 :_isMedian.7:gt :_isMedian.7:lt
  1098:  op abs *tmp302 *tmp301 0
@@ -1466,8 +1466,8 @@ Final code before resolving virtual instructions:
  1130:  set *tmp310 *tmp312
         label *label338
         label *label305
- 1131:  multijump *tmp294 0 0 marker16
-        multilabel *label315 marker16
+ 1131:  multijump *tmp294 0 0
+        multilabel *label315
         label *label306
  1132:  op div *tmp313 :_median.7:best :_median.7:count
  1133:  set *tmp293 *tmp313
@@ -1481,35 +1481,35 @@ Final code before resolving virtual instructions:
  1139:  setaddr *tmp316 *label346
  1140:  set :_median.8:i 9
  1141:  jump *label343 always 0 0
-        multilabel *label346 marker18
+        multilabel *label346
  1142:  setaddr *tmp316 *label347
  1143:  set :_median.8:i 8
  1144:  jump *label343 always 0 0
-        multilabel *label347 marker18
+        multilabel *label347
  1145:  setaddr *tmp316 *label348
  1146:  set :_median.8:i 7
  1147:  jump *label343 always 0 0
-        multilabel *label348 marker18
+        multilabel *label348
  1148:  setaddr *tmp316 *label349
  1149:  set :_median.8:i 6
  1150:  jump *label343 always 0 0
-        multilabel *label349 marker18
+        multilabel *label349
  1151:  setaddr *tmp316 *label350
  1152:  set :_median.8:i 5
  1153:  jump *label343 always 0 0
-        multilabel *label350 marker18
+        multilabel *label350
  1154:  setaddr *tmp316 *label351
  1155:  set :_median.8:i 4
  1156:  jump *label343 always 0 0
-        multilabel *label351 marker18
+        multilabel *label351
  1157:  setaddr *tmp316 *label352
  1158:  set :_median.8:i 3
  1159:  jump *label343 always 0 0
-        multilabel *label352 marker18
+        multilabel *label352
  1160:  setaddr *tmp316 *label353
  1161:  set :_median.8:i 2
  1162:  jump *label343 always 0 0
-        multilabel *label353 marker18
+        multilabel *label353
  1163:  setaddr *tmp316 *label354
  1164:  set :_median.8:i 1
         label *label343
@@ -1519,35 +1519,35 @@ Final code before resolving virtual instructions:
  1168:  setaddr *tmp318 *label359
  1169:  set :_isMedian.8:i 9
  1170:  jump *label356 always 0 0
-        multilabel *label359 marker19
+        multilabel *label359
  1171:  setaddr *tmp318 *label360
  1172:  set :_isMedian.8:i 8
  1173:  jump *label356 always 0 0
-        multilabel *label360 marker19
+        multilabel *label360
  1174:  setaddr *tmp318 *label361
  1175:  set :_isMedian.8:i 7
  1176:  jump *label356 always 0 0
-        multilabel *label361 marker19
+        multilabel *label361
  1177:  setaddr *tmp318 *label362
  1178:  set :_isMedian.8:i 6
  1179:  jump *label356 always 0 0
-        multilabel *label362 marker19
+        multilabel *label362
  1180:  setaddr *tmp318 *label363
  1181:  set :_isMedian.8:i 5
  1182:  jump *label356 always 0 0
-        multilabel *label363 marker19
+        multilabel *label363
  1183:  setaddr *tmp318 *label364
  1184:  set :_isMedian.8:i 4
  1185:  jump *label356 always 0 0
-        multilabel *label364 marker19
+        multilabel *label364
  1186:  setaddr *tmp318 *label365
  1187:  set :_isMedian.8:i 3
  1188:  jump *label356 always 0 0
-        multilabel *label365 marker19
+        multilabel *label365
  1189:  setaddr *tmp318 *label366
  1190:  set :_isMedian.8:i 2
  1191:  jump *label356 always 0 0
-        multilabel *label366 marker19
+        multilabel *label366
  1192:  setaddr *tmp318 *label367
  1193:  set :_isMedian.8:i 1
         label *label356
@@ -1568,8 +1568,8 @@ Final code before resolving virtual instructions:
  1205:  set *tmp320 *tmp322
         label *label369
         label *label357
- 1206:  multijump *tmp318 0 0 marker19
-        multilabel *label367 marker19
+ 1206:  multijump *tmp318 0 0
+        multilabel *label367
         label *label358
  1207:  op sub *tmp323 :_isMedian.8:gt :_isMedian.8:lt
  1208:  op abs *tmp324 *tmp323 0
@@ -1615,8 +1615,8 @@ Final code before resolving virtual instructions:
  1240:  set *tmp332 *tmp334
         label *label377
         label *label344
- 1241:  multijump *tmp316 0 0 marker18
-        multilabel *label354 marker18
+ 1241:  multijump *tmp316 0 0
+        multilabel *label354
         label *label345
  1242:  op div *tmp335 :_median.8:best :_median.8:count
  1243:  set *tmp315 *tmp335
@@ -1630,35 +1630,35 @@ Final code before resolving virtual instructions:
  1249:  setaddr *tmp338 *label385
  1250:  set :_median.9:i 1
  1251:  jump *label382 always 0 0
-        multilabel *label385 marker20
+        multilabel *label385
  1252:  setaddr *tmp338 *label386
  1253:  set :_median.9:i 3
  1254:  jump *label382 always 0 0
-        multilabel *label386 marker20
+        multilabel *label386
  1255:  setaddr *tmp338 *label387
  1256:  set :_median.9:i 5
  1257:  jump *label382 always 0 0
-        multilabel *label387 marker20
+        multilabel *label387
  1258:  setaddr *tmp338 *label388
  1259:  set :_median.9:i 7
  1260:  jump *label382 always 0 0
-        multilabel *label388 marker20
+        multilabel *label388
  1261:  setaddr *tmp338 *label389
  1262:  set :_median.9:i 9
  1263:  jump *label382 always 0 0
-        multilabel *label389 marker20
+        multilabel *label389
  1264:  setaddr *tmp338 *label390
  1265:  set :_median.9:i 2
  1266:  jump *label382 always 0 0
-        multilabel *label390 marker20
+        multilabel *label390
  1267:  setaddr *tmp338 *label391
  1268:  set :_median.9:i 4
  1269:  jump *label382 always 0 0
-        multilabel *label391 marker20
+        multilabel *label391
  1270:  setaddr *tmp338 *label392
  1271:  set :_median.9:i 6
  1272:  jump *label382 always 0 0
-        multilabel *label392 marker20
+        multilabel *label392
  1273:  setaddr *tmp338 *label393
  1274:  set :_median.9:i 8
         label *label382
@@ -1668,35 +1668,35 @@ Final code before resolving virtual instructions:
  1278:  setaddr *tmp340 *label398
  1279:  set :_isMedian.9:i 1
  1280:  jump *label395 always 0 0
-        multilabel *label398 marker21
+        multilabel *label398
  1281:  setaddr *tmp340 *label399
  1282:  set :_isMedian.9:i 3
  1283:  jump *label395 always 0 0
-        multilabel *label399 marker21
+        multilabel *label399
  1284:  setaddr *tmp340 *label400
  1285:  set :_isMedian.9:i 5
  1286:  jump *label395 always 0 0
-        multilabel *label400 marker21
+        multilabel *label400
  1287:  setaddr *tmp340 *label401
  1288:  set :_isMedian.9:i 7
  1289:  jump *label395 always 0 0
-        multilabel *label401 marker21
+        multilabel *label401
  1290:  setaddr *tmp340 *label402
  1291:  set :_isMedian.9:i 9
  1292:  jump *label395 always 0 0
-        multilabel *label402 marker21
+        multilabel *label402
  1293:  setaddr *tmp340 *label403
  1294:  set :_isMedian.9:i 2
  1295:  jump *label395 always 0 0
-        multilabel *label403 marker21
+        multilabel *label403
  1296:  setaddr *tmp340 *label404
  1297:  set :_isMedian.9:i 4
  1298:  jump *label395 always 0 0
-        multilabel *label404 marker21
+        multilabel *label404
  1299:  setaddr *tmp340 *label405
  1300:  set :_isMedian.9:i 6
  1301:  jump *label395 always 0 0
-        multilabel *label405 marker21
+        multilabel *label405
  1302:  setaddr *tmp340 *label406
  1303:  set :_isMedian.9:i 8
         label *label395
@@ -1717,8 +1717,8 @@ Final code before resolving virtual instructions:
  1315:  set *tmp342 *tmp344
         label *label408
         label *label396
- 1316:  multijump *tmp340 0 0 marker21
-        multilabel *label406 marker21
+ 1316:  multijump *tmp340 0 0
+        multilabel *label406
         label *label397
  1317:  op sub *tmp345 :_isMedian.9:gt :_isMedian.9:lt
  1318:  op abs *tmp346 *tmp345 0
@@ -1764,8 +1764,8 @@ Final code before resolving virtual instructions:
  1350:  set *tmp354 *tmp356
         label *label416
         label *label383
- 1351:  multijump *tmp338 0 0 marker20
-        multilabel *label393 marker20
+ 1351:  multijump *tmp338 0 0
+        multilabel *label393
         label *label384
  1352:  op div *tmp357 :_median.9:best :_median.9:count
  1353:  set *tmp337 *tmp357
@@ -1779,35 +1779,35 @@ Final code before resolving virtual instructions:
  1359:  setaddr *tmp360 *label424
  1360:  set :_median.10:i 7
  1361:  jump *label421 always 0 0
-        multilabel *label424 marker22
+        multilabel *label424
  1362:  setaddr *tmp360 *label425
  1363:  set :_median.10:i 4
  1364:  jump *label421 always 0 0
-        multilabel *label425 marker22
+        multilabel *label425
  1365:  setaddr *tmp360 *label426
  1366:  set :_median.10:i 2
  1367:  jump *label421 always 0 0
-        multilabel *label426 marker22
+        multilabel *label426
  1368:  setaddr *tmp360 *label427
  1369:  set :_median.10:i 8
  1370:  jump *label421 always 0 0
-        multilabel *label427 marker22
+        multilabel *label427
  1371:  setaddr *tmp360 *label428
  1372:  set :_median.10:i 1
  1373:  jump *label421 always 0 0
-        multilabel *label428 marker22
+        multilabel *label428
  1374:  setaddr *tmp360 *label429
  1375:  set :_median.10:i 5
  1376:  jump *label421 always 0 0
-        multilabel *label429 marker22
+        multilabel *label429
  1377:  setaddr *tmp360 *label430
  1378:  set :_median.10:i 6
  1379:  jump *label421 always 0 0
-        multilabel *label430 marker22
+        multilabel *label430
  1380:  setaddr *tmp360 *label431
  1381:  set :_median.10:i 9
  1382:  jump *label421 always 0 0
-        multilabel *label431 marker22
+        multilabel *label431
  1383:  setaddr *tmp360 *label432
  1384:  set :_median.10:i 3
         label *label421
@@ -1817,35 +1817,35 @@ Final code before resolving virtual instructions:
  1388:  setaddr *tmp362 *label437
  1389:  set :_isMedian.10:i 7
  1390:  jump *label434 always 0 0
-        multilabel *label437 marker23
+        multilabel *label437
  1391:  setaddr *tmp362 *label438
  1392:  set :_isMedian.10:i 4
  1393:  jump *label434 always 0 0
-        multilabel *label438 marker23
+        multilabel *label438
  1394:  setaddr *tmp362 *label439
  1395:  set :_isMedian.10:i 2
  1396:  jump *label434 always 0 0
-        multilabel *label439 marker23
+        multilabel *label439
  1397:  setaddr *tmp362 *label440
  1398:  set :_isMedian.10:i 8
  1399:  jump *label434 always 0 0
-        multilabel *label440 marker23
+        multilabel *label440
  1400:  setaddr *tmp362 *label441
  1401:  set :_isMedian.10:i 1
  1402:  jump *label434 always 0 0
-        multilabel *label441 marker23
+        multilabel *label441
  1403:  setaddr *tmp362 *label442
  1404:  set :_isMedian.10:i 5
  1405:  jump *label434 always 0 0
-        multilabel *label442 marker23
+        multilabel *label442
  1406:  setaddr *tmp362 *label443
  1407:  set :_isMedian.10:i 6
  1408:  jump *label434 always 0 0
-        multilabel *label443 marker23
+        multilabel *label443
  1409:  setaddr *tmp362 *label444
  1410:  set :_isMedian.10:i 9
  1411:  jump *label434 always 0 0
-        multilabel *label444 marker23
+        multilabel *label444
  1412:  setaddr *tmp362 *label445
  1413:  set :_isMedian.10:i 3
         label *label434
@@ -1866,8 +1866,8 @@ Final code before resolving virtual instructions:
  1425:  set *tmp364 *tmp366
         label *label447
         label *label435
- 1426:  multijump *tmp362 0 0 marker23
-        multilabel *label445 marker23
+ 1426:  multijump *tmp362 0 0
+        multilabel *label445
         label *label436
  1427:  op sub *tmp367 :_isMedian.10:gt :_isMedian.10:lt
  1428:  op abs *tmp368 *tmp367 0
@@ -1913,8 +1913,8 @@ Final code before resolving virtual instructions:
  1460:  set *tmp376 *tmp378
         label *label455
         label *label422
- 1461:  multijump *tmp360 0 0 marker22
-        multilabel *label432 marker22
+ 1461:  multijump *tmp360 0 0
+        multilabel *label432
         label *label423
  1462:  op div *tmp379 :_median.10:best :_median.10:count
  1463:  set *tmp359 *tmp379
@@ -1928,35 +1928,35 @@ Final code before resolving virtual instructions:
  1469:  setaddr *tmp382 *label463
  1470:  set :_median.11:i 1
  1471:  jump *label460 always 0 0
-        multilabel *label463 marker24
+        multilabel *label463
  1472:  setaddr *tmp382 *label464
  1473:  set :_median.11:i 1
  1474:  jump *label460 always 0 0
-        multilabel *label464 marker24
+        multilabel *label464
  1475:  setaddr *tmp382 *label465
  1476:  set :_median.11:i 1
  1477:  jump *label460 always 0 0
-        multilabel *label465 marker24
+        multilabel *label465
  1478:  setaddr *tmp382 *label466
  1479:  set :_median.11:i 1
  1480:  jump *label460 always 0 0
-        multilabel *label466 marker24
+        multilabel *label466
  1481:  setaddr *tmp382 *label467
  1482:  set :_median.11:i 9
  1483:  jump *label460 always 0 0
-        multilabel *label467 marker24
+        multilabel *label467
  1484:  setaddr *tmp382 *label468
  1485:  set :_median.11:i 9
  1486:  jump *label460 always 0 0
-        multilabel *label468 marker24
+        multilabel *label468
  1487:  setaddr *tmp382 *label469
  1488:  set :_median.11:i 9
  1489:  jump *label460 always 0 0
-        multilabel *label469 marker24
+        multilabel *label469
  1490:  setaddr *tmp382 *label470
  1491:  set :_median.11:i 9
  1492:  jump *label460 always 0 0
-        multilabel *label470 marker24
+        multilabel *label470
  1493:  setaddr *tmp382 *label471
  1494:  set :_median.11:i 5
         label *label460
@@ -1966,35 +1966,35 @@ Final code before resolving virtual instructions:
  1498:  setaddr *tmp384 *label476
  1499:  set :_isMedian.11:i 1
  1500:  jump *label473 always 0 0
-        multilabel *label476 marker25
+        multilabel *label476
  1501:  setaddr *tmp384 *label477
  1502:  set :_isMedian.11:i 1
  1503:  jump *label473 always 0 0
-        multilabel *label477 marker25
+        multilabel *label477
  1504:  setaddr *tmp384 *label478
  1505:  set :_isMedian.11:i 1
  1506:  jump *label473 always 0 0
-        multilabel *label478 marker25
+        multilabel *label478
  1507:  setaddr *tmp384 *label479
  1508:  set :_isMedian.11:i 1
  1509:  jump *label473 always 0 0
-        multilabel *label479 marker25
+        multilabel *label479
  1510:  setaddr *tmp384 *label480
  1511:  set :_isMedian.11:i 9
  1512:  jump *label473 always 0 0
-        multilabel *label480 marker25
+        multilabel *label480
  1513:  setaddr *tmp384 *label481
  1514:  set :_isMedian.11:i 9
  1515:  jump *label473 always 0 0
-        multilabel *label481 marker25
+        multilabel *label481
  1516:  setaddr *tmp384 *label482
  1517:  set :_isMedian.11:i 9
  1518:  jump *label473 always 0 0
-        multilabel *label482 marker25
+        multilabel *label482
  1519:  setaddr *tmp384 *label483
  1520:  set :_isMedian.11:i 9
  1521:  jump *label473 always 0 0
-        multilabel *label483 marker25
+        multilabel *label483
  1522:  setaddr *tmp384 *label484
  1523:  set :_isMedian.11:i 5
         label *label473
@@ -2015,8 +2015,8 @@ Final code before resolving virtual instructions:
  1535:  set *tmp386 *tmp388
         label *label486
         label *label474
- 1536:  multijump *tmp384 0 0 marker25
-        multilabel *label484 marker25
+ 1536:  multijump *tmp384 0 0
+        multilabel *label484
         label *label475
  1537:  op sub *tmp389 :_isMedian.11:gt :_isMedian.11:lt
  1538:  op abs *tmp390 *tmp389 0
@@ -2062,8 +2062,8 @@ Final code before resolving virtual instructions:
  1570:  set *tmp398 *tmp400
         label *label494
         label *label461
- 1571:  multijump *tmp382 0 0 marker24
-        multilabel *label471 marker24
+ 1571:  multijump *tmp382 0 0
+        multilabel *label471
         label *label462
  1572:  op div *tmp401 :_median.11:best :_median.11:count
  1573:  set *tmp381 *tmp401

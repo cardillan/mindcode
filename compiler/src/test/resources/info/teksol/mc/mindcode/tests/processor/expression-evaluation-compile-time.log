@@ -217,7 +217,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
     46 set :assertEqualsRound.0:actual 1
     47 set :assertEqualsRound.0:title "sin"
 -    * setaddr :assertEqualsRound.0*retaddr *label4
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label4
 +   48 label *label12
 +   49 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -231,7 +231,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
     57 set :assertEqualsRound.0:actual -1
     58 set :assertEqualsRound.0:title "cos"
 -    * setaddr :assertEqualsRound.0*retaddr *label5
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label5
 +   59 label *label15
 +   60 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -245,7 +245,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
     68 set :assertEqualsRound.0:actual 0.9999999999999999
     69 set :assertEqualsRound.0:title "tan"
 -    * setaddr :assertEqualsRound.0*retaddr *label6
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label6
 +   70 label *label18
 +   71 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -259,7 +259,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
     79 set :assertEqualsRound.0:actual 90
     80 set :assertEqualsRound.0:title "asin"
 -    * setaddr :assertEqualsRound.0*retaddr *label7
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label7
 +   81 label *label21
 +   82 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -273,7 +273,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
     90 set :assertEqualsRound.0:actual 0
     91 set :assertEqualsRound.0:title "acos"
 -    * setaddr :assertEqualsRound.0*retaddr *label8
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label8
 +   92 label *label24
 +   93 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -287,7 +287,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    101 set :assertEqualsRound.0:actual 45
    102 set :assertEqualsRound.0:title "atan"
 -    * setaddr :assertEqualsRound.0*retaddr *label9
--    * call *label3 :assertEqualsRound.0*retval
+-    * call *label3 *invalid :assertEqualsRound.0*retval
 -    * label *label9
 +  103 label *label27
 +  104 op mul :round.0:x :assertEqualsRound.0:actual 100000000

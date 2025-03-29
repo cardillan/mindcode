@@ -27,8 +27,8 @@ public interface ContextlessInstructionCreator {
         return (CallRecInstruction) createInstruction(astContext, CALLREC, stack, callAddr, retAddr, returnValue);
     }
 
-    default CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable returnValue) {
-        return (CallInstruction) createInstruction(astContext, CALL, address, returnValue);
+    default CallInstruction createCallStackless(AstContext astContext, LogicAddress address, LogicVariable retAddr, LogicVariable returnValue) {
+        return (CallInstruction) createInstruction(astContext, CALL, address, retAddr, returnValue);
     }
 
     default ControlInstruction createControl(AstContext astContext, LogicKeyword property, LogicValue target, LogicValue value) {
@@ -64,19 +64,19 @@ public interface ContextlessInstructionCreator {
     }
 
     default MultiCallInstruction createMultiCall(AstContext astContext, LogicLabel target, LogicVariable offset, LogicLabel marker) {
-        return (MultiCallInstruction) createInstruction(astContext, MULTICALL, target, offset, marker);
+        return (MultiCallInstruction) createInstruction(astContext, MULTICALL, target, offset).setMarker(marker);
     }
 
     default MultiJumpInstruction createMultiJump(AstContext astContext, LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
-        return (MultiJumpInstruction) createInstruction(astContext, MULTIJUMP, target, value, offset, marker);
+        return (MultiJumpInstruction) createInstruction(astContext, MULTIJUMP, target, value, offset).setMarker(marker);
     }
 
     default MultiJumpInstruction createMultiJump(AstContext astContext, LogicVariable target, LogicLabel marker) {
-        return (MultiJumpInstruction) createInstruction(astContext, MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO, marker);
+        return (MultiJumpInstruction) createInstruction(astContext, MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO).setMarker(marker);
     }
 
     default MultiLabelInstruction createMultiLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
-        return (MultiLabelInstruction) createInstruction(astContext, MULTILABEL, label, marker);
+        return (MultiLabelInstruction) createInstruction(astContext, MULTILABEL, label).setMarker(marker);
     }
 
     default NoOpInstruction createNoOp(AstContext astContext) {

@@ -106,7 +106,7 @@ public class LogicInstructionArrayExpander {
                 consumer.accept(processor.createSetAddress(astContext, array.readRet, returnLabel));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, ix.getIndex(), LogicNumber.TWO));
                 generateBoundsCheck(consumer, rix, temp);
-                consumer.accept(processor.createMultiCall(astContext, target, temp, marker).withSideEffects(rix.sideEffects()));
+                consumer.accept(processor.createMultiCall(astContext, target, temp, marker).setSideEffects(rix.sideEffects()));
                 consumer.accept(processor.createLabel(astContext, returnLabel));
                 consumer.accept(processor.createSet(astContext, rix.getResult(), array.readVal));
             }
@@ -116,7 +116,7 @@ public class LogicInstructionArrayExpander {
                 consumer.accept(processor.createSet(astContext, array.writeVal, wix.getValue()));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, ix.getIndex(), LogicNumber.TWO));
                 generateBoundsCheck(consumer, wix, temp);
-                consumer.accept(processor.createMultiCall(astContext, target, temp, marker).withSideEffects(wix.sideEffects()));
+                consumer.accept(processor.createMultiCall(astContext, target, temp, marker).setSideEffects(wix.sideEffects()));
                 consumer.accept(processor.createLabel(astContext, returnLabel));
             }
 

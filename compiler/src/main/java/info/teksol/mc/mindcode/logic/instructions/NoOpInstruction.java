@@ -13,22 +13,13 @@ public class NoOpInstruction extends BaseInstruction {
         super(astContext, Opcode.NOOP, List.of(), List.of());
     }
 
-    protected NoOpInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public NoOpInstruction copy() {
-        return new NoOpInstruction(this, astContext, sideEffects);
+    protected NoOpInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public NoOpInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new NoOpInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new NoOpInstruction(this, astContext);
     }
 
-    @Override
-    public NoOpInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new NoOpInstruction(this, astContext, sideEffects);
-    }
 }

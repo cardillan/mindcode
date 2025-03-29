@@ -1,13 +1,11 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
 import info.teksol.mc.common.InputFile;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
-import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.MlogInstruction;
-import info.teksol.mc.mindcode.logic.instructions.RemarkInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.FinalCodeOutput;
 import org.jspecify.annotations.NullMarked;
 
@@ -21,14 +19,17 @@ import java.util.stream.Collectors;
 @NullMarked
 public class LogicInstructionPrinter {
 
-    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions) {
+    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions, boolean symbolicLabels) {
+        final String prefix = symbolicLabels ? "    " : "";
         final StringBuilder buffer = new StringBuilder();
         instructions.forEach((instruction) -> {
             if (instruction instanceof RemarkInstruction rem) {
-                buffer.append("# ");
+                buffer.append(prefix).append("# ");
                 buffer.append(rem.getValue() instanceof LogicString str ? str.getValue() : rem.getValue().toMlog());
+            } else if (instruction instanceof LabeledInstruction label) {
+                buffer.append(label.getLabel().toMlog()).append(":");
             } else {
-                buffer.append(instruction.getMlogOpcode());
+                buffer.append(prefix).append(instruction.getMlogOpcode());
                 addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             }
             buffer.append("\n");
@@ -44,6 +45,7 @@ public class LogicInstructionPrinter {
             case FLAT_AST   -> LogicInstructionPrinter.toStringWithContextsShort(instructionProcessor, instructions);
             case DEEP_AST   -> LogicInstructionPrinter.toStringWithContextsFull(instructionProcessor, instructions);
             case SOURCE     -> LogicInstructionPrinter.toStringWithSourceCode(instructionProcessor, instructions);
+            default         -> throw new MindcodeInternalError("Unsupported FinalCodeOutput: " + finalCodeOutput);
         };
     }
 

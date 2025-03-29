@@ -19,23 +19,13 @@ public class LookupInstruction extends BaseResultInstruction {
         super(astContext, Opcode.LOOKUP, args, params);
     }
 
-    protected LookupInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public LookupInstruction copy() {
-        return new LookupInstruction(this, astContext, sideEffects);
+    protected LookupInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public LookupInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new LookupInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public LookupInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new LookupInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new LookupInstruction(this, astContext);
     }
 
     @Override

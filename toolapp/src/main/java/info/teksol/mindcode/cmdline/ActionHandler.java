@@ -107,6 +107,13 @@ abstract class ActionHandler {
                 .type(LowerCaseEnumArgumentType.forEnum(Remarks.class));
 
         createArgument(container, defaults,
+                CompilerProfile::isSymbolicLabels,
+                (profile, arguments, name) -> profile.setSymbolicLabels(arguments.getBoolean(name)),
+                "--symbolic-labels")
+                .help("generate symbolic labels for jump instructions where possible")
+                .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
                 CompilerProfile::getBoundaryChecks,
                 (profile, arguments, name) -> profile.setBoundaryChecks(arguments.get(name)),
                 "--boundary-checks")
@@ -126,8 +133,7 @@ abstract class ActionHandler {
                 CompilerProfile::isLinkedBlockGuards,
                 (profile, arguments, name) -> profile.setLinkedBlockGuards(arguments.getBoolean(name)),
                 "--link-guards")
-                .help("when set to true, generates code to ensure each declared linked block is linked " +
-                      "to the processor before the program runs")
+                .help("generate code to ensure each declared linked block is linked to the processor at the declaration")
                 .type(Arguments.booleanType());
 
         createArgument(container, defaults,
@@ -141,7 +147,7 @@ abstract class ActionHandler {
                 CompilerProfile::isAutoPrintflush,
                 (profile, arguments, name) -> profile.setAutoPrintflush(arguments.getBoolean(name)),
                 "--printflush")
-                .help("when set to true, automatically adds a 'printflush message' instruction at the end of the program if one is missing")
+                .help("automatically add a 'printflush message1' instruction at the end of the program if one is missing")
                 .type(Arguments.booleanType());
 
         createArgument(container, defaults,
@@ -155,14 +161,6 @@ abstract class ActionHandler {
                 .type(LowerCaseEnumArgumentType.forEnum(SortCategory.class))
                 .nargs("*")
                 .setDefault(List.of(SortCategory.NONE));
-        /*
-        compiler.addArgument("-m", "--memory-model")
-                .help("sets model for handling linked memory blocks: volatile (shared with different processor), " +
-                        "aliased (a memory block may be accessed through different variables), or restricted " +
-                        "(a memory block will never be accessed through different variables)")
-                .type(LowerCaseEnumArgumentType.forEnum(MemoryModel.class))
-                .setDefault(defaults.getMemoryModel());
-        */
     }
 
     private List<SortCategory> normalizeSortVariables(@Nullable List<SortCategory> sortVariables) {

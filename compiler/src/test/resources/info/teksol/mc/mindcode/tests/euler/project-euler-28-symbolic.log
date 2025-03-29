@@ -1,0 +1,93 @@
+    20 instructions before optimizations.
+     2 instructions eliminated by Dead Code Elimination (3 iterations).
+     2 instructions eliminated by Jump Optimization (3 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     1 instructions eliminated by Loop Optimization (2 iterations).
+     1 loops improved by Loop Optimization.
+    13 instructions after optimizations.
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
+ 
+    11 jump *label3 equal *tmp1 false
+    12 op add :step :step 2
+    13 set :count 0
+-    * set *tmp2 :count
+    14 jump *label4 always
+    15 label *label3
+-    * set *tmp2 null
+    16 label *label4
+    17 label *label1
+    18 jump *label0 always
+
+Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
+ 
+     2 set :step 2
+     3 set :count 1
+     4 label *label0
+-    * op lessThanEq *tmp0 :current 1002001
+-    * jump *label2 equal *tmp0 false
++    5 jump *label2 greaterThan :current 1002001
+     6 op add :sum :sum :current
+     7 op add :current :current :step
+     8 op add :count :count 1
+-    * op greaterThan *tmp1 :count 3
+-    * jump *label3 equal *tmp1 false
++    9 jump *label3 lessThanEq :count 3
+    10 op add :step :step 2
+    11 set :count 0
+    12 jump *label4 always
+
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
+ 
+     9 jump *label3 lessThanEq :count 3
+    10 op add :step :step 2
+    11 set :count 0
+-    * jump *label4 always
+    12 label *label3
+    13 label *label4
+    14 label *label1
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+     2 set :step 2
+     3 set :count 1
+     4 label *label0
+-    * jump *label2 greaterThan :current 1002001
++    5 label *label5
+     6 op add :sum :sum :current
+     7 op add :current :current :step
+     8 op add :count :count 1
+ 
+    12 label *label3
+    13 label *label4
+    14 label *label1
+-    * jump *label0 always
++   15 jump *label5 lessThanEq :current 1002001
+    16 label *label2
+    17 assertequals 669171001 :sum "Project Euler 28"
+    18 stop
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+    16 label *label2
+    17 assertequals 669171001 :sum "Project Euler 28"
+    18 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set :sum 1
+set :current 3
+set :step 2
+set :count 1
+label *label5
+op add :sum :sum :current
+op add :current :current :step
+op add :count :count 1
+jump *label3 lessThanEq :count 3
+op add :step :step 2
+set :count 0
+label *label3
+jump *label5 lessThanEq :current 1002001
+assertequals 669171001 :sum "Project Euler 28"
+stop

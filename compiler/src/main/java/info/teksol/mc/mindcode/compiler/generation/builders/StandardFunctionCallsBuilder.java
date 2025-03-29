@@ -225,11 +225,19 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final boolean isVoid = function.isVoid();
 
         assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
-        final LogicLabel returnLabel = assembler.nextLabel();
-        assembler.createSetAddress(LogicVariable.fnRetAddr(functionPrefix), returnLabel);
-        assembler.createCallStackless(function.getLabel(), LogicVariable.fnRetVal(function));
-        // Mark position where the function must return
-        assembler.createLabel(returnLabel);
+        LogicVariable retAddr = LogicVariable.fnRetAddr(functionPrefix);
+        if (profile.isSymbolicLabels()) {
+            assembler.createCallStackless(function.getLabel(), retAddr,LogicVariable.fnRetVal(function));
+        } else {
+            final LogicLabel returnLabel = assembler.nextLabel();
+            assembler.createSetAddress(retAddr, returnLabel).setMarker(returnLabel);
+            // We're putting INVALID as retAddr: in no symbolic labels mode, the CALL instruction doesn't
+            // set function return address, it is set up separately by the previous instruction
+            assembler.createCallStackless(function.getLabel(), LogicVariable.INVALID,LogicVariable.fnRetVal(function))
+                    .setMarker(returnLabel);
+            // Mark position where the function must return
+            assembler.createLabel(returnLabel);
+        }
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         retrieveFunctionParameters(function, arguments, false);
@@ -303,7 +311,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         SideEffects sideEffects = createRemoteCallSideEffects(function);
         LogicLabel label = assembler.createNextLabel();
-        assembler.applySideEffects(sideEffects).yieldExecution();
+        assembler.createYieldExecution().setSideEffects(sideEffects);
         assembler.createJump(label, Condition.EQUAL, finished, LogicBoolean.FALSE);
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
@@ -364,7 +372,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
         LogicLabel label = assembler.createNextLabel();
-        assembler.applySideEffects(sideEffects).yieldExecution();
+        assembler.createYieldExecution().setSideEffects(sideEffects);
         assembler.createJump(label, Condition.EQUAL, LogicVariable.fnFinished(function), LogicBoolean.FALSE);
         assembler.clearSubcontextType();
         return LogicVariable.fnRetVal(function);

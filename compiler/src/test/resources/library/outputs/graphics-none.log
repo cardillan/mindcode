@@ -13,13 +13,13 @@ Final code before resolving virtual instructions:
     4:  jump *label5 equal display5 null
     5:  set :displaySize.0:display display1
     6:  setaddr :displaySize.0*retaddr *label6
-    7:  call *label0 :displaySize.0*retval
+    7:  call *label0 *invalid :displaySize.0*retval
         label *label6
     8:  set *tmp0 :displaySize.0*retval
     9:  assertequals 176 *tmp0 "large display size"
    10:  set :displaySize.0:display display5
    11:  setaddr :displaySize.0*retaddr *label7
-   12:  call *label0 :displaySize.0*retval
+   12:  call *label0 *invalid :displaySize.0*retval
         label *label7
    13:  set *tmp1 :displaySize.0*retval
    14:  assertequals 80 *tmp1 "small display size"

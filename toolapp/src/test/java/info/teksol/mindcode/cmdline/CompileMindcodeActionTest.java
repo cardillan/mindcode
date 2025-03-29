@@ -238,5 +238,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(expected.getSyntacticMode(), actual.getSyntacticMode());
         assertEquals(expected.isRun(), actual.isRun());
         assertEquals(expected.getStepLimit(), actual.getStepLimit());
+
+        assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
     }
 }

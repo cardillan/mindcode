@@ -17,23 +17,13 @@ public class MultiLabelInstruction extends BaseInstruction implements LabeledIns
         super(astContext, Opcode.MULTILABEL, args, params);
     }
 
-    protected MultiLabelInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public MultiLabelInstruction copy() {
-        return new MultiLabelInstruction(this, astContext, sideEffects);
+    protected MultiLabelInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public MultiLabelInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new MultiLabelInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public MultiLabelInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new MultiLabelInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new MultiLabelInstruction(this, astContext);
     }
 
     public boolean matches(LogicInstruction instruction) {
@@ -43,9 +33,5 @@ public class MultiLabelInstruction extends BaseInstruction implements LabeledIns
     @Override
     public final LogicLabel getLabel() {
         return (LogicLabel) getArg(0);
-    }
-
-    public final LogicLabel getMarker() {
-        return (LogicLabel) getArg(1);
     }
 }

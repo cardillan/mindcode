@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicAddress;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -19,23 +18,13 @@ public class MultiCallInstruction extends BaseInstruction implements MultiTarget
         super(astContext, Opcode.MULTICALL, args, params);
     }
 
-    protected MultiCallInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public MultiCallInstruction copy() {
-        return new MultiCallInstruction(this, astContext, sideEffects);
+    protected MultiCallInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public MultiCallInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new MultiCallInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public MultiCallInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new MultiCallInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new MultiCallInstruction(this, astContext);
     }
 
     @Override
@@ -49,10 +38,6 @@ public class MultiCallInstruction extends BaseInstruction implements MultiTarget
 
     public final LogicValue getOffset() {
         return (LogicValue) getArg(1);
-    }
-
-    public final LogicLabel getMarker() {
-        return (LogicLabel) getArg(2);
     }
 
     @Override

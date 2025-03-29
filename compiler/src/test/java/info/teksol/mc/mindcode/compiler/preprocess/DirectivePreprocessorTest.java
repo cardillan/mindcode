@@ -8,7 +8,10 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstProgram;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
-import info.teksol.mc.profile.*;
+import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.profile.Remarks;
+import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
@@ -111,14 +114,6 @@ class DirectivePreprocessorTest {
         profile.setRemarks(Remarks.NONE);
         processDirective(profile, "remarks", "active");
         assertEquals(Remarks.ACTIVE, profile.getRemarks());
-    }
-
-    @Test
-    void processesDirectiveMemoryModel() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        profile.setMemoryModel(MemoryModel.VOLATILE);
-        processDirective(profile, "memory-model", "restricted");
-        assertEquals(MemoryModel.RESTRICTED, profile.getMemoryModel());
     }
 
     @Test

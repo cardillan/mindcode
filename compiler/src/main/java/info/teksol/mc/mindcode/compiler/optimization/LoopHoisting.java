@@ -139,7 +139,7 @@ class LoopHoisting extends BaseOptimizer {
         // Handle side effects!
         Set<LogicVariable> sideEffectModifications = optimizationContext
                 .instructionStream()
-                .filter(ix -> ix.sideEffects() != BaseInstruction.NO_SIDE_EFFECTS)
+                .filter(ix -> ix.sideEffects() != SideEffects.NONE)
                 .<LogicVariable>mapMulti((ix, consumer) -> ix.sideEffects().apply(v -> {}, consumer, consumer))
                 .collect(Collectors.toSet());
 

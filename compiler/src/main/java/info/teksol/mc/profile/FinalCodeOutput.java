@@ -8,6 +8,7 @@ import java.util.Map;
 
 @NullMarked
 public enum FinalCodeOutput {
+    NONE,
     PLAIN,
     FLAT_AST,
     DEEP_AST,

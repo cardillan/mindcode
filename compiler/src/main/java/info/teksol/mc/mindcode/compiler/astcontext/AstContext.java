@@ -298,6 +298,7 @@ public final class AstContext {
         if (contextType == AstContextType.CALL) {
             return subcontextType == AstSubcontextType.SYSTEM_CALL
                     || subcontextType == AstSubcontextType.ARGUMENTS
+                    || subcontextType == AstSubcontextType.PARAMETERS
                     || subcontextType == AstSubcontextType.BASIC;
         } else {
             return subcontextType == AstSubcontextType.INIT || subcontextType == AstSubcontextType.BASIC || !contextType.flowControl;

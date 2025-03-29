@@ -47,5 +47,6 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
         return new LogicLabel(String.valueOf(address), address, true);
     }
 
+    public static final LogicLabel EMPTY = symbolic("");
     public static final LogicLabel INVALID = symbolic("invalid");
 }

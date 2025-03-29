@@ -18,23 +18,13 @@ public class RemarkInstruction extends BaseInstruction {
         super(astContext, Opcode.REMARK, args, params);
     }
 
-    protected RemarkInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public RemarkInstruction copy() {
-        return new RemarkInstruction(this, astContext, sideEffects);
+    protected RemarkInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public RemarkInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new RemarkInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public RemarkInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new RemarkInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new RemarkInstruction(this, astContext);
     }
 
     public final LogicValue getValue() {

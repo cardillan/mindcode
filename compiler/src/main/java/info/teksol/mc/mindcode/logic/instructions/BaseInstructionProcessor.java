@@ -37,6 +37,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
     private final boolean shortFunctionPrefix;
+    private final boolean instructionValidation;
     private final List<OpcodeVariant> opcodeVariants;
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
@@ -54,20 +55,23 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         public final ProcessorVersion version;
         public final ProcessorEdition edition;
         public final boolean shortFunctionPrefix;
+        public final boolean instructionValidation;
         public final List<OpcodeVariant> opcodeVariants;
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
-                ProcessorEdition edition, boolean shortFunctionPrefix, List<OpcodeVariant> opcodeVariants) {
+                ProcessorEdition edition, boolean shortFunctionPrefix, boolean instructionValidation, List<OpcodeVariant> opcodeVariants) {
             this.messageConsumer = messageConsumer;
             this.version = version;
             this.edition = edition;
             this.shortFunctionPrefix = shortFunctionPrefix;
+            this.instructionValidation = instructionValidation;
             this.opcodeVariants = opcodeVariants;
         }
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
-                ProcessorEdition edition, boolean shortFunctionPrefix) {
-            this(messageConsumer, version, edition, shortFunctionPrefix, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
+                ProcessorEdition edition, boolean shortFunctionPrefix, boolean instructionValidation) {
+            this(messageConsumer, version, edition, shortFunctionPrefix, instructionValidation,
+                    MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
         }
     }
 
@@ -76,6 +80,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         this.processorVersion = parameters.version;
         this.processorEdition = parameters.edition;
         this.shortFunctionPrefix = parameters.shortFunctionPrefix;
+        this.instructionValidation = parameters.instructionValidation;
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
         opcodeKeywordPosition = variantsByOpcode.keySet().stream().collect(Collectors.toMap(k -> k,
@@ -243,7 +248,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+    public void resolve(CompilerProfile profile, LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
         AstContext astContext = instruction.getAstContext();
 
         switch (instruction) {
@@ -264,7 +269,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 consumer.accept(createRead(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
             }
             case CallRecInstruction ix -> {
-                consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
+                if (profile.isSymbolicLabels()) {
+                    LogicVariable returnAddress = nextTemp();
+                    consumer.accept(createOp(astContext, ADD, returnAddress, LogicBuiltIn.COUNTER, LogicNumber.THREE));
+                    consumer.accept(createInstruction(astContext, WRITE, returnAddress, ix.getStack(), stackPointer()));
+                } else {
+                    consumer.accept(createInstruction(astContext, WRITE, ix.getRetAddr(), ix.getStack(), stackPointer()));
+                }
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
                 consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
             }
@@ -275,6 +286,9 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, retAddr));
             }
             case CallInstruction ix -> {
+                if (profile.isSymbolicLabels()) {
+                    consumer.accept(createOp(astContext, ADD, ix.getReturnAddr(), LogicBuiltIn.COUNTER, LogicNumber.ONE));
+                }
                 consumer.accept(createJumpUnconditional(astContext, ix.getCallAddr()));
             }
             case SetAddressInstruction ix -> {
@@ -293,12 +307,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     @Override
     @SuppressWarnings("unchecked")
     public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
+        LogicInstruction result;
         if (instruction instanceof CustomInstruction ix) {
-            return (T) new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.isText(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
+            result = new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.isText(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
         } else {
-            return (T) createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs)
-                    .withSideEffects(instruction.sideEffects());
+            result = createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
         }
+        return (T) result.copyInfo(instruction);
     }
 
     @Override
@@ -341,7 +356,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 + opcode.getAdditionalPrintArguments();
     }
 
-    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR, LOOKUP, NOOP, SETADDR);
+    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR, LOOKUP, NOOP /*, SETADDR*/);
     private static final Set<String> CONSTANT_PROPERTIES = Set.of("@size", "@speed", "@type", "@id");
 
     @Override
@@ -422,6 +437,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     protected <T extends LogicInstruction> T validate(T instruction) {
+        if (!instructionValidation) return instruction;
+
         OpcodeVariant opcodeVariant = getOpcodeVariant(instruction.getOpcode(), instruction.getArgs());
         if (opcodeVariant == null) {
             throw new MindcodeInternalError("Invalid or version incompatible instruction " + instruction);

@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 public class CallInstruction extends BaseInstruction implements CallingInstruction {
@@ -18,30 +19,28 @@ public class CallInstruction extends BaseInstruction implements CallingInstructi
         super(astContext, Opcode.CALL, args, params);
     }
 
-    protected CallInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public CallInstruction copy() {
-        return new CallInstruction(this, astContext, sideEffects);
+    protected CallInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public CallInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new CallInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public CallInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new CallInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new CallInstruction(this, astContext);
     }
 
     public final LogicLabel getCallAddr() {
         return (LogicLabel) getArg(0);
     }
 
-    public final LogicVariable getReturnValue()  {
+    public final LogicVariable getReturnAddr() {
         return (LogicVariable) getArg(1);
+    }
+
+    public final LogicVariable getReturnValue()  {
+        return (LogicVariable) getArg(2);
+    }
+
+    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+        return super.getRealSize(sharedStructures) + (astContext.getProfile().isSymbolicLabels() ? 1 : 0);
     }
 }

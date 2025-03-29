@@ -67,7 +67,6 @@ public class OptimizationCoordinator {
                 optimizer.setDebugPrinter(debugPrinter);
 
                 optimizer.setLevel(level);
-                optimizer.setMemoryModel(profile.getMemoryModel());
                 optimizer.setGoal(profile.getGoal());
 
                 result.put(optimization, optimizer);

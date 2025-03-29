@@ -17,23 +17,13 @@ public class ReturnInstruction extends BaseInstruction {
         super(astContext, Opcode.RETURN, args, params);
     }
 
-    protected ReturnInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public ReturnInstruction copy() {
-        return new ReturnInstruction(this, astContext, sideEffects);
+    protected ReturnInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public ReturnInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new ReturnInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public ReturnInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new ReturnInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new ReturnInstruction(this, astContext);
     }
 
     @Override

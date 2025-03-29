@@ -23,21 +23,24 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 @NullMarked
 public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
 
-    @Test
+    // NOTE: instruction validation is turned off for unit tests
+    // If it gets turned on again, activate these tests
+
+    //@Test
     void rejectsIncompatibleInstructions() {
         Assertions.assertThrows(MindcodeInternalError.class, () ->
                 createInstruction(UCONTROL, "pathfind")
         );
     }
 
-    @Test
+    //@Test
     void rejectsWrongNumberOfArguments() {
         Assertions.assertThrows(MindcodeInternalError.class, () ->
                 createInstruction(PRINT, "a", "b")
         );
     }
 
-    @Test
+    //@Test
     void rejectsInvalidArgumentsOnly() {
         Assertions.assertDoesNotThrow(() ->
                 createInstruction(URADAR, "flying", "enemy", "boss", "health", "0", "MIN_MAX", "result")

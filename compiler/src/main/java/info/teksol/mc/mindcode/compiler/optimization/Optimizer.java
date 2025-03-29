@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.profile.GenerationGoal;
-import info.teksol.mc.profile.MemoryModel;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -16,8 +15,6 @@ public interface Optimizer {
     void setLevel(OptimizationLevel level);
 
     void setGoal(GenerationGoal goal);
-
-    void setMemoryModel(MemoryModel memoryModel);
 
     void setDebugPrinter(DebugPrinter debugPrinter);
 

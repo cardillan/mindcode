@@ -804,37 +804,37 @@ Final code before resolving virtual instructions:
   264:  assertflush
   265:  set :printExactSlow.0:n 3.00000007
   266:  setaddr :printExactSlow.0*retaddr *label34
-  267:  call *label7 :printExactSlow.0*retval
+  267:  call *label7 *invalid :printExactSlow.0*retval
         label *label34
   268:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
   269:  assertflush
   270:  set :printExactSlow.0:n 3E50
   271:  setaddr :printExactSlow.0*retaddr *label35
-  272:  call *label7 :printExactSlow.0*retval
+  272:  call *label7 *invalid :printExactSlow.0*retval
         label *label35
   273:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
   274:  assertflush
   275:  set :printExactSlow.0:n 1.0123456789
   276:  setaddr :printExactSlow.0*retaddr *label36
-  277:  call *label7 :printExactSlow.0*retval
+  277:  call *label7 *invalid :printExactSlow.0*retval
         label *label36
   278:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
   279:  assertflush
   280:  set :printExactSlow.0:n 10000001E13
   281:  setaddr :printExactSlow.0*retaddr *label37
-  282:  call *label7 :printExactSlow.0*retval
+  282:  call *label7 *invalid :printExactSlow.0*retval
         label *label37
   283:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
   284:  assertflush
   285:  set :printExactSlow.0:n 12345E-54
   286:  setaddr :printExactSlow.0*retaddr *label38
-  287:  call *label7 :printExactSlow.0*retval
+  287:  call *label7 *invalid :printExactSlow.0*retval
         label *label38
   288:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
   289:  assertflush
   290:  set :printExactSlow.0:n -12345E-54
   291:  setaddr :printExactSlow.0*retaddr *label39
-  292:  call *label7 :printExactSlow.0*retval
+  292:  call *label7 *invalid :printExactSlow.0*retval
         label *label39
   293:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
   294:  stop

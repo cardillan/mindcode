@@ -13,6 +13,7 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     public static final LogicNumber ZERO = create(0);
     public static final LogicNumber ONE = create(1);
     public static final LogicNumber TWO = create(2);
+    public static final LogicNumber THREE = create(3);
 
     private final SourcePosition sourcePosition;
     private final String literal;

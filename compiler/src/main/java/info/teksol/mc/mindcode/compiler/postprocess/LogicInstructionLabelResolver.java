@@ -267,7 +267,8 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
-        return program.stream().mapMulti(processor::resolve).toList();
+        return program.stream().mapMulti((LogicInstruction instruction, Consumer<LogicInstruction> consumer)
+                -> processor.resolve(profile, instruction, consumer)).toList();
     }
 
     private List<LogicInstruction> createVariables(AstContext astContext, Collection<LogicArgument> variables) {

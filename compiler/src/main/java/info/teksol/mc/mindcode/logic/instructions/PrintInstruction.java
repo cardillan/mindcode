@@ -17,23 +17,13 @@ public class PrintInstruction extends BaseInstruction implements PrintingInstruc
         super(astContext, Opcode.PRINT, args, params);
     }
 
-    protected PrintInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public PrintInstruction copy() {
-        return new PrintInstruction(this, astContext, sideEffects);
+    protected PrintInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public PrintInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new PrintInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public PrintInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new PrintInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new PrintInstruction(this, astContext);
     }
 
     public final LogicValue getValue() {

@@ -10,7 +10,6 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
-import info.teksol.mc.profile.MemoryModel;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -23,7 +22,6 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     protected final InstructionProcessor instructionProcessor;
     protected OptimizationLevel level = OptimizationLevel.EXPERIMENTAL;
     protected GenerationGoal goal = GenerationGoal.SIZE;
-    protected MemoryModel memoryModel = MemoryModel.VOLATILE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
 
     public AbstractOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
@@ -60,11 +58,6 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     @Override
     public void setGoal(GenerationGoal goal) {
         this.goal = goal;
-    }
-
-    @Override
-    public void setMemoryModel(MemoryModel memoryModel) {
-        this.memoryModel = memoryModel;
     }
 
     @Override

@@ -15,22 +15,13 @@ public class InitVarInstruction extends BaseInstruction {
         super(astContext, Opcode.INITVAR, args, params);
     }
 
-    protected InitVarInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public InitVarInstruction copy() {
-        return new InitVarInstruction(this, astContext, sideEffects);
+    protected InitVarInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public InitVarInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new InitVarInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new InitVarInstruction(this, astContext);
     }
 
-    @Override
-    public InitVarInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new InitVarInstruction(this, astContext, sideEffects);
-    }
 }

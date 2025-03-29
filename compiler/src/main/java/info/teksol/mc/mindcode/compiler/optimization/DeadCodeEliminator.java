@@ -4,9 +4,9 @@ import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.instructions.BaseInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PushOrPopInstruction;
+import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -106,7 +106,7 @@ class DeadCodeEliminator extends BaseOptimizer {
     /// @param instruction instruction to examine
     /// @return true if all output arguments of the instruction are unread
     private boolean allWritesUnread(LogicInstruction instruction) {
-        if (instruction.sideEffects() == BaseInstruction.NO_SIDE_EFFECTS) {
+        if (instruction.sideEffects() == SideEffects.NONE) {
             // Faster handling for instructions with no side effects
 
             // Instruction with at most one output argument are removed immediately

@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.*;
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -67,9 +68,10 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
     /// Non-virtual instructions are passed as-is.
     ///
+    /// @param profile     compiler profile
     /// @param instruction instruction to process
     /// @param consumer    consumer accepting resolved instructions
-    void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer);
+    void resolve(CompilerProfile profile, LogicInstruction instruction, Consumer<LogicInstruction> consumer);
 
     /// Returns a logic instruction with all arguments equal to a specific value replaced by a new value.
     /// More than one argument of the instruction can be modified. A new instruction is always created.

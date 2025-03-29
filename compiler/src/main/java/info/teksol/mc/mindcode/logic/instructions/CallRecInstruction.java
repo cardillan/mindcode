@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 public class CallRecInstruction extends BaseInstruction implements CallingInstruction {
@@ -18,23 +19,13 @@ public class CallRecInstruction extends BaseInstruction implements CallingInstru
         super(astContext, Opcode.CALLREC, args, params);
     }
 
-    protected CallRecInstruction(BaseInstruction other, AstContext astContext, SideEffects sideEffects) {
-        super(other, astContext, sideEffects);
-    }
-
-    @Override
-    public CallRecInstruction copy() {
-        return new CallRecInstruction(this, astContext, sideEffects);
+    protected CallRecInstruction(BaseInstruction other, AstContext astContext) {
+        super(other, astContext);
     }
 
     @Override
     public CallRecInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new CallRecInstruction(this, astContext, sideEffects);
-    }
-
-    @Override
-    public CallRecInstruction withSideEffects(SideEffects sideEffects) {
-        return this.sideEffects == sideEffects ? this : new CallRecInstruction(this, astContext, sideEffects);
+        return this.astContext == astContext ? this : new CallRecInstruction(this, astContext);
     }
 
     public final LogicVariable getStack() {
@@ -49,7 +40,7 @@ public class CallRecInstruction extends BaseInstruction implements CallingInstru
         return (LogicLabel) getArg(2);
     }
 
-    public final List<LogicLabel> getAddresses() {
-        return List.of(getCallAddr(), getRetAddr());
+    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+        return super.getRealSize(sharedStructures) + (astContext.getProfile().isSymbolicLabels() ? 1 : 0);
     }
 }
