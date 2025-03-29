@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.postprocess;
 
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -248,10 +249,26 @@ public class LogicInstructionLabelResolver {
                             SET, LogicBuiltIn.COUNTER, var);
                     result.add(newInstruction);
                 } else if (resolveLabel(ix.getTarget()) instanceof LogicLabel label && label.getAddress() >= 0) {
-                    int offset = label.getAddress() - ix.getOffset().getIntValue();
-                    LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
-                            OP, Operation.ADD, LogicBuiltIn.COUNTER, ix.getValue(), LogicNumber.create(offset));
-                    result.add(newInstruction);
+                    if (profile.isSymbolicLabels()) {
+                        int offset = ix.getOffset().getIntValue();
+                        LogicArgument counterOffset;
+                        if (offset != 0) {
+                            counterOffset = processor.nextTemp();
+                            result.add(processor.createInstruction(ix.getAstContext(),
+                                    OP, Operation.SUB, counterOffset, ix.getValue(), ix.getOffset()));
+                        } else {
+                            counterOffset = ix.getValue();
+                        }
+                        result.add(processor.createInstruction(ix.getAstContext(),
+                                OP, Operation.ADD, LogicBuiltIn.COUNTER, LogicBuiltIn.COUNTER, counterOffset));
+                        if (result.size() != label.getAddress()) {
+                            processor.error(ERR.SYMBOLIC_LINK_MISMATCH);
+                        }
+                    } else {
+                        int offset = label.getAddress() - ix.getOffset().getIntValue();
+                        result.add(processor.createInstruction(ix.getAstContext(),
+                                OP, Operation.ADD, LogicBuiltIn.COUNTER, ix.getValue(), LogicNumber.create(offset)));
+                    }
                 } else {
                     throw new MindcodeInternalError("MultiJump target '%s' is not a label.", ix.getTarget());
                 }

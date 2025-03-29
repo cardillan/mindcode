@@ -126,6 +126,7 @@ public class ERR {
     public static final String SUBARRAY_INVALID_RANGE = "Empty or invalid subarray range.";
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";
     public static final String SUBARRAY_NON_INTEGER_RANGE = "Subarray specification must use integer range.";
+    public static final String SYMBOLIC_LINK_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
     public static final String UNDEFINED_LOOP_LABEL = "Undefined loop label '%s'.";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' is incompatible with previous modifiers.";

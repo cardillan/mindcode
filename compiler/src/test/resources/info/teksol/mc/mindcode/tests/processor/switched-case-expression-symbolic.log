@@ -409,7 +409,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 +   76 jump *label29 lessThanEq :i 100
     77 label *label2
     78 assertequals 11 .S0 "Unexpected value of S0"
-    79 assertequals 21 .S1 "Unexpected value of S0"
+    79 assertequals 21 .S1 "Unexpected value of S1"
 
 Modifications by Convert case at line 27:5 (+3 instructions):
  
@@ -548,8 +548,8 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1:
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-    91 assertequals 20 .S8 "Unexpected value of S0"
-    92 assertequals 20 .S9 "Unexpected value of S0"
+    91 assertequals 20 .S8 "Unexpected value of S8"
+    92 assertequals 20 .S9 "Unexpected value of S9"
     93 stop
 -    * end
 
@@ -631,13 +631,13 @@ label *label6
 op add :i :i 1
 jump *label29 lessThanEq :i 100
 assertequals 11 .S0 "Unexpected value of S0"
-assertequals 21 .S1 "Unexpected value of S0"
-assertequals 20 .S2 "Unexpected value of S0"
-assertequals 20 .S3 "Unexpected value of S0"
-assertequals 20 .S4 "Unexpected value of S0"
-assertequals 20 .S5 "Unexpected value of S0"
-assertequals 20 .S6 "Unexpected value of S0"
-assertequals 20 .S7 "Unexpected value of S0"
-assertequals 20 .S8 "Unexpected value of S0"
-assertequals 20 .S9 "Unexpected value of S0"
+assertequals 21 .S1 "Unexpected value of S1"
+assertequals 20 .S2 "Unexpected value of S2"
+assertequals 20 .S3 "Unexpected value of S3"
+assertequals 20 .S4 "Unexpected value of S4"
+assertequals 20 .S5 "Unexpected value of S5"
+assertequals 20 .S6 "Unexpected value of S6"
+assertequals 20 .S7 "Unexpected value of S7"
+assertequals 20 .S8 "Unexpected value of S8"
+assertequals 20 .S9 "Unexpected value of S9"
 stop

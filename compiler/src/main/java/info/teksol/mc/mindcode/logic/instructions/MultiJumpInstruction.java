@@ -1,16 +1,14 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.logic.arguments.LogicAddress;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
-import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 public class MultiJumpInstruction extends BaseInstruction implements MultiTargetInstruction {
@@ -48,5 +46,12 @@ public class MultiJumpInstruction extends BaseInstruction implements MultiTarget
     @Override
     public boolean endsCodePath() {
         return true;
+    }
+
+    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+        return super.getRealSize(sharedStructures) +
+                (astContext.getProfile().isSymbolicLabels()
+                        && getTarget() instanceof LogicLabel
+                        && getOffset().getIntValue() != 0 ? 1 : 0);
     }
 }

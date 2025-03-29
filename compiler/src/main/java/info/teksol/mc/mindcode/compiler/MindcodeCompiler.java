@@ -43,6 +43,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.FinalCodeOutput;
+import info.teksol.mc.util.CollectionUtils;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -53,6 +54,8 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
@@ -246,6 +249,21 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         // Run program through the array expander again, as optimizations might have been inactive.
         instructions = arrayExpander.expandArrayInstructions(instructions);
+
+        // Check there are no direct access instructions
+        if (profile.isSymbolicLabels()) {
+            boolean hasLabels = instructions.stream()
+                    .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTILABEL).negate())
+                    .filter(ix -> !(ix instanceof MultiJumpInstruction mx && mx.getTarget() instanceof LogicLabel))
+                    .flatMap(MlogInstruction::inputArgumentsStream)
+                    .filter(LogicLabel.class::isInstance)
+                    .peek(System.out::println)
+                    .anyMatch(a -> true);
+
+            if (hasLabels) {
+                warn(WARN.ABSOLUTE_ADDRESSING);
+            }
+        }
 
         // Sort variables
         LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(profile, instructionProcessor);
