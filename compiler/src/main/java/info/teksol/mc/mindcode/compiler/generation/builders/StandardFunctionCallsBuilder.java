@@ -186,6 +186,10 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private LogicValue handleInlineFunctionCall(MindcodeFunction inlineFunction, List<FunctionArgument> arguments) {
+        if (profile.isSymbolicLabels()) {
+            assembler.createComment("Function: " + inlineFunction.getDeclaration().toSourceCode());
+        }
+
         MindcodeFunction function = inlineFunction.prepareInlinedForCall(processor.nextFunctionPrefix(inlineFunction));
         final int nonVarargCount = Math.min(function.getStandardParameterCount(), arguments.size());
 

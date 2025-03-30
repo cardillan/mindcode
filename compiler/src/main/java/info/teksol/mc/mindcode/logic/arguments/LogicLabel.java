@@ -7,12 +7,18 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
     private final String label;
     private final int address;
     private final boolean stateTransfer;
+    private final boolean remote;
 
-    private LogicLabel(String label, int address, boolean stateTransfer) {
+    private LogicLabel(String label, int address, boolean stateTransfer, boolean remote) {
         super(ArgumentType.LABEL, ValueMutability.IMMUTABLE);
         this.label = label;
         this.address = address;
         this.stateTransfer = stateTransfer;
+        this.remote = remote;
+    }
+
+    public boolean isRemote() {
+        return remote;
     }
 
     public boolean isStateTransfer() {
@@ -35,16 +41,20 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
                 '}';
     }
 
+    public LogicLabel setRemote() {
+        return new LogicLabel(label, address, stateTransfer, true);
+    }
+
     public LogicLabel withoutStateTransfer() {
-        return new LogicLabel(label, address, false);
+        return new LogicLabel(label, address, false, remote);
     }
 
     public static LogicLabel symbolic(String name) {
-        return new LogicLabel(name, -1, true);
+        return new LogicLabel(name, -1, true, false);
     }
 
     public static LogicLabel absolute(int address) {
-        return new LogicLabel(String.valueOf(address), address, true);
+        return new LogicLabel(String.valueOf(address), address, true, false);
     }
 
     public static final LogicLabel EMPTY = symbolic("");

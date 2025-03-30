@@ -167,13 +167,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         return switch (opcode) {
             case CALL        -> new CallInstruction(astContext, arguments, params);
             case CALLREC     -> new CallRecInstruction(astContext, arguments, params);
+            case COMMENT     -> new CommentInstruction(astContext, arguments, params);
             case CONTROL     -> new ControlInstruction(astContext, arguments, params);
             case DRAW        -> new DrawInstruction(astContext, arguments, params);
             case DRAWFLUSH   -> new DrawflushInstruction(astContext, arguments, params);
             case END         -> new EndInstruction(astContext);
             case FORMAT      -> new FormatInstruction(astContext, arguments, params);
             case GETLINK     -> new GetlinkInstruction(astContext, arguments, params);
-            case INITVAR     -> new InitVarInstruction(astContext, arguments, params);
             case JUMP        -> new JumpInstruction(astContext, arguments, params);
             case LABEL       -> new LabelInstruction(astContext, arguments, params);
             case LOOKUP      -> new LookupInstruction(astContext, arguments, params);
@@ -255,11 +255,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case NoOpInstruction ix -> { }
             case MultiLabelInstruction ix -> { }
             case LabelInstruction ix -> { }
-            case InitVarInstruction ix -> {
-                List<LogicArgument> args = new ArrayList<>(ix.getArgs());
-                args.addFirst(LogicVariable.unusedVariable());
-                consumer.accept(createInstruction(astContext, PACKCOLOR, args));
-            }
             case PushInstruction ix -> {
                 consumer.accept(createWrite(astContext, ix.getVariable(), ix.getMemory(), stackPointer()));
                 consumer.accept(createOp(astContext, ADD, stackPointer(), stackPointer(), LogicNumber.ONE));
@@ -298,7 +293,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 consumer.accept(createInstruction(astContext, SET, LogicBuiltIn.COUNTER, ix.getIndirectAddress()));
             }
             default -> {
-                // MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known
+                // Note: MULTIJUMP / MULTICALL Instructions are handled by LabelResolver, as the actual label value needs to be known
                 consumer.accept(instruction);
             }
         }

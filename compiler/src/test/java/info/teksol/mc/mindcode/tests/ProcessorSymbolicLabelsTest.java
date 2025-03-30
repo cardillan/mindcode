@@ -12,6 +12,6 @@ public class ProcessorSymbolicLabelsTest extends ProcessorTestBase {
 
     @AfterAll
     static void done() throws IOException {
-        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, ProcessorTestBase.class.getSimpleName());
+        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, ProcessorSymbolicLabelsTest.class.getSimpleName());
     }
 }

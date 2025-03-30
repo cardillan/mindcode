@@ -60,8 +60,11 @@ public enum AstSubcontextType {
     /// A recursive function call, includes stack operations.
     RECURSIVE_CALL  ("RCAL"),
 
-    /// A recursive function call, includes stack operations.
+    /// A remote function call.
     REMOTE_CALL     ("RMCL"),
+
+    /// Initialization of a remote module.
+    REMOTE_INIT     ("RMIN"),
 
     /// Array access
     ARRAY           ("ARRA"),

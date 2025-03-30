@@ -497,7 +497,7 @@ class OptimizationContext {
         try (LogicIterator it = createIterator()) {
             while (it.hasNext()) {
                 switch (it.next()) {
-                    case LabelInstruction l      when hasNoReferences(l.getLabel()) -> it.remove();
+                    case LabelInstruction l      when !l.getLabel().isRemote() && hasNoReferences(l.getLabel()) -> it.remove();
                     case MultiLabelInstruction g when hasNoReferences(g.getLabel()) && hasNoReferences(g.getMarker()) -> it.remove();
                     case NoOpInstruction noop -> it.remove();
                     default -> { }
@@ -931,9 +931,6 @@ class OptimizationContext {
     private void instructionRemoved(LogicInstruction instruction) {
         variableStates.remove(instruction);
         if (instruction instanceof LabelInstruction label) {
-            if (label.toMlog().equals("*label4")) {
-                System.out.println("Ha!");
-            }
             removeLabelInstruction(label);
         }
         removeLabelReferences(instruction);

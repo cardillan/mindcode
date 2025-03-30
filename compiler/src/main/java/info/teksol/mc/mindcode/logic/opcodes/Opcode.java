@@ -125,14 +125,14 @@ public enum Opcode {
     /// depending on compiler options.
     REMARK          ("remark",          2),
 
-    /// Performs variable initialization of four variables. Gets replaces by packcolor "0" a b c d
-    INITVAR         ("initvar",         1),
-
     /// Read array element
     READARR         ("readarr",         4),
 
     /// Write array element
     WRITEARR        ("writearr",        4),
+
+    /// Represents an mlog comment
+    COMMENT         ("#",               0),
 
     /// Represents a custom-made instruction (mlog or mlogSafe).
     CUSTOM          ("",                1),

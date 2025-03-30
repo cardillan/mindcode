@@ -14,6 +14,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
+import info.teksol.mc.util.StringSimilarity;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -24,7 +25,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.IntConsumer;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /// Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
 @NullMarked
@@ -55,7 +55,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         String directiveText = directive.getOption().getText();
         Consumer<AstDirectiveSet> handler = OPTION_HANDLERS.get(directiveText);
         if (handler == null) {
-            Optional<String> alternative = findBestAlternative(directiveText, OPTION_HANDLERS.keySet());
+            Optional<String> alternative = StringSimilarity.findBestAlternative(directiveText, OPTION_HANDLERS.keySet());
             if (alternative.isPresent()) {
                 error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN_WITH_SUGGESTION, directiveText, alternative.get());
             } else {
@@ -165,7 +165,8 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
             } else if (strValue.equals(falseValue)) {
                 optionSetter.accept(false);
             } else {
-                reportWrongOptionValue(node, node.getValues().getFirst(), List.of(trueValue, falseValue));
+                error(node.getValues().getFirst(), ERR.DIRECTIVE_INVALID_VALUE_WITH_VALUES,
+                        strValue, node.getOption().getText(), trueValue, falseValue);
             }
         }
     }
@@ -210,56 +211,12 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
     }
 
     private <E extends Enum<E>> void reportWrongOptionValue(AstDirectiveSet node, AstDirectiveValue value, Collection<String> allowedValues) {
-        Optional<String> bestAlternative = findBestAlternative(value.getText(), allowedValues);
+        Optional<String> bestAlternative = StringSimilarity.findBestAlternative(value.getText(), allowedValues);
         if (bestAlternative.isPresent()) {
             error(value, ERR.DIRECTIVE_INVALID_VALUE_WITH_SUGGESTION, value.getText(),
                     node.getOption().getText(), bestAlternative.get());
         } else {
             error(value, ERR.DIRECTIVE_INVALID_VALUE, value.getText(), node.getOption().getText());
         }
-    }
-
-    // Implementation of the Levenshtein Edit Distance
-    // See https://rosettacode.org/wiki/Levenshtein_distance#Java
-    private int editDistance0(String s1, String s2) {
-        s1 = s1.toLowerCase();
-        s2 = s2.toLowerCase();
-
-        int[] costs = new int[s2.length() + 1];
-        for (int i = 0; i <= s1.length(); i++) {
-            int lastValue = i;
-            for (int j = 0; j <= s2.length(); j++) {
-                if (i == 0)
-                    costs[j] = j;
-                else {
-                    if (j > 0) {
-                        int newValue = costs[j - 1];
-                        if (s1.charAt(i - 1) != s2.charAt(j - 1))
-                            newValue = Math.min(Math.min(newValue, lastValue),
-                                    costs[j]) + 1;
-                        costs[j - 1] = lastValue;
-                        lastValue = newValue;
-                    }
-                }
-            }
-            if (i > 0)
-                costs[s2.length()] = lastValue;
-        }
-        return costs[s2.length()];
-    }
-
-    private double editDistance(String existingValue, String userValue) {
-        String[] words = existingValue.split("-");
-        return Stream.of(words).mapToInt(s ->editDistance0(s, userValue)).average().orElse(0.0);
-    }
-
-    private Optional<String> findBestAlternative(String value, Collection<String> allowedValues) {
-        return allowedValues.stream()
-                .min(Comparator.comparingDouble(a -> editDistance(a, value)));
-    }
-
-    private Optional<String> findBestAlternative(String value, String[] allowedValues) {
-        return Stream.of(allowedValues)
-                .min(Comparator.comparingDouble(a -> editDistance(a, value)));
     }
 }

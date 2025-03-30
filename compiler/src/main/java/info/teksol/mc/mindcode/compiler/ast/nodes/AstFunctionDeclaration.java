@@ -123,4 +123,22 @@ public class AstFunctionDeclaration extends AstDeclaration {
     public AstSubcontextType getSubcontextType() {
         return AstSubcontextType.BODY;
     }
+
+    public String toSourceCode() {
+        StringBuilder sb = new StringBuilder();
+        if (callType != CallType.NONE) sb.append(callType.token()).append(' ');
+        sb.append(dataType.keyword).append(' ');
+        sb.append(identifier.getName()).append('(');
+        for (int i = 0; i < parameters.size(); i++) {
+            if (i > 0) sb.append(", ");
+            AstFunctionParameter parameter = parameters.get(i);
+            if (parameter.isInput()) sb.append("in ");
+            if (parameter.isOutput()) sb.append("out ");
+            sb.append(parameter.getName());
+            if (parameter.isVarargs()) sb.append("...");
+        }
+        sb.append(')');
+
+        return sb.toString();
+    }
 }

@@ -1,0 +1,22 @@
+Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
+assignments-in-expressions.mnd:                    13       13     100.0%   3E55A40DD17DEC43   326802755E5FB236
+complex-case-expression.mnd:                       51      298      98.0%   E6AA465B5328A02F   178E5A4EABF090BF
+equality-comparisons.mnd:                          85       81      95.2%   16DB5681427420C5   46EC5FE3037FA03F
+executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   93979794D88305D4
+expression-evaluation-compile-time.mnd:            71       71     100.0%   AF03DAE2294C2967   D08438BA7FDA3D78
+expression-evaluation-runtime.mnd:                139      139     100.0%   735EEFE2E08AC90A   6AA2265477F525DB
+fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   AAB8E9C10DD5E137
+for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8BCD3905B56BCF   A6F3CD0EF75DBCB1
+function-inlining.mnd:                            900      900     100.0%   B3AB880177C19FDA   0EB1980CC50CE220
+iterated-for-loop-break-continue.mnd:              37      168      97.2%   80825B23266F8FF3   8CFE241D74684EF8
+loops-in-conditions.mnd:                            4        4     100.0%   25F777AD40847D3B   3E02AB51542C1E59
+prints-values.mnd:                                 42       42     100.0%   EA633A3540E9449B   AADAB5ECEC3FAFA3
+processesAssertBounds:                             13        8      61.5%   442250AE1653638F   B287E667B86A162C
+processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9
+processesBasicCode:                                 5        5     100.0%   A4E4C088A4510A90   763B6A7CD6497320
+ranged-for-loop-break-continue.mnd:                24       61      95.8%   0E564BDD58072C70   EF34EA79ACA6601D
+recursive-calls.mnd:                              104      279      99.0%   9CB0965E0E62F089   011996001C4F93BB
+recursive-function-condition.mnd:                  23       27      95.6%   02C171DDB1F56F08   11EC9F8C41D257C1
+switched-case-expression.mnd:                      61     2130     100.0%   D8AE9E78FC18AFFC   940A6A8685652C43
+testSuiteRecognizesUnexpectedWarnings:              1        1     100.0%   002B7E6873B65270   76B4E6E157F76749
+while-loop.mnd:                                    20       66      95.0%   D881ACAA07A1E8A0   3ABAF340805BA45A

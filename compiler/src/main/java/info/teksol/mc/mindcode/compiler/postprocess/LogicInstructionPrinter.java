@@ -23,8 +23,8 @@ public class LogicInstructionPrinter {
         final String prefix = symbolicLabels ? "    " : "";
         final StringBuilder buffer = new StringBuilder();
         instructions.forEach((instruction) -> {
-            if (instruction instanceof RemarkInstruction rem) {
-                buffer.append(prefix).append("# ");
+            if (instruction instanceof CommentInstruction rem) {
+                buffer.append("# ");
                 buffer.append(rem.getValue() instanceof LogicString str ? str.getValue() : rem.getValue().toMlog());
             } else if (instruction instanceof LabeledInstruction label) {
                 buffer.append(label.getLabel().toMlog()).append(":");

@@ -24,6 +24,7 @@ public class LogicInstructionLabelResolver {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
 
+    private final Map<LogicLabel, LogicInstruction> labelInstructions = new HashMap<>();
     private final Map<LogicLabel, LogicLabel> addresses = new HashMap<>();
 
     public LogicInstructionLabelResolver(CompilerProfile profile, InstructionProcessor processor) {
@@ -160,7 +161,7 @@ public class LogicInstructionLabelResolver {
     private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
         return switch (profile.getRemarks()) {
             case ACTIVE     -> resolveRemarksActive(program);
-            case COMMENTS   -> program;
+            case COMMENTS   -> resolveRemarksComment(program);
             case NONE       -> resolveRemarksNone(program);
             case PASSIVE    -> resolveRemarksPassive(program);
         };
@@ -169,6 +170,12 @@ public class LogicInstructionLabelResolver {
     private List<LogicInstruction> resolveRemarksActive(List<LogicInstruction> program) {
         return program.stream()
                 .map(ix -> ix instanceof RemarkInstruction r ? processor.createPrint(r.getAstContext(), r.getValue()) : ix)
+                .toList();
+    }
+
+    private List<LogicInstruction> resolveRemarksComment(List<LogicInstruction> program) {
+        return program.stream()
+                .map(ix -> ix instanceof RemarkInstruction r ? processor.createComment(r.getAstContext(), r.getValue()) : ix)
                 .toList();
     }
 
@@ -216,6 +223,7 @@ public class LogicInstructionLabelResolver {
                 }
 
                 addresses.put(ix.getLabel(), LogicLabel.absolute(instructionPointer));
+                labelInstructions.put(ix.getLabel(), instruction);
             }
         }
     }
@@ -233,10 +241,12 @@ public class LogicInstructionLabelResolver {
 
     private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program) {
         final List<LogicInstruction> result = new ArrayList<>();
-        Set<LogicLabel> rightLabels = new HashSet<>();
-        Set<LogicLabel> wrongLabels = new HashSet<>();
+        int comments = 0;
+        boolean wrongAddress = false;
 
         for (final LogicInstruction instruction : program) {
+            if (instruction instanceof CommentInstruction) comments++;
+
             if (instruction instanceof MultiCallInstruction ix) {
                 if (resolveLabel(ix.getTarget()) instanceof LogicLabel label && label.getAddress() >= 0) {
                     LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
@@ -263,10 +273,16 @@ public class LogicInstructionLabelResolver {
                         }
                         result.add(processor.createInstruction(ix.getAstContext(),
                                 OP, Operation.ADD, LogicBuiltIn.COUNTER, LogicBuiltIn.COUNTER, counterOffset));
-                        if (result.size() != label.getAddress()) {
-                            wrongLabels.add(ix.getMarker());
+                        int currentIndex = result.size() - comments;
+
+                        if (labelInstructions.entrySet().stream()
+                                .filter(e -> e.getValue().getMarker().equals(ix.getMarker()))
+                                //.peek(e -> System.out.println("    " + e.getKey().toMlog() + " -> " + e.getValue() + " @ " + addresses.get(e.getKey()).getAddress()))
+                                .noneMatch(e -> addresses.get(e.getKey()).getAddress() == currentIndex)) {
+                            //System.out.println("Missing label at index " + currentIndex);
+                            wrongAddress = true;
                         } else {
-                            rightLabels.add(ix.getMarker());
+                            //System.out.println("Label found at index " + currentIndex);
                         }
                     } else {
                         int offset = label.getAddress() - ix.getOffset().getIntValue();
@@ -285,7 +301,7 @@ public class LogicInstructionLabelResolver {
             }
         }
 
-        if (profile.isSymbolicLabels() && !rightLabels.containsAll(wrongLabels)) {
+        if (profile.isSymbolicLabels() && wrongAddress) {
             processor.error(ERR.LABEL_ADDRESS_MISMATCH);
         }
 

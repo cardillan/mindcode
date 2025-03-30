@@ -41,6 +41,7 @@ public class ERR {
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
     public static final String DIRECTIVE_INVALID_VALUE_WITH_SUGGESTION = "Invalid value '%s' of compiler directive '%s'. Did you mean '%s'?";
+    public static final String DIRECTIVE_INVALID_VALUE_WITH_VALUES = "Invalid value '%s' of compiler directive '%s'. Valid values are '%s' and '%s'.";
     public static final String DIRECTIVE_MULTIPLE_VALUES = "Multiple values specified for option '%s'.";
     public static final String DIRECTIVE_NO_VALUE = "No value specified for option '%s'.";
     public static final String DIRECTIVE_UNKNOWN = "Unknown compiler directive '%s'.";

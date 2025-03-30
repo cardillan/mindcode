@@ -10,91 +10,93 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
-    16 label *label3
-    17 jump *label2 always
-    18 label *label4
+    17 label *label3
+    18 jump *label2 always
+    19 label *label4
 -    * set *tmp0 null
-    19 label *label1
-    20 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
-    21 stop
+    20 label *label1
+    21 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
+    22 stop
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
-     0 assertflush
-     1 set :d.0:n 0
-     2 call *label0 :d.0*retaddr :d.0*retval
+ 
+     1 # "Function: def test()"
+     2 set :d.0:n 0
+     3 call *label0 :d.0*retaddr :d.0*retval
 -    * set *tmp1 :d.0*retval
 -    * set :test.0:j *tmp1
-+    3 set :test.0:j :d.0*retval
-     4 set :d.0:n :test.0:j
-     5 call *label0 :d.0*retaddr :d.0*retval
++    4 set :test.0:j :d.0*retval
+     5 set :d.0:n :test.0:j
+     6 call *label0 :d.0*retaddr :d.0*retval
 -    * set *tmp2 :d.0*retval
 -    * set :test.0:i *tmp2
-+    6 set :test.0:i :d.0*retval
-     7 label *label2
-     8 op lessThan *tmp3 :test.0:i 10
-     9 jump *label4 equal *tmp3 false
++    7 set :test.0:i :d.0*retval
+     8 label *label2
+     9 op lessThan *tmp3 :test.0:i 10
+    10 jump *label4 equal *tmp3 false
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
-     5 call *label0 :d.0*retaddr :d.0*retval
-     6 set :test.0:i :d.0*retval
-     7 label *label2
+     6 call *label0 :d.0*retaddr :d.0*retval
+     7 set :test.0:i :d.0*retval
+     8 label *label2
 -    * op lessThan *tmp3 :test.0:i 10
 -    * jump *label4 equal *tmp3 false
-+    8 jump *label4 greaterThanEq :test.0:i 10
-     9 op add :test.0:j :test.0:j :test.0:i
-    10 print :test.0:j
-    11 print "|"
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
- 
-     1 set :d.0:n 0
-     2 call *label0 :d.0*retaddr :d.0*retval
-     3 set :test.0:j :d.0*retval
--    * set :d.0:n :test.0:j
-+    4 set :d.0:n :d.0*retval
-     5 call *label0 :d.0*retaddr :d.0*retval
-     6 set :test.0:i :d.0*retval
-     7 label *label2
-
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
- 
-     6 set :test.0:i :d.0*retval
-     7 label *label2
-     8 jump *label4 greaterThanEq :test.0:i 10
-+    9 label *label6
++    9 jump *label4 greaterThanEq :test.0:i 10
     10 op add :test.0:j :test.0:j :test.0:i
     11 print :test.0:j
     12 print "|"
-    13 op add :test.0:i :test.0:i 1
-    14 label *label3
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     2 set :d.0:n 0
+     3 call *label0 :d.0*retaddr :d.0*retval
+     4 set :test.0:j :d.0*retval
+-    * set :d.0:n :test.0:j
++    5 set :d.0:n :d.0*retval
+     6 call *label0 :d.0*retaddr :d.0*retval
+     7 set :test.0:i :d.0*retval
+     8 label *label2
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+     7 set :test.0:i :d.0*retval
+     8 label *label2
+     9 jump *label4 greaterThanEq :test.0:i 10
++   10 label *label6
+    11 op add :test.0:j :test.0:j :test.0:i
+    12 print :test.0:j
+    13 print "|"
+    14 op add :test.0:i :test.0:i 1
+    15 label *label3
 -    * jump *label2 always
-+   15 jump *label6 lessThan :test.0:i 10
-    16 label *label4
-    17 label *label1
-    18 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
++   16 jump *label6 lessThan :test.0:i 10
+    17 label *label4
+    18 label *label1
+    19 assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-     5 call *label0 :d.0*retaddr :d.0*retval
-     6 set :test.0:i :d.0*retval
-     7 label *label2
+     6 call *label0 :d.0*retaddr :d.0*retval
+     7 set :test.0:i :d.0*retval
+     8 label *label2
 -    * jump *label4 greaterThanEq :test.0:i 10
-+    8 jump *label4 greaterThanEq :d.0*retval 10
-     9 label *label6
-    10 op add :test.0:j :test.0:j :test.0:i
-    11 print :test.0:j
++    9 jump *label4 greaterThanEq :d.0*retval 10
+    10 label *label6
+    11 op add :test.0:j :test.0:j :test.0:i
+    12 print :test.0:j
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-    22 set :d.0*retval :d.0:n
-    23 label *label5
-    24 return :d.0*retaddr
+    24 set :d.0*retval :d.0:n
+    25 label *label5
+    26 return :d.0*retaddr
 -    * end
 
 Final code before resolving virtual instructions:
 
 assertflush
+# "Function: def test()"
 set :d.0:n 0
 call *label0 :d.0*retaddr :d.0*retval
 set :test.0:j :d.0*retval
@@ -113,5 +115,6 @@ assertprints "0|1|3|6|10|15|21|28|36|45|" "while-loop"
 stop
 end
 label *label0
+# "Function: noinline def d(in n)"
 set :d.0*retval :d.0:n
 return :d.0*retaddr

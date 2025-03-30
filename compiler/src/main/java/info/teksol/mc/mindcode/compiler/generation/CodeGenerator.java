@@ -159,10 +159,12 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void generateRemoteInitialization() {
+        assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
         callGraph.getFunctions().stream()
                 .filter(f -> f.isRemote() && f.isEntryPoint())
-                .forEach(f -> assembler.createSetAddress(LogicVariable.fnAddress(f), Objects.requireNonNull(f.getLabel())));
+                .forEach(this::setupRemoteFunctionAddress);
         assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.create("@this", false));
+        assembler.clearContextType(program);
 
         assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
@@ -175,6 +177,15 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.createJumpUnconditional(remoteWaitLabel);
         assembler.clearSubcontextType();
         assembler.clearContextType(program);
+    }
+
+    private void setupRemoteFunctionAddress(MindcodeFunction function) {
+        if (profile.isSymbolicLabels()) {
+            assembler.createJumpUnconditional(LogicLabel.symbolic("*setAddr-" + function.getName()).withoutStateTransfer());
+            assembler.createLabel(LogicLabel.symbolic("*retAddr-" + function.getName()).withoutStateTransfer());
+        } else {
+            assembler.createSetAddress(LogicVariable.fnAddress(function), Objects.requireNonNull(function.getLabel()));
+        }
     }
 
     private Optional<MindcodeFunction> findBackgroundProcessFunction() {

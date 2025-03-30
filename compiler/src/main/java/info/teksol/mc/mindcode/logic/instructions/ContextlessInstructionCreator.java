@@ -31,6 +31,14 @@ public interface ContextlessInstructionCreator {
         return (CallInstruction) createInstruction(astContext, CALL, address, retAddr, returnValue);
     }
 
+    default CommentInstruction createComment(AstContext astContext, LogicArgument comment) {
+        return (CommentInstruction) createInstruction(astContext, COMMENT, comment);
+    }
+
+    default CommentInstruction createComment(AstContext astContext, String comment) {
+        return (CommentInstruction) createInstruction(astContext, COMMENT, LogicString.create(comment));
+    }
+
     default ControlInstruction createControl(AstContext astContext, LogicKeyword property, LogicValue target, LogicValue value) {
         return (ControlInstruction) createInstruction(astContext, CONTROL, property, target, value);
     }

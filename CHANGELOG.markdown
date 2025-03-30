@@ -14,8 +14,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added a new remarks mode - `comments`. In this mode, remarks are compiled as mlog comments (`# comment`).
 * Added a new [`--file-references` command-line option](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#file-references).
+* Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).
+* Added a suggestion of the closest matching alternative when an unknown compiler directive or option value is found.
+
+#### Experimental features
+
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
-* Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
 
 ### Changed
 

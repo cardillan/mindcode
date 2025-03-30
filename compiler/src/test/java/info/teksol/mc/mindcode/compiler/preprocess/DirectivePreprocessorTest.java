@@ -134,7 +134,7 @@ class DirectivePreprocessorTest {
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         ExpectedMessages.create()
-                .addRegex("Unknown compiler directive 'fluffyBunny'\\. Did you mean '.*'\\?")
+                .addRegex("Unknown compiler directive 'fluffyBunny'\\..*")
                 .validate(consumer -> processDirective(consumer, profile, "fluffyBunny", "basic"));
     }
 

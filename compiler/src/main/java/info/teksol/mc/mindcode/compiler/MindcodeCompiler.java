@@ -38,6 +38,7 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -86,6 +87,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private @Nullable CodeAssembler assembler;
     private @Nullable Variables variables;
 
+    private List<LogicInstruction> executableInstructions = List.of();
     private List<LogicInstruction> instructions = List.of();
     private List<LogicInstruction> unoptimized = List.of();
     private List<LogicInstruction> unresolved = List.of();
@@ -255,11 +257,15 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             boolean hasLabels = instructions.stream()
                     .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTIJUMP, MULTILABEL).negate())
                     .flatMap(MlogInstruction::inputArgumentsStream)
-                    .filter(LogicLabel.class::isInstance)
-                    .peek(System.out::println)
-                    .anyMatch(a -> true);
+                    .anyMatch(LogicLabel.class::isInstance);
 
-            if (hasLabels) {
+            boolean hasDirectAssignment = instructions.stream()
+                    .filter(OpInstruction.class::isInstance)
+                    .map(OpInstruction.class::cast)
+                    .anyMatch(ix -> ix.getResultArgument().equals(LogicBuiltIn.COUNTER)
+                            && !ix.getX().equals(LogicBuiltIn.COUNTER) && !ix.getY().equals(LogicBuiltIn.COUNTER));
+
+            if (hasLabels || hasDirectAssignment) {
                 warn(WARN.ABSOLUTE_ADDRESSING);
             }
         }
@@ -276,6 +282,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         // Label resolving
         instructions = resolver.resolveLabels(instructions, remoteVariables);
+        executableInstructions = instructions.stream().filter(ix -> !(ix instanceof CommentInstruction)).toList();
 
         // Set of all user variables in the program
         generateUnusedVolatileWarnings();
@@ -317,16 +324,20 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             assert rootAstContext != null;
 
             BitSet labels = new BitSet(instructions.size());
-            List<LogicInstruction> result = new ArrayList<>();
             for (LogicInstruction instruction : instructions) {
                 if (instruction instanceof JumpInstruction jump) {
                     labels.set(jump.getTarget().getAddress());
                 }
             }
 
+            List<LogicInstruction> result = new ArrayList<>();
+            result.add(instructionProcessor.createComment(rootAstContext, "Mlog code compiled with support for symbolic labels"));
+            result.add(instructionProcessor.createComment(rootAstContext, "You can safely add/remove instructions, in most parts of the program"));
+            result.add(instructionProcessor.createComment(rootAstContext, "Pay closer attention to sections of the program manipulating @counter"));
+
             int counter = 0;
             for (LogicInstruction instruction : instructions) {
-                if (!(instruction instanceof RemarkInstruction)) {
+                if (!(instruction instanceof CommentInstruction)) {
                     if (labels.get(counter)) {
                         result.add(instructionProcessor.createLabel(rootAstContext, LogicLabel.symbolic(labelPrefix + counter)));
                     }
@@ -365,7 +376,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     private void run(List<LogicInstruction> instructions) {
-        List<LogicInstruction> program = instructions.stream().map(instructionProcessor()::convertCustomInstruction).toList();
+        List<LogicInstruction> program = executableInstructions.stream()
+                .map(instructionProcessor()::convertCustomInstruction)
+                .toList();
         emulator = createEmulator();
         emulatorInitializer.accept(emulator);
 
@@ -420,6 +433,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     public List<MindcodeMessage> getMessages() {
         return messageLogger.getMessages();
+    }
+
+    public List<LogicInstruction> getExecutableInstructions() {
+        return executableInstructions;
     }
 
     public List<LogicInstruction> getInstructions() {

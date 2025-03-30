@@ -7,10 +7,8 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -54,7 +52,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         assembler.setActive(function.isUsed() || function.isEntryPoint());
         // TODO: replace getPlacementCount() with proper weight computation
         assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getPlacementCount());
-        if (function.getLabel() != null) {
+        if (function.getLabel() != null && !function.isRemote()) {
             assembler.createLabel(function.getLabel());
         }
 
@@ -77,6 +75,9 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void compileFunctionBody(MindcodeFunction function) {
+        if (profile.isSymbolicLabels()) {
+            assembler.createComment("Function: " + function.getDeclaration().toSourceCode());
+        }
         ValueStore valueStore = function.isVoid()
                 ? visitBody(function.getBody())
                 : evaluateBody(function.getBody());
@@ -94,6 +95,17 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void appendRemoteFunctionDeclaration(MindcodeFunction function) {
+        if (profile.isSymbolicLabels()) {
+            assembler.setSubcontextType(AstSubcontextType.REMOTE_INIT, 1.0);
+            assembler.createLabel(LogicLabel.symbolic("*setAddr-" + function.getName()).withoutStateTransfer());
+            assembler.createInstruction(Opcode.OP, Operation.ADD,
+                    LogicVariable.fnAddress(function), LogicBuiltIn.COUNTER, LogicNumber.ONE);
+            assembler.createJumpUnconditional(LogicLabel.symbolic("*retAddr-" + function.getName()).withoutStateTransfer());
+            assembler.clearSubcontextType();
+        }
+
+        assert function.getLabel() != null;
+        assembler.createLabel(function.getLabel().setRemote());
         compileFunctionBody(function);
 
         // Return value

@@ -30,6 +30,14 @@ public interface ContextfulInstructionCreator {
         return (CallInstruction) createInstruction(CALL, address, retAddr, returnValue);
     }
 
+    default CommentInstruction createComment(LogicArgument comment) {
+        return (CommentInstruction) createInstruction(COMMENT, comment);
+    }
+
+    default CommentInstruction createComment(String comment) {
+        return (CommentInstruction) createInstruction(COMMENT, LogicString.create(comment));
+    }
+
     default ControlInstruction createControl(LogicKeyword property, LogicValue target, LogicValue value) {
         return (ControlInstruction) createInstruction(CONTROL, property, target, value);
     }

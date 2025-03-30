@@ -1,8 +1,8 @@
    140 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Single Step Elimination (4 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
-    77 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+    78 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
     11 instructions added by Function Inlining (3 iterations).
      6 function calls inlined by Function Inlining.
     71 instructions after optimizations.
@@ -16,21 +16,17 @@ Pass 1: speed optimization selection (cost limit 897):
     Inline function call at line 76:1                            cost     4, benefit        4.5, efficiency        1.1
     Inline function call at line 77:1                            cost     4, benefit        4.5, efficiency        1.1
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-   123 stop
-   124 end
-   125 label *label3
--    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
--    * set :round.0:x *tmp4
-+  126 op mul :round.0:x :assertEqualsRound.0:actual 100000000
-   127 op add *tmp6 :round.0:x 0.5
+   128 # "Function: inline def round(in x)"
+   129 set :round.0:x *tmp4
+   130 op add *tmp6 :round.0:x 0.5
 -    * op floor *tmp7 *tmp6
 -    * set *tmp5 *tmp7
-+  128 op floor *tmp5 *tmp6
-   129 label *label5
-   130 op div *tmp8 *tmp5 100000000
-   131 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
++  131 op floor *tmp5 *tmp6
+   132 label *label5
+   133 op div *tmp8 *tmp5 100000000
+   134 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
  
@@ -147,8 +143,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2
    121 stop
    122 end
    123 label *label3
+ 
+   125 op mul *tmp4 :assertEqualsRound.0:actual 100000000
+   126 # "Function: inline def round(in x)"
+   127 set :round.0:x *tmp4
+-    * op add *tmp6 :round.0:x 0.5
++  128 op add *tmp6 *tmp4 0.5
+   129 op floor *tmp5 *tmp6
+   130 label *label5
+   131 op div *tmp8 *tmp5 100000000
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-33 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-34 instructions):
  
     30 assertequals 1 1 "xor"
     31 assertequals -1 -1 "not 1"
@@ -210,6 +215,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
     87 assertequals true true "||="
     88 stop
     89 end
+ 
+    91 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+    92 op mul *tmp4 :assertEqualsRound.0:actual 100000000
+    93 # "Function: inline def round(in x)"
+-    * set :round.0:x *tmp4
+    94 op add *tmp6 *tmp4 0.5
+    95 op floor *tmp5 *tmp6
+    96 label *label5
 
 Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 instructions):
  
@@ -218,83 +231,97 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
     47 set :assertEqualsRound.0:title "sin"
 -    * call *label3 :assertEqualsRound.0*retaddr :assertEqualsRound.0*retval
 +   48 label *label6
-+   49 op mul :round.0:x :assertEqualsRound.0:actual 100000000
-+   50 op add *tmp6 :round.0:x 0.5
-+   51 op floor *tmp5 *tmp6
-+   52 label *label7
-+   53 op div *tmp8 *tmp5 100000000
-+   54 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   55 label *label8
-    56 set :assertEqualsRound.0:expected -1
-    57 set :assertEqualsRound.0:actual -1
-    58 set :assertEqualsRound.0:title "cos"
++   49 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++   50 op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   51 # "Function: inline def round(in x)"
++   52 op add *tmp6 *tmp4 0.5
++   53 op floor *tmp5 *tmp6
++   54 label *label7
++   55 op div *tmp8 *tmp5 100000000
++   56 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
++   57 label *label8
+    58 set :assertEqualsRound.0:expected -1
+    59 set :assertEqualsRound.0:actual -1
+    60 set :assertEqualsRound.0:title "cos"
 -    * call *label3 :assertEqualsRound.0*retaddr :assertEqualsRound.0*retval
-+   59 label *label9
-+   60 op mul :round.0:x :assertEqualsRound.0:actual 100000000
-+   61 op add *tmp6 :round.0:x 0.5
-+   62 op floor *tmp5 *tmp6
-+   63 label *label10
-+   64 op div *tmp8 *tmp5 100000000
-+   65 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   66 label *label11
-    67 set :assertEqualsRound.0:expected 1
-    68 set :assertEqualsRound.0:actual 0.9999999999999999
-    69 set :assertEqualsRound.0:title "tan"
++   61 label *label9
++   62 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++   63 op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   64 # "Function: inline def round(in x)"
++   65 op add *tmp6 *tmp4 0.5
++   66 op floor *tmp5 *tmp6
++   67 label *label10
++   68 op div *tmp8 *tmp5 100000000
++   69 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
++   70 label *label11
+    71 set :assertEqualsRound.0:expected 1
+    72 set :assertEqualsRound.0:actual 0.9999999999999999
+    73 set :assertEqualsRound.0:title "tan"
 -    * call *label3 :assertEqualsRound.0*retaddr :assertEqualsRound.0*retval
-+   70 label *label12
-+   71 op mul :round.0:x :assertEqualsRound.0:actual 100000000
-+   72 op add *tmp6 :round.0:x 0.5
-+   73 op floor *tmp5 *tmp6
-+   74 label *label13
-+   75 op div *tmp8 *tmp5 100000000
-+   76 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   77 label *label14
-    78 set :assertEqualsRound.0:expected 90
-    79 set :assertEqualsRound.0:actual 90
-    80 set :assertEqualsRound.0:title "asin"
++   74 label *label12
++   75 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++   76 op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   77 # "Function: inline def round(in x)"
++   78 op add *tmp6 *tmp4 0.5
++   79 op floor *tmp5 *tmp6
++   80 label *label13
++   81 op div *tmp8 *tmp5 100000000
++   82 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
++   83 label *label14
+    84 set :assertEqualsRound.0:expected 90
+    85 set :assertEqualsRound.0:actual 90
+    86 set :assertEqualsRound.0:title "asin"
 -    * call *label3 :assertEqualsRound.0*retaddr :assertEqualsRound.0*retval
-+   81 label *label15
-+   82 op mul :round.0:x :assertEqualsRound.0:actual 100000000
-+   83 op add *tmp6 :round.0:x 0.5
-+   84 op floor *tmp5 *tmp6
-+   85 label *label16
-+   86 op div *tmp8 *tmp5 100000000
-+   87 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   88 label *label17
-    89 set :assertEqualsRound.0:expected 0
-    90 set :assertEqualsRound.0:actual 0
-    91 set :assertEqualsRound.0:title "acos"
++   87 label *label15
++   88 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++   89 op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   90 # "Function: inline def round(in x)"
++   91 op add *tmp6 *tmp4 0.5
++   92 op floor *tmp5 *tmp6
++   93 label *label16
++   94 op div *tmp8 *tmp5 100000000
++   95 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
++   96 label *label17
+    97 set :assertEqualsRound.0:expected 0
+    98 set :assertEqualsRound.0:actual 0
+    99 set :assertEqualsRound.0:title "acos"
 -    * call *label3 :assertEqualsRound.0*retaddr :assertEqualsRound.0*retval
-+   92 label *label18
-+   93 op mul :round.0:x :assertEqualsRound.0:actual 100000000
-+   94 op add *tmp6 :round.0:x 0.5
-+   95 op floor *tmp5 *tmp6
-+   96 label *label19
-+   97 op div *tmp8 *tmp5 100000000
-+   98 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   99 label *label20
-   100 set :assertEqualsRound.0:expected 45
-   101 set :assertEqualsRound.0:actual 45
-   102 set :assertEqualsRound.0:title "atan"
++  100 label *label18
++  101 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  102 op mul *tmp4 :assertEqualsRound.0:actual 100000000
++  103 # "Function: inline def round(in x)"
++  104 op add *tmp6 *tmp4 0.5
++  105 op floor *tmp5 *tmp6
++  106 label *label19
++  107 op div *tmp8 *tmp5 100000000
++  108 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
++  109 label *label20
+   110 set :assertEqualsRound.0:expected 45
+   111 set :assertEqualsRound.0:actual 45
+   112 set :assertEqualsRound.0:title "atan"
 -    * call *label3 :assertEqualsRound.0*retaddr :assertEqualsRound.0*retval
-+  103 label *label21
-+  104 op mul :round.0:x :assertEqualsRound.0:actual 100000000
-+  105 op add *tmp6 :round.0:x 0.5
-+  106 op floor *tmp5 *tmp6
-+  107 label *label22
-+  108 op div *tmp8 *tmp5 100000000
-+  109 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+  110 label *label23
-   111 assertequals -8 -8 "unary minus"
-   112 assertequals 1 true "boolean negation 1"
-   113 assertequals 0 false "boolean negation 2"
++  113 label *label21
++  114 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  115 op mul *tmp4 :assertEqualsRound.0:actual 100000000
++  116 # "Function: inline def round(in x)"
++  117 op add *tmp6 *tmp4 0.5
++  118 op floor *tmp5 *tmp6
++  119 label *label22
++  120 op div *tmp8 *tmp5 100000000
++  121 assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
++  122 label *label23
+   123 assertequals -8 -8 "unary minus"
+   124 assertequals 1 true "boolean negation 1"
+   125 assertequals 0 false "boolean negation 2"
  
-   129 assertequals true true "||="
-   130 stop
-   131 end
+   141 assertequals true true "||="
+   142 stop
+   143 end
 -    * label *label3
--    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
--    * op add *tmp6 :round.0:x 0.5
+-    * # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
+-    * # "Function: inline def round(in x)"
+-    * op add *tmp6 *tmp4 0.5
 -    * op floor *tmp5 *tmp6
 -    * label *label5
 -    * op div *tmp8 *tmp5 100000000
@@ -305,103 +332,114 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    46 set :assertEqualsRound.0:actual 1
     47 set :assertEqualsRound.0:title "sin"
     48 label *label6
--    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
--    * op add *tmp6 :round.0:x 0.5
+    49 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   50 op mul *tmp4 1 100000000
+    51 # "Function: inline def round(in x)"
+-    * op add *tmp6 *tmp4 0.5
 -    * op floor *tmp5 *tmp6
-+   49 op mul :round.0:x 1 100000000
-+   50 op add *tmp6 100000000 0.5
-+   51 op floor *tmp5 100000000.5
-    52 label *label7
++   52 op add *tmp6 100000000 0.5
++   53 op floor *tmp5 100000000.5
+    54 label *label7
 -    * op div *tmp8 *tmp5 100000000
 -    * assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   53 op div *tmp8 100000000 100000000
-+   54 assertequals 1 1 "sin"
-    55 label *label8
-    56 set :assertEqualsRound.0:expected -1
-    57 set :assertEqualsRound.0:actual -1
-    58 set :assertEqualsRound.0:title "cos"
-    59 label *label9
--    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
--    * op add *tmp6 :round.0:x 0.5
++   55 op div *tmp8 100000000 100000000
++   56 assertequals 1 1 "sin"
+    57 label *label8
+    58 set :assertEqualsRound.0:expected -1
+    59 set :assertEqualsRound.0:actual -1
+    60 set :assertEqualsRound.0:title "cos"
+    61 label *label9
+    62 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   63 op mul *tmp4 -1 100000000
+    64 # "Function: inline def round(in x)"
+-    * op add *tmp6 *tmp4 0.5
 -    * op floor *tmp5 *tmp6
-+   60 op mul :round.0:x -1 100000000
-+   61 op add *tmp6 -100000000 0.5
-+   62 op floor *tmp5 -99999999.5
-    63 label *label10
++   65 op add *tmp6 -100000000 0.5
++   66 op floor *tmp5 -99999999.5
+    67 label *label10
 -    * op div *tmp8 *tmp5 100000000
 -    * assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   64 op div *tmp8 -100000000 100000000
-+   65 assertequals -1 -1 "cos"
-    66 label *label11
-    67 set :assertEqualsRound.0:expected 1
-    68 set :assertEqualsRound.0:actual 0.9999999999999999
-    69 set :assertEqualsRound.0:title "tan"
-    70 label *label12
--    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
--    * op add *tmp6 :round.0:x 0.5
++   68 op div *tmp8 -100000000 100000000
++   69 assertequals -1 -1 "cos"
+    70 label *label11
+    71 set :assertEqualsRound.0:expected 1
+    72 set :assertEqualsRound.0:actual 0.9999999999999999
+    73 set :assertEqualsRound.0:title "tan"
+    74 label *label12
+    75 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   76 op mul *tmp4 0.9999999999999999 100000000
+    77 # "Function: inline def round(in x)"
+-    * op add *tmp6 *tmp4 0.5
 -    * op floor *tmp5 *tmp6
-+   71 op mul :round.0:x 0.9999999999999999 100000000
-+   72 op add *tmp6 99999999.99999999 0.5
-+   73 op floor *tmp5 100000000.49999999
-    74 label *label13
++   78 op add *tmp6 99999999.99999999 0.5
++   79 op floor *tmp5 100000000.49999999
+    80 label *label13
 -    * op div *tmp8 *tmp5 100000000
 -    * assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   75 op div *tmp8 100000000 100000000
-+   76 assertequals 1 1 "tan"
-    77 label *label14
-    78 set :assertEqualsRound.0:expected 90
-    79 set :assertEqualsRound.0:actual 90
-    80 set :assertEqualsRound.0:title "asin"
-    81 label *label15
--    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
--    * op add *tmp6 :round.0:x 0.5
++   81 op div *tmp8 100000000 100000000
++   82 assertequals 1 1 "tan"
+    83 label *label14
+    84 set :assertEqualsRound.0:expected 90
+    85 set :assertEqualsRound.0:actual 90
+    86 set :assertEqualsRound.0:title "asin"
+    87 label *label15
+    88 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
++   89 op mul *tmp4 90 100000000
+    90 # "Function: inline def round(in x)"
+-    * op add *tmp6 *tmp4 0.5
 -    * op floor *tmp5 *tmp6
-+   82 op mul :round.0:x 90 100000000
-+   83 op add *tmp6 9000000000 0.5
-+   84 op floor *tmp5 9000000000.5
-    85 label *label16
++   91 op add *tmp6 9000000000 0.5
++   92 op floor *tmp5 9000000000.5
+    93 label *label16
 -    * op div *tmp8 *tmp5 100000000
 -    * assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   86 op div *tmp8 9000000000 100000000
-+   87 assertequals 90 90 "asin"
-    88 label *label17
-    89 set :assertEqualsRound.0:expected 0
-    90 set :assertEqualsRound.0:actual 0
-    91 set :assertEqualsRound.0:title "acos"
-    92 label *label18
--    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
--    * op add *tmp6 :round.0:x 0.5
++   94 op div *tmp8 9000000000 100000000
++   95 assertequals 90 90 "asin"
+    96 label *label17
+    97 set :assertEqualsRound.0:expected 0
+    98 set :assertEqualsRound.0:actual 0
+    99 set :assertEqualsRound.0:title "acos"
+   100 label *label18
+   101 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
++  102 op mul *tmp4 0 100000000
+   103 # "Function: inline def round(in x)"
+-    * op add *tmp6 *tmp4 0.5
 -    * op floor *tmp5 *tmp6
-+   93 op mul :round.0:x 0 100000000
-+   94 op add *tmp6 0 0.5
-+   95 op floor *tmp5 0.5
-    96 label *label19
++  104 op add *tmp6 0 0.5
++  105 op floor *tmp5 0.5
+   106 label *label19
 -    * op div *tmp8 *tmp5 100000000
 -    * assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+   97 op div *tmp8 0 100000000
-+   98 assertequals 0 0 "acos"
-    99 label *label20
-   100 set :assertEqualsRound.0:expected 45
-   101 set :assertEqualsRound.0:actual 45
-   102 set :assertEqualsRound.0:title "atan"
-   103 label *label21
--    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
--    * op add *tmp6 :round.0:x 0.5
++  107 op div *tmp8 0 100000000
++  108 assertequals 0 0 "acos"
+   109 label *label20
+   110 set :assertEqualsRound.0:expected 45
+   111 set :assertEqualsRound.0:actual 45
+   112 set :assertEqualsRound.0:title "atan"
+   113 label *label21
+   114 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 :assertEqualsRound.0:actual 100000000
++  115 op mul *tmp4 45 100000000
+   116 # "Function: inline def round(in x)"
+-    * op add *tmp6 *tmp4 0.5
 -    * op floor *tmp5 *tmp6
-+  104 op mul :round.0:x 45 100000000
-+  105 op add *tmp6 4500000000 0.5
-+  106 op floor *tmp5 4500000000.5
-   107 label *label22
++  117 op add *tmp6 4500000000 0.5
++  118 op floor *tmp5 4500000000.5
+   119 label *label22
 -    * op div *tmp8 *tmp5 100000000
 -    * assertequals :assertEqualsRound.0:expected *tmp8 :assertEqualsRound.0:title
-+  108 op div *tmp8 4500000000 100000000
-+  109 assertequals 45 45 "atan"
-   110 label *label23
-   111 assertequals -8 -8 "unary minus"
-   112 assertequals 1 true "boolean negation 1"
++  120 op div *tmp8 4500000000 100000000
++  121 assertequals 45 45 "atan"
+   122 label *label23
+   123 assertequals -8 -8 "unary minus"
+   124 assertequals 1 true "boolean negation 1"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-42 instructions):
  
@@ -412,75 +450,87 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound.0:actual 1
 -    * set :assertEqualsRound.0:title "sin"
     45 label *label6
--    * op mul :round.0:x 1 100000000
+    46 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 1 100000000
+    47 # "Function: inline def round(in x)"
 -    * op add *tmp6 100000000 0.5
 -    * op floor *tmp5 100000000.5
-    46 label *label7
+    48 label *label7
 -    * op div *tmp8 100000000 100000000
-    47 assertequals 1 1 "sin"
-    48 label *label8
+    49 assertequals 1 1 "sin"
+    50 label *label8
 -    * set :assertEqualsRound.0:expected -1
 -    * set :assertEqualsRound.0:actual -1
 -    * set :assertEqualsRound.0:title "cos"
-    49 label *label9
--    * op mul :round.0:x -1 100000000
+    51 label *label9
+    52 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 -1 100000000
+    53 # "Function: inline def round(in x)"
 -    * op add *tmp6 -100000000 0.5
 -    * op floor *tmp5 -99999999.5
-    50 label *label10
+    54 label *label10
 -    * op div *tmp8 -100000000 100000000
-    51 assertequals -1 -1 "cos"
-    52 label *label11
+    55 assertequals -1 -1 "cos"
+    56 label *label11
 -    * set :assertEqualsRound.0:expected 1
 -    * set :assertEqualsRound.0:actual 0.9999999999999999
 -    * set :assertEqualsRound.0:title "tan"
-    53 label *label12
--    * op mul :round.0:x 0.9999999999999999 100000000
+    57 label *label12
+    58 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 0.9999999999999999 100000000
+    59 # "Function: inline def round(in x)"
 -    * op add *tmp6 99999999.99999999 0.5
 -    * op floor *tmp5 100000000.49999999
-    54 label *label13
+    60 label *label13
 -    * op div *tmp8 100000000 100000000
-    55 assertequals 1 1 "tan"
-    56 label *label14
+    61 assertequals 1 1 "tan"
+    62 label *label14
 -    * set :assertEqualsRound.0:expected 90
 -    * set :assertEqualsRound.0:actual 90
 -    * set :assertEqualsRound.0:title "asin"
-    57 label *label15
--    * op mul :round.0:x 90 100000000
+    63 label *label15
+    64 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 90 100000000
+    65 # "Function: inline def round(in x)"
 -    * op add *tmp6 9000000000 0.5
 -    * op floor *tmp5 9000000000.5
-    58 label *label16
+    66 label *label16
 -    * op div *tmp8 9000000000 100000000
-    59 assertequals 90 90 "asin"
-    60 label *label17
+    67 assertequals 90 90 "asin"
+    68 label *label17
 -    * set :assertEqualsRound.0:expected 0
 -    * set :assertEqualsRound.0:actual 0
 -    * set :assertEqualsRound.0:title "acos"
-    61 label *label18
--    * op mul :round.0:x 0 100000000
+    69 label *label18
+    70 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 0 100000000
+    71 # "Function: inline def round(in x)"
 -    * op add *tmp6 0 0.5
 -    * op floor *tmp5 0.5
-    62 label *label19
+    72 label *label19
 -    * op div *tmp8 0 100000000
-    63 assertequals 0 0 "acos"
-    64 label *label20
+    73 assertequals 0 0 "acos"
+    74 label *label20
 -    * set :assertEqualsRound.0:expected 45
 -    * set :assertEqualsRound.0:actual 45
 -    * set :assertEqualsRound.0:title "atan"
-    65 label *label21
--    * op mul :round.0:x 45 100000000
+    75 label *label21
+    76 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp4 45 100000000
+    77 # "Function: inline def round(in x)"
 -    * op add *tmp6 4500000000 0.5
 -    * op floor *tmp5 4500000000.5
-    66 label *label22
+    78 label *label22
 -    * op div *tmp8 4500000000 100000000
-    67 assertequals 45 45 "atan"
-    68 label *label23
-    69 assertequals -8 -8 "unary minus"
+    79 assertequals 45 45 "atan"
+    80 label *label23
+    81 assertequals -8 -8 "unary minus"
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-    86 assertequals true true "&&="
-    87 assertequals true true "||="
-    88 stop
+    98 assertequals true true "&&="
+    99 assertequals true true "||="
+   100 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -530,11 +580,23 @@ assertequals 4 4 "sqrt"
 assertequals 45 45 "angle"
 assertequals 90 90 "angleDiff"
 assertequals 5 5 "len"
+# "Function: void assertEqualsRound(in expected, in actual, in title)"
+# "Function: inline def round(in x)"
 assertequals 1 1 "sin"
+# "Function: void assertEqualsRound(in expected, in actual, in title)"
+# "Function: inline def round(in x)"
 assertequals -1 -1 "cos"
+# "Function: void assertEqualsRound(in expected, in actual, in title)"
+# "Function: inline def round(in x)"
 assertequals 1 1 "tan"
+# "Function: void assertEqualsRound(in expected, in actual, in title)"
+# "Function: inline def round(in x)"
 assertequals 90 90 "asin"
+# "Function: void assertEqualsRound(in expected, in actual, in title)"
+# "Function: inline def round(in x)"
 assertequals 0 0 "acos"
+# "Function: void assertEqualsRound(in expected, in actual, in title)"
+# "Function: inline def round(in x)"
 assertequals 45 45 "atan"
 assertequals -8 -8 "unary minus"
 assertequals 1 true "boolean negation 1"

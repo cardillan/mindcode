@@ -170,7 +170,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         InputFiles inputFiles = createInputFiles(code);
         MindcodeCompiler compiler = new MindcodeCompiler(expectedMessages(), createCompilerProfile(), inputFiles);
         compiler.compile();
-        logCompilation(title, code, compiler.getOutput(), compiler.getInstructions().size());
+        logCompilation(title, code, compiler.getOutput(), compiler.getExecutableInstructions().size());
         writeLogFile(logFile, compiler, compiler.getUnresolved());
     }
 

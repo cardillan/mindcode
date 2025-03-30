@@ -11,197 +11,197 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instructions):
  
-    25 label *label4
-    26 set *tmp11 null
-    27 label *label5
+    26 label *label4
+    27 set *tmp11 null
+    28 label *label5
 -    * set *tmp8 *tmp11
-    28 label *label3
-    29 set :procesUnit.1:unit @poly
-    30 ubind :procesUnit.1:unit
+    29 label *label3
+    30 # "Function: inline def procesUnit(in unit)"
+    31 set :procesUnit.1:unit @poly
  
-    38 label *label7
-    39 set *tmp15 null
-    40 label *label8
+    40 label *label7
+    41 set *tmp15 null
+    42 label *label8
 -    * set *tmp12 *tmp15
-    41 label *label6
-    42 set :procesUnit.2:unit @mega
-    43 ubind :procesUnit.2:unit
+    43 label *label6
+    44 # "Function: inline def procesUnit(in unit)"
+    45 set :procesUnit.2:unit @mega
  
-    51 label *label10
-    52 set *tmp19 null
-    53 label *label11
+    54 label *label10
+    55 set *tmp19 null
+    56 label *label11
 -    * set *tmp16 *tmp19
-    54 label *label9
-    55 set :procesUnit.3:unit @quad
-    56 ubind :procesUnit.3:unit
+    57 label *label9
+    58 # "Function: inline def procesUnit(in unit)"
+    59 set :procesUnit.3:unit @quad
  
-    64 label *label13
-    65 set *tmp23 null
-    66 label *label14
+    68 label *label13
+    69 set *tmp23 null
+    70 label *label14
 -    * set *tmp20 *tmp23
-    67 label *label12
-    68 set :procesUnit.4:unit @oct
-    69 ubind :procesUnit.4:unit
+    71 label *label12
+    72 # "Function: inline def procesUnit(in unit)"
+    73 set :procesUnit.4:unit @oct
  
-    77 label *label16
-    78 set *tmp27 null
-    79 label *label17
+    82 label *label16
+    83 set *tmp27 null
+    84 label *label17
 -    * set *tmp24 *tmp27
-    80 label *label15
-    81 set :procesUnit.5:unit @flare
-    82 ubind :procesUnit.5:unit
+    85 label *label15
+    86 # "Function: inline def procesUnit(in unit)"
+    87 set :procesUnit.5:unit @flare
  
-    90 label *label19
-    91 set *tmp31 null
-    92 label *label20
+    96 label *label19
+    97 set *tmp31 null
+    98 label *label20
 -    * set *tmp28 *tmp31
-    93 label *label18
-    94 set :procesUnit.6:unit @horizon
-    95 ubind :procesUnit.6:unit
+    99 label *label18
+   100 # "Function: inline def procesUnit(in unit)"
+   101 set :procesUnit.6:unit @horizon
  
-   103 label *label22
-   104 set *tmp35 null
-   105 label *label23
+   110 label *label22
+   111 set *tmp35 null
+   112 label *label23
 -    * set *tmp32 *tmp35
-   106 label *label21
-   107 set :procesUnit.7:unit @zenith
-   108 ubind :procesUnit.7:unit
+   113 label *label21
+   114 # "Function: inline def procesUnit(in unit)"
+   115 set :procesUnit.7:unit @zenith
  
-   116 label *label25
-   117 set *tmp39 null
-   118 label *label26
+   124 label *label25
+   125 set *tmp39 null
+   126 label *label26
 -    * set *tmp36 *tmp39
-   119 label *label24
-   120 set :procesUnit.8:unit @antumbra
-   121 ubind :procesUnit.8:unit
+   127 label *label24
+   128 # "Function: inline def procesUnit(in unit)"
+   129 set :procesUnit.8:unit @antumbra
  
-   129 label *label28
-   130 set *tmp43 null
-   131 label *label29
+   138 label *label28
+   139 set *tmp43 null
+   140 label *label29
 -    * set *tmp40 *tmp43
-   132 label *label27
-   133 set :procesUnit.9:unit @eclipse
-   134 ubind :procesUnit.9:unit
+   141 label *label27
+   142 # "Function: inline def procesUnit(in unit)"
+   143 set :procesUnit.9:unit @eclipse
  
-   142 label *label31
-   143 set *tmp47 null
-   144 label *label32
+   152 label *label31
+   153 set *tmp47 null
+   154 label *label32
 -    * set *tmp44 *tmp47
-   145 label *label30
-   146 print "Remote vault [gold]#"
-   147 print LINK_ID
+   155 label *label30
+   156 print "Remote vault [gold]#"
+   157 print LINK_ID
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-20 instructions):
  
-    20 jump *label4 equal *tmp10 false
-    21 ucontrol flag .ANSWER_FLAG
-    22 op add .SERVICED .SERVICED 1
+    21 jump *label4 equal *tmp10 false
+    22 ucontrol flag .ANSWER_FLAG
+    23 op add .SERVICED .SERVICED 1
 -    * set *tmp11 .SERVICED
-    23 jump *label5 always
-    24 label *label4
+    24 jump *label5 always
+    25 label *label4
 -    * set *tmp11 null
-    25 label *label5
-    26 label *label3
-    27 set :procesUnit.1:unit @poly
+    26 label *label5
+    27 label *label3
+    28 # "Function: inline def procesUnit(in unit)"
  
-    31 jump *label7 equal *tmp14 false
-    32 ucontrol flag .ANSWER_FLAG
-    33 op add .SERVICED .SERVICED 1
+    33 jump *label7 equal *tmp14 false
+    34 ucontrol flag .ANSWER_FLAG
+    35 op add .SERVICED .SERVICED 1
 -    * set *tmp15 .SERVICED
-    34 jump *label8 always
-    35 label *label7
+    36 jump *label8 always
+    37 label *label7
 -    * set *tmp15 null
-    36 label *label8
-    37 label *label6
-    38 set :procesUnit.2:unit @mega
+    38 label *label8
+    39 label *label6
+    40 # "Function: inline def procesUnit(in unit)"
  
-    42 jump *label10 equal *tmp18 false
-    43 ucontrol flag .ANSWER_FLAG
-    44 op add .SERVICED .SERVICED 1
+    45 jump *label10 equal *tmp18 false
+    46 ucontrol flag .ANSWER_FLAG
+    47 op add .SERVICED .SERVICED 1
 -    * set *tmp19 .SERVICED
-    45 jump *label11 always
-    46 label *label10
+    48 jump *label11 always
+    49 label *label10
 -    * set *tmp19 null
-    47 label *label11
-    48 label *label9
-    49 set :procesUnit.3:unit @quad
+    50 label *label11
+    51 label *label9
+    52 # "Function: inline def procesUnit(in unit)"
  
-    53 jump *label13 equal *tmp22 false
-    54 ucontrol flag .ANSWER_FLAG
-    55 op add .SERVICED .SERVICED 1
+    57 jump *label13 equal *tmp22 false
+    58 ucontrol flag .ANSWER_FLAG
+    59 op add .SERVICED .SERVICED 1
 -    * set *tmp23 .SERVICED
-    56 jump *label14 always
-    57 label *label13
+    60 jump *label14 always
+    61 label *label13
 -    * set *tmp23 null
-    58 label *label14
-    59 label *label12
-    60 set :procesUnit.4:unit @oct
+    62 label *label14
+    63 label *label12
+    64 # "Function: inline def procesUnit(in unit)"
  
-    64 jump *label16 equal *tmp26 false
-    65 ucontrol flag .ANSWER_FLAG
-    66 op add .SERVICED .SERVICED 1
+    69 jump *label16 equal *tmp26 false
+    70 ucontrol flag .ANSWER_FLAG
+    71 op add .SERVICED .SERVICED 1
 -    * set *tmp27 .SERVICED
-    67 jump *label17 always
-    68 label *label16
+    72 jump *label17 always
+    73 label *label16
 -    * set *tmp27 null
-    69 label *label17
-    70 label *label15
-    71 set :procesUnit.5:unit @flare
+    74 label *label17
+    75 label *label15
+    76 # "Function: inline def procesUnit(in unit)"
  
-    75 jump *label19 equal *tmp30 false
-    76 ucontrol flag .ANSWER_FLAG
-    77 op add .SERVICED .SERVICED 1
+    81 jump *label19 equal *tmp30 false
+    82 ucontrol flag .ANSWER_FLAG
+    83 op add .SERVICED .SERVICED 1
 -    * set *tmp31 .SERVICED
-    78 jump *label20 always
-    79 label *label19
+    84 jump *label20 always
+    85 label *label19
 -    * set *tmp31 null
-    80 label *label20
-    81 label *label18
-    82 set :procesUnit.6:unit @horizon
+    86 label *label20
+    87 label *label18
+    88 # "Function: inline def procesUnit(in unit)"
  
-    86 jump *label22 equal *tmp34 false
-    87 ucontrol flag .ANSWER_FLAG
-    88 op add .SERVICED .SERVICED 1
+    93 jump *label22 equal *tmp34 false
+    94 ucontrol flag .ANSWER_FLAG
+    95 op add .SERVICED .SERVICED 1
 -    * set *tmp35 .SERVICED
-    89 jump *label23 always
-    90 label *label22
+    96 jump *label23 always
+    97 label *label22
 -    * set *tmp35 null
-    91 label *label23
-    92 label *label21
-    93 set :procesUnit.7:unit @zenith
+    98 label *label23
+    99 label *label21
+   100 # "Function: inline def procesUnit(in unit)"
  
-    97 jump *label25 equal *tmp38 false
-    98 ucontrol flag .ANSWER_FLAG
-    99 op add .SERVICED .SERVICED 1
+   105 jump *label25 equal *tmp38 false
+   106 ucontrol flag .ANSWER_FLAG
+   107 op add .SERVICED .SERVICED 1
 -    * set *tmp39 .SERVICED
-   100 jump *label26 always
-   101 label *label25
+   108 jump *label26 always
+   109 label *label25
 -    * set *tmp39 null
-   102 label *label26
-   103 label *label24
-   104 set :procesUnit.8:unit @antumbra
+   110 label *label26
+   111 label *label24
+   112 # "Function: inline def procesUnit(in unit)"
  
-   108 jump *label28 equal *tmp42 false
-   109 ucontrol flag .ANSWER_FLAG
-   110 op add .SERVICED .SERVICED 1
+   117 jump *label28 equal *tmp42 false
+   118 ucontrol flag .ANSWER_FLAG
+   119 op add .SERVICED .SERVICED 1
 -    * set *tmp43 .SERVICED
-   111 jump *label29 always
-   112 label *label28
+   120 jump *label29 always
+   121 label *label28
 -    * set *tmp43 null
-   113 label *label29
-   114 label *label27
-   115 set :procesUnit.9:unit @eclipse
+   122 label *label29
+   123 label *label27
+   124 # "Function: inline def procesUnit(in unit)"
  
-   119 jump *label31 equal *tmp46 false
-   120 ucontrol flag .ANSWER_FLAG
-   121 op add .SERVICED .SERVICED 1
+   129 jump *label31 equal *tmp46 false
+   130 ucontrol flag .ANSWER_FLAG
+   131 op add .SERVICED .SERVICED 1
 -    * set *tmp47 .SERVICED
-   122 jump *label32 always
-   123 label *label31
+   132 jump *label32 always
+   133 label *label31
 -    * set *tmp47 null
-   124 label *label32
-   125 label *label30
-   126 print "Remote vault [gold]#"
+   134 label *label32
+   135 label *label30
+   136 print "Remote vault [gold]#"
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 instructions):
      0 set LINK_ID 1
@@ -224,9 +224,9 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 inst
 -    * set *tmp7 @time
 -    * set :start *tmp7
 +   11 set :start @time
-    12 set :procesUnit.0:unit @mono
-    13 ubind :procesUnit.0:unit
-    14 sensor *tmp9 @unit @flag
+    12 # "Function: inline def procesUnit(in unit)"
+    13 set :procesUnit.0:unit @mono
+    14 ubind :procesUnit.0:unit
 
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
@@ -235,380 +235,380 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 ins
      9 label *label0
 -    * jump *label2 equal true false
     10 set :start @time
-    11 set :procesUnit.0:unit @mono
-    12 ubind :procesUnit.0:unit
+    11 # "Function: inline def procesUnit(in unit)"
+    12 set :procesUnit.0:unit @mono
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 instructions):
  
-    11 set :procesUnit.0:unit @mono
-    12 ubind :procesUnit.0:unit
-    13 sensor *tmp9 @unit @flag
+    12 set :procesUnit.0:unit @mono
+    13 ubind :procesUnit.0:unit
+    14 sensor *tmp9 @unit @flag
 -    * op equal *tmp10 *tmp9 .QUERY_FLAG
 -    * jump *label4 equal *tmp10 false
-+   14 jump *label4 notEqual *tmp9 .QUERY_FLAG
-    15 ucontrol flag .ANSWER_FLAG
-    16 op add .SERVICED .SERVICED 1
-    17 jump *label5 always
++   15 jump *label4 notEqual *tmp9 .QUERY_FLAG
+    16 ucontrol flag .ANSWER_FLAG
+    17 op add .SERVICED .SERVICED 1
+    18 jump *label5 always
  
-    21 set :procesUnit.1:unit @poly
-    22 ubind :procesUnit.1:unit
-    23 sensor *tmp13 @unit @flag
+    23 set :procesUnit.1:unit @poly
+    24 ubind :procesUnit.1:unit
+    25 sensor *tmp13 @unit @flag
 -    * op equal *tmp14 *tmp13 .QUERY_FLAG
 -    * jump *label7 equal *tmp14 false
-+   24 jump *label7 notEqual *tmp13 .QUERY_FLAG
-    25 ucontrol flag .ANSWER_FLAG
-    26 op add .SERVICED .SERVICED 1
-    27 jump *label8 always
++   26 jump *label7 notEqual *tmp13 .QUERY_FLAG
+    27 ucontrol flag .ANSWER_FLAG
+    28 op add .SERVICED .SERVICED 1
+    29 jump *label8 always
  
-    31 set :procesUnit.2:unit @mega
-    32 ubind :procesUnit.2:unit
-    33 sensor *tmp17 @unit @flag
+    34 set :procesUnit.2:unit @mega
+    35 ubind :procesUnit.2:unit
+    36 sensor *tmp17 @unit @flag
 -    * op equal *tmp18 *tmp17 .QUERY_FLAG
 -    * jump *label10 equal *tmp18 false
-+   34 jump *label10 notEqual *tmp17 .QUERY_FLAG
-    35 ucontrol flag .ANSWER_FLAG
-    36 op add .SERVICED .SERVICED 1
-    37 jump *label11 always
++   37 jump *label10 notEqual *tmp17 .QUERY_FLAG
+    38 ucontrol flag .ANSWER_FLAG
+    39 op add .SERVICED .SERVICED 1
+    40 jump *label11 always
  
-    41 set :procesUnit.3:unit @quad
-    42 ubind :procesUnit.3:unit
-    43 sensor *tmp21 @unit @flag
+    45 set :procesUnit.3:unit @quad
+    46 ubind :procesUnit.3:unit
+    47 sensor *tmp21 @unit @flag
 -    * op equal *tmp22 *tmp21 .QUERY_FLAG
 -    * jump *label13 equal *tmp22 false
-+   44 jump *label13 notEqual *tmp21 .QUERY_FLAG
-    45 ucontrol flag .ANSWER_FLAG
-    46 op add .SERVICED .SERVICED 1
-    47 jump *label14 always
++   48 jump *label13 notEqual *tmp21 .QUERY_FLAG
+    49 ucontrol flag .ANSWER_FLAG
+    50 op add .SERVICED .SERVICED 1
+    51 jump *label14 always
  
-    51 set :procesUnit.4:unit @oct
-    52 ubind :procesUnit.4:unit
-    53 sensor *tmp25 @unit @flag
+    56 set :procesUnit.4:unit @oct
+    57 ubind :procesUnit.4:unit
+    58 sensor *tmp25 @unit @flag
 -    * op equal *tmp26 *tmp25 .QUERY_FLAG
 -    * jump *label16 equal *tmp26 false
-+   54 jump *label16 notEqual *tmp25 .QUERY_FLAG
-    55 ucontrol flag .ANSWER_FLAG
-    56 op add .SERVICED .SERVICED 1
-    57 jump *label17 always
++   59 jump *label16 notEqual *tmp25 .QUERY_FLAG
+    60 ucontrol flag .ANSWER_FLAG
+    61 op add .SERVICED .SERVICED 1
+    62 jump *label17 always
  
-    61 set :procesUnit.5:unit @flare
-    62 ubind :procesUnit.5:unit
-    63 sensor *tmp29 @unit @flag
+    67 set :procesUnit.5:unit @flare
+    68 ubind :procesUnit.5:unit
+    69 sensor *tmp29 @unit @flag
 -    * op equal *tmp30 *tmp29 .QUERY_FLAG
 -    * jump *label19 equal *tmp30 false
-+   64 jump *label19 notEqual *tmp29 .QUERY_FLAG
-    65 ucontrol flag .ANSWER_FLAG
-    66 op add .SERVICED .SERVICED 1
-    67 jump *label20 always
++   70 jump *label19 notEqual *tmp29 .QUERY_FLAG
+    71 ucontrol flag .ANSWER_FLAG
+    72 op add .SERVICED .SERVICED 1
+    73 jump *label20 always
  
-    71 set :procesUnit.6:unit @horizon
-    72 ubind :procesUnit.6:unit
-    73 sensor *tmp33 @unit @flag
+    78 set :procesUnit.6:unit @horizon
+    79 ubind :procesUnit.6:unit
+    80 sensor *tmp33 @unit @flag
 -    * op equal *tmp34 *tmp33 .QUERY_FLAG
 -    * jump *label22 equal *tmp34 false
-+   74 jump *label22 notEqual *tmp33 .QUERY_FLAG
-    75 ucontrol flag .ANSWER_FLAG
-    76 op add .SERVICED .SERVICED 1
-    77 jump *label23 always
++   81 jump *label22 notEqual *tmp33 .QUERY_FLAG
+    82 ucontrol flag .ANSWER_FLAG
+    83 op add .SERVICED .SERVICED 1
+    84 jump *label23 always
  
-    81 set :procesUnit.7:unit @zenith
-    82 ubind :procesUnit.7:unit
-    83 sensor *tmp37 @unit @flag
+    89 set :procesUnit.7:unit @zenith
+    90 ubind :procesUnit.7:unit
+    91 sensor *tmp37 @unit @flag
 -    * op equal *tmp38 *tmp37 .QUERY_FLAG
 -    * jump *label25 equal *tmp38 false
-+   84 jump *label25 notEqual *tmp37 .QUERY_FLAG
-    85 ucontrol flag .ANSWER_FLAG
-    86 op add .SERVICED .SERVICED 1
-    87 jump *label26 always
++   92 jump *label25 notEqual *tmp37 .QUERY_FLAG
+    93 ucontrol flag .ANSWER_FLAG
+    94 op add .SERVICED .SERVICED 1
+    95 jump *label26 always
  
-    91 set :procesUnit.8:unit @antumbra
-    92 ubind :procesUnit.8:unit
-    93 sensor *tmp41 @unit @flag
+   100 set :procesUnit.8:unit @antumbra
+   101 ubind :procesUnit.8:unit
+   102 sensor *tmp41 @unit @flag
 -    * op equal *tmp42 *tmp41 .QUERY_FLAG
 -    * jump *label28 equal *tmp42 false
-+   94 jump *label28 notEqual *tmp41 .QUERY_FLAG
-    95 ucontrol flag .ANSWER_FLAG
-    96 op add .SERVICED .SERVICED 1
-    97 jump *label29 always
++  103 jump *label28 notEqual *tmp41 .QUERY_FLAG
+   104 ucontrol flag .ANSWER_FLAG
+   105 op add .SERVICED .SERVICED 1
+   106 jump *label29 always
  
-   101 set :procesUnit.9:unit @eclipse
-   102 ubind :procesUnit.9:unit
-   103 sensor *tmp45 @unit @flag
+   111 set :procesUnit.9:unit @eclipse
+   112 ubind :procesUnit.9:unit
+   113 sensor *tmp45 @unit @flag
 -    * op equal *tmp46 *tmp45 .QUERY_FLAG
 -    * jump *label31 equal *tmp46 false
-+  104 jump *label31 notEqual *tmp45 .QUERY_FLAG
-   105 ucontrol flag .ANSWER_FLAG
-   106 op add .SERVICED .SERVICED 1
-   107 jump *label32 always
++  114 jump *label31 notEqual *tmp45 .QUERY_FLAG
+   115 ucontrol flag .ANSWER_FLAG
+   116 op add .SERVICED .SERVICED 1
+   117 jump *label32 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-10 instructions):
  
-    14 jump *label4 notEqual *tmp9 .QUERY_FLAG
-    15 ucontrol flag .ANSWER_FLAG
-    16 op add .SERVICED .SERVICED 1
+    15 jump *label4 notEqual *tmp9 .QUERY_FLAG
+    16 ucontrol flag .ANSWER_FLAG
+    17 op add .SERVICED .SERVICED 1
 -    * jump *label5 always
-    17 label *label4
-    18 label *label5
-    19 label *label3
+    18 label *label4
+    19 label *label5
+    20 label *label3
  
-    23 jump *label7 notEqual *tmp13 .QUERY_FLAG
-    24 ucontrol flag .ANSWER_FLAG
-    25 op add .SERVICED .SERVICED 1
+    25 jump *label7 notEqual *tmp13 .QUERY_FLAG
+    26 ucontrol flag .ANSWER_FLAG
+    27 op add .SERVICED .SERVICED 1
 -    * jump *label8 always
-    26 label *label7
-    27 label *label8
-    28 label *label6
+    28 label *label7
+    29 label *label8
+    30 label *label6
  
-    32 jump *label10 notEqual *tmp17 .QUERY_FLAG
-    33 ucontrol flag .ANSWER_FLAG
-    34 op add .SERVICED .SERVICED 1
+    35 jump *label10 notEqual *tmp17 .QUERY_FLAG
+    36 ucontrol flag .ANSWER_FLAG
+    37 op add .SERVICED .SERVICED 1
 -    * jump *label11 always
-    35 label *label10
-    36 label *label11
-    37 label *label9
+    38 label *label10
+    39 label *label11
+    40 label *label9
  
-    41 jump *label13 notEqual *tmp21 .QUERY_FLAG
-    42 ucontrol flag .ANSWER_FLAG
-    43 op add .SERVICED .SERVICED 1
+    45 jump *label13 notEqual *tmp21 .QUERY_FLAG
+    46 ucontrol flag .ANSWER_FLAG
+    47 op add .SERVICED .SERVICED 1
 -    * jump *label14 always
-    44 label *label13
-    45 label *label14
-    46 label *label12
+    48 label *label13
+    49 label *label14
+    50 label *label12
  
-    50 jump *label16 notEqual *tmp25 .QUERY_FLAG
-    51 ucontrol flag .ANSWER_FLAG
-    52 op add .SERVICED .SERVICED 1
+    55 jump *label16 notEqual *tmp25 .QUERY_FLAG
+    56 ucontrol flag .ANSWER_FLAG
+    57 op add .SERVICED .SERVICED 1
 -    * jump *label17 always
-    53 label *label16
-    54 label *label17
-    55 label *label15
+    58 label *label16
+    59 label *label17
+    60 label *label15
  
-    59 jump *label19 notEqual *tmp29 .QUERY_FLAG
-    60 ucontrol flag .ANSWER_FLAG
-    61 op add .SERVICED .SERVICED 1
+    65 jump *label19 notEqual *tmp29 .QUERY_FLAG
+    66 ucontrol flag .ANSWER_FLAG
+    67 op add .SERVICED .SERVICED 1
 -    * jump *label20 always
-    62 label *label19
-    63 label *label20
-    64 label *label18
+    68 label *label19
+    69 label *label20
+    70 label *label18
  
-    68 jump *label22 notEqual *tmp33 .QUERY_FLAG
-    69 ucontrol flag .ANSWER_FLAG
-    70 op add .SERVICED .SERVICED 1
+    75 jump *label22 notEqual *tmp33 .QUERY_FLAG
+    76 ucontrol flag .ANSWER_FLAG
+    77 op add .SERVICED .SERVICED 1
 -    * jump *label23 always
-    71 label *label22
-    72 label *label23
-    73 label *label21
+    78 label *label22
+    79 label *label23
+    80 label *label21
  
-    77 jump *label25 notEqual *tmp37 .QUERY_FLAG
-    78 ucontrol flag .ANSWER_FLAG
-    79 op add .SERVICED .SERVICED 1
+    85 jump *label25 notEqual *tmp37 .QUERY_FLAG
+    86 ucontrol flag .ANSWER_FLAG
+    87 op add .SERVICED .SERVICED 1
 -    * jump *label26 always
-    80 label *label25
-    81 label *label26
-    82 label *label24
+    88 label *label25
+    89 label *label26
+    90 label *label24
  
-    86 jump *label28 notEqual *tmp41 .QUERY_FLAG
-    87 ucontrol flag .ANSWER_FLAG
-    88 op add .SERVICED .SERVICED 1
--    * jump *label29 always
-    89 label *label28
-    90 label *label29
-    91 label *label27
- 
-    95 jump *label31 notEqual *tmp45 .QUERY_FLAG
+    95 jump *label28 notEqual *tmp41 .QUERY_FLAG
     96 ucontrol flag .ANSWER_FLAG
     97 op add .SERVICED .SERVICED 1
+-    * jump *label29 always
+    98 label *label28
+    99 label *label29
+   100 label *label27
+ 
+   105 jump *label31 notEqual *tmp45 .QUERY_FLAG
+   106 ucontrol flag .ANSWER_FLAG
+   107 op add .SERVICED .SERVICED 1
 -    * jump *label32 always
-    98 label *label31
-    99 label *label32
-   100 label *label30
+   108 label *label31
+   109 label *label32
+   110 label *label30
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     9 label *label0
     10 set :start @time
-    11 set :procesUnit.0:unit @mono
+    11 # "Function: inline def procesUnit(in unit)"
+    12 set :procesUnit.0:unit @mono
 -    * ubind :procesUnit.0:unit
-+   12 ubind @mono
-    13 sensor *tmp9 @unit @flag
-    14 jump *label4 notEqual *tmp9 .QUERY_FLAG
-    15 ucontrol flag .ANSWER_FLAG
++   13 ubind @mono
+    14 sensor *tmp9 @unit @flag
+    15 jump *label4 notEqual *tmp9 .QUERY_FLAG
+    16 ucontrol flag .ANSWER_FLAG
  
-    18 label *label5
-    19 label *label3
-    20 set :procesUnit.1:unit @poly
+    20 label *label3
+    21 # "Function: inline def procesUnit(in unit)"
+    22 set :procesUnit.1:unit @poly
 -    * ubind :procesUnit.1:unit
-+   21 ubind @poly
-    22 sensor *tmp13 @unit @flag
-    23 jump *label7 notEqual *tmp13 .QUERY_FLAG
-    24 ucontrol flag .ANSWER_FLAG
++   23 ubind @poly
+    24 sensor *tmp13 @unit @flag
+    25 jump *label7 notEqual *tmp13 .QUERY_FLAG
+    26 ucontrol flag .ANSWER_FLAG
  
-    27 label *label8
-    28 label *label6
-    29 set :procesUnit.2:unit @mega
+    30 label *label6
+    31 # "Function: inline def procesUnit(in unit)"
+    32 set :procesUnit.2:unit @mega
 -    * ubind :procesUnit.2:unit
-+   30 ubind @mega
-    31 sensor *tmp17 @unit @flag
-    32 jump *label10 notEqual *tmp17 .QUERY_FLAG
-    33 ucontrol flag .ANSWER_FLAG
++   33 ubind @mega
+    34 sensor *tmp17 @unit @flag
+    35 jump *label10 notEqual *tmp17 .QUERY_FLAG
+    36 ucontrol flag .ANSWER_FLAG
  
-    36 label *label11
-    37 label *label9
-    38 set :procesUnit.3:unit @quad
+    40 label *label9
+    41 # "Function: inline def procesUnit(in unit)"
+    42 set :procesUnit.3:unit @quad
 -    * ubind :procesUnit.3:unit
-+   39 ubind @quad
-    40 sensor *tmp21 @unit @flag
-    41 jump *label13 notEqual *tmp21 .QUERY_FLAG
-    42 ucontrol flag .ANSWER_FLAG
++   43 ubind @quad
+    44 sensor *tmp21 @unit @flag
+    45 jump *label13 notEqual *tmp21 .QUERY_FLAG
+    46 ucontrol flag .ANSWER_FLAG
  
-    45 label *label14
-    46 label *label12
-    47 set :procesUnit.4:unit @oct
+    50 label *label12
+    51 # "Function: inline def procesUnit(in unit)"
+    52 set :procesUnit.4:unit @oct
 -    * ubind :procesUnit.4:unit
-+   48 ubind @oct
-    49 sensor *tmp25 @unit @flag
-    50 jump *label16 notEqual *tmp25 .QUERY_FLAG
-    51 ucontrol flag .ANSWER_FLAG
++   53 ubind @oct
+    54 sensor *tmp25 @unit @flag
+    55 jump *label16 notEqual *tmp25 .QUERY_FLAG
+    56 ucontrol flag .ANSWER_FLAG
  
-    54 label *label17
-    55 label *label15
-    56 set :procesUnit.5:unit @flare
+    60 label *label15
+    61 # "Function: inline def procesUnit(in unit)"
+    62 set :procesUnit.5:unit @flare
 -    * ubind :procesUnit.5:unit
-+   57 ubind @flare
-    58 sensor *tmp29 @unit @flag
-    59 jump *label19 notEqual *tmp29 .QUERY_FLAG
-    60 ucontrol flag .ANSWER_FLAG
++   63 ubind @flare
+    64 sensor *tmp29 @unit @flag
+    65 jump *label19 notEqual *tmp29 .QUERY_FLAG
+    66 ucontrol flag .ANSWER_FLAG
  
-    63 label *label20
-    64 label *label18
-    65 set :procesUnit.6:unit @horizon
+    70 label *label18
+    71 # "Function: inline def procesUnit(in unit)"
+    72 set :procesUnit.6:unit @horizon
 -    * ubind :procesUnit.6:unit
-+   66 ubind @horizon
-    67 sensor *tmp33 @unit @flag
-    68 jump *label22 notEqual *tmp33 .QUERY_FLAG
-    69 ucontrol flag .ANSWER_FLAG
++   73 ubind @horizon
+    74 sensor *tmp33 @unit @flag
+    75 jump *label22 notEqual *tmp33 .QUERY_FLAG
+    76 ucontrol flag .ANSWER_FLAG
  
-    72 label *label23
-    73 label *label21
-    74 set :procesUnit.7:unit @zenith
+    80 label *label21
+    81 # "Function: inline def procesUnit(in unit)"
+    82 set :procesUnit.7:unit @zenith
 -    * ubind :procesUnit.7:unit
-+   75 ubind @zenith
-    76 sensor *tmp37 @unit @flag
-    77 jump *label25 notEqual *tmp37 .QUERY_FLAG
-    78 ucontrol flag .ANSWER_FLAG
++   83 ubind @zenith
+    84 sensor *tmp37 @unit @flag
+    85 jump *label25 notEqual *tmp37 .QUERY_FLAG
+    86 ucontrol flag .ANSWER_FLAG
  
-    81 label *label26
-    82 label *label24
-    83 set :procesUnit.8:unit @antumbra
+    90 label *label24
+    91 # "Function: inline def procesUnit(in unit)"
+    92 set :procesUnit.8:unit @antumbra
 -    * ubind :procesUnit.8:unit
-+   84 ubind @antumbra
-    85 sensor *tmp41 @unit @flag
-    86 jump *label28 notEqual *tmp41 .QUERY_FLAG
-    87 ucontrol flag .ANSWER_FLAG
- 
-    90 label *label29
-    91 label *label27
-    92 set :procesUnit.9:unit @eclipse
--    * ubind :procesUnit.9:unit
-+   93 ubind @eclipse
-    94 sensor *tmp45 @unit @flag
-    95 jump *label31 notEqual *tmp45 .QUERY_FLAG
++   93 ubind @antumbra
+    94 sensor *tmp41 @unit @flag
+    95 jump *label28 notEqual *tmp41 .QUERY_FLAG
     96 ucontrol flag .ANSWER_FLAG
+ 
+   100 label *label27
+   101 # "Function: inline def procesUnit(in unit)"
+   102 set :procesUnit.9:unit @eclipse
+-    * ubind :procesUnit.9:unit
++  103 ubind @eclipse
+   104 sensor *tmp45 @unit @flag
+   105 jump *label31 notEqual *tmp45 .QUERY_FLAG
+   106 ucontrol flag .ANSWER_FLAG
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-10 instructions):
  
-     8 set .SERVICED 0
      9 label *label0
     10 set :start @time
+    11 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.0:unit @mono
-    11 ubind @mono
-    12 sensor *tmp9 @unit @flag
-    13 jump *label4 notEqual *tmp9 .QUERY_FLAG
+    12 ubind @mono
+    13 sensor *tmp9 @unit @flag
+    14 jump *label4 notEqual *tmp9 .QUERY_FLAG
  
-    16 label *label4
-    17 label *label5
-    18 label *label3
+    18 label *label5
+    19 label *label3
+    20 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.1:unit @poly
-    19 ubind @poly
-    20 sensor *tmp13 @unit @flag
-    21 jump *label7 notEqual *tmp13 .QUERY_FLAG
+    21 ubind @poly
+    22 sensor *tmp13 @unit @flag
+    23 jump *label7 notEqual *tmp13 .QUERY_FLAG
  
-    24 label *label7
-    25 label *label8
-    26 label *label6
+    27 label *label8
+    28 label *label6
+    29 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.2:unit @mega
-    27 ubind @mega
-    28 sensor *tmp17 @unit @flag
-    29 jump *label10 notEqual *tmp17 .QUERY_FLAG
+    30 ubind @mega
+    31 sensor *tmp17 @unit @flag
+    32 jump *label10 notEqual *tmp17 .QUERY_FLAG
  
-    32 label *label10
-    33 label *label11
-    34 label *label9
+    36 label *label11
+    37 label *label9
+    38 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.3:unit @quad
-    35 ubind @quad
-    36 sensor *tmp21 @unit @flag
-    37 jump *label13 notEqual *tmp21 .QUERY_FLAG
+    39 ubind @quad
+    40 sensor *tmp21 @unit @flag
+    41 jump *label13 notEqual *tmp21 .QUERY_FLAG
  
-    40 label *label13
-    41 label *label14
-    42 label *label12
+    45 label *label14
+    46 label *label12
+    47 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.4:unit @oct
-    43 ubind @oct
-    44 sensor *tmp25 @unit @flag
-    45 jump *label16 notEqual *tmp25 .QUERY_FLAG
+    48 ubind @oct
+    49 sensor *tmp25 @unit @flag
+    50 jump *label16 notEqual *tmp25 .QUERY_FLAG
  
-    48 label *label16
-    49 label *label17
-    50 label *label15
+    54 label *label17
+    55 label *label15
+    56 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.5:unit @flare
-    51 ubind @flare
-    52 sensor *tmp29 @unit @flag
-    53 jump *label19 notEqual *tmp29 .QUERY_FLAG
+    57 ubind @flare
+    58 sensor *tmp29 @unit @flag
+    59 jump *label19 notEqual *tmp29 .QUERY_FLAG
  
-    56 label *label19
-    57 label *label20
-    58 label *label18
+    63 label *label20
+    64 label *label18
+    65 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.6:unit @horizon
-    59 ubind @horizon
-    60 sensor *tmp33 @unit @flag
-    61 jump *label22 notEqual *tmp33 .QUERY_FLAG
+    66 ubind @horizon
+    67 sensor *tmp33 @unit @flag
+    68 jump *label22 notEqual *tmp33 .QUERY_FLAG
  
-    64 label *label22
-    65 label *label23
-    66 label *label21
+    72 label *label23
+    73 label *label21
+    74 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.7:unit @zenith
-    67 ubind @zenith
-    68 sensor *tmp37 @unit @flag
-    69 jump *label25 notEqual *tmp37 .QUERY_FLAG
+    75 ubind @zenith
+    76 sensor *tmp37 @unit @flag
+    77 jump *label25 notEqual *tmp37 .QUERY_FLAG
  
-    72 label *label25
-    73 label *label26
-    74 label *label24
+    81 label *label26
+    82 label *label24
+    83 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.8:unit @antumbra
-    75 ubind @antumbra
-    76 sensor *tmp41 @unit @flag
-    77 jump *label28 notEqual *tmp41 .QUERY_FLAG
+    84 ubind @antumbra
+    85 sensor *tmp41 @unit @flag
+    86 jump *label28 notEqual *tmp41 .QUERY_FLAG
  
-    80 label *label28
-    81 label *label29
-    82 label *label27
+    90 label *label29
+    91 label *label27
+    92 # "Function: inline def procesUnit(in unit)"
 -    * set :procesUnit.9:unit @eclipse
-    83 ubind @eclipse
-    84 sensor *tmp45 @unit @flag
-    85 jump *label31 notEqual *tmp45 .QUERY_FLAG
+    93 ubind @eclipse
+    94 sensor *tmp45 @unit @flag
+    95 jump *label31 notEqual *tmp45 .QUERY_FLAG
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
-   108 printflush message1
-   109 label *label1
-   110 jump *label0 always
+   118 printflush message1
+   119 label *label1
+   120 jump *label0 always
 -    * label *label2
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
  
-    88 label *label31
-    89 label *label32
-    90 label *label30
+    98 label *label31
+    99 label *label32
+   100 label *label30
 -    * print "Remote vault [gold]#"
 -    * print LINK_ID
 -    * print "["
@@ -619,20 +619,20 @@ Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+   91 print "Remote vault [gold]#{0}[]\nQueries serviced: [green]{0}[]\n[lightgray]Loop time: {0} ms\n"
-+   92 format LINK_ID
-+   93 format .SERVICED
-    94 op sub *tmp48 @time :start
-    95 op floor *tmp49 *tmp48
++  101 print "Remote vault [gold]#{0}[]\nQueries serviced: [green]{0}[]\n[lightgray]Loop time: {0} ms\n"
++  102 format LINK_ID
++  103 format .SERVICED
+   104 op sub *tmp48 @time :start
+   105 op floor *tmp49 *tmp48
 -    * print "[lightgray]Loop time: "
 -    * print *tmp49
 -    * print " "
 -    * print "ms"
 -    * print "\n"
-+   96 format *tmp49
-    97 printflush message1
-    98 label *label1
-    99 jump *label0 always
++  106 format *tmp49
+   107 printflush message1
+   108 label *label1
+   109 jump *label0 always
 
 Final code before resolving virtual instructions:
 
@@ -647,60 +647,70 @@ op add .ANSWER_FLAG :position LINK_ID
 set .SERVICED 0
 label *label0
 set :start @time
+# "Function: inline def procesUnit(in unit)"
 ubind @mono
 sensor *tmp9 @unit @flag
 jump *label4 notEqual *tmp9 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label4
+# "Function: inline def procesUnit(in unit)"
 ubind @poly
 sensor *tmp13 @unit @flag
 jump *label7 notEqual *tmp13 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label7
+# "Function: inline def procesUnit(in unit)"
 ubind @mega
 sensor *tmp17 @unit @flag
 jump *label10 notEqual *tmp17 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label10
+# "Function: inline def procesUnit(in unit)"
 ubind @quad
 sensor *tmp21 @unit @flag
 jump *label13 notEqual *tmp21 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label13
+# "Function: inline def procesUnit(in unit)"
 ubind @oct
 sensor *tmp25 @unit @flag
 jump *label16 notEqual *tmp25 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label16
+# "Function: inline def procesUnit(in unit)"
 ubind @flare
 sensor *tmp29 @unit @flag
 jump *label19 notEqual *tmp29 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label19
+# "Function: inline def procesUnit(in unit)"
 ubind @horizon
 sensor *tmp33 @unit @flag
 jump *label22 notEqual *tmp33 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label22
+# "Function: inline def procesUnit(in unit)"
 ubind @zenith
 sensor *tmp37 @unit @flag
 jump *label25 notEqual *tmp37 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label25
+# "Function: inline def procesUnit(in unit)"
 ubind @antumbra
 sensor *tmp41 @unit @flag
 jump *label28 notEqual *tmp41 .QUERY_FLAG
 ucontrol flag .ANSWER_FLAG
 op add .SERVICED .SERVICED 1
 label *label28
+# "Function: inline def procesUnit(in unit)"
 ubind @eclipse
 sensor *tmp45 @unit @flag
 jump *label31 notEqual *tmp45 .QUERY_FLAG

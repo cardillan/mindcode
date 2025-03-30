@@ -763,7 +763,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             // Jumps inside a RETURN context are caused by the return instruction and do not leave the local context,
             // but they do break the control flow and therefore need to be handled here.
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
-                    && !context.matches(ARRAY)
+                    && !context.matches(ARRAY, REMOTE_INIT)
                     && (context.matches(AstContextType.RETURN, FLOW_CONTROL) ||
                         !getLabelInstruction(jump.getTarget()).belongsTo(localContext))) {
 

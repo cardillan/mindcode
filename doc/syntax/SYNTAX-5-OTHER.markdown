@@ -124,18 +124,65 @@ Active remarks can be used to easily add debugging output to a program that can 
 
 Activates/deactivates using symbolic labels for jump instruction targets. Possible values are:
 
-* `false` (the default value): the compiled code contains absolute instruction addresses in `jump` instructions. 
-* `true`: the compiled code contains symbolic labels in `jump` instructions. Where possible, dependency on absolute instruction addresses is removed.
+* `false` (the default value): the compiled code contains absolute instruction addresses in `jump` instructions. Absolute addresses are also used to store program locations in variables, or to compute offsets in jump tables.
+* `true`: the compiled code contains symbolic labels in `jump` instructions. Program locations stored in variables are always derived from actual `@counter` values, including `@counter` manipulations in jump tables.
 
-Using symbolic labels allows modifications to the text representation of the resulting program, including additions and removals of instructions. When symbolic labels are not used, adding/removing an instruction may cause jump instructions targets to become invalid, damaging the program.
+As a consequence, the compiled mlog code can be altered by adding and/or removing instructions when symbolic labels are produced. Instructions must not be added or removed from sections of code where the `@counter` variable is manipulated. All Mindcode features re supported when generating code using symbolic labels, including function call and remote  function calls, list iteration loops, internal arrays and so on.
 
-> [!WARNING]
-> Some more complex programs may still depend on absolute positions of instructions in the resulting code, even if all `jump` instructions do use symbolic labels. Adding/removing instructions in the compiled code of such programs may still render it incorrect. At this moment, the following constructs rely on absolute instruction addresses:
-> 
-> * recursive function calls,
-> * remote function calls,
-> * random array access,
-> * `case` expressions optimized to use jump tables.
+When symbolic labels are produced, the compiler also uses mlog comments to mark function entry points.
+
+> [!NOTE]
+> Activating symbolic labels may increase program size and decrease execution speed. These features are affected:
+>
+> * Stackless function calls: some optimizations are not be applied.
+> * Recursive function calls: the size and execution time of a recursive function call are increased by one.
+> * Internal array element access: the size of a jump table and execution time of array access are increased by one; by one, some optimizations are not be applied.
+> * Optimized case expressions: the size and execution time of optimized case statement may be increased by one.
+> * List iteration loops: the size and execution time of the last iteration are increased by two.
+> * Remote calls: initialization of remote modules is increased by one or two instructions per remote function; however this only impacts the initialization of a remote module and not subsequent calls.
+
+Example of a program compiled with `symbolic-labels` set to `true`:
+
+```Mindcode
+#set symbolic-labels = true;
+
+noinline void process(unitType)
+    println($"$unitType: ${unitType.@id}");
+end;
+
+for var a in @mono, @poly, @mega do
+    process(a);
+end;
+
+printflush(message1);  
+```
+
+compiles to
+
+```mlog
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+    set :process.0:unitType @mono
+    op add :process.0*retaddr @counter 1
+    jump label_11 always 0 0
+    set :process.0:unitType @poly
+    op add :process.0*retaddr @counter 1
+    jump label_11 always 0 0
+    set :process.0:unitType @mega
+    op add :process.0*retaddr @counter 1
+    jump label_11 always 0 0
+    printflush message1
+    end
+# Function: noinline void process(in unitType)
+label_11:
+    sensor *tmp1 :process.0:unitType @id
+    print :process.0:unitType
+    print ": "
+    print *tmp1
+    print "\n"
+    set @counter :process.0*retaddr
+```
 
 ## Option `sort-variables`
 

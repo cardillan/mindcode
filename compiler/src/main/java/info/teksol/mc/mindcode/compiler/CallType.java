@@ -21,6 +21,10 @@ public enum CallType {
         this.token = token;
     }
 
+    public String token() {
+        return MindcodeLexer.VOCABULARY.getLiteralName(token).replace("'", "");
+    }
+
     private static final List<@Nullable CallType> TOKENS = tokens();
 
     public static CallType fromToken(int tokenType) {

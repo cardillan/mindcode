@@ -36,6 +36,10 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
         return (LogicVariable) getArg(resultIndex);
     }
 
+    public LogicArgument getResultArgument() {
+        return getArg(resultIndex);
+    }
+
     @Override
     public LogicResultInstruction withResult(LogicVariable result) {
         List<LogicArgument> args = new ArrayList<>(getArgs());

@@ -34,6 +34,7 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Language features
+  * Support for [symbolic labels in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
   * Specific syntax for [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords).
   * Support for passing mlog keywords as arguments to inline functions.
   * External and internal arrays (`@counter` arrays).
@@ -80,6 +81,14 @@ You can also get help on these Discord servers:
 
 * [Logic channel on the Mindustry server](https://discord.gg/YkMMPMYABE)
 * [Mindustry Logic server](https://discord.gg/TbkC728p)
+
+## Roadmap
+
+An overview of planned new functionalities is available [here](https://github.com/cardillan/mindcode/discussions/142).
+
+Actual progress of development is published in the [`#development` channel on Discord](https://discord.gg/wnWYC2BjAU).
+
+Comments and ideas are welcome at both places.
 
 ## Contributing
 

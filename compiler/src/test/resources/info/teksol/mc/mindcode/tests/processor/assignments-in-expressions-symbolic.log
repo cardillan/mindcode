@@ -7,41 +7,41 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-3 instructions):
  
-    12 set :test.0:res *tmp3
-    13 jump *label1 equal :test.0:res false
-    14 print "yes"
+    13 set :test.0:res *tmp3
+    14 jump *label1 equal :test.0:res false
+    15 print "yes"
 -    * set *tmp4 "yes"
-    15 jump *label2 always
-    16 label *label1
+    16 jump *label2 always
+    17 label *label1
 -    * set *tmp4 null
-    17 label *label2
-    18 print :test.0:res
+    18 label *label2
+    19 print :test.0:res
 -    * set *tmp2 :test.0:res
-    19 label *label0
-    20 assertprints "yes1" "assignments in conditions"
-    21 stop
+    20 label *label0
+    21 assertprints "yes1" "assignments in conditions"
+    22 stop
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
  
-     8 op add *tmp1 .B .B
      9 assertequals 4 *tmp1 "(B += 1) + B"
     10 assertflush
+    11 # "Function: def test()"
 -    * op lessThan *tmp3 a b
 -    * set :test.0:res *tmp3
-+   11 op lessThan :test.0:res a b
-    12 jump *label1 equal :test.0:res false
-    13 print "yes"
-    14 jump *label2 always
++   12 op lessThan :test.0:res a b
+    13 jump *label1 equal :test.0:res false
+    14 print "yes"
+    15 jump *label2 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    11 op lessThan :test.0:res a b
-    12 jump *label1 equal :test.0:res false
-    13 print "yes"
+    12 op lessThan :test.0:res a b
+    13 jump *label1 equal :test.0:res false
+    14 print "yes"
 -    * jump *label2 always
-    14 label *label1
-    15 label *label2
-    16 print :test.0:res
+    15 label *label1
+    16 label *label2
+    17 print :test.0:res
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set a 1
@@ -82,8 +82,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
 +    6 op add *tmp1 .A .A
 +    7 assertequals 4 *tmp0 "(B += 1) + B"
      8 assertflush
-     9 op lessThan :test.0:res a b
-    10 jump *label1 equal :test.0:res false
+     9 # "Function: def test()"
+    10 op lessThan :test.0:res a b
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2 instructions):
  
@@ -94,13 +94,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2
 -    * op add *tmp1 .A .A
      5 assertequals 4 *tmp0 "(B += 1) + B"
      6 assertflush
-     7 op lessThan :test.0:res a b
+     7 # "Function: def test()"
 
 Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-    13 label *label0
-    14 assertprints "yes1" "assignments in conditions"
-    15 stop
+    14 label *label0
+    15 assertprints "yes1" "assignments in conditions"
+    16 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -112,6 +112,7 @@ op add *tmp0 .A .A
 assertequals 4 *tmp0 "A + (A += 1)"
 assertequals 4 *tmp0 "(B += 1) + B"
 assertflush
+# "Function: def test()"
 op lessThan :test.0:res a b
 jump *label1 equal :test.0:res false
 print "yes"
