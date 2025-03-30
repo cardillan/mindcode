@@ -55,62 +55,62 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 inst
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-10 instructions):
      0 set LIMIT 100
-     1 setaddr *tmp0 *label3
 -    * set :a .array*0
+     1 setaddr *tmp0 *label3
      2 jump *label0 always
      3 multilabel *label3
 -    * set .array*0 :a
+-    * set :a .array*1
 +    4 set .array*0 0
      5 setaddr *tmp0 *label4
--    * set :a .array*1
      6 jump *label0 always
      7 multilabel *label4
 -    * set .array*1 :a
+-    * set :a .array*2
 +    8 set .array*1 0
      9 setaddr *tmp0 *label5
--    * set :a .array*2
     10 jump *label0 always
     11 multilabel *label5
 -    * set .array*2 :a
+-    * set :a .array*3
 +   12 set .array*2 0
     13 setaddr *tmp0 *label6
--    * set :a .array*3
     14 jump *label0 always
     15 multilabel *label6
 -    * set .array*3 :a
+-    * set :a .array*4
 +   16 set .array*3 0
     17 setaddr *tmp0 *label7
--    * set :a .array*4
     18 jump *label0 always
     19 multilabel *label7
 -    * set .array*4 :a
+-    * set :a .array*5
 +   20 set .array*4 0
     21 setaddr *tmp0 *label8
--    * set :a .array*5
     22 jump *label0 always
     23 multilabel *label8
 -    * set .array*5 :a
+-    * set :a .array*6
 +   24 set .array*5 0
     25 setaddr *tmp0 *label9
--    * set :a .array*6
     26 jump *label0 always
     27 multilabel *label9
 -    * set .array*6 :a
+-    * set :a .array*7
 +   28 set .array*6 0
     29 setaddr *tmp0 *label10
--    * set :a .array*7
     30 jump *label0 always
     31 multilabel *label10
 -    * set .array*7 :a
+-    * set :a .array*8
 +   32 set .array*7 0
     33 setaddr *tmp0 *label11
--    * set :a .array*8
     34 jump *label0 always
     35 multilabel *label11
 -    * set .array*8 :a
+-    * set :a .array*9
 +   36 set .array*8 0
     37 setaddr *tmp0 *label12
--    * set :a .array*9
     38 label *label0
     39 set :a 0
     40 label *label1

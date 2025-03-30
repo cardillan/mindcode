@@ -20,69 +20,69 @@
    655 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 737):
-    Unroll iteration loop at line 29:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 46:1                           cost   241, benefit       63.0, efficiency        0.3
-    Unroll loop at line 87:5                                     cost   252, benefit     5000.0, efficiency       19.8
-    Inline function 'eraseImages' defined at line 65:1           cost     3, benefit        7.0, efficiency        2.3
-    Inline function 'eraseNumbers' defined at line 74:1          cost     3, benefit       47.3, efficiency       15.8
-    Inline function 'displayItem' defined at line 83:1           cost   101, benefit      100.0, efficiency        1.0
-    Inline function call at line 24:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 25:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 43:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 50:9                            cost   102, benefit       50.0, efficiency        0.5
+    Unroll iteration loop at line 31:1                           cost    81, benefit       63.0, efficiency        0.8
+    Unroll iteration loop at line 48:1                           cost   241, benefit       63.0, efficiency        0.3
+    Unroll loop at line 89:5                                     cost   252, benefit     5000.0, efficiency       19.8
+    Inline function 'eraseImages' defined at line 67:1           cost     3, benefit        7.0, efficiency        2.3
+    Inline function 'eraseNumbers' defined at line 76:1          cost     3, benefit       47.3, efficiency       15.8
+    Inline function 'displayItem' defined at line 85:1           cost   101, benefit      100.0, efficiency        1.0
+    Inline function call at line 26:1                            cost     4, benefit        3.5, efficiency        0.9
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
+    Inline function call at line 45:1                            cost     4, benefit        3.5, efficiency        0.9
     Inline function call at line 52:9                            cost   102, benefit       50.0, efficiency        0.5
-    Inline function call at line 59:9                            cost     4, benefit       43.8, efficiency       10.9
-  * Convert case at line 97:5                                    cost     3, benefit      625.0, efficiency      208.3 (+3 instructions)
+    Inline function call at line 54:9                            cost   102, benefit       50.0, efficiency        0.5
+    Inline function call at line 61:9                            cost     4, benefit       43.8, efficiency       10.9
+  * Convert case at line 99:5                                    cost     3, benefit      625.0, efficiency      208.3 (+3 instructions)
 
 Pass 1: speed optimization selection (cost limit 734):
-    Unroll iteration loop at line 29:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 46:1                           cost   241, benefit       63.0, efficiency        0.3
-  * Unroll loop at line 87:5                                     cost   261, benefit     5000.0, efficiency       19.2 (+261 instructions)
-    Inline function 'eraseImages' defined at line 65:1           cost     3, benefit        7.0, efficiency        2.3
-    Inline function 'eraseNumbers' defined at line 74:1          cost     3, benefit       47.3, efficiency       15.8
-    Inline function 'displayItem' defined at line 83:1           cost   104, benefit      100.0, efficiency        1.0
-    Inline function call at line 24:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 25:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 43:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 50:9                            cost   105, benefit       50.0, efficiency        0.5
+    Unroll iteration loop at line 31:1                           cost    81, benefit       63.0, efficiency        0.8
+    Unroll iteration loop at line 48:1                           cost   241, benefit       63.0, efficiency        0.3
+  * Unroll loop at line 89:5                                     cost   261, benefit     5000.0, efficiency       19.2 (+261 instructions)
+    Inline function 'eraseImages' defined at line 67:1           cost     3, benefit        7.0, efficiency        2.3
+    Inline function 'eraseNumbers' defined at line 76:1          cost     3, benefit       47.3, efficiency       15.8
+    Inline function 'displayItem' defined at line 85:1           cost   104, benefit      100.0, efficiency        1.0
+    Inline function call at line 26:1                            cost     4, benefit        3.5, efficiency        0.9
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
+    Inline function call at line 45:1                            cost     4, benefit        3.5, efficiency        0.9
     Inline function call at line 52:9                            cost   105, benefit       50.0, efficiency        0.5
-    Inline function call at line 59:9                            cost     4, benefit       43.8, efficiency       10.9
+    Inline function call at line 54:9                            cost   105, benefit       50.0, efficiency        0.5
+    Inline function call at line 61:9                            cost     4, benefit       43.8, efficiency       10.9
 
 Pass 1: speed optimization selection (cost limit 473):
-    Unroll iteration loop at line 29:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 46:1                           cost   241, benefit       63.0, efficiency        0.3
-    Inline function 'eraseImages' defined at line 65:1           cost     3, benefit        7.0, efficiency        2.3
-  * Inline function 'eraseNumbers' defined at line 74:1          cost     3, benefit       47.3, efficiency       15.8 (-3 instructions)
-    Inline function 'displayItem' defined at line 83:1           cost   365, benefit      100.0, efficiency        0.3
-    Inline function call at line 24:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 25:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 43:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 50:9                            cost   366, benefit       50.0, efficiency        0.1
+    Unroll iteration loop at line 31:1                           cost    81, benefit       63.0, efficiency        0.8
+    Unroll iteration loop at line 48:1                           cost   241, benefit       63.0, efficiency        0.3
+    Inline function 'eraseImages' defined at line 67:1           cost     3, benefit        7.0, efficiency        2.3
+  * Inline function 'eraseNumbers' defined at line 76:1          cost     3, benefit       47.3, efficiency       15.8 (-3 instructions)
+    Inline function 'displayItem' defined at line 85:1           cost   365, benefit      100.0, efficiency        0.3
+    Inline function call at line 26:1                            cost     4, benefit        3.5, efficiency        0.9
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
+    Inline function call at line 45:1                            cost     4, benefit        3.5, efficiency        0.9
     Inline function call at line 52:9                            cost   366, benefit       50.0, efficiency        0.1
-    Inline function call at line 59:9                            cost     4, benefit       43.8, efficiency       10.9
+    Inline function call at line 54:9                            cost   366, benefit       50.0, efficiency        0.1
+    Inline function call at line 61:9                            cost     4, benefit       43.8, efficiency       10.9
 
 Pass 1: speed optimization selection (cost limit 476):
-    Unroll iteration loop at line 29:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 46:1                           cost   273, benefit       63.0, efficiency        0.2
-  * Inline function 'eraseImages' defined at line 65:1           cost     3, benefit        7.0, efficiency        2.3 (-3 instructions)
-    Inline function 'displayItem' defined at line 83:1           cost   365, benefit      100.0, efficiency        0.3
-    Inline function call at line 24:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 25:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 50:9                            cost   366, benefit       50.0, efficiency        0.1
+    Unroll iteration loop at line 31:1                           cost    81, benefit       63.0, efficiency        0.8
+    Unroll iteration loop at line 48:1                           cost   273, benefit       63.0, efficiency        0.2
+  * Inline function 'eraseImages' defined at line 67:1           cost     3, benefit        7.0, efficiency        2.3 (-3 instructions)
+    Inline function 'displayItem' defined at line 85:1           cost   365, benefit      100.0, efficiency        0.3
+    Inline function call at line 26:1                            cost     4, benefit        3.5, efficiency        0.9
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
     Inline function call at line 52:9                            cost   366, benefit       50.0, efficiency        0.1
+    Inline function call at line 54:9                            cost   366, benefit       50.0, efficiency        0.1
 
 Pass 1: speed optimization selection (cost limit 479):
-  * Unroll iteration loop at line 29:1                           cost    81, benefit       63.0, efficiency        0.8 (-12 instructions)
-    Unroll iteration loop at line 46:1                           cost   273, benefit       63.0, efficiency        0.2
-    Inline function 'displayItem' defined at line 83:1           cost   365, benefit      100.0, efficiency        0.3
-    Inline function call at line 50:9                            cost   366, benefit       50.0, efficiency        0.1
+  * Unroll iteration loop at line 31:1                           cost    81, benefit       63.0, efficiency        0.8 (-12 instructions)
+    Unroll iteration loop at line 48:1                           cost   273, benefit       63.0, efficiency        0.2
+    Inline function 'displayItem' defined at line 85:1           cost   365, benefit      100.0, efficiency        0.3
     Inline function call at line 52:9                            cost   366, benefit       50.0, efficiency        0.1
+    Inline function call at line 54:9                            cost   366, benefit       50.0, efficiency        0.1
 
 Pass 1: speed optimization selection (cost limit 491):
-    Unroll iteration loop at line 46:1                           cost   273, benefit       63.0, efficiency        0.2
-  * Inline function 'displayItem' defined at line 83:1           cost   365, benefit      100.0, efficiency        0.3 (+238 instructions)
-    Inline function call at line 50:9                            cost   366, benefit       50.0, efficiency        0.1
+    Unroll iteration loop at line 48:1                           cost   273, benefit       63.0, efficiency        0.2
+  * Inline function 'displayItem' defined at line 85:1           cost   365, benefit      100.0, efficiency        0.3 (+238 instructions)
     Inline function call at line 52:9                            cost   366, benefit       50.0, efficiency        0.1
+    Inline function call at line 54:9                            cost   366, benefit       50.0, efficiency        0.1
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -190,7 +190,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
 -    * set *tmp1 :eraseImages.0*retval
     12 draw color 255 255 255 255
     13 set :index 0
-    14 setaddr *tmp2 *label8
+    14 set :item @sand
  
     86 set :y 152
     87 set :x 93
@@ -208,8 +208,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-13 instruct
    101 label *label26
 -    * set *tmp9 :eraseNumbers.0*retval
    102 set :index 0
-   103 setaddr *tmp10 *label30
-   104 set :item @sand
+   103 set :item @sand
+   104 setaddr *tmp10 *label30
  
    171 setaddr :displayItem.0*retaddr *label48
    172 call *label2 *invalid :displayItem.0*retval
@@ -543,7 +543,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-5 inst
     86 set :x 93
     87 draw color 255 255 255 255
  
-   163 set :item @spore-pod
+   163 setaddr *tmp10 *label45
    164 label *label27
    165 draw image 0 0 :item 16 0
 -    * op lessThan *tmp11 :index 8
@@ -1207,7 +1207,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-11 instructions):
  
-    75 set :item @spore-pod
+    75 setaddr *tmp2 *label23
     76 label *label5
     77 op add *tmp3 :x 8
 -    * op add *tmp4 :y 8
@@ -1279,7 +1279,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    335 jump *label88 notEqual :displayItem.0:amount 1
    336 op add *tmp119 :displayItem.0:x 6
 
-Modifications by Convert case at line 97:5 (+3 instructions):
+Modifications by Convert case at line 99:5 (+3 instructions):
  
    220 label *label60
    221 label *label90
@@ -1390,7 +1390,7 @@ Modifications by Convert case at line 97:5 (+3 instructions):
    338 label *label63
    339 op sub :displayItem.0:x :displayItem.0:x 11
 
-Modifications by Unroll loop at line 87:5 (+266 instructions):
+Modifications by Unroll loop at line 89:5 (+266 instructions):
  
    216 label *label2
    217 op max :displayItem.0:amount .AMOUNT 0
@@ -2116,7 +2116,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
    721 jump *label88 notEqual :displayItem.0:amount 1
    722 op add *tmp119 :displayItem.0:x 6
 
-Modifications by Inline function 'eraseNumbers' defined at line 74:1 (-1 instructions):
+Modifications by Inline function 'eraseNumbers' defined at line 76:1 (-1 instructions):
  
     92 drawflush display1
     93 set :y 152
@@ -2134,8 +2134,8 @@ Modifications by Inline function 'eraseNumbers' defined at line 74:1 (-1 instruc
 +  102 label *label258
 +  103 label *label259
    104 set :index 0
-   105 setaddr *tmp10 *label30
-   106 set :item @sand
+   105 set :item @sand
+   106 setaddr *tmp10 *label30
  
    186 drawflush display1
    187 set :y 152
@@ -2212,7 +2212,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    188 draw color 0 0 80 255
    189 jump *label261 equal false false
 
-Modifications by Inline function 'eraseImages' defined at line 65:1 (-1 instructions):
+Modifications by Inline function 'eraseImages' defined at line 67:1 (-1 instructions):
  
      2 set :x 7
      3 set :y 152
@@ -2244,7 +2244,7 @@ Modifications by Inline function 'eraseImages' defined at line 65:1 (-1 instruct
 +   23 label *label271
     24 draw color 255 255 255 255
     25 set :index 0
-    26 setaddr *tmp2 *label8
+    26 set :item @sand
  
    213 label *label29
    214 drawflush display1
@@ -2302,73 +2302,73 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     14 draw color 0 0 80 255
     15 jump *label269 equal false false
 
-Modifications by Unroll iteration loop at line 29:1 (+103 instructions):
+Modifications by Unroll iteration loop at line 31:1 (+103 instructions):
  
     21 label *label271
     22 draw color 255 255 255 255
     23 set :index 0
--    * setaddr *tmp2 *label8
 -    * set :item @sand
+-    * setaddr *tmp2 *label8
 -    * jump *label5 always
 -    * multilabel *label8
--    * setaddr *tmp2 *label9
 -    * set :item @copper
+-    * setaddr *tmp2 *label9
 -    * jump *label5 always
 -    * multilabel *label9
--    * setaddr *tmp2 *label10
 -    * set :item @lead
+-    * setaddr *tmp2 *label10
 -    * jump *label5 always
 -    * multilabel *label10
--    * setaddr *tmp2 *label11
 -    * set :item @coal
+-    * setaddr *tmp2 *label11
 -    * jump *label5 always
 -    * multilabel *label11
--    * setaddr *tmp2 *label12
 -    * set :item @titanium
+-    * setaddr *tmp2 *label12
 -    * jump *label5 always
 -    * multilabel *label12
--    * setaddr *tmp2 *label13
 -    * set :item @thorium
+-    * setaddr *tmp2 *label13
 -    * jump *label5 always
 -    * multilabel *label13
--    * setaddr *tmp2 *label14
 -    * set :item @scrap
+-    * setaddr *tmp2 *label14
 -    * jump *label5 always
 -    * multilabel *label14
--    * setaddr *tmp2 *label15
 -    * set :item @graphite
+-    * setaddr *tmp2 *label15
 -    * jump *label5 always
 -    * multilabel *label15
--    * setaddr *tmp2 *label16
 -    * set :item @metaglass
+-    * setaddr *tmp2 *label16
 -    * jump *label5 always
 -    * multilabel *label16
--    * setaddr *tmp2 *label17
 -    * set :item @silicon
+-    * setaddr *tmp2 *label17
 -    * jump *label5 always
 -    * multilabel *label17
--    * setaddr *tmp2 *label18
 -    * set :item @pyratite
+-    * setaddr *tmp2 *label18
 -    * jump *label5 always
 -    * multilabel *label18
--    * setaddr *tmp2 *label19
 -    * set :item @blast-compound
+-    * setaddr *tmp2 *label19
 -    * jump *label5 always
 -    * multilabel *label19
--    * setaddr *tmp2 *label20
 -    * set :item @plastanium
+-    * setaddr *tmp2 *label20
 -    * jump *label5 always
 -    * multilabel *label20
--    * setaddr *tmp2 *label21
 -    * set :item @phase-fabric
+-    * setaddr *tmp2 *label21
 -    * jump *label5 always
 -    * multilabel *label21
--    * setaddr *tmp2 *label22
 -    * set :item @surge-alloy
+-    * setaddr *tmp2 *label22
 -    * jump *label5 always
 -    * multilabel *label22
--    * setaddr *tmp2 *label23
 -    * set :item @spore-pod
+-    * setaddr *tmp2 *label23
 -    * label *label5
 -    * op add *tmp3 :x 8
 -    * op add *tmp6 :y 7
@@ -3142,7 +3142,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8
    129 draw color 255 255 255 255
    130 label *label363
 
-Modifications by Inline function 'displayItem' defined at line 83:1 (+361 instructions):
+Modifications by Inline function 'displayItem' defined at line 85:1 (+361 instructions):
  
    210 jump *label46 greaterThanEq :index 8
    211 set :displayItem.0:x 71
@@ -9009,68 +9009,68 @@ set :y 152
 draw color 0 0 80 255
 draw rect 23 0 70 176
 set :index 0
-setaddr *tmp10 *label30
 set :item @sand
+setaddr *tmp10 *label30
 jump *label27 always
 multilabel *label30
-setaddr *tmp10 *label31
 set :item @copper
+setaddr *tmp10 *label31
 jump *label27 always
 multilabel *label31
-setaddr *tmp10 *label32
 set :item @lead
+setaddr *tmp10 *label32
 jump *label27 always
 multilabel *label32
-setaddr *tmp10 *label33
 set :item @coal
+setaddr *tmp10 *label33
 jump *label27 always
 multilabel *label33
-setaddr *tmp10 *label34
 set :item @titanium
+setaddr *tmp10 *label34
 jump *label27 always
 multilabel *label34
-setaddr *tmp10 *label35
 set :item @thorium
+setaddr *tmp10 *label35
 jump *label27 always
 multilabel *label35
-setaddr *tmp10 *label36
 set :item @scrap
+setaddr *tmp10 *label36
 jump *label27 always
 multilabel *label36
-setaddr *tmp10 *label37
 set :item @graphite
+setaddr *tmp10 *label37
 jump *label27 always
 multilabel *label37
-setaddr *tmp10 *label38
 set :item @metaglass
+setaddr *tmp10 *label38
 jump *label27 always
 multilabel *label38
-setaddr *tmp10 *label39
 set :item @silicon
+setaddr *tmp10 *label39
 jump *label27 always
 multilabel *label39
-setaddr *tmp10 *label40
 set :item @pyratite
+setaddr *tmp10 *label40
 jump *label27 always
 multilabel *label40
-setaddr *tmp10 *label41
 set :item @blast-compound
+setaddr *tmp10 *label41
 jump *label27 always
 multilabel *label41
-setaddr *tmp10 *label42
 set :item @plastanium
+setaddr *tmp10 *label42
 jump *label27 always
 multilabel *label42
-setaddr *tmp10 *label43
 set :item @phase-fabric
+setaddr *tmp10 *label43
 jump *label27 always
 multilabel *label43
-setaddr *tmp10 *label44
 set :item @surge-alloy
+setaddr *tmp10 *label44
 jump *label27 always
 multilabel *label44
-setaddr *tmp10 *label45
 set :item @spore-pod
+setaddr *tmp10 *label45
 label *label27
 draw image 0 0 :item 16 0
 jump *label46 greaterThanEq :index 8

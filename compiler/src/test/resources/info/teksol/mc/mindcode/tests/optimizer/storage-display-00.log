@@ -351,7 +351,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-23 instruct
 -    * set *tmp33 *tmp34
    217 label *label47
    218 set :index 0
-   219 setaddr *tmp35 *label53
+   219 set :item @sand
  
    304 label *label75
    305 set *tmp41 *tmp43
@@ -1861,8 +1861,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    185 jump *label48 equal true false
    186 draw rect 23 0 70 176
  
-   253 setaddr *tmp35 *label68
-   254 set :item @spore-pod
+   253 set :item @spore-pod
+   254 setaddr *tmp35 *label68
    255 label *label50
 -    * set :displayItem.0:index :index
 -    * set :displayItem.0:item :item
@@ -2321,7 +2321,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-92 instructions):
  
-   163 set :item @spore-pod
+   163 setaddr *tmp26 *label44
    164 label *label26
    165 op add *tmp27 :x 8
 -    * op add *tmp28 :y 8
@@ -2329,7 +2329,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-9
    167 draw image *tmp27 *tmp30 :item 16 0
    168 op add :index :index 1
  
-   253 set :item @spore-pod
+   253 setaddr *tmp35 *label68
    254 label *label50
    255 set :displayItem.0:x :x
 -    * set :displayItem.0:y :y
@@ -4385,8 +4385,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7 instructions):
  
-   253 setaddr *tmp35 *label68
-   254 set :item @spore-pod
+   253 set :item @spore-pod
+   254 setaddr *tmp35 *label68
    255 label *label50
 -    * set :displayItem.0:x :x
    256 sensor :displayItem.0:amount .CONTAINER :item
@@ -4476,68 +4476,68 @@ Modifications by Unroll iteration loop at line 69:5 (+103 instructions):
    100 label *label23
    101 draw color 255 255 255 255
    102 set :index 0
--    * setaddr *tmp26 *label29
 -    * set :item @sand
+-    * setaddr *tmp26 *label29
 -    * jump *label26 always
 -    * multilabel *label29
--    * setaddr *tmp26 *label30
 -    * set :item @copper
+-    * setaddr *tmp26 *label30
 -    * jump *label26 always
 -    * multilabel *label30
--    * setaddr *tmp26 *label31
 -    * set :item @lead
+-    * setaddr *tmp26 *label31
 -    * jump *label26 always
 -    * multilabel *label31
--    * setaddr *tmp26 *label32
 -    * set :item @coal
+-    * setaddr *tmp26 *label32
 -    * jump *label26 always
 -    * multilabel *label32
--    * setaddr *tmp26 *label33
 -    * set :item @titanium
+-    * setaddr *tmp26 *label33
 -    * jump *label26 always
 -    * multilabel *label33
--    * setaddr *tmp26 *label34
 -    * set :item @thorium
+-    * setaddr *tmp26 *label34
 -    * jump *label26 always
 -    * multilabel *label34
--    * setaddr *tmp26 *label35
 -    * set :item @scrap
+-    * setaddr *tmp26 *label35
 -    * jump *label26 always
 -    * multilabel *label35
--    * setaddr *tmp26 *label36
 -    * set :item @graphite
+-    * setaddr *tmp26 *label36
 -    * jump *label26 always
 -    * multilabel *label36
--    * setaddr *tmp26 *label37
 -    * set :item @metaglass
+-    * setaddr *tmp26 *label37
 -    * jump *label26 always
 -    * multilabel *label37
--    * setaddr *tmp26 *label38
 -    * set :item @silicon
+-    * setaddr *tmp26 *label38
 -    * jump *label26 always
 -    * multilabel *label38
--    * setaddr *tmp26 *label39
 -    * set :item @pyratite
+-    * setaddr *tmp26 *label39
 -    * jump *label26 always
 -    * multilabel *label39
--    * setaddr *tmp26 *label40
 -    * set :item @blast-compound
+-    * setaddr *tmp26 *label40
 -    * jump *label26 always
 -    * multilabel *label40
--    * setaddr *tmp26 *label41
 -    * set :item @plastanium
+-    * setaddr *tmp26 *label41
 -    * jump *label26 always
 -    * multilabel *label41
--    * setaddr *tmp26 *label42
 -    * set :item @phase-fabric
+-    * setaddr *tmp26 *label42
 -    * jump *label26 always
 -    * multilabel *label42
--    * setaddr *tmp26 *label43
 -    * set :item @surge-alloy
+-    * setaddr *tmp26 *label43
 -    * jump *label26 always
 -    * multilabel *label43
--    * setaddr *tmp26 *label44
 -    * set :item @spore-pod
+-    * setaddr *tmp26 *label44
 -    * label *label26
 -    * op add *tmp27 :x 8
 -    * op add *tmp30 :y 7
@@ -7269,68 +7269,68 @@ set :y 152
 draw color 0 0 80 255
 draw rect 23 0 70 176
 set :index 0
-setaddr *tmp35 *label53
 set :item @sand
+setaddr *tmp35 *label53
 jump *label50 always
 multilabel *label53
-setaddr *tmp35 *label54
 set :item @copper
+setaddr *tmp35 *label54
 jump *label50 always
 multilabel *label54
-setaddr *tmp35 *label55
 set :item @lead
+setaddr *tmp35 *label55
 jump *label50 always
 multilabel *label55
-setaddr *tmp35 *label56
 set :item @coal
+setaddr *tmp35 *label56
 jump *label50 always
 multilabel *label56
-setaddr *tmp35 *label57
 set :item @titanium
+setaddr *tmp35 *label57
 jump *label50 always
 multilabel *label57
-setaddr *tmp35 *label58
 set :item @thorium
+setaddr *tmp35 *label58
 jump *label50 always
 multilabel *label58
-setaddr *tmp35 *label59
 set :item @scrap
+setaddr *tmp35 *label59
 jump *label50 always
 multilabel *label59
-setaddr *tmp35 *label60
 set :item @graphite
+setaddr *tmp35 *label60
 jump *label50 always
 multilabel *label60
-setaddr *tmp35 *label61
 set :item @metaglass
+setaddr *tmp35 *label61
 jump *label50 always
 multilabel *label61
-setaddr *tmp35 *label62
 set :item @silicon
+setaddr *tmp35 *label62
 jump *label50 always
 multilabel *label62
-setaddr *tmp35 *label63
 set :item @pyratite
+setaddr *tmp35 *label63
 jump *label50 always
 multilabel *label63
-setaddr *tmp35 *label64
 set :item @blast-compound
+setaddr *tmp35 *label64
 jump *label50 always
 multilabel *label64
-setaddr *tmp35 *label65
 set :item @plastanium
+setaddr *tmp35 *label65
 jump *label50 always
 multilabel *label65
-setaddr *tmp35 *label66
 set :item @phase-fabric
+setaddr *tmp35 *label66
 jump *label50 always
 multilabel *label66
-setaddr *tmp35 *label67
 set :item @surge-alloy
+setaddr *tmp35 *label67
 jump *label50 always
 multilabel *label67
-setaddr *tmp35 *label68
 set :item @spore-pod
+setaddr *tmp35 *label68
 label *label50
 sensor :displayItem.0:amount .CONTAINER :item
 op strictEqual *tmp38 .MEMORY null

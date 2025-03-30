@@ -110,13 +110,13 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         end;
                         """,
                 createInstruction(SET, ":a", "1"),
-                createInstruction(SETADDR, tmp(0), label(3)),
                 createInstruction(SET, ":i", ":a"),
+                createInstruction(SETADDR, tmp(0), label(3)),
                 createInstruction(JUMP, label(0), "always"),
                 createInstruction(MULTILABEL, label(3)),
-                createInstruction(SETADDR, tmp(0), label(4)),
                 createInstruction(SET, ":a", "2"),
                 createInstruction(SET, ":i", "2"),
+                createInstruction(SETADDR, tmp(0), label(4)),
                 createInstruction(LABEL, label(0)),
                 createInstruction(OP, "mul", ":k", "2", ":a"),
                 createInstruction(PRINT, ":i"),
@@ -332,18 +332,18 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         end;
                         """,
                 createInstruction(SET, "A", "10"),
-                createInstruction(OP, "mul", var(1), "2", "A"),
-                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(OP, "mul", tmp(1), "2", "A"),
                 createInstruction(SET, ":i", "1"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(MULTILABEL, var(1003)),
-                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SETADDR, tmp(0), label(3)),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(MULTILABEL, label(3)),
                 createInstruction(SET, ":i", "A"),
-                createInstruction(LABEL, var(1000)),
+                createInstruction(SETADDR, tmp(0), label(4)),
+                createInstruction(LABEL, label(0)),
                 createInstruction(PRINT, ":i"),
-                createInstruction(PRINT, var(1)),
-                createInstruction(MULTIJUMP, var(0), "0", "0"),
-                createInstruction(MULTILABEL, var(1004))
+                createInstruction(PRINT, tmp(1)),
+                createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                createInstruction(MULTILABEL, label(4))
         );
     }
 
@@ -356,23 +356,23 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         end;
                         """,
                 createInstruction(SET, "A", "10"),
-                createInstruction(OP, "mul", var(5), "2", "A"),
-                createInstruction(SETADDR, var(0), var(1003)),
+                createInstruction(OP, "mul", tmp(5), "2", "A"),
                 createInstruction(SET, ":i", "1"),
                 createInstruction(SET, ":j", "2"),
-                createInstruction(JUMP, var(1000), "always"),
-                createInstruction(MULTILABEL, var(1003)),
-                createInstruction(SETADDR, var(0), var(1004)),
+                createInstruction(SETADDR, tmp(0), label(3)),
+                createInstruction(JUMP, label(0), "always"),
+                createInstruction(MULTILABEL, label(3)),
                 createInstruction(OP, "mul", ":i", "2", "A"),
                 createInstruction(OP, "mul", ":j", "4", "A"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(OP, "mul", var(3), "2", ":i"),
-                createInstruction(OP, "mul", var(4), "2", ":j"),
-                createInstruction(PRINT, var(3)),
-                createInstruction(PRINT, var(4)),
-                createInstruction(PRINT, var(5)),
-                createInstruction(MULTIJUMP, var(0), "0", "0"),
-                createInstruction(MULTILABEL, var(1004))
+                createInstruction(SETADDR, tmp(0), label(4)),
+                createInstruction(LABEL, label(0)),
+                createInstruction(OP, "mul", tmp(3), "2", ":i"),
+                createInstruction(OP, "mul", tmp(4), "2", ":j"),
+                createInstruction(PRINT, tmp(3)),
+                createInstruction(PRINT, tmp(4)),
+                createInstruction(PRINT, tmp(5)),
+                createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                createInstruction(MULTILABEL, label(4))
         );
     }
 

@@ -1,7 +1,7 @@
 package info.teksol.mc.messages;
 
 public class WARN {
-    public static final String ABSOLUTE_ADDRESSING = "Can't compile for symbolic labels, absolute addressing is used.";
+    public static final String ABSOLUTE_ADDRESSING = "Unable to meet the requirement for symbolic links. Some portions of the program still depend on absolute addressing.";
     public static final String BUILT_IN_VARIABLE_NOT_RECOGNIZED = "Built-in variable '%s' not recognized.";
     public static final String FORMAT_PRECLUDED_BY_STRING_LITERAL = "A string literal precludes using 'format' instruction for print merging.";
     public static final String FUNCTION_NO_LONGER_SUPPORTED = "Function '%s' is no longer supported in Mindustry Logic version %s; using '%s' instead.";

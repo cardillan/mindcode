@@ -1,39 +1,39 @@
 jump 0 equal message1 null
 set :findLinkedBlocks.0:title "Example program.\nTrying to locate linked blocks"
 set :findLinkedBlocks.0:message message1
-set *tmp0 9
 set :findLinkedBlocks.0:requested @large-logic-display
 set :findLinkedBlocks.0:name "Display"
 set :findLinkedBlocks.0:variable :display
 set :findLinkedBlocks.0:required true
+set *tmp0 9
 jump 36 always 0 0
 set :display :findLinkedBlocks.0:variable
-set *tmp0 16
 set :findLinkedBlocks.0:requested @message
 set :findLinkedBlocks.0:name "Message"
 set :findLinkedBlocks.0:variable :message
 set :findLinkedBlocks.0:required false
+set *tmp0 16
 jump 36 always 0 0
 set :message :findLinkedBlocks.0:variable
-set *tmp0 23
 set :findLinkedBlocks.0:requested @switch
 set :findLinkedBlocks.0:name "Switch"
 set :findLinkedBlocks.0:variable :switch
 set :findLinkedBlocks.0:required false
+set *tmp0 23
 jump 36 always 0 0
 set :switch :findLinkedBlocks.0:variable
-set *tmp0 30
 set :findLinkedBlocks.0:requested @memory-bank
 set :findLinkedBlocks.0:name "Memory"
 set :findLinkedBlocks.0:variable :memory
 set :findLinkedBlocks.0:required true
+set *tmp0 30
 jump 36 always 0 0
 set :memory :findLinkedBlocks.0:variable
-set *tmp0 38
 set :findLinkedBlocks.0:requested @memory-cell
 set :findLinkedBlocks.0:name "Memory"
 set :findLinkedBlocks.0:variable :memory
 set :findLinkedBlocks.0:required true
+set *tmp0 38
 set :findLinkedBlocks.0:variable null
 set @counter *tmp0
 set :memory :findLinkedBlocks.0:variable
@@ -48,39 +48,39 @@ print "\nFound: "
 print :findLinkedBlocks.0:block
 sensor *tmp3 :findLinkedBlocks.0:block @type
 set :findLinkedBlocks.0:type *tmp3
-set *tmp4 56
 set :findLinkedBlocks.0:requested @large-logic-display
 set :findLinkedBlocks.0:name "Display"
 set :findLinkedBlocks.0:variable :display
 set :findLinkedBlocks.0:required true
+set *tmp4 56
 jump 83 always 0 0
 set :display :findLinkedBlocks.0:variable
-set *tmp4 63
 set :findLinkedBlocks.0:requested @message
 set :findLinkedBlocks.0:name "Message"
 set :findLinkedBlocks.0:variable :message
 set :findLinkedBlocks.0:required false
+set *tmp4 63
 jump 83 always 0 0
 set :message :findLinkedBlocks.0:variable
-set *tmp4 70
 set :findLinkedBlocks.0:requested @switch
 set :findLinkedBlocks.0:name "Switch"
 set :findLinkedBlocks.0:variable :switch
 set :findLinkedBlocks.0:required false
+set *tmp4 70
 jump 83 always 0 0
 set :switch :findLinkedBlocks.0:variable
-set *tmp4 77
 set :findLinkedBlocks.0:requested @memory-bank
 set :findLinkedBlocks.0:name "Memory"
 set :findLinkedBlocks.0:variable :memory
 set :findLinkedBlocks.0:required true
+set *tmp4 77
 jump 83 always 0 0
 set :memory :findLinkedBlocks.0:variable
-set *tmp4 96
 set :findLinkedBlocks.0:requested @memory-cell
 set :findLinkedBlocks.0:name "Memory"
 set :findLinkedBlocks.0:variable :memory
 set :findLinkedBlocks.0:required true
+set *tmp4 96
 op equal *tmp5 :findLinkedBlocks.0:requested :findLinkedBlocks.0:type
 jump 94 equal *tmp5 false
 set :findLinkedBlocks.0:variable :findLinkedBlocks.0:block
@@ -97,39 +97,39 @@ set @counter *tmp4
 set :memory :findLinkedBlocks.0:variable
 jump 41 always 0 0
 set :findLinkedBlocks.0:foundAll 1
-set *tmp9 105
 set :findLinkedBlocks.0:requested @large-logic-display
 set :findLinkedBlocks.0:name "Display"
 set :findLinkedBlocks.0:variable :display
 set :findLinkedBlocks.0:required true
+set *tmp9 105
 jump 132 always 0 0
 set :display :findLinkedBlocks.0:variable
-set *tmp9 112
 set :findLinkedBlocks.0:requested @message
 set :findLinkedBlocks.0:name "Message"
 set :findLinkedBlocks.0:variable :message
 set :findLinkedBlocks.0:required false
+set *tmp9 112
 jump 132 always 0 0
 set :message :findLinkedBlocks.0:variable
-set *tmp9 119
 set :findLinkedBlocks.0:requested @switch
 set :findLinkedBlocks.0:name "Switch"
 set :findLinkedBlocks.0:variable :switch
 set :findLinkedBlocks.0:required false
+set *tmp9 119
 jump 132 always 0 0
 set :switch :findLinkedBlocks.0:variable
-set *tmp9 126
 set :findLinkedBlocks.0:requested @memory-bank
 set :findLinkedBlocks.0:name "Memory"
 set :findLinkedBlocks.0:variable :memory
 set :findLinkedBlocks.0:required true
+set *tmp9 126
 jump 132 always 0 0
 set :memory :findLinkedBlocks.0:variable
-set *tmp9 143
 set :findLinkedBlocks.0:requested @memory-cell
 set :findLinkedBlocks.0:name "Memory"
 set :findLinkedBlocks.0:variable :memory
 set :findLinkedBlocks.0:required true
+set *tmp9 143
 print "\n"
 print :findLinkedBlocks.0:name
 print ":"

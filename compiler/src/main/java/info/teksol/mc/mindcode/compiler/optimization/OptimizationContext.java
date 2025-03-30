@@ -931,6 +931,9 @@ class OptimizationContext {
     private void instructionRemoved(LogicInstruction instruction) {
         variableStates.remove(instruction);
         if (instruction instanceof LabelInstruction label) {
+            if (label.toMlog().equals("*label4")) {
+                System.out.println("Ha!");
+            }
             removeLabelInstruction(label);
         }
         removeLabelReferences(instruction);

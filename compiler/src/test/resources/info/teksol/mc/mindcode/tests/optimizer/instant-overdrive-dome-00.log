@@ -82,8 +82,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-166 instruc
    124 label *label27
 -    * set *tmp32 null
    125 label *label28
-   126 setaddr *tmp33 *label32
-   127 set :chooseUnitType.0:type @flare
+   126 set :chooseUnitType.0:type @flare
+   127 setaddr *tmp33 *label32
  
    189 label *label49
    190 set *tmp56 null
@@ -1980,8 +1980,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-70 ins
     97 print :areUnitsAvailable.0:needed
     98 jump *label26 always
  
-   127 setaddr *tmp33 *label35
-   128 set :chooseUnitType.0:type @mono
+   127 set :chooseUnitType.0:type @mono
+   128 setaddr *tmp33 *label35
    129 label *label29
 -    * op notEqual *tmp34 :chooseUnitType.0:type UNIT_TYPE
 -    * jump *label36 equal *tmp34 false
@@ -2600,7 +2600,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 -    * jump *label28 always
    108 label *label27
    109 label *label28
-   110 setaddr *tmp33 *label32
+   110 set :chooseUnitType.0:type @flare
  
    162 jump *label49 lessThan :areUnitsAvailable.1:free :areUnitsAvailable.1:needed
    163 set *tmp36 true
@@ -4858,20 +4858,20 @@ Modifications by Unroll iteration loop at line 177:9 (+139 instructions):
     89 jump *label6 always
     90 label *label27
     91 label *label28
--    * setaddr *tmp33 *label32
 -    * set :chooseUnitType.0:type @flare
+-    * setaddr *tmp33 *label32
 -    * jump *label29 always
 -    * multilabel *label32
--    * setaddr *tmp33 *label33
 -    * set :chooseUnitType.0:type @poly
+-    * setaddr *tmp33 *label33
 -    * jump *label29 always
 -    * multilabel *label33
--    * setaddr *tmp33 *label34
 -    * set :chooseUnitType.0:type @mega
+-    * setaddr *tmp33 *label34
 -    * jump *label29 always
 -    * multilabel *label34
--    * setaddr *tmp33 *label35
 -    * set :chooseUnitType.0:type @mono
+-    * setaddr *tmp33 *label35
 -    * label *label29
 -    * jump *label36 equal :chooseUnitType.0:type UNIT_TYPE
 -    * remark "chooseUnitType: "

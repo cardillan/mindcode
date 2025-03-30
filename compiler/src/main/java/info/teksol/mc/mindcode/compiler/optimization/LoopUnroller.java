@@ -88,7 +88,8 @@ class LoopUnroller extends BaseOptimizer {
                 case BODY, UPDATE: return false;
             }
         }
-        throw new MindcodeInternalError("Invalid loop structure.");
+        err();
+        return false;
     }
 
     // Remove the last jump of condition context if present (it might have been removed by optimizations).
@@ -463,10 +464,33 @@ class LoopUnroller extends BaseOptimizer {
         return OptimizationResult.REALIZED;
     }
 
+    private void err() {
+        throw new MindcodeInternalError("Invalid loop structure.");
+    }
+
     private LogicList removeLeadingIteratorInstructions(LogicList list) {
-        int begin = list.getFirst() instanceof SetAddressInstruction ? 1 : 0;
-        int end = list.getLast() instanceof JumpInstruction ? 1 : 0;
-        return list.subList(begin, list.size() - end);
+        if (getProfile().isSymbolicLabels()) {
+            if (!(list.getLast() instanceof JumpInstruction jump) || !jump.isUnconditional()) err();
+            int end;
+            if (list.getFromEnd(1) instanceof OpInstruction) {
+                end = 1;
+            } else {
+                // Last iteration: expect a multilabel and an unconditional jump
+                if (!(list.getFromEnd(1) instanceof MultiLabelInstruction
+                        || (!(list.getFromEnd(2) instanceof JumpInstruction jump) || !jump.isUnconditional()))) err();
+                end = 3;
+            }
+
+            if (!(list.getFromEnd(end) instanceof OpInstruction op)
+                    || op.getOperation() != Operation.ADD
+                    || !op.getX().equals(LogicBuiltIn.COUNTER)) err();
+
+            return list.subList(0, list.size() - end);
+        } else {
+            int end = list.getLast() instanceof JumpInstruction ? 1 : 0;
+            if (!(list.getFromEnd(end) instanceof SetAddressInstruction)) err();
+            return list.subList(0, list.size() - end - 1);
+        }
     }
 
     private void unrollFlowControlContext(AstContext loop, AstContext newContext, int insertionPoint) {

@@ -1525,20 +1525,20 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                                 print(i);
                             end;
                             """,
-                    createInstruction(SETADDR, var(0), var(1003)),
                     createInstruction(SET, ":i", "1"),
-                    createInstruction(JUMP, var(1000), "always"),
-                    createInstruction(MULTILABEL, var(1003)),
-                    createInstruction(SETADDR, var(0), var(1004)),
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
                     createInstruction(SET, ":i", "2"),
-                    createInstruction(JUMP, var(1000), "always"),
-                    createInstruction(MULTILABEL, var(1004)),
-                    createInstruction(SETADDR, var(0), var(1005)),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
                     createInstruction(SET, ":i", "3"),
-                    createInstruction(LABEL, var(1000)),
+                    createInstruction(SETADDR, tmp(0), label(5)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ":i"),
-                    createInstruction(MULTIJUMP, var(0), "0", "0"),
-                    createInstruction(MULTILABEL, var(1005))
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(5))
             );
         }
 

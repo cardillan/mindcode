@@ -38,6 +38,7 @@ public class ERR {
     public static final String ASYNC_WRONG_ARGUMENT = "The '%s' function requires a call of a remote function as an argument.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
+    public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
     public static final String DIRECTIVE_MULTIPLE_VALUES = "Multiple values specified for option '%s'.";
     public static final String DIRECTIVE_NO_VALUE = "No value specified for option '%s'.";
@@ -78,6 +79,7 @@ public class ERR {
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";
     public static final String INTERNAL_AMBIGUOUS_CODE = "%s: ambiguous source code (%d ambiguities found).";
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
+    public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals requires language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
     public static final String LITERAL_INVALID_CHAR_FORMAT = "Invalid format of character literal.";
@@ -126,7 +128,6 @@ public class ERR {
     public static final String SUBARRAY_INVALID_RANGE = "Empty or invalid subarray range.";
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";
     public static final String SUBARRAY_NON_INTEGER_RANGE = "Subarray specification must use integer range.";
-    public static final String SYMBOLIC_LINK_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
     public static final String UNDEFINED_LOOP_LABEL = "Undefined loop label '%s'.";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' is incompatible with previous modifiers.";

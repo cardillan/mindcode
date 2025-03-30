@@ -233,6 +233,8 @@ public class LogicInstructionLabelResolver {
 
     private List<LogicInstruction> resolveAddresses(List<LogicInstruction> program) {
         final List<LogicInstruction> result = new ArrayList<>();
+        Set<LogicLabel> rightLabels = new HashSet<>();
+        Set<LogicLabel> wrongLabels = new HashSet<>();
 
         for (final LogicInstruction instruction : program) {
             if (instruction instanceof MultiCallInstruction ix) {
@@ -262,7 +264,9 @@ public class LogicInstructionLabelResolver {
                         result.add(processor.createInstruction(ix.getAstContext(),
                                 OP, Operation.ADD, LogicBuiltIn.COUNTER, LogicBuiltIn.COUNTER, counterOffset));
                         if (result.size() != label.getAddress()) {
-                            processor.error(ERR.SYMBOLIC_LINK_MISMATCH);
+                            wrongLabels.add(ix.getMarker());
+                        } else {
+                            rightLabels.add(ix.getMarker());
                         }
                     } else {
                         int offset = label.getAddress() - ix.getOffset().getIntValue();
@@ -280,6 +284,11 @@ public class LogicInstructionLabelResolver {
                 result.add(instruction);
             }
         }
+
+        if (profile.isSymbolicLabels() && !rightLabels.containsAll(wrongLabels)) {
+            processor.error(ERR.LABEL_ADDRESS_MISMATCH);
+        }
+
         return result;
     }
 

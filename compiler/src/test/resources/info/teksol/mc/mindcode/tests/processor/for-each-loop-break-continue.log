@@ -46,35 +46,35 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
-     7 setaddr :d.0*retaddr *label7
-     8 call *label0 *invalid :d.0*retval
-     9 label *label7
+     6 setaddr :d.0*retaddr *label6
+     7 call *label0 *invalid :d.0*retval
+     8 label *label6
 -    * set *tmp2 :d.0*retval
 -    * set :test.0:i *tmp2
-+   10 set :test.0:i :d.0*retval
++    9 set :test.0:i :d.0*retval
+    10 setaddr *tmp1 *label7
     11 jump *label2 always
-    12 multilabel *label6
-    13 setaddr *tmp1 *label8
+    12 multilabel *label7
  
-    19 setaddr :d.0*retaddr *label10
-    20 call *label0 *invalid :d.0*retval
-    21 label *label10
+    18 setaddr :d.0*retaddr *label9
+    19 call *label0 *invalid :d.0*retval
+    20 label *label9
 -    * set *tmp3 :d.0*retval
 -    * set :test.0:i *tmp3
-+   22 set :test.0:i :d.0*retval
++   21 set :test.0:i :d.0*retval
+    22 setaddr *tmp1 *label10
     23 jump *label2 always
-    24 multilabel *label9
-    25 setaddr *tmp1 *label11
+    24 multilabel *label10
  
-    31 setaddr :d.0*retaddr *label13
-    32 call *label0 *invalid :d.0*retval
-    33 label *label13
+    30 setaddr :d.0*retaddr *label12
+    31 call *label0 *invalid :d.0*retval
+    32 label *label12
 -    * set *tmp4 :d.0*retval
 -    * set :test.0:i *tmp4
-+   34 set :test.0:i :d.0*retval
++   33 set :test.0:i :d.0*retval
+    34 setaddr *tmp1 *label13
     35 jump *label2 always
-    36 multilabel *label12
-    37 setaddr *tmp1 *label14
+    36 multilabel *label13
  
     41 setaddr :d.0*retaddr *label15
     42 call *label0 *invalid :d.0*retval
@@ -138,44 +138,44 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 
 Modifications by Unroll iteration loop at line 4:5 (+58 instructions):
      0 assertflush
--    * setaddr *tmp1 *label5
 -    * set :test.0:i 1
+-    * setaddr *tmp1 *label5
 -    * jump *label2 always
 -    * multilabel *label5
--    * setaddr *tmp1 *label6
 -    * set :d.0:n 2
--    * setaddr :d.0*retaddr *label7
+-    * setaddr :d.0*retaddr *label6
 -    * call *label0 *invalid :d.0*retval
--    * label *label7
+-    * label *label6
 -    * set :test.0:i :d.0*retval
+-    * setaddr *tmp1 *label7
 -    * jump *label2 always
--    * multilabel *label6
--    * setaddr *tmp1 *label8
+-    * multilabel *label7
 -    * set :test.0:i 3
+-    * setaddr *tmp1 *label8
 -    * jump *label2 always
 -    * multilabel *label8
--    * setaddr *tmp1 *label9
 -    * set :d.0:n 5
--    * setaddr :d.0*retaddr *label10
+-    * setaddr :d.0*retaddr *label9
 -    * call *label0 *invalid :d.0*retval
--    * label *label10
+-    * label *label9
 -    * set :test.0:i :d.0*retval
+-    * setaddr *tmp1 *label10
 -    * jump *label2 always
--    * multilabel *label9
--    * setaddr *tmp1 *label11
+-    * multilabel *label10
 -    * set :test.0:i 8
+-    * setaddr *tmp1 *label11
 -    * jump *label2 always
 -    * multilabel *label11
--    * setaddr *tmp1 *label12
 -    * set :d.0:n 12
--    * setaddr :d.0*retaddr *label13
+-    * setaddr :d.0*retaddr *label12
 -    * call *label0 *invalid :d.0*retval
--    * label *label13
+-    * label *label12
 -    * set :test.0:i :d.0*retval
+-    * setaddr *tmp1 *label13
 -    * jump *label2 always
--    * multilabel *label12
--    * setaddr *tmp1 *label14
+-    * multilabel *label13
 -    * set :test.0:i 15
+-    * setaddr *tmp1 *label14
 -    * label *label2
 -    * set :d.0:n :test.0:i
 -    * setaddr :d.0*retaddr *label15

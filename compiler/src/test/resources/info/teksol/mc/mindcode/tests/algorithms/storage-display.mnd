@@ -1,3 +1,5 @@
+#set err-graphics-buffer-overflow = false;
+
 // Sizing
 const HEIGHT    = 12;
 const HALF      = HEIGHT \ 2;

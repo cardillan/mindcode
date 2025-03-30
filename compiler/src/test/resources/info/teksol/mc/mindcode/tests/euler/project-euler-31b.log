@@ -114,36 +114,36 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
      0 label *label0
      1 jump *label0 equal bank1 null
      2 write 1 bank2 0
--    * setaddr *tmp1 *label4
 -    * set :i 1
+-    * setaddr *tmp1 *label4
 -    * jump *label1 always
 -    * multilabel *label4
--    * setaddr *tmp1 *label5
 -    * set :i 2
+-    * setaddr *tmp1 *label5
 -    * jump *label1 always
 -    * multilabel *label5
--    * setaddr *tmp1 *label6
 -    * set :i 5
+-    * setaddr *tmp1 *label6
 -    * jump *label1 always
 -    * multilabel *label6
--    * setaddr *tmp1 *label7
 -    * set :i 10
+-    * setaddr *tmp1 *label7
 -    * jump *label1 always
 -    * multilabel *label7
--    * setaddr *tmp1 *label8
 -    * set :i 20
+-    * setaddr *tmp1 *label8
 -    * jump *label1 always
 -    * multilabel *label8
--    * setaddr *tmp1 *label9
 -    * set :i 50
+-    * setaddr *tmp1 *label9
 -    * jump *label1 always
 -    * multilabel *label9
--    * setaddr *tmp1 *label10
 -    * set :i 100
+-    * setaddr *tmp1 *label10
 -    * jump *label1 always
 -    * multilabel *label10
--    * setaddr *tmp1 *label11
 -    * set :i 200
+-    * setaddr *tmp1 *label11
 -    * label *label1
 -    * set :j :i
 -    * label *label12

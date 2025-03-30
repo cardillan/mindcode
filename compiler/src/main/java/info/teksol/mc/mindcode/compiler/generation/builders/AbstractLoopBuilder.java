@@ -36,4 +36,8 @@ public abstract class AbstractLoopBuilder extends AbstractBuilder {
     protected void exitLoop(AstLabeledStatement loopNode, LoopLabels loopLabels) {
         variables.getLoopStack().exitLoop(loopLabels);
     }
+
+    protected void allowContinue(AstLabeledStatement loopNode, boolean allowed) {
+        variables.getLoopStack().allowContinue(allowed);
+    }
 }

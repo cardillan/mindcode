@@ -10,9 +10,7 @@ import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -46,6 +44,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             super(builder, node);
             iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
             loopLabels = enterLoop(node);
+            allowContinue(node, false);
         }
 
         private IterationGroup processIteratorGroup(AstIteratorsValuesGroup group) {
@@ -106,20 +105,33 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Multiplier is set to 1: all instructions execute exactly once
             assembler.setSubcontextType(AstSubcontextType.ITR_LEADING, 1.0);
 
-            // Setting the iterator address first. It is possible to use `continue` in the value list
-            // (why, oh why?), in which case the next iteration is performed.
-            LogicLabel nextValueLabel = assembler.nextLabel();
-            assembler.createSetAddress(nextAddress, nextValueLabel);
-
             LinkedList<IterationElement> outputs = new LinkedList<>();
 
             // Copy values from the list to iterators
             iterationGroups.forEach(group -> group.generateIterationSetup(outputs));
 
+            // Setting the iterator address.
+            // Continue is disallowed in value list -> nextAddress can't be used before being set up.
+            LogicLabel nextValueLabel = assembler.nextLabel();
+            if (profile.isSymbolicLabels()) {
+                assembler.createOp(Operation.ADD, nextAddress, LogicBuiltIn.COUNTER, LogicNumber.ONE);
+            } else {
+                assembler.createSetAddress(nextAddress, nextValueLabel);
+            }
+
+            LogicLabel lastValueLabel = null;
             if (hasMoreData()) {
                 // This isn't a last iteration: jump to the loop body
                 assembler.createJumpUnconditional(bodyLabel);
             } else {
+                if (profile.isSymbolicLabels()) {
+                    // In symbolic labels mode, the nextAddress leads here. We need to jump over the body.
+                    assembler.createJumpUnconditional(bodyLabel);
+                    assembler.createMultiLabel(assembler.nextLabel(), marker);
+                    lastValueLabel = assembler.nextLabel();
+                    assembler.createJumpUnconditional(lastValueLabel);
+                }
+
                 // The last iteration: continue to the loop body directly
                 createBody();
             }
@@ -129,6 +141,10 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             assembler.setSubcontextType(AstSubcontextType.ITR_TRAILING, 1.0);
             assembler.createMultiLabel(nextValueLabel, marker);
 
+            if (lastValueLabel != null) {
+                assembler.createLabel(lastValueLabel);
+            }
+
             // Copy iterator values back to the array - only for `out` iterators
             for (IterationElement output : outputs) {
                 output.value.setValue(assembler, output.iterator.getValue());
@@ -136,6 +152,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         private void createBody() {
+            allowContinue(node, true);
+
             // This is the last iteration. We'll output the loop body directly here.
             assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
             assembler.createLabel(bodyLabel);
@@ -150,6 +168,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // On the last iteration, this jumps right to the next statement, but it can't be avoided
             assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
             assembler.createMultiJump(nextAddress, marker);
+
+            allowContinue(node, false);
         }
     }
 

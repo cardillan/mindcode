@@ -47,8 +47,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
-    32 setaddr *tmp0 *label12
-    33 set :value 1
+    32 set :value 1
+    33 setaddr *tmp0 *label12
     34 label *label2
 -    * set *tmp1 :index
 -    * write :value bank1 *tmp1
@@ -173,36 +173,36 @@ Modifications by Unroll iteration loop at line 4:1 (-2 instructions):
      1 jump *label1 equal bank1 null
      2 set *sp 16
      3 set :index 0
--    * setaddr *tmp0 *label5
 -    * set :value 200
+-    * setaddr *tmp0 *label5
 -    * jump *label2 always
 -    * multilabel *label5
--    * setaddr *tmp0 *label6
 -    * set :value 100
+-    * setaddr *tmp0 *label6
 -    * jump *label2 always
 -    * multilabel *label6
--    * setaddr *tmp0 *label7
 -    * set :value 50
+-    * setaddr *tmp0 *label7
 -    * jump *label2 always
 -    * multilabel *label7
--    * setaddr *tmp0 *label8
 -    * set :value 20
+-    * setaddr *tmp0 *label8
 -    * jump *label2 always
 -    * multilabel *label8
--    * setaddr *tmp0 *label9
 -    * set :value 10
+-    * setaddr *tmp0 *label9
 -    * jump *label2 always
 -    * multilabel *label9
--    * setaddr *tmp0 *label10
 -    * set :value 5
+-    * setaddr *tmp0 *label10
 -    * jump *label2 always
 -    * multilabel *label10
--    * setaddr *tmp0 *label11
 -    * set :value 2
+-    * setaddr *tmp0 *label11
 -    * jump *label2 always
 -    * multilabel *label11
--    * setaddr *tmp0 *label12
 -    * set :value 1
+-    * setaddr *tmp0 *label12
 -    * label *label2
 -    * write :value bank1 :index
 -    * op add :index :index 1

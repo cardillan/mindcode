@@ -20,11 +20,12 @@ import java.util.function.Function;
 /// Class maintaining the stack of active loops and their break and continue labels.
 @NullMarked
 public class LoopStack extends AbstractMessageEmitter {
-    public record LoopLabels(String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel) {
+    public record LoopLabels(String loopLabel, LogicLabel breakLabel, LogicLabel continueLabel, boolean continueAllowed) {
     }
 
     private final Deque<LoopLabels> stack = new ArrayDeque<>();
     private final Map<String, LoopLabels> map = new HashMap<>();
+    private boolean continueAllowed = true;
 
     public LoopStack(MessageConsumer messageConsumer) {
         super(messageConsumer);
@@ -32,7 +33,7 @@ public class LoopStack extends AbstractMessageEmitter {
 
     public LoopLabels enterLoop(@Nullable AstIdentifier label, LogicLabel breakLabel, LogicLabel continueLabel) {
         String loopLabel = label == null ? "" : label.getName();
-        LoopLabels loopLabels = new LoopLabels(loopLabel, breakLabel, continueLabel);
+        LoopLabels loopLabels = new LoopLabels(loopLabel, breakLabel, continueLabel, continueAllowed);
         if (label != null) {
             if (map.containsKey(loopLabel)) {
                 error(label, ERR.LOOP_LABEL_ALREADY_IN_USE, loopLabel);
@@ -44,11 +45,40 @@ public class LoopStack extends AbstractMessageEmitter {
         return loopLabels;
     }
 
+    public void exitLoop(LoopLabels loopLabels) {
+        if (stack.isEmpty()) {
+            throw new IllegalStateException("exitLoop on empty stack");
+        }
+
+        LoopLabels lastLabels = stack.pop();
+        if (lastLabels != loopLabels) {
+            throw new IllegalStateException("exitLoop: removing non-topmost label");
+        }
+
+        // Do not remove the label from map if it is still found on the stack
+        // This is a graceful recovery from an error where loop label is used twice.
+        if (!loopLabels.loopLabel.isEmpty()) {
+            String loopLabel = loopLabels.loopLabel;
+            if (stack.stream().noneMatch(l -> l.loopLabel().equals(loopLabel))) {
+                map.remove(loopLabel);
+            }
+        }
+
+        continueAllowed = lastLabels.continueAllowed;
+    }
+
+    public void allowContinue(boolean allowed) {
+        continueAllowed = allowed;
+    }
+
     public LogicLabel getBreakLabel(AstBreakStatement breakNode) {
         return getLabel(breakNode, LoopLabels::breakLabel, "break");
     }
 
     public LogicLabel getContinueLabel(AstContinueStatement continueNode) {
+        if (!continueAllowed) {
+            error(continueNode, ERR.CONTINUE_NOT_ALLOWED);
+        }
         return getLabel(continueNode, LoopLabels::continueLabel, "continue");
     }
 
@@ -72,23 +102,4 @@ public class LoopStack extends AbstractMessageEmitter {
         }
     }
 
-    public void exitLoop(LoopLabels loopLabels) {
-        if (stack.isEmpty()) {
-            throw new IllegalStateException("exitLoop on empty stack");
-        }
-
-        LoopLabels lastLabels = stack.pop();
-        if (lastLabels != loopLabels) {
-            throw new IllegalStateException("exitLoop: removing non-topmost label");
-        }
-
-        // Do not remove the label from map if it is still found on the stack
-        // This is a graceful recovery from an error where loop label is used twice.
-        if (!loopLabels.loopLabel.isEmpty()) {
-            String loopLabel = loopLabels.loopLabel;
-            if (stack.stream().noneMatch(l -> l.loopLabel().equals(loopLabel))) {
-                map.remove(loopLabel);
-            }
-        }
-    }
 }
