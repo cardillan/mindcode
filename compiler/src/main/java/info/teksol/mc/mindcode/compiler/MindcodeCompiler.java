@@ -253,8 +253,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         // Check there are no direct access instructions
         if (profile.isSymbolicLabels()) {
             boolean hasLabels = instructions.stream()
-                    .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTILABEL).negate())
-                    .filter(ix -> !(ix instanceof MultiJumpInstruction mx && mx.getTarget() instanceof LogicLabel))
+                    .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTIJUMP, MULTILABEL).negate())
                     .flatMap(MlogInstruction::inputArgumentsStream)
                     .filter(LogicLabel.class::isInstance)
                     .peek(System.out::println)

@@ -120,7 +120,7 @@ public abstract class AbstractTestBase {
             ExpectedMessages.throwOnMessage(), profile);
 
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
-    protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.BASIC, 1.0);
+    protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.MOCK, 1.0);
 
     protected static LogicArgument _logic(String str) {
         return new GenericArgument(str);

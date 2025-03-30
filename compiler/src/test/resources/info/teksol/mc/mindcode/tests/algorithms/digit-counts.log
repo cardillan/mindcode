@@ -667,18 +667,18 @@ Modifications by Virtual Instruction Expansion (+1 instructions):
     37 label *label17
     38 op mod *tmp2 :countDigits.0:number 10
 -    * readarr *tmp3 .array[] *tmp2
-+   39 setaddr .array*rret *label106
++   39 setaddr .array*rret *label108
 +   40 op mul *tmp8 *tmp2 2
 +   41 multicall *label86 *tmp8
-+   42 label *label106
++   42 label *label108
 +   43 set *tmp3 .array*r
     44 op add *tmp3 *tmp3 1
 -    * writearr *tmp3 .array[] *tmp2
-+   45 setaddr .array*wret *label107
++   45 setaddr .array*wret *label109
 +   46 set .array*w *tmp3
 +   47 op mul *tmp9 *tmp2 2
-+   48 multicall *label96 *tmp9
-+   49 label *label107
++   48 multicall *label97 *tmp9
++   49 label *label109
     50 op idiv :countDigits.0:number :countDigits.0:number 10
     51 label *label18
     52 jump *label17 greaterThan :countDigits.0:number 0
@@ -717,77 +717,77 @@ Modifications by Virtual Instruction Expansion (+1 instructions):
 +  130 set .array*r .array*9
 +  131 return .array*rret
 +  132 end
-+  133 multilabel *label96
++  133 multilabel *label97
 +  134 set .array*0 .array*w
 +  135 return .array*wret
-+  136 multilabel *label97
++  136 multilabel *label98
 +  137 set .array*1 .array*w
 +  138 return .array*wret
-+  139 multilabel *label98
++  139 multilabel *label99
 +  140 set .array*2 .array*w
 +  141 return .array*wret
-+  142 multilabel *label99
++  142 multilabel *label100
 +  143 set .array*3 .array*w
 +  144 return .array*wret
-+  145 multilabel *label100
++  145 multilabel *label101
 +  146 set .array*4 .array*w
 +  147 return .array*wret
-+  148 multilabel *label101
++  148 multilabel *label102
 +  149 set .array*5 .array*w
 +  150 return .array*wret
-+  151 multilabel *label102
++  151 multilabel *label103
 +  152 set .array*6 .array*w
 +  153 return .array*wret
-+  154 multilabel *label103
++  154 multilabel *label104
 +  155 set .array*7 .array*w
 +  156 return .array*wret
-+  157 multilabel *label104
++  157 multilabel *label105
 +  158 set .array*8 .array*w
 +  159 return .array*wret
-+  160 multilabel *label105
++  160 multilabel *label106
 +  161 set .array*9 .array*w
 +  162 return .array*wret
 
 Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
  
     41 multicall *label86 *tmp8
-    42 label *label106
+    42 label *label108
     43 set *tmp3 .array*r
 -    * op add *tmp3 *tmp3 1
 +   44 op add *tmp3 .array*r 1
-    45 setaddr .array*wret *label107
+    45 setaddr .array*wret *label109
     46 set .array*w *tmp3
     47 op mul *tmp9 *tmp2 2
--    * multicall *label96 *tmp9
-+   48 multicall *label96 *tmp8
-    49 label *label107
+-    * multicall *label97 *tmp9
++   48 multicall *label97 *tmp8
+    49 label *label109
     50 op idiv :countDigits.0:number :countDigits.0:number 10
     51 label *label18
 
 Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
  
     41 multicall *label86 *tmp8
-    42 label *label106
+    42 label *label108
     43 set *tmp3 .array*r
 -    * op add *tmp3 .array*r 1
 +   44 op add .array*w .array*r 1
-    45 setaddr .array*wret *label107
+    45 setaddr .array*wret *label109
 -    * set .array*w *tmp3
     46 op mul *tmp9 *tmp2 2
-    47 multicall *label96 *tmp8
-    48 label *label107
+    47 multicall *label97 *tmp8
+    48 label *label109
 
 Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 3 (-2 instructions):
  
     40 op mul *tmp8 *tmp2 2
     41 multicall *label86 *tmp8
-    42 label *label106
+    42 label *label108
 -    * set *tmp3 .array*r
     43 op add .array*w .array*r 1
-    44 setaddr .array*wret *label107
+    44 setaddr .array*wret *label109
 -    * op mul *tmp9 *tmp2 2
-    45 multicall *label96 *tmp8
-    46 label *label107
+    45 multicall *label97 *tmp8
+    46 label *label109
     47 op idiv :countDigits.0:number :countDigits.0:number 10
 
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
@@ -796,7 +796,7 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 inst
    127 set .array*r .array*9
    128 return .array*rret
 -    * end
-   129 multilabel *label96
+   129 multilabel *label97
    130 set .array*0 .array*w
    131 return .array*wret
 
@@ -870,14 +870,14 @@ label *label24
 set :countDigits.0:number :i
 label *label17
 op mod *tmp2 :countDigits.0:number 10
-setaddr .array*rret *label106
+setaddr .array*rret *label108
 op mul *tmp8 *tmp2 2
 multicall *label86 *tmp8
-label *label106
+label *label108
 op add .array*w .array*r 1
-setaddr .array*wret *label107
-multicall *label96 *tmp8
-label *label107
+setaddr .array*wret *label109
+multicall *label97 *tmp8
+label *label109
 op idiv :countDigits.0:number :countDigits.0:number 10
 jump *label17 greaterThan :countDigits.0:number 0
 op add :i :i 1
@@ -927,33 +927,33 @@ return .array*rret
 multilabel *label95
 set .array*r .array*9
 return .array*rret
-multilabel *label96
+multilabel *label97
 set .array*0 .array*w
 return .array*wret
-multilabel *label97
+multilabel *label98
 set .array*1 .array*w
 return .array*wret
-multilabel *label98
+multilabel *label99
 set .array*2 .array*w
 return .array*wret
-multilabel *label99
+multilabel *label100
 set .array*3 .array*w
 return .array*wret
-multilabel *label100
+multilabel *label101
 set .array*4 .array*w
 return .array*wret
-multilabel *label101
+multilabel *label102
 set .array*5 .array*w
 return .array*wret
-multilabel *label102
+multilabel *label103
 set .array*6 .array*w
 return .array*wret
-multilabel *label103
+multilabel *label104
 set .array*7 .array*w
 return .array*wret
-multilabel *label104
+multilabel *label105
 set .array*8 .array*w
 return .array*wret
-multilabel *label105
+multilabel *label106
 set .array*9 .array*w
 return .array*wret

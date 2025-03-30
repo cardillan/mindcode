@@ -13,8 +13,10 @@ public class LogicArray extends AbstractArgument {
     protected final InternalArray array;
     protected final String mlog;
 
+    public final LogicVariable readInd;
     public final LogicVariable readVal;
     public final LogicVariable readRet;
+    public final LogicVariable writeInd;
     public final LogicVariable writeVal;
     public final LogicVariable writeRet;
 
@@ -23,8 +25,10 @@ public class LogicArray extends AbstractArgument {
         this.array = array;
         this.mlog = array.getName() + range;
 
+        readInd = LogicVariable.arrayIndex(array.getName(), "*rind");
         readVal = LogicVariable.arrayReadAccess(array.getName());
         readRet = LogicVariable.arrayReturn(array.getName(), "*rret");
+        writeInd = LogicVariable.arrayIndex(array.getName(), "*wind");
         writeVal = LogicVariable.arrayWriteAccess(array.getName());
         writeRet = LogicVariable.arrayReturn(array.getName(), "*wret");
     }

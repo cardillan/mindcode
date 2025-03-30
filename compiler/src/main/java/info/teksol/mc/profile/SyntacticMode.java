@@ -4,6 +4,7 @@ import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Map;
 
 @NullMarked
@@ -25,5 +26,9 @@ public enum SyntacticMode {
 
     public static SyntacticMode byName(String level, SyntacticMode defaultValue) {
         return VALUE_MAP.getOrDefault(level.toLowerCase(), defaultValue);
+    }
+
+    public static Collection<String> allowedValues() {
+        return VALUE_MAP.keySet();
     }
 }

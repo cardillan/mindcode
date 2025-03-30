@@ -1,4 +1,4 @@
-   116 instructions before optimizations.
+   117 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      5 instructions eliminated by Jump Normalization (5 iterations).
@@ -13,11 +13,11 @@
      9 instructions eliminated by Print Merging.
      3 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 894):
+Pass 1: speed optimization selection (cost limit 893):
     Unroll loop at line 6:5                                      cost     3, benefit      500.0, efficiency      166.7
   * Unroll iteration loop at line 18:5                           cost     0, benefit       69.0, efficiency   Infinity (-31 instructions)
 
-Pass 1: speed optimization selection (cost limit 925):
+Pass 1: speed optimization selection (cost limit 924):
   * Unroll loop at line 6:5                                      cost     3, benefit      500.0, efficiency      166.7 (+33 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -1118,7 +1118,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-5 ins
     99 label *label77
    100 label *label78
 
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-50 instructions):
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-51 instructions):
      0 label *label84
      1 label *label85
 -    * writearr 0 .array[] 0

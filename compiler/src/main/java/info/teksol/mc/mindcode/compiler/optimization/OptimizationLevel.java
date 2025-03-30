@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,5 +33,9 @@ public enum OptimizationLevel {
 
     public static OptimizationLevel byName(String level, OptimizationLevel defaultValue) {
         return VALUE_MAP.getOrDefault(level.toLowerCase(), defaultValue);
+    }
+
+    public static Collection<String> allowedValues() {
+        return VALUE_MAP.keySet();
     }
 }

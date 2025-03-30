@@ -3,6 +3,7 @@ package info.teksol.mc.profile;
 import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Map;
 
 public enum RuntimeChecks {
@@ -35,5 +36,9 @@ public enum RuntimeChecks {
 
     public static RuntimeChecks byName(String level, RuntimeChecks defaultValue) {
         return VALUE_MAP.getOrDefault(level.toLowerCase(), defaultValue);
+    }
+
+    public static Collection<String> allowedValues() {
+        return VALUE_MAP.keySet();
     }
 }

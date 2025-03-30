@@ -1,6 +1,8 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -16,10 +18,27 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
 
     WriteArrInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.WRITEARR, args, params);
+        createSideEffects();
     }
 
     protected WriteArrInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
+        createSideEffects();
+    }
+
+    private void createSideEffects() {
+        if (astContext.matches(AstSubcontextType.MOCK)) return;
+
+        List<LogicVariable> elements = getArray().getElements().stream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .toList();
+
+        List<LogicVariable> reads = MindcodeCompiler.getContext().compilerProfile().isSymbolicLabels()
+                ? List.of(getArray().writeVal, getArray().writeInd)
+                : List.of(getArray().writeVal);
+
+        setSideEffects(SideEffects.of(reads, List.of(), elements));
     }
 
     @Override
@@ -34,15 +53,5 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
 
     public final LogicValue getValue() {
         return (LogicValue) getArg(0);
-    }
-
-    @Override
-    public SideEffects sideEffects() {
-        List<LogicVariable> elements = getArray().getElements().stream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .toList();
-
-        return SideEffects.of(List.of(getArray().writeVal), List.of(), elements);
     }
 }

@@ -40,9 +40,11 @@ public class ERR {
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
+    public static final String DIRECTIVE_INVALID_VALUE_WITH_SUGGESTION = "Invalid value '%s' of compiler directive '%s'. Did you mean '%s'?";
     public static final String DIRECTIVE_MULTIPLE_VALUES = "Multiple values specified for option '%s'.";
     public static final String DIRECTIVE_NO_VALUE = "No value specified for option '%s'.";
     public static final String DIRECTIVE_UNKNOWN = "Unknown compiler directive '%s'.";
+    public static final String DIRECTIVE_UNKNOWN_WITH_SUGGESTION = "Unknown compiler directive '%s'. Did you mean '%s'?";
     public static final String DIRECTIVE_VALUE_OUT_OF_RANGE = "Invalid value '%s' of compiler directive '%s' (expected integer between %d and  %d).";
     public static final String ENHANCED_COMMENTS_NO_PLACEHOLDERS = "Formattable placeholders not supported in enhanced comments.";
     public static final String EXPRESSION_NOT_CONSTANT_CONST = "Value assigned to constant '%s' is not a constant expression.";

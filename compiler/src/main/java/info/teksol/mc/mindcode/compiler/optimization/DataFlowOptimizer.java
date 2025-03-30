@@ -763,6 +763,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             // Jumps inside a RETURN context are caused by the return instruction and do not leave the local context,
             // but they do break the control flow and therefore need to be handled here.
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
+                    && !context.matches(ARRAY)
                     && (context.matches(AstContextType.RETURN, FLOW_CONTROL) ||
                         !getLabelInstruction(jump.getTarget()).belongsTo(localContext))) {
 
@@ -908,11 +909,13 @@ class DataFlowOptimizer extends BaseOptimizer {
         // Function call side effects
         switch (instruction.getOpcode()) {
             case CALL, CALLREC -> {
+                // Function may be null for array access
                 MindcodeFunction function = instruction.getAstContext().function();
-                assert function != null;
-                variableStates.updateAfterFunctionCall(function, instruction);
-                if (modifyInstructions && optimizationContext.getEndingFunctions().contains(function)) {
-                    functionEndStates.add(variableStates.copy("function end handling"));
+                if (function != null) {
+                    variableStates.updateAfterFunctionCall(function, instruction);
+                    if (modifyInstructions && optimizationContext.getEndingFunctions().contains(function)) {
+                        functionEndStates.add(variableStates.copy("function end handling"));
+                    }
                 }
             }
         }

@@ -89,6 +89,45 @@ public class LogicInstructionArrayExpander {
     }
 
     private void expandInstruction(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+        if (profile.isSymbolicLabels()) {
+            expandInstructionSymbolicLinks(instruction, consumer);
+        } else {
+            expandInstructionDirectAddress(instruction, consumer);
+        }
+    }
+
+    private void expandInstructionSymbolicLinks(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+        if (!(instruction instanceof ArrayAccessInstruction ix)) {
+            consumer.accept(instruction);
+            return;
+        }
+
+        AstContext astContext = ix.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
+        LogicArray array = ix.getArray();
+        LogicLabel marker = Objects.requireNonNull(jumpTables.get(ix.getJumpTableId()).get(1).getMarker());
+        LogicLabel address = ((LabeledInstruction) jumpTables.get(ix.getJumpTableId()).get(1)).getLabel();
+        LogicLabel returnLabel = processor.nextLabel();
+
+        switch (instruction) {
+            case ReadArrInstruction rix -> {
+                consumer.accept(processor.createOp(astContext, Operation.MUL, array.readInd, ix.getIndex(), LogicNumber.TWO));
+                generateBoundsCheck(consumer, rix, array.readInd);
+                consumer.accept(processor.createCallStackless(astContext, address, array.readRet, LogicVariable.INVALID).setSideEffects(rix.sideEffects()));
+                consumer.accept(processor.createSet(astContext, rix.getResult(), array.readVal));
+            }
+
+            case WriteArrInstruction wix -> {
+                consumer.accept(processor.createSet(astContext, array.writeVal, wix.getValue()));
+                consumer.accept(processor.createOp(astContext, Operation.MUL, array.writeInd, ix.getIndex(), LogicNumber.TWO));
+                generateBoundsCheck(consumer, wix, array.writeInd);
+                consumer.accept(processor.createCallStackless(astContext, address, array.writeRet, LogicVariable.INVALID).setSideEffects(wix.sideEffects()));
+            }
+
+            default -> consumer.accept(instruction);
+        }
+    }
+
+    private void expandInstructionDirectAddress(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
         if (!(instruction instanceof ArrayAccessInstruction ix)) {
             consumer.accept(instruction);
             return;
@@ -174,8 +213,16 @@ public class LogicInstructionArrayExpander {
         LogicLabel marker = processor.nextMarker();
 
         result.add(processor.createEnd(astContext));
+        LogicLabel nextLabel = processor.nextLabel();
+
+        if (profile.isSymbolicLabels()) {
+            LogicLabel startLabel = processor.nextLabel();
+            result.add(processor.createLabel(astContext, startLabel).setMarker(startLabel));
+            result.add(processor.createMultiJump(astContext, nextLabel,array.readInd,LogicNumber.ZERO, marker));
+        }
+
         for (ValueStore element : array.getElements()) {
-            result.add(processor.createMultiLabel(astContext, processor.nextLabel(), marker));
+            result.add(processor.createMultiLabel(astContext, nextLabel, marker));
             switch (element) {
                 case LogicVariable value     -> result.add(processor.createSet(astContext, array.readVal, value));
                 case RemoteVariable variable -> result.add(processor.createRead(astContext, array.readVal,
@@ -183,6 +230,7 @@ public class LogicInstructionArrayExpander {
                 default -> throw new MindcodeInternalError("Unhandled array element type");
             }
             result.add(processor.createReturn(astContext, array.readRet));
+            nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
         }
 
         return result;
@@ -195,8 +243,16 @@ public class LogicInstructionArrayExpander {
         LogicLabel marker = processor.nextMarker();
 
         result.add(processor.createEnd(astContext));
+        LogicLabel nextLabel = processor.nextLabel();
+
+        if (profile.isSymbolicLabels()) {
+            LogicLabel startLabel = processor.nextLabel();
+            result.add(processor.createLabel(astContext, startLabel).setMarker(startLabel));
+            result.add(processor.createMultiJump(astContext, nextLabel,array.writeInd,LogicNumber.ZERO, marker));
+        }
+
         for (ValueStore element : array.getElements()) {
-            result.add(processor.createMultiLabel(astContext, processor.nextLabel(), marker));
+            result.add(processor.createMultiLabel(astContext, nextLabel, marker));
             switch (element) {
                 case LogicVariable value     -> result.add(processor.createSet(astContext, value, array.writeVal));
                 case RemoteVariable variable -> result.add(processor.createWrite(astContext, array.writeVal,
@@ -204,6 +260,7 @@ public class LogicInstructionArrayExpander {
                 default -> throw new MindcodeInternalError("Unhandled array element type");
             }
             result.add(processor.createReturn(astContext, array.writeRet));
+            nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
         }
 
         return result;

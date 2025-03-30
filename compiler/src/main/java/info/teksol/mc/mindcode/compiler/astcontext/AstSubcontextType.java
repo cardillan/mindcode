@@ -7,6 +7,9 @@ public enum AstSubcontextType {
     /// Nonspecific context.
     BASIC           ("    "),
 
+    /// Mocked context. Used by testing code.
+    MOCK            ("    "),
+
     /// System generated END instruction
     END             ("END "),
 
@@ -58,7 +61,10 @@ public enum AstSubcontextType {
     RECURSIVE_CALL  ("RCAL"),
 
     /// A recursive function call, includes stack operations.
-    REMOTE_CALL  ("RMCL"),
+    REMOTE_CALL     ("RMCL"),
+
+    /// Array access
+    ARRAY           ("ARRA"),
 
     ;
 

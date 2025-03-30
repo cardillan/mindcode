@@ -5,6 +5,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,5 +42,9 @@ public enum SortCategory {
 
     public static List<SortCategory> getAllCategories() {
         return ALL_CATEGORIES;
+    }
+
+    public static Collection<String> allowedValues() {
+        return VALUE_MAP.keySet();
     }
 }

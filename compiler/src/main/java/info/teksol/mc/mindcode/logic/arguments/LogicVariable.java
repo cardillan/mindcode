@@ -303,6 +303,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 identifier.getName() + "[" + index + "]", arrayVariableMlog(identifier, index), isVolatile, true, false);
     }
 
+    public static LogicVariable arrayIndex(String arrayName, String suffix) {
+        return new LogicVariable(EMPTY, GLOBAL_VARIABLE,
+                arrayName + suffix, arrayName + suffix, false, true, true);
+    }
+
     public static LogicVariable arrayReadAccess(String arrayName) {
         String name = arrayName + "*r";
         return new LogicVariable(EMPTY, GLOBAL_VARIABLE, name, name, false, true, true);
