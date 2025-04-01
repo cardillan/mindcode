@@ -13,14 +13,18 @@ public class MindustryInstructionProcessor8 extends BaseInstructionProcessor {
     }
 
     @Override
+    public boolean isValidIntegerLiteral(long value) {
+        return value != Integer.MIN_VALUE;
+    }
+
+    @Override
     protected Optional<String> mlogFormat(SourcePosition sourcePosition, double value, String literal, boolean allowPrecisionLoss) {
         if (!Double.isFinite(value)) {
             return Optional.empty();
         }
-        double abs = Math.abs(value);
-        Optional<String> result = mlogFormatWithoutExponent(abs, literal);
+        Optional<String> result = mlogFormatWithoutExponent(value, literal);
         if (result.isPresent()) {
-            return result;
+            return result.get().isEmpty() ? Optional.empty() : result;
         } else {
             return mlogFormatWithExponent(sourcePosition, value, Double.toString(value), literal,
                     false, allowPrecisionLoss);

@@ -43,8 +43,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
     public static final String SCRIPTS_BASE_DIRECTORY = "src/test/resources/info/teksol/mc/mindcode/tests";
 
-    private final String logSuffix;
-    private final boolean symbolicLabels;
+    protected final String logSuffix;
+    protected final boolean symbolicLabels;
 
     public AbstractProcessorTest() {
         this.symbolicLabels = getClass().getSimpleName().contains("SymbolicLabels");

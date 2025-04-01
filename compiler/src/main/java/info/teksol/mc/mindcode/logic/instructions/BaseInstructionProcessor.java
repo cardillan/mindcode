@@ -571,10 +571,16 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     // 17 Digit precision - enough for 2^54. Larger numbers will lose precision anyway
     protected static final MathContext CONVERSION_CONTEXT = new MathContext(17, RoundingMode.HALF_UP);
 
-    protected Optional<String> mlogFormatWithoutExponent(double absoluteValue, String literal) {
+    protected Optional<String> mlogFormatWithoutExponent(double value, String literal) {
+        double absoluteValue = Math.abs(value);
         if (absoluteValue == 0.0) {
             return Optional.of("0");
-        } else if (1e-20 <= absoluteValue && absoluteValue < Long.MAX_VALUE) {
+        } else if (1e-20 <= absoluteValue && absoluteValue <= Long.MAX_VALUE) {
+            long longValue = (long) value;
+            if (longValue == value && !isValidIntegerLiteral(longValue)) {
+                return Optional.of("");
+            }
+
             // Fits into a long, Mindustry can convert it using double precision.
             // NOTE: Some precision is lost for numbers above 2^53, since double can only store 53 digits
             //       of the mantissa.

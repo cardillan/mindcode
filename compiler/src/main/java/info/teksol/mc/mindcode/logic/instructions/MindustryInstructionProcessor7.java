@@ -13,18 +13,23 @@ public class MindustryInstructionProcessor7 extends BaseInstructionProcessor {
     }
 
     @Override
+    public boolean isValidIntegerLiteral(long value) {
+        return value != Integer.MIN_VALUE;
+    }
+
+    @Override
     protected Optional<String> mlogFormat(SourcePosition sourcePosition, double value, String literal, boolean allowPrecisionLoss) {
         if (!Double.isFinite(value)) {
             return Optional.empty();
         }
 
-        double abs = Math.abs(value);
-        Optional<String> result = mlogFormatWithoutExponent(abs, literal);
+        Optional<String> result = mlogFormatWithoutExponent(value, literal);
         if (result.isPresent()) {
-            return result;
+            return result.get().isEmpty() ? Optional.empty() : result;
         }
 
         // Can it be represented as a float at all?
+        double abs = Math.abs(value);
         if ((float) abs == 0f || !Float.isFinite((float) abs)) {
             return Optional.empty();
         }

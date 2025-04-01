@@ -16,7 +16,7 @@ public enum InstructionParameterType {
     ALIGNMENT       ("alignment", Flags.KEYWORD, "center", "top", "bottom", "left", "right",
             "topLeft", "topRight", "bottomLeft", "bottomRight"),
 
-    ///  Alignment for the DRAW PRINT instruction.
+    /// Mindcode's array - a ValueStore instance
     ARRAY           (Flags.SPECIAL),
 
     ///  Input parameter accepting blocks (buildings).
@@ -276,7 +276,7 @@ public enum InstructionParameterType {
 
     /// @return true if the value of this parameter must be one from the allowed values list
     public boolean restrictValues() {
-        return (flags & (Flags.INPUT | Flags.OUTPUT | Flags.UNUSED)) == 0;
+        return (flags & (Flags.INPUT | Flags.OUTPUT | Flags.UNUSED | Flags.SPECIAL)) == 0;
     }
 
     public List<ParameterValues> getAllowedValues() {

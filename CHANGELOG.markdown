@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a new [`--file-references` command-line option](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#file-references).
 * Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).
 * Added a suggestion of the closest matching alternative when an unknown compiler directive or option value is found.
+* Added support for recognizing numerical literal values unsupported by Mindustry Logic (namely, `-2147483648`). When a numerical literal or constant expression has this value, a compile-time error is generated. 
 
 #### Experimental features
 

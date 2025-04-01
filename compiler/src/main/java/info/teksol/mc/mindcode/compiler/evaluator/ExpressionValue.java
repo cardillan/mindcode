@@ -29,21 +29,26 @@ class ExpressionValue implements LogicReadable {
      * @return an ExpressionValue instance representing the value of the given node.
      */
     public static @NonNull ExpressionValue create(InstructionProcessor processor, AstMindcodeNode node) {
-        return switch (node) {
-            case AstLiteralNull n           -> new ExpressionValue(processor, null, null);
-            case AstLiteralBoolean n        -> new ExpressionValue(processor, null, n.getValue() ? 1 : 0);
-            case AstLiteralDecimal n        -> new ExpressionValue(processor, null, n.getLongValue());
-            case AstLiteralBinary n         -> new ExpressionValue(processor, null, n.getLongValue());
-            case AstLiteralHexadecimal n    -> new ExpressionValue(processor, null, n.getLongValue());
-            case AstLiteralFloat n          -> new ExpressionValue(processor, null, n.getDoubleValue());
-            case AstLiteralColor n          -> new ExpressionValue(processor, null, n.getDoubleValue());
-            case AstLiteralString n         -> new ExpressionValue(processor, n.getValue(), null);
-            case AstIdentifier n            -> Icons.isIconName(n.getName())
-                    ? new ExpressionValue(processor, Icons.getIconValue(n.getName()).format(processor), null)
-                    : new InvalidValue(processor);
-            case AstLiteral n -> throw new MindcodeInternalError("Unhandled constant node " + node.getClass().getSimpleName());
-            default -> new InvalidValue(processor);
-        };
+        try {
+            return switch (node) {
+                case AstLiteralNull n -> new ExpressionValue(processor, null, null);
+                case AstLiteralBoolean n -> new ExpressionValue(processor, null, n.getValue() ? 1 : 0);
+                case AstLiteralDecimal n -> new ExpressionValue(processor, null, n.getLongValue());
+                case AstLiteralBinary n -> new ExpressionValue(processor, null, n.getLongValue());
+                case AstLiteralHexadecimal n -> new ExpressionValue(processor, null, n.getLongValue());
+                case AstLiteralFloat n -> new ExpressionValue(processor, null, n.getDoubleValue());
+                case AstLiteralColor n -> new ExpressionValue(processor, null, n.getDoubleValue());
+                case AstLiteralString n -> new ExpressionValue(processor, n.getValue(), null);
+                case AstIdentifier n -> Icons.isIconName(n.getName())
+                        ? new ExpressionValue(processor, Icons.getIconValue(n.getName()).format(processor), null)
+                        : new InvalidValue(processor);
+                case AstLiteral n ->
+                        throw new MindcodeInternalError("Unhandled constant node " + node.getClass().getSimpleName());
+                default -> new InvalidValue(processor);
+            };
+        } catch (NumberFormatException e) {
+            return new InvalidValue(processor);
+        }
     }
 
     public static @NonNull ExpressionValue zero(InstructionProcessor processor) {

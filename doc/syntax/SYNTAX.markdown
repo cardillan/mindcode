@@ -388,6 +388,7 @@ When Mindustry processes the mlog code in Mindustry Logic, it handles numeric li
 * Decimal numeric literal can be an integer, a decimal number or a number in exponential notation where the mantissa doesn't contain a decimal separator, and may include a leading minus. `15`, `-187.5786` and `1e10` are valid numbers, while `1.4e10` is not, as it contains both `.` and `e` characters.
 * Binary and hexadecimal literals always start with `0b` or `0x` prefix. Negative values aren't supported.   
 * Integers and decimal numbers are ultimately stored with `double` precision - this representation supports up to about 16 valid digits. Decimal numbers may specify a lot more digits after the decimal separator, but superfluous ones will be ignored.
+* Some specific literal values (namely, `-2147483648` can't be parsed and are converted to `null`).
 * All integers up to 9,007,199,254,740,992 (2<sup>53</sup>) can be represented precisely in `double` precision.
 * Integers between 2<sup>53</sup> and 2<sup>63</sup>-1 may lose precision when converted to `double`.
 * The maximum value of integers and decimal numbers is 9,223,372,036,854,775,807 (2<sup>63</sup>-1). The results of parsing integer literals larger than this value are not consistent; apparently, sometimes an arithmetic overflow happens, otherwise the result is `null`.
@@ -396,20 +397,22 @@ When Mindustry processes the mlog code in Mindustry Logic, it handles numeric li
 To find a way around these constraints, Mindcode always reads the value of the numeric literal and then converts it to Mindustry Logic compatible literal using these rules (first applicable rule is used):
 
 1. Floating point literals (i.e. decimal literals containing either decimal point or exponent):
-   1. If the value is negative, the absolute value is converted according to these rules, and a minus sign is prepended to the result. 
-   2. If the value is zero, it is encoded as `0`.
-   3. If the value is between 10<sup>-20</sup> and 2<sup>63</sup>-1, the number is converted to decimal notation using 20 digits precision and a decimal separator when needed.
-   4. **Mindustry Logic version 7 and earlier**: If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation
+   1. If the value is negative, the absolute value is converted according to these rules, and a minus sign is prepended to the result.
+   2. If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way and a compilation error is produced.  
+   3. If the value is zero, it is encoded as `0`.
+   4. If the value is between 10<sup>-20</sup> and 2<sup>63</sup>-1, the number is converted to decimal notation using 20 digits precision and a decimal separator when needed.
+   5. **Mindustry Logic version 7 and earlier**: If the value is between 10<sup>-38</sup> and 10<sup>38</sup>, the number is converted to exponential notation
       without using a decimal separator, using `float` precision (which will be used by Mindustry processor when
       reading the literal as well). If the conversion to float causes loss of precision, a warning is produced.
-   5. **Mindustry Logic version 8 and later**: If the value is roughly between 10<sup>-308</sup> and 10<sup>308</sup>, the number is converted to exponential notation
+   6. **Mindustry Logic version 8 and later**: If the value is roughly between 10<sup>-308</sup> and 10<sup>308</sup>, the number is converted to exponential notation
       without using a decimal separator. Loss of precision doesn't happen.
-   6. If none of the above rules is applicable, the conversion isn't possible and a compilation error is produced.
+   7. If none of the above rules is applicable, the conversion isn't possible and a compilation error is produced.
 2. Binary, decimal or hexadecimal integer literals:
    1. If the literal is a positive binary, hexadecimal or decimal integer lower than 2<sup>63</sup>, the literal is used exactly as specified in the source code.
    2. If the literal is negative, it is converted to decimal representation prepended by a unary minus.
-   3. If the value of the literal exceeds the maximum supported value, a compilation error is produced.
-   4. If the value of the literal is larger than 2<sup>52</sup>, Mindcode emits a 'Literal exceeds safe range for integer operations' warning (the warning threshold is set to 2<sup>52</sup> and not 2<sup>53</sup>, because values above 2<sup>52</sup> are potentially unsafe for binary complement operations).
+   3. If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way and a compilation error is produced.
+   4. If the value of the literal exceeds the maximum supported value, a compilation error is produced.
+   5. If the value of the literal is larger than 2<sup>52</sup>, Mindcode emits a 'Literal exceeds safe range for integer operations' warning (the warning threshold is set to 2<sup>52</sup> and not 2<sup>53</sup>, because values above 2<sup>52</sup> are potentially unsafe for binary complement operations).
 
 This processing ensures that numbers within a reasonable range are encoded to use maximal available precision, without producing mlog representations that would be unreasonably long.
 

@@ -109,6 +109,10 @@ public class LiteralsBuilder extends AbstractBuilder implements
         try {
             long value = Long.parseLong(literal, beginIndex + (negative ? 1 : 0), literal.length(), radix);
 
+            if (!processor.isValidIntegerLiteral(value)) {
+                error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, value);
+            }
+
             if (!node.isSuppressWarning() && value > (1L << 52)) {
                 warn(node, WARN.LITERAL_UNSAFE_DECIMAL_RANGE, literal);
             }

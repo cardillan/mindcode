@@ -46,7 +46,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                         "bank3", Memory.createMemoryBank(sorted)
                 ),
                 assertEvaluator(),
-                Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + ".log")
+                Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix)
         );
     }
 

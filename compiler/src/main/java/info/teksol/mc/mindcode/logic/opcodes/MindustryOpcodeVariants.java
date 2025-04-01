@@ -339,8 +339,8 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.MULTIJUMP,   label("address"), in("value"), in("offset"));
         add(list, V6,  MAX, S, NONE, Opcode.MULTICALL,   label("address"), in("offset"));
         add(list, V6,  MAX, S, NONE, Opcode.SETADDR,     res("result"),   in("address"));
-        add(list, V6,  MAX, S, NONE, Opcode.READARR,     res("result"), block("cell1"), in("at"));
-        add(list, V6,  MAX, S, NONE, Opcode.WRITEARR,    in("value"),   block("cell1"), in("at"));
+        add(list, V6,  MAX, S, NONE, Opcode.READARR,     res("result"), array("array"), in("at"));
+        add(list, V6,  MAX, S, NONE, Opcode.WRITEARR,    in("value"),   array("array"), in("at"));
         add(list, V6,  MAX, S, NONE, Opcode.REMARK,      in("remark"));
         add(list, V6,  MAX, S, NONE, Opcode.COMMENT,     in("comment"));
 
