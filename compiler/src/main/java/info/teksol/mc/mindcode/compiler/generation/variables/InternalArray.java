@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArray;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -18,6 +19,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
+import static info.teksol.mc.mindcode.logic.instructions.ArrayOrganization.REGULAR_INTERNAL;
 
 @NullMarked
 public class InternalArray extends AbstractArrayStore {
@@ -77,9 +79,9 @@ public class InternalArray extends AbstractArrayStore {
     }
 
     @Override
-    public ValueStore getElement(CodeAssembler assembler, AstExpression node, ValueStore index) {
-        LogicValue fixedIndex = assembler.defensiveCopy(index, TMP_VARIABLE);
-        return new InternalArrayElement(node, fixedIndex, assembler.nextTemp());
+    public ValueStore getElement(ContextfulInstructionCreator creator, AstExpression node, ValueStore index) {
+        LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
+        return new InternalArrayElement(node, fixedIndex, creator.nextTemp());
     }
 
     @Override
@@ -109,29 +111,29 @@ public class InternalArray extends AbstractArrayStore {
         }
 
         @Override
-        public LogicValue getValue(CodeAssembler assembler) {
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
 
-            assembler.createReadArr(transferVariable, logicArray, index);
+            creator.createReadArr(transferVariable, logicArray, index, REGULAR_INTERNAL);
             return transferVariable;
         }
 
         @Override
-        public void readValue(CodeAssembler assembler, LogicVariable target) {
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            assembler.createReadArr(target, logicArray, index);
+            creator.createReadArr(target, logicArray, index, REGULAR_INTERNAL);
         }
 
         @Override
-        public void setValue(CodeAssembler assembler, LogicValue value) {
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            assembler.createWriteArr(value, logicArray, index);
+            creator.createWriteArr(value, logicArray, index, REGULAR_INTERNAL);
         }
 
         @Override
@@ -140,25 +142,25 @@ public class InternalArray extends AbstractArrayStore {
         }
 
         @Override
-        public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
             valueSetter.accept(transferVariable);
-            assembler.createWriteArr(transferVariable, logicArray, index);
+            creator.createWriteArr(transferVariable, logicArray, index, REGULAR_INTERNAL);
         }
 
         @Override
-        public LogicValue getWriteVariable(CodeAssembler assembler) {
+        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
             return transferVariable;
         }
 
         @Override
-        public void storeValue(CodeAssembler assembler) {
+        public void storeValue(ContextfulInstructionCreator creator) {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            assembler.createWriteArr(transferVariable, logicArray, index);
+            creator.createWriteArr(transferVariable, logicArray, index, REGULAR_INTERNAL);
         }
     }
 }

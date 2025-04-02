@@ -5,12 +5,16 @@ import info.teksol.mc.generated.ast.visitors.AstForEachLoopStatementVisitor;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.*;
+import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
+import info.teksol.mc.mindcode.compiler.generation.AbstractStandaloneBuilder;
+import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
+import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -213,33 +217,33 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
-        public LogicValue getValue(CodeAssembler assembler) {
-            return value().getValue(assembler);
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
+            return value().getValue(creator);
         }
 
         @Override
-        public void readValue(CodeAssembler assembler, LogicVariable target) {
-            value().readValue(assembler, target);
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+            value().readValue(creator, target);
         }
 
         @Override
-        public void setValue(CodeAssembler assembler, LogicValue value) {
-            verifyLValue().setValue(assembler, value);
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+            verifyLValue().setValue(creator, value);
         }
 
         @Override
-        public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
-            verifyLValue().writeValue(assembler, valueSetter);
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+            verifyLValue().writeValue(creator, valueSetter);
         }
 
         @Override
-        public LogicValue getWriteVariable(CodeAssembler assembler) {
-            return verifyLValue().getWriteVariable(assembler);
+        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+            return verifyLValue().getWriteVariable(creator);
         }
 
         @Override
-        public void storeValue(CodeAssembler assembler) {
-            verifyLValue().storeValue(assembler);
+        public void storeValue(ContextfulInstructionCreator creator) {
+            verifyLValue().storeValue(creator);
         }
     }
 
@@ -367,22 +371,22 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
-        public LogicValue getValue(CodeAssembler assembler) {
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
             return LogicVariable.INVALID;
         }
 
         @Override
-        public void readValue(CodeAssembler assembler, LogicVariable target) {
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
             // Do nothing
         }
 
         @Override
-        public void setValue(CodeAssembler assembler, LogicValue value) {
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
             // Do nothing
         }
 
         @Override
-        public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
             // Do nothing
         }
     }

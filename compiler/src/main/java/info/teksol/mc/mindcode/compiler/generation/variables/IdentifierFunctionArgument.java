@@ -2,10 +2,10 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -81,33 +81,33 @@ public class IdentifierFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
-        return unwrap().getValue(assembler);
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
+        return unwrap().getValue(creator);
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable target) {
-        unwrap().readValue(assembler, target);
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+        unwrap().readValue(creator, target);
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue newValue) {
-        assembler.setInternalError();
+    public void setValue(ContextfulInstructionCreator creator, LogicValue newValue) {
+        creator.setInternalError();
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
-        assembler.setInternalError();
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+        creator.setInternalError();
     }
 
     @Override
-    public LogicValue getWriteVariable(CodeAssembler assembler) {
-        assembler.setInternalError();
+    public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+        creator.setInternalError();
         return LogicVariable.INVALID;
     }
 
     @Override
-    public void storeValue(CodeAssembler assembler) {
-        assembler.setInternalError();
+    public void storeValue(ContextfulInstructionCreator creator) {
+        creator.setInternalError();
     }
 }

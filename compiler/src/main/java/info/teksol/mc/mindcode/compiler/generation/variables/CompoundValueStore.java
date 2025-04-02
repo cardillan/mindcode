@@ -3,10 +3,10 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicNull;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.intellij.lang.annotations.Subst;
 import org.jspecify.annotations.NullMarked;
 
@@ -47,23 +47,23 @@ public abstract class CompoundValueStore implements ValueStore {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
-        assembler.error(sourcePosition, errorMessage);
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
+        creator.error(sourcePosition, errorMessage);
         return LogicNull.NULL;
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable target) {
-        assembler.error(sourcePosition, errorMessage);
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+        creator.error(sourcePosition, errorMessage);
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
         throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
     }
 }

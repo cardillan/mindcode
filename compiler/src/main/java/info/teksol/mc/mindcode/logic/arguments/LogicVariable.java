@@ -4,8 +4,8 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionParameter;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -353,12 +353,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
-        assembler.createSet(this, value);
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+        creator.createSet(this, value);
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(this);
     }
 

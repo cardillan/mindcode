@@ -12,6 +12,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 @NullMarked
@@ -52,7 +53,22 @@ public abstract class AbstractInstruction implements LogicInstruction {
         this.typedArguments = other.typedArguments;
         this.inputs = other.inputs;
         this.outputs = other.outputs;
-        this.info.putAll(other.info);
+        copyInfo(other);
+    }
+
+    @Override
+    public LogicInstruction copyInfo(LogicInstruction other) {
+        assert info.isEmpty();
+        if (other instanceof AbstractInstruction ix && !ix.info.isEmpty()) {
+            info.putAll(ix.info);
+            updateInfo(info.keySet());
+        }
+        return this;
+    }
+
+    /// Called whenever info is updated
+    protected void updateInfo(Set<InstructionInfo> types) {
+        // Nothing
     }
 
     public AstContext getAstContext() {
@@ -118,13 +134,7 @@ public abstract class AbstractInstruction implements LogicInstruction {
     @Override
     public LogicInstruction setInfo(InstructionInfo instructionInfo, Object value) {
         info.put(instructionInfo, value);
-        return this;
-    }
-
-    @Override
-    public LogicInstruction copyInfo(LogicInstruction other) {
-        info.clear();
-        info.putAll(((AbstractInstruction) other).info);
+        updateInfo(Set.of(instructionInfo));
         return this;
     }
 

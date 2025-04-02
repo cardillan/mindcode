@@ -2,11 +2,11 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -43,14 +43,14 @@ public class ExternalArray extends AbstractArrayStore {
     }
 
     @Override
-    public ValueStore getElement(CodeAssembler assembler, AstExpression node, ValueStore index) {
+    public ValueStore getElement(ContextfulInstructionCreator creator, AstExpression node, ValueStore index) {
         if (baseIndex == 0) {
-            LogicValue fixedIndex = assembler.defensiveCopy(index, TMP_VARIABLE);
-            return new ExternalArrayElement(node, fixedIndex, assembler.nextTemp());
+            LogicValue fixedIndex = creator.defensiveCopy(index, TMP_VARIABLE);
+            return new ExternalArrayElement(node, fixedIndex, creator.nextTemp());
         } else {
-            LogicVariable actualIndex = assembler.nextTemp();
-            assembler.createOp(Operation.ADD, actualIndex, index.getValue(assembler), baseIndexNumber);
-            return new ExternalArrayElement(node, actualIndex, assembler.nextTemp());
+            LogicVariable actualIndex = creator.nextTemp();
+            creator.createOp(Operation.ADD, actualIndex, index.getValue(creator), baseIndexNumber);
+            return new ExternalArrayElement(node, actualIndex, creator.nextTemp());
         }
     }
 
@@ -81,19 +81,20 @@ public class ExternalArray extends AbstractArrayStore {
         }
 
         @Override
-        public LogicValue getValue(CodeAssembler assembler) {
-            assembler.createRead(transferVariable, memory, index);
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
+            //assembler.createReadArr(transferVariable, logicArray, index, REGULAR_INTERNAL);
+            creator.createRead(transferVariable, memory, index);
             return transferVariable;
         }
 
         @Override
-        public void readValue(CodeAssembler assembler, LogicVariable target) {
-            assembler.createRead(target, memory, index);
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+            creator.createRead(target, memory, index);
         }
 
         @Override
-        public void setValue(CodeAssembler assembler, LogicValue value) {
-            assembler.createWrite(value, memory, index);
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+            creator.createWrite(value, memory, index);
         }
 
         @Override
@@ -102,19 +103,19 @@ public class ExternalArray extends AbstractArrayStore {
         }
 
         @Override
-        public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
             valueSetter.accept(transferVariable);
-            assembler.createWrite(transferVariable, memory, index);
+            creator.createWrite(transferVariable, memory, index);
         }
 
         @Override
-        public LogicValue getWriteVariable(CodeAssembler assembler) {
+        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
             return transferVariable;
         }
 
         @Override
-        public void storeValue(CodeAssembler assembler) {
-            assembler.createWrite(transferVariable, memory, index);
+        public void storeValue(ContextfulInstructionCreator creator) {
+            creator.createWrite(transferVariable, memory, index);
         }
     }
 }

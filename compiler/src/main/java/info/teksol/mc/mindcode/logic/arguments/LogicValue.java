@@ -1,8 +1,8 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -25,22 +25,22 @@ public interface LogicValue extends LogicArgument, ValueStore {
     // ValueStore methods
 
     @Override
-    default LogicValue getValue(CodeAssembler assembler) {
+    default LogicValue getValue(ContextfulInstructionCreator creator) {
         return this;
     }
 
     @Override
-    default void readValue(CodeAssembler assembler, LogicVariable target) {
-        assembler.createSet(target, this);
+    default void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+        creator.createSet(target, this);
     }
 
     @Override
-    default void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    default void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         throw new MindcodeInternalError("Cannot modify readable value.");
     }
 
     @Override
-    default void setValue(CodeAssembler assembler, LogicValue value) {
+    default void setValue(ContextfulInstructionCreator creator, LogicValue value) {
         throw new MindcodeInternalError("Cannot modify readable value.");
     }
 

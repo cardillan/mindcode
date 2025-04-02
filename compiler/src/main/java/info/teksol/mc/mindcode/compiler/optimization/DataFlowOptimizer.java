@@ -921,7 +921,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
 
         // General side effects
-        instruction.sideEffects().apply(
+        instruction.getSideEffects().apply(
                 variable -> variableStates.valueRead(variable, instruction, false, reachable),
                 variable -> variableStates.valueSet(variable, instruction, null, modifyInstructions),
                 variableStates::valueReset);

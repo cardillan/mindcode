@@ -7,9 +7,11 @@ public enum InstructionInfo {
     /// Additional string identification of the instruction
     MARKER(LogicLabel.EMPTY),
 
-    /// instruction side effects
+    /// Instruction side effects
     SIDE_EFFECTS(SideEffects.NONE),
 
+    /// Array organization for ReadArr/WriteArr instructions
+    ARRAY_ORGANIZATION(ArrayOrganization.NONE),
     ;
 
     public final Object defaultValue;

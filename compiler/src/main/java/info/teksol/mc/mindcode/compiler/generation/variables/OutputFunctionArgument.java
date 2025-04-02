@@ -2,9 +2,9 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -46,39 +46,39 @@ public class OutputFunctionArgument extends InputFunctionArgument {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
         if (value.isComplex()) {
             // Argument is both input and output. Currently not possible, but if such an instruction appears,
             // we'll pass the value from and to a complex store through the placeholder.
-            assembler.createInstruction(Opcode.SET, transferVariable, value.getValue(assembler));
+            creator.createInstruction(Opcode.SET, transferVariable, value.getValue(creator));
             return transferVariable;
         } else {
-            return value.getValue(assembler);
+            return value.getValue(creator);
         }
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue newValue) {
-        value.setValue(assembler, newValue);
+    public void setValue(ContextfulInstructionCreator creator, LogicValue newValue) {
+        value.setValue(creator, newValue);
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
-        value.writeValue(assembler, valueSetter);
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+        value.writeValue(creator, valueSetter);
     }
 
 
     @Override
-    public LogicValue getWriteVariable(CodeAssembler assembler) {
-        return value.isComplex() ? transferVariable : value.getWriteVariable(assembler);
+    public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+        return value.isComplex() ? transferVariable : value.getWriteVariable(creator);
     }
 
     @Override
-    public void storeValue(CodeAssembler assembler) {
+    public void storeValue(ContextfulInstructionCreator creator) {
         if (value.isComplex()) {
-            value.setValue(assembler, transferVariable);
+            value.setValue(creator, transferVariable);
         } else {
-            value.storeValue(assembler);
+            value.storeValue(creator);
         }
     }
 }

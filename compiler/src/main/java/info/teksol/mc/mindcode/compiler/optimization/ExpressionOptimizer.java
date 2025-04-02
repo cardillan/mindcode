@@ -3,8 +3,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -272,45 +271,35 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processReadArrInstruction(LogicIterator logicIterator, ReadArrInstruction ix) {
-        if (ix.getIndex() instanceof LogicNumber number) {
-            List<ValueStore> elements = ix.getArray().getElements();
+        ArrayStore arrayStore = ix.getArray().getArrayStore();
+        if (ix.getIndex() instanceof LogicNumber number && arrayStore.optimizeElementAccess()) {
+            List<ValueStore> elements = arrayStore.getElements();
             if (!number.isLong()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
             } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
             } else {
-                switch (elements.get(number.getIntValue())) {
-                    // TODO Modify ValueStore interface to use ContextfulInstructionCreator instead of CodeAssembler
-                    //      (or some lightweight subinterface)
-                    //      Create ContextfulInstructionCreator from instruction context, to put new instructions at correct positions
-                    //      Use ValueStore methods to obtain necessary instructions
-                    case LogicVariable value -> logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), value));
-                    case RemoteVariable variable -> logicIterator.set(createRead(ix.getAstContext(), ix.getResult(),
-                            variable.getProcessor(), variable.getVariableName()));
-                    default -> throw new MindcodeInternalError("Unhandled array element type");
-                }
+                LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
+                        ix.getAstContext(), logicIterator::add);
+                logicIterator.remove();
+                elements.get(number.getIntValue()).readValue(creator, ix.getResult());
             }
         }
     }
 
     private void processWriteArrInstruction(LogicIterator logicIterator, WriteArrInstruction ix) {
-        if (ix.getIndex() instanceof LogicNumber number) {
-            List<ValueStore> elements = ix.getArray().getElements();
+        ArrayStore arrayStore = ix.getArray().getArrayStore();
+        if (ix.getIndex() instanceof LogicNumber number && arrayStore.optimizeElementAccess()) {
+            List<ValueStore> elements = arrayStore.getElements();
             if (!number.isLong()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
             } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
             } else {
-                switch (elements.get(number.getIntValue())) {
-                    // TODO Modify ValueStore interface to use ContextfulInstructionCreator instead of CodeAssembler
-                    //      (or some lightweight subinterface)
-                    //      Create ContextfulInstructionCreator from instruction context, to put new instructions at correct positions
-                    //      Use ValueStore methods to obtain necessary instructions
-                    case LogicVariable value     -> logicIterator.set(createSet(ix.getAstContext(), value, ix.getValue()));
-                    case RemoteVariable variable -> logicIterator.set(createWrite(ix.getAstContext(), ix.getValue(),
-                            variable.getProcessor(), variable.getVariableName()));
-                    default -> throw new MindcodeInternalError("Unhandled array element type");
-                }
+                LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
+                        ix.getAstContext(), logicIterator::add);
+                logicIterator.remove();
+                elements.get(number.getIntValue()).setValue(creator, ix.getValue());
             }
         }
     }

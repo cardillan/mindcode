@@ -3,9 +3,9 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -67,34 +67,34 @@ public class InputFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
-        return value.getValue(assembler);
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
+        return value.getValue(creator);
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable target) {
-        value.readValue(assembler, target);
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+        value.readValue(creator, target);
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue newValue) {
-        assembler.error(argument, ERR.LVALUE_CANNOT_ASSIGN_TO_ARGUMENT);
+    public void setValue(ContextfulInstructionCreator creator, LogicValue newValue) {
+        creator.error(argument, ERR.LVALUE_CANNOT_ASSIGN_TO_ARGUMENT);
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
-        assembler.setInternalError();
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+        creator.setInternalError();
     }
 
     @Override
-    public LogicValue getWriteVariable(CodeAssembler assembler) {
-        assembler.setInternalError();
+    public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+        creator.setInternalError();
         return LogicVariable.INVALID;
     }
 
     @Override
-    public void storeValue(CodeAssembler assembler) {
-        assembler.setInternalError();
+    public void storeValue(ContextfulInstructionCreator creator) {
+        creator.setInternalError();
     }
 
     public OutputFunctionArgument toOutputFunctionArgument() {

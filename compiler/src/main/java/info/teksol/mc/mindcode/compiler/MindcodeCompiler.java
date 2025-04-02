@@ -231,7 +231,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         long compileTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - compileStart);
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.COMPILER) <= 0) return;
 
-        LogicInstructionArrayExpander arrayExpander = new LogicInstructionArrayExpander(profile, instructionProcessor);
+        LogicInstructionArrayExpander arrayExpander = new LogicInstructionArrayExpander();
 
         // OPTIMIZE
         long optimizeStart = System.nanoTime();

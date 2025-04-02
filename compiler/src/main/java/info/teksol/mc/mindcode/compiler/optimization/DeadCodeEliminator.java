@@ -106,7 +106,7 @@ class DeadCodeEliminator extends BaseOptimizer {
     /// @param instruction instruction to examine
     /// @return true if all output arguments of the instruction are unread
     private boolean allWritesUnread(LogicInstruction instruction) {
-        if (instruction.sideEffects() == SideEffects.NONE) {
+        if (instruction.getSideEffects() == SideEffects.NONE) {
             // Faster handling for instructions with no side effects
 
             // Instruction with at most one output argument are removed immediately
@@ -123,7 +123,7 @@ class DeadCodeEliminator extends BaseOptimizer {
                     .forEach(writes::add);
 
             // The instruction has side effects
-            instruction.sideEffects().apply(read -> {}, writes::add, writes::add);
+            instruction.getSideEffects().apply(read -> {}, writes::add, writes::add);
 
             return writes.stream().noneMatch(reads::contains);
         }
@@ -141,7 +141,7 @@ class DeadCodeEliminator extends BaseOptimizer {
                 .map(LogicVariable.class::cast)
                 .forEach(reads::add);
 
-        instruction.sideEffects().apply(
+        instruction.getSideEffects().apply(
                 reads::add,
                 write -> {},
                 write -> {});

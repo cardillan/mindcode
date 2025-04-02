@@ -67,12 +67,12 @@ public interface LogicInstruction extends MlogInstruction {
     }
 
     /// Provides side effects of this instruction
-    default SideEffects sideEffects() {
-        return (SideEffects) getInfo(InstructionInfo.SIDE_EFFECTS);
+    default ArrayOrganization getArrayOrganization() {
+        return (ArrayOrganization) getInfo(InstructionInfo.ARRAY_ORGANIZATION);
     }
 
-    default LogicInstruction setSideEffects(SideEffects sideEffects) {
-        return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
+    default LogicInstruction setArrayOrganization(ArrayOrganization arrayOrganization) {
+        return setInfo(InstructionInfo.ARRAY_ORGANIZATION, arrayOrganization);
     }
 
     default LogicLabel getMarker() {
@@ -81,5 +81,14 @@ public interface LogicInstruction extends MlogInstruction {
 
     default LogicInstruction setMarker(LogicLabel marker) {
         return setInfo(InstructionInfo.MARKER, marker);
+    }
+
+    /// Provides side effects of this instruction
+    default SideEffects getSideEffects() {
+        return (SideEffects) getInfo(InstructionInfo.SIDE_EFFECTS);
+    }
+
+    default LogicInstruction setSideEffects(SideEffects sideEffects) {
+        return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
     }
 }

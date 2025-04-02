@@ -58,13 +58,6 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     LogicInstruction convertCustomInstruction(LogicInstruction instruction);
 
-    /// Expands internal array instructions, creates jump tables as needed
-    ///
-    /// @param tableMap    maps created tables to labels
-    /// @param instruction instruction to process
-    /// @param consumer    consumer accepting resolved instructions
-    void expand(Map<String, LogicLabel> tableMap, LogicInstruction instruction, Consumer<LogicInstruction> consumer);
-
     /// Provides real Mindustry Logic instructions as a replacement for given virtual instruction.
     /// Non-virtual instructions are passed as-is.
     ///

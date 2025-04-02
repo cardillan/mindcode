@@ -1,0 +1,62 @@
+package info.teksol.mc.mindcode.logic.instructions;
+
+import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
+import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jspecify.annotations.NullMarked;
+
+import java.util.List;
+import java.util.function.Consumer;
+
+@NullMarked
+public class LocalContextfulInstructionsCreator extends AbstractMessageEmitter implements ContextfulInstructionCreator {
+    private final InstructionProcessor processor;
+    private final AstContext astContext;
+    private final Consumer<LogicInstruction> consumer;
+
+    public LocalContextfulInstructionsCreator(InstructionProcessor processor, AstContext astContext, Consumer<LogicInstruction> consumer) {
+        super(processor.messageConsumer());
+        this.processor = processor;
+        this.astContext = astContext;
+        this.consumer = consumer;
+    }
+
+    @Override
+    public InstructionProcessor getProcessor() {
+        return processor;
+    }
+
+    @Override
+    public LogicVariable nextTemp() {
+        return processor.nextTemp();
+    }
+
+    @Override
+    public LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
+        if (valueStore instanceof LogicValue value && value.isImmutable()) {
+            return value;
+        } else {
+            LogicVariable tmp = processor.nextTemp().withType(argumentType);
+            createSet(tmp, valueStore.getValue(this));
+            return tmp;
+        }
+    }
+
+    @Override
+    public void setInternalError() {
+        throw new MindcodeInternalError("Internal error occurred.");
+    }
+
+    @Override
+    public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
+        LogicInstruction instruction = processor.createInstruction(astContext, opcode, arguments);
+        consumer.accept(instruction);
+        return instruction;
+    }
+}

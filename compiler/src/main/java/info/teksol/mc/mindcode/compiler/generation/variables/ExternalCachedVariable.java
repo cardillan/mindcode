@@ -1,9 +1,9 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -42,39 +42,39 @@ public class ExternalCachedVariable implements ValueStore {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
         return transferVariable;
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable target) {
-        assembler.createSet(target, transferVariable);
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+        creator.createSet(target, transferVariable);
     }
 
     @Override
-    public void initialize(CodeAssembler assembler) {
-        assembler.createRead(transferVariable, memory, index);
+    public void initialize(ContextfulInstructionCreator creator) {
+        creator.createRead(transferVariable, memory, index);
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
-        transferVariable.setValue(assembler, value);
-        assembler.createWrite(transferVariable, memory, index);
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+        transferVariable.setValue(creator, value);
+        creator.createWrite(transferVariable, memory, index);
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        assembler.createWrite(transferVariable, memory, index);
+        creator.createWrite(transferVariable, memory, index);
     }
 
     @Override
-    public LogicValue getWriteVariable(CodeAssembler assembler) {
+    public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
         return transferVariable;
     }
 
     @Override
-    public void storeValue(CodeAssembler assembler) {
-        assembler.createWrite(transferVariable, memory, index);
+    public void storeValue(ContextfulInstructionCreator creator) {
+        creator.createWrite(transferVariable, memory, index);
     }
 }

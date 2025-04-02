@@ -2,9 +2,9 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -52,8 +52,8 @@ public interface ValueStore extends SourceElement {
 
     /// Generates code for initialization of a newly created variable of this type. Most implementations do nothing.
     ///
-    /// @param assembler assembler instance used to produce code for obtaining the value, if needed
-    default void initialize(CodeAssembler assembler) {
+    /// @param creator assembler instance used to produce code for obtaining the value, if needed
+    default void initialize(ContextfulInstructionCreator creator) {
         // Nothing
     }
 
@@ -63,9 +63,9 @@ public interface ValueStore extends SourceElement {
     /// These values should emit errors when they're being read. They need special handling based on their
     /// type.
     ///
-    /// @param assembler assembler instance used to produce code for obtaining the value, if needed
+    /// @param creator assembler instance used to produce code for obtaining the value, if needed
     /// @return value maintained by this instance
-    LogicValue getValue(CodeAssembler assembler);
+    LogicValue getValue(ContextfulInstructionCreator creator);
 
     /// Writes a value represented by this instance into given target variable.
     ///
@@ -73,15 +73,15 @@ public interface ValueStore extends SourceElement {
     /// These values should emit errors when they're being read. They need special handling based on their
     /// type.
     ///
-    /// @param assembler assembler instance used to produce code for writing the value
-    /// @param target    variable to write the current value to
-    void readValue(CodeAssembler assembler, LogicVariable target);
+    /// @param creator assembler instance used to produce code for writing the value
+    /// @param target  variable to write the current value to
+    void readValue(ContextfulInstructionCreator creator, LogicVariable target);
 
     /// Sets the l-value to the given value, creating the necessary instructions for it.
     ///
-    /// @param assembler assembler instance used to produce code for setting the value, if needed
-    /// @param value value to set
-    void setValue(CodeAssembler assembler, LogicValue value);
+    /// @param creator assembler instance used to produce code for setting the value, if needed
+    /// @param value   value to set
+    void setValue(ContextfulInstructionCreator creator, LogicValue value);
 
     /// Writes the value into the l-value represented by this instance.
     ///
@@ -89,9 +89,9 @@ public interface ValueStore extends SourceElement {
     /// to the value to be written. The method may then generate additional instructions to
     /// facilitate the write operation.
     ///
-    /// @param assembler assembler instance used to produce code for setting the value, if needed
+    /// @param creator     assembler instance used to produce code for setting the value, if needed
     /// @param valueSetter consumer responsible for setting the passed-in variable to the value to be written
-    void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter);
+    void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter);
 
     /// Returns a variable for two-phased writes. In the first phase, the variable provided by this
     /// method is set to the desired value. In the second phase, the value is transferred to the
@@ -102,10 +102,10 @@ public interface ValueStore extends SourceElement {
     ///
     /// The default implementation is adequate for simple values (mlog variables).
     ///
-    /// @param assembler assembler instance used to produce code for setting the value, if needed
+    /// @param creator assembler instance used to produce code for setting the value, if needed
     /// @return variable to use for writes
-    default LogicValue getWriteVariable(CodeAssembler assembler) {
-        return getValue(assembler);
+    default LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+        return getValue(creator);
     }
 
     /// Performs the second phase of a two-phase write. In the first phase, the variable provided by
@@ -118,8 +118,8 @@ public interface ValueStore extends SourceElement {
     ///
     /// The default implementation is adequate for simple values (mlog variables).
     ///
-    /// @param assembler assembler instance used to produce code for setting the value, if needed
-    default void storeValue(CodeAssembler assembler) {
+    /// @param creator assembler instance used to produce code for setting the value, if needed
+    default void storeValue(ContextfulInstructionCreator creator) {
     }
 
     /// Returns an instance with updated source position. Only implementations that report errors

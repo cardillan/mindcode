@@ -1,44 +1,54 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor;
+import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor.AccessType;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @NullMarked
 public class WriteArrInstruction extends BaseInstruction implements ArrayAccessInstruction {
+    private @Nullable ArrayConstructor arrayConstructor;
 
     WriteArrInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.WRITEARR, args, params);
-        createSideEffects();
     }
 
     protected WriteArrInstruction(BaseInstruction other, AstContext astContext) {
         super(other, astContext);
-        createSideEffects();
     }
 
-    private void createSideEffects() {
-        if (astContext.matches(AstSubcontextType.MOCK)) return;
+    @Override
+    protected void updateInfo(Set<InstructionInfo> types) {
+        if (types.contains(InstructionInfo.ARRAY_ORGANIZATION) && !astContext.matches(AstSubcontextType.MOCK)) {
+            arrayConstructor = getArrayOrganization().getExpander(this);
+            // Changing array organization alters side effects
+            setSideEffects(arrayConstructor.createSideEffects(getAccessType()));
+        }
+    }
 
-        List<LogicVariable> elements = getArray().getElements().stream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .toList();
+    @Override
+    public AccessType getAccessType() {
+        return AccessType.WRITE;
+    }
 
-        List<LogicVariable> reads = MindcodeCompiler.getContext().compilerProfile().isSymbolicLabels()
-                ? List.of(getArray().writeVal, getArray().writeInd)
-                : List.of(getArray().writeVal);
+    public final LogicValue getValue() {
+        return (LogicValue) getArg(0);
+    }
 
-        setSideEffects(SideEffects.of(reads, List.of(), elements));
+    @Override
+    public ArrayConstructor getArrayConstructor() {
+        assert arrayConstructor != null;
+        return arrayConstructor;
     }
 
     @Override
@@ -47,11 +57,8 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
     }
 
     @Override
-    public String getJumpTableId() {
-        return getArray().getWriteJumpTableId();
-    }
-
-    public final LogicValue getValue() {
-        return (LogicValue) getArg(0);
+    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+        assert arrayConstructor != null;
+        return arrayConstructor.getInstructionSize(getAccessType(), sharedStructures);
     }
 }

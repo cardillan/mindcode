@@ -1,11 +1,11 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -40,36 +40,36 @@ public class Property implements ValueStore {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
-        assembler.createSensor(transferVariable, object,
-                LogicBuiltIn.create(assembler.getProcessor(), sourcePosition, "@" + propertyName));
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
+        creator.createSensor(transferVariable, object,
+                LogicBuiltIn.create(creator.getProcessor(), sourcePosition, "@" + propertyName));
         return transferVariable;
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable result) {
-        assembler.createSensor(result, object,
-                LogicBuiltIn.create(assembler.getProcessor(), sourcePosition, "@" + propertyName));
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable result) {
+        creator.createSensor(result, object,
+                LogicBuiltIn.create(creator.getProcessor(), sourcePosition, "@" + propertyName));
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
-        assembler.createControl(LogicKeyword.create(sourcePosition, propertyName), object, value);
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+        creator.createControl(LogicKeyword.create(sourcePosition, propertyName), object, value);
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        assembler.createControl(LogicKeyword.create(sourcePosition, propertyName), object, transferVariable);
+        creator.createControl(LogicKeyword.create(sourcePosition, propertyName), object, transferVariable);
     }
 
     @Override
-    public LogicValue getWriteVariable(CodeAssembler assembler) {
+    public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
         return transferVariable;
     }
 
     @Override
-    public void storeValue(CodeAssembler assembler) {
-        assembler.createControl(LogicKeyword.create(sourcePosition, propertyName), object, transferVariable);
+    public void storeValue(ContextfulInstructionCreator creator) {
+        creator.createControl(LogicKeyword.create(sourcePosition, propertyName), object, transferVariable);
     }
 }

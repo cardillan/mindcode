@@ -1,5 +1,7 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.messages.MessageEmitter;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -14,7 +16,24 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 /// The implementing class only needs to implement the non-specific instruction creation method. All the specific
 /// methods are inherited from the interface.
 @NullMarked
-public interface ContextfulInstructionCreator {
+public interface ContextfulInstructionCreator extends MessageEmitter {
+
+    InstructionProcessor getProcessor();
+
+    /// Allocates a new temporary variable.
+    ///
+    /// @return a new temporary variable
+    LogicVariable nextTemp();
+
+    /// Provides an unchanging representation of the given ValueStore at the moment this method is called.
+    /// The returned value is guaranteed not to change. If `valueStore` is a literal, returns the literal
+    /// directly, as it cannot be changed.
+    ///
+    /// @param valueStore the value to use
+    /// @return a LogicValue capturing the current value of the valueStore
+    LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType);
+
+    void setInternalError();
 
     LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);
 
@@ -122,8 +141,8 @@ public interface ContextfulInstructionCreator {
         return (ReadInstruction) createInstruction(READ, result, memory, index);
     }
 
-    default ReadArrInstruction createReadArr(LogicVariable result, LogicArray array, LogicValue index) {
-        return (ReadArrInstruction) createInstruction(READARR, result, array, index);
+    default ReadArrInstruction createReadArr(LogicVariable result, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
+        return (ReadArrInstruction) createInstruction(READARR, result, array, index).setArrayOrganization(arrayOrganization);
     }
 
     default RemarkInstruction createRemark(LogicValue what) {
@@ -162,7 +181,7 @@ public interface ContextfulInstructionCreator {
         return (WriteInstruction) createInstruction(WRITE, value, memory, index);
     }
 
-    default WriteArrInstruction createWriteArr(LogicValue value, LogicArray array, LogicValue index) {
-        return (WriteArrInstruction) createInstruction(WRITEARR, value, array, index);
+    default WriteArrInstruction createWriteArr(LogicValue value, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
+        return (WriteArrInstruction) createInstruction(WRITEARR, value, array, index).setArrayOrganization(arrayOrganization);
     }
 }

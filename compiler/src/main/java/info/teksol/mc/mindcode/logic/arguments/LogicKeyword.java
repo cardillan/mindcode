@@ -3,8 +3,8 @@ package info.teksol.mc.mindcode.logic.arguments;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
@@ -69,23 +69,23 @@ public class LogicKeyword extends AbstractArgument implements ValueStore {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
-        assembler.error(sourcePosition, ERR.INVALID_KEYWORD_USE);
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
+        creator.error(sourcePosition, ERR.INVALID_KEYWORD_USE);
         return LogicNull.NULL;
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable target) {
-        assembler.error(sourcePosition, ERR.INVALID_KEYWORD_USE);
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+        creator.error(sourcePosition, ERR.INVALID_KEYWORD_USE);
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
         throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
     }
 }

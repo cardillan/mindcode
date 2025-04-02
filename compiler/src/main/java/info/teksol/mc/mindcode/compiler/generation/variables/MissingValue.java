@@ -2,9 +2,9 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -41,22 +41,22 @@ public class MissingValue implements ValueStore {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
         throw new MindcodeInternalError("Trying to read an unspecified function argument");
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable target) {
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
         throw new MindcodeInternalError("Trying to read an unspecified function argument");
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
         throw new MindcodeInternalError("Cannot modify this instance.");
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         throw new MindcodeInternalError("Cannot modify this instance.");
     }
 }

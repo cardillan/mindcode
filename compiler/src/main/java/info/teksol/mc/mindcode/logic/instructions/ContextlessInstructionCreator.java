@@ -123,8 +123,8 @@ public interface ContextlessInstructionCreator {
         return (ReadInstruction) createInstruction(astContext, READ, result, memory, index);
     }
 
-    default ReadArrInstruction createReadArr(AstContext astContext, LogicVariable result, LogicArray array, LogicValue index) {
-        return (ReadArrInstruction) createInstruction(astContext, READARR, result, array, index);
+    default ReadArrInstruction createReadArr(AstContext astContext, LogicVariable result, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
+        return (ReadArrInstruction) createInstruction(astContext, READARR, result, array, index).setArrayOrganization(arrayOrganization);
     }
 
     default RemarkInstruction createRemark(AstContext astContext, LogicValue what) {
@@ -163,7 +163,7 @@ public interface ContextlessInstructionCreator {
         return (WriteInstruction) createInstruction(astContext, WRITE, value, memory, index);
     }
 
-    default WriteArrInstruction createWriteArr(AstContext astContext, LogicValue value, LogicArray array, LogicValue index) {
-        return (WriteArrInstruction) createInstruction(astContext, WRITEARR, value, array, index);
+    default WriteArrInstruction createWriteArr(AstContext astContext, LogicValue value, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
+        return (WriteArrInstruction) createInstruction(astContext, WRITEARR, value, array, index).setArrayOrganization(arrayOrganization);
     }
 }

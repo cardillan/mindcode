@@ -3,9 +3,9 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.function.Consumer;
@@ -68,33 +68,33 @@ public class MissingFunctionArgument implements FunctionArgument {
     }
 
     @Override
-    public LogicValue getValue(CodeAssembler assembler) {
+    public LogicValue getValue(ContextfulInstructionCreator creator) {
         return LogicVariable.INVALID;
     }
 
     @Override
-    public void readValue(CodeAssembler assembler, LogicVariable target) {
+    public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
         // Do nothing
     }
 
     @Override
-    public void setValue(CodeAssembler assembler, LogicValue value) {
+    public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
         // Do nothing
     }
 
     @Override
-    public void writeValue(CodeAssembler assembler, Consumer<LogicVariable> valueSetter) {
+    public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         // Do nothing
     }
 
     @Override
-    public LogicVariable getWriteVariable(CodeAssembler assembler) {
+    public LogicVariable getWriteVariable(ContextfulInstructionCreator creator) {
         return LogicVariable.INVALID;
     }
 
     /// Creates code to store output value after instruction call is finished.
     @Override
-    public void storeValue(CodeAssembler assembler) {
+    public void storeValue(ContextfulInstructionCreator creator) {
         // Do nothing - this instance represents an unspecified output argument
     }
 }
