@@ -14,8 +14,6 @@ public interface ArrayConstructor {
 
     SideEffects createSideEffects(AccessType accessType);
 
-    String getJumpTableId(AccessType accessType);
-
     int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures);
 
     void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables);

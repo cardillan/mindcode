@@ -21,10 +21,6 @@ public class LogicInstructionArrayExpander {
 
         analyze(program);
 
-        if (jumpTables.isEmpty()) {
-            return program;
-        }
-
         List<LogicInstruction> expanded = program.stream()
                 .mapMulti(this::expandInstruction)
                 .collect(Collectors.toCollection(ArrayList::new));
@@ -47,13 +43,15 @@ public class LogicInstructionArrayExpander {
         // 2. Group by array name, find min/max index per array
         // 3. Build the jump table for the resulting range, remember to adjust offset
 
+        boolean found = false;
         for (LogicInstruction instruction : program) {
             if (instruction instanceof ArrayAccessInstruction ix) {
                 ix.getArrayConstructor().generateJumpTable(ix.getAccessType(), jumpTables);
+                found = true;
             }
         }
 
-        return !jumpTables.isEmpty();
+        return found;
     }
 
     public List<LogicInstruction> getJumpTables(boolean generateEndSeparator) {

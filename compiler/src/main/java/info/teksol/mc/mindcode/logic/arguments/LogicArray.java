@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import org.jspecify.annotations.NullMarked;
 
@@ -31,11 +30,11 @@ public class LogicArray extends AbstractArgument {
         return array.getElements();
     }
 
-    public static LogicArray create(InternalArray array) {
+    public static LogicArray create(ArrayStore array) {
         return new LogicArray(array, "[]");
     }
 
-    public static LogicArray create(InternalArray array, int start, int end) {
+    public static LogicArray create(ArrayStore array, int start, int end) {
         return new LogicArray(array, "[" + start + "..." + end + "]");
     }
 }

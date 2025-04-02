@@ -102,6 +102,10 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
                 '}';
     }
 
+    public static LogicNumber create(int value) {
+        return new LogicNumber(SourcePosition.EMPTY, String.valueOf(value), value);
+    }
+
     public static LogicNumber create(long value) {
         return new LogicNumber(SourcePosition.EMPTY, String.valueOf(value), value);
     }

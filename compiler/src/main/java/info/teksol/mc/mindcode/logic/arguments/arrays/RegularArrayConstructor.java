@@ -78,8 +78,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         return SideEffects.of(reads, List.of(), elements);
     }
 
-    @Override
-    public String getJumpTableId(AccessType accessType) {
+    private String getJumpTableId(AccessType accessType) {
         return switch (accessType) {
             case READ -> arrayStore.getName() + "-r";
             case WRITE -> arrayStore.getName() + "-w";
@@ -170,13 +169,13 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         if (profile.isSymbolicLabels()) {
-            expandInstructionSymbolicLinks(consumer, jumpTables);
+            expandInstructionSymbolicLabels(consumer, jumpTables);
         } else {
             expandInstructionDirectAddress(consumer, jumpTables);
         }
     }
 
-    private void expandInstructionSymbolicLinks(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+    private void expandInstructionSymbolicLabels(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
@@ -186,7 +185,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         switch (instruction) {
             case ReadArrInstruction rix -> {
                 consumer.accept(processor.createOp(astContext, Operation.MUL, readInd, instruction.getIndex(), LogicNumber.TWO));
-                generateBoundsCheck(consumer, readInd);
+                generateBoundsCheck(astContext, consumer, readInd, 2);
                 consumer.accept(processor.createCallStackless(astContext, address, readRet, LogicVariable.INVALID).setSideEffects(rix.getSideEffects()));
                 consumer.accept(processor.createSet(astContext, rix.getResult(), readVal));
             }
@@ -194,7 +193,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
             case WriteArrInstruction wix -> {
                 consumer.accept(processor.createSet(astContext, writeVal, wix.getValue()));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, writeInd, instruction.getIndex(), LogicNumber.TWO));
-                generateBoundsCheck(consumer, writeInd);
+                generateBoundsCheck(astContext, consumer, writeInd, 2);
                 consumer.accept(processor.createCallStackless(astContext, address, writeRet, LogicVariable.INVALID).setSideEffects(wix.getSideEffects()));
             }
 
@@ -214,7 +213,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
             case ReadArrInstruction rix -> {
                 consumer.accept(processor.createSetAddress(astContext, readRet, returnLabel));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO));
-                generateBoundsCheck(consumer, temp);
+                generateBoundsCheck(astContext, consumer, temp, 2);
                 consumer.accept(processor.createMultiCall(astContext, target, temp, marker).setSideEffects(rix.getSideEffects()));
                 consumer.accept(processor.createLabel(astContext, returnLabel));
                 consumer.accept(processor.createSet(astContext, rix.getResult(), readVal));
@@ -224,12 +223,12 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
                 consumer.accept(processor.createSetAddress(astContext, writeRet, returnLabel));
                 consumer.accept(processor.createSet(astContext, writeVal, wix.getValue()));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO));
-                generateBoundsCheck(consumer, temp);
+                generateBoundsCheck(astContext, consumer, temp, 2);
                 consumer.accept(processor.createMultiCall(astContext, target, temp, marker).setSideEffects(wix.getSideEffects()));
                 consumer.accept(processor.createLabel(astContext, returnLabel));
             }
 
-            default -> consumer.accept(instruction);
+            default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         }
     }
 }

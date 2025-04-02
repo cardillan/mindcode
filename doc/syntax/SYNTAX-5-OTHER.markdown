@@ -29,7 +29,7 @@ This option activates/deactivates runtime checks and specifies which mechanism t
 
 Currently, runtime checks are generated for these operations:
 
-* Accessing an element of an internal array by index: the check makes sure the index lies within bounds.
+* Accessing an element of an internal or external array by index: the check makes sure the index lies within bounds. Note that no runtime checks are generated when accessing memory block directly without a declared array, for example `cell1[index]` or `memory[index]`, where `memory` is a variable and not an external array do not have runtime checks generated. 
 
 Possible values for the `boundary-checks` directive are:
 
@@ -122,12 +122,12 @@ Active remarks can be used to easily add debugging output to a program that can 
 
 ## Option `symbolic-labels`
 
-Activates/deactivates using symbolic labels for jump instruction targets. Possible values are:
+Activates/deactivates generating symbolic labels for jump instruction targets. Possible values are:
 
 * `false` (the default value): the compiled code contains absolute instruction addresses in `jump` instructions. Absolute addresses are also used to store program locations in variables, or to compute offsets in jump tables.
 * `true`: the compiled code contains symbolic labels in `jump` instructions. Program locations stored in variables are always derived from actual `@counter` values, including `@counter` manipulations in jump tables.
 
-As a consequence, the compiled mlog code can be altered by adding and/or removing instructions when symbolic labels are produced. Instructions must not be added or removed from sections of code where the `@counter` variable is manipulated. All Mindcode features re supported when generating code using symbolic labels, including function call and remote  function calls, list iteration loops, internal arrays and so on.
+As a consequence, the compiled mlog code can be altered by adding and/or removing instructions when symbolic labels are produced. Instructions must not be added to or removed from sections of code where the `@counter` variable is manipulated. All Mindcode features are supported when generating code using symbolic labels, including function call and remote function calls, list iteration loops, internal arrays, and so on.
 
 When symbolic labels are produced, the compiler also uses mlog comments to mark function entry points.
 
@@ -136,10 +136,10 @@ When symbolic labels are produced, the compiler also uses mlog comments to mark 
 >
 > * Stackless function calls: some optimizations are not be applied.
 > * Recursive function calls: the size and execution time of a recursive function call are increased by one.
-> * Internal array element access: the size of a jump table and execution time of array access are increased by one; by one, some optimizations are not be applied.
-> * Optimized case expressions: the size and execution time of optimized case statement may be increased by one.
+> * Internal array element access: the size of a jump table and execution time of an array access are increased by one; some optimizations are not be applied.
+> * Optimized case expressions: the size and execution time of optimized case statement may increase by one.
 > * List iteration loops: the size and execution time of the last iteration are increased by two.
-> * Remote calls: initialization of remote modules is increased by one or two instructions per remote function; however this only impacts the initialization of a remote module and not subsequent calls.
+> * Remote calls: initialization of remote modules is increased by one or two instructions per remote function; however this only impacts the initialization of a remote module and not subsequent function calls.
 
 Example of a program compiled with `symbolic-labels` set to `true`:
 

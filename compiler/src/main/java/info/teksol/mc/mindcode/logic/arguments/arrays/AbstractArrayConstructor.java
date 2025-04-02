@@ -31,29 +31,31 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         this.arrayStore = instruction.getArray().getArrayStore();
     }
 
-    protected void generateBoundsCheck(Consumer<LogicInstruction> consumer, LogicVariable index) {
+    protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {
         RuntimeChecks boundaryChecks = profile.getBoundaryChecks();
         if (boundaryChecks == RuntimeChecks.NONE) return;
 
-        AstContext astContext = instruction.getAstContext();
         int maxIndex = arrayStore.getSize() - 1;
-        LogicNumber max = LogicNumber.create(maxIndex * 2L);
+        int max = maxIndex * multiple;
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
 
         switch (boundaryChecks) {
-            case ASSERT -> createAssertRuntimeChecks(consumer, index, max, errorMessage);
-            case MINIMAL -> createMinimalRuntimeCheck(consumer, index, max, errorMessage);
-            case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(consumer, index, max, errorMessage);
+            case ASSERT -> createAssertRuntimeChecks(astContext, consumer, index, max, multiple, errorMessage);
+            case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max, errorMessage);
+            case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
         }
     }
 
-    private void createAssertRuntimeChecks(Consumer<LogicInstruction> consumer, LogicVariable index, LogicNumber max, String errorMessage) {
-        consumer.accept(processor.createInstruction(instruction.getAstContext(), Opcode.ASSERT_BOUNDS, LogicKeyword.create("multiple"),
-                LogicNumber.TWO, LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ, max, LogicString.create(errorMessage)));
+    private void createAssertRuntimeChecks(AstContext astContext, Consumer<LogicInstruction> consumer,
+            LogicValue index, int max, int multiple, String errorMessage) {
+        consumer.accept(processor.createInstruction(astContext, Opcode.ASSERT_BOUNDS, LogicKeyword.create("multiple"),
+                LogicNumber.create(multiple), LogicNumber.ZERO, Condition.LESS_THAN_EQ, index, Condition.LESS_THAN_EQ, LogicNumber.create(max),
+                LogicString.create(errorMessage)));
     }
 
-    private void createMinimalRuntimeCheck(Consumer<LogicInstruction> consumer, LogicVariable index, LogicNumber max, String errorMessage) {
-        AstContext ctx = instruction.getAstContext().createChild(profile, Objects.requireNonNull(instruction.getAstContext().node()),
+    private void createMinimalRuntimeCheck(AstContext astContext, Consumer<LogicInstruction> consumer,
+            LogicValue index, int max, String errorMessage) {
+        AstContext ctx = astContext.createChild(profile, Objects.requireNonNull(instruction.getAstContext().node()),
                 AstContextType.IF, AstSubcontextType.CONDITION);
 
         LogicLabel logicLabel1 = processor.nextLabel();
@@ -61,17 +63,18 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         consumer.accept(processor.createJump(ctx, logicLabel1, Condition.LESS_THAN, index, LogicNumber.ZERO));
         LogicLabel logicLabel2 = processor.nextLabel();
         consumer.accept(processor.createLabel(ctx, logicLabel2));
-        consumer.accept(processor.createJump(ctx, logicLabel2, Condition.GREATER_THAN, index, max));
+        consumer.accept(processor.createJump(ctx, logicLabel2, Condition.GREATER_THAN, index, LogicNumber.create(max)));
     }
 
-    private void createSimpleOrDescribedRuntimeCheck(Consumer<LogicInstruction> consumer, LogicVariable index, LogicNumber max, String errorMessage) {
-        AstContext ctx = instruction.getAstContext().createChild(profile, Objects.requireNonNull(instruction.getAstContext().node()),
+    private void createSimpleOrDescribedRuntimeCheck(AstContext astContext, Consumer<LogicInstruction> consumer,
+            LogicValue index, int max, String errorMessage) {
+        AstContext ctx = astContext.createChild(profile, Objects.requireNonNull(instruction.getAstContext().node()),
                 AstContextType.IF, AstSubcontextType.CONDITION);
 
         LogicLabel logicLabelStop = processor.nextLabel();
         LogicLabel logicLabelRun = processor.nextLabel();
         consumer.accept(processor.createJump(ctx, logicLabelStop, Condition.LESS_THAN, index, LogicNumber.ZERO));
-        consumer.accept(processor.createJump(ctx, logicLabelRun, Condition.LESS_THAN_EQ, index, max));
+        consumer.accept(processor.createJump(ctx, logicLabelRun, Condition.LESS_THAN_EQ, index, LogicNumber.create(max)));
         consumer.accept(processor.createLabel(ctx, logicLabelStop));
         if (profile.getBoundaryChecks() == RuntimeChecks.DESCRIBED) {
             consumer.accept(processor.createPrint(ctx, LogicString.create(errorMessage)));

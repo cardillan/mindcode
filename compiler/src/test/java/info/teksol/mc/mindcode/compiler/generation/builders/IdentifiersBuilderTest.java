@@ -56,12 +56,12 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external a[10], b[10];
                             a[x] = b[y];
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(SET, var(20), ":x"),
-                    createInstruction(OP, "add", var(22), ":y", "10"),
-                    createInstruction(READ, var(23), "cell1", var(22)),
-                    createInstruction(WRITE, var(23), "cell1", var(20))
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
+                    createInstruction(SET, tmp(20), ":x"),
+                    createInstruction(OP, "add", tmp(22), ":y", "10"),
+                    createInstruction(READARR, tmp(23), ".b[]", tmp(22)),
+                    createInstruction(WRITEARR, tmp(23), ".a[]", tmp(20))
             );
         }
 
@@ -72,14 +72,14 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external a[10];
                             a[a[x]] = a[x];
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(SET, var(10), ":x"),
-                    createInstruction(READ, var(11), "cell1", var(10)),
-                    createInstruction(SET, var(12), var(11)),
-                    createInstruction(SET, var(14), ":x"),
-                    createInstruction(READ, var(15), "cell1", var(14)),
-                    createInstruction(WRITE, var(15), "cell1", var(12))
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
+                    createInstruction(SET, tmp(10), ":x"),
+                    createInstruction(READARR, tmp(11), ".a[]", tmp(10)),
+                    createInstruction(SET, tmp(12), tmp(11)),
+                    createInstruction(SET, tmp(14), ":x"),
+                    createInstruction(READARR, tmp(15), ".a[]", tmp(14)),
+                    createInstruction(WRITEARR, tmp(15), ".a[]", tmp(12))
             );
         }
 
@@ -90,18 +90,18 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external x[10];
                             x[a] += x[b] += x[c];
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(SET, var(10), ":a"),
-                    createInstruction(SET, var(12), ":b"),
-                    createInstruction(SET, var(14), ":c"),
-                    createInstruction(READ, var(15), "cell1", var(14)),
-                    createInstruction(READ, var(13), "cell1", var(12)),
-                    createInstruction(OP, "add", var(16), var(13), var(15)),
-                    createInstruction(WRITE, var(16), "cell1", var(12)),
-                    createInstruction(READ, var(11), "cell1", var(10)),
-                    createInstruction(OP, "add", var(17), var(11), var(16)),
-                    createInstruction(WRITE, var(17), "cell1", var(10))
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
+                    createInstruction(SET, tmp(10), ":a"),
+                    createInstruction(SET, tmp(12), ":b"),
+                    createInstruction(SET, tmp(14), ":c"),
+                    createInstruction(READARR, tmp(15), ".x[]", tmp(14)),
+                    createInstruction(READARR, tmp(13), ".x[]", tmp(12)),
+                    createInstruction(OP, "add", tmp(16), tmp(13), tmp(15)),
+                    createInstruction(WRITEARR, tmp(16), ".x[]", tmp(12)),
+                    createInstruction(READARR, tmp(11), ".x[]", tmp(10)),
+                    createInstruction(OP, "add", tmp(17), tmp(11), tmp(16)),
+                    createInstruction(WRITEARR, tmp(17), ".x[]", tmp(10))
             );
         }
 
@@ -112,12 +112,12 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external x[10];
                             a = x[b] = @time;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(SET, var(10), ":b"),
-                    createInstruction(SET, var(12), "@time"),
-                    createInstruction(WRITE, var(12), "cell1", var(10)),
-                    createInstruction(SET, ":a", var(12))
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
+                    createInstruction(SET, tmp(10), ":b"),
+                    createInstruction(SET, tmp(12), "@time"),
+                    createInstruction(WRITEARR, tmp(12), ".x[]", tmp(10)),
+                    createInstruction(SET, ":a", tmp(12))
 
             );
         }
@@ -129,15 +129,15 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external x[10];
                             ulocate(:ore, x[a], out x[b], out x[c]);
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(SET, var(10), ":a"),
-                    createInstruction(SET, var(12), ":b"),
-                    createInstruction(SET, var(15), ":c"),
-                    createInstruction(READ, var(11), "cell1", var(10)),
-                    createInstruction(ULOCATE, "ore", "core", "true", var(11), var(14), var(17), var(18), var(19)),
-                    createInstruction(WRITE, var(14), "cell1", var(12)),
-                    createInstruction(WRITE, var(17), "cell1", var(15))
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
+                    createInstruction(SET, tmp(10), ":a"),
+                    createInstruction(SET, tmp(12), ":b"),
+                    createInstruction(SET, tmp(15), ":c"),
+                    createInstruction(READARR, tmp(11), ".x[]", tmp(10)),
+                    createInstruction(ULOCATE, "ore", "core", "true", tmp(11), tmp(14), tmp(17), tmp(18), tmp(19)),
+                    createInstruction(WRITEARR, tmp(14), ".x[]", tmp(12)),
+                    createInstruction(WRITEARR, tmp(17), ".x[]", tmp(15))
             );
         }
 
@@ -152,13 +152,13 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, label(1)),
                     createInstruction(JUMP, label(1), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(10), ":a"),
-                    createInstruction(READ, tmp(11), "cell1", tmp(10)),
+                    createInstruction(READARR, tmp(11), ".x[]", tmp(10)),
                     createInstruction(SET, tmp(12), tmp(11)),
                     createInstruction(SET, ":foo.0:x", tmp(12)),
                     createInstruction(SETADDR, ":foo.0*retaddr", label(2)),
                     createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
                     createInstruction(LABEL, label(2)),
-                    createInstruction(WRITE, ":foo.0:x", "cell1", tmp(10)),
+                    createInstruction(WRITEARR, ":foo.0:x", ".x[]", tmp(10)),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(SET, tmp(13), ":foo.0:x"),

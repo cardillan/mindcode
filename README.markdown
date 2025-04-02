@@ -71,6 +71,12 @@ You can also use the **Compile and Run** button to execute the compiled code rig
 
 Alternatively, you can download the command-line compiler and use Mindcode [from within an IDE](doc/syntax/TOOLS-IDE-INTEGRATION.markdown).
 
+### Support mods
+
+Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into selected processor in Mindustry World directly, witthout having to use a clipboard.
+
+The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-boundary-checks) for both internal and external arrays, making this kind of bugs easier to detect. 
+
 ## Mindustry Logic References
 
 If you don't know much about Mindustry Logic, you can read more information about it here:
