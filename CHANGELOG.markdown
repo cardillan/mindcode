@@ -22,6 +22,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 #### Experimental features
 
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
+* Added array-specific optimizations for speed: 
+  * Replacing jump tables for short arrays (up to three elements) with if-else blocks.
+  * (more to come)
 
 ### Changed
 

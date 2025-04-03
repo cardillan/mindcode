@@ -16,6 +16,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
 
 @NullMarked
 public abstract class AbstractArrayConstructor implements ArrayConstructor {
@@ -29,6 +30,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         this.profile = instruction.getAstContext().getProfile();
         this.instruction = instruction;
         this.arrayStore = instruction.getArray().getArrayStore();
+    }
+
+    protected Stream<LogicVariable> arrayElements() {
+        return arrayStore.getElements().stream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast);
     }
 
     protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {

@@ -55,7 +55,8 @@ public class BaseInstruction extends AbstractInstruction {
         if (o == null || getClass() != o.getClass()) return false;
         BaseInstruction that = (BaseInstruction) o;
         return Objects.equals(opcode, that.opcode) &&
-                Objects.equals(args, that.args);
+                Objects.equals(args, that.args) &&
+                info.equals(that.info);
     }
 
     @Override

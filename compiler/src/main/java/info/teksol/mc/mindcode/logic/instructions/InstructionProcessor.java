@@ -66,6 +66,9 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @param consumer    consumer accepting resolved instructions
     void resolve(CompilerProfile profile, LogicInstruction instruction, Consumer<LogicInstruction> consumer);
 
+    /// Creates a copy of the instruction, to be modified using info.
+    <T extends LogicInstruction> T copy(T instruction);
+
     /// Returns a logic instruction with all arguments equal to a specific value replaced by a new value.
     /// More than one argument of the instruction can be modified. A new instruction is always created.
     ///

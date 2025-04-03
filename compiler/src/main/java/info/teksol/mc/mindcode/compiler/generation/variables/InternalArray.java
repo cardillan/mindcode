@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
-import static info.teksol.mc.mindcode.logic.instructions.ArrayOrganization.REGULAR_INTERNAL;
+import static info.teksol.mc.mindcode.logic.instructions.ArrayOrganization.INTERNAL_REGULAR;
 
 @NullMarked
 public class InternalArray extends AbstractArrayStore {
@@ -116,7 +116,7 @@ public class InternalArray extends AbstractArrayStore {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
 
-            creator.createReadArr(transferVariable, logicArray, index, REGULAR_INTERNAL);
+            creator.createReadArr(transferVariable, logicArray, index, INTERNAL_REGULAR);
             return transferVariable;
         }
 
@@ -125,7 +125,7 @@ public class InternalArray extends AbstractArrayStore {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            creator.createReadArr(target, logicArray, index, REGULAR_INTERNAL);
+            creator.createReadArr(target, logicArray, index, INTERNAL_REGULAR);
         }
 
         @Override
@@ -133,7 +133,7 @@ public class InternalArray extends AbstractArrayStore {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            creator.createWriteArr(value, logicArray, index, REGULAR_INTERNAL);
+            creator.createWriteArr(value, logicArray, index, INTERNAL_REGULAR);
         }
 
         @Override
@@ -147,7 +147,7 @@ public class InternalArray extends AbstractArrayStore {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
             valueSetter.accept(transferVariable);
-            creator.createWriteArr(transferVariable, logicArray, index, REGULAR_INTERNAL);
+            creator.createWriteArr(transferVariable, logicArray, index, INTERNAL_REGULAR);
         }
 
         @Override
@@ -160,7 +160,7 @@ public class InternalArray extends AbstractArrayStore {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            creator.createWriteArr(transferVariable, logicArray, index, REGULAR_INTERNAL);
+            creator.createWriteArr(transferVariable, logicArray, index, INTERNAL_REGULAR);
         }
     }
 }

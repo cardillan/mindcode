@@ -29,6 +29,7 @@ public enum OptimizationPhase {
             LOOP_OPTIMIZATION,
             LOOP_UNROLLING,
             FUNCTION_INLINING,
+            ARRAY_OPTIMIZATION,
             IF_EXPRESSION_OPTIMIZATION,
             CASE_SWITCHING,
             RETURN_OPTIMIZATION

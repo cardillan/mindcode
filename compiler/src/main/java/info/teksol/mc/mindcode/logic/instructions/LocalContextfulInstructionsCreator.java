@@ -3,6 +3,8 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -17,14 +19,42 @@ import java.util.function.Consumer;
 @NullMarked
 public class LocalContextfulInstructionsCreator extends AbstractMessageEmitter implements ContextfulInstructionCreator {
     private final InstructionProcessor processor;
-    private final AstContext astContext;
     private final Consumer<LogicInstruction> consumer;
+    private AstContext astContext;
+    private boolean subcontextTypeSet = false;
 
     public LocalContextfulInstructionsCreator(InstructionProcessor processor, AstContext astContext, Consumer<LogicInstruction> consumer) {
         super(processor.messageConsumer());
         this.processor = processor;
         this.astContext = astContext;
         this.consumer = consumer;
+    }
+
+    public void pushContext(AstContextType contextType, AstSubcontextType subcontextType) {
+        assert astContext.node() != null;
+        astContext = astContext.createChild(astContext.getProfile(), astContext.node(), contextType, subcontextType);
+    }
+
+    public void popContext() {
+        assert astContext.parent() != null;
+        astContext = astContext.parent();
+    }
+
+    public void setSubcontextType(AstSubcontextType subcontextType, double multiplier) {
+        if (subcontextTypeSet) {
+            assert astContext.parent() != null;
+            astContext = astContext.parent();
+        }
+        astContext = astContext.createSubcontext(subcontextType, multiplier);
+        subcontextTypeSet = true;
+    }
+
+    public void clearSubcontextType() {
+        if (subcontextTypeSet) {
+            assert astContext.parent() != null;
+            astContext = astContext.parent();
+            subcontextTypeSet = false;
+        }
     }
 
     @Override

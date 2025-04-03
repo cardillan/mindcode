@@ -26,6 +26,7 @@ public class LogicArray extends AbstractArgument {
     public String toMlog() {
         return mlog;
     }
+
     public List<ValueStore> getElements() {
         return array.getElements();
     }

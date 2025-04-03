@@ -53,28 +53,16 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private SideEffects createReadSideEffects() {
-        List<LogicVariable> elements = arrayStore.getElements().stream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .collect(Collectors.toCollection(ArrayList::new));
-
+        List<LogicVariable> elements = arrayElements().collect(Collectors.toCollection(ArrayList::new));
         if (profile.isSymbolicLabels()) {
             elements.add(readInd);
         }
-
         return SideEffects.of(List.copyOf(elements), List.of(), List.of(readVal));
     }
 
     private SideEffects createWriteSideEffects() {
-        List<LogicVariable> elements = arrayStore.getElements().stream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .toList();
-
-        List<LogicVariable> reads = profile.isSymbolicLabels()
-                ? List.of(writeVal, writeInd)
-                : List.of(writeVal);
-
+        List<LogicVariable> elements = arrayElements().toList();
+        List<LogicVariable> reads = profile.isSymbolicLabels() ? List.of(writeVal, writeInd) : List.of(writeVal);
         return SideEffects.of(reads, List.of(), elements);
     }
 

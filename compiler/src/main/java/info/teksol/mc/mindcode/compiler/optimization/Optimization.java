@@ -61,6 +61,10 @@ public enum Optimization {
             FunctionInliner::new,
             "inlining stackless function calls (optimization for speed)"),
 
+    ARRAY_OPTIMIZATION("Array Optimization",
+            ArrayOptimizer::new,
+            "improving internal array random access mechanism (optimization for speed)"),
+
     CASE_SWITCHING("Case Switching",
             CaseSwitcher::new,
             "modifying suitable case expressions to use jump tables"),

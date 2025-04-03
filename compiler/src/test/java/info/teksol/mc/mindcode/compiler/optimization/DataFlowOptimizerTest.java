@@ -35,6 +35,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void handlesArrays() {
             assertCompilesTo("""
+                            #set array-optimization = none;
                             const SIZE = 2;
                             param LIMIT = SIZE;
                             

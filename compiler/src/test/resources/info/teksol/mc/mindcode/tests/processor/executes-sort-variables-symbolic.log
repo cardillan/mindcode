@@ -1,7 +1,7 @@
     31 instructions before optimizations.
      1 instructions eliminated by Dead Code Elimination (3 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
-    18 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+    18 instructions eliminated by Data Flow Optimization (3 passes, 12 iterations).
      1 loops unrolled by Loop Unrolling.
     11 instructions after optimizations.
 
@@ -240,39 +240,28 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
+     4 op mul :test.0:step p 2
+     5 label *label11
+     6 label *label14
+-    * set :test.0:i :test.0:step
++    7 set :test.0:b :test.0:step
+     8 op mul :test.0:step p 4
+     9 label *label15
+-    * set :test.0:b :test.0:i
+    10 label *label18
+    11 set :test.0:i :test.0:step
+    12 op mul :test.0:step p 8
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-2 instructions):
+ 
      1 assertflush
      2 # "Function: def test()"
      3 label *label10
 -    * op mul :test.0:step p 2
-+    4 op mul :test.0:i p 2
-     5 label *label11
-     6 label *label14
--    * set :test.0:i :test.0:step
-     7 op mul :test.0:step p 4
-     8 label *label15
-     9 set :test.0:b :test.0:i
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
- 
-     1 assertflush
-     2 # "Function: def test()"
-     3 label *label10
--    * op mul :test.0:i p 2
 +    4 op mul :test.0:b p 2
      5 label *label11
      6 label *label14
-     7 op mul :test.0:step p 4
-     8 label *label15
--    * set :test.0:b :test.0:i
-     9 label *label18
-    10 set :test.0:i :test.0:step
-    11 op mul :test.0:step p 8
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-1 instructions):
- 
-     4 op mul :test.0:b p 2
-     5 label *label11
-     6 label *label14
+-    * set :test.0:b :test.0:step
 -    * op mul :test.0:step p 4
 +    7 op mul :test.0:i p 4
      8 label *label15

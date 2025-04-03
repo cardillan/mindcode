@@ -43,6 +43,8 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
 
     @Test
     void processesAssertBounds() {
+        // Array optimization will redirect all array writes to the single element
+        // Therefore the program will output 10.
         testCode(expectedMessages()
                         .add("Failed runtime check: 'position 4:1: index out of bounds (0 to 0)'."),
                 """
@@ -52,7 +54,8 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
                         a[1 + rand(0)] = 10;
                         print(a);
                         stopProcessor();
-                        """);
+                        """,
+                "10");
     }
 
     @Test

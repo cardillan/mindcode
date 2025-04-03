@@ -111,10 +111,11 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
                 [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
-                [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}]
-                [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [input] [output]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
+                [input] [output]
 
 Compile a Mindcode source file into text mlog file.
 
@@ -270,6 +271,8 @@ optimization levels:
                          speed)
   --function-inlining LEVEL
                          optimization level of inlining stackless function calls (optimization for speed)
+  --array-optimization LEVEL
+                         optimization level of improving internal array random access mechanism (optimization for speed)
   --case-switching LEVEL
                          optimization level of modifying suitable case expressions to use jump tables
   --return-optimization LEVEL
@@ -326,10 +329,11 @@ usage: mindcode cs [-h] [-c] [-l [LOG]] [--file-references {path,uri,windows-uri
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
                 [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--case-switching LEVEL]
-                [--return-optimization LEVEL] [--jump-straightening LEVEL] [--jump-threading LEVEL]
-                [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}]
-                [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [input] [output]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
+                [input] [output]
 
 Compile a schematic definition file into binary msch file.
 
@@ -424,6 +428,8 @@ optimization levels:
                          speed)
   --function-inlining LEVEL
                          optimization level of inlining stackless function calls (optimization for speed)
+  --array-optimization LEVEL
+                         optimization level of improving internal array random access mechanism (optimization for speed)
   --case-switching LEVEL
                          optimization level of modifying suitable case expressions to use jump tables
   --return-optimization LEVEL

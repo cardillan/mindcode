@@ -285,6 +285,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
+    public <T extends LogicInstruction> T copy(T instruction) {
+        return replaceArgs(instruction, instruction.getArgs());
+    }
+
+    @Override
     @SuppressWarnings("unchecked")
     public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
         LogicInstruction result;
