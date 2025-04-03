@@ -58,7 +58,9 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
 
         if (node.isDescending()) {
             // Store the lower value in a temporary variable registered in parent.
-            fixedFinalBound = assembler.defensiveCopy(lowerValue, ArgumentType.TMP_VARIABLE);
+            fixedFinalBound = lowerValue instanceof LogicBuiltIn builtin
+                    ? builtin
+                    : assembler.defensiveCopy(lowerValue, ArgumentType.TMP_VARIABLE);
 
             condition = Condition.LESS_THAN;
 
@@ -70,7 +72,9 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
             }
         } else {
             // Store the upper value in a temporary variable registered in parent.
-            fixedFinalBound = assembler.defensiveCopy(upperValue, ArgumentType.TMP_VARIABLE);
+            fixedFinalBound = upperValue instanceof LogicBuiltIn builtin
+                    ? builtin
+                    : assembler.defensiveCopy(upperValue, ArgumentType.TMP_VARIABLE);
 
             // Condition for variable exceeding the upper bound of the range
             condition = outsideRangeCondition(node.getRange());

@@ -1,7 +1,7 @@
 Name                                     Instructions   Source CRC         Compiled CRC    
 breakout-00.mnd:                                  184   DAE429A013DB4541   2074FEDC921579CB
 detector-00.mnd:                                  128   76B6ACE9D59CB722   95DD57F9D6C12032
-factory-monitor-00.mnd:                           343   863D948F911F2E7A   2CFF19302070543B
+factory-monitor-00.mnd:                           342   863D948F911F2E7A   4E42983DF5242EBA
 factory-monitor-silicon-00.mnd:                   287   92331871E01FEB02   30AF5A51E52B1661
 factory-monitor-surge-alloy-00.mnd:               184   B570A56D64509A07   F0609B96D739F227
 impact-reactor-logic-00.mnd:                      825   3E95B78DA13C7171   96871542B80B8F29
@@ -15,7 +15,7 @@ level-display-water-cryo-00.mnd:                   83   3B59D99D61A51686   5ACB5
 level-meter-00.mnd:                               154   C7BCD2A84C470E15   53DD9EEC72153703
 mass-driver-monitor-00.mnd:                       183   6E6F762403154535   A2B34E9FD72EAC19
 mass-driver-monitor-surge-alloy-00.mnd:            93   84BE8CA14CE3386F   CDD169B21832EE0A
-reactor-control-00.mnd:                           370   0B5F71D4A736D2F1   15F6672104A44EBF
+reactor-control-00.mnd:                           369   0B5F71D4A736D2F1   34FD3B86AF5BE10C
 reactor-control-battery-level-00.mnd:             578   BEBDD58A4C35FD11   B9F377632A557D67
 regulator-00.mnd:                                 142   F49BECB5341151DD   79C69A3D202AA3E0
 remote-vault-00.mnd:                               68   9EA444978E177496   38FA8584481B8C8A

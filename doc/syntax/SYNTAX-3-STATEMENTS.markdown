@@ -68,7 +68,19 @@ for var n in firstIndex + 1 .. lastIndex - 1 do
 end;
 ```
 
-The range is evaluated before the loop begins. If the value of the upper bound changes while the loop executes, it isn't reflected while the loop executes. To have the condition fully evaluated on each iteration, use a [C-style loop](#c-style-loops) or a [while loop](#while-loops).
+> [!NOTE] 
+> The range is evaluated before the loop begins. If the value of the upper bound changes while the loop executes, it isn't reflected while the loop executes. To have the condition fully evaluated on each iteration, use a [C-style loop](#c-style-loops) or a [while loop](#while-loops).
+> 
+> However, if a volatile built-in is used as a bound (such as `@links`), no defensive copy will be created and the variable will be used in the condition directly. This doesn't apply to expressions involving volatile built-ins: `for n in 0 .. @links - 1` causes `@links - 1` to be evaluated and stored in a temporary variable.
+> 
+> The suggested way to loop over all linked blocks is
+> 
+> ```
+> for n = 0 ... @links do
+>     block = getlink(n);
+>     /* do something with block */
+> end;
+> ```
 
 It is possible to iterate the range in descending order by specifying `descending`:
 

@@ -225,5 +225,25 @@ class RangedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, var(1003))
             );
         }
+
+        @Test
+        void compilesForLoopWithLogicBuiltIns() {
+            // Note: this test verifies no defensive copy is made for @links, despite it being a volatile variable
+            assertCompilesTo("""
+                            for i in 0 ... @links do
+                                print(i);
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "0"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(2), "greaterThanEq", ":i", "@links"),
+                    createInstruction(PRINT, ":i"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
     }
 }

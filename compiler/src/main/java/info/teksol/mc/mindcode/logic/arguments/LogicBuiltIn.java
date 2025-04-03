@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 @NullMarked
 public class LogicBuiltIn extends AbstractArgument implements LogicValue {
     public static final LogicBuiltIn COUNTER = create("@counter", true);
+    public static final LogicBuiltIn LINKS = create("@links", true);
     public static final LogicBuiltIn THIS = create("@this", false);
     public static final LogicBuiltIn UNIT = create("@unit", true);
     public static final LogicBuiltIn WAIT = create("@wait", false);
@@ -93,7 +94,14 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
     }
 
     public static LogicBuiltIn create(InstructionProcessor processor, SourcePosition sourcePosition, String name) {
-        return new LogicBuiltIn(sourcePosition, name, MindustryContents.get(name), processor.isVolatileBuiltIn(name));
+        return switch (name) {
+            case "@counter" -> COUNTER;
+            case "@links" -> LINKS;
+            case "@this" -> THIS;
+            case "@unit" -> UNIT;
+            case "@wait" -> WAIT;
+            default -> new LogicBuiltIn(sourcePosition, name, MindustryContents.get(name), processor.isVolatileBuiltIn(name));
+        };
     }
 
     // ValueStore methods
