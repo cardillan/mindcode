@@ -177,6 +177,7 @@ class LoopUnroller extends BaseOptimizer {
                 // Internal array access with control variable as an index is considered.
                 // Loop control updates will only be removed by Data Flow Optimization later on.
                 int size = InstructionCounter.localSize(loopIxs, ix -> getReplacementSize(ix, controlVariable))
+                        + unhoistingSize(loop)
                         - InstructionCounter.localSize(controlIxs.stream());
                 int originalSize = InstructionCounter.localSize(contextStream(loop));
 
@@ -191,6 +192,22 @@ class LoopUnroller extends BaseOptimizer {
         }
 
         return null;
+    }
+
+    private int unhoistingSize(AstContext loop) {
+        // Find all hoisted SETADDRs
+        Map<LogicLabel, LogicInstruction> hoistedMap = instructionStream().filter(LogicInstruction::isHoisted)
+                .collect(Collectors.toMap(LogicInstruction::getMarker, ix -> ix));
+
+        List<LogicInstruction> hoisted = contextStream(loop)
+                .filter(ix -> !ix.isHoisted())
+                .filter(ix -> hoistedMap.containsKey(ix.getMarker()))
+                .peek(System.out::println)
+                .map(ix -> hoistedMap.get(ix.getMarker()))
+                .filter(Objects::nonNull)
+                .toList();
+
+        return InstructionCounter.localSize(hoisted);
     }
 
     private int getReplacementSize(LogicInstruction instruction, LogicVariable controlVariable) {
@@ -364,7 +381,7 @@ class LoopUnroller extends BaseOptimizer {
         LogicList body = contextInstructions(loop.findSubcontext(BODY));
 
         int loops = leading.size();
-        int savings = computeSavedInstructions(loop, loops);
+        int savings = computeSavedInstructions(loop, loops) - unhoistingSize(loop);
         int size = body.realSize();
 
         // Optimization cost could actually get negative
@@ -372,8 +389,29 @@ class LoopUnroller extends BaseOptimizer {
         return cost > costLimit ? null : new UnrollListIterationLoopAction(loop, cost, loop.totalWeight() * savings);
     }
 
+    private void unhoistLoop(AstContext loop) {
+        // Find all hoisted SETADDRs
+        Map<LogicLabel, LogicInstruction> hoistedMap = instructionStream().filter(LogicInstruction::isHoisted)
+                .collect(Collectors.toMap(LogicInstruction::getMarker, ix -> ix));
+
+        try (OptimizationContext.LogicIterator iterator = createIteratorAtContext(loop)) {
+            while (iterator.hasNext()) {
+                LogicInstruction instruction = iterator.next();
+                if (!instruction.belongsTo(loop)) break;
+                if (instruction.isHoisted()) continue;
+
+                LogicInstruction hoisted = hoistedMap.remove(instruction.getMarker());
+                if (hoisted != null) {
+                    removeInstruction(hoisted);
+                    LogicInstruction copy = hoisted.withContext(instruction.getAstContext());
+                    insertInstruction(iterator.previousIndex(), copy);
+                }
+            }
+        }
+    }
+
     private OptimizationResult unrollLoop(AstContext loop, LogicVariable loopControlVariable, int loops, int costLimit) {
-        optimizationContext.addUnrolledVariable(loopControlVariable);
+        unhoistLoop(loop);
         List<LogicList> initContexts = initInstructionContexts(loop);
         List<LogicList> iterationContexts = iterationInstructionContexts(loop);
 
@@ -414,6 +452,7 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     private OptimizationResult unrollListLoop(AstContext loop, int costLimit) {
+        unhoistLoop(loop);
         List<AstContext> leading = loop.findSubcontexts(ITR_LEADING);
         List<AstContext> trailing = loop.findSubcontexts(ITR_TRAILING);
         if (leading.size() != trailing.size()) {

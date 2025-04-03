@@ -91,4 +91,12 @@ public interface LogicInstruction extends MlogInstruction {
     default LogicInstruction setSideEffects(SideEffects sideEffects) {
         return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
     }
+
+    default boolean isHoisted() {
+        return (boolean) getInfo(InstructionInfo.HOISTED);
+    }
+
+    default LogicInstruction setHoisted(boolean hoisted) {
+        return setInfo(InstructionInfo.HOISTED, hoisted);
+    }
 }

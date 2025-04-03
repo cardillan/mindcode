@@ -630,6 +630,35 @@ op add :j :j 1
 jump 4 lessThan :j MAX
 ```
 
+The optimization affect even instructions setting up parameters or return addresses for stackless function calls and array access:   
+
+```Mindcode
+noinline def foo(x)
+    print(x);
+end;
+
+for i in 0 ... @links do
+    foo("Huzzah!");
+end;
+```
+
+compiles into
+
+```mlog
+set :i 0
+set :foo.0:x "Huzzah!"
+set :foo.0*retaddr 5
+jump 0 greaterThanEq 0 @links
+jump 8 always 0 0
+op add :i :i 1
+jump 4 lessThan :i @links
+end
+print :foo.0:x
+set @counter :foo.0*retaddr
+```
+
+Hoisting the instructions setting up return addresses is not possible when [`symbolic-labels`](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`.
+
 Loop Hoisting is capable of handling some `if` expressions as well:
 
 ```Mindcode
@@ -660,7 +689,7 @@ print "end"
 
 At this moment, the following limitations apply:
 
-* If the loop contains a stackless or recursive function call, global variables that might be modified by that function call are marked as loop dependent and expressions based on them aren't hoisted, since the compiler must assume the value of the global variable would potentially change inside these functions.
+* If the loop contains a stackless or recursive function call, global variables that might be modified by that function call are marked as loop dependent and expressions based on them aren't hoisted, since the compiler assumes the value of the global variable may change inside these functions.
 * `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested in a function call (such as `print(x < 0 ? "positive" : "negative");`), it won't be optimized.   
 
 ## Loop Optimization

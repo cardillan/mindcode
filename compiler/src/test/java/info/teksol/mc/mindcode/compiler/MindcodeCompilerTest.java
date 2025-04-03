@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import java.nio.file.Path;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.PRINT;
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.SPAWN;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -102,6 +103,15 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
                         print(-(a + 1));
                         """,
                 createInstruction(PRINT, "-3022415642550011")
+        );
+    }
+
+    @Test
+    void compilesSpawnInstruction() {
+        assertCompilesTo("""
+                        spawn(@flare, @thisx, @thisy, 0, @sharded);
+                        """,
+                createInstruction(SPAWN, "@flare", "@thisx", "@thisy", "0", "@sharded", "0")
         );
     }
 

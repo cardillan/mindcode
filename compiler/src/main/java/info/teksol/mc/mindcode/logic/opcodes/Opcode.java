@@ -47,7 +47,7 @@ public enum Opcode {
     // WORLD
     GETBLOCK        ("getblock",        "Get tile data at any location."),
     SETBLOCK        ("setblock",        "Set tile data at any location."),
-    SPAWN           ( "spawn",          "Spawn unit at a location."),
+    SPAWN           (false, "spawn", "Spawn unit at a location."),
     STATUS          ("status",          "Apply or clear a status effect from a unit."),
     WEATHERSENSE    ("weathersense",    "Check if a type of weather is active."),
     WEATHERSET      ("weatherset",      "Set the current state of a type of weather."),

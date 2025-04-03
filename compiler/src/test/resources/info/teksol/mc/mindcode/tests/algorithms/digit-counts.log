@@ -4,6 +4,7 @@
      1 instructions eliminated by Jump Optimization (6 iterations).
     27 instructions eliminated by Expression Optimization (5 iterations).
     34 instructions eliminated by Data Flow Optimization (5 passes, 17 iterations).
+     1 loops improved by Loop Hoisting.
      1 instructions eliminated by Loop Optimization (5 iterations).
      2 loops improved by Loop Optimization.
     35 instructions added by Loop Unrolling (7 iterations).
@@ -790,6 +791,25 @@ Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 3 (-2
     46 label *label109
     47 op idiv :countDigits.0:number :countDigits.0:number 10
 
+Modifications by Iterated phase, Loop Hoisting, pass 4, iteration 1:
+ 
+    34 jump *label15 greaterThanEq 0 LIMIT
+    35 label *label24
+    36 set :countDigits.0:number :i
++   37 setaddr .array*rret *label108
++   38 setaddr .array*wret *label109
+    39 label *label17
+    40 op mod *tmp2 :countDigits.0:number 10
+-    * setaddr .array*rret *label108
+    41 op mul *tmp8 *tmp2 2
+    42 multicall *label86 *tmp8
+    43 label *label108
+    44 op add .array*w .array*r 1
+-    * setaddr .array*wret *label109
+    45 multicall *label97 *tmp8
+    46 label *label109
+    47 op idiv :countDigits.0:number :countDigits.0:number 10
+
 Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
  
    126 multilabel *label95
@@ -868,14 +888,14 @@ set :i 0
 jump *label15 greaterThanEq 0 LIMIT
 label *label24
 set :countDigits.0:number :i
+setaddr .array*rret *label108
+setaddr .array*wret *label109
 label *label17
 op mod *tmp2 :countDigits.0:number 10
-setaddr .array*rret *label108
 op mul *tmp8 *tmp2 2
 multicall *label86 *tmp8
 label *label108
 op add .array*w .array*r 1
-setaddr .array*wret *label109
 multicall *label97 *tmp8
 label *label109
 op idiv :countDigits.0:number :countDigits.0:number 10

@@ -54,10 +54,9 @@ class OptimizationContext {
     /// Holds evaluation of first loop condition variables for loop optimizer.
     private final Map<AstContext, VariableStates> loopVariables = new HashMap<>();
 
+    /// Variables affected by added, removed or changed instructions are added to the stale list
+    /// The information collected by DFO about these variables is unusable.
     private final Set<LogicVariable> staleVariables = new HashSet<>();
-
-    /// List of variables that serve as a loop control variable in at least one unrolled loop.
-    private final Set<LogicVariable> unrolledVariables = new HashSet<>();
 
     /// Set of variables which were detected as uninitialized.
     private final Set<LogicVariable> uninitializedVariables = new HashSet<>();
@@ -514,14 +513,6 @@ class OptimizationContext {
     public boolean isActive(LogicLabel label) {
         List<LogicInstruction> references = labelReferences.get(label);
         return references != null && !references.isEmpty();
-    }
-
-    public boolean isUnrolledVariable(LogicVariable variable) {
-        return unrolledVariables.contains(variable);
-    }
-
-    public void addUnrolledVariable(LogicVariable variable) {
-        unrolledVariables.add(variable);
     }
 
     public Set<LogicVariable> getUninitializedVariables() {

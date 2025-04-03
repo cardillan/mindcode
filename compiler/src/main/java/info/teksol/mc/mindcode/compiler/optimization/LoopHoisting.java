@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicLi
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -83,6 +84,7 @@ class LoopHoisting extends BaseOptimizer {
             AstContext initContext = getInitContext(loop);
             LogicList instructions = buildLogicList(initContext,
                     invariants.stream().map(ix -> ix.withContext(initContext)).toList());
+            instructions.stream().filter(ix -> ix.getOpcode() == Opcode.SETADDR).forEach(ix -> ix.setHoisted(true));
 
             int index = firstInstructionIndex(anchor);
             insertInstructions(index, instructions);
@@ -102,6 +104,7 @@ class LoopHoisting extends BaseOptimizer {
                 AstContext bodyContext = getInitContext(loop).createChild(invariant.getProfile(), invariant.node(), invariant.contextType());
                 LogicList original = contextInstructions(invariant);
                 LogicList duplicated = original.duplicateToContext(bodyContext);
+                duplicated.stream().filter(ix -> ix.getOpcode() == Opcode.SETADDR).forEach(ix -> ix.setHoisted(true));
                 int index = firstInstructionIndex(anchor);
                 insertInstructions(index, duplicated);
                 original.forEach(this::removeInstruction);
@@ -185,7 +188,14 @@ class LoopHoisting extends BaseOptimizer {
             instruction.outputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
                     .map(LogicVariable.class::cast)
-                    .forEach(arg -> dependencies.computeIfAbsent(arg, a -> new HashSet<>()).addAll(inputs));
+                    .forEach(arg -> {
+                        // This is a bit risky. We assume temporary variables are used just once
+                        if (!arg.isTemporaryVariable() && dependencies.containsKey(arg)) {
+                            dependencies.get(arg).add(arg);
+                        } else {
+                            dependencies.computeIfAbsent(arg, a -> new HashSet<>()).addAll(inputs);
+                        }
+                    });
         } else {
             // This instruction isn't loop independent: it's unsafe, nondeterministic or nonlinear.
             // Add output variables as depending on themselves, removing their invariant status

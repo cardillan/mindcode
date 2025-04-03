@@ -26,6 +26,8 @@ class JumpThreading extends BaseOptimizer {
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
         try (LogicIterator it = createIterator()) {
+            if (!it.hasNext()) return false;
+
             it.add(createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
             while (it.hasNext()) {
                 LogicInstruction instruction = it.next();

@@ -8,14 +8,17 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
+import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ReturnInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
@@ -198,8 +201,9 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
+        Optional<LogicInstruction> cix = contextStream(call.parent()).filter(ix -> ix.getOpcode() == Opcode.CALL).findFirst();
         MindcodeFunction function = call.existingFunction();
-        if (function.isRecursive() || function.isInline()) {
+        if (cix.isEmpty() || function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
         }
 
@@ -223,6 +227,7 @@ class FunctionInliner extends BaseOptimizer {
         insertInstructions(insertionPoint, newBody);
         // Remove original call instructions
         removeMatchingInstructions(ix -> ix.belongsTo(call));
+        removeMatchingInstructions(ix -> ix.getMarker().equals(cix.get().getMarker()));
 
         count += 1;
         return OptimizationResult.REALIZED;

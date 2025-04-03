@@ -199,7 +199,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
-                consumer.accept(processor.createSetAddress(astContext, readRet, returnLabel));
+                consumer.accept(processor.createSetAddress(astContext, readRet, returnLabel).setMarker(marker));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO));
                 generateBoundsCheck(astContext, consumer, temp, 2);
                 consumer.accept(processor.createMultiCall(astContext, target, temp, marker).setSideEffects(rix.getSideEffects()));
@@ -208,7 +208,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
             }
 
             case WriteArrInstruction wix -> {
-                consumer.accept(processor.createSetAddress(astContext, writeRet, returnLabel));
+                consumer.accept(processor.createSetAddress(astContext, writeRet, returnLabel).setMarker(marker));
                 consumer.accept(processor.createSet(astContext, writeVal, wix.getValue()));
                 consumer.accept(processor.createOp(astContext, Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO));
                 generateBoundsCheck(astContext, consumer, temp, 2);

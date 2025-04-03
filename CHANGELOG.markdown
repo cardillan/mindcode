@@ -9,6 +9,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed some command-line options not having an effect in the command-line tool ([#231](https://github.com/cardillan/mindcode/issues/231)).
+* Fixed wrong handling or hoisted set instruction setting up return address in subsequent loop unrolling ([#234](https://github.com/cardillan/mindcode/issues/234)).
+* Fixed optimizations removing the `spawn` instruction when the output value was not used ([#236](https://github.com/cardillan/mindcode/issues/236)).
 
 ### Added
 
@@ -18,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for handling numerical literal values unsupported by Mindustry Logic (namely, `-2147483648`). When a numerical literal or constant expression has this value, a compile-time error is generated. 
 * Added a suggestion of the closest matching alternative when an unknown compiler directive or option value is found.
 * Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).
+* Added support for handling instructions setting up return addresses for function calls to Loop Hoisting optimizer. 
 
 #### Experimental features
 
@@ -55,7 +58,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed the _Start with a new schematic_ button causing HTTP 404.
 * Fixed the schematics decompiler incorrectly processing factories with no unit plan selected.
-* Fixed wrong values of  `@blockCount`, `@unitCount`, `@itemCount` and `@liquidCount` variables in processor emulator (currently assigned values correspond to Mindustry Logic 8 regardless of the compiler target). 
+* Fixed wrong values of `@blockCount`, `@unitCount`, `@itemCount` and `@liquidCount` variables in processor emulator (currently assigned values correspond to Mindustry Logic 8 regardless of the compiler target). 
 
 ### Added
 

@@ -45,22 +45,23 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccess() {
             assertCompilesTo(
                     createCode(RuntimeChecks.NONE, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
                     createInstruction(SET, ".a*1", "2"),
                     createInstruction(SET, ".a*2", "3"),
                     createInstruction(SET, ":i", "0"),
+                    createInstruction(SET, ".a*rret", "11"),
+                    createInstruction(SET, ".a*wret", "14"),
                     createInstruction(JUMP, "16", "greaterThanEq", "0", "LIMIT"),
                     createInstruction(OP, "sub", tmp(2), ":i", "1"),
-                    createInstruction(SET, ".a*rret", "10"),
                     createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
                     createInstruction(OP, "add", "@counter", "20", tmp(5)),
                     createInstruction(SET, ".a*w", ".a*r"),
-                    createInstruction(SET, ".a*wret", "14"),
                     createInstruction(OP, "mul", tmp(6), ":i", "2"),
                     createInstruction(OP, "add", "@counter", "26", tmp(6)),
                     createInstruction(OP, "add", ":i", ":i", "1"),
-                    createInstruction(JUMP, "6", "lessThan", ":i", "LIMIT"),
+                    createInstruction(JUMP, "8", "lessThan", ":i", "LIMIT"),
                     createInstruction(PRINT, ".a*0"),
                     createInstruction(PRINT, ".a*1"),
                     createInstruction(PRINT, ".a*2"),
@@ -85,24 +86,25 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckAssert() {
             assertCompilesTo(
                     createCode(RuntimeChecks.ASSERT, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
                     createInstruction(SET, ".a*1", "2"),
                     createInstruction(SET, ".a*2", "3"),
                     createInstruction(SET, ":i", "0"),
+                    createInstruction(SET, ".a*rret", "12"),
+                    createInstruction(SET, ".a*wret", "16"),
                     createInstruction(JUMP, "18", "greaterThanEq", "0", "LIMIT"),
                     createInstruction(OP, "sub", tmp(2), ":i", "1"),
-                    createInstruction(SET, ".a*rret", "11"),
                     createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(5), "lessThanEq", "4", q("position 7:12: index out of bounds (0 to 2)")),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(5), "lessThanEq", "4", q("position 10:12: index out of bounds (0 to 2)")),
                     createInstruction(OP, "add", "@counter", "22", tmp(5)),
                     createInstruction(SET, ".a*w", ".a*r"),
-                    createInstruction(SET, ".a*wret", "16"),
                     createInstruction(OP, "mul", tmp(6), ":i", "2"),
-                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(6), "lessThanEq", "4", q("position 7:5: index out of bounds (0 to 2)")),
+                    createInstruction(ASSERT_BOUNDS, "multiple", "2", "0", "lessThanEq", tmp(6), "lessThanEq", "4", q("position 10:5: index out of bounds (0 to 2)")),
                     createInstruction(OP, "add", "@counter", "28", tmp(6)),
                     createInstruction(OP, "add", ":i", ":i", "1"),
-                    createInstruction(JUMP, "6", "lessThan", ":i", "LIMIT"),
+                    createInstruction(JUMP, "8", "lessThan", ":i", "LIMIT"),
                     createInstruction(PRINT, ".a*0"),
                     createInstruction(PRINT, ".a*1"),
                     createInstruction(PRINT, ".a*2"),
@@ -127,26 +129,27 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckMinimal() {
             assertCompilesTo(
                     createCode(RuntimeChecks.MINIMAL, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
                     createInstruction(SET, ".a*1", "2"),
                     createInstruction(SET, ".a*2", "3"),
                     createInstruction(SET, ":i", "0"),
+                    createInstruction(SET, ".a*rret", "13"),
+                    createInstruction(SET, ".a*wret", "18"),
                     createInstruction(JUMP, "20", "greaterThanEq", "0", "LIMIT"),
                     createInstruction(OP, "sub", tmp(2), ":i", "1"),
-                    createInstruction(SET, ".a*rret", "12"),
                     createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
-                    createInstruction(JUMP, "9", "lessThan", tmp(5), "0"),
-                    createInstruction(JUMP, "10", "greaterThan", tmp(5), "4"),
+                    createInstruction(JUMP, "10", "lessThan", tmp(5), "0"),
+                    createInstruction(JUMP, "11", "greaterThan", tmp(5), "4"),
                     createInstruction(OP, "add", "@counter", "24", tmp(5)),
                     createInstruction(SET, ".a*w", ".a*r"),
-                    createInstruction(SET, ".a*wret", "18"),
                     createInstruction(OP, "mul", tmp(6), ":i", "2"),
                     createInstruction(JUMP, "15", "lessThan", tmp(6), "0"),
                     createInstruction(JUMP, "16", "greaterThan", tmp(6), "4"),
                     createInstruction(OP, "add", "@counter", "30", tmp(6)),
                     createInstruction(OP, "add", ":i", ":i", "1"),
-                    createInstruction(JUMP, "6", "lessThan", ":i", "LIMIT"),
+                    createInstruction(JUMP, "8", "lessThan", ":i", "LIMIT"),
                     createInstruction(PRINT, ".a*0"),
                     createInstruction(PRINT, ".a*1"),
                     createInstruction(PRINT, ".a*2"),
@@ -171,28 +174,29 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckSimple() {
             assertCompilesTo(
                     createCode(RuntimeChecks.SIMPLE, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
                     createInstruction(SET, ".a*1", "2"),
                     createInstruction(SET, ".a*2", "3"),
                     createInstruction(SET, ":i", "0"),
+                    createInstruction(SET, ".a*rret", "14"),
+                    createInstruction(SET, ".a*wret", "20"),
                     createInstruction(JUMP, "22", "greaterThanEq", "0", "LIMIT"),
                     createInstruction(OP, "sub", tmp(2), ":i", "1"),
-                    createInstruction(SET, ".a*rret", "13"),
                     createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
-                    createInstruction(JUMP, "11", "lessThan", tmp(5), "0"),
-                    createInstruction(JUMP, "12", "lessThanEq", tmp(5), "4"),
+                    createInstruction(JUMP, "12", "lessThan", tmp(5), "0"),
+                    createInstruction(JUMP, "13", "lessThanEq", tmp(5), "4"),
                     createInstruction(STOP),
                     createInstruction(OP, "add", "@counter", "26", tmp(5)),
                     createInstruction(SET, ".a*w", ".a*r"),
-                    createInstruction(SET, ".a*wret", "20"),
                     createInstruction(OP, "mul", tmp(6), ":i", "2"),
                     createInstruction(JUMP, "18", "lessThan", tmp(6), "0"),
                     createInstruction(JUMP, "19", "lessThanEq", tmp(6), "4"),
                     createInstruction(STOP),
                     createInstruction(OP, "add", "@counter", "32", tmp(6)),
                     createInstruction(OP, "add", ":i", ":i", "1"),
-                    createInstruction(JUMP, "6", "lessThan", ":i", "LIMIT"),
+                    createInstruction(JUMP, "8", "lessThan", ":i", "LIMIT"),
                     createInstruction(PRINT, ".a*0"),
                     createInstruction(PRINT, ".a*1"),
                     createInstruction(PRINT, ".a*2"),
@@ -217,22 +221,23 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckDescribed() {
             assertCompilesTo(
                     createCode(RuntimeChecks.DESCRIBED, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
                     createInstruction(SET, ".a*1", "2"),
                     createInstruction(SET, ".a*2", "3"),
                     createInstruction(SET, ":i", "0"),
+                    createInstruction(SET, ".a*rret", "15"),
+                    createInstruction(SET, ".a*wret", "22"),
                     createInstruction(JUMP, "24", "greaterThanEq", "0", "LIMIT"),
                     createInstruction(OP, "sub", tmp(2), ":i", "1"),
-                    createInstruction(SET, ".a*rret", "14"),
                     createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
-                    createInstruction(JUMP, "11", "lessThan", tmp(5), "0"),
-                    createInstruction(JUMP, "13", "lessThanEq", tmp(5), "4"),
+                    createInstruction(JUMP, "12", "lessThan", tmp(5), "0"),
+                    createInstruction(JUMP, "14", "lessThanEq", tmp(5), "4"),
                     createInstruction(PRINT, q("position 10:12: index out of bounds (0 to 2)")),
                     createInstruction(STOP),
                     createInstruction(OP, "add", "@counter", "28", tmp(5)),
                     createInstruction(SET, ".a*w", ".a*r"),
-                    createInstruction(SET, ".a*wret", "22"),
                     createInstruction(OP, "mul", tmp(6), ":i", "2"),
                     createInstruction(JUMP, "19", "lessThan", tmp(6), "0"),
                     createInstruction(JUMP, "21", "lessThanEq", tmp(6), "4"),
@@ -240,7 +245,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                     createInstruction(STOP),
                     createInstruction(OP, "add", "@counter", "34", tmp(6)),
                     createInstruction(OP, "add", ":i", ":i", "1"),
-                    createInstruction(JUMP, "6", "lessThan", ":i", "LIMIT"),
+                    createInstruction(JUMP, "8", "lessThan", ":i", "LIMIT"),
                     createInstruction(PRINT, ".a*0"),
                     createInstruction(PRINT, ".a*1"),
                     createInstruction(PRINT, ".a*2"),
@@ -270,6 +275,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccess() {
             assertCompilesTo(
                     createCode(RuntimeChecks.NONE, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
@@ -294,6 +300,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckAssert() {
             assertCompilesTo(
                     createCode(RuntimeChecks.ASSERT, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
@@ -320,6 +327,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckMinimal() {
             assertCompilesTo(
                     createCode(RuntimeChecks.MINIMAL, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
@@ -348,6 +356,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckSimple() {
             assertCompilesTo(
                     createCode(RuntimeChecks.SIMPLE, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
@@ -378,6 +387,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         void expandsArrayAccessWithBoundCheckDescribed() {
             assertCompilesTo(
                     createCode(RuntimeChecks.DESCRIBED, external),
+
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
@@ -403,6 +413,77 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, tmp(1)),
                     createInstruction(READ, tmp(2), "cell1", "2"),
                     createInstruction(PRINT, tmp(2))
+            );
+        }
+    }
+
+    @Nested
+    class LoopHoistingTest {
+
+        @Test
+        void expandsLoopWithArrayAccess() {
+            // This test is set up to perform loop hoisting first (which hoists the instructions setting
+            // return addresses for the array element access), and loop unrolling second. The loop unrolling
+            // must copy the setaddr instructions back into the loop. The order of the instruction matters!
+            assertCompilesTo("""
+                    #set instruction-limit = 50;
+                    #set array-optimization = none;
+
+                    const SIZE = 4;
+                    var a[SIZE];
+    
+                    for i in 0 ... 3 do
+                        a[floor(rand(SIZE))]++;
+                    end;
+    
+                    print(a);
+                    """,
+                    createInstruction(OP, "rand", tmp(0), "4"),
+                    createInstruction(OP, "floor", tmp(2), tmp(0)),
+                    createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
+                    createInstruction(SET, ".a*rret", "5"),
+                    createInstruction(OP, "add", "@counter", "29", tmp(5)),
+                    createInstruction(OP, "add", ".a*w", ".a*r", "1"),
+                    createInstruction(SET, ".a*wret", "8"),
+                    createInstruction(OP, "add", "@counter", "37", tmp(5)),
+                    createInstruction(OP, "rand", tmp(0), "4"),
+                    createInstruction(OP, "floor", tmp(2), tmp(0)),
+                    createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
+                    createInstruction(SET, ".a*rret", "13"),
+                    createInstruction(OP, "add", "@counter", "29", tmp(5)),
+                    createInstruction(OP, "add", ".a*w", ".a*r", "1"),
+                    createInstruction(SET, ".a*wret", "16"),
+                    createInstruction(OP, "add", "@counter", "37", tmp(5)),
+                    createInstruction(OP, "rand", tmp(0), "4"),
+                    createInstruction(OP, "floor", tmp(2), tmp(0)),
+                    createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
+                    createInstruction(SET, ".a*rret", "21"),
+                    createInstruction(OP, "add", "@counter", "29", tmp(5)),
+                    createInstruction(OP, "add", ".a*w", ".a*r", "1"),
+                    createInstruction(SET, ".a*wret", "24"),
+                    createInstruction(OP, "add", "@counter", "37", tmp(5)),
+                    createInstruction(PRINT, ".a*0"),
+                    createInstruction(PRINT, ".a*1"),
+                    createInstruction(PRINT, ".a*2"),
+                    createInstruction(PRINT, ".a*3"),
+                    createInstruction(END),
+                    createInstruction(SET, ".a*r", ".a*0"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*r", ".a*1"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*r", ".a*2"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*r", ".a*3"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*0", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
+                    createInstruction(SET, ".a*1", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
+                    createInstruction(SET, ".a*2", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
+                    createInstruction(SET, ".a*3", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
+                    createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
             );
         }
     }

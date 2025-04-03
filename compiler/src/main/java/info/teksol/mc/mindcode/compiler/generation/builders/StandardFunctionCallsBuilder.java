@@ -228,13 +228,14 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         setupFunctionParameters(function, arguments, false);
         final boolean isVoid = function.isVoid();
 
-        assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
         LogicVariable retAddr = LogicVariable.fnRetAddr(functionPrefix);
         if (profile.isSymbolicLabels()) {
+            assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
             assembler.createCallStackless(function.getLabel(), retAddr,LogicVariable.fnRetVal(function));
         } else {
             final LogicLabel returnLabel = assembler.nextLabel();
             assembler.createSetAddress(retAddr, returnLabel).setMarker(returnLabel);
+            assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
             // We're putting INVALID as retAddr: in no symbolic labels mode, the CALL instruction doesn't
             // set function return address, it is set up separately by the previous instruction
             assembler.createCallStackless(function.getLabel(), LogicVariable.INVALID,LogicVariable.fnRetVal(function))
