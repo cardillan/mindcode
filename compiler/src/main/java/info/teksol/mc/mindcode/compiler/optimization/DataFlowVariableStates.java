@@ -347,7 +347,7 @@ class DataFlowVariableStates {
         /// by being stored on the stack.
         ///
         /// @param variable variable to reset
-        public void valueReset(LogicVariable variable) {
+        public void valueReset(LogicVariable variable, boolean markInitialized) {
             modifications++;
             if (stored.contains(variable)) {
                 trace(() -> "Variable " + variable.toMlog() + " not reset after function call, because it is stored on stack.");
@@ -357,6 +357,7 @@ class DataFlowVariableStates {
                 reads.remove(variable);
                 invalidateVariable(variable);
                 definitions.computeIfAbsent(variable, v -> new Definition(variable, optimizer.getCounter())).inexact = true;
+                if (markInitialized) markInitialized(variable);
             }
         }
 
@@ -367,7 +368,7 @@ class DataFlowVariableStates {
         public void updateAfterFunctionCall(MindcodeFunction function, @Nullable LogicInstruction instruction) {
             modifications++;
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false, true));
-            optimizationContext.getFunctionWrites(function).forEach(this::valueReset);
+            optimizationContext.getFunctionWrites(function).forEach(variable -> valueReset(variable, false));
             function.getParameters().stream().filter(FunctionParameter::isOutput).map(LogicVariable.class::cast).forEach(initialized::add);
             initialized.add(LogicVariable.fnRetVal(function));
         }

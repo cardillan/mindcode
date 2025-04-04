@@ -31,6 +31,10 @@ public class LogicArray extends AbstractArgument {
         return array.getElements();
     }
 
+    public int getSize() {
+        return array.getSize();
+    }
+
     public static LogicArray create(ArrayStore array) {
         return new LogicArray(array, "[]");
     }

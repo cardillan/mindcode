@@ -33,11 +33,13 @@ public class LocalContextfulInstructionsCreator extends AbstractMessageEmitter i
     public void pushContext(AstContextType contextType, AstSubcontextType subcontextType) {
         assert astContext.node() != null;
         astContext = astContext.createChild(astContext.getProfile(), astContext.node(), contextType, subcontextType);
+        subcontextTypeSet = false;
     }
 
     public void popContext() {
         assert astContext.parent() != null;
         astContext = astContext.parent();
+        subcontextTypeSet = true;
     }
 
     public void setSubcontextType(AstSubcontextType subcontextType, double multiplier) {

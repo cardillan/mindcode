@@ -116,7 +116,7 @@ public class LogicInstructionLabelResolver {
 
     public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, List<LogicArgument> initVariables) {
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
-                .createSubcontext(AstContextType.ARRAY_INIT, AstSubcontextType.BASIC, 1.0);
+                .createSubcontext(AstContextType.CREATE_VARS, AstSubcontextType.BASIC, 1.0);
 
         if (program.isEmpty()) {
             return createVariables(astContext, initVariables);
@@ -151,8 +151,7 @@ public class LogicInstructionLabelResolver {
         }
 
         if (addSignature && profile.isSignature() && program.size() < profile.getInstructionLimit()) {
-            program.add(processor.createPrint(last.getAstContext(),
-                    LogicString.create(CompilerProfile.SIGNATURE)));
+            program.add(processor.createPrint(last.getAstContext(), LogicString.create(CompilerProfile.SIGNATURE)));
         }
 
         return program;

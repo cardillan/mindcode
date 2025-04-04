@@ -25,12 +25,12 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 /// Inlines functions
 @NullMarked
 class FunctionInliner extends BaseOptimizer {
+    private int invocations = 0;
+    private int count = 0;
+
     public FunctionInliner(OptimizationContext optimizationContext) {
         super(Optimization.FUNCTION_INLINING, optimizationContext);
     }
-
-    private int invocations = 0;
-    private int count = 0;
 
     @Override
     public void generateFinalMessages() {

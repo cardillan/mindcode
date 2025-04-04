@@ -1,19 +1,20 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
-import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.RuntimeChecks;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
@@ -32,10 +33,43 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         this.arrayStore = instruction.getArray().getArrayStore();
     }
 
-    protected Stream<LogicVariable> arrayElements() {
+    protected List<LogicVariable> arrayElements() {
         return arrayStore.getElements().stream()
                 .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast);
+                .map(LogicVariable.class::cast)
+                .toList();
+    }
+
+    protected List<LogicVariable> arrayElementsConcat(Stream<LogicVariable> variables) {
+        return Stream.concat(variables,
+                arrayStore.getElements().stream()
+                        .filter(LogicVariable.class::isInstance)
+                        .map(LogicVariable.class::cast)
+        ).toList();
+    }
+
+    protected LogicVariable transferVariable(AccessType accessType) {
+        return LogicVariable.INVALID;
+    }
+
+    public String getJumpTableId(AccessType accessType) {
+        return "";
+    }
+
+    protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
+            Runnable createExit) {
+        LogicLabel nextLabel = firstLabel;
+
+        for (ValueStore element : arrayStore.getElements()) {
+            creator.createMultiLabel(nextLabel, marker);
+            switch (instruction) {
+                case ReadArrInstruction rix -> element.readValue(creator, transferVariable(AccessType.READ));
+                case WriteArrInstruction wix -> element.setValue(creator, transferVariable(AccessType.WRITE));
+                default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
+            }
+            createExit.run();
+            nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
+        }
     }
 
     protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {

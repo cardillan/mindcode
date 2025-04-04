@@ -10,6 +10,7 @@ import java.util.function.Function;
 public enum ArrayOrganization {
     NONE                ("none",        null),
     INTERNAL_REGULAR    ("regular",     RegularArrayConstructor::new),
+    INTERNAL_INLINED    ("inlined",     InlinedArrayConstructor::new),
     INTERNAL_SIZE1      ("short:1",     ArraySize1Constructor::new),
     INTERNAL_SIZE2      ("short:2",     ArraySize2Constructor::new),
     INTERNAL_SIZE3      ("short:3",     ArraySize3Constructor::new),

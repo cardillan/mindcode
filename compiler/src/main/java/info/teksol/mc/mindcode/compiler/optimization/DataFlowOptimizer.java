@@ -281,7 +281,7 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// @param context context to process
     private void processTopContext(AstContext context) {
         // Jump tables. Nothing to optimize here; on the contrary, they must not be disturbed.
-        if (context.matches(AstContextType.ARRAY_READ) || context.matches(AstContextType.ARRAY_WRITE)) {
+        if (context.matches(AstContextType.JUMPS)) {
             return;
         }
 
@@ -387,6 +387,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 case EACH   -> processIterationLoopContext(context, variableStates, modifyInstructions);
                 case IF     -> processIfContext(context, variableStates, modifyInstructions);
                 case CASE   -> processCaseContext(context, variableStates, modifyInstructions);
+                case JUMPS  -> processJumpsContext(context, variableStates, modifyInstructions);
                 default     -> processDefaultContext(localContext, context, variableStates, modifyInstructions);
             };
         }
@@ -509,7 +510,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
     /// Specialized processing of a LOOP context.
     ///
-    /// @param localContext       context to process (must be a LOOP context)
+    /// @param localContext       context to process (must be an `EACH` context)
     /// @param variableStates     variable states at the beginning of the context
     /// @param modifyInstructions true if instructions may be modified in this run based on known variable states.
     ///                           Set to true when doing the second pass through current loop
@@ -686,7 +687,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
     /// Specialized processing of a CASE context.
     ///
-    /// @param localContext       context to process (must be an IF context)
+    /// @param localContext       context to process (must be an CASE context)
     /// @param variableStates     variable states at the beginning of the context
     /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
     /// @return the resulting variable states
@@ -737,6 +738,42 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
     }
 
+
+    /// Specialized processing of a JUMPS context - a jump table. The subcontext must be ARRAY.
+    /// The jump table is expected to have all its effects expressed as side effects stored in the first instruction.
+    /// This method applies these side effects and then skips the rest of the context.
+    ///
+    /// @param localContext       context to process (must be a JUMPS context)
+    /// @param variableStates     variable states at the beginning of the context
+    /// @param modifyInstructions true if instructions may be modified in this run based on known variable states
+    /// @return the resulting variable states
+    private VariableStates processJumpsContext(AstContext localContext, VariableStates variableStates, boolean modifyInstructions) {
+        assert iterator != null;
+        assert unreachables != null;
+
+        if (!iterator.hasNext()) {
+            throw new MindcodeInternalError("Unexpected empty jump table context");
+        }
+
+        // Can't use write as a side effect here, use reset instead
+        boolean reachable = !unreachables.get(iterator.nextIndex());
+        iterator.next().getSideEffects().apply(
+                variable -> variableStates.valueRead(variable, null, false, reachable),
+                variable -> variableStates.valueReset(variable, true),
+                variable -> variableStates.valueReset(variable, false));
+
+        while (iterator.hasNext()) {
+            LogicInstruction instruction = iterator.peek(0);
+            if (!instruction.belongsTo(localContext)) {
+                break;
+            }
+
+            iterator.next();
+        }
+
+        return variableStates;
+    }
+
     /// Processes instructions inside a given context. Jumps outside local context are processed by associating
     /// current variable state with target label. Local context might be the context being processed, or a parent
     /// context when jumps within that context are handled specifically (such as by processIfContext).
@@ -748,9 +785,8 @@ class DataFlowOptimizer extends BaseOptimizer {
     /// @return the resulting variable states
     private VariableStates processDefaultContext(AstContext localContext, AstContext context,
             VariableStates variableStates, boolean modifyInstructions) {
-        Objects.requireNonNull(iterator);
-        Objects.requireNonNull(unreachables);
-        Objects.requireNonNull(variableStates);
+        assert iterator != null;
+        assert unreachables != null;
 
         while (iterator.hasNext()) {
             LogicInstruction instruction = iterator.peek(0);
@@ -758,8 +794,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 break;
             }
 
-            // This needs to be done for each active context
-            // Do not move into processInstruction
+            // This needs to be done for each active context: do not move this code into processInstruction
             // Jumps inside a RETURN context are caused by the return instruction and do not leave the local context,
             // but they do break the control flow and therefore need to be handled here.
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
@@ -924,8 +959,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         instruction.getSideEffects().apply(
                 variable -> variableStates.valueRead(variable, instruction, false, reachable),
                 variable -> variableStates.valueSet(variable, instruction, null, modifyInstructions),
-                variableStates::valueReset);
-
+                variable -> variableStates.valueReset(variable, false));
 
         indentDec();
         return variableStates;

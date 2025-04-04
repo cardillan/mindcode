@@ -26,9 +26,12 @@ public enum AstContextType {
     ARRAY_ACCESS    ("HEAP"),
     ALLOCATION      ("ALOC"),
 
-    ARRAY_INIT      ("IARR"),
-    ARRAY_READ      ("RARR"),
-    ARRAY_WRITE     ("WARR"),
+    // A jump table. Not to be optimized.
+    // The jump table effects are expressed as side effects of the first instruction.
+    JUMPS           ("JUMP"),
+
+    // Variable creation context - added in label resolving phase, never optimized
+    CREATE_VARS     ("CVAR"),
     ;
 
     public final String text;

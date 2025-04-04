@@ -20,8 +20,8 @@ public class ArraySize1Constructor extends AbstractArrayConstructor {
     @Override
     public SideEffects createSideEffects(AccessType accessType) {
         return switch (accessType) {
-            case READ -> SideEffects.reads(arrayElements().toList());
-            case WRITE -> SideEffects.writes(arrayElements().toList());
+            case READ -> SideEffects.reads(arrayElements());
+            case WRITE -> SideEffects.writes(arrayElements());
         };
     }
 

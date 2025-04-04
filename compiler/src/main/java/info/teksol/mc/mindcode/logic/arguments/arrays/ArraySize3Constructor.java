@@ -27,8 +27,8 @@ public class ArraySize3Constructor extends AbstractArrayConstructor {
     @Override
     public SideEffects createSideEffects(AccessType accessType) {
         return switch (accessType) {
-            case READ -> SideEffects.reads(arrayElements().toList());
-            case WRITE -> SideEffects.writes(arrayElements().toList());
+            case READ -> SideEffects.reads(arrayElements());
+            case WRITE -> SideEffects.writes(arrayElements());
         };
     }
 
@@ -88,6 +88,7 @@ public class ArraySize3Constructor extends AbstractArrayConstructor {
         creator.setSubcontextType(AstSubcontextType.BODY, 1.0 / 3.0);
         arrayStore.getElements().get(2).readValue(creator, instruction.getResult());
         creator.popContext();
+        creator.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0 / 3.0);
         creator.createLabel(labelX);
     }
 
@@ -125,6 +126,7 @@ public class ArraySize3Constructor extends AbstractArrayConstructor {
         creator.setSubcontextType(AstSubcontextType.BODY, 1.0 / 3.0);
         arrayStore.getElements().get(2).setValue(creator, instruction.getValue());
         creator.popContext();
+        creator.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0 / 3.0);
         creator.createLabel(labelX);
     }
 }

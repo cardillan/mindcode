@@ -16,6 +16,8 @@ public interface ArrayConstructor {
 
     int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures);
 
+    String getJumpTableId(AccessType accessType);
+
     void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables);
 
     void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables);

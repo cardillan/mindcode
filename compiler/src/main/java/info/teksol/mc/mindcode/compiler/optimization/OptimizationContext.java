@@ -1211,6 +1211,7 @@ class OptimizationContext {
         /// @param offset offset relative to current position
         /// @return instruction at given offset relative to current position, or null
         public LogicInstruction peek(int offset) {
+            checkClosed();
             return instructionAt(cursor + offset);
         }
 

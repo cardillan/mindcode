@@ -5,8 +5,6 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -20,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @NullMarked
 public class RegularArrayConstructor extends AbstractArrayConstructor {
@@ -34,7 +32,6 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     public RegularArrayConstructor(ArrayAccessInstruction instruction) {
         super(instruction);
 
-        // Maybe move to InternalArray?
         String baseName = arrayStore.getName();
         readInd = LogicVariable.arrayIndex(baseName, "*rind");
         readVal = LogicVariable.arrayReadAccess(baseName);
@@ -53,20 +50,24 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private SideEffects createReadSideEffects() {
-        List<LogicVariable> elements = arrayElements().collect(Collectors.toCollection(ArrayList::new));
-        if (profile.isSymbolicLabels()) {
-            elements.add(readInd);
-        }
-        return SideEffects.of(List.copyOf(elements), List.of(), List.of(readVal));
+        List<LogicVariable> reads = arrayElementsConcat(Stream.of(readInd).filter(_ -> profile.isSymbolicLabels()));
+        return SideEffects.of(reads, List.of(), List.of(readVal));
     }
 
     private SideEffects createWriteSideEffects() {
-        List<LogicVariable> elements = arrayElements().toList();
         List<LogicVariable> reads = profile.isSymbolicLabels() ? List.of(writeVal, writeInd) : List.of(writeVal);
-        return SideEffects.of(reads, List.of(), elements);
+        return SideEffects.of(reads, List.of(), arrayElements());
     }
 
-    private String getJumpTableId(AccessType accessType) {
+    @Override
+    protected LogicVariable transferVariable(AccessType accessType) {
+        return switch (accessType) {
+            case READ -> readVal;
+            case WRITE -> writeVal;
+        };
+    }
+
+    public String getJumpTableId(AccessType accessType) {
         return switch (accessType) {
             case READ -> arrayStore.getName() + "-r";
             case WRITE -> arrayStore.getName() + "-w";
@@ -75,10 +76,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
 
     @Override
     public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
-        switch (accessType) {
-            case READ   -> jumpTables.computeIfAbsent(getJumpTableId(accessType),  _ -> buildReadJumpTable());
-            case WRITE  -> jumpTables.computeIfAbsent(getJumpTableId(accessType),  _ -> buildWriteJumpTable());
-        }
+        jumpTables.computeIfAbsent(getJumpTableId(accessType),  _ -> buildJumpTable(accessType));
     }
 
     public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
@@ -94,63 +92,25 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         return checkSize + 4;
     }
 
-    private List<LogicInstruction> buildReadJumpTable() {
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
-                .createSubcontext(AstContextType.ARRAY_READ, AstSubcontextType.BASIC, 1.0);
+    private List<LogicInstruction> buildJumpTable(AccessType accessType) {
         List<LogicInstruction> result = new ArrayList<>();
-        LogicLabel marker = processor.nextMarker();
 
-        result.add(processor.createEnd(astContext));
-        LogicLabel nextLabel = processor.nextLabel();
+        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
+                .createSubcontext(AstContextType.JUMPS, AstSubcontextType.BASIC, 1.0);
+        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, result::add);
+
+        creator.createEnd();
+        LogicLabel firstLabel = processor.nextLabel();
+        LogicLabel marker = processor.nextMarker();
 
         if (profile.isSymbolicLabels()) {
             LogicLabel startLabel = processor.nextLabel();
-            result.add(processor.createLabel(astContext, startLabel).setMarker(startLabel));
-            result.add(processor.createMultiJump(astContext, nextLabel,readInd, LogicNumber.ZERO, marker));
+            creator.createLabel(startLabel).setMarker(startLabel);
+            creator.createMultiJump(firstLabel,writeInd,LogicNumber.ZERO, marker);
         }
 
-        for (ValueStore element : arrayStore.getElements()) {
-            result.add(processor.createMultiLabel(astContext, nextLabel, marker));
-            switch (element) {
-                case LogicVariable value     -> result.add(processor.createSet(astContext, readVal, value));
-                case RemoteVariable variable -> result.add(processor.createRead(astContext, readVal,
-                        variable.getProcessor(), variable.getVariableName()));
-                default -> throw new MindcodeInternalError("Unhandled array element type");
-            }
-            result.add(processor.createReturn(astContext, readRet));
-            nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
-        }
-
-        return result;
-    }
-
-    private List<LogicInstruction> buildWriteJumpTable() {
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
-                .createSubcontext(AstContextType.ARRAY_WRITE, AstSubcontextType.BASIC, 1.0);
-        List<LogicInstruction> result = new ArrayList<>();
-        LogicLabel marker = processor.nextMarker();
-
-        result.add(processor.createEnd(astContext));
-        LogicLabel nextLabel = processor.nextLabel();
-
-        if (profile.isSymbolicLabels()) {
-            LogicLabel startLabel = processor.nextLabel();
-            result.add(processor.createLabel(astContext, startLabel).setMarker(startLabel));
-            result.add(processor.createMultiJump(astContext, nextLabel,writeInd,LogicNumber.ZERO, marker));
-        }
-
-        for (ValueStore element : arrayStore.getElements()) {
-            result.add(processor.createMultiLabel(astContext, nextLabel, marker));
-            switch (element) {
-                case LogicVariable value     -> result.add(processor.createSet(astContext, value, writeVal));
-                case RemoteVariable variable -> result.add(processor.createWrite(astContext, writeVal,
-                        variable.getProcessor(), variable.getVariableName()));
-                default -> throw new MindcodeInternalError("Unhandled array element type");
-            }
-            result.add(processor.createReturn(astContext, writeRet));
-            nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
-        }
-
+        Runnable createExit = () -> creator.createReturn(accessType == AccessType.READ ? readRet : writeRet);
+        generateJumpTable(creator, firstLabel, marker, createExit);
         return result;
     }
 
@@ -166,54 +126,58 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     private void expandInstructionSymbolicLabels(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
+        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+
         LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
         LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
-                consumer.accept(processor.createOp(astContext, Operation.MUL, readInd, instruction.getIndex(), LogicNumber.TWO));
+                creator.createOp(Operation.MUL, readInd, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, readInd, 2);
-                consumer.accept(processor.createCallStackless(astContext, address, readRet, LogicVariable.INVALID).setSideEffects(rix.getSideEffects()));
-                consumer.accept(processor.createSet(astContext, rix.getResult(), readVal));
+                creator.createCallStackless(address, readRet, LogicVariable.INVALID).setSideEffects(rix.getSideEffects());
+                creator.createSet(rix.getResult(), readVal);
             }
 
             case WriteArrInstruction wix -> {
-                consumer.accept(processor.createSet(astContext, writeVal, wix.getValue()));
-                consumer.accept(processor.createOp(astContext, Operation.MUL, writeInd, instruction.getIndex(), LogicNumber.TWO));
+                creator.createSet(writeVal, wix.getValue());
+                creator.createOp(Operation.MUL, writeInd, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, writeInd, 2);
-                consumer.accept(processor.createCallStackless(astContext, address, writeRet, LogicVariable.INVALID).setSideEffects(wix.getSideEffects()));
+                creator.createCallStackless(address, writeRet, LogicVariable.INVALID).setSideEffects(wix.getSideEffects());
             }
 
-            default -> consumer.accept(instruction);
+            default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         }
     }
 
     private void expandInstructionDirectAddress(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext();
-        LogicVariable temp = processor.nextTemp();
+        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+
+        LogicVariable temp = creator.nextTemp();
         LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
         LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
-                consumer.accept(processor.createSetAddress(astContext, readRet, returnLabel).setMarker(marker));
-                consumer.accept(processor.createOp(astContext, Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO));
+                creator.createSetAddress(readRet, returnLabel).setMarker(marker);
+                creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, temp, 2);
-                consumer.accept(processor.createMultiCall(astContext, target, temp, marker).setSideEffects(rix.getSideEffects()));
-                consumer.accept(processor.createLabel(astContext, returnLabel));
-                consumer.accept(processor.createSet(astContext, rix.getResult(), readVal));
+                creator.createMultiCall(target, temp, marker).setSideEffects(rix.getSideEffects());
+                creator.createLabel(returnLabel);
+                creator.createSet(rix.getResult(), readVal);
             }
 
             case WriteArrInstruction wix -> {
-                consumer.accept(processor.createSetAddress(astContext, writeRet, returnLabel).setMarker(marker));
-                consumer.accept(processor.createSet(astContext, writeVal, wix.getValue()));
-                consumer.accept(processor.createOp(astContext, Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO));
+                creator.createSetAddress(writeRet, returnLabel).setMarker(marker);
+                creator.createSet(writeVal, wix.getValue());
+                creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, temp, 2);
-                consumer.accept(processor.createMultiCall(astContext, target, temp, marker).setSideEffects(wix.getSideEffects()));
-                consumer.accept(processor.createLabel(astContext, returnLabel));
+                creator.createMultiCall(target, temp, marker).setSideEffects(wix.getSideEffects());
+                creator.createLabel(returnLabel);
             }
 
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");

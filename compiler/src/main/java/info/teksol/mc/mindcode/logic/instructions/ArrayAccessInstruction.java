@@ -20,4 +20,8 @@ public interface ArrayAccessInstruction extends LogicInstruction {
     ArrayConstructor getArrayConstructor();
 
     AccessType getAccessType();
+
+    default String getJumpTableId() {
+        return getArrayConstructor().getJumpTableId(getAccessType());
+    }
 }
