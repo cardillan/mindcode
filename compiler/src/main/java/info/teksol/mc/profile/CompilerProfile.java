@@ -33,6 +33,7 @@ public class CompilerProfile {
     public static final int DEFAULT_WEBAPP_PASSES = 5;
     public static final int MAX_INSTRUCTIONS = 100_000;
     public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
+    public static final int MAX_MLOG_INDENT = 8;
     public static final int MAX_PASSES = 1000;
 
     private final boolean webApplication;
@@ -50,6 +51,7 @@ public class CompilerProfile {
     private GenerationGoal goal = GenerationGoal.AUTO;
     private int instructionLimit = 1000;
     private boolean linkedBlockGuards = true;
+    private int mlogIndent = -1;
     private int optimizationPasses;
     private int parseTreeLevel = 0;
     private boolean printStackTrace = false;
@@ -203,6 +205,24 @@ public class CompilerProfile {
         return this;
     }
 
+    public boolean isLinkedBlockGuards() {
+        return linkedBlockGuards;
+    }
+
+    public CompilerProfile setLinkedBlockGuards(boolean linkedBlockGuards) {
+        this.linkedBlockGuards = linkedBlockGuards;
+        return this;
+    }
+
+    public int getMlogIndent() {
+        return mlogIndent >= 0 ? mlogIndent : symbolicLabels ? 4 : 0;
+    }
+
+    public CompilerProfile setMlogIndent(int mlogIndent) {
+        this.mlogIndent = mlogIndent;
+        return this;
+    }
+
     public OptimizationLevel getOptimizationLevel(Optimization optimization) {
         return levels.getOrDefault(optimization, OptimizationLevel.NONE);
     }
@@ -319,15 +339,6 @@ public class CompilerProfile {
 
     public CompilerProfile setAutoPrintflush(boolean autoPrintflush) {
         this.autoPrintflush = autoPrintflush;
-        return this;
-    }
-
-    public boolean isLinkedBlockGuards() {
-        return linkedBlockGuards;
-    }
-
-    public CompilerProfile setLinkedBlockGuards(boolean linkedBlockGuards) {
-        this.linkedBlockGuards = linkedBlockGuards;
         return this;
     }
 

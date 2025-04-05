@@ -62,7 +62,7 @@ public class InstructionSamplesTest {
 
         File file = new File(".." + File.separatorChar + "Instruction_Samples_" + version + ".txt");
         try (final PrintWriter w = new PrintWriter(file, StandardCharsets.UTF_8)) {
-            w.print(LogicInstructionPrinter.toString(processor, instructions, false));
+            w.print(LogicInstructionPrinter.toString(processor, instructions, false, 0));
         }
     }
 

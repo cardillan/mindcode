@@ -271,7 +271,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
 
         // Sort variables
-        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(profile, instructionProcessor);
+        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(profile, instructionProcessor, rootAstContext);
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code
@@ -287,7 +287,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         // Set of all user variables in the program
         generateUnusedVolatileWarnings();
 
-        output = LogicInstructionPrinter.toString(instructionProcessor, generateSymbolicLabels(instructions), profile.isSymbolicLabels());
+        output = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
+                profile.isSymbolicLabels(), profile.getMlogIndent());
 
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
 
@@ -315,46 +316,6 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                 .filter(Predicate.not(existing::contains))
                 .sorted(Comparator.comparing(LogicVariable::sourcePosition))
                 .forEach(v -> warn(v.sourcePosition(), WARN.VOLATILE_VARIABLE_NOT_USED, v.getName()));
-    }
-
-    private List<LogicInstruction> generateSymbolicLabels(List<LogicInstruction> instructions) {
-        if (profile.isSymbolicLabels()) {
-            final String labelPrefix = "label_";
-            assert instructionProcessor != null;
-            assert rootAstContext != null;
-
-            BitSet labels = new BitSet(instructions.size());
-            for (LogicInstruction instruction : instructions) {
-                if (instruction instanceof JumpInstruction jump) {
-                    labels.set(jump.getTarget().getAddress());
-                }
-            }
-
-            List<LogicInstruction> result = new ArrayList<>();
-            result.add(instructionProcessor.createComment(rootAstContext, "Mlog code compiled with support for symbolic labels"));
-            result.add(instructionProcessor.createComment(rootAstContext, "You can safely add/remove instructions, in most parts of the program"));
-            result.add(instructionProcessor.createComment(rootAstContext, "Pay closer attention to sections of the program manipulating @counter"));
-
-            int counter = 0;
-            for (LogicInstruction instruction : instructions) {
-                if (!(instruction instanceof CommentInstruction)) {
-                    if (labels.get(counter)) {
-                        result.add(instructionProcessor.createLabel(rootAstContext, LogicLabel.symbolic(labelPrefix + counter)));
-                    }
-
-                    counter++;
-                    if (instruction instanceof JumpInstruction jump) {
-                        result.add(jump.withTarget(LogicLabel.symbolic(labelPrefix + jump.getTarget().getAddress())));
-                        continue;
-                    }
-                }
-                result.add(instruction);
-            }
-
-            return result;
-        } else {
-            return instructions;
-        }
     }
 
     private Processor createEmulator() {

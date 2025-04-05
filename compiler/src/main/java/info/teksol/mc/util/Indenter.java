@@ -15,6 +15,7 @@ public class Indenter {
     }
 
     public String getIndent(int level) {
+        if (level < 0) throw new IllegalArgumentException("Level must be non-negative");
         if (level >= indents.size()) {
             for (int i = indents.size(); i <= level; i++) {
                 indents.add(indents.get(i - 1) + indent);

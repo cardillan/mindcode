@@ -149,7 +149,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
         ).map(LogicInstruction::toMlog).collect(Collectors.joining("\n"));
 
         String actual = LogicInstructionLabelResolver.resolve(
-                profile, ip,
+                profile, ip, mockAstRootContext,
                 List.of(
                         createInstruction(JUMP, label0, Condition.ALWAYS),
                         createInstruction(PUSH, cell1, a),

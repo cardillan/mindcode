@@ -3,11 +3,9 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
-import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -95,8 +93,8 @@ abstract class ActionHandler {
                 (profile, arguments, name) -> profile.setOptimizationPasses(arguments.getInt(name)),
                 "-e", "--passes")
                 .help("sets maximal number of optimization passes to be made")
-                .choices(Arguments.range(1, CompilerProfile.MAX_PASSES))
-                .type(Integer.class);
+                .type(Integer.class)
+                .choices(Arguments.range(1, CompilerProfile.MAX_PASSES));
 
         createArgument(container, defaults,
                 CompilerProfile::getRemarks,
@@ -112,6 +110,14 @@ abstract class ActionHandler {
                 "--symbolic-labels")
                 .help("generate symbolic labels for jump instructions where possible")
                 .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
+                _ -> -1,
+                (profile, arguments, name) -> profile.setMlogIndent(arguments.getInt(name)),
+                "--mlog-indent")
+                .help("the amount of indenting applied to logical blocks in the compiled mlog code")
+                .type(Integer.class)
+                .choices(Arguments.range(0, CompilerProfile.MAX_MLOG_INDENT));
 
         createArgument(container, defaults,
                 CompilerProfile::getBoundaryChecks,
@@ -228,9 +234,8 @@ abstract class ActionHandler {
                 (profile, arguments, name) -> profile.setDebugLevel(arguments.getInt(name)),
                 "-d", "--debug-messages")
                 .help("sets the detail level of debug messages, 0 = off")
-                .choices(Arguments.range(0, 3))
                 .type(Integer.class)
-                .setDefault(defaults.getDebugLevel());
+                .choices(Arguments.range(0, 3));
 
         createArgument(container, defaults,
                 CompilerProfile::getFinalCodeOutput,
@@ -255,61 +260,6 @@ abstract class ActionHandler {
         for (BiConsumer<CompilerProfile, Namespace> setter : optionSetters) {
             setter.accept(profile, arguments);
         }
-        return profile;
-    }
-
-    protected CompilerProfile createCompilerProfileX(Namespace arguments) {
-        CompilerProfile profile = CompilerProfile.fullOptimizations(false);
-
-        //profile.setMemoryModel(arguments.get("memory_model"));
-        profile.setAutoPrintflush(arguments.getBoolean("printflush"));
-        profile.setBoundaryChecks(arguments.get("boundary_checks"));
-        profile.setDebugLevel(arguments.getInt("debug_messages"));
-
-        ExecutionFlag.LIST.stream()
-                .filter(flag -> arguments.get(flag.name()) != null)
-                .forEachOrdered(flag -> profile.setExecutionFlag(flag, arguments.get(flag.name())));
-
-        profile.setFileReferences(arguments.get("file_references"));
-        profile.setFinalCodeOutput(arguments.get("print_unresolved"));
-        profile.setGoal(arguments.get("goal"));
-        profile.setInstructionLimit(arguments.get("instruction_limit"));
-        profile.setLinkedBlockGuards(arguments.getBoolean("link_guards"));
-
-        profile.setAllOptimizationLevels(arguments.get("optimization"));
-        Optimization.LIST.stream()
-                .filter(opt -> arguments.get(opt.name()) != null)
-                .forEachOrdered(opt -> profile.setOptimizationLevel(opt, arguments.get(opt.name())));
-
-        profile.setOptimizationPasses(arguments.get("passes"));
-        profile.setParseTreeLevel(arguments.getInt("parse_tree"));
-        profile.setPrintStackTrace(arguments.getBoolean("stacktrace"));
-
-        String target = arguments.getString("target").toLowerCase();
-        String processor = target.endsWith("w") ? target.substring(0, target.length() - 1) : target;
-        ProcessorEdition edition = target.endsWith("w") ? ProcessorEdition.W : ProcessorEdition.S;
-        profile.setProcessorVersionEdition(ProcessorVersion.byCode(processor), edition);
-
-        profile.setRemarks(arguments.get("remarks"));
-        profile.setShortFunctionPrefix(arguments.getBoolean("function_prefix"));
-        profile.setSignature(!arguments.getBoolean("no_signature"));
-
-        List<SortCategory> sortVariables = arguments.get("sort_variables");
-        if (sortVariables == null || sortVariables.isEmpty()) {
-            profile.setSortVariables(SortCategory.getAllCategories());
-        } else if (sortVariables.equals(List.of(SortCategory.NONE))) {
-            profile.setSortVariables(List.of());
-        } else {
-            profile.setSortVariables(sortVariables);
-        }
-
-        profile.setSyntacticMode(arguments.get("syntax"));
-
-        if (arguments.get("run") != null) {
-            profile.setRun(arguments.getBoolean("run"));
-            profile.setStepLimit(arguments.getInt("run_steps"));
-        }
-
         return profile;
     }
 

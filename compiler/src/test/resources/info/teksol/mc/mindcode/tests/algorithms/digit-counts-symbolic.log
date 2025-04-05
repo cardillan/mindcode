@@ -2,22 +2,42 @@
      1 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Dead Code Elimination (3 iterations).
      1 instructions eliminated by Jump Optimization (6 iterations).
-    27 instructions eliminated by Expression Optimization (5 iterations).
-    43 instructions eliminated by Data Flow Optimization (5 passes, 17 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+   180 instructions eliminated by Expression Optimization (5 iterations).
+    41 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
      1 instructions eliminated by Loop Optimization (5 iterations).
      2 loops improved by Loop Optimization.
-    43 instructions added by Loop Unrolling (7 iterations).
+   179 instructions added by Loop Unrolling (9 iterations).
      2 loops unrolled by Loop Unrolling.
-     1 instructions eliminated by Unreachable Code Elimination.
+     3 jump tables inlined by Array Optimization.
      8 instructions eliminated by Print Merging.
-    82 instructions after optimizations.
+    75 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 895):
   * Unroll iteration loop at line 7:5                            cost     0, benefit       49.0, efficiency   Infinity (-22 instructions)
     Unroll loop at line 25:5                                     cost    18, benefit      450.0, efficiency       25.0
+    Inline read jump table of array 'array'                      cost    13, benefit     1300.0, efficiency      100.0
+    Inline write jump table of array 'array'                     cost     0, benefit     1250.0, efficiency   Infinity
+    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
+    Inline array access at line 26:9                             cost    17, benefit       50.0, efficiency        2.9
+    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
 
 Pass 1: speed optimization selection (cost limit 917):
-  * Unroll loop at line 25:5                                     cost    18, benefit      450.0, efficiency       25.0 (+45 instructions)
+    Unroll loop at line 25:5                                     cost    18, benefit      450.0, efficiency       25.0
+    Inline read jump table of array 'array'                      cost    13, benefit     1300.0, efficiency      100.0
+  * Inline write jump table of array 'array'                     cost     0, benefit     1250.0, efficiency   Infinity (-4 instructions)
+    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
+    Inline array access at line 26:9                             cost    17, benefit       50.0, efficiency        2.9
+    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
+
+Pass 1: speed optimization selection (cost limit 921):
+    Unroll loop at line 25:5                                     cost    18, benefit      450.0, efficiency       25.0
+  * Inline read jump table of array 'array'                      cost    13, benefit     1300.0, efficiency      100.0 (+13 instructions)
+    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
+    Inline array access at line 26:9                             cost    17, benefit       50.0, efficiency        2.9
+
+Pass 1: speed optimization selection (cost limit 908):
+  * Unroll loop at line 25:5                                     cost     1, benefit      450.0, efficiency      450.0 (+181 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -331,7 +351,38 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     37 # "Function: void countDigits(in number)"
     38 set :countDigits.0:number :i
 
-Modifications by Unroll loop at line 25:5 (+55 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+    40 op mod *tmp2 :countDigits.0:number 10
+    41 readarr<regular> *tmp3 .array[] *tmp2
+    42 op add *tmp3 *tmp3 1
+-    * writearr<regular> *tmp3 .array[] *tmp2
++   43 writearr<inlined> *tmp3 .array[] *tmp2
+    44 op idiv :countDigits.0:number :countDigits.0:number 10
+    45 label *label20
+    46 jump *label19 greaterThan :countDigits.0:number 0
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (+13 instructions):
+ 
+    38 set :countDigits.0:number :i
+    39 label *label19
+    40 op mod *tmp2 :countDigits.0:number 10
+-    * readarr<regular> *tmp3 .array[] *tmp2
++   41 readarr<inlined> *tmp3 .array[] *tmp2
+    42 op add *tmp3 *tmp3 1
+    43 writearr<inlined> *tmp3 .array[] *tmp2
+    44 op idiv :countDigits.0:number :countDigits.0:number 10
+ 
+    57 label *label23
+    58 label *label27
+    59 print "-"
+-    * readarr<regular> *tmp7 .array[] :printArray.0:i
++   60 readarr<inlined> *tmp7 .array[] :printArray.0:i
+    61 print *tmp7
+    62 label *label24
+    63 op add :printArray.0:i :printArray.0:i 1
+
+Modifications by Unroll loop at line 25:5 (+191 instructions):
  
     53 assertflush
     54 # "Function: void printArray()"
@@ -340,7 +391,7 @@ Modifications by Unroll loop at line 25:5 (+55 instructions):
 -    * label *label23
 -    * label *label27
 -    * print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
 -    * print *tmp7
 -    * label *label24
 -    * op add :printArray.0:i :printArray.0:i 1
@@ -350,55 +401,55 @@ Modifications by Unroll loop at line 25:5 (+55 instructions):
 +   57 label *label70
 +   58 label *label71
 +   59 print "-"
-+   60 readarr<regular> *tmp7 .array[] :printArray.0:i
++   60 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +   61 print *tmp7
 +   62 label *label72
 +   63 op add :printArray.0:i :printArray.0:i 1
 +   64 label *label73
 +   65 print "-"
-+   66 readarr<regular> *tmp7 .array[] :printArray.0:i
++   66 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +   67 print *tmp7
 +   68 label *label74
 +   69 op add :printArray.0:i :printArray.0:i 1
 +   70 label *label75
 +   71 print "-"
-+   72 readarr<regular> *tmp7 .array[] :printArray.0:i
++   72 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +   73 print *tmp7
 +   74 label *label76
 +   75 op add :printArray.0:i :printArray.0:i 1
 +   76 label *label77
 +   77 print "-"
-+   78 readarr<regular> *tmp7 .array[] :printArray.0:i
++   78 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +   79 print *tmp7
 +   80 label *label78
 +   81 op add :printArray.0:i :printArray.0:i 1
 +   82 label *label79
 +   83 print "-"
-+   84 readarr<regular> *tmp7 .array[] :printArray.0:i
++   84 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +   85 print *tmp7
 +   86 label *label80
 +   87 op add :printArray.0:i :printArray.0:i 1
 +   88 label *label81
 +   89 print "-"
-+   90 readarr<regular> *tmp7 .array[] :printArray.0:i
++   90 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +   91 print *tmp7
 +   92 label *label82
 +   93 op add :printArray.0:i :printArray.0:i 1
 +   94 label *label83
 +   95 print "-"
-+   96 readarr<regular> *tmp7 .array[] :printArray.0:i
++   96 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +   97 print *tmp7
 +   98 label *label84
 +   99 op add :printArray.0:i :printArray.0:i 1
 +  100 label *label85
 +  101 print "-"
-+  102 readarr<regular> *tmp7 .array[] :printArray.0:i
++  102 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +  103 print *tmp7
 +  104 label *label86
 +  105 op add :printArray.0:i :printArray.0:i 1
 +  106 label *label87
 +  107 print "-"
-+  108 readarr<regular> *tmp7 .array[] :printArray.0:i
++  108 readarr<inlined> *tmp7 .array[] :printArray.0:i
 +  109 print *tmp7
 +  110 label *label88
 +  111 op add :printArray.0:i :printArray.0:i 1
@@ -412,72 +463,72 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     57 label *label70
     58 label *label71
     59 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+   60 readarr<regular> *tmp7 .array[] 1
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++   60 readarr<inlined> *tmp7 .array[] 1
     61 print *tmp7
     62 label *label72
 -    * op add :printArray.0:i :printArray.0:i 1
 +   63 op add :printArray.0:i 1 1
     64 label *label73
     65 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+   66 readarr<regular> *tmp7 .array[] 2
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++   66 readarr<inlined> *tmp7 .array[] 2
     67 print *tmp7
     68 label *label74
 -    * op add :printArray.0:i :printArray.0:i 1
 +   69 op add :printArray.0:i 2 1
     70 label *label75
     71 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+   72 readarr<regular> *tmp7 .array[] 3
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++   72 readarr<inlined> *tmp7 .array[] 3
     73 print *tmp7
     74 label *label76
 -    * op add :printArray.0:i :printArray.0:i 1
 +   75 op add :printArray.0:i 3 1
     76 label *label77
     77 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+   78 readarr<regular> *tmp7 .array[] 4
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++   78 readarr<inlined> *tmp7 .array[] 4
     79 print *tmp7
     80 label *label78
 -    * op add :printArray.0:i :printArray.0:i 1
 +   81 op add :printArray.0:i 4 1
     82 label *label79
     83 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+   84 readarr<regular> *tmp7 .array[] 5
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++   84 readarr<inlined> *tmp7 .array[] 5
     85 print *tmp7
     86 label *label80
 -    * op add :printArray.0:i :printArray.0:i 1
 +   87 op add :printArray.0:i 5 1
     88 label *label81
     89 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+   90 readarr<regular> *tmp7 .array[] 6
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++   90 readarr<inlined> *tmp7 .array[] 6
     91 print *tmp7
     92 label *label82
 -    * op add :printArray.0:i :printArray.0:i 1
 +   93 op add :printArray.0:i 6 1
     94 label *label83
     95 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+   96 readarr<regular> *tmp7 .array[] 7
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++   96 readarr<inlined> *tmp7 .array[] 7
     97 print *tmp7
     98 label *label84
 -    * op add :printArray.0:i :printArray.0:i 1
 +   99 op add :printArray.0:i 7 1
    100 label *label85
    101 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+  102 readarr<regular> *tmp7 .array[] 8
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++  102 readarr<inlined> *tmp7 .array[] 8
    103 print *tmp7
    104 label *label86
 -    * op add :printArray.0:i :printArray.0:i 1
 +  105 op add :printArray.0:i 8 1
    106 label *label87
    107 print "-"
--    * readarr<regular> *tmp7 .array[] :printArray.0:i
-+  108 readarr<regular> *tmp7 .array[] 9
+-    * readarr<inlined> *tmp7 .array[] :printArray.0:i
++  108 readarr<inlined> *tmp7 .array[] 9
    109 print *tmp7
    110 label *label88
 -    * op add :printArray.0:i :printArray.0:i 1
@@ -495,55 +546,55 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     56 label *label70
     57 label *label71
     58 print "-"
-    59 readarr<regular> *tmp7 .array[] 1
+    59 readarr<inlined> *tmp7 .array[] 1
     60 print *tmp7
     61 label *label72
 -    * op add :printArray.0:i 1 1
     62 label *label73
     63 print "-"
-    64 readarr<regular> *tmp7 .array[] 2
+    64 readarr<inlined> *tmp7 .array[] 2
     65 print *tmp7
     66 label *label74
 -    * op add :printArray.0:i 2 1
     67 label *label75
     68 print "-"
-    69 readarr<regular> *tmp7 .array[] 3
+    69 readarr<inlined> *tmp7 .array[] 3
     70 print *tmp7
     71 label *label76
 -    * op add :printArray.0:i 3 1
     72 label *label77
     73 print "-"
-    74 readarr<regular> *tmp7 .array[] 4
+    74 readarr<inlined> *tmp7 .array[] 4
     75 print *tmp7
     76 label *label78
 -    * op add :printArray.0:i 4 1
     77 label *label79
     78 print "-"
-    79 readarr<regular> *tmp7 .array[] 5
+    79 readarr<inlined> *tmp7 .array[] 5
     80 print *tmp7
     81 label *label80
 -    * op add :printArray.0:i 5 1
     82 label *label81
     83 print "-"
-    84 readarr<regular> *tmp7 .array[] 6
+    84 readarr<inlined> *tmp7 .array[] 6
     85 print *tmp7
     86 label *label82
 -    * op add :printArray.0:i 6 1
     87 label *label83
     88 print "-"
-    89 readarr<regular> *tmp7 .array[] 7
+    89 readarr<inlined> *tmp7 .array[] 7
     90 print *tmp7
     91 label *label84
 -    * op add :printArray.0:i 7 1
     92 label *label85
     93 print "-"
-    94 readarr<regular> *tmp7 .array[] 8
+    94 readarr<inlined> *tmp7 .array[] 8
     95 print *tmp7
     96 label *label86
 -    * op add :printArray.0:i 8 1
     97 label *label87
     98 print "-"
-    99 readarr<regular> *tmp7 .array[] 9
+    99 readarr<inlined> *tmp7 .array[] 9
    100 print *tmp7
    101 label *label88
 -    * op add :printArray.0:i 9 1
@@ -551,60 +602,60 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    103 label *label22
    104 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
 
-Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-27 instructions):
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-180 instructions):
  
     56 label *label70
     57 label *label71
     58 print "-"
--    * readarr<regular> *tmp7 .array[] 1
+-    * readarr<inlined> *tmp7 .array[] 1
 +   59 set *tmp7 .array*1
     60 print *tmp7
     61 label *label72
     62 label *label73
     63 print "-"
--    * readarr<regular> *tmp7 .array[] 2
+-    * readarr<inlined> *tmp7 .array[] 2
 +   64 set *tmp7 .array*2
     65 print *tmp7
     66 label *label74
     67 label *label75
     68 print "-"
--    * readarr<regular> *tmp7 .array[] 3
+-    * readarr<inlined> *tmp7 .array[] 3
 +   69 set *tmp7 .array*3
     70 print *tmp7
     71 label *label76
     72 label *label77
     73 print "-"
--    * readarr<regular> *tmp7 .array[] 4
+-    * readarr<inlined> *tmp7 .array[] 4
 +   74 set *tmp7 .array*4
     75 print *tmp7
     76 label *label78
     77 label *label79
     78 print "-"
--    * readarr<regular> *tmp7 .array[] 5
+-    * readarr<inlined> *tmp7 .array[] 5
 +   79 set *tmp7 .array*5
     80 print *tmp7
     81 label *label80
     82 label *label81
     83 print "-"
--    * readarr<regular> *tmp7 .array[] 6
+-    * readarr<inlined> *tmp7 .array[] 6
 +   84 set *tmp7 .array*6
     85 print *tmp7
     86 label *label82
     87 label *label83
     88 print "-"
--    * readarr<regular> *tmp7 .array[] 7
+-    * readarr<inlined> *tmp7 .array[] 7
 +   89 set *tmp7 .array*7
     90 print *tmp7
     91 label *label84
     92 label *label85
     93 print "-"
--    * readarr<regular> *tmp7 .array[] 8
+-    * readarr<inlined> *tmp7 .array[] 8
 +   94 set *tmp7 .array*8
     95 print *tmp7
     96 label *label86
     97 label *label87
     98 print "-"
--    * readarr<regular> *tmp7 .array[] 9
+-    * readarr<inlined> *tmp7 .array[] 9
 +   99 set *tmp7 .array*9
    100 print *tmp7
    101 label *label88
@@ -719,186 +770,159 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-9
     92 label *label88
     93 label *label25
 
-Modifications by Virtual Instruction Expansion (+1 instructions):
+Modifications by Virtual Instruction Expansion (+2 instructions):
  
     38 set :countDigits.0:number :i
     39 label *label19
     40 op mod *tmp2 :countDigits.0:number 10
--    * readarr<regular> *tmp3 .array[] *tmp2
-+   41 op mul .array*rind *tmp2 2
-+   42 call *label90 .array*rret *invalid
-+   43 set *tmp3 .array*r
-    44 op add *tmp3 *tmp3 1
--    * writearr<regular> *tmp3 .array[] *tmp2
-+   45 set .array*w *tmp3
-+   46 op mul .array*wind *tmp2 2
-+   47 call *label102 .array*wret *invalid
-    48 op idiv :countDigits.0:number :countDigits.0:number 10
-    49 label *label20
-    50 jump *label19 greaterThan :countDigits.0:number 0
- 
-    98 label *label22
-    99 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
-   100 end
-+  101 label *label90
-+  102 multijump *label89 .array*rind 0
-+  103 multilabel *label89
-+  104 set .array*r .array*0
-+  105 return .array*rret
-+  106 multilabel *label91
-+  107 set .array*r .array*1
-+  108 return .array*rret
-+  109 multilabel *label92
-+  110 set .array*r .array*2
-+  111 return .array*rret
-+  112 multilabel *label93
-+  113 set .array*r .array*3
-+  114 return .array*rret
-+  115 multilabel *label94
-+  116 set .array*r .array*4
-+  117 return .array*rret
-+  118 multilabel *label95
-+  119 set .array*r .array*5
-+  120 return .array*rret
-+  121 multilabel *label96
-+  122 set .array*r .array*6
-+  123 return .array*rret
-+  124 multilabel *label97
-+  125 set .array*r .array*7
-+  126 return .array*rret
-+  127 multilabel *label98
-+  128 set .array*r .array*8
-+  129 return .array*rret
-+  130 multilabel *label99
-+  131 set .array*r .array*9
-+  132 return .array*rret
-+  133 end
-+  134 label *label102
-+  135 multijump *label101 .array*wind 0
-+  136 multilabel *label101
-+  137 set .array*0 .array*w
-+  138 return .array*wret
-+  139 multilabel *label103
-+  140 set .array*1 .array*w
-+  141 return .array*wret
-+  142 multilabel *label104
-+  143 set .array*2 .array*w
-+  144 return .array*wret
-+  145 multilabel *label105
-+  146 set .array*3 .array*w
-+  147 return .array*wret
-+  148 multilabel *label106
-+  149 set .array*4 .array*w
-+  150 return .array*wret
-+  151 multilabel *label107
-+  152 set .array*5 .array*w
-+  153 return .array*wret
-+  154 multilabel *label108
-+  155 set .array*6 .array*w
-+  156 return .array*wret
-+  157 multilabel *label109
-+  158 set .array*7 .array*w
-+  159 return .array*wret
-+  160 multilabel *label110
-+  161 set .array*8 .array*w
-+  162 return .array*wret
-+  163 multilabel *label111
-+  164 set .array*9 .array*w
-+  165 return .array*wret
+-    * readarr<inlined> *tmp3 .array[] *tmp2
++   41 op mul *tmp8 *tmp2 2
++   42 multijump *label90 *tmp8 0
++   43 multilabel *label90
++   44 set *tmp3 .array*0
++   45 jump *label89 always
++   46 multilabel *label91
++   47 set *tmp3 .array*1
++   48 jump *label89 always
++   49 multilabel *label92
++   50 set *tmp3 .array*2
++   51 jump *label89 always
++   52 multilabel *label93
++   53 set *tmp3 .array*3
++   54 jump *label89 always
++   55 multilabel *label94
++   56 set *tmp3 .array*4
++   57 jump *label89 always
++   58 multilabel *label95
++   59 set *tmp3 .array*5
++   60 jump *label89 always
++   61 multilabel *label96
++   62 set *tmp3 .array*6
++   63 jump *label89 always
++   64 multilabel *label97
++   65 set *tmp3 .array*7
++   66 jump *label89 always
++   67 multilabel *label98
++   68 set *tmp3 .array*8
++   69 jump *label89 always
++   70 multilabel *label99
++   71 set *tmp3 .array*9
++   72 jump *label89 always
++   73 label *label89
+    74 op add *tmp3 *tmp3 1
+-    * writearr<inlined> *tmp3 .array[] *tmp2
++   75 op mul *tmp9 *tmp2 2
++   76 multijump *label102 *tmp9 0
++   77 multilabel *label102
++   78 set .array*0 *tmp3
++   79 jump *label101 always
++   80 multilabel *label103
++   81 set .array*1 *tmp3
++   82 jump *label101 always
++   83 multilabel *label104
++   84 set .array*2 *tmp3
++   85 jump *label101 always
++   86 multilabel *label105
++   87 set .array*3 *tmp3
++   88 jump *label101 always
++   89 multilabel *label106
++   90 set .array*4 *tmp3
++   91 jump *label101 always
++   92 multilabel *label107
++   93 set .array*5 *tmp3
++   94 jump *label101 always
++   95 multilabel *label108
++   96 set .array*6 *tmp3
++   97 jump *label101 always
++   98 multilabel *label109
++   99 set .array*7 *tmp3
++  100 jump *label101 always
++  101 multilabel *label110
++  102 set .array*8 *tmp3
++  103 jump *label101 always
++  104 multilabel *label111
++  105 set .array*9 *tmp3
++  106 jump *label101 always
++  107 label *label101
+   108 op idiv :countDigits.0:number :countDigits.0:number 10
+   109 label *label20
+   110 jump *label19 greaterThan :countDigits.0:number 0
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
+Modifications by Iterated phase, Single Step Elimination, pass 4, iteration 1 (-2 instructions):
  
-    41 op mul .array*rind *tmp2 2
-    42 call *label90 .array*rret *invalid
-    43 set *tmp3 .array*r
--    * op add *tmp3 *tmp3 1
-+   44 op add *tmp3 .array*r 1
-    45 set .array*w *tmp3
-    46 op mul .array*wind *tmp2 2
-    47 call *label102 .array*wret *invalid
+    69 jump *label89 always
+    70 multilabel *label99
+    71 set *tmp3 .array*9
+-    * jump *label89 always
+    72 label *label89
+    73 op add *tmp3 *tmp3 1
+    74 op mul *tmp9 *tmp2 2
+ 
+   102 jump *label101 always
+   103 multilabel *label111
+   104 set .array*9 *tmp3
+-    * jump *label101 always
+   105 label *label101
+   106 op idiv :countDigits.0:number :countDigits.0:number 10
+   107 label *label20
 
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
  
-    41 op mul .array*rind *tmp2 2
-    42 call *label90 .array*rret *invalid
-    43 set *tmp3 .array*r
--    * op add *tmp3 .array*r 1
--    * set .array*w *tmp3
-+   44 op add .array*w .array*r 1
-    45 op mul .array*wind *tmp2 2
-    46 call *label102 .array*wret *invalid
-    47 op idiv :countDigits.0:number :countDigits.0:number 10
-
-Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 3 (-1 instructions):
- 
-    40 op mod *tmp2 :countDigits.0:number 10
-    41 op mul .array*rind *tmp2 2
-    42 call *label90 .array*rret *invalid
--    * set *tmp3 .array*r
-    43 op add .array*w .array*r 1
-    44 op mul .array*wind *tmp2 2
-    45 call *label102 .array*wret *invalid
-
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
- 
-   128 multilabel *label99
-   129 set .array*r .array*9
-   130 return .array*rret
+   155 label *label25
+   156 label *label22
+   157 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
 -    * end
-   131 label *label102
-   132 multijump *label101 .array*wind 0
-   133 multilabel *label101
 
 Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
-    57 print .array*0
-    58 label *label70
-    59 label *label71
+   117 print .array*0
+   118 label *label70
+   119 label *label71
 -    * print "-"
 -    * print .array*1
-+   60 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
-+   61 format .array*1
-    62 label *label72
-    63 label *label73
++  120 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
++  121 format .array*1
+   122 label *label72
+   123 label *label73
 -    * print "-"
 -    * print .array*2
-+   64 format .array*2
-    65 label *label74
-    66 label *label75
++  124 format .array*2
+   125 label *label74
+   126 label *label75
 -    * print "-"
 -    * print .array*3
-+   67 format .array*3
-    68 label *label76
-    69 label *label77
++  127 format .array*3
+   128 label *label76
+   129 label *label77
 -    * print "-"
 -    * print .array*4
-+   70 format .array*4
-    71 label *label78
-    72 label *label79
++  130 format .array*4
+   131 label *label78
+   132 label *label79
 -    * print "-"
 -    * print .array*5
-+   73 format .array*5
-    74 label *label80
-    75 label *label81
++  133 format .array*5
+   134 label *label80
+   135 label *label81
 -    * print "-"
 -    * print .array*6
-+   76 format .array*6
-    77 label *label82
-    78 label *label83
++  136 format .array*6
+   137 label *label82
+   138 label *label83
 -    * print "-"
 -    * print .array*7
-+   79 format .array*7
-    80 label *label84
-    81 label *label85
++  139 format .array*7
+   140 label *label84
+   141 label *label85
 -    * print "-"
 -    * print .array*8
-+   82 format .array*8
-    83 label *label86
-    84 label *label87
++  142 format .array*8
+   143 label *label86
+   144 label *label87
 -    * print "-"
-    85 print .array*9
-    86 label *label88
-    87 label *label25
+   145 print .array*9
+   146 label *label88
+   147 label *label25
 
 Final code before resolving virtual instructions:
 
@@ -920,11 +944,71 @@ label *label26
 set :countDigits.0:number :i
 label *label19
 op mod *tmp2 :countDigits.0:number 10
-op mul .array*rind *tmp2 2
-call *label90 .array*rret *invalid
-op add .array*w .array*r 1
-op mul .array*wind *tmp2 2
-call *label102 .array*wret *invalid
+op mul *tmp8 *tmp2 2
+multijump *label90 *tmp8 0
+multilabel *label90
+set *tmp3 .array*0
+jump *label89 always
+multilabel *label91
+set *tmp3 .array*1
+jump *label89 always
+multilabel *label92
+set *tmp3 .array*2
+jump *label89 always
+multilabel *label93
+set *tmp3 .array*3
+jump *label89 always
+multilabel *label94
+set *tmp3 .array*4
+jump *label89 always
+multilabel *label95
+set *tmp3 .array*5
+jump *label89 always
+multilabel *label96
+set *tmp3 .array*6
+jump *label89 always
+multilabel *label97
+set *tmp3 .array*7
+jump *label89 always
+multilabel *label98
+set *tmp3 .array*8
+jump *label89 always
+multilabel *label99
+set *tmp3 .array*9
+label *label89
+op add *tmp3 *tmp3 1
+op mul *tmp9 *tmp2 2
+multijump *label102 *tmp9 0
+multilabel *label102
+set .array*0 *tmp3
+jump *label101 always
+multilabel *label103
+set .array*1 *tmp3
+jump *label101 always
+multilabel *label104
+set .array*2 *tmp3
+jump *label101 always
+multilabel *label105
+set .array*3 *tmp3
+jump *label101 always
+multilabel *label106
+set .array*4 *tmp3
+jump *label101 always
+multilabel *label107
+set .array*5 *tmp3
+jump *label101 always
+multilabel *label108
+set .array*6 *tmp3
+jump *label101 always
+multilabel *label109
+set .array*7 *tmp3
+jump *label101 always
+multilabel *label110
+set .array*8 *tmp3
+jump *label101 always
+multilabel *label111
+set .array*9 *tmp3
+label *label101
 op idiv :countDigits.0:number :countDigits.0:number 10
 jump *label19 greaterThan :countDigits.0:number 0
 op add :i :i 1
@@ -944,68 +1028,3 @@ format .array*7
 format .array*8
 print .array*9
 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
-end
-label *label90
-multijump *label89 .array*rind 0
-multilabel *label89
-set .array*r .array*0
-return .array*rret
-multilabel *label91
-set .array*r .array*1
-return .array*rret
-multilabel *label92
-set .array*r .array*2
-return .array*rret
-multilabel *label93
-set .array*r .array*3
-return .array*rret
-multilabel *label94
-set .array*r .array*4
-return .array*rret
-multilabel *label95
-set .array*r .array*5
-return .array*rret
-multilabel *label96
-set .array*r .array*6
-return .array*rret
-multilabel *label97
-set .array*r .array*7
-return .array*rret
-multilabel *label98
-set .array*r .array*8
-return .array*rret
-multilabel *label99
-set .array*r .array*9
-return .array*rret
-label *label102
-multijump *label101 .array*wind 0
-multilabel *label101
-set .array*0 .array*w
-return .array*wret
-multilabel *label103
-set .array*1 .array*w
-return .array*wret
-multilabel *label104
-set .array*2 .array*w
-return .array*wret
-multilabel *label105
-set .array*3 .array*w
-return .array*wret
-multilabel *label106
-set .array*4 .array*w
-return .array*wret
-multilabel *label107
-set .array*5 .array*w
-return .array*wret
-multilabel *label108
-set .array*6 .array*w
-return .array*wret
-multilabel *label109
-set .array*7 .array*w
-return .array*wret
-multilabel *label110
-set .array*8 .array*w
-return .array*wret
-multilabel *label111
-set .array*9 .array*w
-return .array*wret

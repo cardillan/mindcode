@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.FinalCodeOutput;
+import info.teksol.mc.util.Indenter;
 import org.jspecify.annotations.NullMarked;
 
 import java.text.DecimalFormat;
@@ -19,23 +20,39 @@ import java.util.stream.Collectors;
 @NullMarked
 public class LogicInstructionPrinter {
 
-    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions, boolean symbolicLabels) {
-        final String prefix = symbolicLabels ? "    " : "";
+    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
+            boolean symbolicLabels, int mlogIndent) {
+        final String prefix = symbolicLabels && mlogIndent == 0 ? "    " : "";
         final StringBuilder buffer = new StringBuilder();
+        final Indenter indenter = new Indenter(" ".repeat(mlogIndent));
+
         instructions.forEach((instruction) -> {
+            buffer.append(indenter.getIndent(indent(instruction, symbolicLabels)));
+
             if (instruction instanceof CommentInstruction rem) {
                 buffer.append("# ");
                 buffer.append(rem.getValue() instanceof LogicString str ? str.getValue() : rem.getValue().toMlog());
             } else if (instruction instanceof LabeledInstruction label) {
                 buffer.append(label.getLabel().toMlog()).append(":");
             } else {
-                buffer.append(prefix).append(instruction.getMlogOpcode());
+                buffer.append(prefix);
+                buffer.append(instruction.getMlogOpcode());
                 addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             }
             buffer.append("\n");
         });
 
         return buffer.toString();
+    }
+
+    private static int indent(LogicInstruction instruction, boolean symbolicLabels) {
+        int indent = 0;
+        for (AstContext ctx = instruction.getAstContext(); ctx != null; ctx = ctx.parent()) {
+            if (ctx.subcontextType() == AstSubcontextType.BODY || ctx.subcontextType() == AstSubcontextType.FLOW_CONTROL) {
+                indent++;
+            }
+        }
+        return Math.max(0, indent - (instruction instanceof LabelInstruction ? 1 : 0) - (symbolicLabels ? 0 : 1)) ;
     }
 
     public static String toString(FinalCodeOutput finalCodeOutput, InstructionProcessor instructionProcessor,

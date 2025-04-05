@@ -76,6 +76,14 @@ Use the `link-guards` option to specify whether Mindcode should generate _guard 
 
 For more details on guard code and rules for generating it, see [Guard code for linked variables](SYNTAX-1-VARIABLES.markdown#guard-code-for-linked-variables).
 
+## Option `mlog-indent`
+
+Allows to set the length of an indenting prefix (the amount of spaces) applied to the generated mlog code. Allowed values are `0` to `8`, where `0` disables the indenting entirely. The indenting level is derived from the nesting level of the corresponding source-code construct. 
+
+Default value is `0` when `symbolic-labels` is set to `false`, and `4` when `symbolic-labels` is set to `true`.
+
+For an example of an indented mlog code, see the [`symbolic-labels` option](#option-symbolic-labels).
+
 ## Option `optimization`
 
 Use the `optimization` option to set the optimization level of the compiler:
@@ -132,29 +140,92 @@ As a consequence, the compiled mlog code can be altered by adding and/or removin
 When symbolic labels are produced, the compiler also uses mlog comments to mark function entry points.
 
 > [!NOTE]
-> Activating symbolic labels may increase program size and decrease execution speed. These features are affected:
->
-> * Stackless function calls: some optimizations are not be applied.
-> * Recursive function calls: the size and execution time of a recursive function call are increased by one.
-> * Internal array element access: the size of a jump table and execution time of an array access are increased by one; some optimizations are not be applied.
-> * Optimized case expressions: the size and execution time of optimized case statement may increase by one.
-> * List iteration loops: the size and execution time of the last iteration are increased by two.
-> * Remote calls: initialization of remote modules is increased by one or two instructions per remote function; however this only impacts the initialization of a remote module and not subsequent function calls.
+> Activating symbolic labels may increase program size and decrease execution speed.
+ 
+The following features are affected when activating symbolic labels:
 
-Example of a program compiled with `symbolic-labels` set to `true`:
+* Stackless function calls: instruction setting up function return address cannot be hoisted.
+* Recursive function calls: the size and execution time of a recursive function call are increased by one.
+* Regular internal array element access (inlined array access is not affected):
+  * the size of a jump table and execution time of an array access are increased by one,
+  * instruction setting up function return address cannot be hoisted.
+* Optimized case expressions: the size and execution time of optimized case statement may increase by one.
+* List iteration loops: the size and execution time of the last iteration are increased by two.
+* Remote calls: initialization of remote modules is increased by one or two instructions per remote function; however this only impacts the initialization of a remote module and not subsequent function calls.
+
+Example of a program compiled with mlog comments and symbolic labels:
 
 ```Mindcode
+#set syntax = strict;
+#set remarks = comments;
 #set symbolic-labels = true;
 
-noinline void process(unitType)
-    println($"$unitType: ${unitType.@id}");
-end;
+/// Number of units we want to control
+param target = 2;
 
-for var a in @mono, @poly, @mega do
-    process(a);
-end;
+/// Type of unit
+param type = @mono;
 
-printflush(message1);  
+/// Flag to mark our units
+var myFlag = rand(1e10);
+
+begin
+    noinit var firstUnit, active, change;
+
+    while true do
+        ubind(type);
+        /// Remember first unit we found to be aware we're looping again
+        if firstUnit.@dead then
+            firstUnit = @unit;
+            active = 0;
+            change = 0;
+        elsif @unit == firstUnit then
+            /// We've completed a loop: visited all existing units once
+            /// Compute how many units we want to acquire/release to meet the target
+            /// When change is negative, we need to drop units
+            change = target - active;
+
+            /// Counts active units. Contains valid value when completing the loop.
+            active = 0;
+        end;
+        var unitFlag = @unit.@flag;
+
+        if unitFlag == 0 then
+            /// This is a free unit
+            if change > 0 then
+                /// We're acquiring a new unit
+                change--;
+                flag(myFlag);
+            else
+                /// We don't need a new unit, skip it
+                continue;
+            end;
+        else
+            /// If not our unit, skip it
+            if unitFlag != myFlag then
+                continue;
+            end;
+        end;
+
+        /// This is our unit.
+        if change < 0 then
+            /// The unit is superfluous: free it
+            flag(0);
+            unbind();
+            change++;
+            /// Skip processing for this unit
+            continue;
+        end;
+
+        /// We found an active unit, count it
+        active++;
+
+        /// Handle your unit here
+        var angle = 30 * active + @tick;
+        move(@thisx + 15 * sin(angle), @thisy + 15 * cos(angle));
+        /// End of unit handling
+    end;
+end;
 ```
 
 compiles to
@@ -163,25 +234,68 @@ compiles to
 # Mlog code compiled with support for symbolic labels
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
-    set :process.0:unitType @mono
-    op add :process.0*retaddr @counter 1
-    jump label_11 always 0 0
-    set :process.0:unitType @poly
-    op add :process.0*retaddr @counter 1
-    jump label_11 always 0 0
-    set :process.0:unitType @mega
-    op add :process.0*retaddr @counter 1
-    jump label_11 always 0 0
-    printflush message1
-    end
-# Function: noinline void process(in unitType)
-label_11:
-    sensor *tmp1 :process.0:unitType @id
-    print :process.0:unitType
-    print ": "
-    print *tmp1
-    print "\n"
-    set @counter :process.0*retaddr
+    # Number of units we want to control
+    set target 2
+    # Type of unit
+    set type @mono
+    # Flag to mark our units
+    op rand .myFlag 10000000000 0
+label_3:
+        ubind type
+        # Remember first unit we found to be aware we're looping again
+        sensor *tmp1 :firstUnit @dead
+        jump label_10 equal *tmp1 false
+            set :firstUnit @unit
+            set :active 0
+            set :change 0
+            jump label_13 always 0 0
+        label_10:
+            jump label_13 notEqual @unit :firstUnit
+                # We've completed a loop: visited all existing units once
+                # Compute how many units we want to acquire/release to meet the target
+                # When change is negative, we need to drop units
+                op sub :change target :active
+                # Counts active units. Contains valid value when completing the loop.
+                set :active 0
+        label_13:
+        sensor :unitFlag @unit @flag
+        jump label_20 notEqual :unitFlag 0
+            # This is a free unit
+            jump label_19 lessThanEq :change 0
+                # We're acquiring a new unit
+                op sub :change :change 1
+                ucontrol flag .myFlag 0 0 0 0
+                jump label_21 always 0 0
+                # We don't need a new unit, skip it
+            label_19:
+                jump label_3 always 0 0
+            # If not our unit, skip it
+        label_20:
+            jump label_3 notEqual :unitFlag .myFlag
+        # This is our unit.
+        label_21:
+        jump label_26 greaterThanEq :change 0
+            # The unit is superfluous: free it
+            ucontrol flag 0 0 0 0 0
+            ucontrol unbind 0 0 0 0 0
+            op add :change :change 1
+            # Skip processing for this unit
+            jump label_3 always 0 0
+        # We found an active unit, count it
+        label_26:
+        op add :active :active 1
+        # Handle your unit here
+        op mul *tmp19 30 :active
+        op add :angle *tmp19 @tick
+        op sin *tmp21 :angle 0
+        op mul *tmp22 15 *tmp21
+        op add *tmp23 @thisx *tmp22
+        op cos *tmp24 :angle 0
+        op mul *tmp25 15 *tmp24
+        op add *tmp26 @thisy *tmp25
+        ucontrol move *tmp23 *tmp26 0 0 0
+        # End of unit handling
+        jump label_3 always 0 0
 ```
 
 ## Option `sort-variables`

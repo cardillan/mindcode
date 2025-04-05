@@ -25,8 +25,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 #### Experimental features
 
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
+* Added support for applying indenting to the generated mlog code based through the [`mlog-indent` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-mlog-indent).
 * Added array-specific optimizations for speed: 
   * Replacing jump tables for short arrays (up to three elements) with if-else blocks.
+  * Jump table inlining optimization (similar to function inlining, the jump table gets replicated at the call site, saving up to two instructions).
+  * (no unit tests yet)
   * (more to come)
 
 ### Changed

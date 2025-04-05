@@ -213,6 +213,42 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
+        class SymbolicLabelsArgumentTest {
+            @Test
+            public void longArgumentShort() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--symbolic-labels true");
+                assertTrue(profile.isSymbolicLabels());
+            }
+
+            @Test
+            public void longArgumentLong() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--symbolic-labels false");
+                assertFalse(profile.isSymbolicLabels());
+            }
+        }
+
+        @Nested
+        class MlogIndentTest {
+            @Test
+            public void defaultValueForSymbolicLabels() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--symbolic-labels true");
+                assertEquals(4, profile.getMlogIndent());
+            }
+
+            @Test
+            public void defaultValueForDirectAddressing() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--symbolic-labels false");
+                assertEquals(0, profile.getMlogIndent());
+            }
+
+            @Test
+            public void longArgument() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--mlog-indent 3");
+                assertEquals(3, profile.getMlogIndent());
+            }
+        }
+
+        @Nested
         class BoundaryArgumentTest {
             @Test
             public void longArgumentNone() throws ArgumentParserException {

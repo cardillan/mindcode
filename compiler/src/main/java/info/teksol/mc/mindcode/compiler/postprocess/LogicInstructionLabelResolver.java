@@ -23,18 +23,21 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 public class LogicInstructionLabelResolver {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
+    private final AstContext rootAstContext;
 
     private final Map<LogicLabel, LogicInstruction> labelInstructions = new HashMap<>();
     private final Map<LogicLabel, LogicLabel> addresses = new HashMap<>();
+    private final Map<Integer, AstContext> addressContexts = new HashMap<>();
 
-    public LogicInstructionLabelResolver(CompilerProfile profile, InstructionProcessor processor) {
+    public LogicInstructionLabelResolver(CompilerProfile profile, InstructionProcessor processor, AstContext rootAstContext) {
         this.processor = processor;
         this.profile = profile;
+        this.rootAstContext = rootAstContext;
     }
     
     public static List<LogicInstruction> resolve(CompilerProfile profile, InstructionProcessor processor,
-            List<LogicInstruction> program) {
-        return new LogicInstructionLabelResolver(profile, processor).resolve(program);
+            AstContext rootAstContext, List<LogicInstruction> program) {
+        return new LogicInstructionLabelResolver(profile, processor, rootAstContext).resolve(program);
     }
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
@@ -223,6 +226,9 @@ public class LogicInstructionLabelResolver {
 
                 addresses.put(ix.getLabel(), LogicLabel.absolute(instructionPointer));
                 labelInstructions.put(ix.getLabel(), instruction);
+
+                addressContexts.compute(instructionPointer, (k, v) -> v == null ? ix.getAstContext()
+                        : v.level() < ix.getAstContext().level() ? v : ix.getAstContext());
             }
         }
     }
@@ -329,6 +335,45 @@ public class LogicInstructionLabelResolver {
         }
 
         return result;
+    }
+
+    public List<LogicInstruction> generateSymbolicLabels(List<LogicInstruction> instructions) {
+        if (profile.isSymbolicLabels()) {
+            final String labelPrefix = "label_";
+
+            BitSet labels = new BitSet(instructions.size());
+            for (LogicInstruction instruction : instructions) {
+                if (instruction instanceof JumpInstruction jump) {
+                    labels.set(jump.getTarget().getAddress());
+                }
+            }
+
+            List<LogicInstruction> result = new ArrayList<>();
+            result.add(processor.createComment(rootAstContext, "Mlog code compiled with support for symbolic labels"));
+            result.add(processor.createComment(rootAstContext, "You can safely add/remove instructions, in most parts of the program"));
+            result.add(processor.createComment(rootAstContext, "Pay closer attention to sections of the program manipulating @counter"));
+
+            int counter = 0;
+            for (LogicInstruction instruction : instructions) {
+                if (!(instruction instanceof CommentInstruction)) {
+                    if (labels.get(counter)) {
+                        result.add(processor.createLabel(addressContexts.getOrDefault(counter, rootAstContext),
+                                LogicLabel.symbolic(labelPrefix + counter)));
+                    }
+
+                    counter++;
+                    if (instruction instanceof JumpInstruction jump) {
+                        result.add(jump.withTarget(LogicLabel.symbolic(labelPrefix + jump.getTarget().getAddress())));
+                        continue;
+                    }
+                }
+                result.add(instruction);
+            }
+
+            return result;
+        } else {
+            return instructions;
+        }
     }
 
 }
