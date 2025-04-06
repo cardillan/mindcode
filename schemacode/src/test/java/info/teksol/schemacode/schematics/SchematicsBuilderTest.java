@@ -1,8 +1,8 @@
 package info.teksol.schemacode.schematics;
 
 import info.teksol.mc.messages.ExpectedMessages;
-import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.schemacode.AbstractSchematicsTest;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.BooleanConfiguration;
 import info.teksol.schemacode.config.EmptyConfiguration;
 import info.teksol.schemacode.config.PositionArray;
@@ -239,7 +239,8 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematic expected = new Schematic("", "", List.of(Icons.translateIcon("ITEM-COAL")), 0, 0, List.of());
+        Schematic expected = new Schematic("", "",
+                List.of(SchematicsMetadata.metadata.getIcons().translateIcon("ITEM-COAL")), 0, 0, List.of());
 
         assertAstEquals(expected, actual);
     }

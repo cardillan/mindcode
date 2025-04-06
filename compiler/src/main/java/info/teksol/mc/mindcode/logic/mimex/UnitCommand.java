@@ -14,11 +14,7 @@ public record UnitCommand(
         return ContentType.UNIT_COMMAND;
     }
 
-    public static UnitCommand forId(int id) {
-        return MindustryContents.UNITCOMMAND_ID_MAP.get(id);
-    }
-
-    public static UnitCommand forName(String name) {
-        return MindustryContents.UNITCOMMAND_MAP.get(name);
+    static UnitCommand create(String contentName, String name, int id, int logicId) {
+        return new UnitCommand(contentName, name, id);
     }
 }

@@ -61,8 +61,8 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
             List<LogicInstruction> instructions = LogicInstructionLabelResolver.resolve(compiler.compilerProfile(), compiler.instructionProcessor(),
                     mockAstRootContext, program);
             Processor processor = new Processor(compiler.instructionProcessor(), expectedMessages(), 1000);
-            processor.addBlock("bank1", Memory.createMemoryBank());
-            processor.addBlock("bank2", Memory.createMemoryBank());
+            processor.addBlock("bank1", Memory.createMemoryBank(ip.getMetadata()));
+            processor.addBlock("bank2", Memory.createMemoryBank(ip.getMetadata()));
             try {
                 processor.run(instructions, MAX_STEPS);
             } catch (ExecutionException e) {

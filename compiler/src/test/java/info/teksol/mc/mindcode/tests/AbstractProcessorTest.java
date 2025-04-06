@@ -181,8 +181,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
 
 
     protected void setupEmulator(Processor emulator, Map<String, MindustryBlock> blocks) {
-        emulator.addBlock("bank1", Memory.createMemoryBank());
-        emulator.addBlock("bank2", Memory.createMemoryBank());
+        emulator.addBlock("bank1", Memory.createMemoryBank(ip.getMetadata()));
+        emulator.addBlock("bank2", Memory.createMemoryBank(ip.getMetadata()));
         blocks.forEach(emulator::addBlock);
     }
 

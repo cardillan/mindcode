@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
@@ -37,6 +38,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     /// @return list of all opcode variants available to this instruction processor
     List<OpcodeVariant> getOpcodeVariants();
+
+    MindustryMetadata getMetadata();
 
     LogicLabel nextLabel();
     LogicLabel nextMarker();

@@ -94,7 +94,6 @@ mindcode_source = """
                         println("name: ",               block.@name);
                         println("config: ",             block.@config);
                         println("enabled: ",            block.@enabled);
-                        println("configure: ",          block.@configure);
                 end;
             else
                 println("No linked block found.");

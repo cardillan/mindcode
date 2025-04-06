@@ -1,6 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.mindcode.logic.mimex.UnitCommand;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.Configuration;
 
 import java.util.Objects;
@@ -25,11 +26,11 @@ public final class UnitCommandConfiguration implements Configuration {
     }
 
     public static UnitCommandConfiguration forId(int id) {
-        return forUnitCommand(UnitCommand.forId(id));
+        return forUnitCommand(SchematicsMetadata.metadata.getUnitCommandById(id));
     }
 
     public static UnitCommandConfiguration forName(String name) {
-        return forUnitCommand(UnitCommand.forName(name));
+        return forUnitCommand(SchematicsMetadata.metadata.getUnitCommandByName(name));
     }
 
     @Override

@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.util.Tuple2;
 import info.teksol.schemacode.SchematicsInternalError;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.schematics.Block;
 import info.teksol.schemacode.schematics.BlockPositionMap;
@@ -107,7 +108,7 @@ public class SchematicsIO {
             byte length = stream.readByte();
             for (int i = 0; i < length; i++) {
                 String name = stream.readUTF();
-                BlockType block = BlockType.forName("@" + FALLBACK.getOrDefault(name, name));
+                BlockType block = SchematicsMetadata.metadata.getBlockByName("@" + FALLBACK.getOrDefault(name, name));
                 if (block == null) {
                     throw new IOException("Unknown block type '@" + name + "'.");
                 }

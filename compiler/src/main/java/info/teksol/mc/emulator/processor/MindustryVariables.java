@@ -6,7 +6,8 @@ import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.mimex.*;
+import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Comparator;
@@ -24,6 +25,7 @@ public class MindustryVariables {
 
     private final Processor processor;
     private final InstructionProcessor instructionProcessor;
+    private final MindustryMetadata metadata;
     public final MindustryVariable counter = MindustryVariable.createCounter();
     public final MindustryVariable null_ = MindustryVariable.createNull();
 
@@ -39,6 +41,8 @@ public class MindustryVariables {
     public MindustryVariables(Processor processor, InstructionProcessor instructionProcessor) {
         this.processor = processor;
         this.instructionProcessor = instructionProcessor;
+        this.metadata = instructionProcessor.getMetadata();
+
         variables.put("@counter", counter);
         variables.put("@unit", null_);
         variables.put("@pi", MindustryVariable.createConst("@pi", PI));
@@ -51,10 +55,10 @@ public class MindustryVariables {
         variables.put("0", MindustryVariable.createConst("0", 0));
         variables.put("1", MindustryVariable.createConst("1", 1));
 
-        variables.put("@blockCount", MindustryVariable.createConst("blockCount", BlockType.count()));
-        variables.put("@unitCount", MindustryVariable.createConst("unitCount", Unit.count()));
-        variables.put("@itemCount", MindustryVariable.createConst("itemCount", Item.count()));
-        variables.put("@liquidCount", MindustryVariable.createConst("liquidCount", Liquid.count()));
+        variables.put("@blockCount", MindustryVariable.createConst("blockCount", metadata.getBlockCount()));
+        variables.put("@itemCount", MindustryVariable.createConst("itemCount", metadata.getItemCount()));
+        variables.put("@liquidCount", MindustryVariable.createConst("liquidCount", metadata.getLiquidCount()));
+        variables.put("@unitCount", MindustryVariable.createConst("unitCount", metadata.getUnitCount()));
     }
 
     public void addConstVariable(String name, int value) {
@@ -101,7 +105,7 @@ public class MindustryVariables {
             String name = value.substring(1, value.length() - 1).replace("\\n", "\n").replace("\\\"", "'").replace("\\\\", "\\");
             return MindustryVariable.createConstString(name);
         } else if (value.startsWith("@")) {
-            MindustryContent content = MindustryContents.get(value);
+            MindustryContent content = metadata.getNamedContent(value);
             return content == null
                     ? MindustryVariable.createUnregisteredContent(value)
                     : MindustryVariable.createConstObject(content);

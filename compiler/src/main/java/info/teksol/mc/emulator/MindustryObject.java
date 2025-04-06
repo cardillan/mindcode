@@ -1,6 +1,7 @@
 package info.teksol.mc.emulator;
 
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -31,8 +32,8 @@ public interface MindustryObject {
     }
 
     /// @return icon string literal for this object
-    default @Nullable String iconString() {
+    default @Nullable String iconString(MindustryMetadata metadata) {
         MindustryContent type = type();
-        return type == null ? null : type.iconString();
+        return type == null ? null : type.iconString(metadata);
     }
 }

@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariablesContext;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.OpcodeVariant;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
@@ -61,6 +62,11 @@ public class AbstractFunctionMapperTest {
         @Override
         public InstructionProcessor instructionProcessor() {
             return instructionProcessor;
+        }
+
+        @Override
+        public MindustryMetadata metadata() {
+            return instructionProcessor.getMetadata();
         }
     }
 

@@ -115,7 +115,7 @@ class PrintMerger extends BaseOptimizer {
                 yield isPrintable && ch != '"' ? String.valueOf(ch) : null;
             }
 
-            case LogicBuiltIn builtIn -> builtIn.getObject() != null ? builtIn.getObject().iconString() : null;
+            case LogicBuiltIn builtIn -> builtIn.getObject() != null ? builtIn.getObject().iconString(metadata) : null;
 
             default -> null;
         };

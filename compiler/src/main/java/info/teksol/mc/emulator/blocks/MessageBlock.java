@@ -1,8 +1,8 @@
 package info.teksol.mc.emulator.blocks;
 
 import info.teksol.mc.emulator.processor.TextBuffer;
-import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -17,7 +17,7 @@ public class MessageBlock extends MindustryBlock {
         textBuffer.printflush(contents);
     }
 
-    public static MessageBlock createMessage() {
-        return new MessageBlock("message", BlockType.existing("@message"));
+    public static MessageBlock createMessage(MindustryMetadata metadata) {
+        return new MessageBlock("message", metadata.getExistingBlock("@message"));
     }
 }

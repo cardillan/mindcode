@@ -5,7 +5,6 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
-import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.config.Configuration;
@@ -53,11 +52,11 @@ public abstract class AbstractSchematicsTest {
     private int index = 0;
 
     public Block block(SourcePosition pos, List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(pos, index++, labels, BlockType.forName(blockType), position, direction, configuration);
+        return new Block(pos, index++, labels, SchematicsMetadata.metadata.getBlockByName(blockType), position, direction, configuration);
     }
 
     public Block block(SourcePosition pos, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(pos, index++, List.of(), BlockType.forName(blockType), position, direction, configuration);
+        return new Block(pos, index++, List.of(), SchematicsMetadata.metadata.getBlockByName(blockType), position, direction, configuration);
     }
 
     /**

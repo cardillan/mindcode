@@ -17,7 +17,7 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
-import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -30,6 +30,7 @@ import static info.teksol.mc.emulator.processor.ExecutionFlag.*;
 @NullMarked
 public class Processor extends AbstractMessageEmitter {
     private final InstructionProcessor instructionProcessor;
+    private final MindustryMetadata metadata;
     private final Set<ExecutionFlag> flags;
     private final MindustryVariables variables;
     private final Map<String, MindustryBlock> blockMap = new LinkedHashMap<>();
@@ -52,6 +53,7 @@ public class Processor extends AbstractMessageEmitter {
             Set<ExecutionFlag> flags, int traceLimit) {
         super(messageConsumer);
         this.instructionProcessor = instructionProcessor;
+        this.metadata = instructionProcessor.getMetadata();
         this.flags = EnumSet.copyOf(flags);
         variables = new MindustryVariables(this, instructionProcessor);
         counter = variables.counter;
@@ -374,7 +376,7 @@ public class Processor extends AbstractMessageEmitter {
     private boolean executeLookup(LookupInstruction ix) {
         LogicKeyword type = ix.getType();
         MindustryVariable index = getExistingVariable(ix.getIndex());
-        Map<Integer, ? extends MindustryContent> lookupMap = MindustryContents.getLookupMap(type.getKeyword());
+        Map<Integer, ? extends MindustryContent> lookupMap = metadata.getLookupMap(type.getKeyword());
         if (lookupMap == null) {
             throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid lookup type '%s'.", type.getKeyword());
         }
@@ -427,7 +429,7 @@ public class Processor extends AbstractMessageEmitter {
         MindustryVariable var = getExistingVariable(ix.getValue());
         if (var.isObject()) {
             if (var.getObject() == null) return true;
-            textBuffer.print(Objects.requireNonNullElse(var.getObject().iconString(), ""));
+            textBuffer.print(Objects.requireNonNullElse(var.getObject().iconString(metadata), ""));
         } else {
             textBuffer.print(String.valueOf((char)Math.floor(var.getDoubleValue())));
         }

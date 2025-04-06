@@ -76,7 +76,6 @@ while true do
                 println("name: ",               BLOCK.@name);
                 println("config: ",             BLOCK.@config);
                 println("enabled: ",            BLOCK.@enabled);
-                println("configure: ",          BLOCK.@configure);
         end;
     else
         println("No linked block found.");

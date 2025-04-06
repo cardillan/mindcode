@@ -111,6 +111,10 @@ The web application uses `basic` by default, while the command-line compiler use
 
 All examples in this documentation are run on the `basic` level, unless specified otherwise.
 
+## Compilation target
+
+By default, Mindcode produces code compatible with Mindustry version 7, build 146. It is possible to generate code for different game versions, including the not-yet- released development (a.k.a. "bleeding edge") version. See the [`target` option](SYNTAX-5-OTHER.markdown#option-target) for ways to change the target version, or [Mindustry 8](MINDUSTRY-8.markdown) for more information on running the Bleeding edge version of the game.
+
 ## Syntax modes
 
 Mindcode supports multiple syntax modes tailored for different needs:

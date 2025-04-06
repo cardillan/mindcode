@@ -332,7 +332,9 @@ Chooses the [syntax mode](SYNTAX.markdown#syntax-modes) to be used for compilati
 
 ## Option `target`
 
-Use the `target` option to specify the Mindcode/Mindustry Logic version to be used by the compiler and processor emulator. The target versions consist of a major and minor version number. As of now, these versions exist:
+Use the `target` option to specify the Mindcode/Mindustry Logic version to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and edition, and both compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in given Mindustry Logic version.
+
+The target versions consist of a major and minor version number. As of now, these versions exist:
 
 | Version | Description                                                      |
 |:-------:|:-----------------------------------------------------------------|

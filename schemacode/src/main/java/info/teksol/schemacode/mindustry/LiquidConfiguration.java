@@ -1,6 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.mindcode.logic.mimex.Liquid;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.Configuration;
 
 import java.util.Objects;
@@ -25,11 +26,11 @@ public final class LiquidConfiguration implements Configuration {
     }
 
     public static LiquidConfiguration forId(int id) {
-        return forLiquid(Liquid.forId(id));
+        return forLiquid(SchematicsMetadata.metadata.getLiquidById(id));
     }
 
     public static LiquidConfiguration forName(String name) {
-        return forLiquid(Liquid.forName(name));
+        return forLiquid(SchematicsMetadata.metadata.getLiquidByName(name));
     }
 
     @Override

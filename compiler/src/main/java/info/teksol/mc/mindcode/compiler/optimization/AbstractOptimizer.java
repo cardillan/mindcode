@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.instructions.ContextlessInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -20,6 +21,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     protected final Optimization optimization;
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
+    protected final MindustryMetadata metadata;
     protected OptimizationLevel level = OptimizationLevel.EXPERIMENTAL;
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
@@ -29,6 +31,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         this.optimization = optimization;
         this.optimizationContext = optimizationContext;
         this.instructionProcessor = optimizationContext.getInstructionProcessor();
+        this.metadata = instructionProcessor.getMetadata();
     }
 
     @Override

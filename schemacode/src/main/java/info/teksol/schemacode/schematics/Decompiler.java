@@ -1,6 +1,6 @@
 package info.teksol.schemacode.schematics;
 
-import info.teksol.mc.mindcode.logic.mimex.Icons;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
 import info.teksol.schemacode.mindustry.ProcessorConfiguration.Link;
@@ -116,7 +116,7 @@ public class Decompiler {
                 .mapMulti(this::extractLabelsAndIcons)
                 .filter(t -> !t.isBlank())
                 .distinct()
-                .forEach(t -> nl().append("tag = ").append(Icons.decodeIcon(t)));
+                .forEach(t -> nl().append("tag = ").append(SchematicsMetadata.metadata.getIcons().decodeIcon(t)));
 
         sbr.append('\n');
 
@@ -147,7 +147,7 @@ public class Decompiler {
             char ch = label.charAt(i);
             if (ch >= 32768) {
                 String icon = String.valueOf(ch);
-                if (Icons.isIconValue(icon)) {
+                if (SchematicsMetadata.metadata.getIcons().isIconValue(icon)) {
                     consumer.accept(icon);
                 }
             }

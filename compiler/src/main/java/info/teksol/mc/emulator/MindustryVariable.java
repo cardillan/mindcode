@@ -6,7 +6,7 @@ import info.teksol.mc.evaluator.ExpressionEvaluator;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.evaluator.LogicWritable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
+import info.teksol.mc.mindcode.logic.mimex.UnknownContent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -53,7 +53,7 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
     }
 
     public static MindustryVariable createUnregisteredContent(String contentName) {
-        return new MindustryVariable(contentName, true, false, true, MindustryContents.unregistered(contentName),0.0);
+        return new MindustryVariable(contentName, true, false, true, new UnknownContent(contentName),0.0);
     }
 
     public static MindustryVariable createConst(String name, boolean value) {

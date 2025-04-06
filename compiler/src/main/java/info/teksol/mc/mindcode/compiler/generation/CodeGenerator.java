@@ -163,7 +163,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         callGraph.getFunctions().stream()
                 .filter(f -> f.isRemote() && f.isEntryPoint())
                 .forEach(this::setupRemoteFunctionAddress);
-        assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.create("@this", false));
+        assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.THIS);
         assembler.clearContextType(program);
 
         assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);

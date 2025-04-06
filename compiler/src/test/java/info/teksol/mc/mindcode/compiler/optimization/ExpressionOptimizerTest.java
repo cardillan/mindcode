@@ -156,16 +156,11 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
 
     @Test
     void optimizesSensor() {
-        assertOptimizesTo(
-                List.of(
-                        createInstruction(SENSOR, tmp0, lead, id),
-                        createInstruction(END)
-                ),
-
-                List.of(
-                        createInstruction(SET, tmp0, P1),
-                        createInstruction(END)
-                )
+        assertCompilesTo("""
+                        a = @lead.@id;
+                        """,
+                createInstruction(SET, tmp(0), "1"),
+                createInstruction(SET, ":a", tmp(0))
         );
     }
 

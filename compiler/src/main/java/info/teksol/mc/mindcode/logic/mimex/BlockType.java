@@ -1,10 +1,8 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -13,6 +11,7 @@ public record BlockType(
         String contentName,
         String name,
         int id,
+        int logicId,
         String visibility,
         String implementation,
         int size,
@@ -30,26 +29,6 @@ public record BlockType(
         return ContentType.BLOCK;
     }
 
-    public static int count() {
-        return MindustryContents.logicCount(MindustryContents.BLOCK_MAP);
-    }
-
-    public static BlockType existing(String name) {
-        return Objects.requireNonNull(MindustryContents.BLOCK_MAP.get(name));
-    }
-
-    public static @Nullable BlockType forName(String name) {
-        return MindustryContents.BLOCK_MAP.get(name);
-    }
-
-    public static @Nullable BlockType forId(int id) {
-        return MindustryContents.BLOCK_ID_MAP.get(id);
-    }
-
-    public static boolean isNameValid(String name) {
-        return MindustryContents.BLOCK_MAP.containsKey(name);
-    }
-
     public String getBaseLinkName() {
         String name = this.name.substring(1);
         if (name.contains("-")) {
@@ -64,8 +43,8 @@ public record BlockType(
         return name;
     }
 
-    public static Set<String> getBaseLinkNames() {
-        return MindustryContents.BLOCK_MAP.values().stream()
+    public static Set<String> getBaseLinkNames(MindustryMetadata metadata) {
+        return metadata.getBlockMap().values().stream()
                 .filter(b -> !b.visibility.equals("hidden"))
                 .map(BlockType::getBaseLinkName)
                 .collect(Collectors.toSet());

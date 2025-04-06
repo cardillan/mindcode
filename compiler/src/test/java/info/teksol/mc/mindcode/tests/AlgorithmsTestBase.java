@@ -26,7 +26,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
     void storageDisplayTest() throws IOException {
         testAndEvaluateFile("storage-display.mnd",
                 s -> "AMOUNT = 12345;\n" + s,
-                Map.of("display1", LogicDisplay.createLargeLogicDisplay()),
+                Map.of("display1", LogicDisplay.createLargeLogicDisplay(ip.getMetadata())),
                 List.of()
         );
     }
@@ -42,8 +42,8 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 expectedMessages(),
                 "param SIZE = " + arrayLength + ";\n" + readFile(fileName),
                 Map.of(
-                        "bank2", Memory.createMemoryBank(array),
-                        "bank3", Memory.createMemoryBank(sorted)
+                        "bank2", Memory.createMemoryBank(ip.getMetadata(), array),
+                        "bank3", Memory.createMemoryBank(ip.getMetadata(), sorted)
                 ),
                 assertEvaluator(),
                 Path.of(getScriptsDirectory(), fileName.replace(".mnd", "") + logSuffix)

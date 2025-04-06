@@ -231,18 +231,18 @@ public abstract class AbstractTestBase {
             fn0retval   = LogicVariable.fnRetVal("foo", "__fn0retval");
 
     protected static final LogicBuiltIn
-            coal        = LogicBuiltIn.create("@coal",      false),
-            lead        = LogicBuiltIn.create("@lead",      false),
-            firstItem   = LogicBuiltIn.create("@firstItem", false),
-            enabled     = LogicBuiltIn.create("@enabled",   false),
-            time        = LogicBuiltIn.create("@time",      false),
-            unit        = LogicBuiltIn.create("@unit",      false),
-            This        = LogicBuiltIn.create("@this",      false),
-            x           = LogicBuiltIn.create("@x",         false),
-            y           = LogicBuiltIn.create("@y",         false),
-            thisx       = LogicBuiltIn.create("@thisx",     false),
-            thisy       = LogicBuiltIn.create("@thisy",     false),
-            id          = LogicBuiltIn.create("@id",        false);
+            coal        = LogicBuiltIn.createForUnitTests("@coal",      false),
+            lead        = LogicBuiltIn.createForUnitTests("@lead",      false),
+            firstItem   = LogicBuiltIn.createForUnitTests("@firstItem", false),
+            enabled     = LogicBuiltIn.createForUnitTests("@enabled",   false),
+            time        = LogicBuiltIn.createForUnitTests("@time",      false),
+            unit        = LogicBuiltIn.createForUnitTests("@unit",      false),
+            This        = LogicBuiltIn.createForUnitTests("@this",      false),
+            x           = LogicBuiltIn.createForUnitTests("@x",         false),
+            y           = LogicBuiltIn.createForUnitTests("@y",         false),
+            thisx       = LogicBuiltIn.createForUnitTests("@thisx",     false),
+            thisy       = LogicBuiltIn.createForUnitTests("@thisy",     false),
+            id          = LogicBuiltIn.createForUnitTests("@id",        false);
 
     protected static final LogicKeyword
             color       = LogicKeyword.create("color"),

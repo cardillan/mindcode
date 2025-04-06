@@ -34,7 +34,7 @@ public class AbstractMindustryObject implements MindustryObject {
     }
 
     @Override
-    @Nullable public MindustryContent type() {
+    public @Nullable MindustryContent type() {
         return type;
     }
 }

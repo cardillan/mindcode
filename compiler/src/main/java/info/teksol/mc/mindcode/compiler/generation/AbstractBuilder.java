@@ -18,6 +18,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
@@ -45,6 +46,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     protected final CodeGeneratorContext context;
     protected final CompilerProfile profile;
     protected final InstructionProcessor processor;
+    protected final MindustryMetadata metadata;
     protected final CallGraph callGraph;
     protected final CodeAssembler assembler;
     protected final Variables variables;
@@ -58,6 +60,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
+        metadata = context.metadata();
         callGraph = context.callGraph();
         assembler = context.assembler();
         variables = context.variables();
@@ -72,6 +75,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
+        metadata = context.metadata();
         callGraph = context.callGraph();
         assembler = context.assembler();
         variables = context.variables();

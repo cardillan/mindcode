@@ -13,7 +13,6 @@ import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -41,7 +40,7 @@ public class Variables extends AbstractMessageEmitter {
 
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
-    private final Map<String, ValueStore> globalVariables = Icons.createIconMapAsValueStore();
+    private final Map<String, ValueStore> globalVariables;
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
     private FunctionContext functionContext = new GlobalContext();
 
@@ -52,6 +51,7 @@ public class Variables extends AbstractMessageEmitter {
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
         heapTracker = HeapTracker.createDefaultTracker(context);
+        globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
     }
 
     public List<LogicVariable> getVolatileVariables() {

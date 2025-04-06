@@ -13,7 +13,6 @@ import info.teksol.mc.mindcode.compiler.generation.variables.ExternalArray;
 import info.teksol.mc.mindcode.compiler.generation.variables.ExternalVariable;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -54,7 +53,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitBuiltInIdentifier(AstBuiltInIdentifier node) {
-        if (LVar.forName(node.getName()) == null) {
+        if (!metadata.isBuiltInValid(node.getName())) {
             warn(node, WARN.BUILT_IN_VARIABLE_NOT_RECOGNIZED, node.getName());
         }
         return LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());

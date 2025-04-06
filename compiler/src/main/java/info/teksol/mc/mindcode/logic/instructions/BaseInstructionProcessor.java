@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
@@ -36,6 +37,7 @@ import static info.teksol.mc.util.CollectionUtils.indexOf;
 public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
+    private @Nullable MindustryMetadata metadata;
     private final boolean shortFunctionPrefix;
     private final boolean instructionValidation;
     private final List<OpcodeVariant> opcodeVariants;
@@ -90,6 +92,14 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 Collectors.toMap(this::getOpcodeVariantKeyword, v -> v)));
 
         validArgumentValues = createAllowedArgumentValuesMap();
+    }
+
+    @Override
+    public MindustryMetadata getMetadata() {
+        if (metadata == null) {
+            metadata = MindustryMetadata.forVersion(processorVersion);
+        }
+        return metadata;
     }
 
     @Override
@@ -508,12 +518,15 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
     private static final Pattern BLOCK_NAME_PATTERN = Pattern.compile("^([a-zA-Z][a-zA-Z_]*)[1-9]\\d*$");
 
-    private static final Set<String> BLOCK_NAMES = BlockType.getBaseLinkNames();
+    private @Nullable Set<String> blockNames;
 
     @Override
     public boolean isBlockName(String identifier) {
+        if (blockNames == null) {
+            blockNames = BlockType.getBaseLinkNames(getMetadata());
+        }
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
-        return matcher.find() && BLOCK_NAMES.contains(matcher.group(1));
+        return matcher.find() && blockNames.contains(matcher.group(1));
     }
 
     @Override

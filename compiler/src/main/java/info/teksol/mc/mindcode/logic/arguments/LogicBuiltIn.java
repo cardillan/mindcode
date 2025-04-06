@@ -5,33 +5,42 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
-import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
 
 @NullMarked
 public class LogicBuiltIn extends AbstractArgument implements LogicValue {
-    public static final LogicBuiltIn COUNTER = create("@counter", true);
-    public static final LogicBuiltIn LINKS = create("@links", true);
-    public static final LogicBuiltIn THIS = create("@this", false);
-    public static final LogicBuiltIn UNIT = create("@unit", true);
-    public static final LogicBuiltIn WAIT = create("@wait", false);
+    private static final Map<String, LogicBuiltIn> CACHE = new HashMap<>();
+
+    public static final LogicBuiltIn COUNTER = createAndCache("@counter", true);
+    public static final LogicBuiltIn LINKS = createAndCache("@links", true);
+    public static final LogicBuiltIn UNIT = createAndCache("@unit", true);
+    public static final LogicBuiltIn THIS = createAndCache("@this", false);
+    public static final LogicBuiltIn WAIT = createAndCache("@wait", false);
+    public static final LogicBuiltIn ID = createAndCache("@id", false);
+    public static final LogicBuiltIn X = createAndCache("@x", false);
+    public static final LogicBuiltIn Y = createAndCache("@y", false);
+    public static final LogicBuiltIn THIS_X = createAndCache("@thisx", false);
+    public static final LogicBuiltIn THIS_Y = createAndCache("@thisy", false);
 
     private final SourcePosition sourcePosition;
     private final String name;
     private final @Nullable MindustryContent object;
 
-    private LogicBuiltIn(SourcePosition sourcePosition, String name, @Nullable Object object, boolean isVolatile) {
+    private LogicBuiltIn(SourcePosition sourcePosition, String name, @Nullable MindustryContent object, boolean isVolatile) {
         super(ArgumentType.BUILT_IN, computeMutability(object, isVolatile));
         this.sourcePosition = sourcePosition;
         this.name = Objects.requireNonNull(name);
-        this.object = MindustryContents.get(name);
+        this.object = object;
 
         if (!name.startsWith("@")) {
-            throw new MindcodeInternalError(String.format("No '@' at the beginning of property name '%s'", name));
+            throw new MindcodeInternalError(String.format("No '@' at the beginning of logic built-in '%s'", name));
         }
     }
 
@@ -89,19 +98,26 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
                 '}';
     }
 
-    public static LogicBuiltIn create(String name, boolean isVolatile) {
-        return new LogicBuiltIn(SourcePosition.EMPTY, name, MindustryContents.get(name), isVolatile);
+    public static LogicBuiltIn create(MindustryContent object, boolean isVolatile) {
+        return new LogicBuiltIn(SourcePosition.EMPTY, object.name(), object, isVolatile);
+    }
+
+    // Only for built-ins created by test code
+    public static LogicBuiltIn createAndCache(String name, boolean isVolatile) {
+        LogicBuiltIn builtIn = new LogicBuiltIn(SourcePosition.EMPTY, name, null, isVolatile);
+        CACHE.put(name, builtIn);
+        return builtIn;
     }
 
     public static LogicBuiltIn create(InstructionProcessor processor, SourcePosition sourcePosition, String name) {
-        return switch (name) {
-            case "@counter" -> COUNTER;
-            case "@links" -> LINKS;
-            case "@this" -> THIS;
-            case "@unit" -> UNIT;
-            case "@wait" -> WAIT;
-            default -> new LogicBuiltIn(sourcePosition, name, MindustryContents.get(name), processor.isVolatileBuiltIn(name));
-        };
+        LogicBuiltIn cached = CACHE.get(name);
+        return cached != null ? cached : new LogicBuiltIn(sourcePosition, name, processor.getMetadata().getNamedContent(name),
+                    processor.isVolatileBuiltIn(name));
+    }
+
+    // Uses latest metadata version
+    public static LogicBuiltIn createForUnitTests(String name, boolean isVolatile) {
+        return new LogicBuiltIn(SourcePosition.EMPTY, name, MindustryMetadata.getLatest().getNamedContent(name), isVolatile);
     }
 
     // ValueStore methods

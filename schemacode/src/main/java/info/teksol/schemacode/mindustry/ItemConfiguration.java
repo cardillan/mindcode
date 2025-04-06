@@ -1,6 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.mindcode.logic.mimex.Item;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.Configuration;
 
 import java.util.Objects;
@@ -25,11 +26,11 @@ public final class ItemConfiguration implements Configuration {
     }
 
     public static ItemConfiguration forId(int id) {
-        return forItem(Item.forId(id));
+        return forItem(SchematicsMetadata.metadata.getItemById(id));
     }
 
     public static ItemConfiguration forName(String name) {
-        return forItem(Item.forName(name));
+        return forItem(SchematicsMetadata.metadata.getItemByName(name));
     }
 
     @Override

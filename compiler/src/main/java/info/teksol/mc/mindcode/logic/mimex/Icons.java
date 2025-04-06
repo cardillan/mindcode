@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.logic.mimex;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
-import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -12,49 +11,66 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-@NullMarked
 public class Icons {
+    public static final String RESOURCE_NAME = "mimex-icons.txt";
 
-    public static Map<String, ValueStore> createIconMapAsValueStore() {
-        return new HashMap<>(COMBINED_MAP);
+    private final Map<String, LogicString> iconMap;
+    private final Map<ContentType, Map<String, String>> contentMap;
+    private final Map<String, LogicString> combinedIconMap;
+    private final Map<String, String> reverseIconMap;
+
+    Icons(String mimexVersion) {
+        iconMap = initializeIconMap(mimexVersion);
+        contentMap = initializeContentMap(mimexVersion);
+        combinedIconMap = initializeCombinedIconMap();
+        reverseIconMap = initializeReverseIconMap();
     }
 
-    public static boolean isIconName(String name) {
-        return COMBINED_MAP.containsKey(name);
+    public Map<String, ValueStore> createIconMapAsValueStore() {
+        return new HashMap<>(combinedIconMap);
     }
 
-    public static LogicLiteral getIconValue(String name) {
-        return COMBINED_MAP.get(name);
+    public boolean isIconName(String name) {
+        return combinedIconMap.containsKey(name);
     }
 
-    public static @Nullable String getContentIcon(ContentType type, String contentName) {
-        return CONTENT_MAP.getOrDefault(type, Map.of()).get(contentName);
+    public LogicLiteral getIconValue(String name) {
+        return combinedIconMap.get(name);
     }
 
-    public static String translateIcon(String text) {
-        LogicLiteral literal = ICON_MAP.get(text);
+    public @Nullable String getContentIcon(ContentType type, String contentName) {
+        return contentMap.getOrDefault(type, Map.of()).get(contentName);
+    }
+
+    // Schematics
+
+    public String translateIcon(String text) {
+        LogicLiteral literal = iconMap.get(text);
         return literal == null ? text : literal.format(null);
     }
 
-    public static boolean isIconValue(String text) {
-        return REVERSE_MAP.containsKey(text);
+    public boolean isIconValue(String text) {
+        return reverseIconMap.containsKey(text);
     }
 
-    public static void forEachIcon(BiConsumer<String, LogicLiteral> action) {
-        COMBINED_MAP.forEach(action);
+    public String decodeIcon(String text) {
+        return reverseIconMap.getOrDefault(text, '"' + text + '"');
     }
 
-    public static String decodeIcon(String text) {
-        return REVERSE_MAP.getOrDefault(text, '"' + text + '"');
+    public void forEachIcon(BiConsumer<String, LogicLiteral> action) {
+        combinedIconMap.forEach(action);
     }
 
-    private static Map<String, LogicString> initializeIconMap() {
-        try (InputStream input = Icons.class.getResourceAsStream(RESOURCE_NAME)) {
+    // INITIALIZATION
+
+    private static Map<String, LogicString> initializeIconMap(String mimexVersion) {
+        String resourceName = mimexVersion + "/" + RESOURCE_NAME;
+
+        try (InputStream input = Icons.class.getResourceAsStream(resourceName)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(input)));
             return reader.lines()
                     .filter(l -> !l.startsWith("//") && !l.isBlank())
@@ -63,15 +79,28 @@ public class Icons {
                     .collect(Collectors.toMap(s -> s[0],
                             s -> LogicString.create(String.valueOf((char) Integer.parseInt(s[2])))));
         } catch (IOException e) {
-            throw new RuntimeException("Cannot read resource " + RESOURCE_NAME, e);
+            throw new RuntimeException("Cannot read resource " + resourceName, e);
         } catch (Exception e) {
-            throw new RuntimeException("Error parsing file " + RESOURCE_NAME, e);
+            throw new RuntimeException("Error parsing file " + resourceName, e);
         }
     }
 
-    private static Map<ContentType, Map<String, String>> initializeContentMap() {
+    private Map<String, LogicString> initializeCombinedIconMap() {
+        Map<String, LogicString> result = iconMap.entrySet().stream()
+                .collect(Collectors.toMap(e -> e.getKey().replace("-", "_"), Map.Entry::getValue));
+        result.putAll(iconMap);
+        return result;
+    }
+
+    private Map<String, String> initializeReverseIconMap() {
+        return iconMap.entrySet().stream()
+                .collect(Collectors.toMap(e->e.getValue().format(null), Map.Entry::getKey));
+    }
+
+    private static Map<ContentType, Map<String, String>> initializeContentMap(String mimexVersion) {
+        String resourceName = mimexVersion + "/" + RESOURCE_NAME;
         Map<ContentType, Map<String, String>> result = new HashMap<>();
-        try (InputStream input = Icons.class.getResourceAsStream(RESOURCE_NAME)) {
+        try (InputStream input = Icons.class.getResourceAsStream(resourceName)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(input)));
             reader.lines()
                     .filter(l -> !l.startsWith("//") && !l.isBlank())
@@ -85,29 +114,9 @@ public class Icons {
                     });
             return result;
         } catch (IOException e) {
-            throw new RuntimeException("Cannot read resource " + RESOURCE_NAME, e);
+            throw new RuntimeException("Cannot read resource " + resourceName, e);
         } catch (Exception e) {
-            throw new RuntimeException("Error parsing file " + RESOURCE_NAME, e);
+            throw new RuntimeException("Error parsing file " + resourceName, e);
         }
     }
-
-    private static Map<String, String> initializeReverseMap() {
-        return ICON_MAP.entrySet().stream()
-                .collect(Collectors.toMap(e->e.getValue().format(null), Entry::getKey));
-    }
-
-    public static Map<String, LogicString> initializeCombinedIconMap() {
-        Map<String, LogicString> result = ICON_MAP.entrySet().stream()
-                .collect(Collectors.toMap(e -> e.getKey().replace("-", "_"), Entry::getValue));
-        result.putAll(ICON_MAP);
-        return result;
-    }
-
-    private static final String RESOURCE_NAME = "mimex-icons.txt";
-
-    private static final Map<String, LogicString> ICON_MAP = initializeIconMap();
-    private static final Map<String, LogicString> COMBINED_MAP = initializeCombinedIconMap();
-    private static final Map<String, String> REVERSE_MAP = initializeReverseMap();
-
-    private static final Map<ContentType, Map<String, String>> CONTENT_MAP = initializeContentMap();
 }

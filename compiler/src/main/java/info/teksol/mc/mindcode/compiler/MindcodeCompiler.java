@@ -42,6 +42,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.FinalCodeOutput;
 import info.teksol.mc.util.CollectionUtils;
@@ -69,6 +70,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final CompilerProfile profile;
     private final InputFiles inputFiles;
     private @Nullable InstructionProcessor instructionProcessor;
+    private @Nullable MindustryMetadata metadata;
     private @Nullable CompileTimeEvaluator compileTimeEvaluator;
 
     // Intermediate and final results
@@ -211,6 +213,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         DirectivePreprocessor.processDirectives(this, astProgram);
 
         instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
+        metadata = instructionProcessor.getMetadata();
 
         callGraph = CallGraphCreator.createCallGraph(this, astProgram);
 
@@ -319,14 +322,15 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     private Processor createEmulator() {
-        Objects.requireNonNull(instructionProcessor);
+        assert instructionProcessor != null;
+        assert metadata != null;
 
         // All flags are already set as we want them to be
         Processor processor = new Processor(instructionProcessor, messageConsumer, profile.getExecutionFlags(), profile.getTraceLimit());
-        addBlocks(processor, "cell", i -> Memory.createMemoryCell());
-        addBlocks(processor, "bank", i -> Memory.createMemoryBank());
-        addBlocks(processor, "display", i -> LogicDisplay.createLogicDisplay(i < 5));
-        addBlocks(processor, "message", i -> MessageBlock.createMessage());
+        addBlocks(processor, "cell", i -> Memory.createMemoryCell(metadata));
+        addBlocks(processor, "bank", i -> Memory.createMemoryBank(metadata));
+        addBlocks(processor, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5));
+        addBlocks(processor, "message", i -> MessageBlock.createMessage(metadata));
         return processor;
     }
 
@@ -450,6 +454,11 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     @Override
     public InstructionProcessor instructionProcessor() {
         return Objects.requireNonNull(instructionProcessor);
+    }
+
+    @Override
+    public MindustryMetadata metadata() {
+        return Objects.requireNonNull(metadata);
     }
 
     @Override

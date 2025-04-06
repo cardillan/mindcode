@@ -9,7 +9,6 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
-import info.teksol.mc.mindcode.logic.mimex.MindustryContents;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -23,7 +22,7 @@ import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 /// This optimizer improves and streamlines expressions.
 ///   - Mul/div + floor optimization:
 ///     <br>
-///     `op mul __tmp variable1 constantop floor variable2 __tmp`<br>
+///     `op mul __tmp variable1 constant; op floor variable2 __tmp`<br>
 ///     is replaced by
 ///     <br>
 ///     `op idiv variable2 variable1 (1 / constant)`<br>
@@ -57,11 +56,11 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     private void processLookupInstruction(LogicIterator logicIterator, LookupInstruction ix) {
         if (advanced() && ix.getIndex() instanceof LogicNumber number) {
-            Map<Integer, ? extends MindustryContent> lookupMap = MindustryContents.getLookupMap(ix.getType().getKeyword());
+            Map<Integer, ? extends MindustryContent> lookupMap = metadata.getLookupMap(ix.getType().getKeyword());
             if (lookupMap != null) {
                 MindustryContent object = lookupMap.get(number.getIntValue());
                 if (object != null) {
-                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object.name(), false)));
+                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object, false)));
                 }
             }
         }
@@ -258,12 +257,13 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     private void processSensorInstruction(LogicIterator logicIterator, SensorInstruction ix) {
         if (ix.getObject() instanceof LogicBuiltIn object && ix.getProperty() instanceof LogicBuiltIn property) {
-            if (object.getName().equals("@this")) {
-                if (property.getName().equals("@x") || property.getName().equals("@y")) {
-                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(),
-                            LogicBuiltIn.create(object.getName() + property.getName().substring(1), false)));
+            if (object.equals(LogicBuiltIn.THIS)) {
+                if (property.equals(LogicBuiltIn.X)) {
+                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.THIS_X));
+                } else if (property.equals(LogicBuiltIn.Y)) {
+                    logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.THIS_Y));
                 }
-            } else if (advanced() && property.getName().equals("@id") && object.getObject() != null && object.getObject().id() != -1) {
+            } else if (advanced() && property.equals(LogicBuiltIn.ID) && object.getObject() != null && object.getObject().id() != -1) {
                 logicIterator.set(createSet(ix.getAstContext(),ix.getResult(),
                         LogicNumber.create(ix.sourcePosition(), object.getObject().id())));
             }

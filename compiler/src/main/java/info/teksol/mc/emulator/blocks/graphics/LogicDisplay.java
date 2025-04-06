@@ -3,6 +3,7 @@ package info.teksol.mc.emulator.blocks.graphics;
 import info.teksol.mc.emulator.blocks.MindustryBlock;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -42,15 +43,15 @@ public class LogicDisplay extends MindustryBlock {
         return snapshots;
     }
 
-    public static LogicDisplay createLogicDisplay() {
-        return new LogicDisplay("display", BlockType.existing("@logic-display"), 80);
+    public static LogicDisplay createLogicDisplay(MindustryMetadata metadata) {
+        return new LogicDisplay("display", metadata.getExistingBlock("@logic-display"), 80);
     }
 
-    public static LogicDisplay createLargeLogicDisplay() {
-        return new LogicDisplay("display", BlockType.existing("@large-logic-display"), 176);
+    public static LogicDisplay createLargeLogicDisplay(MindustryMetadata metadata) {
+        return new LogicDisplay("display", metadata.getExistingBlock("@large-logic-display"), 176);
     }
 
-    public static LogicDisplay createLogicDisplay(boolean large) {
-        return large ? createLargeLogicDisplay() : createLogicDisplay();
+    public static LogicDisplay createLogicDisplay(MindustryMetadata metadata, boolean large) {
+        return large ? createLargeLogicDisplay(metadata) : createLogicDisplay(metadata);
     }
 }

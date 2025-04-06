@@ -325,7 +325,11 @@ public class CompilerProfile {
     public CompilerProfile setTarget(String target) {
         String processor = target.endsWith("w") ? target.substring(0, target.length() - 1) : target;
         ProcessorEdition edition = target.endsWith("w") ? ProcessorEdition.W : ProcessorEdition.S;
-        setProcessorVersionEdition(ProcessorVersion.byCode(processor), edition);
+        ProcessorVersion version = ProcessorVersion.byCode(processor);
+        if (version == null) {
+            throw new MindcodeInternalError("Unknown processor version: %s", processor);
+        }
+        setProcessorVersionEdition(version, edition);
         return this;
     }
 

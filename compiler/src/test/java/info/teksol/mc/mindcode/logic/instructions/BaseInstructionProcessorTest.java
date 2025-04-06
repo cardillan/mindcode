@@ -146,12 +146,12 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
 
     //@Test
     public void printLinkedBlockNames() {
-        BlockType.getBaseLinkNames().stream().sorted().forEach(System.out::println);
+        BlockType.getBaseLinkNames(ip.getMetadata()).stream().sorted().forEach(System.out::println);
     }
 
     //@Test
     public void printLinkedBlockNamesN() {
-        BlockType.getBaseLinkNames().stream().sorted()
+        BlockType.getBaseLinkNames(ip.getMetadata()).stream().sorted()
                 .forEach(name -> IntStream.range(1, 10).forEach(i -> System.out.println(name + i)));
     }
 }

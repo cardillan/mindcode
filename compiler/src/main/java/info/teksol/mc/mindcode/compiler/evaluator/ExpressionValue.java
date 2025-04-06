@@ -4,7 +4,6 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.mimex.Icons;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -39,8 +38,8 @@ class ExpressionValue implements LogicReadable {
                 case AstLiteralFloat n -> new ExpressionValue(processor, null, n.getDoubleValue());
                 case AstLiteralColor n -> new ExpressionValue(processor, null, n.getDoubleValue());
                 case AstLiteralString n -> new ExpressionValue(processor, n.getValue(), null);
-                case AstIdentifier n -> Icons.isIconName(n.getName())
-                        ? new ExpressionValue(processor, Icons.getIconValue(n.getName()).format(processor), null)
+                case AstIdentifier n -> processor.getMetadata().getIcons().isIconName(n.getName())
+                        ? new ExpressionValue(processor, processor.getMetadata().getIcons().getIconValue(n.getName()).format(processor), null)
                         : new InvalidValue(processor);
                 case AstLiteral n ->
                         throw new MindcodeInternalError("Unhandled constant node " + node.getClass().getSimpleName());

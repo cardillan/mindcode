@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.Icons;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.SchematicsInternalError;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
 import info.teksol.schemacode.config.*;
 import info.teksol.schemacode.mindustry.*;
@@ -90,11 +91,11 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                 .filter(e -> e.getValue() > 1)
                 .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
-        astSchematic.blocks().stream().filter(astBlock -> !BlockType.isNameValid(astBlock.type()))
+        astSchematic.blocks().stream().filter(astBlock -> !SchematicsMetadata.metadata.isBlockNameValid(astBlock.type()))
                 .forEachOrdered(astBlock -> error(astBlock, "Unknown block type '%s'.", astBlock.type()));
 
         List<AstBlock> astBlocks = astSchematic.blocks().stream()
-                .filter(astBlock -> BlockType.isNameValid(astBlock.type())).toList();
+                .filter(astBlock -> SchematicsMetadata.metadata.isBlockNameValid(astBlock.type())).toList();
 
         // Here are absolute positions of all blocks, stored as "#" + index
         // Labeled blocks are additionally stored under all their labels
@@ -108,7 +109,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         for (int index = 0; index < astBlocks.size(); index++) {
             AstBlock astBlock = astBlocks.get(index);
             BlockPosition blockPos = getBlockPosition(index);
-            BlockType type = BlockType.forName(astBlock.type());
+            BlockType type = SchematicsMetadata.metadata.getBlockByName(astBlock.type());
             Direction direction = astBlock.direction() == null
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
@@ -121,7 +122,8 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         String description = unwrap(getStringAttribute("description", ""));
 
         List<String> schemaLabels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
-        List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(Icons::translateIcon).toList();
+        Icons icons = SchematicsMetadata.metadata.getIcons();
+        List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(icons::translateIcon).toList();
         List<String> labels = Stream.concat(schemaLabels.stream(), additionalLabels.stream()).distinct().toList();
 
         positionMap = BlockPositionMap.forBuilder(m -> {}, blocks);
@@ -202,7 +204,8 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                         e -> resolveConstant(astConstants, new HashSet<>(), e.getValue())));
 
         // Add all icon constants
-        Icons.forEachIcon((k, v) -> constants.put(k, AstStringLiteral.fromText(v.format(null))));
+        SchematicsMetadata.metadata.getIcons().forEachIcon(
+                (k, v) -> constants.put(k, AstStringLiteral.fromText(v.format(null))));
     }
 
     private AstText resolveConstant(Map<String, AstStringConstant> constantLists, Set<String> visited, AstStringConstant value) {
@@ -373,7 +376,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
             return blockPosition;
         }
         error(element, "Unknown block label '%s'", name);
-        return new AstBlockPosition(0, BlockType.forName("@air"), Position.INVALID);
+        return new AstBlockPosition(0, SchematicsMetadata.metadata.getBlockByName("@air"), Position.INVALID);
     }
     public Map<String, BlockPosition> getAstLabelMap() {
         return astLabelMap;

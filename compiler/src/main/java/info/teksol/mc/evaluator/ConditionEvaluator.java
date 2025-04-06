@@ -9,8 +9,8 @@ import java.util.Map;
 @NullMarked
 public class ConditionEvaluator {
 
-    public static LogicCondition getCondition(Condition operation) {
-        return CONDITIONS.get(operation);
+    public static LogicCondition getCondition(Condition condition) {
+        return CONDITIONS.get(condition);
     }
 
     private static final Map<Condition, LogicCondition> CONDITIONS = createConditionsMap();

@@ -1,6 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.config.UnitOrBlockConfiguration;
 
 import java.util.Objects;
@@ -25,11 +26,11 @@ public final class BlockConfiguration implements UnitOrBlockConfiguration {
     }
 
     public static BlockConfiguration forId(int id) {
-        return forBlockType(BlockType.forId(id));
+        return forBlockType(SchematicsMetadata.metadata.getBlockById(id));
     }
 
     public static BlockConfiguration forName(String name) {
-        return forBlockType(BlockType.forName(name));
+        return forBlockType(SchematicsMetadata.metadata.getBlockByName(name));
     }
 
     @Override

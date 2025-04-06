@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.evaluator;
 
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
-import info.teksol.mc.mindcode.logic.mimex.Icons;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
@@ -139,7 +138,7 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         a = "[]" + ITEM_COAL;
                         print(a);
                         """,
-                createInstruction(SET, "a", q("[]" + Icons.getIconValue("ITEM_COAL").format(null))),
+                createInstruction(SET, "a", q("[]" + ip.getMetadata().getIcons().getIconValue("ITEM_COAL").format(null))),
                 createInstruction(PRINT, "a")
         );
     }

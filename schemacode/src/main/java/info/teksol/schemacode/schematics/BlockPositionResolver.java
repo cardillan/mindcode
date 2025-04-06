@@ -4,6 +4,7 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.schemacode.SchematicsInternalError;
+import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.AstBlock;
 import info.teksol.schemacode.mindustry.Position;
 import org.intellij.lang.annotations.PrintFormat;
@@ -68,7 +69,7 @@ public class BlockPositionResolver {
 
     private record RelativeBlockPosition(int index, BlockType blockType, String reference, Position position) {
         public RelativeBlockPosition(int index, AstBlock astBlock, String lastBlock) {
-            this(index, BlockType.forName(astBlock.type()),
+            this(index, SchematicsMetadata.metadata.getBlockByName(astBlock.type()),
                     astBlock.position().relative()
                             ? astBlock.position().getRelativeTo() == null ? lastBlock : astBlock.position().getRelativeTo()
                             : null,

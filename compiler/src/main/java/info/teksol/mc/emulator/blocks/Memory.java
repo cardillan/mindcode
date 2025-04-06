@@ -2,6 +2,7 @@ package info.teksol.mc.emulator.blocks;
 
 import info.teksol.mc.emulator.processor.ExecutionException;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Arrays;
@@ -37,19 +38,19 @@ public class Memory extends MindustryBlock {
         return index;
     }
 
-    public static Memory createMemoryCell() {
-        return new Memory("cell", BlockType.existing("@memory-cell"), 64);
+    public static Memory createMemoryCell(MindustryMetadata metadata) {
+        return new Memory("cell", metadata.getExistingBlock("@memory-cell"), 64);
     }
 
-    public static Memory createMemoryCell(double[] array) {
-        return new Memory("cell", BlockType.existing("@memory-cell"), Arrays.copyOf(array, 64));
+    public static Memory createMemoryCell(MindustryMetadata metadata, double[] array) {
+        return new Memory("cell", metadata.getExistingBlock("@memory-cell"), Arrays.copyOf(array, 64));
     }
 
-    public static Memory createMemoryBank() {
-        return new Memory("bank", BlockType.existing("@memory-bank"), 512);
+    public static Memory createMemoryBank(MindustryMetadata metadata) {
+        return new Memory("bank", metadata.getExistingBlock("@memory-bank"), 512);
     }
 
-    public static Memory createMemoryBank(double[] array) {
-        return new Memory("bank", BlockType.existing("@memory-bank"), Arrays.copyOf(array, 512));
+    public static Memory createMemoryBank(MindustryMetadata metadata, double[] array) {
+        return new Memory("bank", metadata.getExistingBlock("@memory-bank"), Arrays.copyOf(array, 512));
     }
 }

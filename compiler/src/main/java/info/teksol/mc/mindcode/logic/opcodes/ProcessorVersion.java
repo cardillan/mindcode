@@ -10,19 +10,21 @@ import java.util.Set;
 
 @NullMarked
 public enum ProcessorVersion {
-    V6      (6, 0),
-    V7      (7, 0),
-    V7A     (7, 1),
-    V8A     (8, 0),
-    MAX     (8, 0),
+    V6      (6, 0, "6"),
+    V7      (7, 0, "7"),
+    V7A     (7, 1, "7"),
+    V8A     (8, 0, "8"),
+    MAX     (8, 0, "8"),
     ;
 
     public final int major;
     public final int minor;
+    public final String mimexVersion;
 
-    ProcessorVersion(int major, int minor) {
+    ProcessorVersion(int major, int minor, String mimexVersion) {
         this.major = major;
         this.minor = minor;
+        this.mimexVersion = mimexVersion;
     }
 
     public boolean atLeast(ProcessorVersion min) {
