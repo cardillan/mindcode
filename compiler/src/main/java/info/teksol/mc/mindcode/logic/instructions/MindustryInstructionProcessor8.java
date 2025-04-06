@@ -14,7 +14,8 @@ public class MindustryInstructionProcessor8 extends BaseInstructionProcessor {
 
     @Override
     public boolean isValidIntegerLiteral(long value) {
-        return value != Integer.MIN_VALUE;
+        // We always encode negative literals as decimal ones, so we avoid the bug.
+        return true;
     }
 
     @Override

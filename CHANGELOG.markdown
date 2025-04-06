@@ -17,7 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a new remarks mode - `comments`. In this mode, remarks are compiled as mlog comments (`# comment`).
 * Added support for generating boundary checks for explicitly declared external arrays. 
 * Added support for handling instructions setting up return addresses for function calls to Loop Hoisting optimizer. 
-* Added support for handling numerical literal values unsupported by Mindustry Logic (namely, `-2147483648`). When a numerical literal or constant expression has this value, a compile-time error is generated. 
+* Added support for handling numerical literal values unsupported by Mindustry Logic version 7 and earlier (namely, `-2147483648`).
+  When a numerical literal or constant expression has this value, a compile-time error is generated. 
 * Added a new [`--file-references` command-line option](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#file-references).
 * Added a suggestion of the closest matching alternative when an unknown compiler directive or option value is found.
 * Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).

@@ -472,8 +472,8 @@ Returns `true` if the two values differ by less than `precision`.
 
 > [!NOTE]
 > The non-strict equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`,
-> consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function allows
-> to compare values using different precision.
+> consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function
+> allows to compare values using different precision.
 
 ### nullToZero
 
