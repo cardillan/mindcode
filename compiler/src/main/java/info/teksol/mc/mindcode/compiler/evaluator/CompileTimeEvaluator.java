@@ -8,6 +8,8 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
@@ -224,6 +226,9 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         if (node.getFunctionName().equals("packcolor") && processor.isSupported(Opcode.PACKCOLOR)) {
             return evaluatePackColor(node, local);
         }
+        if (node.getFunctionName().equals("length")) {
+            return evaluateLength(node, local);
+        }
 
         Operation operation = Operation.fromMindcode(node.getFunctionName());
         if (operation == null || !processor.isSupported(Opcode.OP, List.of(operation))) {
@@ -262,6 +267,20 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                         evaluated.get(2).getDoubleValue(),
                         evaluated.get(3).getDoubleValue());
                 return new AstLiteralColor(node.sourcePosition(), literal);
+            }
+        }
+
+        return node;
+    }
+
+    private AstMindcodeNode evaluateLength(AstFunctionCall node, boolean local) {
+        if (node.getArguments().size() == 1) {
+            AstFunctionArgument argument = node.getArgument(0);
+            if (argument.hasExpression() &&argument.getExpression() instanceof AstIdentifier identifier) {
+                ValueStore valueStore = variables.resolveVariable(identifier, local, true);
+                if (valueStore instanceof ArrayStore array) {
+                    return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.getSize()));
+                }
             }
         }
 

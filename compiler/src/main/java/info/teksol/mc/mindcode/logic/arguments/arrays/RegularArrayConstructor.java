@@ -106,7 +106,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         if (profile.isSymbolicLabels()) {
             LogicLabel startLabel = processor.nextLabel();
             creator.createLabel(startLabel).setMarker(startLabel);
-            creator.createMultiJump(firstLabel,writeInd,LogicNumber.ZERO, marker);
+            creator.createMultiJump(firstLabel,accessType == AccessType.READ ? readInd : writeInd,LogicNumber.ZERO, marker);
         }
 
         Runnable createExit = () -> creator.createReturn(accessType == AccessType.READ ? readRet : writeRet);

@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a new [`--file-references` command-line option](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#file-references).
 * Added a suggestion of the closest matching alternative when an unknown compiler directive or option value is found.
 * Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).
+* Added support for compile-time evaluation of the `length()` function, allowing to specify offsets relative to the end of the array in subarrays (e.g. `array[0 ... length(array) - 1]`).
 
 #### Experimental features
 
