@@ -78,64 +78,64 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * set :a .array*0
      1 op add *tmp0 @counter 1
      2 jump *label0 always
-     3 multilabel *label3
+     3 multilabel *label3 (m:marker0)
 -    * set .array*0 :a
 -    * set :a .array*1
 +    4 set .array*0 0
      5 op add *tmp0 @counter 1
      6 jump *label0 always
-     7 multilabel *label4
+     7 multilabel *label4 (m:marker0)
 -    * set .array*1 :a
 -    * set :a .array*2
 +    8 set .array*1 0
      9 op add *tmp0 @counter 1
     10 jump *label0 always
-    11 multilabel *label5
+    11 multilabel *label5 (m:marker0)
 -    * set .array*2 :a
 -    * set :a .array*3
 +   12 set .array*2 0
     13 op add *tmp0 @counter 1
     14 jump *label0 always
-    15 multilabel *label6
+    15 multilabel *label6 (m:marker0)
 -    * set .array*3 :a
 -    * set :a .array*4
 +   16 set .array*3 0
     17 op add *tmp0 @counter 1
     18 jump *label0 always
-    19 multilabel *label7
+    19 multilabel *label7 (m:marker0)
 -    * set .array*4 :a
 -    * set :a .array*5
 +   20 set .array*4 0
     21 op add *tmp0 @counter 1
     22 jump *label0 always
-    23 multilabel *label8
+    23 multilabel *label8 (m:marker0)
 -    * set .array*5 :a
 -    * set :a .array*6
 +   24 set .array*5 0
     25 op add *tmp0 @counter 1
     26 jump *label0 always
-    27 multilabel *label9
+    27 multilabel *label9 (m:marker0)
 -    * set .array*6 :a
 -    * set :a .array*7
 +   28 set .array*6 0
     29 op add *tmp0 @counter 1
     30 jump *label0 always
-    31 multilabel *label10
+    31 multilabel *label10 (m:marker0)
 -    * set .array*7 :a
 -    * set :a .array*8
 +   32 set .array*7 0
     33 op add *tmp0 @counter 1
     34 jump *label0 always
-    35 multilabel *label11
+    35 multilabel *label11 (m:marker0)
 -    * set .array*8 :a
 -    * set :a .array*9
 +   36 set .array*8 0
     37 op add *tmp0 @counter 1
     38 jump *label0 always
-    39 multilabel *label13
+    39 multilabel *label13 (m:marker0)
  
-    44 multijump *tmp0 0 0
-    45 multilabel *label12
+    44 multijump *tmp0 0 0 (m:marker0)
+    45 multilabel *label12 (m:marker0)
     46 label *label14
 -    * set .array*9 :a
 +   47 set .array*9 0
@@ -154,13 +154,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
-    39 multilabel *label13
+    39 multilabel *label13 (m:marker0)
     40 jump *label14 always
     41 label *label0
 -    * set :a 0
     42 label *label1
-    43 multijump *tmp0 0 0
-    44 multilabel *label12
+    43 multijump *tmp0 0 0 (m:marker0)
+    44 multilabel *label12 (m:marker0)
  
     70 set :printArray.0:i 1
     71 label *label23
@@ -208,48 +208,48 @@ Modifications by Unroll iteration loop at line 7:5 (-12 instructions):
      0 set LIMIT 100
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label3
+-    * multilabel *label3 (m:marker0)
 -    * set .array*0 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label4
+-    * multilabel *label4 (m:marker0)
 -    * set .array*1 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label5
+-    * multilabel *label5 (m:marker0)
 -    * set .array*2 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label6
+-    * multilabel *label6 (m:marker0)
 -    * set .array*3 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label7
+-    * multilabel *label7 (m:marker0)
 -    * set .array*4 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label8
+-    * multilabel *label8 (m:marker0)
 -    * set .array*5 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label9
+-    * multilabel *label9 (m:marker0)
 -    * set .array*6 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label10
+-    * multilabel *label10 (m:marker0)
 -    * set .array*7 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label11
+-    * multilabel *label11 (m:marker0)
 -    * set .array*8 0
 -    * op add *tmp0 @counter 1
 -    * jump *label0 always
--    * multilabel *label13
+-    * multilabel *label13 (m:marker0)
 -    * jump *label14 always
 -    * label *label0
 -    * label *label1
--    * multijump *tmp0 0 0
--    * multilabel *label12
+-    * multijump *tmp0 0 0 (m:marker0)
+-    * multilabel *label12 (m:marker0)
 -    * label *label14
 -    * set .array*9 0
 -    * label *label2
@@ -777,70 +777,70 @@ Modifications by Virtual Instruction Expansion (+2 instructions):
     40 op mod *tmp2 :countDigits.0:number 10
 -    * readarr<inlined> *tmp3 .array[] *tmp2
 +   41 op mul *tmp8 *tmp2 2
-+   42 multijump *label90 *tmp8 0
-+   43 multilabel *label90
++   42 multijump *label90 *tmp8 0 (m:marker1)
++   43 multilabel *label90 (m:marker1)
 +   44 set *tmp3 .array*0
 +   45 jump *label89 always
-+   46 multilabel *label91
++   46 multilabel *label91 (m:marker1)
 +   47 set *tmp3 .array*1
 +   48 jump *label89 always
-+   49 multilabel *label92
++   49 multilabel *label92 (m:marker1)
 +   50 set *tmp3 .array*2
 +   51 jump *label89 always
-+   52 multilabel *label93
++   52 multilabel *label93 (m:marker1)
 +   53 set *tmp3 .array*3
 +   54 jump *label89 always
-+   55 multilabel *label94
++   55 multilabel *label94 (m:marker1)
 +   56 set *tmp3 .array*4
 +   57 jump *label89 always
-+   58 multilabel *label95
++   58 multilabel *label95 (m:marker1)
 +   59 set *tmp3 .array*5
 +   60 jump *label89 always
-+   61 multilabel *label96
++   61 multilabel *label96 (m:marker1)
 +   62 set *tmp3 .array*6
 +   63 jump *label89 always
-+   64 multilabel *label97
++   64 multilabel *label97 (m:marker1)
 +   65 set *tmp3 .array*7
 +   66 jump *label89 always
-+   67 multilabel *label98
++   67 multilabel *label98 (m:marker1)
 +   68 set *tmp3 .array*8
 +   69 jump *label89 always
-+   70 multilabel *label99
++   70 multilabel *label99 (m:marker1)
 +   71 set *tmp3 .array*9
 +   72 jump *label89 always
 +   73 label *label89
     74 op add *tmp3 *tmp3 1
 -    * writearr<inlined> *tmp3 .array[] *tmp2
 +   75 op mul *tmp9 *tmp2 2
-+   76 multijump *label102 *tmp9 0
-+   77 multilabel *label102
++   76 multijump *label102 *tmp9 0 (m:marker2)
++   77 multilabel *label102 (m:marker2)
 +   78 set .array*0 *tmp3
 +   79 jump *label101 always
-+   80 multilabel *label103
++   80 multilabel *label103 (m:marker2)
 +   81 set .array*1 *tmp3
 +   82 jump *label101 always
-+   83 multilabel *label104
++   83 multilabel *label104 (m:marker2)
 +   84 set .array*2 *tmp3
 +   85 jump *label101 always
-+   86 multilabel *label105
++   86 multilabel *label105 (m:marker2)
 +   87 set .array*3 *tmp3
 +   88 jump *label101 always
-+   89 multilabel *label106
++   89 multilabel *label106 (m:marker2)
 +   90 set .array*4 *tmp3
 +   91 jump *label101 always
-+   92 multilabel *label107
++   92 multilabel *label107 (m:marker2)
 +   93 set .array*5 *tmp3
 +   94 jump *label101 always
-+   95 multilabel *label108
++   95 multilabel *label108 (m:marker2)
 +   96 set .array*6 *tmp3
 +   97 jump *label101 always
-+   98 multilabel *label109
++   98 multilabel *label109 (m:marker2)
 +   99 set .array*7 *tmp3
 +  100 jump *label101 always
-+  101 multilabel *label110
++  101 multilabel *label110 (m:marker2)
 +  102 set .array*8 *tmp3
 +  103 jump *label101 always
-+  104 multilabel *label111
++  104 multilabel *label111 (m:marker2)
 +  105 set .array*9 *tmp3
 +  106 jump *label101 always
 +  107 label *label101
@@ -851,7 +851,7 @@ Modifications by Virtual Instruction Expansion (+2 instructions):
 Modifications by Iterated phase, Single Step Elimination, pass 4, iteration 1 (-2 instructions):
  
     69 jump *label89 always
-    70 multilabel *label99
+    70 multilabel *label99 (m:marker1)
     71 set *tmp3 .array*9
 -    * jump *label89 always
     72 label *label89
@@ -859,7 +859,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 4, iteration 1 (-
     74 op mul *tmp9 *tmp2 2
  
    102 jump *label101 always
-   103 multilabel *label111
+   103 multilabel *label111 (m:marker2)
    104 set .array*9 *tmp3
 -    * jump *label101 always
    105 label *label101

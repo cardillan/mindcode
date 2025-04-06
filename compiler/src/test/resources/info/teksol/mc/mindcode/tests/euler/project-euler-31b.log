@@ -108,7 +108,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
 +   45 jump *label15 lessThanEq :j 200
     46 label *label14
     47 label *label2
-    48 multijump *tmp1 0 0
+    48 multijump *tmp1 0 0 (m:marker0)
 
 Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
      0 label *label0
@@ -117,31 +117,31 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 -    * set :i 1
 -    * setaddr *tmp1 *label4
 -    * jump *label1 always
--    * multilabel *label4
+-    * multilabel *label4 (m:marker0)
 -    * set :i 2
 -    * setaddr *tmp1 *label5
 -    * jump *label1 always
--    * multilabel *label5
+-    * multilabel *label5 (m:marker0)
 -    * set :i 5
 -    * setaddr *tmp1 *label6
 -    * jump *label1 always
--    * multilabel *label6
+-    * multilabel *label6 (m:marker0)
 -    * set :i 10
 -    * setaddr *tmp1 *label7
 -    * jump *label1 always
--    * multilabel *label7
+-    * multilabel *label7 (m:marker0)
 -    * set :i 20
 -    * setaddr *tmp1 *label8
 -    * jump *label1 always
--    * multilabel *label8
+-    * multilabel *label8 (m:marker0)
 -    * set :i 50
 -    * setaddr *tmp1 *label9
 -    * jump *label1 always
--    * multilabel *label9
+-    * multilabel *label9 (m:marker0)
 -    * set :i 100
 -    * setaddr *tmp1 *label10
 -    * jump *label1 always
--    * multilabel *label10
+-    * multilabel *label10 (m:marker0)
 -    * set :i 200
 -    * setaddr *tmp1 *label11
 -    * label *label1
@@ -159,8 +159,8 @@ Modifications by Unroll iteration loop at line 4:1 (+47 instructions):
 -    * jump *label15 lessThanEq :j 200
 -    * label *label14
 -    * label *label2
--    * multijump *tmp1 0 0
--    * multilabel *label11
+-    * multijump *tmp1 0 0 (m:marker0)
+-    * multilabel *label11 (m:marker0)
 -    * label *label3
 +    3 set :i 1
 +    4 label *label16

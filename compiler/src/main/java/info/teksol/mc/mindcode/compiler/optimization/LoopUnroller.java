@@ -197,13 +197,11 @@ class LoopUnroller extends BaseOptimizer {
     private int unhoistingSize(AstContext loop) {
         // Find all hoisted SETADDRs
         Map<LogicLabel, LogicInstruction> hoistedMap = instructionStream().filter(LogicInstruction::isHoisted)
-                .collect(Collectors.toMap(LogicInstruction::getMarker, ix -> ix));
+                .collect(Collectors.toMap(LogicInstruction::getHoistId, ix -> ix));
 
         List<LogicInstruction> hoisted = contextStream(loop)
                 .filter(ix -> !ix.isHoisted())
-                .filter(ix -> hoistedMap.containsKey(ix.getMarker()))
-                .peek(System.out::println)
-                .map(ix -> hoistedMap.get(ix.getMarker()))
+                .map(ix -> hoistedMap.get(ix.getHoistId()))
                 .filter(Objects::nonNull)
                 .toList();
 
@@ -392,7 +390,7 @@ class LoopUnroller extends BaseOptimizer {
     private void unhoistLoop(AstContext loop) {
         // Find all hoisted SETADDRs
         Map<LogicLabel, LogicInstruction> hoistedMap = instructionStream().filter(LogicInstruction::isHoisted)
-                .collect(Collectors.toMap(LogicInstruction::getMarker, ix -> ix));
+                .collect(Collectors.toMap(LogicInstruction::getHoistId, ix -> ix));
 
         try (OptimizationContext.LogicIterator iterator = createIteratorAtContext(loop)) {
             while (iterator.hasNext()) {
@@ -400,7 +398,7 @@ class LoopUnroller extends BaseOptimizer {
                 if (!instruction.belongsTo(loop)) break;
                 if (instruction.isHoisted()) continue;
 
-                LogicInstruction hoisted = hoistedMap.remove(instruction.getMarker());
+                LogicInstruction hoisted = hoistedMap.remove(instruction.getHoistId());
                 if (hoisted != null) {
                     removeInstruction(hoisted);
                     LogicInstruction copy = hoisted.withContext(instruction.getAstContext());

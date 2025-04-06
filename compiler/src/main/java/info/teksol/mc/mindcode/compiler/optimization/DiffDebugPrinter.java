@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
@@ -191,6 +192,12 @@ public class DiffDebugPrinter implements DebugPrinter {
             str.append('<').append(instruction.getArrayOrganization().getName()).append('>');
         }
         instruction.getArgs().forEach(arg -> str.append(" ").append(arg.toMlog()));
+        if (instruction.getMarker() != LogicLabel.EMPTY) {
+            str.append(" (m:").append(instruction.getMarker().toMlog()).append(')');
+        }
+        if (instruction.getHoistId() != LogicLabel.EMPTY) {
+            str.append(" (h:").append(instruction.getHoistId().toMlog()).append(')');
+        }
         return str.toString();
     }
 

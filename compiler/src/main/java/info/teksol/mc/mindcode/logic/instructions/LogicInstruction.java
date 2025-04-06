@@ -83,6 +83,14 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.MARKER, marker);
     }
 
+    default LogicLabel getHoistId() {
+        return (LogicLabel) getInfo(InstructionInfo.HOIST_ID);
+    }
+
+    default LogicInstruction setHoistId(LogicLabel marker) {
+        return setInfo(InstructionInfo.HOIST_ID, marker);
+    }
+
     /// Provides side effects of this instruction
     default SideEffects getSideEffects() {
         return (SideEffects) getInfo(InstructionInfo.SIDE_EFFECTS);

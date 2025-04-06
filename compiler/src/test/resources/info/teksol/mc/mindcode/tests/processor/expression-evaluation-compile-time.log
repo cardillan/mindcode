@@ -216,8 +216,8 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+17 in
  
     46 set :assertEqualsRound.0:actual 1
     47 set :assertEqualsRound.0:title "sin"
-    48 setaddr :assertEqualsRound.0*retaddr *label4
--    * call *label3 *invalid :assertEqualsRound.0*retval
+    48 setaddr :assertEqualsRound.0*retaddr *label4 (h:*label4)
+-    * call *label3 *invalid :assertEqualsRound.0*retval (m:*label4) (h:*label4)
 -    * label *label4
 +   49 label *label12
 +   50 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -230,8 +230,8 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+17 in
     57 set :assertEqualsRound.0:expected -1
     58 set :assertEqualsRound.0:actual -1
     59 set :assertEqualsRound.0:title "cos"
-    60 setaddr :assertEqualsRound.0*retaddr *label5
--    * call *label3 *invalid :assertEqualsRound.0*retval
+    60 setaddr :assertEqualsRound.0*retaddr *label5 (h:*label5)
+-    * call *label3 *invalid :assertEqualsRound.0*retval (m:*label5) (h:*label5)
 -    * label *label5
 +   61 label *label15
 +   62 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -244,8 +244,8 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+17 in
     69 set :assertEqualsRound.0:expected 1
     70 set :assertEqualsRound.0:actual 0.9999999999999999
     71 set :assertEqualsRound.0:title "tan"
-    72 setaddr :assertEqualsRound.0*retaddr *label6
--    * call *label3 *invalid :assertEqualsRound.0*retval
+    72 setaddr :assertEqualsRound.0*retaddr *label6 (h:*label6)
+-    * call *label3 *invalid :assertEqualsRound.0*retval (m:*label6) (h:*label6)
 -    * label *label6
 +   73 label *label18
 +   74 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -258,8 +258,8 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+17 in
     81 set :assertEqualsRound.0:expected 90
     82 set :assertEqualsRound.0:actual 90
     83 set :assertEqualsRound.0:title "asin"
-    84 setaddr :assertEqualsRound.0*retaddr *label7
--    * call *label3 *invalid :assertEqualsRound.0*retval
+    84 setaddr :assertEqualsRound.0*retaddr *label7 (h:*label7)
+-    * call *label3 *invalid :assertEqualsRound.0*retval (m:*label7) (h:*label7)
 -    * label *label7
 +   85 label *label21
 +   86 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -272,8 +272,8 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+17 in
     93 set :assertEqualsRound.0:expected 0
     94 set :assertEqualsRound.0:actual 0
     95 set :assertEqualsRound.0:title "acos"
-    96 setaddr :assertEqualsRound.0*retaddr *label8
--    * call *label3 *invalid :assertEqualsRound.0*retval
+    96 setaddr :assertEqualsRound.0*retaddr *label8 (h:*label8)
+-    * call *label3 *invalid :assertEqualsRound.0*retval (m:*label8) (h:*label8)
 -    * label *label8
 +   97 label *label24
 +   98 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -286,8 +286,8 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+17 in
    105 set :assertEqualsRound.0:expected 45
    106 set :assertEqualsRound.0:actual 45
    107 set :assertEqualsRound.0:title "atan"
-   108 setaddr :assertEqualsRound.0*retaddr *label9
--    * call *label3 *invalid :assertEqualsRound.0*retval
+   108 setaddr :assertEqualsRound.0*retaddr *label9 (h:*label9)
+-    * call *label3 *invalid :assertEqualsRound.0*retval (m:*label9) (h:*label9)
 -    * label *label9
 +  109 label *label27
 +  110 op mul :round.0:x :assertEqualsRound.0:actual 100000000
@@ -318,7 +318,7 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+17 in
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     47 set :assertEqualsRound.0:title "sin"
-    48 setaddr :assertEqualsRound.0*retaddr *label4
+    48 setaddr :assertEqualsRound.0*retaddr *label4 (h:*label4)
     49 label *label12
 -    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
 -    * op add *tmp6 :round.0:x 0.5
@@ -335,7 +335,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     57 set :assertEqualsRound.0:expected -1
     58 set :assertEqualsRound.0:actual -1
     59 set :assertEqualsRound.0:title "cos"
-    60 setaddr :assertEqualsRound.0*retaddr *label5
+    60 setaddr :assertEqualsRound.0*retaddr *label5 (h:*label5)
     61 label *label15
 -    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
 -    * op add *tmp6 :round.0:x 0.5
@@ -352,7 +352,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     69 set :assertEqualsRound.0:expected 1
     70 set :assertEqualsRound.0:actual 0.9999999999999999
     71 set :assertEqualsRound.0:title "tan"
-    72 setaddr :assertEqualsRound.0*retaddr *label6
+    72 setaddr :assertEqualsRound.0*retaddr *label6 (h:*label6)
     73 label *label18
 -    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
 -    * op add *tmp6 :round.0:x 0.5
@@ -369,7 +369,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     81 set :assertEqualsRound.0:expected 90
     82 set :assertEqualsRound.0:actual 90
     83 set :assertEqualsRound.0:title "asin"
-    84 setaddr :assertEqualsRound.0*retaddr *label7
+    84 setaddr :assertEqualsRound.0*retaddr *label7 (h:*label7)
     85 label *label21
 -    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
 -    * op add *tmp6 :round.0:x 0.5
@@ -386,7 +386,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     93 set :assertEqualsRound.0:expected 0
     94 set :assertEqualsRound.0:actual 0
     95 set :assertEqualsRound.0:title "acos"
-    96 setaddr :assertEqualsRound.0*retaddr *label8
+    96 setaddr :assertEqualsRound.0*retaddr *label8 (h:*label8)
     97 label *label24
 -    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
 -    * op add *tmp6 :round.0:x 0.5
@@ -403,7 +403,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    105 set :assertEqualsRound.0:expected 45
    106 set :assertEqualsRound.0:actual 45
    107 set :assertEqualsRound.0:title "atan"
-   108 setaddr :assertEqualsRound.0*retaddr *label9
+   108 setaddr :assertEqualsRound.0*retaddr *label9 (h:*label9)
    109 label *label27
 -    * op mul :round.0:x :assertEqualsRound.0:actual 100000000
 -    * op add *tmp6 :round.0:x 0.5
@@ -428,7 +428,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound.0:expected 1
 -    * set :assertEqualsRound.0:actual 1
 -    * set :assertEqualsRound.0:title "sin"
-    45 setaddr :assertEqualsRound.0*retaddr *label4
+    45 setaddr :assertEqualsRound.0*retaddr *label4 (h:*label4)
     46 label *label12
 -    * op mul :round.0:x 1 100000000
 -    * op add *tmp6 100000000 0.5
@@ -440,7 +440,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound.0:expected -1
 -    * set :assertEqualsRound.0:actual -1
 -    * set :assertEqualsRound.0:title "cos"
-    50 setaddr :assertEqualsRound.0*retaddr *label5
+    50 setaddr :assertEqualsRound.0*retaddr *label5 (h:*label5)
     51 label *label15
 -    * op mul :round.0:x -1 100000000
 -    * op add *tmp6 -100000000 0.5
@@ -452,7 +452,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound.0:expected 1
 -    * set :assertEqualsRound.0:actual 0.9999999999999999
 -    * set :assertEqualsRound.0:title "tan"
-    55 setaddr :assertEqualsRound.0*retaddr *label6
+    55 setaddr :assertEqualsRound.0*retaddr *label6 (h:*label6)
     56 label *label18
 -    * op mul :round.0:x 0.9999999999999999 100000000
 -    * op add *tmp6 99999999.99999999 0.5
@@ -464,7 +464,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound.0:expected 90
 -    * set :assertEqualsRound.0:actual 90
 -    * set :assertEqualsRound.0:title "asin"
-    60 setaddr :assertEqualsRound.0*retaddr *label7
+    60 setaddr :assertEqualsRound.0*retaddr *label7 (h:*label7)
     61 label *label21
 -    * op mul :round.0:x 90 100000000
 -    * op add *tmp6 9000000000 0.5
@@ -476,7 +476,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound.0:expected 0
 -    * set :assertEqualsRound.0:actual 0
 -    * set :assertEqualsRound.0:title "acos"
-    65 setaddr :assertEqualsRound.0*retaddr *label8
+    65 setaddr :assertEqualsRound.0*retaddr *label8 (h:*label8)
     66 label *label24
 -    * op mul :round.0:x 0 100000000
 -    * op add *tmp6 0 0.5
@@ -488,7 +488,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :assertEqualsRound.0:expected 45
 -    * set :assertEqualsRound.0:actual 45
 -    * set :assertEqualsRound.0:title "atan"
-    70 setaddr :assertEqualsRound.0*retaddr *label9
+    70 setaddr :assertEqualsRound.0*retaddr *label9 (h:*label9)
     71 label *label27
 -    * op mul :round.0:x 45 100000000
 -    * op add *tmp6 4500000000 0.5
@@ -504,32 +504,32 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-6 instruction
     42 assertequals 45 45 "angle"
     43 assertequals 90 90 "angleDiff"
     44 assertequals 5 5 "len"
--    * setaddr :assertEqualsRound.0*retaddr *label4
+-    * setaddr :assertEqualsRound.0*retaddr *label4 (h:*label4)
     45 label *label12
     46 label *label13
     47 assertequals 1 1 "sin"
     48 label *label14
--    * setaddr :assertEqualsRound.0*retaddr *label5
+-    * setaddr :assertEqualsRound.0*retaddr *label5 (h:*label5)
     49 label *label15
     50 label *label16
     51 assertequals -1 -1 "cos"
     52 label *label17
--    * setaddr :assertEqualsRound.0*retaddr *label6
+-    * setaddr :assertEqualsRound.0*retaddr *label6 (h:*label6)
     53 label *label18
     54 label *label19
     55 assertequals 1 1 "tan"
     56 label *label20
--    * setaddr :assertEqualsRound.0*retaddr *label7
+-    * setaddr :assertEqualsRound.0*retaddr *label7 (h:*label7)
     57 label *label21
     58 label *label22
     59 assertequals 90 90 "asin"
     60 label *label23
--    * setaddr :assertEqualsRound.0*retaddr *label8
+-    * setaddr :assertEqualsRound.0*retaddr *label8 (h:*label8)
     61 label *label24
     62 label *label25
     63 assertequals 0 0 "acos"
     64 label *label26
--    * setaddr :assertEqualsRound.0*retaddr *label9
+-    * setaddr :assertEqualsRound.0*retaddr *label9 (h:*label9)
     65 label *label27
     66 label *label28
     67 assertequals 45 45 "atan"

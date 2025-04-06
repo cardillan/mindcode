@@ -134,7 +134,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-166 instruc
 -    * set *tmp35 null
    241 label *label37
    242 label *label30
-   243 multijump *tmp33 0 0
+   243 multijump *tmp33 0 0 (m:marker0)
  
    263 op equal *tmp67 :rebindUnits.0:firstUnit null
    264 jump *label58 equal *tmp67 false
@@ -4861,15 +4861,15 @@ Modifications by Unroll iteration loop at line 177:9 (+139 instructions):
 -    * set :chooseUnitType.0:type @flare
 -    * setaddr *tmp33 *label32
 -    * jump *label29 always
--    * multilabel *label32
+-    * multilabel *label32 (m:marker0)
 -    * set :chooseUnitType.0:type @poly
 -    * setaddr *tmp33 *label33
 -    * jump *label29 always
--    * multilabel *label33
+-    * multilabel *label33 (m:marker0)
 -    * set :chooseUnitType.0:type @mega
 -    * setaddr *tmp33 *label34
 -    * jump *label29 always
--    * multilabel *label34
+-    * multilabel *label34 (m:marker0)
 -    * set :chooseUnitType.0:type @mono
 -    * setaddr *tmp33 *label35
 -    * label *label29
@@ -4941,8 +4941,8 @@ Modifications by Unroll iteration loop at line 177:9 (+139 instructions):
 -    * label *label36
 -    * label *label37
 -    * label *label30
--    * multijump *tmp33 0 0
--    * multilabel *label35
+-    * multijump *tmp33 0 0 (m:marker0)
+-    * multilabel *label35 (m:marker0)
 -    * label *label31
 +   92 set :chooseUnitType.0:type @flare
 +   93 label *label322

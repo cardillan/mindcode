@@ -36,8 +36,8 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
 -    * set *tmp10 null
     60 label *label17
     61 label *label3
-    62 multijump *tmp1 0 0
-    63 multilabel *label11
+    62 multijump *tmp1 0 0 (m:marker0)
+    63 multilabel *label11 (m:marker0)
     64 label *label13
     65 label *label4
 -    * set *tmp0 null
@@ -47,7 +47,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructi
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
-     5 multilabel *label5
+     5 multilabel *label5 (m:marker0)
      6 set :d.0:n 2
      7 call *label0 :d.0*retaddr :d.0*retval
 -    * set *tmp2 :d.0*retval
@@ -55,9 +55,9 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 +    8 set :test.0:i :d.0*retval
      9 op add *tmp1 @counter 1
     10 jump *label2 always
-    11 multilabel *label6
+    11 multilabel *label6 (m:marker0)
  
-    15 multilabel *label7
+    15 multilabel *label7 (m:marker0)
     16 set :d.0:n 5
     17 call *label0 :d.0*retaddr :d.0*retval
 -    * set *tmp3 :d.0*retval
@@ -65,9 +65,9 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 +   18 set :test.0:i :d.0*retval
     19 op add *tmp1 @counter 1
     20 jump *label2 always
-    21 multilabel *label8
+    21 multilabel *label8 (m:marker0)
  
-    25 multilabel *label9
+    25 multilabel *label9 (m:marker0)
     26 set :d.0:n 12
     27 call *label0 :d.0*retaddr :d.0*retval
 -    * set *tmp4 :d.0*retval
@@ -75,7 +75,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 +   28 set :test.0:i :d.0*retval
     29 op add *tmp1 @counter 1
     30 jump *label2 always
-    31 multilabel *label10
+    31 multilabel *label10 (m:marker0)
  
     37 label *label2
     38 set :d.0:n :test.0:i
@@ -143,37 +143,37 @@ Modifications by Unroll iteration loop at line 4:5 (+63 instructions):
 -    * set :test.0:i 1
 -    * op add *tmp1 @counter 1
 -    * jump *label2 always
--    * multilabel *label5
+-    * multilabel *label5 (m:marker0)
 -    * set :d.0:n 2
 -    * call *label0 :d.0*retaddr :d.0*retval
 -    * set :test.0:i :d.0*retval
 -    * op add *tmp1 @counter 1
 -    * jump *label2 always
--    * multilabel *label6
+-    * multilabel *label6 (m:marker0)
 -    * set :test.0:i 3
 -    * op add *tmp1 @counter 1
 -    * jump *label2 always
--    * multilabel *label7
+-    * multilabel *label7 (m:marker0)
 -    * set :d.0:n 5
 -    * call *label0 :d.0*retaddr :d.0*retval
 -    * set :test.0:i :d.0*retval
 -    * op add *tmp1 @counter 1
 -    * jump *label2 always
--    * multilabel *label8
+-    * multilabel *label8 (m:marker0)
 -    * set :test.0:i 8
 -    * op add *tmp1 @counter 1
 -    * jump *label2 always
--    * multilabel *label9
+-    * multilabel *label9 (m:marker0)
 -    * set :d.0:n 12
 -    * call *label0 :d.0*retaddr :d.0*retval
 -    * set :test.0:i :d.0*retval
 -    * op add *tmp1 @counter 1
 -    * jump *label2 always
--    * multilabel *label10
+-    * multilabel *label10 (m:marker0)
 -    * set :test.0:i 15
 -    * op add *tmp1 @counter 1
 -    * jump *label2 always
--    * multilabel *label12
+-    * multilabel *label12 (m:marker0)
 -    * jump *label13 always
 -    * label *label2
 -    * set :d.0:n :test.0:i
@@ -191,8 +191,8 @@ Modifications by Unroll iteration loop at line 4:5 (+63 instructions):
 -    * label *label16
 -    * label *label17
 -    * label *label3
--    * multijump *tmp1 0 0
--    * multilabel *label11
+-    * multijump *tmp1 0 0 (m:marker0)
+-    * multilabel *label11 (m:marker0)
 -    * label *label13
 -    * label *label4
 +    2 set :test.0:i 1

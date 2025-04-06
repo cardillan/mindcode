@@ -47,7 +47,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-4 instructi
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 instructions):
  
-    35 multilabel *label13
+    35 multilabel *label13 (m:marker0)
     36 jump *label14 always
     37 label *label2
 -    * set *tmp1 :index
@@ -55,7 +55,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-5 inst
 +   38 write :value bank1 :index
     39 op add :index :index 1
     40 label *label3
-    41 multijump *tmp0 0 0
+    41 multijump *tmp0 0 0 (m:marker0)
  
     46 set :ways.0:index 1
     47 callrec bank1 *label0 *label15 :ways.0*retval
@@ -176,42 +176,42 @@ Modifications by Unroll iteration loop at line 4:1 (+4 instructions):
 -    * set :value 200
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label5
+-    * multilabel *label5 (m:marker0)
 -    * set :value 100
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label6
+-    * multilabel *label6 (m:marker0)
 -    * set :value 50
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label7
+-    * multilabel *label7 (m:marker0)
 -    * set :value 20
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label8
+-    * multilabel *label8 (m:marker0)
 -    * set :value 10
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label9
+-    * multilabel *label9 (m:marker0)
 -    * set :value 5
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label10
+-    * multilabel *label10 (m:marker0)
 -    * set :value 2
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label11
+-    * multilabel *label11 (m:marker0)
 -    * set :value 1
 -    * op add *tmp0 @counter 1
 -    * jump *label2 always
--    * multilabel *label13
+-    * multilabel *label13 (m:marker0)
 -    * jump *label14 always
 -    * label *label2
 -    * write :value bank1 :index
 -    * op add :index :index 1
 -    * label *label3
--    * multijump *tmp0 0 0
--    * multilabel *label12
+-    * multijump *tmp0 0 0 (m:marker0)
+-    * multilabel *label12 (m:marker0)
 -    * label *label14
 -    * label *label4
 +    4 set :value 200

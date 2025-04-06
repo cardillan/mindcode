@@ -225,9 +225,9 @@ class FunctionInliner extends BaseOptimizer {
         int insertionPoint = firstInstructionIndex(call);
         LogicList newBody = body.duplicateToContext(newContext);
         insertInstructions(insertionPoint, newBody);
-        // Remove original call instructions
+        // Remove original call instructions, including hoisted ones
         removeMatchingInstructions(ix -> ix.belongsTo(call));
-        removeMatchingInstructions(ix -> ix.getMarker().equals(cix.get().getMarker()));
+        removeMatchingInstructions(ix -> ix.getHoistId().equals(cix.get().getHoistId()));
 
         count += 1;
         return OptimizationResult.REALIZED;

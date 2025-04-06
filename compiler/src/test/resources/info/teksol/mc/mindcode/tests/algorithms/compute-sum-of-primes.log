@@ -155,8 +155,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
      7 op lessThanEq *tmp3 :sumPrimesUpTo.0:i :sumPrimesUpTo.0:sqrtMax
      8 jump *label5 equal *tmp3 false
  
-    11 setaddr :testAndSetMultiples.0*retaddr *label6
-    12 call *label1 *invalid :testAndSetMultiples.0*retval
+    11 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
+    12 call *label1 *invalid :testAndSetMultiples.0*retval (m:*label6) (h:*label6)
     13 label *label6
 -    * set *tmp4 :testAndSetMultiples.0*retval
 -    * jump *label7 equal *tmp4 false
@@ -165,8 +165,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
     16 jump *label8 always
     17 label *label7
  
-    22 setaddr :testAndSetMultiples.0*retaddr *label9
-    23 call *label1 *invalid :testAndSetMultiples.0*retval
+    22 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
+    23 call *label1 *invalid :testAndSetMultiples.0*retval (m:*label9) (h:*label9)
     24 label *label9
 -    * set *tmp6 :testAndSetMultiples.0*retval
 -    * jump *label10 equal *tmp6 false
@@ -181,8 +181,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
 -    * op idiv *tmp9 :sumPrimesUpTo.0:i 2
 -    * set :getBit.0:bitIndex *tmp9
 +   37 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    38 setaddr :getBit.0*retaddr *label15
-    39 call *label0 *invalid :getBit.0*retval
+    38 setaddr :getBit.0*retaddr *label15 (h:*label15)
+    39 call *label0 *invalid :getBit.0*retval (m:*label15) (h:*label15)
     40 label *label15
 -    * set *tmp10 :getBit.0*retval
 -    * op equal *tmp11 *tmp10 false
@@ -196,8 +196,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
 -    * op idiv *tmp13 :sumPrimesUpTo.0:i 2
 -    * set :getBit.0:bitIndex *tmp13
 +   48 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    49 setaddr :getBit.0*retaddr *label18
-    50 call *label0 *invalid :getBit.0*retval
+    49 setaddr :getBit.0*retaddr *label18 (h:*label18)
+    50 call *label0 *invalid :getBit.0*retval (m:*label18) (h:*label18)
     51 label *label18
 -    * set *tmp14 :getBit.0*retval
 -    * op equal *tmp15 *tmp14 false
@@ -225,8 +225,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-14 ins
 -    * op idiv *tmp25 :testAndSetMultiples.0:n 2
 -    * set :getBit.0:bitIndex *tmp25
 +   82 op idiv :getBit.0:bitIndex :testAndSetMultiples.0:n 2
-    83 setaddr :getBit.0*retaddr *label25
-    84 call *label0 *invalid :getBit.0*retval
+    83 setaddr :getBit.0*retaddr *label25 (h:*label25)
+    84 call *label0 *invalid :getBit.0*retval (m:*label25) (h:*label25)
     85 label *label25
 -    * op equal *tmp26 :getBit.0*retval false
 -    * set :testAndSetMultiples.0:result *tmp26
@@ -260,7 +260,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
 +    7 jump *label5 greaterThan :sumPrimesUpTo.0:i :sumPrimesUpTo.0:sqrtMax
      8 set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
      9 set :testAndSetMultiples.0:maximum :sumPrimesUpTo.0:maximum
-    10 setaddr :testAndSetMultiples.0*retaddr *label6
+    10 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
  
     31 jump *label3 always
     32 label *label5
@@ -269,8 +269,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
 -    * jump *label14 equal *tmp8 false
 +   34 jump *label14 greaterThan :sumPrimesUpTo.0:i :sumPrimesUpTo.0:maximum
     35 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    36 setaddr :getBit.0*retaddr *label15
-    37 call *label0 *invalid :getBit.0*retval
+    36 setaddr :getBit.0*retaddr *label15 (h:*label15)
+    37 call *label0 *invalid :getBit.0*retval (m:*label15) (h:*label15)
     38 label *label15
 -    * op equal *tmp11 :getBit.0*retval false
 -    * jump *label16 equal *tmp11 false
@@ -279,8 +279,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
     41 jump *label17 always
     42 label *label16
  
-    46 setaddr :getBit.0*retaddr *label18
-    47 call *label0 *invalid :getBit.0*retval
+    46 setaddr :getBit.0*retaddr *label18 (h:*label18)
+    47 call *label0 *invalid :getBit.0*retval (m:*label18) (h:*label18)
     48 label *label18
 -    * op equal *tmp15 :getBit.0*retval false
 -    * jump *label19 equal *tmp15 false
@@ -362,8 +362,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      8 set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
 -    * set :testAndSetMultiples.0:maximum :sumPrimesUpTo.0:maximum
 +    9 set :testAndSetMultiples.0:maximum 500
-    10 setaddr :testAndSetMultiples.0*retaddr *label6
-    11 call *label1 *invalid :testAndSetMultiples.0*retval
+    10 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
+    11 call *label1 *invalid :testAndSetMultiples.0*retval (m:*label6) (h:*label6)
     12 label *label6
  
     16 label *label8
@@ -371,8 +371,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     18 set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
 -    * set :testAndSetMultiples.0:maximum :sumPrimesUpTo.0:maximum
 +   19 set :testAndSetMultiples.0:maximum 500
-    20 setaddr :testAndSetMultiples.0*retaddr *label9
-    21 call *label1 *invalid :testAndSetMultiples.0*retval
+    20 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
+    21 call *label1 *invalid :testAndSetMultiples.0*retval (m:*label9) (h:*label9)
     22 label *label9
  
     29 jump *label3 always
@@ -381,10 +381,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * jump *label14 greaterThan :sumPrimesUpTo.0:i :sumPrimesUpTo.0:maximum
 +   32 jump *label14 greaterThan :sumPrimesUpTo.0:i 500
     33 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    34 setaddr :getBit.0*retaddr *label15
-    35 call *label0 *invalid :getBit.0*retval
+    34 setaddr :getBit.0*retaddr *label15 (h:*label15)
+    35 call *label0 *invalid :getBit.0*retval (m:*label15) (h:*label15)
  
-    44 call *label0 *invalid :getBit.0*retval
+    44 call *label0 *invalid :getBit.0*retval (m:*label18) (h:*label18)
     45 label *label18
     46 jump *label19 notEqual :getBit.0*retval false
 -    * jump *label21 greaterThan :sumPrimesUpTo.0:i :sumPrimesUpTo.0:maximum
@@ -449,7 +449,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 +    4 label *label32
      5 set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
      6 set :testAndSetMultiples.0:maximum 500
-     7 setaddr :testAndSetMultiples.0*retaddr *label6
+     7 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
  
     23 label *label11
     24 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 4
@@ -461,8 +461,8 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     29 jump *label14 greaterThan :sumPrimesUpTo.0:i 500
 +   30 label *label33
     31 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    32 setaddr :getBit.0*retaddr *label15
-    33 call *label0 *invalid :getBit.0*retval
+    32 setaddr :getBit.0*retaddr *label15 (h:*label15)
+    33 call *label0 *invalid :getBit.0*retval (m:*label15) (h:*label15)
  
     50 label *label20
     51 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 4
@@ -494,8 +494,8 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+5 instructions)
  
     30 label *label33
     31 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    32 setaddr :getBit.0*retaddr *label15
--    * call *label0 *invalid :getBit.0*retval
+    32 setaddr :getBit.0*retaddr *label15 (h:*label15)
+-    * call *label0 *invalid :getBit.0*retval (m:*label15) (h:*label15)
 -    * label *label15
 +   33 label *label35
 +   34 op idiv *tmp20 :getBit.0:bitIndex 48
@@ -510,8 +510,8 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+5 instructions)
  
     44 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
     45 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    46 setaddr :getBit.0*retaddr *label18
--    * call *label0 *invalid :getBit.0*retval
+    46 setaddr :getBit.0*retaddr *label18 (h:*label18)
+-    * call *label0 *invalid :getBit.0*retval (m:*label18) (h:*label18)
 -    * label *label18
 +   47 label *label37
 +   48 op idiv *tmp20 :getBit.0:bitIndex 48
@@ -538,8 +538,8 @@ Modifications by Inline function 'getBit' defined at line 10:1 (+5 instructions)
 -    * end
     69 label *label1
     70 op idiv :getBit.0:bitIndex :testAndSetMultiples.0:n 2
-    71 setaddr :getBit.0*retaddr *label25
--    * call *label0 *invalid :getBit.0*retval
+    71 setaddr :getBit.0*retaddr *label25 (h:*label25)
+-    * call *label0 *invalid :getBit.0*retval (m:*label25) (h:*label25)
 -    * label *label25
 +   72 label *label39
 +   73 op idiv *tmp20 :getBit.0:bitIndex 48
@@ -556,12 +556,12 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+18
  
      5 set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
      6 set :testAndSetMultiples.0:maximum 500
-     7 setaddr :testAndSetMultiples.0*retaddr *label6
--    * call *label1 *invalid :testAndSetMultiples.0*retval
+     7 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
+-    * call *label1 *invalid :testAndSetMultiples.0*retval (m:*label6) (h:*label6)
 -    * label *label6
 +    8 label *label41
 +    9 op idiv :getBit.0:bitIndex :testAndSetMultiples.0:n 2
-+   10 setaddr :getBit.0*retaddr *label25
++   10 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +   11 label *label42
 +   12 op idiv *tmp20 :getBit.0:bitIndex 48
 +   13 op mod *tmp22 :getBit.0:bitIndex 48
@@ -598,12 +598,12 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+18
  
     46 set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
     47 set :testAndSetMultiples.0:maximum 500
-    48 setaddr :testAndSetMultiples.0*retaddr *label9
--    * call *label1 *invalid :testAndSetMultiples.0*retval
+    48 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
+-    * call *label1 *invalid :testAndSetMultiples.0*retval (m:*label9) (h:*label9)
 -    * label *label9
 +   49 label *label52
 +   50 op idiv :getBit.0:bitIndex :testAndSetMultiples.0:n 2
-+   51 setaddr :getBit.0*retaddr *label25
++   51 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +   52 label *label53
 +   53 op idiv *tmp20 :getBit.0:bitIndex 48
 +   54 op mod *tmp22 :getBit.0:bitIndex 48
@@ -643,7 +643,7 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+18
    130 end
 -    * label *label1
 -    * op idiv :getBit.0:bitIndex :testAndSetMultiples.0:n 2
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
 -    * label *label39
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -680,11 +680,11 @@ Modifications by Inline function 'testAndSetMultiples' defined at line 14:1 (+18
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      6 set :testAndSetMultiples.0:maximum 500
-     7 setaddr :testAndSetMultiples.0*retaddr *label6
+     7 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
      8 label *label41
 -    * op idiv :getBit.0:bitIndex :testAndSetMultiples.0:n 2
 +    9 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    10 setaddr :getBit.0*retaddr *label25
+    10 setaddr :getBit.0*retaddr *label25 (h:*label25)
     11 label *label42
     12 op idiv *tmp20 :getBit.0:bitIndex 48
  
@@ -722,11 +722,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     44 label *label8
  
     47 set :testAndSetMultiples.0:maximum 500
-    48 setaddr :testAndSetMultiples.0*retaddr *label9
+    48 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
     49 label *label52
 -    * op idiv :getBit.0:bitIndex :testAndSetMultiples.0:n 2
 +   50 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-    51 setaddr :getBit.0*retaddr *label25
+    51 setaddr :getBit.0*retaddr *label25 (h:*label25)
     52 label *label53
     53 op idiv *tmp20 :getBit.0:bitIndex 48
  
@@ -770,7 +770,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8
      4 label *label32
 -    * set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
 -    * set :testAndSetMultiples.0:maximum 500
-     5 setaddr :testAndSetMultiples.0*retaddr *label6
+     5 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
      6 label *label41
      7 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
  
@@ -794,7 +794,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-8
     41 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
 -    * set :testAndSetMultiples.0:n :sumPrimesUpTo.0:i
 -    * set :testAndSetMultiples.0:maximum 500
-    42 setaddr :testAndSetMultiples.0*retaddr *label9
+    42 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
     43 label *label52
     44 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
  
@@ -820,10 +820,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
      2 set :sumPrimesUpTo.0:i 5
 -    * label *label3
 -    * label *label32
--    * setaddr :testAndSetMultiples.0*retaddr *label6
+-    * setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
 -    * label *label41
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
 -    * label *label42
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -857,10 +857,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 -    * label *label7
 -    * label *label8
 -    * op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
--    * setaddr :testAndSetMultiples.0*retaddr *label9
+-    * setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
 -    * label *label52
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
 -    * label *label53
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -899,10 +899,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 -    * label *label5
 +    3 label *label63
 +    4 label *label64
-+    5 setaddr :testAndSetMultiples.0*retaddr *label6
++    5 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
 +    6 label *label65
 +    7 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+    8 setaddr :getBit.0*retaddr *label25
++    8 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +    9 label *label66
 +   10 op idiv *tmp20 :getBit.0:bitIndex 48
 +   11 op mod *tmp22 :getBit.0:bitIndex 48
@@ -936,10 +936,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 +   39 label *label76
 +   40 label *label77
 +   41 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
-+   42 setaddr :testAndSetMultiples.0*retaddr *label9
++   42 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
 +   43 label *label78
 +   44 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+   45 setaddr :getBit.0*retaddr *label25
++   45 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +   46 label *label79
 +   47 op idiv *tmp20 :getBit.0:bitIndex 48
 +   48 op mod *tmp22 :getBit.0:bitIndex 48
@@ -975,10 +975,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 +   78 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 4
 +   79 label *label91
 +   80 label *label92
-+   81 setaddr :testAndSetMultiples.0*retaddr *label6
++   81 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
 +   82 label *label93
 +   83 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+   84 setaddr :getBit.0*retaddr *label25
++   84 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +   85 label *label94
 +   86 op idiv *tmp20 :getBit.0:bitIndex 48
 +   87 op mod *tmp22 :getBit.0:bitIndex 48
@@ -1012,10 +1012,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 +  115 label *label104
 +  116 label *label105
 +  117 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
-+  118 setaddr :testAndSetMultiples.0*retaddr *label9
++  118 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
 +  119 label *label106
 +  120 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+  121 setaddr :getBit.0*retaddr *label25
++  121 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +  122 label *label107
 +  123 op idiv *tmp20 :getBit.0:bitIndex 48
 +  124 op mod *tmp22 :getBit.0:bitIndex 48
@@ -1051,10 +1051,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 +  154 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 4
 +  155 label *label119
 +  156 label *label120
-+  157 setaddr :testAndSetMultiples.0*retaddr *label6
++  157 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
 +  158 label *label121
 +  159 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+  160 setaddr :getBit.0*retaddr *label25
++  160 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +  161 label *label122
 +  162 op idiv *tmp20 :getBit.0:bitIndex 48
 +  163 op mod *tmp22 :getBit.0:bitIndex 48
@@ -1088,10 +1088,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 +  191 label *label132
 +  192 label *label133
 +  193 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
-+  194 setaddr :testAndSetMultiples.0*retaddr *label9
++  194 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
 +  195 label *label134
 +  196 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+  197 setaddr :getBit.0*retaddr *label25
++  197 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +  198 label *label135
 +  199 op idiv *tmp20 :getBit.0:bitIndex 48
 +  200 op mod *tmp22 :getBit.0:bitIndex 48
@@ -1127,10 +1127,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 +  230 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 4
 +  231 label *label147
 +  232 label *label148
-+  233 setaddr :testAndSetMultiples.0*retaddr *label6
++  233 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
 +  234 label *label149
 +  235 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+  236 setaddr :getBit.0*retaddr *label25
++  236 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +  237 label *label150
 +  238 op idiv *tmp20 :getBit.0:bitIndex 48
 +  239 op mod *tmp22 :getBit.0:bitIndex 48
@@ -1164,10 +1164,10 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 +  267 label *label160
 +  268 label *label161
 +  269 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
-+  270 setaddr :testAndSetMultiples.0*retaddr *label9
++  270 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
 +  271 label *label162
 +  272 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-+  273 setaddr :getBit.0*retaddr *label25
++  273 setaddr :getBit.0*retaddr *label25 (h:*label25)
 +  274 label *label163
 +  275 op idiv *tmp20 :getBit.0:bitIndex 48
 +  276 op mod *tmp22 :getBit.0:bitIndex 48
@@ -1210,11 +1210,11 @@ Modifications by Unroll loop at line 29:5 (+143 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      4 label *label64
-     5 setaddr :testAndSetMultiples.0*retaddr *label6
+     5 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
      6 label *label65
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +    7 op idiv :getBit.0:bitIndex 5 2
-     8 setaddr :getBit.0*retaddr *label25
+     8 setaddr :getBit.0*retaddr *label25 (h:*label25)
      9 label *label66
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1257,11 +1257,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     40 label *label77
 -    * op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
 +   41 op add :sumPrimesUpTo.0:i 5 2
-    42 setaddr :testAndSetMultiples.0*retaddr *label9
+    42 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
     43 label *label78
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +   44 op idiv :getBit.0:bitIndex 7 2
-    45 setaddr :getBit.0*retaddr *label25
+    45 setaddr :getBit.0*retaddr *label25 (h:*label25)
     46 label *label79
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1306,11 +1306,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   78 op add :sumPrimesUpTo.0:i 7 4
     79 label *label91
     80 label *label92
-    81 setaddr :testAndSetMultiples.0*retaddr *label6
+    81 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
     82 label *label93
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +   83 op idiv :getBit.0:bitIndex 11 2
-    84 setaddr :getBit.0*retaddr *label25
+    84 setaddr :getBit.0*retaddr *label25 (h:*label25)
     85 label *label94
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1353,11 +1353,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    116 label *label105
 -    * op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
 +  117 op add :sumPrimesUpTo.0:i 11 2
-   118 setaddr :testAndSetMultiples.0*retaddr *label9
+   118 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    119 label *label106
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +  120 op idiv :getBit.0:bitIndex 13 2
-   121 setaddr :getBit.0*retaddr *label25
+   121 setaddr :getBit.0*retaddr *label25 (h:*label25)
    122 label *label107
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1402,11 +1402,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  154 op add :sumPrimesUpTo.0:i 13 4
    155 label *label119
    156 label *label120
-   157 setaddr :testAndSetMultiples.0*retaddr *label6
+   157 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
    158 label *label121
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +  159 op idiv :getBit.0:bitIndex 17 2
-   160 setaddr :getBit.0*retaddr *label25
+   160 setaddr :getBit.0*retaddr *label25 (h:*label25)
    161 label *label122
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1449,11 +1449,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    192 label *label133
 -    * op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
 +  193 op add :sumPrimesUpTo.0:i 17 2
-   194 setaddr :testAndSetMultiples.0*retaddr *label9
+   194 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    195 label *label134
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +  196 op idiv :getBit.0:bitIndex 19 2
-   197 setaddr :getBit.0*retaddr *label25
+   197 setaddr :getBit.0*retaddr *label25 (h:*label25)
    198 label *label135
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1498,11 +1498,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  230 op add :sumPrimesUpTo.0:i 19 4
    231 label *label147
    232 label *label148
-   233 setaddr :testAndSetMultiples.0*retaddr *label6
+   233 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
    234 label *label149
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +  235 op idiv :getBit.0:bitIndex 23 2
-   236 setaddr :getBit.0*retaddr *label25
+   236 setaddr :getBit.0*retaddr *label25 (h:*label25)
    237 label *label150
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1545,11 +1545,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    268 label *label161
 -    * op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
 +  269 op add :sumPrimesUpTo.0:i 23 2
-   270 setaddr :testAndSetMultiples.0*retaddr *label9
+   270 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    271 label *label162
 -    * op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
 +  272 op idiv :getBit.0:bitIndex 25 2
-   273 setaddr :getBit.0*retaddr *label25
+   273 setaddr :getBit.0*retaddr *label25 (h:*label25)
    274 label *label163
 -    * op idiv *tmp20 :getBit.0:bitIndex 48
 -    * op mod *tmp22 :getBit.0:bitIndex 48
@@ -1599,7 +1599,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  310 jump *label14 greaterThan 29 500
    311 label *label33
    312 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-   313 setaddr :getBit.0*retaddr *label15
+   313 setaddr :getBit.0*retaddr *label15 (h:*label15)
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-48 instructions):
      0 set BITMAP bank1
@@ -1607,10 +1607,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :sumPrimesUpTo.0:i 5
      2 label *label63
      3 label *label64
-     4 setaddr :testAndSetMultiples.0*retaddr *label6
+     4 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
      5 label *label65
 -    * op idiv :getBit.0:bitIndex 5 2
-     6 setaddr :getBit.0*retaddr *label25
+     6 setaddr :getBit.0*retaddr *label25 (h:*label25)
      7 label *label66
 -    * op idiv *tmp20 2 48
 -    * op mod *tmp22 2 48
@@ -1629,10 +1629,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     33 label *label76
     34 label *label77
 -    * op add :sumPrimesUpTo.0:i 5 2
-    35 setaddr :testAndSetMultiples.0*retaddr *label9
+    35 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
     36 label *label78
 -    * op idiv :getBit.0:bitIndex 7 2
-    37 setaddr :getBit.0*retaddr *label25
+    37 setaddr :getBit.0*retaddr *label25 (h:*label25)
     38 label *label79
 -    * op idiv *tmp20 3 48
 -    * op mod *tmp22 3 48
@@ -1653,10 +1653,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * op add :sumPrimesUpTo.0:i 7 4
     66 label *label91
     67 label *label92
-    68 setaddr :testAndSetMultiples.0*retaddr *label6
+    68 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
     69 label *label93
 -    * op idiv :getBit.0:bitIndex 11 2
-    70 setaddr :getBit.0*retaddr *label25
+    70 setaddr :getBit.0*retaddr *label25 (h:*label25)
     71 label *label94
 -    * op idiv *tmp20 5 48
 -    * op mod *tmp22 5 48
@@ -1675,10 +1675,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     97 label *label104
     98 label *label105
 -    * op add :sumPrimesUpTo.0:i 11 2
-    99 setaddr :testAndSetMultiples.0*retaddr *label9
+    99 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    100 label *label106
 -    * op idiv :getBit.0:bitIndex 13 2
-   101 setaddr :getBit.0*retaddr *label25
+   101 setaddr :getBit.0*retaddr *label25 (h:*label25)
    102 label *label107
 -    * op idiv *tmp20 6 48
 -    * op mod *tmp22 6 48
@@ -1699,10 +1699,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * op add :sumPrimesUpTo.0:i 13 4
    130 label *label119
    131 label *label120
-   132 setaddr :testAndSetMultiples.0*retaddr *label6
+   132 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
    133 label *label121
 -    * op idiv :getBit.0:bitIndex 17 2
-   134 setaddr :getBit.0*retaddr *label25
+   134 setaddr :getBit.0*retaddr *label25 (h:*label25)
    135 label *label122
 -    * op idiv *tmp20 8 48
 -    * op mod *tmp22 8 48
@@ -1721,10 +1721,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
    161 label *label132
    162 label *label133
 -    * op add :sumPrimesUpTo.0:i 17 2
-   163 setaddr :testAndSetMultiples.0*retaddr *label9
+   163 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    164 label *label134
 -    * op idiv :getBit.0:bitIndex 19 2
-   165 setaddr :getBit.0*retaddr *label25
+   165 setaddr :getBit.0*retaddr *label25 (h:*label25)
    166 label *label135
 -    * op idiv *tmp20 9 48
 -    * op mod *tmp22 9 48
@@ -1745,10 +1745,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * op add :sumPrimesUpTo.0:i 19 4
    194 label *label147
    195 label *label148
-   196 setaddr :testAndSetMultiples.0*retaddr *label6
+   196 setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
    197 label *label149
 -    * op idiv :getBit.0:bitIndex 23 2
-   198 setaddr :getBit.0*retaddr *label25
+   198 setaddr :getBit.0*retaddr *label25 (h:*label25)
    199 label *label150
 -    * op idiv *tmp20 11 48
 -    * op mod *tmp22 11 48
@@ -1767,10 +1767,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
    225 label *label160
    226 label *label161
 -    * op add :sumPrimesUpTo.0:i 23 2
-   227 setaddr :testAndSetMultiples.0*retaddr *label9
+   227 setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    228 label *label162
 -    * op idiv :getBit.0:bitIndex 25 2
-   229 setaddr :getBit.0*retaddr *label25
+   229 setaddr :getBit.0*retaddr *label25 (h:*label25)
    230 label *label163
 -    * op idiv *tmp20 12 48
 -    * op mod *tmp22 12 48
@@ -6638,7 +6638,7 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 ins
 -    * jump *label14 greaterThan 29 500
    922 label *label33
    923 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
-   924 setaddr :getBit.0*retaddr *label15
+   924 setaddr :getBit.0*retaddr *label15 (h:*label15)
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-14 instructions):
  
@@ -6787,9 +6787,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
      1 set :sumPrimesUpTo.0:sum 5
      2 label *label63
      3 label *label64
--    * setaddr :testAndSetMultiples.0*retaddr *label6
+-    * setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
      4 label *label65
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
      5 label *label66
      6 read *tmp21 BITMAP 0
      7 op and :getBit.0*retval *tmp21 4
@@ -6797,9 +6797,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    305 op add :sumPrimesUpTo.0:sum 5 5
    306 label *label76
    307 label *label77
--    * setaddr :testAndSetMultiples.0*retaddr *label9
+-    * setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    308 label *label78
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
    309 label *label79
    310 read *tmp21 BITMAP 0
    311 op and :getBit.0*retval *tmp21 8
@@ -6807,9 +6807,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    521 label *label90
    522 label *label91
    523 label *label92
--    * setaddr :testAndSetMultiples.0*retaddr *label6
+-    * setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
    524 label *label93
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
    525 label *label94
    526 read *tmp21 BITMAP 0
    527 op and :getBit.0*retval *tmp21 32
@@ -6817,9 +6817,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    645 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 11
    646 label *label104
    647 label *label105
--    * setaddr :testAndSetMultiples.0*retaddr *label9
+-    * setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    648 label *label106
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
    649 label *label107
    650 read *tmp21 BITMAP 0
    651 op and :getBit.0*retval *tmp21 64
@@ -6827,9 +6827,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    741 label *label118
    742 label *label119
    743 label *label120
--    * setaddr :testAndSetMultiples.0*retaddr *label6
+-    * setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
    744 label *label121
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
    745 label *label122
    746 read *tmp21 BITMAP 0
    747 op and :getBit.0*retval *tmp21 256
@@ -6837,9 +6837,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    799 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 17
    800 label *label132
    801 label *label133
--    * setaddr :testAndSetMultiples.0*retaddr *label9
+-    * setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    802 label *label134
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
    803 label *label135
    804 read *tmp21 BITMAP 0
    805 op and :getBit.0*retval *tmp21 512
@@ -6847,9 +6847,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    841 label *label146
    842 label *label147
    843 label *label148
--    * setaddr :testAndSetMultiples.0*retaddr *label6
+-    * setaddr :testAndSetMultiples.0*retaddr *label6 (h:*label6)
    844 label *label149
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
    845 label *label150
    846 read *tmp21 BITMAP 0
    847 op and :getBit.0*retval *tmp21 2048
@@ -6857,9 +6857,9 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    858 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 23
    859 label *label160
    860 label *label161
--    * setaddr :testAndSetMultiples.0*retaddr *label9
+-    * setaddr :testAndSetMultiples.0*retaddr *label9 (h:*label9)
    861 label *label162
--    * setaddr :getBit.0*retaddr *label25
+-    * setaddr :getBit.0*retaddr *label25 (h:*label25)
    862 label *label163
    863 read *tmp21 BITMAP 0
    864 op and :getBit.0*retval *tmp21 4096
@@ -6867,7 +6867,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    881 label *label12
    882 label *label33
    883 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
--    * setaddr :getBit.0*retaddr *label15
+-    * setaddr :getBit.0*retaddr *label15 (h:*label15)
    884 label *label35
    885 op idiv *tmp20 :getBit.0:bitIndex 48
    886 op mod *tmp22 :getBit.0:bitIndex 48
@@ -6875,7 +6875,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-18 instructio
    894 label *label17
    895 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
    896 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
--    * setaddr :getBit.0*retaddr *label18
+-    * setaddr :getBit.0*retaddr *label18 (h:*label18)
    897 label *label37
    898 op idiv *tmp20 :getBit.0:bitIndex 48
    899 op mod *tmp22 :getBit.0:bitIndex 48

@@ -478,26 +478,26 @@ Modifications by Convert case at line 27:5 (+3 instructions):
 -    * jump *label9 notEqual *tmp2 0
 +   20 jump *label31 lessThan *tmp2 0
 +   21 jump *label31 greaterThan *tmp2 9
-+   22 multijump *label33 *tmp2 0
-+   23 multilabel *label33
++   22 multijump *label33 *tmp2 0 (m:*label32)
++   23 multilabel *label33 (m:*label32)
 +   24 jump *label10 always
-+   25 multilabel *label34
++   25 multilabel *label34 (m:*label32)
 +   26 jump *label12 always
-+   27 multilabel *label35
++   27 multilabel *label35 (m:*label32)
 +   28 jump *label14 always
-+   29 multilabel *label36
++   29 multilabel *label36 (m:*label32)
 +   30 jump *label16 always
-+   31 multilabel *label37
++   31 multilabel *label37 (m:*label32)
 +   32 jump *label18 always
-+   33 multilabel *label38
++   33 multilabel *label38 (m:*label32)
 +   34 jump *label20 always
-+   35 multilabel *label39
++   35 multilabel *label39 (m:*label32)
 +   36 jump *label22 always
-+   37 multilabel *label40
++   37 multilabel *label40 (m:*label32)
 +   38 jump *label24 always
-+   39 multilabel *label41
++   39 multilabel *label41 (m:*label32)
 +   40 jump *label26 always
-+   41 multilabel *label42
++   41 multilabel *label42 (m:*label32)
 +   42 jump *label28 always
     43 label *label10
     44 op add .S0 .S0 1

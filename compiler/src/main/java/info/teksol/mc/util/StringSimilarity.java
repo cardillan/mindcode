@@ -63,7 +63,7 @@ public class StringSimilarity {
     public static Optional<String> findBestAlternative(String value, Collection<String> allowedValues) {
         return allowedValues.stream()
                 .min(Comparator.comparingDouble(a -> editDistance(a, value)))
-                .filter(s -> editDistance(s, value) < 0.8);
+                .filter(s -> editDistance(s, value) < 1);
     }
 
     public static Optional<String> findBestAlternative(String value, String[] allowedValues) {

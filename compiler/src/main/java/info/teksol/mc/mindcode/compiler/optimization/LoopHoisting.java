@@ -6,9 +6,9 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -84,7 +84,7 @@ class LoopHoisting extends BaseOptimizer {
             AstContext initContext = getInitContext(loop);
             LogicList instructions = buildLogicList(initContext,
                     invariants.stream().map(ix -> ix.withContext(initContext)).toList());
-            instructions.stream().filter(ix -> ix.getOpcode() == Opcode.SETADDR).forEach(ix -> ix.setHoisted(true));
+            instructions.stream().filter(ix -> ix.getHoistId() != LogicLabel.EMPTY).forEach(ix -> ix.setHoisted(true));
 
             int index = firstInstructionIndex(anchor);
             insertInstructions(index, instructions);
@@ -104,7 +104,7 @@ class LoopHoisting extends BaseOptimizer {
                 AstContext bodyContext = getInitContext(loop).createChild(invariant.getProfile(), invariant.node(), invariant.contextType());
                 LogicList original = contextInstructions(invariant);
                 LogicList duplicated = original.duplicateToContext(bodyContext);
-                duplicated.stream().filter(ix -> ix.getOpcode() == Opcode.SETADDR).forEach(ix -> ix.setHoisted(true));
+                duplicated.stream().filter(ix -> ix.getHoistId() != LogicLabel.EMPTY).forEach(ix -> ix.setHoisted(true));
                 int index = firstInstructionIndex(anchor);
                 insertInstructions(index, duplicated);
                 original.forEach(this::removeInstruction);

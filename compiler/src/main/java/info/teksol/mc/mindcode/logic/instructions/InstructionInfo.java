@@ -15,6 +15,9 @@ public enum InstructionInfo {
     /// Array organization for ReadArr/WriteArr instructions
     ARRAY_ORGANIZATION(ArrayOrganization.NONE),
 
+    /// Identifier pairing SETADDR and CALL instruction to facilitate hoisting reversion.
+    HOIST_ID(LogicLabel.EMPTY),
+
     /// Hoisted instruction is marked with Boolean.TRUE. When unrolling loops, a tagged hoisted instruction
     /// is returned to the loop (using the CALL_TAG) to ensure correct processing.
     HOISTED(Boolean.FALSE),

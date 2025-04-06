@@ -150,24 +150,24 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instruct
     77 set *tmp8 false
     78 jump *label11 always
  
-   131 setaddr :update_fuel.0*retaddr *label20
-   132 call *label1 *invalid :update_fuel.0*retval
+   131 setaddr :update_fuel.0*retaddr *label20 (h:*label20)
+   132 call *label1 *invalid :update_fuel.0*retval (m:*label20) (h:*label20)
    133 label *label20
 -    * set *tmp20 :update_fuel.0*retval
    134 set :start_reactor.0:reactor reactor2
    135 set :start_reactor.0:reactor_num 2
    136 set :start_reactor.0:emerg_shutdown :emerg_shutdown
  
-   148 setaddr :update_fuel.0*retaddr *label22
-   149 call *label1 *invalid :update_fuel.0*retval
+   148 setaddr :update_fuel.0*retaddr *label22 (h:*label22)
+   149 call *label1 *invalid :update_fuel.0*retval (m:*label22) (h:*label22)
    150 label *label22
 -    * set *tmp22 :update_fuel.0*retval
    151 set :check_radar.0:unit .TOWER
-   152 setaddr :check_radar.0*retaddr *label23
-   153 call *label4 *invalid :check_radar.0*retval
+   152 setaddr :check_radar.0*retaddr *label23 (h:*label23)
+   153 call *label4 *invalid :check_radar.0*retval (m:*label23) (h:*label23)
  
-   196 setaddr :update_fuel.0*retaddr *label27
-   197 call *label1 *invalid :update_fuel.0*retval
+   196 setaddr :update_fuel.0*retaddr *label27 (h:*label27)
+   197 call *label1 *invalid :update_fuel.0*retval (m:*label27) (h:*label27)
    198 label *label27
 -    * set *tmp29 :update_fuel.0*retval
    199 op or *tmp30 :fuel_1 :fuel_2
@@ -196,7 +196,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-20 instruct
 -    * set *tmp52 *tmp59
    296 label *label37
    297 set :kilo.0:val .AVG_SURPLUS
-   298 setaddr :kilo.0*retaddr *label40
+   298 setaddr :kilo.0*retaddr *label40 (h:*label40)
  
    323 print :surplus
    324 print "kW flow."
@@ -605,8 +605,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
     33 label *label5
     34 set *tmp5 @tick
  
-    58 setaddr :check_radar.0*retaddr *label10
-    59 call *label4 *invalid :check_radar.0*retval
+    58 setaddr :check_radar.0*retaddr *label10 (h:*label10)
+    59 call *label4 *invalid :check_radar.0*retval (m:*label10) (h:*label10)
     60 label *label10
 -    * set *tmp7 :check_radar.0*retval
 -    * set :emerg_shutdown *tmp7
@@ -615,40 +615,40 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
     63 sensor *tmp10 switch1 @enabled
     64 op equal *tmp11 *tmp10 false
  
-    81 setaddr :calc_charge_req.0*retaddr *label14
-    82 call *label2 *invalid :calc_charge_req.0*retval
+    81 setaddr :calc_charge_req.0*retaddr *label14 (h:*label14)
+    82 call *label2 *invalid :calc_charge_req.0*retval (m:*label14) (h:*label14)
     83 label *label14
 -    * set *tmp14 :calc_charge_req.0*retval
 -    * set .START_POWER_REQ *tmp14
 +   84 set .START_POWER_REQ :calc_charge_req.0*retval
     85 set :calc_charge_req.0:reactor reactor2
     86 set :calc_charge_req.0:time :t_startup2
-    87 setaddr :calc_charge_req.0*retaddr *label15
-    88 call *label2 *invalid :calc_charge_req.0*retval
+    87 setaddr :calc_charge_req.0*retaddr *label15 (h:*label15)
+    88 call *label2 *invalid :calc_charge_req.0*retval (m:*label15) (h:*label15)
     89 label *label15
 -    * set *tmp15 :calc_charge_req.0*retval
 -    * op add .START_POWER_REQ .START_POWER_REQ *tmp15
 +   90 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
     91 set :calc_charge_req.0:reactor reactor3
     92 set :calc_charge_req.0:time :t_startup3
-    93 setaddr :calc_charge_req.0*retaddr *label16
-    94 call *label2 *invalid :calc_charge_req.0*retval
+    93 setaddr :calc_charge_req.0*retaddr *label16 (h:*label16)
+    94 call *label2 *invalid :calc_charge_req.0*retval (m:*label16) (h:*label16)
     95 label *label16
 -    * set *tmp16 :calc_charge_req.0*retval
 -    * op add .START_POWER_REQ .START_POWER_REQ *tmp16
 +   96 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
     97 set :calc_charge_req.0:reactor reactor4
     98 set :calc_charge_req.0:time :t_startup4
-    99 setaddr :calc_charge_req.0*retaddr *label17
-   100 call *label2 *invalid :calc_charge_req.0*retval
+    99 setaddr :calc_charge_req.0*retaddr *label17 (h:*label17)
+   100 call *label2 *invalid :calc_charge_req.0*retval (m:*label17) (h:*label17)
    101 label *label17
 -    * set *tmp17 :calc_charge_req.0*retval
 -    * op add .START_POWER_REQ .START_POWER_REQ *tmp17
 +  102 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
    103 set :calc_charge_req.0:reactor reactor5
    104 set :calc_charge_req.0:time :t_startup5
-   105 setaddr :calc_charge_req.0*retaddr *label18
-   106 call *label2 *invalid :calc_charge_req.0*retval
+   105 setaddr :calc_charge_req.0*retaddr *label18 (h:*label18)
+   106 call *label2 *invalid :calc_charge_req.0*retval (m:*label18) (h:*label18)
    107 label *label18
 -    * set *tmp18 :calc_charge_req.0*retval
 -    * op add .START_POWER_REQ .START_POWER_REQ *tmp18
@@ -657,8 +657,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    110 set :start_reactor.0:reactor_num 1
    111 set :start_reactor.0:emerg_shutdown :emerg_shutdown
  
-   114 setaddr :start_reactor.0*retaddr *label19
-   115 call *label3 *invalid :start_reactor.0*retval
+   114 setaddr :start_reactor.0*retaddr *label19 (h:*label19)
+   115 call *label3 *invalid :start_reactor.0*retval (m:*label19) (h:*label19)
    116 label *label19
 -    * set *tmp19 :start_reactor.0*retval
 -    * set :fuel_1 *tmp19
@@ -667,8 +667,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    119 set :update_fuel.0:fuel :fuel_1
    120 set :update_fuel.0:uld_in .ULD_IN_1
  
-   130 setaddr :start_reactor.0*retaddr *label21
-   131 call *label3 *invalid :start_reactor.0*retval
+   130 setaddr :start_reactor.0*retaddr *label21 (h:*label21)
+   131 call *label3 *invalid :start_reactor.0*retval (m:*label21) (h:*label21)
    132 label *label21
 -    * set *tmp21 :start_reactor.0*retval
 -    * set :fuel_2 *tmp21
@@ -677,8 +677,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    135 set :update_fuel.0:fuel :fuel_2
    136 set :update_fuel.0:uld_in .ULD_IN_2
  
-   142 setaddr :check_radar.0*retaddr *label23
-   143 call *label4 *invalid :check_radar.0*retval
+   142 setaddr :check_radar.0*retaddr *label23 (h:*label23)
+   143 call *label4 *invalid :check_radar.0*retval (m:*label23) (h:*label23)
    144 label *label23
 -    * set *tmp23 :check_radar.0*retval
 -    * op or :emerg_shutdown :emerg_shutdown *tmp23
@@ -687,8 +687,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    147 set :start_reactor.0:reactor_num 3
    148 set :start_reactor.0:emerg_shutdown :emerg_shutdown
  
-   151 setaddr :start_reactor.0*retaddr *label24
-   152 call *label3 *invalid :start_reactor.0*retval
+   151 setaddr :start_reactor.0*retaddr *label24 (h:*label24)
+   152 call *label3 *invalid :start_reactor.0*retval (m:*label24) (h:*label24)
    153 label *label24
 -    * set *tmp24 :start_reactor.0*retval
 -    * set :fuel_3 *tmp24
@@ -697,8 +697,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    156 set :start_reactor.0:reactor reactor4
    157 set :start_reactor.0:reactor_num 4
  
-   161 setaddr :start_reactor.0*retaddr *label25
-   162 call *label3 *invalid :start_reactor.0*retval
+   161 setaddr :start_reactor.0*retaddr *label25 (h:*label25)
+   162 call *label3 *invalid :start_reactor.0*retval (m:*label25) (h:*label25)
    163 label *label25
 -    * set *tmp25 :start_reactor.0*retval
 -    * set :fuel_4 *tmp25
@@ -707,8 +707,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    166 set :start_reactor.0:reactor reactor5
    167 set :start_reactor.0:reactor_num 5
  
-   171 setaddr :start_reactor.0*retaddr *label26
-   172 call *label3 *invalid :start_reactor.0*retval
+   171 setaddr :start_reactor.0*retaddr *label26 (h:*label26)
+   172 call *label3 *invalid :start_reactor.0*retval (m:*label26) (h:*label26)
    173 label *label26
 -    * set *tmp26 :start_reactor.0*retval
 -    * set :fuel_5 *tmp26
@@ -722,7 +722,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    179 set :update_fuel.0:uld_in .ULD_IN_MANY
    180 set :update_fuel.0:uld_out .ULD_OUT_MANY
  
-   182 call *label1 *invalid :update_fuel.0*retval
+   182 call *label1 *invalid :update_fuel.0*retval (m:*label27) (h:*label27)
    183 label *label27
    184 op or *tmp30 :fuel_1 :fuel_2
 -    * op or *tmp31 *tmp30 :fuel_many
@@ -766,8 +766,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    257 op lessThan *tmp57 .START_POWER_REQ 10
    258 op land *tmp58 *tmp56 *tmp57
  
-   271 setaddr :kilo.0*retaddr *label40
-   272 call *label0 *invalid :kilo.0*retval
+   271 setaddr :kilo.0*retaddr *label40 (h:*label40)
+   272 call *label0 *invalid :kilo.0*retval (m:*label40) (h:*label40)
    273 label *label40
 -    * set *tmp64 :kilo.0*retval
 -    * set :surplus *tmp64
@@ -775,8 +775,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
 -    * set :kilo.0:val *tmp65
 +  274 set :surplus :kilo.0*retval
 +  275 sensor :kilo.0:val .NODE @powerNetStored
-   276 setaddr :kilo.0*retaddr *label41
-   277 call *label0 *invalid :kilo.0*retval
+   276 setaddr :kilo.0*retaddr *label41 (h:*label41)
+   277 call *label0 *invalid :kilo.0*retval (m:*label41) (h:*label41)
    278 label *label41
 -    * set *tmp66 :kilo.0*retval
 -    * set :charge *tmp66
@@ -784,8 +784,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 ins
    280 op greaterThan *tmp67 .START_POWER_REQ 0
    281 jump *label42 equal *tmp67 false
    282 set :kilo.0:val .START_POWER_REQ
-   283 setaddr :kilo.0*retaddr *label44
-   284 call *label0 *invalid :kilo.0*retval
+   283 setaddr :kilo.0*retaddr *label44 (h:*label44)
+   284 call *label0 *invalid :kilo.0*retval (m:*label44) (h:*label44)
    285 label *label44
 -    * set *tmp69 :kilo.0*retval
 -    * set :req *tmp69
@@ -1096,15 +1096,15 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-17 ins
    217 print "Fuel "
    218 print :throttle_blast.0:fuel_stored
  
-   274 call *label0 *invalid :kilo.0*retval
+   274 call *label0 *invalid :kilo.0*retval (m:*label41) (h:*label41)
    275 label *label41
    276 set :charge :kilo.0*retval
 -    * op greaterThan *tmp67 .START_POWER_REQ 0
 -    * jump *label42 equal *tmp67 false
 +  277 jump *label42 lessThanEq .START_POWER_REQ 0
    278 set :kilo.0:val .START_POWER_REQ
-   279 setaddr :kilo.0*retaddr *label44
-   280 call *label0 *invalid :kilo.0*retval
+   279 setaddr :kilo.0*retaddr *label44 (h:*label44)
+   280 call *label0 *invalid :kilo.0*retval (m:*label44) (h:*label44)
  
    304 op greaterThan *tmp76 .AVG_SURPLUS *tmp75
    305 op land *tmp77 *tmp74 *tmp76
@@ -1170,7 +1170,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-17 ins
 +  453 jump *label76 greaterThanEq :start_reactor.0:secs 30
    454 set :calc_charge_req.0:reactor :start_reactor.0:reactor
    455 set :calc_charge_req.0:time :start_reactor.0:t_startup
-   456 setaddr :calc_charge_req.0*retaddr *label78
+   456 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
  
    512 op max :start_reactor.0:flow_units -0.1 *tmp173
    513 op mul *tmp175 .CRYO_REQ_EA :start_reactor.0:reactor_num
@@ -1343,8 +1343,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
     54 set .NODE node1
 -    * set :check_radar.0:unit .TOWER
 +   55 set :check_radar.0:unit cyclone1
-    56 setaddr :check_radar.0*retaddr *label10
-    57 call *label4 *invalid :check_radar.0*retval
+    56 setaddr :check_radar.0*retaddr *label10 (h:*label10)
+    57 call *label4 *invalid :check_radar.0*retval (m:*label10) (h:*label10)
     58 label *label10
  
     70 label *label13
@@ -1356,7 +1356,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
 +   74 op or :emerg_shutdown :check_radar.0*retval *tmp8
     75 set :calc_charge_req.0:reactor reactor1
     76 set :calc_charge_req.0:time :t_startup1
-    77 setaddr :calc_charge_req.0*retaddr *label14
+    77 setaddr :calc_charge_req.0*retaddr *label14 (h:*label14)
  
    112 label *label19
    113 set :fuel_1 :start_reactor.0*retval
@@ -1367,8 +1367,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
 +  115 set :update_fuel.0:fuel :start_reactor.0*retval
 +  116 set :update_fuel.0:uld_in unloader1
 +  117 set :update_fuel.0:uld_out unloader2
-   118 setaddr :update_fuel.0*retaddr *label20
-   119 call *label1 *invalid :update_fuel.0*retval
+   118 setaddr :update_fuel.0*retaddr *label20 (h:*label20)
+   119 call *label1 *invalid :update_fuel.0*retval (m:*label20) (h:*label20)
    120 label *label20
  
    128 label *label21
@@ -1380,13 +1380,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
 +  131 set :update_fuel.0:fuel :start_reactor.0*retval
 +  132 set :update_fuel.0:uld_in unloader3
 +  133 set :update_fuel.0:uld_out unloader4
-   134 setaddr :update_fuel.0*retaddr *label22
-   135 call *label1 *invalid :update_fuel.0*retval
+   134 setaddr :update_fuel.0*retaddr *label22 (h:*label22)
+   135 call *label1 *invalid :update_fuel.0*retval (m:*label22) (h:*label22)
    136 label *label22
 -    * set :check_radar.0:unit .TOWER
 +  137 set :check_radar.0:unit cyclone1
-   138 setaddr :check_radar.0*retaddr *label23
-   139 call *label4 *invalid :check_radar.0*retval
+   138 setaddr :check_radar.0*retaddr *label23 (h:*label23)
+   139 call *label4 *invalid :check_radar.0*retval (m:*label23) (h:*label23)
    140 label *label23
  
    170 set :fuel_5 :start_reactor.0*retval
@@ -1399,8 +1399,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
 -    * set :update_fuel.0:uld_out .ULD_OUT_MANY
 +  175 set :update_fuel.0:uld_in unloader5
 +  176 set :update_fuel.0:uld_out unloader6
-   177 setaddr :update_fuel.0*retaddr *label27
-   178 call *label1 *invalid :update_fuel.0*retval
+   177 setaddr :update_fuel.0*retaddr *label27 (h:*label27)
+   178 call *label1 *invalid :update_fuel.0*retval (m:*label27) (h:*label27)
    179 label *label27
    180 op or *tmp30 :fuel_1 :fuel_2
    181 op or :throttle_blast.0:reactors_fueled *tmp30 :fuel_many
@@ -1493,13 +1493,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
    250 op greaterThan *tmp56 :diff_generators.0:stored_pc 0.9
    251 op lessThan *tmp57 .START_POWER_REQ 10
  
-   266 call *label0 *invalid :kilo.0*retval
+   266 call *label0 *invalid :kilo.0*retval (m:*label40) (h:*label40)
    267 label *label40
    268 set :surplus :kilo.0*retval
 -    * sensor :kilo.0:val .NODE @powerNetStored
 +  269 sensor :kilo.0:val node1 @powerNetStored
-   270 setaddr :kilo.0*retaddr *label41
-   271 call *label0 *invalid :kilo.0*retval
+   270 setaddr :kilo.0*retaddr *label41 (h:*label41)
+   271 call *label0 *invalid :kilo.0*retval (m:*label41) (h:*label41)
    272 label *label41
  
    278 label *label44
@@ -1587,7 +1587,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-7
    382 return :calc_charge_req.0*retaddr
    383 end
  
-   446 call *label2 *invalid :calc_charge_req.0*retval
+   446 call *label2 *invalid :calc_charge_req.0*retval (m:*label78) (h:*label78)
    447 label *label78
    448 set :start_reactor.0:charge_req :calc_charge_req.0*retval
 -    * op sub *tmp153 :start_reactor.0:charge :start_reactor.0:charge_req
@@ -1665,8 +1665,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     49 set .CONTAINER vault1
     50 set .NODE node1
     51 set :check_radar.0:unit cyclone1
-    52 setaddr :check_radar.0*retaddr *label10
-    53 call *label4 *invalid :check_radar.0*retval
+    52 setaddr :check_radar.0*retaddr *label10 (h:*label10)
+    53 call *label4 *invalid :check_radar.0*retval (m:*label10) (h:*label10)
     54 label *label10
 -    * set :emerg_shutdown :check_radar.0*retval
     55 op notEqual *tmp9 switch1 null
@@ -1716,8 +1716,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    240 sensor *tmp54 node1 @powerNetCapacity
    241 op div :diff_generators.0:stored_pc *tmp53 *tmp54
  
-   268 setaddr :kilo.0*retaddr *label44
-   269 call *label0 *invalid :kilo.0*retval
+   268 setaddr :kilo.0*retaddr *label44 (h:*label44)
+   269 call *label0 *invalid :kilo.0*retval (m:*label44) (h:*label44)
    270 label *label44
 -    * set :req :kilo.0*retval
    271 print "Req "
@@ -1756,8 +1756,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    342 set *tmp101 .FUEL
    343 jump *label59 always
  
-   432 setaddr :calc_charge_req.0*retaddr *label78
-   433 call *label2 *invalid :calc_charge_req.0*retval
+   432 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
+   433 call *label2 *invalid :calc_charge_req.0*retval (m:*label78) (h:*label78)
    434 label *label78
 -    * set :start_reactor.0:charge_req :calc_charge_req.0*retval
    435 op sub *tmp153 :start_reactor.0:charge :calc_charge_req.0*retval
@@ -1836,8 +1836,8 @@ Modifications by Inline function 'kilo' defined at line 117:1 (+1 instructions):
  
    251 label *label37
    252 set :kilo.0:val .AVG_SURPLUS
-   253 setaddr :kilo.0*retaddr *label40
--    * call *label0 *invalid :kilo.0*retval
+   253 setaddr :kilo.0*retaddr *label40 (h:*label40)
+-    * call *label0 *invalid :kilo.0*retval (m:*label40) (h:*label40)
 -    * label *label40
 +  254 label *label100
 +  255 op idiv *tmp93 :kilo.0:val 100
@@ -1846,8 +1846,8 @@ Modifications by Inline function 'kilo' defined at line 117:1 (+1 instructions):
 +  258 label *label101
    259 set :surplus :kilo.0*retval
    260 sensor :kilo.0:val node1 @powerNetStored
-   261 setaddr :kilo.0*retaddr *label41
--    * call *label0 *invalid :kilo.0*retval
+   261 setaddr :kilo.0*retaddr *label41 (h:*label41)
+-    * call *label0 *invalid :kilo.0*retval (m:*label41) (h:*label41)
 -    * label *label41
 +  262 label *label102
 +  263 op idiv *tmp93 :kilo.0:val 100
@@ -1857,8 +1857,8 @@ Modifications by Inline function 'kilo' defined at line 117:1 (+1 instructions):
    267 set :charge :kilo.0*retval
    268 jump *label42 lessThanEq .START_POWER_REQ 0
    269 set :kilo.0:val .START_POWER_REQ
-   270 setaddr :kilo.0*retaddr *label44
--    * call *label0 *invalid :kilo.0*retval
+   270 setaddr :kilo.0*retaddr *label44 (h:*label44)
+-    * call *label0 *invalid :kilo.0*retval (m:*label44) (h:*label44)
 -    * label *label44
 +  271 label *label104
 +  272 op idiv *tmp93 :kilo.0:val 100
@@ -1886,7 +1886,7 @@ Modifications by Inline function 'kilo' defined at line 117:1 (+1 instructions):
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
    252 set :kilo.0:val .AVG_SURPLUS
-   253 setaddr :kilo.0*retaddr *label40
+   253 setaddr :kilo.0*retaddr *label40 (h:*label40)
    254 label *label100
 -    * op idiv *tmp93 :kilo.0:val 100
 +  255 op idiv *tmp93 .AVG_SURPLUS 100
@@ -1895,7 +1895,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    258 label *label101
  
    269 set :kilo.0:val .START_POWER_REQ
-   270 setaddr :kilo.0*retaddr *label44
+   270 setaddr :kilo.0*retaddr *label44 (h:*label44)
    271 label *label104
 -    * op idiv *tmp93 :kilo.0:val 100
 +  272 op idiv *tmp93 .START_POWER_REQ 100
@@ -1909,7 +1909,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    250 label *label39
    251 label *label37
 -    * set :kilo.0:val .AVG_SURPLUS
-   252 setaddr :kilo.0*retaddr *label40
+   252 setaddr :kilo.0*retaddr *label40 (h:*label40)
    253 label *label100
    254 op idiv *tmp93 .AVG_SURPLUS 100
  
@@ -1917,7 +1917,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
    266 set :charge :kilo.0*retval
    267 jump *label42 lessThanEq .START_POWER_REQ 0
 -    * set :kilo.0:val .START_POWER_REQ
-   268 setaddr :kilo.0*retaddr *label44
+   268 setaddr :kilo.0*retaddr *label44 (h:*label44)
    269 label *label104
    270 op idiv *tmp93 .START_POWER_REQ 100
 
@@ -1925,8 +1925,8 @@ Modifications by Inline function 'update_fuel' defined at line 121:1 (+11 instru
  
    108 set :update_fuel.0:uld_in unloader1
    109 set :update_fuel.0:uld_out unloader2
-   110 setaddr :update_fuel.0*retaddr *label20
--    * call *label1 *invalid :update_fuel.0*retval
+   110 setaddr :update_fuel.0*retaddr *label20 (h:*label20)
+-    * call *label1 *invalid :update_fuel.0*retval (m:*label20) (h:*label20)
 -    * label *label20
 +  111 label *label106
 +  112 jump *label107 equal :update_fuel.0:fuel false
@@ -1948,8 +1948,8 @@ Modifications by Inline function 'update_fuel' defined at line 121:1 (+11 instru
  
    136 set :update_fuel.0:uld_in unloader3
    137 set :update_fuel.0:uld_out unloader4
-   138 setaddr :update_fuel.0*retaddr *label22
--    * call *label1 *invalid :update_fuel.0*retval
+   138 setaddr :update_fuel.0*retaddr *label22 (h:*label22)
+-    * call *label1 *invalid :update_fuel.0*retval (m:*label22) (h:*label22)
 -    * label *label22
 +  139 label *label112
 +  140 jump *label113 equal :update_fuel.0:fuel false
@@ -1966,13 +1966,13 @@ Modifications by Inline function 'update_fuel' defined at line 121:1 (+11 instru
 +  151 label *label116
 +  152 label *label117
    153 set :check_radar.0:unit cyclone1
-   154 setaddr :check_radar.0*retaddr *label23
-   155 call *label4 *invalid :check_radar.0*retval
+   154 setaddr :check_radar.0*retaddr *label23 (h:*label23)
+   155 call *label4 *invalid :check_radar.0*retval (m:*label23) (h:*label23)
  
    191 set :update_fuel.0:uld_in unloader5
    192 set :update_fuel.0:uld_out unloader6
-   193 setaddr :update_fuel.0*retaddr *label27
--    * call *label1 *invalid :update_fuel.0*retval
+   193 setaddr :update_fuel.0*retaddr *label27 (h:*label27)
+-    * call *label1 *invalid :update_fuel.0*retval (m:*label27) (h:*label27)
 -    * label *label27
 +  194 label *label118
 +  195 jump *label119 equal :update_fuel.0:fuel false
@@ -2018,7 +2018,7 @@ Modifications by Inline function 'update_fuel' defined at line 121:1 (+11 instru
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
    109 set :update_fuel.0:uld_out unloader2
-   110 setaddr :update_fuel.0*retaddr *label20
+   110 setaddr :update_fuel.0*retaddr *label20 (h:*label20)
    111 label *label106
 -    * jump *label107 equal :update_fuel.0:fuel false
 -    * control config :update_fuel.0:uld_in .FUEL
@@ -2042,7 +2042,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    125 set :start_reactor.0:reactor reactor2
  
    137 set :update_fuel.0:uld_out unloader4
-   138 setaddr :update_fuel.0*retaddr *label22
+   138 setaddr :update_fuel.0*retaddr *label22 (h:*label22)
    139 label *label112
 -    * jump *label113 equal :update_fuel.0:fuel false
 -    * control config :update_fuel.0:uld_in .FUEL
@@ -2066,7 +2066,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    153 set :check_radar.0:unit cyclone1
  
    192 set :update_fuel.0:uld_out unloader6
-   193 setaddr :update_fuel.0*retaddr *label27
+   193 setaddr :update_fuel.0*retaddr *label27 (h:*label27)
    194 label *label118
 -    * jump *label119 equal :update_fuel.0:fuel false
 -    * control config :update_fuel.0:uld_in .FUEL
@@ -2097,7 +2097,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
 -    * set :update_fuel.0:fuel :start_reactor.0*retval
 -    * set :update_fuel.0:uld_in unloader1
 -    * set :update_fuel.0:uld_out unloader2
-   107 setaddr :update_fuel.0*retaddr *label20
+   107 setaddr :update_fuel.0*retaddr *label20 (h:*label20)
    108 label *label106
    109 jump *label107 equal :start_reactor.0*retval false
  
@@ -2107,7 +2107,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
 -    * set :update_fuel.0:fuel :start_reactor.0*retval
 -    * set :update_fuel.0:uld_in unloader3
 -    * set :update_fuel.0:uld_out unloader4
-   132 setaddr :update_fuel.0*retaddr *label22
+   132 setaddr :update_fuel.0*retaddr *label22 (h:*label22)
    133 label *label112
    134 jump *label113 equal :start_reactor.0*retval false
  
@@ -2117,7 +2117,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-9
 -    * set :update_fuel.0:fuel :fuel_many
 -    * set :update_fuel.0:uld_in unloader5
 -    * set :update_fuel.0:uld_out unloader6
-   184 setaddr :update_fuel.0*retaddr *label27
+   184 setaddr :update_fuel.0*retaddr *label27 (h:*label27)
    185 label *label118
    186 jump *label119 equal :fuel_many false
 
@@ -2125,8 +2125,8 @@ Modifications by Inline function 'check_radar' defined at line 259:1 (+19 instru
  
     47 set .NODE node1
     48 set :check_radar.0:unit cyclone1
-    49 setaddr :check_radar.0*retaddr *label10
--    * call *label4 *invalid :check_radar.0*retval
+    49 setaddr :check_radar.0*retaddr *label10 (h:*label10)
+-    * call *label4 *invalid :check_radar.0*retval (m:*label10) (h:*label10)
 -    * label *label10
 +   50 label *label124
 +   51 radar enemy any any health :check_radar.0:unit 1 :check_radar.0:enemy_found
@@ -2161,8 +2161,8 @@ Modifications by Inline function 'check_radar' defined at line 259:1 (+19 instru
  
    171 label *label117
    172 set :check_radar.0:unit cyclone1
-   173 setaddr :check_radar.0*retaddr *label23
--    * call *label4 *invalid :check_radar.0*retval
+   173 setaddr :check_radar.0*retaddr *label23 (h:*label23)
+-    * call *label4 *invalid :check_radar.0*retval (m:*label23) (h:*label23)
 -    * label *label23
 +  174 label *label128
 +  175 radar enemy any any health :check_radar.0:unit 1 :check_radar.0:enemy_found
@@ -2231,7 +2231,7 @@ Modifications by Inline function 'check_radar' defined at line 259:1 (+19 instru
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     48 set :check_radar.0:unit cyclone1
-    49 setaddr :check_radar.0*retaddr *label10
+    49 setaddr :check_radar.0*retaddr *label10 (h:*label10)
     50 label *label124
 -    * radar enemy any any health :check_radar.0:unit 1 :check_radar.0:enemy_found
 +   51 radar enemy any any health cyclone1 1 :check_radar.0:enemy_found
@@ -2257,7 +2257,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     64 control enabled reactor3 false
  
    172 set :check_radar.0:unit cyclone1
-   173 setaddr :check_radar.0*retaddr *label23
+   173 setaddr :check_radar.0*retaddr *label23 (h:*label23)
    174 label *label128
 -    * radar enemy any any health :check_radar.0:unit 1 :check_radar.0:enemy_found
 +  175 radar enemy any any health cyclone1 1 :check_radar.0:enemy_found
@@ -2303,7 +2303,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     37 set .CONTAINER vault1
     38 set .NODE node1
 -    * set :check_radar.0:unit cyclone1
-    39 setaddr :check_radar.0*retaddr *label10
+    39 setaddr :check_radar.0*retaddr *label10 (h:*label10)
     40 label *label124
     41 radar enemy any any health cyclone1 1 :check_radar.0:enemy_found
  
@@ -2311,7 +2311,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    160 label *label116
    161 label *label117
 -    * set :check_radar.0:unit cyclone1
-   162 setaddr :check_radar.0*retaddr *label23
+   162 setaddr :check_radar.0*retaddr *label23 (h:*label23)
    163 label *label128
    164 radar enemy any any health cyclone1 1 :check_radar.0:enemy_found
 
@@ -2319,8 +2319,8 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+62 in
  
     82 set :calc_charge_req.0:reactor reactor1
     83 set :calc_charge_req.0:time :t_startup1
-    84 setaddr :calc_charge_req.0*retaddr *label14
--    * call *label2 *invalid :calc_charge_req.0*retval
+    84 setaddr :calc_charge_req.0*retaddr *label14 (h:*label14)
+-    * call *label2 *invalid :calc_charge_req.0*retval (m:*label14) (h:*label14)
 -    * label *label14
 +   85 label *label132
 +   86 op sub *tmp102 @tick :calc_charge_req.0:time
@@ -2343,8 +2343,8 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+62 in
    103 set .START_POWER_REQ :calc_charge_req.0*retval
    104 set :calc_charge_req.0:reactor reactor2
    105 set :calc_charge_req.0:time :t_startup2
-   106 setaddr :calc_charge_req.0*retaddr *label15
--    * call *label2 *invalid :calc_charge_req.0*retval
+   106 setaddr :calc_charge_req.0*retaddr *label15 (h:*label15)
+-    * call *label2 *invalid :calc_charge_req.0*retval (m:*label15) (h:*label15)
 -    * label *label15
 +  107 label *label136
 +  108 op sub *tmp102 @tick :calc_charge_req.0:time
@@ -2367,8 +2367,8 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+62 in
    125 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
    126 set :calc_charge_req.0:reactor reactor3
    127 set :calc_charge_req.0:time :t_startup3
-   128 setaddr :calc_charge_req.0*retaddr *label16
--    * call *label2 *invalid :calc_charge_req.0*retval
+   128 setaddr :calc_charge_req.0*retaddr *label16 (h:*label16)
+-    * call *label2 *invalid :calc_charge_req.0*retval (m:*label16) (h:*label16)
 -    * label *label16
 +  129 label *label140
 +  130 op sub *tmp102 @tick :calc_charge_req.0:time
@@ -2391,8 +2391,8 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+62 in
    147 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
    148 set :calc_charge_req.0:reactor reactor4
    149 set :calc_charge_req.0:time :t_startup4
-   150 setaddr :calc_charge_req.0*retaddr *label17
--    * call *label2 *invalid :calc_charge_req.0*retval
+   150 setaddr :calc_charge_req.0*retaddr *label17 (h:*label17)
+-    * call *label2 *invalid :calc_charge_req.0*retval (m:*label17) (h:*label17)
 -    * label *label17
 +  151 label *label144
 +  152 op sub *tmp102 @tick :calc_charge_req.0:time
@@ -2415,8 +2415,8 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+62 in
    169 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
    170 set :calc_charge_req.0:reactor reactor5
    171 set :calc_charge_req.0:time :t_startup5
-   172 setaddr :calc_charge_req.0*retaddr *label18
--    * call *label2 *invalid :calc_charge_req.0*retval
+   172 setaddr :calc_charge_req.0*retaddr *label18 (h:*label18)
+-    * call *label2 *invalid :calc_charge_req.0*retval (m:*label18) (h:*label18)
 -    * label *label18
 +  173 label *label148
 +  174 op sub *tmp102 @tick :calc_charge_req.0:time
@@ -2469,8 +2469,8 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+62 in
  
    534 set :calc_charge_req.0:reactor :start_reactor.0:reactor
    535 set :calc_charge_req.0:time :start_reactor.0:t_startup
-   536 setaddr :calc_charge_req.0*retaddr *label78
--    * call *label2 *invalid :calc_charge_req.0*retval
+   536 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
+-    * call *label2 *invalid :calc_charge_req.0*retval (m:*label78) (h:*label78)
 -    * label *label78
 +  537 label *label152
 +  538 op sub *tmp102 @tick :calc_charge_req.0:time
@@ -2497,7 +2497,7 @@ Modifications by Inline function 'calc_charge_req' defined at line 126:1 (+62 in
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     83 set :calc_charge_req.0:time :t_startup1
-    84 setaddr :calc_charge_req.0*retaddr *label14
+    84 setaddr :calc_charge_req.0*retaddr *label14 (h:*label14)
     85 label *label132
 -    * op sub *tmp102 @tick :calc_charge_req.0:time
 +   86 op sub *tmp102 @tick :t_startup1
@@ -2510,7 +2510,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     92 jump *label133 equal *tmp107 false
  
    105 set :calc_charge_req.0:time :t_startup2
-   106 setaddr :calc_charge_req.0*retaddr *label15
+   106 setaddr :calc_charge_req.0*retaddr *label15 (h:*label15)
    107 label *label136
 -    * op sub *tmp102 @tick :calc_charge_req.0:time
 +  108 op sub *tmp102 @tick :t_startup2
@@ -2523,7 +2523,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    114 jump *label137 equal *tmp107 false
  
    127 set :calc_charge_req.0:time :t_startup3
-   128 setaddr :calc_charge_req.0*retaddr *label16
+   128 setaddr :calc_charge_req.0*retaddr *label16 (h:*label16)
    129 label *label140
 -    * op sub *tmp102 @tick :calc_charge_req.0:time
 +  130 op sub *tmp102 @tick :t_startup3
@@ -2536,7 +2536,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    136 jump *label141 equal *tmp107 false
  
    149 set :calc_charge_req.0:time :t_startup4
-   150 setaddr :calc_charge_req.0*retaddr *label17
+   150 setaddr :calc_charge_req.0*retaddr *label17 (h:*label17)
    151 label *label144
 -    * op sub *tmp102 @tick :calc_charge_req.0:time
 +  152 op sub *tmp102 @tick :t_startup4
@@ -2549,7 +2549,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    158 jump *label145 equal *tmp107 false
  
    171 set :calc_charge_req.0:time :t_startup5
-   172 setaddr :calc_charge_req.0*retaddr *label18
+   172 setaddr :calc_charge_req.0*retaddr *label18 (h:*label18)
    173 label *label148
 -    * op sub *tmp102 @tick :calc_charge_req.0:time
 +  174 op sub *tmp102 @tick :t_startup5
@@ -2562,7 +2562,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    180 jump *label149 equal *tmp107 false
  
    535 set :calc_charge_req.0:time :start_reactor.0:t_startup
-   536 setaddr :calc_charge_req.0*retaddr *label78
+   536 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    537 label *label152
 -    * op sub *tmp102 @tick :calc_charge_req.0:time
 +  538 op sub *tmp102 @tick :start_reactor.0:t_startup
@@ -2581,7 +2581,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     81 op or :emerg_shutdown :check_radar.0*retval *tmp8
 -    * set :calc_charge_req.0:reactor reactor1
 -    * set :calc_charge_req.0:time :t_startup1
-    82 setaddr :calc_charge_req.0*retaddr *label14
+    82 setaddr :calc_charge_req.0*retaddr *label14 (h:*label14)
     83 label *label132
     84 op sub *tmp102 @tick :t_startup1
  
@@ -2590,7 +2590,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    101 set .START_POWER_REQ :calc_charge_req.0*retval
 -    * set :calc_charge_req.0:reactor reactor2
 -    * set :calc_charge_req.0:time :t_startup2
-   102 setaddr :calc_charge_req.0*retaddr *label15
+   102 setaddr :calc_charge_req.0*retaddr *label15 (h:*label15)
    103 label *label136
    104 op sub *tmp102 @tick :t_startup2
  
@@ -2599,7 +2599,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    121 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
 -    * set :calc_charge_req.0:reactor reactor3
 -    * set :calc_charge_req.0:time :t_startup3
-   122 setaddr :calc_charge_req.0*retaddr *label16
+   122 setaddr :calc_charge_req.0*retaddr *label16 (h:*label16)
    123 label *label140
    124 op sub *tmp102 @tick :t_startup3
  
@@ -2608,7 +2608,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    141 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
 -    * set :calc_charge_req.0:reactor reactor4
 -    * set :calc_charge_req.0:time :t_startup4
-   142 setaddr :calc_charge_req.0*retaddr *label17
+   142 setaddr :calc_charge_req.0*retaddr *label17 (h:*label17)
    143 label *label144
    144 op sub *tmp102 @tick :t_startup4
  
@@ -2617,7 +2617,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    161 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
 -    * set :calc_charge_req.0:reactor reactor5
 -    * set :calc_charge_req.0:time :t_startup5
-   162 setaddr :calc_charge_req.0*retaddr *label18
+   162 setaddr :calc_charge_req.0*retaddr *label18 (h:*label18)
    163 label *label148
    164 op sub *tmp102 @tick :t_startup5
  
@@ -2626,7 +2626,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    523 jump *label76 greaterThanEq :start_reactor.0:secs 30
 -    * set :calc_charge_req.0:reactor :start_reactor.0:reactor
 -    * set :calc_charge_req.0:time :start_reactor.0:t_startup
-   524 setaddr :calc_charge_req.0*retaddr *label78
+   524 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    525 label *label152
    526 op sub *tmp102 @tick :start_reactor.0:t_startup
 
@@ -2635,8 +2635,8 @@ Modifications by Inline function call at line 80:14 (+158 instructions):
    184 set :start_reactor.0:emerg_shutdown :emerg_shutdown
    185 set :start_reactor.0:fuel_on :fuel_1
    186 set :start_reactor.0:t_startup :t_startup1
--    * setaddr :start_reactor.0*retaddr *label19
--    * call *label3 *invalid :start_reactor.0*retval
+-    * setaddr :start_reactor.0*retaddr *label19 (h:*label19)
+-    * call *label3 *invalid :start_reactor.0*retval (m:*label19) (h:*label19)
 -    * label *label19
 +  187 label *label156
 +  188 set .RET_T_STARTUP :start_reactor.0:t_startup
@@ -2697,7 +2697,7 @@ Modifications by Inline function call at line 80:14 (+158 instructions):
 +  243 jump *label172 always
 +  244 label *label161
 +  245 jump *label168 greaterThanEq :start_reactor.0:secs 30
-+  246 setaddr :calc_charge_req.0*retaddr *label78
++  246 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
 +  247 label *label162
 +  248 op sub *tmp102 @tick :start_reactor.0:t_startup
 +  249 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -2838,7 +2838,7 @@ Modifications by Inline function call at line 80:14 (+158 instructions):
 +  384 label *label193
    385 set :fuel_1 :start_reactor.0*retval
    386 set :t_startup1 .RET_T_STARTUP
-   387 setaddr :update_fuel.0*retaddr *label20
+   387 setaddr :update_fuel.0*retaddr *label20 (h:*label20)
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -2933,7 +2933,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    242 jump *label172 always
  
    244 jump *label168 greaterThanEq :start_reactor.0:secs 30
-   245 setaddr :calc_charge_req.0*retaddr *label78
+   245 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    246 label *label162
 -    * op sub *tmp102 @tick :start_reactor.0:t_startup
 +  247 op sub *tmp102 @tick :t_startup1
@@ -3054,7 +3054,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
 -    * set :fuel_1 :start_reactor.0*retval
 +  384 set :fuel_1 :start_reactor.0:supply_fuel
    385 set :t_startup1 .RET_T_STARTUP
-   386 setaddr :update_fuel.0*retaddr *label20
+   386 setaddr :update_fuel.0*retaddr *label20 (h:*label20)
    387 label *label106
 -    * jump *label107 equal :start_reactor.0*retval false
 +  388 jump *label107 equal :start_reactor.0:supply_fuel false
@@ -3105,8 +3105,8 @@ Modifications by Inline function call at line 84:14 (+158 instructions):
    397 set :start_reactor.0:emerg_shutdown :emerg_shutdown
    398 set :start_reactor.0:fuel_on :fuel_2
    399 set :start_reactor.0:t_startup :t_startup2
--    * setaddr :start_reactor.0*retaddr *label21
--    * call *label3 *invalid :start_reactor.0*retval
+-    * setaddr :start_reactor.0*retaddr *label21 (h:*label21)
+-    * call *label3 *invalid :start_reactor.0*retval (m:*label21) (h:*label21)
 -    * label *label21
 +  400 label *label194
 +  401 set .RET_T_STARTUP :start_reactor.0:t_startup
@@ -3167,7 +3167,7 @@ Modifications by Inline function call at line 84:14 (+158 instructions):
 +  456 jump *label210 always
 +  457 label *label199
 +  458 jump *label206 greaterThanEq :start_reactor.0:secs 30
-+  459 setaddr :calc_charge_req.0*retaddr *label78
++  459 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
 +  460 label *label200
 +  461 op sub *tmp102 @tick :start_reactor.0:t_startup
 +  462 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -3308,7 +3308,7 @@ Modifications by Inline function call at line 84:14 (+158 instructions):
 +  597 label *label231
    598 set :fuel_2 :start_reactor.0*retval
    599 set :t_startup2 .RET_T_STARTUP
-   600 setaddr :update_fuel.0*retaddr *label22
+   600 setaddr :update_fuel.0*retaddr *label22 (h:*label22)
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -3395,7 +3395,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    456 jump *label210 always
  
    458 jump *label206 greaterThanEq :start_reactor.0:secs 30
-   459 setaddr :calc_charge_req.0*retaddr *label78
+   459 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    460 label *label200
 -    * op sub *tmp102 @tick :start_reactor.0:t_startup
 +  461 op sub *tmp102 @tick :t_startup2
@@ -3516,7 +3516,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * set :fuel_2 :start_reactor.0*retval
 +  598 set :fuel_2 :start_reactor.0:supply_fuel
    599 set :t_startup2 .RET_T_STARTUP
-   600 setaddr :update_fuel.0*retaddr *label22
+   600 setaddr :update_fuel.0*retaddr *label22 (h:*label22)
    601 label *label112
 -    * jump *label113 equal :start_reactor.0*retval false
 +  602 jump *label113 equal :start_reactor.0:supply_fuel false
@@ -3654,11 +3654,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
     97 jump *label135 always
     98 label *label135
 -    * set .START_POWER_REQ :calc_charge_req.0*retval
-    99 setaddr :calc_charge_req.0*retaddr *label15
+    99 setaddr :calc_charge_req.0*retaddr *label15 (h:*label15)
    100 label *label136
    101 op sub *tmp102 @tick :t_startup2
  
-   759 setaddr :kilo.0*retaddr *label40
+   759 setaddr :kilo.0*retaddr *label40 (h:*label40)
    760 label *label100
    761 op idiv *tmp93 .AVG_SURPLUS 100
 -    * op div :kilo.0*retval *tmp93 10
@@ -3666,7 +3666,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
    763 label *label101
 -    * set :surplus :kilo.0*retval
    764 sensor :kilo.0:val node1 @powerNetStored
-   765 setaddr :kilo.0*retaddr *label41
+   765 setaddr :kilo.0*retaddr *label41 (h:*label41)
    766 label *label102
  
    834 op sub *tmp113 @tick :start_reactor.0:t_startup
@@ -3757,8 +3757,8 @@ Modifications by Inline function call at line 89:14 (+155 instructions):
    635 set :start_reactor.0:emerg_shutdown :emerg_shutdown
    636 set :start_reactor.0:fuel_on :fuel_3
    637 set :start_reactor.0:t_startup :t_startup3
--    * setaddr :start_reactor.0*retaddr *label24
--    * call *label3 *invalid :start_reactor.0*retval
+-    * setaddr :start_reactor.0*retaddr *label24 (h:*label24)
+-    * call *label3 *invalid :start_reactor.0*retval (m:*label24) (h:*label24)
 -    * label *label24
 +  638 label *label232
 +  639 set .RET_T_STARTUP :start_reactor.0:t_startup
@@ -3819,7 +3819,7 @@ Modifications by Inline function call at line 89:14 (+155 instructions):
 +  694 jump *label248 always
 +  695 label *label237
 +  696 jump *label244 greaterThanEq :start_reactor.0:secs 30
-+  697 setaddr :calc_charge_req.0*retaddr *label78
++  697 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
 +  698 label *label238
 +  699 op sub *tmp102 @tick :start_reactor.0:t_startup
 +  700 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4108,7 +4108,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
    694 jump *label248 always
  
    696 jump *label244 greaterThanEq :start_reactor.0:secs 30
-   697 setaddr :calc_charge_req.0*retaddr *label78
+   697 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    698 label *label238
 -    * op sub *tmp102 @tick :start_reactor.0:t_startup
 +  699 op sub *tmp102 @tick :t_startup3
@@ -4290,7 +4290,7 @@ Modifications by Final phase, Jump Threading, iteration 1:
 +  235 jump *label189 always
    236 label *label161
    237 jump *label168 greaterThanEq :start_reactor.0:secs 30
-   238 setaddr :calc_charge_req.0*retaddr *label78
+   238 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
  
    263 print "START FAIL battery"
    264 print "\n"
@@ -4358,7 +4358,7 @@ Modifications by Final phase, Jump Threading, iteration 1:
 +  448 jump *label227 always
    449 label *label199
    450 jump *label206 greaterThanEq :start_reactor.0:secs 30
-   451 setaddr :calc_charge_req.0*retaddr *label78
+   451 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
  
    476 print "START FAIL battery"
    477 print "\n"
@@ -4426,7 +4426,7 @@ Modifications by Final phase, Jump Threading, iteration 1:
 +  690 jump *label265 always
    691 label *label237
    692 jump *label244 greaterThanEq :start_reactor.0:secs 30
-   693 setaddr :calc_charge_req.0*retaddr *label78
+   693 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
  
    717 print "START FAIL battery"
    718 print "\n"
@@ -4503,7 +4503,7 @@ Modifications by Final phase, Jump Threading, iteration 1:
 + 1074 jump *label67 always
   1075 label *label74
   1076 jump *label76 greaterThanEq :start_reactor.0:secs 30
-  1077 setaddr :calc_charge_req.0*retaddr *label78
+  1077 setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
  
   1101 print "START FAIL battery"
   1102 print "\n"
@@ -4578,7 +4578,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
     35 label *label7
     36 set .CONTAINER vault1
     37 set .NODE node1
--    * setaddr :check_radar.0*retaddr *label10
+-    * setaddr :check_radar.0*retaddr *label10 (h:*label10)
     38 label *label124
     39 radar enemy any any health cyclone1 1 :check_radar.0:enemy_found
     40 jump *label125 equal :check_radar.0:enemy_found null
@@ -4586,7 +4586,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
     75 jump *label11 always
     76 label *label11
     77 op or :emerg_shutdown :check_radar.0*retval *tmp8
--    * setaddr :calc_charge_req.0*retaddr *label14
+-    * setaddr :calc_charge_req.0*retaddr *label14 (h:*label14)
     78 label *label132
     79 op sub *tmp102 @tick :t_startup1
     80 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4594,7 +4594,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
     93 set .START_POWER_REQ :calc_charge_req.0:charge_req
     94 jump *label135 always
     95 label *label135
--    * setaddr :calc_charge_req.0*retaddr *label15
+-    * setaddr :calc_charge_req.0*retaddr *label15 (h:*label15)
     96 label *label136
     97 op sub *tmp102 @tick :t_startup2
     98 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4602,7 +4602,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    112 jump *label139 always
    113 label *label139
    114 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
--    * setaddr :calc_charge_req.0*retaddr *label16
+-    * setaddr :calc_charge_req.0*retaddr *label16 (h:*label16)
    115 label *label140
    116 op sub *tmp102 @tick :t_startup3
    117 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4610,7 +4610,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    131 jump *label143 always
    132 label *label143
    133 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
--    * setaddr :calc_charge_req.0*retaddr *label17
+-    * setaddr :calc_charge_req.0*retaddr *label17 (h:*label17)
    134 label *label144
    135 op sub *tmp102 @tick :t_startup4
    136 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4618,7 +4618,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    150 jump *label147 always
    151 label *label147
    152 op add .START_POWER_REQ .START_POWER_REQ :calc_charge_req.0*retval
--    * setaddr :calc_charge_req.0*retaddr *label18
+-    * setaddr :calc_charge_req.0*retaddr *label18 (h:*label18)
    153 label *label148
    154 op sub *tmp102 @tick :t_startup5
    155 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4626,7 +4626,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    228 jump *label189 always
    229 label *label161
    230 jump *label168 greaterThanEq :start_reactor.0:secs 30
--    * setaddr :calc_charge_req.0*retaddr *label78
+-    * setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    231 label *label162
    232 op sub *tmp102 @tick :t_startup1
    233 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4634,7 +4634,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    366 label *label193
    367 set :fuel_1 :start_reactor.0:supply_fuel
    368 set :t_startup1 .RET_T_STARTUP
--    * setaddr :update_fuel.0*retaddr *label20
+-    * setaddr :update_fuel.0*retaddr *label20 (h:*label20)
    369 label *label106
    370 jump *label107 equal :start_reactor.0:supply_fuel false
    371 control config unloader1 @blast-compound
@@ -4642,7 +4642,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    439 jump *label227 always
    440 label *label199
    441 jump *label206 greaterThanEq :start_reactor.0:secs 30
--    * setaddr :calc_charge_req.0*retaddr *label78
+-    * setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    442 label *label200
    443 op sub *tmp102 @tick :t_startup2
    444 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4650,7 +4650,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    577 label *label231
    578 set :fuel_2 :start_reactor.0:supply_fuel
    579 set :t_startup2 .RET_T_STARTUP
--    * setaddr :update_fuel.0*retaddr *label22
+-    * setaddr :update_fuel.0*retaddr *label22 (h:*label22)
    580 label *label112
    581 jump *label113 equal :start_reactor.0:supply_fuel false
    582 control config unloader3 @blast-compound
@@ -4658,7 +4658,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    591 control config unloader4 @scrap
    592 label *label116
    593 label *label117
--    * setaddr :check_radar.0*retaddr *label23
+-    * setaddr :check_radar.0*retaddr *label23 (h:*label23)
    594 label *label128
    595 radar enemy any any health cyclone1 1 :check_radar.0:enemy_found
    596 jump *label129 equal :check_radar.0:enemy_found null
@@ -4666,7 +4666,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    677 jump *label265 always
    678 label *label237
    679 jump *label244 greaterThanEq :start_reactor.0:secs 30
--    * setaddr :calc_charge_req.0*retaddr *label78
+-    * setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
    680 label *label238
    681 op sub *tmp102 @tick :t_startup3
    682 op idiv :calc_charge_req.0:secs *tmp102 60
@@ -4674,7 +4674,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    835 set :t_startup5 .RET_T_STARTUP
    836 op or *tmp27 :fuel_3 :fuel_4
    837 op or :fuel_many *tmp27 :start_reactor.0*retval
--    * setaddr :update_fuel.0*retaddr *label27
+-    * setaddr :update_fuel.0*retaddr *label27 (h:*label27)
    838 label *label118
    839 jump *label119 equal :fuel_many false
    840 control config unloader5 @blast-compound
@@ -4682,20 +4682,20 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
    927 control enabled generator2 true
    928 label *label39
    929 label *label37
--    * setaddr :kilo.0*retaddr *label40
+-    * setaddr :kilo.0*retaddr *label40 (h:*label40)
    930 label *label100
    931 op idiv *tmp93 .AVG_SURPLUS 100
    932 op div :surplus *tmp93 10
    933 label *label101
    934 sensor :kilo.0:val node1 @powerNetStored
--    * setaddr :kilo.0*retaddr *label41
+-    * setaddr :kilo.0*retaddr *label41 (h:*label41)
    935 label *label102
    936 op idiv *tmp93 :kilo.0:val 100
    937 op div :kilo.0*retval *tmp93 10
    938 label *label103
    939 set :charge :kilo.0*retval
    940 jump *label42 lessThanEq .START_POWER_REQ 0
--    * setaddr :kilo.0*retaddr *label44
+-    * setaddr :kilo.0*retaddr *label44 (h:*label44)
    941 label *label104
    942 op idiv *tmp93 .START_POWER_REQ 100
    943 op div :kilo.0*retval *tmp93 10
@@ -4703,7 +4703,7 @@ Modifications by Final phase, Dead Code Elimination, iteration 1 (-17 instructio
   1054 jump *label67 always
   1055 label *label74
   1056 jump *label76 greaterThanEq :start_reactor.0:secs 30
--    * setaddr :calc_charge_req.0*retaddr *label78
+-    * setaddr :calc_charge_req.0*retaddr *label78 (h:*label78)
   1057 label *label152
   1058 op sub *tmp102 @tick :start_reactor.0:t_startup
   1059 op idiv :calc_charge_req.0:secs *tmp102 60

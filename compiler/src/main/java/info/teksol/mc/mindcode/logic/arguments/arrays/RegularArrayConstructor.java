@@ -128,7 +128,6 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
         LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
@@ -158,25 +157,26 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
 
         LogicVariable temp = creator.nextTemp();
         LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
+        LogicLabel marker2 = processor.nextMarker();
         LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
-                creator.createSetAddress(readRet, returnLabel).setMarker(marker);
+                creator.createSetAddress(readRet, returnLabel).setHoistId(marker2);
                 creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, temp, 2);
-                creator.createMultiCall(target, temp, marker).setSideEffects(rix.getSideEffects());
+                creator.createMultiCall(target, temp, marker).setSideEffects(rix.getSideEffects()).setHoistId(marker2);
                 creator.createLabel(returnLabel);
                 creator.createSet(rix.getResult(), readVal);
             }
 
             case WriteArrInstruction wix -> {
-                creator.createSetAddress(writeRet, returnLabel).setMarker(marker);
+                creator.createSetAddress(writeRet, returnLabel).setHoistId(marker2);
                 creator.createSet(writeVal, wix.getValue());
                 creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, temp, 2);
-                creator.createMultiCall(target, temp, marker).setSideEffects(wix.getSideEffects());
+                creator.createMultiCall(target, temp, marker).setSideEffects(wix.getSideEffects()).setHoistId(marker2);
                 creator.createLabel(returnLabel);
             }
 
