@@ -68,7 +68,7 @@ public class Icons {
     // INITIALIZATION
 
     private static Map<String, LogicString> initializeIconMap(String mimexVersion) {
-        String resourceName = mimexVersion + "/" + RESOURCE_NAME;
+        String resourceName = "/mimex/" + mimexVersion + "/" + RESOURCE_NAME;
 
         try (InputStream input = Icons.class.getResourceAsStream(resourceName)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(input)));
@@ -98,7 +98,7 @@ public class Icons {
     }
 
     private static Map<ContentType, Map<String, String>> initializeContentMap(String mimexVersion) {
-        String resourceName = mimexVersion + "/" + RESOURCE_NAME;
+        String resourceName = "/mimex/" + mimexVersion + "/" + RESOURCE_NAME;
         Map<ContentType, Map<String, String>> result = new HashMap<>();
         try (InputStream input = Icons.class.getResourceAsStream(resourceName)) {
             BufferedReader reader = new BufferedReader(new InputStreamReader(Objects.requireNonNull(input)));

@@ -285,7 +285,7 @@ public class MindustryMetadata {
         }
 
         public AbstractReader(String resource) {
-            this.resourceName = processorVersion.mimexVersion + "/" + resource;
+            this.resourceName = "/mimex/" + processorVersion.mimexVersion + "/" + resource;
 
             try (InputStream input = Objects.requireNonNull(BlockTypeReader.class.getResourceAsStream(resourceName))) {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
