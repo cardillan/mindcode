@@ -79,7 +79,7 @@ abstract class ActionHandler {
                 "-i", "--instruction-limit")
                 .help("sets the maximal number of instructions for the speed optimizations")
                 .type(Integer.class)
-                .choices(Arguments.range(1, CompilerProfile.MAX_INSTRUCTIONS));
+                .choices(Arguments.range(1, CompilerProfile.MAX_INSTRUCTIONS_CMDLINE));
 
         createArgument(container, defaults,
                 CompilerProfile::getGoal,
@@ -94,7 +94,7 @@ abstract class ActionHandler {
                 "-e", "--passes")
                 .help("sets maximal number of optimization passes to be made")
                 .type(Integer.class)
-                .choices(Arguments.range(1, CompilerProfile.MAX_PASSES));
+                .choices(Arguments.range(1, CompilerProfile.MAX_PASSES_CMDLINE));
 
         createArgument(container, defaults,
                 CompilerProfile::getRemarks,

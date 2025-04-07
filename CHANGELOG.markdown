@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed some command-line options not having an effect in the command-line tool ([#231](https://github.com/cardillan/mindcode/issues/231)).
 * Fixed wrong handling or hoisted set instruction setting up return address in subsequent loop unrolling ([#234](https://github.com/cardillan/mindcode/issues/234)).
 * Fixed optimizations removing the `spawn` instruction when the output value was not used ([#236](https://github.com/cardillan/mindcode/issues/236)).
+* Fixed Jump Optimization not performing the optimization in unrolled loops.
 
 ### Added
 

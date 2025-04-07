@@ -59,7 +59,7 @@ class JumpOptimizer extends BaseOptimizer {
                             ix -> ix.getArgs().contains(lastOp.getResult()) && !(ix instanceof PushOrPopInstruction));
 
                     // Not exactly two instructions
-                    if (list.size() == 2) {
+                    if (list.size() == 2 || identicalInstructions(list, lastOp, jump)) {
                         Operation operation = jump.getCondition() == Condition.EQUAL
                                 ? lastOp.getOperation().hasInverse() ? lastOp.getOperation().inverse() : null
                                 : lastOp.getOperation().toCondition() != null ? lastOp.getOperation() : null;
@@ -82,5 +82,20 @@ class JumpOptimizer extends BaseOptimizer {
 
             return false;
         }
+    }
+
+    public boolean identicalInstructions(List<LogicInstruction> instructions, OpInstruction op, JumpInstruction jump) {
+        //if (true) return false;
+
+        if (instructions.size() % 2 != 0) return false;
+        for (int i = 2; i < instructions.size(); i += 2) {
+            if (!op.equals(instructions.get(i))) return false;
+            if (!(instructions.get(i + 1) instanceof JumpInstruction jump2
+                    && jump2.getTypedArguments().subList(1, jump2.getTypedArguments().size() - 1).equals(
+                            jump.getTypedArguments().subList(1, jump.getTypedArguments().size() - 1))))
+                    return false;
+        }
+
+        return true;
     }
 }

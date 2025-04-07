@@ -183,11 +183,11 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("boundary-checks",      node -> setEnumOption(node, RuntimeChecks::byName, profile::setBoundaryChecks, RuntimeChecks::allowedValues));
         map.put("function-prefix",      node -> setBooleanOption(node, profile::setShortFunctionPrefix, "short", "long"));
         map.put("goal",                 node -> setEnumOption(node, GenerationGoal::byName, profile::setGoal, GenerationGoal::allowedValues));
-        map.put("instruction-limit",    node -> setIntOption(node, profile::setInstructionLimit, 1, CompilerProfile.MAX_INSTRUCTIONS));
+        map.put("instruction-limit",    node -> setIntOption(node, profile::setInstructionLimit, 1, profile.getMaxInstructionLimit()));
         map.put("link-guards",          node -> setBooleanOption(node, profile::setLinkedBlockGuards));
         map.put("mlog-indent",          node -> setIntOption(node, profile::setMlogIndent, 0, CompilerProfile.MAX_MLOG_INDENT));
         map.put("optimization",         node -> setEnumOption(node, OptimizationLevel::byName, profile::setAllOptimizationLevels, OptimizationLevel::allowedValues));
-        map.put("passes",               node -> setIntOption(node, profile::setOptimizationPasses, 1, CompilerProfile.MAX_PASSES));
+        map.put("passes",               node -> setIntOption(node, profile::setOptimizationPasses, 1, profile.getMaxPasses()));
         map.put("print-unresolved",     node -> setEnumOption(node, FinalCodeOutput::byName, profile::setFinalCodeOutput, FinalCodeOutput::allowedValues));
         map.put("profile",              this::setProfile);
         map.put("remarks",              node -> setEnumOption(node, Remarks::byName, profile::setRemarks, Remarks::allowedValues));

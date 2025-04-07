@@ -26,15 +26,16 @@ import java.util.stream.Collectors;
 public class CompilerProfile {
     public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
 
-    public static final int DEFAULT_CMDLINE_PASSES = 25;
     public static final int DEFAULT_INSTRUCTIONS = 1000;
+    public static final int DEFAULT_PASSES_CMDLINE = 25;
+    public static final int DEFAULT_PASSES_WEBAPP = 5;
     public static final int DEFAULT_STEP_LIMIT_CMDLINE = 10_000_000;
     public static final int DEFAULT_STEP_LIMIT_WEBAPP = 1_000_000;
-    public static final int DEFAULT_WEBAPP_PASSES = 5;
-    public static final int MAX_INSTRUCTIONS = 100_000;
+    public static final int MAX_INSTRUCTIONS_CMDLINE = 100_000;
     public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
     public static final int MAX_MLOG_INDENT = 8;
-    public static final int MAX_PASSES = 1000;
+    public static final int MAX_PASSES_CMDLINE = 1000;
+    public static final int MAX_PASSES_WEBAPP = 25;
 
     private final boolean webApplication;
 
@@ -79,7 +80,7 @@ public class CompilerProfile {
     /// @param level          the global optimization level to be applied across all optimization types.
     public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
-        this.optimizationPasses = webApplication ? DEFAULT_WEBAPP_PASSES : DEFAULT_CMDLINE_PASSES;
+        this.optimizationPasses = webApplication ? DEFAULT_PASSES_WEBAPP : DEFAULT_PASSES_CMDLINE;
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }
@@ -93,11 +94,19 @@ public class CompilerProfile {
     ///                        is configured with an advanced level if specified.
     public CompilerProfile(boolean webApplication, Optimization... optimizations) {
         this.webApplication = webApplication;
-        this.optimizationPasses = webApplication ? DEFAULT_WEBAPP_PASSES : DEFAULT_CMDLINE_PASSES;
+        this.optimizationPasses = webApplication ? DEFAULT_PASSES_WEBAPP : DEFAULT_PASSES_CMDLINE;
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         Set<Optimization> optimSet = Set.of(optimizations);
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
                 o -> optimSet.contains(o) ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.NONE));
+    }
+
+    public int getMaxPasses() {
+        return webApplication ? MAX_PASSES_WEBAPP : MAX_PASSES_CMDLINE;
+    }
+
+    public int getMaxInstructionLimit() {
+        return webApplication ? MAX_INSTRUCTIONS_WEBAPP : MAX_INSTRUCTIONS_CMDLINE;
     }
 
     public CompilerProfile clearExecutionFlags(ExecutionFlag... flags) {
@@ -200,8 +209,7 @@ public class CompilerProfile {
     }
 
     public CompilerProfile setInstructionLimit(int instructionLimit) {
-        int max = webApplication ? MAX_INSTRUCTIONS_WEBAPP : MAX_INSTRUCTIONS;
-        this.instructionLimit = Math.min(max, instructionLimit);
+        this.instructionLimit = Math.min(instructionLimit, getMaxInstructionLimit());
         return this;
     }
 
@@ -236,7 +244,7 @@ public class CompilerProfile {
     }
 
     public CompilerProfile setOptimizationPasses(int optimizationPasses) {
-        this.optimizationPasses = optimizationPasses;
+        this.optimizationPasses = Math.min(optimizationPasses, getMaxPasses());
         return this;
     }
 
