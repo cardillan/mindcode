@@ -38,10 +38,10 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    protected LogicVariable transferVariable(AccessType accessType) {
+    protected LogicValue transferVariable(AccessType accessType) {
         return switch (accessType) {
             case READ -> ((ReadArrInstruction)instruction).getResult();
-            case WRITE -> (LogicVariable) ((WriteArrInstruction)instruction).getValue();
+            case WRITE -> ((WriteArrInstruction)instruction).getValue();
         };
     }
 
@@ -56,7 +56,7 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     private List<LogicVariable> arrayElementsPlus(LogicValue value) {
-        return arrayElementsConcat(Stream.of((LogicVariable) value));
+        return arrayElementsConcat(Stream.of(value));
     }
 
     @Override
@@ -78,8 +78,8 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
 
         SideEffects sideEffects =  switch (instruction) {
             case ReadArrInstruction rix -> SideEffects.of(arrayElementsPlus(tmp),
-                    List.of(rix.getResult()), List.of());
-            case WriteArrInstruction wix -> SideEffects.of(List.of((LogicVariable) wix.getValue(), tmp),
+                    variables(rix.getResult()), List.of());
+            case WriteArrInstruction wix -> SideEffects.of(variables(wix.getValue(), tmp),
                     List.of(), arrayElements());
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         };

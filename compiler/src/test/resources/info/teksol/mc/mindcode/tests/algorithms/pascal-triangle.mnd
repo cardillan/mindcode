@@ -1,0 +1,31 @@
+#set syntax = strict;
+
+param TRIANGLE_SIZE = 10;
+
+var previousLine[10];
+var currentLine[10];
+
+begin
+    var total = 3;              // First two lines
+    var lineLength = 2;
+
+    previousLine[0] = 1;
+    previousLine[1] = 1;
+
+    for var i in 3 .. TRIANGLE_SIZE do
+        currentLine[0] = 1;
+        for var j in 1 .. lineLength do
+            currentLine[j] = previousLine[j - 1] + previousLine[j];
+        end;
+        currentLine[lineLength] = 1;
+        lineLength++;
+
+        for var c in 0 ... lineLength do
+            total += currentLine[c];
+            previousLine[c] = currentLine[c];
+        end;
+    end;
+
+    assertEquals(1023, total, "Sum of Pascal triangle");
+    stopProcessor();
+end;

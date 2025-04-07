@@ -4,6 +4,7 @@ compute-recursive-fibonacci.mnd:                   32     2477      96.8%   BDE1
 compute-sum-of-primes.mnd:                        434     1884      99.7%   B6615E97E02F94A9   0F170092A29DBCAC
 digit-counts.mnd:                                  75     2566     100.0%   4395C6D90051BC6D   81ACEDCD04B0E3E0
 memory-read-write.mnd:                              5        5     100.0%   D9539CC21D8111B7   8B4165EC6B0E2D00
+pascal-triangle.mnd:                              171     1583      94.7%   954D9E65ED4E6EF0   FA8B99C138C980D5
 sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   B866D753C40FB38B
 sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   58C8232EF2FCBF22
 sorting with insert-sort.mnd:                      27    26064     100.0%   0AF6F57A5EBA45E2   F2B842147528A850

@@ -40,15 +40,19 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
                 .toList();
     }
 
-    protected List<LogicVariable> arrayElementsConcat(Stream<LogicVariable> variables) {
+    protected List<LogicVariable> arrayElementsConcat(Stream<? extends LogicArgument> variables) {
         return Stream.concat(variables,
-                arrayStore.getElements().stream()
-                        .filter(LogicVariable.class::isInstance)
-                        .map(LogicVariable.class::cast)
-        ).toList();
+                        arrayStore.getElements().stream())
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .toList();
     }
 
-    protected LogicVariable transferVariable(AccessType accessType) {
+    protected List<LogicVariable> variables(LogicArgument... args) {
+        return Stream.of(args).filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList();
+    }
+
+    protected LogicValue transferVariable(AccessType accessType) {
         return LogicVariable.INVALID;
     }
 
@@ -63,7 +67,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         for (ValueStore element : arrayStore.getElements()) {
             creator.createMultiLabel(nextLabel, marker);
             switch (instruction) {
-                case ReadArrInstruction rix -> element.readValue(creator, transferVariable(AccessType.READ));
+                case ReadArrInstruction rix -> element.readValue(creator, (LogicVariable) transferVariable(AccessType.READ));
                 case WriteArrInstruction wix -> element.setValue(creator, transferVariable(AccessType.WRITE));
                 default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
             }
@@ -83,7 +87,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         switch (boundaryChecks) {
             case ASSERT -> createAssertRuntimeChecks(astContext, consumer, index, max, multiple, errorMessage);
             case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max, errorMessage);
-            case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
+            case SIMPLE, DESCRIBED ->
+                    createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
         }
     }
 

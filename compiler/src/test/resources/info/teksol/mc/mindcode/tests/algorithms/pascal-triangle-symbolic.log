@@ -1,0 +1,856 @@
+   147 instructions before optimizations.
+     4 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Dead Code Elimination (3 iterations).
+     8 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     5 instructions eliminated by Data Flow Optimization (2 passes, 11 iterations).
+     3 instructions modified by Loop Optimization (4 iterations).
+     3 loops improved by Loop Optimization.
+     7 jump tables inlined by Array Optimization.
+   171 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 863):
+    Inline read jump table of array 'currentLine'                cost    13, benefit     2500.0, efficiency      192.3
+    Inline write jump table of array 'currentLine'               cost    13, benefit     1300.0, efficiency      100.0
+    Inline read jump table of array 'previousLine'               cost    13, benefit     2500.0, efficiency      192.3
+  * Inline write jump table of array 'previousLine'              cost     0, benefit     1250.0, efficiency   Infinity (-4 instructions)
+    Inline 'currentLine' read access at line 24:22               cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' read access at line 25:31               cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' write access at line 18:13              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' write access at line 20:9               cost    17, benefit       50.0, efficiency        2.9
+    Inline 'previousLine' read access at line 18:50              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'previousLine' read access at line 18:50              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'previousLine' write access at line 25:13             cost    17, benefit     1250.0, efficiency       73.5
+
+Pass 1: speed optimization selection (cost limit 867):
+  * Inline read jump table of array 'currentLine'                cost    13, benefit     2500.0, efficiency      192.3 (+13 instructions)
+    Inline write jump table of array 'currentLine'               cost    13, benefit     1300.0, efficiency      100.0
+    Inline read jump table of array 'previousLine'               cost    13, benefit     2500.0, efficiency      192.3
+    Inline 'currentLine' read access at line 24:22               cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' read access at line 25:31               cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' write access at line 18:13              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' write access at line 20:9               cost    17, benefit       50.0, efficiency        2.9
+    Inline 'previousLine' read access at line 18:50              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'previousLine' read access at line 18:50              cost    17, benefit     1250.0, efficiency       73.5
+
+Pass 1: speed optimization selection (cost limit 854):
+    Inline write jump table of array 'currentLine'               cost    13, benefit     1300.0, efficiency      100.0
+  * Inline read jump table of array 'previousLine'               cost    13, benefit     2500.0, efficiency      192.3 (+13 instructions)
+    Inline 'currentLine' write access at line 18:13              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' write access at line 20:9               cost    17, benefit       50.0, efficiency        2.9
+    Inline 'previousLine' read access at line 18:50              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'previousLine' read access at line 18:50              cost    17, benefit     1250.0, efficiency       73.5
+
+Pass 1: speed optimization selection (cost limit 841):
+  * Inline write jump table of array 'currentLine'               cost    13, benefit     1300.0, efficiency      100.0 (+13 instructions)
+    Inline 'currentLine' write access at line 18:13              cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'currentLine' write access at line 20:9               cost    17, benefit       50.0, efficiency        2.9
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
+ 
+    24 label *label5
+    25 set *tmp9 :lineLength
+    26 writearr<regular> 1 .currentLine[] *tmp9
+-    * set *tmp11 :lineLength
+    27 op add :lineLength :lineLength 1
+    28 set *tmp12 :lineLength
+    29 set :c 0
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-4 instructions):
+ 
+    11 label *label3
+    12 jump *label5 greaterThan :j *tmp0
+    13 set *tmp1 :j
+-    * op sub *tmp3 :j 1
+-    * set *tmp4 *tmp3
++   14 op sub *tmp4 :j 1
+    15 set *tmp6 :j
+    16 readarr<regular> *tmp5 .previousLine[] *tmp4
+    17 readarr<regular> *tmp7 .previousLine[] *tmp6
+ 
+    21 op add :j :j 1
+    22 jump *label3 always
+    23 label *label5
+-    * set *tmp9 :lineLength
+-    * writearr<regular> 1 .currentLine[] *tmp9
++   24 writearr<regular> 1 .currentLine[] :lineLength
+    25 op add :lineLength :lineLength 1
+    26 set *tmp12 :lineLength
+    27 set :c 0
+    28 label *label6
+    29 jump *label8 greaterThanEq :c *tmp12
+-    * set *tmp13 :c
+-    * readarr<regular> *tmp14 .currentLine[] *tmp13
++   30 readarr<regular> *tmp14 .currentLine[] :c
+    31 op add :total :total *tmp14
+    32 set *tmp15 :c
+-    * set *tmp17 :c
+-    * readarr<regular> *tmp18 .currentLine[] *tmp17
++   33 readarr<regular> *tmp18 .currentLine[] :c
+    34 writearr<regular> *tmp18 .previousLine[] *tmp15
+    35 label *label7
+    36 op add :c :c 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     9 set *tmp0 :lineLength
+    10 set :j 1
+    11 label *label3
+-    * jump *label5 greaterThan :j *tmp0
++   12 jump *label5 greaterThan :j :lineLength
+    13 set *tmp1 :j
+    14 op sub *tmp4 :j 1
+    15 set *tmp6 :j
+    16 readarr<regular> *tmp5 .previousLine[] *tmp4
+-    * readarr<regular> *tmp7 .previousLine[] *tmp6
++   17 readarr<regular> *tmp7 .previousLine[] :j
+    18 op add *tmp8 *tmp5 *tmp7
+-    * writearr<regular> *tmp8 .currentLine[] *tmp1
++   19 writearr<regular> *tmp8 .currentLine[] :j
+    20 label *label4
+    21 op add :j :j 1
+    22 jump *label3 always
+ 
+    26 set *tmp12 :lineLength
+    27 set :c 0
+    28 label *label6
+-    * jump *label8 greaterThanEq :c *tmp12
++   29 jump *label8 greaterThanEq :c :lineLength
+    30 readarr<regular> *tmp14 .currentLine[] :c
+    31 op add :total :total *tmp14
+    32 set *tmp15 :c
+    33 readarr<regular> *tmp18 .currentLine[] :c
+-    * writearr<regular> *tmp18 .previousLine[] *tmp15
++   34 writearr<regular> *tmp18 .previousLine[] :c
+    35 label *label7
+    36 op add :c :c 1
+    37 jump *label6 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
+ 
+     6 label *label0
+     7 jump *label2 greaterThan :i TRIANGLE_SIZE
+     8 set .currentLine*0 1
+-    * set *tmp0 :lineLength
+     9 set :j 1
+    10 label *label3
+    11 jump *label5 greaterThan :j :lineLength
+-    * set *tmp1 :j
+    12 op sub *tmp4 :j 1
+-    * set *tmp6 :j
+    13 readarr<regular> *tmp5 .previousLine[] *tmp4
+    14 readarr<regular> *tmp7 .previousLine[] :j
+    15 op add *tmp8 *tmp5 *tmp7
+ 
+    20 label *label5
+    21 writearr<regular> 1 .currentLine[] :lineLength
+    22 op add :lineLength :lineLength 1
+-    * set *tmp12 :lineLength
+    23 set :c 0
+    24 label *label6
+    25 jump *label8 greaterThanEq :c :lineLength
+    26 readarr<regular> *tmp14 .currentLine[] :c
+    27 op add :total :total *tmp14
+-    * set *tmp15 :c
+    28 readarr<regular> *tmp18 .currentLine[] :c
+    29 writearr<regular> *tmp18 .previousLine[] :c
+    30 label *label7
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+     5 set :i 3
+     6 label *label0
+     7 jump *label2 greaterThan :i TRIANGLE_SIZE
++    8 label *label9
+     9 set .currentLine*0 1
+    10 set :j 1
+    11 label *label3
+    12 jump *label5 greaterThan :j :lineLength
++   13 label *label10
+    14 op sub *tmp4 :j 1
+    15 readarr<regular> *tmp5 .previousLine[] *tmp4
+    16 readarr<regular> *tmp7 .previousLine[] :j
+ 
+    18 writearr<regular> *tmp8 .currentLine[] :j
+    19 label *label4
+    20 op add :j :j 1
+-    * jump *label3 always
++   21 jump *label10 lessThanEq :j :lineLength
+    22 label *label5
+    23 writearr<regular> 1 .currentLine[] :lineLength
+    24 op add :lineLength :lineLength 1
+    25 set :c 0
+    26 label *label6
+    27 jump *label8 greaterThanEq :c :lineLength
++   28 label *label11
+    29 readarr<regular> *tmp14 .currentLine[] :c
+    30 op add :total :total *tmp14
+    31 readarr<regular> *tmp18 .currentLine[] :c
+    32 writearr<regular> *tmp18 .previousLine[] :c
+    33 label *label7
+    34 op add :c :c 1
+-    * jump *label6 always
++   35 jump *label11 lessThan :c :lineLength
+    36 label *label8
+    37 label *label1
+    38 op add :i :i 1
+-    * jump *label0 always
++   39 jump *label9 lessThanEq :i TRIANGLE_SIZE
+    40 label *label2
+    41 assertequals 1023 :total "Sum of Pascal triangle"
+    42 stop
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
+ 
+     4 set .previousLine*1 1
+     5 set :i 3
+     6 label *label0
+-    * jump *label2 greaterThan :i TRIANGLE_SIZE
++    7 jump *label2 greaterThan 3 TRIANGLE_SIZE
+     8 label *label9
+     9 set .currentLine*0 1
+    10 set :j 1
+    11 label *label3
+-    * jump *label5 greaterThan :j :lineLength
++   12 jump *label5 greaterThan 1 :lineLength
+    13 label *label10
+    14 op sub *tmp4 :j 1
+    15 readarr<regular> *tmp5 .previousLine[] *tmp4
+ 
+    24 op add :lineLength :lineLength 1
+    25 set :c 0
+    26 label *label6
+-    * jump *label8 greaterThanEq :c :lineLength
++   27 jump *label8 greaterThanEq 0 :lineLength
+    28 label *label11
+    29 readarr<regular> *tmp14 .currentLine[] :c
+    30 op add :total :total *tmp14
+    31 readarr<regular> *tmp18 .currentLine[] :c
+-    * writearr<regular> *tmp18 .previousLine[] :c
++   32 writearr<inlined> *tmp18 .previousLine[] :c
+    33 label *label7
+    34 op add :c :c 1
+    35 jump *label11 lessThan :c :lineLength
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (+13 instructions):
+ 
+    26 label *label6
+    27 jump *label8 greaterThanEq 0 :lineLength
+    28 label *label11
+-    * readarr<regular> *tmp14 .currentLine[] :c
++   29 readarr<inlined> *tmp14 .currentLine[] :c
+    30 op add :total :total *tmp14
+-    * readarr<regular> *tmp18 .currentLine[] :c
++   31 readarr<inlined> *tmp18 .currentLine[] :c
+    32 writearr<inlined> *tmp18 .previousLine[] :c
+    33 label *label7
+    34 op add :c :c 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (+13 instructions):
+ 
+    12 jump *label5 greaterThan 1 :lineLength
+    13 label *label10
+    14 op sub *tmp4 :j 1
+-    * readarr<regular> *tmp5 .previousLine[] *tmp4
+-    * readarr<regular> *tmp7 .previousLine[] :j
++   15 readarr<inlined> *tmp5 .previousLine[] *tmp4
++   16 readarr<inlined> *tmp7 .previousLine[] :j
+    17 op add *tmp8 *tmp5 *tmp7
+    18 writearr<regular> *tmp8 .currentLine[] :j
+    19 label *label4
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (+13 instructions):
+ 
+    15 readarr<inlined> *tmp5 .previousLine[] *tmp4
+    16 readarr<inlined> *tmp7 .previousLine[] :j
+    17 op add *tmp8 *tmp5 *tmp7
+-    * writearr<regular> *tmp8 .currentLine[] :j
++   18 writearr<inlined> *tmp8 .currentLine[] :j
+    19 label *label4
+    20 op add :j :j 1
+    21 jump *label10 lessThanEq :j :lineLength
+    22 label *label5
+-    * writearr<regular> 1 .currentLine[] :lineLength
++   23 writearr<inlined> 1 .currentLine[] :lineLength
+    24 op add :lineLength :lineLength 1
+    25 set :c 0
+    26 label *label6
+
+Modifications by Virtual Instruction Expansion (+7 instructions):
+ 
+    12 jump *label5 greaterThan 1 :lineLength
+    13 label *label10
+    14 op sub *tmp4 :j 1
+-    * readarr<inlined> *tmp5 .previousLine[] *tmp4
+-    * readarr<inlined> *tmp7 .previousLine[] :j
++   15 op mul *tmp19 *tmp4 2
++   16 multijump *label13 *tmp19 0 (m:marker0)
++   17 multilabel *label13 (m:marker0)
++   18 set *tmp5 .previousLine*0
++   19 jump *label12 always
++   20 multilabel *label14 (m:marker0)
++   21 set *tmp5 .previousLine*1
++   22 jump *label12 always
++   23 multilabel *label15 (m:marker0)
++   24 set *tmp5 .previousLine*2
++   25 jump *label12 always
++   26 multilabel *label16 (m:marker0)
++   27 set *tmp5 .previousLine*3
++   28 jump *label12 always
++   29 multilabel *label17 (m:marker0)
++   30 set *tmp5 .previousLine*4
++   31 jump *label12 always
++   32 multilabel *label18 (m:marker0)
++   33 set *tmp5 .previousLine*5
++   34 jump *label12 always
++   35 multilabel *label19 (m:marker0)
++   36 set *tmp5 .previousLine*6
++   37 jump *label12 always
++   38 multilabel *label20 (m:marker0)
++   39 set *tmp5 .previousLine*7
++   40 jump *label12 always
++   41 multilabel *label21 (m:marker0)
++   42 set *tmp5 .previousLine*8
++   43 jump *label12 always
++   44 multilabel *label22 (m:marker0)
++   45 set *tmp5 .previousLine*9
++   46 jump *label12 always
++   47 label *label12
++   48 op mul *tmp20 :j 2
++   49 multijump *label25 *tmp20 0 (m:marker1)
++   50 multilabel *label25 (m:marker1)
++   51 set *tmp7 .previousLine*0
++   52 jump *label24 always
++   53 multilabel *label26 (m:marker1)
++   54 set *tmp7 .previousLine*1
++   55 jump *label24 always
++   56 multilabel *label27 (m:marker1)
++   57 set *tmp7 .previousLine*2
++   58 jump *label24 always
++   59 multilabel *label28 (m:marker1)
++   60 set *tmp7 .previousLine*3
++   61 jump *label24 always
++   62 multilabel *label29 (m:marker1)
++   63 set *tmp7 .previousLine*4
++   64 jump *label24 always
++   65 multilabel *label30 (m:marker1)
++   66 set *tmp7 .previousLine*5
++   67 jump *label24 always
++   68 multilabel *label31 (m:marker1)
++   69 set *tmp7 .previousLine*6
++   70 jump *label24 always
++   71 multilabel *label32 (m:marker1)
++   72 set *tmp7 .previousLine*7
++   73 jump *label24 always
++   74 multilabel *label33 (m:marker1)
++   75 set *tmp7 .previousLine*8
++   76 jump *label24 always
++   77 multilabel *label34 (m:marker1)
++   78 set *tmp7 .previousLine*9
++   79 jump *label24 always
++   80 label *label24
+    81 op add *tmp8 *tmp5 *tmp7
+-    * writearr<inlined> *tmp8 .currentLine[] :j
++   82 op mul *tmp21 :j 2
++   83 multijump *label37 *tmp21 0 (m:marker2)
++   84 multilabel *label37 (m:marker2)
++   85 set .currentLine*0 *tmp8
++   86 jump *label36 always
++   87 multilabel *label38 (m:marker2)
++   88 set .currentLine*1 *tmp8
++   89 jump *label36 always
++   90 multilabel *label39 (m:marker2)
++   91 set .currentLine*2 *tmp8
++   92 jump *label36 always
++   93 multilabel *label40 (m:marker2)
++   94 set .currentLine*3 *tmp8
++   95 jump *label36 always
++   96 multilabel *label41 (m:marker2)
++   97 set .currentLine*4 *tmp8
++   98 jump *label36 always
++   99 multilabel *label42 (m:marker2)
++  100 set .currentLine*5 *tmp8
++  101 jump *label36 always
++  102 multilabel *label43 (m:marker2)
++  103 set .currentLine*6 *tmp8
++  104 jump *label36 always
++  105 multilabel *label44 (m:marker2)
++  106 set .currentLine*7 *tmp8
++  107 jump *label36 always
++  108 multilabel *label45 (m:marker2)
++  109 set .currentLine*8 *tmp8
++  110 jump *label36 always
++  111 multilabel *label46 (m:marker2)
++  112 set .currentLine*9 *tmp8
++  113 jump *label36 always
++  114 label *label36
+   115 label *label4
+   116 op add :j :j 1
+   117 jump *label10 lessThanEq :j :lineLength
+   118 label *label5
+-    * writearr<inlined> 1 .currentLine[] :lineLength
++  119 op mul *tmp22 :lineLength 2
++  120 multijump *label49 *tmp22 0 (m:marker3)
++  121 multilabel *label49 (m:marker3)
++  122 set .currentLine*0 1
++  123 jump *label48 always
++  124 multilabel *label50 (m:marker3)
++  125 set .currentLine*1 1
++  126 jump *label48 always
++  127 multilabel *label51 (m:marker3)
++  128 set .currentLine*2 1
++  129 jump *label48 always
++  130 multilabel *label52 (m:marker3)
++  131 set .currentLine*3 1
++  132 jump *label48 always
++  133 multilabel *label53 (m:marker3)
++  134 set .currentLine*4 1
++  135 jump *label48 always
++  136 multilabel *label54 (m:marker3)
++  137 set .currentLine*5 1
++  138 jump *label48 always
++  139 multilabel *label55 (m:marker3)
++  140 set .currentLine*6 1
++  141 jump *label48 always
++  142 multilabel *label56 (m:marker3)
++  143 set .currentLine*7 1
++  144 jump *label48 always
++  145 multilabel *label57 (m:marker3)
++  146 set .currentLine*8 1
++  147 jump *label48 always
++  148 multilabel *label58 (m:marker3)
++  149 set .currentLine*9 1
++  150 jump *label48 always
++  151 label *label48
+   152 op add :lineLength :lineLength 1
+   153 set :c 0
+   154 label *label6
+   155 jump *label8 greaterThanEq 0 :lineLength
+   156 label *label11
+-    * readarr<inlined> *tmp14 .currentLine[] :c
++  157 op mul *tmp23 :c 2
++  158 multijump *label61 *tmp23 0 (m:marker4)
++  159 multilabel *label61 (m:marker4)
++  160 set *tmp14 .currentLine*0
++  161 jump *label60 always
++  162 multilabel *label62 (m:marker4)
++  163 set *tmp14 .currentLine*1
++  164 jump *label60 always
++  165 multilabel *label63 (m:marker4)
++  166 set *tmp14 .currentLine*2
++  167 jump *label60 always
++  168 multilabel *label64 (m:marker4)
++  169 set *tmp14 .currentLine*3
++  170 jump *label60 always
++  171 multilabel *label65 (m:marker4)
++  172 set *tmp14 .currentLine*4
++  173 jump *label60 always
++  174 multilabel *label66 (m:marker4)
++  175 set *tmp14 .currentLine*5
++  176 jump *label60 always
++  177 multilabel *label67 (m:marker4)
++  178 set *tmp14 .currentLine*6
++  179 jump *label60 always
++  180 multilabel *label68 (m:marker4)
++  181 set *tmp14 .currentLine*7
++  182 jump *label60 always
++  183 multilabel *label69 (m:marker4)
++  184 set *tmp14 .currentLine*8
++  185 jump *label60 always
++  186 multilabel *label70 (m:marker4)
++  187 set *tmp14 .currentLine*9
++  188 jump *label60 always
++  189 label *label60
+   190 op add :total :total *tmp14
+-    * readarr<inlined> *tmp18 .currentLine[] :c
+-    * writearr<inlined> *tmp18 .previousLine[] :c
++  191 op mul *tmp24 :c 2
++  192 multijump *label73 *tmp24 0 (m:marker5)
++  193 multilabel *label73 (m:marker5)
++  194 set *tmp18 .currentLine*0
++  195 jump *label72 always
++  196 multilabel *label74 (m:marker5)
++  197 set *tmp18 .currentLine*1
++  198 jump *label72 always
++  199 multilabel *label75 (m:marker5)
++  200 set *tmp18 .currentLine*2
++  201 jump *label72 always
++  202 multilabel *label76 (m:marker5)
++  203 set *tmp18 .currentLine*3
++  204 jump *label72 always
++  205 multilabel *label77 (m:marker5)
++  206 set *tmp18 .currentLine*4
++  207 jump *label72 always
++  208 multilabel *label78 (m:marker5)
++  209 set *tmp18 .currentLine*5
++  210 jump *label72 always
++  211 multilabel *label79 (m:marker5)
++  212 set *tmp18 .currentLine*6
++  213 jump *label72 always
++  214 multilabel *label80 (m:marker5)
++  215 set *tmp18 .currentLine*7
++  216 jump *label72 always
++  217 multilabel *label81 (m:marker5)
++  218 set *tmp18 .currentLine*8
++  219 jump *label72 always
++  220 multilabel *label82 (m:marker5)
++  221 set *tmp18 .currentLine*9
++  222 jump *label72 always
++  223 label *label72
++  224 op mul *tmp25 :c 2
++  225 multijump *label85 *tmp25 0 (m:marker6)
++  226 multilabel *label85 (m:marker6)
++  227 set .previousLine*0 *tmp18
++  228 jump *label84 always
++  229 multilabel *label86 (m:marker6)
++  230 set .previousLine*1 *tmp18
++  231 jump *label84 always
++  232 multilabel *label87 (m:marker6)
++  233 set .previousLine*2 *tmp18
++  234 jump *label84 always
++  235 multilabel *label88 (m:marker6)
++  236 set .previousLine*3 *tmp18
++  237 jump *label84 always
++  238 multilabel *label89 (m:marker6)
++  239 set .previousLine*4 *tmp18
++  240 jump *label84 always
++  241 multilabel *label90 (m:marker6)
++  242 set .previousLine*5 *tmp18
++  243 jump *label84 always
++  244 multilabel *label91 (m:marker6)
++  245 set .previousLine*6 *tmp18
++  246 jump *label84 always
++  247 multilabel *label92 (m:marker6)
++  248 set .previousLine*7 *tmp18
++  249 jump *label84 always
++  250 multilabel *label93 (m:marker6)
++  251 set .previousLine*8 *tmp18
++  252 jump *label84 always
++  253 multilabel *label94 (m:marker6)
++  254 set .previousLine*9 *tmp18
++  255 jump *label84 always
++  256 label *label84
+   257 label *label7
+   258 op add :c :c 1
+   259 jump *label11 lessThan :c :lineLength
+
+Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-7 instructions):
+ 
+    43 jump *label12 always
+    44 multilabel *label22 (m:marker0)
+    45 set *tmp5 .previousLine*9
+-    * jump *label12 always
+    46 label *label12
+    47 op mul *tmp20 :j 2
+    48 multijump *label25 *tmp20 0 (m:marker1)
+ 
+    75 jump *label24 always
+    76 multilabel *label34 (m:marker1)
+    77 set *tmp7 .previousLine*9
+-    * jump *label24 always
+    78 label *label24
+    79 op add *tmp8 *tmp5 *tmp7
+    80 op mul *tmp21 :j 2
+ 
+   108 jump *label36 always
+   109 multilabel *label46 (m:marker2)
+   110 set .currentLine*9 *tmp8
+-    * jump *label36 always
+   111 label *label36
+   112 label *label4
+   113 op add :j :j 1
+ 
+   144 jump *label48 always
+   145 multilabel *label58 (m:marker3)
+   146 set .currentLine*9 1
+-    * jump *label48 always
+   147 label *label48
+   148 op add :lineLength :lineLength 1
+   149 set :c 0
+ 
+   181 jump *label60 always
+   182 multilabel *label70 (m:marker4)
+   183 set *tmp14 .currentLine*9
+-    * jump *label60 always
+   184 label *label60
+   185 op add :total :total *tmp14
+   186 op mul *tmp24 :c 2
+ 
+   214 jump *label72 always
+   215 multilabel *label82 (m:marker5)
+   216 set *tmp18 .currentLine*9
+-    * jump *label72 always
+   217 label *label72
+   218 op mul *tmp25 :c 2
+   219 multijump *label85 *tmp25 0 (m:marker6)
+ 
+   246 jump *label84 always
+   247 multilabel *label94 (m:marker6)
+   248 set .previousLine*9 *tmp18
+-    * jump *label84 always
+   249 label *label84
+   250 label *label7
+   251 op add :c :c 1
+
+Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+ 
+   257 label *label2
+   258 assertequals 1023 :total "Sum of Pascal triangle"
+   259 stop
+-    * end
+
+Final code before resolving virtual instructions:
+
+set TRIANGLE_SIZE 10
+set :total 3
+set :lineLength 2
+set .previousLine*0 1
+set .previousLine*1 1
+set :i 3
+jump *label2 greaterThan 3 TRIANGLE_SIZE
+label *label9
+set .currentLine*0 1
+set :j 1
+jump *label5 greaterThan 1 :lineLength
+label *label10
+op sub *tmp4 :j 1
+op mul *tmp19 *tmp4 2
+multijump *label13 *tmp19 0
+multilabel *label13
+set *tmp5 .previousLine*0
+jump *label12 always
+multilabel *label14
+set *tmp5 .previousLine*1
+jump *label12 always
+multilabel *label15
+set *tmp5 .previousLine*2
+jump *label12 always
+multilabel *label16
+set *tmp5 .previousLine*3
+jump *label12 always
+multilabel *label17
+set *tmp5 .previousLine*4
+jump *label12 always
+multilabel *label18
+set *tmp5 .previousLine*5
+jump *label12 always
+multilabel *label19
+set *tmp5 .previousLine*6
+jump *label12 always
+multilabel *label20
+set *tmp5 .previousLine*7
+jump *label12 always
+multilabel *label21
+set *tmp5 .previousLine*8
+jump *label12 always
+multilabel *label22
+set *tmp5 .previousLine*9
+label *label12
+op mul *tmp20 :j 2
+multijump *label25 *tmp20 0
+multilabel *label25
+set *tmp7 .previousLine*0
+jump *label24 always
+multilabel *label26
+set *tmp7 .previousLine*1
+jump *label24 always
+multilabel *label27
+set *tmp7 .previousLine*2
+jump *label24 always
+multilabel *label28
+set *tmp7 .previousLine*3
+jump *label24 always
+multilabel *label29
+set *tmp7 .previousLine*4
+jump *label24 always
+multilabel *label30
+set *tmp7 .previousLine*5
+jump *label24 always
+multilabel *label31
+set *tmp7 .previousLine*6
+jump *label24 always
+multilabel *label32
+set *tmp7 .previousLine*7
+jump *label24 always
+multilabel *label33
+set *tmp7 .previousLine*8
+jump *label24 always
+multilabel *label34
+set *tmp7 .previousLine*9
+label *label24
+op add *tmp8 *tmp5 *tmp7
+op mul *tmp21 :j 2
+multijump *label37 *tmp21 0
+multilabel *label37
+set .currentLine*0 *tmp8
+jump *label36 always
+multilabel *label38
+set .currentLine*1 *tmp8
+jump *label36 always
+multilabel *label39
+set .currentLine*2 *tmp8
+jump *label36 always
+multilabel *label40
+set .currentLine*3 *tmp8
+jump *label36 always
+multilabel *label41
+set .currentLine*4 *tmp8
+jump *label36 always
+multilabel *label42
+set .currentLine*5 *tmp8
+jump *label36 always
+multilabel *label43
+set .currentLine*6 *tmp8
+jump *label36 always
+multilabel *label44
+set .currentLine*7 *tmp8
+jump *label36 always
+multilabel *label45
+set .currentLine*8 *tmp8
+jump *label36 always
+multilabel *label46
+set .currentLine*9 *tmp8
+label *label36
+op add :j :j 1
+jump *label10 lessThanEq :j :lineLength
+label *label5
+op mul *tmp22 :lineLength 2
+multijump *label49 *tmp22 0
+multilabel *label49
+set .currentLine*0 1
+jump *label48 always
+multilabel *label50
+set .currentLine*1 1
+jump *label48 always
+multilabel *label51
+set .currentLine*2 1
+jump *label48 always
+multilabel *label52
+set .currentLine*3 1
+jump *label48 always
+multilabel *label53
+set .currentLine*4 1
+jump *label48 always
+multilabel *label54
+set .currentLine*5 1
+jump *label48 always
+multilabel *label55
+set .currentLine*6 1
+jump *label48 always
+multilabel *label56
+set .currentLine*7 1
+jump *label48 always
+multilabel *label57
+set .currentLine*8 1
+jump *label48 always
+multilabel *label58
+set .currentLine*9 1
+label *label48
+op add :lineLength :lineLength 1
+set :c 0
+jump *label8 greaterThanEq 0 :lineLength
+label *label11
+op mul *tmp23 :c 2
+multijump *label61 *tmp23 0
+multilabel *label61
+set *tmp14 .currentLine*0
+jump *label60 always
+multilabel *label62
+set *tmp14 .currentLine*1
+jump *label60 always
+multilabel *label63
+set *tmp14 .currentLine*2
+jump *label60 always
+multilabel *label64
+set *tmp14 .currentLine*3
+jump *label60 always
+multilabel *label65
+set *tmp14 .currentLine*4
+jump *label60 always
+multilabel *label66
+set *tmp14 .currentLine*5
+jump *label60 always
+multilabel *label67
+set *tmp14 .currentLine*6
+jump *label60 always
+multilabel *label68
+set *tmp14 .currentLine*7
+jump *label60 always
+multilabel *label69
+set *tmp14 .currentLine*8
+jump *label60 always
+multilabel *label70
+set *tmp14 .currentLine*9
+label *label60
+op add :total :total *tmp14
+op mul *tmp24 :c 2
+multijump *label73 *tmp24 0
+multilabel *label73
+set *tmp18 .currentLine*0
+jump *label72 always
+multilabel *label74
+set *tmp18 .currentLine*1
+jump *label72 always
+multilabel *label75
+set *tmp18 .currentLine*2
+jump *label72 always
+multilabel *label76
+set *tmp18 .currentLine*3
+jump *label72 always
+multilabel *label77
+set *tmp18 .currentLine*4
+jump *label72 always
+multilabel *label78
+set *tmp18 .currentLine*5
+jump *label72 always
+multilabel *label79
+set *tmp18 .currentLine*6
+jump *label72 always
+multilabel *label80
+set *tmp18 .currentLine*7
+jump *label72 always
+multilabel *label81
+set *tmp18 .currentLine*8
+jump *label72 always
+multilabel *label82
+set *tmp18 .currentLine*9
+label *label72
+op mul *tmp25 :c 2
+multijump *label85 *tmp25 0
+multilabel *label85
+set .previousLine*0 *tmp18
+jump *label84 always
+multilabel *label86
+set .previousLine*1 *tmp18
+jump *label84 always
+multilabel *label87
+set .previousLine*2 *tmp18
+jump *label84 always
+multilabel *label88
+set .previousLine*3 *tmp18
+jump *label84 always
+multilabel *label89
+set .previousLine*4 *tmp18
+jump *label84 always
+multilabel *label90
+set .previousLine*5 *tmp18
+jump *label84 always
+multilabel *label91
+set .previousLine*6 *tmp18
+jump *label84 always
+multilabel *label92
+set .previousLine*7 *tmp18
+jump *label84 always
+multilabel *label93
+set .previousLine*8 *tmp18
+jump *label84 always
+multilabel *label94
+set .previousLine*9 *tmp18
+label *label84
+op add :c :c 1
+jump *label11 lessThan :c :lineLength
+label *label8
+op add :i :i 1
+jump *label9 lessThanEq :i TRIANGLE_SIZE
+label *label2
+assertequals 1023 :total "Sum of Pascal triangle"
+stop

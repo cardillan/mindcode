@@ -18,23 +18,23 @@ Pass 1: speed optimization selection (cost limit 895):
     Unroll loop at line 25:5                                     cost    18, benefit      450.0, efficiency       25.0
     Inline read jump table of array 'array'                      cost    13, benefit     1300.0, efficiency      100.0
     Inline write jump table of array 'array'                     cost     0, benefit     1250.0, efficiency   Infinity
-    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
-    Inline array access at line 26:9                             cost    17, benefit       50.0, efficiency        2.9
-    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'array' read access at line 17:5                      cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'array' read access at line 26:9                      cost    17, benefit       50.0, efficiency        2.9
+    Inline 'array' write access at line 17:5                     cost    17, benefit     1250.0, efficiency       73.5
 
 Pass 1: speed optimization selection (cost limit 917):
     Unroll loop at line 25:5                                     cost    18, benefit      450.0, efficiency       25.0
     Inline read jump table of array 'array'                      cost    13, benefit     1300.0, efficiency      100.0
   * Inline write jump table of array 'array'                     cost     0, benefit     1250.0, efficiency   Infinity (-4 instructions)
-    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
-    Inline array access at line 26:9                             cost    17, benefit       50.0, efficiency        2.9
-    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'array' read access at line 17:5                      cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'array' read access at line 26:9                      cost    17, benefit       50.0, efficiency        2.9
+    Inline 'array' write access at line 17:5                     cost    17, benefit     1250.0, efficiency       73.5
 
 Pass 1: speed optimization selection (cost limit 921):
     Unroll loop at line 25:5                                     cost    18, benefit      450.0, efficiency       25.0
   * Inline read jump table of array 'array'                      cost    13, benefit     1300.0, efficiency      100.0 (+13 instructions)
-    Inline array access at line 17:5                             cost    17, benefit     1250.0, efficiency       73.5
-    Inline array access at line 26:9                             cost    17, benefit       50.0, efficiency        2.9
+    Inline 'array' read access at line 17:5                      cost    17, benefit     1250.0, efficiency       73.5
+    Inline 'array' read access at line 26:9                      cost    17, benefit       50.0, efficiency        2.9
 
 Pass 1: speed optimization selection (cost limit 908):
   * Unroll loop at line 25:5                                     cost     1, benefit      450.0, efficiency      450.0 (+181 instructions)

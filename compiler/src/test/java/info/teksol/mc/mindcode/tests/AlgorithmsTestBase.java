@@ -77,6 +77,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
                 "compute-recursive-fibonacci.mnd",
                 "compute-sum-of-primes.mnd",
                 "digit-counts.mnd",
+                "pascal-triangle.mnd",
                 "memory-read-write.mnd"
         );
 

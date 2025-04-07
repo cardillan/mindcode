@@ -53,7 +53,6 @@ class ArrayOptimizer extends BaseOptimizer {
         return switch (ix.getArray().getArrayStore().getSize()) {
             case 1 -> ArrayOrganization.INTERNAL_SIZE1;
             case 2 -> ArrayOrganization.INTERNAL_SIZE2;
-            case 3 -> current == ArrayOrganization.INTERNAL_INLINED ? ArrayOrganization.INTERNAL_SIZE3 : current;
             default -> current;
         };
     }
@@ -133,8 +132,10 @@ class ArrayOptimizer extends BaseOptimizer {
 
             if (indexes.length == instructions.size()) {
                 for (int i = 0; i < indexes.length; i++) {
+                    ArrayOrganization organization = instructions.get(i).getArray().getSize() == 3
+                            ? ArrayOrganization.INTERNAL_SIZE3 : ArrayOrganization.INTERNAL_INLINED;
                     LogicInstruction copy = instructionProcessor.copy(instructions.get(i))
-                            .setArrayOrganization(ArrayOrganization.INTERNAL_INLINED);
+                            .setArrayOrganization(organization);
                     replaceInstruction(indexes[i], copy);
                 }
                 count += indexes.length;
@@ -163,8 +164,10 @@ class ArrayOptimizer extends BaseOptimizer {
         @Override
         public OptimizationResult apply(int costLimit) {
             int index = instructionIndex(instruction);
-            if (index >= 0 && instruction.getArrayOrganization() != ArrayOrganization.INTERNAL_REGULAR) {
-                LogicInstruction newInstruction = instructionProcessor.copy(instruction).setArrayOrganization(ArrayOrganization.INTERNAL_INLINED);
+            if (index >= 0 && instruction.getArrayOrganization() == ArrayOrganization.INTERNAL_REGULAR) {
+                ArrayOrganization organization = instruction.getArray().getSize() == 3
+                        ? ArrayOrganization.INTERNAL_SIZE3 : ArrayOrganization.INTERNAL_INLINED;
+                LogicInstruction newInstruction = instructionProcessor.copy(instruction).setArrayOrganization(organization);
                 replaceInstruction(index, newInstruction);
                 count++;
                 return OptimizationResult.REALIZED;
@@ -176,7 +179,10 @@ class ArrayOptimizer extends BaseOptimizer {
         @Override
         public String toString() {
             assert astContext.node() != null;
-            return "Inline array access at " + astContext.node().sourcePosition().formatForLog();
+            return String.format("Inline '%s' %s access at %s",
+                    instruction.getArray().getArrayStore().getName().substring(1),
+                    instruction.getAccessType().toString().toLowerCase(),
+                    astContext.node().sourcePosition().formatForLog());
         }
     }
 }
