@@ -38,6 +38,7 @@ class ExpressionValue implements LogicReadable {
                 case AstLiteralFloat n -> new ExpressionValue(processor, null, n.getDoubleValue());
                 case AstLiteralColor n -> new ExpressionValue(processor, null, n.getDoubleValue());
                 case AstLiteralString n -> new ExpressionValue(processor, n.getValue(), null);
+                case AstLiteralChar n -> new ExpressionValue(processor, n.getLongValue(), null);
                 case AstIdentifier n -> processor.getMetadata().getIcons().isIconName(n.getName())
                         ? new ExpressionValue(processor, processor.getMetadata().getIcons().getIconValue(n.getName()).format(processor), null)
                         : new InvalidValue(processor);

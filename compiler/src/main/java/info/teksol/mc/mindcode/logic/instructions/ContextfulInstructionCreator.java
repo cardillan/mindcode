@@ -137,7 +137,7 @@ public interface ContextfulInstructionCreator extends MessageEmitter {
         return (PushInstruction) createInstruction(PUSH, stack, value);
     }
 
-    default ReadInstruction createRead(LogicVariable result, LogicVariable memory, LogicValue index) {
+    default ReadInstruction createRead(LogicVariable result, LogicValue memory, LogicValue index) {
         return (ReadInstruction) createInstruction(READ, result, memory, index);
     }
 

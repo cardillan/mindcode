@@ -1,6 +1,7 @@
 package info.teksol.mc.emulator.processor;
 
 import info.teksol.mc.emulator.MindustryObject;
+import info.teksol.mc.emulator.MindustryString;
 import info.teksol.mc.emulator.MindustryVariable;
 import info.teksol.mc.emulator.blocks.Memory;
 import info.teksol.mc.emulator.blocks.MessageBlock;
@@ -449,9 +450,18 @@ public class Processor extends AbstractMessageEmitter {
     private boolean executeRead(ReadInstruction ix) {
         MindustryVariable target = getOrCreateVariable(ix.getResult());
         MindustryVariable index = getExistingVariable(ix.getIndex());
-        blockOperation("read", ix.getMemory(), Memory.class,
-                memory -> target.setDoubleValue(memory.read(index.getIntValue())));
+        MindustryVariable object = getExistingVariable(ix.getMemory());
+        if (object.getObject() instanceof MindustryString str) {
+            target.setDoubleValue(getChar(str, index.getIntValue()));
+        } else {
+            blockOperation("read", ix.getMemory(), Memory.class,
+                    memory -> target.setDoubleValue(memory.read(index.getIntValue())));
+        }
         return true;
+    }
+
+    private double getChar(MindustryString str, int index) {
+        return index >= 0 && index < str.value().length() ? str.value().charAt(index) : Double.NaN;
     }
 
     private boolean executeSensor(SensorInstruction ix) {

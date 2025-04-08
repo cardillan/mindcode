@@ -431,7 +431,7 @@ print *tmp0
 
 ## The `ascii()` function
 
-The `ascii()` function takes a string constant as an argument, and returns the ASCII value of the first character of its argument. 
+The `ascii()` function takes a string constant as an argument, and returns the ASCII value of the first character of its argument.
 
 The function allows obtaining ASCII values from built-in string constants (icons) and using them with `printchar()`. Since the ASCII values are numbers, they can be stored in external variables:
 
@@ -448,6 +448,49 @@ jump 0 equal cell1 null
 write 63539 cell1 0
 read *tmp0 cell1 0
 printchar *tmp0
+```
+
+## The `char()` function
+
+The `char()` function returns the ASCII value of a character at a given position in a string. The operation is supported by the `read` instruction in Mindustry Logic since version 8, therefore both the string and the position may be stored in a variable. Because  of this, the `char()` function is only supported in Mindustry Logic 8.
+
+The values obtained from this function may be used with `printchar()`:
+
+```Mindcode
+#set target = 8;
+param data = "Dbftbs!djqifs";
+linked message1;
+
+begin
+    var index = 0;
+    while true do
+        var ch = char(data, index);
+        if ch == null then
+            printflush(message1);
+            index = 0;
+        else
+            printchar(ch - 1);
+            index++;
+        end;
+    end;
+end;
+```
+
+compiles to
+
+```mlog
+set data "Dbftbs!djqifs"
+jump 1 equal message1 null
+set :index 0
+read :ch data :index
+jump 8 notEqual :ch null
+printflush message1
+set :index 0
+jump 3 always 0 0
+op sub *tmp3 :ch 1
+printchar *tmp3
+op add :index :index 1
+jump 3 always 0 0
 ```
 
 ## Remote calls

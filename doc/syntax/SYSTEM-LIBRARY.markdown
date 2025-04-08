@@ -776,8 +776,8 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |         34 |         34 |
-| Function body                  |         35 |         35 |
+| Inlined function               |         33 |         33 |
+| Function body                  |         34 |         34 |
 | Function call                  |          5 |          5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -802,8 +802,8 @@ Nulls are printed as zero values.
 
 | Optimization goal:             |      Speed |       Size |
 |------------------------------- |-----------:|-----------:|
-| Inlined function               |         35 |         35 |
-| Function body                  |         36 |         36 |
+| Inlined function               |         34 |         34 |
+| Function body                  |         35 |         35 |
 | Function call                  |          5 |          5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.

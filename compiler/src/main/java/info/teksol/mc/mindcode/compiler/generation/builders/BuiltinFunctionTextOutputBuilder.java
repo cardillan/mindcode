@@ -49,9 +49,34 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return result;
     }
 
+    public ValueStore handleChar(AstFunctionCall call) {
+        if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+            error(call.getIdentifier(), FUNCTION_REQUIRES_TARGET_8, call.getFunctionName());
+            return LogicVoid.VOID;
+        }
+
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        ValueStore result;
+        if (validateStandardFunctionArguments(call, arguments, 2)) {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            LogicValue text = arguments.get(0).getValue(assembler);
+            LogicValue index = arguments.get(1).getValue(assembler);
+            LogicVariable output = assembler.nextNodeResultTemp();
+            assembler.createRead(output, text, index);
+            result = output;
+        } else {
+            result = LogicVoid.VOID;
+        }
+
+        assembler.clearSubcontextType();
+        return result;
+    }
+
     public ValueStore handlePrintf(AstFunctionCall call) {
         if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
-            error(call.getIdentifier(), PRINTF_REQUIRES_TARGET_8);
+            error(call.getIdentifier(), FUNCTION_REQUIRES_TARGET_8, call.getFunctionName());
             return LogicVoid.VOID;
         }
 

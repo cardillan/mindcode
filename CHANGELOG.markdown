@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* Added the [`char()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-char-function). The function returns the ASCII value of a character at given index from a string value using the `read` instruction, as supported in latest BE version.
 * Added a new remarks mode - `comments`. In this mode, remarks are compiled as mlog comments (`# comment`).
 * Added support for generating boundary checks for explicitly declared external arrays. 
 * Added support for handling instructions setting up return addresses for function calls to Loop Hoisting optimizer. 

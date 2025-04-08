@@ -149,6 +149,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         map.put("mlogSafe",     call -> mlogBuilder.get().handleMlog(call, true, false));
         map.put("mlogText",     call -> mlogBuilder.get().handleMlog(call, false, true));
         map.put("ascii",        call -> textBuilder.get().handleAscii(call));
+        map.put("char",         call -> textBuilder.get().handleChar(call));
         map.put("printf",       call -> textBuilder.get().handlePrintf(call));
         map.put("print",        call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT));
         map.put("println",      call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN));

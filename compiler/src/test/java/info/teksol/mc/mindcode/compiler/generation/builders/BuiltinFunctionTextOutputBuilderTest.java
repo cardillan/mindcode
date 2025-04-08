@@ -41,6 +41,22 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Nested
+    class Char {
+        @Test
+        void compilesCharFunction() {
+            assertCompilesTo("""
+                            a = char("AA", 0);
+                            b = char("BB", 1);
+                            """,
+                    createInstruction(READ, tmp(0), q("AA"), "0"),
+                    createInstruction(SET, ":a", tmp(0)),
+                    createInstruction(READ, tmp(1), q("BB"), "0"),
+                    createInstruction(SET, ":b", tmp(1))
+            );
+        }
+    }
+
+    @Nested
     class FormattableErrors {
         @Test
         void refusesTooFewValues() {

@@ -9,6 +9,10 @@ public class MindustryString extends AbstractMindustryObject {
         super(name, -1, null);
     }
 
+    public String value() {
+        return name();
+    }
+
     @Override
     public boolean equals(Object obj) {
         return obj != null && obj.getClass() == this.getClass() && ((MindustryString) obj).name().equals(name());

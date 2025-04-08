@@ -78,6 +78,7 @@ public class ERR {
     public static final String FUNCTION_RECURSIVE_INLINE = "Recursive function '%s' declared 'inline'.";
     public static final String FUNCTION_RECURSIVE_NO_STACK = "Function '%s' is recursive and no stack was allocated.";
     public static final String FUNCTION_REMOTE_CALLED_LOCALLY = "Cannot call remote function '%s' locally.";
+    public static final String FUNCTION_REQUIRES_TARGET_8 = "The '%s' function requires language target 8 or higher.";
     public static final String FUNCTION_VARARGS_NOT_INLINE = "Varargs function '%s' must be declared 'inline'.";
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";
     public static final String INTERNAL_AMBIGUOUS_CODE = "%s: ambiguous source code (%d ambiguities found).";
@@ -109,7 +110,6 @@ public class ERR {
     public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of file '%s'.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
-    public static final String PRINTF_REQUIRES_TARGET_8 = "The printf function requires language target 8 or higher.";
     public static final String PROPERTY_UNKNOWN = "Unknown property '%s'.";
     public static final String REMOTE_INVALID_USE = "Invalid use of remote function '%s' (specify one of output parameters to access function output values).";
     public static final String REMOTE_MULTIPLE_FUNCTIONS = "Cannot resolve remote function '%s'.";

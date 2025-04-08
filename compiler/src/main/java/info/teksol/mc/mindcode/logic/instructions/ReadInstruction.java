@@ -33,8 +33,8 @@ public class ReadInstruction extends BaseResultInstruction {
         return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getArgumentTypes());
     }
 
-    public final LogicVariable getMemory() {
-        return (LogicVariable) getArg(1);
+    public final LogicValue getMemory() {
+        return (LogicValue) getArg(1);
     }
 
     public final LogicValue getIndex() {
