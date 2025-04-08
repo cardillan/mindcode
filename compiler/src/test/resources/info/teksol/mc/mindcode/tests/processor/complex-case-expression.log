@@ -1,14 +1,14 @@
     70 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-     1 instructions eliminated by Dead Code Elimination (3 iterations).
+     1 instructions eliminated by Dead Code Elimination (5 iterations).
      4 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
-     4 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
+     7 instructions eliminated by Jump Straightening (3 passes, 6 iterations).
      1 instructions updated by JumpThreading.
-     3 instructions eliminated by Unreachable Code Elimination.
-    51 instructions after optimizations.
+     3 instructions eliminated by Unreachable Code Elimination (3 iterations).
+    48 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -253,51 +253,160 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
     14 set :d.0:n 1
     15 setaddr :d.0*retaddr *label10 (h:*label10)
 
-Modifications by Final phase, Jump Straightening, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-    15 setaddr :d.0*retaddr *label10 (h:*label10)
-    16 call *label0 *invalid :d.0*retval (m:*label10) (h:*label10)
-    17 label *label10
+     8 call *label0 *invalid :d.0*retval (m:*label3) (h:*label3)
+     9 label *label3
+    10 set *tmp3 :d.0*retval
+-    * label *label4
+    11 jump *label6 greaterThan :test.0:i :d.0*retval
+    12 label *label25
+    13 set :d.0:n 1
+ 
+    36 jump *label7 always
+    37 label *label11
+    38 jump *label15 notEqual :test.0:i 5
+-    * label *label16
+    39 jump *label5 always
+    40 jump *label7 always
+    41 label *label15
+ 
+    56 jump *label7 always
+    57 label *label17
+    58 jump *label22 notEqual :test.0:i 10
+-    * label *label23
+    59 jump *label6 always
+    60 jump *label7 always
+    61 label *label22
+ 
+    66 op add :test.0:i :test.0:i 1
+    67 jump *label25 lessThanEq :test.0:i *tmp3
+    68 label *label6
+-    * label *label1
+    69 assertprints "ABBBCCCD" "complex-case-expression"
+    70 stop
+    71 end
+    72 label *label0
+    73 set :d.0*retval :d.0:n
+-    * label *label24
+    74 return :d.0*retaddr
+    75 end
+
+Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
+ 
+    14 setaddr :d.0*retaddr *label10 (h:*label10)
+    15 call *label0 *invalid :d.0*retval (m:*label10) (h:*label10)
+    16 label *label10
 -    * jump *label9 equal :test.0:i :d.0*retval
 -    * jump *label8 always
-+   18 jump *label8 notEqual :test.0:i :d.0*retval
-    19 label *label9
-    20 set *tmp4 "A"
-    21 jump *label7 always
++   17 jump *label8 notEqual :test.0:i :d.0*retval
+    18 label *label9
+    19 set *tmp4 "A"
+    20 jump *label7 always
 
-Modifications by Final phase, Jump Threading, iteration 1:
+Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
  
-    44 setaddr :d.0*retaddr *label20 (h:*label20)
-    45 call *label0 *invalid :d.0*retval (m:*label20) (h:*label20)
-    46 label *label20
+    15 call *label0 *invalid :d.0*retval (m:*label10) (h:*label10)
+    16 label *label10
+    17 jump *label8 notEqual :test.0:i :d.0*retval
+-    * label *label9
+    18 set *tmp4 "A"
+    19 jump *label7 always
+    20 label *label8
+
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
+ 
+    41 setaddr :d.0*retaddr *label20 (h:*label20)
+    42 call *label0 *invalid :d.0*retval (m:*label20) (h:*label20)
+    43 label *label20
 -    * jump *label19 lessThan :test.0:i :d.0*retval
-+   47 jump *label17 lessThan :test.0:i :d.0*retval
-    48 set :d.0:n 8
-    49 setaddr :d.0*retaddr *label21 (h:*label21)
-    50 call *label0 *invalid :d.0*retval (m:*label21) (h:*label21)
++   44 jump *label17 lessThan :test.0:i :d.0*retval
+    45 set :d.0:n 8
+    46 setaddr :d.0*retaddr *label21 (h:*label21)
+    47 call *label0 *invalid :d.0*retval (m:*label21) (h:*label21)
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-3 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-3 instructions):
  
-    38 jump *label15 notEqual :test.0:i 5
-    39 label *label16
-    40 jump *label5 always
+    35 label *label11
+    36 jump *label15 notEqual :test.0:i 5
+    37 jump *label5 always
 -    * jump *label7 always
-    41 label *label15
-    42 set :d.0:n 6
-    43 setaddr :d.0*retaddr *label20 (h:*label20)
+    38 label *label15
+    39 set :d.0:n 6
+    40 setaddr :d.0*retaddr *label20 (h:*label20)
  
-    58 jump *label22 notEqual :test.0:i 10
-    59 label *label23
-    60 jump *label6 always
+    46 call *label0 *invalid :d.0*retval (m:*label21) (h:*label21)
+    47 label *label21
+    48 jump *label18 lessThanEq :test.0:i :d.0*retval
+-    * label *label19
+    49 jump *label17 always
+    50 label *label18
+    51 set *tmp4 "C"
+ 
+    53 label *label17
+    54 jump *label22 notEqual :test.0:i 10
+    55 jump *label6 always
 -    * jump *label7 always
-    61 label *label22
-    62 set *tmp4 "D"
-    63 label *label7
+    56 label *label22
+    57 set *tmp4 "D"
+    58 label *label7
  
-    74 set :d.0*retval :d.0:n
-    75 label *label24
-    76 return :d.0*retaddr
+    67 label *label0
+    68 set :d.0*retval :d.0:n
+    69 return :d.0*retaddr
 -    * end
+
+Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-3 instructions):
+ 
+    33 set *tmp4 "B"
+    34 jump *label7 always
+    35 label *label11
+-    * jump *label15 notEqual :test.0:i 5
+-    * jump *label5 always
++   36 jump *label5 equal :test.0:i 5
+    37 label *label15
+    38 set :d.0:n 6
+    39 setaddr :d.0*retaddr *label20 (h:*label20)
+ 
+    44 setaddr :d.0*retaddr *label21 (h:*label21)
+    45 call *label0 *invalid :d.0*retval (m:*label21) (h:*label21)
+    46 label *label21
+-    * jump *label18 lessThanEq :test.0:i :d.0*retval
+-    * jump *label17 always
++   47 jump *label17 greaterThan :test.0:i :d.0*retval
+    48 label *label18
+    49 set *tmp4 "C"
+    50 jump *label7 always
+    51 label *label17
+-    * jump *label22 notEqual :test.0:i 10
+-    * jump *label6 always
++   52 jump *label6 equal :test.0:i 10
+    53 label *label22
+    54 set *tmp4 "D"
+    55 label *label7
+
+Modifications by Jumps phase, Jump Optimization, pass 5, iteration 1:
+ 
+    34 jump *label7 always
+    35 label *label11
+    36 jump *label5 equal :test.0:i 5
+-    * label *label15
+    37 set :d.0:n 6
+    38 setaddr :d.0*retaddr *label20 (h:*label20)
+    39 call *label0 *invalid :d.0*retval (m:*label20) (h:*label20)
+ 
+    44 call *label0 *invalid :d.0*retval (m:*label21) (h:*label21)
+    45 label *label21
+    46 jump *label17 greaterThan :test.0:i :d.0*retval
+-    * label *label18
+    47 set *tmp4 "C"
+    48 jump *label7 always
+    49 label *label17
+    50 jump *label6 equal :test.0:i 10
+-    * label *label22
+    51 set *tmp4 "D"
+    52 label *label7
+    53 print *tmp4
 
 Final code before resolving virtual instructions:
 
@@ -337,9 +446,7 @@ label *label12
 set *tmp4 "B"
 jump *label7 always
 label *label11
-jump *label15 notEqual :test.0:i 5
-jump *label5 always
-label *label15
+jump *label5 equal :test.0:i 5
 set :d.0:n 6
 setaddr :d.0*retaddr *label20
 call *label0 *invalid :d.0*retval
@@ -349,15 +456,11 @@ set :d.0:n 8
 setaddr :d.0*retaddr *label21
 call *label0 *invalid :d.0*retval
 label *label21
-jump *label18 lessThanEq :test.0:i :d.0*retval
-jump *label17 always
-label *label18
+jump *label17 greaterThan :test.0:i :d.0*retval
 set *tmp4 "C"
 jump *label7 always
 label *label17
-jump *label22 notEqual :test.0:i 10
-jump *label6 always
-label *label22
+jump *label6 equal :test.0:i 10
 set *tmp4 "D"
 label *label7
 print *tmp4

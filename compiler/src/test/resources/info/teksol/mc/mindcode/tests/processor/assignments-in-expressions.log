@@ -1,7 +1,7 @@
     23 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     3 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     3 instructions eliminated by Dead Code Elimination (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      4 instructions eliminated by Data Flow Optimization (6 iterations).
     13 instructions after optimizations.
 
@@ -96,11 +96,23 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2
      6 assertflush
      7 op lessThan :test.0:res a b
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-    13 label *label0
-    14 assertprints "yes1" "assignments in conditions"
-    15 stop
+     8 jump *label1 equal :test.0:res false
+     9 print "yes"
+    10 label *label1
+-    * label *label2
+    11 print :test.0:res
+-    * label *label0
+    12 assertprints "yes1" "assignments in conditions"
+    13 stop
+    14 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    11 print :test.0:res
+    12 assertprints "yes1" "assignments in conditions"
+    13 stop
 -    * end
 
 Final code before resolving virtual instructions:

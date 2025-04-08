@@ -1,6 +1,6 @@
     45 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Single Step Elimination (4 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions eliminated by Data Flow Optimization (4 iterations).
     42 instructions after optimizations.
 
@@ -36,7 +36,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     41 stop
     42 end
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
     39 set :y @counter
     40 assertequals :y :y "chained assignments"

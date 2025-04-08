@@ -1,8 +1,8 @@
     40 instructions before optimizations.
-     1 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-     1 instructions eliminated by Jump Optimization (4 iterations).
-     4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     1 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     1 instructions eliminated by Jump Optimization (5 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions modified by If Expression Optimization (3 iterations).
     39 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
      2 instructions eliminated by Loop Optimization (3 iterations).
@@ -538,38 +538,76 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     40 print "|"
     41 print 0
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 assertflush
+     1 # "Function: def test()"
+     2 # "Function: inline def sum(in n)"
+-    * label *label13
+-    * label *label14
+-    * label *label15
+-    * label *label16
+-    * label *label17
+-    * label *label18
+-    * label *label19
+-    * label *label20
+-    * label *label21
+-    * label *label4
+     3 print 6
+     4 print "|"
+-    * label *label1
+     5 # "Function: inline def sum(in n)"
+-    * label *label22
+-    * label *label23
+-    * label *label24
+-    * label *label25
+-    * label *label26
+-    * label *label27
+-    * label *label28
+-    * label *label29
+-    * label *label30
+-    * label *label31
+-    * label *label32
+-    * label *label33
+-    * label *label34
+-    * label *label35
+-    * label *label36
+-    * label *label37
+-    * label *label38
+-    * label *label8
+     6 print 28
+     7 print "|"
+-    * label *label5
+     8 print "Less"
+-    * label *label10
+     9 print "|"
+    10 print 0
+-    * label *label0
+    11 assertprints "6|28|Less|0" "loops in conditions"
+    12 stop
+    13 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-    42 label *label0
-    43 assertprints "6|28|Less|0" "loops in conditions"
-    44 stop
+    10 print 0
+    11 assertprints "6|28|Less|0" "loops in conditions"
+    12 stop
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-6 instructions):
- 
-    10 label *label20
-    11 label *label21
-    12 label *label4
+     0 assertflush
+     1 # "Function: def test()"
+     2 # "Function: inline def sum(in n)"
 -    * print 6
 -    * print "|"
-+   13 print "6|28|Less|0"
-    14 label *label1
-    15 # "Function: inline def sum(in n)"
-    16 label *label22
- 
-    31 label *label37
-    32 label *label38
-    33 label *label8
++    3 print "6|28|Less|0"
+     4 # "Function: inline def sum(in n)"
 -    * print 28
 -    * print "|"
-    34 label *label5
 -    * print "Less"
-    35 label *label10
 -    * print "|"
 -    * print 0
-    36 label *label0
-    37 assertprints "6|28|Less|0" "loops in conditions"
-    38 stop
+     5 assertprints "6|28|Less|0" "loops in conditions"
+     6 stop
 
 Final code before resolving virtual instructions:
 

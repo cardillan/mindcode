@@ -1,6 +1,6 @@
    140 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Single Step Elimination (4 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
     78 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
     11 instructions added by Function Inlining (3 iterations).
@@ -526,11 +526,56 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
     80 label *label23
     81 assertequals -8 -8 "unary minus"
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-    98 assertequals true true "&&="
-    99 assertequals true true "||="
-   100 stop
+    42 assertequals 45 45 "angle"
+    43 assertequals 90 90 "angleDiff"
+    44 assertequals 5 5 "len"
+-    * label *label6
+    45 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+    46 # "Function: inline def round(in x)"
+-    * label *label7
+    47 assertequals 1 1 "sin"
+-    * label *label8
+-    * label *label9
+    48 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+    49 # "Function: inline def round(in x)"
+-    * label *label10
+    50 assertequals -1 -1 "cos"
+-    * label *label11
+-    * label *label12
+    51 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+    52 # "Function: inline def round(in x)"
+-    * label *label13
+    53 assertequals 1 1 "tan"
+-    * label *label14
+-    * label *label15
+    54 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+    55 # "Function: inline def round(in x)"
+-    * label *label16
+    56 assertequals 90 90 "asin"
+-    * label *label17
+-    * label *label18
+    57 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+    58 # "Function: inline def round(in x)"
+-    * label *label19
+    59 assertequals 0 0 "acos"
+-    * label *label20
+-    * label *label21
+    60 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+    61 # "Function: inline def round(in x)"
+-    * label *label22
+    62 assertequals 45 45 "atan"
+-    * label *label23
+    63 assertequals -8 -8 "unary minus"
+    64 assertequals 1 true "boolean negation 1"
+    65 assertequals 0 false "boolean negation 2"
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    80 assertequals true true "&&="
+    81 assertequals true true "||="
+    82 stop
 -    * end
 
 Final code before resolving virtual instructions:

@@ -16,19 +16,20 @@ import java.util.Set;
 @NullMarked
 class JumpThreading extends BaseOptimizer {
     private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
-    private boolean startLabelUsed = false;
+    boolean hasStartLabel;
     int count = 0;
-    
+
     public JumpThreading(OptimizationContext optimizationContext) {
         super(Optimization.JUMP_THREADING, optimizationContext);
     }
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+        hasStartLabel = hasStartLabel();
+
         try (LogicIterator it = createIterator()) {
             if (!it.hasNext()) return false;
 
-            it.add(createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
             while (it.hasNext()) {
                 LogicInstruction instruction = it.next();
                 if (instruction instanceof JumpInstruction jump) {
@@ -42,7 +43,6 @@ class JumpThreading extends BaseOptimizer {
                         it.set(target.withContext(jump.getAstContext()));
                         count++;
                     } else if (!label.equals(jump.getTarget())){
-                        startLabelUsed |= label.equals(FIRST_LABEL);
                         // Update target of the original jump
                         it.set(jump.withTarget(label));
                         count++;
@@ -51,12 +51,18 @@ class JumpThreading extends BaseOptimizer {
             }
         }
 
-        if (!startLabelUsed) {
-            // Keep start label only if used -- easier on some unit tests
-            removeInstruction(0);
-        }
-
         return false;
+    }
+
+    private boolean hasStartLabel() {
+        return instructionAt(0) instanceof LabelInstruction ix && ix.getLabel().equals(FIRST_LABEL);
+    }
+
+    private void createStartLabel() {
+        if (!hasStartLabel) {
+            insertInstruction(0, createLabel(instructionAt(0).getAstContext(), FIRST_LABEL));
+            hasStartLabel = true;
+        }
     }
 
     @Override
@@ -98,6 +104,7 @@ class JumpThreading extends BaseOptimizer {
 
         // Handle end instruction only in advanced mode
         if (next == null || (next instanceof EndInstruction)) {
+            createStartLabel();
             return FIRST_LABEL;
         }
 

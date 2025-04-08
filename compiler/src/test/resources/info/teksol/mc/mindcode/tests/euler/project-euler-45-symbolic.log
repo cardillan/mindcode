@@ -1,12 +1,12 @@
     38 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination.
-     4 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Normalization (3 iterations).
-     2 instructions eliminated by Jump Optimization (3 iterations).
-     1 instructions eliminated by Single Step Elimination (4 iterations).
+     4 instructions eliminated by Dead Code Elimination (5 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
+     2 instructions eliminated by Jump Optimization (4 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
      3 instructions updated by JumpThreading.
-     2 instructions eliminated by Unreachable Code Elimination.
+     2 instructions eliminated by Unreachable Code Elimination (2 iterations).
     14 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -144,7 +144,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
      4 label *label0
      5 jump *label3 greaterThanEq :pn :hn
 
-Modifications by Final phase, Jump Threading, iteration 1:
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+ 
+    15 jump *label2 always
+    16 label *label6
+    17 label *label4
+-    * label *label1
+    18 jump *label0 always
+    19 label *label2
+    20 assertequals 1533776805 :hn "Project Euler 45"
+
+Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
      5 jump *label3 greaterThanEq :pn :hn
      6 op add :pn :pn :p
@@ -162,7 +172,7 @@ Modifications by Final phase, Jump Threading, iteration 1:
     15 jump *label2 always
     16 label *label6
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-2 instructions):
  
     11 op add :hn :hn :h
     12 op add :h :h 4
@@ -171,13 +181,12 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-2 inst
 -    * jump *label2 always
 -    * label *label6
 -    * label *label4
--    * label *label1
 -    * jump *label0 always
     14 label *label2
     15 assertequals 1533776805 :hn "Project Euler 45"
     16 stop
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
     14 label *label2
     15 assertequals 1533776805 :hn "Project Euler 45"

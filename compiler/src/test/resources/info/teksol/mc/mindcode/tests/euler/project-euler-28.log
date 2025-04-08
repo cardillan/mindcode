@@ -1,7 +1,7 @@
     20 instructions before optimizations.
-     2 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Jump Optimization (3 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     2 instructions eliminated by Dead Code Elimination (4 iterations).
+     2 instructions eliminated by Jump Optimization (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
     13 instructions after optimizations.
@@ -67,11 +67,32 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     17 assertequals 669171001 :sum "Project Euler 28"
     18 stop
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-    16 label *label2
-    17 assertequals 669171001 :sum "Project Euler 28"
-    18 stop
+     1 set :current 3
+     2 set :step 2
+     3 set :count 1
+-    * label *label0
+     4 label *label5
+     5 op add :sum :sum :current
+     6 op add :current :current :step
+ 
+     9 op add :step :step 2
+    10 set :count 0
+    11 label *label3
+-    * label *label4
+-    * label *label1
+    12 jump *label5 lessThanEq :current 1002001
+-    * label *label2
+    13 assertequals 669171001 :sum "Project Euler 28"
+    14 stop
+    15 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    12 jump *label5 lessThanEq :current 1002001
+    13 assertequals 669171001 :sum "Project Euler 28"
+    14 stop
 -    * end
 
 Final code before resolving virtual instructions:

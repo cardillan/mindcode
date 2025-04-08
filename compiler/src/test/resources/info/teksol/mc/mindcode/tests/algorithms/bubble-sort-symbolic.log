@@ -1,7 +1,7 @@
     46 instructions before optimizations.
      6 instructions eliminated by Temp Variables Elimination.
-     2 instructions eliminated by Jump Optimization (4 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     2 instructions eliminated by Jump Optimization (5 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Expression Optimization (3 iterations).
      1 instructions eliminated by If Expression Optimization (3 iterations).
      7 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
@@ -235,11 +235,44 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     34 read *tmp15 FINAL :i
     35 read *tmp17 ARRAY :i
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-    39 jump *label14 lessThan :i SIZE
-    40 label *label12
-    41 stop
+     7 op sub :n :n 1
+     8 set :sorted true
+     9 set :i 0
+-    * label *label4
+    10 jump *label6 greaterThanEq 0 :n
+    11 label *label13
+    12 op add *tmp1 :i 1
+ 
+    18 write :testAndSwap.0:a ARRAY *tmp1
+    19 set :sorted false
+    20 label *label9
+-    * label *label7
+-    * label *label5
+    21 op add :i :i 1
+    22 jump *label13 lessThan :i :n
+    23 label *label6
+-    * label *label2
+    24 jump *label1 equal :sorted false
+-    * label *label3
+    25 set :i 0
+-    * label *label10
+    26 jump *label12 greaterThanEq 0 SIZE
+    27 label *label14
+    28 read *tmp15 FINAL :i
+    29 read *tmp17 ARRAY :i
+    30 assertequals *tmp15 *tmp17 "unexpected value"
+-    * label *label11
+    31 op add :i :i 1
+    32 jump *label14 lessThan :i SIZE
+    33 label *label12
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+    32 jump *label14 lessThan :i SIZE
+    33 label *label12
+    34 stop
 -    * end
 
 Final code before resolving virtual instructions:

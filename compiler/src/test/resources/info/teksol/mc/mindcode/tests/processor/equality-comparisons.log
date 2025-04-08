@@ -1,8 +1,8 @@
    603 instructions before optimizations.
     60 instructions eliminated by Temp Variables Elimination.
-    15 instructions eliminated by Dead Code Elimination (3 iterations).
-    26 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    87 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+    15 instructions eliminated by Dead Code Elimination (4 iterations).
+    26 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
+    87 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
      3 instructions modified by Expression Optimization (4 iterations).
     12 instructions modified by If Expression Optimization (4 iterations).
    291 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
@@ -3913,170 +3913,422 @@ Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-
    142 label *label101
    143 print "T"
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
+     0 set A 0
+     1 assertflush
+-    * label *label2
+-    * label *label3
+-    * label *label1
+-    * label *label5
+-    * label *label6
+-    * label *label4
+-    * label *label8
+-    * label *label9
+-    * label *label7
+-    * label *label11
+-    * label *label12
+-    * label *label10
+     2 print "T"
+     3 print "F"
+     4 print "F"
+     5 print "T"
+     6 assertprints "TFFT" "comparison 1"
+-    * label *label0
+     7 assertflush
+-    * label *label15
+-    * label *label16
+-    * label *label14
+-    * label *label18
+-    * label *label19
+-    * label *label17
+-    * label *label21
+-    * label *label22
+-    * label *label20
+-    * label *label24
+-    * label *label25
+-    * label *label23
+     8 print "F"
+     9 print "T"
+    10 print "F"
+    11 print "T"
+    12 assertprints "FTFT" "comparison 2"
+-    * label *label13
+    13 assertflush
+-    * label *label28
+-    * label *label29
+-    * label *label27
+-    * label *label31
+-    * label *label32
+-    * label *label30
+-    * label *label34
+-    * label *label35
+-    * label *label33
+-    * label *label37
+-    * label *label38
+-    * label *label36
+    14 print "F"
+    15 print "T"
+    16 print "F"
+    17 print "T"
+    18 assertprints "FTFT" "comparison 3"
+-    * label *label26
+    19 assertflush
+-    * label *label41
+-    * label *label42
+-    * label *label40
+-    * label *label44
+-    * label *label45
+-    * label *label43
+-    * label *label47
+-    * label *label48
+-    * label *label46
+-    * label *label50
+-    * label *label51
+-    * label *label49
+    20 print "F"
+    21 print "T"
+    22 print "F"
+    23 print "T"
+    24 assertprints "FTFT" "comparison 4"
+-    * label *label39
+    25 assertflush
+-    * label *label54
+-    * label *label55
+-    * label *label53
+-    * label *label57
+-    * label *label58
+-    * label *label56
+-    * label *label60
+-    * label *label61
+-    * label *label59
+-    * label *label63
+-    * label *label64
+-    * label *label62
+    26 print "T"
+    27 print "F"
+    28 print "F"
+    29 print "T"
+    30 assertprints "TFFT" "comparison 5"
+-    * label *label52
+    31 assertflush
+-    * label *label67
+-    * label *label68
+-    * label *label66
+-    * label *label70
+-    * label *label71
+-    * label *label69
+-    * label *label73
+-    * label *label74
+-    * label *label72
+-    * label *label76
+-    * label *label77
+-    * label *label75
+    32 print "F"
+    33 print "T"
+    34 print "F"
+    35 print "T"
+    36 assertprints "FTFT" "comparison 6"
+-    * label *label65
+    37 assertflush
+-    * label *label80
+-    * label *label81
+-    * label *label79
+-    * label *label83
+-    * label *label84
+-    * label *label82
+-    * label *label86
+-    * label *label87
+-    * label *label85
+-    * label *label89
+-    * label *label90
+-    * label *label88
+    38 print "F"
+    39 print "T"
+    40 print "F"
+    41 print "T"
+    42 assertprints "FTFT" "comparison 7"
+-    * label *label78
+    43 assertflush
+-    * label *label94
+-    * label *label92
+-    * label *label97
+-    * label *label95
+-    * label *label100
+-    * label *label98
+-    * label *label103
+-    * label *label101
+    44 print "T"
+    45 print "F"
+    46 print "T"
+    47 print "F"
+    48 assertprints "TFTF" "comparison 8"
+-    * label *label91
+    49 assertflush
+    50 op equal :eval.32:b A 0
+    51 set *tmp115 "F"
+    52 jump *label107 equal :eval.32:b false
+    53 set *tmp115 "T"
+    54 label *label107
+-    * label *label105
+    55 op notEqual :eval.33:b A 0
+    56 set *tmp118 "F"
+    57 jump *label110 equal :eval.33:b false
+    58 set *tmp118 "T"
+    59 label *label110
+-    * label *label108
+    60 op strictEqual :eval.34:b A 0
+    61 set *tmp121 "F"
+    62 jump *label113 equal :eval.34:b false
+    63 set *tmp121 "T"
+    64 label *label113
+-    * label *label111
+    65 op equal :eval.35:b :eval.34:b false
+    66 set *tmp125 "F"
+    67 jump *label116 equal :eval.35:b false
+    68 set *tmp125 "T"
+    69 label *label116
+-    * label *label114
+    70 print *tmp115
+    71 print *tmp118
+    72 print *tmp121
+    73 print *tmp125
+    74 assertprints "TFTF" "comparison 9"
+-    * label *label104
+    75 assertflush
+    76 op equal :eval.36:b A 1
+    77 set *tmp129 "F"
+    78 jump *label120 equal :eval.36:b false
+    79 set *tmp129 "T"
+    80 label *label120
+-    * label *label118
+    81 op notEqual :eval.37:b A 1
+    82 set *tmp132 "F"
+    83 jump *label123 equal :eval.37:b false
+    84 set *tmp132 "T"
+    85 label *label123
+-    * label *label121
+    86 op strictEqual :eval.38:b A 1
+    87 set *tmp135 "F"
+    88 jump *label126 equal :eval.38:b false
+    89 set *tmp135 "T"
+    90 label *label126
+-    * label *label124
+    91 op equal :eval.39:b :eval.38:b false
+    92 set *tmp139 "F"
+    93 jump *label129 equal :eval.39:b false
+    94 set *tmp139 "T"
+    95 label *label129
+-    * label *label127
+    96 print *tmp129
+    97 print *tmp132
+    98 print *tmp135
+    99 print *tmp139
+   100 assertprints "FTFT" "comparison 10"
+-    * label *label117
+   101 assertflush
+-    * label *label132
+-    * label *label133
+-    * label *label131
+-    * label *label135
+-    * label *label136
+-    * label *label134
+-    * label *label138
+-    * label *label139
+-    * label *label137
+-    * label *label141
+-    * label *label142
+-    * label *label140
+   102 print "F"
+   103 print "T"
+   104 print "F"
+   105 print "T"
+   106 assertprints "FTFT" "comparison 11"
+-    * label *label130
+   107 assertflush
+-    * label *label145
+-    * label *label146
+-    * label *label144
+-    * label *label148
+-    * label *label149
+-    * label *label147
+-    * label *label151
+-    * label *label152
+-    * label *label150
+-    * label *label154
+-    * label *label155
+-    * label *label153
+   108 print "T"
+   109 print "F"
+   110 print "F"
+   111 print "T"
+   112 assertprints "TFFT" "comparison 12"
+-    * label *label143
+   113 assertflush
+-    * label *label158
+-    * label *label159
+-    * label *label157
+-    * label *label161
+-    * label *label162
+-    * label *label160
+-    * label *label164
+-    * label *label165
+-    * label *label163
+-    * label *label167
+-    * label *label168
+-    * label *label166
+   114 print "F"
+   115 print "T"
+   116 print "F"
+   117 print "T"
+   118 assertprints "FTFT" "comparison 13"
+-    * label *label156
+   119 assertflush
+-    * label *label171
+-    * label *label172
+-    * label *label170
+-    * label *label174
+-    * label *label175
+-    * label *label173
+-    * label *label177
+-    * label *label178
+-    * label *label176
+-    * label *label180
+-    * label *label181
+-    * label *label179
+   120 print "F"
+   121 print "T"
+   122 print "F"
+   123 print "T"
+   124 assertprints "FTFT" "comparison 14"
+-    * label *label169
+   125 assertflush
+-    * label *label184
+-    * label *label185
+-    * label *label183
+-    * label *label187
+-    * label *label188
+-    * label *label186
+-    * label *label190
+-    * label *label191
+-    * label *label189
+-    * label *label193
+-    * label *label194
+-    * label *label192
+   126 print "T"
+   127 print "F"
+   128 print "T"
+   129 print "F"
+   130 assertprints "TFTF" "comparison 15"
+-    * label *label182
+   131 stop
+   132 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
-   304 assertprints "TFTF" "comparison 15"
-   305 label *label182
-   306 stop
+   129 print "F"
+   130 assertprints "TFTF" "comparison 15"
+   131 stop
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
- 
-    11 label *label11
-    12 label *label12
-    13 label *label10
+     0 set A 0
+     1 assertflush
+-    * print "T"
+-    * print "F"
+-    * print "F"
+-    * print "T"
++    2 print "TFFT"
+     3 assertprints "TFFT" "comparison 1"
+     4 assertflush
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++    5 print "FTFT"
+     6 assertprints "FTFT" "comparison 2"
+     7 assertflush
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++    8 print "FTFT"
+     9 assertprints "FTFT" "comparison 3"
+    10 assertflush
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++   11 print "FTFT"
+    12 assertprints "FTFT" "comparison 4"
+    13 assertflush
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
 +   14 print "TFFT"
-    15 assertprints "TFFT" "comparison 1"
-    16 label *label0
-    17 assertflush
+    15 assertprints "TFFT" "comparison 5"
+    16 assertflush
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++   17 print "FTFT"
+    18 assertprints "FTFT" "comparison 6"
+    19 assertflush
+-    * print "F"
+-    * print "T"
+-    * print "F"
+-    * print "T"
++   20 print "FTFT"
+    21 assertprints "FTFT" "comparison 7"
+    22 assertflush
+-    * print "T"
+-    * print "F"
+-    * print "T"
+-    * print "F"
++   23 print "TFTF"
+    24 assertprints "TFTF" "comparison 8"
+    25 assertflush
+    26 op equal :eval.32:b A 0
  
-    27 label *label24
-    28 label *label25
-    29 label *label23
+    75 print *tmp139
+    76 assertprints "FTFT" "comparison 10"
+    77 assertflush
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+   30 print "FTFT"
-    31 assertprints "FTFT" "comparison 2"
-    32 label *label13
-    33 assertflush
- 
-    43 label *label37
-    44 label *label38
-    45 label *label36
--    * print "F"
--    * print "T"
--    * print "F"
--    * print "T"
-+   46 print "FTFT"
-    47 assertprints "FTFT" "comparison 3"
-    48 label *label26
-    49 assertflush
- 
-    59 label *label50
-    60 label *label51
-    61 label *label49
--    * print "F"
--    * print "T"
--    * print "F"
--    * print "T"
-+   62 print "FTFT"
-    63 assertprints "FTFT" "comparison 4"
-    64 label *label39
-    65 assertflush
- 
-    75 label *label63
-    76 label *label64
-    77 label *label62
++   78 print "FTFT"
+    79 assertprints "FTFT" "comparison 11"
+    80 assertflush
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
-+   78 print "TFFT"
-    79 assertprints "TFFT" "comparison 5"
-    80 label *label52
-    81 assertflush
- 
-    91 label *label76
-    92 label *label77
-    93 label *label75
++   81 print "TFFT"
+    82 assertprints "TFFT" "comparison 12"
+    83 assertflush
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+   94 print "FTFT"
-    95 assertprints "FTFT" "comparison 6"
-    96 label *label65
-    97 assertflush
- 
-   107 label *label89
-   108 label *label90
-   109 label *label88
++   84 print "FTFT"
+    85 assertprints "FTFT" "comparison 13"
+    86 assertflush
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+  110 print "FTFT"
-   111 assertprints "FTFT" "comparison 7"
-   112 label *label78
-   113 assertflush
- 
-   119 label *label98
-   120 label *label103
-   121 label *label101
++   87 print "FTFT"
+    88 assertprints "FTFT" "comparison 14"
+    89 assertflush
 -    * print "T"
 -    * print "F"
 -    * print "T"
 -    * print "F"
-+  122 print "TFTF"
-   123 assertprints "TFTF" "comparison 8"
-   124 label *label91
-   125 assertflush
- 
-   197 label *label141
-   198 label *label142
-   199 label *label140
--    * print "F"
--    * print "T"
--    * print "F"
--    * print "T"
-+  200 print "FTFT"
-   201 assertprints "FTFT" "comparison 11"
-   202 label *label130
-   203 assertflush
- 
-   213 label *label154
-   214 label *label155
-   215 label *label153
--    * print "T"
--    * print "F"
--    * print "F"
--    * print "T"
-+  216 print "TFFT"
-   217 assertprints "TFFT" "comparison 12"
-   218 label *label143
-   219 assertflush
- 
-   229 label *label167
-   230 label *label168
-   231 label *label166
--    * print "F"
--    * print "T"
--    * print "F"
--    * print "T"
-+  232 print "FTFT"
-   233 assertprints "FTFT" "comparison 13"
-   234 label *label156
-   235 assertflush
- 
-   245 label *label180
-   246 label *label181
-   247 label *label179
--    * print "F"
--    * print "T"
--    * print "F"
--    * print "T"
-+  248 print "FTFT"
-   249 assertprints "FTFT" "comparison 14"
-   250 label *label169
-   251 assertflush
- 
-   261 label *label193
-   262 label *label194
-   263 label *label192
--    * print "T"
--    * print "F"
--    * print "T"
--    * print "F"
-+  264 print "TFTF"
-   265 assertprints "TFTF" "comparison 15"
-   266 label *label182
-   267 stop
++   90 print "TFTF"
+    91 assertprints "TFTF" "comparison 15"
+    92 stop
 
 Final code before resolving virtual instructions:
 

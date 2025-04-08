@@ -1,14 +1,14 @@
    173 instructions before optimizations.
     25 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-    14 instructions eliminated by Dead Code Elimination (6 iterations).
-    10 instructions eliminated by Jump Optimization (3 iterations).
-     7 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+    14 instructions eliminated by Dead Code Elimination (7 iterations).
+    10 instructions eliminated by Jump Optimization (4 iterations).
+     7 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
-     3 instructions eliminated by Jump Straightening (3 iterations).
+     3 instructions eliminated by Jump Straightening (4 iterations).
      1 instructions updated by JumpThreading.
     20 instructions eliminated by Print Merging.
     90 instructions after optimizations.
@@ -584,33 +584,138 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    141 write 0 .MEMORY :n
    142 op add :n :n 1
 
-Modifications by Final phase, Jump Threading, iteration 1:
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+ 
+     4 set .MEMORY null
+     5 set .FIRST_BLOCK @links
+     6 set :n @links
+-    * label *label3
+     7 jump *label5 lessThanEq :n 0
+     8 label *label32
+     9 op sub :n :n 1
+    10 getlink :block :n
+    11 sensor *tmp5 :block @type
+    12 jump *label7 notEqual *tmp5 @memory-cell
+-    * label *label8
+    13 set .MEMORY :block
+    14 set :lastCell 63
+    15 jump *label6 always
+    16 label *label7
+    17 jump *label9 notEqual *tmp5 @memory-bank
+-    * label *label10
+    18 set .MEMORY :block
+    19 set :lastCell 511
+    20 jump *label6 always
+    21 label *label9
+    22 jump *label11 notEqual *tmp5 @plastanium-conveyor
+-    * label *label12
+    23 set .FIRST_BLOCK :n
+    24 label *label11
+    25 label *label6
+-    * label *label4
+    26 jump *label32 greaterThan :n 0
+    27 label *label5
+    28 print "Item Counter\n[salmon]No memory attached."
+    29 printflush message1
+-    * label *label1
+    30 jump *label0 equal .MEMORY null
+-    * label *label2
+    31 read :total .MEMORY 0
+    32 op max *tmp9 MIN_BATCH 10
+    33 op idiv *tmp10 *tmp9 10
+ 
+    40 set :ratePerMin 0
+    41 op add :limit :total .EFF_MIN_BATCH
+    42 control enabled switch1 0
+-    * label *label13
+    43 sensor *tmp18 switch1 @enabled
+    44 jump *label15 notEqual *tmp18 0
+    45 label *label35
+    46 set :start @time
+    47 set :n .FIRST_BLOCK
+-    * label *label16
+    48 jump *label18 greaterThanEq .FIRST_BLOCK @links
+    49 label *label33
+    50 getlink :block :n
+ 
+    69 op add *tmp46 :batch 10
+    70 op min :batch *tmp46 .EFF_MAX_BATCH
+    71 label *label25
+-    * label *label26
+    72 label *label23
+-    * label *label24
+    73 label *label21
+-    * label *label22
+    74 label *label19
+-    * label *label20
+-    * label *label17
+    75 jump *label33 lessThan :n @links
+    76 label *label18
+    77 op sub *tmp48 @time :startTime
+ 
+    84 set :ratePerMin 0
+    85 set :startTime @time
+    86 label *label27
+-    * label *label28
+    87 print "Item Counter                  "
+    88 print "\n"
+    89 print "Total items: [gold]"
+ 
+   113 print " "
+   114 print "ms"
+   115 printflush message1
+-    * label *label14
+   116 sensor *tmp18 switch1 @enabled
+   117 jump *label35 equal *tmp18 0
+   118 label *label15
+   119 control enabled switch1 0
+   120 write 0 .MEMORY :lastCell
+   121 set :n 0
+-    * label *label29
+   122 jump *label31 greaterThanEq 0 @links
+   123 label *label34
+   124 write 0 .MEMORY :n
+   125 op add :n :n 1
+-    * label *label30
+   126 jump *label34 lessThan :n @links
+   127 label *label31
+   128 end
+
+Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
      1 set MIN_BATCH 10
      2 set MAX_BATCH 1000
      3 set :lastCell 0
  
-   137 write 0 .MEMORY :lastCell
-   138 set :n 0
-   139 label *label29
+   120 control enabled switch1 0
+   121 write 0 .MEMORY :lastCell
+   122 set :n 0
 -    * jump *label31 greaterThanEq 0 @links
-+  140 jump __start__ greaterThanEq 0 @links
-   141 label *label34
-   142 write 0 .MEMORY :n
-   143 op add :n :n 1
++  123 jump __start__ greaterThanEq 0 @links
+   124 label *label34
+   125 write 0 .MEMORY :n
+   126 op add :n :n 1
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
  
-   144 label *label30
-   145 jump *label34 lessThan :n @links
-   146 label *label31
+   125 write 0 .MEMORY :n
+   126 op add :n :n 1
+   127 jump *label34 lessThan :n @links
+-    * label *label31
+   128 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   125 write 0 .MEMORY :n
+   126 op add :n :n 1
+   127 jump *label34 lessThan :n @links
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
  
-   100 set :startTime @time
-   101 label *label27
-   102 label *label28
+    85 set :ratePerMin 0
+    86 set :startTime @time
+    87 label *label27
 -    * print "Item Counter                  "
 -    * print "\n"
 -    * print "Total items: [gold]"
@@ -633,21 +738,21 @@ Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
 -    * print "["
 -    * print "] ms"
 -    * print "\n"
-+  103 print "Item Counter                  \nTotal items: [gold]{0}[]\nRate: [green]{0}[] items/min\nBatch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
-+  104 format :total
-+  105 format :ratePerMin
-+  106 format :batch
-+  107 format :elapsed
-   108 op sub *tmp58 @time :start
-   109 op floor *tmp59 *tmp58
++   88 print "Item Counter                  \nTotal items: [gold]{0}[]\nRate: [green]{0}[] items/min\nBatch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
++   89 format :total
++   90 format :ratePerMin
++   91 format :batch
++   92 format :elapsed
+    93 op sub *tmp58 @time :start
+    94 op floor *tmp59 *tmp58
 -    * print "[lightgray]Loop time: "
 -    * print *tmp59
 -    * print " "
 -    * print "ms"
-+  110 format *tmp59
-   111 printflush message1
-   112 label *label14
-   113 sensor *tmp18 switch1 @enabled
++   95 format *tmp59
+    96 printflush message1
+    97 sensor *tmp18 switch1 @enabled
+    98 jump *label35 equal *tmp18 0
 
 Final code before resolving virtual instructions:
 

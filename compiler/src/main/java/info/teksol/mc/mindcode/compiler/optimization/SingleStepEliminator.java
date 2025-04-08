@@ -107,7 +107,7 @@ class SingleStepEliminator extends BaseOptimizer {
 
         removableJumps.forEach(this::invalidateInstruction);
 
-        if (phase == OptimizationPhase.FINAL) {
+        if (phase.breaksContextStructure()) {
             int index = optimizationContext.getProgram().size() - 1;
             while (index >= 0) {
                 LogicInstruction lastIx = optimizationContext.getProgram().get(index);

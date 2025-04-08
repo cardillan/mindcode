@@ -35,16 +35,21 @@ public enum OptimizationPhase {
             RETURN_OPTIMIZATION
     ),
 
-    /// Optimizers run in a single pass at the end of the optimization. These optimizers can make changes incompatible
-    /// with the AST context structure, therefore are separated from the previous phase.
-    FINAL("Final",
+    /// Jump specific optimizations. Several passes might be needed to iron out all jump paths.
+    /// These optimizers can make changes incompatible with the AST context structure in this phase,
+    /// therefore are separated from the previous phase.
+    JUMPS("Jumps",
             JUMP_NORMALIZATION,
             JUMP_STRAIGHTENING,
             JUMP_OPTIMIZATION,
             JUMP_THREADING,
             UNREACHABLE_CODE_ELIMINATION,
             DEAD_CODE_ELIMINATION,
-            SINGLE_STEP_ELIMINATION,
+            SINGLE_STEP_ELIMINATION
+    ),
+
+    /// Optimizers run in a single pass at the end of the optimization. No context structure dependency.
+    FINAL("Final",
             STACK_OPTIMIZATION,
             PRINT_MERGING
     );
@@ -55,5 +60,9 @@ public enum OptimizationPhase {
     OptimizationPhase(String name, Optimization... optimizations) {
         this.name = name;
         this.optimizations = List.of(optimizations);
+    }
+
+    public boolean breaksContextStructure() {
+        return this.ordinal() >= JUMPS.ordinal();
     }
 }

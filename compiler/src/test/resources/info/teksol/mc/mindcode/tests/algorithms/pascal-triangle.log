@@ -1,7 +1,7 @@
    143 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Dead Code Elimination (3 iterations).
-     8 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     1 instructions eliminated by Dead Code Elimination (4 iterations).
+     8 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
      5 instructions eliminated by Data Flow Optimization (2 passes, 11 iterations).
      3 instructions modified by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
@@ -591,11 +591,54 @@ Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-
    250 label *label7
    251 op add :c :c 1
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
  
-   257 label *label2
-   258 assertequals 1023 :total "Sum of Pascal triangle"
-   259 stop
+     3 set .previousLine*0 1
+     4 set .previousLine*1 1
+     5 set :i 3
+-    * label *label0
+     6 jump *label2 greaterThan 3 TRIANGLE_SIZE
+     7 label *label9
+     8 set .currentLine*0 1
+     9 set :j 1
+-    * label *label3
+    10 jump *label5 greaterThan 1 :lineLength
+    11 label *label10
+    12 op sub *tmp4 :j 1
+ 
+   107 multilabel *label46 (m:marker2)
+   108 set .currentLine*9 *tmp8
+   109 label *label36
+-    * label *label4
+   110 op add :j :j 1
+   111 jump *label10 lessThanEq :j :lineLength
+   112 label *label5
+ 
+   144 label *label48
+   145 op add :lineLength :lineLength 1
+   146 set :c 0
+-    * label *label6
+   147 jump *label8 greaterThanEq 0 :lineLength
+   148 label *label11
+   149 op mul *tmp23 :c 2
+ 
+   243 multilabel *label94 (m:marker6)
+   244 set .previousLine*9 *tmp18
+   245 label *label84
+-    * label *label7
+   246 op add :c :c 1
+   247 jump *label11 lessThan :c :lineLength
+   248 label *label8
+-    * label *label1
+   249 op add :i :i 1
+   250 jump *label9 lessThanEq :i TRIANGLE_SIZE
+   251 label *label2
+
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
+ 
+   251 label *label2
+   252 assertequals 1023 :total "Sum of Pascal triangle"
+   253 stop
 -    * end
 
 Final code before resolving virtual instructions:

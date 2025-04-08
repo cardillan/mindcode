@@ -1,8 +1,8 @@
     40 instructions before optimizations.
-     1 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-     1 instructions eliminated by Jump Optimization (4 iterations).
-     4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     1 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     1 instructions eliminated by Jump Optimization (5 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions modified by If Expression Optimization (3 iterations).
     39 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
      2 instructions eliminated by Loop Optimization (3 iterations).
@@ -527,38 +527,70 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     37 print "|"
     38 print 0
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 assertflush
+-    * label *label13
+-    * label *label14
+-    * label *label15
+-    * label *label16
+-    * label *label17
+-    * label *label18
+-    * label *label19
+-    * label *label20
+-    * label *label21
+-    * label *label4
+     1 print 6
+     2 print "|"
+-    * label *label1
+-    * label *label22
+-    * label *label23
+-    * label *label24
+-    * label *label25
+-    * label *label26
+-    * label *label27
+-    * label *label28
+-    * label *label29
+-    * label *label30
+-    * label *label31
+-    * label *label32
+-    * label *label33
+-    * label *label34
+-    * label *label35
+-    * label *label36
+-    * label *label37
+-    * label *label38
+-    * label *label8
+     3 print 28
+     4 print "|"
+-    * label *label5
+     5 print "Less"
+-    * label *label10
+     6 print "|"
+     7 print 0
+-    * label *label0
+     8 assertprints "6|28|Less|0" "loops in conditions"
+     9 stop
+    10 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-    39 label *label0
-    40 assertprints "6|28|Less|0" "loops in conditions"
-    41 stop
+     7 print 0
+     8 assertprints "6|28|Less|0" "loops in conditions"
+     9 stop
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-6 instructions):
- 
-     8 label *label20
-     9 label *label21
-    10 label *label4
+     0 assertflush
 -    * print 6
 -    * print "|"
-+   11 print "6|28|Less|0"
-    12 label *label1
-    13 label *label22
-    14 label *label23
- 
-    28 label *label37
-    29 label *label38
-    30 label *label8
 -    * print 28
 -    * print "|"
-    31 label *label5
 -    * print "Less"
-    32 label *label10
 -    * print "|"
 -    * print 0
-    33 label *label0
-    34 assertprints "6|28|Less|0" "loops in conditions"
-    35 stop
++    1 print "6|28|Less|0"
+     2 assertprints "6|28|Less|0" "loops in conditions"
+     3 stop
 
 Final code before resolving virtual instructions:
 

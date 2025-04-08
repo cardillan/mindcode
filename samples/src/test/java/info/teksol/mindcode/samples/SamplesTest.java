@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @Order(1)
 class SamplesTest {
@@ -62,11 +63,12 @@ class SamplesTest {
     }
 
     private void evaluateOutput(Sample sample, List<MindcodeMessage> output) {
-        output.stream().filter(MindcodeMessage::isErrorOrWarning)
+        List<String> unexpectedMessages = output.stream().filter(MindcodeMessage::isErrorOrWarning)
+                .filter(message -> !message.message().matches("Optimization passes limit \\(\\d+\\) reached\\."))
                 .map(MindcodeMessage::formatMessage)
-                .forEach(System.out::println);
+                .toList();
 
-        assertFalse(output.stream().anyMatch(MindcodeMessage::isErrorOrWarning),
-                "Sample " + sample.name() + " generated warnings or errors.");
+        unexpectedMessages.forEach(System.out::println);
+        assertTrue(unexpectedMessages.isEmpty(), "Sample " + sample.name() + " generated warnings or errors.");
     }
 }

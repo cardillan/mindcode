@@ -1,8 +1,8 @@
    129 instructions before optimizations.
     27 instructions eliminated by Temp Variables Elimination.
-     4 instructions eliminated by Dead Code Elimination (3 iterations).
-     3 instructions eliminated by Jump Optimization (4 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     4 instructions eliminated by Dead Code Elimination (4 iterations).
+     3 instructions eliminated by Jump Optimization (5 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
     11 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
     13 instructions added by Loop Optimization (3 iterations).
@@ -464,33 +464,90 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     54 op add .MILLIS .MILLIS 1000
     55 op mul .SIGN_MILLIS .MULTIPLIER .MILLIS
 
-Modifications by Final phase, Jump Threading, iteration 1:
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+ 
+     1 set .SORTER sorter1
+     2 set .VAULT vault1
+     3 set .BANK bank1
+-    * label *label0
+     4 op equal *tmp1 sorter1 null
+     5 op equal *tmp2 vault1 null
+     6 op or *tmp3 *tmp1 *tmp2
+ 
+    13 set .SORTER sorter1
+    14 set .VAULT vault1
+    15 set .BANK bank1
+-    * label *label1
+    16 op equal *tmp1 sorter1 null
+    17 op equal *tmp2 vault1 null
+    18 op or *tmp3 *tmp1 *tmp2
+ 
+    28 set :index 0
+    29 set .MILLIS 0
+    30 set :wait 0
+-    * label *label3
+    31 sensor *tmp13 .SORTER @dead
+    32 op strictEqual *tmp14 *tmp13 0
+    33 sensor *tmp15 .VAULT @dead
+ 
+    44 print "Wait reset\n"
+    45 op add :wait :start 1000
+    46 label *label6
+-    * label *label7
+    47 read :shipped .BANK 511
+    48 sensor :item .SORTER @config
+    49 jump *label8 greaterThanEq .MILLIS 10000
+ 
+    85 print " ms"
+    86 printflush message1
+    87 set :loops 0
+-    * label *label10
+    88 jump *label12 greaterThanEq @time :wait
+    89 label *label13
+    90 op add :loops :loops 1
+-    * label *label11
+    91 jump *label13 lessThan @time :wait
+    92 label *label12
+-    * label *label4
+    93 sensor *tmp13 .SORTER @dead
+    94 op strictEqual *tmp14 *tmp13 0
+    95 sensor *tmp15 .VAULT @dead
+
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set .SIGN_MILLIS null
      2 set .SORTER sorter1
      3 set .VAULT vault1
  
-    40 read *tmp19 .BANK 509
-    41 op strictEqual *tmp20 .SESSION_KEY *tmp19
-    42 op land *tmp21 *tmp17 *tmp20
+    37 read *tmp19 .BANK 509
+    38 op strictEqual *tmp20 .SESSION_KEY *tmp19
+    39 op land *tmp21 *tmp17 *tmp20
 -    * jump *label5 equal *tmp21 false
-+   43 jump __start__ equal *tmp21 false
-    44 label *label15
-    45 set :start @time
-    46 op add :wait :wait 1000
++   40 jump __start__ equal *tmp21 false
+    41 label *label15
+    42 set :start @time
+    43 op add :wait :wait 1000
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
  
-   108 op land *tmp21 *tmp17 *tmp20
-   109 jump *label15 notEqual *tmp21 false
-   110 label *label5
+   100 op strictEqual *tmp20 .SESSION_KEY *tmp19
+   101 op land *tmp21 *tmp17 *tmp20
+   102 jump *label15 notEqual *tmp21 false
+-    * label *label5
+   103 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+   100 op strictEqual *tmp20 .SESSION_KEY *tmp19
+   101 op land *tmp21 *tmp17 *tmp20
+   102 jump *label15 notEqual *tmp21 false
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
  
-    68 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
-    69 op div :seconds .MILLIS 1000
-    70 op sub :elapsed @time :start
+    64 op idiv :flow_rate_str :flow_rate 0.000016666666666666667
+    65 op div :seconds .MILLIS 1000
+    66 op sub :elapsed @time :start
 -    * print "Measured interval: "
 -    * print :seconds
 -    * print " sec"
@@ -511,18 +568,18 @@ Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
 -    * print "\nElapsed: "
 -    * print :elapsed
 -    * print " ms"
-+   71 print "Measured interval: {0} sec\nItem: {0}\nItems shipped: {0}\nContainer level: 0\nFlow rate: {0}\nTotal: {0}\nLast total: {0}\nIndex: {0}\nElapsed: {0} ms"
-+   72 format :seconds
-+   73 format :item
-+   74 format :shipped
-+   75 format :flow_rate_str
-+   76 format :shipped
-+   77 format :last_total
-+   78 format :index
-+   79 format :elapsed
-    80 printflush message1
-    81 set :loops 0
-    82 label *label10
++   67 print "Measured interval: {0} sec\nItem: {0}\nItems shipped: {0}\nContainer level: 0\nFlow rate: {0}\nTotal: {0}\nLast total: {0}\nIndex: {0}\nElapsed: {0} ms"
++   68 format :seconds
++   69 format :item
++   70 format :shipped
++   71 format :flow_rate_str
++   72 format :shipped
++   73 format :last_total
++   74 format :index
++   75 format :elapsed
+    76 printflush message1
+    77 set :loops 0
+    78 jump *label12 greaterThanEq @time :wait
 
 Final code before resolving virtual instructions:
 

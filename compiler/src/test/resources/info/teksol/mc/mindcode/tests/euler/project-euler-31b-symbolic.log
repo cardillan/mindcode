@@ -1,7 +1,7 @@
     43 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     6 instructions eliminated by Jump Normalization (4 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+     6 instructions eliminated by Jump Normalization (5 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
    223 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
@@ -3681,11 +3681,725 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-6 ins
     77 op sub *tmp5 :j 50
     78 read *tmp6 bank2 *tmp5
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 label *label0
+     1 jump *label0 equal bank1 null
+     2 write 1 bank2 0
+-    * label *label18
+     3 set :j 1
+-    * label *label19
+     4 label *label20
+     5 op sub *tmp5 :j 1
+     6 read *tmp6 bank2 *tmp5
+     7 read *tmp3 bank2 :j
+     8 op add *tmp7 *tmp3 *tmp6
+     9 write *tmp7 bank2 :j
+-    * label *label21
+    10 op add :j :j 1
+    11 jump *label20 lessThanEq :j 200
+-    * label *label22
+-    * label *label23
+-    * label *label26
+    12 set :j 2
+-    * label *label27
+    13 label *label28
+    14 op sub *tmp5 :j 2
+    15 read *tmp6 bank2 *tmp5
+    16 read *tmp3 bank2 :j
+    17 op add *tmp7 *tmp3 *tmp6
+    18 write *tmp7 bank2 :j
+-    * label *label29
+    19 op add :j :j 1
+    20 jump *label28 lessThanEq :j 200
+-    * label *label30
+-    * label *label31
+-    * label *label34
+    21 set :j 5
+-    * label *label35
+    22 label *label36
+    23 op sub *tmp5 :j 5
+    24 read *tmp6 bank2 *tmp5
+    25 read *tmp3 bank2 :j
+    26 op add *tmp7 *tmp3 *tmp6
+    27 write *tmp7 bank2 :j
+-    * label *label37
+    28 op add :j :j 1
+    29 jump *label36 lessThanEq :j 200
+-    * label *label38
+-    * label *label39
+-    * label *label42
+    30 set :j 10
+-    * label *label43
+    31 label *label44
+    32 op sub *tmp5 :j 10
+    33 read *tmp6 bank2 *tmp5
+    34 read *tmp3 bank2 :j
+    35 op add *tmp7 *tmp3 *tmp6
+    36 write *tmp7 bank2 :j
+-    * label *label45
+    37 op add :j :j 1
+    38 jump *label44 lessThanEq :j 200
+-    * label *label46
+-    * label *label47
+-    * label *label50
+    39 set :j 20
+-    * label *label51
+    40 label *label52
+    41 op sub *tmp5 :j 20
+    42 read *tmp6 bank2 *tmp5
+    43 read *tmp3 bank2 :j
+    44 op add *tmp7 *tmp3 *tmp6
+    45 write *tmp7 bank2 :j
+-    * label *label53
+    46 op add :j :j 1
+    47 jump *label52 lessThanEq :j 200
+-    * label *label54
+-    * label *label55
+-    * label *label58
+    48 set :j 50
+-    * label *label59
+    49 label *label60
+    50 op sub *tmp5 :j 50
+    51 read *tmp6 bank2 *tmp5
+    52 read *tmp3 bank2 :j
+    53 op add *tmp7 *tmp3 *tmp6
+    54 write *tmp7 bank2 :j
+-    * label *label61
+    55 op add :j :j 1
+    56 jump *label60 lessThanEq :j 200
+-    * label *label62
+-    * label *label63
+-    * label *label66
+-    * label *label87
+-    * label *label88
+    57 read *tmp6 bank2 0
+    58 read *tmp3 bank2 100
+    59 op add *tmp7 *tmp3 *tmp6
+    60 write *tmp7 bank2 100
+-    * label *label89
+-    * label *label90
+    61 read *tmp6 bank2 1
+    62 read *tmp3 bank2 101
+    63 op add *tmp7 *tmp3 *tmp6
+    64 write *tmp7 bank2 101
+-    * label *label91
+-    * label *label92
+    65 read *tmp6 bank2 2
+    66 read *tmp3 bank2 102
+    67 op add *tmp7 *tmp3 *tmp6
+    68 write *tmp7 bank2 102
+-    * label *label93
+-    * label *label94
+    69 read *tmp6 bank2 3
+    70 read *tmp3 bank2 103
+    71 op add *tmp7 *tmp3 *tmp6
+    72 write *tmp7 bank2 103
+-    * label *label95
+-    * label *label96
+    73 read *tmp6 bank2 4
+    74 read *tmp3 bank2 104
+    75 op add *tmp7 *tmp3 *tmp6
+    76 write *tmp7 bank2 104
+-    * label *label97
+-    * label *label98
+    77 read *tmp6 bank2 5
+    78 read *tmp3 bank2 105
+    79 op add *tmp7 *tmp3 *tmp6
+    80 write *tmp7 bank2 105
+-    * label *label99
+-    * label *label100
+    81 read *tmp6 bank2 6
+    82 read *tmp3 bank2 106
+    83 op add *tmp7 *tmp3 *tmp6
+    84 write *tmp7 bank2 106
+-    * label *label101
+-    * label *label102
+    85 read *tmp6 bank2 7
+    86 read *tmp3 bank2 107
+    87 op add *tmp7 *tmp3 *tmp6
+    88 write *tmp7 bank2 107
+-    * label *label103
+-    * label *label104
+    89 read *tmp6 bank2 8
+    90 read *tmp3 bank2 108
+    91 op add *tmp7 *tmp3 *tmp6
+    92 write *tmp7 bank2 108
+-    * label *label105
+-    * label *label106
+    93 read *tmp6 bank2 9
+    94 read *tmp3 bank2 109
+    95 op add *tmp7 *tmp3 *tmp6
+    96 write *tmp7 bank2 109
+-    * label *label107
+-    * label *label108
+    97 read *tmp6 bank2 10
+    98 read *tmp3 bank2 110
+    99 op add *tmp7 *tmp3 *tmp6
+   100 write *tmp7 bank2 110
+-    * label *label109
+-    * label *label110
+   101 read *tmp6 bank2 11
+   102 read *tmp3 bank2 111
+   103 op add *tmp7 *tmp3 *tmp6
+   104 write *tmp7 bank2 111
+-    * label *label111
+-    * label *label112
+   105 read *tmp6 bank2 12
+   106 read *tmp3 bank2 112
+   107 op add *tmp7 *tmp3 *tmp6
+   108 write *tmp7 bank2 112
+-    * label *label113
+-    * label *label114
+   109 read *tmp6 bank2 13
+   110 read *tmp3 bank2 113
+   111 op add *tmp7 *tmp3 *tmp6
+   112 write *tmp7 bank2 113
+-    * label *label115
+-    * label *label116
+   113 read *tmp6 bank2 14
+   114 read *tmp3 bank2 114
+   115 op add *tmp7 *tmp3 *tmp6
+   116 write *tmp7 bank2 114
+-    * label *label117
+-    * label *label118
+   117 read *tmp6 bank2 15
+   118 read *tmp3 bank2 115
+   119 op add *tmp7 *tmp3 *tmp6
+   120 write *tmp7 bank2 115
+-    * label *label119
+-    * label *label120
+   121 read *tmp6 bank2 16
+   122 read *tmp3 bank2 116
+   123 op add *tmp7 *tmp3 *tmp6
+   124 write *tmp7 bank2 116
+-    * label *label121
+-    * label *label122
+   125 read *tmp6 bank2 17
+   126 read *tmp3 bank2 117
+   127 op add *tmp7 *tmp3 *tmp6
+   128 write *tmp7 bank2 117
+-    * label *label123
+-    * label *label124
+   129 read *tmp6 bank2 18
+   130 read *tmp3 bank2 118
+   131 op add *tmp7 *tmp3 *tmp6
+   132 write *tmp7 bank2 118
+-    * label *label125
+-    * label *label126
+   133 read *tmp6 bank2 19
+   134 read *tmp3 bank2 119
+   135 op add *tmp7 *tmp3 *tmp6
+   136 write *tmp7 bank2 119
+-    * label *label127
+-    * label *label128
+   137 read *tmp6 bank2 20
+   138 read *tmp3 bank2 120
+   139 op add *tmp7 *tmp3 *tmp6
+   140 write *tmp7 bank2 120
+-    * label *label129
+-    * label *label130
+   141 read *tmp6 bank2 21
+   142 read *tmp3 bank2 121
+   143 op add *tmp7 *tmp3 *tmp6
+   144 write *tmp7 bank2 121
+-    * label *label131
+-    * label *label132
+   145 read *tmp6 bank2 22
+   146 read *tmp3 bank2 122
+   147 op add *tmp7 *tmp3 *tmp6
+   148 write *tmp7 bank2 122
+-    * label *label133
+-    * label *label134
+   149 read *tmp6 bank2 23
+   150 read *tmp3 bank2 123
+   151 op add *tmp7 *tmp3 *tmp6
+   152 write *tmp7 bank2 123
+-    * label *label135
+-    * label *label136
+   153 read *tmp6 bank2 24
+   154 read *tmp3 bank2 124
+   155 op add *tmp7 *tmp3 *tmp6
+   156 write *tmp7 bank2 124
+-    * label *label137
+-    * label *label138
+   157 read *tmp6 bank2 25
+   158 read *tmp3 bank2 125
+   159 op add *tmp7 *tmp3 *tmp6
+   160 write *tmp7 bank2 125
+-    * label *label139
+-    * label *label140
+   161 read *tmp6 bank2 26
+   162 read *tmp3 bank2 126
+   163 op add *tmp7 *tmp3 *tmp6
+   164 write *tmp7 bank2 126
+-    * label *label141
+-    * label *label142
+   165 read *tmp6 bank2 27
+   166 read *tmp3 bank2 127
+   167 op add *tmp7 *tmp3 *tmp6
+   168 write *tmp7 bank2 127
+-    * label *label143
+-    * label *label144
+   169 read *tmp6 bank2 28
+   170 read *tmp3 bank2 128
+   171 op add *tmp7 *tmp3 *tmp6
+   172 write *tmp7 bank2 128
+-    * label *label145
+-    * label *label146
+   173 read *tmp6 bank2 29
+   174 read *tmp3 bank2 129
+   175 op add *tmp7 *tmp3 *tmp6
+   176 write *tmp7 bank2 129
+-    * label *label147
+-    * label *label148
+   177 read *tmp6 bank2 30
+   178 read *tmp3 bank2 130
+   179 op add *tmp7 *tmp3 *tmp6
+   180 write *tmp7 bank2 130
+-    * label *label149
+-    * label *label150
+   181 read *tmp6 bank2 31
+   182 read *tmp3 bank2 131
+   183 op add *tmp7 *tmp3 *tmp6
+   184 write *tmp7 bank2 131
+-    * label *label151
+-    * label *label152
+   185 read *tmp6 bank2 32
+   186 read *tmp3 bank2 132
+   187 op add *tmp7 *tmp3 *tmp6
+   188 write *tmp7 bank2 132
+-    * label *label153
+-    * label *label154
+   189 read *tmp6 bank2 33
+   190 read *tmp3 bank2 133
+   191 op add *tmp7 *tmp3 *tmp6
+   192 write *tmp7 bank2 133
+-    * label *label155
+-    * label *label156
+   193 read *tmp6 bank2 34
+   194 read *tmp3 bank2 134
+   195 op add *tmp7 *tmp3 *tmp6
+   196 write *tmp7 bank2 134
+-    * label *label157
+-    * label *label158
+   197 read *tmp6 bank2 35
+   198 read *tmp3 bank2 135
+   199 op add *tmp7 *tmp3 *tmp6
+   200 write *tmp7 bank2 135
+-    * label *label159
+-    * label *label160
+   201 read *tmp6 bank2 36
+   202 read *tmp3 bank2 136
+   203 op add *tmp7 *tmp3 *tmp6
+   204 write *tmp7 bank2 136
+-    * label *label161
+-    * label *label162
+   205 read *tmp6 bank2 37
+   206 read *tmp3 bank2 137
+   207 op add *tmp7 *tmp3 *tmp6
+   208 write *tmp7 bank2 137
+-    * label *label163
+-    * label *label164
+   209 read *tmp6 bank2 38
+   210 read *tmp3 bank2 138
+   211 op add *tmp7 *tmp3 *tmp6
+   212 write *tmp7 bank2 138
+-    * label *label165
+-    * label *label166
+   213 read *tmp6 bank2 39
+   214 read *tmp3 bank2 139
+   215 op add *tmp7 *tmp3 *tmp6
+   216 write *tmp7 bank2 139
+-    * label *label167
+-    * label *label168
+   217 read *tmp6 bank2 40
+   218 read *tmp3 bank2 140
+   219 op add *tmp7 *tmp3 *tmp6
+   220 write *tmp7 bank2 140
+-    * label *label169
+-    * label *label170
+   221 read *tmp6 bank2 41
+   222 read *tmp3 bank2 141
+   223 op add *tmp7 *tmp3 *tmp6
+   224 write *tmp7 bank2 141
+-    * label *label171
+-    * label *label172
+   225 read *tmp6 bank2 42
+   226 read *tmp3 bank2 142
+   227 op add *tmp7 *tmp3 *tmp6
+   228 write *tmp7 bank2 142
+-    * label *label173
+-    * label *label174
+   229 read *tmp6 bank2 43
+   230 read *tmp3 bank2 143
+   231 op add *tmp7 *tmp3 *tmp6
+   232 write *tmp7 bank2 143
+-    * label *label175
+-    * label *label176
+   233 read *tmp6 bank2 44
+   234 read *tmp3 bank2 144
+   235 op add *tmp7 *tmp3 *tmp6
+   236 write *tmp7 bank2 144
+-    * label *label177
+-    * label *label178
+   237 read *tmp6 bank2 45
+   238 read *tmp3 bank2 145
+   239 op add *tmp7 *tmp3 *tmp6
+   240 write *tmp7 bank2 145
+-    * label *label179
+-    * label *label180
+   241 read *tmp6 bank2 46
+   242 read *tmp3 bank2 146
+   243 op add *tmp7 *tmp3 *tmp6
+   244 write *tmp7 bank2 146
+-    * label *label181
+-    * label *label182
+   245 read *tmp6 bank2 47
+   246 read *tmp3 bank2 147
+   247 op add *tmp7 *tmp3 *tmp6
+   248 write *tmp7 bank2 147
+-    * label *label183
+-    * label *label184
+   249 read *tmp6 bank2 48
+   250 read *tmp3 bank2 148
+   251 op add *tmp7 *tmp3 *tmp6
+   252 write *tmp7 bank2 148
+-    * label *label185
+-    * label *label186
+   253 read *tmp6 bank2 49
+   254 read *tmp3 bank2 149
+   255 op add *tmp7 *tmp3 *tmp6
+   256 write *tmp7 bank2 149
+-    * label *label187
+-    * label *label188
+   257 read *tmp6 bank2 50
+   258 read *tmp3 bank2 150
+   259 op add *tmp7 *tmp3 *tmp6
+   260 write *tmp7 bank2 150
+-    * label *label189
+-    * label *label190
+   261 read *tmp6 bank2 51
+   262 read *tmp3 bank2 151
+   263 op add *tmp7 *tmp3 *tmp6
+   264 write *tmp7 bank2 151
+-    * label *label191
+-    * label *label192
+   265 read *tmp6 bank2 52
+   266 read *tmp3 bank2 152
+   267 op add *tmp7 *tmp3 *tmp6
+   268 write *tmp7 bank2 152
+-    * label *label193
+-    * label *label194
+   269 read *tmp6 bank2 53
+   270 read *tmp3 bank2 153
+   271 op add *tmp7 *tmp3 *tmp6
+   272 write *tmp7 bank2 153
+-    * label *label195
+-    * label *label196
+   273 read *tmp6 bank2 54
+   274 read *tmp3 bank2 154
+   275 op add *tmp7 *tmp3 *tmp6
+   276 write *tmp7 bank2 154
+-    * label *label197
+-    * label *label198
+   277 read *tmp6 bank2 55
+   278 read *tmp3 bank2 155
+   279 op add *tmp7 *tmp3 *tmp6
+   280 write *tmp7 bank2 155
+-    * label *label199
+-    * label *label200
+   281 read *tmp6 bank2 56
+   282 read *tmp3 bank2 156
+   283 op add *tmp7 *tmp3 *tmp6
+   284 write *tmp7 bank2 156
+-    * label *label201
+-    * label *label202
+   285 read *tmp6 bank2 57
+   286 read *tmp3 bank2 157
+   287 op add *tmp7 *tmp3 *tmp6
+   288 write *tmp7 bank2 157
+-    * label *label203
+-    * label *label204
+   289 read *tmp6 bank2 58
+   290 read *tmp3 bank2 158
+   291 op add *tmp7 *tmp3 *tmp6
+   292 write *tmp7 bank2 158
+-    * label *label205
+-    * label *label206
+   293 read *tmp6 bank2 59
+   294 read *tmp3 bank2 159
+   295 op add *tmp7 *tmp3 *tmp6
+   296 write *tmp7 bank2 159
+-    * label *label207
+-    * label *label208
+   297 read *tmp6 bank2 60
+   298 read *tmp3 bank2 160
+   299 op add *tmp7 *tmp3 *tmp6
+   300 write *tmp7 bank2 160
+-    * label *label209
+-    * label *label210
+   301 read *tmp6 bank2 61
+   302 read *tmp3 bank2 161
+   303 op add *tmp7 *tmp3 *tmp6
+   304 write *tmp7 bank2 161
+-    * label *label211
+-    * label *label212
+   305 read *tmp6 bank2 62
+   306 read *tmp3 bank2 162
+   307 op add *tmp7 *tmp3 *tmp6
+   308 write *tmp7 bank2 162
+-    * label *label213
+-    * label *label214
+   309 read *tmp6 bank2 63
+   310 read *tmp3 bank2 163
+   311 op add *tmp7 *tmp3 *tmp6
+   312 write *tmp7 bank2 163
+-    * label *label215
+-    * label *label216
+   313 read *tmp6 bank2 64
+   314 read *tmp3 bank2 164
+   315 op add *tmp7 *tmp3 *tmp6
+   316 write *tmp7 bank2 164
+-    * label *label217
+-    * label *label218
+   317 read *tmp6 bank2 65
+   318 read *tmp3 bank2 165
+   319 op add *tmp7 *tmp3 *tmp6
+   320 write *tmp7 bank2 165
+-    * label *label219
+-    * label *label220
+   321 read *tmp6 bank2 66
+   322 read *tmp3 bank2 166
+   323 op add *tmp7 *tmp3 *tmp6
+   324 write *tmp7 bank2 166
+-    * label *label221
+-    * label *label222
+   325 read *tmp6 bank2 67
+   326 read *tmp3 bank2 167
+   327 op add *tmp7 *tmp3 *tmp6
+   328 write *tmp7 bank2 167
+-    * label *label223
+-    * label *label224
+   329 read *tmp6 bank2 68
+   330 read *tmp3 bank2 168
+   331 op add *tmp7 *tmp3 *tmp6
+   332 write *tmp7 bank2 168
+-    * label *label225
+-    * label *label226
+   333 read *tmp6 bank2 69
+   334 read *tmp3 bank2 169
+   335 op add *tmp7 *tmp3 *tmp6
+   336 write *tmp7 bank2 169
+-    * label *label227
+-    * label *label228
+   337 read *tmp6 bank2 70
+   338 read *tmp3 bank2 170
+   339 op add *tmp7 *tmp3 *tmp6
+   340 write *tmp7 bank2 170
+-    * label *label229
+-    * label *label230
+   341 read *tmp6 bank2 71
+   342 read *tmp3 bank2 171
+   343 op add *tmp7 *tmp3 *tmp6
+   344 write *tmp7 bank2 171
+-    * label *label231
+-    * label *label232
+   345 read *tmp6 bank2 72
+   346 read *tmp3 bank2 172
+   347 op add *tmp7 *tmp3 *tmp6
+   348 write *tmp7 bank2 172
+-    * label *label233
+-    * label *label234
+   349 read *tmp6 bank2 73
+   350 read *tmp3 bank2 173
+   351 op add *tmp7 *tmp3 *tmp6
+   352 write *tmp7 bank2 173
+-    * label *label235
+-    * label *label236
+   353 read *tmp6 bank2 74
+   354 read *tmp3 bank2 174
+   355 op add *tmp7 *tmp3 *tmp6
+   356 write *tmp7 bank2 174
+-    * label *label237
+-    * label *label238
+   357 read *tmp6 bank2 75
+   358 read *tmp3 bank2 175
+   359 op add *tmp7 *tmp3 *tmp6
+   360 write *tmp7 bank2 175
+-    * label *label239
+-    * label *label240
+   361 read *tmp6 bank2 76
+   362 read *tmp3 bank2 176
+   363 op add *tmp7 *tmp3 *tmp6
+   364 write *tmp7 bank2 176
+-    * label *label241
+-    * label *label242
+   365 read *tmp6 bank2 77
+   366 read *tmp3 bank2 177
+   367 op add *tmp7 *tmp3 *tmp6
+   368 write *tmp7 bank2 177
+-    * label *label243
+-    * label *label244
+   369 read *tmp6 bank2 78
+   370 read *tmp3 bank2 178
+   371 op add *tmp7 *tmp3 *tmp6
+   372 write *tmp7 bank2 178
+-    * label *label245
+-    * label *label246
+   373 read *tmp6 bank2 79
+   374 read *tmp3 bank2 179
+   375 op add *tmp7 *tmp3 *tmp6
+   376 write *tmp7 bank2 179
+-    * label *label247
+-    * label *label248
+   377 read *tmp6 bank2 80
+   378 read *tmp3 bank2 180
+   379 op add *tmp7 *tmp3 *tmp6
+   380 write *tmp7 bank2 180
+-    * label *label249
+-    * label *label250
+   381 read *tmp6 bank2 81
+   382 read *tmp3 bank2 181
+   383 op add *tmp7 *tmp3 *tmp6
+   384 write *tmp7 bank2 181
+-    * label *label251
+-    * label *label252
+   385 read *tmp6 bank2 82
+   386 read *tmp3 bank2 182
+   387 op add *tmp7 *tmp3 *tmp6
+   388 write *tmp7 bank2 182
+-    * label *label253
+-    * label *label254
+   389 read *tmp6 bank2 83
+   390 read *tmp3 bank2 183
+   391 op add *tmp7 *tmp3 *tmp6
+   392 write *tmp7 bank2 183
+-    * label *label255
+-    * label *label256
+   393 read *tmp6 bank2 84
+   394 read *tmp3 bank2 184
+   395 op add *tmp7 *tmp3 *tmp6
+   396 write *tmp7 bank2 184
+-    * label *label257
+-    * label *label258
+   397 read *tmp6 bank2 85
+   398 read *tmp3 bank2 185
+   399 op add *tmp7 *tmp3 *tmp6
+   400 write *tmp7 bank2 185
+-    * label *label259
+-    * label *label260
+   401 read *tmp6 bank2 86
+   402 read *tmp3 bank2 186
+   403 op add *tmp7 *tmp3 *tmp6
+   404 write *tmp7 bank2 186
+-    * label *label261
+-    * label *label262
+   405 read *tmp6 bank2 87
+   406 read *tmp3 bank2 187
+   407 op add *tmp7 *tmp3 *tmp6
+   408 write *tmp7 bank2 187
+-    * label *label263
+-    * label *label264
+   409 read *tmp6 bank2 88
+   410 read *tmp3 bank2 188
+   411 op add *tmp7 *tmp3 *tmp6
+   412 write *tmp7 bank2 188
+-    * label *label265
+-    * label *label266
+   413 read *tmp6 bank2 89
+   414 read *tmp3 bank2 189
+   415 op add *tmp7 *tmp3 *tmp6
+   416 write *tmp7 bank2 189
+-    * label *label267
+-    * label *label268
+   417 read *tmp6 bank2 90
+   418 read *tmp3 bank2 190
+   419 op add *tmp7 *tmp3 *tmp6
+   420 write *tmp7 bank2 190
+-    * label *label269
+-    * label *label270
+   421 read *tmp6 bank2 91
+   422 read *tmp3 bank2 191
+   423 op add *tmp7 *tmp3 *tmp6
+   424 write *tmp7 bank2 191
+-    * label *label271
+-    * label *label272
+   425 read *tmp6 bank2 92
+   426 read *tmp3 bank2 192
+   427 op add *tmp7 *tmp3 *tmp6
+   428 write *tmp7 bank2 192
+-    * label *label273
+-    * label *label274
+   429 read *tmp6 bank2 93
+   430 read *tmp3 bank2 193
+   431 op add *tmp7 *tmp3 *tmp6
+   432 write *tmp7 bank2 193
+-    * label *label275
+-    * label *label276
+   433 read *tmp6 bank2 94
+   434 read *tmp3 bank2 194
+   435 op add *tmp7 *tmp3 *tmp6
+   436 write *tmp7 bank2 194
+-    * label *label277
+-    * label *label278
+   437 read *tmp6 bank2 95
+   438 read *tmp3 bank2 195
+   439 op add *tmp7 *tmp3 *tmp6
+   440 write *tmp7 bank2 195
+-    * label *label279
+-    * label *label280
+   441 read *tmp6 bank2 96
+   442 read *tmp3 bank2 196
+   443 op add *tmp7 *tmp3 *tmp6
+   444 write *tmp7 bank2 196
+-    * label *label281
+-    * label *label282
+   445 read *tmp6 bank2 97
+   446 read *tmp3 bank2 197
+   447 op add *tmp7 *tmp3 *tmp6
+   448 write *tmp7 bank2 197
+-    * label *label283
+-    * label *label284
+   449 read *tmp6 bank2 98
+   450 read *tmp3 bank2 198
+   451 op add *tmp7 *tmp3 *tmp6
+   452 write *tmp7 bank2 198
+-    * label *label285
+-    * label *label286
+   453 read *tmp6 bank2 99
+   454 read *tmp3 bank2 199
+   455 op add *tmp7 *tmp3 *tmp6
+   456 write *tmp7 bank2 199
+-    * label *label287
+-    * label *label288
+   457 read *tmp6 bank2 100
+   458 read *tmp3 bank2 200
+   459 op add *tmp7 *tmp3 *tmp6
+   460 write *tmp7 bank2 200
+-    * label *label289
+-    * label *label70
+-    * label *label71
+-    * label *label74
+-    * label *label84
+-    * label *label85
+   461 read *tmp6 bank2 0
+   462 read *tmp3 bank2 200
+   463 op add *tmp7 *tmp3 *tmp6
+   464 write *tmp7 bank2 200
+-    * label *label86
+-    * label *label78
+-    * label *label79
+-    * label *label13
+-    * label *label3
+   465 read *tmp8 bank2 200
+   466 assertequals 73682 *tmp8 "Project Euler 31b"
+   467 stop
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   709 read *tmp8 bank2 200
-   710 assertequals 73682 *tmp8 "Project Euler 31b"
-   711 stop
+   465 read *tmp8 bank2 200
+   466 assertequals 73682 *tmp8 "Project Euler 31b"
+   467 stop
 -    * end
 
 Final code before resolving virtual instructions:

@@ -1,9 +1,9 @@
    117 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
-     2 instructions eliminated by Dead Code Elimination (3 iterations).
-     5 instructions eliminated by Jump Normalization (5 iterations).
-     1 instructions eliminated by Jump Optimization (5 iterations).
-    17 instructions eliminated by Single Step Elimination (3 passes, 17 iterations).
+     2 instructions eliminated by Dead Code Elimination (4 iterations).
+     5 instructions eliminated by Jump Normalization (6 iterations).
+     1 instructions eliminated by Jump Optimization (6 iterations).
+    17 instructions eliminated by Single Step Elimination (3 passes, 18 iterations).
    200 instructions eliminated by Expression Optimization (4 iterations).
     85 instructions eliminated by Data Flow Optimization (4 passes, 34 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
@@ -1649,18 +1649,87 @@ Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 10 (
     25 label *label24
     26 label *label25
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
+-    * label *label84
+-    * label *label85
+-    * label *label86
+-    * label *label87
+-    * label *label88
+-    * label *label89
+-    * label *label90
+-    * label *label91
+-    * label *label92
+-    * label *label93
+-    * label *label94
+-    * label *label95
+-    * label *label96
+-    * label *label97
+-    * label *label98
+-    * label *label99
+-    * label *label100
+-    * label *label101
+-    * label *label102
+-    * label *label103
+-    * label *label104
+-    * label *label2
+     0 # "Function: inline void reverse(in array...)"
+-    * label *label22
+-    * label *label23
+-    * label *label24
+-    * label *label25
+-    * label *label28
+-    * label *label29
+-    * label *label30
+-    * label *label31
+-    * label *label34
+-    * label *label35
+-    * label *label36
+-    * label *label37
+-    * label *label40
+-    * label *label41
+-    * label *label42
+-    * label *label43
+-    * label *label46
+-    * label *label47
+-    * label *label48
+-    * label *label49
+-    * label *label52
+-    * label *label53
+-    * label *label54
+-    * label *label55
+-    * label *label58
+-    * label *label59
+-    * label *label60
+-    * label *label61
+-    * label *label64
+-    * label *label65
+-    * label *label66
+-    * label *label67
+-    * label *label70
+-    * label *label71
+-    * label *label72
+-    * label *label73
+-    * label *label76
+-    * label *label77
+-    * label *label78
+-    * label *label79
+-    * label *label18
+-    * label *label6
+-    * label *label3
+     1 assertflush
+     2 print 9
+     3 print 8
+
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
-    75 print 1
-    76 print 0
-    77 assertprints "9876543210" "reverse array"
+    10 print 1
+    11 print 0
+    12 assertprints "9876543210" "reverse array"
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-9 instructions):
- 
-    64 label *label6
-    65 label *label3
-    66 assertflush
+     0 # "Function: inline void reverse(in array...)"
+     1 assertflush
 -    * print 9
 -    * print 8
 -    * print 7
@@ -1671,8 +1740,8 @@ Modifications by Final phase, Print Merging, iteration 1 (-9 instructions):
 -    * print 2
 -    * print 1
 -    * print 0
-+   67 print "9876543210"
-    68 assertprints "9876543210" "reverse array"
++    2 print "9876543210"
+     3 assertprints "9876543210" "reverse array"
 
 Final code before resolving virtual instructions:
 

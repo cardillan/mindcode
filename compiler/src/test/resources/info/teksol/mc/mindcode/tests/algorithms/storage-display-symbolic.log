@@ -1,10 +1,10 @@
    404 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-    33 instructions eliminated by Dead Code Elimination (6 iterations).
-    21 instructions eliminated by Jump Normalization (4 iterations).
-     5 instructions eliminated by Jump Optimization (4 iterations).
-    25 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+    33 instructions eliminated by Dead Code Elimination (7 iterations).
+    21 instructions eliminated by Jump Normalization (5 iterations).
+     5 instructions eliminated by Jump Optimization (5 iterations).
+    25 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
    349 instructions eliminated by Data Flow Optimization (7 passes, 23 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
@@ -14,9 +14,9 @@
      6 function calls inlined by Function Inlining.
      3 instructions added by Case Switching (9 iterations).
      1 case expressions converted to switched jumps Case Switching.
-    10 instructions eliminated by Jump Straightening (4 iterations).
+    10 instructions eliminated by Jump Straightening (5 iterations).
     78 instructions updated by JumpThreading.
-    40 instructions eliminated by Unreachable Code Elimination.
+    40 instructions eliminated by Unreachable Code Elimination (2 iterations).
    663 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 733):
@@ -7431,1566 +7431,1887 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
   1128 draw line 113 *tmp131 120 *tmp131
   1129 label *label676
 
-Modifications by Final phase, Jump Threading, iteration 1:
- 
-   241 label *label381
-   242 op sub *tmp26 :y 1
-   243 draw lineRect 70 *tmp26 9 14
--    * jump *label402 always
-+  244 jump *label404 always
-   245 label *label382
-   246 label *label383
-   247 op add *tmp31 :y 12
-   248 draw line 77 :y 77 *tmp31
--    * jump *label402 always
-+  249 jump *label404 always
-   250 label *label384
-   251 label *label385
-   252 draw line 71 :y 78 :y
- 
-   256 op add *tmp40 :y 12
-   257 draw line 78 *tmp33 78 *tmp40
-   258 draw line 71 *tmp40 78 *tmp40
--    * jump *label402 always
-+  259 jump *label404 always
-   260 label *label386
-   261 label *label387
-   262 op add *tmp46 :y 12
- 
-   265 op add *tmp48 :y 6
-   266 draw line 71 *tmp48 78 *tmp48
-   267 draw line 71 *tmp46 78 *tmp46
--    * jump *label402 always
-+  268 jump *label404 always
-   269 label *label388
-   270 label *label389
-   271 op add *tmp56 :y 12
- 
-   273 op add *tmp57 :y 6
-   274 draw line 71 *tmp57 78 *tmp57
-   275 draw line 71 *tmp57 71 *tmp56
--    * jump *label402 always
-+  276 jump *label404 always
-   277 label *label390
-   278 label *label391
-   279 draw line 71 :y 78 :y
- 
-   283 op add *tmp70 :y 12
-   284 draw line 71 *tmp65 71 *tmp70
-   285 draw line 71 *tmp70 78 *tmp70
--    * jump *label402 always
-+  286 jump *label404 always
-   287 label *label392
-   288 label *label393
-   289 op add *tmp74 :y 12
- 
-   293 draw line 78 :y 78 *tmp78
-   294 draw line 71 *tmp78 78 *tmp78
-   295 draw line 71 *tmp74 78 *tmp74
--    * jump *label402 always
-+  296 jump *label404 always
-   297 label *label394
-   298 label *label395
-   299 op add *tmp89 :y 12
-   300 draw line 77 :y 77 *tmp89
-   301 draw line 71 *tmp89 77 *tmp89
--    * jump *label402 always
-+  302 jump *label404 always
-   303 label *label396
-   304 label *label397
-   305 op sub *tmp97 :y 1
-   306 draw lineRect 70 *tmp97 9 14
-   307 op add *tmp98 :y 6
-   308 draw line 71 *tmp98 78 *tmp98
--    * jump *label402 always
-+  309 jump *label404 always
-   310 label *label398
-   311 label *label399
-   312 draw line 71 :y 78 :y
- 
-   321 label *label402
-   322 label *label403
-   323 jump *label404 always
--    * jump *label522 always
-+  324 jump *label48 always
-   325 label *label404
-   326 label *label405
-   327 label *label406
- 
-   351 label *label418
-   352 op sub *tmp26 :y 1
-   353 draw lineRect 59 *tmp26 9 14
--    * jump *label439 always
-+  354 jump *label441 always
-   355 label *label419
-   356 label *label420
-   357 op add *tmp31 :y 12
-   358 draw line 66 :y 66 *tmp31
--    * jump *label439 always
-+  359 jump *label441 always
-   360 label *label421
-   361 label *label422
-   362 draw line 60 :y 67 :y
- 
-   366 op add *tmp40 :y 12
-   367 draw line 67 *tmp33 67 *tmp40
-   368 draw line 60 *tmp40 67 *tmp40
--    * jump *label439 always
-+  369 jump *label441 always
-   370 label *label423
-   371 label *label424
-   372 op add *tmp46 :y 12
- 
-   375 op add *tmp48 :y 6
-   376 draw line 60 *tmp48 67 *tmp48
-   377 draw line 60 *tmp46 67 *tmp46
--    * jump *label439 always
-+  378 jump *label441 always
-   379 label *label425
-   380 label *label426
-   381 op add *tmp56 :y 12
- 
-   383 op add *tmp57 :y 6
-   384 draw line 60 *tmp57 67 *tmp57
-   385 draw line 60 *tmp57 60 *tmp56
--    * jump *label439 always
-+  386 jump *label441 always
-   387 label *label427
-   388 label *label428
-   389 draw line 60 :y 67 :y
- 
-   393 op add *tmp70 :y 12
-   394 draw line 60 *tmp65 60 *tmp70
-   395 draw line 60 *tmp70 67 *tmp70
--    * jump *label439 always
-+  396 jump *label441 always
-   397 label *label429
-   398 label *label430
-   399 op add *tmp74 :y 12
- 
-   403 draw line 67 :y 67 *tmp78
-   404 draw line 60 *tmp78 67 *tmp78
-   405 draw line 60 *tmp74 67 *tmp74
--    * jump *label439 always
-+  406 jump *label441 always
-   407 label *label431
-   408 label *label432
-   409 op add *tmp89 :y 12
-   410 draw line 66 :y 66 *tmp89
-   411 draw line 60 *tmp89 66 *tmp89
--    * jump *label439 always
-+  412 jump *label441 always
-   413 label *label433
-   414 label *label434
-   415 op sub *tmp97 :y 1
-   416 draw lineRect 59 *tmp97 9 14
-   417 op add *tmp98 :y 6
-   418 draw line 60 *tmp98 67 *tmp98
--    * jump *label439 always
-+  419 jump *label441 always
-   420 label *label435
-   421 label *label436
-   422 draw line 60 :y 67 :y
- 
-   431 label *label439
-   432 label *label440
-   433 jump *label441 always
--    * jump *label522 always
-+  434 jump *label48 always
-   435 label *label441
-   436 label *label442
-   437 label *label443
- 
-   461 label *label455
-   462 op sub *tmp26 :y 1
-   463 draw lineRect 48 *tmp26 9 14
--    * jump *label476 always
-+  464 jump *label478 always
-   465 label *label456
-   466 label *label457
-   467 op add *tmp31 :y 12
-   468 draw line 55 :y 55 *tmp31
--    * jump *label476 always
-+  469 jump *label478 always
-   470 label *label458
-   471 label *label459
-   472 draw line 49 :y 56 :y
- 
-   476 op add *tmp40 :y 12
-   477 draw line 56 *tmp33 56 *tmp40
-   478 draw line 49 *tmp40 56 *tmp40
--    * jump *label476 always
-+  479 jump *label478 always
-   480 label *label460
-   481 label *label461
-   482 op add *tmp46 :y 12
- 
-   485 op add *tmp48 :y 6
-   486 draw line 49 *tmp48 56 *tmp48
-   487 draw line 49 *tmp46 56 *tmp46
--    * jump *label476 always
-+  488 jump *label478 always
-   489 label *label462
-   490 label *label463
-   491 op add *tmp56 :y 12
- 
-   493 op add *tmp57 :y 6
-   494 draw line 49 *tmp57 56 *tmp57
-   495 draw line 49 *tmp57 49 *tmp56
--    * jump *label476 always
-+  496 jump *label478 always
-   497 label *label464
-   498 label *label465
-   499 draw line 49 :y 56 :y
- 
-   503 op add *tmp70 :y 12
-   504 draw line 49 *tmp65 49 *tmp70
-   505 draw line 49 *tmp70 56 *tmp70
--    * jump *label476 always
-+  506 jump *label478 always
-   507 label *label466
-   508 label *label467
-   509 op add *tmp74 :y 12
- 
-   513 draw line 56 :y 56 *tmp78
-   514 draw line 49 *tmp78 56 *tmp78
-   515 draw line 49 *tmp74 56 *tmp74
--    * jump *label476 always
-+  516 jump *label478 always
-   517 label *label468
-   518 label *label469
-   519 op add *tmp89 :y 12
-   520 draw line 55 :y 55 *tmp89
-   521 draw line 49 *tmp89 55 *tmp89
--    * jump *label476 always
-+  522 jump *label478 always
-   523 label *label470
-   524 label *label471
-   525 op sub *tmp97 :y 1
-   526 draw lineRect 48 *tmp97 9 14
-   527 op add *tmp98 :y 6
-   528 draw line 49 *tmp98 56 *tmp98
--    * jump *label476 always
-+  529 jump *label478 always
-   530 label *label472
-   531 label *label473
-   532 draw line 49 :y 56 :y
- 
-   541 label *label476
-   542 label *label477
-   543 jump *label478 always
--    * jump *label522 always
-+  544 jump *label48 always
-   545 label *label478
-   546 label *label479
-   547 label *label480
- 
-   571 label *label492
-   572 op sub *tmp26 :y 1
-   573 draw lineRect 37 *tmp26 9 14
--    * jump *label513 always
-+  574 jump *label515 always
-   575 label *label493
-   576 label *label494
-   577 op add *tmp31 :y 12
-   578 draw line 44 :y 44 *tmp31
--    * jump *label513 always
-+  579 jump *label515 always
-   580 label *label495
-   581 label *label496
-   582 draw line 38 :y 45 :y
- 
-   586 op add *tmp40 :y 12
-   587 draw line 45 *tmp33 45 *tmp40
-   588 draw line 38 *tmp40 45 *tmp40
--    * jump *label513 always
-+  589 jump *label515 always
-   590 label *label497
-   591 label *label498
-   592 op add *tmp46 :y 12
- 
-   595 op add *tmp48 :y 6
-   596 draw line 38 *tmp48 45 *tmp48
-   597 draw line 38 *tmp46 45 *tmp46
--    * jump *label513 always
-+  598 jump *label515 always
-   599 label *label499
-   600 label *label500
-   601 op add *tmp56 :y 12
- 
-   603 op add *tmp57 :y 6
-   604 draw line 38 *tmp57 45 *tmp57
-   605 draw line 38 *tmp57 38 *tmp56
--    * jump *label513 always
-+  606 jump *label515 always
-   607 label *label501
-   608 label *label502
-   609 draw line 38 :y 45 :y
- 
-   613 op add *tmp70 :y 12
-   614 draw line 38 *tmp65 38 *tmp70
-   615 draw line 38 *tmp70 45 *tmp70
--    * jump *label513 always
-+  616 jump *label515 always
-   617 label *label503
-   618 label *label504
-   619 op add *tmp74 :y 12
- 
-   623 draw line 45 :y 45 *tmp78
-   624 draw line 38 *tmp78 45 *tmp78
-   625 draw line 38 *tmp74 45 *tmp74
--    * jump *label513 always
-+  626 jump *label515 always
-   627 label *label505
-   628 label *label506
-   629 op add *tmp89 :y 12
-   630 draw line 44 :y 44 *tmp89
-   631 draw line 38 *tmp89 44 *tmp89
--    * jump *label513 always
-+  632 jump *label515 always
-   633 label *label507
-   634 label *label508
-   635 op sub *tmp97 :y 1
-   636 draw lineRect 37 *tmp97 9 14
-   637 op add *tmp98 :y 6
-   638 draw line 38 *tmp98 45 *tmp98
--    * jump *label513 always
-+  639 jump *label515 always
-   640 label *label509
-   641 label *label510
-   642 draw line 38 :y 45 :y
- 
-   651 label *label513
-   652 label *label514
-   653 jump *label515 always
--    * jump *label522 always
-+  654 jump *label48 always
-   655 label *label515
-   656 label *label516
-   657 label *label517
- 
-   659 # "Function: def drawDigit12(in x, in y, in digit)"
-   660 op add *tmp122 :y 12
-   661 draw line 33 :y 33 *tmp122
--    * jump *label520 always
-+  662 jump *label48 always
-   663 label *label519
-   664 draw line 27 :y 34 :y
-   665 draw line 27 :y 27 *tmp124
- 
-   701 label *label537
-   702 op sub *tmp26 :y 1
-   703 draw lineRect 156 *tmp26 9 14
--    * jump *label558 always
-+  704 jump *label560 always
-   705 label *label538
-   706 label *label539
-   707 op add *tmp31 :y 12
-   708 draw line 163 :y 163 *tmp31
--    * jump *label558 always
-+  709 jump *label560 always
-   710 label *label540
-   711 label *label541
-   712 draw line 157 :y 164 :y
- 
-   716 op add *tmp40 :y 12
-   717 draw line 164 *tmp33 164 *tmp40
-   718 draw line 157 *tmp40 164 *tmp40
--    * jump *label558 always
-+  719 jump *label560 always
-   720 label *label542
-   721 label *label543
-   722 op add *tmp46 :y 12
- 
-   725 op add *tmp48 :y 6
-   726 draw line 157 *tmp48 164 *tmp48
-   727 draw line 157 *tmp46 164 *tmp46
--    * jump *label558 always
-+  728 jump *label560 always
-   729 label *label544
-   730 label *label545
-   731 op add *tmp56 :y 12
- 
-   733 op add *tmp57 :y 6
-   734 draw line 157 *tmp57 164 *tmp57
-   735 draw line 157 *tmp57 157 *tmp56
--    * jump *label558 always
-+  736 jump *label560 always
-   737 label *label546
-   738 label *label547
-   739 draw line 157 :y 164 :y
- 
-   743 op add *tmp70 :y 12
-   744 draw line 157 *tmp65 157 *tmp70
-   745 draw line 157 *tmp70 164 *tmp70
--    * jump *label558 always
-+  746 jump *label560 always
-   747 label *label548
-   748 label *label549
-   749 op add *tmp74 :y 12
- 
-   753 draw line 164 :y 164 *tmp78
-   754 draw line 157 *tmp78 164 *tmp78
-   755 draw line 157 *tmp74 164 *tmp74
--    * jump *label558 always
-+  756 jump *label560 always
-   757 label *label550
-   758 label *label551
-   759 op add *tmp89 :y 12
-   760 draw line 163 :y 163 *tmp89
-   761 draw line 157 *tmp89 163 *tmp89
--    * jump *label558 always
-+  762 jump *label560 always
-   763 label *label552
-   764 label *label553
-   765 op sub *tmp97 :y 1
-   766 draw lineRect 156 *tmp97 9 14
-   767 op add *tmp98 :y 6
-   768 draw line 157 *tmp98 164 *tmp98
--    * jump *label558 always
-+  769 jump *label560 always
-   770 label *label554
-   771 label *label555
-   772 draw line 157 :y 164 :y
- 
-   811 label *label574
-   812 op sub *tmp26 :y 1
-   813 draw lineRect 145 *tmp26 9 14
--    * jump *label595 always
-+  814 jump *label597 always
-   815 label *label575
-   816 label *label576
-   817 op add *tmp31 :y 12
-   818 draw line 152 :y 152 *tmp31
--    * jump *label595 always
-+  819 jump *label597 always
-   820 label *label577
-   821 label *label578
-   822 draw line 146 :y 153 :y
- 
-   826 op add *tmp40 :y 12
-   827 draw line 153 *tmp33 153 *tmp40
-   828 draw line 146 *tmp40 153 *tmp40
--    * jump *label595 always
-+  829 jump *label597 always
-   830 label *label579
-   831 label *label580
-   832 op add *tmp46 :y 12
- 
-   835 op add *tmp48 :y 6
-   836 draw line 146 *tmp48 153 *tmp48
-   837 draw line 146 *tmp46 153 *tmp46
--    * jump *label595 always
-+  838 jump *label597 always
-   839 label *label581
-   840 label *label582
-   841 op add *tmp56 :y 12
- 
-   843 op add *tmp57 :y 6
-   844 draw line 146 *tmp57 153 *tmp57
-   845 draw line 146 *tmp57 146 *tmp56
--    * jump *label595 always
-+  846 jump *label597 always
-   847 label *label583
-   848 label *label584
-   849 draw line 146 :y 153 :y
- 
-   853 op add *tmp70 :y 12
-   854 draw line 146 *tmp65 146 *tmp70
-   855 draw line 146 *tmp70 153 *tmp70
--    * jump *label595 always
-+  856 jump *label597 always
-   857 label *label585
-   858 label *label586
-   859 op add *tmp74 :y 12
- 
-   863 draw line 153 :y 153 *tmp78
-   864 draw line 146 *tmp78 153 *tmp78
-   865 draw line 146 *tmp74 153 *tmp74
--    * jump *label595 always
-+  866 jump *label597 always
-   867 label *label587
-   868 label *label588
-   869 op add *tmp89 :y 12
-   870 draw line 152 :y 152 *tmp89
-   871 draw line 146 *tmp89 152 *tmp89
--    * jump *label595 always
-+  872 jump *label597 always
-   873 label *label589
-   874 label *label590
-   875 op sub *tmp97 :y 1
-   876 draw lineRect 145 *tmp97 9 14
-   877 op add *tmp98 :y 6
-   878 draw line 146 *tmp98 153 *tmp98
--    * jump *label595 always
-+  879 jump *label597 always
-   880 label *label591
-   881 label *label592
-   882 draw line 146 :y 153 :y
- 
-   921 label *label611
-   922 op sub *tmp26 :y 1
-   923 draw lineRect 134 *tmp26 9 14
--    * jump *label632 always
-+  924 jump *label634 always
-   925 label *label612
-   926 label *label613
-   927 op add *tmp31 :y 12
-   928 draw line 141 :y 141 *tmp31
--    * jump *label632 always
-+  929 jump *label634 always
-   930 label *label614
-   931 label *label615
-   932 draw line 135 :y 142 :y
- 
-   936 op add *tmp40 :y 12
-   937 draw line 142 *tmp33 142 *tmp40
-   938 draw line 135 *tmp40 142 *tmp40
--    * jump *label632 always
-+  939 jump *label634 always
-   940 label *label616
-   941 label *label617
-   942 op add *tmp46 :y 12
- 
-   945 op add *tmp48 :y 6
-   946 draw line 135 *tmp48 142 *tmp48
-   947 draw line 135 *tmp46 142 *tmp46
--    * jump *label632 always
-+  948 jump *label634 always
-   949 label *label618
-   950 label *label619
-   951 op add *tmp56 :y 12
- 
-   953 op add *tmp57 :y 6
-   954 draw line 135 *tmp57 142 *tmp57
-   955 draw line 135 *tmp57 135 *tmp56
--    * jump *label632 always
-+  956 jump *label634 always
-   957 label *label620
-   958 label *label621
-   959 draw line 135 :y 142 :y
- 
-   963 op add *tmp70 :y 12
-   964 draw line 135 *tmp65 135 *tmp70
-   965 draw line 135 *tmp70 142 *tmp70
--    * jump *label632 always
-+  966 jump *label634 always
-   967 label *label622
-   968 label *label623
-   969 op add *tmp74 :y 12
- 
-   973 draw line 142 :y 142 *tmp78
-   974 draw line 135 *tmp78 142 *tmp78
-   975 draw line 135 *tmp74 142 *tmp74
--    * jump *label632 always
-+  976 jump *label634 always
-   977 label *label624
-   978 label *label625
-   979 op add *tmp89 :y 12
-   980 draw line 141 :y 141 *tmp89
-   981 draw line 135 *tmp89 141 *tmp89
--    * jump *label632 always
-+  982 jump *label634 always
-   983 label *label626
-   984 label *label627
-   985 op sub *tmp97 :y 1
-   986 draw lineRect 134 *tmp97 9 14
-   987 op add *tmp98 :y 6
-   988 draw line 135 *tmp98 142 *tmp98
--    * jump *label632 always
-+  989 jump *label634 always
-   990 label *label628
-   991 label *label629
-   992 draw line 135 :y 142 :y
- 
-  1031 label *label648
-  1032 op sub *tmp26 :y 1
-  1033 draw lineRect 123 *tmp26 9 14
--    * jump *label669 always
-+ 1034 jump *label671 always
-  1035 label *label649
-  1036 label *label650
-  1037 op add *tmp31 :y 12
-  1038 draw line 130 :y 130 *tmp31
--    * jump *label669 always
-+ 1039 jump *label671 always
-  1040 label *label651
-  1041 label *label652
-  1042 draw line 124 :y 131 :y
- 
-  1046 op add *tmp40 :y 12
-  1047 draw line 131 *tmp33 131 *tmp40
-  1048 draw line 124 *tmp40 131 *tmp40
--    * jump *label669 always
-+ 1049 jump *label671 always
-  1050 label *label653
-  1051 label *label654
-  1052 op add *tmp46 :y 12
- 
-  1055 op add *tmp48 :y 6
-  1056 draw line 124 *tmp48 131 *tmp48
-  1057 draw line 124 *tmp46 131 *tmp46
--    * jump *label669 always
-+ 1058 jump *label671 always
-  1059 label *label655
-  1060 label *label656
-  1061 op add *tmp56 :y 12
- 
-  1063 op add *tmp57 :y 6
-  1064 draw line 124 *tmp57 131 *tmp57
-  1065 draw line 124 *tmp57 124 *tmp56
--    * jump *label669 always
-+ 1066 jump *label671 always
-  1067 label *label657
-  1068 label *label658
-  1069 draw line 124 :y 131 :y
- 
-  1073 op add *tmp70 :y 12
-  1074 draw line 124 *tmp65 124 *tmp70
-  1075 draw line 124 *tmp70 131 *tmp70
--    * jump *label669 always
-+ 1076 jump *label671 always
-  1077 label *label659
-  1078 label *label660
-  1079 op add *tmp74 :y 12
- 
-  1083 draw line 131 :y 131 *tmp78
-  1084 draw line 124 *tmp78 131 *tmp78
-  1085 draw line 124 *tmp74 131 *tmp74
--    * jump *label669 always
-+ 1086 jump *label671 always
-  1087 label *label661
-  1088 label *label662
-  1089 op add *tmp89 :y 12
-  1090 draw line 130 :y 130 *tmp89
-  1091 draw line 124 *tmp89 130 *tmp89
--    * jump *label669 always
-+ 1092 jump *label671 always
-  1093 label *label663
-  1094 label *label664
-  1095 op sub *tmp97 :y 1
-  1096 draw lineRect 123 *tmp97 9 14
-  1097 op add *tmp98 :y 6
-  1098 draw line 124 *tmp98 131 *tmp98
--    * jump *label669 always
-+ 1099 jump *label671 always
-  1100 label *label665
-  1101 label *label666
-  1102 draw line 124 :y 131 :y
- 
-  1140 draw color 0 0 80 255
-  1141 jump *label259 always
-  1142 draw rect 23 0 70 176
--    * jump *label260 always
-+ 1143 multijump *tmp10 0 0 (m:marker1)
-  1144 label *label259
-  1145 draw rect 109 0 176 176
-  1146 label *label260
-
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-40 instructions):
- 
-     3 draw color 0 0 80 255
-     4 draw rect 0 0 23 176
-     5 jump *label264 always
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 draw stroke 2
+-    * label *label262
+     1 # "Function: def eraseImages(in first_column)"
+     2 draw color 0 0 80 255
+     3 draw rect 0 0 23 176
+     4 jump *label264 always
 -    * label *label263
--    * draw rect 93 0 16 176
+     5 draw rect 93 0 16 176
      6 label *label264
-     7 label *label265
-     8 label *label266
-     9 # "Function: def eraseImages(in first_column)"
-    10 draw color 0 0 80 255
-    11 jump *label267 always
--    * draw rect 0 0 23 176
--    * jump *label268 always
+-    * label *label265
+-    * label *label266
+     7 # "Function: def eraseImages(in first_column)"
+     8 draw color 0 0 80 255
+     9 jump *label267 always
+ 
     12 label *label267
     13 draw rect 93 0 16 176
     14 label *label268
- 
-    17 label *label270
-    18 draw image 15 159 @sand 16 0
-    19 jump *label271 always
--    * draw color 255 255 255 255
-    20 label *label271
-    21 label *label272
-    22 label *label273
-    23 label *label276
-    24 draw image 15 139 @copper 16 0
-    25 jump *label277 always
--    * draw color 255 255 255 255
-    26 label *label277
-    27 label *label278
-    28 label *label279
-    29 label *label282
-    30 draw image 15 119 @lead 16 0
-    31 jump *label283 always
--    * draw color 255 255 255 255
-    32 label *label283
-    33 label *label284
-    34 label *label285
-    35 label *label288
-    36 draw image 15 99 @coal 16 0
-    37 jump *label289 always
--    * draw color 255 255 255 255
-    38 label *label289
-    39 label *label290
-    40 label *label291
-    41 label *label294
-    42 draw image 15 79 @titanium 16 0
-    43 jump *label295 always
--    * draw color 255 255 255 255
-    44 label *label295
-    45 label *label296
-    46 label *label297
-    47 label *label300
-    48 draw image 15 59 @thorium 16 0
-    49 jump *label301 always
--    * draw color 255 255 255 255
-    50 label *label301
-    51 label *label302
-    52 label *label303
-    53 label *label306
-    54 draw image 15 39 @scrap 16 0
-    55 jump *label307 always
--    * draw color 255 255 255 255
-    56 label *label307
-    57 label *label308
-    58 label *label309
- 
-    65 label *label318
-    66 draw image 101 159 @metaglass 16 0
-    67 jump *label319 always
--    * draw color 255 255 255 255
-    68 label *label319
-    69 label *label320
-    70 label *label321
-    71 label *label324
-    72 draw image 101 139 @silicon 16 0
-    73 jump *label325 always
--    * draw color 255 255 255 255
-    74 label *label325
-    75 label *label326
-    76 label *label327
-    77 label *label330
-    78 draw image 101 119 @pyratite 16 0
-    79 jump *label331 always
--    * draw color 255 255 255 255
-    80 label *label331
-    81 label *label332
-    82 label *label333
-    83 label *label336
-    84 draw image 101 99 @blast-compound 16 0
-    85 jump *label337 always
--    * draw color 255 255 255 255
-    86 label *label337
-    87 label *label338
-    88 label *label339
-    89 label *label342
-    90 draw image 101 79 @plastanium 16 0
-    91 jump *label343 always
--    * draw color 255 255 255 255
-    92 label *label343
-    93 label *label344
-    94 label *label345
-    95 label *label348
-    96 draw image 101 59 @phase-fabric 16 0
-    97 jump *label349 always
--    * draw color 255 255 255 255
-    98 label *label349
-    99 label *label350
-   100 label *label351
-   101 label *label354
-   102 draw image 101 39 @surge-alloy 16 0
-   103 jump *label355 always
--    * draw color 255 255 255 255
-   104 label *label355
-   105 label *label356
-   106 label *label357
-   107 label *label360
-   108 draw image 101 19 @spore-pod 16 0
-   109 jump *label361 always
--    * draw color 255 255 255 255
-   110 label *label361
-   111 label *label362
-   112 label *label363
- 
-   119 draw color 0 0 80 255
-   120 draw rect 23 0 70 176
-   121 jump *label256 always
+-    * label *label269
+    15 draw color 255 255 255 255
+-    * label *label270
+    16 draw image 15 159 @sand 16 0
+    17 jump *label271 always
+    18 draw color 255 255 255 255
+    19 label *label271
+-    * label *label272
+-    * label *label273
+-    * label *label276
+    20 draw image 15 139 @copper 16 0
+    21 jump *label277 always
+    22 draw color 255 255 255 255
+    23 label *label277
+-    * label *label278
+-    * label *label279
+-    * label *label282
+    24 draw image 15 119 @lead 16 0
+    25 jump *label283 always
+    26 draw color 255 255 255 255
+    27 label *label283
+-    * label *label284
+-    * label *label285
+-    * label *label288
+    28 draw image 15 99 @coal 16 0
+    29 jump *label289 always
+    30 draw color 255 255 255 255
+    31 label *label289
+-    * label *label290
+-    * label *label291
+-    * label *label294
+    32 draw image 15 79 @titanium 16 0
+    33 jump *label295 always
+    34 draw color 255 255 255 255
+    35 label *label295
+-    * label *label296
+-    * label *label297
+-    * label *label300
+    36 draw image 15 59 @thorium 16 0
+    37 jump *label301 always
+    38 draw color 255 255 255 255
+    39 label *label301
+-    * label *label302
+-    * label *label303
+-    * label *label306
+    40 draw image 15 39 @scrap 16 0
+    41 jump *label307 always
+    42 draw color 255 255 255 255
+    43 label *label307
+-    * label *label308
+-    * label *label309
+-    * label *label312
+    44 draw image 15 19 @graphite 16 0
+    45 draw color 255 255 255 255
+-    * label *label313
+-    * label *label314
+-    * label *label315
+-    * label *label318
+    46 draw image 101 159 @metaglass 16 0
+    47 jump *label319 always
+    48 draw color 255 255 255 255
+    49 label *label319
+-    * label *label320
+-    * label *label321
+-    * label *label324
+    50 draw image 101 139 @silicon 16 0
+    51 jump *label325 always
+    52 draw color 255 255 255 255
+    53 label *label325
+-    * label *label326
+-    * label *label327
+-    * label *label330
+    54 draw image 101 119 @pyratite 16 0
+    55 jump *label331 always
+    56 draw color 255 255 255 255
+    57 label *label331
+-    * label *label332
+-    * label *label333
+-    * label *label336
+    58 draw image 101 99 @blast-compound 16 0
+    59 jump *label337 always
+    60 draw color 255 255 255 255
+    61 label *label337
+-    * label *label338
+-    * label *label339
+-    * label *label342
+    62 draw image 101 79 @plastanium 16 0
+    63 jump *label343 always
+    64 draw color 255 255 255 255
+    65 label *label343
+-    * label *label344
+-    * label *label345
+-    * label *label348
+    66 draw image 101 59 @phase-fabric 16 0
+    67 jump *label349 always
+    68 draw color 255 255 255 255
+    69 label *label349
+-    * label *label350
+-    * label *label351
+-    * label *label354
+    70 draw image 101 39 @surge-alloy 16 0
+    71 jump *label355 always
+    72 draw color 255 255 255 255
+    73 label *label355
+-    * label *label356
+-    * label *label357
+-    * label *label360
+    74 draw image 101 19 @spore-pod 16 0
+    75 jump *label361 always
+    76 draw color 255 255 255 255
+    77 label *label361
+-    * label *label362
+-    * label *label363
+-    * label *label23
+-    * label *label5
+    78 drawflush display1
+    79 set :y 152
+-    * label *label254
+    80 # "Function: def eraseNumbers(in first_column)"
+    81 draw color 0 0 80 255
+    82 draw rect 23 0 70 176
+    83 jump *label256 always
 -    * label *label255
--    * draw rect 109 0 176 176
-   122 label *label256
-   123 label *label257
-   124 set :index 0
+    84 draw rect 109 0 176 176
+    85 label *label256
+-    * label *label257
+    86 set :index 0
+    87 set :item @sand
+    88 op add *tmp10 @counter 1
  
-   221 op sub *tmp26 :y 1
-   222 draw lineRect 70 *tmp26 9 14
-   223 jump *label404 always
+   152 label *label26
+   153 draw image 0 0 :item 16 0
+   154 jump *label47 greaterThanEq :index 8
+-    * label *label368
+   155 # "Function: void displayItem(in x, in y)"
+   156 draw color 0 255 0 255
+-    * label *label369
+-    * label *label370
+   157 # "Function: def drawDigit(in x, in y, in digit)"
+   158 multijump *label371 5 0 (m:*label90)
+   159 multilabel *label371 (m:*label90)
+ 
+   180 op sub *tmp26 :y 1
+   181 draw lineRect 70 *tmp26 9 14
+   182 jump *label402 always
 -    * label *label382
-   224 label *label383
-   225 op add *tmp31 :y 12
-   226 draw line 77 :y 77 *tmp31
-   227 jump *label404 always
+   183 label *label383
+   184 op add *tmp31 :y 12
+   185 draw line 77 :y 77 *tmp31
+   186 jump *label402 always
 -    * label *label384
-   228 label *label385
-   229 draw line 71 :y 78 :y
-   230 op add *tmp33 :y 6
+   187 label *label385
+   188 draw line 71 :y 78 :y
+   189 op add *tmp33 :y 6
  
-   234 draw line 78 *tmp33 78 *tmp40
-   235 draw line 71 *tmp40 78 *tmp40
-   236 jump *label404 always
+   193 draw line 78 *tmp33 78 *tmp40
+   194 draw line 71 *tmp40 78 *tmp40
+   195 jump *label402 always
 -    * label *label386
-   237 label *label387
-   238 op add *tmp46 :y 12
-   239 draw line 78 :y 78 *tmp46
+   196 label *label387
+   197 op add *tmp46 :y 12
+   198 draw line 78 :y 78 *tmp46
  
-   242 draw line 71 *tmp48 78 *tmp48
-   243 draw line 71 *tmp46 78 *tmp46
-   244 jump *label404 always
+   201 draw line 71 *tmp48 78 *tmp48
+   202 draw line 71 *tmp46 78 *tmp46
+   203 jump *label402 always
 -    * label *label388
-   245 label *label389
-   246 op add *tmp56 :y 12
-   247 draw line 78 :y 78 *tmp56
+   204 label *label389
+   205 op add *tmp56 :y 12
+   206 draw line 78 :y 78 *tmp56
  
-   249 draw line 71 *tmp57 78 *tmp57
-   250 draw line 71 *tmp57 71 *tmp56
-   251 jump *label404 always
+   208 draw line 71 *tmp57 78 *tmp57
+   209 draw line 71 *tmp57 71 *tmp56
+   210 jump *label402 always
 -    * label *label390
-   252 label *label391
-   253 draw line 71 :y 78 :y
-   254 op add *tmp65 :y 6
+   211 label *label391
+   212 draw line 71 :y 78 :y
+   213 op add *tmp65 :y 6
  
-   258 draw line 71 *tmp65 71 *tmp70
-   259 draw line 71 *tmp70 78 *tmp70
-   260 jump *label404 always
+   217 draw line 71 *tmp65 71 *tmp70
+   218 draw line 71 *tmp70 78 *tmp70
+   219 jump *label402 always
 -    * label *label392
-   261 label *label393
-   262 op add *tmp74 :y 12
-   263 draw line 71 :y 71 *tmp74
+   220 label *label393
+   221 op add *tmp74 :y 12
+   222 draw line 71 :y 71 *tmp74
  
-   267 draw line 71 *tmp78 78 *tmp78
-   268 draw line 71 *tmp74 78 *tmp74
-   269 jump *label404 always
+   226 draw line 71 *tmp78 78 *tmp78
+   227 draw line 71 *tmp74 78 *tmp74
+   228 jump *label402 always
 -    * label *label394
-   270 label *label395
-   271 op add *tmp89 :y 12
-   272 draw line 77 :y 77 *tmp89
-   273 draw line 71 *tmp89 77 *tmp89
-   274 jump *label404 always
+   229 label *label395
+   230 op add *tmp89 :y 12
+   231 draw line 77 :y 77 *tmp89
+   232 draw line 71 *tmp89 77 *tmp89
+   233 jump *label402 always
 -    * label *label396
-   275 label *label397
-   276 op sub *tmp97 :y 1
-   277 draw lineRect 70 *tmp97 9 14
-   278 op add *tmp98 :y 6
-   279 draw line 71 *tmp98 78 *tmp98
-   280 jump *label404 always
+   234 label *label397
+   235 op sub *tmp97 :y 1
+   236 draw lineRect 70 *tmp97 9 14
+   237 op add *tmp98 :y 6
+   238 draw line 71 *tmp98 78 *tmp98
+   239 jump *label402 always
 -    * label *label398
-   281 label *label399
-   282 draw line 71 :y 78 :y
-   283 op add *tmp104 :y 12
+   240 label *label399
+   241 draw line 71 :y 78 :y
+   242 op add *tmp104 :y 12
  
-   291 label *label402
-   292 label *label403
-   293 jump *label404 always
--    * jump *label48 always
-   294 label *label404
-   295 label *label405
-   296 label *label406
+   245 draw line 71 *tmp105 78 *tmp105
+   246 draw line 71 *tmp105 71 *tmp104
+   247 draw line 71 *tmp104 78 *tmp104
+-    * label *label400
+-    * label *label401
+   248 label *label402
+-    * label *label403
+   249 jump *label404 always
+   250 jump *label522 always
+   251 label *label404
+-    * label *label405
+-    * label *label406
+-    * label *label407
+   252 # "Function: def drawDigit(in x, in y, in digit)"
+   253 multijump *label408 4 0 (m:*label90)
+   254 multilabel *label408 (m:*label90)
  
-   321 op sub *tmp26 :y 1
-   322 draw lineRect 59 *tmp26 9 14
-   323 jump *label441 always
+   275 op sub *tmp26 :y 1
+   276 draw lineRect 59 *tmp26 9 14
+   277 jump *label439 always
 -    * label *label419
-   324 label *label420
-   325 op add *tmp31 :y 12
-   326 draw line 66 :y 66 *tmp31
-   327 jump *label441 always
+   278 label *label420
+   279 op add *tmp31 :y 12
+   280 draw line 66 :y 66 *tmp31
+   281 jump *label439 always
 -    * label *label421
-   328 label *label422
-   329 draw line 60 :y 67 :y
-   330 op add *tmp33 :y 6
+   282 label *label422
+   283 draw line 60 :y 67 :y
+   284 op add *tmp33 :y 6
  
-   334 draw line 67 *tmp33 67 *tmp40
-   335 draw line 60 *tmp40 67 *tmp40
-   336 jump *label441 always
+   288 draw line 67 *tmp33 67 *tmp40
+   289 draw line 60 *tmp40 67 *tmp40
+   290 jump *label439 always
 -    * label *label423
-   337 label *label424
-   338 op add *tmp46 :y 12
-   339 draw line 67 :y 67 *tmp46
+   291 label *label424
+   292 op add *tmp46 :y 12
+   293 draw line 67 :y 67 *tmp46
  
-   342 draw line 60 *tmp48 67 *tmp48
-   343 draw line 60 *tmp46 67 *tmp46
-   344 jump *label441 always
+   296 draw line 60 *tmp48 67 *tmp48
+   297 draw line 60 *tmp46 67 *tmp46
+   298 jump *label439 always
 -    * label *label425
-   345 label *label426
-   346 op add *tmp56 :y 12
-   347 draw line 67 :y 67 *tmp56
+   299 label *label426
+   300 op add *tmp56 :y 12
+   301 draw line 67 :y 67 *tmp56
  
-   349 draw line 60 *tmp57 67 *tmp57
-   350 draw line 60 *tmp57 60 *tmp56
-   351 jump *label441 always
+   303 draw line 60 *tmp57 67 *tmp57
+   304 draw line 60 *tmp57 60 *tmp56
+   305 jump *label439 always
 -    * label *label427
-   352 label *label428
-   353 draw line 60 :y 67 :y
-   354 op add *tmp65 :y 6
+   306 label *label428
+   307 draw line 60 :y 67 :y
+   308 op add *tmp65 :y 6
  
-   358 draw line 60 *tmp65 60 *tmp70
-   359 draw line 60 *tmp70 67 *tmp70
-   360 jump *label441 always
+   312 draw line 60 *tmp65 60 *tmp70
+   313 draw line 60 *tmp70 67 *tmp70
+   314 jump *label439 always
 -    * label *label429
-   361 label *label430
-   362 op add *tmp74 :y 12
-   363 draw line 60 :y 60 *tmp74
+   315 label *label430
+   316 op add *tmp74 :y 12
+   317 draw line 60 :y 60 *tmp74
  
-   367 draw line 60 *tmp78 67 *tmp78
-   368 draw line 60 *tmp74 67 *tmp74
-   369 jump *label441 always
+   321 draw line 60 *tmp78 67 *tmp78
+   322 draw line 60 *tmp74 67 *tmp74
+   323 jump *label439 always
 -    * label *label431
-   370 label *label432
-   371 op add *tmp89 :y 12
-   372 draw line 66 :y 66 *tmp89
-   373 draw line 60 *tmp89 66 *tmp89
-   374 jump *label441 always
+   324 label *label432
+   325 op add *tmp89 :y 12
+   326 draw line 66 :y 66 *tmp89
+   327 draw line 60 *tmp89 66 *tmp89
+   328 jump *label439 always
 -    * label *label433
-   375 label *label434
-   376 op sub *tmp97 :y 1
-   377 draw lineRect 59 *tmp97 9 14
-   378 op add *tmp98 :y 6
-   379 draw line 60 *tmp98 67 *tmp98
-   380 jump *label441 always
+   329 label *label434
+   330 op sub *tmp97 :y 1
+   331 draw lineRect 59 *tmp97 9 14
+   332 op add *tmp98 :y 6
+   333 draw line 60 *tmp98 67 *tmp98
+   334 jump *label439 always
 -    * label *label435
-   381 label *label436
-   382 draw line 60 :y 67 :y
-   383 op add *tmp104 :y 12
+   335 label *label436
+   336 draw line 60 :y 67 :y
+   337 op add *tmp104 :y 12
  
-   391 label *label439
-   392 label *label440
-   393 jump *label441 always
--    * jump *label48 always
-   394 label *label441
-   395 label *label442
-   396 label *label443
+   340 draw line 60 *tmp105 67 *tmp105
+   341 draw line 60 *tmp105 60 *tmp104
+   342 draw line 60 *tmp104 67 *tmp104
+-    * label *label437
+-    * label *label438
+   343 label *label439
+-    * label *label440
+   344 jump *label441 always
+   345 jump *label522 always
+   346 label *label441
+-    * label *label442
+-    * label *label443
+-    * label *label444
+   347 # "Function: def drawDigit(in x, in y, in digit)"
+   348 multijump *label445 3 0 (m:*label90)
+   349 multilabel *label445 (m:*label90)
  
-   421 op sub *tmp26 :y 1
-   422 draw lineRect 48 *tmp26 9 14
-   423 jump *label478 always
+   370 op sub *tmp26 :y 1
+   371 draw lineRect 48 *tmp26 9 14
+   372 jump *label476 always
 -    * label *label456
-   424 label *label457
-   425 op add *tmp31 :y 12
-   426 draw line 55 :y 55 *tmp31
-   427 jump *label478 always
+   373 label *label457
+   374 op add *tmp31 :y 12
+   375 draw line 55 :y 55 *tmp31
+   376 jump *label476 always
 -    * label *label458
-   428 label *label459
-   429 draw line 49 :y 56 :y
-   430 op add *tmp33 :y 6
+   377 label *label459
+   378 draw line 49 :y 56 :y
+   379 op add *tmp33 :y 6
  
-   434 draw line 56 *tmp33 56 *tmp40
-   435 draw line 49 *tmp40 56 *tmp40
-   436 jump *label478 always
+   383 draw line 56 *tmp33 56 *tmp40
+   384 draw line 49 *tmp40 56 *tmp40
+   385 jump *label476 always
 -    * label *label460
-   437 label *label461
-   438 op add *tmp46 :y 12
-   439 draw line 56 :y 56 *tmp46
+   386 label *label461
+   387 op add *tmp46 :y 12
+   388 draw line 56 :y 56 *tmp46
  
-   442 draw line 49 *tmp48 56 *tmp48
-   443 draw line 49 *tmp46 56 *tmp46
-   444 jump *label478 always
+   391 draw line 49 *tmp48 56 *tmp48
+   392 draw line 49 *tmp46 56 *tmp46
+   393 jump *label476 always
 -    * label *label462
-   445 label *label463
-   446 op add *tmp56 :y 12
-   447 draw line 56 :y 56 *tmp56
+   394 label *label463
+   395 op add *tmp56 :y 12
+   396 draw line 56 :y 56 *tmp56
  
-   449 draw line 49 *tmp57 56 *tmp57
-   450 draw line 49 *tmp57 49 *tmp56
-   451 jump *label478 always
+   398 draw line 49 *tmp57 56 *tmp57
+   399 draw line 49 *tmp57 49 *tmp56
+   400 jump *label476 always
 -    * label *label464
-   452 label *label465
-   453 draw line 49 :y 56 :y
-   454 op add *tmp65 :y 6
+   401 label *label465
+   402 draw line 49 :y 56 :y
+   403 op add *tmp65 :y 6
  
-   458 draw line 49 *tmp65 49 *tmp70
-   459 draw line 49 *tmp70 56 *tmp70
-   460 jump *label478 always
+   407 draw line 49 *tmp65 49 *tmp70
+   408 draw line 49 *tmp70 56 *tmp70
+   409 jump *label476 always
 -    * label *label466
-   461 label *label467
-   462 op add *tmp74 :y 12
-   463 draw line 49 :y 49 *tmp74
+   410 label *label467
+   411 op add *tmp74 :y 12
+   412 draw line 49 :y 49 *tmp74
  
-   467 draw line 49 *tmp78 56 *tmp78
-   468 draw line 49 *tmp74 56 *tmp74
-   469 jump *label478 always
+   416 draw line 49 *tmp78 56 *tmp78
+   417 draw line 49 *tmp74 56 *tmp74
+   418 jump *label476 always
 -    * label *label468
-   470 label *label469
-   471 op add *tmp89 :y 12
-   472 draw line 55 :y 55 *tmp89
-   473 draw line 49 *tmp89 55 *tmp89
-   474 jump *label478 always
+   419 label *label469
+   420 op add *tmp89 :y 12
+   421 draw line 55 :y 55 *tmp89
+   422 draw line 49 *tmp89 55 *tmp89
+   423 jump *label476 always
 -    * label *label470
-   475 label *label471
-   476 op sub *tmp97 :y 1
-   477 draw lineRect 48 *tmp97 9 14
-   478 op add *tmp98 :y 6
-   479 draw line 49 *tmp98 56 *tmp98
-   480 jump *label478 always
+   424 label *label471
+   425 op sub *tmp97 :y 1
+   426 draw lineRect 48 *tmp97 9 14
+   427 op add *tmp98 :y 6
+   428 draw line 49 *tmp98 56 *tmp98
+   429 jump *label476 always
 -    * label *label472
-   481 label *label473
-   482 draw line 49 :y 56 :y
-   483 op add *tmp104 :y 12
+   430 label *label473
+   431 draw line 49 :y 56 :y
+   432 op add *tmp104 :y 12
  
-   491 label *label476
-   492 label *label477
-   493 jump *label478 always
--    * jump *label48 always
-   494 label *label478
-   495 label *label479
-   496 label *label480
+   435 draw line 49 *tmp105 56 *tmp105
+   436 draw line 49 *tmp105 49 *tmp104
+   437 draw line 49 *tmp104 56 *tmp104
+-    * label *label474
+-    * label *label475
+   438 label *label476
+-    * label *label477
+   439 jump *label478 always
+   440 jump *label522 always
+   441 label *label478
+-    * label *label479
+-    * label *label480
+-    * label *label481
+   442 # "Function: def drawDigit(in x, in y, in digit)"
+   443 multijump *label482 2 0 (m:*label90)
+   444 multilabel *label482 (m:*label90)
  
-   521 op sub *tmp26 :y 1
-   522 draw lineRect 37 *tmp26 9 14
-   523 jump *label515 always
+   465 op sub *tmp26 :y 1
+   466 draw lineRect 37 *tmp26 9 14
+   467 jump *label513 always
 -    * label *label493
-   524 label *label494
-   525 op add *tmp31 :y 12
-   526 draw line 44 :y 44 *tmp31
-   527 jump *label515 always
+   468 label *label494
+   469 op add *tmp31 :y 12
+   470 draw line 44 :y 44 *tmp31
+   471 jump *label513 always
 -    * label *label495
-   528 label *label496
-   529 draw line 38 :y 45 :y
-   530 op add *tmp33 :y 6
+   472 label *label496
+   473 draw line 38 :y 45 :y
+   474 op add *tmp33 :y 6
  
-   534 draw line 45 *tmp33 45 *tmp40
-   535 draw line 38 *tmp40 45 *tmp40
-   536 jump *label515 always
+   478 draw line 45 *tmp33 45 *tmp40
+   479 draw line 38 *tmp40 45 *tmp40
+   480 jump *label513 always
 -    * label *label497
-   537 label *label498
-   538 op add *tmp46 :y 12
-   539 draw line 45 :y 45 *tmp46
+   481 label *label498
+   482 op add *tmp46 :y 12
+   483 draw line 45 :y 45 *tmp46
  
-   542 draw line 38 *tmp48 45 *tmp48
-   543 draw line 38 *tmp46 45 *tmp46
-   544 jump *label515 always
+   486 draw line 38 *tmp48 45 *tmp48
+   487 draw line 38 *tmp46 45 *tmp46
+   488 jump *label513 always
 -    * label *label499
-   545 label *label500
-   546 op add *tmp56 :y 12
-   547 draw line 45 :y 45 *tmp56
+   489 label *label500
+   490 op add *tmp56 :y 12
+   491 draw line 45 :y 45 *tmp56
  
-   549 draw line 38 *tmp57 45 *tmp57
-   550 draw line 38 *tmp57 38 *tmp56
-   551 jump *label515 always
+   493 draw line 38 *tmp57 45 *tmp57
+   494 draw line 38 *tmp57 38 *tmp56
+   495 jump *label513 always
 -    * label *label501
-   552 label *label502
-   553 draw line 38 :y 45 :y
-   554 op add *tmp65 :y 6
+   496 label *label502
+   497 draw line 38 :y 45 :y
+   498 op add *tmp65 :y 6
  
-   558 draw line 38 *tmp65 38 *tmp70
-   559 draw line 38 *tmp70 45 *tmp70
-   560 jump *label515 always
+   502 draw line 38 *tmp65 38 *tmp70
+   503 draw line 38 *tmp70 45 *tmp70
+   504 jump *label513 always
 -    * label *label503
-   561 label *label504
-   562 op add *tmp74 :y 12
-   563 draw line 38 :y 38 *tmp74
+   505 label *label504
+   506 op add *tmp74 :y 12
+   507 draw line 38 :y 38 *tmp74
  
-   567 draw line 38 *tmp78 45 *tmp78
-   568 draw line 38 *tmp74 45 *tmp74
-   569 jump *label515 always
+   511 draw line 38 *tmp78 45 *tmp78
+   512 draw line 38 *tmp74 45 *tmp74
+   513 jump *label513 always
 -    * label *label505
-   570 label *label506
-   571 op add *tmp89 :y 12
-   572 draw line 44 :y 44 *tmp89
-   573 draw line 38 *tmp89 44 *tmp89
-   574 jump *label515 always
+   514 label *label506
+   515 op add *tmp89 :y 12
+   516 draw line 44 :y 44 *tmp89
+   517 draw line 38 *tmp89 44 *tmp89
+   518 jump *label513 always
 -    * label *label507
-   575 label *label508
-   576 op sub *tmp97 :y 1
-   577 draw lineRect 37 *tmp97 9 14
-   578 op add *tmp98 :y 6
-   579 draw line 38 *tmp98 45 *tmp98
-   580 jump *label515 always
+   519 label *label508
+   520 op sub *tmp97 :y 1
+   521 draw lineRect 37 *tmp97 9 14
+   522 op add *tmp98 :y 6
+   523 draw line 38 *tmp98 45 *tmp98
+   524 jump *label513 always
 -    * label *label509
-   581 label *label510
-   582 draw line 38 :y 45 :y
-   583 op add *tmp104 :y 12
+   525 label *label510
+   526 draw line 38 :y 45 :y
+   527 op add *tmp104 :y 12
  
-   591 label *label513
-   592 label *label514
-   593 jump *label515 always
--    * jump *label48 always
-   594 label *label515
-   595 label *label516
-   596 label *label517
- 
-   599 op add *tmp122 :y 12
-   600 draw line 33 :y 33 *tmp122
-   601 jump *label48 always
+   530 draw line 38 *tmp105 45 *tmp105
+   531 draw line 38 *tmp105 38 *tmp104
+   532 draw line 38 *tmp104 45 *tmp104
+-    * label *label511
+-    * label *label512
+   533 label *label513
+-    * label *label514
+   534 jump *label515 always
+   535 jump *label522 always
+   536 label *label515
+-    * label *label516
+-    * label *label517
+-    * label *label518
+   537 # "Function: def drawDigit12(in x, in y, in digit)"
+   538 op add *tmp122 :y 12
+   539 draw line 33 :y 33 *tmp122
+   540 jump *label520 always
 -    * label *label519
+   541 draw line 27 :y 34 :y
+   542 draw line 27 :y 27 *tmp124
+   543 draw line 27 *tmp124 34 *tmp124
+   544 draw line 34 *tmp124 34 *tmp131
+   545 draw line 27 *tmp131 34 *tmp131
+   546 label *label520
+-    * label *label521
+   547 label *label522
+   548 jump *label48 always
+   549 label *label47
+-    * label *label524
+   550 # "Function: void displayItem(in x, in y)"
+   551 draw color 0 255 0 255
+-    * label *label525
+-    * label *label526
+   552 # "Function: def drawDigit(in x, in y, in digit)"
+   553 multijump *label527 5 0 (m:*label90)
+   554 multilabel *label527 (m:*label90)
+ 
+   575 op sub *tmp26 :y 1
+   576 draw lineRect 156 *tmp26 9 14
+   577 jump *label558 always
+-    * label *label538
+   578 label *label539
+   579 op add *tmp31 :y 12
+   580 draw line 163 :y 163 *tmp31
+   581 jump *label558 always
+-    * label *label540
+   582 label *label541
+   583 draw line 157 :y 164 :y
+   584 op add *tmp33 :y 6
+ 
+   588 draw line 164 *tmp33 164 *tmp40
+   589 draw line 157 *tmp40 164 *tmp40
+   590 jump *label558 always
+-    * label *label542
+   591 label *label543
+   592 op add *tmp46 :y 12
+   593 draw line 164 :y 164 *tmp46
+ 
+   596 draw line 157 *tmp48 164 *tmp48
+   597 draw line 157 *tmp46 164 *tmp46
+   598 jump *label558 always
+-    * label *label544
+   599 label *label545
+   600 op add *tmp56 :y 12
+   601 draw line 164 :y 164 *tmp56
+ 
+   603 draw line 157 *tmp57 164 *tmp57
+   604 draw line 157 *tmp57 157 *tmp56
+   605 jump *label558 always
+-    * label *label546
+   606 label *label547
+   607 draw line 157 :y 164 :y
+   608 op add *tmp65 :y 6
+ 
+   612 draw line 157 *tmp65 157 *tmp70
+   613 draw line 157 *tmp70 164 *tmp70
+   614 jump *label558 always
+-    * label *label548
+   615 label *label549
+   616 op add *tmp74 :y 12
+   617 draw line 157 :y 157 *tmp74
+ 
+   621 draw line 157 *tmp78 164 *tmp78
+   622 draw line 157 *tmp74 164 *tmp74
+   623 jump *label558 always
+-    * label *label550
+   624 label *label551
+   625 op add *tmp89 :y 12
+   626 draw line 163 :y 163 *tmp89
+   627 draw line 157 *tmp89 163 *tmp89
+   628 jump *label558 always
+-    * label *label552
+   629 label *label553
+   630 op sub *tmp97 :y 1
+   631 draw lineRect 156 *tmp97 9 14
+   632 op add *tmp98 :y 6
+   633 draw line 157 *tmp98 164 *tmp98
+   634 jump *label558 always
+-    * label *label554
+   635 label *label555
+   636 draw line 157 :y 164 :y
+   637 op add *tmp104 :y 12
+ 
+   640 draw line 157 *tmp105 164 *tmp105
+   641 draw line 157 *tmp105 157 *tmp104
+   642 draw line 157 *tmp104 164 *tmp104
+-    * label *label556
+-    * label *label557
+   643 label *label558
+-    * label *label559
+   644 jump *label560 always
+   645 jump *label678 always
+   646 label *label560
+-    * label *label561
+-    * label *label562
+-    * label *label563
+   647 # "Function: def drawDigit(in x, in y, in digit)"
+   648 multijump *label564 4 0 (m:*label90)
+   649 multilabel *label564 (m:*label90)
+ 
+   670 op sub *tmp26 :y 1
+   671 draw lineRect 145 *tmp26 9 14
+   672 jump *label595 always
+-    * label *label575
+   673 label *label576
+   674 op add *tmp31 :y 12
+   675 draw line 152 :y 152 *tmp31
+   676 jump *label595 always
+-    * label *label577
+   677 label *label578
+   678 draw line 146 :y 153 :y
+   679 op add *tmp33 :y 6
+ 
+   683 draw line 153 *tmp33 153 *tmp40
+   684 draw line 146 *tmp40 153 *tmp40
+   685 jump *label595 always
+-    * label *label579
+   686 label *label580
+   687 op add *tmp46 :y 12
+   688 draw line 153 :y 153 *tmp46
+ 
+   691 draw line 146 *tmp48 153 *tmp48
+   692 draw line 146 *tmp46 153 *tmp46
+   693 jump *label595 always
+-    * label *label581
+   694 label *label582
+   695 op add *tmp56 :y 12
+   696 draw line 153 :y 153 *tmp56
+ 
+   698 draw line 146 *tmp57 153 *tmp57
+   699 draw line 146 *tmp57 146 *tmp56
+   700 jump *label595 always
+-    * label *label583
+   701 label *label584
+   702 draw line 146 :y 153 :y
+   703 op add *tmp65 :y 6
+ 
+   707 draw line 146 *tmp65 146 *tmp70
+   708 draw line 146 *tmp70 153 *tmp70
+   709 jump *label595 always
+-    * label *label585
+   710 label *label586
+   711 op add *tmp74 :y 12
+   712 draw line 146 :y 146 *tmp74
+ 
+   716 draw line 146 *tmp78 153 *tmp78
+   717 draw line 146 *tmp74 153 *tmp74
+   718 jump *label595 always
+-    * label *label587
+   719 label *label588
+   720 op add *tmp89 :y 12
+   721 draw line 152 :y 152 *tmp89
+   722 draw line 146 *tmp89 152 *tmp89
+   723 jump *label595 always
+-    * label *label589
+   724 label *label590
+   725 op sub *tmp97 :y 1
+   726 draw lineRect 145 *tmp97 9 14
+   727 op add *tmp98 :y 6
+   728 draw line 146 *tmp98 153 *tmp98
+   729 jump *label595 always
+-    * label *label591
+   730 label *label592
+   731 draw line 146 :y 153 :y
+   732 op add *tmp104 :y 12
+ 
+   735 draw line 146 *tmp105 153 *tmp105
+   736 draw line 146 *tmp105 146 *tmp104
+   737 draw line 146 *tmp104 153 *tmp104
+-    * label *label593
+-    * label *label594
+   738 label *label595
+-    * label *label596
+   739 jump *label597 always
+   740 jump *label678 always
+   741 label *label597
+-    * label *label598
+-    * label *label599
+-    * label *label600
+   742 # "Function: def drawDigit(in x, in y, in digit)"
+   743 multijump *label601 3 0 (m:*label90)
+   744 multilabel *label601 (m:*label90)
+ 
+   765 op sub *tmp26 :y 1
+   766 draw lineRect 134 *tmp26 9 14
+   767 jump *label632 always
+-    * label *label612
+   768 label *label613
+   769 op add *tmp31 :y 12
+   770 draw line 141 :y 141 *tmp31
+   771 jump *label632 always
+-    * label *label614
+   772 label *label615
+   773 draw line 135 :y 142 :y
+   774 op add *tmp33 :y 6
+ 
+   778 draw line 142 *tmp33 142 *tmp40
+   779 draw line 135 *tmp40 142 *tmp40
+   780 jump *label632 always
+-    * label *label616
+   781 label *label617
+   782 op add *tmp46 :y 12
+   783 draw line 142 :y 142 *tmp46
+ 
+   786 draw line 135 *tmp48 142 *tmp48
+   787 draw line 135 *tmp46 142 *tmp46
+   788 jump *label632 always
+-    * label *label618
+   789 label *label619
+   790 op add *tmp56 :y 12
+   791 draw line 142 :y 142 *tmp56
+ 
+   793 draw line 135 *tmp57 142 *tmp57
+   794 draw line 135 *tmp57 135 *tmp56
+   795 jump *label632 always
+-    * label *label620
+   796 label *label621
+   797 draw line 135 :y 142 :y
+   798 op add *tmp65 :y 6
+ 
+   802 draw line 135 *tmp65 135 *tmp70
+   803 draw line 135 *tmp70 142 *tmp70
+   804 jump *label632 always
+-    * label *label622
+   805 label *label623
+   806 op add *tmp74 :y 12
+   807 draw line 135 :y 135 *tmp74
+ 
+   811 draw line 135 *tmp78 142 *tmp78
+   812 draw line 135 *tmp74 142 *tmp74
+   813 jump *label632 always
+-    * label *label624
+   814 label *label625
+   815 op add *tmp89 :y 12
+   816 draw line 141 :y 141 *tmp89
+   817 draw line 135 *tmp89 141 *tmp89
+   818 jump *label632 always
+-    * label *label626
+   819 label *label627
+   820 op sub *tmp97 :y 1
+   821 draw lineRect 134 *tmp97 9 14
+   822 op add *tmp98 :y 6
+   823 draw line 135 *tmp98 142 *tmp98
+   824 jump *label632 always
+-    * label *label628
+   825 label *label629
+   826 draw line 135 :y 142 :y
+   827 op add *tmp104 :y 12
+ 
+   830 draw line 135 *tmp105 142 *tmp105
+   831 draw line 135 *tmp105 135 *tmp104
+   832 draw line 135 *tmp104 142 *tmp104
+-    * label *label630
+-    * label *label631
+   833 label *label632
+-    * label *label633
+   834 jump *label634 always
+   835 jump *label678 always
+   836 label *label634
+-    * label *label635
+-    * label *label636
+-    * label *label637
+   837 # "Function: def drawDigit(in x, in y, in digit)"
+   838 multijump *label638 2 0 (m:*label90)
+   839 multilabel *label638 (m:*label90)
+ 
+   860 op sub *tmp26 :y 1
+   861 draw lineRect 123 *tmp26 9 14
+   862 jump *label669 always
+-    * label *label649
+   863 label *label650
+   864 op add *tmp31 :y 12
+   865 draw line 130 :y 130 *tmp31
+   866 jump *label669 always
+-    * label *label651
+   867 label *label652
+   868 draw line 124 :y 131 :y
+   869 op add *tmp33 :y 6
+ 
+   873 draw line 131 *tmp33 131 *tmp40
+   874 draw line 124 *tmp40 131 *tmp40
+   875 jump *label669 always
+-    * label *label653
+   876 label *label654
+   877 op add *tmp46 :y 12
+   878 draw line 131 :y 131 *tmp46
+ 
+   881 draw line 124 *tmp48 131 *tmp48
+   882 draw line 124 *tmp46 131 *tmp46
+   883 jump *label669 always
+-    * label *label655
+   884 label *label656
+   885 op add *tmp56 :y 12
+   886 draw line 131 :y 131 *tmp56
+ 
+   888 draw line 124 *tmp57 131 *tmp57
+   889 draw line 124 *tmp57 124 *tmp56
+   890 jump *label669 always
+-    * label *label657
+   891 label *label658
+   892 draw line 124 :y 131 :y
+   893 op add *tmp65 :y 6
+ 
+   897 draw line 124 *tmp65 124 *tmp70
+   898 draw line 124 *tmp70 131 *tmp70
+   899 jump *label669 always
+-    * label *label659
+   900 label *label660
+   901 op add *tmp74 :y 12
+   902 draw line 124 :y 124 *tmp74
+ 
+   906 draw line 124 *tmp78 131 *tmp78
+   907 draw line 124 *tmp74 131 *tmp74
+   908 jump *label669 always
+-    * label *label661
+   909 label *label662
+   910 op add *tmp89 :y 12
+   911 draw line 130 :y 130 *tmp89
+   912 draw line 124 *tmp89 130 *tmp89
+   913 jump *label669 always
+-    * label *label663
+   914 label *label664
+   915 op sub *tmp97 :y 1
+   916 draw lineRect 123 *tmp97 9 14
+   917 op add *tmp98 :y 6
+   918 draw line 124 *tmp98 131 *tmp98
+   919 jump *label669 always
+-    * label *label665
+   920 label *label666
+   921 draw line 124 :y 131 :y
+   922 op add *tmp104 :y 12
+ 
+   925 draw line 124 *tmp105 131 *tmp105
+   926 draw line 124 *tmp105 124 *tmp104
+   927 draw line 124 *tmp104 131 *tmp104
+-    * label *label667
+-    * label *label668
+   928 label *label669
+-    * label *label670
+   929 jump *label671 always
+   930 jump *label678 always
+   931 label *label671
+-    * label *label672
+-    * label *label673
+-    * label *label674
+   932 # "Function: def drawDigit12(in x, in y, in digit)"
+   933 op add *tmp122 :y 12
+   934 draw line 119 :y 119 *tmp122
+   935 jump *label676 always
+-    * label *label675
+   936 draw line 113 :y 120 :y
+   937 draw line 113 :y 113 *tmp124
+   938 draw line 113 *tmp124 120 *tmp124
+   939 draw line 120 *tmp124 120 *tmp131
+   940 draw line 113 *tmp131 120 *tmp131
+   941 label *label676
+-    * label *label677
+   942 label *label678
+   943 label *label48
+   944 op add :index :index 1
+ 
+   946 jump *label49 notEqual :index 8
+   947 drawflush display1
+   948 set :y 152
+-    * label *label258
+   949 # "Function: def eraseNumbers(in first_column)"
+   950 draw color 0 0 80 255
+   951 jump *label259 always
+ 
+   954 label *label259
+   955 draw rect 109 0 176 176
+   956 label *label260
+-    * label *label261
+   957 label *label49
+-    * label *label50
+-    * label *label27
+   958 multijump *tmp10 0 0 (m:marker1)
+   959 multilabel *label44 (m:marker1)
+   960 label *label46
+-    * label *label28
+   961 drawflush display1
+   962 end
+
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
+ 
+   179 label *label381
+   180 op sub *tmp26 :y 1
+   181 draw lineRect 70 *tmp26 9 14
+-    * jump *label402 always
++  182 jump *label404 always
+   183 label *label383
+   184 op add *tmp31 :y 12
+   185 draw line 77 :y 77 *tmp31
+-    * jump *label402 always
++  186 jump *label404 always
+   187 label *label385
+   188 draw line 71 :y 78 :y
+   189 op add *tmp33 :y 6
+ 
+   192 op add *tmp40 :y 12
+   193 draw line 78 *tmp33 78 *tmp40
+   194 draw line 71 *tmp40 78 *tmp40
+-    * jump *label402 always
++  195 jump *label404 always
+   196 label *label387
+   197 op add *tmp46 :y 12
+   198 draw line 78 :y 78 *tmp46
+ 
+   200 op add *tmp48 :y 6
+   201 draw line 71 *tmp48 78 *tmp48
+   202 draw line 71 *tmp46 78 *tmp46
+-    * jump *label402 always
++  203 jump *label404 always
+   204 label *label389
+   205 op add *tmp56 :y 12
+   206 draw line 78 :y 78 *tmp56
+   207 op add *tmp57 :y 6
+   208 draw line 71 *tmp57 78 *tmp57
+   209 draw line 71 *tmp57 71 *tmp56
+-    * jump *label402 always
++  210 jump *label404 always
+   211 label *label391
+   212 draw line 71 :y 78 :y
+   213 op add *tmp65 :y 6
+ 
+   216 op add *tmp70 :y 12
+   217 draw line 71 *tmp65 71 *tmp70
+   218 draw line 71 *tmp70 78 *tmp70
+-    * jump *label402 always
++  219 jump *label404 always
+   220 label *label393
+   221 op add *tmp74 :y 12
+   222 draw line 71 :y 71 *tmp74
+ 
+   225 draw line 78 :y 78 *tmp78
+   226 draw line 71 *tmp78 78 *tmp78
+   227 draw line 71 *tmp74 78 *tmp74
+-    * jump *label402 always
++  228 jump *label404 always
+   229 label *label395
+   230 op add *tmp89 :y 12
+   231 draw line 77 :y 77 *tmp89
+   232 draw line 71 *tmp89 77 *tmp89
+-    * jump *label402 always
++  233 jump *label404 always
+   234 label *label397
+   235 op sub *tmp97 :y 1
+   236 draw lineRect 70 *tmp97 9 14
+   237 op add *tmp98 :y 6
+   238 draw line 71 *tmp98 78 *tmp98
+-    * jump *label402 always
++  239 jump *label404 always
+   240 label *label399
+   241 draw line 71 :y 78 :y
+   242 op add *tmp104 :y 12
+ 
+   247 draw line 71 *tmp104 78 *tmp104
+   248 label *label402
+   249 jump *label404 always
+-    * jump *label522 always
++  250 jump *label48 always
+   251 label *label404
+   252 # "Function: def drawDigit(in x, in y, in digit)"
+   253 multijump *label408 4 0 (m:*label90)
+ 
+   274 label *label418
+   275 op sub *tmp26 :y 1
+   276 draw lineRect 59 *tmp26 9 14
+-    * jump *label439 always
++  277 jump *label441 always
+   278 label *label420
+   279 op add *tmp31 :y 12
+   280 draw line 66 :y 66 *tmp31
+-    * jump *label439 always
++  281 jump *label441 always
+   282 label *label422
+   283 draw line 60 :y 67 :y
+   284 op add *tmp33 :y 6
+ 
+   287 op add *tmp40 :y 12
+   288 draw line 67 *tmp33 67 *tmp40
+   289 draw line 60 *tmp40 67 *tmp40
+-    * jump *label439 always
++  290 jump *label441 always
+   291 label *label424
+   292 op add *tmp46 :y 12
+   293 draw line 67 :y 67 *tmp46
+ 
+   295 op add *tmp48 :y 6
+   296 draw line 60 *tmp48 67 *tmp48
+   297 draw line 60 *tmp46 67 *tmp46
+-    * jump *label439 always
++  298 jump *label441 always
+   299 label *label426
+   300 op add *tmp56 :y 12
+   301 draw line 67 :y 67 *tmp56
+   302 op add *tmp57 :y 6
+   303 draw line 60 *tmp57 67 *tmp57
+   304 draw line 60 *tmp57 60 *tmp56
+-    * jump *label439 always
++  305 jump *label441 always
+   306 label *label428
+   307 draw line 60 :y 67 :y
+   308 op add *tmp65 :y 6
+ 
+   311 op add *tmp70 :y 12
+   312 draw line 60 *tmp65 60 *tmp70
+   313 draw line 60 *tmp70 67 *tmp70
+-    * jump *label439 always
++  314 jump *label441 always
+   315 label *label430
+   316 op add *tmp74 :y 12
+   317 draw line 60 :y 60 *tmp74
+ 
+   320 draw line 67 :y 67 *tmp78
+   321 draw line 60 *tmp78 67 *tmp78
+   322 draw line 60 *tmp74 67 *tmp74
+-    * jump *label439 always
++  323 jump *label441 always
+   324 label *label432
+   325 op add *tmp89 :y 12
+   326 draw line 66 :y 66 *tmp89
+   327 draw line 60 *tmp89 66 *tmp89
+-    * jump *label439 always
++  328 jump *label441 always
+   329 label *label434
+   330 op sub *tmp97 :y 1
+   331 draw lineRect 59 *tmp97 9 14
+   332 op add *tmp98 :y 6
+   333 draw line 60 *tmp98 67 *tmp98
+-    * jump *label439 always
++  334 jump *label441 always
+   335 label *label436
+   336 draw line 60 :y 67 :y
+   337 op add *tmp104 :y 12
+ 
+   342 draw line 60 *tmp104 67 *tmp104
+   343 label *label439
+   344 jump *label441 always
+-    * jump *label522 always
++  345 jump *label48 always
+   346 label *label441
+   347 # "Function: def drawDigit(in x, in y, in digit)"
+   348 multijump *label445 3 0 (m:*label90)
+ 
+   369 label *label455
+   370 op sub *tmp26 :y 1
+   371 draw lineRect 48 *tmp26 9 14
+-    * jump *label476 always
++  372 jump *label478 always
+   373 label *label457
+   374 op add *tmp31 :y 12
+   375 draw line 55 :y 55 *tmp31
+-    * jump *label476 always
++  376 jump *label478 always
+   377 label *label459
+   378 draw line 49 :y 56 :y
+   379 op add *tmp33 :y 6
+ 
+   382 op add *tmp40 :y 12
+   383 draw line 56 *tmp33 56 *tmp40
+   384 draw line 49 *tmp40 56 *tmp40
+-    * jump *label476 always
++  385 jump *label478 always
+   386 label *label461
+   387 op add *tmp46 :y 12
+   388 draw line 56 :y 56 *tmp46
+ 
+   390 op add *tmp48 :y 6
+   391 draw line 49 *tmp48 56 *tmp48
+   392 draw line 49 *tmp46 56 *tmp46
+-    * jump *label476 always
++  393 jump *label478 always
+   394 label *label463
+   395 op add *tmp56 :y 12
+   396 draw line 56 :y 56 *tmp56
+   397 op add *tmp57 :y 6
+   398 draw line 49 *tmp57 56 *tmp57
+   399 draw line 49 *tmp57 49 *tmp56
+-    * jump *label476 always
++  400 jump *label478 always
+   401 label *label465
+   402 draw line 49 :y 56 :y
+   403 op add *tmp65 :y 6
+ 
+   406 op add *tmp70 :y 12
+   407 draw line 49 *tmp65 49 *tmp70
+   408 draw line 49 *tmp70 56 *tmp70
+-    * jump *label476 always
++  409 jump *label478 always
+   410 label *label467
+   411 op add *tmp74 :y 12
+   412 draw line 49 :y 49 *tmp74
+ 
+   415 draw line 56 :y 56 *tmp78
+   416 draw line 49 *tmp78 56 *tmp78
+   417 draw line 49 *tmp74 56 *tmp74
+-    * jump *label476 always
++  418 jump *label478 always
+   419 label *label469
+   420 op add *tmp89 :y 12
+   421 draw line 55 :y 55 *tmp89
+   422 draw line 49 *tmp89 55 *tmp89
+-    * jump *label476 always
++  423 jump *label478 always
+   424 label *label471
+   425 op sub *tmp97 :y 1
+   426 draw lineRect 48 *tmp97 9 14
+   427 op add *tmp98 :y 6
+   428 draw line 49 *tmp98 56 *tmp98
+-    * jump *label476 always
++  429 jump *label478 always
+   430 label *label473
+   431 draw line 49 :y 56 :y
+   432 op add *tmp104 :y 12
+ 
+   437 draw line 49 *tmp104 56 *tmp104
+   438 label *label476
+   439 jump *label478 always
+-    * jump *label522 always
++  440 jump *label48 always
+   441 label *label478
+   442 # "Function: def drawDigit(in x, in y, in digit)"
+   443 multijump *label482 2 0 (m:*label90)
+ 
+   464 label *label492
+   465 op sub *tmp26 :y 1
+   466 draw lineRect 37 *tmp26 9 14
+-    * jump *label513 always
++  467 jump *label515 always
+   468 label *label494
+   469 op add *tmp31 :y 12
+   470 draw line 44 :y 44 *tmp31
+-    * jump *label513 always
++  471 jump *label515 always
+   472 label *label496
+   473 draw line 38 :y 45 :y
+   474 op add *tmp33 :y 6
+ 
+   477 op add *tmp40 :y 12
+   478 draw line 45 *tmp33 45 *tmp40
+   479 draw line 38 *tmp40 45 *tmp40
+-    * jump *label513 always
++  480 jump *label515 always
+   481 label *label498
+   482 op add *tmp46 :y 12
+   483 draw line 45 :y 45 *tmp46
+ 
+   485 op add *tmp48 :y 6
+   486 draw line 38 *tmp48 45 *tmp48
+   487 draw line 38 *tmp46 45 *tmp46
+-    * jump *label513 always
++  488 jump *label515 always
+   489 label *label500
+   490 op add *tmp56 :y 12
+   491 draw line 45 :y 45 *tmp56
+   492 op add *tmp57 :y 6
+   493 draw line 38 *tmp57 45 *tmp57
+   494 draw line 38 *tmp57 38 *tmp56
+-    * jump *label513 always
++  495 jump *label515 always
+   496 label *label502
+   497 draw line 38 :y 45 :y
+   498 op add *tmp65 :y 6
+ 
+   501 op add *tmp70 :y 12
+   502 draw line 38 *tmp65 38 *tmp70
+   503 draw line 38 *tmp70 45 *tmp70
+-    * jump *label513 always
++  504 jump *label515 always
+   505 label *label504
+   506 op add *tmp74 :y 12
+   507 draw line 38 :y 38 *tmp74
+ 
+   510 draw line 45 :y 45 *tmp78
+   511 draw line 38 *tmp78 45 *tmp78
+   512 draw line 38 *tmp74 45 *tmp74
+-    * jump *label513 always
++  513 jump *label515 always
+   514 label *label506
+   515 op add *tmp89 :y 12
+   516 draw line 44 :y 44 *tmp89
+   517 draw line 38 *tmp89 44 *tmp89
+-    * jump *label513 always
++  518 jump *label515 always
+   519 label *label508
+   520 op sub *tmp97 :y 1
+   521 draw lineRect 37 *tmp97 9 14
+   522 op add *tmp98 :y 6
+   523 draw line 38 *tmp98 45 *tmp98
+-    * jump *label513 always
++  524 jump *label515 always
+   525 label *label510
+   526 draw line 38 :y 45 :y
+   527 op add *tmp104 :y 12
+ 
+   532 draw line 38 *tmp104 45 *tmp104
+   533 label *label513
+   534 jump *label515 always
+-    * jump *label522 always
++  535 jump *label48 always
+   536 label *label515
+   537 # "Function: def drawDigit12(in x, in y, in digit)"
+   538 op add *tmp122 :y 12
+   539 draw line 33 :y 33 *tmp122
+-    * jump *label520 always
++  540 jump *label48 always
+   541 draw line 27 :y 34 :y
+   542 draw line 27 :y 27 *tmp124
+   543 draw line 27 *tmp124 34 *tmp124
+ 
+   574 label *label537
+   575 op sub *tmp26 :y 1
+   576 draw lineRect 156 *tmp26 9 14
+-    * jump *label558 always
++  577 jump *label560 always
+   578 label *label539
+   579 op add *tmp31 :y 12
+   580 draw line 163 :y 163 *tmp31
+-    * jump *label558 always
++  581 jump *label560 always
+   582 label *label541
+   583 draw line 157 :y 164 :y
+   584 op add *tmp33 :y 6
+ 
+   587 op add *tmp40 :y 12
+   588 draw line 164 *tmp33 164 *tmp40
+   589 draw line 157 *tmp40 164 *tmp40
+-    * jump *label558 always
++  590 jump *label560 always
+   591 label *label543
+   592 op add *tmp46 :y 12
+   593 draw line 164 :y 164 *tmp46
+ 
+   595 op add *tmp48 :y 6
+   596 draw line 157 *tmp48 164 *tmp48
+   597 draw line 157 *tmp46 164 *tmp46
+-    * jump *label558 always
++  598 jump *label560 always
+   599 label *label545
+   600 op add *tmp56 :y 12
+   601 draw line 164 :y 164 *tmp56
+   602 op add *tmp57 :y 6
+   603 draw line 157 *tmp57 164 *tmp57
+   604 draw line 157 *tmp57 157 *tmp56
+-    * jump *label558 always
++  605 jump *label560 always
+   606 label *label547
+   607 draw line 157 :y 164 :y
+   608 op add *tmp65 :y 6
+ 
+   611 op add *tmp70 :y 12
+   612 draw line 157 *tmp65 157 *tmp70
+   613 draw line 157 *tmp70 164 *tmp70
+-    * jump *label558 always
++  614 jump *label560 always
+   615 label *label549
+   616 op add *tmp74 :y 12
+   617 draw line 157 :y 157 *tmp74
+ 
+   620 draw line 164 :y 164 *tmp78
+   621 draw line 157 *tmp78 164 *tmp78
+   622 draw line 157 *tmp74 164 *tmp74
+-    * jump *label558 always
++  623 jump *label560 always
+   624 label *label551
+   625 op add *tmp89 :y 12
+   626 draw line 163 :y 163 *tmp89
+   627 draw line 157 *tmp89 163 *tmp89
+-    * jump *label558 always
++  628 jump *label560 always
+   629 label *label553
+   630 op sub *tmp97 :y 1
+   631 draw lineRect 156 *tmp97 9 14
+   632 op add *tmp98 :y 6
+   633 draw line 157 *tmp98 164 *tmp98
+-    * jump *label558 always
++  634 jump *label560 always
+   635 label *label555
+   636 draw line 157 :y 164 :y
+   637 op add *tmp104 :y 12
+ 
+   669 label *label574
+   670 op sub *tmp26 :y 1
+   671 draw lineRect 145 *tmp26 9 14
+-    * jump *label595 always
++  672 jump *label597 always
+   673 label *label576
+   674 op add *tmp31 :y 12
+   675 draw line 152 :y 152 *tmp31
+-    * jump *label595 always
++  676 jump *label597 always
+   677 label *label578
+   678 draw line 146 :y 153 :y
+   679 op add *tmp33 :y 6
+ 
+   682 op add *tmp40 :y 12
+   683 draw line 153 *tmp33 153 *tmp40
+   684 draw line 146 *tmp40 153 *tmp40
+-    * jump *label595 always
++  685 jump *label597 always
+   686 label *label580
+   687 op add *tmp46 :y 12
+   688 draw line 153 :y 153 *tmp46
+ 
+   690 op add *tmp48 :y 6
+   691 draw line 146 *tmp48 153 *tmp48
+   692 draw line 146 *tmp46 153 *tmp46
+-    * jump *label595 always
++  693 jump *label597 always
+   694 label *label582
+   695 op add *tmp56 :y 12
+   696 draw line 153 :y 153 *tmp56
+   697 op add *tmp57 :y 6
+   698 draw line 146 *tmp57 153 *tmp57
+   699 draw line 146 *tmp57 146 *tmp56
+-    * jump *label595 always
++  700 jump *label597 always
+   701 label *label584
+   702 draw line 146 :y 153 :y
+   703 op add *tmp65 :y 6
+ 
+   706 op add *tmp70 :y 12
+   707 draw line 146 *tmp65 146 *tmp70
+   708 draw line 146 *tmp70 153 *tmp70
+-    * jump *label595 always
++  709 jump *label597 always
+   710 label *label586
+   711 op add *tmp74 :y 12
+   712 draw line 146 :y 146 *tmp74
+ 
+   715 draw line 153 :y 153 *tmp78
+   716 draw line 146 *tmp78 153 *tmp78
+   717 draw line 146 *tmp74 153 *tmp74
+-    * jump *label595 always
++  718 jump *label597 always
+   719 label *label588
+   720 op add *tmp89 :y 12
+   721 draw line 152 :y 152 *tmp89
+   722 draw line 146 *tmp89 152 *tmp89
+-    * jump *label595 always
++  723 jump *label597 always
+   724 label *label590
+   725 op sub *tmp97 :y 1
+   726 draw lineRect 145 *tmp97 9 14
+   727 op add *tmp98 :y 6
+   728 draw line 146 *tmp98 153 *tmp98
+-    * jump *label595 always
++  729 jump *label597 always
+   730 label *label592
+   731 draw line 146 :y 153 :y
+   732 op add *tmp104 :y 12
+ 
+   764 label *label611
+   765 op sub *tmp26 :y 1
+   766 draw lineRect 134 *tmp26 9 14
+-    * jump *label632 always
++  767 jump *label634 always
+   768 label *label613
+   769 op add *tmp31 :y 12
+   770 draw line 141 :y 141 *tmp31
+-    * jump *label632 always
++  771 jump *label634 always
+   772 label *label615
+   773 draw line 135 :y 142 :y
+   774 op add *tmp33 :y 6
+ 
+   777 op add *tmp40 :y 12
+   778 draw line 142 *tmp33 142 *tmp40
+   779 draw line 135 *tmp40 142 *tmp40
+-    * jump *label632 always
++  780 jump *label634 always
+   781 label *label617
+   782 op add *tmp46 :y 12
+   783 draw line 142 :y 142 *tmp46
+ 
+   785 op add *tmp48 :y 6
+   786 draw line 135 *tmp48 142 *tmp48
+   787 draw line 135 *tmp46 142 *tmp46
+-    * jump *label632 always
++  788 jump *label634 always
+   789 label *label619
+   790 op add *tmp56 :y 12
+   791 draw line 142 :y 142 *tmp56
+   792 op add *tmp57 :y 6
+   793 draw line 135 *tmp57 142 *tmp57
+   794 draw line 135 *tmp57 135 *tmp56
+-    * jump *label632 always
++  795 jump *label634 always
+   796 label *label621
+   797 draw line 135 :y 142 :y
+   798 op add *tmp65 :y 6
+ 
+   801 op add *tmp70 :y 12
+   802 draw line 135 *tmp65 135 *tmp70
+   803 draw line 135 *tmp70 142 *tmp70
+-    * jump *label632 always
++  804 jump *label634 always
+   805 label *label623
+   806 op add *tmp74 :y 12
+   807 draw line 135 :y 135 *tmp74
+ 
+   810 draw line 142 :y 142 *tmp78
+   811 draw line 135 *tmp78 142 *tmp78
+   812 draw line 135 *tmp74 142 *tmp74
+-    * jump *label632 always
++  813 jump *label634 always
+   814 label *label625
+   815 op add *tmp89 :y 12
+   816 draw line 141 :y 141 *tmp89
+   817 draw line 135 *tmp89 141 *tmp89
+-    * jump *label632 always
++  818 jump *label634 always
+   819 label *label627
+   820 op sub *tmp97 :y 1
+   821 draw lineRect 134 *tmp97 9 14
+   822 op add *tmp98 :y 6
+   823 draw line 135 *tmp98 142 *tmp98
+-    * jump *label632 always
++  824 jump *label634 always
+   825 label *label629
+   826 draw line 135 :y 142 :y
+   827 op add *tmp104 :y 12
+ 
+   859 label *label648
+   860 op sub *tmp26 :y 1
+   861 draw lineRect 123 *tmp26 9 14
+-    * jump *label669 always
++  862 jump *label671 always
+   863 label *label650
+   864 op add *tmp31 :y 12
+   865 draw line 130 :y 130 *tmp31
+-    * jump *label669 always
++  866 jump *label671 always
+   867 label *label652
+   868 draw line 124 :y 131 :y
+   869 op add *tmp33 :y 6
+ 
+   872 op add *tmp40 :y 12
+   873 draw line 131 *tmp33 131 *tmp40
+   874 draw line 124 *tmp40 131 *tmp40
+-    * jump *label669 always
++  875 jump *label671 always
+   876 label *label654
+   877 op add *tmp46 :y 12
+   878 draw line 131 :y 131 *tmp46
+ 
+   880 op add *tmp48 :y 6
+   881 draw line 124 *tmp48 131 *tmp48
+   882 draw line 124 *tmp46 131 *tmp46
+-    * jump *label669 always
++  883 jump *label671 always
+   884 label *label656
+   885 op add *tmp56 :y 12
+   886 draw line 131 :y 131 *tmp56
+   887 op add *tmp57 :y 6
+   888 draw line 124 *tmp57 131 *tmp57
+   889 draw line 124 *tmp57 124 *tmp56
+-    * jump *label669 always
++  890 jump *label671 always
+   891 label *label658
+   892 draw line 124 :y 131 :y
+   893 op add *tmp65 :y 6
+ 
+   896 op add *tmp70 :y 12
+   897 draw line 124 *tmp65 124 *tmp70
+   898 draw line 124 *tmp70 131 *tmp70
+-    * jump *label669 always
++  899 jump *label671 always
+   900 label *label660
+   901 op add *tmp74 :y 12
+   902 draw line 124 :y 124 *tmp74
+ 
+   905 draw line 131 :y 131 *tmp78
+   906 draw line 124 *tmp78 131 *tmp78
+   907 draw line 124 *tmp74 131 *tmp74
+-    * jump *label669 always
++  908 jump *label671 always
+   909 label *label662
+   910 op add *tmp89 :y 12
+   911 draw line 130 :y 130 *tmp89
+   912 draw line 124 *tmp89 130 *tmp89
+-    * jump *label669 always
++  913 jump *label671 always
+   914 label *label664
+   915 op sub *tmp97 :y 1
+   916 draw lineRect 123 *tmp97 9 14
+   917 op add *tmp98 :y 6
+   918 draw line 124 *tmp98 131 *tmp98
+-    * jump *label669 always
++  919 jump *label671 always
+   920 label *label666
+   921 draw line 124 :y 131 :y
+   922 op add *tmp104 :y 12
+ 
+   950 draw color 0 0 80 255
+   951 jump *label259 always
+   952 draw rect 23 0 70 176
+-    * jump *label260 always
++  953 multijump *tmp10 0 0 (m:marker1)
+   954 label *label259
+   955 draw rect 109 0 176 176
+   956 label *label260
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-40 instructions):
+ 
+     2 draw color 0 0 80 255
+     3 draw rect 0 0 23 176
+     4 jump *label264 always
+-    * draw rect 93 0 16 176
+     5 label *label264
+     6 # "Function: def eraseImages(in first_column)"
+     7 draw color 0 0 80 255
+     8 jump *label267 always
+-    * draw rect 0 0 23 176
+-    * jump *label268 always
+     9 label *label267
+    10 draw rect 93 0 16 176
+    11 label *label268
+    12 draw color 255 255 255 255
+    13 draw image 15 159 @sand 16 0
+    14 jump *label271 always
+-    * draw color 255 255 255 255
+    15 label *label271
+    16 draw image 15 139 @copper 16 0
+    17 jump *label277 always
+-    * draw color 255 255 255 255
+    18 label *label277
+    19 draw image 15 119 @lead 16 0
+    20 jump *label283 always
+-    * draw color 255 255 255 255
+    21 label *label283
+    22 draw image 15 99 @coal 16 0
+    23 jump *label289 always
+-    * draw color 255 255 255 255
+    24 label *label289
+    25 draw image 15 79 @titanium 16 0
+    26 jump *label295 always
+-    * draw color 255 255 255 255
+    27 label *label295
+    28 draw image 15 59 @thorium 16 0
+    29 jump *label301 always
+-    * draw color 255 255 255 255
+    30 label *label301
+    31 draw image 15 39 @scrap 16 0
+    32 jump *label307 always
+-    * draw color 255 255 255 255
+    33 label *label307
+    34 draw image 15 19 @graphite 16 0
+    35 draw color 255 255 255 255
+    36 draw image 101 159 @metaglass 16 0
+    37 jump *label319 always
+-    * draw color 255 255 255 255
+    38 label *label319
+    39 draw image 101 139 @silicon 16 0
+    40 jump *label325 always
+-    * draw color 255 255 255 255
+    41 label *label325
+    42 draw image 101 119 @pyratite 16 0
+    43 jump *label331 always
+-    * draw color 255 255 255 255
+    44 label *label331
+    45 draw image 101 99 @blast-compound 16 0
+    46 jump *label337 always
+-    * draw color 255 255 255 255
+    47 label *label337
+    48 draw image 101 79 @plastanium 16 0
+    49 jump *label343 always
+-    * draw color 255 255 255 255
+    50 label *label343
+    51 draw image 101 59 @phase-fabric 16 0
+    52 jump *label349 always
+-    * draw color 255 255 255 255
+    53 label *label349
+    54 draw image 101 39 @surge-alloy 16 0
+    55 jump *label355 always
+-    * draw color 255 255 255 255
+    56 label *label355
+    57 draw image 101 19 @spore-pod 16 0
+    58 jump *label361 always
+-    * draw color 255 255 255 255
+    59 label *label361
+    60 drawflush display1
+    61 set :y 152
+ 
+    63 draw color 0 0 80 255
+    64 draw rect 23 0 70 176
+    65 jump *label256 always
+-    * draw rect 109 0 176 176
+    66 label *label256
+    67 set :index 0
+    68 set :item @sand
+ 
+   226 draw line 71 *tmp105 78 *tmp105
+   227 draw line 71 *tmp105 71 *tmp104
+   228 draw line 71 *tmp104 78 *tmp104
+-    * label *label402
+   229 jump *label404 always
+-    * jump *label48 always
+   230 label *label404
+   231 # "Function: def drawDigit(in x, in y, in digit)"
+   232 multijump *label408 4 0 (m:*label90)
+ 
+   319 draw line 60 *tmp105 67 *tmp105
+   320 draw line 60 *tmp105 60 *tmp104
+   321 draw line 60 *tmp104 67 *tmp104
+-    * label *label439
+   322 jump *label441 always
+-    * jump *label48 always
+   323 label *label441
+   324 # "Function: def drawDigit(in x, in y, in digit)"
+   325 multijump *label445 3 0 (m:*label90)
+ 
+   412 draw line 49 *tmp105 56 *tmp105
+   413 draw line 49 *tmp105 49 *tmp104
+   414 draw line 49 *tmp104 56 *tmp104
+-    * label *label476
+   415 jump *label478 always
+-    * jump *label48 always
+   416 label *label478
+   417 # "Function: def drawDigit(in x, in y, in digit)"
+   418 multijump *label482 2 0 (m:*label90)
+ 
+   505 draw line 38 *tmp105 45 *tmp105
+   506 draw line 38 *tmp105 38 *tmp104
+   507 draw line 38 *tmp104 45 *tmp104
+-    * label *label513
+   508 jump *label515 always
+-    * jump *label48 always
+   509 label *label515
+   510 # "Function: def drawDigit12(in x, in y, in digit)"
+   511 op add *tmp122 :y 12
+   512 draw line 33 :y 33 *tmp122
+   513 jump *label48 always
 -    * draw line 27 :y 34 :y
 -    * draw line 27 :y 27 *tmp124
 -    * draw line 27 *tmp124 34 *tmp124
 -    * draw line 34 *tmp124 34 *tmp131
 -    * draw line 27 *tmp131 34 *tmp131
 -    * label *label520
--    * label *label521
 -    * label *label522
 -    * jump *label48 always
-   602 label *label47
-   603 label *label524
-   604 # "Function: void displayItem(in x, in y)"
+   514 label *label47
+   515 # "Function: void displayItem(in x, in y)"
+   516 draw color 0 255 0 255
  
-   631 op sub *tmp26 :y 1
-   632 draw lineRect 156 *tmp26 9 14
-   633 jump *label560 always
--    * label *label538
-   634 label *label539
-   635 op add *tmp31 :y 12
-   636 draw line 163 :y 163 *tmp31
-   637 jump *label560 always
--    * label *label540
-   638 label *label541
-   639 draw line 157 :y 164 :y
-   640 op add *tmp33 :y 6
- 
-   644 draw line 164 *tmp33 164 *tmp40
-   645 draw line 157 *tmp40 164 *tmp40
-   646 jump *label560 always
--    * label *label542
-   647 label *label543
-   648 op add *tmp46 :y 12
-   649 draw line 164 :y 164 *tmp46
- 
-   652 draw line 157 *tmp48 164 *tmp48
-   653 draw line 157 *tmp46 164 *tmp46
-   654 jump *label560 always
--    * label *label544
-   655 label *label545
-   656 op add *tmp56 :y 12
-   657 draw line 164 :y 164 *tmp56
- 
-   659 draw line 157 *tmp57 164 *tmp57
-   660 draw line 157 *tmp57 157 *tmp56
-   661 jump *label560 always
--    * label *label546
-   662 label *label547
-   663 draw line 157 :y 164 :y
-   664 op add *tmp65 :y 6
- 
-   668 draw line 157 *tmp65 157 *tmp70
-   669 draw line 157 *tmp70 164 *tmp70
-   670 jump *label560 always
--    * label *label548
-   671 label *label549
-   672 op add *tmp74 :y 12
-   673 draw line 157 :y 157 *tmp74
- 
-   677 draw line 157 *tmp78 164 *tmp78
-   678 draw line 157 *tmp74 164 *tmp74
-   679 jump *label560 always
--    * label *label550
-   680 label *label551
-   681 op add *tmp89 :y 12
-   682 draw line 163 :y 163 *tmp89
-   683 draw line 157 *tmp89 163 *tmp89
-   684 jump *label560 always
--    * label *label552
-   685 label *label553
-   686 op sub *tmp97 :y 1
-   687 draw lineRect 156 *tmp97 9 14
-   688 op add *tmp98 :y 6
-   689 draw line 157 *tmp98 164 *tmp98
-   690 jump *label560 always
--    * label *label554
-   691 label *label555
-   692 draw line 157 :y 164 :y
-   693 op add *tmp104 :y 12
- 
-   701 label *label558
-   702 label *label559
-   703 jump *label560 always
+   605 draw line 157 *tmp105 164 *tmp105
+   606 draw line 157 *tmp105 157 *tmp104
+   607 draw line 157 *tmp104 164 *tmp104
+-    * label *label558
+   608 jump *label560 always
 -    * jump *label678 always
-   704 label *label560
-   705 label *label561
-   706 label *label562
+   609 label *label560
+   610 # "Function: def drawDigit(in x, in y, in digit)"
+   611 multijump *label564 4 0 (m:*label90)
  
-   731 op sub *tmp26 :y 1
-   732 draw lineRect 145 *tmp26 9 14
-   733 jump *label597 always
--    * label *label575
-   734 label *label576
-   735 op add *tmp31 :y 12
-   736 draw line 152 :y 152 *tmp31
-   737 jump *label597 always
--    * label *label577
-   738 label *label578
-   739 draw line 146 :y 153 :y
-   740 op add *tmp33 :y 6
- 
-   744 draw line 153 *tmp33 153 *tmp40
-   745 draw line 146 *tmp40 153 *tmp40
-   746 jump *label597 always
--    * label *label579
-   747 label *label580
-   748 op add *tmp46 :y 12
-   749 draw line 153 :y 153 *tmp46
- 
-   752 draw line 146 *tmp48 153 *tmp48
-   753 draw line 146 *tmp46 153 *tmp46
-   754 jump *label597 always
--    * label *label581
-   755 label *label582
-   756 op add *tmp56 :y 12
-   757 draw line 153 :y 153 *tmp56
- 
-   759 draw line 146 *tmp57 153 *tmp57
-   760 draw line 146 *tmp57 146 *tmp56
-   761 jump *label597 always
--    * label *label583
-   762 label *label584
-   763 draw line 146 :y 153 :y
-   764 op add *tmp65 :y 6
- 
-   768 draw line 146 *tmp65 146 *tmp70
-   769 draw line 146 *tmp70 153 *tmp70
-   770 jump *label597 always
--    * label *label585
-   771 label *label586
-   772 op add *tmp74 :y 12
-   773 draw line 146 :y 146 *tmp74
- 
-   777 draw line 146 *tmp78 153 *tmp78
-   778 draw line 146 *tmp74 153 *tmp74
-   779 jump *label597 always
--    * label *label587
-   780 label *label588
-   781 op add *tmp89 :y 12
-   782 draw line 152 :y 152 *tmp89
-   783 draw line 146 *tmp89 152 *tmp89
-   784 jump *label597 always
--    * label *label589
-   785 label *label590
-   786 op sub *tmp97 :y 1
-   787 draw lineRect 145 *tmp97 9 14
-   788 op add *tmp98 :y 6
-   789 draw line 146 *tmp98 153 *tmp98
-   790 jump *label597 always
--    * label *label591
-   791 label *label592
-   792 draw line 146 :y 153 :y
-   793 op add *tmp104 :y 12
- 
-   801 label *label595
-   802 label *label596
-   803 jump *label597 always
+   698 draw line 146 *tmp105 153 *tmp105
+   699 draw line 146 *tmp105 146 *tmp104
+   700 draw line 146 *tmp104 153 *tmp104
+-    * label *label595
+   701 jump *label597 always
 -    * jump *label678 always
-   804 label *label597
-   805 label *label598
-   806 label *label599
+   702 label *label597
+   703 # "Function: def drawDigit(in x, in y, in digit)"
+   704 multijump *label601 3 0 (m:*label90)
  
-   831 op sub *tmp26 :y 1
-   832 draw lineRect 134 *tmp26 9 14
-   833 jump *label634 always
--    * label *label612
-   834 label *label613
-   835 op add *tmp31 :y 12
-   836 draw line 141 :y 141 *tmp31
-   837 jump *label634 always
--    * label *label614
-   838 label *label615
-   839 draw line 135 :y 142 :y
-   840 op add *tmp33 :y 6
- 
-   844 draw line 142 *tmp33 142 *tmp40
-   845 draw line 135 *tmp40 142 *tmp40
-   846 jump *label634 always
--    * label *label616
-   847 label *label617
-   848 op add *tmp46 :y 12
-   849 draw line 142 :y 142 *tmp46
- 
-   852 draw line 135 *tmp48 142 *tmp48
-   853 draw line 135 *tmp46 142 *tmp46
-   854 jump *label634 always
--    * label *label618
-   855 label *label619
-   856 op add *tmp56 :y 12
-   857 draw line 142 :y 142 *tmp56
- 
-   859 draw line 135 *tmp57 142 *tmp57
-   860 draw line 135 *tmp57 135 *tmp56
-   861 jump *label634 always
--    * label *label620
-   862 label *label621
-   863 draw line 135 :y 142 :y
-   864 op add *tmp65 :y 6
- 
-   868 draw line 135 *tmp65 135 *tmp70
-   869 draw line 135 *tmp70 142 *tmp70
-   870 jump *label634 always
--    * label *label622
-   871 label *label623
-   872 op add *tmp74 :y 12
-   873 draw line 135 :y 135 *tmp74
- 
-   877 draw line 135 *tmp78 142 *tmp78
-   878 draw line 135 *tmp74 142 *tmp74
-   879 jump *label634 always
--    * label *label624
-   880 label *label625
-   881 op add *tmp89 :y 12
-   882 draw line 141 :y 141 *tmp89
-   883 draw line 135 *tmp89 141 *tmp89
-   884 jump *label634 always
--    * label *label626
-   885 label *label627
-   886 op sub *tmp97 :y 1
-   887 draw lineRect 134 *tmp97 9 14
-   888 op add *tmp98 :y 6
-   889 draw line 135 *tmp98 142 *tmp98
-   890 jump *label634 always
--    * label *label628
-   891 label *label629
-   892 draw line 135 :y 142 :y
-   893 op add *tmp104 :y 12
- 
-   901 label *label632
-   902 label *label633
-   903 jump *label634 always
+   791 draw line 135 *tmp105 142 *tmp105
+   792 draw line 135 *tmp105 135 *tmp104
+   793 draw line 135 *tmp104 142 *tmp104
+-    * label *label632
+   794 jump *label634 always
 -    * jump *label678 always
-   904 label *label634
-   905 label *label635
-   906 label *label636
+   795 label *label634
+   796 # "Function: def drawDigit(in x, in y, in digit)"
+   797 multijump *label638 2 0 (m:*label90)
  
-   931 op sub *tmp26 :y 1
-   932 draw lineRect 123 *tmp26 9 14
-   933 jump *label671 always
--    * label *label649
-   934 label *label650
-   935 op add *tmp31 :y 12
-   936 draw line 130 :y 130 *tmp31
-   937 jump *label671 always
--    * label *label651
-   938 label *label652
-   939 draw line 124 :y 131 :y
-   940 op add *tmp33 :y 6
- 
-   944 draw line 131 *tmp33 131 *tmp40
-   945 draw line 124 *tmp40 131 *tmp40
-   946 jump *label671 always
--    * label *label653
-   947 label *label654
-   948 op add *tmp46 :y 12
-   949 draw line 131 :y 131 *tmp46
- 
-   952 draw line 124 *tmp48 131 *tmp48
-   953 draw line 124 *tmp46 131 *tmp46
-   954 jump *label671 always
--    * label *label655
-   955 label *label656
-   956 op add *tmp56 :y 12
-   957 draw line 131 :y 131 *tmp56
- 
-   959 draw line 124 *tmp57 131 *tmp57
-   960 draw line 124 *tmp57 124 *tmp56
-   961 jump *label671 always
--    * label *label657
-   962 label *label658
-   963 draw line 124 :y 131 :y
-   964 op add *tmp65 :y 6
- 
-   968 draw line 124 *tmp65 124 *tmp70
-   969 draw line 124 *tmp70 131 *tmp70
-   970 jump *label671 always
--    * label *label659
-   971 label *label660
-   972 op add *tmp74 :y 12
-   973 draw line 124 :y 124 *tmp74
- 
-   977 draw line 124 *tmp78 131 *tmp78
-   978 draw line 124 *tmp74 131 *tmp74
-   979 jump *label671 always
--    * label *label661
-   980 label *label662
-   981 op add *tmp89 :y 12
-   982 draw line 130 :y 130 *tmp89
-   983 draw line 124 *tmp89 130 *tmp89
-   984 jump *label671 always
--    * label *label663
-   985 label *label664
-   986 op sub *tmp97 :y 1
-   987 draw lineRect 123 *tmp97 9 14
-   988 op add *tmp98 :y 6
-   989 draw line 124 *tmp98 131 *tmp98
-   990 jump *label671 always
--    * label *label665
-   991 label *label666
-   992 draw line 124 :y 131 :y
-   993 op add *tmp104 :y 12
- 
-  1001 label *label669
-  1002 label *label670
-  1003 jump *label671 always
+   884 draw line 124 *tmp105 131 *tmp105
+   885 draw line 124 *tmp105 124 *tmp104
+   886 draw line 124 *tmp104 131 *tmp104
+-    * label *label669
+   887 jump *label671 always
 -    * jump *label678 always
-  1004 label *label671
-  1005 label *label672
-  1006 label *label673
- 
-  1009 op add *tmp122 :y 12
-  1010 draw line 119 :y 119 *tmp122
-  1011 jump *label676 always
--    * label *label675
+   888 label *label671
+   889 # "Function: def drawDigit12(in x, in y, in digit)"
+   890 op add *tmp122 :y 12
+   891 draw line 119 :y 119 *tmp122
+   892 jump *label676 always
 -    * draw line 113 :y 120 :y
 -    * draw line 113 :y 113 *tmp124
 -    * draw line 113 *tmp124 120 *tmp124
 -    * draw line 120 *tmp124 120 *tmp131
 -    * draw line 113 *tmp131 120 *tmp131
-  1012 label *label676
-  1013 label *label677
-  1014 label *label678
+   893 label *label676
+   894 label *label678
+   895 label *label48
  
-  1022 # "Function: def eraseNumbers(in first_column)"
-  1023 draw color 0 0 80 255
-  1024 jump *label259 always
+   901 # "Function: def eraseNumbers(in first_column)"
+   902 draw color 0 0 80 255
+   903 jump *label259 always
 -    * draw rect 23 0 70 176
 -    * multijump *tmp10 0 0 (m:marker1)
-  1025 label *label259
-  1026 draw rect 109 0 176 176
-  1027 label *label260
+   904 label *label259
+   905 draw rect 109 0 176 176
+-    * label *label260
+   906 label *label49
+   907 multijump *tmp10 0 0 (m:marker1)
+   908 multilabel *label44 (m:marker1)
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-21 instructions):
+Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
  
-     2 # "Function: def eraseImages(in first_column)"
-     3 draw color 0 0 80 255
-     4 draw rect 0 0 23 176
+     8 jump *label267 always
+     9 label *label267
+    10 draw rect 93 0 16 176
+-    * label *label268
+    11 draw color 255 255 255 255
+    12 draw image 15 159 @sand 16 0
+    13 jump *label271 always
+ 
+   890 draw line 119 :y 119 *tmp122
+   891 jump *label676 always
+   892 label *label676
+-    * label *label678
+   893 label *label48
+   894 op add :index :index 1
+   895 op sub :y :y 20
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-21 instructions):
+ 
+     1 # "Function: def eraseImages(in first_column)"
+     2 draw color 0 0 80 255
+     3 draw rect 0 0 23 176
 -    * jump *label264 always
-     5 label *label264
-     6 label *label265
-     7 label *label266
-     8 # "Function: def eraseImages(in first_column)"
-     9 draw color 0 0 80 255
+     4 label *label264
+     5 # "Function: def eraseImages(in first_column)"
+     6 draw color 0 0 80 255
 -    * jump *label267 always
-    10 label *label267
-    11 draw rect 93 0 16 176
-    12 label *label268
- 
-    14 draw color 255 255 255 255
-    15 label *label270
-    16 draw image 15 159 @sand 16 0
+     7 label *label267
+     8 draw rect 93 0 16 176
+     9 draw color 255 255 255 255
+    10 draw image 15 159 @sand 16 0
 -    * jump *label271 always
-    17 label *label271
-    18 label *label272
-    19 label *label273
-    20 label *label276
-    21 draw image 15 139 @copper 16 0
+    11 label *label271
+    12 draw image 15 139 @copper 16 0
 -    * jump *label277 always
-    22 label *label277
-    23 label *label278
-    24 label *label279
-    25 label *label282
-    26 draw image 15 119 @lead 16 0
+    13 label *label277
+    14 draw image 15 119 @lead 16 0
 -    * jump *label283 always
-    27 label *label283
-    28 label *label284
-    29 label *label285
-    30 label *label288
-    31 draw image 15 99 @coal 16 0
+    15 label *label283
+    16 draw image 15 99 @coal 16 0
 -    * jump *label289 always
-    32 label *label289
-    33 label *label290
-    34 label *label291
-    35 label *label294
-    36 draw image 15 79 @titanium 16 0
+    17 label *label289
+    18 draw image 15 79 @titanium 16 0
 -    * jump *label295 always
-    37 label *label295
-    38 label *label296
-    39 label *label297
-    40 label *label300
-    41 draw image 15 59 @thorium 16 0
+    19 label *label295
+    20 draw image 15 59 @thorium 16 0
 -    * jump *label301 always
-    42 label *label301
-    43 label *label302
-    44 label *label303
-    45 label *label306
-    46 draw image 15 39 @scrap 16 0
+    21 label *label301
+    22 draw image 15 39 @scrap 16 0
 -    * jump *label307 always
-    47 label *label307
-    48 label *label308
-    49 label *label309
- 
-    55 label *label315
-    56 label *label318
-    57 draw image 101 159 @metaglass 16 0
+    23 label *label307
+    24 draw image 15 19 @graphite 16 0
+    25 draw color 255 255 255 255
+    26 draw image 101 159 @metaglass 16 0
 -    * jump *label319 always
-    58 label *label319
-    59 label *label320
-    60 label *label321
-    61 label *label324
-    62 draw image 101 139 @silicon 16 0
+    27 label *label319
+    28 draw image 101 139 @silicon 16 0
 -    * jump *label325 always
-    63 label *label325
-    64 label *label326
-    65 label *label327
-    66 label *label330
-    67 draw image 101 119 @pyratite 16 0
+    29 label *label325
+    30 draw image 101 119 @pyratite 16 0
 -    * jump *label331 always
-    68 label *label331
-    69 label *label332
-    70 label *label333
-    71 label *label336
-    72 draw image 101 99 @blast-compound 16 0
+    31 label *label331
+    32 draw image 101 99 @blast-compound 16 0
 -    * jump *label337 always
-    73 label *label337
-    74 label *label338
-    75 label *label339
-    76 label *label342
-    77 draw image 101 79 @plastanium 16 0
+    33 label *label337
+    34 draw image 101 79 @plastanium 16 0
 -    * jump *label343 always
-    78 label *label343
-    79 label *label344
-    80 label *label345
-    81 label *label348
-    82 draw image 101 59 @phase-fabric 16 0
+    35 label *label343
+    36 draw image 101 59 @phase-fabric 16 0
 -    * jump *label349 always
-    83 label *label349
-    84 label *label350
-    85 label *label351
-    86 label *label354
-    87 draw image 101 39 @surge-alloy 16 0
+    37 label *label349
+    38 draw image 101 39 @surge-alloy 16 0
 -    * jump *label355 always
-    88 label *label355
-    89 label *label356
-    90 label *label357
-    91 label *label360
-    92 draw image 101 19 @spore-pod 16 0
+    39 label *label355
+    40 draw image 101 19 @spore-pod 16 0
 -    * jump *label361 always
-    93 label *label361
-    94 label *label362
-    95 label *label363
- 
-   101 # "Function: def eraseNumbers(in first_column)"
-   102 draw color 0 0 80 255
-   103 draw rect 23 0 70 176
+    41 label *label361
+    42 drawflush display1
+    43 set :y 152
+    44 # "Function: def eraseNumbers(in first_column)"
+    45 draw color 0 0 80 255
+    46 draw rect 23 0 70 176
 -    * jump *label256 always
-   104 label *label256
-   105 label *label257
-   106 set :index 0
+    47 label *label256
+    48 set :index 0
+    49 set :item @sand
  
-   990 # "Function: def drawDigit12(in x, in y, in digit)"
-   991 op add *tmp122 :y 12
-   992 draw line 119 :y 119 *tmp122
+   870 # "Function: def drawDigit12(in x, in y, in digit)"
+   871 op add *tmp122 :y 12
+   872 draw line 119 :y 119 *tmp122
 -    * jump *label676 always
-   993 label *label676
-   994 label *label677
-   995 label *label678
+   873 label *label676
+   874 label *label48
+   875 op add :index :index 1
  
-  1002 label *label258
-  1003 # "Function: def eraseNumbers(in first_column)"
-  1004 draw color 0 0 80 255
+   879 set :y 152
+   880 # "Function: def eraseNumbers(in first_column)"
+   881 draw color 0 0 80 255
 -    * jump *label259 always
-  1005 label *label259
-  1006 draw rect 109 0 176 176
-  1007 label *label260
+   882 label *label259
+   883 draw rect 109 0 176 176
+   884 label *label49
  
-  1014 label *label46
-  1015 label *label28
-  1016 drawflush display1
+   886 multilabel *label44 (m:marker1)
+   887 label *label46
+   888 drawflush display1
 -    * end
+
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
+ 
+     1 # "Function: def eraseImages(in first_column)"
+     2 draw color 0 0 80 255
+     3 draw rect 0 0 23 176
+-    * label *label264
+     4 # "Function: def eraseImages(in first_column)"
+     5 draw color 0 0 80 255
+-    * label *label267
+     6 draw rect 93 0 16 176
+     7 draw color 255 255 255 255
+     8 draw image 15 159 @sand 16 0
+-    * label *label271
+     9 draw image 15 139 @copper 16 0
+-    * label *label277
+    10 draw image 15 119 @lead 16 0
+-    * label *label283
+    11 draw image 15 99 @coal 16 0
+-    * label *label289
+    12 draw image 15 79 @titanium 16 0
+-    * label *label295
+    13 draw image 15 59 @thorium 16 0
+-    * label *label301
+    14 draw image 15 39 @scrap 16 0
+-    * label *label307
+    15 draw image 15 19 @graphite 16 0
+    16 draw color 255 255 255 255
+    17 draw image 101 159 @metaglass 16 0
+-    * label *label319
+    18 draw image 101 139 @silicon 16 0
+-    * label *label325
+    19 draw image 101 119 @pyratite 16 0
+-    * label *label331
+    20 draw image 101 99 @blast-compound 16 0
+-    * label *label337
+    21 draw image 101 79 @plastanium 16 0
+-    * label *label343
+    22 draw image 101 59 @phase-fabric 16 0
+-    * label *label349
+    23 draw image 101 39 @surge-alloy 16 0
+-    * label *label355
+    24 draw image 101 19 @spore-pod 16 0
+-    * label *label361
+    25 drawflush display1
+    26 set :y 152
+    27 # "Function: def eraseNumbers(in first_column)"
+    28 draw color 0 0 80 255
+    29 draw rect 23 0 70 176
+-    * label *label256
+    30 set :index 0
+    31 set :item @sand
+    32 op add *tmp10 @counter 1
+ 
+   852 # "Function: def drawDigit12(in x, in y, in digit)"
+   853 op add *tmp122 :y 12
+   854 draw line 119 :y 119 *tmp122
+-    * label *label676
+   855 label *label48
+   856 op add :index :index 1
+   857 op sub :y :y 20
+ 
+   860 set :y 152
+   861 # "Function: def eraseNumbers(in first_column)"
+   862 draw color 0 0 80 255
+-    * label *label259
+   863 draw rect 109 0 176 176
+   864 label *label49
+   865 multijump *tmp10 0 0 (m:marker1)
 
 Final code before resolving virtual instructions:
 

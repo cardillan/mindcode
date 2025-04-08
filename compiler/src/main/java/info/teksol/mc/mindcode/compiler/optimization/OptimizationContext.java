@@ -663,6 +663,9 @@ class OptimizationContext {
     /// @param index index of the instruction
     /// @return the instruction at given index
     LogicInstruction instructionAt(int index) {
+        if (index < 0 || index >= program.size()) {
+            throw new IndexOutOfBoundsException("Index " + index + " is out of bounds for length " + program.size());
+        }
         return program.get(index);
     }
 

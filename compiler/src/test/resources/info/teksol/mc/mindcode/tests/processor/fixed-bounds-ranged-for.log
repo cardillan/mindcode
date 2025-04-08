@@ -1,6 +1,6 @@
     12 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
@@ -72,11 +72,24 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      6 op sub :b :b 1
      7 label *label1
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 set a 10
+     1 set :b 20
+     2 set :i a
+-    * label *label0
+     3 jump *label2 greaterThanEq a 20
+     4 label *label3
+     5 op sub :b :b 1
+-    * label *label1
+     6 op add :i :i 1
+     7 jump *label3 lessThan :i 20
+     8 label *label2
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-    10 label *label2
-    11 assertequals 10 :b "fixed-bounds-ranged-for"
-    12 stop
+     8 label *label2
+     9 assertequals 10 :b "fixed-bounds-ranged-for"
+    10 stop
 -    * end
 
 Final code before resolving virtual instructions:

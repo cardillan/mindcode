@@ -1,8 +1,8 @@
     46 instructions before optimizations.
      8 instructions eliminated by Temp Variables Elimination.
-     2 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Jump Optimization (4 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     2 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Jump Optimization (5 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      3 instructions modified by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -192,11 +192,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     37 read *tmp16 FINAL :i
     38 read *tmp18 ARRAY :i
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-    42 jump *label14 lessThan :i SIZE
-    43 label *label11
-    44 stop
+     4 set FINAL bank3
+     5 op sub *tmp1 SIZE 1
+     6 set :i 0
+-    * label *label1
+     7 jump *label3 greaterThanEq 0 *tmp1
+     8 label *label12
+     9 read :min ARRAY :i
+    10 set :min_index :i
+    11 op add :j :i 1
+-    * label *label4
+    12 jump *label6 greaterThanEq :j SIZE
+    13 label *label13
+    14 read :curr ARRAY :j
+ 
+    16 set :min :curr
+    17 set :min_index :j
+    18 label *label7
+-    * label *label8
+-    * label *label5
+    19 op add :j :j 1
+    20 jump *label13 lessThan :j SIZE
+    21 label *label6
+    22 read *tmp12 ARRAY :i
+    23 write *tmp12 ARRAY :min_index
+    24 write :min ARRAY :i
+-    * label *label2
+    25 op add :i :i 1
+    26 jump *label12 lessThan :i *tmp1
+    27 label *label3
+    28 set :i 0
+-    * label *label9
+    29 jump *label11 greaterThanEq 0 SIZE
+    30 label *label14
+    31 read *tmp16 FINAL :i
+    32 read *tmp18 ARRAY :i
+    33 assertequals *tmp16 *tmp18 "unexpected value"
+-    * label *label10
+    34 op add :i :i 1
+    35 jump *label14 lessThan :i SIZE
+    36 label *label11
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+    35 jump *label14 lessThan :i SIZE
+    36 label *label11
+    37 stop
 -    * end
 
 Final code before resolving virtual instructions:

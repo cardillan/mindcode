@@ -1,8 +1,8 @@
     96 instructions before optimizations.
      5 instructions eliminated by Temp Variables Elimination.
-     4 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Jump Optimization (3 iterations).
-     2 instructions eliminated by Single Step Elimination (4 iterations).
+     4 instructions eliminated by Dead Code Elimination (4 iterations).
+     2 instructions eliminated by Jump Optimization (4 iterations).
+     2 instructions eliminated by Single Step Elimination (5 iterations).
     18 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions modified by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
@@ -10,7 +10,7 @@
      1 loops unrolled by Loop Unrolling.
      2 instructions added by Return Optimization (4 iterations).
      1 return statements optimized by Return Optimization.
-     1 instructions eliminated by Unreachable Code Elimination.
+     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Stack Optimization.
     60 instructions after optimizations.
 
@@ -385,27 +385,84 @@ Modifications by Optimize return at line 14:9 (+2 instructions):
     40 label *label16
     41 set :ways.0:result 0
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+     0 label *label1
+     1 jump *label1 equal bank1 null
+     2 set *sp 16
+-    * label *label24
+     3 write 200 bank1 0
+-    * label *label25
+-    * label *label28
+     4 write 100 bank1 1
+-    * label *label29
+-    * label *label32
+     5 write 50 bank1 2
+-    * label *label33
+-    * label *label36
+     6 write 20 bank1 3
+-    * label *label37
+-    * label *label40
+     7 write 10 bank1 4
+-    * label *label41
+-    * label *label44
+     8 write 5 bank1 5
+-    * label *label45
+-    * label *label48
+     9 write 2 bank1 6
+-    * label *label49
+-    * label *label52
+    10 write 1 bank1 7
+-    * label *label53
+-    * label *label4
+    11 set :ways.0:amount 20
+    12 set :ways.0:index 1
+    13 callrec bank1 *label0 *label13 :ways.0*retval
  
-    71 set :ways.0*retval :ways.0:result
-    72 label *label14
-    73 returnrec bank1
+    20 set :ways.0*retval 1
+    21 returnrec bank1
+    22 label *label15
+-    * label *label16
+    23 set :ways.0:result 0
+    24 set :ways.0:i :ways.0:index
+-    * label *label17
+    25 jump *label19 greaterThanEq :ways.0:index 8
+    26 label *label23
+    27 read :ways.0:p bank1 :ways.0:i
+ 
+    44 pop bank1 :ways.0:amount
+    45 op add :ways.0:result :ways.0:result :ways.0*retval
+    46 label *label20
+-    * label *label21
+-    * label *label18
+    47 op add :ways.0:i :ways.0:i 1
+    48 jump *label23 lessThan :ways.0:i 8
+    49 label *label19
+    50 set :ways.0*retval :ways.0:result
+-    * label *label14
+    51 returnrec bank1
+    52 end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    49 label *label19
+    50 set :ways.0*retval :ways.0:result
+    51 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
  
-    50 push bank1 :ways.0:result
-    51 push bank1 :ways.0:i
-    52 push bank1 :ways.0:p
+    31 push bank1 :ways.0:result
+    32 push bank1 :ways.0:i
+    33 push bank1 :ways.0:p
 -    * push bank1 *tmp5
-    53 op sub :ways.0:amount :ways.0:amount :ways.0:p
-    54 set :ways.0:index :ways.0:i
-    55 callrec bank1 *label0 *label22 :ways.0*retval
-    56 label *label22
+    34 op sub :ways.0:amount :ways.0:amount :ways.0:p
+    35 set :ways.0:index :ways.0:i
+    36 callrec bank1 *label0 *label22 :ways.0*retval
+    37 label *label22
 -    * pop bank1 *tmp5
-    57 pop bank1 :ways.0:p
-    58 pop bank1 :ways.0:i
-    59 pop bank1 :ways.0:result
+    38 pop bank1 :ways.0:p
+    39 pop bank1 :ways.0:i
+    40 pop bank1 :ways.0:result
 
 Final code before resolving virtual instructions:
 

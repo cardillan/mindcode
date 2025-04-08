@@ -1,9 +1,9 @@
    108 instructions before optimizations.
     14 instructions eliminated by Temp Variables Elimination.
-    13 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Normalization (4 iterations).
-     6 instructions eliminated by Jump Optimization (4 iterations).
-    17 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+    13 instructions eliminated by Dead Code Elimination (5 iterations).
+     1 instructions eliminated by Jump Normalization (5 iterations).
+     6 instructions eliminated by Jump Optimization (5 iterations).
+    17 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
    573 instructions eliminated by Data Flow Optimization (10 passes, 31 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -12,7 +12,7 @@
     17 instructions added by Function Inlining (12 iterations).
      5 function calls inlined by Function Inlining.
      8 instructions updated by JumpThreading.
-     4 instructions eliminated by Unreachable Code Elimination.
+     4 instructions eliminated by Unreachable Code Elimination (2 iterations).
    434 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 937):
@@ -7065,196 +7065,1337 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
   1022 label *label164
   1023 label *label165
 
-Modifications by Final phase, Jump Threading, iteration 1:
- 
-    10 op and :getBit.0*retval *tmp21 4
-    11 label *label62
-    12 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label68 equal :testAndSetMultiples.0:result false
-+   13 jump *label71 equal :testAndSetMultiples.0:result false
-    14 label *label401
-    15 label *label402
-    16 # "Function: def setBit(in bitIndex)"
- 
-   364 op and :getBit.0*retval *tmp21 8
-   365 label *label75
-   366 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label81 equal :testAndSetMultiples.0:result false
-+  367 jump *label84 equal :testAndSetMultiples.0:result false
-   368 label *label301
-   369 label *label302
-   370 # "Function: def setBit(in bitIndex)"
- 
-   615 op and :getBit.0*retval *tmp21 32
-   616 label *label90
-   617 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label96 equal :testAndSetMultiples.0:result false
-+  618 jump *label99 equal :testAndSetMultiples.0:result false
-   619 label *label246
-   620 label *label247
-   621 # "Function: def setBit(in bitIndex)"
- 
-   759 op and :getBit.0*retval *tmp21 64
-   760 label *label103
-   761 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label109 equal :testAndSetMultiples.0:result false
-+  762 jump *label112 equal :testAndSetMultiples.0:result false
-   763 label *label206
-   764 label *label207
-   765 # "Function: def setBit(in bitIndex)"
- 
-   870 op and :getBit.0*retval *tmp21 256
-   871 label *label118
-   872 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label124 equal :testAndSetMultiples.0:result false
-+  873 jump *label127 equal :testAndSetMultiples.0:result false
-   874 label *label184
-   875 label *label185
-   876 # "Function: def setBit(in bitIndex)"
- 
-   937 op and :getBit.0*retval *tmp21 512
-   938 label *label131
-   939 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label137 equal :testAndSetMultiples.0:result false
-+  940 jump *label140 equal :testAndSetMultiples.0:result false
-   941 label *label171
-   942 label *label172
-   943 # "Function: def setBit(in bitIndex)"
- 
-   985 op and :getBit.0*retval *tmp21 2048
-   986 label *label146
-   987 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label152 equal :testAndSetMultiples.0:result false
-+  988 jump *label155 equal :testAndSetMultiples.0:result false
-   989 label *label147
-   990 jump *label151 always
-   991 label *label148
- 
-  1010 op and :getBit.0*retval *tmp21 4096
-  1011 label *label159
-  1012 op equal :testAndSetMultiples.0:result :getBit.0*retval false
--    * jump *label165 equal :testAndSetMultiples.0:result false
-+ 1013 jump *label168 equal :testAndSetMultiples.0:result false
-  1014 label *label160
-  1015 jump *label164 always
-  1016 label *label161
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 set BITMAP bank1
+     1 # "Function: def sumPrimesUpTo(in maximum)"
+     2 set :sumPrimesUpTo.0:sum 5
+-    * label *label58
+-    * label *label59
+-    * label *label60
+     3 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label61
+     4 # "Function: def getBit(in bitIndex)"
+     5 read *tmp21 BITMAP 0
+     6 op and :getBit.0*retval *tmp21 4
+-    * label *label62
+     7 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+     8 jump *label68 equal :testAndSetMultiples.0:result false
+-    * label *label401
+-    * label *label402
+     9 # "Function: def setBit(in bitIndex)"
+    10 read *tmp35 BITMAP 0
+    11 op or *tmp38 *tmp35 4096
+    12 write *tmp38 BITMAP 0
+-    * label *label403
+-    * label *label404
+-    * label *label405
+    13 # "Function: def setBit(in bitIndex)"
+    14 read *tmp35 BITMAP 0
+    15 op or *tmp38 *tmp35 131072
+    16 write *tmp38 BITMAP 0
+-    * label *label406
+-    * label *label407
+-    * label *label408
+    17 # "Function: def setBit(in bitIndex)"
+    18 read *tmp35 BITMAP 0
+    19 op or *tmp38 *tmp35 4194304
+    20 write *tmp38 BITMAP 0
+-    * label *label409
+-    * label *label410
+-    * label *label411
+    21 # "Function: def setBit(in bitIndex)"
+    22 read *tmp35 BITMAP 0
+    23 op or *tmp38 *tmp35 134217728
+    24 write *tmp38 BITMAP 0
+-    * label *label412
+-    * label *label413
+-    * label *label414
+    25 # "Function: def setBit(in bitIndex)"
+    26 read *tmp35 BITMAP 0
+    27 op or *tmp38 *tmp35 4294967296
+    28 write *tmp38 BITMAP 0
+-    * label *label415
+-    * label *label416
+-    * label *label417
+    29 # "Function: def setBit(in bitIndex)"
+    30 read *tmp35 BITMAP 0
+    31 op or *tmp38 *tmp35 137438953472
+    32 write *tmp38 BITMAP 0
+-    * label *label418
+-    * label *label419
+-    * label *label420
+    33 # "Function: def setBit(in bitIndex)"
+    34 read *tmp35 BITMAP 0
+    35 op or *tmp38 *tmp35 4398046511104
+    36 write *tmp38 BITMAP 0
+-    * label *label421
+-    * label *label422
+-    * label *label423
+    37 # "Function: def setBit(in bitIndex)"
+    38 read *tmp35 BITMAP 0
+    39 op or *tmp38 *tmp35 140737488355328
+    40 write *tmp38 BITMAP 0
+-    * label *label424
+-    * label *label425
+-    * label *label426
+    41 # "Function: def setBit(in bitIndex)"
+    42 read *tmp35 BITMAP 1
+    43 op or *tmp38 *tmp35 16
+    44 write *tmp38 BITMAP 1
+-    * label *label427
+-    * label *label428
+-    * label *label429
+    45 # "Function: def setBit(in bitIndex)"
+    46 read *tmp35 BITMAP 1
+    47 op or *tmp38 *tmp35 512
+    48 write *tmp38 BITMAP 1
+-    * label *label430
+-    * label *label431
+-    * label *label432
+    49 # "Function: def setBit(in bitIndex)"
+    50 read *tmp35 BITMAP 1
+    51 op or *tmp38 *tmp35 16384
+    52 write *tmp38 BITMAP 1
+-    * label *label433
+-    * label *label434
+-    * label *label435
+    53 # "Function: def setBit(in bitIndex)"
+    54 read *tmp35 BITMAP 1
+    55 op or *tmp38 *tmp35 524288
+    56 write *tmp38 BITMAP 1
+-    * label *label436
+-    * label *label437
+-    * label *label438
+    57 # "Function: def setBit(in bitIndex)"
+    58 read *tmp35 BITMAP 1
+    59 op or *tmp38 *tmp35 16777216
+    60 write *tmp38 BITMAP 1
+-    * label *label439
+-    * label *label440
+-    * label *label441
+    61 # "Function: def setBit(in bitIndex)"
+    62 read *tmp35 BITMAP 1
+    63 op or *tmp38 *tmp35 536870912
+    64 write *tmp38 BITMAP 1
+-    * label *label442
+-    * label *label443
+-    * label *label444
+    65 # "Function: def setBit(in bitIndex)"
+    66 read *tmp35 BITMAP 1
+    67 op or *tmp38 *tmp35 17179869184
+    68 write *tmp38 BITMAP 1
+-    * label *label445
+-    * label *label446
+-    * label *label447
+    69 # "Function: def setBit(in bitIndex)"
+    70 read *tmp35 BITMAP 1
+    71 op or *tmp38 *tmp35 549755813888
+    72 write *tmp38 BITMAP 1
+-    * label *label448
+-    * label *label449
+-    * label *label450
+    73 # "Function: def setBit(in bitIndex)"
+    74 read *tmp35 BITMAP 1
+    75 op or *tmp38 *tmp35 17592186044416
+    76 write *tmp38 BITMAP 1
+-    * label *label451
+-    * label *label452
+-    * label *label453
+    77 # "Function: def setBit(in bitIndex)"
+    78 read *tmp35 BITMAP 2
+    79 op or *tmp38 *tmp35 2
+    80 write *tmp38 BITMAP 2
+-    * label *label454
+-    * label *label455
+-    * label *label456
+    81 # "Function: def setBit(in bitIndex)"
+    82 read *tmp35 BITMAP 2
+    83 op or *tmp38 *tmp35 64
+    84 write *tmp38 BITMAP 2
+-    * label *label457
+-    * label *label458
+-    * label *label459
+    85 # "Function: def setBit(in bitIndex)"
+    86 read *tmp35 BITMAP 2
+    87 op or *tmp38 *tmp35 2048
+    88 write *tmp38 BITMAP 2
+-    * label *label460
+-    * label *label461
+-    * label *label462
+    89 # "Function: def setBit(in bitIndex)"
+    90 read *tmp35 BITMAP 2
+    91 op or *tmp38 *tmp35 65536
+    92 write *tmp38 BITMAP 2
+-    * label *label463
+-    * label *label464
+-    * label *label465
+    93 # "Function: def setBit(in bitIndex)"
+    94 read *tmp35 BITMAP 2
+    95 op or *tmp38 *tmp35 2097152
+    96 write *tmp38 BITMAP 2
+-    * label *label466
+-    * label *label467
+-    * label *label468
+    97 # "Function: def setBit(in bitIndex)"
+    98 read *tmp35 BITMAP 2
+    99 op or *tmp38 *tmp35 67108864
+   100 write *tmp38 BITMAP 2
+-    * label *label469
+-    * label *label470
+-    * label *label471
+   101 # "Function: def setBit(in bitIndex)"
+   102 read *tmp35 BITMAP 2
+   103 op or *tmp38 *tmp35 2147483648
+   104 write *tmp38 BITMAP 2
+-    * label *label472
+-    * label *label473
+-    * label *label474
+   105 # "Function: def setBit(in bitIndex)"
+   106 read *tmp35 BITMAP 2
+   107 op or *tmp38 *tmp35 68719476736
+   108 write *tmp38 BITMAP 2
+-    * label *label475
+-    * label *label476
+-    * label *label477
+   109 # "Function: def setBit(in bitIndex)"
+   110 read *tmp35 BITMAP 2
+   111 op or *tmp38 *tmp35 2199023255552
+   112 write *tmp38 BITMAP 2
+-    * label *label478
+-    * label *label479
+-    * label *label480
+   113 # "Function: def setBit(in bitIndex)"
+   114 read *tmp35 BITMAP 2
+   115 op or *tmp38 *tmp35 70368744177664
+   116 write *tmp38 BITMAP 2
+-    * label *label481
+-    * label *label482
+-    * label *label483
+   117 # "Function: def setBit(in bitIndex)"
+   118 read *tmp35 BITMAP 3
+   119 op or *tmp38 *tmp35 8
+   120 write *tmp38 BITMAP 3
+-    * label *label484
+-    * label *label485
+-    * label *label486
+   121 # "Function: def setBit(in bitIndex)"
+   122 read *tmp35 BITMAP 3
+   123 op or *tmp38 *tmp35 256
+   124 write *tmp38 BITMAP 3
+-    * label *label487
+-    * label *label488
+-    * label *label489
+   125 # "Function: def setBit(in bitIndex)"
+   126 read *tmp35 BITMAP 3
+   127 op or *tmp38 *tmp35 8192
+   128 write *tmp38 BITMAP 3
+-    * label *label490
+-    * label *label491
+-    * label *label492
+   129 # "Function: def setBit(in bitIndex)"
+   130 read *tmp35 BITMAP 3
+   131 op or *tmp38 *tmp35 262144
+   132 write *tmp38 BITMAP 3
+-    * label *label493
+-    * label *label494
+-    * label *label495
+   133 # "Function: def setBit(in bitIndex)"
+   134 read *tmp35 BITMAP 3
+   135 op or *tmp38 *tmp35 8388608
+   136 write *tmp38 BITMAP 3
+-    * label *label496
+-    * label *label497
+-    * label *label498
+   137 # "Function: def setBit(in bitIndex)"
+   138 read *tmp35 BITMAP 3
+   139 op or *tmp38 *tmp35 268435456
+   140 write *tmp38 BITMAP 3
+-    * label *label499
+-    * label *label500
+-    * label *label501
+   141 # "Function: def setBit(in bitIndex)"
+   142 read *tmp35 BITMAP 3
+   143 op or *tmp38 *tmp35 8589934592
+   144 write *tmp38 BITMAP 3
+-    * label *label502
+-    * label *label503
+-    * label *label504
+   145 # "Function: def setBit(in bitIndex)"
+   146 read *tmp35 BITMAP 3
+   147 op or *tmp38 *tmp35 274877906944
+   148 write *tmp38 BITMAP 3
+-    * label *label505
+-    * label *label506
+-    * label *label507
+   149 # "Function: def setBit(in bitIndex)"
+   150 read *tmp35 BITMAP 3
+   151 op or *tmp38 *tmp35 8796093022208
+   152 write *tmp38 BITMAP 3
+-    * label *label508
+-    * label *label509
+-    * label *label510
+   153 # "Function: def setBit(in bitIndex)"
+   154 read *tmp35 BITMAP 4
+   155 op or *tmp38 *tmp35 1
+   156 write *tmp38 BITMAP 4
+-    * label *label511
+-    * label *label512
+-    * label *label513
+   157 # "Function: def setBit(in bitIndex)"
+   158 read *tmp35 BITMAP 4
+   159 op or *tmp38 *tmp35 32
+   160 write *tmp38 BITMAP 4
+-    * label *label514
+-    * label *label515
+-    * label *label516
+   161 # "Function: def setBit(in bitIndex)"
+   162 read *tmp35 BITMAP 4
+   163 op or *tmp38 *tmp35 1024
+   164 write *tmp38 BITMAP 4
+-    * label *label517
+-    * label *label518
+-    * label *label519
+   165 # "Function: def setBit(in bitIndex)"
+   166 read *tmp35 BITMAP 4
+   167 op or *tmp38 *tmp35 32768
+   168 write *tmp38 BITMAP 4
+-    * label *label520
+-    * label *label521
+-    * label *label522
+   169 # "Function: def setBit(in bitIndex)"
+   170 read *tmp35 BITMAP 4
+   171 op or *tmp38 *tmp35 1048576
+   172 write *tmp38 BITMAP 4
+-    * label *label523
+-    * label *label524
+-    * label *label525
+   173 # "Function: def setBit(in bitIndex)"
+   174 read *tmp35 BITMAP 4
+   175 op or *tmp38 *tmp35 33554432
+   176 write *tmp38 BITMAP 4
+-    * label *label526
+-    * label *label527
+-    * label *label528
+   177 # "Function: def setBit(in bitIndex)"
+   178 read *tmp35 BITMAP 4
+   179 op or *tmp38 *tmp35 1073741824
+   180 write *tmp38 BITMAP 4
+-    * label *label529
+-    * label *label530
+-    * label *label531
+   181 # "Function: def setBit(in bitIndex)"
+   182 read *tmp35 BITMAP 4
+   183 op or *tmp38 *tmp35 34359738368
+   184 write *tmp38 BITMAP 4
+-    * label *label532
+-    * label *label533
+-    * label *label534
+   185 # "Function: def setBit(in bitIndex)"
+   186 read *tmp35 BITMAP 4
+   187 op or *tmp38 *tmp35 1099511627776
+   188 write *tmp38 BITMAP 4
+-    * label *label535
+-    * label *label536
+-    * label *label537
+   189 # "Function: def setBit(in bitIndex)"
+   190 read *tmp35 BITMAP 4
+   191 op or *tmp38 *tmp35 35184372088832
+   192 write *tmp38 BITMAP 4
+-    * label *label538
+-    * label *label539
+-    * label *label540
+   193 # "Function: def setBit(in bitIndex)"
+   194 read *tmp35 BITMAP 5
+   195 op or *tmp38 *tmp35 4
+   196 write *tmp38 BITMAP 5
+-    * label *label541
+-    * label *label542
+-    * label *label543
+   197 # "Function: def setBit(in bitIndex)"
+   198 read *tmp35 BITMAP 5
+   199 op or *tmp38 *tmp35 128
+   200 write *tmp38 BITMAP 5
+-    * label *label544
+-    * label *label545
+-    * label *label67
+   201 label *label68
+-    * label *label69
+-    * label *label70
+   202 jump *label71 equal :testAndSetMultiples.0:result false
+   203 op add :sumPrimesUpTo.0:sum 5 5
+   204 label *label71
+-    * label *label72
+-    * label *label73
+   205 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label74
+   206 # "Function: def getBit(in bitIndex)"
+   207 read *tmp21 BITMAP 0
+   208 op and :getBit.0*retval *tmp21 8
+-    * label *label75
+   209 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   210 jump *label81 equal :testAndSetMultiples.0:result false
+-    * label *label301
+-    * label *label302
+   211 # "Function: def setBit(in bitIndex)"
+   212 read *tmp35 BITMAP 0
+   213 op or *tmp38 *tmp35 16777216
+   214 write *tmp38 BITMAP 0
+-    * label *label303
+-    * label *label304
+-    * label *label305
+   215 # "Function: def setBit(in bitIndex)"
+   216 read *tmp35 BITMAP 0
+   217 op or *tmp38 *tmp35 2147483648
+   218 write *tmp38 BITMAP 0
+-    * label *label306
+-    * label *label307
+-    * label *label308
+   219 # "Function: def setBit(in bitIndex)"
+   220 read *tmp35 BITMAP 0
+   221 op or *tmp38 *tmp35 274877906944
+   222 write *tmp38 BITMAP 0
+-    * label *label309
+-    * label *label310
+-    * label *label311
+   223 # "Function: def setBit(in bitIndex)"
+   224 read *tmp35 BITMAP 0
+   225 op or *tmp38 *tmp35 35184372088832
+   226 write *tmp38 BITMAP 0
+-    * label *label312
+-    * label *label313
+-    * label *label314
+   227 # "Function: def setBit(in bitIndex)"
+   228 read *tmp35 BITMAP 1
+   229 op or *tmp38 *tmp35 16
+   230 write *tmp38 BITMAP 1
+-    * label *label315
+-    * label *label316
+-    * label *label317
+   231 # "Function: def setBit(in bitIndex)"
+   232 read *tmp35 BITMAP 1
+   233 op or *tmp38 *tmp35 2048
+   234 write *tmp38 BITMAP 1
+-    * label *label318
+-    * label *label319
+-    * label *label320
+   235 # "Function: def setBit(in bitIndex)"
+   236 read *tmp35 BITMAP 1
+   237 op or *tmp38 *tmp35 262144
+   238 write *tmp38 BITMAP 1
+-    * label *label321
+-    * label *label322
+-    * label *label323
+   239 # "Function: def setBit(in bitIndex)"
+   240 read *tmp35 BITMAP 1
+   241 op or *tmp38 *tmp35 33554432
+   242 write *tmp38 BITMAP 1
+-    * label *label324
+-    * label *label325
+-    * label *label326
+   243 # "Function: def setBit(in bitIndex)"
+   244 read *tmp35 BITMAP 1
+   245 op or *tmp38 *tmp35 4294967296
+   246 write *tmp38 BITMAP 1
+-    * label *label327
+-    * label *label328
+-    * label *label329
+   247 # "Function: def setBit(in bitIndex)"
+   248 read *tmp35 BITMAP 1
+   249 op or *tmp38 *tmp35 549755813888
+   250 write *tmp38 BITMAP 1
+-    * label *label330
+-    * label *label331
+-    * label *label332
+   251 # "Function: def setBit(in bitIndex)"
+   252 read *tmp35 BITMAP 1
+   253 op or *tmp38 *tmp35 70368744177664
+   254 write *tmp38 BITMAP 1
+-    * label *label333
+-    * label *label334
+-    * label *label335
+   255 # "Function: def setBit(in bitIndex)"
+   256 read *tmp35 BITMAP 2
+   257 op or *tmp38 *tmp35 32
+   258 write *tmp38 BITMAP 2
+-    * label *label336
+-    * label *label337
+-    * label *label338
+   259 # "Function: def setBit(in bitIndex)"
+   260 read *tmp35 BITMAP 2
+   261 op or *tmp38 *tmp35 4096
+   262 write *tmp38 BITMAP 2
+-    * label *label339
+-    * label *label340
+-    * label *label341
+   263 # "Function: def setBit(in bitIndex)"
+   264 read *tmp35 BITMAP 2
+   265 op or *tmp38 *tmp35 524288
+   266 write *tmp38 BITMAP 2
+-    * label *label342
+-    * label *label343
+-    * label *label344
+   267 # "Function: def setBit(in bitIndex)"
+   268 read *tmp35 BITMAP 2
+   269 op or *tmp38 *tmp35 67108864
+   270 write *tmp38 BITMAP 2
+-    * label *label345
+-    * label *label346
+-    * label *label347
+   271 # "Function: def setBit(in bitIndex)"
+   272 read *tmp35 BITMAP 2
+   273 op or *tmp38 *tmp35 8589934592
+   274 write *tmp38 BITMAP 2
+-    * label *label348
+-    * label *label349
+-    * label *label350
+   275 # "Function: def setBit(in bitIndex)"
+   276 read *tmp35 BITMAP 2
+   277 op or *tmp38 *tmp35 1099511627776
+   278 write *tmp38 BITMAP 2
+-    * label *label351
+-    * label *label352
+-    * label *label353
+   279 # "Function: def setBit(in bitIndex)"
+   280 read *tmp35 BITMAP 2
+   281 op or *tmp38 *tmp35 140737488355328
+   282 write *tmp38 BITMAP 2
+-    * label *label354
+-    * label *label355
+-    * label *label356
+   283 # "Function: def setBit(in bitIndex)"
+   284 read *tmp35 BITMAP 3
+   285 op or *tmp38 *tmp35 64
+   286 write *tmp38 BITMAP 3
+-    * label *label357
+-    * label *label358
+-    * label *label359
+   287 # "Function: def setBit(in bitIndex)"
+   288 read *tmp35 BITMAP 3
+   289 op or *tmp38 *tmp35 8192
+   290 write *tmp38 BITMAP 3
+-    * label *label360
+-    * label *label361
+-    * label *label362
+   291 # "Function: def setBit(in bitIndex)"
+   292 read *tmp35 BITMAP 3
+   293 op or *tmp38 *tmp35 1048576
+   294 write *tmp38 BITMAP 3
+-    * label *label363
+-    * label *label364
+-    * label *label365
+   295 # "Function: def setBit(in bitIndex)"
+   296 read *tmp35 BITMAP 3
+   297 op or *tmp38 *tmp35 134217728
+   298 write *tmp38 BITMAP 3
+-    * label *label366
+-    * label *label367
+-    * label *label368
+   299 # "Function: def setBit(in bitIndex)"
+   300 read *tmp35 BITMAP 3
+   301 op or *tmp38 *tmp35 17179869184
+   302 write *tmp38 BITMAP 3
+-    * label *label369
+-    * label *label370
+-    * label *label371
+   303 # "Function: def setBit(in bitIndex)"
+   304 read *tmp35 BITMAP 3
+   305 op or *tmp38 *tmp35 2199023255552
+   306 write *tmp38 BITMAP 3
+-    * label *label372
+-    * label *label373
+-    * label *label374
+   307 # "Function: def setBit(in bitIndex)"
+   308 read *tmp35 BITMAP 4
+   309 op or *tmp38 *tmp35 1
+   310 write *tmp38 BITMAP 4
+-    * label *label375
+-    * label *label376
+-    * label *label377
+   311 # "Function: def setBit(in bitIndex)"
+   312 read *tmp35 BITMAP 4
+   313 op or *tmp38 *tmp35 128
+   314 write *tmp38 BITMAP 4
+-    * label *label378
+-    * label *label379
+-    * label *label380
+   315 # "Function: def setBit(in bitIndex)"
+   316 read *tmp35 BITMAP 4
+   317 op or *tmp38 *tmp35 16384
+   318 write *tmp38 BITMAP 4
+-    * label *label381
+-    * label *label382
+-    * label *label383
+   319 # "Function: def setBit(in bitIndex)"
+   320 read *tmp35 BITMAP 4
+   321 op or *tmp38 *tmp35 2097152
+   322 write *tmp38 BITMAP 4
+-    * label *label384
+-    * label *label385
+-    * label *label386
+   323 # "Function: def setBit(in bitIndex)"
+   324 read *tmp35 BITMAP 4
+   325 op or *tmp38 *tmp35 268435456
+   326 write *tmp38 BITMAP 4
+-    * label *label387
+-    * label *label388
+-    * label *label389
+   327 # "Function: def setBit(in bitIndex)"
+   328 read *tmp35 BITMAP 4
+   329 op or *tmp38 *tmp35 34359738368
+   330 write *tmp38 BITMAP 4
+-    * label *label390
+-    * label *label391
+-    * label *label392
+   331 # "Function: def setBit(in bitIndex)"
+   332 read *tmp35 BITMAP 4
+   333 op or *tmp38 *tmp35 4398046511104
+   334 write *tmp38 BITMAP 4
+-    * label *label393
+-    * label *label394
+-    * label *label395
+   335 # "Function: def setBit(in bitIndex)"
+   336 read *tmp35 BITMAP 5
+   337 op or *tmp38 *tmp35 2
+   338 write *tmp38 BITMAP 5
+-    * label *label396
+-    * label *label397
+-    * label *label398
+   339 # "Function: def setBit(in bitIndex)"
+   340 read *tmp35 BITMAP 5
+   341 op or *tmp38 *tmp35 256
+   342 write *tmp38 BITMAP 5
+-    * label *label399
+-    * label *label400
+-    * label *label80
+   343 label *label81
+-    * label *label82
+-    * label *label83
+   344 jump *label84 equal :testAndSetMultiples.0:result false
+   345 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 7
+   346 label *label84
+-    * label *label85
+-    * label *label86
+-    * label *label87
+-    * label *label88
+   347 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label89
+   348 # "Function: def getBit(in bitIndex)"
+   349 read *tmp21 BITMAP 0
+   350 op and :getBit.0*retval *tmp21 32
+-    * label *label90
+   351 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   352 jump *label96 equal :testAndSetMultiples.0:result false
+-    * label *label246
+-    * label *label247
+   353 # "Function: def setBit(in bitIndex)"
+   354 read *tmp35 BITMAP 1
+   355 op or *tmp38 *tmp35 4096
+   356 write *tmp38 BITMAP 1
+-    * label *label248
+-    * label *label249
+-    * label *label250
+   357 # "Function: def setBit(in bitIndex)"
+   358 read *tmp35 BITMAP 1
+   359 op or *tmp38 *tmp35 8388608
+   360 write *tmp38 BITMAP 1
+-    * label *label251
+-    * label *label252
+-    * label *label253
+   361 # "Function: def setBit(in bitIndex)"
+   362 read *tmp35 BITMAP 1
+   363 op or *tmp38 *tmp35 17179869184
+   364 write *tmp38 BITMAP 1
+-    * label *label254
+-    * label *label255
+-    * label *label256
+   365 # "Function: def setBit(in bitIndex)"
+   366 read *tmp35 BITMAP 1
+   367 op or *tmp38 *tmp35 35184372088832
+   368 write *tmp38 BITMAP 1
+-    * label *label257
+-    * label *label258
+-    * label *label259
+   369 # "Function: def setBit(in bitIndex)"
+   370 read *tmp35 BITMAP 2
+   371 op or *tmp38 *tmp35 256
+   372 write *tmp38 BITMAP 2
+-    * label *label260
+-    * label *label261
+-    * label *label262
+   373 # "Function: def setBit(in bitIndex)"
+   374 read *tmp35 BITMAP 2
+   375 op or *tmp38 *tmp35 524288
+   376 write *tmp38 BITMAP 2
+-    * label *label263
+-    * label *label264
+-    * label *label265
+   377 # "Function: def setBit(in bitIndex)"
+   378 read *tmp35 BITMAP 2
+   379 op or *tmp38 *tmp35 1073741824
+   380 write *tmp38 BITMAP 2
+-    * label *label266
+-    * label *label267
+-    * label *label268
+   381 # "Function: def setBit(in bitIndex)"
+   382 read *tmp35 BITMAP 2
+   383 op or *tmp38 *tmp35 2199023255552
+   384 write *tmp38 BITMAP 2
+-    * label *label269
+-    * label *label270
+-    * label *label271
+   385 # "Function: def setBit(in bitIndex)"
+   386 read *tmp35 BITMAP 3
+   387 op or *tmp38 *tmp35 16
+   388 write *tmp38 BITMAP 3
+-    * label *label272
+-    * label *label273
+-    * label *label274
+   389 # "Function: def setBit(in bitIndex)"
+   390 read *tmp35 BITMAP 3
+   391 op or *tmp38 *tmp35 32768
+   392 write *tmp38 BITMAP 3
+-    * label *label275
+-    * label *label276
+-    * label *label277
+   393 # "Function: def setBit(in bitIndex)"
+   394 read *tmp35 BITMAP 3
+   395 op or *tmp38 *tmp35 67108864
+   396 write *tmp38 BITMAP 3
+-    * label *label278
+-    * label *label279
+-    * label *label280
+   397 # "Function: def setBit(in bitIndex)"
+   398 read *tmp35 BITMAP 3
+   399 op or *tmp38 *tmp35 137438953472
+   400 write *tmp38 BITMAP 3
+-    * label *label281
+-    * label *label282
+-    * label *label283
+   401 # "Function: def setBit(in bitIndex)"
+   402 read *tmp35 BITMAP 4
+   403 op or *tmp38 *tmp35 1
+   404 write *tmp38 BITMAP 4
+-    * label *label284
+-    * label *label285
+-    * label *label286
+   405 # "Function: def setBit(in bitIndex)"
+   406 read *tmp35 BITMAP 4
+   407 op or *tmp38 *tmp35 2048
+   408 write *tmp38 BITMAP 4
+-    * label *label287
+-    * label *label288
+-    * label *label289
+   409 # "Function: def setBit(in bitIndex)"
+   410 read *tmp35 BITMAP 4
+   411 op or *tmp38 *tmp35 4194304
+   412 write *tmp38 BITMAP 4
+-    * label *label290
+-    * label *label291
+-    * label *label292
+   413 # "Function: def setBit(in bitIndex)"
+   414 read *tmp35 BITMAP 4
+   415 op or *tmp38 *tmp35 8589934592
+   416 write *tmp38 BITMAP 4
+-    * label *label293
+-    * label *label294
+-    * label *label295
+   417 # "Function: def setBit(in bitIndex)"
+   418 read *tmp35 BITMAP 4
+   419 op or *tmp38 *tmp35 17592186044416
+   420 write *tmp38 BITMAP 4
+-    * label *label296
+-    * label *label297
+-    * label *label298
+   421 # "Function: def setBit(in bitIndex)"
+   422 read *tmp35 BITMAP 5
+   423 op or *tmp38 *tmp35 128
+   424 write *tmp38 BITMAP 5
+-    * label *label299
+-    * label *label300
+-    * label *label95
+   425 label *label96
+-    * label *label97
+-    * label *label98
+   426 jump *label99 equal :testAndSetMultiples.0:result false
+   427 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 11
+   428 label *label99
+-    * label *label100
+-    * label *label101
+   429 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label102
+   430 # "Function: def getBit(in bitIndex)"
+   431 read *tmp21 BITMAP 0
+   432 op and :getBit.0*retval *tmp21 64
+-    * label *label103
+   433 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   434 jump *label109 equal :testAndSetMultiples.0:result false
+-    * label *label206
+-    * label *label207
+   435 # "Function: def setBit(in bitIndex)"
+   436 read *tmp35 BITMAP 1
+   437 op or *tmp38 *tmp35 68719476736
+   438 write *tmp38 BITMAP 1
+-    * label *label208
+-    * label *label209
+-    * label *label210
+   439 # "Function: def setBit(in bitIndex)"
+   440 read *tmp35 BITMAP 2
+   441 op or *tmp38 *tmp35 2
+   442 write *tmp38 BITMAP 2
+-    * label *label211
+-    * label *label212
+-    * label *label213
+   443 # "Function: def setBit(in bitIndex)"
+   444 read *tmp35 BITMAP 2
+   445 op or *tmp38 *tmp35 16384
+   446 write *tmp38 BITMAP 2
+-    * label *label214
+-    * label *label215
+-    * label *label216
+   447 # "Function: def setBit(in bitIndex)"
+   448 read *tmp35 BITMAP 2
+   449 op or *tmp38 *tmp35 134217728
+   450 write *tmp38 BITMAP 2
+-    * label *label217
+-    * label *label218
+-    * label *label219
+   451 # "Function: def setBit(in bitIndex)"
+   452 read *tmp35 BITMAP 2
+   453 op or *tmp38 *tmp35 1099511627776
+   454 write *tmp38 BITMAP 2
+-    * label *label220
+-    * label *label221
+-    * label *label222
+   455 # "Function: def setBit(in bitIndex)"
+   456 read *tmp35 BITMAP 3
+   457 op or *tmp38 *tmp35 32
+   458 write *tmp38 BITMAP 3
+-    * label *label223
+-    * label *label224
+-    * label *label225
+   459 # "Function: def setBit(in bitIndex)"
+   460 read *tmp35 BITMAP 3
+   461 op or *tmp38 *tmp35 262144
+   462 write *tmp38 BITMAP 3
+-    * label *label226
+-    * label *label227
+-    * label *label228
+   463 # "Function: def setBit(in bitIndex)"
+   464 read *tmp35 BITMAP 3
+   465 op or *tmp38 *tmp35 2147483648
+   466 write *tmp38 BITMAP 3
+-    * label *label229
+-    * label *label230
+-    * label *label231
+   467 # "Function: def setBit(in bitIndex)"
+   468 read *tmp35 BITMAP 3
+   469 op or *tmp38 *tmp35 17592186044416
+   470 write *tmp38 BITMAP 3
+-    * label *label232
+-    * label *label233
+-    * label *label234
+   471 # "Function: def setBit(in bitIndex)"
+   472 read *tmp35 BITMAP 4
+   473 op or *tmp38 *tmp35 512
+   474 write *tmp38 BITMAP 4
+-    * label *label235
+-    * label *label236
+-    * label *label237
+   475 # "Function: def setBit(in bitIndex)"
+   476 read *tmp35 BITMAP 4
+   477 op or *tmp38 *tmp35 4194304
+   478 write *tmp38 BITMAP 4
+-    * label *label238
+-    * label *label239
+-    * label *label240
+   479 # "Function: def setBit(in bitIndex)"
+   480 read *tmp35 BITMAP 4
+   481 op or *tmp38 *tmp35 34359738368
+   482 write *tmp38 BITMAP 4
+-    * label *label241
+-    * label *label242
+-    * label *label243
+   483 # "Function: def setBit(in bitIndex)"
+   484 read *tmp35 BITMAP 5
+   485 op or *tmp38 *tmp35 1
+   486 write *tmp38 BITMAP 5
+-    * label *label244
+-    * label *label245
+-    * label *label108
+   487 label *label109
+-    * label *label110
+-    * label *label111
+   488 jump *label112 equal :testAndSetMultiples.0:result false
+   489 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 13
+   490 label *label112
+-    * label *label113
+-    * label *label114
+-    * label *label115
+-    * label *label116
+   491 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label117
+   492 # "Function: def getBit(in bitIndex)"
+   493 read *tmp21 BITMAP 0
+   494 op and :getBit.0*retval *tmp21 256
+-    * label *label118
+   495 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   496 jump *label124 equal :testAndSetMultiples.0:result false
+-    * label *label184
+-    * label *label185
+   497 # "Function: def setBit(in bitIndex)"
+   498 read *tmp35 BITMAP 3
+   499 op or *tmp38 *tmp35 1
+   500 write *tmp38 BITMAP 3
+-    * label *label186
+-    * label *label187
+-    * label *label188
+   501 # "Function: def setBit(in bitIndex)"
+   502 read *tmp35 BITMAP 3
+   503 op or *tmp38 *tmp35 131072
+   504 write *tmp38 BITMAP 3
+-    * label *label189
+-    * label *label190
+-    * label *label191
+   505 # "Function: def setBit(in bitIndex)"
+   506 read *tmp35 BITMAP 3
+   507 op or *tmp38 *tmp35 17179869184
+   508 write *tmp38 BITMAP 3
+-    * label *label192
+-    * label *label193
+-    * label *label194
+   509 # "Function: def setBit(in bitIndex)"
+   510 read *tmp35 BITMAP 4
+   511 op or *tmp38 *tmp35 8
+   512 write *tmp38 BITMAP 4
+-    * label *label195
+-    * label *label196
+-    * label *label197
+   513 # "Function: def setBit(in bitIndex)"
+   514 read *tmp35 BITMAP 4
+   515 op or *tmp38 *tmp35 1048576
+   516 write *tmp38 BITMAP 4
+-    * label *label198
+-    * label *label199
+-    * label *label200
+   517 # "Function: def setBit(in bitIndex)"
+   518 read *tmp35 BITMAP 4
+   519 op or *tmp38 *tmp35 137438953472
+   520 write *tmp38 BITMAP 4
+-    * label *label201
+-    * label *label202
+-    * label *label203
+   521 # "Function: def setBit(in bitIndex)"
+   522 read *tmp35 BITMAP 5
+   523 op or *tmp38 *tmp35 64
+   524 write *tmp38 BITMAP 5
+-    * label *label204
+-    * label *label205
+-    * label *label123
+   525 label *label124
+-    * label *label125
+-    * label *label126
+   526 jump *label127 equal :testAndSetMultiples.0:result false
+   527 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 17
+   528 label *label127
+-    * label *label128
+-    * label *label129
+   529 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label130
+   530 # "Function: def getBit(in bitIndex)"
+   531 read *tmp21 BITMAP 0
+   532 op and :getBit.0*retval *tmp21 512
+-    * label *label131
+   533 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   534 jump *label137 equal :testAndSetMultiples.0:result false
+-    * label *label171
+-    * label *label172
+   535 # "Function: def setBit(in bitIndex)"
+   536 read *tmp35 BITMAP 3
+   537 op or *tmp38 *tmp35 68719476736
+   538 write *tmp38 BITMAP 3
+-    * label *label173
+-    * label *label174
+-    * label *label175
+   539 # "Function: def setBit(in bitIndex)"
+   540 read *tmp35 BITMAP 4
+   541 op or *tmp38 *tmp35 128
+   542 write *tmp38 BITMAP 4
+-    * label *label176
+-    * label *label177
+-    * label *label178
+   543 # "Function: def setBit(in bitIndex)"
+   544 read *tmp35 BITMAP 4
+   545 op or *tmp38 *tmp35 67108864
+   546 write *tmp38 BITMAP 4
+-    * label *label179
+-    * label *label180
+-    * label *label181
+   547 # "Function: def setBit(in bitIndex)"
+   548 read *tmp35 BITMAP 4
+   549 op or *tmp38 *tmp35 35184372088832
+   550 write *tmp38 BITMAP 4
+-    * label *label182
+-    * label *label183
+-    * label *label136
+   551 label *label137
+-    * label *label138
+-    * label *label139
+   552 jump *label140 equal :testAndSetMultiples.0:result false
+   553 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 19
+   554 label *label140
+-    * label *label141
+-    * label *label142
+-    * label *label143
+-    * label *label144
+   555 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label145
+   556 # "Function: def getBit(in bitIndex)"
+   557 read *tmp21 BITMAP 0
+   558 op and :getBit.0*retval *tmp21 2048
+-    * label *label146
+   559 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   560 jump *label152 equal :testAndSetMultiples.0:result false
+-    * label *label147
+   561 jump *label151 always
+   562 label *label148
+   563 # "Function: def setBit(in bitIndex)"
+   564 write *tmp38 BITMAP *tmp34
+-    * label *label149
+-    * label *label150
+   565 jump *label148 lessThanEq :testAndSetMultiples.0:i 250
+   566 label *label151
+   567 label *label152
+-    * label *label153
+-    * label *label154
+   568 jump *label155 equal :testAndSetMultiples.0:result false
+   569 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 23
+   570 label *label155
+-    * label *label156
+-    * label *label157
+   571 # "Function: def testAndSetMultiples(in n, in maximum)"
+-    * label *label158
+   572 # "Function: def getBit(in bitIndex)"
+   573 read *tmp21 BITMAP 0
+   574 op and :getBit.0*retval *tmp21 4096
+-    * label *label159
+   575 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   576 jump *label165 equal :testAndSetMultiples.0:result false
+-    * label *label160
+   577 jump *label164 always
+   578 label *label161
+   579 # "Function: def setBit(in bitIndex)"
+   580 write *tmp38 BITMAP *tmp34
+-    * label *label162
+-    * label *label163
+   581 jump *label161 lessThanEq :testAndSetMultiples.0:i 250
+   582 label *label164
+   583 label *label165
+-    * label *label166
+-    * label *label167
+   584 jump *label168 equal :testAndSetMultiples.0:result false
+   585 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 25
+   586 label *label168
+-    * label *label169
+   587 op add :sumPrimesUpTo.0:i 25 4
+-    * label *label170
+-    * label *label5
+-    * label *label10
+   588 label *label28
+   589 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
+-    * label *label30
+   590 # "Function: def getBit(in bitIndex)"
+   591 op idiv *tmp20 :getBit.0:bitIndex 48
+   592 op mod *tmp22 :getBit.0:bitIndex 48
+   593 op shl *tmp23 1 *tmp22
+   594 read *tmp21 BITMAP *tmp20
+   595 op and :getBit.0*retval *tmp21 *tmp23
+-    * label *label31
+   596 jump *label13 notEqual :getBit.0*retval false
+   597 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:i
+   598 label *label13
+-    * label *label14
+   599 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 2
+   600 op idiv :getBit.0:bitIndex :sumPrimesUpTo.0:i 2
+-    * label *label32
+   601 # "Function: def getBit(in bitIndex)"
+   602 op idiv *tmp20 :getBit.0:bitIndex 48
+   603 op mod *tmp22 :getBit.0:bitIndex 48
+   604 op shl *tmp23 1 *tmp22
+   605 read *tmp21 BITMAP *tmp20
+   606 op and :getBit.0*retval *tmp21 *tmp23
+-    * label *label33
+   607 jump *label15 notEqual :getBit.0*retval false
+   608 jump *label17 greaterThan :sumPrimesUpTo.0:i 500
+   609 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:i
+   610 label *label17
+-    * label *label18
+   611 label *label15
+-    * label *label16
+   612 op add :sumPrimesUpTo.0:i :sumPrimesUpTo.0:i 4
+-    * label *label11
+   613 jump *label28 lessThanEq :sumPrimesUpTo.0:i 500
+-    * label *label12
+-    * label *label2
+   614 assertequals 21536 :sumPrimesUpTo.0:sum "sumPrimesUpTo(500)"
+   615 stop
+   616 end
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-4 instructions):
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
-   988 jump *label155 equal :testAndSetMultiples.0:result false
-   989 label *label147
-   990 jump *label151 always
+     5 read *tmp21 BITMAP 0
+     6 op and :getBit.0*retval *tmp21 4
+     7 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label68 equal :testAndSetMultiples.0:result false
++    8 jump *label71 equal :testAndSetMultiples.0:result false
+     9 # "Function: def setBit(in bitIndex)"
+    10 read *tmp35 BITMAP 0
+    11 op or *tmp38 *tmp35 4096
+ 
+   207 read *tmp21 BITMAP 0
+   208 op and :getBit.0*retval *tmp21 8
+   209 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label81 equal :testAndSetMultiples.0:result false
++  210 jump *label84 equal :testAndSetMultiples.0:result false
+   211 # "Function: def setBit(in bitIndex)"
+   212 read *tmp35 BITMAP 0
+   213 op or *tmp38 *tmp35 16777216
+ 
+   349 read *tmp21 BITMAP 0
+   350 op and :getBit.0*retval *tmp21 32
+   351 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label96 equal :testAndSetMultiples.0:result false
++  352 jump *label99 equal :testAndSetMultiples.0:result false
+   353 # "Function: def setBit(in bitIndex)"
+   354 read *tmp35 BITMAP 1
+   355 op or *tmp38 *tmp35 4096
+ 
+   431 read *tmp21 BITMAP 0
+   432 op and :getBit.0*retval *tmp21 64
+   433 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label109 equal :testAndSetMultiples.0:result false
++  434 jump *label112 equal :testAndSetMultiples.0:result false
+   435 # "Function: def setBit(in bitIndex)"
+   436 read *tmp35 BITMAP 1
+   437 op or *tmp38 *tmp35 68719476736
+ 
+   493 read *tmp21 BITMAP 0
+   494 op and :getBit.0*retval *tmp21 256
+   495 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label124 equal :testAndSetMultiples.0:result false
++  496 jump *label127 equal :testAndSetMultiples.0:result false
+   497 # "Function: def setBit(in bitIndex)"
+   498 read *tmp35 BITMAP 3
+   499 op or *tmp38 *tmp35 1
+ 
+   531 read *tmp21 BITMAP 0
+   532 op and :getBit.0*retval *tmp21 512
+   533 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label137 equal :testAndSetMultiples.0:result false
++  534 jump *label140 equal :testAndSetMultiples.0:result false
+   535 # "Function: def setBit(in bitIndex)"
+   536 read *tmp35 BITMAP 3
+   537 op or *tmp38 *tmp35 68719476736
+ 
+   557 read *tmp21 BITMAP 0
+   558 op and :getBit.0*retval *tmp21 2048
+   559 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label152 equal :testAndSetMultiples.0:result false
++  560 jump *label155 equal :testAndSetMultiples.0:result false
+   561 jump *label151 always
+   562 label *label148
+   563 # "Function: def setBit(in bitIndex)"
+ 
+   573 read *tmp21 BITMAP 0
+   574 op and :getBit.0*retval *tmp21 4096
+   575 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * jump *label165 equal :testAndSetMultiples.0:result false
++  576 jump *label168 equal :testAndSetMultiples.0:result false
+   577 jump *label164 always
+   578 label *label161
+   579 # "Function: def setBit(in bitIndex)"
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-4 instructions):
+ 
+   198 read *tmp35 BITMAP 5
+   199 op or *tmp38 *tmp35 128
+   200 write *tmp38 BITMAP 5
+-    * label *label68
+   201 jump *label71 equal :testAndSetMultiples.0:result false
+   202 op add :sumPrimesUpTo.0:sum 5 5
+   203 label *label71
+ 
+   339 read *tmp35 BITMAP 5
+   340 op or *tmp38 *tmp35 256
+   341 write *tmp38 BITMAP 5
+-    * label *label81
+   342 jump *label84 equal :testAndSetMultiples.0:result false
+   343 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 7
+   344 label *label84
+ 
+   420 read *tmp35 BITMAP 5
+   421 op or *tmp38 *tmp35 128
+   422 write *tmp38 BITMAP 5
+-    * label *label96
+   423 jump *label99 equal :testAndSetMultiples.0:result false
+   424 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 11
+   425 label *label99
+ 
+   481 read *tmp35 BITMAP 5
+   482 op or *tmp38 *tmp35 1
+   483 write *tmp38 BITMAP 5
+-    * label *label109
+   484 jump *label112 equal :testAndSetMultiples.0:result false
+   485 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 13
+   486 label *label112
+ 
+   518 read *tmp35 BITMAP 5
+   519 op or *tmp38 *tmp35 64
+   520 write *tmp38 BITMAP 5
+-    * label *label124
+   521 jump *label127 equal :testAndSetMultiples.0:result false
+   522 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 17
+   523 label *label127
+ 
+   543 read *tmp35 BITMAP 4
+   544 op or *tmp38 *tmp35 35184372088832
+   545 write *tmp38 BITMAP 4
+-    * label *label137
+   546 jump *label140 equal :testAndSetMultiples.0:result false
+   547 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 19
+   548 label *label140
+ 
+   553 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   554 jump *label155 equal :testAndSetMultiples.0:result false
+   555 jump *label151 always
 -    * label *label148
 -    * # "Function: def setBit(in bitIndex)"
 -    * write *tmp38 BITMAP *tmp34
--    * label *label149
--    * label *label150
 -    * jump *label148 lessThanEq :testAndSetMultiples.0:i 250
-   991 label *label151
-   992 label *label152
-   993 label *label153
+   556 label *label151
+-    * label *label152
+   557 jump *label155 equal :testAndSetMultiples.0:result false
+   558 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 23
+   559 label *label155
  
-  1007 jump *label168 equal :testAndSetMultiples.0:result false
-  1008 label *label160
-  1009 jump *label164 always
+   564 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   565 jump *label168 equal :testAndSetMultiples.0:result false
+   566 jump *label164 always
 -    * label *label161
 -    * # "Function: def setBit(in bitIndex)"
 -    * write *tmp38 BITMAP *tmp34
--    * label *label162
--    * label *label163
 -    * jump *label161 lessThanEq :testAndSetMultiples.0:i 250
-  1010 label *label164
-  1011 label *label165
-  1012 label *label166
+   567 label *label164
+-    * label *label165
+   568 jump *label168 equal :testAndSetMultiples.0:result false
+   569 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 25
+   570 label *label168
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-9 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-9 instructions):
  
-   352 label *label68
-   353 label *label69
-   354 label *label70
+   198 read *tmp35 BITMAP 5
+   199 op or *tmp38 *tmp35 128
+   200 write *tmp38 BITMAP 5
 -    * jump *label71 equal :testAndSetMultiples.0:result false
-   355 op add :sumPrimesUpTo.0:sum 5 5
-   356 label *label71
-   357 label *label72
+   201 op add :sumPrimesUpTo.0:sum 5 5
+   202 label *label71
+   203 # "Function: def testAndSetMultiples(in n, in maximum)"
  
-   600 label *label81
-   601 label *label82
-   602 label *label83
+   338 read *tmp35 BITMAP 5
+   339 op or *tmp38 *tmp35 256
+   340 write *tmp38 BITMAP 5
 -    * jump *label84 equal :testAndSetMultiples.0:result false
-   603 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 7
-   604 label *label84
-   605 label *label85
+   341 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 7
+   342 label *label84
+   343 # "Function: def testAndSetMultiples(in n, in maximum)"
  
-   745 label *label96
-   746 label *label97
-   747 label *label98
+   418 read *tmp35 BITMAP 5
+   419 op or *tmp38 *tmp35 128
+   420 write *tmp38 BITMAP 5
 -    * jump *label99 equal :testAndSetMultiples.0:result false
-   748 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 11
-   749 label *label99
-   750 label *label100
+   421 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 11
+   422 label *label99
+   423 # "Function: def testAndSetMultiples(in n, in maximum)"
  
-   853 label *label109
-   854 label *label110
-   855 label *label111
+   478 read *tmp35 BITMAP 5
+   479 op or *tmp38 *tmp35 1
+   480 write *tmp38 BITMAP 5
 -    * jump *label112 equal :testAndSetMultiples.0:result false
-   856 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 13
-   857 label *label112
-   858 label *label113
+   481 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 13
+   482 label *label112
+   483 # "Function: def testAndSetMultiples(in n, in maximum)"
  
-   921 label *label124
-   922 label *label125
-   923 label *label126
+   514 read *tmp35 BITMAP 5
+   515 op or *tmp38 *tmp35 64
+   516 write *tmp38 BITMAP 5
 -    * jump *label127 equal :testAndSetMultiples.0:result false
-   924 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 17
-   925 label *label127
-   926 label *label128
+   517 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 17
+   518 label *label127
+   519 # "Function: def testAndSetMultiples(in n, in maximum)"
  
-   966 label *label137
-   967 label *label138
-   968 label *label139
+   538 read *tmp35 BITMAP 4
+   539 op or *tmp38 *tmp35 35184372088832
+   540 write *tmp38 BITMAP 4
 -    * jump *label140 equal :testAndSetMultiples.0:result false
-   969 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 19
-   970 label *label140
-   971 label *label141
+   541 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 19
+   542 label *label140
+   543 # "Function: def testAndSetMultiples(in n, in maximum)"
  
-   981 op equal :testAndSetMultiples.0:result :getBit.0*retval false
-   982 jump *label155 equal :testAndSetMultiples.0:result false
-   983 label *label147
+   546 op and :getBit.0*retval *tmp21 2048
+   547 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   548 jump *label155 equal :testAndSetMultiples.0:result false
 -    * jump *label151 always
-   984 label *label151
-   985 label *label152
-   986 label *label153
+   549 label *label151
+   550 jump *label155 equal :testAndSetMultiples.0:result false
+   551 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 23
  
-   999 op equal :testAndSetMultiples.0:result :getBit.0*retval false
-  1000 jump *label168 equal :testAndSetMultiples.0:result false
-  1001 label *label160
+   556 op and :getBit.0*retval *tmp21 4096
+   557 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   558 jump *label168 equal :testAndSetMultiples.0:result false
 -    * jump *label164 always
-  1002 label *label164
-  1003 label *label165
-  1004 label *label166
+   559 label *label164
+   560 jump *label168 equal :testAndSetMultiples.0:result false
+   561 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 25
  
-  1049 label *label2
-  1050 assertequals 21536 :sumPrimesUpTo.0:sum "sumPrimesUpTo(500)"
-  1051 stop
+   589 jump *label28 lessThanEq :sumPrimesUpTo.0:i 500
+   590 assertequals 21536 :sumPrimesUpTo.0:sum "sumPrimesUpTo(500)"
+   591 stop
 -    * end
 
-Modifications by Final phase, Single Step Elimination, iteration 2 (-2 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 2 (-2 instructions):
  
-   979 op and :getBit.0*retval *tmp21 2048
-   980 label *label146
-   981 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   545 read *tmp21 BITMAP 0
+   546 op and :getBit.0*retval *tmp21 2048
+   547 op equal :testAndSetMultiples.0:result :getBit.0*retval false
 -    * jump *label155 equal :testAndSetMultiples.0:result false
-   982 label *label147
-   983 label *label151
-   984 label *label152
+   548 label *label151
+   549 jump *label155 equal :testAndSetMultiples.0:result false
+   550 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 23
  
-   996 op and :getBit.0*retval *tmp21 4096
-   997 label *label159
-   998 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+   554 read *tmp21 BITMAP 0
+   555 op and :getBit.0*retval *tmp21 4096
+   556 op equal :testAndSetMultiples.0:result :getBit.0*retval false
 -    * jump *label168 equal :testAndSetMultiples.0:result false
-   999 label *label160
-  1000 label *label164
-  1001 label *label165
+   557 label *label164
+   558 jump *label168 equal :testAndSetMultiples.0:result false
+   559 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 25
+
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
+ 
+   545 read *tmp21 BITMAP 0
+   546 op and :getBit.0*retval *tmp21 2048
+   547 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * label *label151
+   548 jump *label155 equal :testAndSetMultiples.0:result false
+   549 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 23
+   550 label *label155
+ 
+   553 read *tmp21 BITMAP 0
+   554 op and :getBit.0*retval *tmp21 4096
+   555 op equal :testAndSetMultiples.0:result :getBit.0*retval false
+-    * label *label164
+   556 jump *label168 equal :testAndSetMultiples.0:result false
+   557 op add :sumPrimesUpTo.0:sum :sumPrimesUpTo.0:sum 25
+   558 label *label168
 
 Final code before resolving virtual instructions:
 

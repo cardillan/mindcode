@@ -97,9 +97,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void handlesAssignmentSequences() {
             assertCompilesTo(
-                    expectedMessages()
-                            .add("Optimization passes limit (1) reached.")
-                            .add("Optimization passes limited at 1."),
+                    expectedMessages().add("Optimization passes limit (1) reached."),
                     """
                             #set passes = 1;
                             i = 0;
@@ -178,24 +176,22 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             print(a);
                             """,
-                    createInstruction(READ, var(0), "cell1", "0"),
-                    createInstruction(JUMP, var(1002), "equal", var(0), "0"),
-                    createInstruction(JUMP, var(1002), "equal", var(0), "1"),
-                    createInstruction(JUMP, var(1001), "notEqual", var(0), "2"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(SET, var(1), "10"),
-                    createInstruction(JUMP, var(1000), "always"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(JUMP, var(1003), "lessThan", var(0), "10"),
-                    createInstruction(JUMP, var(1004), "lessThanEq", var(0), "20"),
-                    createInstruction(JUMP, var(1003), "always"),
-                    createInstruction(LABEL, var(1004)),
-                    createInstruction(SET, var(1), "20"),
-                    createInstruction(JUMP, var(1000), "always"),
-                    createInstruction(LABEL, var(1003)),
-                    createInstruction(SET, var(1), "30"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(PRINT, var(1))
+                    createInstruction(READ, tmp(1), "cell1", "0"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "0"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "1"),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(1), "2"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), "10"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(3), "lessThan", tmp(1), "10"),
+                    createInstruction(JUMP, label(3), "greaterThan", tmp(1), "20"),
+                    createInstruction(SET, tmp(0), "20"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(0), "30"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(0))
             );
         }
 

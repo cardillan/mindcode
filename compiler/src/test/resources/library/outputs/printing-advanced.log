@@ -1,10 +1,10 @@
    417 instructions before optimizations.
     20 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-    48 instructions eliminated by Dead Code Elimination (2 passes, 7 iterations).
-    65 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    20 instructions eliminated by Jump Optimization (5 iterations).
-    45 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+    48 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
+    65 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
+    20 instructions eliminated by Jump Optimization (6 iterations).
+    45 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
      2 instructions eliminated by If Expression Optimization (4 iterations).
    199 instructions eliminated by Data Flow Optimization (18 passes, 55 iterations).
      2 instructions eliminated by Loop Optimization (4 iterations).
@@ -13,9 +13,9 @@
     12 loops unrolled by Loop Unrolling.
    245 instructions added by Function Inlining (20 iterations).
     13 function calls inlined by Function Inlining.
-     6 instructions eliminated by Jump Straightening (5 iterations).
+     6 instructions eliminated by Jump Straightening (6 iterations).
    268 instructions updated by JumpThreading.
-   525 instructions eliminated by Unreachable Code Elimination.
+   525 instructions eliminated by Unreachable Code Elimination (2 iterations).
    372 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 686):

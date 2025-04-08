@@ -1,8 +1,8 @@
     30 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by Jump Optimization (4 iterations).
      1 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Unreachable Code Elimination.
+     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Stack Optimization.
     21 instructions after optimizations.
 
@@ -61,11 +61,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     12 op sub :foo.0:n :foo.0:n 1
     13 callrec bank1 *label0 *label6 :foo.0*retval
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
+    19 set *tmp2 10
+    20 label *label5
     21 set :foo.0*retval *tmp2
-    22 label *label3
-    23 returnrec bank1
+-    * label *label3
+    22 returnrec bank1
+    23 end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    20 label *label5
+    21 set :foo.0*retval *tmp2
+    22 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):

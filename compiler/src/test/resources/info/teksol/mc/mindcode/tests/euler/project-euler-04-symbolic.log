@@ -1,8 +1,8 @@
     36 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
-     4 instructions eliminated by Dead Code Elimination (4 iterations).
-     3 instructions eliminated by Jump Optimization (4 iterations).
-     3 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     4 instructions eliminated by Dead Code Elimination (5 iterations).
+     3 instructions eliminated by Jump Optimization (5 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -191,11 +191,54 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
     16 op mul *tmp5 10 :revert.0:res
     17 op mod *tmp6 :revert.0:num 10
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 set :max 0
+     1 set :i 10
+-    * label *label0
+     2 label *label14
+     3 set :j :i
+-    * label *label3
+     4 jump *label5 greaterThanEq :i 100
+     5 label *label15
+     6 op mul :num :i :j
  
-    37 label *label2
-    38 assertequals 9009 :max "Project Euler 4"
-    39 stop
+     8 # "Function: def revert(in num)"
+     9 set :revert.0:num :num
+    10 set :revert.0:res 0
+-    * label *label9
+    11 jump *label11 lessThanEq :num 0
+    12 label *label16
+    13 op mul *tmp5 10 :revert.0:res
+    14 op mod *tmp6 :revert.0:num 10
+    15 op add :revert.0:res *tmp5 *tmp6
+    16 op idiv :revert.0:num :revert.0:num 10
+-    * label *label10
+    17 jump *label16 greaterThan :revert.0:num 0
+    18 label *label11
+-    * label *label8
+    19 jump *label12 notEqual :num :revert.0:res
+    20 set :max :num
+    21 label *label12
+-    * label *label13
+    22 label *label6
+-    * label *label7
+-    * label *label4
+    23 op add :j :j 1
+    24 jump *label15 lessThan :j 100
+    25 label *label5
+-    * label *label1
+    26 op add :i :i 1
+    27 jump *label14 lessThan :i 100
+-    * label *label2
+    28 assertequals 9009 :max "Project Euler 4"
+    29 stop
+    30 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+    27 jump *label14 lessThan :i 100
+    28 assertequals 9009 :max "Project Euler 4"
+    29 stop
 -    * end
 
 Final code before resolving virtual instructions:

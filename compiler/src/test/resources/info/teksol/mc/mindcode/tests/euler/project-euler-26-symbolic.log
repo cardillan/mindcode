@@ -1,8 +1,8 @@
     54 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     6 instructions eliminated by Dead Code Elimination (3 iterations).
-     5 instructions eliminated by Jump Optimization (3 iterations).
-     4 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     6 instructions eliminated by Dead Code Elimination (4 iterations).
+     5 instructions eliminated by Jump Optimization (4 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
    105 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
@@ -3285,11 +3285,950 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    922 print "Power of ten limit reached."
    923 end
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+     0 set :maxlen 0
+     1 set :maxnum 0
+     2 set :d 2
+-    * label *label0
+     3 label *label19
+     4 # "Function: def getRepeatLength(in d)"
+     5 set :getRepeatLength.0:n :d
+-    * label *label4
+     6 op mod *tmp1 :d 5
+     7 jump *label6 notEqual *tmp1 0
+     8 label *label21
+     9 op div :getRepeatLength.0:n :getRepeatLength.0:n 5
+-    * label *label5
+    10 op mod *tmp1 :getRepeatLength.0:n 5
+    11 jump *label21 equal *tmp1 0
+    12 label *label6
+-    * label *label7
+    13 op mod *tmp3 :getRepeatLength.0:n 2
+    14 jump *label9 notEqual *tmp3 0
+    15 label *label22
+    16 op div :getRepeatLength.0:n :getRepeatLength.0:n 2
+-    * label *label8
+    17 op mod *tmp3 :getRepeatLength.0:n 2
+    18 jump *label22 equal *tmp3 0
+    19 label *label9
  
-   933 label *label2
-   934 assertequals 97 :maxnum "Project Euler 26"
-   935 stop
+    21 set *tmp0 0
+    22 jump *label3 always
+    23 label *label10
+-    * label *label11
+-    * label *label23
+-    * label *label24
+    24 op mod :getRepeatLength.0:power 10 :getRepeatLength.0:n
+    25 jump *label25 notEqual :getRepeatLength.0:power 1
+    26 set *tmp0 1
+    27 jump *label3 always
+    28 label *label25
+-    * label *label26
+-    * label *label27
+-    * label *label28
+    29 op mul *tmp7 :getRepeatLength.0:power 10
+    30 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    31 jump *label29 notEqual :getRepeatLength.0:power 1
+    32 set *tmp0 2
+    33 jump *label3 always
+    34 label *label29
+-    * label *label30
+-    * label *label31
+-    * label *label32
+    35 op mul *tmp7 :getRepeatLength.0:power 10
+    36 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    37 jump *label33 notEqual :getRepeatLength.0:power 1
+    38 set *tmp0 3
+    39 jump *label3 always
+    40 label *label33
+-    * label *label34
+-    * label *label35
+-    * label *label36
+    41 op mul *tmp7 :getRepeatLength.0:power 10
+    42 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    43 jump *label37 notEqual :getRepeatLength.0:power 1
+    44 set *tmp0 4
+    45 jump *label3 always
+    46 label *label37
+-    * label *label38
+-    * label *label39
+-    * label *label40
+    47 op mul *tmp7 :getRepeatLength.0:power 10
+    48 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    49 jump *label41 notEqual :getRepeatLength.0:power 1
+    50 set *tmp0 5
+    51 jump *label3 always
+    52 label *label41
+-    * label *label42
+-    * label *label43
+-    * label *label44
+    53 op mul *tmp7 :getRepeatLength.0:power 10
+    54 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    55 jump *label45 notEqual :getRepeatLength.0:power 1
+    56 set *tmp0 6
+    57 jump *label3 always
+    58 label *label45
+-    * label *label46
+-    * label *label47
+-    * label *label48
+    59 op mul *tmp7 :getRepeatLength.0:power 10
+    60 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    61 jump *label49 notEqual :getRepeatLength.0:power 1
+    62 set *tmp0 7
+    63 jump *label3 always
+    64 label *label49
+-    * label *label50
+-    * label *label51
+-    * label *label52
+    65 op mul *tmp7 :getRepeatLength.0:power 10
+    66 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    67 jump *label53 notEqual :getRepeatLength.0:power 1
+    68 set *tmp0 8
+    69 jump *label3 always
+    70 label *label53
+-    * label *label54
+-    * label *label55
+-    * label *label56
+    71 op mul *tmp7 :getRepeatLength.0:power 10
+    72 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    73 jump *label57 notEqual :getRepeatLength.0:power 1
+    74 set *tmp0 9
+    75 jump *label3 always
+    76 label *label57
+-    * label *label58
+-    * label *label59
+-    * label *label60
+    77 op mul *tmp7 :getRepeatLength.0:power 10
+    78 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    79 jump *label61 notEqual :getRepeatLength.0:power 1
+    80 set *tmp0 10
+    81 jump *label3 always
+    82 label *label61
+-    * label *label62
+-    * label *label63
+-    * label *label64
+    83 op mul *tmp7 :getRepeatLength.0:power 10
+    84 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    85 jump *label65 notEqual :getRepeatLength.0:power 1
+    86 set *tmp0 11
+    87 jump *label3 always
+    88 label *label65
+-    * label *label66
+-    * label *label67
+-    * label *label68
+    89 op mul *tmp7 :getRepeatLength.0:power 10
+    90 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    91 jump *label69 notEqual :getRepeatLength.0:power 1
+    92 set *tmp0 12
+    93 jump *label3 always
+    94 label *label69
+-    * label *label70
+-    * label *label71
+-    * label *label72
+    95 op mul *tmp7 :getRepeatLength.0:power 10
+    96 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+    97 jump *label73 notEqual :getRepeatLength.0:power 1
+    98 set *tmp0 13
+    99 jump *label3 always
+   100 label *label73
+-    * label *label74
+-    * label *label75
+-    * label *label76
+   101 op mul *tmp7 :getRepeatLength.0:power 10
+   102 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   103 jump *label77 notEqual :getRepeatLength.0:power 1
+   104 set *tmp0 14
+   105 jump *label3 always
+   106 label *label77
+-    * label *label78
+-    * label *label79
+-    * label *label80
+   107 op mul *tmp7 :getRepeatLength.0:power 10
+   108 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   109 jump *label81 notEqual :getRepeatLength.0:power 1
+   110 set *tmp0 15
+   111 jump *label3 always
+   112 label *label81
+-    * label *label82
+-    * label *label83
+-    * label *label84
+   113 op mul *tmp7 :getRepeatLength.0:power 10
+   114 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   115 jump *label85 notEqual :getRepeatLength.0:power 1
+   116 set *tmp0 16
+   117 jump *label3 always
+   118 label *label85
+-    * label *label86
+-    * label *label87
+-    * label *label88
+   119 op mul *tmp7 :getRepeatLength.0:power 10
+   120 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   121 jump *label89 notEqual :getRepeatLength.0:power 1
+   122 set *tmp0 17
+   123 jump *label3 always
+   124 label *label89
+-    * label *label90
+-    * label *label91
+-    * label *label92
+   125 op mul *tmp7 :getRepeatLength.0:power 10
+   126 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   127 jump *label93 notEqual :getRepeatLength.0:power 1
+   128 set *tmp0 18
+   129 jump *label3 always
+   130 label *label93
+-    * label *label94
+-    * label *label95
+-    * label *label96
+   131 op mul *tmp7 :getRepeatLength.0:power 10
+   132 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   133 jump *label97 notEqual :getRepeatLength.0:power 1
+   134 set *tmp0 19
+   135 jump *label3 always
+   136 label *label97
+-    * label *label98
+-    * label *label99
+-    * label *label100
+   137 op mul *tmp7 :getRepeatLength.0:power 10
+   138 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   139 jump *label101 notEqual :getRepeatLength.0:power 1
+   140 set *tmp0 20
+   141 jump *label3 always
+   142 label *label101
+-    * label *label102
+-    * label *label103
+-    * label *label104
+   143 op mul *tmp7 :getRepeatLength.0:power 10
+   144 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   145 jump *label105 notEqual :getRepeatLength.0:power 1
+   146 set *tmp0 21
+   147 jump *label3 always
+   148 label *label105
+-    * label *label106
+-    * label *label107
+-    * label *label108
+   149 op mul *tmp7 :getRepeatLength.0:power 10
+   150 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   151 jump *label109 notEqual :getRepeatLength.0:power 1
+   152 set *tmp0 22
+   153 jump *label3 always
+   154 label *label109
+-    * label *label110
+-    * label *label111
+-    * label *label112
+   155 op mul *tmp7 :getRepeatLength.0:power 10
+   156 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   157 jump *label113 notEqual :getRepeatLength.0:power 1
+   158 set *tmp0 23
+   159 jump *label3 always
+   160 label *label113
+-    * label *label114
+-    * label *label115
+-    * label *label116
+   161 op mul *tmp7 :getRepeatLength.0:power 10
+   162 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   163 jump *label117 notEqual :getRepeatLength.0:power 1
+   164 set *tmp0 24
+   165 jump *label3 always
+   166 label *label117
+-    * label *label118
+-    * label *label119
+-    * label *label120
+   167 op mul *tmp7 :getRepeatLength.0:power 10
+   168 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   169 jump *label121 notEqual :getRepeatLength.0:power 1
+   170 set *tmp0 25
+   171 jump *label3 always
+   172 label *label121
+-    * label *label122
+-    * label *label123
+-    * label *label124
+   173 op mul *tmp7 :getRepeatLength.0:power 10
+   174 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   175 jump *label125 notEqual :getRepeatLength.0:power 1
+   176 set *tmp0 26
+   177 jump *label3 always
+   178 label *label125
+-    * label *label126
+-    * label *label127
+-    * label *label128
+   179 op mul *tmp7 :getRepeatLength.0:power 10
+   180 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   181 jump *label129 notEqual :getRepeatLength.0:power 1
+   182 set *tmp0 27
+   183 jump *label3 always
+   184 label *label129
+-    * label *label130
+-    * label *label131
+-    * label *label132
+   185 op mul *tmp7 :getRepeatLength.0:power 10
+   186 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   187 jump *label133 notEqual :getRepeatLength.0:power 1
+   188 set *tmp0 28
+   189 jump *label3 always
+   190 label *label133
+-    * label *label134
+-    * label *label135
+-    * label *label136
+   191 op mul *tmp7 :getRepeatLength.0:power 10
+   192 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   193 jump *label137 notEqual :getRepeatLength.0:power 1
+   194 set *tmp0 29
+   195 jump *label3 always
+   196 label *label137
+-    * label *label138
+-    * label *label139
+-    * label *label140
+   197 op mul *tmp7 :getRepeatLength.0:power 10
+   198 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   199 jump *label141 notEqual :getRepeatLength.0:power 1
+   200 set *tmp0 30
+   201 jump *label3 always
+   202 label *label141
+-    * label *label142
+-    * label *label143
+-    * label *label144
+   203 op mul *tmp7 :getRepeatLength.0:power 10
+   204 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   205 jump *label145 notEqual :getRepeatLength.0:power 1
+   206 set *tmp0 31
+   207 jump *label3 always
+   208 label *label145
+-    * label *label146
+-    * label *label147
+-    * label *label148
+   209 op mul *tmp7 :getRepeatLength.0:power 10
+   210 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   211 jump *label149 notEqual :getRepeatLength.0:power 1
+   212 set *tmp0 32
+   213 jump *label3 always
+   214 label *label149
+-    * label *label150
+-    * label *label151
+-    * label *label152
+   215 op mul *tmp7 :getRepeatLength.0:power 10
+   216 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   217 jump *label153 notEqual :getRepeatLength.0:power 1
+   218 set *tmp0 33
+   219 jump *label3 always
+   220 label *label153
+-    * label *label154
+-    * label *label155
+-    * label *label156
+   221 op mul *tmp7 :getRepeatLength.0:power 10
+   222 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   223 jump *label157 notEqual :getRepeatLength.0:power 1
+   224 set *tmp0 34
+   225 jump *label3 always
+   226 label *label157
+-    * label *label158
+-    * label *label159
+-    * label *label160
+   227 op mul *tmp7 :getRepeatLength.0:power 10
+   228 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   229 jump *label161 notEqual :getRepeatLength.0:power 1
+   230 set *tmp0 35
+   231 jump *label3 always
+   232 label *label161
+-    * label *label162
+-    * label *label163
+-    * label *label164
+   233 op mul *tmp7 :getRepeatLength.0:power 10
+   234 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   235 jump *label165 notEqual :getRepeatLength.0:power 1
+   236 set *tmp0 36
+   237 jump *label3 always
+   238 label *label165
+-    * label *label166
+-    * label *label167
+-    * label *label168
+   239 op mul *tmp7 :getRepeatLength.0:power 10
+   240 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   241 jump *label169 notEqual :getRepeatLength.0:power 1
+   242 set *tmp0 37
+   243 jump *label3 always
+   244 label *label169
+-    * label *label170
+-    * label *label171
+-    * label *label172
+   245 op mul *tmp7 :getRepeatLength.0:power 10
+   246 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   247 jump *label173 notEqual :getRepeatLength.0:power 1
+   248 set *tmp0 38
+   249 jump *label3 always
+   250 label *label173
+-    * label *label174
+-    * label *label175
+-    * label *label176
+   251 op mul *tmp7 :getRepeatLength.0:power 10
+   252 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   253 jump *label177 notEqual :getRepeatLength.0:power 1
+   254 set *tmp0 39
+   255 jump *label3 always
+   256 label *label177
+-    * label *label178
+-    * label *label179
+-    * label *label180
+   257 op mul *tmp7 :getRepeatLength.0:power 10
+   258 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   259 jump *label181 notEqual :getRepeatLength.0:power 1
+   260 set *tmp0 40
+   261 jump *label3 always
+   262 label *label181
+-    * label *label182
+-    * label *label183
+-    * label *label184
+   263 op mul *tmp7 :getRepeatLength.0:power 10
+   264 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   265 jump *label185 notEqual :getRepeatLength.0:power 1
+   266 set *tmp0 41
+   267 jump *label3 always
+   268 label *label185
+-    * label *label186
+-    * label *label187
+-    * label *label188
+   269 op mul *tmp7 :getRepeatLength.0:power 10
+   270 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   271 jump *label189 notEqual :getRepeatLength.0:power 1
+   272 set *tmp0 42
+   273 jump *label3 always
+   274 label *label189
+-    * label *label190
+-    * label *label191
+-    * label *label192
+   275 op mul *tmp7 :getRepeatLength.0:power 10
+   276 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   277 jump *label193 notEqual :getRepeatLength.0:power 1
+   278 set *tmp0 43
+   279 jump *label3 always
+   280 label *label193
+-    * label *label194
+-    * label *label195
+-    * label *label196
+   281 op mul *tmp7 :getRepeatLength.0:power 10
+   282 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   283 jump *label197 notEqual :getRepeatLength.0:power 1
+   284 set *tmp0 44
+   285 jump *label3 always
+   286 label *label197
+-    * label *label198
+-    * label *label199
+-    * label *label200
+   287 op mul *tmp7 :getRepeatLength.0:power 10
+   288 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   289 jump *label201 notEqual :getRepeatLength.0:power 1
+   290 set *tmp0 45
+   291 jump *label3 always
+   292 label *label201
+-    * label *label202
+-    * label *label203
+-    * label *label204
+   293 op mul *tmp7 :getRepeatLength.0:power 10
+   294 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   295 jump *label205 notEqual :getRepeatLength.0:power 1
+   296 set *tmp0 46
+   297 jump *label3 always
+   298 label *label205
+-    * label *label206
+-    * label *label207
+-    * label *label208
+   299 op mul *tmp7 :getRepeatLength.0:power 10
+   300 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   301 jump *label209 notEqual :getRepeatLength.0:power 1
+   302 set *tmp0 47
+   303 jump *label3 always
+   304 label *label209
+-    * label *label210
+-    * label *label211
+-    * label *label212
+   305 op mul *tmp7 :getRepeatLength.0:power 10
+   306 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   307 jump *label213 notEqual :getRepeatLength.0:power 1
+   308 set *tmp0 48
+   309 jump *label3 always
+   310 label *label213
+-    * label *label214
+-    * label *label215
+-    * label *label216
+   311 op mul *tmp7 :getRepeatLength.0:power 10
+   312 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   313 jump *label217 notEqual :getRepeatLength.0:power 1
+   314 set *tmp0 49
+   315 jump *label3 always
+   316 label *label217
+-    * label *label218
+-    * label *label219
+-    * label *label220
+   317 op mul *tmp7 :getRepeatLength.0:power 10
+   318 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   319 jump *label221 notEqual :getRepeatLength.0:power 1
+   320 set *tmp0 50
+   321 jump *label3 always
+   322 label *label221
+-    * label *label222
+-    * label *label223
+-    * label *label224
+   323 op mul *tmp7 :getRepeatLength.0:power 10
+   324 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   325 jump *label225 notEqual :getRepeatLength.0:power 1
+   326 set *tmp0 51
+   327 jump *label3 always
+   328 label *label225
+-    * label *label226
+-    * label *label227
+-    * label *label228
+   329 op mul *tmp7 :getRepeatLength.0:power 10
+   330 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   331 jump *label229 notEqual :getRepeatLength.0:power 1
+   332 set *tmp0 52
+   333 jump *label3 always
+   334 label *label229
+-    * label *label230
+-    * label *label231
+-    * label *label232
+   335 op mul *tmp7 :getRepeatLength.0:power 10
+   336 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   337 jump *label233 notEqual :getRepeatLength.0:power 1
+   338 set *tmp0 53
+   339 jump *label3 always
+   340 label *label233
+-    * label *label234
+-    * label *label235
+-    * label *label236
+   341 op mul *tmp7 :getRepeatLength.0:power 10
+   342 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   343 jump *label237 notEqual :getRepeatLength.0:power 1
+   344 set *tmp0 54
+   345 jump *label3 always
+   346 label *label237
+-    * label *label238
+-    * label *label239
+-    * label *label240
+   347 op mul *tmp7 :getRepeatLength.0:power 10
+   348 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   349 jump *label241 notEqual :getRepeatLength.0:power 1
+   350 set *tmp0 55
+   351 jump *label3 always
+   352 label *label241
+-    * label *label242
+-    * label *label243
+-    * label *label244
+   353 op mul *tmp7 :getRepeatLength.0:power 10
+   354 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   355 jump *label245 notEqual :getRepeatLength.0:power 1
+   356 set *tmp0 56
+   357 jump *label3 always
+   358 label *label245
+-    * label *label246
+-    * label *label247
+-    * label *label248
+   359 op mul *tmp7 :getRepeatLength.0:power 10
+   360 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   361 jump *label249 notEqual :getRepeatLength.0:power 1
+   362 set *tmp0 57
+   363 jump *label3 always
+   364 label *label249
+-    * label *label250
+-    * label *label251
+-    * label *label252
+   365 op mul *tmp7 :getRepeatLength.0:power 10
+   366 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   367 jump *label253 notEqual :getRepeatLength.0:power 1
+   368 set *tmp0 58
+   369 jump *label3 always
+   370 label *label253
+-    * label *label254
+-    * label *label255
+-    * label *label256
+   371 op mul *tmp7 :getRepeatLength.0:power 10
+   372 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   373 jump *label257 notEqual :getRepeatLength.0:power 1
+   374 set *tmp0 59
+   375 jump *label3 always
+   376 label *label257
+-    * label *label258
+-    * label *label259
+-    * label *label260
+   377 op mul *tmp7 :getRepeatLength.0:power 10
+   378 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   379 jump *label261 notEqual :getRepeatLength.0:power 1
+   380 set *tmp0 60
+   381 jump *label3 always
+   382 label *label261
+-    * label *label262
+-    * label *label263
+-    * label *label264
+   383 op mul *tmp7 :getRepeatLength.0:power 10
+   384 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   385 jump *label265 notEqual :getRepeatLength.0:power 1
+   386 set *tmp0 61
+   387 jump *label3 always
+   388 label *label265
+-    * label *label266
+-    * label *label267
+-    * label *label268
+   389 op mul *tmp7 :getRepeatLength.0:power 10
+   390 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   391 jump *label269 notEqual :getRepeatLength.0:power 1
+   392 set *tmp0 62
+   393 jump *label3 always
+   394 label *label269
+-    * label *label270
+-    * label *label271
+-    * label *label272
+   395 op mul *tmp7 :getRepeatLength.0:power 10
+   396 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   397 jump *label273 notEqual :getRepeatLength.0:power 1
+   398 set *tmp0 63
+   399 jump *label3 always
+   400 label *label273
+-    * label *label274
+-    * label *label275
+-    * label *label276
+   401 op mul *tmp7 :getRepeatLength.0:power 10
+   402 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   403 jump *label277 notEqual :getRepeatLength.0:power 1
+   404 set *tmp0 64
+   405 jump *label3 always
+   406 label *label277
+-    * label *label278
+-    * label *label279
+-    * label *label280
+   407 op mul *tmp7 :getRepeatLength.0:power 10
+   408 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   409 jump *label281 notEqual :getRepeatLength.0:power 1
+   410 set *tmp0 65
+   411 jump *label3 always
+   412 label *label281
+-    * label *label282
+-    * label *label283
+-    * label *label284
+   413 op mul *tmp7 :getRepeatLength.0:power 10
+   414 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   415 jump *label285 notEqual :getRepeatLength.0:power 1
+   416 set *tmp0 66
+   417 jump *label3 always
+   418 label *label285
+-    * label *label286
+-    * label *label287
+-    * label *label288
+   419 op mul *tmp7 :getRepeatLength.0:power 10
+   420 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   421 jump *label289 notEqual :getRepeatLength.0:power 1
+   422 set *tmp0 67
+   423 jump *label3 always
+   424 label *label289
+-    * label *label290
+-    * label *label291
+-    * label *label292
+   425 op mul *tmp7 :getRepeatLength.0:power 10
+   426 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   427 jump *label293 notEqual :getRepeatLength.0:power 1
+   428 set *tmp0 68
+   429 jump *label3 always
+   430 label *label293
+-    * label *label294
+-    * label *label295
+-    * label *label296
+   431 op mul *tmp7 :getRepeatLength.0:power 10
+   432 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   433 jump *label297 notEqual :getRepeatLength.0:power 1
+   434 set *tmp0 69
+   435 jump *label3 always
+   436 label *label297
+-    * label *label298
+-    * label *label299
+-    * label *label300
+   437 op mul *tmp7 :getRepeatLength.0:power 10
+   438 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   439 jump *label301 notEqual :getRepeatLength.0:power 1
+   440 set *tmp0 70
+   441 jump *label3 always
+   442 label *label301
+-    * label *label302
+-    * label *label303
+-    * label *label304
+   443 op mul *tmp7 :getRepeatLength.0:power 10
+   444 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   445 jump *label305 notEqual :getRepeatLength.0:power 1
+   446 set *tmp0 71
+   447 jump *label3 always
+   448 label *label305
+-    * label *label306
+-    * label *label307
+-    * label *label308
+   449 op mul *tmp7 :getRepeatLength.0:power 10
+   450 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   451 jump *label309 notEqual :getRepeatLength.0:power 1
+   452 set *tmp0 72
+   453 jump *label3 always
+   454 label *label309
+-    * label *label310
+-    * label *label311
+-    * label *label312
+   455 op mul *tmp7 :getRepeatLength.0:power 10
+   456 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   457 jump *label313 notEqual :getRepeatLength.0:power 1
+   458 set *tmp0 73
+   459 jump *label3 always
+   460 label *label313
+-    * label *label314
+-    * label *label315
+-    * label *label316
+   461 op mul *tmp7 :getRepeatLength.0:power 10
+   462 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   463 jump *label317 notEqual :getRepeatLength.0:power 1
+   464 set *tmp0 74
+   465 jump *label3 always
+   466 label *label317
+-    * label *label318
+-    * label *label319
+-    * label *label320
+   467 op mul *tmp7 :getRepeatLength.0:power 10
+   468 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   469 jump *label321 notEqual :getRepeatLength.0:power 1
+   470 set *tmp0 75
+   471 jump *label3 always
+   472 label *label321
+-    * label *label322
+-    * label *label323
+-    * label *label324
+   473 op mul *tmp7 :getRepeatLength.0:power 10
+   474 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   475 jump *label325 notEqual :getRepeatLength.0:power 1
+   476 set *tmp0 76
+   477 jump *label3 always
+   478 label *label325
+-    * label *label326
+-    * label *label327
+-    * label *label328
+   479 op mul *tmp7 :getRepeatLength.0:power 10
+   480 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   481 jump *label329 notEqual :getRepeatLength.0:power 1
+   482 set *tmp0 77
+   483 jump *label3 always
+   484 label *label329
+-    * label *label330
+-    * label *label331
+-    * label *label332
+   485 op mul *tmp7 :getRepeatLength.0:power 10
+   486 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   487 jump *label333 notEqual :getRepeatLength.0:power 1
+   488 set *tmp0 78
+   489 jump *label3 always
+   490 label *label333
+-    * label *label334
+-    * label *label335
+-    * label *label336
+   491 op mul *tmp7 :getRepeatLength.0:power 10
+   492 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   493 jump *label337 notEqual :getRepeatLength.0:power 1
+   494 set *tmp0 79
+   495 jump *label3 always
+   496 label *label337
+-    * label *label338
+-    * label *label339
+-    * label *label340
+   497 op mul *tmp7 :getRepeatLength.0:power 10
+   498 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   499 jump *label341 notEqual :getRepeatLength.0:power 1
+   500 set *tmp0 80
+   501 jump *label3 always
+   502 label *label341
+-    * label *label342
+-    * label *label343
+-    * label *label344
+   503 op mul *tmp7 :getRepeatLength.0:power 10
+   504 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   505 jump *label345 notEqual :getRepeatLength.0:power 1
+   506 set *tmp0 81
+   507 jump *label3 always
+   508 label *label345
+-    * label *label346
+-    * label *label347
+-    * label *label348
+   509 op mul *tmp7 :getRepeatLength.0:power 10
+   510 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   511 jump *label349 notEqual :getRepeatLength.0:power 1
+   512 set *tmp0 82
+   513 jump *label3 always
+   514 label *label349
+-    * label *label350
+-    * label *label351
+-    * label *label352
+   515 op mul *tmp7 :getRepeatLength.0:power 10
+   516 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   517 jump *label353 notEqual :getRepeatLength.0:power 1
+   518 set *tmp0 83
+   519 jump *label3 always
+   520 label *label353
+-    * label *label354
+-    * label *label355
+-    * label *label356
+   521 op mul *tmp7 :getRepeatLength.0:power 10
+   522 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   523 jump *label357 notEqual :getRepeatLength.0:power 1
+   524 set *tmp0 84
+   525 jump *label3 always
+   526 label *label357
+-    * label *label358
+-    * label *label359
+-    * label *label360
+   527 op mul *tmp7 :getRepeatLength.0:power 10
+   528 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   529 jump *label361 notEqual :getRepeatLength.0:power 1
+   530 set *tmp0 85
+   531 jump *label3 always
+   532 label *label361
+-    * label *label362
+-    * label *label363
+-    * label *label364
+   533 op mul *tmp7 :getRepeatLength.0:power 10
+   534 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   535 jump *label365 notEqual :getRepeatLength.0:power 1
+   536 set *tmp0 86
+   537 jump *label3 always
+   538 label *label365
+-    * label *label366
+-    * label *label367
+-    * label *label368
+   539 op mul *tmp7 :getRepeatLength.0:power 10
+   540 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   541 jump *label369 notEqual :getRepeatLength.0:power 1
+   542 set *tmp0 87
+   543 jump *label3 always
+   544 label *label369
+-    * label *label370
+-    * label *label371
+-    * label *label372
+   545 op mul *tmp7 :getRepeatLength.0:power 10
+   546 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   547 jump *label373 notEqual :getRepeatLength.0:power 1
+   548 set *tmp0 88
+   549 jump *label3 always
+   550 label *label373
+-    * label *label374
+-    * label *label375
+-    * label *label376
+   551 op mul *tmp7 :getRepeatLength.0:power 10
+   552 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   553 jump *label377 notEqual :getRepeatLength.0:power 1
+   554 set *tmp0 89
+   555 jump *label3 always
+   556 label *label377
+-    * label *label378
+-    * label *label379
+-    * label *label380
+   557 op mul *tmp7 :getRepeatLength.0:power 10
+   558 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   559 jump *label381 notEqual :getRepeatLength.0:power 1
+   560 set *tmp0 90
+   561 jump *label3 always
+   562 label *label381
+-    * label *label382
+-    * label *label383
+-    * label *label384
+   563 op mul *tmp7 :getRepeatLength.0:power 10
+   564 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   565 jump *label385 notEqual :getRepeatLength.0:power 1
+   566 set *tmp0 91
+   567 jump *label3 always
+   568 label *label385
+-    * label *label386
+-    * label *label387
+-    * label *label388
+   569 op mul *tmp7 :getRepeatLength.0:power 10
+   570 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   571 jump *label389 notEqual :getRepeatLength.0:power 1
+   572 set *tmp0 92
+   573 jump *label3 always
+   574 label *label389
+-    * label *label390
+-    * label *label391
+-    * label *label392
+   575 op mul *tmp7 :getRepeatLength.0:power 10
+   576 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   577 jump *label393 notEqual :getRepeatLength.0:power 1
+   578 set *tmp0 93
+   579 jump *label3 always
+   580 label *label393
+-    * label *label394
+-    * label *label395
+-    * label *label396
+   581 op mul *tmp7 :getRepeatLength.0:power 10
+   582 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   583 jump *label397 notEqual :getRepeatLength.0:power 1
+   584 set *tmp0 94
+   585 jump *label3 always
+   586 label *label397
+-    * label *label398
+-    * label *label399
+-    * label *label400
+   587 op mul *tmp7 :getRepeatLength.0:power 10
+   588 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   589 jump *label401 notEqual :getRepeatLength.0:power 1
+   590 set *tmp0 95
+   591 jump *label3 always
+   592 label *label401
+-    * label *label402
+-    * label *label403
+-    * label *label404
+   593 op mul *tmp7 :getRepeatLength.0:power 10
+   594 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   595 jump *label405 notEqual :getRepeatLength.0:power 1
+   596 set *tmp0 96
+   597 jump *label3 always
+   598 label *label405
+-    * label *label406
+-    * label *label407
+-    * label *label408
+   599 op mul *tmp7 :getRepeatLength.0:power 10
+   600 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   601 jump *label409 notEqual :getRepeatLength.0:power 1
+   602 set *tmp0 97
+   603 jump *label3 always
+   604 label *label409
+-    * label *label410
+-    * label *label411
+-    * label *label412
+   605 op mul *tmp7 :getRepeatLength.0:power 10
+   606 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   607 jump *label413 notEqual :getRepeatLength.0:power 1
+   608 set *tmp0 98
+   609 jump *label3 always
+   610 label *label413
+-    * label *label414
+-    * label *label415
+-    * label *label416
+   611 op mul *tmp7 :getRepeatLength.0:power 10
+   612 op mod :getRepeatLength.0:power *tmp7 :getRepeatLength.0:n
+   613 jump *label417 notEqual :getRepeatLength.0:power 1
+   614 set *tmp0 99
+   615 jump *label3 always
+   616 label *label417
+-    * label *label418
+-    * label *label419
+-    * label *label14
+   617 print "Power of ten limit reached."
+   618 end
+   619 label *label3
+ 
+   621 set :maxlen *tmp0
+   622 set :maxnum :d
+   623 label *label17
+-    * label *label18
+-    * label *label1
+   624 op add :d :d 1
+   625 jump *label19 lessThanEq :d 100
+-    * label *label2
+   626 assertequals 97 :maxnum "Project Euler 26"
+   627 stop
+   628 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   625 jump *label19 lessThanEq :d 100
+   626 assertequals 97 :maxnum "Project Euler 26"
+   627 stop
 -    * end
 
 Final code before resolving virtual instructions:

@@ -1,8 +1,8 @@
    121 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Jump Optimization (6 iterations).
-     3 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
+     1 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Jump Optimization (7 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 9 iterations).
    180 instructions eliminated by Expression Optimization (5 iterations).
     41 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
      1 instructions eliminated by Loop Optimization (5 iterations).
@@ -866,63 +866,142 @@ Modifications by Iterated phase, Single Step Elimination, pass 4, iteration 1 (-
    106 op idiv :countDigits.0:number :countDigits.0:number 10
    107 label *label20
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 6, iteration 1:
+     0 set LIMIT 100
+-    * label *label28
+-    * label *label29
+     1 set .array*0 0
+-    * label *label32
+-    * label *label33
+     2 set .array*1 0
+-    * label *label36
+-    * label *label37
+     3 set .array*2 0
+-    * label *label40
+-    * label *label41
+     4 set .array*3 0
+-    * label *label44
+-    * label *label45
+     5 set .array*4 0
+-    * label *label48
+-    * label *label49
+     6 set .array*5 0
+-    * label *label52
+-    * label *label53
+     7 set .array*6 0
+-    * label *label56
+-    * label *label57
+     8 set .array*7 0
+-    * label *label60
+-    * label *label61
+     9 set .array*8 0
+-    * label *label64
+-    * label *label65
+    10 set .array*9 0
+-    * label *label14
+-    * label *label2
+    11 set :i 0
+-    * label *label15
+    12 jump *label17 greaterThanEq 0 LIMIT
+    13 label *label26
+    14 # "Function: void countDigits(in number)"
  
-   155 label *label25
-   156 label *label22
-   157 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
+    81 set .array*9 *tmp3
+    82 label *label101
+    83 op idiv :countDigits.0:number :countDigits.0:number 10
+-    * label *label20
+    84 jump *label19 greaterThan :countDigits.0:number 0
+-    * label *label21
+-    * label *label18
+-    * label *label16
+    85 op add :i :i 1
+    86 jump *label26 lessThan :i LIMIT
+    87 label *label17
+    88 assertflush
+    89 # "Function: void printArray()"
+    90 print .array*0
+-    * label *label70
+-    * label *label71
+    91 print "-"
+    92 print .array*1
+-    * label *label72
+-    * label *label73
+    93 print "-"
+    94 print .array*2
+-    * label *label74
+-    * label *label75
+    95 print "-"
+    96 print .array*3
+-    * label *label76
+-    * label *label77
+    97 print "-"
+    98 print .array*4
+-    * label *label78
+-    * label *label79
+    99 print "-"
+   100 print .array*5
+-    * label *label80
+-    * label *label81
+   101 print "-"
+   102 print .array*6
+-    * label *label82
+-    * label *label83
+   103 print "-"
+   104 print .array*7
+-    * label *label84
+-    * label *label85
+   105 print "-"
+   106 print .array*8
+-    * label *label86
+-    * label *label87
+   107 print "-"
+   108 print .array*9
+-    * label *label88
+-    * label *label25
+-    * label *label22
+   109 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
+   110 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
+ 
+   107 print "-"
+   108 print .array*9
+   109 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
-   117 print .array*0
-   118 label *label70
-   119 label *label71
+    88 assertflush
+    89 # "Function: void printArray()"
+    90 print .array*0
 -    * print "-"
 -    * print .array*1
-+  120 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
-+  121 format .array*1
-   122 label *label72
-   123 label *label73
 -    * print "-"
 -    * print .array*2
-+  124 format .array*2
-   125 label *label74
-   126 label *label75
 -    * print "-"
 -    * print .array*3
-+  127 format .array*3
-   128 label *label76
-   129 label *label77
 -    * print "-"
 -    * print .array*4
-+  130 format .array*4
-   131 label *label78
-   132 label *label79
 -    * print "-"
 -    * print .array*5
-+  133 format .array*5
-   134 label *label80
-   135 label *label81
 -    * print "-"
 -    * print .array*6
-+  136 format .array*6
-   137 label *label82
-   138 label *label83
 -    * print "-"
 -    * print .array*7
-+  139 format .array*7
-   140 label *label84
-   141 label *label85
 -    * print "-"
 -    * print .array*8
-+  142 format .array*8
-   143 label *label86
-   144 label *label87
 -    * print "-"
-   145 print .array*9
-   146 label *label88
-   147 label *label25
++   91 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
++   92 format .array*1
++   93 format .array*2
++   94 format .array*3
++   95 format .array*4
++   96 format .array*5
++   97 format .array*6
++   98 format .array*7
++   99 format .array*8
+   100 print .array*9
+   101 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
 
 Final code before resolving virtual instructions:
 

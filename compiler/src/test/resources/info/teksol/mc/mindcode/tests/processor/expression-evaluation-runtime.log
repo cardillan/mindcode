@@ -1,7 +1,7 @@
    372 instructions before optimizations.
     63 instructions eliminated by Temp Variables Elimination.
-     6 instructions eliminated by Dead Code Elimination (3 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+     6 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
    180 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
     17 instructions added by Function Inlining (4 iterations).
@@ -1910,46 +1910,256 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     50 op land *tmp44 1 zero
     51 assertequals false *tmp44 "land 1"
 
-Modifications by Final phase, Dead Code Elimination, iteration 1 (-6 instructions):
- 
-   144 op angleDiff *tmp129 45 *tmp127
-   145 assertequals 90 *tmp129 "angleDiff"
-   146 assertequals 5 5 "len"
--    * setaddr :assertEqualsRound.0*retaddr *label46 (h:*label46)
-   147 label *label73
-   148 label *label74
-   149 assertequals 1 1 "sin"
-   150 label *label75
--    * setaddr :assertEqualsRound.0*retaddr *label47 (h:*label47)
-   151 label *label76
-   152 label *label77
-   153 assertequals -1 -1 "cos"
-   154 label *label78
--    * setaddr :assertEqualsRound.0*retaddr *label48 (h:*label48)
-   155 label *label79
-   156 label *label80
-   157 assertequals 1 1 "tan"
-   158 label *label81
--    * setaddr :assertEqualsRound.0*retaddr *label49 (h:*label49)
-   159 label *label82
-   160 label *label83
-   161 assertequals 90 90 "asin"
-   162 label *label84
--    * setaddr :assertEqualsRound.0*retaddr *label50 (h:*label50)
-   163 label *label85
-   164 label *label86
-   165 assertequals 0 0 "acos"
-   166 label *label87
--    * setaddr :assertEqualsRound.0*retaddr *label51 (h:*label51)
-   167 label *label88
-   168 label *label89
-   169 assertequals 45 45 "atan"
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+     0 set NULL null
+     1 set zero 0
+-    * label *label4
+     2 op add *tmp2 zero 5
+     3 assertequals 5 *tmp2 "add"
+     4 op add *tmp3 zero 6
+-    * label *label5
+     5 op sub *tmp5 1 zero
+     6 assertequals 1 *tmp5 "sub"
+     7 op add *tmp6 zero 2
+-    * label *label6
+     8 op mul *tmp8 3 *tmp6
+     9 assertequals 6 *tmp8 "mul"
+    10 op add *tmp9 zero 4
+-    * label *label7
+    11 op div *tmp11 6 *tmp9
+    12 assertequals 1.5 *tmp11 "div"
+    13 op add *tmp12 zero 100000
+-    * label *label8
+    14 op div *tmp14 1 *tmp12
+    15 assertequals 0.00001 *tmp14 "div exp"
+-    * label *label9
+    16 op idiv *tmp17 6 *tmp9
+    17 assertequals 1 *tmp17 "idiv"
+-    * label *label10
+    18 op mod *tmp20 6 *tmp9
+    19 assertequals 2 *tmp20 "mod"
+-    * label *label11
+    20 op pow *tmp23 2 *tmp9
+    21 assertequals 16 *tmp23 "pow"
+-    * label *label12
+    22 op equal *tmp26 5 *tmp2
+    23 assertequals true *tmp26 "equal 1"
+-    * label *label13
+    24 op equal *tmp29 5 *tmp3
+    25 assertequals false *tmp29 "equal 2"
+    26 op add *tmp30 zero null
+-    * label *label14
+    27 op equal *tmp32 0 *tmp30
+    28 assertequals true *tmp32 "equal null"
+-    * label *label15
+    29 op notEqual *tmp35 5 *tmp2
+    30 assertequals false *tmp35 "notEqual 1"
+-    * label *label16
+    31 op notEqual *tmp38 5 *tmp3
+    32 assertequals true *tmp38 "notEqual 2"
+-    * label *label17
+    33 op notEqual *tmp41 0 *tmp30
+    34 assertequals false *tmp41 "notEqual null"
+-    * label *label18
+    35 op land *tmp44 1 zero
+    36 assertequals false *tmp44 "land 1"
+-    * label *label19
+    37 op land *tmp47 1 *tmp6
+    38 assertequals true *tmp47 "land 2"
+    39 op add *tmp48 zero 1
+-    * label *label20
+    40 op lessThan *tmp50 0 *tmp48
+    41 assertequals true *tmp50 "lessThan 1"
+-    * label *label21
+    42 op lessThan *tmp53 1 zero
+    43 assertequals false *tmp53 "lessThan 2"
+-    * label *label22
+    44 op lessThanEq *tmp56 1 *tmp48
+    45 assertequals true *tmp56 "lessThanEq 1"
+-    * label *label23
+    46 op lessThanEq *tmp59 1 zero
+    47 assertequals false *tmp59 "lessThanEq 2"
+-    * label *label24
+    48 op greaterThan *tmp62 2 *tmp48
+    49 assertequals true *tmp62 "greaterThan 1"
+-    * label *label25
+    50 op greaterThan *tmp65 1 *tmp6
+    51 assertequals false *tmp65 "greaterThan 2"
+-    * label *label26
+    52 op greaterThanEq *tmp68 1 *tmp48
+    53 assertequals true *tmp68 "greaterThanEq 1"
+-    * label *label27
+    54 op greaterThanEq *tmp71 1 *tmp6
+    55 assertequals false *tmp71 "greaterThanEq 2"
+    56 op strictEqual *tmp72 0 NULL
+    57 assertequals false *tmp72 "strictEqual 1"
+    58 op strictEqual *tmp73 null NULL
+    59 assertequals true *tmp73 "strictEqual 2"
+-    * label *label28
+    60 op shl *tmp76 1 *tmp6
+    61 assertequals 4 *tmp76 "shl"
+-    * label *label29
+    62 op shr *tmp79 9 *tmp6
+    63 assertequals 2 *tmp79 "shr"
+-    * label *label30
+    64 op or *tmp82 1 *tmp6
+    65 assertequals 3 *tmp82 "or"
+-    * label *label31
+    66 op and *tmp85 3 *tmp6
+    67 assertequals 2 *tmp85 "and"
+-    * label *label32
+    68 op xor *tmp88 3 *tmp6
+    69 assertequals 1 *tmp88 "xor"
+-    * label *label33
+    70 op not *tmp91 zero
+    71 assertequals -1 *tmp91 "not 1"
+    72 op add *tmp92 zero 65535
+-    * label *label34
+    73 op not *tmp94 *tmp92
+    74 assertequals -65536 *tmp94 "not 2"
+    75 op add *tmp97 zero 0xabcdefabcdef
+-    * label *label35
+    76 op not *tmp99 *tmp97
+    77 assertequals -188900977659376 *tmp99 "not 3"
+-    * label *label36
+    78 op max *tmp102 2 *tmp9
+    79 assertequals 4 *tmp102 "max"
+-    * label *label37
+    80 op min *tmp105 2 *tmp9
+    81 assertequals 2 *tmp105 "min"
+    82 op add *tmp106 zero -2
+-    * label *label38
+    83 op abs *tmp108 *tmp106
+    84 assertequals 2 *tmp108 "abs"
+    85 op add *tmp109 zero 2.718281828459045
+-    * label *label39
+    86 op log *tmp111 *tmp109
+    87 assertequals 1 *tmp111 "log"
+    88 op add *tmp112 zero 10
+-    * label *label40
+    89 op log10 *tmp114 *tmp112
+    90 assertequals 1 *tmp114 "log10"
+    91 op add *tmp115 zero 2.5
+-    * label *label41
+    92 op floor *tmp117 *tmp115
+    93 assertequals 2 *tmp117 "floor"
+-    * label *label42
+    94 op ceil *tmp120 *tmp115
+    95 assertequals 3 *tmp120 "ceil"
+    96 op add *tmp121 zero 16
+-    * label *label43
+    97 op sqrt *tmp123 *tmp121
+    98 assertequals 4 *tmp123 "sqrt"
+-    * label *label44
+    99 op angle *tmp126 1 *tmp48
+   100 assertequals 45 *tmp126 "angle"
+   101 op add *tmp127 zero 135
+-    * label *label45
+   102 op angleDiff *tmp129 45 *tmp127
+   103 assertequals 90 *tmp129 "angleDiff"
+   104 assertequals 5 5 "len"
+   105 setaddr :assertEqualsRound.0*retaddr *label46 (h:*label46)
+-    * label *label73
+-    * label *label74
+   106 assertequals 1 1 "sin"
+-    * label *label75
+   107 setaddr :assertEqualsRound.0*retaddr *label47 (h:*label47)
+-    * label *label76
+-    * label *label77
+   108 assertequals -1 -1 "cos"
+-    * label *label78
+   109 setaddr :assertEqualsRound.0*retaddr *label48 (h:*label48)
+-    * label *label79
+-    * label *label80
+   110 assertequals 1 1 "tan"
+-    * label *label81
+   111 setaddr :assertEqualsRound.0*retaddr *label49 (h:*label49)
+-    * label *label82
+-    * label *label83
+   112 assertequals 90 90 "asin"
+-    * label *label84
+   113 setaddr :assertEqualsRound.0*retaddr *label50 (h:*label50)
+-    * label *label85
+-    * label *label86
+   114 assertequals 0 0 "acos"
+-    * label *label87
+   115 setaddr :assertEqualsRound.0*retaddr *label51 (h:*label51)
+-    * label *label88
+-    * label *label89
+   116 assertequals 45 45 "atan"
+-    * label *label90
+-    * label *label52
+   117 op sub *tmp132 -8 zero
+   118 assertequals -8 *tmp132 "unary minus"
+-    * label *label53
+   119 op equal *tmp135 zero false
+   120 assertequals 1 *tmp135 "boolean negation 1"
+-    * label *label54
+   121 op equal *tmp138 *tmp48 false
+   122 assertequals 0 *tmp138 "boolean negation 2"
+-    * label *label55
+   123 op equal *tmp141 *tmp6 false
+   124 assertequals 0 *tmp141 "boolean negation 3"
+-    * label *label56
+   125 assertequals 16 *tmp23 "**="
+-    * label *label57
+   126 op mul :a 2 *tmp9
+   127 assertequals 8 :a "*="
+-    * label *label58
+   128 assertequals 1.5 *tmp11 "/="
+-    * label *label59
+   129 assertequals 1 *tmp17 "\="
+-    * label *label60
+   130 assertequals 2 *tmp20 "%="
+-    * label *label61
+   131 assertequals 6 *tmp3 "+="
+-    * label *label62
+   132 op sub :a 2 zero
+   133 assertequals 2 :a "-="
+-    * label *label63
+   134 assertequals 4 *tmp76 "<<="
+-    * label *label64
+   135 assertequals 2 *tmp79 ">>="
+-    * label *label65
+   136 assertequals 3 *tmp82 "|="
+-    * label *label66
+   137 assertequals 2 *tmp85 "&="
+-    * label *label67
+   138 assertequals 1 *tmp88 "^="
+-    * label *label68
+   139 assertequals false *tmp44 "&&="
+-    * label *label69
+   140 assertequals true *tmp47 "&&="
+-    * label *label70
+   141 op or *tmp172 0 *tmp6
+   142 op notEqual :a *tmp172 false
+   143 assertequals true :a "||="
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1 (-6 instructions):
  
-   215 op notEqual :a *tmp172 false
-   216 assertequals true :a "||="
-   217 stop
+   102 op angleDiff *tmp129 45 *tmp127
+   103 assertequals 90 *tmp129 "angleDiff"
+   104 assertequals 5 5 "len"
+-    * setaddr :assertEqualsRound.0*retaddr *label46 (h:*label46)
+   105 assertequals 1 1 "sin"
+-    * setaddr :assertEqualsRound.0*retaddr *label47 (h:*label47)
+   106 assertequals -1 -1 "cos"
+-    * setaddr :assertEqualsRound.0*retaddr *label48 (h:*label48)
+   107 assertequals 1 1 "tan"
+-    * setaddr :assertEqualsRound.0*retaddr *label49 (h:*label49)
+   108 assertequals 90 90 "asin"
+-    * setaddr :assertEqualsRound.0*retaddr *label50 (h:*label50)
+   109 assertequals 0 0 "acos"
+-    * setaddr :assertEqualsRound.0*retaddr *label51 (h:*label51)
+   110 assertequals 45 45 "atan"
+   111 op sub *tmp132 -8 zero
+   112 assertequals -8 *tmp132 "unary minus"
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+   136 op notEqual :a *tmp172 false
+   137 assertequals true :a "||="
+   138 stop
 -    * end
 
 Final code before resolving virtual instructions:

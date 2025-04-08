@@ -1,7 +1,7 @@
    603 instructions before optimizations.
-    15 instructions eliminated by Dead Code Elimination (3 iterations).
-    26 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
-    87 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+    15 instructions eliminated by Dead Code Elimination (4 iterations).
+    26 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
+    87 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
      3 instructions modified by Expression Optimization (4 iterations).
     12 instructions modified by If Expression Optimization (4 iterations).
    351 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
@@ -3997,170 +3997,552 @@ Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-
    182 label *label101
    183 print "T"
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
  
-   379 assertprints "TFTF" "comparison 15"
-   380 label *label182
-   381 stop
+     1 # "Function: inline def compare(in title, in a, in b, in expected)"
+     2 assertflush
+     3 # "Function: inline def eval(in b)"
+-    * label *label2
+-    * label *label3
+-    * label *label1
+     4 # "Function: inline def eval(in b)"
+-    * label *label5
+-    * label *label6
+-    * label *label4
+     5 # "Function: inline def eval(in b)"
+-    * label *label8
+-    * label *label9
+-    * label *label7
+     6 # "Function: inline def eval(in b)"
+-    * label *label11
+-    * label *label12
+-    * label *label10
+     7 print "T"
+     8 print "F"
+     9 print "F"
+    10 print "T"
+    11 assertprints "TFFT" "comparison 1"
+-    * label *label0
+    12 # "Function: inline def compare(in title, in a, in b, in expected)"
+    13 assertflush
+    14 # "Function: inline def eval(in b)"
+-    * label *label15
+-    * label *label16
+-    * label *label14
+    15 # "Function: inline def eval(in b)"
+-    * label *label18
+-    * label *label19
+-    * label *label17
+    16 # "Function: inline def eval(in b)"
+-    * label *label21
+-    * label *label22
+-    * label *label20
+    17 # "Function: inline def eval(in b)"
+-    * label *label24
+-    * label *label25
+-    * label *label23
+    18 print "F"
+    19 print "T"
+    20 print "F"
+    21 print "T"
+    22 assertprints "FTFT" "comparison 2"
+-    * label *label13
+    23 # "Function: inline def compare(in title, in a, in b, in expected)"
+    24 assertflush
+    25 # "Function: inline def eval(in b)"
+-    * label *label28
+-    * label *label29
+-    * label *label27
+    26 # "Function: inline def eval(in b)"
+-    * label *label31
+-    * label *label32
+-    * label *label30
+    27 # "Function: inline def eval(in b)"
+-    * label *label34
+-    * label *label35
+-    * label *label33
+    28 # "Function: inline def eval(in b)"
+-    * label *label37
+-    * label *label38
+-    * label *label36
+    29 print "F"
+    30 print "T"
+    31 print "F"
+    32 print "T"
+    33 assertprints "FTFT" "comparison 3"
+-    * label *label26
+    34 # "Function: inline def compare(in title, in a, in b, in expected)"
+    35 assertflush
+    36 # "Function: inline def eval(in b)"
+-    * label *label41
+-    * label *label42
+-    * label *label40
+    37 # "Function: inline def eval(in b)"
+-    * label *label44
+-    * label *label45
+-    * label *label43
+    38 # "Function: inline def eval(in b)"
+-    * label *label47
+-    * label *label48
+-    * label *label46
+    39 # "Function: inline def eval(in b)"
+-    * label *label50
+-    * label *label51
+-    * label *label49
+    40 print "F"
+    41 print "T"
+    42 print "F"
+    43 print "T"
+    44 assertprints "FTFT" "comparison 4"
+-    * label *label39
+    45 # "Function: inline def compare(in title, in a, in b, in expected)"
+    46 assertflush
+    47 # "Function: inline def eval(in b)"
+-    * label *label54
+-    * label *label55
+-    * label *label53
+    48 # "Function: inline def eval(in b)"
+-    * label *label57
+-    * label *label58
+-    * label *label56
+    49 # "Function: inline def eval(in b)"
+-    * label *label60
+-    * label *label61
+-    * label *label59
+    50 # "Function: inline def eval(in b)"
+-    * label *label63
+-    * label *label64
+-    * label *label62
+    51 print "T"
+    52 print "F"
+    53 print "F"
+    54 print "T"
+    55 assertprints "TFFT" "comparison 5"
+-    * label *label52
+    56 # "Function: inline def compare(in title, in a, in b, in expected)"
+    57 assertflush
+    58 # "Function: inline def eval(in b)"
+-    * label *label67
+-    * label *label68
+-    * label *label66
+    59 # "Function: inline def eval(in b)"
+-    * label *label70
+-    * label *label71
+-    * label *label69
+    60 # "Function: inline def eval(in b)"
+-    * label *label73
+-    * label *label74
+-    * label *label72
+    61 # "Function: inline def eval(in b)"
+-    * label *label76
+-    * label *label77
+-    * label *label75
+    62 print "F"
+    63 print "T"
+    64 print "F"
+    65 print "T"
+    66 assertprints "FTFT" "comparison 6"
+-    * label *label65
+    67 # "Function: inline def compare(in title, in a, in b, in expected)"
+    68 assertflush
+    69 # "Function: inline def eval(in b)"
+-    * label *label80
+-    * label *label81
+-    * label *label79
+    70 # "Function: inline def eval(in b)"
+-    * label *label83
+-    * label *label84
+-    * label *label82
+    71 # "Function: inline def eval(in b)"
+-    * label *label86
+-    * label *label87
+-    * label *label85
+    72 # "Function: inline def eval(in b)"
+-    * label *label89
+-    * label *label90
+-    * label *label88
+    73 print "F"
+    74 print "T"
+    75 print "F"
+    76 print "T"
+    77 assertprints "FTFT" "comparison 7"
+-    * label *label78
+    78 # "Function: inline def compare(in title, in a, in b, in expected)"
+    79 assertflush
+    80 # "Function: inline def eval(in b)"
+-    * label *label94
+-    * label *label92
+    81 # "Function: inline def eval(in b)"
+-    * label *label97
+-    * label *label95
+    82 # "Function: inline def eval(in b)"
+-    * label *label100
+-    * label *label98
+    83 # "Function: inline def eval(in b)"
+-    * label *label103
+-    * label *label101
+    84 print "T"
+    85 print "F"
+    86 print "T"
+    87 print "F"
+    88 assertprints "TFTF" "comparison 8"
+-    * label *label91
+    89 # "Function: inline def compare(in title, in a, in b, in expected)"
+    90 assertflush
+    91 op equal *tmp113 A 0
+ 
+    94 jump *label107 equal *tmp113 false
+    95 set *tmp115 "T"
+    96 label *label107
+-    * label *label105
+    97 op notEqual *tmp116 A 0
+    98 # "Function: inline def eval(in b)"
+    99 set *tmp118 "F"
+   100 jump *label110 equal *tmp116 false
+   101 set *tmp118 "T"
+   102 label *label110
+-    * label *label108
+   103 op strictEqual *tmp119 A 0
+   104 # "Function: inline def eval(in b)"
+   105 set *tmp121 "F"
+   106 jump *label113 equal *tmp119 false
+   107 set *tmp121 "T"
+   108 label *label113
+-    * label *label111
+   109 op equal *tmp122 *tmp119 false
+   110 # "Function: inline def eval(in b)"
+   111 set *tmp125 "F"
+   112 jump *label116 equal *tmp122 false
+   113 set *tmp125 "T"
+   114 label *label116
+-    * label *label114
+   115 print *tmp115
+   116 print *tmp118
+   117 print *tmp121
+   118 print *tmp125
+   119 assertprints "TFTF" "comparison 9"
+-    * label *label104
+   120 # "Function: inline def compare(in title, in a, in b, in expected)"
+   121 assertflush
+   122 op equal *tmp127 A 1
+ 
+   125 jump *label120 equal *tmp127 false
+   126 set *tmp129 "T"
+   127 label *label120
+-    * label *label118
+   128 op notEqual *tmp130 A 1
+   129 # "Function: inline def eval(in b)"
+   130 set *tmp132 "F"
+   131 jump *label123 equal *tmp130 false
+   132 set *tmp132 "T"
+   133 label *label123
+-    * label *label121
+   134 op strictEqual *tmp133 A 1
+   135 # "Function: inline def eval(in b)"
+   136 set *tmp135 "F"
+   137 jump *label126 equal *tmp133 false
+   138 set *tmp135 "T"
+   139 label *label126
+-    * label *label124
+   140 op equal *tmp136 *tmp133 false
+   141 # "Function: inline def eval(in b)"
+   142 set *tmp139 "F"
+   143 jump *label129 equal *tmp136 false
+   144 set *tmp139 "T"
+   145 label *label129
+-    * label *label127
+   146 print *tmp129
+   147 print *tmp132
+   148 print *tmp135
+   149 print *tmp139
+   150 assertprints "FTFT" "comparison 10"
+-    * label *label117
+   151 # "Function: inline def compare(in title, in a, in b, in expected)"
+   152 assertflush
+   153 # "Function: inline def eval(in b)"
+-    * label *label132
+-    * label *label133
+-    * label *label131
+   154 # "Function: inline def eval(in b)"
+-    * label *label135
+-    * label *label136
+-    * label *label134
+   155 # "Function: inline def eval(in b)"
+-    * label *label138
+-    * label *label139
+-    * label *label137
+   156 # "Function: inline def eval(in b)"
+-    * label *label141
+-    * label *label142
+-    * label *label140
+   157 print "F"
+   158 print "T"
+   159 print "F"
+   160 print "T"
+   161 assertprints "FTFT" "comparison 11"
+-    * label *label130
+   162 # "Function: inline def compare(in title, in a, in b, in expected)"
+   163 assertflush
+   164 # "Function: inline def eval(in b)"
+-    * label *label145
+-    * label *label146
+-    * label *label144
+   165 # "Function: inline def eval(in b)"
+-    * label *label148
+-    * label *label149
+-    * label *label147
+   166 # "Function: inline def eval(in b)"
+-    * label *label151
+-    * label *label152
+-    * label *label150
+   167 # "Function: inline def eval(in b)"
+-    * label *label154
+-    * label *label155
+-    * label *label153
+   168 print "T"
+   169 print "F"
+   170 print "F"
+   171 print "T"
+   172 assertprints "TFFT" "comparison 12"
+-    * label *label143
+   173 # "Function: inline def compare(in title, in a, in b, in expected)"
+   174 assertflush
+   175 # "Function: inline def eval(in b)"
+-    * label *label158
+-    * label *label159
+-    * label *label157
+   176 # "Function: inline def eval(in b)"
+-    * label *label161
+-    * label *label162
+-    * label *label160
+   177 # "Function: inline def eval(in b)"
+-    * label *label164
+-    * label *label165
+-    * label *label163
+   178 # "Function: inline def eval(in b)"
+-    * label *label167
+-    * label *label168
+-    * label *label166
+   179 print "F"
+   180 print "T"
+   181 print "F"
+   182 print "T"
+   183 assertprints "FTFT" "comparison 13"
+-    * label *label156
+   184 # "Function: inline def compare(in title, in a, in b, in expected)"
+   185 assertflush
+   186 # "Function: inline def eval(in b)"
+-    * label *label171
+-    * label *label172
+-    * label *label170
+   187 # "Function: inline def eval(in b)"
+-    * label *label174
+-    * label *label175
+-    * label *label173
+   188 # "Function: inline def eval(in b)"
+-    * label *label177
+-    * label *label178
+-    * label *label176
+   189 # "Function: inline def eval(in b)"
+-    * label *label180
+-    * label *label181
+-    * label *label179
+   190 print "F"
+   191 print "T"
+   192 print "F"
+   193 print "T"
+   194 assertprints "FTFT" "comparison 14"
+-    * label *label169
+   195 # "Function: inline def compare(in title, in a, in b, in expected)"
+   196 assertflush
+   197 # "Function: inline def eval(in b)"
+-    * label *label184
+-    * label *label185
+-    * label *label183
+   198 # "Function: inline def eval(in b)"
+-    * label *label187
+-    * label *label188
+-    * label *label186
+   199 # "Function: inline def eval(in b)"
+-    * label *label190
+-    * label *label191
+-    * label *label189
+   200 # "Function: inline def eval(in b)"
+-    * label *label193
+-    * label *label194
+-    * label *label192
+   201 print "T"
+   202 print "F"
+   203 print "T"
+   204 print "F"
+   205 assertprints "TFTF" "comparison 15"
+-    * label *label182
+   206 stop
+   207 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
+ 
+   204 print "F"
+   205 assertprints "TFTF" "comparison 15"
+   206 stop
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
  
-    16 label *label11
-    17 label *label12
-    18 label *label10
+     4 # "Function: inline def eval(in b)"
+     5 # "Function: inline def eval(in b)"
+     6 # "Function: inline def eval(in b)"
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
-+   19 print "TFFT"
-    20 assertprints "TFFT" "comparison 1"
-    21 label *label0
-    22 # "Function: inline def compare(in title, in a, in b, in expected)"
++    7 print "TFFT"
+     8 assertprints "TFFT" "comparison 1"
+     9 # "Function: inline def compare(in title, in a, in b, in expected)"
+    10 assertflush
  
-    37 label *label24
-    38 label *label25
-    39 label *label23
+    12 # "Function: inline def eval(in b)"
+    13 # "Function: inline def eval(in b)"
+    14 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+   40 print "FTFT"
-    41 assertprints "FTFT" "comparison 2"
-    42 label *label13
-    43 # "Function: inline def compare(in title, in a, in b, in expected)"
++   15 print "FTFT"
+    16 assertprints "FTFT" "comparison 2"
+    17 # "Function: inline def compare(in title, in a, in b, in expected)"
+    18 assertflush
  
-    58 label *label37
-    59 label *label38
-    60 label *label36
+    20 # "Function: inline def eval(in b)"
+    21 # "Function: inline def eval(in b)"
+    22 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+   61 print "FTFT"
-    62 assertprints "FTFT" "comparison 3"
-    63 label *label26
-    64 # "Function: inline def compare(in title, in a, in b, in expected)"
++   23 print "FTFT"
+    24 assertprints "FTFT" "comparison 3"
+    25 # "Function: inline def compare(in title, in a, in b, in expected)"
+    26 assertflush
  
-    79 label *label50
-    80 label *label51
-    81 label *label49
+    28 # "Function: inline def eval(in b)"
+    29 # "Function: inline def eval(in b)"
+    30 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+   82 print "FTFT"
-    83 assertprints "FTFT" "comparison 4"
-    84 label *label39
-    85 # "Function: inline def compare(in title, in a, in b, in expected)"
++   31 print "FTFT"
+    32 assertprints "FTFT" "comparison 4"
+    33 # "Function: inline def compare(in title, in a, in b, in expected)"
+    34 assertflush
  
-   100 label *label63
-   101 label *label64
-   102 label *label62
+    36 # "Function: inline def eval(in b)"
+    37 # "Function: inline def eval(in b)"
+    38 # "Function: inline def eval(in b)"
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
-+  103 print "TFFT"
-   104 assertprints "TFFT" "comparison 5"
-   105 label *label52
-   106 # "Function: inline def compare(in title, in a, in b, in expected)"
++   39 print "TFFT"
+    40 assertprints "TFFT" "comparison 5"
+    41 # "Function: inline def compare(in title, in a, in b, in expected)"
+    42 assertflush
  
-   121 label *label76
-   122 label *label77
-   123 label *label75
+    44 # "Function: inline def eval(in b)"
+    45 # "Function: inline def eval(in b)"
+    46 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+  124 print "FTFT"
-   125 assertprints "FTFT" "comparison 6"
-   126 label *label65
-   127 # "Function: inline def compare(in title, in a, in b, in expected)"
++   47 print "FTFT"
+    48 assertprints "FTFT" "comparison 6"
+    49 # "Function: inline def compare(in title, in a, in b, in expected)"
+    50 assertflush
  
-   142 label *label89
-   143 label *label90
-   144 label *label88
+    52 # "Function: inline def eval(in b)"
+    53 # "Function: inline def eval(in b)"
+    54 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+  145 print "FTFT"
-   146 assertprints "FTFT" "comparison 7"
-   147 label *label78
-   148 # "Function: inline def compare(in title, in a, in b, in expected)"
++   55 print "FTFT"
+    56 assertprints "FTFT" "comparison 7"
+    57 # "Function: inline def compare(in title, in a, in b, in expected)"
+    58 assertflush
  
-   159 # "Function: inline def eval(in b)"
-   160 label *label103
-   161 label *label101
+    60 # "Function: inline def eval(in b)"
+    61 # "Function: inline def eval(in b)"
+    62 # "Function: inline def eval(in b)"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 -    * print "F"
-+  162 print "TFTF"
-   163 assertprints "TFTF" "comparison 8"
-   164 label *label91
-   165 # "Function: inline def compare(in title, in a, in b, in expected)"
++   63 print "TFTF"
+    64 assertprints "TFTF" "comparison 8"
+    65 # "Function: inline def compare(in title, in a, in b, in expected)"
+    66 assertflush
  
-   252 label *label141
-   253 label *label142
-   254 label *label140
+   130 # "Function: inline def eval(in b)"
+   131 # "Function: inline def eval(in b)"
+   132 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+  255 print "FTFT"
-   256 assertprints "FTFT" "comparison 11"
-   257 label *label130
-   258 # "Function: inline def compare(in title, in a, in b, in expected)"
++  133 print "FTFT"
+   134 assertprints "FTFT" "comparison 11"
+   135 # "Function: inline def compare(in title, in a, in b, in expected)"
+   136 assertflush
  
-   273 label *label154
-   274 label *label155
-   275 label *label153
+   138 # "Function: inline def eval(in b)"
+   139 # "Function: inline def eval(in b)"
+   140 # "Function: inline def eval(in b)"
 -    * print "T"
 -    * print "F"
 -    * print "F"
 -    * print "T"
-+  276 print "TFFT"
-   277 assertprints "TFFT" "comparison 12"
-   278 label *label143
-   279 # "Function: inline def compare(in title, in a, in b, in expected)"
++  141 print "TFFT"
+   142 assertprints "TFFT" "comparison 12"
+   143 # "Function: inline def compare(in title, in a, in b, in expected)"
+   144 assertflush
  
-   294 label *label167
-   295 label *label168
-   296 label *label166
+   146 # "Function: inline def eval(in b)"
+   147 # "Function: inline def eval(in b)"
+   148 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+  297 print "FTFT"
-   298 assertprints "FTFT" "comparison 13"
-   299 label *label156
-   300 # "Function: inline def compare(in title, in a, in b, in expected)"
++  149 print "FTFT"
+   150 assertprints "FTFT" "comparison 13"
+   151 # "Function: inline def compare(in title, in a, in b, in expected)"
+   152 assertflush
  
-   315 label *label180
-   316 label *label181
-   317 label *label179
+   154 # "Function: inline def eval(in b)"
+   155 # "Function: inline def eval(in b)"
+   156 # "Function: inline def eval(in b)"
 -    * print "F"
 -    * print "T"
 -    * print "F"
 -    * print "T"
-+  318 print "FTFT"
-   319 assertprints "FTFT" "comparison 14"
-   320 label *label169
-   321 # "Function: inline def compare(in title, in a, in b, in expected)"
++  157 print "FTFT"
+   158 assertprints "FTFT" "comparison 14"
+   159 # "Function: inline def compare(in title, in a, in b, in expected)"
+   160 assertflush
  
-   336 label *label193
-   337 label *label194
-   338 label *label192
+   162 # "Function: inline def eval(in b)"
+   163 # "Function: inline def eval(in b)"
+   164 # "Function: inline def eval(in b)"
 -    * print "T"
 -    * print "F"
 -    * print "T"
 -    * print "F"
-+  339 print "TFTF"
-   340 assertprints "TFTF" "comparison 15"
-   341 label *label182
-   342 stop
++  165 print "TFTF"
+   166 assertprints "TFTF" "comparison 15"
+   167 stop
 
 Final code before resolving virtual instructions:
 

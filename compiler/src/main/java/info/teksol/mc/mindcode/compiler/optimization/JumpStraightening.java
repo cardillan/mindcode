@@ -47,10 +47,10 @@ class JumpStraightening extends BaseOptimizer {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump
                         && jump.getCondition().hasInverse()
-                        && iterator.peek(0) instanceof JumpInstruction next
+                        && iterator.hasNext() && iterator.peek(0) instanceof JumpInstruction next
                         && next.isUnconditional()) {
 
-                    if (next.getAstContext() == jump.getAstContext() || phase == OptimizationPhase.FINAL) {
+                    if (next.getAstContext() == jump.getAstContext() || phase.breaksContextStructure()) {
                         try (LogicIterator inner = iterator.copy()) {
                             inner.next(); // Skip unconditional jump
                             while (inner.hasNext()) {

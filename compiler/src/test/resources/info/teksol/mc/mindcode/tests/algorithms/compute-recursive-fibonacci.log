@@ -1,9 +1,9 @@
     45 instructions before optimizations.
      3 instructions eliminated by Temp Variables Elimination.
-     1 instructions eliminated by Jump Optimization (3 iterations).
+     1 instructions eliminated by Jump Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (2 iterations).
      2 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Unreachable Code Elimination.
+     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Stack Optimization.
     32 instructions after optimizations.
 
@@ -104,28 +104,45 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     29 returnrec bank1
     30 end
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-    27 label *label5
-    28 label *label3
-    29 returnrec bank1
+     9 label *label0
+    10 set :fib.0*retval :fib.0:n
+    11 jump *label5 lessThan :fib.0:n 2
+-    * label *label4
+    12 push bank1 :fib.0:n
+    13 op sub :fib.0:n :fib.0:n 1
+    14 callrec bank1 *label0 *label6 :fib.0*retval
+ 
+    24 pop bank1 :fib.0:n
+    25 op add :fib.0*retval *tmp4 :fib.0*retval
+    26 label *label5
+-    * label *label3
+    27 returnrec bank1
+    28 end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    25 op add :fib.0*retval *tmp4 :fib.0*retval
+    26 label *label5
+    27 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
  
-    16 label *label6
-    17 pop bank1 :fib.0:n
-    18 set *tmp4 :fib.0*retval
+    15 label *label6
+    16 pop bank1 :fib.0:n
+    17 set *tmp4 :fib.0*retval
 -    * push bank1 :fib.0:n
-    19 push bank1 *tmp4
-    20 op sub :fib.0:n :fib.0:n 2
-    21 callrec bank1 *label0 *label7 :fib.0*retval
-    22 label *label7
-    23 pop bank1 *tmp4
+    18 push bank1 *tmp4
+    19 op sub :fib.0:n :fib.0:n 2
+    20 callrec bank1 *label0 *label7 :fib.0*retval
+    21 label *label7
+    22 pop bank1 *tmp4
 -    * pop bank1 :fib.0:n
-    24 op add :fib.0*retval *tmp4 :fib.0*retval
-    25 label *label5
-    26 label *label3
+    23 op add :fib.0*retval *tmp4 :fib.0*retval
+    24 label *label5
+    25 returnrec bank1
 
 Final code before resolving virtual instructions:
 

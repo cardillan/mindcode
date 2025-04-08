@@ -1,13 +1,13 @@
    136 instructions before optimizations.
     19 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-     8 instructions eliminated by Dead Code Elimination (3 iterations).
-     4 instructions eliminated by Jump Optimization (3 iterations).
-     3 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     8 instructions eliminated by Dead Code Elimination (4 iterations).
+     4 instructions eliminated by Jump Optimization (4 iterations).
+     3 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      2 instructions added by Loop Optimization (2 iterations).
      5 loops improved by Loop Optimization.
-     5 instructions eliminated by Jump Straightening (3 iterations).
+     5 instructions eliminated by Jump Straightening (4 iterations).
      5 instructions eliminated by Print Merging.
     87 instructions after optimizations.
 
@@ -458,18 +458,121 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
     63 label *label2
     64 read .CURRENT_INDEX .MEMORY 1
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-   122 jump *label32 equal *tmp21 0
-   123 label *label21
-   124 control enabled switch1 0
+     2 set .MEMORY null
+     3 set .SWITCH null
+     4 set .MESSAGE null
+-    * label *label0
+     5 label *label28
+     6 print "Item/Liquid/Energy Level Display"
+     7 set :n @links
+-    * label *label3
+     8 jump *label5 lessThanEq :n 0
+     9 label *label29
+    10 op sub :n :n 1
+ 
+    13 print :block
+    14 sensor *tmp8 :block @type
+    15 jump *label7 notEqual *tmp8 @large-logic-display
+-    * label *label8
+    16 set .DISPLAY :block
+    17 jump *label6 always
+    18 label *label7
+    19 jump *label9 notEqual *tmp8 @message
+-    * label *label10
+    20 set .MESSAGE :block
+    21 jump *label6 always
+    22 label *label9
+    23 jump *label11 notEqual *tmp8 @switch
+-    * label *label12
+    24 set .SWITCH :block
+    25 jump *label6 always
+    26 label *label11
+    27 jump *label13 notEqual *tmp8 @memory-bank
+-    * label *label14
+    28 set .MEMORY :block
+    29 jump *label6 always
+    30 label *label13
+    31 jump *label15 notEqual *tmp8 @memory-cell
+-    * label *label16
+    32 set .MEMORY :block
+    33 label *label15
+    34 label *label6
+-    * label *label4
+    35 jump *label29 greaterThan :n 0
+    36 label *label5
+    37 print "\nMessage: "
+ 
+    48 jump *label17 equal *tmp12 false
+    49 print "\nNo memory or display."
+    50 label *label17
+-    * label *label18
+    51 printflush .MESSAGE
+-    * label *label1
+    52 jump *label28 notEqual *tmp12 false
+-    * label *label2
+    53 read .CURRENT_INDEX .MEMORY 1
+    54 read .R0 .MEMORY 3
+    55 read .G0 .MEMORY 4
+ 
+    58 read .G1 .MEMORY 7
+    59 read .B1 .MEMORY 8
+    60 draw stroke 1
+-    * label *label19
+    61 sensor *tmp21 .SWITCH @enabled
+    62 jump *label21 notEqual *tmp21 0
+    63 label *label32
+ 
+    74 print :last
+    75 draw color .R1 .G1 .B1 255
+    76 set :x 159
+-    * label *label22
+    77 label *label30
+    78 op sub :head :head 1
+    79 read :value .MEMORY :head
+ 
+    81 draw line :x :last :x1 :value
+    82 set :x :x1
+    83 set :last :value
+-    * label *label23
+    84 jump *label30 greaterThan :x1 10
+-    * label *label24
+    85 draw color 255 255 255 255
+    86 draw lineRect 10 10 156 156
+    87 op sub *tmp32 @time :start
+ 
+    91 op ceil *tmp34 *tmp33
+    92 op mul :wait FREQ *tmp34
+    93 set :loops 0
+-    * label *label25
+    94 jump *label27 greaterThanEq @time :wait
+    95 label *label31
+    96 op add :loops :loops 1
+-    * label *label26
+    97 jump *label31 lessThan @time :wait
+    98 label *label27
+    99 drawflush .DISPLAY
+   100 print "\nWait loops: "
+   101 print :loops
+   102 printflush .MESSAGE
+-    * label *label20
+   103 sensor *tmp21 .SWITCH @enabled
+   104 jump *label32 equal *tmp21 0
+   105 label *label21
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   104 jump *label32 equal *tmp21 0
+   105 label *label21
+   106 control enabled switch1 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
  
-    42 label *label4
-    43 jump *label29 greaterThan :n 0
-    44 label *label5
+    34 label *label6
+    35 jump *label29 greaterThan :n 0
+    36 label *label5
 -    * print "\nMessage: "
 -    * print .MESSAGE
 -    * print "\nSwitch: "
@@ -477,31 +580,31 @@ Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
 -    * print "\nMemory: "
 -    * print .MEMORY
 -    * print "\nDisplay: "
-+   45 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: "
-+   46 format .MESSAGE
-+   47 format .SWITCH
-+   48 format .MEMORY
-    49 print .DISPLAY
-    50 op equal *tmp10 .MEMORY null
-    51 op equal *tmp11 .DISPLAY null
++   37 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: "
++   38 format .MESSAGE
++   39 format .SWITCH
++   40 format .MEMORY
+    41 print .DISPLAY
+    42 op equal *tmp10 .MEMORY null
+    43 op equal *tmp11 .DISPLAY null
  
-    71 jump *label21 notEqual *tmp21 0
-    72 label *label32
-    73 set :start @time
+    59 jump *label21 notEqual *tmp21 0
+    60 label *label32
+    61 set :start @time
 -    * print "Item/Liquid/Energy Level Display"
-+   74 print "Item/Liquid/Energy Level Display\nIndex: {0}\nValue: "
-    75 draw clear 0 0 80
-    76 draw color .R0 .G0 .B0 255
-    77 draw rect 10 10 156 156
-    78 read :head .MEMORY .CURRENT_INDEX
-    79 read :last .MEMORY :head
++   62 print "Item/Liquid/Energy Level Display\nIndex: {0}\nValue: "
+    63 draw clear 0 0 80
+    64 draw color .R0 .G0 .B0 255
+    65 draw rect 10 10 156 156
+    66 read :head .MEMORY .CURRENT_INDEX
+    67 read :last .MEMORY :head
 -    * print "\nIndex: "
 -    * print :head
 -    * print "\nValue: "
-+   80 format :head
-    81 print :last
-    82 draw color .R1 .G1 .B1 255
-    83 set :x 159
++   68 format :head
+    69 print :last
+    70 draw color .R1 .G1 .B1 255
+    71 set :x 159
 
 Final code before resolving virtual instructions:
 

@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
@@ -227,7 +228,9 @@ class FunctionInliner extends BaseOptimizer {
         insertInstructions(insertionPoint, newBody);
         // Remove original call instructions, including hoisted ones
         removeMatchingInstructions(ix -> ix.belongsTo(call));
-        removeMatchingInstructions(ix -> ix.getHoistId().equals(cix.get().getHoistId()));
+        if (!LogicLabel.EMPTY.equals(cix.get().getHoistId())) {
+            removeMatchingInstructions(ix -> ix.getHoistId().equals(cix.get().getHoistId()));
+        }
 
         count += 1;
         return OptimizationResult.REALIZED;

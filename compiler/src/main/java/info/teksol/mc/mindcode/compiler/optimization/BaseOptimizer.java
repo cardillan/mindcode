@@ -59,6 +59,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     @Override
     public boolean optimize(OptimizationPhase phase, int pass) {
+        if (optimizationContext.getProgram().isEmpty()) {
+            return false;
+        }
+
         currentPass = pass;
         boolean repeat;
         boolean modified = false;

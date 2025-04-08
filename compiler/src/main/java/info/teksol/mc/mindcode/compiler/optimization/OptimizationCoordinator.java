@@ -10,7 +10,6 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionArrayExpande
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -80,6 +79,7 @@ public class OptimizationCoordinator {
 
     public List<LogicInstruction> optimize(CallGraph callGraph, List<LogicInstruction> instructions, AstContext rootAstContext) {
         program.addAll(instructions);
+        boolean passesExceeded = false;
 
         try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
             optimizationContext = new OptimizationContext(traceFile, messageConsumer, profile, instructionProcessor,
@@ -127,7 +127,13 @@ public class OptimizationCoordinator {
                 modified = optimizePhase(ITERATED, optimizers, pass++);
             }
 
-            if (modified) {
+            passesExceeded = modified;
+
+            do {
+                modified = optimizePhase(JUMPS, optimizers, pass++);
+            } while (modified && pass <= profile.getOptimizationPasses());
+
+            if (passesExceeded || modified) {
                 messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, profile.getOptimizationPasses()));
             }
 
@@ -136,11 +142,6 @@ public class OptimizationCoordinator {
             optimizers.values().forEach(Optimizer::generateFinalMessages);
             int newCount = codeSize();
             messageConsumer.accept(OptimizerMessage.info("%6d instructions after optimizations.", newCount));
-
-            if (modified) {
-                messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMITED,
-                        profile.getOptimizationPasses()));
-            }
 
             optimizationContext.removeInactiveInstructions();
             optimizationStatistics.forEach(messageConsumer);
@@ -156,14 +157,9 @@ public class OptimizationCoordinator {
 
         boolean modified = false;
         for (Optimization optimization : phase.optimizations) {
-            if (phase == FINAL) {
-                try (OptimizationContext.LogicIterator it = optimizationContext.createIterator()) {
-                    while (it.hasNext()) {
-                        if (it.next() instanceof NoOpInstruction) {
-                            it.remove();
-                        }
-                    }
-                }
+            if (phase.breaksContextStructure()) {
+                optimizationContext.rebuildLabelReferences();
+                optimizationContext.removeInactiveInstructions();
             }
 
             Optimizer optimizer = optimizers.get(optimization);

@@ -39,7 +39,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking**: underscores in multi-word command-line options were changed to hyphens.
-* The metadata used by Mindcode compiler and processor emulator now correspond to the compilation target. Schemacode still uses the latest version of the metadata for both building and decompiling schematics.      
+* The metadata used by Mindcode compiler and processor emulator now correspond to the compilation target. Schemacode still uses the latest version of the metadata for both building and decompiling schematics.
+* Improved optimization of jumps by making multiple passes over jumps-related optimizers, up to the optimization passes limit.
 * Volatile built-in variables used an upper or lower bound in a ranged for-loop statement are used directly in the condition, without storing them in a temporary variable.
 * The `noinit` modifier is no longer disallowed for local variables.
 

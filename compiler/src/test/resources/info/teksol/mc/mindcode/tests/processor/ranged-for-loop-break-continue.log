@@ -1,13 +1,13 @@
     39 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
-     5 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Jump Optimization (4 iterations).
-     2 instructions eliminated by Single Step Elimination (5 iterations).
+     5 instructions eliminated by Dead Code Elimination (4 iterations).
+     2 instructions eliminated by Jump Optimization (5 iterations).
+     2 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
-     2 instructions eliminated by Jump Straightening (4 iterations).
-     1 instructions eliminated by Unreachable Code Elimination.
+     2 instructions eliminated by Jump Straightening (5 iterations).
+     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     24 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-5 instructions):
@@ -149,33 +149,85 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
     14 jump *label7 notEqual :test.0:i 3
     15 jump *label5 always
 
-Modifications by Final phase, Jump Straightening, iteration 1 (-2 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-    11 label *label4
-    12 jump *label6 greaterThanEq :test.0:i :d.0*retval
-    13 label *label13
+     8 call *label0 *invalid :d.0*retval (m:*label3) (h:*label3)
+     9 label *label3
+    10 set *tmp3 :d.0*retval
+-    * label *label4
+    11 jump *label6 greaterThanEq :test.0:i :d.0*retval
+    12 label *label13
+    13 jump *label7 notEqual :test.0:i 3
+    14 jump *label5 always
+    15 label *label7
+-    * label *label8
+    16 print :test.0:i
+    17 print "|"
+    18 set :d.0:n 5
+ 
+    22 jump *label10 notEqual :test.0:i :d.0*retval
+    23 jump *label6 always
+    24 label *label10
+-    * label *label11
+    25 label *label5
+    26 op add :test.0:i :test.0:i 1
+    27 jump *label13 lessThan :test.0:i *tmp3
+    28 label *label6
+-    * label *label1
+    29 assertprints "1|2|4|5|" "iterated-for-loop-break-continue"
+    30 stop
+    31 end
+    32 label *label0
+    33 set :d.0*retval :d.0:n
+-    * label *label12
+    34 return :d.0*retaddr
+    35 end
+
+Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-2 instructions):
+ 
+    10 set *tmp3 :d.0*retval
+    11 jump *label6 greaterThanEq :test.0:i :d.0*retval
+    12 label *label13
 -    * jump *label7 notEqual :test.0:i 3
 -    * jump *label5 always
-+   14 jump *label5 equal :test.0:i 3
-    15 label *label7
-    16 label *label8
-    17 print :test.0:i
++   13 jump *label5 equal :test.0:i 3
+    14 label *label7
+    15 print :test.0:i
+    16 print "|"
  
-    20 setaddr :d.0*retaddr *label9 (h:*label9)
-    21 call *label0 *invalid :d.0*retval (m:*label9) (h:*label9)
-    22 label *label9
+    18 setaddr :d.0*retaddr *label9 (h:*label9)
+    19 call *label0 *invalid :d.0*retval (m:*label9) (h:*label9)
+    20 label *label9
 -    * jump *label10 notEqual :test.0:i :d.0*retval
 -    * jump *label6 always
-+   23 jump *label6 equal :test.0:i :d.0*retval
-    24 label *label10
-    25 label *label11
-    26 label *label5
++   21 jump *label6 equal :test.0:i :d.0*retval
+    22 label *label10
+    23 label *label5
+    24 op add :test.0:i :test.0:i 1
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
  
-    35 set :d.0*retval :d.0:n
-    36 label *label12
-    37 return :d.0*retaddr
+    11 jump *label6 greaterThanEq :test.0:i :d.0*retval
+    12 label *label13
+    13 jump *label5 equal :test.0:i 3
+-    * label *label7
+    14 print :test.0:i
+    15 print "|"
+    16 set :d.0:n 5
+ 
+    18 call *label0 *invalid :d.0*retval (m:*label9) (h:*label9)
+    19 label *label9
+    20 jump *label6 equal :test.0:i :d.0*retval
+-    * label *label10
+    21 label *label5
+    22 op add :test.0:i :test.0:i 1
+    23 jump *label13 lessThan :test.0:i *tmp3
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+    28 label *label0
+    29 set :d.0*retval :d.0:n
+    30 return :d.0*retaddr
 -    * end
 
 Final code before resolving virtual instructions:

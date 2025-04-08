@@ -1,10 +1,10 @@
    649 instructions before optimizations.
     11 instructions eliminated by Temp Variables Elimination.
      3 instructions eliminated by Case Expression Optimization.
-    64 instructions eliminated by Dead Code Elimination (5 iterations).
-     3 instructions eliminated by Jump Normalization (2 passes, 4 iterations).
-     9 instructions eliminated by Jump Optimization (4 iterations).
-    19 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+    64 instructions eliminated by Dead Code Elimination (6 iterations).
+     3 instructions eliminated by Jump Normalization (2 passes, 5 iterations).
+     9 instructions eliminated by Jump Optimization (5 iterations).
+    19 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
    163 instructions eliminated by Data Flow Optimization (4 passes, 17 iterations).
      6 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -12,9 +12,9 @@
      1 loops unrolled by Loop Unrolling.
      6 instructions added by Case Switching (7 iterations).
      2 case expressions converted to switched jumps Case Switching.
-    28 instructions eliminated by Jump Straightening (2 passes, 4 iterations).
+    28 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
     62 instructions updated by JumpThreading.
-   246 instructions eliminated by Unreachable Code Elimination.
+   246 instructions eliminated by Unreachable Code Elimination (2 iterations).
     14 instructions eliminated by Print Merging.
    652 instructions after optimizations.
 
@@ -4582,504 +4582,1379 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
   1346 label *label535
   1347 label *label536
 
-Modifications by Final phase, Jump Straightening, iteration 1 (-4 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-   500 label *label237
-   501 op sub :displayItem.0:x :x 11
-   502 op idiv :displayItem.0:amount :displayItem.0:amount 10
+     6 print "\n"
+     7 set .LINKS @links
+     8 set :n .LINKS
+-    * label *label3
+     9 jump *label5 lessThanEq .LINKS 0
+    10 label *label142
+    11 op sub :n :n 1
+ 
+    15 print "\n"
+    16 sensor *tmp5 :block @type
+    17 jump *label7 notEqual *tmp5 @message
+-    * label *label8
+    18 set .MESSAGE :block
+    19 jump *label6 always
+    20 label *label7
+ 
+    34 jump *label6 always
+    35 label *label11
+    36 jump *label13 notEqual *tmp5 @large-logic-display
+-    * label *label14
+    37 set .DISPLAY :block
+    38 label *label13
+    39 label *label6
+-    * label *label4
+    40 jump *label142 greaterThan :n 0
+    41 label *label5
+    42 print "Message: "
+ 
+    58 print "No container or display."
+    59 print "\n"
+    60 label *label15
+-    * label *label16
+    61 printflush .MESSAGE
+-    * label *label1
+    62 jump *label0 equal .CONTAINER null
+-    * label *label2
+-    * label *label17
+    63 sensor *tmp12 .CONTAINER @dead
+    64 op equal *tmp13 *tmp12 0
+    65 sensor *tmp14 .DISPLAY @dead
+ 
+    79 draw color 0 0 80 255
+    80 draw rect 0 0 23 176
+    81 jump *label22 always
+-    * label *label21
+    82 draw rect 93 0 16 176
+    83 label *label22
+-    * label *label20
+    84 # "Function: inline def eraseImages(in first_column)"
+    85 draw color 0 0 80 255
+    86 jump *label24 always
+ 
+    89 label *label24
+    90 draw rect 93 0 16 176
+    91 label *label25
+-    * label *label23
+    92 draw color 255 255 255 255
+    93 set :index 0
+    94 set :item @sand
+ 
+   167 set :x 93
+   168 draw color 255 255 255 255
+   169 label *label47
+-    * label *label48
+-    * label *label27
+   170 multijump *tmp26 0 0 (m:marker0)
+   171 multilabel *label44 (m:marker0)
+   172 label *label46
+-    * label *label28
+   173 drawflush display1
+   174 set :x 71
+   175 set :y 152
+ 
+   177 draw color 0 0 80 255
+   178 draw rect 23 0 70 176
+   179 jump *label51 always
+-    * label *label50
+   180 draw rect 109 0 176 176
+   181 label *label51
+-    * label *label49
+   182 set :index 0
+   183 set :item @sand
+   184 op add *tmp35 @counter 1
+ 
+   277 label *label83
+   278 label *label81
+   279 label *label75
+-    * label *label168
+-    * label *label169
+   280 jump *label203 always
+   281 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   282 jump *label200 lessThan *tmp53 0
+ 
+   305 label *label180
+   306 draw lineRect *tmp58 *tmp60 9 14
+   307 jump *label201 always
+-    * label *label181
+   308 label *label182
+   309 draw line *tmp62 :y *tmp62 *tmp65
+   310 jump *label201 always
+-    * label *label183
+   311 label *label184
+   312 draw line :x :y *tmp66 :y
+   313 draw line :x :y *tmp66 *tmp68
+   314 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   315 draw line *tmp73 *tmp72 *tmp66 *tmp72
+   316 jump *label201 always
+-    * label *label185
+   317 label *label186
+   318 draw line :x :y *tmp77 *tmp78
+   319 draw line :x *tmp78 *tmp77 *tmp78
+   320 draw line :x *tmp78 *tmp77 *tmp84
+   321 draw line :x *tmp84 *tmp77 *tmp84
+   322 jump *label201 always
+-    * label *label187
+   323 label *label188
+   324 draw line *tmp88 :y *tmp88 *tmp90
+   325 draw line :x *tmp90 *tmp88 *tmp90
+   326 draw line :x *tmp90 *tmp88 *tmp96
+   327 jump *label201 always
+-    * label *label189
+   328 label *label190
+   329 draw line :x :y *tmp97 *tmp98
+   330 draw line :x *tmp98 *tmp97 *tmp98
+   331 draw line :x *tmp98 :x *tmp103
+   332 draw line :x *tmp103 *tmp97 *tmp103
+   333 jump *label201 always
+-    * label *label191
+   334 label *label192
+   335 draw lineRect *tmp108 *tmp110 9 8
+   336 draw line :x *tmp111 *tmp112 *tmp113
+   337 jump *label201 always
+-    * label *label193
+   338 label *label194
+   339 draw line :x :y *tmp114 *tmp115
+   340 draw line :x *tmp115 *tmp114 *tmp115
+   341 jump *label201 always
+-    * label *label195
+   342 label *label196
+   343 draw lineRect *tmp120 *tmp122 9 14
+   344 draw line :x *tmp123 *tmp124 *tmp123
+   345 jump *label201 always
+-    * label *label197
+   346 label *label198
+   347 draw lineRect *tmp127 *tmp130 9 8
+   348 draw line :x :y *tmp131 *tmp128
+-    * label *label199
+   349 label *label200
+   350 label *label201
+-    * label *label202
+   351 jump *label237 always
+   352 label *label203
+   353 op mod *tmp133 :displayItem.0:amount 10
+ 
+   380 op sub *tmp140 :y 1
+   381 draw lineRect *tmp138 *tmp140 9 14
+   382 jump *label235 always
+-    * label *label215
+   383 label *label216
+   384 op add *tmp142 :x 6
+   385 op add *tmp145 :y 12
+   386 draw line *tmp142 :y *tmp142 *tmp145
+   387 jump *label235 always
+-    * label *label217
+   388 label *label218
+   389 op add *tmp146 :x 7
+   390 draw line :x :y *tmp146 :y
+ 
+   395 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   396 draw line :x *tmp154 *tmp146 *tmp154
+   397 jump *label235 always
+-    * label *label219
+   398 label *label220
+   399 op add *tmp158 :x 7
+   400 op add *tmp160 :y 12
+ 
+   404 draw line :x *tmp162 *tmp158 *tmp162
+   405 draw line :x *tmp160 *tmp158 *tmp160
+   406 jump *label235 always
+-    * label *label221
+   407 label *label222
+   408 op add *tmp168 :x 7
+   409 op add *tmp170 :y 12
+ 
+   412 draw line :x *tmp171 *tmp168 *tmp171
+   413 draw line :x *tmp171 :x *tmp170
+   414 jump *label235 always
+-    * label *label223
+   415 label *label224
+   416 op add *tmp176 :x 7
+   417 draw line :x :y *tmp176 :y
+ 
+   422 draw line :x *tmp179 :x *tmp184
+   423 draw line :x *tmp184 *tmp176 *tmp184
+   424 jump *label235 always
+-    * label *label225
+   425 label *label226
+   426 op add *tmp188 :y 12
+   427 draw line :x :y :x *tmp188
+ 
+   432 draw line :x *tmp192 *tmp189 *tmp192
+   433 draw line :x *tmp188 *tmp189 *tmp188
+   434 jump *label235 always
+-    * label *label227
+   435 label *label228
+   436 op add *tmp200 :x 6
+   437 op add *tmp203 :y 12
+   438 draw line *tmp200 :y *tmp200 *tmp203
+   439 draw line :x *tmp203 *tmp200 *tmp203
+   440 jump *label235 always
+-    * label *label229
+   441 label *label230
+   442 op sub *tmp209 :x 1
+   443 op sub *tmp211 :y 1
+ 
+   446 op add *tmp213 :x 7
+   447 draw line :x *tmp212 *tmp213 *tmp212
+   448 jump *label235 always
+-    * label *label231
+   449 label *label232
+   450 op add *tmp215 :x 7
+   451 draw line :x :y *tmp215 :y
+ 
+   455 draw line :x *tmp219 *tmp215 *tmp219
+   456 draw line :x *tmp219 :x *tmp218
+   457 draw line :x *tmp218 *tmp215 *tmp218
+-    * label *label233
+   458 label *label234
+   459 label *label235
+-    * label *label236
+   460 label *label237
+   461 op sub :displayItem.0:x :x 11
+   462 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   463 jump *label238 notEqual :displayItem.0:amount 0
+   464 jump *label86 always
+   465 label *label238
+-    * label *label239
+-    * label *label240
+-    * label *label243
+   466 jump *label277 always
+   467 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   468 jump *label274 lessThan *tmp53 0
+ 
+   491 label *label254
+   492 draw lineRect *tmp58 *tmp60 9 14
+   493 jump *label275 always
+-    * label *label255
+   494 label *label256
+   495 draw line *tmp62 :y *tmp62 *tmp65
+   496 jump *label275 always
+-    * label *label257
+   497 label *label258
+   498 draw line :displayItem.0:x :y *tmp66 :y
+   499 draw line :displayItem.0:x :y *tmp66 *tmp68
+   500 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   501 draw line *tmp73 *tmp72 *tmp66 *tmp72
+   502 jump *label275 always
+-    * label *label259
+   503 label *label260
+   504 draw line :displayItem.0:x :y *tmp77 *tmp78
+   505 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+   506 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+   507 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
+   508 jump *label275 always
+-    * label *label261
+   509 label *label262
+   510 draw line *tmp88 :y *tmp88 *tmp90
+   511 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+   512 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
+   513 jump *label275 always
+-    * label *label263
+   514 label *label264
+   515 draw line :displayItem.0:x :y *tmp97 *tmp98
+   516 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+   517 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+   518 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
+   519 jump *label275 always
+-    * label *label265
+   520 label *label266
+   521 draw lineRect *tmp108 *tmp110 9 8
+   522 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
+   523 jump *label275 always
+-    * label *label267
+   524 label *label268
+   525 draw line :displayItem.0:x :y *tmp114 *tmp115
+   526 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
+   527 jump *label275 always
+-    * label *label269
+   528 label *label270
+   529 draw lineRect *tmp120 *tmp122 9 14
+   530 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
+   531 jump *label275 always
+-    * label *label271
+   532 label *label272
+   533 draw lineRect *tmp127 *tmp130 9 8
+   534 draw line :displayItem.0:x :y *tmp131 *tmp128
+-    * label *label273
+   535 label *label274
+   536 label *label275
+-    * label *label276
+   537 jump *label311 always
+   538 label *label277
+   539 op mod *tmp133 :displayItem.0:amount 10
+ 
+   566 op sub *tmp140 :y 1
+   567 draw lineRect *tmp138 *tmp140 9 14
+   568 jump *label309 always
+-    * label *label289
+   569 label *label290
+   570 op add *tmp142 :displayItem.0:x 6
+   571 op add *tmp145 :y 12
+   572 draw line *tmp142 :y *tmp142 *tmp145
+   573 jump *label309 always
+-    * label *label291
+   574 label *label292
+   575 op add *tmp146 :displayItem.0:x 7
+   576 draw line :displayItem.0:x :y *tmp146 :y
+ 
+   581 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   582 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
+   583 jump *label309 always
+-    * label *label293
+   584 label *label294
+   585 op add *tmp158 :displayItem.0:x 7
+   586 op add *tmp160 :y 12
+ 
+   590 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
+   591 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
+   592 jump *label309 always
+-    * label *label295
+   593 label *label296
+   594 op add *tmp168 :displayItem.0:x 7
+   595 op add *tmp170 :y 12
+ 
+   598 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
+   599 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
+   600 jump *label309 always
+-    * label *label297
+   601 label *label298
+   602 op add *tmp176 :displayItem.0:x 7
+   603 draw line :displayItem.0:x :y *tmp176 :y
+ 
+   608 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
+   609 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
+   610 jump *label309 always
+-    * label *label299
+   611 label *label300
+   612 op add *tmp188 :y 12
+   613 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
+ 
+   618 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
+   619 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
+   620 jump *label309 always
+-    * label *label301
+   621 label *label302
+   622 op add *tmp200 :displayItem.0:x 6
+   623 op add *tmp203 :y 12
+   624 draw line *tmp200 :y *tmp200 *tmp203
+   625 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
+   626 jump *label309 always
+-    * label *label303
+   627 label *label304
+   628 op sub *tmp209 :displayItem.0:x 1
+   629 op sub *tmp211 :y 1
+ 
+   632 op add *tmp213 :displayItem.0:x 7
+   633 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
+   634 jump *label309 always
+-    * label *label305
+   635 label *label306
+   636 op add *tmp215 :displayItem.0:x 7
+   637 draw line :displayItem.0:x :y *tmp215 :y
+ 
+   641 draw line :displayItem.0:x *tmp219 *tmp215 *tmp219
+   642 draw line :displayItem.0:x *tmp219 :displayItem.0:x *tmp218
+   643 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+-    * label *label307
+   644 label *label308
+   645 label *label309
+-    * label *label310
+   646 label *label311
+   647 op sub :displayItem.0:x :x 22
+   648 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   649 jump *label312 notEqual :displayItem.0:amount 0
+   650 jump *label86 always
+   651 label *label312
+-    * label *label313
+-    * label *label314
+-    * label *label317
+   652 jump *label351 always
+   653 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   654 jump *label348 lessThan *tmp53 0
+ 
+   677 label *label328
+   678 draw lineRect *tmp58 *tmp60 9 14
+   679 jump *label349 always
+-    * label *label329
+   680 label *label330
+   681 draw line *tmp62 :y *tmp62 *tmp65
+   682 jump *label349 always
+-    * label *label331
+   683 label *label332
+   684 draw line :displayItem.0:x :y *tmp66 :y
+   685 draw line :displayItem.0:x :y *tmp66 *tmp68
+   686 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   687 draw line *tmp73 *tmp72 *tmp66 *tmp72
+   688 jump *label349 always
+-    * label *label333
+   689 label *label334
+   690 draw line :displayItem.0:x :y *tmp77 *tmp78
+   691 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+   692 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+   693 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
+   694 jump *label349 always
+-    * label *label335
+   695 label *label336
+   696 draw line *tmp88 :y *tmp88 *tmp90
+   697 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+   698 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
+   699 jump *label349 always
+-    * label *label337
+   700 label *label338
+   701 draw line :displayItem.0:x :y *tmp97 *tmp98
+   702 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+   703 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+   704 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
+   705 jump *label349 always
+-    * label *label339
+   706 label *label340
+   707 draw lineRect *tmp108 *tmp110 9 8
+   708 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
+   709 jump *label349 always
+-    * label *label341
+   710 label *label342
+   711 draw line :displayItem.0:x :y *tmp114 *tmp115
+   712 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
+   713 jump *label349 always
+-    * label *label343
+   714 label *label344
+   715 draw lineRect *tmp120 *tmp122 9 14
+   716 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
+   717 jump *label349 always
+-    * label *label345
+   718 label *label346
+   719 draw lineRect *tmp127 *tmp130 9 8
+   720 draw line :displayItem.0:x :y *tmp131 *tmp128
+-    * label *label347
+   721 label *label348
+   722 label *label349
+-    * label *label350
+   723 jump *label385 always
+   724 label *label351
+   725 op mod *tmp133 :displayItem.0:amount 10
+ 
+   752 op sub *tmp140 :y 1
+   753 draw lineRect *tmp138 *tmp140 9 14
+   754 jump *label383 always
+-    * label *label363
+   755 label *label364
+   756 op add *tmp142 :displayItem.0:x 6
+   757 op add *tmp145 :y 12
+   758 draw line *tmp142 :y *tmp142 *tmp145
+   759 jump *label383 always
+-    * label *label365
+   760 label *label366
+   761 op add *tmp146 :displayItem.0:x 7
+   762 draw line :displayItem.0:x :y *tmp146 :y
+ 
+   767 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   768 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
+   769 jump *label383 always
+-    * label *label367
+   770 label *label368
+   771 op add *tmp158 :displayItem.0:x 7
+   772 op add *tmp160 :y 12
+ 
+   776 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
+   777 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
+   778 jump *label383 always
+-    * label *label369
+   779 label *label370
+   780 op add *tmp168 :displayItem.0:x 7
+   781 op add *tmp170 :y 12
+ 
+   784 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
+   785 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
+   786 jump *label383 always
+-    * label *label371
+   787 label *label372
+   788 op add *tmp176 :displayItem.0:x 7
+   789 draw line :displayItem.0:x :y *tmp176 :y
+ 
+   794 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
+   795 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
+   796 jump *label383 always
+-    * label *label373
+   797 label *label374
+   798 op add *tmp188 :y 12
+   799 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
+ 
+   804 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
+   805 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
+   806 jump *label383 always
+-    * label *label375
+   807 label *label376
+   808 op add *tmp200 :displayItem.0:x 6
+   809 op add *tmp203 :y 12
+   810 draw line *tmp200 :y *tmp200 *tmp203
+   811 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
+   812 jump *label383 always
+-    * label *label377
+   813 label *label378
+   814 op sub *tmp209 :displayItem.0:x 1
+   815 op sub *tmp211 :y 1
+ 
+   818 op add *tmp213 :displayItem.0:x 7
+   819 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
+   820 jump *label383 always
+-    * label *label379
+   821 label *label380
+   822 op add *tmp215 :displayItem.0:x 7
+   823 draw line :displayItem.0:x :y *tmp215 :y
+ 
+   827 draw line :displayItem.0:x *tmp219 *tmp215 *tmp219
+   828 draw line :displayItem.0:x *tmp219 :displayItem.0:x *tmp218
+   829 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+-    * label *label381
+   830 label *label382
+   831 label *label383
+-    * label *label384
+   832 label *label385
+   833 op sub :displayItem.0:x :x 33
+   834 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   835 jump *label386 notEqual :displayItem.0:amount 0
+   836 jump *label86 always
+   837 label *label386
+-    * label *label387
+-    * label *label388
+-    * label *label391
+   838 jump *label425 always
+   839 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   840 jump *label422 lessThan *tmp53 0
+ 
+   863 label *label402
+   864 draw lineRect *tmp58 *tmp60 9 14
+   865 jump *label423 always
+-    * label *label403
+   866 label *label404
+   867 draw line *tmp62 :y *tmp62 *tmp65
+   868 jump *label423 always
+-    * label *label405
+   869 label *label406
+   870 draw line :displayItem.0:x :y *tmp66 :y
+   871 draw line :displayItem.0:x :y *tmp66 *tmp68
+   872 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   873 draw line *tmp73 *tmp72 *tmp66 *tmp72
+   874 jump *label423 always
+-    * label *label407
+   875 label *label408
+   876 draw line :displayItem.0:x :y *tmp77 *tmp78
+   877 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+   878 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+   879 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
+   880 jump *label423 always
+-    * label *label409
+   881 label *label410
+   882 draw line *tmp88 :y *tmp88 *tmp90
+   883 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+   884 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
+   885 jump *label423 always
+-    * label *label411
+   886 label *label412
+   887 draw line :displayItem.0:x :y *tmp97 *tmp98
+   888 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+   889 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+   890 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
+   891 jump *label423 always
+-    * label *label413
+   892 label *label414
+   893 draw lineRect *tmp108 *tmp110 9 8
+   894 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
+   895 jump *label423 always
+-    * label *label415
+   896 label *label416
+   897 draw line :displayItem.0:x :y *tmp114 *tmp115
+   898 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
+   899 jump *label423 always
+-    * label *label417
+   900 label *label418
+   901 draw lineRect *tmp120 *tmp122 9 14
+   902 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
+   903 jump *label423 always
+-    * label *label419
+   904 label *label420
+   905 draw lineRect *tmp127 *tmp130 9 8
+   906 draw line :displayItem.0:x :y *tmp131 *tmp128
+-    * label *label421
+   907 label *label422
+   908 label *label423
+-    * label *label424
+   909 jump *label459 always
+   910 label *label425
+   911 op mod *tmp133 :displayItem.0:amount 10
+ 
+   938 op sub *tmp140 :y 1
+   939 draw lineRect *tmp138 *tmp140 9 14
+   940 jump *label457 always
+-    * label *label437
+   941 label *label438
+   942 op add *tmp142 :displayItem.0:x 6
+   943 op add *tmp145 :y 12
+   944 draw line *tmp142 :y *tmp142 *tmp145
+   945 jump *label457 always
+-    * label *label439
+   946 label *label440
+   947 op add *tmp146 :displayItem.0:x 7
+   948 draw line :displayItem.0:x :y *tmp146 :y
+ 
+   953 draw line *tmp146 *tmp147 *tmp146 *tmp154
+   954 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
+   955 jump *label457 always
+-    * label *label441
+   956 label *label442
+   957 op add *tmp158 :displayItem.0:x 7
+   958 op add *tmp160 :y 12
+ 
+   962 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
+   963 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
+   964 jump *label457 always
+-    * label *label443
+   965 label *label444
+   966 op add *tmp168 :displayItem.0:x 7
+   967 op add *tmp170 :y 12
+ 
+   970 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
+   971 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
+   972 jump *label457 always
+-    * label *label445
+   973 label *label446
+   974 op add *tmp176 :displayItem.0:x 7
+   975 draw line :displayItem.0:x :y *tmp176 :y
+ 
+   980 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
+   981 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
+   982 jump *label457 always
+-    * label *label447
+   983 label *label448
+   984 op add *tmp188 :y 12
+   985 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
+ 
+   990 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
+   991 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
+   992 jump *label457 always
+-    * label *label449
+   993 label *label450
+   994 op add *tmp200 :displayItem.0:x 6
+   995 op add *tmp203 :y 12
+   996 draw line *tmp200 :y *tmp200 *tmp203
+   997 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
+   998 jump *label457 always
+-    * label *label451
+   999 label *label452
+  1000 op sub *tmp209 :displayItem.0:x 1
+  1001 op sub *tmp211 :y 1
+ 
+  1004 op add *tmp213 :displayItem.0:x 7
+  1005 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
+  1006 jump *label457 always
+-    * label *label453
+  1007 label *label454
+  1008 op add *tmp215 :displayItem.0:x 7
+  1009 draw line :displayItem.0:x :y *tmp215 :y
+ 
+  1013 draw line :displayItem.0:x *tmp219 *tmp215 *tmp219
+  1014 draw line :displayItem.0:x *tmp219 :displayItem.0:x *tmp218
+  1015 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+-    * label *label455
+  1016 label *label456
+  1017 label *label457
+-    * label *label458
+  1018 label *label459
+  1019 op sub :displayItem.0:x :x 44
+  1020 op idiv :displayItem.0:amount :displayItem.0:amount 10
+  1021 jump *label460 notEqual :displayItem.0:amount 0
+  1022 jump *label86 always
+  1023 label *label460
+-    * label *label461
+-    * label *label462
+-    * label *label465
+  1024 jump *label499 always
+  1025 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+  1026 jump *label496 lessThan *tmp53 0
+ 
+  1049 label *label476
+  1050 draw lineRect *tmp58 *tmp60 9 14
+  1051 jump *label497 always
+-    * label *label477
+  1052 label *label478
+  1053 draw line *tmp62 :y *tmp62 *tmp65
+  1054 jump *label497 always
+-    * label *label479
+  1055 label *label480
+  1056 draw line :displayItem.0:x :y *tmp66 :y
+  1057 draw line :displayItem.0:x :y *tmp66 *tmp68
+  1058 draw line *tmp66 *tmp68 *tmp66 *tmp72
+  1059 draw line *tmp73 *tmp72 *tmp66 *tmp72
+  1060 jump *label497 always
+-    * label *label481
+  1061 label *label482
+  1062 draw line :displayItem.0:x :y *tmp77 *tmp78
+  1063 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+  1064 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+  1065 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
+  1066 jump *label497 always
+-    * label *label483
+  1067 label *label484
+  1068 draw line *tmp88 :y *tmp88 *tmp90
+  1069 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+  1070 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
+  1071 jump *label497 always
+-    * label *label485
+  1072 label *label486
+  1073 draw line :displayItem.0:x :y *tmp97 *tmp98
+  1074 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+  1075 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+  1076 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
+  1077 jump *label497 always
+-    * label *label487
+  1078 label *label488
+  1079 draw lineRect *tmp108 *tmp110 9 8
+  1080 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
+  1081 jump *label497 always
+-    * label *label489
+  1082 label *label490
+  1083 draw line :displayItem.0:x :y *tmp114 *tmp115
+  1084 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
+  1085 jump *label497 always
+-    * label *label491
+  1086 label *label492
+  1087 draw lineRect *tmp120 *tmp122 9 14
+  1088 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
+  1089 jump *label497 always
+-    * label *label493
+  1090 label *label494
+  1091 draw lineRect *tmp127 *tmp130 9 8
+  1092 draw line :displayItem.0:x :y *tmp131 *tmp128
+-    * label *label495
+  1093 label *label496
+  1094 label *label497
+-    * label *label498
+  1095 jump *label533 always
+  1096 label *label499
+  1097 op mod *tmp133 :displayItem.0:amount 10
+ 
+  1124 op sub *tmp140 :y 1
+  1125 draw lineRect *tmp138 *tmp140 9 14
+  1126 jump *label531 always
+-    * label *label511
+  1127 label *label512
+  1128 op add *tmp142 :displayItem.0:x 6
+  1129 op add *tmp145 :y 12
+  1130 draw line *tmp142 :y *tmp142 *tmp145
+  1131 jump *label531 always
+-    * label *label513
+  1132 label *label514
+  1133 op add *tmp146 :displayItem.0:x 7
+  1134 draw line :displayItem.0:x :y *tmp146 :y
+ 
+  1139 draw line *tmp146 *tmp147 *tmp146 *tmp154
+  1140 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
+  1141 jump *label531 always
+-    * label *label515
+  1142 label *label516
+  1143 op add *tmp158 :displayItem.0:x 7
+  1144 op add *tmp160 :y 12
+ 
+  1148 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
+  1149 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
+  1150 jump *label531 always
+-    * label *label517
+  1151 label *label518
+  1152 op add *tmp168 :displayItem.0:x 7
+  1153 op add *tmp170 :y 12
+ 
+  1156 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
+  1157 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
+  1158 jump *label531 always
+-    * label *label519
+  1159 label *label520
+  1160 op add *tmp176 :displayItem.0:x 7
+  1161 draw line :displayItem.0:x :y *tmp176 :y
+ 
+  1166 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
+  1167 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
+  1168 jump *label531 always
+-    * label *label521
+  1169 label *label522
+  1170 op add *tmp188 :y 12
+  1171 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
+ 
+  1176 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
+  1177 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
+  1178 jump *label531 always
+-    * label *label523
+  1179 label *label524
+  1180 op add *tmp200 :displayItem.0:x 6
+  1181 op add *tmp203 :y 12
+  1182 draw line *tmp200 :y *tmp200 *tmp203
+  1183 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
+  1184 jump *label531 always
+-    * label *label525
+  1185 label *label526
+  1186 op sub *tmp209 :displayItem.0:x 1
+  1187 op sub *tmp211 :y 1
+ 
+  1190 op add *tmp213 :displayItem.0:x 7
+  1191 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
+  1192 jump *label531 always
+-    * label *label527
+  1193 label *label528
+  1194 op add *tmp215 :displayItem.0:x 7
+  1195 draw line :displayItem.0:x :y *tmp215 :y
+ 
+  1199 draw line :displayItem.0:x *tmp219 *tmp215 *tmp219
+  1200 draw line :displayItem.0:x *tmp219 :displayItem.0:x *tmp218
+  1201 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+-    * label *label529
+  1202 label *label530
+  1203 label *label531
+-    * label *label532
+  1204 label *label533
+-    * label *label534
+-    * label *label535
+-    * label *label536
+  1205 label *label86
+-    * label *label73
+  1206 op add :index :index 1
+  1207 op sub :y :y 20
+  1208 jump *label135 notEqual :index 8
+  1209 drawflush display1
+-    * label *label137
+-    * label *label138
+  1210 set :y 152
+  1211 set :x 157
+  1212 # "Function: inline def eraseNumbers(in first_column)"
+ 
+  1217 label *label140
+  1218 draw rect 109 0 176 176
+  1219 label *label141
+-    * label *label139
+  1220 label *label135
+-    * label *label136
+-    * label *label53
+  1221 multijump *tmp35 0 0 (m:marker1)
+  1222 multilabel *label70 (m:marker1)
+  1223 label *label72
+-    * label *label54
+  1224 drawflush display1
+  1225 op sub *tmp234 @time :start
+  1226 op floor :elapsed *tmp234
+ 
+  1231 print " "
+  1232 print "ms"
+  1233 printflush message1
+-    * label *label18
+  1234 sensor *tmp12 .CONTAINER @dead
+  1235 op equal *tmp13 *tmp12 0
+  1236 sensor *tmp14 .DISPLAY @dead
+
+Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-4 instructions):
+ 
+   460 label *label237
+   461 op sub :displayItem.0:x :x 11
+   462 op idiv :displayItem.0:amount :displayItem.0:amount 10
 -    * jump *label238 notEqual :displayItem.0:amount 0
 -    * jump *label86 always
-+  503 jump *label86 equal :displayItem.0:amount 0
-   504 label *label238
-   505 label *label239
-   506 label *label240
++  463 jump *label86 equal :displayItem.0:amount 0
+   464 label *label238
+   465 jump *label277 always
+   466 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
  
-   710 label *label311
-   711 op sub :displayItem.0:x :x 22
-   712 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   645 label *label311
+   646 op sub :displayItem.0:x :x 22
+   647 op idiv :displayItem.0:amount :displayItem.0:amount 10
 -    * jump *label312 notEqual :displayItem.0:amount 0
 -    * jump *label86 always
-+  713 jump *label86 equal :displayItem.0:amount 0
-   714 label *label312
-   715 label *label313
-   716 label *label314
++  648 jump *label86 equal :displayItem.0:amount 0
+   649 label *label312
+   650 jump *label351 always
+   651 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
  
-   920 label *label385
-   921 op sub :displayItem.0:x :x 33
-   922 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   830 label *label385
+   831 op sub :displayItem.0:x :x 33
+   832 op idiv :displayItem.0:amount :displayItem.0:amount 10
 -    * jump *label386 notEqual :displayItem.0:amount 0
 -    * jump *label86 always
-+  923 jump *label86 equal :displayItem.0:amount 0
-   924 label *label386
-   925 label *label387
-   926 label *label388
++  833 jump *label86 equal :displayItem.0:amount 0
+   834 label *label386
+   835 jump *label425 always
+   836 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
  
-  1130 label *label459
-  1131 op sub :displayItem.0:x :x 44
-  1132 op idiv :displayItem.0:amount :displayItem.0:amount 10
+  1015 label *label459
+  1016 op sub :displayItem.0:x :x 44
+  1017 op idiv :displayItem.0:amount :displayItem.0:amount 10
 -    * jump *label460 notEqual :displayItem.0:amount 0
 -    * jump *label86 always
-+ 1133 jump *label86 equal :displayItem.0:amount 0
-  1134 label *label460
-  1135 label *label461
-  1136 label *label462
++ 1018 jump *label86 equal :displayItem.0:amount 0
+  1019 label *label460
+  1020 jump *label499 always
+  1021 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 
-Modifications by Final phase, Jump Threading, iteration 1:
+Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
+ 
+   461 op sub :displayItem.0:x :x 11
+   462 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   463 jump *label86 equal :displayItem.0:amount 0
+-    * label *label238
+   464 jump *label277 always
+   465 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   466 jump *label274 lessThan *tmp53 0
+ 
+   645 op sub :displayItem.0:x :x 22
+   646 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   647 jump *label86 equal :displayItem.0:amount 0
+-    * label *label312
+   648 jump *label351 always
+   649 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   650 jump *label348 lessThan *tmp53 0
+ 
+   829 op sub :displayItem.0:x :x 33
+   830 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   831 jump *label86 equal :displayItem.0:amount 0
+-    * label *label386
+   832 jump *label425 always
+   833 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   834 jump *label422 lessThan *tmp53 0
+ 
+  1013 op sub :displayItem.0:x :x 44
+  1014 op idiv :displayItem.0:amount :displayItem.0:amount 10
+  1015 jump *label86 equal :displayItem.0:amount 0
+-    * label *label460
+  1016 jump *label499 always
+  1017 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+  1018 jump *label496 lessThan *tmp53 0
+
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set .CONTAINER null
      2 set .MEMORY null
      3 set .MESSAGE null
  
-    76 op land *tmp16 *tmp13 *tmp15
-    77 op equal *tmp17 .LINKS @links
-    78 op land *tmp18 *tmp16 *tmp17
+    68 op land *tmp16 *tmp13 *tmp15
+    69 op equal *tmp17 .LINKS @links
+    70 op land *tmp18 *tmp16 *tmp17
 -    * jump *label19 equal *tmp18 false
-+   79 jump __start__ equal *tmp18 false
-    80 label *label539
-    81 set :start @time
-    82 sensor .CAPACITY .CONTAINER @itemCapacity
++   71 jump __start__ equal *tmp18 false
+    72 label *label539
+    73 set :start @time
+    74 sensor .CAPACITY .CONTAINER @itemCapacity
  
-   269 jump *label74 equal *tmp38 false
-   270 jump *label76 notEqual :displayItem.0:amount .CAPACITY
-   271 draw color 0 255 0 255
+   253 jump *label74 equal *tmp38 false
+   254 jump *label76 notEqual :displayItem.0:amount .CAPACITY
+   255 draw color 0 255 0 255
 -    * jump *label77 always
-+  272 jump *label203 always
-   273 label *label76
-   274 jump *label78 lessThanEq :displayItem.0:amount .LIMIT
-   275 draw color 255 255 0 255
++  256 jump *label203 always
+   257 label *label76
+   258 jump *label78 lessThanEq :displayItem.0:amount .LIMIT
+   259 draw color 255 255 0 255
 -    * jump *label79 always
-+  276 jump *label203 always
-   277 label *label78
-   278 draw color 255 80 80 255
-   279 label *label79
-   280 label *label77
++  260 jump *label203 always
+   261 label *label78
+   262 draw color 255 80 80 255
+   263 label *label79
+   264 label *label77
 -    * jump *label75 always
-+  281 jump *label203 always
-   282 label *label74
-   283 read :displayItem.0:last .MEMORY :index
-   284 write :displayItem.0:amount .MEMORY :index
-   285 jump *label80 notEqual :displayItem.0:amount :displayItem.0:last
-   286 draw color 255 255 0 255
++  265 jump *label203 always
+   266 label *label74
+   267 read :displayItem.0:last .MEMORY :index
+   268 write :displayItem.0:amount .MEMORY :index
+   269 jump *label80 notEqual :displayItem.0:amount :displayItem.0:last
+   270 draw color 255 255 0 255
 -    * jump *label81 always
-+  287 jump *label203 always
-   288 label *label80
-   289 jump *label82 greaterThanEq :displayItem.0:amount :displayItem.0:last
-   290 draw color 255 80 80 255
++  271 jump *label203 always
+   272 label *label80
+   273 jump *label82 greaterThanEq :displayItem.0:amount :displayItem.0:last
+   274 draw color 255 80 80 255
 -    * jump *label83 always
-+  291 jump *label203 always
-   292 label *label82
-   293 draw color 0 255 0 255
-   294 label *label83
++  275 jump *label203 always
+   276 label *label82
+   277 draw color 0 255 0 255
+   278 label *label83
  
-   298 label *label169
-   299 jump *label203 always
-   300 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   280 label *label75
+   281 jump *label203 always
+   282 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label200 lessThan *tmp53 0
 -    * jump *label200 greaterThan *tmp53 9
-+  301 jump *label237 lessThan *tmp53 0
-+  302 jump *label237 greaterThan *tmp53 9
-   303 multijump *label170 *tmp53 0 (m:*label145)
-   304 multilabel *label170 (m:*label145)
-   305 jump *label180 always
++  283 jump *label237 lessThan *tmp53 0
++  284 jump *label237 greaterThan *tmp53 9
+   285 multijump *label170 *tmp53 0 (m:*label145)
+   286 multilabel *label170 (m:*label145)
+   287 jump *label180 always
  
-   323 jump *label198 always
-   324 label *label180
-   325 draw lineRect *tmp58 *tmp60 9 14
+   305 jump *label198 always
+   306 label *label180
+   307 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label201 always
-+  326 jump *label237 always
-   327 label *label181
-   328 label *label182
-   329 draw line *tmp62 :y *tmp62 *tmp65
++  308 jump *label237 always
+   309 label *label182
+   310 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label201 always
-+  330 jump *label237 always
-   331 label *label183
-   332 label *label184
-   333 draw line :x :y *tmp66 :y
-   334 draw line :x :y *tmp66 *tmp68
-   335 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   336 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  311 jump *label237 always
+   312 label *label184
+   313 draw line :x :y *tmp66 :y
+   314 draw line :x :y *tmp66 *tmp68
+   315 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   316 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label201 always
-+  337 jump *label237 always
-   338 label *label185
-   339 label *label186
-   340 draw line :x :y *tmp77 *tmp78
-   341 draw line :x *tmp78 *tmp77 *tmp78
-   342 draw line :x *tmp78 *tmp77 *tmp84
-   343 draw line :x *tmp84 *tmp77 *tmp84
++  317 jump *label237 always
+   318 label *label186
+   319 draw line :x :y *tmp77 *tmp78
+   320 draw line :x *tmp78 *tmp77 *tmp78
+   321 draw line :x *tmp78 *tmp77 *tmp84
+   322 draw line :x *tmp84 *tmp77 *tmp84
 -    * jump *label201 always
-+  344 jump *label237 always
-   345 label *label187
-   346 label *label188
-   347 draw line *tmp88 :y *tmp88 *tmp90
-   348 draw line :x *tmp90 *tmp88 *tmp90
-   349 draw line :x *tmp90 *tmp88 *tmp96
++  323 jump *label237 always
+   324 label *label188
+   325 draw line *tmp88 :y *tmp88 *tmp90
+   326 draw line :x *tmp90 *tmp88 *tmp90
+   327 draw line :x *tmp90 *tmp88 *tmp96
 -    * jump *label201 always
-+  350 jump *label237 always
-   351 label *label189
-   352 label *label190
-   353 draw line :x :y *tmp97 *tmp98
-   354 draw line :x *tmp98 *tmp97 *tmp98
-   355 draw line :x *tmp98 :x *tmp103
-   356 draw line :x *tmp103 *tmp97 *tmp103
++  328 jump *label237 always
+   329 label *label190
+   330 draw line :x :y *tmp97 *tmp98
+   331 draw line :x *tmp98 *tmp97 *tmp98
+   332 draw line :x *tmp98 :x *tmp103
+   333 draw line :x *tmp103 *tmp97 *tmp103
 -    * jump *label201 always
-+  357 jump *label237 always
-   358 label *label191
-   359 label *label192
-   360 draw lineRect *tmp108 *tmp110 9 8
-   361 draw line :x *tmp111 *tmp112 *tmp113
++  334 jump *label237 always
+   335 label *label192
+   336 draw lineRect *tmp108 *tmp110 9 8
+   337 draw line :x *tmp111 *tmp112 *tmp113
 -    * jump *label201 always
-+  362 jump *label237 always
-   363 label *label193
-   364 label *label194
-   365 draw line :x :y *tmp114 *tmp115
-   366 draw line :x *tmp115 *tmp114 *tmp115
++  338 jump *label237 always
+   339 label *label194
+   340 draw line :x :y *tmp114 *tmp115
+   341 draw line :x *tmp115 *tmp114 *tmp115
 -    * jump *label201 always
-+  367 jump *label237 always
-   368 label *label195
-   369 label *label196
-   370 draw lineRect *tmp120 *tmp122 9 14
-   371 draw line :x *tmp123 *tmp124 *tmp123
++  342 jump *label237 always
+   343 label *label196
+   344 draw lineRect *tmp120 *tmp122 9 14
+   345 draw line :x *tmp123 *tmp124 *tmp123
 -    * jump *label201 always
-+  372 jump *label237 always
-   373 label *label197
-   374 label *label198
-   375 draw lineRect *tmp127 *tmp130 9 8
++  346 jump *label237 always
+   347 label *label198
+   348 draw lineRect *tmp127 *tmp130 9 8
+   349 draw line :x :y *tmp131 *tmp128
  
-   508 label *label243
-   509 jump *label277 always
-   510 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   464 jump *label86 equal :displayItem.0:amount 0
+   465 jump *label277 always
+   466 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label274 lessThan *tmp53 0
 -    * jump *label274 greaterThan *tmp53 9
-+  511 jump *label311 lessThan *tmp53 0
-+  512 jump *label311 greaterThan *tmp53 9
-   513 multijump *label244 *tmp53 0 (m:*label145)
-   514 multilabel *label244 (m:*label145)
-   515 jump *label254 always
++  467 jump *label311 lessThan *tmp53 0
++  468 jump *label311 greaterThan *tmp53 9
+   469 multijump *label244 *tmp53 0 (m:*label145)
+   470 multilabel *label244 (m:*label145)
+   471 jump *label254 always
  
-   533 jump *label272 always
-   534 label *label254
-   535 draw lineRect *tmp58 *tmp60 9 14
+   489 jump *label272 always
+   490 label *label254
+   491 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label275 always
-+  536 jump *label311 always
-   537 label *label255
-   538 label *label256
-   539 draw line *tmp62 :y *tmp62 *tmp65
++  492 jump *label311 always
+   493 label *label256
+   494 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label275 always
-+  540 jump *label311 always
-   541 label *label257
-   542 label *label258
-   543 draw line :displayItem.0:x :y *tmp66 :y
-   544 draw line :displayItem.0:x :y *tmp66 *tmp68
-   545 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   546 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  495 jump *label311 always
+   496 label *label258
+   497 draw line :displayItem.0:x :y *tmp66 :y
+   498 draw line :displayItem.0:x :y *tmp66 *tmp68
+   499 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   500 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label275 always
-+  547 jump *label311 always
-   548 label *label259
-   549 label *label260
-   550 draw line :displayItem.0:x :y *tmp77 *tmp78
-   551 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
-   552 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
-   553 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
++  501 jump *label311 always
+   502 label *label260
+   503 draw line :displayItem.0:x :y *tmp77 *tmp78
+   504 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+   505 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+   506 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label275 always
-+  554 jump *label311 always
-   555 label *label261
-   556 label *label262
-   557 draw line *tmp88 :y *tmp88 *tmp90
-   558 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
-   559 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
++  507 jump *label311 always
+   508 label *label262
+   509 draw line *tmp88 :y *tmp88 *tmp90
+   510 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+   511 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label275 always
-+  560 jump *label311 always
-   561 label *label263
-   562 label *label264
-   563 draw line :displayItem.0:x :y *tmp97 *tmp98
-   564 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
-   565 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
-   566 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
++  512 jump *label311 always
+   513 label *label264
+   514 draw line :displayItem.0:x :y *tmp97 *tmp98
+   515 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+   516 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+   517 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label275 always
-+  567 jump *label311 always
-   568 label *label265
-   569 label *label266
-   570 draw lineRect *tmp108 *tmp110 9 8
-   571 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
++  518 jump *label311 always
+   519 label *label266
+   520 draw lineRect *tmp108 *tmp110 9 8
+   521 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label275 always
-+  572 jump *label311 always
-   573 label *label267
-   574 label *label268
-   575 draw line :displayItem.0:x :y *tmp114 *tmp115
-   576 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
++  522 jump *label311 always
+   523 label *label268
+   524 draw line :displayItem.0:x :y *tmp114 *tmp115
+   525 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label275 always
-+  577 jump *label311 always
-   578 label *label269
-   579 label *label270
-   580 draw lineRect *tmp120 *tmp122 9 14
-   581 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
++  526 jump *label311 always
+   527 label *label270
+   528 draw lineRect *tmp120 *tmp122 9 14
+   529 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label275 always
-+  582 jump *label311 always
-   583 label *label271
-   584 label *label272
-   585 draw lineRect *tmp127 *tmp130 9 8
++  530 jump *label311 always
+   531 label *label272
+   532 draw lineRect *tmp127 *tmp130 9 8
+   533 draw line :displayItem.0:x :y *tmp131 *tmp128
  
-   718 label *label317
-   719 jump *label351 always
-   720 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   648 jump *label86 equal :displayItem.0:amount 0
+   649 jump *label351 always
+   650 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label348 lessThan *tmp53 0
 -    * jump *label348 greaterThan *tmp53 9
-+  721 jump *label385 lessThan *tmp53 0
-+  722 jump *label385 greaterThan *tmp53 9
-   723 multijump *label318 *tmp53 0 (m:*label145)
-   724 multilabel *label318 (m:*label145)
-   725 jump *label328 always
++  651 jump *label385 lessThan *tmp53 0
++  652 jump *label385 greaterThan *tmp53 9
+   653 multijump *label318 *tmp53 0 (m:*label145)
+   654 multilabel *label318 (m:*label145)
+   655 jump *label328 always
  
-   743 jump *label346 always
-   744 label *label328
-   745 draw lineRect *tmp58 *tmp60 9 14
+   673 jump *label346 always
+   674 label *label328
+   675 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label349 always
-+  746 jump *label385 always
-   747 label *label329
-   748 label *label330
-   749 draw line *tmp62 :y *tmp62 *tmp65
++  676 jump *label385 always
+   677 label *label330
+   678 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label349 always
-+  750 jump *label385 always
-   751 label *label331
-   752 label *label332
-   753 draw line :displayItem.0:x :y *tmp66 :y
-   754 draw line :displayItem.0:x :y *tmp66 *tmp68
-   755 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   756 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  679 jump *label385 always
+   680 label *label332
+   681 draw line :displayItem.0:x :y *tmp66 :y
+   682 draw line :displayItem.0:x :y *tmp66 *tmp68
+   683 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   684 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label349 always
-+  757 jump *label385 always
-   758 label *label333
-   759 label *label334
-   760 draw line :displayItem.0:x :y *tmp77 *tmp78
-   761 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
-   762 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
-   763 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
++  685 jump *label385 always
+   686 label *label334
+   687 draw line :displayItem.0:x :y *tmp77 *tmp78
+   688 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+   689 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+   690 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label349 always
-+  764 jump *label385 always
-   765 label *label335
-   766 label *label336
-   767 draw line *tmp88 :y *tmp88 *tmp90
-   768 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
-   769 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
++  691 jump *label385 always
+   692 label *label336
+   693 draw line *tmp88 :y *tmp88 *tmp90
+   694 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+   695 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label349 always
-+  770 jump *label385 always
-   771 label *label337
-   772 label *label338
-   773 draw line :displayItem.0:x :y *tmp97 *tmp98
-   774 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
-   775 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
-   776 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
++  696 jump *label385 always
+   697 label *label338
+   698 draw line :displayItem.0:x :y *tmp97 *tmp98
+   699 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+   700 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+   701 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label349 always
-+  777 jump *label385 always
-   778 label *label339
-   779 label *label340
-   780 draw lineRect *tmp108 *tmp110 9 8
-   781 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
++  702 jump *label385 always
+   703 label *label340
+   704 draw lineRect *tmp108 *tmp110 9 8
+   705 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label349 always
-+  782 jump *label385 always
-   783 label *label341
-   784 label *label342
-   785 draw line :displayItem.0:x :y *tmp114 *tmp115
-   786 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
++  706 jump *label385 always
+   707 label *label342
+   708 draw line :displayItem.0:x :y *tmp114 *tmp115
+   709 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label349 always
-+  787 jump *label385 always
-   788 label *label343
-   789 label *label344
-   790 draw lineRect *tmp120 *tmp122 9 14
-   791 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
++  710 jump *label385 always
+   711 label *label344
+   712 draw lineRect *tmp120 *tmp122 9 14
+   713 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label349 always
-+  792 jump *label385 always
-   793 label *label345
-   794 label *label346
-   795 draw lineRect *tmp127 *tmp130 9 8
++  714 jump *label385 always
+   715 label *label346
+   716 draw lineRect *tmp127 *tmp130 9 8
+   717 draw line :displayItem.0:x :y *tmp131 *tmp128
  
-   928 label *label391
-   929 jump *label425 always
-   930 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+   832 jump *label86 equal :displayItem.0:amount 0
+   833 jump *label425 always
+   834 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label422 lessThan *tmp53 0
 -    * jump *label422 greaterThan *tmp53 9
-+  931 jump *label459 lessThan *tmp53 0
-+  932 jump *label459 greaterThan *tmp53 9
-   933 multijump *label392 *tmp53 0 (m:*label145)
-   934 multilabel *label392 (m:*label145)
-   935 jump *label402 always
++  835 jump *label459 lessThan *tmp53 0
++  836 jump *label459 greaterThan *tmp53 9
+   837 multijump *label392 *tmp53 0 (m:*label145)
+   838 multilabel *label392 (m:*label145)
+   839 jump *label402 always
  
-   953 jump *label420 always
-   954 label *label402
-   955 draw lineRect *tmp58 *tmp60 9 14
+   857 jump *label420 always
+   858 label *label402
+   859 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label423 always
-+  956 jump *label459 always
-   957 label *label403
-   958 label *label404
-   959 draw line *tmp62 :y *tmp62 *tmp65
++  860 jump *label459 always
+   861 label *label404
+   862 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label423 always
-+  960 jump *label459 always
-   961 label *label405
-   962 label *label406
-   963 draw line :displayItem.0:x :y *tmp66 :y
-   964 draw line :displayItem.0:x :y *tmp66 *tmp68
-   965 draw line *tmp66 *tmp68 *tmp66 *tmp72
-   966 draw line *tmp73 *tmp72 *tmp66 *tmp72
++  863 jump *label459 always
+   864 label *label406
+   865 draw line :displayItem.0:x :y *tmp66 :y
+   866 draw line :displayItem.0:x :y *tmp66 *tmp68
+   867 draw line *tmp66 *tmp68 *tmp66 *tmp72
+   868 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label423 always
-+  967 jump *label459 always
-   968 label *label407
-   969 label *label408
-   970 draw line :displayItem.0:x :y *tmp77 *tmp78
-   971 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
-   972 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
-   973 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
++  869 jump *label459 always
+   870 label *label408
+   871 draw line :displayItem.0:x :y *tmp77 *tmp78
+   872 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+   873 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+   874 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label423 always
-+  974 jump *label459 always
-   975 label *label409
-   976 label *label410
-   977 draw line *tmp88 :y *tmp88 *tmp90
-   978 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
-   979 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
++  875 jump *label459 always
+   876 label *label410
+   877 draw line *tmp88 :y *tmp88 *tmp90
+   878 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+   879 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label423 always
-+  980 jump *label459 always
-   981 label *label411
-   982 label *label412
-   983 draw line :displayItem.0:x :y *tmp97 *tmp98
-   984 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
-   985 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
-   986 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
++  880 jump *label459 always
+   881 label *label412
+   882 draw line :displayItem.0:x :y *tmp97 *tmp98
+   883 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+   884 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+   885 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label423 always
-+  987 jump *label459 always
-   988 label *label413
-   989 label *label414
-   990 draw lineRect *tmp108 *tmp110 9 8
-   991 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
++  886 jump *label459 always
+   887 label *label414
+   888 draw lineRect *tmp108 *tmp110 9 8
+   889 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label423 always
-+  992 jump *label459 always
-   993 label *label415
-   994 label *label416
-   995 draw line :displayItem.0:x :y *tmp114 *tmp115
-   996 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
++  890 jump *label459 always
+   891 label *label416
+   892 draw line :displayItem.0:x :y *tmp114 *tmp115
+   893 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label423 always
-+  997 jump *label459 always
-   998 label *label417
-   999 label *label418
-  1000 draw lineRect *tmp120 *tmp122 9 14
-  1001 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
++  894 jump *label459 always
+   895 label *label418
+   896 draw lineRect *tmp120 *tmp122 9 14
+   897 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label423 always
-+ 1002 jump *label459 always
-  1003 label *label419
-  1004 label *label420
-  1005 draw lineRect *tmp127 *tmp130 9 8
++  898 jump *label459 always
+   899 label *label420
+   900 draw lineRect *tmp127 *tmp130 9 8
+   901 draw line :displayItem.0:x :y *tmp131 *tmp128
  
-  1138 label *label465
-  1139 jump *label499 always
-  1140 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
+  1016 jump *label86 equal :displayItem.0:amount 0
+  1017 jump *label499 always
+  1018 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label496 lessThan *tmp53 0
 -    * jump *label496 greaterThan *tmp53 9
-+ 1141 jump *label533 lessThan *tmp53 0
-+ 1142 jump *label533 greaterThan *tmp53 9
-  1143 multijump *label466 *tmp53 0 (m:*label145)
-  1144 multilabel *label466 (m:*label145)
-  1145 jump *label476 always
++ 1019 jump *label533 lessThan *tmp53 0
++ 1020 jump *label533 greaterThan *tmp53 9
+  1021 multijump *label466 *tmp53 0 (m:*label145)
+  1022 multilabel *label466 (m:*label145)
+  1023 jump *label476 always
  
-  1163 jump *label494 always
-  1164 label *label476
-  1165 draw lineRect *tmp58 *tmp60 9 14
+  1041 jump *label494 always
+  1042 label *label476
+  1043 draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label497 always
-+ 1166 jump *label533 always
-  1167 label *label477
-  1168 label *label478
-  1169 draw line *tmp62 :y *tmp62 *tmp65
++ 1044 jump *label533 always
+  1045 label *label478
+  1046 draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label497 always
-+ 1170 jump *label533 always
-  1171 label *label479
-  1172 label *label480
-  1173 draw line :displayItem.0:x :y *tmp66 :y
-  1174 draw line :displayItem.0:x :y *tmp66 *tmp68
-  1175 draw line *tmp66 *tmp68 *tmp66 *tmp72
-  1176 draw line *tmp73 *tmp72 *tmp66 *tmp72
++ 1047 jump *label533 always
+  1048 label *label480
+  1049 draw line :displayItem.0:x :y *tmp66 :y
+  1050 draw line :displayItem.0:x :y *tmp66 *tmp68
+  1051 draw line *tmp66 *tmp68 *tmp66 *tmp72
+  1052 draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label497 always
-+ 1177 jump *label533 always
-  1178 label *label481
-  1179 label *label482
-  1180 draw line :displayItem.0:x :y *tmp77 *tmp78
-  1181 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
-  1182 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
-  1183 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
++ 1053 jump *label533 always
+  1054 label *label482
+  1055 draw line :displayItem.0:x :y *tmp77 *tmp78
+  1056 draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
+  1057 draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
+  1058 draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label497 always
-+ 1184 jump *label533 always
-  1185 label *label483
-  1186 label *label484
-  1187 draw line *tmp88 :y *tmp88 *tmp90
-  1188 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
-  1189 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
++ 1059 jump *label533 always
+  1060 label *label484
+  1061 draw line *tmp88 :y *tmp88 *tmp90
+  1062 draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
+  1063 draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label497 always
-+ 1190 jump *label533 always
-  1191 label *label485
-  1192 label *label486
-  1193 draw line :displayItem.0:x :y *tmp97 *tmp98
-  1194 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
-  1195 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
-  1196 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
++ 1064 jump *label533 always
+  1065 label *label486
+  1066 draw line :displayItem.0:x :y *tmp97 *tmp98
+  1067 draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
+  1068 draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
+  1069 draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label497 always
-+ 1197 jump *label533 always
-  1198 label *label487
-  1199 label *label488
-  1200 draw lineRect *tmp108 *tmp110 9 8
-  1201 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
++ 1070 jump *label533 always
+  1071 label *label488
+  1072 draw lineRect *tmp108 *tmp110 9 8
+  1073 draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label497 always
-+ 1202 jump *label533 always
-  1203 label *label489
-  1204 label *label490
-  1205 draw line :displayItem.0:x :y *tmp114 *tmp115
-  1206 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
++ 1074 jump *label533 always
+  1075 label *label490
+  1076 draw line :displayItem.0:x :y *tmp114 *tmp115
+  1077 draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label497 always
-+ 1207 jump *label533 always
-  1208 label *label491
-  1209 label *label492
-  1210 draw lineRect *tmp120 *tmp122 9 14
-  1211 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
++ 1078 jump *label533 always
+  1079 label *label492
+  1080 draw lineRect *tmp120 *tmp122 9 14
+  1081 draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label497 always
-+ 1212 jump *label533 always
-  1213 label *label493
-  1214 label *label494
-  1215 draw lineRect *tmp127 *tmp130 9 8
++ 1082 jump *label533 always
+  1083 label *label494
+  1084 draw lineRect *tmp127 *tmp130 9 8
+  1085 draw line :displayItem.0:x :y *tmp131 *tmp128
  
-  1356 draw color 0 0 80 255
-  1357 jump *label140 always
-  1358 draw rect 23 0 70 176
+  1206 draw color 0 0 80 255
+  1207 jump *label140 always
+  1208 draw rect 23 0 70 176
 -    * jump *label141 always
-+ 1359 multijump *tmp35 0 0 (m:marker1)
-  1360 label *label140
-  1361 draw rect 109 0 176 176
-  1362 label *label141
++ 1209 multijump *tmp35 0 0 (m:marker1)
+  1210 label *label140
+  1211 draw rect 109 0 176 176
+  1212 label *label141
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-246 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-246 instructions):
  
-    88 draw color 0 0 80 255
-    89 draw rect 0 0 23 176
-    90 jump *label22 always
--    * label *label21
+    80 draw color 0 0 80 255
+    81 draw rect 0 0 23 176
+    82 jump *label22 always
 -    * draw rect 93 0 16 176
-    91 label *label22
-    92 label *label20
-    93 # "Function: inline def eraseImages(in first_column)"
-    94 draw color 0 0 80 255
-    95 jump *label24 always
+    83 label *label22
+    84 # "Function: inline def eraseImages(in first_column)"
+    85 draw color 0 0 80 255
+    86 jump *label24 always
 -    * draw rect 0 0 23 176
 -    * jump *label25 always
-    96 label *label24
-    97 draw rect 93 0 16 176
-    98 label *label25
+    87 label *label24
+    88 draw rect 93 0 16 176
+    89 label *label25
  
-   188 draw color 0 0 80 255
-   189 draw rect 23 0 70 176
-   190 jump *label51 always
--    * label *label50
+   175 draw color 0 0 80 255
+   176 draw rect 23 0 70 176
+   177 jump *label51 always
 -    * draw rect 109 0 176 176
-   191 label *label51
-   192 label *label49
-   193 set :index 0
+   178 label *label51
+   179 set :index 0
+   180 set :item @sand
  
-   291 label *label168
-   292 label *label169
-   293 jump *label203 always
+   256 jump *label203 always
+   257 label *label78
+   258 draw color 255 80 80 255
+-    * label *label79
+-    * label *label77
+   259 jump *label203 always
+   260 label *label74
+   261 read :displayItem.0:last .MEMORY :index
+ 
+   269 jump *label203 always
+   270 label *label82
+   271 draw color 0 255 0 255
+-    * label *label83
+-    * label *label81
+-    * label *label75
+   272 jump *label203 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label237 lessThan *tmp53 0
 -    * jump *label237 greaterThan *tmp53 9
@@ -5107,137 +5982,57 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-246 in
 -    * label *label180
 -    * draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label237 always
--    * label *label181
 -    * label *label182
 -    * draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label237 always
--    * label *label183
 -    * label *label184
 -    * draw line :x :y *tmp66 :y
 -    * draw line :x :y *tmp66 *tmp68
 -    * draw line *tmp66 *tmp68 *tmp66 *tmp72
 -    * draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label237 always
--    * label *label185
 -    * label *label186
 -    * draw line :x :y *tmp77 *tmp78
 -    * draw line :x *tmp78 *tmp77 *tmp78
 -    * draw line :x *tmp78 *tmp77 *tmp84
 -    * draw line :x *tmp84 *tmp77 *tmp84
 -    * jump *label237 always
--    * label *label187
 -    * label *label188
 -    * draw line *tmp88 :y *tmp88 *tmp90
 -    * draw line :x *tmp90 *tmp88 *tmp90
 -    * draw line :x *tmp90 *tmp88 *tmp96
 -    * jump *label237 always
--    * label *label189
 -    * label *label190
 -    * draw line :x :y *tmp97 *tmp98
 -    * draw line :x *tmp98 *tmp97 *tmp98
 -    * draw line :x *tmp98 :x *tmp103
 -    * draw line :x *tmp103 *tmp97 *tmp103
 -    * jump *label237 always
--    * label *label191
 -    * label *label192
 -    * draw lineRect *tmp108 *tmp110 9 8
 -    * draw line :x *tmp111 *tmp112 *tmp113
 -    * jump *label237 always
--    * label *label193
 -    * label *label194
 -    * draw line :x :y *tmp114 *tmp115
 -    * draw line :x *tmp115 *tmp114 *tmp115
 -    * jump *label237 always
--    * label *label195
 -    * label *label196
 -    * draw lineRect *tmp120 *tmp122 9 14
 -    * draw line :x *tmp123 *tmp124 *tmp123
 -    * jump *label237 always
--    * label *label197
 -    * label *label198
 -    * draw lineRect *tmp127 *tmp130 9 8
 -    * draw line :x :y *tmp131 *tmp128
--    * label *label199
 -    * label *label200
 -    * label *label201
--    * label *label202
 -    * jump *label237 always
-   294 label *label203
-   295 op mod *tmp133 :displayItem.0:amount 10
-   296 # "Function: inline def drawDigit(in x, in y, in digit)"
+   273 label *label203
+   274 op mod *tmp133 :displayItem.0:amount 10
+   275 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   322 op sub *tmp140 :y 1
-   323 draw lineRect *tmp138 *tmp140 9 14
-   324 jump *label235 always
--    * label *label215
-   325 label *label216
-   326 op add *tmp142 :x 6
-   327 op add *tmp145 :y 12
-   328 draw line *tmp142 :y *tmp142 *tmp145
-   329 jump *label235 always
--    * label *label217
-   330 label *label218
-   331 op add *tmp146 :x 7
-   332 draw line :x :y *tmp146 :y
- 
-   337 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   338 draw line :x *tmp154 *tmp146 *tmp154
-   339 jump *label235 always
--    * label *label219
-   340 label *label220
-   341 op add *tmp158 :x 7
-   342 op add *tmp160 :y 12
- 
-   346 draw line :x *tmp162 *tmp158 *tmp162
-   347 draw line :x *tmp160 *tmp158 *tmp160
-   348 jump *label235 always
--    * label *label221
-   349 label *label222
-   350 op add *tmp168 :x 7
-   351 op add *tmp170 :y 12
- 
-   354 draw line :x *tmp171 *tmp168 *tmp171
-   355 draw line :x *tmp171 :x *tmp170
-   356 jump *label235 always
--    * label *label223
-   357 label *label224
-   358 op add *tmp176 :x 7
-   359 draw line :x :y *tmp176 :y
- 
-   364 draw line :x *tmp179 :x *tmp184
-   365 draw line :x *tmp184 *tmp176 *tmp184
-   366 jump *label235 always
--    * label *label225
-   367 label *label226
-   368 op add *tmp188 :y 12
-   369 draw line :x :y :x *tmp188
- 
-   374 draw line :x *tmp192 *tmp189 *tmp192
-   375 draw line :x *tmp188 *tmp189 *tmp188
-   376 jump *label235 always
--    * label *label227
-   377 label *label228
-   378 op add *tmp200 :x 6
-   379 op add *tmp203 :y 12
-   380 draw line *tmp200 :y *tmp200 *tmp203
-   381 draw line :x *tmp203 *tmp200 *tmp203
-   382 jump *label235 always
--    * label *label229
-   383 label *label230
-   384 op sub *tmp209 :x 1
-   385 op sub *tmp211 :y 1
- 
-   388 op add *tmp213 :x 7
-   389 draw line :x *tmp212 *tmp213 *tmp212
-   390 jump *label235 always
--    * label *label231
-   391 label *label232
-   392 op add *tmp215 :x 7
-   393 draw line :x :y *tmp215 :y
- 
-   410 label *label240
-   411 label *label243
-   412 jump *label277 always
+   383 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   384 jump *label86 equal :displayItem.0:amount 0
+   385 jump *label277 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label311 lessThan *tmp53 0
 -    * jump *label311 greaterThan *tmp53 9
@@ -5265,137 +6060,57 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-246 in
 -    * label *label254
 -    * draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label311 always
--    * label *label255
 -    * label *label256
 -    * draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label311 always
--    * label *label257
 -    * label *label258
 -    * draw line :displayItem.0:x :y *tmp66 :y
 -    * draw line :displayItem.0:x :y *tmp66 *tmp68
 -    * draw line *tmp66 *tmp68 *tmp66 *tmp72
 -    * draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label311 always
--    * label *label259
 -    * label *label260
 -    * draw line :displayItem.0:x :y *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
 -    * draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label311 always
--    * label *label261
 -    * label *label262
 -    * draw line *tmp88 :y *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label311 always
--    * label *label263
 -    * label *label264
 -    * draw line :displayItem.0:x :y *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
 -    * draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label311 always
--    * label *label265
 -    * label *label266
 -    * draw lineRect *tmp108 *tmp110 9 8
 -    * draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label311 always
--    * label *label267
 -    * label *label268
 -    * draw line :displayItem.0:x :y *tmp114 *tmp115
 -    * draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label311 always
--    * label *label269
 -    * label *label270
 -    * draw lineRect *tmp120 *tmp122 9 14
 -    * draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label311 always
--    * label *label271
 -    * label *label272
 -    * draw lineRect *tmp127 *tmp130 9 8
 -    * draw line :displayItem.0:x :y *tmp131 *tmp128
--    * label *label273
 -    * label *label274
 -    * label *label275
--    * label *label276
 -    * jump *label311 always
-   413 label *label277
-   414 op mod *tmp133 :displayItem.0:amount 10
-   415 # "Function: inline def drawDigit(in x, in y, in digit)"
+   386 label *label277
+   387 op mod *tmp133 :displayItem.0:amount 10
+   388 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   441 op sub *tmp140 :y 1
-   442 draw lineRect *tmp138 *tmp140 9 14
-   443 jump *label309 always
--    * label *label289
-   444 label *label290
-   445 op add *tmp142 :displayItem.0:x 6
-   446 op add *tmp145 :y 12
-   447 draw line *tmp142 :y *tmp142 *tmp145
-   448 jump *label309 always
--    * label *label291
-   449 label *label292
-   450 op add *tmp146 :displayItem.0:x 7
-   451 draw line :displayItem.0:x :y *tmp146 :y
- 
-   456 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   457 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
-   458 jump *label309 always
--    * label *label293
-   459 label *label294
-   460 op add *tmp158 :displayItem.0:x 7
-   461 op add *tmp160 :y 12
- 
-   465 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
-   466 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
-   467 jump *label309 always
--    * label *label295
-   468 label *label296
-   469 op add *tmp168 :displayItem.0:x 7
-   470 op add *tmp170 :y 12
- 
-   473 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
-   474 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
-   475 jump *label309 always
--    * label *label297
-   476 label *label298
-   477 op add *tmp176 :displayItem.0:x 7
-   478 draw line :displayItem.0:x :y *tmp176 :y
- 
-   483 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
-   484 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
-   485 jump *label309 always
--    * label *label299
-   486 label *label300
-   487 op add *tmp188 :y 12
-   488 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
- 
-   493 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
-   494 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
-   495 jump *label309 always
--    * label *label301
-   496 label *label302
-   497 op add *tmp200 :displayItem.0:x 6
-   498 op add *tmp203 :y 12
-   499 draw line *tmp200 :y *tmp200 *tmp203
-   500 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
-   501 jump *label309 always
--    * label *label303
-   502 label *label304
-   503 op sub *tmp209 :displayItem.0:x 1
-   504 op sub *tmp211 :y 1
- 
-   507 op add *tmp213 :displayItem.0:x 7
-   508 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
-   509 jump *label309 always
--    * label *label305
-   510 label *label306
-   511 op add *tmp215 :displayItem.0:x 7
-   512 draw line :displayItem.0:x :y *tmp215 :y
- 
-   529 label *label314
-   530 label *label317
-   531 jump *label351 always
+   496 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   497 jump *label86 equal :displayItem.0:amount 0
+   498 jump *label351 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label385 lessThan *tmp53 0
 -    * jump *label385 greaterThan *tmp53 9
@@ -5423,137 +6138,57 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-246 in
 -    * label *label328
 -    * draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label385 always
--    * label *label329
 -    * label *label330
 -    * draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label385 always
--    * label *label331
 -    * label *label332
 -    * draw line :displayItem.0:x :y *tmp66 :y
 -    * draw line :displayItem.0:x :y *tmp66 *tmp68
 -    * draw line *tmp66 *tmp68 *tmp66 *tmp72
 -    * draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label385 always
--    * label *label333
 -    * label *label334
 -    * draw line :displayItem.0:x :y *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
 -    * draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label385 always
--    * label *label335
 -    * label *label336
 -    * draw line *tmp88 :y *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label385 always
--    * label *label337
 -    * label *label338
 -    * draw line :displayItem.0:x :y *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
 -    * draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label385 always
--    * label *label339
 -    * label *label340
 -    * draw lineRect *tmp108 *tmp110 9 8
 -    * draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label385 always
--    * label *label341
 -    * label *label342
 -    * draw line :displayItem.0:x :y *tmp114 *tmp115
 -    * draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label385 always
--    * label *label343
 -    * label *label344
 -    * draw lineRect *tmp120 *tmp122 9 14
 -    * draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label385 always
--    * label *label345
 -    * label *label346
 -    * draw lineRect *tmp127 *tmp130 9 8
 -    * draw line :displayItem.0:x :y *tmp131 *tmp128
--    * label *label347
 -    * label *label348
 -    * label *label349
--    * label *label350
 -    * jump *label385 always
-   532 label *label351
-   533 op mod *tmp133 :displayItem.0:amount 10
-   534 # "Function: inline def drawDigit(in x, in y, in digit)"
+   499 label *label351
+   500 op mod *tmp133 :displayItem.0:amount 10
+   501 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   560 op sub *tmp140 :y 1
-   561 draw lineRect *tmp138 *tmp140 9 14
-   562 jump *label383 always
--    * label *label363
-   563 label *label364
-   564 op add *tmp142 :displayItem.0:x 6
-   565 op add *tmp145 :y 12
-   566 draw line *tmp142 :y *tmp142 *tmp145
-   567 jump *label383 always
--    * label *label365
-   568 label *label366
-   569 op add *tmp146 :displayItem.0:x 7
-   570 draw line :displayItem.0:x :y *tmp146 :y
- 
-   575 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   576 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
-   577 jump *label383 always
--    * label *label367
-   578 label *label368
-   579 op add *tmp158 :displayItem.0:x 7
-   580 op add *tmp160 :y 12
- 
-   584 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
-   585 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
-   586 jump *label383 always
--    * label *label369
-   587 label *label370
-   588 op add *tmp168 :displayItem.0:x 7
-   589 op add *tmp170 :y 12
- 
-   592 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
-   593 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
-   594 jump *label383 always
--    * label *label371
-   595 label *label372
-   596 op add *tmp176 :displayItem.0:x 7
-   597 draw line :displayItem.0:x :y *tmp176 :y
- 
-   602 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
-   603 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
-   604 jump *label383 always
--    * label *label373
-   605 label *label374
-   606 op add *tmp188 :y 12
-   607 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
- 
-   612 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
-   613 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
-   614 jump *label383 always
--    * label *label375
-   615 label *label376
-   616 op add *tmp200 :displayItem.0:x 6
-   617 op add *tmp203 :y 12
-   618 draw line *tmp200 :y *tmp200 *tmp203
-   619 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
-   620 jump *label383 always
--    * label *label377
-   621 label *label378
-   622 op sub *tmp209 :displayItem.0:x 1
-   623 op sub *tmp211 :y 1
- 
-   626 op add *tmp213 :displayItem.0:x 7
-   627 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
-   628 jump *label383 always
--    * label *label379
-   629 label *label380
-   630 op add *tmp215 :displayItem.0:x 7
-   631 draw line :displayItem.0:x :y *tmp215 :y
- 
-   648 label *label388
-   649 label *label391
-   650 jump *label425 always
+   609 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   610 jump *label86 equal :displayItem.0:amount 0
+   611 jump *label425 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label459 lessThan *tmp53 0
 -    * jump *label459 greaterThan *tmp53 9
@@ -5581,137 +6216,57 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-246 in
 -    * label *label402
 -    * draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label459 always
--    * label *label403
 -    * label *label404
 -    * draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label459 always
--    * label *label405
 -    * label *label406
 -    * draw line :displayItem.0:x :y *tmp66 :y
 -    * draw line :displayItem.0:x :y *tmp66 *tmp68
 -    * draw line *tmp66 *tmp68 *tmp66 *tmp72
 -    * draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label459 always
--    * label *label407
 -    * label *label408
 -    * draw line :displayItem.0:x :y *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
 -    * draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label459 always
--    * label *label409
 -    * label *label410
 -    * draw line *tmp88 :y *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label459 always
--    * label *label411
 -    * label *label412
 -    * draw line :displayItem.0:x :y *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
 -    * draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label459 always
--    * label *label413
 -    * label *label414
 -    * draw lineRect *tmp108 *tmp110 9 8
 -    * draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label459 always
--    * label *label415
 -    * label *label416
 -    * draw line :displayItem.0:x :y *tmp114 *tmp115
 -    * draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label459 always
--    * label *label417
 -    * label *label418
 -    * draw lineRect *tmp120 *tmp122 9 14
 -    * draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label459 always
--    * label *label419
 -    * label *label420
 -    * draw lineRect *tmp127 *tmp130 9 8
 -    * draw line :displayItem.0:x :y *tmp131 *tmp128
--    * label *label421
 -    * label *label422
 -    * label *label423
--    * label *label424
 -    * jump *label459 always
-   651 label *label425
-   652 op mod *tmp133 :displayItem.0:amount 10
-   653 # "Function: inline def drawDigit(in x, in y, in digit)"
+   612 label *label425
+   613 op mod *tmp133 :displayItem.0:amount 10
+   614 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   679 op sub *tmp140 :y 1
-   680 draw lineRect *tmp138 *tmp140 9 14
-   681 jump *label457 always
--    * label *label437
-   682 label *label438
-   683 op add *tmp142 :displayItem.0:x 6
-   684 op add *tmp145 :y 12
-   685 draw line *tmp142 :y *tmp142 *tmp145
-   686 jump *label457 always
--    * label *label439
-   687 label *label440
-   688 op add *tmp146 :displayItem.0:x 7
-   689 draw line :displayItem.0:x :y *tmp146 :y
- 
-   694 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   695 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
-   696 jump *label457 always
--    * label *label441
-   697 label *label442
-   698 op add *tmp158 :displayItem.0:x 7
-   699 op add *tmp160 :y 12
- 
-   703 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
-   704 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
-   705 jump *label457 always
--    * label *label443
-   706 label *label444
-   707 op add *tmp168 :displayItem.0:x 7
-   708 op add *tmp170 :y 12
- 
-   711 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
-   712 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
-   713 jump *label457 always
--    * label *label445
-   714 label *label446
-   715 op add *tmp176 :displayItem.0:x 7
-   716 draw line :displayItem.0:x :y *tmp176 :y
- 
-   721 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
-   722 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
-   723 jump *label457 always
--    * label *label447
-   724 label *label448
-   725 op add *tmp188 :y 12
-   726 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
- 
-   731 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
-   732 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
-   733 jump *label457 always
--    * label *label449
-   734 label *label450
-   735 op add *tmp200 :displayItem.0:x 6
-   736 op add *tmp203 :y 12
-   737 draw line *tmp200 :y *tmp200 *tmp203
-   738 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
-   739 jump *label457 always
--    * label *label451
-   740 label *label452
-   741 op sub *tmp209 :displayItem.0:x 1
-   742 op sub *tmp211 :y 1
- 
-   745 op add *tmp213 :displayItem.0:x 7
-   746 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
-   747 jump *label457 always
--    * label *label453
-   748 label *label454
-   749 op add *tmp215 :displayItem.0:x 7
-   750 draw line :displayItem.0:x :y *tmp215 :y
- 
-   767 label *label462
-   768 label *label465
-   769 jump *label499 always
+   722 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   723 jump *label86 equal :displayItem.0:amount 0
+   724 jump *label499 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label533 lessThan *tmp53 0
 -    * jump *label533 greaterThan *tmp53 9
@@ -5739,210 +6294,249 @@ Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-246 in
 -    * label *label476
 -    * draw lineRect *tmp58 *tmp60 9 14
 -    * jump *label533 always
--    * label *label477
 -    * label *label478
 -    * draw line *tmp62 :y *tmp62 *tmp65
 -    * jump *label533 always
--    * label *label479
 -    * label *label480
 -    * draw line :displayItem.0:x :y *tmp66 :y
 -    * draw line :displayItem.0:x :y *tmp66 *tmp68
 -    * draw line *tmp66 *tmp68 *tmp66 *tmp72
 -    * draw line *tmp73 *tmp72 *tmp66 *tmp72
 -    * jump *label533 always
--    * label *label481
 -    * label *label482
 -    * draw line :displayItem.0:x :y *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp78
 -    * draw line :displayItem.0:x *tmp78 *tmp77 *tmp84
 -    * draw line :displayItem.0:x *tmp84 *tmp77 *tmp84
 -    * jump *label533 always
--    * label *label483
 -    * label *label484
 -    * draw line *tmp88 :y *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp90
 -    * draw line :displayItem.0:x *tmp90 *tmp88 *tmp96
 -    * jump *label533 always
--    * label *label485
 -    * label *label486
 -    * draw line :displayItem.0:x :y *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 *tmp97 *tmp98
 -    * draw line :displayItem.0:x *tmp98 :displayItem.0:x *tmp103
 -    * draw line :displayItem.0:x *tmp103 *tmp97 *tmp103
 -    * jump *label533 always
--    * label *label487
 -    * label *label488
 -    * draw lineRect *tmp108 *tmp110 9 8
 -    * draw line :displayItem.0:x *tmp111 *tmp112 *tmp113
 -    * jump *label533 always
--    * label *label489
 -    * label *label490
 -    * draw line :displayItem.0:x :y *tmp114 *tmp115
 -    * draw line :displayItem.0:x *tmp115 *tmp114 *tmp115
 -    * jump *label533 always
--    * label *label491
 -    * label *label492
 -    * draw lineRect *tmp120 *tmp122 9 14
 -    * draw line :displayItem.0:x *tmp123 *tmp124 *tmp123
 -    * jump *label533 always
--    * label *label493
 -    * label *label494
 -    * draw lineRect *tmp127 *tmp130 9 8
 -    * draw line :displayItem.0:x :y *tmp131 *tmp128
--    * label *label495
 -    * label *label496
 -    * label *label497
--    * label *label498
 -    * jump *label533 always
-   770 label *label499
-   771 op mod *tmp133 :displayItem.0:amount 10
-   772 # "Function: inline def drawDigit(in x, in y, in digit)"
+   725 label *label499
+   726 op mod *tmp133 :displayItem.0:amount 10
+   727 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   798 op sub *tmp140 :y 1
-   799 draw lineRect *tmp138 *tmp140 9 14
-   800 jump *label531 always
--    * label *label511
-   801 label *label512
-   802 op add *tmp142 :displayItem.0:x 6
-   803 op add *tmp145 :y 12
-   804 draw line *tmp142 :y *tmp142 *tmp145
-   805 jump *label531 always
--    * label *label513
-   806 label *label514
-   807 op add *tmp146 :displayItem.0:x 7
-   808 draw line :displayItem.0:x :y *tmp146 :y
- 
-   813 draw line *tmp146 *tmp147 *tmp146 *tmp154
-   814 draw line :displayItem.0:x *tmp154 *tmp146 *tmp154
-   815 jump *label531 always
--    * label *label515
-   816 label *label516
-   817 op add *tmp158 :displayItem.0:x 7
-   818 op add *tmp160 :y 12
- 
-   822 draw line :displayItem.0:x *tmp162 *tmp158 *tmp162
-   823 draw line :displayItem.0:x *tmp160 *tmp158 *tmp160
-   824 jump *label531 always
--    * label *label517
-   825 label *label518
-   826 op add *tmp168 :displayItem.0:x 7
-   827 op add *tmp170 :y 12
- 
-   830 draw line :displayItem.0:x *tmp171 *tmp168 *tmp171
-   831 draw line :displayItem.0:x *tmp171 :displayItem.0:x *tmp170
-   832 jump *label531 always
--    * label *label519
-   833 label *label520
-   834 op add *tmp176 :displayItem.0:x 7
-   835 draw line :displayItem.0:x :y *tmp176 :y
- 
-   840 draw line :displayItem.0:x *tmp179 :displayItem.0:x *tmp184
-   841 draw line :displayItem.0:x *tmp184 *tmp176 *tmp184
-   842 jump *label531 always
--    * label *label521
-   843 label *label522
-   844 op add *tmp188 :y 12
-   845 draw line :displayItem.0:x :y :displayItem.0:x *tmp188
- 
-   850 draw line :displayItem.0:x *tmp192 *tmp189 *tmp192
-   851 draw line :displayItem.0:x *tmp188 *tmp189 *tmp188
-   852 jump *label531 always
--    * label *label523
-   853 label *label524
-   854 op add *tmp200 :displayItem.0:x 6
-   855 op add *tmp203 :y 12
-   856 draw line *tmp200 :y *tmp200 *tmp203
-   857 draw line :displayItem.0:x *tmp203 *tmp200 *tmp203
-   858 jump *label531 always
--    * label *label525
-   859 label *label526
-   860 op sub *tmp209 :displayItem.0:x 1
-   861 op sub *tmp211 :y 1
- 
-   864 op add *tmp213 :displayItem.0:x 7
-   865 draw line :displayItem.0:x *tmp212 *tmp213 *tmp212
-   866 jump *label531 always
--    * label *label527
-   867 label *label528
-   868 op add *tmp215 :displayItem.0:x 7
-   869 draw line :displayItem.0:x :y *tmp215 :y
- 
-   894 # "Function: inline def eraseNumbers(in first_column)"
-   895 draw color 0 0 80 255
-   896 jump *label140 always
+   841 # "Function: inline def eraseNumbers(in first_column)"
+   842 draw color 0 0 80 255
+   843 jump *label140 always
 -    * draw rect 23 0 70 176
 -    * multijump *tmp35 0 0 (m:marker1)
-   897 label *label140
-   898 draw rect 109 0 176 176
-   899 label *label141
+   844 label *label140
+   845 draw rect 109 0 176 176
+-    * label *label141
+   846 label *label135
+   847 multijump *tmp35 0 0 (m:marker1)
+   848 multilabel *label70 (m:marker1)
+ 
+   865 op equal *tmp17 .LINKS @links
+   866 op land *tmp18 *tmp16 *tmp17
+   867 jump *label539 notEqual *tmp18 false
+-    * label *label19
+   868 end
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-9 instructions):
+Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
  
-    87 # "Function: inline def eraseImages(in first_column)"
-    88 draw color 0 0 80 255
-    89 draw rect 0 0 23 176
+    86 jump *label24 always
+    87 label *label24
+    88 draw rect 93 0 16 176
+-    * label *label25
+    89 draw color 255 255 255 255
+    90 set :index 0
+    91 set :item @sand
+ 
+   377 draw line :x *tmp218 *tmp215 *tmp218
+   378 label *label234
+   379 label *label235
+-    * label *label237
+   380 op sub :displayItem.0:x :x 11
+   381 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   382 jump *label86 equal :displayItem.0:amount 0
+ 
+   489 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+   490 label *label308
+   491 label *label309
+-    * label *label311
+   492 op sub :displayItem.0:x :x 22
+   493 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   494 jump *label86 equal :displayItem.0:amount 0
+ 
+   601 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+   602 label *label382
+   603 label *label383
+-    * label *label385
+   604 op sub :displayItem.0:x :x 33
+   605 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   606 jump *label86 equal :displayItem.0:amount 0
+ 
+   713 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+   714 label *label456
+   715 label *label457
+-    * label *label459
+   716 op sub :displayItem.0:x :x 44
+   717 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   718 jump *label86 equal :displayItem.0:amount 0
+ 
+   825 draw line :displayItem.0:x *tmp218 *tmp215 *tmp218
+   826 label *label530
+   827 label *label531
+-    * label *label533
+   828 label *label86
+   829 op add :index :index 1
+   830 op sub :y :y 20
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-9 instructions):
+ 
+    79 # "Function: inline def eraseImages(in first_column)"
+    80 draw color 0 0 80 255
+    81 draw rect 0 0 23 176
 -    * jump *label22 always
-    90 label *label22
-    91 label *label20
-    92 # "Function: inline def eraseImages(in first_column)"
-    93 draw color 0 0 80 255
+    82 label *label22
+    83 # "Function: inline def eraseImages(in first_column)"
+    84 draw color 0 0 80 255
 -    * jump *label24 always
-    94 label *label24
-    95 draw rect 93 0 16 176
-    96 label *label25
+    85 label *label24
+    86 draw rect 93 0 16 176
+    87 draw color 255 255 255 255
  
-   185 # "Function: inline def eraseNumbers(in first_column)"
-   186 draw color 0 0 80 255
-   187 draw rect 23 0 70 176
+   171 # "Function: inline def eraseNumbers(in first_column)"
+   172 draw color 0 0 80 255
+   173 draw rect 23 0 70 176
 -    * jump *label51 always
-   188 label *label51
-   189 label *label49
-   190 set :index 0
+   174 label *label51
+   175 set :index 0
+   176 set :item @sand
  
-   406 label *label239
-   407 label *label240
-   408 label *label243
+   377 op sub :displayItem.0:x :x 11
+   378 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   379 jump *label86 equal :displayItem.0:amount 0
 -    * jump *label277 always
-   409 label *label277
-   410 op mod *tmp133 :displayItem.0:amount 10
-   411 # "Function: inline def drawDigit(in x, in y, in digit)"
+   380 label *label277
+   381 op mod *tmp133 :displayItem.0:amount 10
+   382 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   524 label *label313
-   525 label *label314
-   526 label *label317
+   488 op sub :displayItem.0:x :x 22
+   489 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   490 jump *label86 equal :displayItem.0:amount 0
 -    * jump *label351 always
-   527 label *label351
-   528 op mod *tmp133 :displayItem.0:amount 10
-   529 # "Function: inline def drawDigit(in x, in y, in digit)"
+   491 label *label351
+   492 op mod *tmp133 :displayItem.0:amount 10
+   493 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   642 label *label387
-   643 label *label388
-   644 label *label391
+   599 op sub :displayItem.0:x :x 33
+   600 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   601 jump *label86 equal :displayItem.0:amount 0
 -    * jump *label425 always
-   645 label *label425
-   646 op mod *tmp133 :displayItem.0:amount 10
-   647 # "Function: inline def drawDigit(in x, in y, in digit)"
+   602 label *label425
+   603 op mod *tmp133 :displayItem.0:amount 10
+   604 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   760 label *label461
-   761 label *label462
-   762 label *label465
+   710 op sub :displayItem.0:x :x 44
+   711 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   712 jump *label86 equal :displayItem.0:amount 0
 -    * jump *label499 always
-   763 label *label499
-   764 op mod *tmp133 :displayItem.0:amount 10
-   765 # "Function: inline def drawDigit(in x, in y, in digit)"
+   713 label *label499
+   714 op mod *tmp133 :displayItem.0:amount 10
+   715 # "Function: inline def drawDigit(in x, in y, in digit)"
  
-   886 set :x 157
-   887 # "Function: inline def eraseNumbers(in first_column)"
-   888 draw color 0 0 80 255
+   827 set :x 157
+   828 # "Function: inline def eraseNumbers(in first_column)"
+   829 draw color 0 0 80 255
 -    * jump *label140 always
-   889 label *label140
-   890 draw rect 109 0 176 176
-   891 label *label141
+   830 label *label140
+   831 draw rect 109 0 176 176
+   832 label *label135
  
-   917 op land *tmp18 *tmp16 *tmp17
-   918 jump *label539 notEqual *tmp18 false
-   919 label *label19
+   851 op equal *tmp17 .LINKS @links
+   852 op land *tmp18 *tmp16 *tmp17
+   853 jump *label539 notEqual *tmp18 false
 -    * end
+
+Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
+ 
+    79 # "Function: inline def eraseImages(in first_column)"
+    80 draw color 0 0 80 255
+    81 draw rect 0 0 23 176
+-    * label *label22
+    82 # "Function: inline def eraseImages(in first_column)"
+    83 draw color 0 0 80 255
+-    * label *label24
+    84 draw rect 93 0 16 176
+    85 draw color 255 255 255 255
+    86 set :index 0
+ 
+   169 # "Function: inline def eraseNumbers(in first_column)"
+   170 draw color 0 0 80 255
+   171 draw rect 23 0 70 176
+-    * label *label51
+   172 set :index 0
+   173 set :item @sand
+   174 op add *tmp35 @counter 1
+ 
+   374 op sub :displayItem.0:x :x 11
+   375 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   376 jump *label86 equal :displayItem.0:amount 0
+-    * label *label277
+   377 op mod *tmp133 :displayItem.0:amount 10
+   378 # "Function: inline def drawDigit(in x, in y, in digit)"
+   379 jump *label308 lessThan *tmp133 0
+ 
+   484 op sub :displayItem.0:x :x 22
+   485 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   486 jump *label86 equal :displayItem.0:amount 0
+-    * label *label351
+   487 op mod *tmp133 :displayItem.0:amount 10
+   488 # "Function: inline def drawDigit(in x, in y, in digit)"
+   489 jump *label382 lessThan *tmp133 0
+ 
+   594 op sub :displayItem.0:x :x 33
+   595 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   596 jump *label86 equal :displayItem.0:amount 0
+-    * label *label425
+   597 op mod *tmp133 :displayItem.0:amount 10
+   598 # "Function: inline def drawDigit(in x, in y, in digit)"
+   599 jump *label456 lessThan *tmp133 0
+ 
+   704 op sub :displayItem.0:x :x 44
+   705 op idiv :displayItem.0:amount :displayItem.0:amount 10
+   706 jump *label86 equal :displayItem.0:amount 0
+-    * label *label499
+   707 op mod *tmp133 :displayItem.0:amount 10
+   708 # "Function: inline def drawDigit(in x, in y, in digit)"
+   709 jump *label530 lessThan *tmp133 0
+ 
+   820 set :x 157
+   821 # "Function: inline def eraseNumbers(in first_column)"
+   822 draw color 0 0 80 255
+-    * label *label140
+   823 draw rect 109 0 176 176
+   824 label *label135
+   825 multijump *tmp35 0 0 (m:marker1)
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
  
@@ -5954,23 +6548,22 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 +    6 print "Configuring storage display...\n"
      7 set .LINKS @links
      8 set :n .LINKS
-     9 label *label3
- 
-    11 label *label142
-    12 op sub :n :n 1
-    13 getlink :block :n
+     9 jump *label5 lessThanEq .LINKS 0
+    10 label *label142
+    11 op sub :n :n 1
+    12 getlink :block :n
 -    * print "Found: "
 -    * print :block
 -    * print "\n"
-+   14 print "Found: {0}\n"
-+   15 format :block
-    16 sensor *tmp5 :block @type
-    17 jump *label7 notEqual *tmp5 @message
-    18 label *label8
++   13 print "Found: {0}\n"
++   14 format :block
+    15 sensor *tmp5 :block @type
+    16 jump *label7 notEqual *tmp5 @message
+    17 set .MESSAGE :block
  
-    42 label *label4
-    43 jump *label142 greaterThan :n 0
-    44 label *label5
+    38 label *label6
+    39 jump *label142 greaterThan :n 0
+    40 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -5983,36 +6576,36 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 -    * print "Display: "
 -    * print .DISPLAY
 -    * print "\n"
-+   45 print "Message: {0}\nMemory: {0}\nContainer: {0}\nDisplay: {0}\n"
-+   46 format .MESSAGE
-+   47 format .MEMORY
-+   48 format .CONTAINER
-+   49 format .DISPLAY
-    50 op equal *tmp7 .CONTAINER null
-    51 op equal *tmp8 .DISPLAY null
-    52 op or *tmp9 *tmp7 *tmp8
-    53 jump *label15 equal *tmp9 false
++   41 print "Message: {0}\nMemory: {0}\nContainer: {0}\nDisplay: {0}\n"
++   42 format .MESSAGE
++   43 format .MEMORY
++   44 format .CONTAINER
++   45 format .DISPLAY
+    46 op equal *tmp7 .CONTAINER null
+    47 op equal *tmp8 .DISPLAY null
+    48 op or *tmp9 *tmp7 *tmp8
+    49 jump *label15 equal *tmp9 false
 -    * print "No container or display."
 -    * print "\n"
-+   54 print "No container or display.\n"
-    55 label *label15
-    56 label *label16
-    57 printflush .MESSAGE
++   50 print "No container or display.\n"
+    51 label *label15
+    52 printflush .MESSAGE
+    53 jump *label0 equal .CONTAINER null
  
-   890 drawflush display1
-   891 op sub *tmp234 @time :start
-   892 op floor :elapsed *tmp234
+   818 drawflush display1
+   819 op sub *tmp234 @time :start
+   820 op floor :elapsed *tmp234
 -    * print "Storage Display"
 -    * print "\n"
 -    * print "Elapsed: "
 -    * print :elapsed
 -    * print " "
 -    * print "ms"
-+  893 print "Storage Display\nElapsed: {0} ms"
-+  894 format :elapsed
-   895 printflush message1
-   896 label *label18
-   897 sensor *tmp12 .CONTAINER @dead
++  821 print "Storage Display\nElapsed: {0} ms"
++  822 format :elapsed
+   823 printflush message1
+   824 sensor *tmp12 .CONTAINER @dead
+   825 op equal *tmp13 *tmp12 0
 
 Final code before resolving virtual instructions:
 

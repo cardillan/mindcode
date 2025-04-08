@@ -1,7 +1,7 @@
     23 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination.
-     3 instructions eliminated by Dead Code Elimination (3 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     3 instructions eliminated by Dead Code Elimination (4 iterations).
+     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      4 instructions eliminated by Data Flow Optimization (6 iterations).
     13 instructions after optimizations.
 
@@ -96,11 +96,23 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2
      6 assertflush
      7 # "Function: def test()"
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-    14 label *label0
-    15 assertprints "yes1" "assignments in conditions"
-    16 stop
+     9 jump *label1 equal :test.0:res false
+    10 print "yes"
+    11 label *label1
+-    * label *label2
+    12 print :test.0:res
+-    * label *label0
+    13 assertprints "yes1" "assignments in conditions"
+    14 stop
+    15 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    12 print :test.0:res
+    13 assertprints "yes1" "assignments in conditions"
+    14 stop
 -    * end
 
 Final code before resolving virtual instructions:

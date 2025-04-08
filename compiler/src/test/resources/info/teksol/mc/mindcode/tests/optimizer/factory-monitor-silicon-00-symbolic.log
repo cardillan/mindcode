@@ -1,8 +1,8 @@
    477 instructions before optimizations.
     48 instructions eliminated by Temp Variables Elimination.
-    48 instructions eliminated by Dead Code Elimination (4 iterations).
-    26 instructions eliminated by Jump Optimization (4 iterations).
-    23 instructions eliminated by Single Step Elimination (3 passes, 7 iterations).
+    48 instructions eliminated by Dead Code Elimination (5 iterations).
+    26 instructions eliminated by Jump Optimization (5 iterations).
+    23 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions eliminated by Expression Optimization (2 passes, 3 iterations).
      5 instructions eliminated by If Expression Optimization (3 iterations).
     35 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
@@ -1653,73 +1653,248 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
    211 op mul *tmp118 :index 22
    212 op add :y 4 *tmp118
 
-Modifications by Final phase, Jump Threading, iteration 1:
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+ 
+    15 label *label3
+    16 set *tmp5 0
+    17 jump *label5 equal FROM_INDEX 0
+-    * label *label4
+    18 op mul *tmp6 FROM_INDEX 22
+    19 op add *tmp5 4 *tmp6
+    20 label *label5
+ 
+    30 set :expected_flow_str null
+    31 set :icon null
+    32 control enabled switch1 0
+-    * label *label8
+    33 sensor *tmp14 switch1 @enabled
+    34 jump *label10 notEqual *tmp14 0
+    35 label *label73
+ 
+    41 draw stroke 2
+    42 set :index FROM_INDEX
+    43 set :n 0
+-    * label *label11
+    44 jump *label13 greaterThanEq 0 @links
+    45 label *label71
+    46 getlink :smelter :n
+ 
+    59 set :minimum :s
+    60 set :icon @sand
+    61 label *label16
+-    * label *label17
+    62 jump *label18 greaterThanEq :c :minimum
+    63 set :minimum :c
+    64 set :icon @coal
+    65 label *label18
+-    * label *label19
+    66 jump *label20 greaterThanEq :p :minimum
+    67 set :minimum :p
+    68 set :icon @pyratite
+    69 label *label20
+-    * label *label21
+    70 op greaterThan *tmp36 :a 10
+    71 op sub *tmp37 31 :a
+    72 op lessThan *tmp38 *tmp37 :minimum
+ 
+    74 jump *label22 equal :showa false
+    75 set :icon @silicon
+    76 label *label22
+-    * label *label23
+    77 op mul *tmp43 :index 22
+    78 op add :y 4 *tmp43
+    79 draw color 0 0 80 255
+ 
+    85 jump *label24 equal *tmp49 false
+    86 set :icon @silicon-crucible
+    87 label *label24
+-    * label *label25
+    88 draw color 255 255 255 255
+    89 jump *label26 equal :e false
+    90 jump *label28 lessThanEq :power 0
+ 
+   151 op max :blue 192 :blue
+   152 set :boost EXPECTED_BOOST
+   153 label *label38
+-    * label *label39
+   154 op mul *tmp91 .BAR_LENGTH :boost
+   155 op idiv :length *tmp91 EXPECTED_BOOST
+   156 draw color :red :green :blue 128
+ 
+   162 op add :index :index 1
+   163 op add :factories :factories 1
+   164 label *label14
+-    * label *label15
+-    * label *label12
+   165 op add :n :n 1
+   166 jump *label71 lessThan :n @links
+   167 label *label13
+   168 set :index FROM_INDEX
+   169 set :n 0
+-    * label *label40
+   170 jump *label42 greaterThanEq 0 @links
+   171 label *label72
+   172 getlink :smelter :n
+ 
+   184 set :minimum :s
+   185 set :icon @sand
+   186 label *label45
+-    * label *label46
+   187 jump *label47 greaterThanEq :c :minimum
+   188 set :minimum :c
+   189 set :icon @coal
+   190 label *label47
+-    * label *label48
+   191 jump *label49 greaterThanEq :l :minimum
+   192 set :minimum :l
+   193 set :icon @lead
+   194 label *label49
+-    * label *label50
+   195 op add :x 5 .BAR_SPACE
+   196 op mul *tmp118 :index 22
+   197 op add :y 4 *tmp118
+ 
+   205 jump *label51 equal *tmp124 false
+   206 set :icon @pyratite-mixer
+   207 label *label51
+-    * label *label52
+   208 draw color 255 255 255 255
+   209 jump *label53 equal :e false
+   210 jump *label55 lessThanEq :power 0
+ 
+   269 op max :blue 192 0
+   270 set :boost EXPECTED_BOOST
+   271 label *label63
+-    * label *label64
+   272 op mul *tmp165 .BAR_LENGTH :boost
+   273 op idiv :length *tmp165 EXPECTED_BOOST
+   274 draw color :red :green :blue 128
+ 
+   279 draw lineRect :x :y :length 14
+   280 op add :index :index 1
+   281 label *label43
+-    * label *label44
+-    * label *label41
+   282 op add :n :n 1
+   283 jump *label72 lessThan :n @links
+   284 label *label42
+ 
+   315 draw triangle 156 :pos1 164 :pos 156 :pos2
+   316 op idiv :flow_str :rate 0.0002777777777777778
+   317 label *label69
+-    * label *label70
+   318 label *label67
+-    * label *label68
+   319 print "\nNominal production: "
+   320 print :expected_flow_str
+   321 print "/min"
+ 
+   323 print :flow_str
+   324 print "/min"
+   325 label *label65
+-    * label *label66
+   326 drawflush display1
+   327 op sub *tmp192 @time :start
+   328 op floor *tmp193 *tmp192
+ 
+   330 print *tmp193
+   331 print " ms"
+   332 printflush message1
+-    * label *label9
+   333 sensor *tmp14 switch1 @enabled
+   334 jump *label73 equal *tmp14 0
+   335 label *label10
+
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set FROM_INDEX 0
      2 set TO_INDEX 8
      3 set EXPECTED_BOOST 1.5
  
-    34 control enabled switch1 0
-    35 label *label8
-    36 sensor *tmp14 switch1 @enabled
+    32 set :icon null
+    33 control enabled switch1 0
+    34 sensor *tmp14 switch1 @enabled
 -    * jump *label10 notEqual *tmp14 0
-+   37 jump __start__ notEqual *tmp14 0
-    38 label *label73
-    39 set :start @time
-    40 print "Silicon Factory Monitor"
++   35 jump __start__ notEqual *tmp14 0
+    36 label *label73
+    37 set :start @time
+    38 print "Silicon Factory Monitor"
  
-    99 jump *label28 lessThanEq :power 0
-   100 op add *tmp55 :y 7
-   101 draw image 12 *tmp55 :icon 16 0
+    91 jump *label28 lessThanEq :power 0
+    92 op add *tmp55 :y 7
+    93 draw image 12 *tmp55 :icon 16 0
 -    * jump *label29 always
-+  102 jump *label27 always
-   103 label *label28
-   104 draw color 255 80 80 255
-   105 op add *tmp56 :y 3
++   94 jump *label27 always
+    95 label *label28
+    96 draw color 255 80 80 255
+    97 op add *tmp56 :y 3
  
-   228 op add *tmp129 :x 7
-   229 op add *tmp130 :y 7
-   230 draw image *tmp129 *tmp130 :icon 16 0
+   212 op add *tmp129 :x 7
+   213 op add *tmp130 :y 7
+   214 draw image *tmp129 *tmp130 :icon 16 0
 -    * jump *label56 always
-+  231 jump *label54 always
-   232 label *label55
-   233 draw color 255 80 80 255
-   234 op add *tmp131 :y 3
++  215 jump *label54 always
+   216 label *label55
+   217 draw color 255 80 80 255
+   218 op add *tmp131 :y 3
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
  
-   357 sensor *tmp14 switch1 @enabled
-   358 jump *label73 equal *tmp14 0
-   359 label *label10
+   105 draw color 255 80 80 255
+   106 op add *tmp64 :y 6
+   107 draw rect 9 *tmp64 2 2
+-    * label *label29
+   108 jump *label27 always
+   109 label *label26
+   110 draw color 255 80 80 255
+ 
+   228 op add *tmp138 :x 4
+   229 op add *tmp139 :y 6
+   230 draw rect *tmp138 *tmp139 2 2
+-    * label *label56
+   231 jump *label54 always
+   232 label *label53
+   233 draw color 255 80 80 255
+ 
+   331 printflush message1
+   332 sensor *tmp14 switch1 @enabled
+   333 jump *label73 equal *tmp14 0
+-    * label *label10
+   334 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+   331 printflush message1
+   332 sensor *tmp14 switch1 @enabled
+   333 jump *label73 equal *tmp14 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-4 instructions):
  
-   338 label *label70
-   339 label *label67
-   340 label *label68
+   315 op idiv :flow_str :rate 0.0002777777777777778
+   316 label *label69
+   317 label *label67
 -    * print "\nNominal production: "
 -    * print :expected_flow_str
 -    * print "/min"
 -    * print "\nActual production: "
 -    * print :flow_str
 -    * print "/min"
-+  341 print "\nNominal production: {0}/min\nActual production: {0}/min"
-+  342 format :expected_flow_str
-+  343 format :flow_str
-   344 label *label65
-   345 label *label66
-   346 drawflush display1
-   347 op sub *tmp192 @time :start
-   348 op floor *tmp193 *tmp192
++  318 print "\nNominal production: {0}/min\nActual production: {0}/min"
++  319 format :expected_flow_str
++  320 format :flow_str
+   321 label *label65
+   322 drawflush display1
+   323 op sub *tmp192 @time :start
+   324 op floor *tmp193 *tmp192
 -    * print "\nUpdate time: "
 -    * print *tmp193
 -    * print " ms"
-+  349 print "\nUpdate time: {0} ms"
-+  350 format *tmp193
-   351 printflush message1
-   352 label *label9
-   353 sensor *tmp14 switch1 @enabled
++  325 print "\nUpdate time: {0} ms"
++  326 format *tmp193
+   327 printflush message1
+   328 sensor *tmp14 switch1 @enabled
+   329 jump *label73 equal *tmp14 0
 
 Final code before resolving virtual instructions:
 

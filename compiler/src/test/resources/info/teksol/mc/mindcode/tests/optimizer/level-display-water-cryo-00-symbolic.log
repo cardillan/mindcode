@@ -1,13 +1,13 @@
    125 instructions before optimizations.
      9 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-     9 instructions eliminated by Dead Code Elimination (3 iterations).
-     4 instructions eliminated by Jump Optimization (3 iterations).
-     4 instructions eliminated by Single Step Elimination (2 passes, 5 iterations).
+     9 instructions eliminated by Dead Code Elimination (4 iterations).
+     4 instructions eliminated by Jump Optimization (4 iterations).
+     4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
     10 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      5 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
-     4 instructions eliminated by Jump Straightening (3 iterations).
+     4 instructions eliminated by Jump Straightening (4 iterations).
      1 instructions updated by JumpThreading.
      6 instructions eliminated by Print Merging.
     83 instructions after optimizations.
@@ -420,33 +420,114 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
      7 print "Water and Cryofluid Level Meter"
      8 set :n @links
 
-Modifications by Final phase, Jump Threading, iteration 1:
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+ 
+     2 set .MESSAGE null
+     3 set .SWITCH null
+     4 set .DISPLAY null
+-    * label *label0
+     5 label *label22
+     6 print "Water and Cryofluid Level Meter"
+     7 set :n @links
+-    * label *label3
+     8 jump *label5 lessThanEq :n 0
+     9 label *label23
+    10 op sub :n :n 1
+ 
+    13 print :block
+    14 sensor *tmp10 :block @type
+    15 jump *label7 notEqual *tmp10 @message
+-    * label *label8
+    16 set .MESSAGE :block
+    17 jump *label6 always
+    18 label *label7
+    19 jump *label9 notEqual *tmp10 @switch
+-    * label *label10
+    20 set .SWITCH :block
+    21 jump *label6 always
+    22 label *label9
+    23 jump *label11 notEqual *tmp10 @liquid-tank
+-    * label *label12
+    24 set .TANK_CRYO .TANK_WATER
+    25 set .TANK_WATER :block
+    26 jump *label6 always
+    27 label *label11
+    28 jump *label13 notEqual *tmp10 @logic-display
+-    * label *label14
+    29 set .DISPLAY :block
+    30 label *label13
+    31 label *label6
+-    * label *label4
+    32 jump *label23 greaterThan :n 0
+    33 label *label5
+    34 print "\nMessage: "
+ 
+    42 jump *label15 notEqual .TANK_CRYO null
+    43 print "\nNo cryofluid or water tank."
+    44 label *label15
+-    * label *label16
+    45 jump *label17 notEqual .DISPLAY null
+    46 print "\nNo display."
+    47 label *label17
+-    * label *label18
+    48 printflush .MESSAGE
+-    * label *label1
+    49 op equal *tmp0 .TANK_CRYO null
+    50 op equal *tmp1 .TANK_WATER null
+    51 op or *tmp2 *tmp0 *tmp1
+    52 op equal *tmp3 .DISPLAY null
+    53 op or *tmp4 *tmp2 *tmp3
+    54 jump *label22 notEqual *tmp4 false
+-    * label *label2
+    55 control enabled .SWITCH 0
+-    * label *label19
+    56 sensor *tmp18 .SWITCH @enabled
+    57 jump *label21 notEqual *tmp18 0
+    58 label *label24
+ 
+    95 print "\nElapsed: "
+    96 print *tmp39
+    97 printflush .MESSAGE
+-    * label *label20
+    98 sensor *tmp18 .SWITCH @enabled
+    99 jump *label24 equal *tmp18 0
+   100 label *label21
+
+Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
      1 set .TANK_WATER null
      2 set .TANK_CRYO null
      3 set .MESSAGE null
  
-    67 control enabled .SWITCH 0
-    68 label *label19
-    69 sensor *tmp18 .SWITCH @enabled
+    55 jump *label22 notEqual *tmp4 false
+    56 control enabled .SWITCH 0
+    57 sensor *tmp18 .SWITCH @enabled
 -    * jump *label21 notEqual *tmp18 0
-+   70 jump __start__ notEqual *tmp18 0
-    71 label *label24
-    72 set :start_time @time
-    73 draw clear 0 0 0
++   58 jump __start__ notEqual *tmp18 0
+    59 label *label24
+    60 set :start_time @time
+    61 draw clear 0 0 0
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
  
-   112 sensor *tmp18 .SWITCH @enabled
-   113 jump *label24 equal *tmp18 0
-   114 label *label21
+    98 printflush .MESSAGE
+    99 sensor *tmp18 .SWITCH @enabled
+   100 jump *label24 equal *tmp18 0
+-    * label *label21
+   101 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    98 printflush .MESSAGE
+    99 sensor *tmp18 .SWITCH @enabled
+   100 jump *label24 equal *tmp18 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-6 instructions):
  
-    39 label *label4
-    40 jump *label23 greaterThan :n 0
-    41 label *label5
+    32 label *label6
+    33 jump *label23 greaterThan :n 0
+    34 label *label5
 -    * print "\nMessage: "
 -    * print .MESSAGE
 -    * print "\nSwitch: "
@@ -454,34 +535,34 @@ Modifications by Final phase, Print Merging, iteration 1 (-6 instructions):
 -    * print "\nWater tank: "
 -    * print .TANK_WATER
 -    * print "\nCryo tank: "
-+   42 print "\nMessage: {0}\nSwitch: {0}\nWater tank: {0}\nCryo tank: "
-+   43 format .MESSAGE
-+   44 format .SWITCH
-+   45 format .TANK_WATER
-    46 print .TANK_CRYO
-    47 jump *label15 notEqual .TANK_CRYO null
-    48 print "\nNo cryofluid or water tank."
++   35 print "\nMessage: {0}\nSwitch: {0}\nWater tank: {0}\nCryo tank: "
++   36 format .MESSAGE
++   37 format .SWITCH
++   38 format .TANK_WATER
+    39 print .TANK_CRYO
+    40 jump *label15 notEqual .TANK_CRYO null
+    41 print "\nNo cryofluid or water tank."
  
-    92 draw triangle 46 *tmp31 54 :pos 46 *tmp32
-    93 draw triangle 74 *tmp31 66 :pos 74 *tmp32
-    94 drawflush .DISPLAY
+    80 draw triangle 46 *tmp31 54 :pos 46 *tmp32
+    81 draw triangle 74 *tmp31 66 :pos 74 *tmp32
+    82 drawflush .DISPLAY
 -    * print "Water and Cryofluid Level Meter"
-+   95 print "Water and Cryofluid Level Meter\nWater level: {0}\nCryofluid level: {0}\nElapsed: "
-    96 op mul *tmp35 100 :water
-    97 op idiv *tmp36 *tmp35 100
++   83 print "Water and Cryofluid Level Meter\nWater level: {0}\nCryofluid level: {0}\nElapsed: "
+    84 op mul *tmp35 100 :water
+    85 op idiv *tmp36 *tmp35 100
 -    * print "\nWater level: "
 -    * print *tmp36
-+   98 format *tmp36
-    99 op mul *tmp37 100 :cryo
-   100 op idiv *tmp38 *tmp37 100
++   86 format *tmp36
+    87 op mul *tmp37 100 :cryo
+    88 op idiv *tmp38 *tmp37 100
 -    * print "\nCryofluid level: "
 -    * print *tmp38
-+  101 format *tmp38
-   102 op sub *tmp39 @time :start_time
++   89 format *tmp38
+    90 op sub *tmp39 @time :start_time
 -    * print "\nElapsed: "
-   103 print *tmp39
-   104 printflush .MESSAGE
-   105 label *label20
+    91 print *tmp39
+    92 printflush .MESSAGE
+    93 sensor *tmp18 .SWITCH @enabled
 
 Final code before resolving virtual instructions:
 

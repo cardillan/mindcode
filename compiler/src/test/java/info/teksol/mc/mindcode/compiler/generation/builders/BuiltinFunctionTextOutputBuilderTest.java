@@ -338,7 +338,7 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesPrintfInLogic7() {
-            assertGeneratesMessage("The printf function requires language target 8 or higher.",
+            assertGeneratesMessage("The 'printf' function requires language target 8 or higher.",
                     """
                             #set target = 7;
                             printf(format, name, value);

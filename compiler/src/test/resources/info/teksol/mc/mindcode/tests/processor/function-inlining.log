@@ -1,7 +1,7 @@
     62 instructions before optimizations.
      5 instructions eliminated by Temp Variables Elimination.
-    31 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
-     1 instructions eliminated by Single Step Elimination (5 iterations).
+    31 instructions eliminated by Dead Code Elimination (2 passes, 9 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
     16 instructions modified by Expression Optimization (3 iterations).
     88 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
      1 loops improved by Loop Hoisting.
@@ -4690,308 +4690,2914 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
   2449 label *label1706
   2450 op add :foo.0:sum *tmp6 *tmp6
 
-Modifications by Final phase, Dead Code Elimination, iteration 1 (-20 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      0 assertflush
--    * setaddr :bar.0*retaddr *label3 (h:*label3)
-     1 label *label118
--    * setaddr :foo.0*retaddr *label119 (h:*label12)
-     2 label *label142
+     1 setaddr :bar.0*retaddr *label3 (h:*label3)
+-    * label *label118
+     2 setaddr :foo.0*retaddr *label119 (h:*label12)
+-    * label *label142
      3 op rand :foo.0:r 10
      4 op add *tmp6 11 :foo.0:r
- 
-   160 print *tmp10
-   161 print "|"
-   162 label *label245
--    * setaddr :foo.0*retaddr *label120 (h:*label13)
-   163 label *label246
-   164 op rand :foo.0:r 10
-   165 op add *tmp6 21 :foo.0:r
- 
-   321 print *tmp10
-   322 print "|"
-   323 label *label349
--    * setaddr :foo.0*retaddr *label121 (h:*label14)
-   324 label *label350
-   325 op rand :foo.0:r 10
-   326 op add *tmp6 31 :foo.0:r
- 
-   482 print *tmp10
-   483 print "|"
-   484 label *label453
--    * setaddr :foo.0*retaddr *label122 (h:*label15)
-   485 label *label454
-   486 op rand :foo.0:r 10
-   487 op add *tmp6 41 :foo.0:r
- 
-   644 print "|"
-   645 label *label557
-   646 label *label123
--    * setaddr :bar.0*retaddr *label4 (h:*label4)
-   647 label *label124
--    * setaddr :foo.0*retaddr *label125 (h:*label12)
-   648 label *label558
-   649 op rand :foo.0:r 10
-   650 op add *tmp6 12 :foo.0:r
- 
-   806 print *tmp10
-   807 print "|"
-   808 label *label661
--    * setaddr :foo.0*retaddr *label126 (h:*label13)
-   809 label *label662
-   810 op rand :foo.0:r 10
-   811 op add *tmp6 22 :foo.0:r
- 
-   967 print *tmp10
-   968 print "|"
-   969 label *label765
--    * setaddr :foo.0*retaddr *label127 (h:*label14)
-   970 label *label766
-   971 op rand :foo.0:r 10
-   972 op add *tmp6 32 :foo.0:r
- 
-  1128 print *tmp10
-  1129 print "|"
-  1130 label *label869
--    * setaddr :foo.0*retaddr *label128 (h:*label15)
-  1131 label *label870
-  1132 op rand :foo.0:r 10
-  1133 op add *tmp6 42 :foo.0:r
- 
-  1290 print "|"
-  1291 label *label973
-  1292 label *label129
--    * setaddr :bar.0*retaddr *label5 (h:*label5)
-  1293 label *label130
--    * setaddr :foo.0*retaddr *label131 (h:*label12)
-  1294 label *label974
-  1295 op rand :foo.0:r 10
-  1296 op add *tmp6 13 :foo.0:r
- 
-  1452 print *tmp10
-  1453 print "|"
-  1454 label *label1077
--    * setaddr :foo.0*retaddr *label132 (h:*label13)
-  1455 label *label1078
-  1456 op rand :foo.0:r 10
-  1457 op add *tmp6 23 :foo.0:r
- 
-  1613 print *tmp10
-  1614 print "|"
-  1615 label *label1181
--    * setaddr :foo.0*retaddr *label133 (h:*label14)
-  1616 label *label1182
-  1617 op rand :foo.0:r 10
-  1618 op add *tmp6 33 :foo.0:r
- 
-  1774 print *tmp10
-  1775 print "|"
-  1776 label *label1285
--    * setaddr :foo.0*retaddr *label134 (h:*label15)
-  1777 label *label1286
-  1778 op rand :foo.0:r 10
-  1779 op add *tmp6 43 :foo.0:r
- 
-  1936 print "|"
-  1937 label *label1389
-  1938 label *label135
--    * setaddr :bar.0*retaddr *label6 (h:*label6)
-  1939 label *label136
--    * setaddr :foo.0*retaddr *label137 (h:*label12)
-  1940 label *label1390
-  1941 op rand :foo.0:r 10
-  1942 op add *tmp6 14 :foo.0:r
- 
-  2098 print *tmp10
-  2099 print "|"
-  2100 label *label1493
--    * setaddr :foo.0*retaddr *label138 (h:*label13)
-  2101 label *label1494
-  2102 op rand :foo.0:r 10
-  2103 op add *tmp6 24 :foo.0:r
- 
-  2259 print *tmp10
-  2260 print "|"
-  2261 label *label1597
--    * setaddr :foo.0*retaddr *label139 (h:*label14)
-  2262 label *label1598
-  2263 op rand :foo.0:r 10
-  2264 op add *tmp6 34 :foo.0:r
- 
-  2420 print *tmp10
-  2421 print "|"
-  2422 label *label1701
--    * setaddr :foo.0*retaddr *label140 (h:*label15)
-  2423 label *label1702
-  2424 op rand :foo.0:r 10
-  2425 op add *tmp6 44 :foo.0:r
+-    * label *label143
+-    * label *label144
+-    * label *label145
+-    * label *label146
+     5 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label147
+-    * label *label148
+     6 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label149
+-    * label *label150
+     7 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label151
+-    * label *label152
+     8 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label153
+-    * label *label154
+     9 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label155
+-    * label *label156
+    10 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label157
+-    * label *label158
+    11 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label159
+-    * label *label160
+    12 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label161
+-    * label *label162
+    13 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label163
+-    * label *label164
+    14 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label165
+-    * label *label166
+    15 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label167
+-    * label *label168
+    16 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label169
+-    * label *label170
+    17 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label171
+-    * label *label172
+    18 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label173
+-    * label *label174
+    19 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label175
+-    * label *label176
+    20 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label177
+-    * label *label178
+    21 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label179
+-    * label *label180
+    22 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label181
+-    * label *label182
+    23 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label183
+-    * label *label184
+    24 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label185
+-    * label *label186
+    25 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label187
+-    * label *label188
+    26 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label189
+-    * label *label190
+    27 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label191
+-    * label *label192
+    28 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label193
+-    * label *label194
+    29 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label195
+-    * label *label196
+    30 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label197
+-    * label *label198
+    31 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label199
+-    * label *label200
+    32 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label201
+-    * label *label202
+    33 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label203
+-    * label *label204
+    34 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label205
+-    * label *label206
+    35 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label207
+-    * label *label208
+    36 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label209
+-    * label *label210
+    37 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label211
+-    * label *label212
+    38 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label213
+-    * label *label214
+    39 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label215
+-    * label *label216
+    40 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label217
+-    * label *label218
+    41 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label219
+-    * label *label220
+    42 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label221
+-    * label *label222
+    43 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label223
+-    * label *label224
+    44 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label225
+-    * label *label226
+    45 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label227
+-    * label *label228
+    46 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label229
+-    * label *label230
+    47 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label231
+-    * label *label232
+    48 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label233
+-    * label *label234
+    49 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label235
+-    * label *label236
+    50 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label237
+-    * label *label238
+    51 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label239
+-    * label *label240
+    52 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label241
+-    * label *label242
+    53 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label243
+-    * label *label244
+    54 op mul *tmp7 50 :foo.0:r
+    55 op sub *tmp8 :foo.0:sum *tmp7
+    56 op add *tmp9 *tmp8 0.5
+    57 op floor *tmp10 *tmp9
+    58 print *tmp10
+    59 print "|"
+-    * label *label245
+    60 setaddr :foo.0*retaddr *label120 (h:*label13)
+-    * label *label246
+    61 op rand :foo.0:r 10
+    62 op add *tmp6 21 :foo.0:r
+-    * label *label247
+-    * label *label248
+-    * label *label249
+-    * label *label250
+    63 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label251
+-    * label *label252
+    64 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label253
+-    * label *label254
+    65 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label255
+-    * label *label256
+    66 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label257
+-    * label *label258
+    67 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label259
+-    * label *label260
+    68 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label261
+-    * label *label262
+    69 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label263
+-    * label *label264
+    70 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label265
+-    * label *label266
+    71 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label267
+-    * label *label268
+    72 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label269
+-    * label *label270
+    73 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label271
+-    * label *label272
+    74 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label273
+-    * label *label274
+    75 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label275
+-    * label *label276
+    76 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label277
+-    * label *label278
+    77 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label279
+-    * label *label280
+    78 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label281
+-    * label *label282
+    79 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label283
+-    * label *label284
+    80 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label285
+-    * label *label286
+    81 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label287
+-    * label *label288
+    82 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label289
+-    * label *label290
+    83 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label291
+-    * label *label292
+    84 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label293
+-    * label *label294
+    85 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label295
+-    * label *label296
+    86 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label297
+-    * label *label298
+    87 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label299
+-    * label *label300
+    88 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label301
+-    * label *label302
+    89 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label303
+-    * label *label304
+    90 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label305
+-    * label *label306
+    91 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label307
+-    * label *label308
+    92 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label309
+-    * label *label310
+    93 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label311
+-    * label *label312
+    94 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label313
+-    * label *label314
+    95 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label315
+-    * label *label316
+    96 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label317
+-    * label *label318
+    97 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label319
+-    * label *label320
+    98 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label321
+-    * label *label322
+    99 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label323
+-    * label *label324
+   100 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label325
+-    * label *label326
+   101 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label327
+-    * label *label328
+   102 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label329
+-    * label *label330
+   103 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label331
+-    * label *label332
+   104 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label333
+-    * label *label334
+   105 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label335
+-    * label *label336
+   106 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label337
+-    * label *label338
+   107 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label339
+-    * label *label340
+   108 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label341
+-    * label *label342
+   109 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label343
+-    * label *label344
+   110 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label345
+-    * label *label346
+   111 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label347
+-    * label *label348
+   112 op mul *tmp7 50 :foo.0:r
+   113 op sub *tmp8 :foo.0:sum *tmp7
+   114 op add *tmp9 *tmp8 0.5
+   115 op floor *tmp10 *tmp9
+   116 print *tmp10
+   117 print "|"
+-    * label *label349
+   118 setaddr :foo.0*retaddr *label121 (h:*label14)
+-    * label *label350
+   119 op rand :foo.0:r 10
+   120 op add *tmp6 31 :foo.0:r
+-    * label *label351
+-    * label *label352
+-    * label *label353
+-    * label *label354
+   121 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label355
+-    * label *label356
+   122 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label357
+-    * label *label358
+   123 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label359
+-    * label *label360
+   124 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label361
+-    * label *label362
+   125 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label363
+-    * label *label364
+   126 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label365
+-    * label *label366
+   127 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label367
+-    * label *label368
+   128 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label369
+-    * label *label370
+   129 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label371
+-    * label *label372
+   130 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label373
+-    * label *label374
+   131 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label375
+-    * label *label376
+   132 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label377
+-    * label *label378
+   133 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label379
+-    * label *label380
+   134 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label381
+-    * label *label382
+   135 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label383
+-    * label *label384
+   136 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label385
+-    * label *label386
+   137 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label387
+-    * label *label388
+   138 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label389
+-    * label *label390
+   139 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label391
+-    * label *label392
+   140 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label393
+-    * label *label394
+   141 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label395
+-    * label *label396
+   142 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label397
+-    * label *label398
+   143 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label399
+-    * label *label400
+   144 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label401
+-    * label *label402
+   145 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label403
+-    * label *label404
+   146 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label405
+-    * label *label406
+   147 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label407
+-    * label *label408
+   148 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label409
+-    * label *label410
+   149 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label411
+-    * label *label412
+   150 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label413
+-    * label *label414
+   151 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label415
+-    * label *label416
+   152 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label417
+-    * label *label418
+   153 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label419
+-    * label *label420
+   154 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label421
+-    * label *label422
+   155 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label423
+-    * label *label424
+   156 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label425
+-    * label *label426
+   157 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label427
+-    * label *label428
+   158 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label429
+-    * label *label430
+   159 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label431
+-    * label *label432
+   160 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label433
+-    * label *label434
+   161 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label435
+-    * label *label436
+   162 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label437
+-    * label *label438
+   163 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label439
+-    * label *label440
+   164 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label441
+-    * label *label442
+   165 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label443
+-    * label *label444
+   166 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label445
+-    * label *label446
+   167 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label447
+-    * label *label448
+   168 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label449
+-    * label *label450
+   169 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label451
+-    * label *label452
+   170 op mul *tmp7 50 :foo.0:r
+   171 op sub *tmp8 :foo.0:sum *tmp7
+   172 op add *tmp9 *tmp8 0.5
+   173 op floor *tmp10 *tmp9
+   174 print *tmp10
+   175 print "|"
+-    * label *label453
+   176 setaddr :foo.0*retaddr *label122 (h:*label15)
+-    * label *label454
+   177 op rand :foo.0:r 10
+   178 op add *tmp6 41 :foo.0:r
+-    * label *label455
+-    * label *label456
+-    * label *label457
+-    * label *label458
+   179 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label459
+-    * label *label460
+   180 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label461
+-    * label *label462
+   181 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label463
+-    * label *label464
+   182 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label465
+-    * label *label466
+   183 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label467
+-    * label *label468
+   184 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label469
+-    * label *label470
+   185 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label471
+-    * label *label472
+   186 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label473
+-    * label *label474
+   187 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label475
+-    * label *label476
+   188 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label477
+-    * label *label478
+   189 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label479
+-    * label *label480
+   190 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label481
+-    * label *label482
+   191 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label483
+-    * label *label484
+   192 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label485
+-    * label *label486
+   193 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label487
+-    * label *label488
+   194 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label489
+-    * label *label490
+   195 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label491
+-    * label *label492
+   196 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label493
+-    * label *label494
+   197 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label495
+-    * label *label496
+   198 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label497
+-    * label *label498
+   199 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label499
+-    * label *label500
+   200 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label501
+-    * label *label502
+   201 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label503
+-    * label *label504
+   202 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label505
+-    * label *label506
+   203 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label507
+-    * label *label508
+   204 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label509
+-    * label *label510
+   205 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label511
+-    * label *label512
+   206 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label513
+-    * label *label514
+   207 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label515
+-    * label *label516
+   208 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label517
+-    * label *label518
+   209 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label519
+-    * label *label520
+   210 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label521
+-    * label *label522
+   211 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label523
+-    * label *label524
+   212 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label525
+-    * label *label526
+   213 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label527
+-    * label *label528
+   214 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label529
+-    * label *label530
+   215 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label531
+-    * label *label532
+   216 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label533
+-    * label *label534
+   217 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label535
+-    * label *label536
+   218 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label537
+-    * label *label538
+   219 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label539
+-    * label *label540
+   220 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label541
+-    * label *label542
+   221 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label543
+-    * label *label544
+   222 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label545
+-    * label *label546
+   223 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label547
+-    * label *label548
+   224 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label549
+-    * label *label550
+   225 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label551
+-    * label *label552
+   226 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label553
+-    * label *label554
+   227 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label555
+-    * label *label556
+   228 op mul *tmp7 50 :foo.0:r
+   229 op sub *tmp8 :foo.0:sum *tmp7
+   230 op add *tmp9 *tmp8 0.5
+   231 op floor *tmp10 *tmp9
+   232 print *tmp10
+   233 print "|"
+-    * label *label557
+-    * label *label123
+   234 setaddr :bar.0*retaddr *label4 (h:*label4)
+-    * label *label124
+   235 setaddr :foo.0*retaddr *label125 (h:*label12)
+-    * label *label558
+   236 op rand :foo.0:r 10
+   237 op add *tmp6 12 :foo.0:r
+-    * label *label559
+-    * label *label560
+-    * label *label561
+-    * label *label562
+   238 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label563
+-    * label *label564
+   239 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label565
+-    * label *label566
+   240 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label567
+-    * label *label568
+   241 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label569
+-    * label *label570
+   242 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label571
+-    * label *label572
+   243 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label573
+-    * label *label574
+   244 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label575
+-    * label *label576
+   245 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label577
+-    * label *label578
+   246 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label579
+-    * label *label580
+   247 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label581
+-    * label *label582
+   248 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label583
+-    * label *label584
+   249 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label585
+-    * label *label586
+   250 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label587
+-    * label *label588
+   251 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label589
+-    * label *label590
+   252 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label591
+-    * label *label592
+   253 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label593
+-    * label *label594
+   254 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label595
+-    * label *label596
+   255 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label597
+-    * label *label598
+   256 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label599
+-    * label *label600
+   257 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label601
+-    * label *label602
+   258 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label603
+-    * label *label604
+   259 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label605
+-    * label *label606
+   260 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label607
+-    * label *label608
+   261 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label609
+-    * label *label610
+   262 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label611
+-    * label *label612
+   263 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label613
+-    * label *label614
+   264 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label615
+-    * label *label616
+   265 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label617
+-    * label *label618
+   266 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label619
+-    * label *label620
+   267 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label621
+-    * label *label622
+   268 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label623
+-    * label *label624
+   269 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label625
+-    * label *label626
+   270 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label627
+-    * label *label628
+   271 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label629
+-    * label *label630
+   272 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label631
+-    * label *label632
+   273 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label633
+-    * label *label634
+   274 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label635
+-    * label *label636
+   275 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label637
+-    * label *label638
+   276 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label639
+-    * label *label640
+   277 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label641
+-    * label *label642
+   278 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label643
+-    * label *label644
+   279 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label645
+-    * label *label646
+   280 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label647
+-    * label *label648
+   281 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label649
+-    * label *label650
+   282 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label651
+-    * label *label652
+   283 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label653
+-    * label *label654
+   284 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label655
+-    * label *label656
+   285 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label657
+-    * label *label658
+   286 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label659
+-    * label *label660
+   287 op mul *tmp7 50 :foo.0:r
+   288 op sub *tmp8 :foo.0:sum *tmp7
+   289 op add *tmp9 *tmp8 0.5
+   290 op floor *tmp10 *tmp9
+   291 print *tmp10
+   292 print "|"
+-    * label *label661
+   293 setaddr :foo.0*retaddr *label126 (h:*label13)
+-    * label *label662
+   294 op rand :foo.0:r 10
+   295 op add *tmp6 22 :foo.0:r
+-    * label *label663
+-    * label *label664
+-    * label *label665
+-    * label *label666
+   296 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label667
+-    * label *label668
+   297 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label669
+-    * label *label670
+   298 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label671
+-    * label *label672
+   299 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label673
+-    * label *label674
+   300 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label675
+-    * label *label676
+   301 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label677
+-    * label *label678
+   302 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label679
+-    * label *label680
+   303 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label681
+-    * label *label682
+   304 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label683
+-    * label *label684
+   305 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label685
+-    * label *label686
+   306 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label687
+-    * label *label688
+   307 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label689
+-    * label *label690
+   308 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label691
+-    * label *label692
+   309 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label693
+-    * label *label694
+   310 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label695
+-    * label *label696
+   311 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label697
+-    * label *label698
+   312 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label699
+-    * label *label700
+   313 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label701
+-    * label *label702
+   314 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label703
+-    * label *label704
+   315 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label705
+-    * label *label706
+   316 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label707
+-    * label *label708
+   317 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label709
+-    * label *label710
+   318 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label711
+-    * label *label712
+   319 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label713
+-    * label *label714
+   320 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label715
+-    * label *label716
+   321 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label717
+-    * label *label718
+   322 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label719
+-    * label *label720
+   323 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label721
+-    * label *label722
+   324 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label723
+-    * label *label724
+   325 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label725
+-    * label *label726
+   326 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label727
+-    * label *label728
+   327 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label729
+-    * label *label730
+   328 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label731
+-    * label *label732
+   329 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label733
+-    * label *label734
+   330 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label735
+-    * label *label736
+   331 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label737
+-    * label *label738
+   332 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label739
+-    * label *label740
+   333 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label741
+-    * label *label742
+   334 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label743
+-    * label *label744
+   335 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label745
+-    * label *label746
+   336 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label747
+-    * label *label748
+   337 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label749
+-    * label *label750
+   338 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label751
+-    * label *label752
+   339 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label753
+-    * label *label754
+   340 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label755
+-    * label *label756
+   341 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label757
+-    * label *label758
+   342 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label759
+-    * label *label760
+   343 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label761
+-    * label *label762
+   344 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label763
+-    * label *label764
+   345 op mul *tmp7 50 :foo.0:r
+   346 op sub *tmp8 :foo.0:sum *tmp7
+   347 op add *tmp9 *tmp8 0.5
+   348 op floor *tmp10 *tmp9
+   349 print *tmp10
+   350 print "|"
+-    * label *label765
+   351 setaddr :foo.0*retaddr *label127 (h:*label14)
+-    * label *label766
+   352 op rand :foo.0:r 10
+   353 op add *tmp6 32 :foo.0:r
+-    * label *label767
+-    * label *label768
+-    * label *label769
+-    * label *label770
+   354 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label771
+-    * label *label772
+   355 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label773
+-    * label *label774
+   356 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label775
+-    * label *label776
+   357 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label777
+-    * label *label778
+   358 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label779
+-    * label *label780
+   359 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label781
+-    * label *label782
+   360 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label783
+-    * label *label784
+   361 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label785
+-    * label *label786
+   362 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label787
+-    * label *label788
+   363 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label789
+-    * label *label790
+   364 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label791
+-    * label *label792
+   365 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label793
+-    * label *label794
+   366 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label795
+-    * label *label796
+   367 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label797
+-    * label *label798
+   368 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label799
+-    * label *label800
+   369 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label801
+-    * label *label802
+   370 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label803
+-    * label *label804
+   371 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label805
+-    * label *label806
+   372 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label807
+-    * label *label808
+   373 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label809
+-    * label *label810
+   374 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label811
+-    * label *label812
+   375 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label813
+-    * label *label814
+   376 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label815
+-    * label *label816
+   377 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label817
+-    * label *label818
+   378 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label819
+-    * label *label820
+   379 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label821
+-    * label *label822
+   380 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label823
+-    * label *label824
+   381 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label825
+-    * label *label826
+   382 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label827
+-    * label *label828
+   383 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label829
+-    * label *label830
+   384 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label831
+-    * label *label832
+   385 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label833
+-    * label *label834
+   386 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label835
+-    * label *label836
+   387 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label837
+-    * label *label838
+   388 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label839
+-    * label *label840
+   389 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label841
+-    * label *label842
+   390 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label843
+-    * label *label844
+   391 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label845
+-    * label *label846
+   392 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label847
+-    * label *label848
+   393 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label849
+-    * label *label850
+   394 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label851
+-    * label *label852
+   395 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label853
+-    * label *label854
+   396 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label855
+-    * label *label856
+   397 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label857
+-    * label *label858
+   398 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label859
+-    * label *label860
+   399 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label861
+-    * label *label862
+   400 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label863
+-    * label *label864
+   401 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label865
+-    * label *label866
+   402 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label867
+-    * label *label868
+   403 op mul *tmp7 50 :foo.0:r
+   404 op sub *tmp8 :foo.0:sum *tmp7
+   405 op add *tmp9 *tmp8 0.5
+   406 op floor *tmp10 *tmp9
+   407 print *tmp10
+   408 print "|"
+-    * label *label869
+   409 setaddr :foo.0*retaddr *label128 (h:*label15)
+-    * label *label870
+   410 op rand :foo.0:r 10
+   411 op add *tmp6 42 :foo.0:r
+-    * label *label871
+-    * label *label872
+-    * label *label873
+-    * label *label874
+   412 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label875
+-    * label *label876
+   413 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label877
+-    * label *label878
+   414 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label879
+-    * label *label880
+   415 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label881
+-    * label *label882
+   416 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label883
+-    * label *label884
+   417 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label885
+-    * label *label886
+   418 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label887
+-    * label *label888
+   419 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label889
+-    * label *label890
+   420 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label891
+-    * label *label892
+   421 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label893
+-    * label *label894
+   422 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label895
+-    * label *label896
+   423 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label897
+-    * label *label898
+   424 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label899
+-    * label *label900
+   425 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label901
+-    * label *label902
+   426 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label903
+-    * label *label904
+   427 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label905
+-    * label *label906
+   428 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label907
+-    * label *label908
+   429 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label909
+-    * label *label910
+   430 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label911
+-    * label *label912
+   431 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label913
+-    * label *label914
+   432 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label915
+-    * label *label916
+   433 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label917
+-    * label *label918
+   434 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label919
+-    * label *label920
+   435 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label921
+-    * label *label922
+   436 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label923
+-    * label *label924
+   437 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label925
+-    * label *label926
+   438 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label927
+-    * label *label928
+   439 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label929
+-    * label *label930
+   440 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label931
+-    * label *label932
+   441 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label933
+-    * label *label934
+   442 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label935
+-    * label *label936
+   443 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label937
+-    * label *label938
+   444 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label939
+-    * label *label940
+   445 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label941
+-    * label *label942
+   446 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label943
+-    * label *label944
+   447 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label945
+-    * label *label946
+   448 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label947
+-    * label *label948
+   449 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label949
+-    * label *label950
+   450 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label951
+-    * label *label952
+   451 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label953
+-    * label *label954
+   452 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label955
+-    * label *label956
+   453 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label957
+-    * label *label958
+   454 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label959
+-    * label *label960
+   455 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label961
+-    * label *label962
+   456 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label963
+-    * label *label964
+   457 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label965
+-    * label *label966
+   458 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label967
+-    * label *label968
+   459 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label969
+-    * label *label970
+   460 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label971
+-    * label *label972
+   461 op mul *tmp7 50 :foo.0:r
+   462 op sub *tmp8 :foo.0:sum *tmp7
+   463 op add *tmp9 *tmp8 0.5
+   464 op floor *tmp10 *tmp9
+   465 print *tmp10
+   466 print "|"
+-    * label *label973
+-    * label *label129
+   467 setaddr :bar.0*retaddr *label5 (h:*label5)
+-    * label *label130
+   468 setaddr :foo.0*retaddr *label131 (h:*label12)
+-    * label *label974
+   469 op rand :foo.0:r 10
+   470 op add *tmp6 13 :foo.0:r
+-    * label *label975
+-    * label *label976
+-    * label *label977
+-    * label *label978
+   471 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label979
+-    * label *label980
+   472 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label981
+-    * label *label982
+   473 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label983
+-    * label *label984
+   474 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label985
+-    * label *label986
+   475 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label987
+-    * label *label988
+   476 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label989
+-    * label *label990
+   477 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label991
+-    * label *label992
+   478 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label993
+-    * label *label994
+   479 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label995
+-    * label *label996
+   480 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label997
+-    * label *label998
+   481 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label999
+-    * label *label1000
+   482 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1001
+-    * label *label1002
+   483 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1003
+-    * label *label1004
+   484 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1005
+-    * label *label1006
+   485 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1007
+-    * label *label1008
+   486 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1009
+-    * label *label1010
+   487 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1011
+-    * label *label1012
+   488 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1013
+-    * label *label1014
+   489 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1015
+-    * label *label1016
+   490 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1017
+-    * label *label1018
+   491 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1019
+-    * label *label1020
+   492 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1021
+-    * label *label1022
+   493 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1023
+-    * label *label1024
+   494 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1025
+-    * label *label1026
+   495 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1027
+-    * label *label1028
+   496 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1029
+-    * label *label1030
+   497 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1031
+-    * label *label1032
+   498 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1033
+-    * label *label1034
+   499 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1035
+-    * label *label1036
+   500 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1037
+-    * label *label1038
+   501 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1039
+-    * label *label1040
+   502 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1041
+-    * label *label1042
+   503 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1043
+-    * label *label1044
+   504 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1045
+-    * label *label1046
+   505 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1047
+-    * label *label1048
+   506 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1049
+-    * label *label1050
+   507 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1051
+-    * label *label1052
+   508 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1053
+-    * label *label1054
+   509 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1055
+-    * label *label1056
+   510 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1057
+-    * label *label1058
+   511 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1059
+-    * label *label1060
+   512 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1061
+-    * label *label1062
+   513 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1063
+-    * label *label1064
+   514 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1065
+-    * label *label1066
+   515 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1067
+-    * label *label1068
+   516 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1069
+-    * label *label1070
+   517 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1071
+-    * label *label1072
+   518 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1073
+-    * label *label1074
+   519 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1075
+-    * label *label1076
+   520 op mul *tmp7 50 :foo.0:r
+   521 op sub *tmp8 :foo.0:sum *tmp7
+   522 op add *tmp9 *tmp8 0.5
+   523 op floor *tmp10 *tmp9
+   524 print *tmp10
+   525 print "|"
+-    * label *label1077
+   526 setaddr :foo.0*retaddr *label132 (h:*label13)
+-    * label *label1078
+   527 op rand :foo.0:r 10
+   528 op add *tmp6 23 :foo.0:r
+-    * label *label1079
+-    * label *label1080
+-    * label *label1081
+-    * label *label1082
+   529 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label1083
+-    * label *label1084
+   530 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1085
+-    * label *label1086
+   531 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1087
+-    * label *label1088
+   532 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1089
+-    * label *label1090
+   533 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1091
+-    * label *label1092
+   534 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1093
+-    * label *label1094
+   535 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1095
+-    * label *label1096
+   536 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1097
+-    * label *label1098
+   537 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1099
+-    * label *label1100
+   538 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1101
+-    * label *label1102
+   539 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1103
+-    * label *label1104
+   540 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1105
+-    * label *label1106
+   541 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1107
+-    * label *label1108
+   542 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1109
+-    * label *label1110
+   543 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1111
+-    * label *label1112
+   544 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1113
+-    * label *label1114
+   545 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1115
+-    * label *label1116
+   546 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1117
+-    * label *label1118
+   547 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1119
+-    * label *label1120
+   548 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1121
+-    * label *label1122
+   549 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1123
+-    * label *label1124
+   550 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1125
+-    * label *label1126
+   551 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1127
+-    * label *label1128
+   552 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1129
+-    * label *label1130
+   553 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1131
+-    * label *label1132
+   554 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1133
+-    * label *label1134
+   555 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1135
+-    * label *label1136
+   556 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1137
+-    * label *label1138
+   557 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1139
+-    * label *label1140
+   558 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1141
+-    * label *label1142
+   559 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1143
+-    * label *label1144
+   560 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1145
+-    * label *label1146
+   561 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1147
+-    * label *label1148
+   562 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1149
+-    * label *label1150
+   563 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1151
+-    * label *label1152
+   564 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1153
+-    * label *label1154
+   565 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1155
+-    * label *label1156
+   566 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1157
+-    * label *label1158
+   567 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1159
+-    * label *label1160
+   568 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1161
+-    * label *label1162
+   569 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1163
+-    * label *label1164
+   570 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1165
+-    * label *label1166
+   571 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1167
+-    * label *label1168
+   572 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1169
+-    * label *label1170
+   573 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1171
+-    * label *label1172
+   574 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1173
+-    * label *label1174
+   575 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1175
+-    * label *label1176
+   576 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1177
+-    * label *label1178
+   577 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1179
+-    * label *label1180
+   578 op mul *tmp7 50 :foo.0:r
+   579 op sub *tmp8 :foo.0:sum *tmp7
+   580 op add *tmp9 *tmp8 0.5
+   581 op floor *tmp10 *tmp9
+   582 print *tmp10
+   583 print "|"
+-    * label *label1181
+   584 setaddr :foo.0*retaddr *label133 (h:*label14)
+-    * label *label1182
+   585 op rand :foo.0:r 10
+   586 op add *tmp6 33 :foo.0:r
+-    * label *label1183
+-    * label *label1184
+-    * label *label1185
+-    * label *label1186
+   587 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label1187
+-    * label *label1188
+   588 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1189
+-    * label *label1190
+   589 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1191
+-    * label *label1192
+   590 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1193
+-    * label *label1194
+   591 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1195
+-    * label *label1196
+   592 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1197
+-    * label *label1198
+   593 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1199
+-    * label *label1200
+   594 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1201
+-    * label *label1202
+   595 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1203
+-    * label *label1204
+   596 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1205
+-    * label *label1206
+   597 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1207
+-    * label *label1208
+   598 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1209
+-    * label *label1210
+   599 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1211
+-    * label *label1212
+   600 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1213
+-    * label *label1214
+   601 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1215
+-    * label *label1216
+   602 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1217
+-    * label *label1218
+   603 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1219
+-    * label *label1220
+   604 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1221
+-    * label *label1222
+   605 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1223
+-    * label *label1224
+   606 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1225
+-    * label *label1226
+   607 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1227
+-    * label *label1228
+   608 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1229
+-    * label *label1230
+   609 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1231
+-    * label *label1232
+   610 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1233
+-    * label *label1234
+   611 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1235
+-    * label *label1236
+   612 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1237
+-    * label *label1238
+   613 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1239
+-    * label *label1240
+   614 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1241
+-    * label *label1242
+   615 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1243
+-    * label *label1244
+   616 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1245
+-    * label *label1246
+   617 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1247
+-    * label *label1248
+   618 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1249
+-    * label *label1250
+   619 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1251
+-    * label *label1252
+   620 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1253
+-    * label *label1254
+   621 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1255
+-    * label *label1256
+   622 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1257
+-    * label *label1258
+   623 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1259
+-    * label *label1260
+   624 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1261
+-    * label *label1262
+   625 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1263
+-    * label *label1264
+   626 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1265
+-    * label *label1266
+   627 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1267
+-    * label *label1268
+   628 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1269
+-    * label *label1270
+   629 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1271
+-    * label *label1272
+   630 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1273
+-    * label *label1274
+   631 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1275
+-    * label *label1276
+   632 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1277
+-    * label *label1278
+   633 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1279
+-    * label *label1280
+   634 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1281
+-    * label *label1282
+   635 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1283
+-    * label *label1284
+   636 op mul *tmp7 50 :foo.0:r
+   637 op sub *tmp8 :foo.0:sum *tmp7
+   638 op add *tmp9 *tmp8 0.5
+   639 op floor *tmp10 *tmp9
+   640 print *tmp10
+   641 print "|"
+-    * label *label1285
+   642 setaddr :foo.0*retaddr *label134 (h:*label15)
+-    * label *label1286
+   643 op rand :foo.0:r 10
+   644 op add *tmp6 43 :foo.0:r
+-    * label *label1287
+-    * label *label1288
+-    * label *label1289
+-    * label *label1290
+   645 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label1291
+-    * label *label1292
+   646 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1293
+-    * label *label1294
+   647 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1295
+-    * label *label1296
+   648 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1297
+-    * label *label1298
+   649 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1299
+-    * label *label1300
+   650 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1301
+-    * label *label1302
+   651 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1303
+-    * label *label1304
+   652 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1305
+-    * label *label1306
+   653 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1307
+-    * label *label1308
+   654 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1309
+-    * label *label1310
+   655 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1311
+-    * label *label1312
+   656 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1313
+-    * label *label1314
+   657 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1315
+-    * label *label1316
+   658 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1317
+-    * label *label1318
+   659 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1319
+-    * label *label1320
+   660 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1321
+-    * label *label1322
+   661 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1323
+-    * label *label1324
+   662 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1325
+-    * label *label1326
+   663 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1327
+-    * label *label1328
+   664 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1329
+-    * label *label1330
+   665 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1331
+-    * label *label1332
+   666 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1333
+-    * label *label1334
+   667 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1335
+-    * label *label1336
+   668 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1337
+-    * label *label1338
+   669 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1339
+-    * label *label1340
+   670 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1341
+-    * label *label1342
+   671 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1343
+-    * label *label1344
+   672 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1345
+-    * label *label1346
+   673 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1347
+-    * label *label1348
+   674 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1349
+-    * label *label1350
+   675 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1351
+-    * label *label1352
+   676 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1353
+-    * label *label1354
+   677 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1355
+-    * label *label1356
+   678 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1357
+-    * label *label1358
+   679 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1359
+-    * label *label1360
+   680 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1361
+-    * label *label1362
+   681 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1363
+-    * label *label1364
+   682 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1365
+-    * label *label1366
+   683 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1367
+-    * label *label1368
+   684 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1369
+-    * label *label1370
+   685 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1371
+-    * label *label1372
+   686 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1373
+-    * label *label1374
+   687 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1375
+-    * label *label1376
+   688 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1377
+-    * label *label1378
+   689 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1379
+-    * label *label1380
+   690 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1381
+-    * label *label1382
+   691 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1383
+-    * label *label1384
+   692 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1385
+-    * label *label1386
+   693 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1387
+-    * label *label1388
+   694 op mul *tmp7 50 :foo.0:r
+   695 op sub *tmp8 :foo.0:sum *tmp7
+   696 op add *tmp9 *tmp8 0.5
+   697 op floor *tmp10 *tmp9
+   698 print *tmp10
+   699 print "|"
+-    * label *label1389
+-    * label *label135
+   700 setaddr :bar.0*retaddr *label6 (h:*label6)
+-    * label *label136
+   701 setaddr :foo.0*retaddr *label137 (h:*label12)
+-    * label *label1390
+   702 op rand :foo.0:r 10
+   703 op add *tmp6 14 :foo.0:r
+-    * label *label1391
+-    * label *label1392
+-    * label *label1393
+-    * label *label1394
+   704 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label1395
+-    * label *label1396
+   705 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1397
+-    * label *label1398
+   706 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1399
+-    * label *label1400
+   707 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1401
+-    * label *label1402
+   708 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1403
+-    * label *label1404
+   709 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1405
+-    * label *label1406
+   710 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1407
+-    * label *label1408
+   711 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1409
+-    * label *label1410
+   712 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1411
+-    * label *label1412
+   713 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1413
+-    * label *label1414
+   714 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1415
+-    * label *label1416
+   715 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1417
+-    * label *label1418
+   716 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1419
+-    * label *label1420
+   717 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1421
+-    * label *label1422
+   718 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1423
+-    * label *label1424
+   719 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1425
+-    * label *label1426
+   720 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1427
+-    * label *label1428
+   721 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1429
+-    * label *label1430
+   722 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1431
+-    * label *label1432
+   723 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1433
+-    * label *label1434
+   724 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1435
+-    * label *label1436
+   725 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1437
+-    * label *label1438
+   726 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1439
+-    * label *label1440
+   727 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1441
+-    * label *label1442
+   728 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1443
+-    * label *label1444
+   729 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1445
+-    * label *label1446
+   730 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1447
+-    * label *label1448
+   731 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1449
+-    * label *label1450
+   732 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1451
+-    * label *label1452
+   733 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1453
+-    * label *label1454
+   734 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1455
+-    * label *label1456
+   735 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1457
+-    * label *label1458
+   736 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1459
+-    * label *label1460
+   737 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1461
+-    * label *label1462
+   738 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1463
+-    * label *label1464
+   739 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1465
+-    * label *label1466
+   740 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1467
+-    * label *label1468
+   741 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1469
+-    * label *label1470
+   742 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1471
+-    * label *label1472
+   743 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1473
+-    * label *label1474
+   744 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1475
+-    * label *label1476
+   745 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1477
+-    * label *label1478
+   746 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1479
+-    * label *label1480
+   747 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1481
+-    * label *label1482
+   748 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1483
+-    * label *label1484
+   749 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1485
+-    * label *label1486
+   750 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1487
+-    * label *label1488
+   751 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1489
+-    * label *label1490
+   752 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1491
+-    * label *label1492
+   753 op mul *tmp7 50 :foo.0:r
+   754 op sub *tmp8 :foo.0:sum *tmp7
+   755 op add *tmp9 *tmp8 0.5
+   756 op floor *tmp10 *tmp9
+   757 print *tmp10
+   758 print "|"
+-    * label *label1493
+   759 setaddr :foo.0*retaddr *label138 (h:*label13)
+-    * label *label1494
+   760 op rand :foo.0:r 10
+   761 op add *tmp6 24 :foo.0:r
+-    * label *label1495
+-    * label *label1496
+-    * label *label1497
+-    * label *label1498
+   762 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label1499
+-    * label *label1500
+   763 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1501
+-    * label *label1502
+   764 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1503
+-    * label *label1504
+   765 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1505
+-    * label *label1506
+   766 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1507
+-    * label *label1508
+   767 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1509
+-    * label *label1510
+   768 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1511
+-    * label *label1512
+   769 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1513
+-    * label *label1514
+   770 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1515
+-    * label *label1516
+   771 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1517
+-    * label *label1518
+   772 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1519
+-    * label *label1520
+   773 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1521
+-    * label *label1522
+   774 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1523
+-    * label *label1524
+   775 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1525
+-    * label *label1526
+   776 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1527
+-    * label *label1528
+   777 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1529
+-    * label *label1530
+   778 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1531
+-    * label *label1532
+   779 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1533
+-    * label *label1534
+   780 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1535
+-    * label *label1536
+   781 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1537
+-    * label *label1538
+   782 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1539
+-    * label *label1540
+   783 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1541
+-    * label *label1542
+   784 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1543
+-    * label *label1544
+   785 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1545
+-    * label *label1546
+   786 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1547
+-    * label *label1548
+   787 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1549
+-    * label *label1550
+   788 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1551
+-    * label *label1552
+   789 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1553
+-    * label *label1554
+   790 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1555
+-    * label *label1556
+   791 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1557
+-    * label *label1558
+   792 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1559
+-    * label *label1560
+   793 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1561
+-    * label *label1562
+   794 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1563
+-    * label *label1564
+   795 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1565
+-    * label *label1566
+   796 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1567
+-    * label *label1568
+   797 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1569
+-    * label *label1570
+   798 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1571
+-    * label *label1572
+   799 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1573
+-    * label *label1574
+   800 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1575
+-    * label *label1576
+   801 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1577
+-    * label *label1578
+   802 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1579
+-    * label *label1580
+   803 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1581
+-    * label *label1582
+   804 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1583
+-    * label *label1584
+   805 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1585
+-    * label *label1586
+   806 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1587
+-    * label *label1588
+   807 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1589
+-    * label *label1590
+   808 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1591
+-    * label *label1592
+   809 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1593
+-    * label *label1594
+   810 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1595
+-    * label *label1596
+   811 op mul *tmp7 50 :foo.0:r
+   812 op sub *tmp8 :foo.0:sum *tmp7
+   813 op add *tmp9 *tmp8 0.5
+   814 op floor *tmp10 *tmp9
+   815 print *tmp10
+   816 print "|"
+-    * label *label1597
+   817 setaddr :foo.0*retaddr *label139 (h:*label14)
+-    * label *label1598
+   818 op rand :foo.0:r 10
+   819 op add *tmp6 34 :foo.0:r
+-    * label *label1599
+-    * label *label1600
+-    * label *label1601
+-    * label *label1602
+   820 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label1603
+-    * label *label1604
+   821 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1605
+-    * label *label1606
+   822 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1607
+-    * label *label1608
+   823 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1609
+-    * label *label1610
+   824 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1611
+-    * label *label1612
+   825 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1613
+-    * label *label1614
+   826 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1615
+-    * label *label1616
+   827 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1617
+-    * label *label1618
+   828 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1619
+-    * label *label1620
+   829 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1621
+-    * label *label1622
+   830 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1623
+-    * label *label1624
+   831 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1625
+-    * label *label1626
+   832 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1627
+-    * label *label1628
+   833 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1629
+-    * label *label1630
+   834 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1631
+-    * label *label1632
+   835 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1633
+-    * label *label1634
+   836 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1635
+-    * label *label1636
+   837 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1637
+-    * label *label1638
+   838 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1639
+-    * label *label1640
+   839 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1641
+-    * label *label1642
+   840 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1643
+-    * label *label1644
+   841 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1645
+-    * label *label1646
+   842 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1647
+-    * label *label1648
+   843 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1649
+-    * label *label1650
+   844 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1651
+-    * label *label1652
+   845 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1653
+-    * label *label1654
+   846 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1655
+-    * label *label1656
+   847 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1657
+-    * label *label1658
+   848 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1659
+-    * label *label1660
+   849 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1661
+-    * label *label1662
+   850 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1663
+-    * label *label1664
+   851 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1665
+-    * label *label1666
+   852 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1667
+-    * label *label1668
+   853 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1669
+-    * label *label1670
+   854 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1671
+-    * label *label1672
+   855 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1673
+-    * label *label1674
+   856 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1675
+-    * label *label1676
+   857 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1677
+-    * label *label1678
+   858 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1679
+-    * label *label1680
+   859 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1681
+-    * label *label1682
+   860 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1683
+-    * label *label1684
+   861 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1685
+-    * label *label1686
+   862 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1687
+-    * label *label1688
+   863 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1689
+-    * label *label1690
+   864 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1691
+-    * label *label1692
+   865 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1693
+-    * label *label1694
+   866 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1695
+-    * label *label1696
+   867 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1697
+-    * label *label1698
+   868 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1699
+-    * label *label1700
+   869 op mul *tmp7 50 :foo.0:r
+   870 op sub *tmp8 :foo.0:sum *tmp7
+   871 op add *tmp9 *tmp8 0.5
+   872 op floor *tmp10 *tmp9
+   873 print *tmp10
+   874 print "|"
+-    * label *label1701
+   875 setaddr :foo.0*retaddr *label140 (h:*label15)
+-    * label *label1702
+   876 op rand :foo.0:r 10
+   877 op add *tmp6 44 :foo.0:r
+-    * label *label1703
+-    * label *label1704
+-    * label *label1705
+-    * label *label1706
+   878 op add :foo.0:sum *tmp6 *tmp6
+-    * label *label1707
+-    * label *label1708
+   879 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1709
+-    * label *label1710
+   880 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1711
+-    * label *label1712
+   881 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1713
+-    * label *label1714
+   882 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1715
+-    * label *label1716
+   883 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1717
+-    * label *label1718
+   884 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1719
+-    * label *label1720
+   885 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1721
+-    * label *label1722
+   886 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1723
+-    * label *label1724
+   887 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1725
+-    * label *label1726
+   888 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1727
+-    * label *label1728
+   889 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1729
+-    * label *label1730
+   890 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1731
+-    * label *label1732
+   891 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1733
+-    * label *label1734
+   892 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1735
+-    * label *label1736
+   893 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1737
+-    * label *label1738
+   894 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1739
+-    * label *label1740
+   895 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1741
+-    * label *label1742
+   896 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1743
+-    * label *label1744
+   897 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1745
+-    * label *label1746
+   898 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1747
+-    * label *label1748
+   899 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1749
+-    * label *label1750
+   900 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1751
+-    * label *label1752
+   901 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1753
+-    * label *label1754
+   902 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1755
+-    * label *label1756
+   903 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1757
+-    * label *label1758
+   904 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1759
+-    * label *label1760
+   905 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1761
+-    * label *label1762
+   906 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1763
+-    * label *label1764
+   907 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1765
+-    * label *label1766
+   908 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1767
+-    * label *label1768
+   909 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1769
+-    * label *label1770
+   910 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1771
+-    * label *label1772
+   911 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1773
+-    * label *label1774
+   912 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1775
+-    * label *label1776
+   913 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1777
+-    * label *label1778
+   914 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1779
+-    * label *label1780
+   915 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1781
+-    * label *label1782
+   916 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1783
+-    * label *label1784
+   917 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1785
+-    * label *label1786
+   918 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1787
+-    * label *label1788
+   919 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1789
+-    * label *label1790
+   920 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1791
+-    * label *label1792
+   921 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1793
+-    * label *label1794
+   922 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1795
+-    * label *label1796
+   923 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1797
+-    * label *label1798
+   924 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1799
+-    * label *label1800
+   925 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1801
+-    * label *label1802
+   926 op add :foo.0:sum :foo.0:sum *tmp6
+-    * label *label1803
+-    * label *label1804
+   927 op mul *tmp7 50 :foo.0:r
+   928 op sub *tmp8 :foo.0:sum *tmp7
+   929 op add *tmp9 *tmp8 0.5
+   930 op floor *tmp10 *tmp9
+   931 print *tmp10
+   932 print "|"
+-    * label *label1805
+-    * label *label141
+-    * label *label2
+   933 assertprints "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"
+   934 stop
+   935 end
 
-Modifications by Final phase, Single Step Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1 (-20 instructions):
+     0 assertflush
+-    * setaddr :bar.0*retaddr *label3 (h:*label3)
+-    * setaddr :foo.0*retaddr *label119 (h:*label12)
+     1 op rand :foo.0:r 10
+     2 op add *tmp6 11 :foo.0:r
+     3 op add :foo.0:sum *tmp6 *tmp6
  
-  2585 label *label2
-  2586 assertprints "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"
-  2587 stop
+    55 op floor *tmp10 *tmp9
+    56 print *tmp10
+    57 print "|"
+-    * setaddr :foo.0*retaddr *label120 (h:*label13)
+    58 op rand :foo.0:r 10
+    59 op add *tmp6 21 :foo.0:r
+    60 op add :foo.0:sum *tmp6 *tmp6
+ 
+   112 op floor *tmp10 *tmp9
+   113 print *tmp10
+   114 print "|"
+-    * setaddr :foo.0*retaddr *label121 (h:*label14)
+   115 op rand :foo.0:r 10
+   116 op add *tmp6 31 :foo.0:r
+   117 op add :foo.0:sum *tmp6 *tmp6
+ 
+   169 op floor *tmp10 *tmp9
+   170 print *tmp10
+   171 print "|"
+-    * setaddr :foo.0*retaddr *label122 (h:*label15)
+   172 op rand :foo.0:r 10
+   173 op add *tmp6 41 :foo.0:r
+   174 op add :foo.0:sum *tmp6 *tmp6
+ 
+   226 op floor *tmp10 *tmp9
+   227 print *tmp10
+   228 print "|"
+-    * setaddr :bar.0*retaddr *label4 (h:*label4)
+-    * setaddr :foo.0*retaddr *label125 (h:*label12)
+   229 op rand :foo.0:r 10
+   230 op add *tmp6 12 :foo.0:r
+   231 op add :foo.0:sum *tmp6 *tmp6
+ 
+   283 op floor *tmp10 *tmp9
+   284 print *tmp10
+   285 print "|"
+-    * setaddr :foo.0*retaddr *label126 (h:*label13)
+   286 op rand :foo.0:r 10
+   287 op add *tmp6 22 :foo.0:r
+   288 op add :foo.0:sum *tmp6 *tmp6
+ 
+   340 op floor *tmp10 *tmp9
+   341 print *tmp10
+   342 print "|"
+-    * setaddr :foo.0*retaddr *label127 (h:*label14)
+   343 op rand :foo.0:r 10
+   344 op add *tmp6 32 :foo.0:r
+   345 op add :foo.0:sum *tmp6 *tmp6
+ 
+   397 op floor *tmp10 *tmp9
+   398 print *tmp10
+   399 print "|"
+-    * setaddr :foo.0*retaddr *label128 (h:*label15)
+   400 op rand :foo.0:r 10
+   401 op add *tmp6 42 :foo.0:r
+   402 op add :foo.0:sum *tmp6 *tmp6
+ 
+   454 op floor *tmp10 *tmp9
+   455 print *tmp10
+   456 print "|"
+-    * setaddr :bar.0*retaddr *label5 (h:*label5)
+-    * setaddr :foo.0*retaddr *label131 (h:*label12)
+   457 op rand :foo.0:r 10
+   458 op add *tmp6 13 :foo.0:r
+   459 op add :foo.0:sum *tmp6 *tmp6
+ 
+   511 op floor *tmp10 *tmp9
+   512 print *tmp10
+   513 print "|"
+-    * setaddr :foo.0*retaddr *label132 (h:*label13)
+   514 op rand :foo.0:r 10
+   515 op add *tmp6 23 :foo.0:r
+   516 op add :foo.0:sum *tmp6 *tmp6
+ 
+   568 op floor *tmp10 *tmp9
+   569 print *tmp10
+   570 print "|"
+-    * setaddr :foo.0*retaddr *label133 (h:*label14)
+   571 op rand :foo.0:r 10
+   572 op add *tmp6 33 :foo.0:r
+   573 op add :foo.0:sum *tmp6 *tmp6
+ 
+   625 op floor *tmp10 *tmp9
+   626 print *tmp10
+   627 print "|"
+-    * setaddr :foo.0*retaddr *label134 (h:*label15)
+   628 op rand :foo.0:r 10
+   629 op add *tmp6 43 :foo.0:r
+   630 op add :foo.0:sum *tmp6 *tmp6
+ 
+   682 op floor *tmp10 *tmp9
+   683 print *tmp10
+   684 print "|"
+-    * setaddr :bar.0*retaddr *label6 (h:*label6)
+-    * setaddr :foo.0*retaddr *label137 (h:*label12)
+   685 op rand :foo.0:r 10
+   686 op add *tmp6 14 :foo.0:r
+   687 op add :foo.0:sum *tmp6 *tmp6
+ 
+   739 op floor *tmp10 *tmp9
+   740 print *tmp10
+   741 print "|"
+-    * setaddr :foo.0*retaddr *label138 (h:*label13)
+   742 op rand :foo.0:r 10
+   743 op add *tmp6 24 :foo.0:r
+   744 op add :foo.0:sum *tmp6 *tmp6
+ 
+   796 op floor *tmp10 *tmp9
+   797 print *tmp10
+   798 print "|"
+-    * setaddr :foo.0*retaddr *label139 (h:*label14)
+   799 op rand :foo.0:r 10
+   800 op add *tmp6 34 :foo.0:r
+   801 op add :foo.0:sum *tmp6 *tmp6
+ 
+   853 op floor *tmp10 *tmp9
+   854 print *tmp10
+   855 print "|"
+-    * setaddr :foo.0*retaddr *label140 (h:*label15)
+   856 op rand :foo.0:r 10
+   857 op add *tmp6 44 :foo.0:r
+   858 op add :foo.0:sum *tmp6 *tmp6
+
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+   912 print "|"
+   913 assertprints "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"
+   914 stop
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-15 instructions):
  
-   158 op add *tmp9 *tmp8 0.5
-   159 op floor *tmp10 *tmp9
-   160 print *tmp10
+    54 op add *tmp9 *tmp8 0.5
+    55 op floor *tmp10 *tmp9
+    56 print *tmp10
 -    * print "|"
-+  161 print "|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|"
-   162 label *label245
-   163 label *label246
-   164 op rand :foo.0:r 10
++   57 print "|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|{0}|"
+    58 op rand :foo.0:r 10
+    59 op add *tmp6 21 :foo.0:r
+    60 op add :foo.0:sum *tmp6 *tmp6
  
-   318 op sub *tmp8 :foo.0:sum *tmp7
-   319 op add *tmp9 *tmp8 0.5
-   320 op floor *tmp10 *tmp9
+   110 op sub *tmp8 :foo.0:sum *tmp7
+   111 op add *tmp9 *tmp8 0.5
+   112 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+  321 format *tmp10
-   322 label *label349
-   323 label *label350
-   324 op rand :foo.0:r 10
++  113 format *tmp10
+   114 op rand :foo.0:r 10
+   115 op add *tmp6 31 :foo.0:r
+   116 op add :foo.0:sum *tmp6 *tmp6
  
-   478 op sub *tmp8 :foo.0:sum *tmp7
-   479 op add *tmp9 *tmp8 0.5
-   480 op floor *tmp10 *tmp9
+   166 op sub *tmp8 :foo.0:sum *tmp7
+   167 op add *tmp9 *tmp8 0.5
+   168 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+  481 format *tmp10
-   482 label *label453
-   483 label *label454
-   484 op rand :foo.0:r 10
++  169 format *tmp10
+   170 op rand :foo.0:r 10
+   171 op add *tmp6 41 :foo.0:r
+   172 op add :foo.0:sum *tmp6 *tmp6
  
-   638 op sub *tmp8 :foo.0:sum *tmp7
-   639 op add *tmp9 *tmp8 0.5
-   640 op floor *tmp10 *tmp9
+   222 op sub *tmp8 :foo.0:sum *tmp7
+   223 op add *tmp9 *tmp8 0.5
+   224 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+  641 format *tmp10
-   642 label *label557
-   643 label *label123
-   644 label *label124
++  225 format *tmp10
+   226 op rand :foo.0:r 10
+   227 op add *tmp6 12 :foo.0:r
+   228 op add :foo.0:sum *tmp6 *tmp6
  
-   800 op sub *tmp8 :foo.0:sum *tmp7
-   801 op add *tmp9 *tmp8 0.5
-   802 op floor *tmp10 *tmp9
+   278 op sub *tmp8 :foo.0:sum *tmp7
+   279 op add *tmp9 *tmp8 0.5
+   280 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+  803 format *tmp10
-   804 label *label661
-   805 label *label662
-   806 op rand :foo.0:r 10
++  281 format *tmp10
+   282 op rand :foo.0:r 10
+   283 op add *tmp6 22 :foo.0:r
+   284 op add :foo.0:sum *tmp6 *tmp6
  
-   960 op sub *tmp8 :foo.0:sum *tmp7
-   961 op add *tmp9 *tmp8 0.5
-   962 op floor *tmp10 *tmp9
+   334 op sub *tmp8 :foo.0:sum *tmp7
+   335 op add *tmp9 *tmp8 0.5
+   336 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+  963 format *tmp10
-   964 label *label765
-   965 label *label766
-   966 op rand :foo.0:r 10
++  337 format *tmp10
+   338 op rand :foo.0:r 10
+   339 op add *tmp6 32 :foo.0:r
+   340 op add :foo.0:sum *tmp6 *tmp6
  
-  1120 op sub *tmp8 :foo.0:sum *tmp7
-  1121 op add *tmp9 *tmp8 0.5
-  1122 op floor *tmp10 *tmp9
+   390 op sub *tmp8 :foo.0:sum *tmp7
+   391 op add *tmp9 *tmp8 0.5
+   392 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 1123 format *tmp10
-  1124 label *label869
-  1125 label *label870
-  1126 op rand :foo.0:r 10
++  393 format *tmp10
+   394 op rand :foo.0:r 10
+   395 op add *tmp6 42 :foo.0:r
+   396 op add :foo.0:sum *tmp6 *tmp6
  
-  1280 op sub *tmp8 :foo.0:sum *tmp7
-  1281 op add *tmp9 *tmp8 0.5
-  1282 op floor *tmp10 *tmp9
+   446 op sub *tmp8 :foo.0:sum *tmp7
+   447 op add *tmp9 *tmp8 0.5
+   448 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 1283 format *tmp10
-  1284 label *label973
-  1285 label *label129
-  1286 label *label130
++  449 format *tmp10
+   450 op rand :foo.0:r 10
+   451 op add *tmp6 13 :foo.0:r
+   452 op add :foo.0:sum *tmp6 *tmp6
  
-  1442 op sub *tmp8 :foo.0:sum *tmp7
-  1443 op add *tmp9 *tmp8 0.5
-  1444 op floor *tmp10 *tmp9
+   502 op sub *tmp8 :foo.0:sum *tmp7
+   503 op add *tmp9 *tmp8 0.5
+   504 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 1445 format *tmp10
-  1446 label *label1077
-  1447 label *label1078
-  1448 op rand :foo.0:r 10
++  505 format *tmp10
+   506 op rand :foo.0:r 10
+   507 op add *tmp6 23 :foo.0:r
+   508 op add :foo.0:sum *tmp6 *tmp6
  
-  1602 op sub *tmp8 :foo.0:sum *tmp7
-  1603 op add *tmp9 *tmp8 0.5
-  1604 op floor *tmp10 *tmp9
+   558 op sub *tmp8 :foo.0:sum *tmp7
+   559 op add *tmp9 *tmp8 0.5
+   560 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 1605 format *tmp10
-  1606 label *label1181
-  1607 label *label1182
-  1608 op rand :foo.0:r 10
++  561 format *tmp10
+   562 op rand :foo.0:r 10
+   563 op add *tmp6 33 :foo.0:r
+   564 op add :foo.0:sum *tmp6 *tmp6
  
-  1762 op sub *tmp8 :foo.0:sum *tmp7
-  1763 op add *tmp9 *tmp8 0.5
-  1764 op floor *tmp10 *tmp9
+   614 op sub *tmp8 :foo.0:sum *tmp7
+   615 op add *tmp9 *tmp8 0.5
+   616 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 1765 format *tmp10
-  1766 label *label1285
-  1767 label *label1286
-  1768 op rand :foo.0:r 10
++  617 format *tmp10
+   618 op rand :foo.0:r 10
+   619 op add *tmp6 43 :foo.0:r
+   620 op add :foo.0:sum *tmp6 *tmp6
  
-  1922 op sub *tmp8 :foo.0:sum *tmp7
-  1923 op add *tmp9 *tmp8 0.5
-  1924 op floor *tmp10 *tmp9
+   670 op sub *tmp8 :foo.0:sum *tmp7
+   671 op add *tmp9 *tmp8 0.5
+   672 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 1925 format *tmp10
-  1926 label *label1389
-  1927 label *label135
-  1928 label *label136
++  673 format *tmp10
+   674 op rand :foo.0:r 10
+   675 op add *tmp6 14 :foo.0:r
+   676 op add :foo.0:sum *tmp6 *tmp6
  
-  2084 op sub *tmp8 :foo.0:sum *tmp7
-  2085 op add *tmp9 *tmp8 0.5
-  2086 op floor *tmp10 *tmp9
+   726 op sub *tmp8 :foo.0:sum *tmp7
+   727 op add *tmp9 *tmp8 0.5
+   728 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 2087 format *tmp10
-  2088 label *label1493
-  2089 label *label1494
-  2090 op rand :foo.0:r 10
++  729 format *tmp10
+   730 op rand :foo.0:r 10
+   731 op add *tmp6 24 :foo.0:r
+   732 op add :foo.0:sum *tmp6 *tmp6
  
-  2244 op sub *tmp8 :foo.0:sum *tmp7
-  2245 op add *tmp9 *tmp8 0.5
-  2246 op floor *tmp10 *tmp9
+   782 op sub *tmp8 :foo.0:sum *tmp7
+   783 op add *tmp9 *tmp8 0.5
+   784 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 2247 format *tmp10
-  2248 label *label1597
-  2249 label *label1598
-  2250 op rand :foo.0:r 10
++  785 format *tmp10
+   786 op rand :foo.0:r 10
+   787 op add *tmp6 34 :foo.0:r
+   788 op add :foo.0:sum *tmp6 *tmp6
  
-  2404 op sub *tmp8 :foo.0:sum *tmp7
-  2405 op add *tmp9 *tmp8 0.5
-  2406 op floor *tmp10 *tmp9
+   838 op sub *tmp8 :foo.0:sum *tmp7
+   839 op add *tmp9 *tmp8 0.5
+   840 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 2407 format *tmp10
-  2408 label *label1701
-  2409 label *label1702
-  2410 op rand :foo.0:r 10
++  841 format *tmp10
+   842 op rand :foo.0:r 10
+   843 op add *tmp6 44 :foo.0:r
+   844 op add :foo.0:sum *tmp6 *tmp6
  
-  2564 op sub *tmp8 :foo.0:sum *tmp7
-  2565 op add *tmp9 *tmp8 0.5
-  2566 op floor *tmp10 *tmp9
+   894 op sub *tmp8 :foo.0:sum *tmp7
+   895 op add *tmp9 *tmp8 0.5
+   896 op floor *tmp10 *tmp9
 -    * print *tmp10
 -    * print "|"
-+ 2567 format *tmp10
-  2568 label *label1805
-  2569 label *label141
-  2570 label *label2
++  897 format *tmp10
+   898 assertprints "550|1050|1550|2050|600|1100|1600|2100|650|1150|1650|2150|700|1200|1700|2200|" "function-inlining"
+   899 stop
 
 Final code before resolving virtual instructions:
 

@@ -12,6 +12,7 @@ import info.teksol.mc.messages.TimingMessage;
 import info.teksol.mc.mindcode.compiler.AbstractTestBase;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -170,6 +171,9 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         InputFiles inputFiles = createInputFiles(code);
         MindcodeCompiler compiler = new MindcodeCompiler(expectedMessages(), createCompilerProfile(), inputFiles);
         compiler.compile();
+        if (compiler.getUnresolved().isEmpty()) {
+            throw new MindcodeInternalError("No code generated.");
+        }
         logCompilation(title, code, compiler.getOutput(), compiler.getExecutableInstructions().size());
         writeLogFile(logFile, compiler, compiler.getUnresolved());
     }

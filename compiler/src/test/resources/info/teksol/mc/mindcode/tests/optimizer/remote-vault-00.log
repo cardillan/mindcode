@@ -1,11 +1,11 @@
    145 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination.
-    30 instructions eliminated by Dead Code Elimination (4 iterations).
-     1 instructions eliminated by Jump Normalization (3 iterations).
-    10 instructions eliminated by Jump Optimization (3 iterations).
-    10 instructions eliminated by Single Step Elimination (4 iterations).
+    30 instructions eliminated by Dead Code Elimination (5 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
+    10 instructions eliminated by Jump Optimization (4 iterations).
+    10 instructions eliminated by Single Step Elimination (5 iterations).
     10 instructions eliminated by Data Flow Optimization (4 iterations).
-     1 instructions eliminated by Unreachable Code Elimination.
+     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     11 instructions eliminated by Print Merging.
     68 instructions after optimizations.
 
@@ -596,19 +596,109 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     84 sensor *tmp45 @unit @flag
     85 jump *label31 notEqual *tmp45 .QUERY_FLAG
 
-Modifications by Final phase, Unreachable Code Elimination, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-   108 printflush message1
-   109 label *label1
-   110 jump *label0 always
+    14 ucontrol flag .ANSWER_FLAG
+    15 op add .SERVICED .SERVICED 1
+    16 label *label4
+-    * label *label5
+-    * label *label3
+    17 ubind @poly
+    18 sensor *tmp13 @unit @flag
+    19 jump *label7 notEqual *tmp13 .QUERY_FLAG
+    20 ucontrol flag .ANSWER_FLAG
+    21 op add .SERVICED .SERVICED 1
+    22 label *label7
+-    * label *label8
+-    * label *label6
+    23 ubind @mega
+    24 sensor *tmp17 @unit @flag
+    25 jump *label10 notEqual *tmp17 .QUERY_FLAG
+    26 ucontrol flag .ANSWER_FLAG
+    27 op add .SERVICED .SERVICED 1
+    28 label *label10
+-    * label *label11
+-    * label *label9
+    29 ubind @quad
+    30 sensor *tmp21 @unit @flag
+    31 jump *label13 notEqual *tmp21 .QUERY_FLAG
+    32 ucontrol flag .ANSWER_FLAG
+    33 op add .SERVICED .SERVICED 1
+    34 label *label13
+-    * label *label14
+-    * label *label12
+    35 ubind @oct
+    36 sensor *tmp25 @unit @flag
+    37 jump *label16 notEqual *tmp25 .QUERY_FLAG
+    38 ucontrol flag .ANSWER_FLAG
+    39 op add .SERVICED .SERVICED 1
+    40 label *label16
+-    * label *label17
+-    * label *label15
+    41 ubind @flare
+    42 sensor *tmp29 @unit @flag
+    43 jump *label19 notEqual *tmp29 .QUERY_FLAG
+    44 ucontrol flag .ANSWER_FLAG
+    45 op add .SERVICED .SERVICED 1
+    46 label *label19
+-    * label *label20
+-    * label *label18
+    47 ubind @horizon
+    48 sensor *tmp33 @unit @flag
+    49 jump *label22 notEqual *tmp33 .QUERY_FLAG
+    50 ucontrol flag .ANSWER_FLAG
+    51 op add .SERVICED .SERVICED 1
+    52 label *label22
+-    * label *label23
+-    * label *label21
+    53 ubind @zenith
+    54 sensor *tmp37 @unit @flag
+    55 jump *label25 notEqual *tmp37 .QUERY_FLAG
+    56 ucontrol flag .ANSWER_FLAG
+    57 op add .SERVICED .SERVICED 1
+    58 label *label25
+-    * label *label26
+-    * label *label24
+    59 ubind @antumbra
+    60 sensor *tmp41 @unit @flag
+    61 jump *label28 notEqual *tmp41 .QUERY_FLAG
+    62 ucontrol flag .ANSWER_FLAG
+    63 op add .SERVICED .SERVICED 1
+    64 label *label28
+-    * label *label29
+-    * label *label27
+    65 ubind @eclipse
+    66 sensor *tmp45 @unit @flag
+    67 jump *label31 notEqual *tmp45 .QUERY_FLAG
+    68 ucontrol flag .ANSWER_FLAG
+    69 op add .SERVICED .SERVICED 1
+    70 label *label31
+-    * label *label32
+-    * label *label30
+    71 print "Remote vault [gold]#"
+    72 print LINK_ID
+    73 print "["
+ 
+    86 print "ms"
+    87 print "\n"
+    88 printflush message1
+-    * label *label1
+    89 jump *label0 always
 -    * label *label2
+    90 end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+    87 print "\n"
+    88 printflush message1
+    89 jump *label0 always
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
  
-    88 label *label31
-    89 label *label32
-    90 label *label30
+    68 ucontrol flag .ANSWER_FLAG
+    69 op add .SERVICED .SERVICED 1
+    70 label *label31
 -    * print "Remote vault [gold]#"
 -    * print LINK_ID
 -    * print "["
@@ -619,20 +709,19 @@ Modifications by Final phase, Print Merging, iteration 1 (-11 instructions):
 -    * print "["
 -    * print "]"
 -    * print "\n"
-+   91 print "Remote vault [gold]#{0}[]\nQueries serviced: [green]{0}[]\n[lightgray]Loop time: {0} ms\n"
-+   92 format LINK_ID
-+   93 format .SERVICED
-    94 op sub *tmp48 @time :start
-    95 op floor *tmp49 *tmp48
++   71 print "Remote vault [gold]#{0}[]\nQueries serviced: [green]{0}[]\n[lightgray]Loop time: {0} ms\n"
++   72 format LINK_ID
++   73 format .SERVICED
+    74 op sub *tmp48 @time :start
+    75 op floor *tmp49 *tmp48
 -    * print "[lightgray]Loop time: "
 -    * print *tmp49
 -    * print " "
 -    * print "ms"
 -    * print "\n"
-+   96 format *tmp49
-    97 printflush message1
-    98 label *label1
-    99 jump *label0 always
++   76 format *tmp49
+    77 printflush message1
+    78 jump *label0 always
 
 Final code before resolving virtual instructions:
 
