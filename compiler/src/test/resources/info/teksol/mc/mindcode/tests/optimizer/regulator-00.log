@@ -362,10 +362,10 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
 -    * op strictEqual *tmp15 *tmp14 @inverted-sorter
 -    * set .INVERTED *tmp15
 +  119 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   120 set :setState.0:newState true
-   121 op notEqual *tmp17 .STATE :setState.0:newState
+   120 set :setState:newState true
+   121 op notEqual *tmp17 .STATE :setState:newState
    122 jump *label24 equal *tmp17 false
-   123 set .STATE :setState.0:newState
+   123 set .STATE :setState:newState
    124 op add .CYCLES .CYCLES 1
 -    * op xor *tmp19 .INVERTED .STATE
 -    * set .ON *tmp19
@@ -409,10 +409,10 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
 +  163 op idiv :pct *tmp33 :max
    164 op lessThanEq *tmp35 :pct PCT_LOW
    165 jump *label33 equal *tmp35 false
-   166 set :setState.1:newState true
+   166 set :setState47:newState true
  
    168 jump *label36 equal *tmp38 false
-   169 set .STATE :setState.1:newState
+   169 set .STATE :setState47:newState
    170 op add .CYCLES .CYCLES 1
 -    * op xor *tmp40 .INVERTED .STATE
 -    * set .ON *tmp40
@@ -422,7 +422,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
    174 jump *label39 always
  
    189 jump *label43 equal *tmp45 false
-   190 set .STATE :setState.2:newState
+   190 set .STATE :setState48:newState
    191 op add .CYCLES .CYCLES 1
 -    * op xor *tmp47 .INVERTED .STATE
 -    * set .ON *tmp47
@@ -543,11 +543,11 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
    107 label *label2
    108 sensor *tmp14 .SORTER @type
    109 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   110 set :setState.0:newState true
--    * op notEqual *tmp17 .STATE :setState.0:newState
+   110 set :setState:newState true
+-    * op notEqual *tmp17 .STATE :setState:newState
 -    * jump *label24 equal *tmp17 false
-+  111 jump *label24 equal .STATE :setState.0:newState
-   112 set .STATE :setState.0:newState
++  111 jump *label24 equal .STATE :setState:newState
+   112 set .STATE :setState:newState
    113 op add .CYCLES .CYCLES 1
    114 op xor .ON .INVERTED .STATE
  
@@ -567,11 +567,11 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
 -    * op lessThanEq *tmp35 :pct PCT_LOW
 -    * jump *label33 equal *tmp35 false
 +  152 jump *label33 greaterThan :pct PCT_LOW
-   153 set :setState.1:newState true
--    * op notEqual *tmp38 .STATE :setState.1:newState
+   153 set :setState47:newState true
+-    * op notEqual *tmp38 .STATE :setState47:newState
 -    * jump *label36 equal *tmp38 false
-+  154 jump *label36 equal .STATE :setState.1:newState
-   155 set .STATE :setState.1:newState
++  154 jump *label36 equal .STATE :setState47:newState
+   155 set .STATE :setState47:newState
    156 op add .CYCLES .CYCLES 1
    157 op xor .ON .INVERTED .STATE
  
@@ -581,11 +581,11 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
 -    * op greaterThanEq *tmp42 :pct PCT_HIGH
 -    * jump *label40 equal *tmp42 false
 +  171 jump *label40 lessThan :pct PCT_HIGH
-   172 set :setState.2:newState false
--    * op notEqual *tmp45 .STATE :setState.2:newState
+   172 set :setState48:newState false
+-    * op notEqual *tmp45 .STATE :setState48:newState
 -    * jump *label43 equal *tmp45 false
-+  173 jump *label43 equal .STATE :setState.2:newState
-   174 set .STATE :setState.2:newState
++  173 jump *label43 equal .STATE :setState48:newState
+   174 set .STATE :setState48:newState
    175 op add .CYCLES .CYCLES 1
    176 op xor .ON .INVERTED .STATE
  
@@ -670,42 +670,42 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
  
    106 sensor *tmp14 .SORTER @type
    107 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   108 set :setState.0:newState true
--    * jump *label24 equal .STATE :setState.0:newState
--    * set .STATE :setState.0:newState
+   108 set :setState:newState true
+-    * jump *label24 equal .STATE :setState:newState
+-    * set .STATE :setState:newState
 -    * op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED .STATE
 +  109 jump *label24 equal .STATE true
 +  110 set .STATE true
-+  111 op xor .ON .INVERTED :setState.0:newState
++  111 op xor .ON .INVERTED :setState:newState
    112 jump *label26 equal .ON false
    113 set *tmp20 "\nCurrently active:[green]"
    114 jump *label27 always
  
    147 op idiv :pct *tmp33 :max
    148 jump *label33 greaterThan :pct PCT_LOW
-   149 set :setState.1:newState true
--    * jump *label36 equal .STATE :setState.1:newState
--    * set .STATE :setState.1:newState
+   149 set :setState47:newState true
+-    * jump *label36 equal .STATE :setState47:newState
+-    * set .STATE :setState47:newState
 +  150 jump *label36 equal .STATE true
 +  151 set .STATE true
    152 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED .STATE
-+  153 op xor .ON .INVERTED :setState.1:newState
++  153 op xor .ON .INVERTED :setState47:newState
    154 jump *label38 equal .ON false
    155 set *tmp41 "\nCurrently active:[green]"
    156 jump *label39 always
  
    165 label *label33
    166 jump *label40 lessThan :pct PCT_HIGH
-   167 set :setState.2:newState false
--    * jump *label43 equal .STATE :setState.2:newState
--    * set .STATE :setState.2:newState
+   167 set :setState48:newState false
+-    * jump *label43 equal .STATE :setState48:newState
+-    * set .STATE :setState48:newState
 +  168 jump *label43 equal .STATE false
 +  169 set .STATE false
    170 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED .STATE
-+  171 op xor .ON .INVERTED :setState.2:newState
++  171 op xor .ON .INVERTED :setState48:newState
    172 jump *label45 equal .ON false
    173 set *tmp48 "\nCurrently active:[green]"
    174 jump *label46 always
@@ -733,11 +733,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
  
    106 sensor *tmp14 .SORTER @type
    107 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   108 set :setState.0:newState true
+   108 set :setState:newState true
 -    * jump *label24 equal .STATE true
 +  109 jump *label24 equal null true
    110 set .STATE true
--    * op xor .ON .INVERTED :setState.0:newState
+-    * op xor .ON .INVERTED :setState:newState
 +  111 op xor .ON .INVERTED true
    112 jump *label26 equal .ON false
    113 set *tmp20 "\nCurrently active:[green]"
@@ -746,7 +746,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
    150 jump *label36 equal .STATE true
    151 set .STATE true
    152 op add .CYCLES .CYCLES 1
--    * op xor .ON .INVERTED :setState.1:newState
+-    * op xor .ON .INVERTED :setState47:newState
 +  153 op xor .ON .INVERTED true
    154 jump *label38 equal .ON false
    155 set *tmp41 "\nCurrently active:[green]"
@@ -755,7 +755,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
    168 jump *label43 equal .STATE false
    169 set .STATE false
    170 op add .CYCLES .CYCLES 1
--    * op xor .ON .INVERTED :setState.2:newState
+-    * op xor .ON .INVERTED :setState48:newState
 +  171 op xor .ON .INVERTED false
    172 jump *label45 equal .ON false
    173 set *tmp48 "\nCurrently active:[green]"
@@ -781,7 +781,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
    105 label *label2
    106 sensor *tmp14 .SORTER @type
    107 op strictEqual .INVERTED *tmp14 @inverted-sorter
--    * set :setState.0:newState true
+-    * set :setState:newState true
    108 jump *label24 equal null true
    109 set .STATE true
    110 op xor .ON .INVERTED true
@@ -789,7 +789,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
    145 op mul *tmp33 100 :amount
    146 op idiv :pct *tmp33 :max
    147 jump *label33 greaterThan :pct PCT_LOW
--    * set :setState.1:newState true
+-    * set :setState47:newState true
    148 jump *label36 equal .STATE true
    149 set .STATE true
    150 op add .CYCLES .CYCLES 1
@@ -797,7 +797,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
    162 jump *label34 always
    163 label *label33
    164 jump *label40 lessThan :pct PCT_HIGH
--    * set :setState.2:newState false
+-    * set :setState48:newState false
    165 jump *label43 equal .STATE false
    166 set .STATE false
    167 op add .CYCLES .CYCLES 1

@@ -454,8 +454,8 @@ Compiling this code produces the following output:
 ```mlog
 set a 10
 print "The value is: {0}\n"
-op mul :format.0:value a 20
-format :format.0:value
+op mul :format:value a 20
+format :format:value
 printflush message1
 ```
 
@@ -523,10 +523,10 @@ ucontrol getBlock :x :y :type :building :floor
 print :building
 print :type
 print :floor
-ucontrol getBlock :x :y :getBlock2.0:type :getBlock2.0:building :getBlock2.0:floor
-print :getBlock2.0:building
-print :getBlock2.0:type
-print :getBlock2.0:floor
+ucontrol getBlock :x :y :getBlock2:type :getBlock2:building :getBlock2:floor
+print :getBlock2:building
+print :getBlock2:type
+print :getBlock2:floor
 printflush message1
 ```
 

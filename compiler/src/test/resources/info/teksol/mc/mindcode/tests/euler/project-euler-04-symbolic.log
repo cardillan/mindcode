@@ -56,12 +56,12 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
     10 # "Function: def revert(in num)"
  
     15 jump *label11 equal *tmp4 false
-    16 op mul *tmp5 10 :revert.0:res
-    17 op mod *tmp6 :revert.0:num 10
+    16 op mul *tmp5 10 :revert:res
+    17 op mod *tmp6 :revert:num 10
 -    * op add *tmp7 *tmp5 *tmp6
--    * set :revert.0:res *tmp7
-+   18 op add :revert.0:res *tmp5 *tmp6
-    19 op idiv :revert.0:num :revert.0:num 10
+-    * set :revert:res *tmp7
++   18 op add :revert:res *tmp5 *tmp6
+    19 op idiv :revert:num :revert:num 10
     20 label *label10
     21 jump *label9 always
 
@@ -74,18 +74,18 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-3 inst
 -    * jump *label6 equal *tmp1 false
 +    8 jump *label6 lessThanEq :num :max
      9 # "Function: def revert(in num)"
-    10 set :revert.0:num :num
-    11 set :revert.0:res 0
+    10 set :revert:num :num
+    11 set :revert:res 0
     12 label *label9
--    * op greaterThan *tmp4 :revert.0:num 0
+-    * op greaterThan *tmp4 :revert:num 0
 -    * jump *label11 equal *tmp4 false
-+   13 jump *label11 lessThanEq :revert.0:num 0
-    14 op mul *tmp5 10 :revert.0:res
-    15 op mod *tmp6 :revert.0:num 10
-    16 op add :revert.0:res *tmp5 *tmp6
++   13 jump *label11 lessThanEq :revert:num 0
+    14 op mul *tmp5 10 :revert:res
+    15 op mod *tmp6 :revert:num 10
+    16 op add :revert:res *tmp5 *tmp6
  
     20 label *label11
-    21 set *tmp3 :revert.0:res
+    21 set *tmp3 :revert:res
     22 label *label8
 -    * op equal *tmp8 :num *tmp3
 -    * jump *label12 equal *tmp8 false
@@ -110,10 +110,10 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     20 label *label11
-    21 set *tmp3 :revert.0:res
+    21 set *tmp3 :revert:res
     22 label *label8
 -    * jump *label12 notEqual :num *tmp3
-+   23 jump *label12 notEqual :num :revert.0:res
++   23 jump *label12 notEqual :num :revert:res
     24 set :max :num
     25 label *label12
     26 label *label13
@@ -123,9 +123,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     18 label *label10
     19 jump *label9 always
     20 label *label11
--    * set *tmp3 :revert.0:res
+-    * set *tmp3 :revert:res
     21 label *label8
-    22 jump *label12 notEqual :num :revert.0:res
+    22 jump *label12 notEqual :num :revert:res
     23 set :max :num
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
@@ -142,20 +142,20 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
      9 jump *label6 lessThanEq :num :max
     10 # "Function: def revert(in num)"
  
-    12 set :revert.0:res 0
+    12 set :revert:res 0
     13 label *label9
-    14 jump *label11 lessThanEq :revert.0:num 0
+    14 jump *label11 lessThanEq :revert:num 0
 +   15 label *label16
-    16 op mul *tmp5 10 :revert.0:res
-    17 op mod *tmp6 :revert.0:num 10
-    18 op add :revert.0:res *tmp5 *tmp6
-    19 op idiv :revert.0:num :revert.0:num 10
+    16 op mul *tmp5 10 :revert:res
+    17 op mod *tmp6 :revert:num 10
+    18 op add :revert:res *tmp5 *tmp6
+    19 op idiv :revert:num :revert:num 10
     20 label *label10
 -    * jump *label9 always
-+   21 jump *label16 greaterThan :revert.0:num 0
++   21 jump *label16 greaterThan :revert:num 0
     22 label *label11
     23 label *label8
-    24 jump *label12 notEqual :num :revert.0:res
+    24 jump *label12 notEqual :num :revert:res
  
     29 label *label7
     30 label *label4
@@ -182,14 +182,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      8 op mul :num :i :j
      9 jump *label6 lessThanEq :num :max
  
-    11 set :revert.0:num :num
-    12 set :revert.0:res 0
+    11 set :revert:num :num
+    12 set :revert:res 0
     13 label *label9
--    * jump *label11 lessThanEq :revert.0:num 0
+-    * jump *label11 lessThanEq :revert:num 0
 +   14 jump *label11 lessThanEq :num 0
     15 label *label16
-    16 op mul *tmp5 10 :revert.0:res
-    17 op mod *tmp6 :revert.0:num 10
+    16 op mul *tmp5 10 :revert:res
+    17 op mod *tmp6 :revert:num 10
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      0 set :max 0
@@ -203,20 +203,20 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      6 op mul :num :i :j
  
      8 # "Function: def revert(in num)"
-     9 set :revert.0:num :num
-    10 set :revert.0:res 0
+     9 set :revert:num :num
+    10 set :revert:res 0
 -    * label *label9
     11 jump *label11 lessThanEq :num 0
     12 label *label16
-    13 op mul *tmp5 10 :revert.0:res
-    14 op mod *tmp6 :revert.0:num 10
-    15 op add :revert.0:res *tmp5 *tmp6
-    16 op idiv :revert.0:num :revert.0:num 10
+    13 op mul *tmp5 10 :revert:res
+    14 op mod *tmp6 :revert:num 10
+    15 op add :revert:res *tmp5 *tmp6
+    16 op idiv :revert:num :revert:num 10
 -    * label *label10
-    17 jump *label16 greaterThan :revert.0:num 0
+    17 jump *label16 greaterThan :revert:num 0
     18 label *label11
 -    * label *label8
-    19 jump *label12 notEqual :num :revert.0:res
+    19 jump *label12 notEqual :num :revert:res
     20 set :max :num
     21 label *label12
 -    * label *label13
@@ -252,17 +252,17 @@ label *label15
 op mul :num :i :j
 jump *label6 lessThanEq :num :max
 # "Function: def revert(in num)"
-set :revert.0:num :num
-set :revert.0:res 0
+set :revert:num :num
+set :revert:res 0
 jump *label11 lessThanEq :num 0
 label *label16
-op mul *tmp5 10 :revert.0:res
-op mod *tmp6 :revert.0:num 10
-op add :revert.0:res *tmp5 *tmp6
-op idiv :revert.0:num :revert.0:num 10
-jump *label16 greaterThan :revert.0:num 0
+op mul *tmp5 10 :revert:res
+op mod *tmp6 :revert:num 10
+op add :revert:res *tmp5 *tmp6
+op idiv :revert:num :revert:num 10
+jump *label16 greaterThan :revert:num 0
 label *label11
-jump *label12 notEqual :num :revert.0:res
+jump *label12 notEqual :num :revert:res
 set :max :num
 label *label12
 label *label6

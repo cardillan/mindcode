@@ -86,7 +86,7 @@ is compiled to
 
 ```mlog
 jump 2 always 0 0
-draw triangle MAX MIN .A :i :foo.0:n 0
+draw triangle MAX MIN .A :i :foo:n 0
 set MIN 10
 set MAX 50
 set *tmp1 "not first"
@@ -96,8 +96,8 @@ set :i MIN
 jump 16 greaterThan MIN MAX
 print :i
 op add .A .A 1
-op mul :foo.0:n 2 :i
-print :foo.0:n
+op mul :foo:n 2 :i
+print :foo:n
 op add .A .A 1
 op add :i :i 1
 jump 9 lessThanEq :i MAX

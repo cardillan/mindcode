@@ -1,13 +1,14 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   734AF6B0E8E9D264
-compute-recursive-fibonacci.mnd:                   35     2654      97.1%   BDE1C81A7769E0CB   A351B515A5BA3ACD
-compute-sum-of-primes.mnd:                        434     1884      99.7%   B6615E97E02F94A9   4780CA5A2E002528
-digit-counts.mnd:                                  75     2566     100.0%   4395C6D90051BC6D   5E7ABC0DE1C37233
+base64-decode.mnd:                                 59      408      93.2%   BDD246AE230D839E   AB7D5E1F49FDEC23
+compute-recursive-fibonacci.mnd:                   35     2654      97.1%   BDE1C81A7769E0CB   849353EC5DE0A303
+compute-sum-of-primes.mnd:                        434     1884      99.7%   B6615E97E02F94A9   3D4B25341C15DB23
+digit-counts.mnd:                                  75     2566     100.0%   4395C6D90051BC6D   221CAFE996D1CD89
 memory-read-write.mnd:                              5        5     100.0%   D9539CC21D8111B7   763B6A7CD6497320
 pascal-triangle.mnd:                              171     1583      94.7%   954D9E65ED4E6EF0   F5E9B162E65BE032
-sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   F7ED10B98930E00E
-sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   D2F300497CBD9B21
+sorting with bubble-sort.mnd:                      27    15477     100.0%   09F1B1A6B8B97AF2   791FA84234ECBFF5
+sorting with heap-sort.mnd:                        54    64559     100.0%   0CEFC91051987EFB   2912ACDEB2AD758D
 sorting with insert-sort.mnd:                      27    26064     100.0%   0AF6F57A5EBA45E2   5D036BBB25355323
-sorting with quick-sort.mnd:                       69    49133      98.5%   24EED06D28A2DCC0   AE421777DC82DF3B
+sorting with quick-sort.mnd:                       69    49133      98.5%   24EED06D28A2DCC0   0C076FAEF13A462A
 sorting with select-sort.mnd:                      30    35153     100.0%   3F4EE1C8DB9B8B18   0025C2BBB2F9A982
 storage-display.mnd:                              663      826      25.4%   04F7DC90B38FD002   6098EC15A795C12A

@@ -3,36 +3,36 @@ jump 1 equal display2 null
 jump 2 equal display3 null
 jump 3 equal display4 null
 jump 4 equal display5 null
-set :displaySize.0:display display1
-set :displaySize.0*retaddr 8
+set :displaySize:display display1
+set :displaySize*retaddr 8
 jump 147 always 0 0
-set *tmp0 :displaySize.0*retval
+set *tmp0 :displaySize*retval
 assertequals 176 *tmp0 "large display size"
-set :displaySize.0:display display5
-set :displaySize.0*retaddr 13
+set :displaySize:display display5
+set :displaySize*retaddr 13
 jump 147 always 0 0
-set *tmp1 :displaySize.0*retval
+set *tmp1 :displaySize*retval
 assertequals 80 *tmp1 "small display size"
 set :x %336699cc
-set :unpackcolor.0:packedColor :x
-op div *tmp2 :unpackcolor.0:packedColor %00000001
-set :unpackcolor.0:bits *tmp2
-op and *tmp3 :unpackcolor.0:bits 4278190080
+set :unpackcolor:packedColor :x
+op div *tmp2 :unpackcolor:packedColor %00000001
+set :unpackcolor:bits *tmp2
+op and *tmp3 :unpackcolor:bits 4278190080
 op div *tmp4 *tmp3 4278190080
-set :unpackcolor.0:r *tmp4
-op and *tmp5 :unpackcolor.0:bits 16711680
+set :unpackcolor:r *tmp4
+op and *tmp5 :unpackcolor:bits 16711680
 op div *tmp6 *tmp5 16711680
-set :unpackcolor.0:g *tmp6
-op and *tmp7 :unpackcolor.0:bits 65280
+set :unpackcolor:g *tmp6
+op and *tmp7 :unpackcolor:bits 65280
 op div *tmp8 *tmp7 65280
-set :unpackcolor.0:b *tmp8
-op and *tmp9 :unpackcolor.0:bits 255
+set :unpackcolor:b *tmp8
+op and *tmp9 :unpackcolor:bits 255
 op div *tmp10 *tmp9 255
-set :unpackcolor.0:a *tmp10
-set :r :unpackcolor.0:r
-set :g :unpackcolor.0:g
-set :b :unpackcolor.0:b
-set :a :unpackcolor.0:a
+set :unpackcolor:a *tmp10
+set :r :unpackcolor:r
+set :g :unpackcolor:g
+set :b :unpackcolor:b
+set :a :unpackcolor:a
 assertequals 0.2 :r "red channel"
 assertequals 0.4 :g "green channel"
 assertequals 0.6 :b "blue channel"
@@ -57,8 +57,8 @@ draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
-set :rotateLeft.0:display display1
-sensor *tmp12 :rotateLeft.0:display @type
+set :rotateLeft:display display1
+sensor *tmp12 :rotateLeft:display @type
 set *tmp13 *tmp12
 jump 64 equal *tmp13 @logic-display
 jump 68 always 0 0
@@ -74,8 +74,8 @@ set *tmp11 null
 jump 76 always 0 0
 stop
 set *tmp11 null
-set :rotateRight.0:display display2
-sensor *tmp15 :rotateRight.0:display @type
+set :rotateRight:display display2
+sensor *tmp15 :rotateRight:display @type
 set *tmp16 *tmp15
 jump 81 equal *tmp16 @logic-display
 jump 85 always 0 0
@@ -91,8 +91,8 @@ set *tmp14 null
 jump 93 always 0 0
 stop
 set *tmp14 null
-set :upsideDown.0:display display3
-sensor *tmp18 :upsideDown.0:display @type
+set :upsideDown:display display3
+sensor *tmp18 :upsideDown:display @type
 set *tmp19 *tmp18
 jump 98 equal *tmp19 @logic-display
 jump 102 always 0 0
@@ -108,8 +108,8 @@ set *tmp17 null
 jump 110 always 0 0
 stop
 set *tmp17 null
-set :flipVertical.0:display display4
-sensor *tmp21 :flipVertical.0:display @type
+set :flipVertical:display display4
+sensor *tmp21 :flipVertical:display @type
 set *tmp22 *tmp21
 jump 115 equal *tmp22 @logic-display
 jump 119 always 0 0
@@ -125,8 +125,8 @@ set *tmp20 null
 jump 127 always 0 0
 stop
 set *tmp20 null
-set :flipHorizontal.0:display display5
-sensor *tmp24 :flipHorizontal.0:display @type
+set :flipHorizontal:display display5
+sensor *tmp24 :flipHorizontal:display @type
 set *tmp25 *tmp24
 jump 132 equal *tmp25 @logic-display
 jump 136 always 0 0
@@ -145,19 +145,19 @@ set *tmp23 null
 draw scale 2.2 2.2 0 0 0 0
 draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
 end
-sensor *tmp26 :displaySize.0:display @type
-set :displaySize.0:type *tmp26
-op equal *tmp27 :displaySize.0:type @logic-display
+sensor *tmp26 :displaySize:display @type
+set :displaySize:type *tmp26
+op equal *tmp27 :displaySize:type @logic-display
 jump 153 equal *tmp27 false
 set *tmp28 80
 jump 159 always 0 0
-op equal *tmp29 :displaySize.0:type @large-logic-display
+op equal *tmp29 :displaySize:type @large-logic-display
 jump 157 equal *tmp29 false
 set *tmp30 176
 jump 158 always 0 0
 set *tmp30 null
 set *tmp28 *tmp30
-set :displaySize.0*retval *tmp28
-set @counter :displaySize.0*retaddr
+set :displaySize*retval *tmp28
+set @counter :displaySize*retaddr
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

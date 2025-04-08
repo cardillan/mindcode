@@ -66,115 +66,115 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 in
  
    555 set .LAST_ITEM .ITEM
    556 # "Function: def itemTypeToIcon(in itemType)"
-   557 set :itemTypeToIcon.0:itemType .ITEM
--    * set *tmp167 :itemTypeToIcon.0:itemType
+   557 set :itemTypeToIcon:itemType .ITEM
+-    * set *tmp167 :itemTypeToIcon:itemType
 -    * jump *label89 equal *tmp167 @blast-compound
-+  558 jump *label89 equal :itemTypeToIcon.0:itemType @blast-compound
++  558 jump *label89 equal :itemTypeToIcon:itemType @blast-compound
    559 jump *label88 always
    560 label *label89
    561 set *tmp166 "[]"
    562 jump *label87 always
    563 label *label88
 -    * jump *label91 equal *tmp167 @coal
-+  564 jump *label91 equal :itemTypeToIcon.0:itemType @coal
++  564 jump *label91 equal :itemTypeToIcon:itemType @coal
    565 jump *label90 always
    566 label *label91
    567 set *tmp166 "[]"
    568 jump *label87 always
    569 label *label90
 -    * jump *label93 equal *tmp167 @copper
-+  570 jump *label93 equal :itemTypeToIcon.0:itemType @copper
++  570 jump *label93 equal :itemTypeToIcon:itemType @copper
    571 jump *label92 always
    572 label *label93
    573 set *tmp166 "[]"
    574 jump *label87 always
    575 label *label92
 -    * jump *label95 equal *tmp167 @graphite
-+  576 jump *label95 equal :itemTypeToIcon.0:itemType @graphite
++  576 jump *label95 equal :itemTypeToIcon:itemType @graphite
    577 jump *label94 always
    578 label *label95
    579 set *tmp166 "[]"
    580 jump *label87 always
    581 label *label94
 -    * jump *label97 equal *tmp167 @lead
-+  582 jump *label97 equal :itemTypeToIcon.0:itemType @lead
++  582 jump *label97 equal :itemTypeToIcon:itemType @lead
    583 jump *label96 always
    584 label *label97
    585 set *tmp166 "[]"
    586 jump *label87 always
    587 label *label96
 -    * jump *label99 equal *tmp167 @metaglass
-+  588 jump *label99 equal :itemTypeToIcon.0:itemType @metaglass
++  588 jump *label99 equal :itemTypeToIcon:itemType @metaglass
    589 jump *label98 always
    590 label *label99
    591 set *tmp166 "[]"
    592 jump *label87 always
    593 label *label98
 -    * jump *label101 equal *tmp167 @phase-fabric
-+  594 jump *label101 equal :itemTypeToIcon.0:itemType @phase-fabric
++  594 jump *label101 equal :itemTypeToIcon:itemType @phase-fabric
    595 jump *label100 always
    596 label *label101
    597 set *tmp166 "[]"
    598 jump *label87 always
    599 label *label100
 -    * jump *label103 equal *tmp167 @plastanium
-+  600 jump *label103 equal :itemTypeToIcon.0:itemType @plastanium
++  600 jump *label103 equal :itemTypeToIcon:itemType @plastanium
    601 jump *label102 always
    602 label *label103
    603 set *tmp166 "[]"
    604 jump *label87 always
    605 label *label102
 -    * jump *label105 equal *tmp167 @pyratite
-+  606 jump *label105 equal :itemTypeToIcon.0:itemType @pyratite
++  606 jump *label105 equal :itemTypeToIcon:itemType @pyratite
    607 jump *label104 always
    608 label *label105
    609 set *tmp166 "[]"
    610 jump *label87 always
    611 label *label104
 -    * jump *label107 equal *tmp167 @sand
-+  612 jump *label107 equal :itemTypeToIcon.0:itemType @sand
++  612 jump *label107 equal :itemTypeToIcon:itemType @sand
    613 jump *label106 always
    614 label *label107
    615 set *tmp166 "[]"
    616 jump *label87 always
    617 label *label106
 -    * jump *label109 equal *tmp167 @scrap
-+  618 jump *label109 equal :itemTypeToIcon.0:itemType @scrap
++  618 jump *label109 equal :itemTypeToIcon:itemType @scrap
    619 jump *label108 always
    620 label *label109
    621 set *tmp166 "[]"
    622 jump *label87 always
    623 label *label108
 -    * jump *label111 equal *tmp167 @silicon
-+  624 jump *label111 equal :itemTypeToIcon.0:itemType @silicon
++  624 jump *label111 equal :itemTypeToIcon:itemType @silicon
    625 jump *label110 always
    626 label *label111
    627 set *tmp166 "[]"
    628 jump *label87 always
    629 label *label110
 -    * jump *label113 equal *tmp167 @spore-pod
-+  630 jump *label113 equal :itemTypeToIcon.0:itemType @spore-pod
++  630 jump *label113 equal :itemTypeToIcon:itemType @spore-pod
    631 jump *label112 always
    632 label *label113
    633 set *tmp166 "[]"
    634 jump *label87 always
    635 label *label112
 -    * jump *label115 equal *tmp167 @surge-alloy
-+  636 jump *label115 equal :itemTypeToIcon.0:itemType @surge-alloy
++  636 jump *label115 equal :itemTypeToIcon:itemType @surge-alloy
    637 jump *label114 always
    638 label *label115
    639 set *tmp166 "[]"
    640 jump *label87 always
    641 label *label114
 -    * jump *label117 equal *tmp167 @thorium
-+  642 jump *label117 equal :itemTypeToIcon.0:itemType @thorium
++  642 jump *label117 equal :itemTypeToIcon:itemType @thorium
    643 jump *label116 always
    644 label *label117
    645 set *tmp166 "[]"
    646 jump *label87 always
    647 label *label116
 -    * jump *label119 equal *tmp167 @titanium
-+  648 jump *label119 equal :itemTypeToIcon.0:itemType @titanium
++  648 jump *label119 equal :itemTypeToIcon:itemType @titanium
    649 jump *label118 always
    650 label *label119
    651 set *tmp166 "[]"
@@ -1579,115 +1579,115 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-17 in
  
    466 set .LAST_ITEM .ITEM
    467 # "Function: def itemTypeToIcon(in itemType)"
-   468 set :itemTypeToIcon.0:itemType .ITEM
--    * jump *label89 equal :itemTypeToIcon.0:itemType @blast-compound
+   468 set :itemTypeToIcon:itemType .ITEM
+-    * jump *label89 equal :itemTypeToIcon:itemType @blast-compound
 -    * jump *label88 always
-+  469 jump *label88 notEqual :itemTypeToIcon.0:itemType @blast-compound
++  469 jump *label88 notEqual :itemTypeToIcon:itemType @blast-compound
    470 label *label89
    471 set *tmp166 "[]"
    472 jump *label87 always
    473 label *label88
--    * jump *label91 equal :itemTypeToIcon.0:itemType @coal
+-    * jump *label91 equal :itemTypeToIcon:itemType @coal
 -    * jump *label90 always
-+  474 jump *label90 notEqual :itemTypeToIcon.0:itemType @coal
++  474 jump *label90 notEqual :itemTypeToIcon:itemType @coal
    475 label *label91
    476 set *tmp166 "[]"
    477 jump *label87 always
    478 label *label90
--    * jump *label93 equal :itemTypeToIcon.0:itemType @copper
+-    * jump *label93 equal :itemTypeToIcon:itemType @copper
 -    * jump *label92 always
-+  479 jump *label92 notEqual :itemTypeToIcon.0:itemType @copper
++  479 jump *label92 notEqual :itemTypeToIcon:itemType @copper
    480 label *label93
    481 set *tmp166 "[]"
    482 jump *label87 always
    483 label *label92
--    * jump *label95 equal :itemTypeToIcon.0:itemType @graphite
+-    * jump *label95 equal :itemTypeToIcon:itemType @graphite
 -    * jump *label94 always
-+  484 jump *label94 notEqual :itemTypeToIcon.0:itemType @graphite
++  484 jump *label94 notEqual :itemTypeToIcon:itemType @graphite
    485 label *label95
    486 set *tmp166 "[]"
    487 jump *label87 always
    488 label *label94
--    * jump *label97 equal :itemTypeToIcon.0:itemType @lead
+-    * jump *label97 equal :itemTypeToIcon:itemType @lead
 -    * jump *label96 always
-+  489 jump *label96 notEqual :itemTypeToIcon.0:itemType @lead
++  489 jump *label96 notEqual :itemTypeToIcon:itemType @lead
    490 label *label97
    491 set *tmp166 "[]"
    492 jump *label87 always
    493 label *label96
--    * jump *label99 equal :itemTypeToIcon.0:itemType @metaglass
+-    * jump *label99 equal :itemTypeToIcon:itemType @metaglass
 -    * jump *label98 always
-+  494 jump *label98 notEqual :itemTypeToIcon.0:itemType @metaglass
++  494 jump *label98 notEqual :itemTypeToIcon:itemType @metaglass
    495 label *label99
    496 set *tmp166 "[]"
    497 jump *label87 always
    498 label *label98
--    * jump *label101 equal :itemTypeToIcon.0:itemType @phase-fabric
+-    * jump *label101 equal :itemTypeToIcon:itemType @phase-fabric
 -    * jump *label100 always
-+  499 jump *label100 notEqual :itemTypeToIcon.0:itemType @phase-fabric
++  499 jump *label100 notEqual :itemTypeToIcon:itemType @phase-fabric
    500 label *label101
    501 set *tmp166 "[]"
    502 jump *label87 always
    503 label *label100
--    * jump *label103 equal :itemTypeToIcon.0:itemType @plastanium
+-    * jump *label103 equal :itemTypeToIcon:itemType @plastanium
 -    * jump *label102 always
-+  504 jump *label102 notEqual :itemTypeToIcon.0:itemType @plastanium
++  504 jump *label102 notEqual :itemTypeToIcon:itemType @plastanium
    505 label *label103
    506 set *tmp166 "[]"
    507 jump *label87 always
    508 label *label102
--    * jump *label105 equal :itemTypeToIcon.0:itemType @pyratite
+-    * jump *label105 equal :itemTypeToIcon:itemType @pyratite
 -    * jump *label104 always
-+  509 jump *label104 notEqual :itemTypeToIcon.0:itemType @pyratite
++  509 jump *label104 notEqual :itemTypeToIcon:itemType @pyratite
    510 label *label105
    511 set *tmp166 "[]"
    512 jump *label87 always
    513 label *label104
--    * jump *label107 equal :itemTypeToIcon.0:itemType @sand
+-    * jump *label107 equal :itemTypeToIcon:itemType @sand
 -    * jump *label106 always
-+  514 jump *label106 notEqual :itemTypeToIcon.0:itemType @sand
++  514 jump *label106 notEqual :itemTypeToIcon:itemType @sand
    515 label *label107
    516 set *tmp166 "[]"
    517 jump *label87 always
    518 label *label106
--    * jump *label109 equal :itemTypeToIcon.0:itemType @scrap
+-    * jump *label109 equal :itemTypeToIcon:itemType @scrap
 -    * jump *label108 always
-+  519 jump *label108 notEqual :itemTypeToIcon.0:itemType @scrap
++  519 jump *label108 notEqual :itemTypeToIcon:itemType @scrap
    520 label *label109
    521 set *tmp166 "[]"
    522 jump *label87 always
    523 label *label108
--    * jump *label111 equal :itemTypeToIcon.0:itemType @silicon
+-    * jump *label111 equal :itemTypeToIcon:itemType @silicon
 -    * jump *label110 always
-+  524 jump *label110 notEqual :itemTypeToIcon.0:itemType @silicon
++  524 jump *label110 notEqual :itemTypeToIcon:itemType @silicon
    525 label *label111
    526 set *tmp166 "[]"
    527 jump *label87 always
    528 label *label110
--    * jump *label113 equal :itemTypeToIcon.0:itemType @spore-pod
+-    * jump *label113 equal :itemTypeToIcon:itemType @spore-pod
 -    * jump *label112 always
-+  529 jump *label112 notEqual :itemTypeToIcon.0:itemType @spore-pod
++  529 jump *label112 notEqual :itemTypeToIcon:itemType @spore-pod
    530 label *label113
    531 set *tmp166 "[]"
    532 jump *label87 always
    533 label *label112
--    * jump *label115 equal :itemTypeToIcon.0:itemType @surge-alloy
+-    * jump *label115 equal :itemTypeToIcon:itemType @surge-alloy
 -    * jump *label114 always
-+  534 jump *label114 notEqual :itemTypeToIcon.0:itemType @surge-alloy
++  534 jump *label114 notEqual :itemTypeToIcon:itemType @surge-alloy
    535 label *label115
    536 set *tmp166 "[]"
    537 jump *label87 always
    538 label *label114
--    * jump *label117 equal :itemTypeToIcon.0:itemType @thorium
+-    * jump *label117 equal :itemTypeToIcon:itemType @thorium
 -    * jump *label116 always
-+  539 jump *label116 notEqual :itemTypeToIcon.0:itemType @thorium
++  539 jump *label116 notEqual :itemTypeToIcon:itemType @thorium
    540 label *label117
    541 set *tmp166 "[]"
    542 jump *label87 always
    543 label *label116
--    * jump *label119 equal :itemTypeToIcon.0:itemType @titanium
+-    * jump *label119 equal :itemTypeToIcon:itemType @titanium
 -    * jump *label118 always
-+  544 jump *label118 notEqual :itemTypeToIcon.0:itemType @titanium
++  544 jump *label118 notEqual :itemTypeToIcon:itemType @titanium
    545 label *label119
    546 set *tmp166 "[]"
    547 jump *label87 always
@@ -2668,98 +2668,98 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
    431 set .LAST_ITEM .ITEM
    432 # "Function: def itemTypeToIcon(in itemType)"
-   433 set :itemTypeToIcon.0:itemType .ITEM
--    * jump *label88 notEqual :itemTypeToIcon.0:itemType @blast-compound
+   433 set :itemTypeToIcon:itemType .ITEM
+-    * jump *label88 notEqual :itemTypeToIcon:itemType @blast-compound
 +  434 jump *label88 notEqual .ITEM @blast-compound
    435 label *label89
    436 set *tmp166 "[]"
    437 jump *label87 always
    438 label *label88
--    * jump *label90 notEqual :itemTypeToIcon.0:itemType @coal
+-    * jump *label90 notEqual :itemTypeToIcon:itemType @coal
 +  439 jump *label90 notEqual .ITEM @coal
    440 label *label91
    441 set *tmp166 "[]"
    442 jump *label87 always
    443 label *label90
--    * jump *label92 notEqual :itemTypeToIcon.0:itemType @copper
+-    * jump *label92 notEqual :itemTypeToIcon:itemType @copper
 +  444 jump *label92 notEqual .ITEM @copper
    445 label *label93
    446 set *tmp166 "[]"
    447 jump *label87 always
    448 label *label92
--    * jump *label94 notEqual :itemTypeToIcon.0:itemType @graphite
+-    * jump *label94 notEqual :itemTypeToIcon:itemType @graphite
 +  449 jump *label94 notEqual .ITEM @graphite
    450 label *label95
    451 set *tmp166 "[]"
    452 jump *label87 always
    453 label *label94
--    * jump *label96 notEqual :itemTypeToIcon.0:itemType @lead
+-    * jump *label96 notEqual :itemTypeToIcon:itemType @lead
 +  454 jump *label96 notEqual .ITEM @lead
    455 label *label97
    456 set *tmp166 "[]"
    457 jump *label87 always
    458 label *label96
--    * jump *label98 notEqual :itemTypeToIcon.0:itemType @metaglass
+-    * jump *label98 notEqual :itemTypeToIcon:itemType @metaglass
 +  459 jump *label98 notEqual .ITEM @metaglass
    460 label *label99
    461 set *tmp166 "[]"
    462 jump *label87 always
    463 label *label98
--    * jump *label100 notEqual :itemTypeToIcon.0:itemType @phase-fabric
+-    * jump *label100 notEqual :itemTypeToIcon:itemType @phase-fabric
 +  464 jump *label100 notEqual .ITEM @phase-fabric
    465 label *label101
    466 set *tmp166 "[]"
    467 jump *label87 always
    468 label *label100
--    * jump *label102 notEqual :itemTypeToIcon.0:itemType @plastanium
+-    * jump *label102 notEqual :itemTypeToIcon:itemType @plastanium
 +  469 jump *label102 notEqual .ITEM @plastanium
    470 label *label103
    471 set *tmp166 "[]"
    472 jump *label87 always
    473 label *label102
--    * jump *label104 notEqual :itemTypeToIcon.0:itemType @pyratite
+-    * jump *label104 notEqual :itemTypeToIcon:itemType @pyratite
 +  474 jump *label104 notEqual .ITEM @pyratite
    475 label *label105
    476 set *tmp166 "[]"
    477 jump *label87 always
    478 label *label104
--    * jump *label106 notEqual :itemTypeToIcon.0:itemType @sand
+-    * jump *label106 notEqual :itemTypeToIcon:itemType @sand
 +  479 jump *label106 notEqual .ITEM @sand
    480 label *label107
    481 set *tmp166 "[]"
    482 jump *label87 always
    483 label *label106
--    * jump *label108 notEqual :itemTypeToIcon.0:itemType @scrap
+-    * jump *label108 notEqual :itemTypeToIcon:itemType @scrap
 +  484 jump *label108 notEqual .ITEM @scrap
    485 label *label109
    486 set *tmp166 "[]"
    487 jump *label87 always
    488 label *label108
--    * jump *label110 notEqual :itemTypeToIcon.0:itemType @silicon
+-    * jump *label110 notEqual :itemTypeToIcon:itemType @silicon
 +  489 jump *label110 notEqual .ITEM @silicon
    490 label *label111
    491 set *tmp166 "[]"
    492 jump *label87 always
    493 label *label110
--    * jump *label112 notEqual :itemTypeToIcon.0:itemType @spore-pod
+-    * jump *label112 notEqual :itemTypeToIcon:itemType @spore-pod
 +  494 jump *label112 notEqual .ITEM @spore-pod
    495 label *label113
    496 set *tmp166 "[]"
    497 jump *label87 always
    498 label *label112
--    * jump *label114 notEqual :itemTypeToIcon.0:itemType @surge-alloy
+-    * jump *label114 notEqual :itemTypeToIcon:itemType @surge-alloy
 +  499 jump *label114 notEqual .ITEM @surge-alloy
    500 label *label115
    501 set *tmp166 "[]"
    502 jump *label87 always
    503 label *label114
--    * jump *label116 notEqual :itemTypeToIcon.0:itemType @thorium
+-    * jump *label116 notEqual :itemTypeToIcon:itemType @thorium
 +  504 jump *label116 notEqual .ITEM @thorium
    505 label *label117
    506 set *tmp166 "[]"
    507 jump *label87 always
    508 label *label116
--    * jump *label118 notEqual :itemTypeToIcon.0:itemType @titanium
+-    * jump *label118 notEqual :itemTypeToIcon:itemType @titanium
 +  509 jump *label118 notEqual .ITEM @titanium
    510 label *label119
    511 set *tmp166 "[]"
@@ -2922,7 +2922,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    414 label *label85
    415 set .LAST_ITEM .ITEM
    416 # "Function: def itemTypeToIcon(in itemType)"
--    * set :itemTypeToIcon.0:itemType .ITEM
+-    * set :itemTypeToIcon:itemType .ITEM
    417 jump *label88 notEqual .ITEM @blast-compound
    418 label *label89
    419 set *tmp166 "[]"

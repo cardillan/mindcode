@@ -11,39 +11,39 @@
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
  
-    14 set :testAndSwap.0:i :i
-    15 set :testAndSwap.0:j *tmp1
-    16 set :testAndSwap.0:sorted :sorted
--    * set *tmp3 :testAndSwap.0:i
+    14 set :testAndSwap:i :i
+    15 set :testAndSwap:j *tmp1
+    16 set :testAndSwap:sorted :sorted
+-    * set *tmp3 :testAndSwap:i
 -    * read *tmp4 ARRAY *tmp3
--    * set :testAndSwap.0:a *tmp4
--    * set *tmp5 :testAndSwap.0:j
+-    * set :testAndSwap:a *tmp4
+-    * set *tmp5 :testAndSwap:j
 -    * read *tmp6 ARRAY *tmp5
--    * set :testAndSwap.0:b *tmp6
-+   17 read :testAndSwap.0:a ARRAY :testAndSwap.0:i
-+   18 read :testAndSwap.0:b ARRAY :testAndSwap.0:j
-    19 op greaterThan *tmp7 :testAndSwap.0:a :testAndSwap.0:b
+-    * set :testAndSwap:b *tmp6
++   17 read :testAndSwap:a ARRAY :testAndSwap:i
++   18 read :testAndSwap:b ARRAY :testAndSwap:j
+    19 op greaterThan *tmp7 :testAndSwap:a :testAndSwap:b
     20 jump *label8 equal *tmp7 false
--    * set *tmp9 :testAndSwap.0:i
--    * write :testAndSwap.0:b ARRAY *tmp9
--    * set *tmp11 :testAndSwap.0:j
--    * write :testAndSwap.0:a ARRAY *tmp11
-+   21 write :testAndSwap.0:b ARRAY :testAndSwap.0:i
-+   22 write :testAndSwap.0:a ARRAY :testAndSwap.0:j
+-    * set *tmp9 :testAndSwap:i
+-    * write :testAndSwap:b ARRAY *tmp9
+-    * set *tmp11 :testAndSwap:j
+-    * write :testAndSwap:a ARRAY *tmp11
++   21 write :testAndSwap:b ARRAY :testAndSwap:i
++   22 write :testAndSwap:a ARRAY :testAndSwap:j
     23 set *tmp8 false
     24 jump *label9 always
     25 label *label8
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-2 instructions):
  
-    16 set :testAndSwap.0:sorted :sorted
-    17 read :testAndSwap.0:a ARRAY :testAndSwap.0:i
-    18 read :testAndSwap.0:b ARRAY :testAndSwap.0:j
--    * op greaterThan *tmp7 :testAndSwap.0:a :testAndSwap.0:b
+    16 set :testAndSwap:sorted :sorted
+    17 read :testAndSwap:a ARRAY :testAndSwap:i
+    18 read :testAndSwap:b ARRAY :testAndSwap:j
+-    * op greaterThan *tmp7 :testAndSwap:a :testAndSwap:b
 -    * jump *label8 equal *tmp7 false
-+   19 jump *label8 lessThanEq :testAndSwap.0:a :testAndSwap.0:b
-    20 write :testAndSwap.0:b ARRAY :testAndSwap.0:i
-    21 write :testAndSwap.0:a ARRAY :testAndSwap.0:j
++   19 jump *label8 lessThanEq :testAndSwap:a :testAndSwap:b
+    20 write :testAndSwap:b ARRAY :testAndSwap:i
+    21 write :testAndSwap:a ARRAY :testAndSwap:j
     22 set *tmp8 false
  
     32 jump *label4 always
@@ -64,22 +64,22 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * jump *label6 greaterThanEq :i *tmp0
 +   12 jump *label6 greaterThanEq :i :n
     13 op add *tmp1 :i 1
-    14 set :testAndSwap.0:i :i
-    15 set :testAndSwap.0:j *tmp1
-    16 set :testAndSwap.0:sorted :sorted
--    * read :testAndSwap.0:a ARRAY :testAndSwap.0:i
--    * read :testAndSwap.0:b ARRAY :testAndSwap.0:j
-+   17 read :testAndSwap.0:a ARRAY :i
-+   18 read :testAndSwap.0:b ARRAY *tmp1
-    19 jump *label8 lessThanEq :testAndSwap.0:a :testAndSwap.0:b
--    * write :testAndSwap.0:b ARRAY :testAndSwap.0:i
--    * write :testAndSwap.0:a ARRAY :testAndSwap.0:j
-+   20 write :testAndSwap.0:b ARRAY :i
-+   21 write :testAndSwap.0:a ARRAY *tmp1
+    14 set :testAndSwap:i :i
+    15 set :testAndSwap:j *tmp1
+    16 set :testAndSwap:sorted :sorted
+-    * read :testAndSwap:a ARRAY :testAndSwap:i
+-    * read :testAndSwap:b ARRAY :testAndSwap:j
++   17 read :testAndSwap:a ARRAY :i
++   18 read :testAndSwap:b ARRAY *tmp1
+    19 jump *label8 lessThanEq :testAndSwap:a :testAndSwap:b
+-    * write :testAndSwap:b ARRAY :testAndSwap:i
+-    * write :testAndSwap:a ARRAY :testAndSwap:j
++   20 write :testAndSwap:b ARRAY :i
++   21 write :testAndSwap:a ARRAY *tmp1
     22 set *tmp8 false
     23 jump *label9 always
     24 label *label8
--    * set *tmp8 :testAndSwap.0:sorted
+-    * set *tmp8 :testAndSwap:sorted
 +   25 set *tmp8 :sorted
     26 label *label9
     27 set *tmp2 *tmp8
@@ -111,12 +111,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     10 label *label4
     11 jump *label6 greaterThanEq :i :n
     12 op add *tmp1 :i 1
--    * set :testAndSwap.0:i :i
--    * set :testAndSwap.0:j *tmp1
--    * set :testAndSwap.0:sorted :sorted
-    13 read :testAndSwap.0:a ARRAY :i
-    14 read :testAndSwap.0:b ARRAY *tmp1
-    15 jump *label8 lessThanEq :testAndSwap.0:a :testAndSwap.0:b
+-    * set :testAndSwap:i :i
+-    * set :testAndSwap:j *tmp1
+-    * set :testAndSwap:sorted :sorted
+    13 read :testAndSwap:a ARRAY :i
+    14 read :testAndSwap:b ARRAY *tmp1
+    15 jump *label8 lessThanEq :testAndSwap:a :testAndSwap:b
  
     20 label *label8
     21 set *tmp8 :sorted
@@ -142,8 +142,8 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     11 jump *label6 greaterThanEq :i :n
 +   12 label *label13
     13 op add *tmp1 :i 1
-    14 read :testAndSwap.0:a ARRAY :i
-    15 read :testAndSwap.0:b ARRAY *tmp1
+    14 read :testAndSwap:a ARRAY :i
+    15 read :testAndSwap:b ARRAY *tmp1
  
     25 set :sorted *tmp8
     26 label *label5
@@ -175,12 +175,12 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
     12 label *label13
     13 op add *tmp1 :i 1
 +   14 set :sorted :sorted
-    15 read :testAndSwap.0:a ARRAY :i
-    16 read :testAndSwap.0:b ARRAY *tmp1
--    * jump *label8 lessThanEq :testAndSwap.0:a :testAndSwap.0:b
-+   17 jump *label9 lessThanEq :testAndSwap.0:a :testAndSwap.0:b
-    18 write :testAndSwap.0:b ARRAY :i
-    19 write :testAndSwap.0:a ARRAY *tmp1
+    15 read :testAndSwap:a ARRAY :i
+    16 read :testAndSwap:b ARRAY *tmp1
+-    * jump *label8 lessThanEq :testAndSwap:a :testAndSwap:b
++   17 jump *label9 lessThanEq :testAndSwap:a :testAndSwap:b
+    18 write :testAndSwap:b ARRAY :i
+    19 write :testAndSwap:a ARRAY *tmp1
 -    * set *tmp8 false
 +   20 set :sorted false
     21 jump *label9 always
@@ -195,8 +195,8 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
-    18 write :testAndSwap.0:b ARRAY :i
-    19 write :testAndSwap.0:a ARRAY *tmp1
+    18 write :testAndSwap:b ARRAY :i
+    19 write :testAndSwap:a ARRAY *tmp1
     20 set :sorted false
 -    * jump *label9 always
     21 label *label9
@@ -209,9 +209,9 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-
     12 label *label13
     13 op add *tmp1 :i 1
 -    * set :sorted :sorted
-    14 read :testAndSwap.0:a ARRAY :i
-    15 read :testAndSwap.0:b ARRAY *tmp1
-    16 jump *label9 lessThanEq :testAndSwap.0:a :testAndSwap.0:b
+    14 read :testAndSwap:a ARRAY :i
+    15 read :testAndSwap:b ARRAY *tmp1
+    16 jump *label9 lessThanEq :testAndSwap:a :testAndSwap:b
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -222,7 +222,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
 +   11 jump *label6 greaterThanEq 0 :n
     12 label *label13
     13 op add *tmp1 :i 1
-    14 read :testAndSwap.0:a ARRAY :i
+    14 read :testAndSwap:a ARRAY :i
  
     28 label *label3
     29 set :i 0
@@ -243,7 +243,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     11 label *label13
     12 op add *tmp1 :i 1
  
-    17 write :testAndSwap.0:a ARRAY *tmp1
+    17 write :testAndSwap:a ARRAY *tmp1
     18 set :sorted false
     19 label *label9
 -    * label *label7
@@ -288,11 +288,11 @@ set :i 0
 jump *label6 greaterThanEq 0 :n
 label *label13
 op add *tmp1 :i 1
-read :testAndSwap.0:a ARRAY :i
-read :testAndSwap.0:b ARRAY *tmp1
-jump *label9 lessThanEq :testAndSwap.0:a :testAndSwap.0:b
-write :testAndSwap.0:b ARRAY :i
-write :testAndSwap.0:a ARRAY *tmp1
+read :testAndSwap:a ARRAY :i
+read :testAndSwap:b ARRAY *tmp1
+jump *label9 lessThanEq :testAndSwap:a :testAndSwap:b
+write :testAndSwap:b ARRAY :i
+write :testAndSwap:a ARRAY *tmp1
 set :sorted false
 label *label9
 op add :i :i 1

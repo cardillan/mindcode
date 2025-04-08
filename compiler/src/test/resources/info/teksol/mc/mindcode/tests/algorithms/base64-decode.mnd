@@ -1,0 +1,41 @@
+#set target = 8;
+#set remarks = comments;
+
+param data = "QWxsIEhhaWwgdGhlIEtpbmch";
+
+noinline def charToInt(ch)
+    case ch
+        when 'A' .. 'Z' then ch - 'A';
+        when 'a' .. 'z' then ch - 'a' + 26;
+        when '+', '-' then 62;
+        when '_', '/' then 63;
+    end;
+end;
+
+void printbyte(byte)
+    var ch = byte & 0xFF;
+    if ch then printchar(ch); end;
+end;
+
+void decode64()
+    var index = 0, src;
+    do
+        var bytes = 0;
+        for var i in 0 ... 4 do
+            /// Reading character number $i from input data quartet
+            src = char(data, index);
+            bytes = (bytes << 6) | charToInt(src);
+            index++;
+        end;
+        /// Printing text
+        printbyte(bytes >> 16);
+        printbyte(bytes >> 8);
+        printbyte(bytes);
+    while src != null;
+
+    printflush(message1);
+end;
+
+begin
+    assertPrints("All Hail the King!", decode64(), "Decoded value");
+end;

@@ -16,12 +16,12 @@ Pass 1: speed optimization selection (cost limit 941):
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
-    18 op mod *tmp2 :processNumber.0:n 10
+    18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
-    20 set :processDigit.0:n *tmp2
--    * set *tmp5 :processDigit.0:n
+    20 set :processDigit:n *tmp2
+-    * set *tmp5 :processDigit:n
 -    * jump *label10 equal *tmp5 0
-+   21 jump *label10 equal :processDigit.0:n 0
++   21 jump *label10 equal :processDigit:n 0
     22 jump *label9 always
     23 label *label10
     24 op add .S0 .S0 1
@@ -29,7 +29,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     26 jump *label8 always
     27 label *label9
 -    * jump *label12 equal *tmp5 1
-+   28 jump *label12 equal :processDigit.0:n 1
++   28 jump *label12 equal :processDigit:n 1
     29 jump *label11 always
     30 label *label12
     31 op add .S1 .S1 1
@@ -37,7 +37,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     33 jump *label8 always
     34 label *label11
 -    * jump *label14 equal *tmp5 2
-+   35 jump *label14 equal :processDigit.0:n 2
++   35 jump *label14 equal :processDigit:n 2
     36 jump *label13 always
     37 label *label14
     38 op add .S2 .S2 1
@@ -45,7 +45,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     40 jump *label8 always
     41 label *label13
 -    * jump *label16 equal *tmp5 3
-+   42 jump *label16 equal :processDigit.0:n 3
++   42 jump *label16 equal :processDigit:n 3
     43 jump *label15 always
     44 label *label16
     45 op add .S3 .S3 1
@@ -53,7 +53,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     47 jump *label8 always
     48 label *label15
 -    * jump *label18 equal *tmp5 4
-+   49 jump *label18 equal :processDigit.0:n 4
++   49 jump *label18 equal :processDigit:n 4
     50 jump *label17 always
     51 label *label18
     52 op add .S4 .S4 1
@@ -61,7 +61,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     54 jump *label8 always
     55 label *label17
 -    * jump *label20 equal *tmp5 5
-+   56 jump *label20 equal :processDigit.0:n 5
++   56 jump *label20 equal :processDigit:n 5
     57 jump *label19 always
     58 label *label20
     59 op add .S5 .S5 1
@@ -69,7 +69,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     61 jump *label8 always
     62 label *label19
 -    * jump *label22 equal *tmp5 6
-+   63 jump *label22 equal :processDigit.0:n 6
++   63 jump *label22 equal :processDigit:n 6
     64 jump *label21 always
     65 label *label22
     66 op add .S6 .S6 1
@@ -77,7 +77,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     68 jump *label8 always
     69 label *label21
 -    * jump *label24 equal *tmp5 7
-+   70 jump *label24 equal :processDigit.0:n 7
++   70 jump *label24 equal :processDigit:n 7
     71 jump *label23 always
     72 label *label24
     73 op add .S7 .S7 1
@@ -85,7 +85,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     75 jump *label8 always
     76 label *label23
 -    * jump *label26 equal *tmp5 8
-+   77 jump *label26 equal :processDigit.0:n 8
++   77 jump *label26 equal :processDigit:n 8
     78 jump *label25 always
     79 label *label26
     80 op add .S8 .S8 1
@@ -93,7 +93,7 @@ Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 in
     82 jump *label8 always
     83 label *label25
 -    * jump *label28 equal *tmp5 9
-+   84 jump *label28 equal :processDigit.0:n 9
++   84 jump *label28 equal :processDigit:n 9
     85 jump *label27 always
     86 label *label28
     87 op add .S9 .S9 1
@@ -105,7 +105,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructi
     92 label *label8
 -    * set *tmp3 *tmp4
     93 label *label7
-    94 op idiv :processNumber.0:n :processNumber.0:n 10
+    94 op idiv :processNumber:n :processNumber:n 10
     95 label *label5
     96 jump *label4 always
     97 label *label6
@@ -122,63 +122,63 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-11 instruct
 -    * set *tmp4 .S0
     25 jump *label8 always
     26 label *label9
-    27 jump *label12 equal :processDigit.0:n 1
+    27 jump *label12 equal :processDigit:n 1
     28 jump *label11 always
     29 label *label12
     30 op add .S1 .S1 1
 -    * set *tmp4 .S1
     31 jump *label8 always
     32 label *label11
-    33 jump *label14 equal :processDigit.0:n 2
+    33 jump *label14 equal :processDigit:n 2
     34 jump *label13 always
     35 label *label14
     36 op add .S2 .S2 1
 -    * set *tmp4 .S2
     37 jump *label8 always
     38 label *label13
-    39 jump *label16 equal :processDigit.0:n 3
+    39 jump *label16 equal :processDigit:n 3
     40 jump *label15 always
     41 label *label16
     42 op add .S3 .S3 1
 -    * set *tmp4 .S3
     43 jump *label8 always
     44 label *label15
-    45 jump *label18 equal :processDigit.0:n 4
+    45 jump *label18 equal :processDigit:n 4
     46 jump *label17 always
     47 label *label18
     48 op add .S4 .S4 1
 -    * set *tmp4 .S4
     49 jump *label8 always
     50 label *label17
-    51 jump *label20 equal :processDigit.0:n 5
+    51 jump *label20 equal :processDigit:n 5
     52 jump *label19 always
     53 label *label20
     54 op add .S5 .S5 1
 -    * set *tmp4 .S5
     55 jump *label8 always
     56 label *label19
-    57 jump *label22 equal :processDigit.0:n 6
+    57 jump *label22 equal :processDigit:n 6
     58 jump *label21 always
     59 label *label22
     60 op add .S6 .S6 1
 -    * set *tmp4 .S6
     61 jump *label8 always
     62 label *label21
-    63 jump *label24 equal :processDigit.0:n 7
+    63 jump *label24 equal :processDigit:n 7
     64 jump *label23 always
     65 label *label24
     66 op add .S7 .S7 1
 -    * set *tmp4 .S7
     67 jump *label8 always
     68 label *label23
-    69 jump *label26 equal :processDigit.0:n 8
+    69 jump *label26 equal :processDigit:n 8
     70 jump *label25 always
     71 label *label26
     72 op add .S8 .S8 1
 -    * set *tmp4 .S8
     73 jump *label8 always
     74 label *label25
-    75 jump *label28 equal :processDigit.0:n 9
+    75 jump *label28 equal :processDigit:n 9
     76 jump *label27 always
     77 label *label28
     78 op add .S9 .S9 1
@@ -188,79 +188,79 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-11 instruct
 -    * set *tmp4 null
     81 label *label8
     82 label *label7
-    83 op idiv :processNumber.0:n :processNumber.0:n 10
+    83 op idiv :processNumber:n :processNumber:n 10
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 instructions):
  
-    18 op mod *tmp2 :processNumber.0:n 10
+    18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
-    20 set :processDigit.0:n *tmp2
--    * jump *label10 equal :processDigit.0:n 0
+    20 set :processDigit:n *tmp2
+-    * jump *label10 equal :processDigit:n 0
 -    * jump *label9 always
-+   21 jump *label9 notEqual :processDigit.0:n 0
++   21 jump *label9 notEqual :processDigit:n 0
     22 label *label10
     23 op add .S0 .S0 1
     24 jump *label8 always
     25 label *label9
--    * jump *label12 equal :processDigit.0:n 1
+-    * jump *label12 equal :processDigit:n 1
 -    * jump *label11 always
-+   26 jump *label11 notEqual :processDigit.0:n 1
++   26 jump *label11 notEqual :processDigit:n 1
     27 label *label12
     28 op add .S1 .S1 1
     29 jump *label8 always
     30 label *label11
--    * jump *label14 equal :processDigit.0:n 2
+-    * jump *label14 equal :processDigit:n 2
 -    * jump *label13 always
-+   31 jump *label13 notEqual :processDigit.0:n 2
++   31 jump *label13 notEqual :processDigit:n 2
     32 label *label14
     33 op add .S2 .S2 1
     34 jump *label8 always
     35 label *label13
--    * jump *label16 equal :processDigit.0:n 3
+-    * jump *label16 equal :processDigit:n 3
 -    * jump *label15 always
-+   36 jump *label15 notEqual :processDigit.0:n 3
++   36 jump *label15 notEqual :processDigit:n 3
     37 label *label16
     38 op add .S3 .S3 1
     39 jump *label8 always
     40 label *label15
--    * jump *label18 equal :processDigit.0:n 4
+-    * jump *label18 equal :processDigit:n 4
 -    * jump *label17 always
-+   41 jump *label17 notEqual :processDigit.0:n 4
++   41 jump *label17 notEqual :processDigit:n 4
     42 label *label18
     43 op add .S4 .S4 1
     44 jump *label8 always
     45 label *label17
--    * jump *label20 equal :processDigit.0:n 5
+-    * jump *label20 equal :processDigit:n 5
 -    * jump *label19 always
-+   46 jump *label19 notEqual :processDigit.0:n 5
++   46 jump *label19 notEqual :processDigit:n 5
     47 label *label20
     48 op add .S5 .S5 1
     49 jump *label8 always
     50 label *label19
--    * jump *label22 equal :processDigit.0:n 6
+-    * jump *label22 equal :processDigit:n 6
 -    * jump *label21 always
-+   51 jump *label21 notEqual :processDigit.0:n 6
++   51 jump *label21 notEqual :processDigit:n 6
     52 label *label22
     53 op add .S6 .S6 1
     54 jump *label8 always
     55 label *label21
--    * jump *label24 equal :processDigit.0:n 7
+-    * jump *label24 equal :processDigit:n 7
 -    * jump *label23 always
-+   56 jump *label23 notEqual :processDigit.0:n 7
++   56 jump *label23 notEqual :processDigit:n 7
     57 label *label24
     58 op add .S7 .S7 1
     59 jump *label8 always
     60 label *label23
--    * jump *label26 equal :processDigit.0:n 8
+-    * jump *label26 equal :processDigit:n 8
 -    * jump *label25 always
-+   61 jump *label25 notEqual :processDigit.0:n 8
++   61 jump *label25 notEqual :processDigit:n 8
     62 label *label26
     63 op add .S8 .S8 1
     64 jump *label8 always
     65 label *label25
--    * jump *label28 equal :processDigit.0:n 9
+-    * jump *label28 equal :processDigit:n 9
 -    * jump *label27 always
-+   66 jump *label27 notEqual :processDigit.0:n 9
++   66 jump *label27 notEqual :processDigit:n 9
     67 label *label28
     68 op add .S9 .S9 1
     69 jump *label8 always
@@ -268,18 +268,18 @@ Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-10 in
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
     13 # "Function: def processNumber(in n)"
-    14 set :processNumber.0:n :i
+    14 set :processNumber:n :i
     15 label *label4
--    * op greaterThan *tmp1 :processNumber.0:n 0
+-    * op greaterThan *tmp1 :processNumber:n 0
 -    * jump *label6 equal *tmp1 false
-+   16 jump *label6 lessThanEq :processNumber.0:n 0
-    17 op mod *tmp2 :processNumber.0:n 10
++   16 jump *label6 lessThanEq :processNumber:n 0
+    17 op mod *tmp2 :processNumber:n 10
     18 # "Function: def processDigit(in n)"
-    19 set :processDigit.0:n *tmp2
+    19 set :processDigit:n *tmp2
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    65 jump *label27 notEqual :processDigit.0:n 9
+    65 jump *label27 notEqual :processDigit:n 9
     66 label *label28
     67 op add .S9 .S9 1
 -    * jump *label8 always
@@ -311,64 +311,64 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     11 label *label0
     12 jump *label2 greaterThan :i 100
  
-    17 op mod *tmp2 :processNumber.0:n 10
+    17 op mod *tmp2 :processNumber:n 10
     18 # "Function: def processDigit(in n)"
-    19 set :processDigit.0:n *tmp2
--    * jump *label9 notEqual :processDigit.0:n 0
+    19 set :processDigit:n *tmp2
+-    * jump *label9 notEqual :processDigit:n 0
 +   20 jump *label9 notEqual *tmp2 0
     21 label *label10
     22 op add .S0 .S0 1
     23 jump *label8 always
     24 label *label9
--    * jump *label11 notEqual :processDigit.0:n 1
+-    * jump *label11 notEqual :processDigit:n 1
 +   25 jump *label11 notEqual *tmp2 1
     26 label *label12
     27 op add .S1 .S1 1
     28 jump *label8 always
     29 label *label11
--    * jump *label13 notEqual :processDigit.0:n 2
+-    * jump *label13 notEqual :processDigit:n 2
 +   30 jump *label13 notEqual *tmp2 2
     31 label *label14
     32 op add .S2 .S2 1
     33 jump *label8 always
     34 label *label13
--    * jump *label15 notEqual :processDigit.0:n 3
+-    * jump *label15 notEqual :processDigit:n 3
 +   35 jump *label15 notEqual *tmp2 3
     36 label *label16
     37 op add .S3 .S3 1
     38 jump *label8 always
     39 label *label15
--    * jump *label17 notEqual :processDigit.0:n 4
+-    * jump *label17 notEqual :processDigit:n 4
 +   40 jump *label17 notEqual *tmp2 4
     41 label *label18
     42 op add .S4 .S4 1
     43 jump *label8 always
     44 label *label17
--    * jump *label19 notEqual :processDigit.0:n 5
+-    * jump *label19 notEqual :processDigit:n 5
 +   45 jump *label19 notEqual *tmp2 5
     46 label *label20
     47 op add .S5 .S5 1
     48 jump *label8 always
     49 label *label19
--    * jump *label21 notEqual :processDigit.0:n 6
+-    * jump *label21 notEqual :processDigit:n 6
 +   50 jump *label21 notEqual *tmp2 6
     51 label *label22
     52 op add .S6 .S6 1
     53 jump *label8 always
     54 label *label21
--    * jump *label23 notEqual :processDigit.0:n 7
+-    * jump *label23 notEqual :processDigit:n 7
 +   55 jump *label23 notEqual *tmp2 7
     56 label *label24
     57 op add .S7 .S7 1
     58 jump *label8 always
     59 label *label23
--    * jump *label25 notEqual :processDigit.0:n 8
+-    * jump *label25 notEqual :processDigit:n 8
 +   60 jump *label25 notEqual *tmp2 8
     61 label *label26
     62 op add .S8 .S8 1
     63 jump *label8 always
     64 label *label25
--    * jump *label27 notEqual :processDigit.0:n 9
+-    * jump *label27 notEqual :processDigit:n 9
 +   65 jump *label27 notEqual *tmp2 9
     66 label *label28
     67 op add .S9 .S9 1
@@ -397,10 +397,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     11 label *label0
     12 jump *label2 greaterThan :i 100
  
-    16 jump *label6 lessThanEq :processNumber.0:n 0
-    17 op mod *tmp2 :processNumber.0:n 10
+    16 jump *label6 lessThanEq :processNumber:n 0
+    17 op mod *tmp2 :processNumber:n 10
     18 # "Function: def processDigit(in n)"
--    * set :processDigit.0:n *tmp2
+-    * set :processDigit:n *tmp2
     19 jump *label9 notEqual *tmp2 0
     20 label *label10
     21 op add .S0 .S0 1
@@ -447,19 +447,19 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 -    * jump *label2 greaterThan :i 100
 +   12 label *label29
     13 # "Function: def processNumber(in n)"
-    14 set :processNumber.0:n :i
+    14 set :processNumber:n :i
     15 label *label4
-    16 jump *label6 lessThanEq :processNumber.0:n 0
+    16 jump *label6 lessThanEq :processNumber:n 0
 +   17 label *label30
-    18 op mod *tmp2 :processNumber.0:n 10
+    18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
     20 jump *label9 notEqual *tmp2 0
  
     70 label *label7
-    71 op idiv :processNumber.0:n :processNumber.0:n 10
+    71 op idiv :processNumber:n :processNumber:n 10
     72 label *label5
 -    * jump *label4 always
-+   73 jump *label30 greaterThan :processNumber.0:n 0
++   73 jump *label30 greaterThan :processNumber:n 0
     74 label *label6
     75 label *label3
     76 label *label1
@@ -473,7 +473,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 Modifications by Convert case at line 27:5 (+3 instructions):
  
     17 label *label30
-    18 op mod *tmp2 :processNumber.0:n 10
+    18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
 -    * jump *label9 notEqual *tmp2 0
 +   20 jump *label31 lessThan *tmp2 0
@@ -550,17 +550,17 @@ Modifications by Convert case at line 27:5 (+3 instructions):
 +   82 label *label31
     83 label *label8
     84 label *label7
-    85 op idiv :processNumber.0:n :processNumber.0:n 10
+    85 op idiv :processNumber:n :processNumber:n 10
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     13 # "Function: def processNumber(in n)"
-    14 set :processNumber.0:n :i
+    14 set :processNumber:n :i
     15 label *label4
--    * jump *label6 lessThanEq :processNumber.0:n 0
+-    * jump *label6 lessThanEq :processNumber:n 0
 +   16 jump *label6 lessThanEq :i 0
     17 label *label30
-    18 op mod *tmp2 :processNumber.0:n 10
+    18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
@@ -571,11 +571,11 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label0
     11 label *label29
     12 # "Function: def processNumber(in n)"
-    13 set :processNumber.0:n :i
+    13 set :processNumber:n :i
 -    * label *label4
     14 jump *label6 lessThanEq :i 0
     15 label *label30
-    16 op mod *tmp2 :processNumber.0:n 10
+    16 op mod *tmp2 :processNumber:n 10
  
     41 label *label10
     42 op add .S0 .S0 1
@@ -619,9 +619,9 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     70 label *label31
     71 label *label8
 -    * label *label7
-    72 op idiv :processNumber.0:n :processNumber.0:n 10
+    72 op idiv :processNumber:n :processNumber:n 10
 -    * label *label5
-    73 jump *label30 greaterThan :processNumber.0:n 0
+    73 jump *label30 greaterThan :processNumber:n 0
     74 label *label6
 -    * label *label3
 -    * label *label1
@@ -654,10 +654,10 @@ set .S0 0
 set :i 1
 label *label29
 # "Function: def processNumber(in n)"
-set :processNumber.0:n :i
+set :processNumber:n :i
 jump *label6 lessThanEq :i 0
 label *label30
-op mod *tmp2 :processNumber.0:n 10
+op mod *tmp2 :processNumber:n 10
 # "Function: def processDigit(in n)"
 jump *label31 lessThan *tmp2 0
 jump *label31 greaterThan *tmp2 9
@@ -713,8 +713,8 @@ label *label28
 op add .S9 .S9 1
 label *label31
 label *label8
-op idiv :processNumber.0:n :processNumber.0:n 10
-jump *label30 greaterThan :processNumber.0:n 0
+op idiv :processNumber:n :processNumber:n 10
+jump *label30 greaterThan :processNumber:n 0
 label *label6
 op add :i :i 1
 jump *label29 lessThanEq :i 100

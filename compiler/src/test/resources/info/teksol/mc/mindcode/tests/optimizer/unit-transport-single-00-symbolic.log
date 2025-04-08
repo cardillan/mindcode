@@ -60,7 +60,7 @@ Pass 1: speed optimization selection (cost limit 584):
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-52 instructions):
  
     33 set *tmp10 @unit
-    34 set :rebindUnit.0:first_unit *tmp10
+    34 set :rebindUnit:first_unit *tmp10
     35 jump *label9 always
 -    * set *tmp9 null
     36 jump *label11 always
@@ -596,8 +596,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
     29 op notEqual *tmp8 @unit null
     30 jump *label10 equal *tmp8 false
 -    * set *tmp10 @unit
--    * set :rebindUnit.0:first_unit *tmp10
-+   31 set :rebindUnit.0:first_unit @unit
+-    * set :rebindUnit:first_unit *tmp10
++   31 set :rebindUnit:first_unit @unit
     32 jump *label9 always
     33 jump *label11 always
     34 label *label10
@@ -854,7 +854,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-38 ins
 Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-6 instructions):
  
     24 # "Function: inline def rebindUnit()"
-    25 set :rebindUnit.0:first_unit null
+    25 set :rebindUnit:first_unit null
     26 label *label7
 -    * jump *label9 equal true false
     27 ubind UNIT
@@ -920,13 +920,13 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-42 ins
 -    * jump *label5 equal *tmp5 false
 +   21 jump *label5 notEqual *tmp6 false
     22 # "Function: inline def rebindUnit()"
-    23 set :rebindUnit.0:first_unit null
+    23 set :rebindUnit:first_unit null
     24 label *label7
     25 ubind UNIT
 -    * op notEqual *tmp8 @unit null
 -    * jump *label10 equal *tmp8 false
 +   26 jump *label10 equal @unit null
-    27 set :rebindUnit.0:first_unit @unit
+    27 set :rebindUnit:first_unit @unit
     28 jump *label9 always
     29 jump *label11 always
  
@@ -1294,7 +1294,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-42 ins
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-23 instructions):
  
     26 jump *label10 equal @unit null
-    27 set :rebindUnit.0:first_unit @unit
+    27 set :rebindUnit:first_unit @unit
     28 jump *label9 always
 -    * jump *label11 always
     29 label *label10
@@ -1665,7 +1665,7 @@ Modifications by Replicate loop condition at line 51:1 (+2 instructions):
     23 jump *label5 notEqual *tmp6 false
 +   24 label *label138
     25 # "Function: inline def rebindUnit()"
-    26 set :rebindUnit.0:first_unit null
+    26 set :rebindUnit:first_unit null
     27 label *label7
  
     83 label *label17
@@ -1870,7 +1870,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     19 op strictEqual *tmp6 *tmp4 0
     20 jump *label5 notEqual *tmp6 false
  
-    27 set :rebindUnit.0:first_unit @unit
+    27 set :rebindUnit:first_unit @unit
     28 jump *label9 always
     29 label *label10
 -    * label *label11
@@ -1892,8 +1892,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     43 print "[gold]Looking for old unit..."
     44 printflush message1
 -    * label *label13
-    45 op notEqual *tmp14 @unit :rebindUnit.0:first_unit
-    46 sensor *tmp15 :rebindUnit.0:first_unit @dead
+    45 op notEqual *tmp14 @unit :rebindUnit:first_unit
+    46 sensor *tmp15 :rebindUnit:first_unit @dead
     47 op strictEqual *tmp16 *tmp15 0
     48 op land *tmp17 *tmp14 *tmp16
     49 jump *label12 notEqual *tmp17 false
@@ -2416,7 +2416,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
     13 sensor *tmp2 switch1 @enabled
     14 jump *label136 equal *tmp2 false
  
-    25 set :rebindUnit.0:first_unit @unit
+    25 set :rebindUnit:first_unit @unit
     26 jump *label9 always
     27 label *label10
 -    * print "[salmon]No unit of type "
@@ -2666,11 +2666,11 @@ op strictEqual *tmp6 *tmp4 0
 jump *label5 notEqual *tmp6 false
 label *label138
 # "Function: inline def rebindUnit()"
-set :rebindUnit.0:first_unit null
+set :rebindUnit:first_unit null
 label *label7
 ubind UNIT
 jump *label10 equal @unit null
-set :rebindUnit.0:first_unit @unit
+set :rebindUnit:first_unit @unit
 jump *label9 always
 label *label10
 print "[salmon]No unit of type {0} found. 1"
@@ -2684,8 +2684,8 @@ jump *label6 equal *tmp11 @this
 ubind UNIT
 print "[gold]Looking for old unit..."
 printflush message1
-op notEqual *tmp14 @unit :rebindUnit.0:first_unit
-sensor *tmp15 :rebindUnit.0:first_unit @dead
+op notEqual *tmp14 @unit :rebindUnit:first_unit
+sensor *tmp15 :rebindUnit:first_unit @dead
 op strictEqual *tmp16 *tmp15 0
 op land *tmp17 *tmp14 *tmp16
 jump *label12 notEqual *tmp17 false

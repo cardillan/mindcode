@@ -12,119 +12,119 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-15 instruct
  
     54 print *tmp8
     55 print *tmp12
-    56 assertprints :compare.0:expected :compare.0:title
+    56 assertprints :compare:expected :compare:title
 -    * set *tmp0 null
     57 label *label0
     58 # "Function: inline def compare(in title, in a, in b, in expected)"
-    59 set :compare.1:title "comparison 2"
+    59 set :compare47:title "comparison 2"
  
    111 print *tmp22
    112 print *tmp26
-   113 assertprints :compare.1:expected :compare.1:title
+   113 assertprints :compare47:expected :compare47:title
 -    * set *tmp14 null
    114 label *label13
    115 # "Function: inline def compare(in title, in a, in b, in expected)"
-   116 set :compare.2:title "comparison 3"
+   116 set :compare48:title "comparison 3"
  
    168 print *tmp36
    169 print *tmp40
-   170 assertprints :compare.2:expected :compare.2:title
+   170 assertprints :compare48:expected :compare48:title
 -    * set *tmp28 null
    171 label *label26
    172 # "Function: inline def compare(in title, in a, in b, in expected)"
-   173 set :compare.3:title "comparison 4"
+   173 set :compare49:title "comparison 4"
  
    225 print *tmp50
    226 print *tmp54
-   227 assertprints :compare.3:expected :compare.3:title
+   227 assertprints :compare49:expected :compare49:title
 -    * set *tmp42 null
    228 label *label39
    229 # "Function: inline def compare(in title, in a, in b, in expected)"
-   230 set :compare.4:title "comparison 5"
+   230 set :compare50:title "comparison 5"
  
    282 print *tmp64
    283 print *tmp68
-   284 assertprints :compare.4:expected :compare.4:title
+   284 assertprints :compare50:expected :compare50:title
 -    * set *tmp56 null
    285 label *label52
    286 # "Function: inline def compare(in title, in a, in b, in expected)"
-   287 set :compare.5:title "comparison 6"
+   287 set :compare51:title "comparison 6"
  
    339 print *tmp78
    340 print *tmp82
-   341 assertprints :compare.5:expected :compare.5:title
+   341 assertprints :compare51:expected :compare51:title
 -    * set *tmp70 null
    342 label *label65
    343 # "Function: inline def compare(in title, in a, in b, in expected)"
-   344 set :compare.6:title "comparison 7"
+   344 set :compare52:title "comparison 7"
  
    396 print *tmp92
    397 print *tmp96
-   398 assertprints :compare.6:expected :compare.6:title
+   398 assertprints :compare52:expected :compare52:title
 -    * set *tmp84 null
    399 label *label78
    400 # "Function: inline def compare(in title, in a, in b, in expected)"
-   401 set :compare.7:title "comparison 8"
+   401 set :compare53:title "comparison 8"
  
    453 print *tmp106
    454 print *tmp110
-   455 assertprints :compare.7:expected :compare.7:title
+   455 assertprints :compare53:expected :compare53:title
 -    * set *tmp98 null
    456 label *label91
    457 # "Function: inline def compare(in title, in a, in b, in expected)"
-   458 set :compare.8:title "comparison 9"
+   458 set :compare54:title "comparison 9"
  
    510 print *tmp120
    511 print *tmp124
-   512 assertprints :compare.8:expected :compare.8:title
+   512 assertprints :compare54:expected :compare54:title
 -    * set *tmp112 null
    513 label *label104
    514 # "Function: inline def compare(in title, in a, in b, in expected)"
-   515 set :compare.9:title "comparison 10"
+   515 set :compare55:title "comparison 10"
  
    567 print *tmp134
    568 print *tmp138
-   569 assertprints :compare.9:expected :compare.9:title
+   569 assertprints :compare55:expected :compare55:title
 -    * set *tmp126 null
    570 label *label117
    571 # "Function: inline def compare(in title, in a, in b, in expected)"
-   572 set :compare.10:title "comparison 11"
+   572 set :compare56:title "comparison 11"
  
    624 print *tmp148
    625 print *tmp152
-   626 assertprints :compare.10:expected :compare.10:title
+   626 assertprints :compare56:expected :compare56:title
 -    * set *tmp140 null
    627 label *label130
    628 # "Function: inline def compare(in title, in a, in b, in expected)"
-   629 set :compare.11:title "comparison 12"
+   629 set :compare57:title "comparison 12"
  
    681 print *tmp162
    682 print *tmp166
-   683 assertprints :compare.11:expected :compare.11:title
+   683 assertprints :compare57:expected :compare57:title
 -    * set *tmp154 null
    684 label *label143
    685 # "Function: inline def compare(in title, in a, in b, in expected)"
-   686 set :compare.12:title "comparison 13"
+   686 set :compare58:title "comparison 13"
  
    738 print *tmp176
    739 print *tmp180
-   740 assertprints :compare.12:expected :compare.12:title
+   740 assertprints :compare58:expected :compare58:title
 -    * set *tmp168 null
    741 label *label156
    742 # "Function: inline def compare(in title, in a, in b, in expected)"
-   743 set :compare.13:title "comparison 14"
+   743 set :compare59:title "comparison 14"
  
    795 print *tmp190
    796 print *tmp194
-   797 assertprints :compare.13:expected :compare.13:title
+   797 assertprints :compare59:expected :compare59:title
 -    * set *tmp182 null
    798 label *label169
    799 # "Function: inline def compare(in title, in a, in b, in expected)"
-   800 set :compare.14:title "comparison 15"
+   800 set :compare60:title "comparison 15"
  
    852 print *tmp204
    853 print *tmp208
-   854 assertprints :compare.14:expected :compare.14:title
+   854 assertprints :compare60:expected :compare60:title
 -    * set *tmp196 null
    855 label *label182
    856 stop
@@ -132,15 +132,15 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-15 instruct
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     4 set :compare.0:b 0
-     5 set :compare.0:expected "TFFT"
+     4 set :compare:b 0
+     5 set :compare:expected "TFFT"
      6 assertflush
--    * op equal *tmp1 :compare.0:a :compare.0:b
+-    * op equal *tmp1 :compare:a :compare:b
 +    7 op equal *tmp1 null 0
      8 # "Function: inline def eval(in b)"
--    * set :eval.0:b *tmp1
--    * jump *label2 equal :eval.0:b false
-+    9 set :eval.0:b true
+-    * set :eval:b *tmp1
+-    * jump *label2 equal :eval:b false
++    9 set :eval:b true
 +   10 jump *label2 equal *tmp1 false
     11 set *tmp3 "T"
     12 jump *label3 always
@@ -149,12 +149,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     15 label *label3
     16 set *tmp2 *tmp3
     17 label *label1
--    * op notEqual *tmp4 :compare.0:a :compare.0:b
+-    * op notEqual *tmp4 :compare:a :compare:b
 +   18 op notEqual *tmp4 null 0
     19 # "Function: inline def eval(in b)"
--    * set :eval.1:b *tmp4
--    * jump *label5 equal :eval.1:b false
-+   20 set :eval.1:b false
+-    * set :eval47:b *tmp4
+-    * jump *label5 equal :eval47:b false
++   20 set :eval47:b false
 +   21 jump *label5 equal *tmp4 false
     22 set *tmp6 "T"
     23 jump *label6 always
@@ -163,12 +163,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     26 label *label6
     27 set *tmp5 *tmp6
     28 label *label4
--    * op strictEqual *tmp7 :compare.0:a :compare.0:b
+-    * op strictEqual *tmp7 :compare:a :compare:b
 +   29 op strictEqual *tmp7 null 0
     30 # "Function: inline def eval(in b)"
--    * set :eval.2:b *tmp7
--    * jump *label8 equal :eval.2:b false
-+   31 set :eval.2:b false
+-    * set :eval48:b *tmp7
+-    * jump *label8 equal :eval48:b false
++   31 set :eval48:b false
 +   32 jump *label8 equal *tmp7 false
     33 set *tmp9 "T"
     34 jump *label9 always
@@ -177,14 +177,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     37 label *label9
     38 set *tmp8 *tmp9
     39 label *label7
--    * op strictEqual *tmp11 :compare.0:a :compare.0:b
+-    * op strictEqual *tmp11 :compare:a :compare:b
 -    * op equal *tmp10 *tmp11 false
 +   40 op strictEqual *tmp11 null 0
 +   41 op equal *tmp10 false false
     42 # "Function: inline def eval(in b)"
--    * set :eval.3:b *tmp10
--    * jump *label11 equal :eval.3:b false
-+   43 set :eval.3:b true
+-    * set :eval49:b *tmp10
+-    * jump *label11 equal :eval49:b false
++   43 set :eval49:b true
 +   44 jump *label11 equal *tmp10 false
     45 set *tmp13 "T"
     46 jump *label12 always
@@ -197,7 +197,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp5
 -    * print *tmp8
 -    * print *tmp12
--    * assertprints :compare.0:expected :compare.0:title
+-    * assertprints :compare:expected :compare:title
 +   52 print *tmp3
 +   53 print *tmp6
 +   54 print *tmp9
@@ -205,17 +205,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   56 assertprints "TFFT" "comparison 1"
     57 label *label0
     58 # "Function: inline def compare(in title, in a, in b, in expected)"
-    59 set :compare.1:title "comparison 2"
+    59 set :compare47:title "comparison 2"
  
-    61 set :compare.1:b 1
-    62 set :compare.1:expected "FTFT"
+    61 set :compare47:b 1
+    62 set :compare47:expected "FTFT"
     63 assertflush
--    * op equal *tmp15 :compare.1:a :compare.1:b
+-    * op equal *tmp15 :compare47:a :compare47:b
 +   64 op equal *tmp15 null 1
     65 # "Function: inline def eval(in b)"
--    * set :eval.4:b *tmp15
--    * jump *label15 equal :eval.4:b false
-+   66 set :eval.4:b false
+-    * set :eval50:b *tmp15
+-    * jump *label15 equal :eval50:b false
++   66 set :eval50:b false
 +   67 jump *label15 equal *tmp15 false
     68 set *tmp17 "T"
     69 jump *label16 always
@@ -224,12 +224,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     72 label *label16
     73 set *tmp16 *tmp17
     74 label *label14
--    * op notEqual *tmp18 :compare.1:a :compare.1:b
+-    * op notEqual *tmp18 :compare47:a :compare47:b
 +   75 op notEqual *tmp18 null 1
     76 # "Function: inline def eval(in b)"
--    * set :eval.5:b *tmp18
--    * jump *label18 equal :eval.5:b false
-+   77 set :eval.5:b true
+-    * set :eval51:b *tmp18
+-    * jump *label18 equal :eval51:b false
++   77 set :eval51:b true
 +   78 jump *label18 equal *tmp18 false
     79 set *tmp20 "T"
     80 jump *label19 always
@@ -238,12 +238,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     83 label *label19
     84 set *tmp19 *tmp20
     85 label *label17
--    * op strictEqual *tmp21 :compare.1:a :compare.1:b
+-    * op strictEqual *tmp21 :compare47:a :compare47:b
 +   86 op strictEqual *tmp21 null 1
     87 # "Function: inline def eval(in b)"
--    * set :eval.6:b *tmp21
--    * jump *label21 equal :eval.6:b false
-+   88 set :eval.6:b false
+-    * set :eval52:b *tmp21
+-    * jump *label21 equal :eval52:b false
++   88 set :eval52:b false
 +   89 jump *label21 equal *tmp21 false
     90 set *tmp23 "T"
     91 jump *label22 always
@@ -252,14 +252,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     94 label *label22
     95 set *tmp22 *tmp23
     96 label *label20
--    * op strictEqual *tmp25 :compare.1:a :compare.1:b
+-    * op strictEqual *tmp25 :compare47:a :compare47:b
 -    * op equal *tmp24 *tmp25 false
 +   97 op strictEqual *tmp25 null 1
 +   98 op equal *tmp24 false false
     99 # "Function: inline def eval(in b)"
--    * set :eval.7:b *tmp24
--    * jump *label24 equal :eval.7:b false
-+  100 set :eval.7:b true
+-    * set :eval53:b *tmp24
+-    * jump *label24 equal :eval53:b false
++  100 set :eval53:b true
 +  101 jump *label24 equal *tmp24 false
    102 set *tmp27 "T"
    103 jump *label25 always
@@ -272,7 +272,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp19
 -    * print *tmp22
 -    * print *tmp26
--    * assertprints :compare.1:expected :compare.1:title
+-    * assertprints :compare47:expected :compare47:title
 +  109 print *tmp17
 +  110 print *tmp20
 +  111 print *tmp23
@@ -280,17 +280,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  113 assertprints "FTFT" "comparison 2"
    114 label *label13
    115 # "Function: inline def compare(in title, in a, in b, in expected)"
-   116 set :compare.2:title "comparison 3"
+   116 set :compare48:title "comparison 3"
  
-   118 set :compare.2:b 2
-   119 set :compare.2:expected "FTFT"
+   118 set :compare48:b 2
+   119 set :compare48:expected "FTFT"
    120 assertflush
--    * op equal *tmp29 :compare.2:a :compare.2:b
+-    * op equal *tmp29 :compare48:a :compare48:b
 +  121 op equal *tmp29 null 2
    122 # "Function: inline def eval(in b)"
--    * set :eval.8:b *tmp29
--    * jump *label28 equal :eval.8:b false
-+  123 set :eval.8:b false
+-    * set :eval54:b *tmp29
+-    * jump *label28 equal :eval54:b false
++  123 set :eval54:b false
 +  124 jump *label28 equal *tmp29 false
    125 set *tmp31 "T"
    126 jump *label29 always
@@ -299,12 +299,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    129 label *label29
    130 set *tmp30 *tmp31
    131 label *label27
--    * op notEqual *tmp32 :compare.2:a :compare.2:b
+-    * op notEqual *tmp32 :compare48:a :compare48:b
 +  132 op notEqual *tmp32 null 2
    133 # "Function: inline def eval(in b)"
--    * set :eval.9:b *tmp32
--    * jump *label31 equal :eval.9:b false
-+  134 set :eval.9:b true
+-    * set :eval55:b *tmp32
+-    * jump *label31 equal :eval55:b false
++  134 set :eval55:b true
 +  135 jump *label31 equal *tmp32 false
    136 set *tmp34 "T"
    137 jump *label32 always
@@ -313,12 +313,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    140 label *label32
    141 set *tmp33 *tmp34
    142 label *label30
--    * op strictEqual *tmp35 :compare.2:a :compare.2:b
+-    * op strictEqual *tmp35 :compare48:a :compare48:b
 +  143 op strictEqual *tmp35 null 2
    144 # "Function: inline def eval(in b)"
--    * set :eval.10:b *tmp35
--    * jump *label34 equal :eval.10:b false
-+  145 set :eval.10:b false
+-    * set :eval56:b *tmp35
+-    * jump *label34 equal :eval56:b false
++  145 set :eval56:b false
 +  146 jump *label34 equal *tmp35 false
    147 set *tmp37 "T"
    148 jump *label35 always
@@ -327,14 +327,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    151 label *label35
    152 set *tmp36 *tmp37
    153 label *label33
--    * op strictEqual *tmp39 :compare.2:a :compare.2:b
+-    * op strictEqual *tmp39 :compare48:a :compare48:b
 -    * op equal *tmp38 *tmp39 false
 +  154 op strictEqual *tmp39 null 2
 +  155 op equal *tmp38 false false
    156 # "Function: inline def eval(in b)"
--    * set :eval.11:b *tmp38
--    * jump *label37 equal :eval.11:b false
-+  157 set :eval.11:b true
+-    * set :eval57:b *tmp38
+-    * jump *label37 equal :eval57:b false
++  157 set :eval57:b true
 +  158 jump *label37 equal *tmp38 false
    159 set *tmp41 "T"
    160 jump *label38 always
@@ -347,7 +347,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp33
 -    * print *tmp36
 -    * print *tmp40
--    * assertprints :compare.2:expected :compare.2:title
+-    * assertprints :compare48:expected :compare48:title
 +  166 print *tmp31
 +  167 print *tmp34
 +  168 print *tmp37
@@ -355,16 +355,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  170 assertprints "FTFT" "comparison 3"
    171 label *label26
    172 # "Function: inline def compare(in title, in a, in b, in expected)"
-   173 set :compare.3:title "comparison 4"
+   173 set :compare49:title "comparison 4"
  
-   175 set :compare.3:b 0
-   176 set :compare.3:expected "FTFT"
+   175 set :compare49:b 0
+   176 set :compare49:expected "FTFT"
    177 assertflush
--    * op equal *tmp43 :compare.3:a :compare.3:b
+-    * op equal *tmp43 :compare49:a :compare49:b
 +  178 op equal *tmp43 @coal 0
    179 # "Function: inline def eval(in b)"
-   180 set :eval.12:b *tmp43
--    * jump *label41 equal :eval.12:b false
+   180 set :eval58:b *tmp43
+-    * jump *label41 equal :eval58:b false
 +  181 jump *label41 equal *tmp43 false
    182 set *tmp45 "T"
    183 jump *label42 always
@@ -373,11 +373,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    186 label *label42
    187 set *tmp44 *tmp45
    188 label *label40
--    * op notEqual *tmp46 :compare.3:a :compare.3:b
+-    * op notEqual *tmp46 :compare49:a :compare49:b
 +  189 op notEqual *tmp46 @coal 0
    190 # "Function: inline def eval(in b)"
-   191 set :eval.13:b *tmp46
--    * jump *label44 equal :eval.13:b false
+   191 set :eval59:b *tmp46
+-    * jump *label44 equal :eval59:b false
 +  192 jump *label44 equal *tmp46 false
    193 set *tmp48 "T"
    194 jump *label45 always
@@ -386,11 +386,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    197 label *label45
    198 set *tmp47 *tmp48
    199 label *label43
--    * op strictEqual *tmp49 :compare.3:a :compare.3:b
+-    * op strictEqual *tmp49 :compare49:a :compare49:b
 +  200 op strictEqual *tmp49 @coal 0
    201 # "Function: inline def eval(in b)"
-   202 set :eval.14:b *tmp49
--    * jump *label47 equal :eval.14:b false
+   202 set :eval60:b *tmp49
+-    * jump *label47 equal :eval60:b false
 +  203 jump *label47 equal *tmp49 false
    204 set *tmp51 "T"
    205 jump *label48 always
@@ -399,13 +399,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    208 label *label48
    209 set *tmp50 *tmp51
    210 label *label46
--    * op strictEqual *tmp53 :compare.3:a :compare.3:b
+-    * op strictEqual *tmp53 :compare49:a :compare49:b
 -    * op equal *tmp52 *tmp53 false
 +  211 op strictEqual *tmp53 @coal 0
 +  212 op equal *tmp52 *tmp49 false
    213 # "Function: inline def eval(in b)"
-   214 set :eval.15:b *tmp52
--    * jump *label50 equal :eval.15:b false
+   214 set :eval61:b *tmp52
+-    * jump *label50 equal :eval61:b false
 +  215 jump *label50 equal *tmp52 false
    216 set *tmp55 "T"
    217 jump *label51 always
@@ -418,7 +418,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp47
 -    * print *tmp50
 -    * print *tmp54
--    * assertprints :compare.3:expected :compare.3:title
+-    * assertprints :compare49:expected :compare49:title
 +  223 print *tmp45
 +  224 print *tmp48
 +  225 print *tmp51
@@ -426,16 +426,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  227 assertprints "FTFT" "comparison 4"
    228 label *label39
    229 # "Function: inline def compare(in title, in a, in b, in expected)"
-   230 set :compare.4:title "comparison 5"
+   230 set :compare50:title "comparison 5"
  
-   232 set :compare.4:b 1
-   233 set :compare.4:expected "TFFT"
+   232 set :compare50:b 1
+   233 set :compare50:expected "TFFT"
    234 assertflush
--    * op equal *tmp57 :compare.4:a :compare.4:b
+-    * op equal *tmp57 :compare50:a :compare50:b
 +  235 op equal *tmp57 @coal 1
    236 # "Function: inline def eval(in b)"
-   237 set :eval.16:b *tmp57
--    * jump *label54 equal :eval.16:b false
+   237 set :eval62:b *tmp57
+-    * jump *label54 equal :eval62:b false
 +  238 jump *label54 equal *tmp57 false
    239 set *tmp59 "T"
    240 jump *label55 always
@@ -444,11 +444,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    243 label *label55
    244 set *tmp58 *tmp59
    245 label *label53
--    * op notEqual *tmp60 :compare.4:a :compare.4:b
+-    * op notEqual *tmp60 :compare50:a :compare50:b
 +  246 op notEqual *tmp60 @coal 1
    247 # "Function: inline def eval(in b)"
-   248 set :eval.17:b *tmp60
--    * jump *label57 equal :eval.17:b false
+   248 set :eval63:b *tmp60
+-    * jump *label57 equal :eval63:b false
 +  249 jump *label57 equal *tmp60 false
    250 set *tmp62 "T"
    251 jump *label58 always
@@ -457,11 +457,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    254 label *label58
    255 set *tmp61 *tmp62
    256 label *label56
--    * op strictEqual *tmp63 :compare.4:a :compare.4:b
+-    * op strictEqual *tmp63 :compare50:a :compare50:b
 +  257 op strictEqual *tmp63 @coal 1
    258 # "Function: inline def eval(in b)"
-   259 set :eval.18:b *tmp63
--    * jump *label60 equal :eval.18:b false
+   259 set :eval64:b *tmp63
+-    * jump *label60 equal :eval64:b false
 +  260 jump *label60 equal *tmp63 false
    261 set *tmp65 "T"
    262 jump *label61 always
@@ -470,13 +470,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    265 label *label61
    266 set *tmp64 *tmp65
    267 label *label59
--    * op strictEqual *tmp67 :compare.4:a :compare.4:b
+-    * op strictEqual *tmp67 :compare50:a :compare50:b
 -    * op equal *tmp66 *tmp67 false
 +  268 op strictEqual *tmp67 @coal 1
 +  269 op equal *tmp66 *tmp63 false
    270 # "Function: inline def eval(in b)"
-   271 set :eval.19:b *tmp66
--    * jump *label63 equal :eval.19:b false
+   271 set :eval65:b *tmp66
+-    * jump *label63 equal :eval65:b false
 +  272 jump *label63 equal *tmp66 false
    273 set *tmp69 "T"
    274 jump *label64 always
@@ -489,7 +489,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp61
 -    * print *tmp64
 -    * print *tmp68
--    * assertprints :compare.4:expected :compare.4:title
+-    * assertprints :compare50:expected :compare50:title
 +  280 print *tmp59
 +  281 print *tmp62
 +  282 print *tmp65
@@ -497,16 +497,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  284 assertprints "TFFT" "comparison 5"
    285 label *label52
    286 # "Function: inline def compare(in title, in a, in b, in expected)"
-   287 set :compare.5:title "comparison 6"
+   287 set :compare51:title "comparison 6"
  
-   289 set :compare.5:b 2
-   290 set :compare.5:expected "FTFT"
+   289 set :compare51:b 2
+   290 set :compare51:expected "FTFT"
    291 assertflush
--    * op equal *tmp71 :compare.5:a :compare.5:b
+-    * op equal *tmp71 :compare51:a :compare51:b
 +  292 op equal *tmp71 @coal 2
    293 # "Function: inline def eval(in b)"
-   294 set :eval.20:b *tmp71
--    * jump *label67 equal :eval.20:b false
+   294 set :eval66:b *tmp71
+-    * jump *label67 equal :eval66:b false
 +  295 jump *label67 equal *tmp71 false
    296 set *tmp73 "T"
    297 jump *label68 always
@@ -515,11 +515,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    300 label *label68
    301 set *tmp72 *tmp73
    302 label *label66
--    * op notEqual *tmp74 :compare.5:a :compare.5:b
+-    * op notEqual *tmp74 :compare51:a :compare51:b
 +  303 op notEqual *tmp74 @coal 2
    304 # "Function: inline def eval(in b)"
-   305 set :eval.21:b *tmp74
--    * jump *label70 equal :eval.21:b false
+   305 set :eval67:b *tmp74
+-    * jump *label70 equal :eval67:b false
 +  306 jump *label70 equal *tmp74 false
    307 set *tmp76 "T"
    308 jump *label71 always
@@ -528,11 +528,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    311 label *label71
    312 set *tmp75 *tmp76
    313 label *label69
--    * op strictEqual *tmp77 :compare.5:a :compare.5:b
+-    * op strictEqual *tmp77 :compare51:a :compare51:b
 +  314 op strictEqual *tmp77 @coal 2
    315 # "Function: inline def eval(in b)"
-   316 set :eval.22:b *tmp77
--    * jump *label73 equal :eval.22:b false
+   316 set :eval68:b *tmp77
+-    * jump *label73 equal :eval68:b false
 +  317 jump *label73 equal *tmp77 false
    318 set *tmp79 "T"
    319 jump *label74 always
@@ -541,13 +541,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    322 label *label74
    323 set *tmp78 *tmp79
    324 label *label72
--    * op strictEqual *tmp81 :compare.5:a :compare.5:b
+-    * op strictEqual *tmp81 :compare51:a :compare51:b
 -    * op equal *tmp80 *tmp81 false
 +  325 op strictEqual *tmp81 @coal 2
 +  326 op equal *tmp80 *tmp77 false
    327 # "Function: inline def eval(in b)"
-   328 set :eval.23:b *tmp80
--    * jump *label76 equal :eval.23:b false
+   328 set :eval69:b *tmp80
+-    * jump *label76 equal :eval69:b false
 +  329 jump *label76 equal *tmp80 false
    330 set *tmp83 "T"
    331 jump *label77 always
@@ -560,7 +560,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp75
 -    * print *tmp78
 -    * print *tmp82
--    * assertprints :compare.5:expected :compare.5:title
+-    * assertprints :compare51:expected :compare51:title
 +  337 print *tmp73
 +  338 print *tmp76
 +  339 print *tmp79
@@ -568,16 +568,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  341 assertprints "FTFT" "comparison 6"
    342 label *label65
    343 # "Function: inline def compare(in title, in a, in b, in expected)"
-   344 set :compare.6:title "comparison 7"
+   344 set :compare52:title "comparison 7"
  
-   346 set :compare.6:b @lead
-   347 set :compare.6:expected "FTFT"
+   346 set :compare52:b @lead
+   347 set :compare52:expected "FTFT"
    348 assertflush
--    * op equal *tmp85 :compare.6:a :compare.6:b
+-    * op equal *tmp85 :compare52:a :compare52:b
 +  349 op equal *tmp85 @coal @lead
    350 # "Function: inline def eval(in b)"
-   351 set :eval.24:b *tmp85
--    * jump *label80 equal :eval.24:b false
+   351 set :eval70:b *tmp85
+-    * jump *label80 equal :eval70:b false
 +  352 jump *label80 equal *tmp85 false
    353 set *tmp87 "T"
    354 jump *label81 always
@@ -586,11 +586,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    357 label *label81
    358 set *tmp86 *tmp87
    359 label *label79
--    * op notEqual *tmp88 :compare.6:a :compare.6:b
+-    * op notEqual *tmp88 :compare52:a :compare52:b
 +  360 op notEqual *tmp88 @coal @lead
    361 # "Function: inline def eval(in b)"
-   362 set :eval.25:b *tmp88
--    * jump *label83 equal :eval.25:b false
+   362 set :eval71:b *tmp88
+-    * jump *label83 equal :eval71:b false
 +  363 jump *label83 equal *tmp88 false
    364 set *tmp90 "T"
    365 jump *label84 always
@@ -599,11 +599,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    368 label *label84
    369 set *tmp89 *tmp90
    370 label *label82
--    * op strictEqual *tmp91 :compare.6:a :compare.6:b
+-    * op strictEqual *tmp91 :compare52:a :compare52:b
 +  371 op strictEqual *tmp91 @coal @lead
    372 # "Function: inline def eval(in b)"
-   373 set :eval.26:b *tmp91
--    * jump *label86 equal :eval.26:b false
+   373 set :eval72:b *tmp91
+-    * jump *label86 equal :eval72:b false
 +  374 jump *label86 equal *tmp91 false
    375 set *tmp93 "T"
    376 jump *label87 always
@@ -612,13 +612,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    379 label *label87
    380 set *tmp92 *tmp93
    381 label *label85
--    * op strictEqual *tmp95 :compare.6:a :compare.6:b
+-    * op strictEqual *tmp95 :compare52:a :compare52:b
 -    * op equal *tmp94 *tmp95 false
 +  382 op strictEqual *tmp95 @coal @lead
 +  383 op equal *tmp94 *tmp91 false
    384 # "Function: inline def eval(in b)"
-   385 set :eval.27:b *tmp94
--    * jump *label89 equal :eval.27:b false
+   385 set :eval73:b *tmp94
+-    * jump *label89 equal :eval73:b false
 +  386 jump *label89 equal *tmp94 false
    387 set *tmp97 "T"
    388 jump *label90 always
@@ -631,7 +631,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp89
 -    * print *tmp92
 -    * print *tmp96
--    * assertprints :compare.6:expected :compare.6:title
+-    * assertprints :compare52:expected :compare52:title
 +  394 print *tmp87
 +  395 print *tmp90
 +  396 print *tmp93
@@ -639,16 +639,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  398 assertprints "FTFT" "comparison 7"
    399 label *label78
    400 # "Function: inline def compare(in title, in a, in b, in expected)"
-   401 set :compare.7:title "comparison 8"
+   401 set :compare53:title "comparison 8"
  
-   403 set :compare.7:b A
-   404 set :compare.7:expected "TFTF"
+   403 set :compare53:b A
+   404 set :compare53:expected "TFTF"
    405 assertflush
--    * op equal *tmp99 :compare.7:a :compare.7:b
+-    * op equal *tmp99 :compare53:a :compare53:b
 +  406 op equal *tmp99 A A
    407 # "Function: inline def eval(in b)"
-   408 set :eval.28:b *tmp99
--    * jump *label93 equal :eval.28:b false
+   408 set :eval74:b *tmp99
+-    * jump *label93 equal :eval74:b false
 +  409 jump *label93 equal *tmp99 false
    410 set *tmp101 "T"
    411 jump *label94 always
@@ -657,11 +657,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    414 label *label94
    415 set *tmp100 *tmp101
    416 label *label92
--    * op notEqual *tmp102 :compare.7:a :compare.7:b
+-    * op notEqual *tmp102 :compare53:a :compare53:b
 +  417 op notEqual *tmp102 A A
    418 # "Function: inline def eval(in b)"
-   419 set :eval.29:b *tmp102
--    * jump *label96 equal :eval.29:b false
+   419 set :eval75:b *tmp102
+-    * jump *label96 equal :eval75:b false
 +  420 jump *label96 equal *tmp102 false
    421 set *tmp104 "T"
    422 jump *label97 always
@@ -670,11 +670,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    425 label *label97
    426 set *tmp103 *tmp104
    427 label *label95
--    * op strictEqual *tmp105 :compare.7:a :compare.7:b
+-    * op strictEqual *tmp105 :compare53:a :compare53:b
 +  428 op strictEqual *tmp105 A A
    429 # "Function: inline def eval(in b)"
-   430 set :eval.30:b *tmp105
--    * jump *label99 equal :eval.30:b false
+   430 set :eval76:b *tmp105
+-    * jump *label99 equal :eval76:b false
 +  431 jump *label99 equal *tmp105 false
    432 set *tmp107 "T"
    433 jump *label100 always
@@ -683,13 +683,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    436 label *label100
    437 set *tmp106 *tmp107
    438 label *label98
--    * op strictEqual *tmp109 :compare.7:a :compare.7:b
+-    * op strictEqual *tmp109 :compare53:a :compare53:b
 -    * op equal *tmp108 *tmp109 false
 +  439 op strictEqual *tmp109 A A
 +  440 op equal *tmp108 *tmp105 false
    441 # "Function: inline def eval(in b)"
-   442 set :eval.31:b *tmp108
--    * jump *label102 equal :eval.31:b false
+   442 set :eval77:b *tmp108
+-    * jump *label102 equal :eval77:b false
 +  443 jump *label102 equal *tmp108 false
    444 set *tmp111 "T"
    445 jump *label103 always
@@ -702,7 +702,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp103
 -    * print *tmp106
 -    * print *tmp110
--    * assertprints :compare.7:expected :compare.7:title
+-    * assertprints :compare53:expected :compare53:title
 +  451 print *tmp101
 +  452 print *tmp104
 +  453 print *tmp107
@@ -710,16 +710,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  455 assertprints "TFTF" "comparison 8"
    456 label *label91
    457 # "Function: inline def compare(in title, in a, in b, in expected)"
-   458 set :compare.8:title "comparison 9"
+   458 set :compare54:title "comparison 9"
  
-   460 set :compare.8:b 0
-   461 set :compare.8:expected "TFTF"
+   460 set :compare54:b 0
+   461 set :compare54:expected "TFTF"
    462 assertflush
--    * op equal *tmp113 :compare.8:a :compare.8:b
+-    * op equal *tmp113 :compare54:a :compare54:b
 +  463 op equal *tmp113 A 0
    464 # "Function: inline def eval(in b)"
-   465 set :eval.32:b *tmp113
--    * jump *label106 equal :eval.32:b false
+   465 set :eval78:b *tmp113
+-    * jump *label106 equal :eval78:b false
 +  466 jump *label106 equal *tmp113 false
    467 set *tmp115 "T"
    468 jump *label107 always
@@ -728,11 +728,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    471 label *label107
    472 set *tmp114 *tmp115
    473 label *label105
--    * op notEqual *tmp116 :compare.8:a :compare.8:b
+-    * op notEqual *tmp116 :compare54:a :compare54:b
 +  474 op notEqual *tmp116 A 0
    475 # "Function: inline def eval(in b)"
-   476 set :eval.33:b *tmp116
--    * jump *label109 equal :eval.33:b false
+   476 set :eval79:b *tmp116
+-    * jump *label109 equal :eval79:b false
 +  477 jump *label109 equal *tmp116 false
    478 set *tmp118 "T"
    479 jump *label110 always
@@ -741,11 +741,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    482 label *label110
    483 set *tmp117 *tmp118
    484 label *label108
--    * op strictEqual *tmp119 :compare.8:a :compare.8:b
+-    * op strictEqual *tmp119 :compare54:a :compare54:b
 +  485 op strictEqual *tmp119 A 0
    486 # "Function: inline def eval(in b)"
-   487 set :eval.34:b *tmp119
--    * jump *label112 equal :eval.34:b false
+   487 set :eval80:b *tmp119
+-    * jump *label112 equal :eval80:b false
 +  488 jump *label112 equal *tmp119 false
    489 set *tmp121 "T"
    490 jump *label113 always
@@ -754,13 +754,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    493 label *label113
    494 set *tmp120 *tmp121
    495 label *label111
--    * op strictEqual *tmp123 :compare.8:a :compare.8:b
+-    * op strictEqual *tmp123 :compare54:a :compare54:b
 -    * op equal *tmp122 *tmp123 false
 +  496 op strictEqual *tmp123 A 0
 +  497 op equal *tmp122 *tmp119 false
    498 # "Function: inline def eval(in b)"
-   499 set :eval.35:b *tmp122
--    * jump *label115 equal :eval.35:b false
+   499 set :eval81:b *tmp122
+-    * jump *label115 equal :eval81:b false
 +  500 jump *label115 equal *tmp122 false
    501 set *tmp125 "T"
    502 jump *label116 always
@@ -773,7 +773,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp117
 -    * print *tmp120
 -    * print *tmp124
--    * assertprints :compare.8:expected :compare.8:title
+-    * assertprints :compare54:expected :compare54:title
 +  508 print *tmp115
 +  509 print *tmp118
 +  510 print *tmp121
@@ -781,16 +781,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  512 assertprints "TFTF" "comparison 9"
    513 label *label104
    514 # "Function: inline def compare(in title, in a, in b, in expected)"
-   515 set :compare.9:title "comparison 10"
+   515 set :compare55:title "comparison 10"
  
-   517 set :compare.9:b 1
-   518 set :compare.9:expected "FTFT"
+   517 set :compare55:b 1
+   518 set :compare55:expected "FTFT"
    519 assertflush
--    * op equal *tmp127 :compare.9:a :compare.9:b
+-    * op equal *tmp127 :compare55:a :compare55:b
 +  520 op equal *tmp127 A 1
    521 # "Function: inline def eval(in b)"
-   522 set :eval.36:b *tmp127
--    * jump *label119 equal :eval.36:b false
+   522 set :eval82:b *tmp127
+-    * jump *label119 equal :eval82:b false
 +  523 jump *label119 equal *tmp127 false
    524 set *tmp129 "T"
    525 jump *label120 always
@@ -799,11 +799,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    528 label *label120
    529 set *tmp128 *tmp129
    530 label *label118
--    * op notEqual *tmp130 :compare.9:a :compare.9:b
+-    * op notEqual *tmp130 :compare55:a :compare55:b
 +  531 op notEqual *tmp130 A 1
    532 # "Function: inline def eval(in b)"
-   533 set :eval.37:b *tmp130
--    * jump *label122 equal :eval.37:b false
+   533 set :eval83:b *tmp130
+-    * jump *label122 equal :eval83:b false
 +  534 jump *label122 equal *tmp130 false
    535 set *tmp132 "T"
    536 jump *label123 always
@@ -812,11 +812,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    539 label *label123
    540 set *tmp131 *tmp132
    541 label *label121
--    * op strictEqual *tmp133 :compare.9:a :compare.9:b
+-    * op strictEqual *tmp133 :compare55:a :compare55:b
 +  542 op strictEqual *tmp133 A 1
    543 # "Function: inline def eval(in b)"
-   544 set :eval.38:b *tmp133
--    * jump *label125 equal :eval.38:b false
+   544 set :eval84:b *tmp133
+-    * jump *label125 equal :eval84:b false
 +  545 jump *label125 equal *tmp133 false
    546 set *tmp135 "T"
    547 jump *label126 always
@@ -825,13 +825,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    550 label *label126
    551 set *tmp134 *tmp135
    552 label *label124
--    * op strictEqual *tmp137 :compare.9:a :compare.9:b
+-    * op strictEqual *tmp137 :compare55:a :compare55:b
 -    * op equal *tmp136 *tmp137 false
 +  553 op strictEqual *tmp137 A 1
 +  554 op equal *tmp136 *tmp133 false
    555 # "Function: inline def eval(in b)"
-   556 set :eval.39:b *tmp136
--    * jump *label128 equal :eval.39:b false
+   556 set :eval85:b *tmp136
+-    * jump *label128 equal :eval85:b false
 +  557 jump *label128 equal *tmp136 false
    558 set *tmp139 "T"
    559 jump *label129 always
@@ -844,7 +844,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp131
 -    * print *tmp134
 -    * print *tmp138
--    * assertprints :compare.9:expected :compare.9:title
+-    * assertprints :compare55:expected :compare55:title
 +  565 print *tmp129
 +  566 print *tmp132
 +  567 print *tmp135
@@ -852,16 +852,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  569 assertprints "FTFT" "comparison 10"
    570 label *label117
    571 # "Function: inline def compare(in title, in a, in b, in expected)"
-   572 set :compare.10:title "comparison 11"
+   572 set :compare56:title "comparison 11"
  
-   574 set :compare.10:b 0
-   575 set :compare.10:expected "FTFT"
+   574 set :compare56:b 0
+   575 set :compare56:expected "FTFT"
    576 assertflush
--    * op equal *tmp141 :compare.10:a :compare.10:b
+-    * op equal *tmp141 :compare56:a :compare56:b
 +  577 op equal *tmp141 "A" 0
    578 # "Function: inline def eval(in b)"
-   579 set :eval.40:b *tmp141
--    * jump *label132 equal :eval.40:b false
+   579 set :eval86:b *tmp141
+-    * jump *label132 equal :eval86:b false
 +  580 jump *label132 equal *tmp141 false
    581 set *tmp143 "T"
    582 jump *label133 always
@@ -870,11 +870,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    585 label *label133
    586 set *tmp142 *tmp143
    587 label *label131
--    * op notEqual *tmp144 :compare.10:a :compare.10:b
+-    * op notEqual *tmp144 :compare56:a :compare56:b
 +  588 op notEqual *tmp144 "A" 0
    589 # "Function: inline def eval(in b)"
-   590 set :eval.41:b *tmp144
--    * jump *label135 equal :eval.41:b false
+   590 set :eval87:b *tmp144
+-    * jump *label135 equal :eval87:b false
 +  591 jump *label135 equal *tmp144 false
    592 set *tmp146 "T"
    593 jump *label136 always
@@ -883,11 +883,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    596 label *label136
    597 set *tmp145 *tmp146
    598 label *label134
--    * op strictEqual *tmp147 :compare.10:a :compare.10:b
+-    * op strictEqual *tmp147 :compare56:a :compare56:b
 +  599 op strictEqual *tmp147 "A" 0
    600 # "Function: inline def eval(in b)"
-   601 set :eval.42:b *tmp147
--    * jump *label138 equal :eval.42:b false
+   601 set :eval88:b *tmp147
+-    * jump *label138 equal :eval88:b false
 +  602 jump *label138 equal *tmp147 false
    603 set *tmp149 "T"
    604 jump *label139 always
@@ -896,13 +896,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    607 label *label139
    608 set *tmp148 *tmp149
    609 label *label137
--    * op strictEqual *tmp151 :compare.10:a :compare.10:b
+-    * op strictEqual *tmp151 :compare56:a :compare56:b
 -    * op equal *tmp150 *tmp151 false
 +  610 op strictEqual *tmp151 "A" 0
 +  611 op equal *tmp150 *tmp147 false
    612 # "Function: inline def eval(in b)"
-   613 set :eval.43:b *tmp150
--    * jump *label141 equal :eval.43:b false
+   613 set :eval89:b *tmp150
+-    * jump *label141 equal :eval89:b false
 +  614 jump *label141 equal *tmp150 false
    615 set *tmp153 "T"
    616 jump *label142 always
@@ -915,7 +915,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp145
 -    * print *tmp148
 -    * print *tmp152
--    * assertprints :compare.10:expected :compare.10:title
+-    * assertprints :compare56:expected :compare56:title
 +  622 print *tmp143
 +  623 print *tmp146
 +  624 print *tmp149
@@ -923,16 +923,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  626 assertprints "FTFT" "comparison 11"
    627 label *label130
    628 # "Function: inline def compare(in title, in a, in b, in expected)"
-   629 set :compare.11:title "comparison 12"
+   629 set :compare57:title "comparison 12"
  
-   631 set :compare.11:b 1
-   632 set :compare.11:expected "TFFT"
+   631 set :compare57:b 1
+   632 set :compare57:expected "TFFT"
    633 assertflush
--    * op equal *tmp155 :compare.11:a :compare.11:b
+-    * op equal *tmp155 :compare57:a :compare57:b
 +  634 op equal *tmp155 "A" 1
    635 # "Function: inline def eval(in b)"
-   636 set :eval.44:b *tmp155
--    * jump *label145 equal :eval.44:b false
+   636 set :eval90:b *tmp155
+-    * jump *label145 equal :eval90:b false
 +  637 jump *label145 equal *tmp155 false
    638 set *tmp157 "T"
    639 jump *label146 always
@@ -941,11 +941,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    642 label *label146
    643 set *tmp156 *tmp157
    644 label *label144
--    * op notEqual *tmp158 :compare.11:a :compare.11:b
+-    * op notEqual *tmp158 :compare57:a :compare57:b
 +  645 op notEqual *tmp158 "A" 1
    646 # "Function: inline def eval(in b)"
-   647 set :eval.45:b *tmp158
--    * jump *label148 equal :eval.45:b false
+   647 set :eval91:b *tmp158
+-    * jump *label148 equal :eval91:b false
 +  648 jump *label148 equal *tmp158 false
    649 set *tmp160 "T"
    650 jump *label149 always
@@ -954,11 +954,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    653 label *label149
    654 set *tmp159 *tmp160
    655 label *label147
--    * op strictEqual *tmp161 :compare.11:a :compare.11:b
+-    * op strictEqual *tmp161 :compare57:a :compare57:b
 +  656 op strictEqual *tmp161 "A" 1
    657 # "Function: inline def eval(in b)"
-   658 set :eval.46:b *tmp161
--    * jump *label151 equal :eval.46:b false
+   658 set :eval92:b *tmp161
+-    * jump *label151 equal :eval92:b false
 +  659 jump *label151 equal *tmp161 false
    660 set *tmp163 "T"
    661 jump *label152 always
@@ -967,13 +967,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    664 label *label152
    665 set *tmp162 *tmp163
    666 label *label150
--    * op strictEqual *tmp165 :compare.11:a :compare.11:b
+-    * op strictEqual *tmp165 :compare57:a :compare57:b
 -    * op equal *tmp164 *tmp165 false
 +  667 op strictEqual *tmp165 "A" 1
 +  668 op equal *tmp164 *tmp161 false
    669 # "Function: inline def eval(in b)"
-   670 set :eval.47:b *tmp164
--    * jump *label154 equal :eval.47:b false
+   670 set :eval93:b *tmp164
+-    * jump *label154 equal :eval93:b false
 +  671 jump *label154 equal *tmp164 false
    672 set *tmp167 "T"
    673 jump *label155 always
@@ -986,7 +986,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp159
 -    * print *tmp162
 -    * print *tmp166
--    * assertprints :compare.11:expected :compare.11:title
+-    * assertprints :compare57:expected :compare57:title
 +  679 print *tmp157
 +  680 print *tmp160
 +  681 print *tmp163
@@ -994,16 +994,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  683 assertprints "TFFT" "comparison 12"
    684 label *label143
    685 # "Function: inline def compare(in title, in a, in b, in expected)"
-   686 set :compare.12:title "comparison 13"
+   686 set :compare58:title "comparison 13"
  
-   688 set :compare.12:b 2
-   689 set :compare.12:expected "FTFT"
+   688 set :compare58:b 2
+   689 set :compare58:expected "FTFT"
    690 assertflush
--    * op equal *tmp169 :compare.12:a :compare.12:b
+-    * op equal *tmp169 :compare58:a :compare58:b
 +  691 op equal *tmp169 "A" 2
    692 # "Function: inline def eval(in b)"
-   693 set :eval.48:b *tmp169
--    * jump *label158 equal :eval.48:b false
+   693 set :eval94:b *tmp169
+-    * jump *label158 equal :eval94:b false
 +  694 jump *label158 equal *tmp169 false
    695 set *tmp171 "T"
    696 jump *label159 always
@@ -1012,11 +1012,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    699 label *label159
    700 set *tmp170 *tmp171
    701 label *label157
--    * op notEqual *tmp172 :compare.12:a :compare.12:b
+-    * op notEqual *tmp172 :compare58:a :compare58:b
 +  702 op notEqual *tmp172 "A" 2
    703 # "Function: inline def eval(in b)"
-   704 set :eval.49:b *tmp172
--    * jump *label161 equal :eval.49:b false
+   704 set :eval95:b *tmp172
+-    * jump *label161 equal :eval95:b false
 +  705 jump *label161 equal *tmp172 false
    706 set *tmp174 "T"
    707 jump *label162 always
@@ -1025,11 +1025,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    710 label *label162
    711 set *tmp173 *tmp174
    712 label *label160
--    * op strictEqual *tmp175 :compare.12:a :compare.12:b
+-    * op strictEqual *tmp175 :compare58:a :compare58:b
 +  713 op strictEqual *tmp175 "A" 2
    714 # "Function: inline def eval(in b)"
-   715 set :eval.50:b *tmp175
--    * jump *label164 equal :eval.50:b false
+   715 set :eval96:b *tmp175
+-    * jump *label164 equal :eval96:b false
 +  716 jump *label164 equal *tmp175 false
    717 set *tmp177 "T"
    718 jump *label165 always
@@ -1038,13 +1038,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    721 label *label165
    722 set *tmp176 *tmp177
    723 label *label163
--    * op strictEqual *tmp179 :compare.12:a :compare.12:b
+-    * op strictEqual *tmp179 :compare58:a :compare58:b
 -    * op equal *tmp178 *tmp179 false
 +  724 op strictEqual *tmp179 "A" 2
 +  725 op equal *tmp178 *tmp175 false
    726 # "Function: inline def eval(in b)"
-   727 set :eval.51:b *tmp178
--    * jump *label167 equal :eval.51:b false
+   727 set :eval97:b *tmp178
+-    * jump *label167 equal :eval97:b false
 +  728 jump *label167 equal *tmp178 false
    729 set *tmp181 "T"
    730 jump *label168 always
@@ -1057,7 +1057,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp173
 -    * print *tmp176
 -    * print *tmp180
--    * assertprints :compare.12:expected :compare.12:title
+-    * assertprints :compare58:expected :compare58:title
 +  736 print *tmp171
 +  737 print *tmp174
 +  738 print *tmp177
@@ -1065,16 +1065,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  740 assertprints "FTFT" "comparison 13"
    741 label *label156
    742 # "Function: inline def compare(in title, in a, in b, in expected)"
-   743 set :compare.13:title "comparison 14"
+   743 set :compare59:title "comparison 14"
  
-   745 set :compare.13:b "B"
-   746 set :compare.13:expected "FTFT"
+   745 set :compare59:b "B"
+   746 set :compare59:expected "FTFT"
    747 assertflush
--    * op equal *tmp183 :compare.13:a :compare.13:b
+-    * op equal *tmp183 :compare59:a :compare59:b
 +  748 op equal *tmp183 "A" "B"
    749 # "Function: inline def eval(in b)"
-   750 set :eval.52:b *tmp183
--    * jump *label171 equal :eval.52:b false
+   750 set :eval98:b *tmp183
+-    * jump *label171 equal :eval98:b false
 +  751 jump *label171 equal *tmp183 false
    752 set *tmp185 "T"
    753 jump *label172 always
@@ -1083,11 +1083,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    756 label *label172
    757 set *tmp184 *tmp185
    758 label *label170
--    * op notEqual *tmp186 :compare.13:a :compare.13:b
+-    * op notEqual *tmp186 :compare59:a :compare59:b
 +  759 op notEqual *tmp186 "A" "B"
    760 # "Function: inline def eval(in b)"
-   761 set :eval.53:b *tmp186
--    * jump *label174 equal :eval.53:b false
+   761 set :eval99:b *tmp186
+-    * jump *label174 equal :eval99:b false
 +  762 jump *label174 equal *tmp186 false
    763 set *tmp188 "T"
    764 jump *label175 always
@@ -1096,11 +1096,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    767 label *label175
    768 set *tmp187 *tmp188
    769 label *label173
--    * op strictEqual *tmp189 :compare.13:a :compare.13:b
+-    * op strictEqual *tmp189 :compare59:a :compare59:b
 +  770 op strictEqual *tmp189 "A" "B"
    771 # "Function: inline def eval(in b)"
-   772 set :eval.54:b *tmp189
--    * jump *label177 equal :eval.54:b false
+   772 set :eval100:b *tmp189
+-    * jump *label177 equal :eval100:b false
 +  773 jump *label177 equal *tmp189 false
    774 set *tmp191 "T"
    775 jump *label178 always
@@ -1109,13 +1109,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    778 label *label178
    779 set *tmp190 *tmp191
    780 label *label176
--    * op strictEqual *tmp193 :compare.13:a :compare.13:b
+-    * op strictEqual *tmp193 :compare59:a :compare59:b
 -    * op equal *tmp192 *tmp193 false
 +  781 op strictEqual *tmp193 "A" "B"
 +  782 op equal *tmp192 *tmp189 false
    783 # "Function: inline def eval(in b)"
-   784 set :eval.55:b *tmp192
--    * jump *label180 equal :eval.55:b false
+   784 set :eval101:b *tmp192
+-    * jump *label180 equal :eval101:b false
 +  785 jump *label180 equal *tmp192 false
    786 set *tmp195 "T"
    787 jump *label181 always
@@ -1128,7 +1128,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp187
 -    * print *tmp190
 -    * print *tmp194
--    * assertprints :compare.13:expected :compare.13:title
+-    * assertprints :compare59:expected :compare59:title
 +  793 print *tmp185
 +  794 print *tmp188
 +  795 print *tmp191
@@ -1136,16 +1136,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  797 assertprints "FTFT" "comparison 14"
    798 label *label169
    799 # "Function: inline def compare(in title, in a, in b, in expected)"
-   800 set :compare.14:title "comparison 15"
+   800 set :compare60:title "comparison 15"
  
-   802 set :compare.14:b "A"
-   803 set :compare.14:expected "TFTF"
+   802 set :compare60:b "A"
+   803 set :compare60:expected "TFTF"
    804 assertflush
--    * op equal *tmp197 :compare.14:a :compare.14:b
+-    * op equal *tmp197 :compare60:a :compare60:b
 +  805 op equal *tmp197 "A" "A"
    806 # "Function: inline def eval(in b)"
-   807 set :eval.56:b *tmp197
--    * jump *label184 equal :eval.56:b false
+   807 set :eval102:b *tmp197
+-    * jump *label184 equal :eval102:b false
 +  808 jump *label184 equal *tmp197 false
    809 set *tmp199 "T"
    810 jump *label185 always
@@ -1154,11 +1154,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    813 label *label185
    814 set *tmp198 *tmp199
    815 label *label183
--    * op notEqual *tmp200 :compare.14:a :compare.14:b
+-    * op notEqual *tmp200 :compare60:a :compare60:b
 +  816 op notEqual *tmp200 "A" "A"
    817 # "Function: inline def eval(in b)"
-   818 set :eval.57:b *tmp200
--    * jump *label187 equal :eval.57:b false
+   818 set :eval103:b *tmp200
+-    * jump *label187 equal :eval103:b false
 +  819 jump *label187 equal *tmp200 false
    820 set *tmp202 "T"
    821 jump *label188 always
@@ -1167,11 +1167,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    824 label *label188
    825 set *tmp201 *tmp202
    826 label *label186
--    * op strictEqual *tmp203 :compare.14:a :compare.14:b
+-    * op strictEqual *tmp203 :compare60:a :compare60:b
 +  827 op strictEqual *tmp203 "A" "A"
    828 # "Function: inline def eval(in b)"
-   829 set :eval.58:b *tmp203
--    * jump *label190 equal :eval.58:b false
+   829 set :eval104:b *tmp203
+-    * jump *label190 equal :eval104:b false
 +  830 jump *label190 equal *tmp203 false
    831 set *tmp205 "T"
    832 jump *label191 always
@@ -1180,13 +1180,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    835 label *label191
    836 set *tmp204 *tmp205
    837 label *label189
--    * op strictEqual *tmp207 :compare.14:a :compare.14:b
+-    * op strictEqual *tmp207 :compare60:a :compare60:b
 -    * op equal *tmp206 *tmp207 false
 +  838 op strictEqual *tmp207 "A" "A"
 +  839 op equal *tmp206 *tmp203 false
    840 # "Function: inline def eval(in b)"
-   841 set :eval.59:b *tmp206
--    * jump *label193 equal :eval.59:b false
+   841 set :eval105:b *tmp206
+-    * jump *label193 equal :eval105:b false
 +  842 jump *label193 equal *tmp206 false
    843 set *tmp209 "T"
    844 jump *label194 always
@@ -1199,7 +1199,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * print *tmp201
 -    * print *tmp204
 -    * print *tmp208
--    * assertprints :compare.14:expected :compare.14:title
+-    * assertprints :compare60:expected :compare60:title
 +  850 print *tmp199
 +  851 print *tmp202
 +  852 print *tmp205
@@ -1212,14 +1212,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-159 instructions):
      0 set A 0
      1 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.0:title "comparison 1"
--    * set :compare.0:a null
--    * set :compare.0:b 0
--    * set :compare.0:expected "TFFT"
+-    * set :compare:title "comparison 1"
+-    * set :compare:a null
+-    * set :compare:b 0
+-    * set :compare:expected "TFFT"
      2 assertflush
      3 op equal *tmp1 null 0
      4 # "Function: inline def eval(in b)"
--    * set :eval.0:b true
+-    * set :eval:b true
 -    * jump *label2 equal *tmp1 false
 +    5 jump *label2 equal true false
      6 set *tmp3 "T"
@@ -1232,7 +1232,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     11 label *label1
     12 op notEqual *tmp4 null 0
     13 # "Function: inline def eval(in b)"
--    * set :eval.1:b false
+-    * set :eval47:b false
 -    * jump *label5 equal *tmp4 false
 -    * set *tmp6 "T"
 +   14 jump *label5 equal false false
@@ -1245,7 +1245,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     20 label *label4
     21 op strictEqual *tmp7 null 0
     22 # "Function: inline def eval(in b)"
--    * set :eval.2:b false
+-    * set :eval48:b false
 -    * jump *label8 equal *tmp7 false
 -    * set *tmp9 "T"
 +   23 jump *label8 equal false false
@@ -1259,7 +1259,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op strictEqual *tmp11 null 0
     30 op equal *tmp10 false false
     31 # "Function: inline def eval(in b)"
--    * set :eval.3:b true
+-    * set :eval49:b true
 -    * jump *label11 equal *tmp10 false
 +   32 jump *label11 equal true false
     33 set *tmp13 "T"
@@ -1281,14 +1281,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     43 assertprints "TFFT" "comparison 1"
     44 label *label0
     45 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.1:title "comparison 2"
--    * set :compare.1:a null
--    * set :compare.1:b 1
--    * set :compare.1:expected "FTFT"
+-    * set :compare47:title "comparison 2"
+-    * set :compare47:a null
+-    * set :compare47:b 1
+-    * set :compare47:expected "FTFT"
     46 assertflush
     47 op equal *tmp15 null 1
     48 # "Function: inline def eval(in b)"
--    * set :eval.4:b false
+-    * set :eval50:b false
 -    * jump *label15 equal *tmp15 false
 -    * set *tmp17 "T"
 +   49 jump *label15 equal false false
@@ -1301,7 +1301,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     55 label *label14
     56 op notEqual *tmp18 null 1
     57 # "Function: inline def eval(in b)"
--    * set :eval.5:b true
+-    * set :eval51:b true
 -    * jump *label18 equal *tmp18 false
 +   58 jump *label18 equal true false
     59 set *tmp20 "T"
@@ -1314,7 +1314,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     64 label *label17
     65 op strictEqual *tmp21 null 1
     66 # "Function: inline def eval(in b)"
--    * set :eval.6:b false
+-    * set :eval52:b false
 -    * jump *label21 equal *tmp21 false
 -    * set *tmp23 "T"
 +   67 jump *label21 equal false false
@@ -1328,7 +1328,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op strictEqual *tmp25 null 1
     74 op equal *tmp24 false false
     75 # "Function: inline def eval(in b)"
--    * set :eval.7:b true
+-    * set :eval53:b true
 -    * jump *label24 equal *tmp24 false
 +   76 jump *label24 equal true false
     77 set *tmp27 "T"
@@ -1350,14 +1350,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     87 assertprints "FTFT" "comparison 2"
     88 label *label13
     89 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.2:title "comparison 3"
--    * set :compare.2:a null
--    * set :compare.2:b 2
--    * set :compare.2:expected "FTFT"
+-    * set :compare48:title "comparison 3"
+-    * set :compare48:a null
+-    * set :compare48:b 2
+-    * set :compare48:expected "FTFT"
     90 assertflush
     91 op equal *tmp29 null 2
     92 # "Function: inline def eval(in b)"
--    * set :eval.8:b false
+-    * set :eval54:b false
 -    * jump *label28 equal *tmp29 false
 -    * set *tmp31 "T"
 +   93 jump *label28 equal false false
@@ -1370,7 +1370,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     99 label *label27
    100 op notEqual *tmp32 null 2
    101 # "Function: inline def eval(in b)"
--    * set :eval.9:b true
+-    * set :eval55:b true
 -    * jump *label31 equal *tmp32 false
 +  102 jump *label31 equal true false
    103 set *tmp34 "T"
@@ -1383,7 +1383,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    108 label *label30
    109 op strictEqual *tmp35 null 2
    110 # "Function: inline def eval(in b)"
--    * set :eval.10:b false
+-    * set :eval56:b false
 -    * jump *label34 equal *tmp35 false
 -    * set *tmp37 "T"
 +  111 jump *label34 equal false false
@@ -1397,7 +1397,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op strictEqual *tmp39 null 2
    118 op equal *tmp38 false false
    119 # "Function: inline def eval(in b)"
--    * set :eval.11:b true
+-    * set :eval57:b true
 -    * jump *label37 equal *tmp38 false
 +  120 jump *label37 equal true false
    121 set *tmp41 "T"
@@ -1419,17 +1419,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    131 assertprints "FTFT" "comparison 3"
    132 label *label26
    133 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.3:title "comparison 4"
--    * set :compare.3:a @coal
--    * set :compare.3:b 0
--    * set :compare.3:expected "FTFT"
+-    * set :compare49:title "comparison 4"
+-    * set :compare49:a @coal
+-    * set :compare49:b 0
+-    * set :compare49:expected "FTFT"
    134 assertflush
    135 op equal *tmp43 @coal 0
    136 # "Function: inline def eval(in b)"
--    * set :eval.12:b *tmp43
+-    * set :eval58:b *tmp43
 -    * jump *label41 equal *tmp43 false
 -    * set *tmp45 "T"
-+  137 set :eval.12:b false
++  137 set :eval58:b false
 +  138 jump *label41 equal false false
    139 jump *label42 always
    140 label *label41
@@ -1440,9 +1440,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    144 label *label40
    145 op notEqual *tmp46 @coal 0
    146 # "Function: inline def eval(in b)"
--    * set :eval.13:b *tmp46
+-    * set :eval59:b *tmp46
 -    * jump *label44 equal *tmp46 false
-+  147 set :eval.13:b true
++  147 set :eval59:b true
 +  148 jump *label44 equal true false
    149 set *tmp48 "T"
    150 jump *label45 always
@@ -1454,10 +1454,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    154 label *label43
    155 op strictEqual *tmp49 @coal 0
    156 # "Function: inline def eval(in b)"
--    * set :eval.14:b *tmp49
+-    * set :eval60:b *tmp49
 -    * jump *label47 equal *tmp49 false
 -    * set *tmp51 "T"
-+  157 set :eval.14:b false
++  157 set :eval60:b false
 +  158 jump *label47 equal false false
    159 jump *label48 always
    160 label *label47
@@ -1470,9 +1470,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp52 *tmp49 false
 +  165 op equal *tmp52 false false
    166 # "Function: inline def eval(in b)"
--    * set :eval.15:b *tmp52
+-    * set :eval61:b *tmp52
 -    * jump *label50 equal *tmp52 false
-+  167 set :eval.15:b true
++  167 set :eval61:b true
 +  168 jump *label50 equal true false
    169 set *tmp55 "T"
    170 jump *label51 always
@@ -1493,16 +1493,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    179 assertprints "FTFT" "comparison 4"
    180 label *label39
    181 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.4:title "comparison 5"
--    * set :compare.4:a @coal
--    * set :compare.4:b 1
--    * set :compare.4:expected "TFFT"
+-    * set :compare50:title "comparison 5"
+-    * set :compare50:a @coal
+-    * set :compare50:b 1
+-    * set :compare50:expected "TFFT"
    182 assertflush
    183 op equal *tmp57 @coal 1
    184 # "Function: inline def eval(in b)"
--    * set :eval.16:b *tmp57
+-    * set :eval62:b *tmp57
 -    * jump *label54 equal *tmp57 false
-+  185 set :eval.16:b true
++  185 set :eval62:b true
 +  186 jump *label54 equal true false
    187 set *tmp59 "T"
    188 jump *label55 always
@@ -1514,10 +1514,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    192 label *label53
    193 op notEqual *tmp60 @coal 1
    194 # "Function: inline def eval(in b)"
--    * set :eval.17:b *tmp60
+-    * set :eval63:b *tmp60
 -    * jump *label57 equal *tmp60 false
 -    * set *tmp62 "T"
-+  195 set :eval.17:b false
++  195 set :eval63:b false
 +  196 jump *label57 equal false false
    197 jump *label58 always
    198 label *label57
@@ -1528,10 +1528,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    202 label *label56
    203 op strictEqual *tmp63 @coal 1
    204 # "Function: inline def eval(in b)"
--    * set :eval.18:b *tmp63
+-    * set :eval64:b *tmp63
 -    * jump *label60 equal *tmp63 false
 -    * set *tmp65 "T"
-+  205 set :eval.18:b false
++  205 set :eval64:b false
 +  206 jump *label60 equal false false
    207 jump *label61 always
    208 label *label60
@@ -1544,9 +1544,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp66 *tmp63 false
 +  213 op equal *tmp66 false false
    214 # "Function: inline def eval(in b)"
--    * set :eval.19:b *tmp66
+-    * set :eval65:b *tmp66
 -    * jump *label63 equal *tmp66 false
-+  215 set :eval.19:b true
++  215 set :eval65:b true
 +  216 jump *label63 equal true false
    217 set *tmp69 "T"
    218 jump *label64 always
@@ -1567,17 +1567,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    227 assertprints "TFFT" "comparison 5"
    228 label *label52
    229 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.5:title "comparison 6"
--    * set :compare.5:a @coal
--    * set :compare.5:b 2
--    * set :compare.5:expected "FTFT"
+-    * set :compare51:title "comparison 6"
+-    * set :compare51:a @coal
+-    * set :compare51:b 2
+-    * set :compare51:expected "FTFT"
    230 assertflush
    231 op equal *tmp71 @coal 2
    232 # "Function: inline def eval(in b)"
--    * set :eval.20:b *tmp71
+-    * set :eval66:b *tmp71
 -    * jump *label67 equal *tmp71 false
 -    * set *tmp73 "T"
-+  233 set :eval.20:b false
++  233 set :eval66:b false
 +  234 jump *label67 equal false false
    235 jump *label68 always
    236 label *label67
@@ -1588,9 +1588,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    240 label *label66
    241 op notEqual *tmp74 @coal 2
    242 # "Function: inline def eval(in b)"
--    * set :eval.21:b *tmp74
+-    * set :eval67:b *tmp74
 -    * jump *label70 equal *tmp74 false
-+  243 set :eval.21:b true
++  243 set :eval67:b true
 +  244 jump *label70 equal true false
    245 set *tmp76 "T"
    246 jump *label71 always
@@ -1602,10 +1602,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    250 label *label69
    251 op strictEqual *tmp77 @coal 2
    252 # "Function: inline def eval(in b)"
--    * set :eval.22:b *tmp77
+-    * set :eval68:b *tmp77
 -    * jump *label73 equal *tmp77 false
 -    * set *tmp79 "T"
-+  253 set :eval.22:b false
++  253 set :eval68:b false
 +  254 jump *label73 equal false false
    255 jump *label74 always
    256 label *label73
@@ -1618,9 +1618,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp80 *tmp77 false
 +  261 op equal *tmp80 false false
    262 # "Function: inline def eval(in b)"
--    * set :eval.23:b *tmp80
+-    * set :eval69:b *tmp80
 -    * jump *label76 equal *tmp80 false
-+  263 set :eval.23:b true
++  263 set :eval69:b true
 +  264 jump *label76 equal true false
    265 set *tmp83 "T"
    266 jump *label77 always
@@ -1641,17 +1641,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    275 assertprints "FTFT" "comparison 6"
    276 label *label65
    277 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.6:title "comparison 7"
--    * set :compare.6:a @coal
--    * set :compare.6:b @lead
--    * set :compare.6:expected "FTFT"
+-    * set :compare52:title "comparison 7"
+-    * set :compare52:a @coal
+-    * set :compare52:b @lead
+-    * set :compare52:expected "FTFT"
    278 assertflush
    279 op equal *tmp85 @coal @lead
    280 # "Function: inline def eval(in b)"
--    * set :eval.24:b *tmp85
+-    * set :eval70:b *tmp85
 -    * jump *label80 equal *tmp85 false
 -    * set *tmp87 "T"
-+  281 set :eval.24:b false
++  281 set :eval70:b false
 +  282 jump *label80 equal false false
    283 jump *label81 always
    284 label *label80
@@ -1662,9 +1662,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    288 label *label79
    289 op notEqual *tmp88 @coal @lead
    290 # "Function: inline def eval(in b)"
--    * set :eval.25:b *tmp88
+-    * set :eval71:b *tmp88
 -    * jump *label83 equal *tmp88 false
-+  291 set :eval.25:b true
++  291 set :eval71:b true
 +  292 jump *label83 equal true false
    293 set *tmp90 "T"
    294 jump *label84 always
@@ -1676,10 +1676,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    298 label *label82
    299 op strictEqual *tmp91 @coal @lead
    300 # "Function: inline def eval(in b)"
--    * set :eval.26:b *tmp91
+-    * set :eval72:b *tmp91
 -    * jump *label86 equal *tmp91 false
 -    * set *tmp93 "T"
-+  301 set :eval.26:b false
++  301 set :eval72:b false
 +  302 jump *label86 equal false false
    303 jump *label87 always
    304 label *label86
@@ -1692,9 +1692,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp94 *tmp91 false
 +  309 op equal *tmp94 false false
    310 # "Function: inline def eval(in b)"
--    * set :eval.27:b *tmp94
+-    * set :eval73:b *tmp94
 -    * jump *label89 equal *tmp94 false
-+  311 set :eval.27:b true
++  311 set :eval73:b true
 +  312 jump *label89 equal true false
    313 set *tmp97 "T"
    314 jump *label90 always
@@ -1715,14 +1715,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    323 assertprints "FTFT" "comparison 7"
    324 label *label78
    325 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.7:title "comparison 8"
--    * set :compare.7:a A
--    * set :compare.7:b A
--    * set :compare.7:expected "TFTF"
+-    * set :compare53:title "comparison 8"
+-    * set :compare53:a A
+-    * set :compare53:b A
+-    * set :compare53:expected "TFTF"
    326 assertflush
    327 op equal *tmp99 A A
    328 # "Function: inline def eval(in b)"
--    * set :eval.28:b *tmp99
+-    * set :eval74:b *tmp99
    329 jump *label93 equal *tmp99 false
    330 set *tmp101 "T"
    331 jump *label94 always
@@ -1733,7 +1733,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    335 label *label92
    336 op notEqual *tmp102 A A
    337 # "Function: inline def eval(in b)"
--    * set :eval.29:b *tmp102
+-    * set :eval75:b *tmp102
    338 jump *label96 equal *tmp102 false
    339 set *tmp104 "T"
    340 jump *label97 always
@@ -1744,7 +1744,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    344 label *label95
    345 op strictEqual *tmp105 A A
    346 # "Function: inline def eval(in b)"
--    * set :eval.30:b *tmp105
+-    * set :eval76:b *tmp105
    347 jump *label99 equal *tmp105 false
    348 set *tmp107 "T"
    349 jump *label100 always
@@ -1756,7 +1756,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op strictEqual *tmp109 A A
    354 op equal *tmp108 *tmp105 false
    355 # "Function: inline def eval(in b)"
--    * set :eval.31:b *tmp108
+-    * set :eval77:b *tmp108
    356 jump *label102 equal *tmp108 false
    357 set *tmp111 "T"
    358 jump *label103 always
@@ -1771,14 +1771,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    367 assertprints "TFTF" "comparison 8"
    368 label *label91
    369 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.8:title "comparison 9"
--    * set :compare.8:a A
--    * set :compare.8:b 0
--    * set :compare.8:expected "TFTF"
+-    * set :compare54:title "comparison 9"
+-    * set :compare54:a A
+-    * set :compare54:b 0
+-    * set :compare54:expected "TFTF"
    370 assertflush
    371 op equal *tmp113 A 0
    372 # "Function: inline def eval(in b)"
--    * set :eval.32:b *tmp113
+-    * set :eval78:b *tmp113
    373 jump *label106 equal *tmp113 false
    374 set *tmp115 "T"
    375 jump *label107 always
@@ -1789,7 +1789,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    379 label *label105
    380 op notEqual *tmp116 A 0
    381 # "Function: inline def eval(in b)"
--    * set :eval.33:b *tmp116
+-    * set :eval79:b *tmp116
    382 jump *label109 equal *tmp116 false
    383 set *tmp118 "T"
    384 jump *label110 always
@@ -1800,7 +1800,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    388 label *label108
    389 op strictEqual *tmp119 A 0
    390 # "Function: inline def eval(in b)"
--    * set :eval.34:b *tmp119
+-    * set :eval80:b *tmp119
    391 jump *label112 equal *tmp119 false
    392 set *tmp121 "T"
    393 jump *label113 always
@@ -1812,7 +1812,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op strictEqual *tmp123 A 0
    398 op equal *tmp122 *tmp119 false
    399 # "Function: inline def eval(in b)"
--    * set :eval.35:b *tmp122
+-    * set :eval81:b *tmp122
    400 jump *label115 equal *tmp122 false
    401 set *tmp125 "T"
    402 jump *label116 always
@@ -1827,14 +1827,14 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    411 assertprints "TFTF" "comparison 9"
    412 label *label104
    413 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.9:title "comparison 10"
--    * set :compare.9:a A
--    * set :compare.9:b 1
--    * set :compare.9:expected "FTFT"
+-    * set :compare55:title "comparison 10"
+-    * set :compare55:a A
+-    * set :compare55:b 1
+-    * set :compare55:expected "FTFT"
    414 assertflush
    415 op equal *tmp127 A 1
    416 # "Function: inline def eval(in b)"
--    * set :eval.36:b *tmp127
+-    * set :eval82:b *tmp127
    417 jump *label119 equal *tmp127 false
    418 set *tmp129 "T"
    419 jump *label120 always
@@ -1845,7 +1845,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    423 label *label118
    424 op notEqual *tmp130 A 1
    425 # "Function: inline def eval(in b)"
--    * set :eval.37:b *tmp130
+-    * set :eval83:b *tmp130
    426 jump *label122 equal *tmp130 false
    427 set *tmp132 "T"
    428 jump *label123 always
@@ -1856,7 +1856,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    432 label *label121
    433 op strictEqual *tmp133 A 1
    434 # "Function: inline def eval(in b)"
--    * set :eval.38:b *tmp133
+-    * set :eval84:b *tmp133
    435 jump *label125 equal *tmp133 false
    436 set *tmp135 "T"
    437 jump *label126 always
@@ -1868,7 +1868,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op strictEqual *tmp137 A 1
    442 op equal *tmp136 *tmp133 false
    443 # "Function: inline def eval(in b)"
--    * set :eval.39:b *tmp136
+-    * set :eval85:b *tmp136
    444 jump *label128 equal *tmp136 false
    445 set *tmp139 "T"
    446 jump *label129 always
@@ -1883,17 +1883,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    455 assertprints "FTFT" "comparison 10"
    456 label *label117
    457 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.10:title "comparison 11"
--    * set :compare.10:a "A"
--    * set :compare.10:b 0
--    * set :compare.10:expected "FTFT"
+-    * set :compare56:title "comparison 11"
+-    * set :compare56:a "A"
+-    * set :compare56:b 0
+-    * set :compare56:expected "FTFT"
    458 assertflush
    459 op equal *tmp141 "A" 0
    460 # "Function: inline def eval(in b)"
--    * set :eval.40:b *tmp141
+-    * set :eval86:b *tmp141
 -    * jump *label132 equal *tmp141 false
 -    * set *tmp143 "T"
-+  461 set :eval.40:b false
++  461 set :eval86:b false
 +  462 jump *label132 equal false false
    463 jump *label133 always
    464 label *label132
@@ -1904,9 +1904,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    468 label *label131
    469 op notEqual *tmp144 "A" 0
    470 # "Function: inline def eval(in b)"
--    * set :eval.41:b *tmp144
+-    * set :eval87:b *tmp144
 -    * jump *label135 equal *tmp144 false
-+  471 set :eval.41:b true
++  471 set :eval87:b true
 +  472 jump *label135 equal true false
    473 set *tmp146 "T"
    474 jump *label136 always
@@ -1918,10 +1918,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    478 label *label134
    479 op strictEqual *tmp147 "A" 0
    480 # "Function: inline def eval(in b)"
--    * set :eval.42:b *tmp147
+-    * set :eval88:b *tmp147
 -    * jump *label138 equal *tmp147 false
 -    * set *tmp149 "T"
-+  481 set :eval.42:b false
++  481 set :eval88:b false
 +  482 jump *label138 equal false false
    483 jump *label139 always
    484 label *label138
@@ -1934,9 +1934,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp150 *tmp147 false
 +  489 op equal *tmp150 false false
    490 # "Function: inline def eval(in b)"
--    * set :eval.43:b *tmp150
+-    * set :eval89:b *tmp150
 -    * jump *label141 equal *tmp150 false
-+  491 set :eval.43:b true
++  491 set :eval89:b true
 +  492 jump *label141 equal true false
    493 set *tmp153 "T"
    494 jump *label142 always
@@ -1957,16 +1957,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    503 assertprints "FTFT" "comparison 11"
    504 label *label130
    505 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.11:title "comparison 12"
--    * set :compare.11:a "A"
--    * set :compare.11:b 1
--    * set :compare.11:expected "TFFT"
+-    * set :compare57:title "comparison 12"
+-    * set :compare57:a "A"
+-    * set :compare57:b 1
+-    * set :compare57:expected "TFFT"
    506 assertflush
    507 op equal *tmp155 "A" 1
    508 # "Function: inline def eval(in b)"
--    * set :eval.44:b *tmp155
+-    * set :eval90:b *tmp155
 -    * jump *label145 equal *tmp155 false
-+  509 set :eval.44:b true
++  509 set :eval90:b true
 +  510 jump *label145 equal true false
    511 set *tmp157 "T"
    512 jump *label146 always
@@ -1978,10 +1978,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    516 label *label144
    517 op notEqual *tmp158 "A" 1
    518 # "Function: inline def eval(in b)"
--    * set :eval.45:b *tmp158
+-    * set :eval91:b *tmp158
 -    * jump *label148 equal *tmp158 false
 -    * set *tmp160 "T"
-+  519 set :eval.45:b false
++  519 set :eval91:b false
 +  520 jump *label148 equal false false
    521 jump *label149 always
    522 label *label148
@@ -1992,10 +1992,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    526 label *label147
    527 op strictEqual *tmp161 "A" 1
    528 # "Function: inline def eval(in b)"
--    * set :eval.46:b *tmp161
+-    * set :eval92:b *tmp161
 -    * jump *label151 equal *tmp161 false
 -    * set *tmp163 "T"
-+  529 set :eval.46:b false
++  529 set :eval92:b false
 +  530 jump *label151 equal false false
    531 jump *label152 always
    532 label *label151
@@ -2008,9 +2008,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp164 *tmp161 false
 +  537 op equal *tmp164 false false
    538 # "Function: inline def eval(in b)"
--    * set :eval.47:b *tmp164
+-    * set :eval93:b *tmp164
 -    * jump *label154 equal *tmp164 false
-+  539 set :eval.47:b true
++  539 set :eval93:b true
 +  540 jump *label154 equal true false
    541 set *tmp167 "T"
    542 jump *label155 always
@@ -2031,17 +2031,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    551 assertprints "TFFT" "comparison 12"
    552 label *label143
    553 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.12:title "comparison 13"
--    * set :compare.12:a "A"
--    * set :compare.12:b 2
--    * set :compare.12:expected "FTFT"
+-    * set :compare58:title "comparison 13"
+-    * set :compare58:a "A"
+-    * set :compare58:b 2
+-    * set :compare58:expected "FTFT"
    554 assertflush
    555 op equal *tmp169 "A" 2
    556 # "Function: inline def eval(in b)"
--    * set :eval.48:b *tmp169
+-    * set :eval94:b *tmp169
 -    * jump *label158 equal *tmp169 false
 -    * set *tmp171 "T"
-+  557 set :eval.48:b false
++  557 set :eval94:b false
 +  558 jump *label158 equal false false
    559 jump *label159 always
    560 label *label158
@@ -2052,9 +2052,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    564 label *label157
    565 op notEqual *tmp172 "A" 2
    566 # "Function: inline def eval(in b)"
--    * set :eval.49:b *tmp172
+-    * set :eval95:b *tmp172
 -    * jump *label161 equal *tmp172 false
-+  567 set :eval.49:b true
++  567 set :eval95:b true
 +  568 jump *label161 equal true false
    569 set *tmp174 "T"
    570 jump *label162 always
@@ -2066,10 +2066,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    574 label *label160
    575 op strictEqual *tmp175 "A" 2
    576 # "Function: inline def eval(in b)"
--    * set :eval.50:b *tmp175
+-    * set :eval96:b *tmp175
 -    * jump *label164 equal *tmp175 false
 -    * set *tmp177 "T"
-+  577 set :eval.50:b false
++  577 set :eval96:b false
 +  578 jump *label164 equal false false
    579 jump *label165 always
    580 label *label164
@@ -2082,9 +2082,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp178 *tmp175 false
 +  585 op equal *tmp178 false false
    586 # "Function: inline def eval(in b)"
--    * set :eval.51:b *tmp178
+-    * set :eval97:b *tmp178
 -    * jump *label167 equal *tmp178 false
-+  587 set :eval.51:b true
++  587 set :eval97:b true
 +  588 jump *label167 equal true false
    589 set *tmp181 "T"
    590 jump *label168 always
@@ -2105,17 +2105,17 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    599 assertprints "FTFT" "comparison 13"
    600 label *label156
    601 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.13:title "comparison 14"
--    * set :compare.13:a "A"
--    * set :compare.13:b "B"
--    * set :compare.13:expected "FTFT"
+-    * set :compare59:title "comparison 14"
+-    * set :compare59:a "A"
+-    * set :compare59:b "B"
+-    * set :compare59:expected "FTFT"
    602 assertflush
    603 op equal *tmp183 "A" "B"
    604 # "Function: inline def eval(in b)"
--    * set :eval.52:b *tmp183
+-    * set :eval98:b *tmp183
 -    * jump *label171 equal *tmp183 false
 -    * set *tmp185 "T"
-+  605 set :eval.52:b false
++  605 set :eval98:b false
 +  606 jump *label171 equal false false
    607 jump *label172 always
    608 label *label171
@@ -2126,9 +2126,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    612 label *label170
    613 op notEqual *tmp186 "A" "B"
    614 # "Function: inline def eval(in b)"
--    * set :eval.53:b *tmp186
+-    * set :eval99:b *tmp186
 -    * jump *label174 equal *tmp186 false
-+  615 set :eval.53:b true
++  615 set :eval99:b true
 +  616 jump *label174 equal true false
    617 set *tmp188 "T"
    618 jump *label175 always
@@ -2140,10 +2140,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    622 label *label173
    623 op strictEqual *tmp189 "A" "B"
    624 # "Function: inline def eval(in b)"
--    * set :eval.54:b *tmp189
+-    * set :eval100:b *tmp189
 -    * jump *label177 equal *tmp189 false
 -    * set *tmp191 "T"
-+  625 set :eval.54:b false
++  625 set :eval100:b false
 +  626 jump *label177 equal false false
    627 jump *label178 always
    628 label *label177
@@ -2156,9 +2156,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp192 *tmp189 false
 +  633 op equal *tmp192 false false
    634 # "Function: inline def eval(in b)"
--    * set :eval.55:b *tmp192
+-    * set :eval101:b *tmp192
 -    * jump *label180 equal *tmp192 false
-+  635 set :eval.55:b true
++  635 set :eval101:b true
 +  636 jump *label180 equal true false
    637 set *tmp195 "T"
    638 jump *label181 always
@@ -2179,16 +2179,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    647 assertprints "FTFT" "comparison 14"
    648 label *label169
    649 # "Function: inline def compare(in title, in a, in b, in expected)"
--    * set :compare.14:title "comparison 15"
--    * set :compare.14:a "A"
--    * set :compare.14:b "A"
--    * set :compare.14:expected "TFTF"
+-    * set :compare60:title "comparison 15"
+-    * set :compare60:a "A"
+-    * set :compare60:b "A"
+-    * set :compare60:expected "TFTF"
    650 assertflush
    651 op equal *tmp197 "A" "A"
    652 # "Function: inline def eval(in b)"
--    * set :eval.56:b *tmp197
+-    * set :eval102:b *tmp197
 -    * jump *label184 equal *tmp197 false
-+  653 set :eval.56:b true
++  653 set :eval102:b true
 +  654 jump *label184 equal true false
    655 set *tmp199 "T"
    656 jump *label185 always
@@ -2200,10 +2200,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    660 label *label183
    661 op notEqual *tmp200 "A" "A"
    662 # "Function: inline def eval(in b)"
--    * set :eval.57:b *tmp200
+-    * set :eval103:b *tmp200
 -    * jump *label187 equal *tmp200 false
 -    * set *tmp202 "T"
-+  663 set :eval.57:b false
++  663 set :eval103:b false
 +  664 jump *label187 equal false false
    665 jump *label188 always
    666 label *label187
@@ -2214,9 +2214,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    670 label *label186
    671 op strictEqual *tmp203 "A" "A"
    672 # "Function: inline def eval(in b)"
--    * set :eval.58:b *tmp203
+-    * set :eval104:b *tmp203
 -    * jump *label190 equal *tmp203 false
-+  673 set :eval.58:b true
++  673 set :eval104:b true
 +  674 jump *label190 equal true false
    675 set *tmp205 "T"
    676 jump *label191 always
@@ -2230,10 +2230,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * op equal *tmp206 *tmp203 false
 +  681 op equal *tmp206 true false
    682 # "Function: inline def eval(in b)"
--    * set :eval.59:b *tmp206
+-    * set :eval105:b *tmp206
 -    * jump *label193 equal *tmp206 false
 -    * set *tmp209 "T"
-+  683 set :eval.59:b false
++  683 set :eval105:b false
 +  684 jump *label193 equal false false
    685 jump *label194 always
    686 label *label193
@@ -2386,7 +2386,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
     98 assertflush
 -    * op equal *tmp43 @coal 0
     99 # "Function: inline def eval(in b)"
--    * set :eval.12:b false
+-    * set :eval58:b false
    100 jump *label41 equal false false
    101 jump *label42 always
    102 label *label41
@@ -2396,7 +2396,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    104 label *label40
 -    * op notEqual *tmp46 @coal 0
    105 # "Function: inline def eval(in b)"
--    * set :eval.13:b true
+-    * set :eval59:b true
    106 jump *label44 equal true false
 -    * set *tmp48 "T"
    107 jump *label45 always
@@ -2406,7 +2406,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    110 label *label43
 -    * op strictEqual *tmp49 @coal 0
    111 # "Function: inline def eval(in b)"
--    * set :eval.14:b false
+-    * set :eval60:b false
    112 jump *label47 equal false false
    113 jump *label48 always
    114 label *label47
@@ -2416,7 +2416,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    116 label *label46
 -    * op equal *tmp52 false false
    117 # "Function: inline def eval(in b)"
--    * set :eval.15:b true
+-    * set :eval61:b true
    118 jump *label50 equal true false
 -    * set *tmp55 "T"
    119 jump *label51 always
@@ -2432,7 +2432,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    130 assertflush
 -    * op equal *tmp57 @coal 1
    131 # "Function: inline def eval(in b)"
--    * set :eval.16:b true
+-    * set :eval62:b true
    132 jump *label54 equal true false
 -    * set *tmp59 "T"
    133 jump *label55 always
@@ -2442,7 +2442,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    136 label *label53
 -    * op notEqual *tmp60 @coal 1
    137 # "Function: inline def eval(in b)"
--    * set :eval.17:b false
+-    * set :eval63:b false
    138 jump *label57 equal false false
    139 jump *label58 always
    140 label *label57
@@ -2452,7 +2452,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    142 label *label56
 -    * op strictEqual *tmp63 @coal 1
    143 # "Function: inline def eval(in b)"
--    * set :eval.18:b false
+-    * set :eval64:b false
    144 jump *label60 equal false false
    145 jump *label61 always
    146 label *label60
@@ -2462,7 +2462,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    148 label *label59
 -    * op equal *tmp66 false false
    149 # "Function: inline def eval(in b)"
--    * set :eval.19:b true
+-    * set :eval65:b true
    150 jump *label63 equal true false
 -    * set *tmp69 "T"
    151 jump *label64 always
@@ -2478,7 +2478,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    162 assertflush
 -    * op equal *tmp71 @coal 2
    163 # "Function: inline def eval(in b)"
--    * set :eval.20:b false
+-    * set :eval66:b false
    164 jump *label67 equal false false
    165 jump *label68 always
    166 label *label67
@@ -2488,7 +2488,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    168 label *label66
 -    * op notEqual *tmp74 @coal 2
    169 # "Function: inline def eval(in b)"
--    * set :eval.21:b true
+-    * set :eval67:b true
    170 jump *label70 equal true false
 -    * set *tmp76 "T"
    171 jump *label71 always
@@ -2498,7 +2498,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    174 label *label69
 -    * op strictEqual *tmp77 @coal 2
    175 # "Function: inline def eval(in b)"
--    * set :eval.22:b false
+-    * set :eval68:b false
    176 jump *label73 equal false false
    177 jump *label74 always
    178 label *label73
@@ -2508,7 +2508,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    180 label *label72
 -    * op equal *tmp80 false false
    181 # "Function: inline def eval(in b)"
--    * set :eval.23:b true
+-    * set :eval69:b true
    182 jump *label76 equal true false
 -    * set *tmp83 "T"
    183 jump *label77 always
@@ -2524,7 +2524,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    194 assertflush
 -    * op equal *tmp85 @coal @lead
    195 # "Function: inline def eval(in b)"
--    * set :eval.24:b false
+-    * set :eval70:b false
    196 jump *label80 equal false false
    197 jump *label81 always
    198 label *label80
@@ -2534,7 +2534,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    200 label *label79
 -    * op notEqual *tmp88 @coal @lead
    201 # "Function: inline def eval(in b)"
--    * set :eval.25:b true
+-    * set :eval71:b true
    202 jump *label83 equal true false
 -    * set *tmp90 "T"
    203 jump *label84 always
@@ -2544,7 +2544,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    206 label *label82
 -    * op strictEqual *tmp91 @coal @lead
    207 # "Function: inline def eval(in b)"
--    * set :eval.26:b false
+-    * set :eval72:b false
    208 jump *label86 equal false false
    209 jump *label87 always
    210 label *label86
@@ -2554,7 +2554,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    212 label *label85
 -    * op equal *tmp94 false false
    213 # "Function: inline def eval(in b)"
--    * set :eval.27:b true
+-    * set :eval73:b true
    214 jump *label89 equal true false
 -    * set *tmp97 "T"
    215 jump *label90 always
@@ -2570,7 +2570,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    358 assertflush
 -    * op equal *tmp141 "A" 0
    359 # "Function: inline def eval(in b)"
--    * set :eval.40:b false
+-    * set :eval86:b false
    360 jump *label132 equal false false
    361 jump *label133 always
    362 label *label132
@@ -2580,7 +2580,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    364 label *label131
 -    * op notEqual *tmp144 "A" 0
    365 # "Function: inline def eval(in b)"
--    * set :eval.41:b true
+-    * set :eval87:b true
    366 jump *label135 equal true false
 -    * set *tmp146 "T"
    367 jump *label136 always
@@ -2590,7 +2590,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    370 label *label134
 -    * op strictEqual *tmp147 "A" 0
    371 # "Function: inline def eval(in b)"
--    * set :eval.42:b false
+-    * set :eval88:b false
    372 jump *label138 equal false false
    373 jump *label139 always
    374 label *label138
@@ -2600,7 +2600,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    376 label *label137
 -    * op equal *tmp150 false false
    377 # "Function: inline def eval(in b)"
--    * set :eval.43:b true
+-    * set :eval89:b true
    378 jump *label141 equal true false
 -    * set *tmp153 "T"
    379 jump *label142 always
@@ -2616,7 +2616,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    390 assertflush
 -    * op equal *tmp155 "A" 1
    391 # "Function: inline def eval(in b)"
--    * set :eval.44:b true
+-    * set :eval90:b true
    392 jump *label145 equal true false
 -    * set *tmp157 "T"
    393 jump *label146 always
@@ -2626,7 +2626,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    396 label *label144
 -    * op notEqual *tmp158 "A" 1
    397 # "Function: inline def eval(in b)"
--    * set :eval.45:b false
+-    * set :eval91:b false
    398 jump *label148 equal false false
    399 jump *label149 always
    400 label *label148
@@ -2636,7 +2636,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    402 label *label147
 -    * op strictEqual *tmp161 "A" 1
    403 # "Function: inline def eval(in b)"
--    * set :eval.46:b false
+-    * set :eval92:b false
    404 jump *label151 equal false false
    405 jump *label152 always
    406 label *label151
@@ -2646,7 +2646,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    408 label *label150
 -    * op equal *tmp164 false false
    409 # "Function: inline def eval(in b)"
--    * set :eval.47:b true
+-    * set :eval93:b true
    410 jump *label154 equal true false
 -    * set *tmp167 "T"
    411 jump *label155 always
@@ -2662,7 +2662,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    422 assertflush
 -    * op equal *tmp169 "A" 2
    423 # "Function: inline def eval(in b)"
--    * set :eval.48:b false
+-    * set :eval94:b false
    424 jump *label158 equal false false
    425 jump *label159 always
    426 label *label158
@@ -2672,7 +2672,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    428 label *label157
 -    * op notEqual *tmp172 "A" 2
    429 # "Function: inline def eval(in b)"
--    * set :eval.49:b true
+-    * set :eval95:b true
    430 jump *label161 equal true false
 -    * set *tmp174 "T"
    431 jump *label162 always
@@ -2682,7 +2682,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    434 label *label160
 -    * op strictEqual *tmp175 "A" 2
    435 # "Function: inline def eval(in b)"
--    * set :eval.50:b false
+-    * set :eval96:b false
    436 jump *label164 equal false false
    437 jump *label165 always
    438 label *label164
@@ -2692,7 +2692,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    440 label *label163
 -    * op equal *tmp178 false false
    441 # "Function: inline def eval(in b)"
--    * set :eval.51:b true
+-    * set :eval97:b true
    442 jump *label167 equal true false
 -    * set *tmp181 "T"
    443 jump *label168 always
@@ -2708,7 +2708,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    454 assertflush
 -    * op equal *tmp183 "A" "B"
    455 # "Function: inline def eval(in b)"
--    * set :eval.52:b false
+-    * set :eval98:b false
    456 jump *label171 equal false false
    457 jump *label172 always
    458 label *label171
@@ -2718,7 +2718,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    460 label *label170
 -    * op notEqual *tmp186 "A" "B"
    461 # "Function: inline def eval(in b)"
--    * set :eval.53:b true
+-    * set :eval99:b true
    462 jump *label174 equal true false
 -    * set *tmp188 "T"
    463 jump *label175 always
@@ -2728,7 +2728,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    466 label *label173
 -    * op strictEqual *tmp189 "A" "B"
    467 # "Function: inline def eval(in b)"
--    * set :eval.54:b false
+-    * set :eval100:b false
    468 jump *label177 equal false false
    469 jump *label178 always
    470 label *label177
@@ -2738,7 +2738,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    472 label *label176
 -    * op equal *tmp192 false false
    473 # "Function: inline def eval(in b)"
--    * set :eval.55:b true
+-    * set :eval101:b true
    474 jump *label180 equal true false
 -    * set *tmp195 "T"
    475 jump *label181 always
@@ -2754,7 +2754,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    486 assertflush
 -    * op equal *tmp197 "A" "A"
    487 # "Function: inline def eval(in b)"
--    * set :eval.56:b true
+-    * set :eval102:b true
    488 jump *label184 equal true false
 -    * set *tmp199 "T"
    489 jump *label185 always
@@ -2764,7 +2764,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    492 label *label183
 -    * op notEqual *tmp200 "A" "A"
    493 # "Function: inline def eval(in b)"
--    * set :eval.57:b false
+-    * set :eval103:b false
    494 jump *label187 equal false false
    495 jump *label188 always
    496 label *label187
@@ -2774,7 +2774,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    498 label *label186
 -    * op strictEqual *tmp203 "A" "A"
    499 # "Function: inline def eval(in b)"
--    * set :eval.58:b true
+-    * set :eval104:b true
    500 jump *label190 equal true false
 -    * set *tmp205 "T"
    501 jump *label191 always
@@ -2784,7 +2784,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
    504 label *label189
 -    * op equal *tmp206 true false
    505 # "Function: inline def eval(in b)"
--    * set :eval.59:b false
+-    * set :eval105:b false
    506 jump *label193 equal false false
    507 jump *label194 always
    508 label *label193

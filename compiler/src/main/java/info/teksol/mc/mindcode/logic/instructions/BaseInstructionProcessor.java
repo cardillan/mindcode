@@ -124,7 +124,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         } else {
             AtomicInteger counter = functionPrefixCounter.computeIfAbsent(function.getName(), k -> new AtomicInteger(0));
             while (true) {
-                String prefix = ':' + function.getName() + '.' + counter.getAndIncrement();
+                int index = counter.getAndIncrement();
+                String prefix = ':' + function.getName() + (index == 0 ? "" : "." + index);
                 if (functionPrefixes.add(prefix)) {
                     return prefix;
                 }

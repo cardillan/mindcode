@@ -98,7 +98,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             }
         }
 
-        functions.stream().filter(f -> !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
+        functions.stream().filter(MindcodeFunction::isRemote).forEach(this::setupOutOfLineFunction);
+        functions.stream().filter(f -> !f.isRemote() && !f.isMain() && !f.isInline()).forEach(this::setupOutOfLineFunction);
     }
 
     void buildCallTreeAtRoot(List<MindcodeFunction> entryPoints, boolean trackUsages) {
@@ -119,7 +120,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private void setupOutOfLineFunction(MindcodeFunction function) {
         function.setLabel(processor.nextLabel());
-        function.setPrefix(function.isRemote() ? ":" + function.getName() : processor.nextFunctionPrefix(function));
+        function.setPrefix(processor.nextFunctionPrefix(function));
         function.createParameters();
     }
 

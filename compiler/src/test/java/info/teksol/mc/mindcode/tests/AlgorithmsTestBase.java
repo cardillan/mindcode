@@ -74,6 +74,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
         final List<DynamicTest> result = new ArrayList<>();
         final List<String> fileNames = List.of(
                 "array-reversion.mnd",
+                "base64-decode.mnd",
                 "compute-recursive-fibonacci.mnd",
                 "compute-sum-of-primes.mnd",
                 "digit-counts.mnd",

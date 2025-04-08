@@ -7,16 +7,16 @@
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-3 instructions):
  
-    13 set :test.0:res *tmp3
-    14 jump *label1 equal :test.0:res false
+    13 set :test:res *tmp3
+    14 jump *label1 equal :test:res false
     15 print "yes"
 -    * set *tmp4 "yes"
     16 jump *label2 always
     17 label *label1
 -    * set *tmp4 null
     18 label *label2
-    19 print :test.0:res
--    * set *tmp2 :test.0:res
+    19 print :test:res
+-    * set *tmp2 :test:res
     20 label *label0
     21 assertprints "yes1" "assignments in conditions"
     22 stop
@@ -27,21 +27,21 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
     10 assertflush
     11 # "Function: def test()"
 -    * op lessThan *tmp3 a b
--    * set :test.0:res *tmp3
-+   12 op lessThan :test.0:res a b
-    13 jump *label1 equal :test.0:res false
+-    * set :test:res *tmp3
++   12 op lessThan :test:res a b
+    13 jump *label1 equal :test:res false
     14 print "yes"
     15 jump *label2 always
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
  
-    12 op lessThan :test.0:res a b
-    13 jump *label1 equal :test.0:res false
+    12 op lessThan :test:res a b
+    13 jump *label1 equal :test:res false
     14 print "yes"
 -    * jump *label2 always
     15 label *label1
     16 label *label2
-    17 print :test.0:res
+    17 print :test:res
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set a 1
@@ -83,7 +83,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
 +    7 assertequals 4 *tmp0 "(B += 1) + B"
      8 assertflush
      9 # "Function: def test()"
-    10 op lessThan :test.0:res a b
+    10 op lessThan :test:res a b
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2 instructions):
  
@@ -98,11 +98,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-     9 jump *label1 equal :test.0:res false
+     9 jump *label1 equal :test:res false
     10 print "yes"
     11 label *label1
 -    * label *label2
-    12 print :test.0:res
+    12 print :test:res
 -    * label *label0
     13 assertprints "yes1" "assignments in conditions"
     14 stop
@@ -110,7 +110,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-    12 print :test.0:res
+    12 print :test:res
     13 assertprints "yes1" "assignments in conditions"
     14 stop
 -    * end
@@ -125,10 +125,10 @@ assertequals 4 *tmp0 "A + (A += 1)"
 assertequals 4 *tmp0 "(B += 1) + B"
 assertflush
 # "Function: def test()"
-op lessThan :test.0:res a b
-jump *label1 equal :test.0:res false
+op lessThan :test:res a b
+jump *label1 equal :test:res false
 print "yes"
 label *label1
-print :test.0:res
+print :test:res
 assertprints "yes1" "assignments in conditions"
 stop

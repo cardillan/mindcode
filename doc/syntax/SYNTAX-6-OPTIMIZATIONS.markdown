@@ -646,15 +646,15 @@ compiles into
 
 ```mlog
 set :i 0
-set :foo.0:x "Huzzah!"
-set :foo.0*retaddr 5
+set :foo:x "Huzzah!"
+set :foo*retaddr 5
 jump 0 greaterThanEq 0 @links
 jump 8 always 0 0
 op add :i :i 1
 jump 4 lessThan :i @links
 end
-print :foo.0:x
-set @counter :foo.0*retaddr
+print :foo:x
+set @counter :foo*retaddr
 ```
 
 Hoisting the instructions setting up return addresses is not possible when [`symbolic-labels`](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`.

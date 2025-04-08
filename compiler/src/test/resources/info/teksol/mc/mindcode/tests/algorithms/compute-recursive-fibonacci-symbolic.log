@@ -9,25 +9,25 @@
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
-     3 set :fib.0:n 10
-     4 callrec bank1 *label0 *label2 :fib.0*retval
+     3 set :fib:n 10
+     4 callrec bank1 *label0 *label2 :fib*retval
      5 label *label2
--    * set *tmp0 :fib.0*retval
+-    * set *tmp0 :fib*retval
 -    * assertequals 55 *tmp0 "fib(10)"
-+    6 assertequals 55 :fib.0*retval "fib(10)"
++    6 assertequals 55 :fib*retval "fib(10)"
      7 stop
      8 end
      9 label *label0
  
     28 label *label7
     29 pop bank1 *tmp4
-    30 pop bank1 :fib.0:n
--    * set *tmp6 :fib.0*retval
+    30 pop bank1 :fib:n
+-    * set *tmp6 :fib*retval
 -    * op add *tmp7 *tmp4 *tmp6
 -    * set *tmp2 *tmp7
-+   31 op add *tmp2 *tmp4 :fib.0*retval
++   31 op add *tmp2 *tmp4 :fib*retval
     32 label *label5
-    33 set :fib.0*retval *tmp2
+    33 set :fib*retval *tmp2
     34 label *label3
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
@@ -35,71 +35,71 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 inst
      8 end
      9 label *label0
     10 # "Function: def fib(in n)"
--    * op lessThan *tmp1 :fib.0:n 2
+-    * op lessThan *tmp1 :fib:n 2
 -    * jump *label4 equal *tmp1 false
-+   11 jump *label4 greaterThanEq :fib.0:n 2
-    12 set *tmp2 :fib.0:n
++   11 jump *label4 greaterThanEq :fib:n 2
+    12 set *tmp2 :fib:n
     13 jump *label5 always
     14 label *label4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     14 label *label4
-    15 op sub *tmp3 :fib.0:n 1
-    16 push bank1 :fib.0:n
--    * set :fib.0:n *tmp3
-+   17 op sub :fib.0:n :fib.0:n 1
-    18 callrec bank1 *label0 *label6 :fib.0*retval
+    15 op sub *tmp3 :fib:n 1
+    16 push bank1 :fib:n
+-    * set :fib:n *tmp3
++   17 op sub :fib:n :fib:n 1
+    18 callrec bank1 *label0 *label6 :fib*retval
     19 label *label6
-    20 pop bank1 :fib.0:n
+    20 pop bank1 :fib:n
  
-    22 op sub *tmp5 :fib.0:n 2
-    23 push bank1 :fib.0:n
+    22 op sub *tmp5 :fib:n 2
+    23 push bank1 :fib:n
     24 push bank1 *tmp4
--    * set :fib.0:n *tmp5
-+   25 op sub :fib.0:n :fib.0:n 2
-    26 callrec bank1 *label0 *label7 :fib.0*retval
+-    * set :fib:n *tmp5
++   25 op sub :fib:n :fib:n 2
+    26 callrec bank1 *label0 *label7 :fib*retval
     27 label *label7
     28 pop bank1 *tmp4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
-    12 set *tmp2 :fib.0:n
+    12 set *tmp2 :fib:n
     13 jump *label5 always
     14 label *label4
--    * op sub *tmp3 :fib.0:n 1
-    15 push bank1 :fib.0:n
-    16 op sub :fib.0:n :fib.0:n 1
-    17 callrec bank1 *label0 *label6 :fib.0*retval
+-    * op sub *tmp3 :fib:n 1
+    15 push bank1 :fib:n
+    16 op sub :fib:n :fib:n 1
+    17 callrec bank1 *label0 *label6 :fib*retval
     18 label *label6
-    19 pop bank1 :fib.0:n
-    20 set *tmp4 :fib.0*retval
--    * op sub *tmp5 :fib.0:n 2
-    21 push bank1 :fib.0:n
+    19 pop bank1 :fib:n
+    20 set *tmp4 :fib*retval
+-    * op sub *tmp5 :fib:n 2
+    21 push bank1 :fib:n
     22 push bank1 *tmp4
-    23 op sub :fib.0:n :fib.0:n 2
+    23 op sub :fib:n :fib:n 2
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
      8 end
      9 label *label0
     10 # "Function: def fib(in n)"
--    * jump *label4 greaterThanEq :fib.0:n 2
--    * set *tmp2 :fib.0:n
+-    * jump *label4 greaterThanEq :fib:n 2
+-    * set *tmp2 :fib:n
 -    * jump *label5 always
-+   11 set :fib.0*retval :fib.0:n
-+   12 jump *label5 lessThan :fib.0:n 2
++   11 set :fib*retval :fib:n
++   12 jump *label5 lessThan :fib:n 2
     13 label *label4
-    14 push bank1 :fib.0:n
-    15 op sub :fib.0:n :fib.0:n 1
+    14 push bank1 :fib:n
+    15 op sub :fib:n :fib:n 1
  
     24 label *label7
     25 pop bank1 *tmp4
-    26 pop bank1 :fib.0:n
--    * op add *tmp2 *tmp4 :fib.0*retval
-+   27 op add :fib.0*retval *tmp4 :fib.0*retval
+    26 pop bank1 :fib:n
+-    * op add *tmp2 *tmp4 :fib*retval
++   27 op add :fib*retval *tmp4 :fib*retval
     28 label *label5
--    * set :fib.0*retval *tmp2
+-    * set :fib*retval *tmp2
     29 label *label3
     30 returnrec bank1
     31 end
@@ -107,15 +107,15 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
     10 # "Function: def fib(in n)"
-    11 set :fib.0*retval :fib.0:n
-    12 jump *label5 lessThan :fib.0:n 2
+    11 set :fib*retval :fib:n
+    12 jump *label5 lessThan :fib:n 2
 -    * label *label4
-    13 push bank1 :fib.0:n
-    14 op sub :fib.0:n :fib.0:n 1
-    15 callrec bank1 *label0 *label6 :fib.0*retval
+    13 push bank1 :fib:n
+    14 op sub :fib:n :fib:n 1
+    15 callrec bank1 *label0 *label6 :fib*retval
  
-    25 pop bank1 :fib.0:n
-    26 op add :fib.0*retval *tmp4 :fib.0*retval
+    25 pop bank1 :fib:n
+    26 op add :fib*retval *tmp4 :fib*retval
     27 label *label5
 -    * label *label3
     28 returnrec bank1
@@ -123,7 +123,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-    26 op add :fib.0*retval *tmp4 :fib.0*retval
+    26 op add :fib*retval *tmp4 :fib*retval
     27 label *label5
     28 returnrec bank1
 -    * end
@@ -131,16 +131,16 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
  
     16 label *label6
-    17 pop bank1 :fib.0:n
-    18 set *tmp4 :fib.0*retval
--    * push bank1 :fib.0:n
+    17 pop bank1 :fib:n
+    18 set *tmp4 :fib*retval
+-    * push bank1 :fib:n
     19 push bank1 *tmp4
-    20 op sub :fib.0:n :fib.0:n 2
-    21 callrec bank1 *label0 *label7 :fib.0*retval
+    20 op sub :fib:n :fib:n 2
+    21 callrec bank1 *label0 *label7 :fib*retval
     22 label *label7
     23 pop bank1 *tmp4
--    * pop bank1 :fib.0:n
-    24 op add :fib.0*retval *tmp4 :fib.0*retval
+-    * pop bank1 :fib:n
+    24 op add :fib*retval *tmp4 :fib*retval
     25 label *label5
     26 returnrec bank1
 
@@ -149,27 +149,27 @@ Final code before resolving virtual instructions:
 label *label1
 jump *label1 equal bank1 null
 set *sp 0
-set :fib.0:n 10
-callrec bank1 *label0 *label2 :fib.0*retval
+set :fib:n 10
+callrec bank1 *label0 *label2 :fib*retval
 label *label2
-assertequals 55 :fib.0*retval "fib(10)"
+assertequals 55 :fib*retval "fib(10)"
 stop
 end
 label *label0
 # "Function: def fib(in n)"
-set :fib.0*retval :fib.0:n
-jump *label5 lessThan :fib.0:n 2
-push bank1 :fib.0:n
-op sub :fib.0:n :fib.0:n 1
-callrec bank1 *label0 *label6 :fib.0*retval
+set :fib*retval :fib:n
+jump *label5 lessThan :fib:n 2
+push bank1 :fib:n
+op sub :fib:n :fib:n 1
+callrec bank1 *label0 *label6 :fib*retval
 label *label6
-pop bank1 :fib.0:n
-set *tmp4 :fib.0*retval
+pop bank1 :fib:n
+set *tmp4 :fib*retval
 push bank1 *tmp4
-op sub :fib.0:n :fib.0:n 2
-callrec bank1 *label0 *label7 :fib.0*retval
+op sub :fib:n :fib:n 2
+callrec bank1 *label0 *label7 :fib*retval
 label *label7
 pop bank1 *tmp4
-op add :fib.0*retval *tmp4 :fib.0*retval
+op add :fib*retval *tmp4 :fib*retval
 label *label5
 returnrec bank1

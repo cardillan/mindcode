@@ -1,9 +1,9 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
-project-euler-04.mnd:                              22    42899     100.0%   485ABBCEBCE63451   0055097DC7D6FB50
+project-euler-04.mnd:                              22    42899     100.0%   485ABBCEBCE63451   99698174C254A917
 project-euler-18.mnd:                             837      837     100.0%   9CD1F51670FF2A5D   0AAC86C9F63BCE49
-project-euler-26.mnd:                             520     4923      68.6%   6C7318A31C223AA5   DF21DDA99B447FAF
+project-euler-26.mnd:                             520     4923      68.6%   6C7318A31C223AA5   7CE5AAFF4354C9B8
 project-euler-28.mnd:                              13    11006     100.0%   5C943F9BE29F7DE5   01C78654215D499C
-project-euler-31.mnd:                              60    11018      98.3%   47A4CC119289380D   B9E241A3C2B6B27E
+project-euler-31.mnd:                              60    11018      98.3%   47A4CC119289380D   9A5301EAE03288A7
 project-euler-31b.mnd:                            461     8245     100.0%   08C1247BD928B046   03E0AB32FE11A3F4
 project-euler-45.mnd:                              14   265002     100.0%   75B12E5E9F981D9A   5E1A2726096B69F6
 project-euler-97.mnd:                              11    11579     100.0%   0ED039F2AEA675BF   20E5544733C95CF7

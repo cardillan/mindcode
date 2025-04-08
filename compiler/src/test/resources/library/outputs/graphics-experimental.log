@@ -28,24 +28,24 @@ Final code before resolving virtual instructions:
     3:  jump *label4 equal display4 null
         label *label5
     4:  jump *label5 equal display5 null
-    5:  sensor :displaySize.0:type display1 @type
-    6:  set :displaySize.0*retval 80
-    7:  jump *label69 equal :displaySize.0:type @logic-display
-    8:  set :displaySize.0*retval null
-    9:  jump *label68 notEqual :displaySize.0:type @large-logic-display
-   10:  set :displaySize.0*retval 176
+    5:  sensor :displaySize:type display1 @type
+    6:  set :displaySize*retval 80
+    7:  jump *label69 equal :displaySize:type @logic-display
+    8:  set :displaySize*retval null
+    9:  jump *label68 notEqual :displaySize:type @large-logic-display
+   10:  set :displaySize*retval 176
         label *label68
         label *label69
-   11:  assertequals 176 :displaySize.0*retval "large display size"
-   12:  sensor :displaySize.0:type display5 @type
-   13:  set :displaySize.0*retval 80
-   14:  jump *label74 equal :displaySize.0:type @logic-display
-   15:  set :displaySize.0*retval null
-   16:  jump *label73 notEqual :displaySize.0:type @large-logic-display
-   17:  set :displaySize.0*retval 176
+   11:  assertequals 176 :displaySize*retval "large display size"
+   12:  sensor :displaySize:type display5 @type
+   13:  set :displaySize*retval 80
+   14:  jump *label74 equal :displaySize:type @logic-display
+   15:  set :displaySize*retval null
+   16:  jump *label73 notEqual :displaySize:type @large-logic-display
+   17:  set :displaySize*retval 176
         label *label73
         label *label74
-   18:  assertequals 80 :displaySize.0*retval "small display size"
+   18:  assertequals 80 :displaySize*retval "small display size"
    19:  assertequals 0.2 0.2 "red channel"
    20:  assertequals 0.4 0.4 "green channel"
    21:  assertequals 0.6 0.6 "blue channel"

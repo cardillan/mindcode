@@ -154,18 +154,18 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, tmp(10), ":a"),
                     createInstruction(READARR, tmp(11), ".x[]", tmp(10)),
                     createInstruction(SET, tmp(12), tmp(11)),
-                    createInstruction(SET, ":foo.0:x", tmp(12)),
-                    createInstruction(SETADDR, ":foo.0*retaddr", label(2)),
-                    createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
+                    createInstruction(SET, ":foo:x", tmp(12)),
+                    createInstruction(SETADDR, ":foo*retaddr", label(2)),
+                    createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                     createInstruction(LABEL, label(2)),
-                    createInstruction(WRITEARR, ":foo.0:x", ".x[]", tmp(10)),
+                    createInstruction(WRITEARR, ":foo:x", ".x[]", tmp(10)),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(SET, tmp(13), ":foo.0:x"),
-                    createInstruction(OP, "add", ":foo.0:x", ":foo.0:x", "1"),
-                    createInstruction(SET, ":foo.0*retval", tmp(13)),
+                    createInstruction(SET, tmp(13), ":foo:x"),
+                    createInstruction(OP, "add", ":foo:x", ":foo:x", "1"),
+                    createInstruction(SET, ":foo*retval", tmp(13)),
                     createInstruction(LABEL, label(3)),
-                    createInstruction(RETURN, ":foo.0*retaddr")
+                    createInstruction(RETURN, ":foo*retaddr")
             );
         }
     }
@@ -281,18 +281,18 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, tmp(0), ":a"),
                     createInstruction(READARR, tmp(1), ".x[]", tmp(0)),
                     createInstruction(SET, tmp(2), tmp(1)),
-                    createInstruction(SET, ":foo.0:x", tmp(2)),
-                    createInstruction(SETADDR, ":foo.0*retaddr", label(1)),
-                    createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
+                    createInstruction(SET, ":foo:x", tmp(2)),
+                    createInstruction(SETADDR, ":foo*retaddr", label(1)),
+                    createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                     createInstruction(LABEL, label(1)),
-                    createInstruction(WRITEARR, ":foo.0:x", ".x[]", tmp(0)),
+                    createInstruction(WRITEARR, ":foo:x", ".x[]", tmp(0)),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(SET, tmp(3), ":foo.0:x"),
-                    createInstruction(OP, "add", ":foo.0:x", ":foo.0:x", "1"),
-                    createInstruction(SET, ":foo.0*retval", tmp(3)),
+                    createInstruction(SET, tmp(3), ":foo:x"),
+                    createInstruction(OP, "add", ":foo:x", ":foo:x", "1"),
+                    createInstruction(SET, ":foo*retval", tmp(3)),
                     createInstruction(LABEL, label(2)),
-                    createInstruction(RETURN, ":foo.0*retaddr")
+                    createInstruction(RETURN, ":foo*retaddr")
             );
         }
     }

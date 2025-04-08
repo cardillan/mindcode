@@ -240,18 +240,18 @@ class DeadCodeEliminatorTest extends AbstractOptimizerTest<DeadCodeEliminator> {
                         foo(2);
                         foo(4);
                         """,
-                createInstruction(SET, ":foo.0:n", "2"),
-                createInstruction(SETADDR, ":foo.0*retaddr", label(1)),
-                createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
+                createInstruction(SET, ":foo:n", "2"),
+                createInstruction(SETADDR, ":foo*retaddr", label(1)),
+                createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(1)),
-                createInstruction(SET, ":foo.0:n", "4"),
-                createInstruction(SETADDR, ":foo.0*retaddr", label(2)),
-                createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
+                createInstruction(SET, ":foo:n", "4"),
+                createInstruction(SETADDR, ":foo*retaddr", label(2)),
+                createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(2)),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
-                createInstruction(PRINT, ":foo.0:n"),
-                createInstruction(RETURN, ":foo.0*retaddr")
+                createInstruction(PRINT, ":foo:n"),
+                createInstruction(RETURN, ":foo*retaddr")
         );
     }
 

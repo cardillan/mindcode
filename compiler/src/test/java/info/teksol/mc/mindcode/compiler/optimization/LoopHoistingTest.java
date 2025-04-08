@@ -152,12 +152,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "rand", ".B", "20"),
                 createInstruction(SET, ":i", "0"),
                 createInstruction(OP, "mul", ":y", "2", ".B"),
-                createInstruction(SET, ":foo.0:n", "10"),
-                createInstruction(SETADDR, ":foo.0*retaddr", label(5)),
+                createInstruction(SET, ":foo:n", "10"),
+                createInstruction(SETADDR, ":foo*retaddr", label(5)),
                 createInstruction(JUMP, "__start__", "greaterThanEq", "0", ".A"),
                 createInstruction(LABEL, label(9)),
                 createInstruction(OP, "mul", ":x", "2", ".A"),
-                createInstruction(CALL, label(1), "*invalid", ":foo.0*retval"),
+                createInstruction(CALL, label(1), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(5)),
                 createInstruction(PRINT, ":x"),
                 createInstruction(PRINT, ":y"),
@@ -165,15 +165,15 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(JUMP, label(9), "lessThan", ":i", ".A"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
-                createInstruction(OP, "sub", ".A", ":bar.0:x", ".B"),
-                createInstruction(RETURN, ":bar.0*retaddr"),
+                createInstruction(OP, "sub", ".A", ":bar:x", ".B"),
+                createInstruction(RETURN, ":bar*retaddr"),
                 createInstruction(LABEL, label(1)),
-                createInstruction(PRINT, ":foo.0:n"),
-                createInstruction(SET, ":bar.0:x", ":foo.0:n"),
-                createInstruction(SETADDR, ":bar.0*retaddr", label(8)),
-                createInstruction(CALL, label(0), "*invalid", ":bar.0*retval"),
+                createInstruction(PRINT, ":foo:n"),
+                createInstruction(SET, ":bar:x", ":foo:n"),
+                createInstruction(SETADDR, ":bar*retaddr", label(8)),
+                createInstruction(CALL, label(0), "*invalid", ":bar*retval"),
                 createInstruction(LABEL, label(8)),
-                createInstruction(RETURN, ":foo.0*retaddr")
+                createInstruction(RETURN, ":foo*retaddr")
         );
     }
 
@@ -215,9 +215,9 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         end;
                         """,
                 createInstruction(OP, "rand", ":a", "10"),
-                createInstruction(OP, "rand", ":foo.0*retval", "10"),
+                createInstruction(OP, "rand", ":foo*retval", "10"),
                 createInstruction(PRINT, ":a"),
-                createInstruction(PRINT, ":foo.0*retval")
+                createInstruction(PRINT, ":foo*retval")
         );
     }
 
@@ -270,26 +270,26 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         """,
                 createInstruction(LABEL, "__start__"),
                 createInstruction(SET, "count", "10"),
-                createInstruction(SETADDR, ":foo.0*retaddr", label(1)),
-                createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
+                createInstruction(SETADDR, ":foo*retaddr", label(1)),
+                createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(1)),
-                createInstruction(OP, "add", tmp(1), ":foo.0:x", ":foo.0:y"),
+                createInstruction(OP, "add", tmp(1), ":foo:x", ":foo:y"),
                 createInstruction(PRINT, tmp(1)),
                 createInstruction(SET, ":i", "1"),
-                createInstruction(SETADDR, ":foo.0*retaddr", label(5)),
+                createInstruction(SETADDR, ":foo*retaddr", label(5)),
                 createInstruction(JUMP, "__start__", "greaterThan", "1", "count"),
                 createInstruction(LABEL, label(7)),
-                createInstruction(CALL, label(0), "*invalid", ":foo.0*retval"),
+                createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(5)),
-                createInstruction(OP, "add", tmp(3), ":foo.0:x", ":foo.0:y"),
+                createInstruction(OP, "add", tmp(3), ":foo:x", ":foo:y"),
                 createInstruction(PRINT, tmp(3)),
                 createInstruction(OP, "add", ":i", ":i", "1"),
                 createInstruction(JUMP, label(7), "lessThanEq", ":i", "count"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
-                createInstruction(OP, "rand", ":foo.0:x", "10"),
-                createInstruction(OP, "rand", ":foo.0:y", "10"),
-                createInstruction(RETURN, ":foo.0*retaddr")
+                createInstruction(OP, "rand", ":foo:x", "10"),
+                createInstruction(OP, "rand", ":foo:y", "10"),
+                createInstruction(RETURN, ":foo*retaddr")
         );
     }
 
@@ -505,32 +505,32 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         
                         bar(1);
                         """,
-                createInstruction(SET, ":bar.0:s", "1"),
-                createInstruction(SETADDR, ":bar.0*retaddr", label(2)),
-                createInstruction(CALL, label(0), "*invalid", ":bar.0*retval"),
+                createInstruction(SET, ":bar:s", "1"),
+                createInstruction(SETADDR, ":bar*retaddr", label(2)),
+                createInstruction(CALL, label(0), "*invalid", ":bar*retval"),
                 createInstruction(LABEL, label(2)),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
-                createInstruction(OP, "add", ":foo.0:n", "10", ":bar.0:s"),
-                createInstruction(SETADDR, ":foo.0*retaddr", label(4)),
-                createInstruction(CALL, label(1), "*invalid", ":foo.0*retval"),
+                createInstruction(OP, "add", ":foo:n", "10", ":bar:s"),
+                createInstruction(SETADDR, ":foo*retaddr", label(4)),
+                createInstruction(CALL, label(1), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(4)),
-                createInstruction(RETURN, ":bar.0*retaddr"),
+                createInstruction(RETURN, ":bar*retaddr"),
                 createInstruction(LABEL, label(1)),
-                createInstruction(SET, ":foo.0:sum", "0"),
-                createInstruction(OP, "rand", ":foo.0:r", "10"),
-                createInstruction(SET, ":foo.0:i", "0"),
-                createInstruction(OP, "add", tmp(2), ":foo.0:n", ":foo.0:r"),
+                createInstruction(SET, ":foo:sum", "0"),
+                createInstruction(OP, "rand", ":foo:r", "10"),
+                createInstruction(SET, ":foo:i", "0"),
+                createInstruction(OP, "add", tmp(2), ":foo:n", ":foo:r"),
                 createInstruction(LABEL, label(9)),
-                createInstruction(OP, "add", ":foo.0:sum", ":foo.0:sum", tmp(2)),
-                createInstruction(OP, "add", ":foo.0:i", ":foo.0:i", "1"),
-                createInstruction(JUMP, label(9), "lessThan", ":foo.0:i", "50"),
-                createInstruction(OP, "mul", tmp(3), "50", ":foo.0:r"),
-                createInstruction(OP, "sub", tmp(4), ":foo.0:sum", tmp(3)),
+                createInstruction(OP, "add", ":foo:sum", ":foo:sum", tmp(2)),
+                createInstruction(OP, "add", ":foo:i", ":foo:i", "1"),
+                createInstruction(JUMP, label(9), "lessThan", ":foo:i", "50"),
+                createInstruction(OP, "mul", tmp(3), "50", ":foo:r"),
+                createInstruction(OP, "sub", tmp(4), ":foo:sum", tmp(3)),
                 createInstruction(OP, "add", tmp(5), tmp(4), "0.5"),
                 createInstruction(OP, "floor", tmp(6), tmp(5)),
                 createInstruction(PRINT, tmp(6)),
-                createInstruction(RETURN, ":foo.0*retaddr")
+                createInstruction(RETURN, ":foo*retaddr")
         );
     }
 }
