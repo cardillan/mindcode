@@ -134,6 +134,14 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         this.debugPrinterProvider = debugPrinterProvider;
     }
 
+    public void safeCompile() {
+        try {
+            compile();
+        } catch (Exception e) {
+            error(ERR.INTERNAL_ERROR);
+        }
+    }
+
     public void compile() {
         compile(inputFiles.getInputFiles());
     }

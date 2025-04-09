@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
@@ -333,7 +334,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         int maxSize = modifiers.containsKey(Modifier.EXTERNAL) ? MAX_EXTERNAL_ARRAY_SIZE : MAX_INTERNAL_ARRAY_SIZE;
 
         ValueStore size = processInLocalScope(() -> evaluate(specification.getArraySize()));
-        if (!(size instanceof LogicNumber number)) {
+        if (!(size instanceof LogicReadable number &&number.isConstant())) {
             error(specification.getArraySize(), ERR.ARRAY_MUTABLE_SIZE);
         } else if (!number.isInteger()) {
             error(specification.getArraySize(), ERR.ARRAY_NON_INTEGER_SIZE);

@@ -15,6 +15,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -28,6 +29,7 @@ import java.util.*;
 /// Non-deterministic operations or operations with side effects remain unevaluated.
 @NullMarked
 public class CompileTimeEvaluator extends AbstractMessageEmitter {
+    private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final Map<String, AstLiteral> constants = new HashMap<>();
     private final IdentityHashMap<AstMindcodeNode, AstMindcodeNode> cache = new IdentityHashMap<>();
@@ -35,6 +37,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
 
     public CompileTimeEvaluator(CompileTimeEvaluatorContext context) {
         super(context.messageConsumer());
+        profile = context.compilerProfile();
         processor = context.instructionProcessor();
         variables = context.variables();
     }
@@ -52,9 +55,9 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     ///         unwrapped, so that proper error message can be generated if the value cannot be represented in mlog
     /// @return compile-time evaluation of the node
     public AstMindcodeNode evaluate(AstMindcodeNode node, boolean local, boolean requireMlogConstant) {
-        if (node instanceof AstIdentifier) {
-            // Identifiers aren't evaluated to prevent a possible loss precision warning
-            // generated when using imprecise constants.
+        if (node instanceof AstIdentifier || node instanceof AstBuiltInIdentifier) {
+            // Identifiers aren't evaluated to prevent a possible loss precision warning generated when using imprecise constants.
+            // Logic builtins aren't evaluated to prevent their conversion to a numeric literal
             return node;
         }
 
@@ -107,7 +110,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         LogicOperation eval = ExpressionEvaluator.getOperation(node.getOperation());
         if (operation.isDeterministic() && eval != null) {
             if (operation == Operation.ADD || operation == Operation.SUB || operation.getOperands() == 1) {
-                ExpressionValue right = ExpressionValue.create(processor, evaluateNode(node.getOperand(), local));
+                ExpressionValue right = ExpressionValue.create(profile, processor, evaluateNode(node.getOperand(), local));
                 ExpressionValue left = operation.getOperands() == 1 ? right : ExpressionValue.zero(processor);
                 if (right.isString()) {
                     error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
@@ -126,8 +129,8 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         if (operation.isDeterministic()) {
             LogicOperation eval = ExpressionEvaluator.getOperation(operation);
             if (eval != null) {
-                ExpressionValue left = ExpressionValue.create(processor, evaluateNode(node.getLeft(), local));
-                ExpressionValue right = ExpressionValue.create(processor, evaluateNode(node.getRight(), local));
+                ExpressionValue left = ExpressionValue.create(profile, processor, evaluateNode(node.getLeft(), local));
+                ExpressionValue right = ExpressionValue.create(profile, processor, evaluateNode(node.getRight(), local));
                 if (left.isString() || right.isString()) {
                     // Only addition of a string and a non-null value is supported
                     if (operation == Operation.ADD && !left.isNull() && !right.isNull()) {
@@ -242,8 +245,8 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
             if (evaluated.size() == numArgs) {
                 // All parameters are constant
                 // left and right are the same argument for unary functions
-                ExpressionValue left = ExpressionValue.create(processor, evaluated.getFirst());
-                ExpressionValue right = ExpressionValue.create(processor, evaluated.getLast());
+                ExpressionValue left = ExpressionValue.create(profile, processor, evaluated.getFirst());
+                ExpressionValue right = ExpressionValue.create(profile, processor, evaluated.getLast());
                 if (left.isString() || right.isString()) {
                     error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
                     return node;

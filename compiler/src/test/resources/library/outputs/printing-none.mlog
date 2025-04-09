@@ -368,8 +368,8 @@ set *tmp57 null
 set *tmp25 *tmp57
 set @counter :printExactFast*retaddr
 end
-set :isZero47:x :printExactSlow:n
-op abs *tmp59 :isZero47:x 0
+set :isZero.1:x :printExactSlow:n
+op abs *tmp59 :isZero.1:x 0
 op lessThanEq *tmp60 *tmp59 0
 set *tmp58 *tmp60
 jump 378 equal *tmp58 false
@@ -396,8 +396,8 @@ print *tmp70
 print "."
 set :printExactSlow:digit 1
 jump 407 greaterThan :printExactSlow:digit 15
-set :frac47:x :printExactSlow:base
-op mod *tmp72 :frac47:x 1
+set :frac.1:x :printExactSlow:base
+op mod *tmp72 :frac.1:x 1
 set *tmp71 *tmp72
 op mul *tmp73 *tmp71 10
 set :printExactSlow:base *tmp73

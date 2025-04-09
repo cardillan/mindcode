@@ -82,6 +82,7 @@ public class ERR {
     public static final String FUNCTION_VARARGS_NOT_INLINE = "Varargs function '%s' must be declared 'inline'.";
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";
     public static final String INTERNAL_AMBIGUOUS_CODE = "%s: ambiguous source code (%d ambiguities found).";
+    public static final String INTERNAL_ERROR = "An internal error was encountered.";
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals requires language target 7 or higher.";

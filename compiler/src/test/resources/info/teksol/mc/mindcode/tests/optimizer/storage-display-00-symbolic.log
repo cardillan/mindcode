@@ -330,7 +330,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-23 instruct
 -    * set *tmp22 *tmp23
    109 label *label20
    110 # "Function: inline def eraseImages(in first_column)"
-   111 set :eraseImages47:first_column false
+   111 set :eraseImages.1:first_column false
  
    118 draw rect 93 0 16 176
    119 set *tmp25 null
@@ -444,7 +444,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-13 instruct
    108 # "Function: inline def eraseImages(in first_column)"
  
    110 draw color 0 0 80 255
-   111 jump *label24 equal :eraseImages47:first_column false
+   111 jump *label24 equal :eraseImages.1:first_column false
    112 draw rect 0 0 23 176
 -    * set *tmp25 null
    113 jump *label25 always
@@ -716,7 +716,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-28 instruct
    673 label *label88
  
    700 draw color 0 0 80 255
-   701 jump *label140 equal :eraseNumbers47:first_column false
+   701 jump *label140 equal :eraseNumbers.1:first_column false
    702 draw rect 23 0 70 176
 -    * set *tmp233 null
    703 jump *label141 always
@@ -1217,9 +1217,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     90 label *label21
  
     94 # "Function: inline def eraseImages(in first_column)"
-    95 set :eraseImages47:first_column false
+    95 set :eraseImages.1:first_column false
     96 draw color 0 0 80 255
--    * jump *label24 equal :eraseImages47:first_column false
+-    * jump *label24 equal :eraseImages.1:first_column false
 +   97 jump *label24 equal false false
     98 draw rect 0 0 23 176
     99 jump *label25 always
@@ -1824,9 +1824,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    625 label *label111
  
    646 # "Function: inline def eraseNumbers(in first_column)"
-   647 set :eraseNumbers47:first_column false
+   647 set :eraseNumbers.1:first_column false
    648 draw color 0 0 80 255
--    * jump *label140 equal :eraseNumbers47:first_column false
+-    * jump *label140 equal :eraseNumbers.1:first_column false
 +  649 jump *label140 equal false false
    650 draw rect 23 0 70 176
    651 jump *label141 always
@@ -1845,7 +1845,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
     91 label *label22
     92 label *label20
     93 # "Function: inline def eraseImages(in first_column)"
--    * set :eraseImages47:first_column false
+-    * set :eraseImages.1:first_column false
     94 draw color 0 0 80 255
     95 jump *label24 equal false false
     96 draw rect 0 0 23 176
@@ -2322,7 +2322,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    585 set :y 152
    586 set :x 157
    587 # "Function: inline def eraseNumbers(in first_column)"
--    * set :eraseNumbers47:first_column false
+-    * set :eraseNumbers.1:first_column false
    588 draw color 0 0 80 255
    589 jump *label140 equal false false
    590 draw rect 23 0 70 176

@@ -33,8 +33,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added array-specific optimizations for speed: 
   * Replacing jump tables for short arrays (up to three elements) with if-else blocks.
   * Jump table inlining optimization (similar to function inlining, the jump table gets replicated at the call site, saving up to two instructions).
-  * (no unit tests yet)
-  * (more to come)
 
 ### Changed
 
@@ -42,7 +40,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * The metadata used by Mindcode compiler and processor emulator now correspond to the compilation target. Schemacode still uses the latest version of the metadata for both building and decompiling schematics.
 * Improved optimization of jumps by making multiple passes over jumps-related optimizers, up to the optimization passes limit.
 * Volatile built-in variables used an upper or lower bound in a ranged for-loop statement are used directly in the condition, without storing them in a temporary variable.
-* Stripped unnecessary `.0` counter from local variable prefix.
+* Stripped unnecessary `.0` distinctions from local variable prefix.
 * The `noinit` modifier is no longer disallowed for local variables.
 
 ## 3.2.1 - 2025-03-23

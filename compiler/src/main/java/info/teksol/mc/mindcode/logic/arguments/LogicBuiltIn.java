@@ -44,6 +44,13 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
         }
     }
 
+    protected LogicBuiltIn(SourcePosition sourcePosition, String name) {
+        super(ArgumentType.BUILT_IN, ValueMutability.CONSTANT);
+        this.sourcePosition = sourcePosition;
+        this.name = name;
+        this.object = null;
+    }
+
     private static ValueMutability computeMutability(@Nullable Object object, boolean isVolatile) {
         return isVolatile ? ValueMutability.VOLATILE : object == null ? ValueMutability.IMMUTABLE : ValueMutability.CONSTANT;
     }

@@ -67,6 +67,14 @@ abstract class ActionHandler {
                 .choices(new CaseInsensitiveChoices(ProcessorVersion.getPossibleVersions()));
 
         createArgument(container, defaults,
+                CompilerProfile::isTargetOptimization,
+                (profile, arguments, name) -> profile.setTargetOptimization(arguments.getBoolean(name)),
+                "--target-optimization")
+                .help("'specific' produces code guaranteed to run on the processor of the chosen target version only, " +
+                        "'compatible' produces code compatible with current target and future versions of Mindustry Logic")
+                .type(Arguments.booleanType("specific", "compatible"));
+
+        createArgument(container, defaults,
                 CompilerProfile::getSyntacticMode,
                 (profile, arguments, name) -> profile.setSyntacticMode(arguments.get(name)),
                 "-y", "--syntax")

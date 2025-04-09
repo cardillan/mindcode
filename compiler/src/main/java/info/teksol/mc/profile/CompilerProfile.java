@@ -57,6 +57,7 @@ public class CompilerProfile {
     private int parseTreeLevel = 0;
     private boolean printStackTrace = false;
     private Remarks remarks = Remarks.PASSIVE;
+    private boolean targetOptimization = false;
     private boolean shortCircuitEval = false;
     private boolean shortFunctionPrefix = false;
     private boolean signature = true;
@@ -405,6 +406,15 @@ public class CompilerProfile {
 
     public CompilerProfile setSymbolicLabels(boolean symbolicLabels) {
         this.symbolicLabels = symbolicLabels;
+        return this;
+    }
+
+    public boolean isTargetOptimization() {
+        return targetOptimization;
+    }
+
+    public CompilerProfile setTargetOptimization(boolean targetOptimization) {
+        this.targetOptimization = targetOptimization;
         return this;
     }
 

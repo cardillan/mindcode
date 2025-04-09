@@ -54,6 +54,21 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
+        class TargetOptimizationArgumentTest {
+            @Test
+            public void longArgumentSpecific() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--target-optimization specific");
+                assertTrue(profile.isTargetOptimization());
+            }
+
+            @Test
+            public void longArgumentCompatible() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--target-optimization compatible");
+                assertFalse(profile.isTargetOptimization());
+            }
+        }
+
+        @Nested
         class SyntaxArgumentTest {
             @Test
             public void shortArgumentRelaxed() throws ArgumentParserException {

@@ -100,6 +100,15 @@ class DirectivePreprocessorTest {
         assertFalse(profile.isShortFunctionPrefix());
     }
 
+
+    @Test
+    void processesDirectiveTargetOptimization() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setTargetOptimization(false);
+        processDirective(profile, "target-optimization", "specific");
+        assertTrue(profile.isTargetOptimization());
+    }
+
     @Test
     void processesDirectiveGoal() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);

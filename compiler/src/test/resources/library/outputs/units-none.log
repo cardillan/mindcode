@@ -170,37 +170,37 @@ Final code before resolving virtual instructions:
         label *label29
   130:  print *tmp35
   131:  print "\n"
-  132:  set :waitForFreeUnit47:message :message
-  133:  set :waitForFreeUnit47:preface :preface
-  134:  set :waitForFreeUnit47:unit_type :unit_type
-  135:  set :waitForFreeUnit47:initial_flag :initial_flag
+  132:  set :waitForFreeUnit.1:message :message
+  133:  set :waitForFreeUnit.1:preface :preface
+  134:  set :waitForFreeUnit.1:unit_type :unit_type
+  135:  set :waitForFreeUnit.1:initial_flag :initial_flag
         label *label38
   136:  jump *label40 equal true false
-  137:  ubind :waitForFreeUnit47:unit_type
+  137:  ubind :waitForFreeUnit.1:unit_type
   138:  op equal *tmp42 @unit null
   139:  jump *label41 equal *tmp42 false
-  140:  print :waitForFreeUnit47:preface
+  140:  print :waitForFreeUnit.1:preface
   141:  print "No unit of type "
-  142:  print :waitForFreeUnit47:unit_type
+  142:  print :waitForFreeUnit.1:unit_type
   143:  print " "
   144:  print "found."
-  145:  printflush :waitForFreeUnit47:message
+  145:  printflush :waitForFreeUnit.1:message
   146:  set *tmp43 null
   147:  jump *label42 always 0 0
         label *label41
   148:  sensor *tmp44 @unit @controlled
   149:  op notEqual *tmp45 *tmp44 0
   150:  jump *label43 equal *tmp45 false
-  151:  print :waitForFreeUnit47:preface
+  151:  print :waitForFreeUnit.1:preface
   152:  print "Looking for a free "
-  153:  print :waitForFreeUnit47:unit_type
+  153:  print :waitForFreeUnit.1:unit_type
   154:  print "."
   155:  print ".."
-  156:  printflush :waitForFreeUnit47:message
+  156:  printflush :waitForFreeUnit.1:message
   157:  set *tmp46 null
   158:  jump *label44 always 0 0
         label *label43
-  159:  ucontrol flag :waitForFreeUnit47:initial_flag 0 0 0 0
+  159:  ucontrol flag :waitForFreeUnit.1:initial_flag 0 0 0 0
   160:  set *tmp41 @unit
   161:  jump *label37 always 0 0
   162:  set *tmp46 null

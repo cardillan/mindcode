@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 /// Represents a Mindustry content. There are various kind of contents - building types, unit types,
 /// items, liquids.
 @NullMarked
-public interface MindustryContent extends MindustryObject {
+public interface MindustryContent extends MindustryObject, Comparable<MindustryContent> {
 
     /// @return the type of this content
     ContentType contentType();
@@ -42,5 +42,9 @@ public interface MindustryContent extends MindustryObject {
     /// @return icon string literal for this object
     default @Nullable String iconString(MindustryMetadata metadata) {
         return metadata.getIcons().getContentIcon(contentType(), contentName());
+    }
+
+    default int compareTo(MindustryContent other) {
+        return Integer.compare(id(), other.id());
     }
 }

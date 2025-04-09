@@ -24,7 +24,24 @@ public interface LogicReadable {
     ///
     /// @return numeric value of this argument as a long
     default long getLongValue() {
-        throw new MindcodeInternalError("Unexpected call to getLongValue");
+        return (long) getDoubleValue();
+    }
+
+    /// @return true when this value is a long
+    default boolean isLong() {
+        return getLongValue() == getDoubleValue();
+    }
+
+    /// Provides the value of this argument as an int. Throws error when isConstant() is false.
+    ///
+    /// @return numeric value of this argument as a long
+    default int getIntValue() {
+        return (int) getDoubleValue();
+    }
+
+    /// @return true when this value is an int
+    default boolean isInteger() {
+        return getIntValue() == getDoubleValue();
     }
 
     /// Provides the value of this argument as an object. Throws error when isConstant() is false.

@@ -23,12 +23,13 @@ public class MindustryMetadata {
         this.processorVersion = processorVersion;
     }
 
-    private static final EnumMap<ProcessorVersion, MindustryMetadata> cache = new EnumMap<>(ProcessorVersion.class);
+    private static final Map<String, MindustryMetadata> cache = new HashMap<>();
 
     public static MindustryMetadata forVersion(ProcessorVersion processorVersion) {
-        return cache.computeIfAbsent(processorVersion, MindustryMetadata::new);
+        return cache.computeIfAbsent(processorVersion.mimexVersion, _ -> new MindustryMetadata(processorVersion));
     }
 
+    private final AtomicReference<Set<String>> stableBuiltins = new AtomicReference<>();
     private final AtomicReference<Icons> icons = new AtomicReference<>();
 
     private final AtomicReference<Map<String, BlockType>> blockMap = new AtomicReference<>();
@@ -68,6 +69,20 @@ public class MindustryMetadata {
         return value;
     }
 
+    Set<String> getStableBuiltins() {
+        return cacheInstance(stableBuiltins, () -> {
+            try (InputStream input = Objects.requireNonNull(BlockTypeReader.class.getResourceAsStream("/mimex/stable-builtins.txt"))) {
+                return new BufferedReader(new InputStreamReader(input)).lines().collect(Collectors.toCollection(HashSet::new));
+            } catch (IOException e) {
+                throw new RuntimeException("Cannot read resource /mimex/stable-builtins.txt", e);
+            }
+        });
+    }
+
+    public boolean isStableBuiltin(String name) {
+        return getStableBuiltins().contains(name);
+    }
+
     // Icons
     public Icons getIcons() {
         return cacheInstance(icons, () -> new Icons(processorVersion.mimexVersion));
@@ -79,15 +94,15 @@ public class MindustryMetadata {
         return cacheInstance(blockMap, () -> new BlockTypeReader("mimex-blocks.txt").createFromResource());
     }
 
-    private Map<String, Item> getItemMap() {
+    Map<String, Item> getItemMap() {
         return cacheInstance(itemMap, () -> new SimpleReader<>("mimex-items.txt", Item::new).createFromResource());
     }
 
-    private Map<String, Liquid> getLiquidMap() {
+    Map<String, Liquid> getLiquidMap() {
         return cacheInstance(liquidMap, () -> new SimpleReader<>("mimex-liquids.txt", Liquid::new).createFromResource());
     }
 
-    private Map<String, Unit> getUnitMap() {
+    Map<String, Unit> getUnitMap() {
         return cacheInstance(unitMap, () -> new SimpleReader<>("mimex-units.txt", Unit::new).createFromResource());
     }
 
@@ -175,10 +190,10 @@ public class MindustryMetadata {
 
     public @Nullable Map<Integer, ? extends MindustryContent> getLookupMap(String type) {
         return switch (type) {
-            case "block" -> getBlockIdMap();
-            case "liquid" -> getLiquidIdMap();
-            case "item" -> getItemIdMap();
-            case "unit" -> getUnitIdMap();
+            case "block" -> getBlockLogicIdMap();
+            case "liquid" -> getLiquidLogicIdMap();
+            case "item" -> getItemLogicIdMap();
+            case "unit" -> getUnitLogicIdMap();
             default -> null;
         };
     }
@@ -265,6 +280,10 @@ public class MindustryMetadata {
 
     public Collection<LVar> getAllLVars() {
         return getLVarMap().values();
+    }
+
+    public @Nullable LVar getLVar(String name) {
+        return getLVarMap().get(name);
     }
     //</editor-fold>
 

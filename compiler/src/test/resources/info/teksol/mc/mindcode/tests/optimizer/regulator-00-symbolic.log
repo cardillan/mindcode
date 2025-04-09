@@ -413,7 +413,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
    167 # "Function: inline def setState(in newState)"
  
    170 jump *label36 equal *tmp38 false
-   171 set .STATE :setState47:newState
+   171 set .STATE :setState.1:newState
    172 op add .CYCLES .CYCLES 1
 -    * op xor *tmp40 .INVERTED .STATE
 -    * set .ON *tmp40
@@ -423,7 +423,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-19 ins
    176 jump *label39 always
  
    192 jump *label43 equal *tmp45 false
-   193 set .STATE :setState48:newState
+   193 set .STATE :setState.2:newState
    194 op add .CYCLES .CYCLES 1
 -    * op xor *tmp47 .INVERTED .STATE
 -    * set .ON *tmp47
@@ -570,11 +570,11 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
 -    * jump *label33 equal *tmp35 false
 +  153 jump *label33 greaterThan :pct PCT_LOW
    154 # "Function: inline def setState(in newState)"
-   155 set :setState47:newState true
--    * op notEqual *tmp38 .STATE :setState47:newState
+   155 set :setState.1:newState true
+-    * op notEqual *tmp38 .STATE :setState.1:newState
 -    * jump *label36 equal *tmp38 false
-+  156 jump *label36 equal .STATE :setState47:newState
-   157 set .STATE :setState47:newState
++  156 jump *label36 equal .STATE :setState.1:newState
+   157 set .STATE :setState.1:newState
    158 op add .CYCLES .CYCLES 1
    159 op xor .ON .INVERTED .STATE
  
@@ -585,11 +585,11 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
 -    * jump *label40 equal *tmp42 false
 +  173 jump *label40 lessThan :pct PCT_HIGH
    174 # "Function: inline def setState(in newState)"
-   175 set :setState48:newState false
--    * op notEqual *tmp45 .STATE :setState48:newState
+   175 set :setState.2:newState false
+-    * op notEqual *tmp45 .STATE :setState.2:newState
 -    * jump *label43 equal *tmp45 false
-+  176 jump *label43 equal .STATE :setState48:newState
-   177 set .STATE :setState48:newState
++  176 jump *label43 equal .STATE :setState.2:newState
+   177 set .STATE :setState.2:newState
    178 op add .CYCLES .CYCLES 1
    179 op xor .ON .INVERTED .STATE
  
@@ -688,28 +688,28 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
  
    149 jump *label33 greaterThan :pct PCT_LOW
    150 # "Function: inline def setState(in newState)"
-   151 set :setState47:newState true
--    * jump *label36 equal .STATE :setState47:newState
--    * set .STATE :setState47:newState
+   151 set :setState.1:newState true
+-    * jump *label36 equal .STATE :setState.1:newState
+-    * set .STATE :setState.1:newState
 +  152 jump *label36 equal .STATE true
 +  153 set .STATE true
    154 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED .STATE
-+  155 op xor .ON .INVERTED :setState47:newState
++  155 op xor .ON .INVERTED :setState.1:newState
    156 jump *label38 equal .ON false
    157 set *tmp41 "\nCurrently active:[green]"
    158 jump *label39 always
  
    168 jump *label40 lessThan :pct PCT_HIGH
    169 # "Function: inline def setState(in newState)"
-   170 set :setState48:newState false
--    * jump *label43 equal .STATE :setState48:newState
--    * set .STATE :setState48:newState
+   170 set :setState.2:newState false
+-    * jump *label43 equal .STATE :setState.2:newState
+-    * set .STATE :setState.2:newState
 +  171 jump *label43 equal .STATE false
 +  172 set .STATE false
    173 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED .STATE
-+  174 op xor .ON .INVERTED :setState48:newState
++  174 op xor .ON .INVERTED :setState.2:newState
    175 jump *label45 equal .ON false
    176 set *tmp48 "\nCurrently active:[green]"
    177 jump *label46 always
@@ -750,7 +750,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
    152 jump *label36 equal .STATE true
    153 set .STATE true
    154 op add .CYCLES .CYCLES 1
--    * op xor .ON .INVERTED :setState47:newState
+-    * op xor .ON .INVERTED :setState.1:newState
 +  155 op xor .ON .INVERTED true
    156 jump *label38 equal .ON false
    157 set *tmp41 "\nCurrently active:[green]"
@@ -759,7 +759,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
    171 jump *label43 equal .STATE false
    172 set .STATE false
    173 op add .CYCLES .CYCLES 1
--    * op xor .ON .INVERTED :setState48:newState
+-    * op xor .ON .INVERTED :setState.2:newState
 +  174 op xor .ON .INVERTED false
    175 jump *label45 equal .ON false
    176 set *tmp48 "\nCurrently active:[green]"
@@ -793,7 +793,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
    147 op idiv :pct *tmp33 :max
    148 jump *label33 greaterThan :pct PCT_LOW
    149 # "Function: inline def setState(in newState)"
--    * set :setState47:newState true
+-    * set :setState.1:newState true
    150 jump *label36 equal .STATE true
    151 set .STATE true
    152 op add .CYCLES .CYCLES 1
@@ -801,7 +801,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-3
    165 label *label33
    166 jump *label40 lessThan :pct PCT_HIGH
    167 # "Function: inline def setState(in newState)"
--    * set :setState48:newState false
+-    * set :setState.2:newState false
    168 jump *label43 equal .STATE false
    169 set .STATE false
    170 op add .CYCLES .CYCLES 1

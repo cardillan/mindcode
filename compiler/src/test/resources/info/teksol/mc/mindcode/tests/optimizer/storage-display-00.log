@@ -323,7 +323,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-23 instruct
    107 label *label22
 -    * set *tmp22 *tmp23
    108 label *label20
-   109 set :eraseImages47:first_column false
+   109 set :eraseImages.1:first_column false
    110 draw color 0 0 80 255
  
    116 draw rect 93 0 16 176
@@ -435,9 +435,9 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-13 instruct
 -    * set *tmp23 null
    105 label *label22
    106 label *label20
-   107 set :eraseImages47:first_column false
+   107 set :eraseImages.1:first_column false
    108 draw color 0 0 80 255
-   109 jump *label24 equal :eraseImages47:first_column false
+   109 jump *label24 equal :eraseImages.1:first_column false
    110 draw rect 0 0 23 176
 -    * set *tmp25 null
    111 jump *label25 always
@@ -709,7 +709,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 3 (-28 instruct
    660 label *label84
  
    686 draw color 0 0 80 255
-   687 jump *label136 equal :eraseNumbers47:first_column false
+   687 jump *label136 equal :eraseNumbers.1:first_column false
    688 draw rect 23 0 70 176
 -    * set *tmp233 null
    689 jump *label137 always
@@ -1210,9 +1210,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     89 label *label21
  
     92 label *label20
-    93 set :eraseImages47:first_column false
+    93 set :eraseImages.1:first_column false
     94 draw color 0 0 80 255
--    * jump *label24 equal :eraseImages47:first_column false
+-    * jump *label24 equal :eraseImages.1:first_column false
 +   95 jump *label24 equal false false
     96 draw rect 0 0 23 176
     97 jump *label25 always
@@ -1817,9 +1817,9 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    612 label *label107
  
    632 set :x 157
-   633 set :eraseNumbers47:first_column false
+   633 set :eraseNumbers.1:first_column false
    634 draw color 0 0 80 255
--    * jump *label136 equal :eraseNumbers47:first_column false
+-    * jump *label136 equal :eraseNumbers.1:first_column false
 +  635 jump *label136 equal false false
    636 draw rect 23 0 70 176
    637 jump *label137 always
@@ -1838,7 +1838,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
     89 draw rect 93 0 16 176
     90 label *label22
     91 label *label20
--    * set :eraseImages47:first_column false
+-    * set :eraseImages.1:first_column false
     92 draw color 0 0 80 255
     93 jump *label24 equal false false
     94 draw rect 0 0 23 176
@@ -2314,7 +2314,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    571 label *label134
    572 set :y 152
    573 set :x 157
--    * set :eraseNumbers47:first_column false
+-    * set :eraseNumbers.1:first_column false
    574 draw color 0 0 80 255
    575 jump *label136 equal false false
    576 draw rect 23 0 70 176

@@ -476,8 +476,8 @@ Final code before resolving virtual instructions:
   368:  return :printExactFast*retaddr
   369:  end
         label *label7
-  370:  set :isZero47:x :printExactSlow:n
-  371:  op abs *tmp59 :isZero47:x 0
+  370:  set :isZero.1:x :printExactSlow:n
+  371:  op abs *tmp59 :isZero.1:x 0
   372:  op lessThanEq *tmp60 *tmp59 0
   373:  set *tmp58 *tmp60
         label *label109
@@ -509,8 +509,8 @@ Final code before resolving virtual instructions:
   396:  set :printExactSlow:digit 1
         label *label114
   397:  jump *label116 greaterThan :printExactSlow:digit 15
-  398:  set :frac47:x :printExactSlow:base
-  399:  op mod *tmp72 :frac47:x 1
+  398:  set :frac.1:x :printExactSlow:base
+  399:  op mod *tmp72 :frac.1:x 1
   400:  set *tmp71 *tmp72
         label *label117
   401:  op mul *tmp73 *tmp71 10
@@ -625,9 +625,9 @@ stop instruction encountered, dumping variable values:
 :formatNumber:mod: 9.0
 :formatNumber:n: 9.0
 :formatNumber:number: 9009099.0
-:frac47:x: 0.015276668818842154
+:frac.1:x: 0.015276668818842154
 :frac:x: 999.9999983634211
-:isZero47:x: -1.2345E-50
+:isZero.1:x: -1.2345E-50
 :isZero:x: -1.2345E-50
 :printBinaryNumber*retaddr: 46.0
 :printBinaryNumber:digits: 6.0

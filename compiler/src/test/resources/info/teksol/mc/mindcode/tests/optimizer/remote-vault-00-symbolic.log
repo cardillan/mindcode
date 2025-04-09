@@ -17,7 +17,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp8 *tmp11
     29 label *label3
     30 # "Function: inline def procesUnit(in unit)"
-    31 set :procesUnit47:unit @poly
+    31 set :procesUnit.1:unit @poly
  
     40 label *label7
     41 set *tmp15 null
@@ -25,7 +25,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp12 *tmp15
     43 label *label6
     44 # "Function: inline def procesUnit(in unit)"
-    45 set :procesUnit48:unit @mega
+    45 set :procesUnit.2:unit @mega
  
     54 label *label10
     55 set *tmp19 null
@@ -33,7 +33,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp16 *tmp19
     57 label *label9
     58 # "Function: inline def procesUnit(in unit)"
-    59 set :procesUnit49:unit @quad
+    59 set :procesUnit.3:unit @quad
  
     68 label *label13
     69 set *tmp23 null
@@ -41,7 +41,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp20 *tmp23
     71 label *label12
     72 # "Function: inline def procesUnit(in unit)"
-    73 set :procesUnit50:unit @oct
+    73 set :procesUnit.4:unit @oct
  
     82 label *label16
     83 set *tmp27 null
@@ -49,7 +49,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp24 *tmp27
     85 label *label15
     86 # "Function: inline def procesUnit(in unit)"
-    87 set :procesUnit51:unit @flare
+    87 set :procesUnit.5:unit @flare
  
     96 label *label19
     97 set *tmp31 null
@@ -57,7 +57,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp28 *tmp31
     99 label *label18
    100 # "Function: inline def procesUnit(in unit)"
-   101 set :procesUnit52:unit @horizon
+   101 set :procesUnit.6:unit @horizon
  
    110 label *label22
    111 set *tmp35 null
@@ -65,7 +65,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp32 *tmp35
    113 label *label21
    114 # "Function: inline def procesUnit(in unit)"
-   115 set :procesUnit53:unit @zenith
+   115 set :procesUnit.7:unit @zenith
  
    124 label *label25
    125 set *tmp39 null
@@ -73,7 +73,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp36 *tmp39
    127 label *label24
    128 # "Function: inline def procesUnit(in unit)"
-   129 set :procesUnit54:unit @antumbra
+   129 set :procesUnit.8:unit @antumbra
  
    138 label *label28
    139 set *tmp43 null
@@ -81,7 +81,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-10 instruct
 -    * set *tmp40 *tmp43
    141 label *label27
    142 # "Function: inline def procesUnit(in unit)"
-   143 set :procesUnit55:unit @eclipse
+   143 set :procesUnit.9:unit @eclipse
  
    152 label *label31
    153 set *tmp47 null
@@ -250,8 +250,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     17 op add .SERVICED .SERVICED 1
     18 jump *label5 always
  
-    23 set :procesUnit47:unit @poly
-    24 ubind :procesUnit47:unit
+    23 set :procesUnit.1:unit @poly
+    24 ubind :procesUnit.1:unit
     25 sensor *tmp13 @unit @flag
 -    * op equal *tmp14 *tmp13 .QUERY_FLAG
 -    * jump *label7 equal *tmp14 false
@@ -260,8 +260,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     28 op add .SERVICED .SERVICED 1
     29 jump *label8 always
  
-    34 set :procesUnit48:unit @mega
-    35 ubind :procesUnit48:unit
+    34 set :procesUnit.2:unit @mega
+    35 ubind :procesUnit.2:unit
     36 sensor *tmp17 @unit @flag
 -    * op equal *tmp18 *tmp17 .QUERY_FLAG
 -    * jump *label10 equal *tmp18 false
@@ -270,8 +270,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     39 op add .SERVICED .SERVICED 1
     40 jump *label11 always
  
-    45 set :procesUnit49:unit @quad
-    46 ubind :procesUnit49:unit
+    45 set :procesUnit.3:unit @quad
+    46 ubind :procesUnit.3:unit
     47 sensor *tmp21 @unit @flag
 -    * op equal *tmp22 *tmp21 .QUERY_FLAG
 -    * jump *label13 equal *tmp22 false
@@ -280,8 +280,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     50 op add .SERVICED .SERVICED 1
     51 jump *label14 always
  
-    56 set :procesUnit50:unit @oct
-    57 ubind :procesUnit50:unit
+    56 set :procesUnit.4:unit @oct
+    57 ubind :procesUnit.4:unit
     58 sensor *tmp25 @unit @flag
 -    * op equal *tmp26 *tmp25 .QUERY_FLAG
 -    * jump *label16 equal *tmp26 false
@@ -290,8 +290,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     61 op add .SERVICED .SERVICED 1
     62 jump *label17 always
  
-    67 set :procesUnit51:unit @flare
-    68 ubind :procesUnit51:unit
+    67 set :procesUnit.5:unit @flare
+    68 ubind :procesUnit.5:unit
     69 sensor *tmp29 @unit @flag
 -    * op equal *tmp30 *tmp29 .QUERY_FLAG
 -    * jump *label19 equal *tmp30 false
@@ -300,8 +300,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     72 op add .SERVICED .SERVICED 1
     73 jump *label20 always
  
-    78 set :procesUnit52:unit @horizon
-    79 ubind :procesUnit52:unit
+    78 set :procesUnit.6:unit @horizon
+    79 ubind :procesUnit.6:unit
     80 sensor *tmp33 @unit @flag
 -    * op equal *tmp34 *tmp33 .QUERY_FLAG
 -    * jump *label22 equal *tmp34 false
@@ -310,8 +310,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     83 op add .SERVICED .SERVICED 1
     84 jump *label23 always
  
-    89 set :procesUnit53:unit @zenith
-    90 ubind :procesUnit53:unit
+    89 set :procesUnit.7:unit @zenith
+    90 ubind :procesUnit.7:unit
     91 sensor *tmp37 @unit @flag
 -    * op equal *tmp38 *tmp37 .QUERY_FLAG
 -    * jump *label25 equal *tmp38 false
@@ -320,8 +320,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
     94 op add .SERVICED .SERVICED 1
     95 jump *label26 always
  
-   100 set :procesUnit54:unit @antumbra
-   101 ubind :procesUnit54:unit
+   100 set :procesUnit.8:unit @antumbra
+   101 ubind :procesUnit.8:unit
    102 sensor *tmp41 @unit @flag
 -    * op equal *tmp42 *tmp41 .QUERY_FLAG
 -    * jump *label28 equal *tmp42 false
@@ -330,8 +330,8 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-10 ins
    105 op add .SERVICED .SERVICED 1
    106 jump *label29 always
  
-   111 set :procesUnit55:unit @eclipse
-   112 ubind :procesUnit55:unit
+   111 set :procesUnit.9:unit @eclipse
+   112 ubind :procesUnit.9:unit
    113 sensor *tmp45 @unit @flag
 -    * op equal *tmp46 *tmp45 .QUERY_FLAG
 -    * jump *label31 equal *tmp46 false
@@ -435,8 +435,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     20 label *label3
     21 # "Function: inline def procesUnit(in unit)"
-    22 set :procesUnit47:unit @poly
--    * ubind :procesUnit47:unit
+    22 set :procesUnit.1:unit @poly
+-    * ubind :procesUnit.1:unit
 +   23 ubind @poly
     24 sensor *tmp13 @unit @flag
     25 jump *label7 notEqual *tmp13 .QUERY_FLAG
@@ -444,8 +444,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     30 label *label6
     31 # "Function: inline def procesUnit(in unit)"
-    32 set :procesUnit48:unit @mega
--    * ubind :procesUnit48:unit
+    32 set :procesUnit.2:unit @mega
+-    * ubind :procesUnit.2:unit
 +   33 ubind @mega
     34 sensor *tmp17 @unit @flag
     35 jump *label10 notEqual *tmp17 .QUERY_FLAG
@@ -453,8 +453,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     40 label *label9
     41 # "Function: inline def procesUnit(in unit)"
-    42 set :procesUnit49:unit @quad
--    * ubind :procesUnit49:unit
+    42 set :procesUnit.3:unit @quad
+-    * ubind :procesUnit.3:unit
 +   43 ubind @quad
     44 sensor *tmp21 @unit @flag
     45 jump *label13 notEqual *tmp21 .QUERY_FLAG
@@ -462,8 +462,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     50 label *label12
     51 # "Function: inline def procesUnit(in unit)"
-    52 set :procesUnit50:unit @oct
--    * ubind :procesUnit50:unit
+    52 set :procesUnit.4:unit @oct
+-    * ubind :procesUnit.4:unit
 +   53 ubind @oct
     54 sensor *tmp25 @unit @flag
     55 jump *label16 notEqual *tmp25 .QUERY_FLAG
@@ -471,8 +471,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     60 label *label15
     61 # "Function: inline def procesUnit(in unit)"
-    62 set :procesUnit51:unit @flare
--    * ubind :procesUnit51:unit
+    62 set :procesUnit.5:unit @flare
+-    * ubind :procesUnit.5:unit
 +   63 ubind @flare
     64 sensor *tmp29 @unit @flag
     65 jump *label19 notEqual *tmp29 .QUERY_FLAG
@@ -480,8 +480,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     70 label *label18
     71 # "Function: inline def procesUnit(in unit)"
-    72 set :procesUnit52:unit @horizon
--    * ubind :procesUnit52:unit
+    72 set :procesUnit.6:unit @horizon
+-    * ubind :procesUnit.6:unit
 +   73 ubind @horizon
     74 sensor *tmp33 @unit @flag
     75 jump *label22 notEqual *tmp33 .QUERY_FLAG
@@ -489,8 +489,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     80 label *label21
     81 # "Function: inline def procesUnit(in unit)"
-    82 set :procesUnit53:unit @zenith
--    * ubind :procesUnit53:unit
+    82 set :procesUnit.7:unit @zenith
+-    * ubind :procesUnit.7:unit
 +   83 ubind @zenith
     84 sensor *tmp37 @unit @flag
     85 jump *label25 notEqual *tmp37 .QUERY_FLAG
@@ -498,8 +498,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
     90 label *label24
     91 # "Function: inline def procesUnit(in unit)"
-    92 set :procesUnit54:unit @antumbra
--    * ubind :procesUnit54:unit
+    92 set :procesUnit.8:unit @antumbra
+-    * ubind :procesUnit.8:unit
 +   93 ubind @antumbra
     94 sensor *tmp41 @unit @flag
     95 jump *label28 notEqual *tmp41 .QUERY_FLAG
@@ -507,8 +507,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
    100 label *label27
    101 # "Function: inline def procesUnit(in unit)"
-   102 set :procesUnit55:unit @eclipse
--    * ubind :procesUnit55:unit
+   102 set :procesUnit.9:unit @eclipse
+-    * ubind :procesUnit.9:unit
 +  103 ubind @eclipse
    104 sensor *tmp45 @unit @flag
    105 jump *label31 notEqual *tmp45 .QUERY_FLAG
@@ -527,7 +527,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     18 label *label5
     19 label *label3
     20 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit47:unit @poly
+-    * set :procesUnit.1:unit @poly
     21 ubind @poly
     22 sensor *tmp13 @unit @flag
     23 jump *label7 notEqual *tmp13 .QUERY_FLAG
@@ -535,7 +535,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     27 label *label8
     28 label *label6
     29 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit48:unit @mega
+-    * set :procesUnit.2:unit @mega
     30 ubind @mega
     31 sensor *tmp17 @unit @flag
     32 jump *label10 notEqual *tmp17 .QUERY_FLAG
@@ -543,7 +543,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     36 label *label11
     37 label *label9
     38 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit49:unit @quad
+-    * set :procesUnit.3:unit @quad
     39 ubind @quad
     40 sensor *tmp21 @unit @flag
     41 jump *label13 notEqual *tmp21 .QUERY_FLAG
@@ -551,7 +551,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     45 label *label14
     46 label *label12
     47 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit50:unit @oct
+-    * set :procesUnit.4:unit @oct
     48 ubind @oct
     49 sensor *tmp25 @unit @flag
     50 jump *label16 notEqual *tmp25 .QUERY_FLAG
@@ -559,7 +559,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     54 label *label17
     55 label *label15
     56 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit51:unit @flare
+-    * set :procesUnit.5:unit @flare
     57 ubind @flare
     58 sensor *tmp29 @unit @flag
     59 jump *label19 notEqual *tmp29 .QUERY_FLAG
@@ -567,7 +567,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     63 label *label20
     64 label *label18
     65 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit52:unit @horizon
+-    * set :procesUnit.6:unit @horizon
     66 ubind @horizon
     67 sensor *tmp33 @unit @flag
     68 jump *label22 notEqual *tmp33 .QUERY_FLAG
@@ -575,7 +575,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     72 label *label23
     73 label *label21
     74 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit53:unit @zenith
+-    * set :procesUnit.7:unit @zenith
     75 ubind @zenith
     76 sensor *tmp37 @unit @flag
     77 jump *label25 notEqual *tmp37 .QUERY_FLAG
@@ -583,7 +583,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     81 label *label26
     82 label *label24
     83 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit54:unit @antumbra
+-    * set :procesUnit.8:unit @antumbra
     84 ubind @antumbra
     85 sensor *tmp41 @unit @flag
     86 jump *label28 notEqual *tmp41 .QUERY_FLAG
@@ -591,7 +591,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     90 label *label29
     91 label *label27
     92 # "Function: inline def procesUnit(in unit)"
--    * set :procesUnit55:unit @eclipse
+-    * set :procesUnit.9:unit @eclipse
     93 ubind @eclipse
     94 sensor *tmp45 @unit @flag
     95 jump *label31 notEqual *tmp45 .QUERY_FLAG

@@ -16,4 +16,8 @@ public record LVar(
     public ContentType contentType() {
         return ContentType.LVAR;
     }
+
+    public boolean isNumericConstant() {
+        return global && !object && constant && numericValue != null && numericValue != 0.0;
+    }
 }

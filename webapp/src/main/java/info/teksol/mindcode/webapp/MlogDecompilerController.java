@@ -63,7 +63,7 @@ public class MlogDecompilerController {
         String result;
         try {
             result = MlogDecompiler.decompile(mlog);
-        } catch (RuntimeException e) {
+        } catch (Exception e) {
             logger.error("Error decompiling mlog code", e);
             result = "Internal error";
         }

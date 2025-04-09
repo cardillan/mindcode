@@ -29,8 +29,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         AstBuiltInIdentifierVisitor<ValueStore>,
         AstIdentifierVisitor<ValueStore>,
         AstKeywordVisitor<ValueStore>,
-        AstSubarrayVisitor<ValueStore>
-{
+        AstSubarrayVisitor<ValueStore> {
     private static final Set<ArgumentType> memoryExpressionTypes = Set.of(
             GLOBAL_VARIABLE,
             LOCAL_VARIABLE,
@@ -45,8 +44,8 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     public ValueStore visitArrayAccess(AstArrayAccess node) {
         ValueStore valueStore = evaluate(node.getArray());
         return switch (valueStore) {
-            case LogicVariable memory   -> memoryArrayAccess(node, memory);
-            case ArrayStore array       -> storeArrayAccess(node, array);
+            case LogicVariable memory -> memoryArrayAccess(node, memory);
+            case ArrayStore array -> storeArrayAccess(node, array);
             default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
         };
     }
@@ -56,7 +55,9 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         if (!metadata.isBuiltInValid(node.getName())) {
             warn(node, WARN.BUILT_IN_VARIABLE_NOT_RECOGNIZED, node.getName());
         }
-        return LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
+        return profile.isTargetOptimization() && node.getName().endsWith("Count")
+                ? LogicBuiltinConst.create(processor, node.sourcePosition(), node.getName())
+                : LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
     }
 
     @Override
@@ -74,8 +75,8 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     public ValueStore visitSubarray(AstSubarray node) {
         ValueStore valueStore = evaluate(node.getArray());
         return switch (valueStore) {
-            case LogicVariable memory   -> memorySubarrayAccess(node, memory);
-            case ArrayStore array       -> storeSubarrayAccess(node, array);
+            case LogicVariable memory -> memorySubarrayAccess(node, memory);
+            case ArrayStore array -> storeSubarrayAccess(node, array);
             default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
         };
     }

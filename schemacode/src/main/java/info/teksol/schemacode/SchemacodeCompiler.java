@@ -3,8 +3,10 @@ package info.teksol.schemacode;
 import info.teksol.mc.common.CompilerOutput;
 import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
+import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.schemacode.ast.AstDefinitions;
 import info.teksol.schemacode.ast.AstSchematicsBuilder;
@@ -83,11 +85,15 @@ public class SchemacodeCompiler {
     }
 
     public static CompilerOutput<String> compileAndEncode(InputFiles inputFiles, CompilerProfile compilerProfile) {
-        CompilerOutput<byte[]> binaryOutput = compile(inputFiles, compilerProfile);
+        try {
+            CompilerOutput<byte[]> binaryOutput = compile(inputFiles, compilerProfile);
 
-        String encoded = binaryOutput.output() != null
-                ? Base64.getEncoder().encodeToString(binaryOutput.output()) : "";
-        return binaryOutput.withOutput(encoded);
+            String encoded = binaryOutput.output() != null
+                    ? Base64.getEncoder().encodeToString(binaryOutput.output()) : "";
+            return binaryOutput.withOutput(encoded);
+        } catch (Exception e) {
+            return new CompilerOutput<>("", List.of(ToolMessage.error(ERR.INTERNAL_ERROR)));
+        }
     }
 
     private static boolean hasErrors(List<MindcodeMessage> messages) {

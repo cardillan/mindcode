@@ -91,9 +91,9 @@ Actions:
 ```
 usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
                 [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
-                [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [-y {strict,mixed,relaxed}] [-i {1..100000}]
-                [-g {size,speed,auto}] [-e {1..1000}] [-r {none,comments,passive,active}]
-                [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
+                [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
+                [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,auto}] [-e {1..1000}]
+                [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--link-guards {true,false}] [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
@@ -150,6 +150,10 @@ input/output files:
 compiler options:
   -t, --target {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}
                          selects target processor version and edition ('w' suffix specifies the world processor)
+  --target-optimization {specific,compatible}
+                         'specific' produces code guaranteed to run on the  processor of the chosen target version only,
+                         'compatible' produces code compatible  with  current  target  and  future versions of Mindustry
+                         Logic
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
   -i, --instruction-limit {1..100000}
@@ -320,9 +324,9 @@ named arguments:
 
 ```
 usage: mindcode cs [-h] [-c] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a TAG [TAG ...]]
-                [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [-y {strict,mixed,relaxed}] [-i {1..100000}]
-                [-g {size,speed,auto}] [-e {1..1000}] [-r {none,comments,passive,active}]
-                [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
+                [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
+                [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,auto}] [-e {1..1000}]
+                [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--link-guards {true,false}] [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
@@ -358,6 +362,10 @@ schematic creation:
 compiler options:
   -t, --target {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}
                          selects target processor version and edition ('w' suffix specifies the world processor)
+  --target-optimization {specific,compatible}
+                         'specific' produces code guaranteed to run on the  processor of the chosen target version only,
+                         'compatible' produces code compatible  with  current  target  and  future versions of Mindustry
+                         Logic
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
   -i, --instruction-limit {1..100000}
