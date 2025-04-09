@@ -361,6 +361,61 @@ To use a world-processor variant of Mindcode language, it is necessary to add `W
 
 The same names of version targets is used with the `-t` / `--target` command-line option.
 
+## Option target-optimization
+
+Chooses how Mindcode takes into account the [`target` option](#option-target). Possible values are:
+
+* `compatible` (the default value): the code is supposed to be run in Mindustry version specified by the `target` option, or any later version. 
+* `specific`: the code is only expected to be run in Mindustry version specified by the `target` option, not in any other version.
+
+The difference lies in handling of unstable [built-in variables](SYNTAX-1-VARIABLES.markdown#built-in-variables) and logic ids. Numerical built-in variables and logic IDs are considered stable if their value is the same in all known versions of Mindustry Logic in which they appear, and if they weren't removed in a subsequent known mindustry version.   
+
+In the `compatible` setting only the stable the built-in and logic ID values are evaluated at compile time. It is expected these values won't change in a future release. For all other values, the compiled code corresponds to the _meaning_ of all logic built-ins. For example, in the following code 
+
+```Mindustry
+for var unitIndex in 0 ... @unitCount do
+    var unitType = lookup(:unit, unitIndex);
+    // Handle the unit type, e.g. deflag all units of this type
+end;
+```
+
+the loop won't be unrolled and the code will loop through all unit types available in the version in which it is actually run.
+
+The `specific` setting ensures even the unstable built-in variables will be compile-time evaluated, using the value corresponding to the Mindustry version specified by the `target` option. This not only allows to perform more optimizations (such as unroll loops), but also allows to use the built-in variables to specify array sizes. However, the code will only produce correct result when run on the processor of the correct Mindustry version:
+
+```Mindcode
+#set target = 7;
+#set target-optimization = specific;
+
+// This wouldn't compile on the compatible setting
+var items[@itemCount];
+
+for var i in 17 ... @itemCount do
+    items[i] = lookup(:item, i); 
+end;
+
+for var item in items[17 ... length(items)] do
+    println(item);
+end; 
+
+printflush(message1);
+```
+
+compiles to 
+
+```mlog
+print "fissile-matter\ndormant-cyst\ntungsten\ncarbide\noxide\n"
+printflush message1
+```
+
+When `target` is set to `8`, the code instead compiles to
+
+```
+print "tungsten\noxide\ncarbide\n"
+printflush message1
+```
+
+
 ## Individual optimization options
 
 It is possible to set the level of individual optimization tasks. Every optimization is assigned a name, and this name can be used in the compiler directive like this:

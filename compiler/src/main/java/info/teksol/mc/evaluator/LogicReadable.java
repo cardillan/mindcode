@@ -13,6 +13,10 @@ public interface LogicReadable {
     /// @return true if the expression can be evaluated.
     boolean isConstant();
 
+    default boolean isNumericConstant() {
+        return isConstant() && !isObject();
+    }
+
     /// Provides the value of this argument as a double. Throws error when isConstant() is false.
     ///
     /// @return numeric value of this argument as a double
@@ -29,7 +33,7 @@ public interface LogicReadable {
 
     /// @return true when this value is a long
     default boolean isLong() {
-        return getLongValue() == getDoubleValue();
+        return isNumber() && getLongValue() == getDoubleValue();
     }
 
     /// Provides the value of this argument as an int. Throws error when isConstant() is false.
@@ -41,7 +45,7 @@ public interface LogicReadable {
 
     /// @return true when this value is an int
     default boolean isInteger() {
-        return getIntValue() == getDoubleValue();
+        return isNumber() && getIntValue() == getDoubleValue();
     }
 
     /// Provides the value of this argument as an object. Throws error when isConstant() is false.
@@ -49,6 +53,13 @@ public interface LogicReadable {
     /// @return numeric value of this argument as an object
     default @Nullable Object getObject() {
         throw new MindcodeInternalError("Unexpected call to getObject");
+    }
+
+    /// Determines whether the value of this argument is a number. Throws error when isConstant() is false.
+    ///
+    /// @return true if this value is a number, false if it is an object.
+    default boolean isNumber() {
+        return !isObject();
     }
 
     /// Determines whether the value of this argument is an object. Throws error when isConstant() is false.

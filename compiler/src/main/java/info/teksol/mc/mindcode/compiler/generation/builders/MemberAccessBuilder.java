@@ -28,7 +28,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitMemberAccess(AstMemberAccess node) {
-        ValueStore target = resolveTarget(node.getObject(), true, ERR.CANNOT_INVOKE_PROPERTIES);
+        ValueStore target = resolveTarget(node.getObject(), true, false, ERR.CANNOT_INVOKE_PROPERTIES);
         String name = node.getMember().getName();
         if (target instanceof StructuredValueStore store) {
             ValueStore member = store.getMember(name);
@@ -61,7 +61,7 @@ public class MemberAccessBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitPropertyAccess(AstPropertyAccess node) {
-        ValueStore target = resolveTarget(node.getObject(), false, ERR.CANNOT_INVOKE_PROPERTIES);
+        ValueStore target = resolveTarget(node.getObject(), false, true, ERR.CANNOT_INVOKE_PROPERTIES);
         final LogicVariable resultVar = assembler.nextNodeResultTemp();
         assembler.createSensor(resultVar, target.getValue(assembler), evaluate(node.getProperty()).getValue(assembler));
         return resultVar;

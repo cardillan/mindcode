@@ -83,10 +83,12 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         evaluator = context.compileTimeEvaluator();
     }
 
-    protected ValueStore resolveTarget(AstMindcodeNode node, boolean allowStructured, @PrintFormat String message, Object... args) {
+    protected ValueStore resolveTarget(AstMindcodeNode node, boolean allowStructured, boolean allowStrings,
+            @PrintFormat String message, Object... args) {
         ValueStore valueStore = process(node, false);
         return switch(valueStore) {
             case StructuredValueStore s when allowStructured -> s;
+            case LogicString s when allowStrings -> s;
             case InternalArrayElement e -> e;
             case LogicVariable v -> v;
             case LogicBuiltIn b -> b;

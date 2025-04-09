@@ -1,5 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.common.SourceElement;
+import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
@@ -55,7 +57,10 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         if (!metadata.isBuiltInValid(node.getName())) {
             warn(node, WARN.BUILT_IN_VARIABLE_NOT_RECOGNIZED, node.getName());
         }
-        return profile.isTargetOptimization() && node.getName().endsWith("Count")
+
+        // Target optimization: evaluate all numerical builtins
+        // No target optimization: evaluate stable numerical builtins except @unitCount, @itemCount etc.
+        return profile.isTargetOptimization() || (!node.getName().endsWith("Count") && metadata.isStableBuiltin(node.getName()))
                 ? LogicBuiltinConst.create(processor, node.sourcePosition(), node.getName())
                 : LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
     }
@@ -115,14 +120,14 @@ public class IdentifiersBuilder extends AbstractBuilder implements
     private ValueStore storeArrayAccess(AstArrayAccess node, ArrayStore array) {
         ValueStore index = evaluate(node.getIndex());
 
-        if (index instanceof LogicNumber number) {
+        if (index instanceof LogicReadable number && number.isNumericConstant()) {
             List<? extends ValueStore> elements = array.getElements();
 
             if (!number.isLong()) {
-                assembler.error(number.sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
+                assembler.error(((SourceElement)number).sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
                 return LogicVariable.INVALID;
             } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
-                assembler.error(number.sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
+                assembler.error(((SourceElement)number).sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
                 return LogicVariable.INVALID;
             } else {
                 return elements.get(number.getIntValue());
@@ -166,7 +171,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         AstMindcodeNode element = first ? range.getFirstValue() : range.getLastValue();
         int correction = !first && range.isExclusive() ? -1 : 0;
         ValueStore value = evaluate(element);
-        if (!(value instanceof LogicNumber number)) {
+        if (!(value instanceof LogicReadable number && number.isNumericConstant())) {
             error(element, ERR.SUBARRAY_MUTABLE_RANGE);
         } else if (!number.isInteger()) {
             error(element, ERR.SUBARRAY_NON_INTEGER_RANGE);

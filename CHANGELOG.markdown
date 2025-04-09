@@ -16,18 +16,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added the [`char()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-char-function). The function returns the ASCII value of a character at given index from a string value using the `read` instruction, as supported in latest BE version.
-* Added a new remarks mode - `comments`. In this mode, remarks are compiled as mlog comments (`# comment`).
+* Added support for invoking properties and the `sensor` functions on string values to support latest BE Enhancement of sensing string lengths using `@size`. 
+* Added support for compile-time evaluation of the `length()` function, allowing to specify offsets relative to the end of the array in subarrays (e.g. `array[0 ... length(array) - 1]`).
+* Added compile-time evaluation of either stable, or all built-in numerical variables (such as `@pi` or `@unitCount`).
+* Added a new remarks mode, `comments`, to compile remarks as mlog comments (`# comment`).
 * Added support for generating boundary checks for explicitly declared external arrays. 
-* Added support for handling instructions setting up return addresses for function calls to Loop Hoisting optimizer. 
-* Added support for handling numerical literal values unsupported by Mindustry Logic version 7 and earlier (namely, `-2147483648`).
-  When a numerical literal or constant expression has this value, a compile-time error is generated. 
+* Loop Hoisting optimizer enhanced with an ability to optimize instructions setting up return addresses of function calls. 
+* Added handling of numerical literal values unsupported by Mindustry Logic version 7 and earlier (namely, `-2147483648`).
+  When a numerical literal or constant expression has this value, a compile-time error is generated.
+* Added support for strings in `read` and `sensor` instructions to processor emulator. 
 * Added a new [`--file-references` command-line option](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#file-references).
 * Added a suggestion of the closest matching alternative when an unknown compiler directive or option value is found.
 * Added support for mlog syntax highlighting into the provided [IntelliJ file type settings](/doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea).
-* Added support for compile-time evaluation of the `length()` function, allowing to specify offsets relative to the end of the array in subarrays (e.g. `array[0 ... length(array) - 1]`).
 
 #### Experimental features
 
+* Added new [`target-optimization` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-optimization). The `specific` option generates code for the specific compilation target only, the `compatible` option generates code intended for the compilation target and future versions of Mindustry Logic.    
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
 * Added support for applying indenting to the generated mlog code based through the [`mlog-indent` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-mlog-indent).
 * Added array-specific optimizations for speed: 
@@ -42,6 +46,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Volatile built-in variables used an upper or lower bound in a ranged for-loop statement are used directly in the condition, without storing them in a temporary variable.
 * Stripped unnecessary `.0` distinctions from local variable prefix.
 * The `noinit` modifier is no longer disallowed for local variables.
+* The processor emulator uses numerical values provided by metadata for built-in variables (such as `@pi` or `@unitCount`). The metadata version corresponds to the compilation target.  
 
 ## 3.2.1 - 2025-03-23
 

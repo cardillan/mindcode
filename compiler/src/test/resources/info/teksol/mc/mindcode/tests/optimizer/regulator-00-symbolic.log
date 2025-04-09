@@ -5,8 +5,9 @@
      1 instructions eliminated by Jump Normalization (5 iterations).
     10 instructions eliminated by Jump Optimization (5 iterations).
     10 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     1 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-     7 instructions eliminated by Data Flow Optimization (2 passes, 9 iterations).
+     7 instructions eliminated by Data Flow Optimization (3 passes, 10 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
      7 instructions eliminated by Jump Straightening (5 iterations).
@@ -976,6 +977,28 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    168 label *label43
    169 label *label44
 
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
+ 
+   160 jump *label43 equal .STATE false
+   161 set .STATE false
+   162 op add .CYCLES .CYCLES 1
+-    * op xor .ON .INVERTED false
++  163 set .ON .INVERTED
+   164 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   165 jump *label46 equal .ON false
+   166 set .ACTIVE_TEXT "\nCurrently active:[green]"
+
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
+ 
+   162 op add .CYCLES .CYCLES 1
+   163 set .ON .INVERTED
+   164 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+-    * jump *label46 equal .ON false
++  165 jump *label46 equal .INVERTED false
+   166 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   167 label *label46
+   168 label *label43
+
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
     10 print "Configuring regulator..."
@@ -1396,9 +1419,9 @@ jump *label40 lessThan :pct PCT_HIGH
 jump *label43 equal .STATE false
 set .STATE false
 op add .CYCLES .CYCLES 1
-op xor .ON .INVERTED false
+set .ON .INVERTED
 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-jump *label46 equal .ON false
+jump *label46 equal .INVERTED false
 set .ACTIVE_TEXT "\nCurrently active:[green]"
 label *label46
 label *label43

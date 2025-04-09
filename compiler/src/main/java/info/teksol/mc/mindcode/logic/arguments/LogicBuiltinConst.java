@@ -4,6 +4,9 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.LVar;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+
+import java.util.Objects;
 
 @NullMarked
 public class LogicBuiltinConst extends LogicBuiltIn {
@@ -35,6 +38,11 @@ public class LogicBuiltinConst extends LogicBuiltIn {
 
     public boolean isInteger() {
         return value == (int) value;
+    }
+
+    @Override
+    public String format(@Nullable InstructionProcessor instructionProcessor) {
+        return Objects.requireNonNull(instructionProcessor).formatNumber(value);
     }
 
     public static LogicBuiltIn create(InstructionProcessor processor, SourcePosition sourcePosition, String name) {

@@ -55,10 +55,10 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processLookupInstruction(LogicIterator logicIterator, LookupInstruction ix) {
-        if (advanced() && ix.getIndex() instanceof LogicNumber number) {
+        if (advanced() && ix.getIndex().isNumericConstant() && ix.getIndex().isInteger()) {
             Map<Integer, ? extends MindustryContent> lookupMap = metadata.getLookupMap(ix.getType().getKeyword());
             if (lookupMap != null) {
-                MindustryContent object = lookupMap.get(number.getIntValue());
+                MindustryContent object = lookupMap.get(ix.getIndex().getIntValue());
                 if (object != null && (getProfile().isTargetOptimization() || metadata.isStableBuiltin(object.name()))) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object, false)));
                 }
@@ -69,8 +69,8 @@ class ExpressionOptimizer extends BaseOptimizer {
     private void processOpInstruction(LogicIterator logicIterator, OpInstruction ix) {
         if (ix.hasSecondOperand()) {
             final Tuple2<LogicValue, LogicValue> opers = extractConstantOperand(ix);
-            if (opers.e1() instanceof LogicNumber num && num.isInteger()) {
-                long value = num.getLongValue();
+            if (opers.e1().isNumericConstant() && opers.e1().isLong()) {
+                long value = opers.e1().getLongValue();
                 switch (ix.getOperation()) {
                     case MUL -> {
                         if (value == 0) {
@@ -274,34 +274,34 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     private void processReadArrInstruction(LogicIterator logicIterator, ReadArrInstruction ix) {
         ArrayStore arrayStore = ix.getArray().getArrayStore();
-        if (ix.getIndex() instanceof LogicNumber number && arrayStore.optimizeElementAccess()) {
+        if (ix.getIndex().isNumericConstant() && arrayStore.optimizeElementAccess()) {
             List<ValueStore> elements = arrayStore.getElements();
-            if (!number.isLong()) {
+            if (!ix.getIndex().isLong()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
-            } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
+            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= elements.size()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
             } else {
                 LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
                         ix.getAstContext(), logicIterator::add);
                 logicIterator.remove();
-                elements.get(number.getIntValue()).readValue(creator, ix.getResult());
+                elements.get(ix.getIndex().getIntValue()).readValue(creator, ix.getResult());
             }
         }
     }
 
     private void processWriteArrInstruction(LogicIterator logicIterator, WriteArrInstruction ix) {
         ArrayStore arrayStore = ix.getArray().getArrayStore();
-        if (ix.getIndex() instanceof LogicNumber number && arrayStore.optimizeElementAccess()) {
+        if (ix.getIndex().isNumericConstant() && arrayStore.optimizeElementAccess()) {
             List<ValueStore> elements = arrayStore.getElements();
-            if (!number.isLong()) {
+            if (!ix.getIndex().isLong()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_NON_INTEGER_INDEX);
-            } else if (number.getIntValue() < 0 || number.getIntValue() >= elements.size()) {
+            } else if (ix.getIndex().getIntValue() < 0 || ix.getIndex().getIntValue() >= elements.size()) {
                 error(ix.getIndex().sourcePosition(), ERR.ARRAY_INDEX_OUT_OF_BOUNDS, elements.size() - 1);
             } else {
                 LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(instructionProcessor,
                         ix.getAstContext(), logicIterator::add);
                 logicIterator.remove();
-                elements.get(number.getIntValue()).setValue(creator, ix.getValue());
+                elements.get(ix.getIndex().getIntValue()).setValue(creator, ix.getValue());
             }
         }
     }

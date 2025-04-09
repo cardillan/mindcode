@@ -76,7 +76,7 @@ class CaseSwitcher extends BaseOptimizer {
                         // NOT_EQUAL might have been created by jump over jump optimization
                         if ((jump.getCondition() == Condition.EQUAL || jump.getCondition() == Condition.NOT_EQUAL)
                                 && jump.getX() instanceof LogicVariable var && (variable == null || var.equals(variable))
-                                && jump.getY() instanceof LogicNumber lit && lit.isInteger()
+                                && jump.getY().isNumericConstant() && jump.getY().isInteger()
                                 && getLabelInstruction(jump.getTarget()).getAstContext().parent() == context) {
                             variable = var;
                             LogicLabel target;
@@ -95,7 +95,7 @@ class CaseSwitcher extends BaseOptimizer {
                                 }
                             }
 
-                            if (targets.put(lit.getIntValue(), target) != null) {
+                            if (targets.put(jump.getY().getIntValue(), target) != null) {
                                 return null;
                             }
                         } else if (!jump.isUnconditional()) {

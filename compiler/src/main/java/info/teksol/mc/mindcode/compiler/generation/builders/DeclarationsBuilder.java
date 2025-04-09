@@ -334,7 +334,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         int maxSize = modifiers.containsKey(Modifier.EXTERNAL) ? MAX_EXTERNAL_ARRAY_SIZE : MAX_INTERNAL_ARRAY_SIZE;
 
         ValueStore size = processInLocalScope(() -> evaluate(specification.getArraySize()));
-        if (!(size instanceof LogicReadable number &&number.isConstant())) {
+        if (!(size instanceof LogicReadable number &&number.isNumericConstant())) {
             error(specification.getArraySize(), ERR.ARRAY_MUTABLE_SIZE);
         } else if (!number.isInteger()) {
             error(specification.getArraySize(), ERR.ARRAY_NON_INTEGER_SIZE);
@@ -511,7 +511,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             if (!first) return defaultValue;
 
             ValueStore value = evaluate(startIndex);
-            if (!(value instanceof LogicNumber number)) {
+            if (!(value instanceof LogicReadable number && number.isNumericConstant())) {
                 error(startIndex, ERR.EXT_STORAGE_MUTABLE_INDEX);
             } else if (!number.isInteger()) {
                 error(startIndex, ERR.EXT_STORAGE_NON_INTEGER_INDEX);
@@ -524,7 +524,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             AstMindcodeNode element = first ? range.getFirstValue() : range.getLastValue();
             int correction = !first && range.isExclusive() ? -1 : 0;
             ValueStore value = evaluate(element);
-            if (!(value instanceof LogicNumber number)) {
+            if (!(value instanceof LogicReadable number && number.isNumericConstant())) {
                 error(element, ERR.EXT_STORAGE_MUTABLE_RANGE);
             } else if (!number.isInteger()) {
                 error(element, ERR.EXT_STORAGE_NON_INTEGER_RANGE);

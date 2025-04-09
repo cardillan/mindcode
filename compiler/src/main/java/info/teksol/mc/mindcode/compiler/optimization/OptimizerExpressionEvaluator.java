@@ -134,12 +134,14 @@ class OptimizerExpressionEvaluator {
     OpInstruction normalize(OpInstruction op) {
         switch (op.getOperation()) {
             case SUB:
+                // TODO use isNumericConstant, adapt negation to handle LogicReadable
                 if (op.getY() instanceof LogicNumber l && l.getDoubleValue() < 0.0) {
                     return ixProcessor.createOp(op.getAstContext(), ADD, op.getResult(), op.getX(), l.negation(ixProcessor));
                 }
                 break;
 
             case DIV:
+                // TODO use isNumericConstant, adapt reciprocal to handle LogicReadable
                 if (op.getY() instanceof LogicNumber l && l.getDoubleValue() != (long) l.getDoubleValue()) {
                     LogicLiteral reciprocal = l.reciprocal(ixProcessor);
                     if (reciprocal != null && reciprocal.toMlog().length() < l.toMlog().length()) {
@@ -149,9 +151,10 @@ class OptimizerExpressionEvaluator {
                 break;
 
             case MUL:
-                if (op.getX() instanceof LogicNumber number && op.getY() instanceof  LogicVariable variable) {
+                // TODO use isNumericConstant, adapt reciprocal to handle LogicReadable
+                if (op.getX() instanceof LogicNumber number && op.getY() instanceof LogicVariable variable) {
                     return normalizeMul(op, variable, number);
-                } else if (op.getY() instanceof LogicNumber number && op.getX() instanceof  LogicVariable variable) {
+                } else if (op.getY() instanceof LogicNumber number && op.getX() instanceof LogicVariable variable) {
                     return normalizeMul(op, variable, number);
                 }
                 break;

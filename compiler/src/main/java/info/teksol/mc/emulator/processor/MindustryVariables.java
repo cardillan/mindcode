@@ -6,6 +6,7 @@ import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
@@ -33,11 +34,6 @@ public class MindustryVariables {
 
     private final Map<String, MindustryVariable> variables = new HashMap<>();
 
-    private static final float PI = 3.1415927f;
-    private static final float E = 2.7182818f;
-    private static final float RAD_DEG = 180f / PI;
-    private static final float DEG_RAD = PI / 180;
-
     public MindustryVariables(Processor processor, InstructionProcessor instructionProcessor) {
         this.processor = processor;
         this.instructionProcessor = instructionProcessor;
@@ -45,20 +41,15 @@ public class MindustryVariables {
 
         variables.put("@counter", counter);
         variables.put("@unit", null_);
-        variables.put("@pi", MindustryVariable.createConst("@pi", PI));
-        variables.put("@e", MindustryVariable.createConst("@e", E));
-        variables.put("@degToRad", MindustryVariable.createConst("@degToRad", RAD_DEG));
-        variables.put("@radToDeg", MindustryVariable.createConst("@radToDeg", DEG_RAD));
         variables.put("null", null_);
         variables.put("true", MindustryVariable.createConst("true", true));
         variables.put("false", MindustryVariable.createConst("false", false));
         variables.put("0", MindustryVariable.createConst("0", 0));
         variables.put("1", MindustryVariable.createConst("1", 1));
 
-        variables.put("@blockCount", MindustryVariable.createConst("blockCount", metadata.getBlockCount()));
-        variables.put("@itemCount", MindustryVariable.createConst("itemCount", metadata.getItemCount()));
-        variables.put("@liquidCount", MindustryVariable.createConst("liquidCount", metadata.getLiquidCount()));
-        variables.put("@unitCount", MindustryVariable.createConst("unitCount", metadata.getUnitCount()));
+        metadata.getAllLVars().stream()
+                .filter(LVar::isNumericConstant)
+                .forEach(v -> variables.put(v.name(), MindustryVariable.createConst(v.name(), v.numericValue())));
     }
 
     public void addConstVariable(String name, int value) {

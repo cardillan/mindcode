@@ -470,6 +470,12 @@ public class Processor extends AbstractMessageEmitter {
         MindustryObject inner = object.getObject();
         MindustryVariable target = getOrCreateVariable(ix.getResult());
         switch (property.getExistingObject().name()) {
+            case "@size" -> {
+                if (inner instanceof MindustryString str) {
+                    target.setIntValue(str.value().length());
+                    return true;
+                }
+            }
             case "@type" -> {
                 target.setObject(inner != null ? inner.type() : null);
                 return true;
@@ -482,10 +488,9 @@ public class Processor extends AbstractMessageEmitter {
                 }
                 return true;
             }
-            default -> {
-                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
-            }
         }
+
+        throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
     }
 
     private boolean executeSet(SetInstruction ix) {

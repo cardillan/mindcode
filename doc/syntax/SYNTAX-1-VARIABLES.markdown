@@ -1352,7 +1352,33 @@ The list of all existing icons is quite huge:
 
 [Mindustry built-in variables](#mindustry-logic-built-in-variables) are available in Mindcode directly by their name, including the `@` prefix (e.g. `var n = @links;`). A declaration is never required to use them.
 
-Built-in constants and variables are compiled into mlog code as is, although Mindcode emits a warning when an unknown built-in variable is encountered as a protection against mistyped identifiers. However, contents unknown to Mindcode (provided by a mod, for example) can be directly used in Mindcode programs if you ignore the warning.
+Some built-in variables represent a constant numerical value, such as `@pi` or `@blockCount`. The actual numerical value is either _stable_, meaning it is the same in all released versions of Mindustry (e.g. `@pi`), or _unstable_, meaning the value depends on the actual version of Mindustry used (e.g. `@blockCount`).
+
+Mindustry always evaluates expressions involving stable numerical built-in variables at compile time, including string conversion for printing. However, when the original value is not affected by expression evaluation, it is written using the symbolic name into mlog:
+
+```Mindcode
+print(@pi);         // No evaluation
+printflush(message1);
+print(2 * @pi);     // Numeric evaluation
+printflush(message2);
+println(@pi);       // Conversion to string
+printflush(message3);
+```
+
+compiles to
+
+```mlog
+print @pi
+printflush message1
+print 6.2831854820251465
+printflush message2
+print "3.1415927410125732\n"
+printflush message3
+```
+
+The unstable built-in variables are compile-time evaluated when the [`target-optimization` option](SYNTAX-5-OTHER.markdown#option-target-optimization) is set to `specific`. This setting is useful when the program is meant to be only run in the version of Mindustry selected by the `target` option, and not on later versions.
+
+All other built-in constants and variables (that is, those that aren't numerical constants) are compiled into mlog code as is, although Mindcode emits a warning when an unknown built-in variable is encountered as a protection against mistyped identifiers. However, contents unknown to Mindcode (provided by a mod, for example) can be directly used in Mindcode programs if you ignore the warning.
 
 > [!TIP]
 > Assignments to built-in variables aren't supported. As far as we know, there exists only one built-in variable that can be assigned a new value: `@counter`. Allowing direct assignments to it would make Mindcode unsafe.       

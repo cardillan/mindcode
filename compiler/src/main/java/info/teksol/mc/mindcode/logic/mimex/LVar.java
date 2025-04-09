@@ -9,7 +9,7 @@ public record LVar(
         boolean global,
         boolean object,
         boolean constant,
-        Double numericValue
+        double numericValue
 ) implements MindustryContent {
 
     @Override
@@ -18,6 +18,6 @@ public record LVar(
     }
 
     public boolean isNumericConstant() {
-        return global && !object && constant && numericValue != null && numericValue != 0.0;
+        return global && !object && constant && numericValue != 0.0;
     }
 }

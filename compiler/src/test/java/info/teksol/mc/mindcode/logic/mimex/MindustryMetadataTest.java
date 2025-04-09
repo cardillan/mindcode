@@ -22,8 +22,8 @@ class MindustryMetadataTest {
     void createStableIdList() {
         List<MindustryMetadata> metadataList = new ArrayList<>();
 
-        // Crate a list of metadata
-        String last = ProcessorVersion.V6.mimexVersion;
+        // Create a list of metadata
+        String last = "";
         for (ProcessorVersion version : ProcessorVersion.values()) {
             if (!version.mimexVersion.equals(last)) {
                 last = version.mimexVersion;
@@ -36,6 +36,7 @@ class MindustryMetadataTest {
         findStableIds(stableIds, metadataList, MindustryMetadata::getUnitMap);
         findStableIds(stableIds, metadataList, MindustryMetadata::getItemMap);
         findStableIds(stableIds, metadataList, MindustryMetadata::getLiquidMap);
+        findStableValues(stableIds, metadataList);
 
         Assertions.assertFalse(stableIds.isEmpty(), "No stable IDs found");
 
@@ -52,17 +53,19 @@ class MindustryMetadataTest {
         }
     }
 
-    private void findStableIds(List<String> stableIds, List<MindustryMetadata> metadata,
-            Function<MindustryMetadata, Map<String, ? extends MindustryContent>> contentExtractor) {
+    private <T extends MindustryContent> void findStableIds(List<String> stableIds, List<MindustryMetadata> metadata,
+            Function<MindustryMetadata, Map<String, T>> contentExtractor) {
 
-        Map<String, MindustryContent> stableList = createList(contentExtractor.apply(metadata.getFirst()));
+        Map<String, T> stableList = createList(contentExtractor.apply(metadata.getFirst()));
 
         for (int i = 1; i < metadata.size(); i++) {
-            Map<String, MindustryContent> currentList = createList(contentExtractor.apply(metadata.get(i)));
+            Map<String, T> currentList = createList(contentExtractor.apply(metadata.get(i)));
             stableList.keySet().retainAll(currentList.keySet());
-            for (MindustryContent c : currentList.values()) {
-                MindustryContent d = stableList.get(c.name());
-                if (d != null && d.logicId() != c.logicId()) {
+            for (T c : currentList.values()) {
+                T d = stableList.get(c.name());
+                if (d == null) {
+                    stableList.put(c.name(), c);
+                } else if (d.logicId() != c.logicId()) {
                     stableList.remove(c.name());
                 }
             }
@@ -71,9 +74,34 @@ class MindustryMetadataTest {
         stableList.values().stream().sorted().map(MindustryContent::name).forEach(stableIds::add);
     }
 
-    private Map<String, MindustryContent> createList(Map<String, ? extends MindustryContent> content) {
+    private void findStableValues(List<String> stableIds, List<MindustryMetadata> metadata) {
+        Map<String, LVar> stableList = createLVarList(metadata.getFirst().getLVarMap());
+
+        for (int i = 1; i < metadata.size(); i++) {
+            Map<String, LVar> currentList = createLVarList(metadata.get(i).getLVarMap());
+            for (LVar c : currentList.values()) {
+                LVar d = stableList.get(c.name());
+                if (d == null) {
+                    stableList.put(c.name(), c);
+                } else if (d.numericValue() != c.numericValue()) {
+                    stableList.remove(c.name());
+                }
+            }
+        }
+
+        stableList.values().stream().sorted().map(MindustryContent::name).forEach(stableIds::add);
+    }
+
+    private <T extends MindustryContent> Map<String, T> createList(Map<String, T> content) {
         return content.values().stream()
                 .filter(c -> c.logicId() >= 0)
+                .collect(Collectors.toMap(MindustryContent::name, Function.identity()));
+    }
+
+    private Map<String, LVar> createLVarList(Map<String, LVar> content) {
+        return content.values().stream()
+                .filter(LVar::isNumericConstant)
+                .filter(c -> !c.name().endsWith("Count"))
                 .collect(Collectors.toMap(MindustryContent::name, Function.identity()));
     }
 }

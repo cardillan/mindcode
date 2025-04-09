@@ -117,7 +117,7 @@ public class MindustryMetadata {
         return cacheInstance(lAccessMap, () -> new LAccessReader("mimex-laccess.txt").createFromResource());
     }
 
-    private Map<String, LVar> getLVarMap() {
+    Map<String, LVar> getLVarMap() {
         return cacheInstance(lVarMap, () -> new LVarReader("mimex-vars.txt").createFromResource());
     }
 
