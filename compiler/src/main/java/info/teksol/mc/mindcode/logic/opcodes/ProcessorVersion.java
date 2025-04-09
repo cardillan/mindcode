@@ -10,11 +10,11 @@ import java.util.Set;
 
 @NullMarked
 public enum ProcessorVersion {
-    V6      (6, 0, "6"),
-    V7      (7, 0, "7"),
-    V7A     (7, 1, "7"),
-    V8A     (8, 0, "8"),
-    MAX     (8, 0, "8"),
+    V6      (6, 0, "v126.2"),
+    V7      (7, 0, "v146"),
+    V7A     (7, 1, "v146"),
+    V8A     (8, 0, "be"),
+    MAX     (8, 0, "be"),
     ;
 
     public final int major;
