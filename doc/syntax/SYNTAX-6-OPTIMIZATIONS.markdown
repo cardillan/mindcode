@@ -131,7 +131,36 @@ Some mlog operations are produced by different Mindcode operators. When the opti
 If the optimization level is `advanced`, the following additional expressions are handled:
 
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
-* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block or unit with given id and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block or unit literal.      
+* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block or unit with given id and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block or unit literal.
+
+Some Mindustry objects may have different logic IDs in different Mindustry versions. For these objects, the above optimizations only happen when the [`target-optimization` option](SYNTAX-5-OTHER.markdown#option-target-optimization) is set to `specific`:
+
+```Mindcode
+#set target = 7;
+#set target-optimization = specific;
+println(lookup(:item, 18));
+println(@tungsten.@id);
+printflush(message1);
+```
+
+compiles to 
+
+```mlog
+print "dormant-cyst\n17\n"
+printflush message1
+```
+
+When compiled with `target-optimization` set to `compatible`, the code is 
+
+```mlog
+lookup item *tmp0 18
+print *tmp0
+print "\n"
+sensor *tmp1 @tungsten @id
+print *tmp1
+print "\n"
+printflush message1
+```
 
 Mindcode contains a list of known Mindustry objects and their IDs, obtained from the latest Mindustry version. These IDs are expected to be immutable, but the optimization can be turned off by setting the optimization level to `basic` if the actual IDs turn out to be different from the IDs known to Mindcode.   
 

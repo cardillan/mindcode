@@ -1352,7 +1352,7 @@ The list of all existing icons is quite huge:
 
 [Mindustry built-in variables](#mindustry-logic-built-in-variables) are available in Mindcode directly by their name, including the `@` prefix (e.g. `var n = @links;`). A declaration is never required to use them.
 
-Some built-in variables represent a constant numerical value, such as `@pi` or `@blockCount`. The actual numerical value is either _stable_, meaning it is the same in all released versions of Mindustry (e.g. `@pi`), or _unstable_, meaning the value depends on the actual version of Mindustry used (e.g. `@blockCount`).
+Some built-in variables represent a constant numerical value, such as `@pi` or `@blockCount`. The actual numerical value is either _stable_, meaning it is the same in all released versions of Mindustry (e.g. `@pi`) since the first one in which it appeared, or _unstable_, meaning the value depends on the actual version of Mindustry used (e.g. `@blockCount`).
 
 Mindustry always evaluates expressions involving stable numerical built-in variables at compile time, including string conversion for printing. However, when the original value is not affected by expression evaluation, it is written using the symbolic name into mlog:
 
