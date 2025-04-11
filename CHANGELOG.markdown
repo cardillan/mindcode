@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.3.0 - Future release
+## 3.3.0 - 2025-04-11
 
 ### Fixed
 
@@ -12,16 +12,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed wrong handling or hoisted set instruction setting up return address in subsequent loop unrolling ([#234](https://github.com/cardillan/mindcode/issues/234)).
 * Fixed optimizations removing the `spawn` instruction when the output value was not used ([#236](https://github.com/cardillan/mindcode/issues/236)).
 * Fixed Jump Optimization not performing the optimization in unrolled loops.
+* Fixed error in compile-time evaluation of an expression involving a character literal ([#240](https://github.com/cardillan/mindcode/issues/240)).
+* Fixed incorrect compile-time evaluation of some logic IDs ([#242](https://github.com/cardillan/mindcode/issues/242)).
+* Fixed possible incorrect handling of arguments passed to the `print()` and other output functions ([#243](https://github.com/cardillan/mindcode/issues/243)).
 
 ### Added
 
 * **Breaking:** new `ref` keyword was added to the language. Code that uses this keyword as a function or variable name will not compile and the variable or function will have to be renamed.
 * Added the [`char()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-char-function). The function returns the ASCII value of a character at given index from a string value using the `read` instruction, as supported in latest BE version.
 * Added support for invoking properties and the `sensor` functions on string values to support latest BE Enhancement of sensing string lengths using `@size`. 
+* Added the [`strlen()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-strlen-function) returning the length of a string determined at runtime.
 * Added support for compile-time evaluation of the `length()` function, allowing to specify offsets relative to the end of the array in subarrays (e.g. `array[0 ... length(array) - 1]`).
 * Added compile-time evaluation of either stable, or all built-in numerical variables (such as `@pi` or `@unitCount`).
 * Added a new remarks mode, `comments`, to compile remarks as mlog comments (`# comment`).
-* Added support for generating boundary checks for explicitly declared external arrays.
+* Added support for generating runtime boundary checks for explicitly declared external arrays.
 * Added new `printLines()` function to the `printing` library. The function prints each of its arguments on a new line. 
 * Loop Hoisting optimizer enhanced with an ability to optimize instructions setting up return addresses of function calls. 
 * Added handling of numerical literal values unsupported by Mindustry Logic version 7 and earlier (namely, `-2147483648`).
@@ -44,6 +48,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking**: underscores in multi-word command-line options were changed to hyphens.
 * The metadata used by Mindcode compiler and processor emulator now correspond to the compilation target. Schemacode still uses the latest version of the metadata for both building and decompiling schematics.
+* Compile-time evaluation cache is cleared when exiting function context. This forces primarily the `length()` function to be reevaluated in each call to an inline function, as its value depends on the actual arguments passed to the function. 
 * Improved optimization of jumps by making multiple passes over jumps-related optimizers, up to the optimization passes limit.
 * Volatile built-in variables used an upper or lower bound in a ranged for-loop statement are used directly in the condition, without storing them in a temporary variable.
 * Stripped unnecessary `.0` distinctions from local variable prefix.

@@ -2,6 +2,7 @@ require printing;
 
 begin
 
+printLines(1, 2, 3)                 :* "1\n2\n3\n"
 printNumber(null)                   :* "0"
 printNumber(1)                      :* "1"
 printNumber(1.5)                    :* "1"

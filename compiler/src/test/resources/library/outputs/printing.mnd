@@ -2,6 +2,7 @@ require printing;
 
 begin
 
+assertPrints("1\n2\n3\n", printLines(1, 2, 3), "printLines(1, 2, 3)");
 assertPrints("0", printNumber(null), "printNumber(null)");
 assertPrints("1", printNumber(1), "printNumber(1)");
 assertPrints("1", printNumber(1.5), "printNumber(1.5)");

@@ -18,10 +18,10 @@
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
-## Mindcode Syntax
-
 > [!NOTE]
-> To use new Mindustry Logic capabilities from the new [Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v147), use `#set target = 8;` in your code. 
+> To use new Mindustry Logic capabilities from the new [Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v147), use `#set target = 8;` in your code. [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality.
+
+## Mindcode Syntax
 
 Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
@@ -34,16 +34,18 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 The most important recent changes to Mindcode include:
 
 * Language features
-  * Support for [symbolic labels in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
+  * Passing arguments (including arrays) to inline functions by reference.
   * Specific syntax for [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords).
   * Support for passing mlog keywords as arguments to inline functions.
-  * External and internal arrays (`@counter` arrays).
+  * External and internal arrays (`@counter` arrays), including basic array optimizations.
   * Expressions in string interpolation: `print($"Sum: ${a + b}.")`.
   * Support for color literals: `%00ffff80`.
   * Prefix/postfix increment/decrement operators: `i++`, `--j`.
   * Redefined [strict and relaxed syntax modes](/doc/syntax/SYNTAX.markdown#strict-syntax).
   * Variable declaration (optional in relaxed syntax, compulsory in strict syntax).
 * Basic functionality
+  * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
+  * Using Mindustry Logic metadata corresponding to the target selected for compilation.  
   * Significant improvement in reporting error messages generated during compilation.
   * A built-in [library of system functions](doc/syntax/SYSTEM-LIBRARY.markdown).
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
@@ -52,7 +54,7 @@ The most important recent changes to Mindcode include:
 * Mindustry Logic 8
   * Complete support for the Mindustry Logic in the latest [Mindustry BE version](/doc/syntax/MINDUSTRY-8.markdown).
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
-  * New `printchar` instruction and character literals.
+  * New string/character based instructions and character literals.
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
