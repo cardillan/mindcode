@@ -1151,6 +1151,46 @@ set *tmp2 "I don't known this number!"
 print *tmp2
 ```
 
+## Array Optimization
+
+The array optimization improves the performance of array operations in several ways. At this moment, all optimizations are only available on the `experimental` level.
+
+Loop unrolling may replace random access to array elements with sequential code accessing individual elements directly, in which case no array optimization happens. 
+
+### Array access inlining
+
+To facilitate random array access, shared jump tables for read and write access are generated for each array. These jump tables are shared by all read/write random access of an individual array. This requires to using a dedicated _array access variable_ for each access, and setting up return addresses for resuming the control flow after the array element has been processed. 
+
+Array access inlining builds a dedicated jump table at each place an array access operation is performed, eliminating the need for array access variables and return addresses.
+
+Inlining a jump table in general case reduces the number of steps required per element access from 6 to 4. Please note that in case of accessing an element of the array in a loop at most once for read and once for write, the usage of array access variables can be streamlined, and return addresses setup can be hoisted out of the loop, reducing a lot of the overhead of shared jump tables.  
+
+### Short array optimizations
+
+This optimization is performed for arrays of up to 3 elements.
+
+Short array optimizations cause out-of-bounds accesses to always target one of the elements (the last one). Using out-of-bounds index can't derail the program execution. Nevertheless, runtime checks still get generated when prescribed by a compiler directive.
+
+#### Arrays of length 1
+
+Each element access gets converted to direct access of the single element.
+
+#### Arrays of length 2 and 3
+
+The jump table is replaced by a sequence of if/else statements. Arrays of length 2 are always optimized, while arrays of length 3 are only optimized if the jump table for the array access has been selected for inlining.  
+
+For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
+
+* `a[x] = b;` gets converted to `if x == 0 then a[0] = b; else a[1] = b; end;`.
+* `b = a[x]` gets converted to  `if x == 0 then b = a[0]; else b = a[1]; end;`.
+
+For arrays of length 3, the optimization is analogous:
+
+* `a[x] = b;` gets converted to `if x == 0 then a[0] = b; elsif x == 1 then a[1] = b; else a[2] = b end;`.
+* `b = a[x]` gets converted to  `if x == 0 then b = a[0]; elsif x == 1 then b = a[1]; else b = a[2] end;`.
+
+This optimization allows additional [If Expression optimizations](#if-expression-optimization) to take place.  
+
 ## Return Optimization
 
 Return Optimization is a [speed optimization](#optimization-for-speed), and as such is only active when the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) is set to `speed` or `auto`.

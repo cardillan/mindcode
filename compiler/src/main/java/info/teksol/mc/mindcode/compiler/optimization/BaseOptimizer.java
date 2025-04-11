@@ -388,6 +388,14 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.instructions(matcher);
     }
 
+    /// Return a list of indexes corresponding to instructions matching predicate.
+    ///
+    /// @param matcher predicate matching sought instructions
+    /// @return list of all predicate matching instructions indexes.
+    protected List<Integer> instructionIndexes(Predicate<LogicInstruction> matcher) {
+        return optimizationContext.instructionIndexes(matcher);
+    }
+
     /// Return a number of instructions matching predicate.
     ///
     /// @param matcher predicate matching sought instructions

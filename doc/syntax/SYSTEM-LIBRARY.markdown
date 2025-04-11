@@ -44,6 +44,69 @@ There are several factors which might cause the size of a function used in an ac
 > The function sizes are measured separately for the `speed` and `size` optimization goals. In some cases, optimizing for speed may produce smaller code than optimizing for size. The reason for this primarily is that optimization for speed may unroll some loops resulting in linear code, which is much better suited for further optimizations.
 
 
+# Arrays library
+
+To use the Arrays library, use the `require arrays;` statement.
+
+Functions in this library are designed for loop unrolling for best performance.
+When instruction space doesn't allow loop unrolling, a random array access is used,
+possibly leading to general (un-inlined) array jump tables being generated for space conservation.
+
+## Functions
+
+### fill
+
+**Definition:** `inline void fill(array, value)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Five elements in the array     |                   5 |                 19 |
+| Ten elements in the array      |                  10 |                 34 |
+| Twenty elements in the array   |                  20 |                 64 |
+
+Fills the array with given value.
+
+
+### reverse
+
+**Definition:** `inline void reverse(array)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Five elements in the array     |                  11 |                 43 |
+| Ten elements in the array      |                  25 |                 68 |
+| Twenty elements in the array   |                  50 |                118 |
+
+Reverses the values in the array.
+
+
+### bubblesort
+
+**Definition:** `inline void bubblesort(array, in maxToMin)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Five elements in the array     |                  74 |                 72 |
+| Ten elements in the array      |                 164 |                 97 |
+| Twenty elements in the array   |                 344 |                147 |
+
+Sorts the array.
+
+
+### bubblesort
+
+**Definition:** `inline void bubblesort(sortBy, values, in maxToMin)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Five elements in the array     |                  98 |                114 |
+| Ten elements in the array      |                 218 |                159 |
+| Twenty elements in the array   |                 458 |                249 |
+
+Sorts elements of two arrays in parallel. The `sortBy` array contains the sort keys, while the
+`values` array gets reordered to the same relative order as the `sortBy` array.
+
+
 # Blocks library
 
 To use the Blocks library, use the `require blocks;` statement.
@@ -54,11 +117,11 @@ To use the Blocks library, use the `require blocks;` statement.
 
 **Definition:** `inline void findLinkedBlocks(title, message, linkMap...)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Linking two blocks        |                  27 |                 27 |
-| Linking four blocks       |                  40 |                 40 |
-| Linking six blocks        |                  53 |                 53 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Linking two blocks             |                  27 |                 27 |
+| Linking four blocks            |                  40 |                 40 |
+| Linking six blocks             |                  53 |                 53 |
 
 Searches blocks linked to the processor for blocks of requested types, and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.
@@ -134,11 +197,11 @@ Length of the side of the drawing area of the `large-logic-display` block.
 
 **Definition:** `void unpackcolor(packedColor, out r, out g, out b, out a)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   9 |                  9 |
-| Function body             |                  10 |                 10 |
-| Function call             |                   8 |                  8 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   9 |                  9 |
+| Function body                  |                  10 |                 10 |
+| Function call                  |                   8 |                  8 |
 
 Unpacks numeric value created by the `packcolor` instruction (or a corresponding color literal) into
 individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
@@ -156,9 +219,9 @@ all four color channels.
 
 **Definition:** `inline void drawflush()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Clears the processor's graphics buffer without outputting the contents into any display. Equivalent to
 `drawflush(null);`.
@@ -167,11 +230,11 @@ Clears the processor's graphics buffer without outputting the contents into any 
 
 **Definition:** `def displaySize(display)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   7 |                  7 |
-| Function body             |                   8 |                  8 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   7 |                  7 |
+| Function body                  |                   8 |                  8 |
+| Function call                  |                   4 |                  4 |
 
 Returns the actual display size based on the type of display passed in as an argument.
 When the passed-in argument is not a display, the processor is stopped.
@@ -180,9 +243,9 @@ When the passed-in argument is not a display, the processor is stopped.
 
 **Definition:** `inline void rotateLeftSmall()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Rotates the output to the left (counterclockwise) by 90 degrees for a small display.
 
@@ -190,9 +253,9 @@ Rotates the output to the left (counterclockwise) by 90 degrees for a small disp
 
 **Definition:** `inline void rotateRightSmall()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Rotates the output to the right (clockwise) by 90 degrees for a small display.
 
@@ -200,9 +263,9 @@ Rotates the output to the right (clockwise) by 90 degrees for a small display.
 
 **Definition:** `inline void upsideDownSmall()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Rotates the output by 180 degrees (upside down) by 90 degrees for a small display.
 
@@ -210,9 +273,9 @@ Rotates the output by 180 degrees (upside down) by 90 degrees for a small displa
 
 **Definition:** `inline void flipVerticalSmall()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Flips the output vertically (along the Y axis) for a small display.
 
@@ -220,9 +283,9 @@ Flips the output vertically (along the Y axis) for a small display.
 
 **Definition:** `inline void flipHorizontalSmall()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Flips the output horizontally (along the X axis) for a small display.
 
@@ -230,9 +293,9 @@ Flips the output horizontally (along the X axis) for a small display.
 
 **Definition:** `inline void rotateLeftLarge()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Rotates the output to the left (counterclockwise) by 90 degrees for a large display.
 
@@ -240,9 +303,9 @@ Rotates the output to the left (counterclockwise) by 90 degrees for a large disp
 
 **Definition:** `inline void rotateRightLarge()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Rotates the output to the right (clockwise) by 90 degrees for a large display.
 
@@ -250,9 +313,9 @@ Rotates the output to the right (clockwise) by 90 degrees for a large display.
 
 **Definition:** `inline void upsideDownLarge()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Rotates the output by 180 degrees (upside down) by 90 degrees for a large display.
 
@@ -260,9 +323,9 @@ Rotates the output by 180 degrees (upside down) by 90 degrees for a large displa
 
 **Definition:** `inline void flipVerticalLarge()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Flips the output vertically (along the Y axis) for a large display.
 
@@ -270,9 +333,9 @@ Flips the output vertically (along the Y axis) for a large display.
 
 **Definition:** `inline void flipHorizontalLarge()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Flips the output horizontally (along the X axis) for a large display.
 
@@ -280,11 +343,11 @@ Flips the output horizontally (along the X axis) for a large display.
 
 **Definition:** `void rotateLeft(display)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  10 |                 10 |
-| Function body             |                  11 |                 11 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  10 |                 10 |
+| Function body                  |                  11 |                 11 |
+| Function call                  |                   4 |                  4 |
 
 Rotates the output to the left (counterclockwise) by 90 degrees for the given display.
 
@@ -292,11 +355,11 @@ Rotates the output to the left (counterclockwise) by 90 degrees for the given di
 
 **Definition:** `void rotateRight(display)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  10 |                 10 |
-| Function body             |                  11 |                 11 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  10 |                 10 |
+| Function body                  |                  11 |                 11 |
+| Function call                  |                   4 |                  4 |
 
 Rotates the output to the right (clockwise) by 90 degrees for the given display.
 
@@ -304,11 +367,11 @@ Rotates the output to the right (clockwise) by 90 degrees for the given display.
 
 **Definition:** `void upsideDown(display)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  10 |                 10 |
-| Function body             |                  11 |                 11 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  10 |                 10 |
+| Function body                  |                  11 |                 11 |
+| Function call                  |                   4 |                  4 |
 
 Rotates the output by 180 degrees (upside down) by 90 degrees for the given display.
 
@@ -316,11 +379,11 @@ Rotates the output by 180 degrees (upside down) by 90 degrees for the given disp
 
 **Definition:** `void flipVertical(display)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  10 |                 10 |
-| Function body             |                  11 |                 11 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  10 |                 10 |
+| Function body                  |                  11 |                 11 |
+| Function call                  |                   4 |                  4 |
 
 Flips the output vertically (along the Y axis) for the given display.
 
@@ -328,11 +391,11 @@ Flips the output vertically (along the Y axis) for the given display.
 
 **Definition:** `void flipHorizontal(display)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  10 |                 10 |
-| Function body             |                  11 |                 11 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  10 |                 10 |
+| Function body                  |                  11 |                 11 |
+| Function call                  |                   4 |                  4 |
 
 Flips the output horizontally (along the X axis) for the given display.
 
@@ -340,9 +403,9 @@ Flips the output horizontally (along the X axis) for the given display.
 
 **Definition:** `inline void scaleSmallToLarge()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Scales the graphics output so that an output that targets a small display gets displayed
 over the entire area of a large display.
@@ -351,9 +414,9 @@ over the entire area of a large display.
 
 **Definition:** `inline void scaleLargeToSmall()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Scales the graphics output so that an output that targets a large display gets displayed
 over the entire area of a small display.
@@ -390,9 +453,9 @@ Constant by which to multiply an angular value in radians to obtain an angular v
 
 **Definition:** `inline def distance(x1, y1, x2, y2)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   3 |                  3 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   3 |                  3 |
 
 Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`).
 Uses the `len` instruction for efficient hypotenuse calculation.
@@ -401,9 +464,9 @@ Uses the `len` instruction for efficient hypotenuse calculation.
 
 **Definition:** `inline def round(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`.
 
@@ -411,9 +474,9 @@ Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gi
 
 **Definition:** `inline def frac(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
@@ -421,11 +484,11 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 **Definition:** `def sign(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   6 |                  6 |
-| Function body             |                   7 |                  7 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   6 |                  6 |
+| Function body                  |                   7 |                  7 |
+| Function call                  |                   4 |                  4 |
 
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
 (using the Mindustry Logic native comparison precision).
@@ -434,9 +497,9 @@ Returns the sign of the number. The return value is `0` precisely when `x == 0`
 
 **Definition:** `inline def signExact(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   3 |                  3 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   3 |                  3 |
 
 Returns the sign of the number. The return value is `0` when `x` is null or exactly zero.
 
@@ -444,9 +507,9 @@ Returns the sign of the number. The return value is `0` when `x` is null or exac
 
 **Definition:** `inline def isZero(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Returns `true` when `x` is null or precisely zero.
 
@@ -454,9 +517,9 @@ Returns `true` when `x` is null or precisely zero.
 
 **Definition:** `inline def isZero(x, precision)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Returns `true` when `x` is null or its absolute value is less than `precision`.
 
@@ -464,9 +527,9 @@ Returns `true` when `x` is null or its absolute value is less than `precision`.
 
 **Definition:** `inline def isEqual(a, b, precision)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   3 |                  3 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   3 |                  3 |
 
 Returns `true` if the two values differ by less than `precision`.
 
@@ -479,9 +542,9 @@ Returns `true` if the two values differ by less than `precision`.
 
 **Definition:** `inline def nullToZero(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
 and makes sure it won't be removed by the optimizer.
@@ -490,9 +553,9 @@ and makes sure it won't be removed by the optimizer.
 
 **Definition:** `inline def boolean(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Converts the value of `x` to boolean values (`0` or `1`). The returning value will be `0`
 if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
@@ -501,9 +564,9 @@ if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
 
 **Definition:** `inline def integer(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
 (`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
@@ -513,9 +576,9 @@ Uses single instruction for the conversion, and makes sure it won't be removed b
 
 **Definition:** `inline def sum(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   0 |                  0 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   0 |                  0 |
 
 Returns `x`. The function is a fallback case for the generic `sum` function taking a variable number of arguments.
 
@@ -523,11 +586,11 @@ Returns `x`. The function is a fallback case for the generic `sum` function taki
 
 **Definition:** `inline def sum(x1, x2, x...)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Five arguments in total   |                   4 |                  4 |
-| Ten arguments in total    |                   9 |                  9 |
-| Twenty arguments in total |                  19 |                 19 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Five arguments in total        |                   4 |                  4 |
+| Ten arguments in total         |                   9 |                  9 |
+| Twenty arguments in total      |                  19 |                 19 |
 
 Returns the sum of all given arguments.
 
@@ -535,9 +598,9 @@ Returns the sum of all given arguments.
 
 **Definition:** `inline def avg(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   0 |                  0 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   0 |                  0 |
 
 Returns `x`. The function is a fallback case for the generic `avg` function taking a variable number of arguments.
 
@@ -545,11 +608,11 @@ Returns `x`. The function is a fallback case for the generic `avg` function taki
 
 **Definition:** `inline def avg(x1, x2, x...)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Five arguments in total   |                   5 |                  5 |
-| Ten arguments in total    |                  10 |                 10 |
-| Twenty arguments in total |                  20 |                 20 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Five arguments in total        |                   5 |                  5 |
+| Ten arguments in total         |                  10 |                 10 |
+| Twenty arguments in total      |                  20 |                 20 |
 
 Returns the average of all given arguments.
 
@@ -557,9 +620,9 @@ Returns the average of all given arguments.
 
 **Definition:** `inline def log2(number)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Returns the logarithm of the number in base 2
 
@@ -567,9 +630,9 @@ Returns the logarithm of the number in base 2
 
 **Definition:** `inline def lerp(from, to, ratio)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   4 |                  4 |
 
 Perform linear interpolation between two values.
 
@@ -584,9 +647,9 @@ Perform linear interpolation between two values.
 
 **Definition:** `inline def median(x)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   0 |                  0 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   0 |                  0 |
 
 Returns `x`. The function is a fallback case for the generic `median` function taking a variable number of arguments.
 
@@ -594,9 +657,9 @@ Returns `x`. The function is a fallback case for the generic `median` function t
 
 **Definition:** `inline def median(x1, x2)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   2 |                  2 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   2 |                  2 |
 
 Returns the median of two values.
 
@@ -604,9 +667,9 @@ Returns the median of two values.
 
 **Definition:** `inline def median(x1, x2, x3)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   5 |                  5 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   5 |                  5 |
 
 Returns the median of three values .
 
@@ -614,11 +677,11 @@ Returns the median of three values .
 
 **Definition:** `def median(x1, x2, x3, x4)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  16 |                 16 |
-| Function body             |                  17 |                 17 |
-| Function call             |                   7 |                  7 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  16 |                 16 |
+| Function body                  |                  17 |                 17 |
+| Function call                  |                   7 |                  7 |
 
 Returns the median of four values .
 
@@ -626,11 +689,11 @@ Returns the median of four values .
 
 **Definition:** `def median(x1, x2, x3, x4, x5)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  18 |                 18 |
-| Function body             |                  19 |                 19 |
-| Function call             |                   8 |                  8 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  18 |                 18 |
+| Function body                  |                  19 |                 19 |
+| Function call                  |                   8 |                  8 |
 
 Returns the median of five values.
 
@@ -638,11 +701,11 @@ Returns the median of five values.
 
 **Definition:** `inline def median(x...)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Ten arguments in total    |                 693 |                 88 |
-| Fifteen arguments in total |                 143 |                118 |
-| Twenty arguments in total |                 183 |                148 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Ten arguments in total         |                 693 |                 88 |
+| Fifteen arguments in total     |                 143 |                118 |
+| Twenty arguments in total      |                 183 |                148 |
 
 Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
 and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
@@ -659,9 +722,9 @@ Mindustry Logic 8 instructions and therefore require the `#set target = 8;` stat
 
 **Definition:** `inline void printflush()`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   1 |                  1 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   1 |                  1 |
 
 Clears the processor's text buffer without outputting the contents into any message block. Equivalent to
 `printflush(null);`.
@@ -670,11 +733,11 @@ Clears the processor's text buffer without outputting the contents into any mess
 
 **Definition:** `inline void printLines(lines...)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Five arguments in total   |                   6 |                  6 |
-| Ten arguments in total    |                  11 |                 11 |
-| Twenty arguments in total |                  21 |                 21 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Five arguments in total        |                   6 |                  6 |
+| Ten arguments in total         |                  11 |                 11 |
+| Twenty arguments in total      |                  21 |                 21 |
 
 Prints all arguments passed to it, each on a new line.
 
@@ -682,11 +745,11 @@ Prints all arguments passed to it, each on a new line.
 
 **Definition:** `void formatNumber(number)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  17 |                 17 |
-| Function body             |                  18 |                 18 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  17 |                 17 |
+| Function body                  |                  18 |                 18 |
+| Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -707,11 +770,11 @@ Nulls are printed as 0.
 
 **Definition:** `void printNumber(number)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  18 |                 18 |
-| Function body             |                  19 |                 19 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  18 |                 18 |
+| Function body                  |                  19 |                 19 |
+| Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -733,11 +796,11 @@ See also [`formatNumber`](#formatnumber)
 
 **Definition:** `void formatBinaryNumber(number, digits)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  13 |                 13 |
-| Function body             |                  14 |                 14 |
-| Function call             |                   5 |                  5 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  13 |                 13 |
+| Function body                  |                  14 |                 14 |
+| Function call                  |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -759,11 +822,11 @@ Nulls are printed as zero values.
 
 **Definition:** `void printBinaryNumber(number, digits)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  14 |                 14 |
-| Function body             |                  15 |                 15 |
-| Function call             |                   5 |                  5 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  14 |                 14 |
+| Function body                  |                  15 |                 15 |
+| Function call                  |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -786,11 +849,11 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 **Definition:** `void formatHexNumber(number, digits)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  33 |                 33 |
-| Function body             |                  34 |                 34 |
-| Function call             |                   5 |                  5 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  33 |                 33 |
+| Function body                  |                  34 |                 34 |
+| Function call                  |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -812,11 +875,11 @@ Nulls are printed as zero values.
 
 **Definition:** `void printHexNumber(number, digits)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  34 |                 34 |
-| Function body             |                  35 |                 35 |
-| Function call             |                   5 |                  5 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  34 |                 34 |
+| Function body                  |                  35 |                 35 |
+| Function call                  |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -839,11 +902,11 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 **Definition:** `void printExactFast(n)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  74 |                 47 |
-| Function body             |                  75 |                 48 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  74 |                 47 |
+| Function body                  |                  75 |                 48 |
+| Function call                  |                   4 |                  4 |
 
 Prints the value into the text buffer without rounding to the nearest integer value.
 The function is primarily useful for debugging purposes to determine the actual value of variables.
@@ -868,11 +931,11 @@ is used, which can take around 50 steps to output the entire number.
 
 **Definition:** `void printExactSlow(n)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  79 |                 26 |
-| Function body             |                  80 |                 27 |
-| Function call             |                   4 |                  4 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  79 |                 26 |
+| Function body                  |                  80 |                 27 |
+| Function call                  |                   4 |                  4 |
 
 Prints the value into the text buffer without rounding to the nearest integer value.
 The function is primarily useful for debugging purposes to determine the actual value of variables.
@@ -892,11 +955,11 @@ To use the Units library, use the `require units;`
 
 **Definition:** `def findFreeUnit(unit_type, initial_flag)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  16 |                 16 |
-| Function body             |                  17 |                 17 |
-| Function call             |                   5 |                  5 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  16 |                 16 |
+| Function body                  |                  17 |                 17 |
+| Function call                  |                   5 |                  5 |
 
 Finds and binds a free unit of given type. When such a unit is found, it is flagged by the given initial flag.
 If no free unit of given type can be found (either because none exists, or because all existing units are occupied),
@@ -914,11 +977,11 @@ The function doesn't use units that are controlled by a player or a different pr
 
 **Definition:** `def findClosestUnit(x, y, unit_type, initial_flag)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  31 |                 31 |
-| Function body             |                  32 |                 32 |
-| Function call             |                   7 |                  7 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  31 |                 31 |
+| Function body                  |                  32 |                 32 |
+| Function call                  |                   7 |                  7 |
 
 Searches for and binds a free unit of given type closest to the coordinates on the map given.
 If no free unit of given type can be found (either because none exists, or because all existing units
@@ -937,11 +1000,11 @@ The function doesn't use units that are controlled by a player or a different pr
 
 **Definition:** `def waitForFreeUnit(unit_type, initial_flag)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                   6 |                  6 |
-| Function body             |                   7 |                  7 |
-| Function call             |                   5 |                  5 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   6 |                  6 |
+| Function body                  |                   7 |                  7 |
+| Function call                  |                   5 |                  5 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
 The function doesn't return until a free unit of the given type can be found.
@@ -958,11 +1021,11 @@ The function doesn't use units that are controlled by a player or a different pr
 
 **Definition:** `def waitForFreeUnit(message, preface, unit_type, initial_flag)`
 
-| Number of arguments       | Optimized for speed | Optimized for size |
-|---------------------------|--------------------:|-------------------:|
-| Inlined function          |                  16 |                 16 |
-| Function body             |                  17 |                 17 |
-| Function call             |                   7 |                  7 |
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  16 |                 16 |
+| Function body                  |                  17 |                 17 |
+| Function call                  |                   7 |                  7 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
 The function doesn't return until a free unit of the given type can be found. The function prints status

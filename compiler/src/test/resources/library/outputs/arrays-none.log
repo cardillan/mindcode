@@ -1,0 +1,520 @@
+
+Final code before resolving virtual instructions:
+
+    0:  set p 0
+    1:  set :fill:value "x"
+    2:  set :fill:i 0
+        label *label1
+    3:  jump *label3 greaterThanEq :fill:i 5
+    4:  set *tmp0 :fill:i
+    5:  setaddr .a*wret *label101
+    6:  set .a*w :fill:value
+    7:  op mul *tmp83 *tmp0 2
+    8:  multicall *label51 *tmp83
+        label *label101
+        label *label2
+    9:  op add :fill:i :fill:i 1
+   10:  jump *label1 always 0 0
+        label *label3
+        label *label0
+   11:  assertflush
+   12:  print .a*0
+   13:  print .a*1
+   14:  print .a*2
+   15:  print .a*3
+   16:  print .a*4
+   17:  assertprints "xxxxx" "Array fill"
+   18:  set :i 0
+        label *label4
+   19:  jump *label6 greaterThanEq :i 10
+   20:  set *tmp2 :i
+   21:  op add *tmp4 p :i
+   22:  setaddr .b*wret *label102
+   23:  set .b*w *tmp4
+   24:  op mul *tmp84 *tmp2 2
+   25:  multicall *label57 *tmp84
+        label *label102
+   26:  set *tmp5 :i
+   27:  op add *tmp7 p :i
+   28:  setaddr .c*wret *label103
+   29:  set .c*w *tmp7
+   30:  op mul *tmp85 *tmp5 2
+   31:  multicall *label68 *tmp85
+        label *label103
+        label *label5
+   32:  op add :i :i 1
+   33:  jump *label4 always 0 0
+        label *label6
+   34:  set :reverse:i 0
+        label *label8
+   35:  jump *label10 greaterThanEq :reverse:i 5
+   36:  op sub *tmp8 9 :reverse:i
+   37:  set :reverse:j *tmp8
+   38:  set *tmp9 :reverse:i
+   39:  setaddr .b*rret *label104
+   40:  op mul *tmp86 *tmp9 2
+   41:  multicall *label79 *tmp86
+        label *label104
+   42:  set *tmp10 .b*r
+   43:  set :reverse:t *tmp10
+   44:  set *tmp11 :reverse:i
+   45:  set *tmp13 :reverse:j
+   46:  setaddr .b*rret *label105
+   47:  op mul *tmp87 *tmp13 2
+   48:  multicall *label79 *tmp87
+        label *label105
+   49:  set *tmp14 .b*r
+   50:  setaddr .b*wret *label106
+   51:  set .b*w *tmp14
+   52:  op mul *tmp88 *tmp11 2
+   53:  multicall *label57 *tmp88
+        label *label106
+   54:  set *tmp15 :reverse:j
+   55:  setaddr .b*wret *label107
+   56:  set .b*w :reverse:t
+   57:  op mul *tmp89 *tmp15 2
+   58:  multicall *label57 *tmp89
+        label *label107
+        label *label9
+   59:  op add :reverse:i :reverse:i 1
+   60:  jump *label8 always 0 0
+        label *label10
+        label *label7
+   61:  assertflush
+   62:  print .b*0
+   63:  print .b*1
+   64:  print .b*2
+   65:  print .b*3
+   66:  print .b*4
+   67:  print .b*5
+   68:  print .b*6
+   69:  print .b*7
+   70:  print .b*8
+   71:  print .b*9
+   72:  assertprints "9876543210" "Array reverse"
+   73:  set :bubblesort:maxToMin false
+        label *label12
+   74:  set :bubblesort:flag true
+   75:  set :bubblesort:a .b*0
+   76:  set :bubblesort:i 1
+        label *label15
+   77:  jump *label17 greaterThanEq :bubblesort:i 10
+   78:  set *tmp17 :bubblesort:i
+   79:  setaddr .b*rret *label108
+   80:  op mul *tmp90 *tmp17 2
+   81:  multicall *label79 *tmp90
+        label *label108
+   82:  set *tmp18 .b*r
+   83:  set :bubblesort:b *tmp18
+   84:  jump *label18 equal :bubblesort:maxToMin false
+   85:  op lessThan *tmp20 :bubblesort:a :bubblesort:b
+   86:  set *tmp19 *tmp20
+   87:  jump *label19 always 0 0
+        label *label18
+   88:  op greaterThan *tmp21 :bubblesort:a :bubblesort:b
+   89:  set *tmp19 *tmp21
+        label *label19
+   90:  set :bubblesort:condition *tmp19
+   91:  jump *label20 equal :bubblesort:condition false
+   92:  op sub *tmp23 :bubblesort:i 1
+   93:  set *tmp24 *tmp23
+   94:  setaddr .b*wret *label109
+   95:  set .b*w :bubblesort:b
+   96:  op mul *tmp91 *tmp24 2
+   97:  multicall *label57 *tmp91
+        label *label109
+   98:  set *tmp26 :bubblesort:i
+   99:  setaddr .b*wret *label110
+  100:  set .b*w :bubblesort:a
+  101:  op mul *tmp92 *tmp26 2
+  102:  multicall *label57 *tmp92
+        label *label110
+  103:  set :bubblesort:flag false
+  104:  set *tmp22 :bubblesort:flag
+  105:  jump *label21 always 0 0
+        label *label20
+  106:  set :bubblesort:a :bubblesort:b
+  107:  set *tmp22 :bubblesort:a
+        label *label21
+        label *label16
+  108:  op add :bubblesort:i :bubblesort:i 1
+  109:  jump *label15 always 0 0
+        label *label17
+  110:  jump *label22 equal :bubblesort:flag false
+  111:  jump *label11 always 0 0
+  112:  set *tmp28 null
+  113:  jump *label23 always 0 0
+        label *label22
+  114:  set *tmp28 null
+        label *label23
+  115:  set :bubblesort:a .b*9
+  116:  op sub :bubblesort:i.1 9 1
+        label *label24
+  117:  jump *label26 lessThan :bubblesort:i.1 0
+  118:  set *tmp29 :bubblesort:i.1
+  119:  setaddr .b*rret *label111
+  120:  op mul *tmp93 *tmp29 2
+  121:  multicall *label79 *tmp93
+        label *label111
+  122:  set *tmp30 .b*r
+  123:  set :bubblesort:b.1 *tmp30
+  124:  jump *label27 equal :bubblesort:maxToMin false
+  125:  op greaterThan *tmp32 :bubblesort:a :bubblesort:b.1
+  126:  set *tmp31 *tmp32
+  127:  jump *label28 always 0 0
+        label *label27
+  128:  op lessThan *tmp33 :bubblesort:a :bubblesort:b.1
+  129:  set *tmp31 *tmp33
+        label *label28
+  130:  set :bubblesort:condition.1 *tmp31
+  131:  jump *label29 equal :bubblesort:condition.1 false
+  132:  op add *tmp35 :bubblesort:i.1 1
+  133:  set *tmp36 *tmp35
+  134:  setaddr .b*wret *label112
+  135:  set .b*w :bubblesort:b.1
+  136:  op mul *tmp94 *tmp36 2
+  137:  multicall *label57 *tmp94
+        label *label112
+  138:  set *tmp38 :bubblesort:i.1
+  139:  setaddr .b*wret *label113
+  140:  set .b*w :bubblesort:a
+  141:  op mul *tmp95 *tmp38 2
+  142:  multicall *label57 *tmp95
+        label *label113
+  143:  set :bubblesort:flag true
+  144:  set *tmp34 :bubblesort:flag
+  145:  jump *label30 always 0 0
+        label *label29
+  146:  set :bubblesort:a :bubblesort:b.1
+  147:  set *tmp34 :bubblesort:a
+        label *label30
+        label *label25
+  148:  op sub :bubblesort:i.1 :bubblesort:i.1 1
+  149:  jump *label24 always 0 0
+        label *label26
+        label *label13
+  150:  jump *label12 notEqual true false
+        label *label14
+        label *label11
+  151:  assertflush
+  152:  print .b*0
+  153:  print .b*1
+  154:  print .b*2
+  155:  print .b*3
+  156:  print .b*4
+  157:  print .b*5
+  158:  print .b*6
+  159:  print .b*7
+  160:  print .b*8
+  161:  print .b*9
+  162:  assertprints "0123456789" "Array sort 1"
+  163:  set :bubblesort.1:maxToMin true
+        label *label32
+  164:  set :bubblesort.1:flag true
+  165:  set :bubblesort.1:a .b*0
+  166:  set :bubblesort.1:i 1
+        label *label35
+  167:  jump *label37 greaterThanEq :bubblesort.1:i 10
+  168:  set *tmp40 :bubblesort.1:i
+  169:  setaddr .b*rret *label114
+  170:  op mul *tmp96 *tmp40 2
+  171:  multicall *label79 *tmp96
+        label *label114
+  172:  set *tmp41 .b*r
+  173:  set :bubblesort.1:b *tmp41
+  174:  jump *label38 equal :bubblesort.1:maxToMin false
+  175:  op lessThan *tmp43 :bubblesort.1:a :bubblesort.1:b
+  176:  set *tmp42 *tmp43
+  177:  jump *label39 always 0 0
+        label *label38
+  178:  op greaterThan *tmp44 :bubblesort.1:a :bubblesort.1:b
+  179:  set *tmp42 *tmp44
+        label *label39
+  180:  set :bubblesort.1:condition *tmp42
+  181:  jump *label40 equal :bubblesort.1:condition false
+  182:  op sub *tmp46 :bubblesort.1:i 1
+  183:  set *tmp47 *tmp46
+  184:  setaddr .b*wret *label115
+  185:  set .b*w :bubblesort.1:b
+  186:  op mul *tmp97 *tmp47 2
+  187:  multicall *label57 *tmp97
+        label *label115
+  188:  set *tmp49 :bubblesort.1:i
+  189:  setaddr .b*wret *label116
+  190:  set .b*w :bubblesort.1:a
+  191:  op mul *tmp98 *tmp49 2
+  192:  multicall *label57 *tmp98
+        label *label116
+  193:  op sub *tmp51 :bubblesort.1:i 1
+  194:  set *tmp52 *tmp51
+  195:  setaddr .c*rret *label117
+  196:  op mul *tmp99 *tmp52 2
+  197:  multicall *label90 *tmp99
+        label *label117
+  198:  set *tmp53 .c*r
+  199:  set :bubblesort.1:v *tmp53
+  200:  op sub *tmp54 :bubblesort.1:i 1
+  201:  set *tmp55 *tmp54
+  202:  set *tmp57 :bubblesort.1:i
+  203:  setaddr .c*rret *label118
+  204:  op mul *tmp100 *tmp57 2
+  205:  multicall *label90 *tmp100
+        label *label118
+  206:  set *tmp58 .c*r
+  207:  setaddr .c*wret *label119
+  208:  set .c*w *tmp58
+  209:  op mul *tmp101 *tmp55 2
+  210:  multicall *label68 *tmp101
+        label *label119
+  211:  set *tmp59 :bubblesort.1:i
+  212:  setaddr .c*wret *label120
+  213:  set .c*w :bubblesort.1:v
+  214:  op mul *tmp102 *tmp59 2
+  215:  multicall *label68 *tmp102
+        label *label120
+  216:  set :bubblesort.1:flag false
+  217:  set *tmp45 :bubblesort.1:flag
+  218:  jump *label41 always 0 0
+        label *label40
+  219:  set :bubblesort.1:a :bubblesort.1:b
+  220:  set *tmp45 :bubblesort.1:a
+        label *label41
+        label *label36
+  221:  op add :bubblesort.1:i :bubblesort.1:i 1
+  222:  jump *label35 always 0 0
+        label *label37
+  223:  jump *label42 equal :bubblesort.1:flag false
+  224:  jump *label31 always 0 0
+  225:  set *tmp61 null
+  226:  jump *label43 always 0 0
+        label *label42
+  227:  set *tmp61 null
+        label *label43
+  228:  set :bubblesort.1:a .b*9
+  229:  op sub :bubblesort.1:i.1 9 1
+        label *label44
+  230:  jump *label46 lessThan :bubblesort.1:i.1 0
+  231:  set *tmp62 :bubblesort.1:i.1
+  232:  setaddr .b*rret *label121
+  233:  op mul *tmp103 *tmp62 2
+  234:  multicall *label79 *tmp103
+        label *label121
+  235:  set *tmp63 .b*r
+  236:  set :bubblesort.1:b.1 *tmp63
+  237:  jump *label47 equal :bubblesort.1:maxToMin false
+  238:  op greaterThan *tmp65 :bubblesort.1:a :bubblesort.1:b.1
+  239:  set *tmp64 *tmp65
+  240:  jump *label48 always 0 0
+        label *label47
+  241:  op lessThan *tmp66 :bubblesort.1:a :bubblesort.1:b.1
+  242:  set *tmp64 *tmp66
+        label *label48
+  243:  set :bubblesort.1:condition.1 *tmp64
+  244:  jump *label49 equal :bubblesort.1:condition.1 false
+  245:  op add *tmp68 :bubblesort.1:i.1 1
+  246:  set *tmp69 *tmp68
+  247:  setaddr .b*wret *label122
+  248:  set .b*w :bubblesort.1:b.1
+  249:  op mul *tmp104 *tmp69 2
+  250:  multicall *label57 *tmp104
+        label *label122
+  251:  set *tmp71 :bubblesort.1:i.1
+  252:  setaddr .b*wret *label123
+  253:  set .b*w :bubblesort.1:a
+  254:  op mul *tmp105 *tmp71 2
+  255:  multicall *label57 *tmp105
+        label *label123
+  256:  op add *tmp73 :bubblesort.1:i.1 1
+  257:  set *tmp74 *tmp73
+  258:  setaddr .c*rret *label124
+  259:  op mul *tmp106 *tmp74 2
+  260:  multicall *label90 *tmp106
+        label *label124
+  261:  set *tmp75 .c*r
+  262:  set :bubblesort.1:v.1 *tmp75
+  263:  op add *tmp76 :bubblesort.1:i.1 1
+  264:  set *tmp77 *tmp76
+  265:  set *tmp79 :bubblesort.1:i.1
+  266:  setaddr .c*rret *label125
+  267:  op mul *tmp107 *tmp79 2
+  268:  multicall *label90 *tmp107
+        label *label125
+  269:  set *tmp80 .c*r
+  270:  setaddr .c*wret *label126
+  271:  set .c*w *tmp80
+  272:  op mul *tmp108 *tmp77 2
+  273:  multicall *label68 *tmp108
+        label *label126
+  274:  set *tmp81 :bubblesort.1:i.1
+  275:  setaddr .c*wret *label127
+  276:  set .c*w :bubblesort.1:v.1
+  277:  op mul *tmp109 *tmp81 2
+  278:  multicall *label68 *tmp109
+        label *label127
+  279:  set :bubblesort.1:flag true
+  280:  set *tmp67 :bubblesort.1:flag
+  281:  jump *label50 always 0 0
+        label *label49
+  282:  set :bubblesort.1:a :bubblesort.1:b.1
+  283:  set *tmp67 :bubblesort.1:a
+        label *label50
+        label *label45
+  284:  op sub :bubblesort.1:i.1 :bubblesort.1:i.1 1
+  285:  jump *label44 always 0 0
+        label *label46
+        label *label33
+  286:  jump *label32 notEqual true false
+        label *label34
+        label *label31
+  287:  assertflush
+  288:  print .c*0
+  289:  print .c*1
+  290:  print .c*2
+  291:  print .c*3
+  292:  print .c*4
+  293:  print .c*5
+  294:  print .c*6
+  295:  print .c*7
+  296:  print .c*8
+  297:  print .c*9
+  298:  assertprints "9876543210" "Array sort 2"
+  299:  end
+        multilabel *label51
+  300:  set .a*0 .a*w
+  301:  return .a*wret
+        multilabel *label52
+  302:  set .a*1 .a*w
+  303:  return .a*wret
+        multilabel *label53
+  304:  set .a*2 .a*w
+  305:  return .a*wret
+        multilabel *label54
+  306:  set .a*3 .a*w
+  307:  return .a*wret
+        multilabel *label55
+  308:  set .a*4 .a*w
+  309:  return .a*wret
+  310:  end
+        multilabel *label79
+  311:  set .b*r .b*0
+  312:  return .b*rret
+        multilabel *label80
+  313:  set .b*r .b*1
+  314:  return .b*rret
+        multilabel *label81
+  315:  set .b*r .b*2
+  316:  return .b*rret
+        multilabel *label82
+  317:  set .b*r .b*3
+  318:  return .b*rret
+        multilabel *label83
+  319:  set .b*r .b*4
+  320:  return .b*rret
+        multilabel *label84
+  321:  set .b*r .b*5
+  322:  return .b*rret
+        multilabel *label85
+  323:  set .b*r .b*6
+  324:  return .b*rret
+        multilabel *label86
+  325:  set .b*r .b*7
+  326:  return .b*rret
+        multilabel *label87
+  327:  set .b*r .b*8
+  328:  return .b*rret
+        multilabel *label88
+  329:  set .b*r .b*9
+  330:  return .b*rret
+  331:  end
+        multilabel *label57
+  332:  set .b*0 .b*w
+  333:  return .b*wret
+        multilabel *label58
+  334:  set .b*1 .b*w
+  335:  return .b*wret
+        multilabel *label59
+  336:  set .b*2 .b*w
+  337:  return .b*wret
+        multilabel *label60
+  338:  set .b*3 .b*w
+  339:  return .b*wret
+        multilabel *label61
+  340:  set .b*4 .b*w
+  341:  return .b*wret
+        multilabel *label62
+  342:  set .b*5 .b*w
+  343:  return .b*wret
+        multilabel *label63
+  344:  set .b*6 .b*w
+  345:  return .b*wret
+        multilabel *label64
+  346:  set .b*7 .b*w
+  347:  return .b*wret
+        multilabel *label65
+  348:  set .b*8 .b*w
+  349:  return .b*wret
+        multilabel *label66
+  350:  set .b*9 .b*w
+  351:  return .b*wret
+  352:  end
+        multilabel *label90
+  353:  set .c*r .c*0
+  354:  return .c*rret
+        multilabel *label91
+  355:  set .c*r .c*1
+  356:  return .c*rret
+        multilabel *label92
+  357:  set .c*r .c*2
+  358:  return .c*rret
+        multilabel *label93
+  359:  set .c*r .c*3
+  360:  return .c*rret
+        multilabel *label94
+  361:  set .c*r .c*4
+  362:  return .c*rret
+        multilabel *label95
+  363:  set .c*r .c*5
+  364:  return .c*rret
+        multilabel *label96
+  365:  set .c*r .c*6
+  366:  return .c*rret
+        multilabel *label97
+  367:  set .c*r .c*7
+  368:  return .c*rret
+        multilabel *label98
+  369:  set .c*r .c*8
+  370:  return .c*rret
+        multilabel *label99
+  371:  set .c*r .c*9
+  372:  return .c*rret
+  373:  end
+        multilabel *label68
+  374:  set .c*0 .c*w
+  375:  return .c*wret
+        multilabel *label69
+  376:  set .c*1 .c*w
+  377:  return .c*wret
+        multilabel *label70
+  378:  set .c*2 .c*w
+  379:  return .c*wret
+        multilabel *label71
+  380:  set .c*3 .c*w
+  381:  return .c*wret
+        multilabel *label72
+  382:  set .c*4 .c*w
+  383:  return .c*wret
+        multilabel *label73
+  384:  set .c*5 .c*w
+  385:  return .c*wret
+        multilabel *label74
+  386:  set .c*6 .c*w
+  387:  return .c*wret
+        multilabel *label75
+  388:  set .c*7 .c*w
+  389:  return .c*wret
+        multilabel *label76
+  390:  set .c*8 .c*w
+  391:  return .c*wret
+        multilabel *label77
+  392:  set .c*9 .c*w
+  393:  return .c*wret

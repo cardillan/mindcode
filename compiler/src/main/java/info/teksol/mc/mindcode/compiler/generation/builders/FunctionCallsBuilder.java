@@ -154,6 +154,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         map.put("print",        call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT));
         map.put("println",      call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN));
         map.put("remark",       call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.REMARK));
+        map.put("strlen",       call -> textBuilder.get().handleStrlen(call));
         return map;
     }
 

@@ -30,6 +30,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 @NullMarked
@@ -852,6 +853,18 @@ class OptimizationContext {
     protected List<LogicInstruction> instructions(Predicate<LogicInstruction> matcher) {
         return program.stream().filter(matcher).toList();
     }
+
+    /// Return a list of indexes corresponding to instructions matching predicate.
+    ///
+    /// @param matcher predicate matching sought instructions
+    /// @return list of all predicate matching instructions indexes.
+    protected List<Integer> instructionIndexes(Predicate<LogicInstruction> matcher) {
+        return IntStream.range(0, program.size())
+                .filter(i -> matcher.test(program.get(i)))
+                .boxed()
+                .toList();
+    }
+
     /// Return a number of instructions matching predicate.
     ///
     /// @param matcher predicate matching sought instructions

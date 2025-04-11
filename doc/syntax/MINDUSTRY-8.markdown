@@ -195,6 +195,10 @@ Mindustry 8 supports accessing individual characters of string values as UTF-16 
 
 This functionality is accessible in Mindcode via the [`char()` function](SYNTAX-4-FUNCTIONS.markdown#the-char-function).  
 
+## Obtaining string length
+
+A length of a string can be obtained by sensing it's `@size` property. This functionality is accessible in Mindcode either using the `@size` property, `sensor` function or the specialized [`strlen()` function](SYNTAX-4-FUNCTIONS.markdown#the-strlen-function).
+
 ## Reading and writing linked processor variables
 
 Mindustry 8 allows reading and writing variables of another processor, addressing them by name. This functionality is provided as an extension to the `read` and `write` instructions, which can take processors instead of memory cells/banks, and string values representing variable names instead of numerical index.

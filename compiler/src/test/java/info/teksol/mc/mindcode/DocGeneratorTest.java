@@ -40,6 +40,7 @@ public class DocGeneratorTest {
     private static final String TARGET_FILE = "../doc/syntax/SYSTEM-LIBRARY.markdown";
     private static final String LIBRARY_DIRECTORY = "src/main/resources/library";
     private static final String FOOTPRINT = "@footprint";
+    private static final String FOOTPRINT2 = "@footprint2";
 
     @Test
     void generateLibraryDocumentation() throws IOException {
@@ -194,14 +195,22 @@ public class DocGeneratorTest {
             writeFunction();
 
             writer.println();
-            writer.printf("| %-30s | %10s | %10s |%n", "Optimization goal:", "Speed", "Size");
-            writer.printf("|-%-30s |-%10s:|-%10s:|%n", dashes(30), dashes(10), dashes(10));
+            writer.printf("| %-30s | %19s | %18s |%n", "Compiled code size when...", "optimized for speed", "optimized for size");
+            writer.printf("|-%-30s-|-%19s:|-%18s:|%n", dashes(30), dashes(19), dashes(18));
 
-            if (!declaration.isVarargs()) {
+            AstDocComment docComment = declaration.getDocComment();
+            if (declaration.isVarargs() || docComment != null && docComment.getComment().contains(FOOTPRINT2)) {
+                List<FootprintConfig> footprintConfigs = processFootprints(docComment);
+                footprintConfigs.forEach(footprintConfig -> {
+                    int speed = measureFootprint(footprintConfig, GenerationGoal.SPEED);
+                    int size = measureFootprint(footprintConfig, GenerationGoal.SIZE);
+                    writer.printf("| %-30s | %19s | %18s |%n", footprintConfig.title, speed, size);
+                });
+            } else {
                 int speed = measureFootprint(null, GenerationGoal.SPEED);
                 int size = measureFootprint(null, GenerationGoal.SIZE);
                 if (!declaration.isNoinline()) {
-                    writer.printf("| %-30s | %10s | %10s |%n", "Inlined function", speed, size);
+                    writer.printf("| %-30s | %19s | %18s |%n", "Inlined function", speed, size);
                 } else {
                     // Implement if noinline function is ever added to the library
                     throw new UnsupportedOperationException("Size calculation for noinline functions is not supported");
@@ -209,28 +218,21 @@ public class DocGeneratorTest {
                 if (!declaration.isInline()) {
                     int callSize = declaration.computeCallSize();
                     // +1 for the return from the function call
-                    writer.printf("| %-30s | %10s | %10s |%n", "Function body", speed + 1, size + 1);
-                    writer.printf("| %-30s | %10s | %10s |%n", "Function call", callSize, callSize);
+                    writer.printf("| %-30s | %19s | %18s |%n", "Function body", speed + 1, size + 1);
+                    writer.printf("| %-30s | %19s | %18s |%n", "Function call", callSize, callSize);
                 }
-            } else {
-                List<FootprintConfig> footprintConfigs = processFootprints(declaration.getDocComment());
-                footprintConfigs.forEach(footprintConfig -> {
-                    int speed = measureFootprint(footprintConfig, GenerationGoal.SPEED);
-                    int size = measureFootprint(footprintConfig, GenerationGoal.SIZE);
-                    writer.printf("| %-30s | %10s | %10s |%n", footprintConfig.title, speed, size);
-                });
             }
 
-            if (declaration.getDocComment() != null) {
+            if (docComment != null) {
                 writer.println();
-                writeDocComment(declaration.getDocComment().getComment());
+                writeDocComment(docComment.getComment());
             }
         }
 
         private final List<FootprintConfig> defaultFootprintConfigs = List.of(
-                new FootprintConfig("Five arguments in total", null, 5),
-                new FootprintConfig("Ten arguments in total", null, 10),
-                new FootprintConfig("Twenty arguments in total", null, 20)
+                new FootprintConfig("Five arguments in total", null, 5, false),
+                new FootprintConfig("Ten arguments in total", null, 10, false),
+                new FootprintConfig("Twenty arguments in total", null, 20, false)
         );
 
         private List<FootprintConfig> processFootprints(@Nullable AstDocComment docComment) {
@@ -243,6 +245,10 @@ public class DocGeneratorTest {
         }
 
         private FootprintConfig processFootprint(String directive) {
+            if (directive.contains(FOOTPRINT2)) {
+                return processFootprint2(directive);
+            }
+
             int index = directive.indexOf(FOOTPRINT);
             String trimmed = directive.substring(index + FOOTPRINT.length()).trim();
             int index2 = trimmed.indexOf(':');
@@ -252,10 +258,22 @@ public class DocGeneratorTest {
             String title = trimmed.substring(0, index2);
             String declaration = trimmed.substring(index2 + 1).trim();
             if (declaration.startsWith("*")) {
-                return new FootprintConfig(title, null, Integer.parseInt(declaration.substring(1)));
+                return new FootprintConfig(title, null, Integer.parseInt(declaration.substring(1)), false);
             } else {
-                return new FootprintConfig(title, declaration, 0);
+                return new FootprintConfig(title, declaration, 0, false);
             }
+        }
+
+        private FootprintConfig processFootprint2(String directive) {
+            int index = directive.indexOf(FOOTPRINT2);
+            String trimmed = directive.substring(index + FOOTPRINT2.length()).trim();
+            int index2 = trimmed.indexOf(':');
+            if (index2 == -1) {
+                throw new MindcodeInternalError("Malformed %s directive", FOOTPRINT2);
+            }
+            String title = trimmed.substring(0, index2);
+            String declaration = trimmed.substring(index2 + 1).trim();
+            return new FootprintConfig(title, declaration, 0, true);
         }
 
         private int measureFootprint(@Nullable FootprintConfig footprintConfig, GenerationGoal goal) {
@@ -280,9 +298,14 @@ public class DocGeneratorTest {
                     .map(name -> "prm_" + name)
                     .forEach(additionalOutputs::add);
 
+            boolean customCode = footprintConfig != null && footprintConfig.code;
             String varargs = null;
             if (footprintConfig != null) {
-                if (footprintConfig.declarations == null) {
+                if (customCode) {
+                    assert footprintConfig.declarations != null;
+                    code.append(footprintConfig.declarations).append("\n");
+                    createdParams += countOccurrences(footprintConfig.declarations, " param ");
+                } else if (footprintConfig.declarations == null) {
                     int count = footprintConfig.argCount - declaration.getParameters().size() + 1;
                     if (count < 0) {
                         throw new MindcodeInternalError("Invalid argument count");
@@ -308,29 +331,31 @@ public class DocGeneratorTest {
                 }
             }
 
-            code.append("\n");
-            if (declaration.getDataType() != DataType.VOID) code.append("print(");
-            code.append(declaration.getName()).append("(");
+            if (!customCode) {
+                code.append("\n");
+                if (declaration.getDataType() != DataType.VOID) code.append("print(");
+                code.append(declaration.getName()).append("(");
 
-            boolean first = true;
-            for (AstFunctionParameter parameter : declaration.getParameters()) {
-                if (first) {
-                    first = false;
-                } else {
-                    code.append(", ");
-                }
-                if (parameter.isVarargs()) {
-                    if (varargs != null) {
-                        code.append(varargs);
+                boolean first = true;
+                for (AstFunctionParameter parameter : declaration.getParameters()) {
+                    if (first) {
+                        first = false;
+                    } else {
+                        code.append(", ");
                     }
-                } else {
-                    if (parameter.isOutput()) code.append("out ");
-                    code.append("prm_").append(parameter.getName());
+                    if (parameter.isVarargs()) {
+                        if (varargs != null) {
+                            code.append(varargs);
+                        }
+                    } else {
+                        if (parameter.isOutput()) code.append("out ");
+                        code.append("prm_").append(parameter.getName());
+                    }
                 }
+                code.append(")");
+                if (declaration.getDataType() != DataType.VOID) code.append(")");
+                code.append(";\n");
             }
-            code.append(")");
-            if (declaration.getDataType() != DataType.VOID) code.append(")");
-            code.append(";\n");
 
             if (!additionalOutputs.isEmpty()) {
                 code.append(additionalOutputs.stream().collect(Collectors.joining(",", "print(", ");\n")));
@@ -400,7 +425,7 @@ public class DocGeneratorTest {
             }
         }
 
-        private record FootprintConfig(String title, @Nullable String declarations, int argCount) {
+        private record FootprintConfig(String title, @Nullable String declarations, int argCount, boolean code) {
         }
 
         private String dashes(int count) {
@@ -408,5 +433,19 @@ public class DocGeneratorTest {
             Arrays.fill(array, '-');
             return new String(array);
         }
+    }
+
+    private static int countOccurrences(String str, String sub) {
+        if (sub.isEmpty()) return 0;
+
+        int count = 0;
+        int index = 0;
+
+        while ((index = str.indexOf(sub, index)) != -1) {
+            count++;
+            index += sub.length(); // move past this match to avoid overlapping
+        }
+
+        return count;
     }
 }

@@ -508,6 +508,27 @@ op add :index :index 1
 jump 3 always 0 0
 ```
 
+## The `strlen()` function
+
+The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8` or higher.
+
+```Mindcode
+#set target = 8;
+param data = "Dbftbs!djqifs";
+println(strlen(data));
+printflush(message1);
+```
+
+compiles to
+
+```mlog
+set data "Dbftbs!djqifs"
+sensor *tmp0 data @size
+print *tmp0
+print "\n"
+printflush message1
+```
+
 ## Remote calls
 
 The built-in functions `async()`, `finished()` and `await()` serve to 

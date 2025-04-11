@@ -74,10 +74,34 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return result;
     }
 
+    public ValueStore handleStrlen(AstFunctionCall call) {
+        if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+            error(call.getIdentifier(), FUNCTION_REQUIRES_TARGET_8, call.getFunctionName());
+            return LogicNull.NULL;
+        }
+
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+
+        ValueStore result;
+        if (validateStandardFunctionArguments(call, arguments, 1)) {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            LogicValue text = arguments.getFirst().getValue(assembler);
+            LogicVariable output = assembler.nextNodeResultTemp();
+            assembler.createSensor(output, text, LogicBuiltIn.SIZE);
+            result = output;
+        } else {
+            result = LogicNull.NULL;
+        }
+
+        assembler.clearSubcontextType();
+        return result;
+    }
+
     public ValueStore handlePrintf(AstFunctionCall call) {
         if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
             error(call.getIdentifier(), FUNCTION_REQUIRES_TARGET_8, call.getFunctionName());
-            return LogicVoid.VOID;
+            return LogicNull.NULL;
         }
 
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
@@ -87,7 +111,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         if (arguments.isEmpty()) {
             error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS, call.getFunctionName(), 1, call.getArguments().size());
             assembler.clearSubcontextType();
-            return LogicVoid.VOID;
+            return LogicNull.NULL;
         }
 
         if (arguments.getFirst().unwrap() instanceof LogicString str) {

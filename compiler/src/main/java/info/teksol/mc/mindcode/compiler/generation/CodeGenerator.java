@@ -108,6 +108,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     protected void exitFunction(MindcodeFunction function) {
+        evaluator.purgeFromCache(function.getDeclaration().getBody());
         variables.exitFunction(function);
         nested--;
     }

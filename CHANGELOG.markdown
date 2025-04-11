@@ -35,11 +35,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added support for passing arguments to inline functions [by reference](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters). It is possible to pass variables and arrays this way.
 * Added new [`target-optimization` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-optimization). The `specific` option generates code for the specific compilation target only, the `compatible` option generates code intended for the compilation target and future versions of Mindustry Logic.    
+* Added [array-specific optimizations for speed](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) (available on `experimental` level).
+* Added new [`arrays` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#arrays-library) with some basic array functions. The size calculations for the library functions are possibly incorrect, as new means for determining code size of functions taking an array as a ref argument needs to be developed.    
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
 * Added support for applying indenting to the generated mlog code based through the [`mlog-indent` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-mlog-indent).
-* Added array-specific optimizations for speed: 
-  * Replacing jump tables for short arrays (up to three elements) with if-else blocks.
-  * Jump table inlining optimization (similar to function inlining, the jump table gets replicated at the call site, saving up to two instructions).
 
 ### Changed
 

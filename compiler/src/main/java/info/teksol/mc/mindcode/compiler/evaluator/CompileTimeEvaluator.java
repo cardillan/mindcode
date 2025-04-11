@@ -42,6 +42,14 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         variables = context.variables();
     }
 
+    /// Purges all nodes in and their children from cache. If these nodes get evaluated again, they
+    /// will be resolved from a fresh start. Prevents the compile-time evaluator remembering values
+    /// based on constant definitions that might not be valid in a new context.
+    public void purgeFromCache(List<? extends AstMindcodeNode> nodes) {
+        nodes.forEach(cache.keySet()::remove);
+        nodes.forEach(node -> purgeFromCache(node.getChildren()));
+    }
+
     /// If the node can be compile-time evaluated, returns the evaluation, otherwise returns the node itself.
     /// The evaluation can be partial, for example when the AstIfExpression node has a constant condition,
     /// it can return just the true/false branch (depending on the compile-time value of the condition)
@@ -82,14 +90,6 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
             case AstFunctionCall n when !n.hasObject() -> evaluateFunctionCall(n, local);
             default -> exp;
         });
-    }
-
-    /// Purges all nodes in and their children from cache. If these nodes get evaluated again, they
-    /// will be resolved from a fresh start. Prevents the compile-time evaluator remembering values
-    /// based on constant definitions that might not be valid in a new context.
-    public void purgeFromCache(List<? extends AstMindcodeNode> nodes) {
-        nodes.forEach(cache.keySet()::remove);
-        nodes.forEach(node -> purgeFromCache(node.getChildren()));
     }
 
     private AstMindcodeNode evaluateParentheses(AstParentheses node, boolean local) {
@@ -279,7 +279,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     private AstMindcodeNode evaluateLength(AstFunctionCall node, boolean local) {
         if (node.getArguments().size() == 1) {
             AstFunctionArgument argument = node.getArgument(0);
-            if (argument.hasExpression() &&argument.getExpression() instanceof AstIdentifier identifier) {
+            if (argument.hasExpression() && argument.getExpression() instanceof AstIdentifier identifier) {
                 ValueStore valueStore = variables.resolveVariable(identifier, local, true);
                 if (valueStore instanceof ArrayStore array) {
                     return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(array.getSize()));

@@ -28,6 +28,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
     public static final LogicBuiltIn Y = createAndCache("@y", false);
     public static final LogicBuiltIn THIS_X = createAndCache("@thisx", false);
     public static final LogicBuiltIn THIS_Y = createAndCache("@thisy", false);
+    public static final LogicBuiltIn SIZE = createAndCache("@size", false);
 
     private final SourcePosition sourcePosition;
     private final String name;

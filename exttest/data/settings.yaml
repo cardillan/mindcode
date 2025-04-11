@@ -41,6 +41,7 @@ defaults:
   goal: [ speed, size ]
 
   # List of optimization levels for each given optimization
+  array-optimization: [ none, basic ]
   case-expression-optimization: [ none, basic ]
   case-switching: [ none, basic ]
   data-flow-optimization: [ none, basic ]

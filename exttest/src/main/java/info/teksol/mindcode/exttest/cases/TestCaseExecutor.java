@@ -16,33 +16,38 @@ public class TestCaseExecutor {
     }
 
     public void runTest(TestCaseCreator caseCreator, int testRunNumber) {
-
         MindcodeCompiler compiler = caseCreator.createCaseCompiler(testRunNumber);
-        compiler.compile(caseCreator.getInputFile(testRunNumber));
 
-        String unexpectedMessages = compiler.getMessages().stream()
-                .filter(MindcodeMessage::isErrorOrWarning)
-                .map(MindcodeMessage::message)
-                .collect(Collectors.joining("\n"));
+        try {
+            compiler.compile(caseCreator.getInputFile(testRunNumber));
 
-        String failedTests = compiler.getAssertions().stream()
-                .filter(Assertion::failure)
-                .map(Assertion::generateErrorMessage)
-                .collect(Collectors.joining("\n"));
+            String unexpectedMessages = compiler.getMessages().stream()
+                    .filter(MindcodeMessage::isErrorOrWarning)
+                    .map(MindcodeMessage::message)
+                    .collect(Collectors.joining("\n"));
 
-        boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && compiler.getExecutionException() == null;
+            String failedTests = compiler.getAssertions().stream()
+                    .filter(Assertion::failure)
+                    .map(Assertion::generateErrorMessage)
+                    .collect(Collectors.joining("\n"));
 
-        if (success) {
-            if (compiler.compilerProfile().isRun() && (compiler.getAssertions().isEmpty()
-                                                       || compiler.getAssertions().stream().anyMatch(Assertion::failure))) {
-                progress.reportError(new ErrorResult(caseCreator.getTestCaseId(testRunNumber),
-                        compiler.compilerProfile(), "", null, "No assertions found."));
+            boolean success = unexpectedMessages.isEmpty() && failedTests.isEmpty() && compiler.getExecutionException() == null;
+
+            if (success) {
+                if (compiler.compilerProfile().isRun() && (compiler.getAssertions().isEmpty()
+                        || compiler.getAssertions().stream().anyMatch(Assertion::failure))) {
+                    progress.reportError(new ErrorResult(caseCreator.getTestCaseId(testRunNumber),
+                            compiler.compilerProfile(), "", null, "No assertions found."));
+                } else {
+                    progress.reportSuccess();
+                }
             } else {
-                progress.reportSuccess();
+                progress.reportError(new ErrorResult(caseCreator.getTestCaseId(testRunNumber),
+                        compiler.compilerProfile(), unexpectedMessages, compiler.getExecutionException(), failedTests));
             }
-        } else {
+        } catch (Exception e) {
             progress.reportError(new ErrorResult(caseCreator.getTestCaseId(testRunNumber),
-                    compiler.compilerProfile(), unexpectedMessages, compiler.getExecutionException(), failedTests));
+                    compiler.compilerProfile(), "", null, "Exception: " + e));
         }
     }
 }

@@ -128,12 +128,24 @@ class FunctionInliner extends BaseOptimizer {
             return OptimizationResult.INVALID;
         }
 
-        trace(() -> "Inlining function " + function.getName());
-
         List<AstContext> calls = contexts(
                 c -> c.function() == context.function() && c.matches(AstContextType.CALL, OUT_OF_LINE_CALL));
 
-        for (AstContext call : calls) {
+        List<LogicInstruction> callIxs = calls.stream()
+                .flatMap(call -> contextStream(call.parent())
+                        .filter(ix -> ix.getOpcode() == Opcode.CALL && ix.getAstContext() == call))
+                .toList();
+
+        if (calls.size() != callIxs.size()) {
+            return OptimizationResult.INVALID;
+        }
+
+        trace(() -> "Inlining function " + function.getName());
+
+        for (int i = 0; i < calls.size(); i++) {
+            AstContext call = calls.get(i);
+            LogicInstruction cix = callIxs.get(i);
+
             assert call.parent() != null;
             AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
             int insertionPoint = firstInstructionIndex(call);
@@ -141,6 +153,9 @@ class FunctionInliner extends BaseOptimizer {
             insertInstructions(insertionPoint, newBody);
             // Remove original call instructions
             removeMatchingInstructions(ix -> ix.belongsTo(call));
+            if (!LogicLabel.EMPTY.equals(cix.getHoistId())) {
+                removeMatchingInstructions(ix -> ix.getHoistId().equals(cix.getHoistId()));
+            }
         }
 
         // Remove original function
@@ -202,7 +217,8 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
-        Optional<LogicInstruction> cix = contextStream(call.parent()).filter(ix -> ix.getOpcode() == Opcode.CALL).findFirst();
+        Optional<LogicInstruction> cix = contextStream(call.parent())
+                .filter(ix -> ix.getOpcode() == Opcode.CALL && ix.getAstContext() == call).findFirst();
         MindcodeFunction function = call.existingFunction();
         if (cix.isEmpty() || function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;

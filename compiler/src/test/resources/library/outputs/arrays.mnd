@@ -1,0 +1,25 @@
+require arrays;
+
+param p = 0;
+var a[5];
+var b[10];
+var c[10];
+
+begin
+    fill(ref a, "x");
+    assertPrints("xxxxx", print(a), "Array fill");
+
+    for var i in 0 ... length(b) do
+        b[i] = p + i;
+        c[i] = p + i;
+    end;
+
+    reverse(ref b);
+    assertPrints("9876543210", print(b), "Array reverse");
+
+    bubblesort(ref b, false);
+    assertPrints("0123456789", print(b), "Array sort 1");
+
+    bubblesort(ref b, ref c, true);
+    assertPrints("9876543210", print(c), "Array sort 2");
+end;

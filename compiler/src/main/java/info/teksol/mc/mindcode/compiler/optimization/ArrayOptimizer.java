@@ -31,6 +31,8 @@ class ArrayOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+        if (!experimental()) return false;
+
         try (OptimizationContext.LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 LogicInstruction instruction = iterator.next();
