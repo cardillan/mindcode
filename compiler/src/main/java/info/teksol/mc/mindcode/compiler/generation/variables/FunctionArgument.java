@@ -22,6 +22,9 @@ public interface FunctionArgument extends ValueStore {
     /// @return `true` if the `out` modifier was used with this argument
     boolean hasOutModifier();
 
+    /// @return `true` if the `out` modifier was used with this argument
+    boolean hasRefModifier();
+
     /// @return `true` if the argument is effectively input
     boolean isInput();
 

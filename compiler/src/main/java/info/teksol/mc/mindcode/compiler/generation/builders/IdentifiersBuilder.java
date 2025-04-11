@@ -48,7 +48,10 @@ public class IdentifiersBuilder extends AbstractBuilder implements
         return switch (valueStore) {
             case LogicVariable memory -> memoryArrayAccess(node, memory);
             case ArrayStore array -> storeArrayAccess(node, array);
-            default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
+            default -> {
+                error(node.getArray(), ERR.ARRAY_INVALID, node.getArray().getName());
+                yield LogicVariable.INVALID;
+            }
         };
     }
 

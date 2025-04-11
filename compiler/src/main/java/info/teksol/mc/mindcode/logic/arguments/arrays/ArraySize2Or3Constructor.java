@@ -18,10 +18,13 @@ import java.util.Objects;
 import java.util.function.Consumer;
 
 @NullMarked
-public class ArraySize2Constructor extends AbstractArrayConstructor {
+public class ArraySize2Or3Constructor extends AbstractArrayConstructor {
+    private final int arraySize;
 
-    public ArraySize2Constructor(ArrayAccessInstruction instruction) {
+    public ArraySize2Or3Constructor(ArrayAccessInstruction instruction) {
         super(instruction);
+        arraySize = arrayStore.getSize();
+        if (arraySize != 2 && arraySize != 3) throw new MindcodeInternalError("Expected array of size 2 or 3");
     }
 
     @Override
@@ -34,7 +37,7 @@ public class ArraySize2Constructor extends AbstractArrayConstructor {
 
     @Override
     public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        return profile.getBoundaryChecks().getSize() + (accessType == AccessType.READ ? 3 : 4);
+        return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 4 : 7);
     }
 
     @Override
@@ -46,50 +49,44 @@ public class ArraySize2Constructor extends AbstractArrayConstructor {
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
 
+        AstContext astContext = this.instruction.getAstContext().createChild(profile,
+                Objects.requireNonNull(this.instruction.getAstContext().node()),
+                AstContextType.IF, AstSubcontextType.BASIC);
+        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        ValueStore element = arrayStore.getElements().getFirst();
         switch (instruction) {
-            case ReadArrInstruction rix -> expandRead(consumer, rix);
-            case WriteArrInstruction wix -> expandWrite(consumer, wix);
+            case ReadArrInstruction rix -> expandAccess(creator, element -> element.readValue(creator, rix.getResult()));
+            case WriteArrInstruction wix -> expandAccess( creator, element -> element.setValue(creator, wix.getValue()));
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         }
     }
 
-    private void expandRead(Consumer<LogicInstruction> consumer, ReadArrInstruction instruction) {
-        AstContext astContext = this.instruction.getAstContext().createChild(profile,
-                Objects.requireNonNull(this.instruction.getAstContext().node()),
-                AstContextType.IF, AstSubcontextType.BASIC);
-
-        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
-        creator.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
-
-        // Read first element, jump if ok, then read second
-        arrayStore.getElements().getFirst().readValue(creator, instruction.getResult());
-        LogicLabel label = processor.nextLabel();
-        creator.createJump(label, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO);
-        creator.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        arrayStore.getElements().get(1).readValue(creator, instruction.getResult());
-        creator.createLabel(label);
+    private void expandAccess(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> operation) {
+        createIfElse(creator, operation, 0, arraySize - 1);
     }
 
-    private void expandWrite(Consumer<LogicInstruction> consumer, WriteArrInstruction instruction) {
-        AstContext astContext = this.instruction.getAstContext().createChild(profile,
-                Objects.requireNonNull(this.instruction.getAstContext().node()),
-                AstContextType.IF, AstSubcontextType.BASIC);
-
-        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+    private void createIfElse(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> operation, int startIndex, int endIndex) {
         creator.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
+        LogicLabel elseLabel = processor.nextLabel();
+        LogicLabel endLabel = processor.nextLabel();
 
-        LogicLabel trueLabel = processor.nextLabel();
-        LogicLabel falseLabel = processor.nextLabel();
-        creator.createJump(trueLabel, Condition.NOT_EQUAL, instruction.getIndex(), LogicNumber.ZERO);
+        creator.createJump(elseLabel, Condition.NOT_EQUAL, instruction.getIndex(), LogicNumber.create(startIndex));
+
         creator.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        arrayStore.getElements().getFirst().setValue(creator, instruction.getValue());
+        operation.accept(arrayStore.getElements().get(startIndex));
         creator.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
-        creator.createJumpUnconditional(falseLabel);
-        creator.createLabel(trueLabel);
+        creator.createJumpUnconditional(endLabel);
+        creator.createLabel(elseLabel);
+
         creator.setSubcontextType(AstSubcontextType.BODY, 0.5);
-        arrayStore.getElements().get(1).setValue(creator, instruction.getValue());
-        creator.createLabel(falseLabel);
+        if (endIndex == startIndex + 1) {
+            operation.accept(arrayStore.getElements().get(endIndex));
+        } else {
+            creator.pushContext(AstContextType.IF, AstSubcontextType.BASIC);
+            createIfElse(creator, operation, startIndex + 1, endIndex);
+            creator.popContext();
+        }
+        creator.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 0.5);
+        creator.createLabel(endLabel);
     }
 }

@@ -105,7 +105,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
 
         assembler.createPrint(arguments.getFirst().getValue(assembler));
-        arguments.stream().skip(1).forEach(argument -> assembler.createFormat(argument.getValue(assembler)));
+        createPlainOutput(1, Formatter.FORMAT, arguments);
         assembler.clearSubcontextType();
         return arguments.isEmpty() ? LogicNull.NULL : arguments.getLast();
     }
@@ -130,7 +130,7 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
                 ? createFormattableOutput(formattable, false, formatter,
                     evaluateExpressionsUncached(formattable.getParts()),
                     arguments.subList(1, arguments.size()))
-                : createPlainOutput(formatter, arguments);
+                : createPlainOutput(0, formatter, arguments);
 
         if (formatter.createsNewLine()) {
             formatter.createInstruction(assembler, LogicString.NEW_LINE);
@@ -174,17 +174,36 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return LogicVoid.VOID;
     }
 
-    private ValueStore createPlainOutput(Formatter formatter, List<FunctionArgument> arguments) {
-        // The non-formattable variant of the call
-        // Just output an instruction for every argument
-        arguments.forEach(argument -> formatter.createInstruction(assembler, argument.getValue(assembler)));
-        return arguments.getLast().unwrap();
+    private ValueStore createPlainOutput(int start, Formatter formatter, List<FunctionArgument> arguments) {
+        ValueStore result = LogicVariable.INVALID;
+
+        for (int i = start; i < arguments.size(); i++) {
+            FunctionArgument argument = arguments.get(i);
+            if (i < arguments.size() - 1) {
+                formatter.createInstruction(assembler, argument.getValue(assembler));
+            } else {
+                ValueStore unwrapped = argument.unwrap();
+                if (unwrapped.isComplex() || unwrapped instanceof LogicArgument arg && arg.isVolatile()) {
+                    LogicVariable temp = assembler.nextNodeResultTemp();
+                    argument.readValue(assembler, temp);
+                    formatter.createInstruction(assembler, temp);
+                    result = temp;
+                } else {
+                    formatter.createInstruction(assembler, unwrapped.getValue(assembler));
+                    result = unwrapped;
+                }
+            }
+        }
+
+        return result;
     }
 
     public enum Formatter {
         PRINT("print", CodeAssembler::createPrint),
         PRINTLN("println", CodeAssembler::createPrint),
-        REMARK("remark", CodeAssembler::createRemark);
+        REMARK("remark", CodeAssembler::createRemark),
+        FORMAT("", CodeAssembler::createFormat),
+        ;
 
         final String function;
         final BiConsumer<CodeAssembler, LogicValue> creator;

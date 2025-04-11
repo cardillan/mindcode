@@ -1,17 +1,21 @@
-# New functionality in Mindustry 8
+# Using unreleased versions of Mindustry
 
-Mindustry version 8 will hopefully be released soon. The expected new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to 8 either by command-line argument, or by the `#set target = 8;` directive.
+[Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v147) is now available. The new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to `8` either by command-line argument, or by the `#set target = 8;` directive.
 
 The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown).
 
-To run the code produced by Mindcode Logic 8, you need to use one of the development versions of Mindustry (a "bleeding-edge" version).
-
-## Running development versions of Mindustry
+To run the code produced by Mindcode Logic 8, you need to use one the pre-release version, or one of the development versions of Mindustry (a "bleeding-edge" version).
 
 > [!CAUTION]
-> If you save a game or a campaign in a development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game, particularly in the official Mindustry 7 version. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular development version you're using, meaning there would be no official release which would be able to read your game state.
-> 
-> It is strongly recommended to back up the state of your current game (Settings/Game Data/Export data) before running any development version of Mindustry.
+> If you save a game or a campaign in a pre-release or development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular development version you're using, meaning there would be no official release which would be able to read your game state.
+>
+> It is strongly recommended to back up the state of your current game (Settings/Game Data/Export data) before running any pre-release or development version of Mindustry.
+
+## Running a pre-release version
+
+You can download and install the pre-release version in the same way as an official release, for example from [Itch](https://anuke.itch.io/mindustry). 
+
+## Running development versions of Mindustry
 
 How to run a development versions of Mindustry:
 
@@ -28,6 +32,8 @@ java.exe -jar Mindustry-BE-Desktop-<build number>.jar
 
 - Use the full path to java.exe from the directory into which you've placed the files in step 2.
 - Use the full path including a correct name of the file you've downloaded in step 3.
+
+# New functionality in Mindustry 8
 
 ## Numeric literals
 
@@ -182,6 +188,12 @@ sensor :amount vault1 @graphite
 format :amount
 printflush message1
 ```
+
+## Reading characters from strings
+
+Mindustry 8 supports accessing individual characters of string values as UTF-16 numeric values using the `read` instruction. Characters are indexed starting at 0. The instruction returns `null` when the index is out of bounds.
+
+This functionality is accessible in Mindcode via the [`char()` function](SYNTAX-4-FUNCTIONS.markdown#the-char-function).  
 
 ## Reading and writing linked processor variables
 

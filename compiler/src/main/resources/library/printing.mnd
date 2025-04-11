@@ -17,6 +17,15 @@ inline void printflush()
 end;
 
 /**
+ * Prints all arguments passed to it, each on a new line.
+ */
+inline void printLines(lines...)
+    for var line in lines do
+        println(line);
+    end;
+end;
+
+/**
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
  * Formats the number passed in as a parameter into the text buffer, using comma as thousands separator.

@@ -16,11 +16,13 @@ import java.util.function.Supplier;
 public class IdentifierFunctionArgument implements FunctionArgument {
     protected final Supplier<ValueStore> valueSupplier;
     protected final AstIdentifier identifier;
+    protected final boolean refModifier;
     protected @Nullable ValueStore value;
 
-    public IdentifierFunctionArgument(Supplier<ValueStore> valueSupplier, AstIdentifier identifier) {
+    public IdentifierFunctionArgument(Supplier<ValueStore> valueSupplier, AstIdentifier identifier, boolean refModifier) {
         this.valueSupplier = valueSupplier;
         this.identifier = identifier;
+        this.refModifier = refModifier;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class IdentifierFunctionArgument implements FunctionArgument {
         if (value == null) {
             value = valueSupplier.get();
         }
-        return value;
+        return value.unwrap();
     }
 
     @Override
@@ -58,6 +60,11 @@ public class IdentifierFunctionArgument implements FunctionArgument {
     @Override
     public boolean hasOutModifier() {
         return false;
+    }
+
+    @Override
+    public boolean hasRefModifier() {
+        return refModifier;
     }
 
     @Override

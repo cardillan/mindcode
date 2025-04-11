@@ -58,6 +58,7 @@ NOINLINE                : 'noinline' ;
 NULL                    : 'null' ;
 OUT                     : 'out' ;
 PARAM                   : 'param' ;
+REF                     : 'ref' ;
 REMOTE                  : 'remote' ;
 REQUIRE                 : 'require' ;
 RETURN                  : 'return' ;

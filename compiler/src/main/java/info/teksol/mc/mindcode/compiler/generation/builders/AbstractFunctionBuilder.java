@@ -56,7 +56,14 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
             if (valueStore instanceof ArrayStore array) {
                 expandArray(argument, array, consumer);
             } else {
-                consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier));
+                consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier, argument.hasRefModifier()));
+            }
+        } else if (argument.hasRefModifier()) {
+            if (argument.getExpression() instanceof AstIdentifier identifier) {
+                ValueStore valueStore = variables.findVariable(identifier, false);
+                consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier, true));
+            } else {
+                error(argument, ERR.ARGUMENT_REF_IDENTIFIER_REQUESTED);
             }
         } else if (argument.hasExpression()) {
             final ValueStore value = evaluate(Objects.requireNonNull(argument.getExpression()));
@@ -64,7 +71,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
                 warn(argument, ERR.VOID_ARGUMENT);
             }
 
-            if (value instanceof ArrayStore array) {
+            if (value instanceof ArrayStore array && !argument.isReference()) {
                 expandArray(argument, array, consumer);
             } else {
                 consumer.accept(wrapArgumentValue(argument, value));

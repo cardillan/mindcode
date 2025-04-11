@@ -28,7 +28,7 @@ public class InputFunctionArgument implements FunctionArgument {
     /// Provides the value of the underlying argument
     @Override
     public ValueStore unwrap() {
-        return value;
+        return value.unwrap();
     }
 
     @Override
@@ -44,6 +44,11 @@ public class InputFunctionArgument implements FunctionArgument {
     @Override
     public boolean hasOutModifier() {
         return argument.hasOutModifier();
+    }
+
+    @Override
+    public boolean hasRefModifier() {
+        return argument.hasRefModifier();
     }
 
     @Override

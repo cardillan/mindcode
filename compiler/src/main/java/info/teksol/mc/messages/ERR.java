@@ -11,8 +11,11 @@ public class ERR {
     public static final String ARGUMENT_KEYWORD_UNSPECIFIED_VALUE = "Invalid or unspecified value for keyword parameter: allowed values are '%s'.";
     public static final String ARGUMENT_NOT_LVALUE = "Argument assigned to output parameter '%s' is not writable.";
     public static final String ARGUMENT_NOT_OPTIONAL = "Parameter '%s' isn't optional, a value must be provided.";
-    public static final String ARGUMENT_OUT_MODIFIER_DISALLOWED = "Parameter '%s' isn't output, 'out' modifier not allowed.";
-    public static final String ARGUMENT_OUT_MODIFIER_REQUESTED = "Parameter '%s' is output and 'out' modifier was not used.";
+    public static final String ARGUMENT_OUT_MODIFIER_DISALLOWED = "Parameter '%s' isn't output, 'out' argument modifier not allowed.";
+    public static final String ARGUMENT_OUT_MODIFIER_REQUESTED = "Parameter '%s' is output and 'out' argument modifier was not used.";
+    public static final String ARGUMENT_REF_IDENTIFIER_REQUESTED = "A 'ref' argument modifier requires a variable or array as an argument.";
+    public static final String ARGUMENT_REF_MODIFIER_DISALLOWED = "Parameter '%s' isn't a reference, 'ref' argument modifier not allowed.";
+    public static final String ARGUMENT_REF_MODIFIER_REQUESTED = "Parameter '%s' is a reference and 'ref' argument modifier was not used.";
     public static final String ARGUMENT_UNNAMED_NOT_OPTIONAL = "Parameter corresponding to this argument isn't optional, a value must be provided.";
     public static final String ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED = "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.";
     public static final String ARGUMENT_WAIT_OUT_NOT_ALLOWED = "'out' modifier not allowed with special value '%s'.";
@@ -22,6 +25,7 @@ public class ERR {
     public static final String ARRAY_EXPRESSION_NOT_MEMORY = "'%s' is not an external memory.";
     public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
     public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "Array index out of bounds (0 .. %d)";
+    public static final String ARRAY_INVALID = "'%s' is not an array.'";
     public static final String ARRAY_LINKED = "Arrays cannot be declared 'linked'.";
     public static final String ARRAY_LOCAL = "Arrays must be declared in the global scope.";
     public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";
@@ -111,6 +115,10 @@ public class ERR {
     public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of file '%s'.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
+    public static final String PARAMETER_VARARGS_NOT_LAST = "Parameter '%s' of function '%s' is declared vararg, but is not last in the parameter list.";
+    public static final String PARAMETER_REF_IDENTIFIER_REQUESTED = "Parameter '%s' is a reference and can only accept variables or arrays as an argument.";
+    public static final String PARAMETER_REF_VARARGS = "Vararg parameter '%s' of function '%s' cannot be declared 'ref'.";
+    public static final String PARAMETER_REF_NOT_INLINE = "Parameter '%s' of function '%s' cannot be declared 'ref' unless the function is declared 'inline'.";
     public static final String PROPERTY_UNKNOWN = "Unknown property '%s'.";
     public static final String REMOTE_INVALID_USE = "Invalid use of remote function '%s' (specify one of output parameters to access function output values).";
     public static final String REMOTE_MULTIPLE_FUNCTIONS = "Cannot resolve remote function '%s'.";

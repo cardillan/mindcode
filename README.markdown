@@ -20,6 +20,9 @@
 
 ## Mindcode Syntax
 
+> [!NOTE]
+> To use new Mindustry Logic capabilities from the new [Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v147), use `#set target = 8;` in your code. 
+
 Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
 You can also visit [golem](https://github.com/cardillan/golem), a collection of more complex Mindcode and Schemacode scripts.
@@ -27,9 +30,6 @@ You can also visit [golem](https://github.com/cardillan/golem), a collection of 
 ## Latest development
 
 See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug) for open bugs and possible workarounds. 
-
-> [!NOTE]
-> Deprecated functionalities from Mindcode 2.x were removed. The system for specifying [language version targets](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target) has been changed.
 
 The most important recent changes to Mindcode include:
 

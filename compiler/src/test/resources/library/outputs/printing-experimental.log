@@ -19,13 +19,13 @@
    372 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 686):
-    Unroll loop at *printing:242:13                              cost    27, benefit      187.5, efficiency        6.9
-  * Unroll loop at *printing:287:9                               cost    53, benefit     3750.0, efficiency       70.8 (+53 instructions)
-    Inline function 'printNumber' defined at *printing:69:1      cost   101, benefit       24.5, efficiency        0.2
-    Inline function 'printBinaryNumber' defined at *printing:126:1 cost    12, benefit        8.0, efficiency        0.7
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-    Inline function 'printExactFast' defined at *printing:218:1  cost   404, benefit       35.0, efficiency        0.1
-    Inline function 'printExactSlow' defined at *printing:274:1  cost   215, benefit       35.0, efficiency        0.2
+    Unroll loop at *printing:251:13                              cost    27, benefit      187.5, efficiency        6.9
+  * Unroll loop at *printing:296:9                               cost    53, benefit     3750.0, efficiency       70.8 (+53 instructions)
+    Inline function 'printNumber' defined at *printing:78:1      cost   101, benefit       24.5, efficiency        0.2
+    Inline function 'printBinaryNumber' defined at *printing:135:1 cost    12, benefit        8.0, efficiency        0.7
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+    Inline function 'printExactFast' defined at *printing:227:1  cost   404, benefit       35.0, efficiency        0.1
+    Inline function 'printExactSlow' defined at *printing:283:1  cost   215, benefit       35.0, efficiency        0.2
     Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
@@ -60,12 +60,12 @@ Pass 1: speed optimization selection (cost limit 686):
     Inline function call at line 36:40                           cost    24, benefit        3.5, efficiency        0.1
 
 Pass 1: speed optimization selection (cost limit 633):
-  * Unroll loop at *printing:242:13                              cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
-    Inline function 'printNumber' defined at *printing:69:1      cost   101, benefit       24.5, efficiency        0.2
-    Inline function 'printBinaryNumber' defined at *printing:126:1 cost    12, benefit        8.0, efficiency        0.7
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-    Inline function 'printExactFast' defined at *printing:218:1  cost   404, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:251:13                              cost    27, benefit      187.5, efficiency        6.9 (+27 instructions)
+    Inline function 'printNumber' defined at *printing:78:1      cost   101, benefit       24.5, efficiency        0.2
+    Inline function 'printBinaryNumber' defined at *printing:135:1 cost    12, benefit        8.0, efficiency        0.7
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+    Inline function 'printExactFast' defined at *printing:227:1  cost   404, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
@@ -100,11 +100,11 @@ Pass 1: speed optimization selection (cost limit 633):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 606):
-    Inline function 'printNumber' defined at *printing:69:1      cost   101, benefit       24.5, efficiency        0.2
-  * Inline function 'printBinaryNumber' defined at *printing:126:1 cost    12, benefit        8.0, efficiency        0.7 (+6 instructions)
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+    Inline function 'printNumber' defined at *printing:78:1      cost   101, benefit       24.5, efficiency        0.2
+  * Inline function 'printBinaryNumber' defined at *printing:135:1 cost    12, benefit        8.0, efficiency        0.7 (+6 instructions)
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
@@ -139,12 +139,12 @@ Pass 1: speed optimization selection (cost limit 606):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 600):
-  * Unroll loop at *printing:93:5                                cost    10, benefit      200.0, efficiency       20.0 (+1 instructions)
-    Unroll loop at *printing:93:5                                cost    10, benefit      200.0, efficiency       20.0
-    Inline function 'printNumber' defined at *printing:69:1      cost   101, benefit       24.5, efficiency        0.2
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:102:5                               cost    10, benefit      200.0, efficiency       20.0 (+1 instructions)
+    Unroll loop at *printing:102:5                               cost    10, benefit      200.0, efficiency       20.0
+    Inline function 'printNumber' defined at *printing:78:1      cost   101, benefit       24.5, efficiency        0.2
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
@@ -177,11 +177,11 @@ Pass 1: speed optimization selection (cost limit 600):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 599):
-  * Unroll loop at *printing:93:5                                cost    10, benefit      200.0, efficiency       20.0 (+1 instructions)
-    Inline function 'printNumber' defined at *printing:69:1      cost   101, benefit       24.5, efficiency        0.2
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:102:5                               cost    10, benefit      200.0, efficiency       20.0 (+1 instructions)
+    Inline function 'printNumber' defined at *printing:78:1      cost   101, benefit       24.5, efficiency        0.2
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
@@ -214,11 +214,11 @@ Pass 1: speed optimization selection (cost limit 599):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 598):
-  * Unroll loop at *printing:99:5                                cost     0, benefit      100.0, efficiency   Infinity (-3 instructions)
-    Inline function 'printNumber' defined at *printing:69:1      cost   101, benefit       24.5, efficiency        0.2
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:108:5                               cost     0, benefit      100.0, efficiency   Infinity (-3 instructions)
+    Inline function 'printNumber' defined at *printing:78:1      cost   101, benefit       24.5, efficiency        0.2
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
@@ -251,10 +251,10 @@ Pass 1: speed optimization selection (cost limit 598):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 601):
-  * Inline function 'printNumber' defined at *printing:69:1      cost   101, benefit       24.5, efficiency        0.2 (+85 instructions)
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function 'printNumber' defined at *printing:78:1      cost   101, benefit       24.5, efficiency        0.2 (+85 instructions)
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 5:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 6:19                            cost    17, benefit        3.5, efficiency        0.2
     Inline function call at line 7:19                            cost    17, benefit        3.5, efficiency        0.2
@@ -287,12 +287,12 @@ Pass 1: speed optimization selection (cost limit 601):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 516):
-  * Unroll loop at *printing:40:5                                cost     6, benefit      100.0, efficiency       16.7 (+3 instructions)
-    Unroll loop at *printing:40:5                                cost     6, benefit      100.0, efficiency       16.7
-    Unroll loop at *printing:40:5                                cost     6, benefit      100.0, efficiency       16.7
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:49:5                                cost     6, benefit      100.0, efficiency       16.7 (+3 instructions)
+    Unroll loop at *printing:49:5                                cost     6, benefit      100.0, efficiency       16.7
+    Unroll loop at *printing:49:5                                cost     6, benefit      100.0, efficiency       16.7
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
@@ -318,11 +318,11 @@ Pass 1: speed optimization selection (cost limit 516):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 513):
-  * Unroll loop at *printing:40:5                                cost     6, benefit      100.0, efficiency       16.7 (+3 instructions)
-    Unroll loop at *printing:40:5                                cost     6, benefit      100.0, efficiency       16.7
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:49:5                                cost     6, benefit      100.0, efficiency       16.7 (+3 instructions)
+    Unroll loop at *printing:49:5                                cost     6, benefit      100.0, efficiency       16.7
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
@@ -348,10 +348,10 @@ Pass 1: speed optimization selection (cost limit 513):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 510):
-  * Unroll loop at *printing:40:5                                cost     6, benefit      100.0, efficiency       16.7 (+3 instructions)
-    Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:49:5                                cost     6, benefit      100.0, efficiency       16.7 (+3 instructions)
+    Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
@@ -377,9 +377,9 @@ Pass 1: speed optimization selection (cost limit 510):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 507):
-  * Inline function 'printHexNumber' defined at *printing:192:1  cost    67, benefit       12.0, efficiency        0.2 (+60 instructions)
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Inline function 'printHexNumber' defined at *printing:201:1  cost    67, benefit       12.0, efficiency        0.2 (+60 instructions)
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 14:26                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 15:30                           cost    34, benefit        4.0, efficiency        0.1
     Inline function call at line 16:28                           cost    34, benefit        4.0, efficiency        0.1
@@ -405,11 +405,11 @@ Pass 1: speed optimization selection (cost limit 507):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 447):
-  * Unroll loop at *printing:150:5                               cost   123, benefit      300.0, efficiency        2.4 (+110 instructions)
-    Unroll loop at *printing:150:5                               cost   223, benefit      500.0, efficiency        2.2
-    Unroll loop at *printing:150:5                               cost   123, benefit      300.0, efficiency        2.4
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:159:5                               cost   123, benefit      300.0, efficiency        2.4 (+110 instructions)
+    Unroll loop at *printing:159:5                               cost   223, benefit      500.0, efficiency        2.2
+    Unroll loop at *printing:159:5                               cost   123, benefit      300.0, efficiency        2.4
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
@@ -432,10 +432,10 @@ Pass 1: speed optimization selection (cost limit 447):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 337):
-    Unroll loop at *printing:150:5                               cost   223, benefit      500.0, efficiency        2.2
-  * Unroll loop at *printing:150:5                               cost   123, benefit      300.0, efficiency        2.4 (+110 instructions)
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+    Unroll loop at *printing:159:5                               cost   223, benefit      500.0, efficiency        2.2
+  * Unroll loop at *printing:159:5                               cost   123, benefit      300.0, efficiency        2.4 (+110 instructions)
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
@@ -458,10 +458,10 @@ Pass 1: speed optimization selection (cost limit 337):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 227):
-    Unroll loop at *printing:150:5                               cost   223, benefit      500.0, efficiency        2.2
-  * Unroll loop at *printing:165:5                               cost     0, benefit      100.0, efficiency   Infinity (-3 instructions)
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+    Unroll loop at *printing:159:5                               cost   223, benefit      500.0, efficiency        2.2
+  * Unroll loop at *printing:174:5                               cost     0, benefit      100.0, efficiency   Infinity (-3 instructions)
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0
@@ -484,9 +484,9 @@ Pass 1: speed optimization selection (cost limit 227):
     Inline function call at line 36:40                           cost    77, benefit        3.5, efficiency        0.0
 
 Pass 1: speed optimization selection (cost limit 230):
-  * Unroll loop at *printing:150:5                               cost   223, benefit      500.0, efficiency        2.2 (+202 instructions)
-  ! Inline function 'printExactFast' defined at *printing:218:1  cost   647, benefit       35.0, efficiency        0.1
-  ! Inline function 'printExactSlow' defined at *printing:274:1  cost   692, benefit       35.0, efficiency        0.1
+  * Unroll loop at *printing:159:5                               cost   223, benefit      500.0, efficiency        2.2 (+202 instructions)
+  ! Inline function 'printExactFast' defined at *printing:227:1  cost   647, benefit       35.0, efficiency        0.1
+  ! Inline function 'printExactSlow' defined at *printing:283:1  cost   692, benefit       35.0, efficiency        0.1
     Inline function call at line 17:22                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 18:19                           cost    72, benefit        3.5, efficiency        0.0
     Inline function call at line 19:19                           cost    72, benefit        3.5, efficiency        0.0

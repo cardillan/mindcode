@@ -37,7 +37,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     arguments = AstFunctionArgument {
                                         expression = AstIdentifier{name = "a", external = false},
                                         inModifier = false,
-                                        outModifier = false
+                                        outModifier = false,
+                                        refModifier = false
                                     }
                                 },
                                 AstFunctionCall {
@@ -46,7 +47,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     arguments = AstFunctionArgument {
                                         expression = AstIdentifier{name = "b", external = false},
                                         inModifier = false,
-                                        outModifier = false
+                                        outModifier = false,
+                                        refModifier = false
                                     }
                                 },
                                 AstFunctionCall {
@@ -55,7 +57,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     arguments = AstFunctionArgument {
                                         expression = AstIdentifier{name = "c", external = false},
                                         inModifier = false,
-                                        outModifier = false
+                                        outModifier = false,
+                                        refModifier = false
                                     }
                                 }
                             ],
@@ -98,6 +101,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                         identifier = AstIdentifier{name = "n", external = false},
                                         inModifier = false,
                                         outModifier = false,
+                                        refModifier = false,
                                         varargs = false
                                     },
                                     body = AstIfExpression {
@@ -127,7 +131,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                                             right = AstLiteralDecimal{literal = "1", suppressWarning = false}
                                                         },
                                                         inModifier = false,
-                                                        outModifier = false
+                                                        outModifier = false,
+                                                        refModifier = false
                                                     }
                                                 },
                                                 right = AstFunctionCall {
@@ -140,7 +145,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                                             right = AstLiteralDecimal{literal = "2", suppressWarning = false}
                                                         },
                                                         inModifier = false,
-                                                        outModifier = false
+                                                        outModifier = false,
+                                                        refModifier = false
                                                     }
                                                 }
                                             }
@@ -158,11 +164,13 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                             arguments = AstFunctionArgument {
                                                 expression = AstLiteralDecimal{literal = "5", suppressWarning = false},
                                                 inModifier = false,
-                                                outModifier = false
+                                                outModifier = false,
+                                                refModifier = false
                                             }
                                         },
                                         inModifier = false,
-                                        outModifier = false
+                                        outModifier = false,
+                                        refModifier = false
                                     }
                                 }
                             ],
@@ -200,7 +208,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                             arguments = AstFunctionArgument {
                                                 expression = AstLiteralString{literal = "In loop", suppressWarning = false},
                                                 inModifier = false,
-                                                outModifier = false
+                                                outModifier = false,
+                                                refModifier = false
                                             }
                                         },
                                         AstIfExpression {
@@ -233,7 +242,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     arguments = AstFunctionArgument {
                                         expression = AstLiteralString{literal = "Out of loop", suppressWarning = false},
                                         inModifier = false,
-                                        outModifier = false
+                                        outModifier = false,
+                                        refModifier = false
                                     }
                                 }
                             ],

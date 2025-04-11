@@ -387,6 +387,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 identifier(ctx.name),
                 ctx.modifier_in != null,
                 ctx.modifier_out != null,
+                ctx.modifier_ref != null,
                 ctx.varargs != null);
     }
     //</editor-fold>
@@ -535,7 +536,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstFunctionArgument(pos(ctx),
                 visitAstExpression(ctx.arg),
                 ctx.modifier_in != null,
-                ctx.modifier_out != null);
+                ctx.modifier_out != null,
+                ctx.modifier_ref != null);
     }
 
     @Override

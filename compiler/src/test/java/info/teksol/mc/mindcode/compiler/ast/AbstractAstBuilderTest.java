@@ -87,23 +87,27 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
     }
 
     protected static AstFunctionArgument arg(AstExpression expression) {
-        return new AstFunctionArgument(EMPTY, expression, false, false);
+        return new AstFunctionArgument(EMPTY, expression, false, false, false);
     }
 
     protected static AstFunctionArgument arg(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), false, false);
+        return new AstFunctionArgument(EMPTY, id(name), false, false, false);
     }
 
     protected static AstFunctionArgument argIn(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), true, false);
+        return new AstFunctionArgument(EMPTY, id(name), true, false, false);
     }
 
     protected static AstFunctionArgument argOut(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), false, true);
+        return new AstFunctionArgument(EMPTY, id(name), false, true, false);
     }
 
     protected static AstFunctionArgument argInOut(String name) {
-        return new AstFunctionArgument(EMPTY, id(name), true, true);
+        return new AstFunctionArgument(EMPTY, id(name), true, true, false);
+    }
+
+    protected static AstFunctionArgument argRef(String name) {
+        return new AstFunctionArgument(EMPTY, id(name), false, false, true);
     }
 
     protected static List<AstFunctionArgument> args(AstFunctionArgument... args) {

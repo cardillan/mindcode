@@ -5,6 +5,7 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
@@ -65,7 +66,10 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
     @Override
     public @Nullable ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
         FunctionHandler handler = functionMap.get(call.getFunctionName());
-        return handler == null ? null : handler.handleFunction(call, arguments);
+        if (handler == null) return null;
+        assert assembler != null;
+        assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+        return handler.handleFunction(call, arguments);
     }
 
     public @Nullable String decompile(MlogInstruction instruction) {

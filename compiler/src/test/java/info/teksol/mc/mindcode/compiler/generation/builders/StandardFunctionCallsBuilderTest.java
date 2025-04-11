@@ -305,7 +305,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesWrongOutModifier() {
             assertGeneratesMessage(
-                    "Parameter 'a' isn't output, 'out' modifier not allowed.",
+                    "Parameter 'a' isn't output, 'out' argument modifier not allowed.",
                     """
                             def foo(a)
                                 a + 1;
@@ -318,7 +318,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsMissingOutModifier() {
             assertGeneratesMessage(
-                    "Parameter 'a' is output and 'out' modifier was not used.",
+                    "Parameter 'a' is output and 'out' argument modifier was not used.",
                     """
                             def foo(out a)
                                 a = 10;
@@ -389,8 +389,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessages(
                     expectedMessages()
                             .add(5, 1, "Function 'foo': wrong number of arguments (expected 1, found 2).")
-                            .add(6, 12, "Parameter 'b' isn't output, 'out' modifier not allowed.")
-                            .add(7, 11, "Parameter 'c' isn't output, 'out' modifier not allowed.")
+                            .add(6, 12, "Parameter 'b' isn't output, 'out' argument modifier not allowed.")
+                            .add(7, 11, "Parameter 'c' isn't output, 'out' argument modifier not allowed.")
                     ,
                     """
                             inline void foo(a) print(a); end;
@@ -408,8 +408,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesNoOutModifiersInSystemCalls() {
             assertGeneratesMessages(
                     expectedMessages()
-                            .add(1, 16, "Parameter 'type' is output and 'out' modifier was not used.")
-                            .add(1, 22, "Parameter 'floor' is output and 'out' modifier was not used."),
+                            .add(1, 16, "Parameter 'type' is output and 'out' argument modifier was not used.")
+                            .add(1, 22, "Parameter 'floor' is output and 'out' argument modifier was not used."),
                     """
                             getBlock(x, y, type, floor);
                             """
@@ -419,7 +419,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesNoModifiers() {
             assertGeneratesMessage(
-                    "Parameter 'x' is output and 'out' modifier was not used.",
+                    "Parameter 'x' is output and 'out' argument modifier was not used.",
                     """
                             void foo(out x)
                                 x = 10;
@@ -954,6 +954,54 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             end;
                             foo(x);
                             """);
+        }
+    }
+
+    @Nested
+    class ReferenceFunctions {
+        @Test
+        void compilesReferenceArgument() {
+            assertCompilesTo("""
+                            var a = 10;
+                            inline def foo(ref n)
+                                print(a);
+                                n++;
+                                print(a);
+                            end;
+                            foo(ref a);
+                            """,
+                    createInstruction(SET, ".a", "10"),
+                    createInstruction(PRINT, ".a"),
+                    createInstruction(SET, tmp(1), ".a"),
+                    createInstruction(OP, "add", ".a", ".a", "1"),
+                    createInstruction(PRINT, ".a"),
+                    createInstruction(SET, tmp(0), ".a"),
+                    createInstruction(LABEL, label(0))
+            );
+        }
+
+        @Test
+        void compilesArrayReferenceArgument() {
+            // Verifies that locals inside inline functions (which by definition are limited to the function scope)
+            // aren't pushed to the stack in recursive functions
+            assertCompilesTo("""
+                            var a[2] = (1, 2);
+                            inline def foo(ref array)
+                                print(array[floor(rand(length(array)) + 1)]);
+                            end;
+                            foo(ref a);
+                            """,
+                    createInstruction(SET, ".a*0", "1"),
+                    createInstruction(SET, ".a*1", "2"),
+                    createInstruction(OP, "rand", tmp(1), "2"),
+                    createInstruction(OP, "add", tmp(2), tmp(1), "1"),
+                    createInstruction(OP, "floor", tmp(3), tmp(2)),
+                    createInstruction(SET, tmp(4), tmp(3)),
+                    createInstruction(READARR, tmp(6), ".a[]", tmp(4)),
+                    createInstruction(PRINT, tmp(6)),
+                    createInstruction(SET, tmp(0), tmp(6)),
+                    createInstruction(LABEL, label(0))
+            );
         }
     }
 

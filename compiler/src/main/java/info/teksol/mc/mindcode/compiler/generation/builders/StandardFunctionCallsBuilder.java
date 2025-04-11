@@ -2,10 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionParameter;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.functions.BaseFunctionMapper;
@@ -14,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
+import info.teksol.mc.mindcode.compiler.generation.variables.IdentifierFunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
@@ -71,12 +69,12 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             return processMatchedFunctionCalls(call, arguments, exactMatches, async);
         } else {
             // No exact match. Try built-in function, and if it fails, evaluate possible loose matches
-            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
-
-            ValueStore result = functionMapper.handleFunction(call, arguments);
-            if (result != null) {
-                if (async) error(call, ERR.FUNCTION_CALL_ASYNC_UNSUPPORTED, call.getFunctionName());
-                return result;
+            if (call.getArguments().stream().noneMatch(AstFunctionArgument::isReference)) {
+                ValueStore result = functionMapper.handleFunction(call, arguments);
+                if (result != null) {
+                    if (async) error(call, ERR.FUNCTION_CALL_ASYNC_UNSUPPORTED, call.getFunctionName());
+                    return result;
+                }
             }
 
             return processMatchedFunctionCalls(call, arguments, callGraph.getLooseMatches(call), async);
@@ -161,25 +159,38 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                 error(argument, ERR.ARGUMENT_NOT_OPTIONAL, parameter.getName());
             }
 
-            if (parameter.isOutput()) {
-                if (parameter.isInput()) {
-                    // In or out modifier needs to be used
-                    if (!argument.hasInModifier() && !argument.hasOutModifier()) {
-                        error(argument, ERR.ARGUMENT_IN_OUT_MODIFIER_REQUESTED, parameter.getName());
-                    }
-                } else {
-                    // Output parameter: the 'in' modifier is forbidden
-                    if (argument.hasInModifier()) {
-                        error(argument, ERR.ARGUMENT_IN_MODIFIER_NOT_ALLOWED, parameter.getName());
-                    } else if (argument.hasValue() && !argument.hasOutModifier()) {
-                        // Out modifier needs to be used
-                        error(argument, ERR.ARGUMENT_OUT_MODIFIER_REQUESTED, parameter.getName());
-                    }
+            if (parameter.isReference()) {
+                if (!argument.hasRefModifier()) {
+                    error(argument, ERR.ARGUMENT_REF_MODIFIER_REQUESTED, parameter.getName());
+                }
+                if (!(argument instanceof IdentifierFunctionArgument)) {
+                    error(argument, ERR.PARAMETER_REF_IDENTIFIER_REQUESTED, parameter.getName());
                 }
             } else {
-                // Input parameter: the 'out' modifier is forbidden
-                if (argument.hasOutModifier()) {
-                    error(argument, ERR.ARGUMENT_OUT_MODIFIER_DISALLOWED, parameter.getName());
+                if (argument.hasRefModifier()) {
+                    error(argument, ERR.ARGUMENT_REF_MODIFIER_DISALLOWED, parameter.getName());
+                }
+
+                if (parameter.isOutput()) {
+                    if (parameter.isInput()) {
+                        // In or out modifier needs to be used
+                        if (!argument.hasInModifier() && !argument.hasOutModifier()) {
+                            error(argument, ERR.ARGUMENT_IN_OUT_MODIFIER_REQUESTED, parameter.getName());
+                        }
+                    } else {
+                        // Output parameter: the 'in' modifier is forbidden
+                        if (argument.hasInModifier()) {
+                            error(argument, ERR.ARGUMENT_IN_MODIFIER_NOT_ALLOWED, parameter.getName());
+                        } else if (argument.hasValue() && !argument.hasOutModifier()) {
+                            // Out modifier needs to be used
+                            error(argument, ERR.ARGUMENT_OUT_MODIFIER_REQUESTED, parameter.getName());
+                        }
+                    }
+                } else {
+                    // Input parameter: the 'out' modifier is forbidden
+                    if (argument.hasOutModifier()) {
+                        error(argument, ERR.ARGUMENT_OUT_MODIFIER_DISALLOWED, parameter.getName());
+                    }
                 }
             }
         }
@@ -414,7 +425,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         for (int index = 0; index < limit; index++) {
             FunctionArgument argument = arguments.get(index);
-            if (function.getDeclaredParameter(index).isInput()) {
+            if (function.getDeclaredParameter(index).isReference()) {
+                argumentValues.offer(argument);
+            } else if (function.getDeclaredParameter(index).isInput()) {
                 if (misplacedInput(function, argument, function.getParameter(index))) {
                     LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, argument.getValue(assembler));
@@ -428,10 +441,14 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // We use the in/out information of FunctionArgument to decide whether to set a parameter as input
         // Should FunctionArgument be incompatible with the parameter, an error would have been produced earlier
         for (int index = 0; index < limit; index++) {
-            if (function.getDeclaredParameter(index).isInput()) {
+            AstFunctionParameter parameter = function.getDeclaredParameter(index);
+            if (parameter.isReference()) {
+                ValueStore argument = argumentValues.remove();
+                variables.replaceFunctionVariable(parameter.getIdentifier(), argument.unwrap());
+            } else if (parameter.isInput()) {
                 ValueStore argument = argumentValues.remove();
                 if (function.getDeclaration().isInline() && !argument.unwrap().isMlogRepresentable()) {
-                    variables.replaceFunctionVariable(function.getDeclaredParameter(index).getIdentifier(), argument.unwrap());
+                    variables.replaceFunctionVariable(parameter.getIdentifier(), argument.unwrap());
                 } else {
                     function.getParameter(index).setValue(assembler, argument.getValue(assembler));
                 }

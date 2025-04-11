@@ -47,6 +47,10 @@ public class MissingFunctionArgument implements FunctionArgument {
         return argument.hasOutModifier();
     }
 
+    public boolean hasRefModifier() {
+        return argument.hasRefModifier();
+    }
+
     @Override
     public boolean isInput() {
         return true;

@@ -168,12 +168,38 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             error(function.getSourcePosition(), ERR.FUNCTION_VARARGS_NOT_INLINE, function.getName());
         }
 
+        List<AstFunctionParameter> params = function.getDeclaredParameters();
+        if (!params.isEmpty()) {
+            // Varargs
+            params.subList(0, params.size() - 1).stream()
+                    .filter(AstFunctionParameter::isVarargs)
+                    .forEach(p -> error(p, ERR.PARAMETER_VARARGS_NOT_LAST, p.getName(), function.getName()));
+
+            // Ref varargs
+            if (params.getLast().isVarargs() && params.getLast().isReference()) {
+                error(params.getLast(), ERR.PARAMETER_REF_VARARGS, params.getLast().getName(), function.getName());
+            }
+
+            // Ref but not inline
+            if (!function.getDeclaration().isInline()) {
+                params.stream()
+                        .filter(AstFunctionParameter::isReference)
+                        .forEach(p -> error(function.getSourcePosition(), ERR.PARAMETER_REF_NOT_INLINE, p.getName(),  function.getName()));
+            }
+
+
+            // Ref cannot be in or out (prevented by syntax, but checked anyway)
+            params.stream()
+                    .filter(p -> p.hasRefModifier() && (p.hasInModifier() || p.hasOutModifier()))
+                    .forEach(p -> error(function.getSourcePosition(), ERR.PARAMETER_REF_NOT_INLINE, p.getName(),  function.getName()));
+        }
+
         if (profile.getSyntacticMode() != SyntacticMode.STRICT) {
-            function.getDeclaredParameters().stream()
+            params.stream()
                     .filter(p -> processor.isBlockName(p.getName()))
                     .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_LINKED, p.getName(), function.getName()));
 
-            function.getDeclaredParameters().stream()
+            params.stream()
                     .filter(p -> processor.isGlobalName(p.getName()))
                     .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_GLOBAL, p.getName(), function.getName()));
         }

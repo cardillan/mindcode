@@ -659,6 +659,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     a(0, 1);
                     a(out x, in y);
                     a(, in y);
+                    a(ref x, in y);
                     """);
         }
 
@@ -670,6 +671,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     object.a(0, 1);
                     object.a(out x, in y);
                     object.a(, in y);
+                    object.a(ref x, in y);
                     """);
         }
 
@@ -724,11 +726,36 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
+        void refusesInRefFunctionModifiers() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 8, "Parse error: .*"),
+                    "foo(in ref a);");
+        }
+
+
+        @Test
+        void refusesRefOutFunctionModifiers() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 9, "Parse error: .*"),
+                    "foo(ref out a);");
+        }
+
+        @Test
         void refusesModifiersWithoutArguments() {
             assertGeneratesMessages(
                     expectedMessages()
                             .addRegex(1, 7, "Parse error: .*"),
                     "foo(in, out);");
+        }
+
+        @Test
+        void refusesRefWithoutArguments() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 8, "Parse error: .*"),
+                    "foo(ref);");
         }
     }
 
@@ -741,6 +768,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     noinline def bar(x..., y...) end;
                     void baz() x; end;
                     void quux(in a, out b, in out c, out in d) a + b + c + d; end;
+                    void corge(ref array) array[0] = 1; end;
                     """);
         }
 
@@ -769,6 +797,24 @@ class MindcodeParserTest extends AbstractParserTest {
                             .addRegex(1, 14, "Parse error: .*")
                             .addRegex(1, 19, "Parse error: .*"),
                     "void foo(out out b) end;");
+        }
+
+        @Test
+        void refusesInRefParameterModifiers() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 13, "Parse error: .*")
+                            .addRegex(1, 18, "Parse error: .*"),
+                    "void foo(in ref a) end;");
+        }
+
+        @Test
+        void refusesRefOutParameterModifiers() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 14, "Parse error: .*")
+                            .addRegex(1, 19, "Parse error: .*"),
+                    "void foo(ref out a) end;");
         }
     }
 

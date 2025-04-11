@@ -1507,7 +1507,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             def a() end;
                             /** Comment2 */
                             /** Comment3 */
-                            inline def b(a...) a; end;
+                            inline def b(ref a, b...) b; end;
                             noinline void c(in a, out b, in out c, out in d) a + b; end;
                             remote def d() end;
                             """,
@@ -1523,18 +1523,21 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     new AstDocComment(EMPTY, "/** Comment3 */"),
                                     b,
                                     DataType.VAR,
-                                    List.of(new AstFunctionParameter(EMPTY, a, false, false, true)),
-                                    List.of(a),
+                                    List.of(
+                                            new AstFunctionParameter(EMPTY, a, false, false, true, false),
+                                            new AstFunctionParameter(EMPTY, b, false, false, false, true)
+                                    ),
+                                    List.of(b),
                                     CallType.INLINE),
                             new AstFunctionDeclaration(EMPTY,
                                     null,
                                     c,
                                     DataType.VOID,
                                     List.of(
-                                            new AstFunctionParameter(EMPTY, a, true, false, false),
-                                            new AstFunctionParameter(EMPTY, b, false, true, false),
-                                            new AstFunctionParameter(EMPTY, c, true, true, false),
-                                            new AstFunctionParameter(EMPTY, d, true, true, false)
+                                            new AstFunctionParameter(EMPTY, a, true, false, false, false),
+                                            new AstFunctionParameter(EMPTY, b, false, true, false, false),
+                                            new AstFunctionParameter(EMPTY, c, true, true, false, false),
+                                            new AstFunctionParameter(EMPTY, d, true, true, false, false)
                                     ),
                                     List.of(new AstOperatorBinary(EMPTY, ADD, a, b)),
                                     CallType.NOINLINE),

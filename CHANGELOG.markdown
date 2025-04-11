@@ -15,12 +15,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* **Breaking:** new `ref` keyword was added to the language. Code that uses this keyword as a function or variable name will not compile and the variable or function will have to be renamed.
 * Added the [`char()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-char-function). The function returns the ASCII value of a character at given index from a string value using the `read` instruction, as supported in latest BE version.
 * Added support for invoking properties and the `sensor` functions on string values to support latest BE Enhancement of sensing string lengths using `@size`. 
 * Added support for compile-time evaluation of the `length()` function, allowing to specify offsets relative to the end of the array in subarrays (e.g. `array[0 ... length(array) - 1]`).
 * Added compile-time evaluation of either stable, or all built-in numerical variables (such as `@pi` or `@unitCount`).
 * Added a new remarks mode, `comments`, to compile remarks as mlog comments (`# comment`).
-* Added support for generating boundary checks for explicitly declared external arrays. 
+* Added support for generating boundary checks for explicitly declared external arrays.
+* Added new `printLines()` function to the `printing` library. The function prints each of its arguments on a new line. 
 * Loop Hoisting optimizer enhanced with an ability to optimize instructions setting up return addresses of function calls. 
 * Added handling of numerical literal values unsupported by Mindustry Logic version 7 and earlier (namely, `-2147483648`).
   When a numerical literal or constant expression has this value, a compile-time error is generated.
@@ -31,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 #### Experimental features
 
+* Added support for passing arguments to inline functions [by reference](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters). It is possible to pass variables and arrays this way.
 * Added new [`target-optimization` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-optimization). The `specific` option generates code for the specific compilation target only, the `compatible` option generates code intended for the compilation target and future versions of Mindustry Logic.    
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
 * Added support for applying indenting to the generated mlog code based through the [`mlog-indent` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-mlog-indent).
