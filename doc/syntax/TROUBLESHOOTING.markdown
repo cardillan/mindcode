@@ -112,4 +112,4 @@ The number of variables being sorted is limited by the [instruction limit](SYNTA
 
 ---
 
-[« Previous: Testing framework](TOOLS-TESTING-TOOL.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindustry Tips and Tricks »](MINDUSTRY-TIPS-N-TRICKS.markdown)
+[« Previous: Testing framework](TOOLS-TESTING-TOOL.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Mindcode Performance Tips »](PERFORMANCE-TIPS.markdown)

@@ -19,7 +19,7 @@ reactor-control-00.mnd:                           369   0B5F71D4A736D2F1   BF3A9
 reactor-control-battery-level-00.mnd:             578   BEBDD58A4C35FD11   13B7195589C27A67
 regulator-00.mnd:                                 142   F49BECB5341151DD   A79A05F1A64CE4EF
 remote-vault-00.mnd:                               68   9EA444978E177496   6F061D3572082F7D
-storage-display-00.mnd:                           652   DDB65C7053234A4E   A509041728B2CD02
+storage-display-00.mnd:                           605   DDB65C7053234A4E   E0E13874E096CCB3
 unit-housekeeping-00.mnd:                         101   F607CA415057529A   8B7ADFA55D6A2724
 unit-speed-00.mnd:                                 71   2A68EEB3B75D1513   549163C6D7CEE023
 unit-transport-00.mnd:                            671   26FE3A15D7EA529B   57AEF66FC2BB0BBF

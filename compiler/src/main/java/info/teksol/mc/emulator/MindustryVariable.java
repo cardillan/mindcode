@@ -108,12 +108,12 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     public void setObject(@Nullable MindustryObject object) {
         verifyModification();
-        if (counter) {
-            throw new ExecutionException(ExecutionFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '%s'.", name);
-        }
         if (object == null) {
             setNull();
         } else {
+            if (counter) {
+                throw new ExecutionException(ExecutionFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '%s'.", name);
+            }
             this.isObject = true;
             this.object = object;
         }
@@ -121,11 +121,11 @@ public class MindustryVariable implements LogicWritable, LogicReadable {
 
     public void setNull() {
         verifyModification();
-        if (counter) {
-            throw new ExecutionException(ExecutionFlag.ERR_INVALID_COUNTER, "Trying to assign an object to '%s'.", name);
+        // set @counter null is a noop
+        if (!counter) {
+            this.isObject = true;
+            this.object = null;
         }
-        this.isObject = true;
-        this.object = null;
     }
 
     public void setDoubleValue(double value) {

@@ -33,6 +33,10 @@ See [issues](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3
 
 The most important recent changes to Mindcode include:
 
+* Mindustry Logic 8
+  * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
+  * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
+  * New string/character based instructions and character literals.
 * Language features
   * Passing arguments (including arrays) to inline functions by reference.
   * Specific syntax for [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords).
@@ -51,10 +55,6 @@ The most important recent changes to Mindcode include:
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
   * Support for running the compiled mlog code in an emulated processor.
   * Tool for [partial decompilation](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) of an existing mlog code into Mindcode.
-* Mindustry Logic 8
-  * Complete support for the Mindustry Logic in the latest [Mindustry BE version](/doc/syntax/MINDUSTRY-8.markdown).
-  * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
-  * New string/character based instructions and character literals.
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 

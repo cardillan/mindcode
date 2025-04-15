@@ -149,8 +149,7 @@ The following features are affected when activating symbolic labels:
 * Regular internal array element access (inlined array access is not affected):
   * the size of a jump table and execution time of an array access are increased by one,
   * instruction setting up function return address cannot be hoisted.
-* Optimized case expressions: the size and execution time of optimized case statement may increase by one.
-* List iteration loops: the size and execution time of the last iteration are increased by two.
+* Optimized case expressions: the size and execution time of an optimized case statement may increase by one.
 * Remote calls: initialization of remote modules is increased by one or two instructions per remote function; however this only impacts the initialization of a remote module and not subsequent function calls.
 
 Example of a program compiled with mlog comments and symbolic labels:

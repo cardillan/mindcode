@@ -114,40 +114,34 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Copy values from the list to iterators
             iterationGroups.forEach(group -> group.generateIterationSetup(outputs));
 
+            boolean lastIteration = !hasMoreData();
+
             // Setting the iterator address.
             // Continue is disallowed in value list -> nextAddress can't be used before being set up.
             LogicLabel nextValueLabel = assembler.nextLabel();
+
             if (profile.isSymbolicLabels()) {
-                assembler.createOp(Operation.ADD, nextAddress, LogicBuiltIn.COUNTER, LogicNumber.ONE);
+                if (lastIteration) {
+                    assembler.createSet(nextAddress, LogicNull.NULL);
+                } else {
+                    assembler.createOp(Operation.ADD, nextAddress, LogicBuiltIn.COUNTER, LogicNumber.ONE);
+                }
             } else {
                 assembler.createSetAddress(nextAddress, nextValueLabel);
             }
 
-            LogicLabel lastValueLabel = null;
-            if (hasMoreData()) {
-                // This isn't a last iteration: jump to the loop body
-                assembler.createJumpUnconditional(bodyLabel);
-            } else {
-                if (profile.isSymbolicLabels()) {
-                    // In symbolic labels mode, the nextAddress leads here. We need to jump over the body.
-                    assembler.createJumpUnconditional(bodyLabel);
-                    assembler.createMultiLabel(assembler.nextLabel(), marker);
-                    lastValueLabel = assembler.nextLabel();
-                    assembler.createJumpUnconditional(lastValueLabel);
-                }
-
+            if (lastIteration) {
                 // The last iteration: continue to the loop body directly
                 createBody();
+            } else {
+                // This isn't a last iteration: jump to the loop body
+                assembler.createJumpUnconditional(bodyLabel);
             }
 
             // The trailing part of the iteration setup. For the last iteration the code is generated after
             // the loop body, so that the program flow naturally exits the loop after the last iteration.
             assembler.setSubcontextType(AstSubcontextType.ITR_TRAILING, 1.0);
             assembler.createMultiLabel(nextValueLabel, marker);
-
-            if (lastValueLabel != null) {
-                assembler.createLabel(lastValueLabel);
-            }
 
             // Copy iterator values back to the array - only for `out` iterators
             for (IterationElement output : outputs) {

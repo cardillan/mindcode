@@ -419,4 +419,4 @@ end;
 
 ---
 
-[« Previous: Troubleshooting Mindcode](TROUBLESHOOTING.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)
+[« Previous: Mindcode Performance Tips](PERFORMANCE-TIPS.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown)

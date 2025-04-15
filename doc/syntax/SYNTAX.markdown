@@ -45,6 +45,7 @@ Supporting tools:
 Additional information on Mindcode and Mindustry Logic:
 
 * [Troubleshooting Mindcode](TROUBLESHOOTING.markdown)
+* [Mindcode Performance Tips](PERFORMANCE-TIPS.markdown)
 * [Mindustry Tips and Tricks](MINDUSTRY-TIPS-N-TRICKS.markdown)
 
 ---

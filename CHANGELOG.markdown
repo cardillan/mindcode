@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.4.0 - Future release
+
+### Changed
+
+* Improved list iteration loops generation to avoid execution time increase when `symbolic-labels` is active.   
+
+### Miscellaneous
+
+* Added new documentation on [optimizing mindcode for performance](doc/syntax/PERFORMANCE-TIPS.markdown). 
+
 ## 3.3.0 - 2025-04-11
 
 ### Fixed

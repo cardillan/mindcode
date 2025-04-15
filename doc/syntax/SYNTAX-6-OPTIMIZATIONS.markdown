@@ -935,9 +935,9 @@ end;
 j = 10;
 while j > 1 do
     j += 1;
-    println(i);
+    println(j);
     j \= 2;
-    println(i);
+    println(j);
 end;
 
 // This loop is unrolled, but the number of iterations is 11!
