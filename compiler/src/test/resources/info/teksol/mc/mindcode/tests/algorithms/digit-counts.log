@@ -4,14 +4,14 @@
      1 instructions eliminated by Jump Optimization (7 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 9 iterations).
    180 instructions eliminated by Expression Optimization (5 iterations).
-    31 instructions eliminated by Data Flow Optimization (4 passes, 16 iterations).
+    32 instructions eliminated by Data Flow Optimization (5 passes, 18 iterations).
      1 instructions eliminated by Loop Optimization (5 iterations).
      2 loops improved by Loop Optimization.
    171 instructions added by Loop Unrolling (9 iterations).
      2 loops unrolled by Loop Unrolling.
      3 jump tables inlined by Array Optimization.
      8 instructions eliminated by Print Merging.
-    75 instructions after optimizations.
+    74 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 899):
   * Unroll iteration loop at line 7:5                            cost     0, benefit       49.0, efficiency   Infinity (-20 instructions)
@@ -808,6 +808,27 @@ Modifications by Iterated phase, Single Step Elimination, pass 4, iteration 1 (-
    104 op idiv :countDigits:number :countDigits:number 10
    105 label *label18
 
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 1:
+ 
+    70 label *label86
+    71 op add *tmp3 *tmp3 1
+    72 op mul *tmp10 *tmp2 2
+-    * multijump *label99 *tmp10 0 (m:marker2)
++   73 multijump *label99 *tmp9 0 (m:marker2)
+    74 multilabel *label99 (m:marker2)
+    75 set .array*0 *tmp3
+    76 jump *label98 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 4, iteration 2 (-1 instructions):
+ 
+    69 set *tmp3 .array*9
+    70 label *label86
+    71 op add *tmp3 *tmp3 1
+-    * op mul *tmp10 *tmp2 2
+    72 multijump *label99 *tmp9 0 (m:marker2)
+    73 multilabel *label99 (m:marker2)
+    74 set .array*0 *tmp3
+
 Modifications by Jumps phase, Jump Normalization, pass 6, iteration 1:
      0 set LIMIT 100
 -    * label *label26
@@ -847,73 +868,73 @@ Modifications by Jumps phase, Jump Normalization, pass 6, iteration 1:
     13 label *label24
     14 set :countDigits:number :i
  
-    80 set .array*9 *tmp3
-    81 label *label98
-    82 op idiv :countDigits:number :countDigits:number 10
+    79 set .array*9 *tmp3
+    80 label *label98
+    81 op idiv :countDigits:number :countDigits:number 10
 -    * label *label18
-    83 jump *label17 greaterThan :countDigits:number 0
+    82 jump *label17 greaterThan :countDigits:number 0
 -    * label *label19
 -    * label *label16
 -    * label *label14
-    84 op add :i :i 1
-    85 jump *label24 lessThan :i LIMIT
-    86 label *label15
-    87 assertflush
-    88 print .array*0
+    83 op add :i :i 1
+    84 jump *label24 lessThan :i LIMIT
+    85 label *label15
+    86 assertflush
+    87 print .array*0
 -    * label *label67
 -    * label *label68
-    89 print "-"
-    90 print .array*1
+    88 print "-"
+    89 print .array*1
 -    * label *label69
 -    * label *label70
-    91 print "-"
-    92 print .array*2
+    90 print "-"
+    91 print .array*2
 -    * label *label71
 -    * label *label72
-    93 print "-"
-    94 print .array*3
+    92 print "-"
+    93 print .array*3
 -    * label *label73
 -    * label *label74
-    95 print "-"
-    96 print .array*4
+    94 print "-"
+    95 print .array*4
 -    * label *label75
 -    * label *label76
-    97 print "-"
-    98 print .array*5
+    96 print "-"
+    97 print .array*5
 -    * label *label77
 -    * label *label78
-    99 print "-"
-   100 print .array*6
+    98 print "-"
+    99 print .array*6
 -    * label *label79
 -    * label *label80
-   101 print "-"
-   102 print .array*7
+   100 print "-"
+   101 print .array*7
 -    * label *label81
 -    * label *label82
-   103 print "-"
-   104 print .array*8
+   102 print "-"
+   103 print .array*8
 -    * label *label83
 -    * label *label84
-   105 print "-"
-   106 print .array*9
+   104 print "-"
+   105 print .array*9
 -    * label *label85
 -    * label *label23
 -    * label *label20
-   107 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
-   108 end
+   106 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
+   107 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 6, iteration 1 (-1 instructions):
  
-   105 print "-"
-   106 print .array*9
-   107 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
+   104 print "-"
+   105 print .array*9
+   106 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
  
-    86 label *label15
-    87 assertflush
-    88 print .array*0
+    85 label *label15
+    86 assertflush
+    87 print .array*0
 -    * print "-"
 -    * print .array*1
 -    * print "-"
@@ -931,17 +952,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-8 instructions):
 -    * print "-"
 -    * print .array*8
 -    * print "-"
-+   89 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
-+   90 format .array*1
-+   91 format .array*2
-+   92 format .array*3
-+   93 format .array*4
-+   94 format .array*5
-+   95 format .array*6
-+   96 format .array*7
-+   97 format .array*8
-    98 print .array*9
-    99 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
++   88 print "-{0}-{0}-{0}-{0}-{0}-{0}-{0}-{0}-"
++   89 format .array*1
++   90 format .array*2
++   91 format .array*3
++   92 format .array*4
++   93 format .array*5
++   94 format .array*6
++   95 format .array*7
++   96 format .array*8
+    97 print .array*9
+    98 assertprints "10-20-20-20-20-20-20-20-20-20" "digit counts"
 
 Final code before resolving virtual instructions:
 
@@ -995,8 +1016,7 @@ multilabel *label96
 set *tmp3 .array*9
 label *label86
 op add *tmp3 *tmp3 1
-op mul *tmp10 *tmp2 2
-multijump *label99 *tmp10 0
+multijump *label99 *tmp9 0
 multilabel *label99
 set .array*0 *tmp3
 jump *label98 always

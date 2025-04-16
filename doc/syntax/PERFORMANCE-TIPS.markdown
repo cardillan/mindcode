@@ -450,27 +450,25 @@ produces
         jump label_31 always 0 0
         set *tmp5 .b*3
     label_31:
-        op mul *tmp10 :i 2
-        op add @counter @counter *tmp10
+        op add @counter @counter *tmp9
         set *tmp7 .c*0
-        jump label_40 always 0 0
+        jump label_39 always 0 0
         set *tmp7 .c*1
-        jump label_40 always 0 0
+        jump label_39 always 0 0
         set *tmp7 .c*2
-        jump label_40 always 0 0
+        jump label_39 always 0 0
         set *tmp7 .c*3
-    label_40:
+    label_39:
         op add *tmp8 *tmp5 *tmp7
-        op mul *tmp11 :i 2
-        op add @counter @counter *tmp11
+        op add @counter @counter *tmp9
         set .a*0 *tmp8
-        jump label_50 always 0 0
+        jump label_48 always 0 0
         set .a*1 *tmp8
-        jump label_50 always 0 0
+        jump label_48 always 0 0
         set .a*2 *tmp8
-        jump label_50 always 0 0
+        jump label_48 always 0 0
         set .a*3 *tmp8
-    label_50:
+    label_48:
     op add :i :i 1
     jump label_22 lessThan :i 4
     print .a*0
@@ -508,7 +506,7 @@ print(array);
 
 ### Breaking out of list iteration loops
 
-List-iteration loops are always generated for the entire array. If you want to iterate over only part of the array, use subarrays instead of the `break` statement to limit the number of iterations, preventing both generation of unwanted iterations and code for computing/testing iterations:
+List-iteration loops are always generated for the entire array. If you want to iterate over a part of the array only, use subarrays instead of the `break` statement to limit the number of iterations, preventing both generation of unwanted iterations and code for computing/testing iterations:
 
 ```Mindcode
 #set symbolic-labels = true;

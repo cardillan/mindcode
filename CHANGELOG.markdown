@@ -6,13 +6,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.4.0 - Future release
 
+### Fixed
+
+* Fixed bug in jump tables generation for unused arrays.
+
 ### Added
 
 * A document offering some [tips on writing better performing Mindcode](/doc/syntax/PERFORMANCE-TIPS.markdown). 
 
 ### Changed
 
-* Improved list iteration loops generation to avoid execution time increase when `symbolic-labels` is active.   
+* Improved list iteration loops generation to avoid execution time increase when `symbolic-labels` is active.
+* Small improvements in chained random array access optimizations.
 
 ### Miscellaneous
 

@@ -15,7 +15,7 @@
      3 instructions added by Case Switching (9 iterations).
      1 case expressions converted to switched jumps Case Switching.
     10 instructions eliminated by Jump Straightening (5 iterations).
-    78 instructions updated by JumpThreading.
+    77 instructions updated by JumpThreading.
     40 instructions eliminated by Unreachable Code Elimination (2 iterations).
    661 instructions after optimizations.
 
@@ -8880,15 +8880,6 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    917 label *label661
    918 draw line 124 :y 131 :y
    919 op add *tmp104 :y 12
- 
-   947 draw color 0 0 80 255
-   948 jump *label255 always
-   949 draw rect 23 0 70 176
--    * jump *label256 always
-+  950 multijump *tmp10 0 0 (m:marker1)
-   951 label *label255
-   952 draw rect 109 0 176 176
-   953 label *label256
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-40 instructions):
  
@@ -9086,13 +9077,10 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    899 draw color 0 0 80 255
    900 jump *label255 always
 -    * draw rect 23 0 70 176
--    * multijump *tmp10 0 0 (m:marker1)
+-    * jump *label256 always
    901 label *label255
    902 draw rect 109 0 176 176
--    * label *label256
-   903 label *label45
-   904 multijump *tmp10 0 0 (m:marker1)
-   905 multilabel *label42 (m:marker1)
+   903 label *label256
 
 Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
  
@@ -9111,6 +9099,14 @@ Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
    890 label *label44
    891 op add :index :index 1
    892 op sub :y :y 20
+ 
+   898 jump *label255 always
+   899 label *label255
+   900 draw rect 109 0 176 176
+-    * label *label256
+   901 label *label45
+   902 multijump *tmp10 0 0 (m:marker1)
+   903 multilabel *label42 (m:marker1)
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-21 instructions):
  

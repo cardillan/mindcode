@@ -8,7 +8,7 @@ import java.util.Set;
 
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.*;
 
-// MUSTDO Fill in parameter names for all keywords/selectors. Change error message to include a parameter name.
+// TODO Fill in parameter names for all keywords/selectors. Change error message to include a parameter name.
 
 @NullMarked
 public enum InstructionParameterType {
@@ -248,6 +248,8 @@ public enum InstructionParameterType {
     public boolean isInput() {
         return (flags & Flags.INPUT) != 0;
     }
+
+
 
     /// @return true if this parameter can write to a variable
     public boolean isOutput() {

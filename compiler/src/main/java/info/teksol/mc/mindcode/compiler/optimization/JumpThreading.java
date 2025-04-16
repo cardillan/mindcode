@@ -36,8 +36,7 @@ class JumpThreading extends BaseOptimizer {
                     // Target of the jump
                     LogicLabel label = findJumpRedirection(jump);
                     LogicInstruction target = labeledInstruction(label);
-                    boolean replaceAdvanced = jump.isUnconditional() && (target instanceof ReturnInstruction
-                            || target instanceof MultiJumpInstruction || target instanceof MultiCallInstruction);
+                    boolean replaceAdvanced = jump.isUnconditional() && target != null && canMoveTarget(target);
 
                     if (replaceAdvanced) {
                         it.set(target.withContext(jump.getAstContext()));
@@ -52,6 +51,12 @@ class JumpThreading extends BaseOptimizer {
         }
 
         return false;
+    }
+
+    private boolean canMoveTarget(LogicInstruction target) {
+        return target instanceof ReturnInstruction
+                || !getProfile().isSymbolicLabels()
+                && (target instanceof MultiJumpInstruction || target instanceof MultiCallInstruction);
     }
 
     private boolean hasStartLabel() {

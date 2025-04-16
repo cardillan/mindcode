@@ -13,7 +13,7 @@
      6 instructions added by Case Switching (8 iterations).
      2 case expressions converted to switched jumps Case Switching.
     28 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
-    62 instructions updated by JumpThreading.
+    61 instructions updated by JumpThreading.
    261 instructions eliminated by Unreachable Code Elimination (2 iterations).
     14 instructions eliminated by Print Merging.
    605 instructions after optimizations.
@@ -6982,15 +6982,6 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
   1060 label *label490
   1061 draw lineRect *tmp127 *tmp130 9 8
   1062 draw line :displayItem:x :y *tmp131 *tmp128
- 
-  1183 draw color 0 0 80 255
-  1184 jump *label136 always
-  1185 draw rect 23 0 70 176
--    * jump *label137 always
-+ 1186 multijump *tmp35 0 0 (m:marker1)
-  1187 label *label136
-  1188 draw rect 109 0 176 176
-  1189 label *label137
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-261 instructions):
  
@@ -7488,19 +7479,16 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    804 draw color 0 0 80 255
    805 jump *label136 always
 -    * draw rect 23 0 70 176
--    * multijump *tmp35 0 0 (m:marker1)
+-    * jump *label137 always
    806 label *label136
    807 draw rect 109 0 176 176
--    * label *label137
-   808 label *label131
-   809 multijump *tmp35 0 0 (m:marker1)
-   810 multilabel *label68 (m:marker1)
+   808 label *label137
  
-   826 op equal *tmp17 .LINKS @links
-   827 op land *tmp18 *tmp16 *tmp17
-   828 jump *label632 notEqual *tmp18 false
+   827 op equal *tmp17 .LINKS @links
+   828 op land *tmp18 *tmp16 *tmp17
+   829 jump *label632 notEqual *tmp18 false
 -    * label *label19
-   829 end
+   830 end
 
 Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
  
@@ -7551,6 +7539,14 @@ Modifications by Jumps phase, Dead Code Elimination, pass 4, iteration 1:
    790 label *label82
    791 op add :index :index 1
    792 op sub :y :y 20
+ 
+   799 jump *label136 always
+   800 label *label136
+   801 draw rect 109 0 176 176
+-    * label *label137
+   802 label *label131
+   803 multijump *tmp35 0 0 (m:marker1)
+   804 multilabel *label68 (m:marker1)
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-24 instructions):
  

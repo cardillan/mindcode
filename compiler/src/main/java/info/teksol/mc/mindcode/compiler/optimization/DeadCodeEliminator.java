@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.CompilerMessage;
 import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -91,6 +92,7 @@ class DeadCodeEliminator extends BaseOptimizer {
             Objects.requireNonNull(writes.get(key)).stream()
                     .filter(LogicInstruction::isSafe)
                     .filter(this::allWritesUnread)
+                    .filter(ix -> !ix.getAstContext().matches(AstContextType.JUMPS))
                     .mapToInt(ix -> firstInstructionIndex(ixx -> ixx == ix))
                     .filter(i -> i >= 0)
                     .forEach(this::invalidateInstruction);

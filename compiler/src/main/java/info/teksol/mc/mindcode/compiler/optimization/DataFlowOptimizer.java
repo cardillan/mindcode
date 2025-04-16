@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -191,15 +192,20 @@ class DataFlowOptimizer extends BaseOptimizer {
             List<LogicArgument> arguments = new ArrayList<>(instruction.getArgs());
             for (int i = 0; i < arguments.size(); i++) {
                 LogicValue replacement;
-                if (instruction.getArgumentType(i).isInput() && arguments.get(i) instanceof LogicVariable variable
+                if (instruction.getArgumentType(i).isInput()
+                        && instruction.getArgumentType(i) != InstructionParameterType.LABEL
+                        && arguments.get(i) instanceof LogicVariable variable
                         && (replacement = valueReplacements.get(variable)) != null) {
                     arguments.set(i, replacement);
                     updated = true;
                 }
             }
 
-            if (updated) {
-                replaceInstruction(index, replaceArgs(instruction, arguments), variableStates);
+            SideEffects sideEffects = instruction.getSideEffects().replaceVariables(valueReplacements);
+
+            if (updated || sideEffects != instruction.getSideEffects()) {
+                replaceInstruction(index, replaceArgs(instruction, arguments).setSideEffects(sideEffects),
+                        variableStates);
             }
         } else if (instruction instanceof OpInstruction op && op.hasSecondOperand()) {
             // Trying for extended evaluation
@@ -757,21 +763,26 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         // Can't use write as a side effect here, use reset instead
         boolean reachable = !unreachables.get(iterator.nextIndex());
-        iterator.next().getSideEffects().apply(
+        LogicInstruction instruction = iterator.next();
+        instruction.getSideEffects().apply(
                 variable -> variableStates.valueRead(variable, null, false, reachable),
                 variable -> variableStates.valueReset(variable, true),
                 variable -> variableStates.valueReset(variable, false));
 
+        VariableStates result = instruction instanceof MultiJumpInstruction
+                ? processInstruction(variableStates, instruction, modifyInstructions, reachable)
+                : variableStates;
+
         while (iterator.hasNext()) {
-            LogicInstruction instruction = iterator.peek(0);
-            if (!instruction.belongsTo(localContext)) {
+            LogicInstruction ix = iterator.peek(0);
+            if (!ix.belongsTo(localContext)) {
                 break;
             }
 
             iterator.next();
         }
 
-        return variableStates;
+        return result;
     }
 
     /// Processes instructions inside a given context. Jumps outside local context are processed by associating

@@ -133,7 +133,11 @@ public abstract class AbstractInstruction implements LogicInstruction {
 
     @Override
     public LogicInstruction setInfo(InstructionInfo instructionInfo, Object value) {
-        info.put(instructionInfo, value);
+        if (value == instructionInfo.getDefaultValue()) {
+            info.remove(instructionInfo);
+        } else {
+            info.put(instructionInfo, value);
+        }
         updateInfo(Set.of(instructionInfo));
         return this;
     }
