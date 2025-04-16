@@ -120,9 +120,9 @@ By default, Mindcode produces code compatible with Mindustry version 7, build 14
 
 Mindcode supports multiple syntax modes tailored for different needs:
 
-* Relaxed syntax: useful for shorter scripts, as it requires less boilerplate code.
-* Strict syntax: useful for larger projects, as it enforces additional rules designed to make source code more maintainable.
-* Mixed syntax: designed to help with a transition of relaxed syntax code to the strict standard. In this mode, code is compiled using the relaxed syntax rules, but all violations of the strict syntax rules are reported as warnings.
+* **Relaxed syntax**: useful for shorter scripts, as it requires less boilerplate code.
+* **Strict syntax**: useful for larger projects, as it enforces additional rules designed to make source code more maintainable.
+* **Mixed syntax**: designed to help with transition from the relaxed syntax code to the strict standard. In this mode, code is compiled using the relaxed syntax rules, but all violations of the strict syntax rules are reported as warnings.
  
 Relaxed syntax is the default one. Syntax mode can be changed by the command-line switch or through the `#set syntax = mode;` compiler directive, where `mode` is one of `strict`, `relaxed` or `mixed`.
 

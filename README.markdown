@@ -45,12 +45,11 @@ The most important recent changes to Mindcode include:
   * Expressions in string interpolation: `print($"Sum: ${a + b}.")`.
   * Support for color literals: `%00ffff80`.
   * Prefix/postfix increment/decrement operators: `i++`, `--j`.
-  * Redefined [strict and relaxed syntax modes](/doc/syntax/SYNTAX.markdown#strict-syntax).
+  * Redefined [strict and relaxed syntax modes](/doc/syntax/SYNTAX.markdown#syntax-modes).
   * Variable declaration (optional in relaxed syntax, compulsory in strict syntax).
 * Basic functionality
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
   * Using Mindustry Logic metadata corresponding to the target selected for compilation.  
-  * Significant improvement in reporting error messages generated during compilation.
   * A built-in [library of system functions](doc/syntax/SYSTEM-LIBRARY.markdown).
   * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
   * Support for running the compiled mlog code in an emulated processor.
@@ -75,9 +74,9 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 ### Support mods
 
-Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into selected processor in Mindustry World directly, witthout having to use a clipboard.
+Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into selected processor in Mindustry World directly, without having to use a clipboard.
 
-The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-boundary-checks) for both internal and external arrays, making this kind of bugs easier to detect. 
+The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-boundary-checks) for both internal and external arrays, making this kind of bugs easier to detect. 
 
 ## Mindustry Logic References
 

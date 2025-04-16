@@ -9,15 +9,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the logic id translation from blocks to ids and back not handling all types of blocks ([#246](https://github.com/cardillan/mindcode/issues/246)).  
-* Fixed bug in jump tables generation for unused arrays.
+* Fixed small bug in jump tables generation for unused arrays.
 
 ### Added
 
-* A document offering some [tips on writing better performing Mindcode](/doc/syntax/PERFORMANCE-TIPS.markdown). 
+* A document offering some [tips on writing a better performing Mindcode](/doc/syntax/PERFORMANCE-TIPS.markdown). 
 
 ### Changed
 
-* Improved list iteration loops generation to avoid execution time increase when `symbolic-labels` is active.
+* Improved list iteration loops generation for symbolic labels to perform the same as a code compiled without symbolic labels.
 * Small improvements in chained random array access optimizations.
 
 ### Miscellaneous
