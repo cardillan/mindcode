@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.4.0 - Future release
 
+### Added
+
+* A document offering some [tips on writing better performing Mindcode](/doc/syntax/PERFORMANCE-TIPS.markdown). 
+
 ### Changed
 
 * Improved list iteration loops generation to avoid execution time increase when `symbolic-labels` is active.   
