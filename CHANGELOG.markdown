@@ -4,10 +4,11 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.4.0 - Future release
+## 3.3.1 - 2025-04-16
 
 ### Fixed
 
+* Fixed the logic id translation from blocks to ids and back not handling all types of blocks ([#246](https://github.com/cardillan/mindcode/issues/246)).  
 * Fixed bug in jump tables generation for unused arrays.
 
 ### Added
@@ -21,7 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Miscellaneous
 
-* Added new documentation on [optimizing mindcode for performance](doc/syntax/PERFORMANCE-TIPS.markdown). 
+* Added new documentation on [optimizing mindcode for performance](doc/syntax/PERFORMANCE-TIPS.markdown).
+* Updated BE metadata to the last available BE build.  
 
 ## 3.3.0 - 2025-04-11
 

@@ -11,7 +11,6 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -124,52 +123,51 @@ public class MindustryMetadata {
 
     // ID to instance maps
 
-    private <T extends MindustryContent> Map<Integer, T> createIdMap(Map<String, T> map, Predicate<T> filter) {
-        return map.values().stream().filter(filter)
-                .collect(Collectors.toMap(MindustryContent::id, obj -> obj));
+    private <T extends MindustryContent> Map<Integer, T> createIdMap(Map<String, T> map) {
+        return map.values().stream().collect(Collectors.toMap(MindustryContent::id, obj -> obj));
     }
 
     private Map<Integer, BlockType> getBlockIdMap() {
-        return cacheInstance(blockIdMap, () -> createIdMap(getBlockMap(), block -> "shown".equals(block.visibility())));
+        return cacheInstance(blockIdMap, () -> createIdMap(getBlockMap()));
     }
 
     private Map<Integer, Item> getItemIdMap() {
-        return cacheInstance(itemIdMap, () -> createIdMap(getItemMap(), item -> true));
+        return cacheInstance(itemIdMap, () -> createIdMap(getItemMap()));
     }
 
     private Map<Integer, Liquid> getLiquidIdMap() {
-        return cacheInstance(liquidIdMap, () -> createIdMap(getLiquidMap(), liquid -> true));
+        return cacheInstance(liquidIdMap, () -> createIdMap(getLiquidMap()));
     }
 
     private Map<Integer, Unit> getUnitIdMap() {
-        return cacheInstance(unitIdMap, () -> createIdMap(getUnitMap(), unit -> true));
+        return cacheInstance(unitIdMap, () -> createIdMap(getUnitMap()));
     }
 
     private Map<Integer, UnitCommand> getUnitCommandIdMap() {
-        return cacheInstance(unitCommandIdMap, () -> createIdMap(getUnitCommandMap(), unitCommand -> true));
+        return cacheInstance(unitCommandIdMap, () -> createIdMap(getUnitCommandMap()));
     }
 
     // LogicId to instance maps
 
-    private <T extends MindustryContent> Map<Integer, T> createLogicIdMap(Map<String, T> map, Predicate<T> filter) {
-        return map.values().stream().filter(filter).filter(t -> t.logicId() >= 0)
+    private <T extends MindustryContent> Map<Integer, T> createLogicIdMap(Map<String, T> map) {
+        return map.values().stream().filter(t -> t.logicId() >= 0)
                 .collect(Collectors.toMap(MindustryContent::logicId, obj -> obj));
     }
 
     private Map<Integer, BlockType> getBlockLogicIdMap() {
-        return cacheInstance(blockLogicIdMap, () -> createLogicIdMap(getBlockMap(), block -> "shown".equals(block.visibility())));
+        return cacheInstance(blockLogicIdMap, () -> createLogicIdMap(getBlockMap()));
     }
 
     private Map<Integer, Item> getItemLogicIdMap() {
-        return cacheInstance(itemLogicIdMap, () -> createLogicIdMap(getItemMap(), item -> true));
+        return cacheInstance(itemLogicIdMap, () -> createLogicIdMap(getItemMap()));
     }
 
     private Map<Integer, Liquid> getLiquidLogicIdMap() {
-        return cacheInstance(liquidLogicIdMap, () -> createLogicIdMap(getLiquidMap(), liquid -> true));
+        return cacheInstance(liquidLogicIdMap, () -> createLogicIdMap(getLiquidMap()));
     }
 
     private Map<Integer, Unit> getUnitLogicIdMap() {
-        return cacheInstance(unitLogicIdMap, () -> createLogicIdMap(getUnitMap(), unit -> true));
+        return cacheInstance(unitLogicIdMap, () -> createLogicIdMap(getUnitMap()));
     }
 
     // All constants

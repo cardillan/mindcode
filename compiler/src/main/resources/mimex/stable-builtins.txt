@@ -27,9 +27,9 @@
 @heat-router
 @slag-incinerator
 @carbide-crucible
-@small-heat-redirector
 @slag-centrifuge
 @surge-crucible
+@small-heat-redirector
 @cyanogen-synthesizer
 @phase-synthesizer
 @heat-reactor
@@ -153,10 +153,10 @@
 @plasma-bore
 @large-plasma-bore
 @impact-drill
-@large-cliff-crusher
 @eruption-drill
 @core-shard
 @core-foundation
+@large-cliff-crusher
 @core-nucleus
 @core-bastion
 @core-citadel
@@ -244,10 +244,10 @@
 @switch
 @micro-processor
 @logic-processor
-@advanced-launch-pad
-@landing-pad
 @hyper-processor
 @memory-cell
+@advanced-launch-pad
+@landing-pad
 @memory-bank
 @logic-display
 @large-logic-display

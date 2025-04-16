@@ -29,6 +29,7 @@ name;global;isobj;constant;numval
 @avert;global;true;true;0.0
 @basalt;global;true;true;0.0
 @basalt-boulder;global;true;true;0.0
+@basalt-vent;global;true;true;0.0
 @basic-assembler-module;global;true;true;0.0
 @battery;global;true;true;0.0
 @battery-large;global;true;true;0.0
@@ -673,6 +674,7 @@ name;global;isobj;constant;numval
 @steam-generator;global;true;true;0.0
 @stell;global;true;true;0.0
 @stone;global;true;true;0.0
+@stone-vent;global;true;true;0.0
 @stone-wall;global;true;true;0.0
 @sublimate;global;true;true;0.0
 @surge-alloy;global;true;true;0.0
