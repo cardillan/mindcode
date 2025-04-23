@@ -41,7 +41,7 @@
             <div>
                 <#if model.runOutput != "">
                     <label class="block font-bold" for="output">Program output (${model.runSteps} steps):</label>
-                    <textarea rows="4" id="output" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.runOutput}</textarea>
+                    <textarea rows="4" id="output" class="block font-mono text-sm bg-gray-100 dark:bg-gray-700 w-full p-1">${model.runOutput}</textarea>
                 </#if>
 
                 <@com.compilerMessages messageTitle="Compiler messages:" />

@@ -9,54 +9,8 @@
     <title>Mindcode: a Mindustry Logic high-level language</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <script src="https://kit.fontawesome.com/592e5a7a8a.js" crossorigin="anonymous"></script>
-    <style>
-        .textarea-container {
-            position: relative;
-            display: inline-block;
-        }
-
-        .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: gray;
-            color: white;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .copy-btn i {
-            font-size: 1.2rem;
-        }
-
-        .mlog-btn {
-            position: absolute;
-            top: 10px;
-            right: 70px;
-            width: 40px;
-            height: 40px;
-            background: gray;
-            color: white;
-            padding: 8px 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4rem;
-        }
-
-    </style>
 </head>
-<body class="m-4">
+<body class="m-4 dark:bg-gray-800 dark:text-white">
 </#macro>
 
 <#macro h1>
@@ -69,34 +23,34 @@
 <h1 class="my-4 text-2xl font-bold">
     <nav class="my-2">
         <ul class="flex space-around">
-            <li><a href="/"                 class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mindcode"        >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Mindcode Compiler</a>
-            <li><a href="/mlog-decompiler"  class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mlog-decompiler" >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Mlog Decompiler</a>
-            <li><a href="/schematics"       class="block text-center py-2 px-4 mx-2 rounded <#if selection == "schematics"      >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Schematics Builder</a>
-            <li><a href="/decompiler"       class="block text-center py-2 px-4 mx-2 rounded <#if selection == "decompiler"      >font-bold bg-indigo-700 text-white<#else>bg-gray-200</#if>">Schematics Decompiler</a>
+            <li><a href="/"                 class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mindcode"        >font-bold bg-indigo-700 text-white<#else>bg-gray-200 dark:bg-gray-600</#if>">Mindcode Compiler</a>
+            <li><a href="/mlog-decompiler"  class="block text-center py-2 px-4 mx-2 rounded <#if selection == "mlog-decompiler" >font-bold bg-indigo-700 text-white<#else>bg-gray-200 dark:bg-gray-600</#if>">Mlog Decompiler</a>
+            <li><a href="/schematics"       class="block text-center py-2 px-4 mx-2 rounded <#if selection == "schematics"      >font-bold bg-indigo-700 text-white<#else>bg-gray-200 dark:bg-gray-600</#if>">Schematics Builder</a>
+            <li><a href="/decompiler"       class="block text-center py-2 px-4 mx-2 rounded <#if selection == "decompiler"      >font-bold bg-indigo-700 text-white<#else>bg-gray-200 dark:bg-gray-600</#if>">Schematics Decompiler</a>
         </ul>
     </nav>
 </h1>
 </#macro>
 
 <#macro sample name>
-<li><a href="?s=${name}" class="block text-center py-2 px-4 mx-2 underline rounded <#if model.sample == name>font-bold bg-indigo-700 text-white<#else>bg-gray-200 </#if>"><#nested></a>
+<li><a href="?s=${name}" class="block text-center py-2 px-4 mx-2 underline rounded <#if model.sample == name>font-bold bg-indigo-700 text-white<#else>bg-gray-200 dark:bg-gray-600 </#if>"><#nested></a>
 </#macro>
 
 <#macro codeareas mlogWatcher sourceTitle targetTitle sourceLines targetLines>
     <label class="block font-bold" for="source">${sourceTitle}</label>
     <label class="block font-bold" for="target">${targetTitle}</label>
     <div>
-        <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.source}</textarea>
+        <textarea name="source" rows="24" id="source"   class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 dark:bg-gray-700 w-full p-1">${model.source}</textarea>
         <#if sourceLines == "Y"><p class="text-center">${model.sourceLoc} lines of code</p></#if>
     </div>
-    <div class="textarea-container">
-        <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 w-full p-1">${model.compiled}</textarea>
+    <div class="relative inline-block">
+        <textarea               rows="24" id="compiled" class="block font-mono text-sm border border-1 border-gray-700 bg-gray-100 dark:bg-gray-700 w-full p-1">${model.compiled}</textarea>
         <#if targetLines == "Y"><p class="text-center">${model.compiledLoc} lines of code</p></#if>
-        <button type="button" class="copy-btn bg-indigo-700" onclick="copyToClipboard()">
-            <i id="copyIcon" class="fa-solid fa-copy"></i>
-        </button>
+            <button type="button" class="absolute flex items-center justify-center text-1.2rem text-white bg-indigo-700 top-[10px] right-[20px] w-[40px] h-[40px] rounded-[5px]" onclick="copyToClipboard()">
+                <i id="copyIcon" class="fa-solid fa-copy"></i>
+            </button>
         <#if mlogWatcher = "Y">
-            <button type="button" class="mlog-btn bg-indigo-700">
+            <button type="button" class="absolute flex items-center justify-center text-1.4rem text-white bg-indigo-700 top-[10px] right-[70px] w-[40px] h-[40px] rounded-[5px]">
                 <i id="mlogIcon" class="fa-solid fa-microchip"></i>
             </button>
         </#if>
@@ -114,11 +68,11 @@
 </#macro>
 
 <#macro optimizationSettings >
-    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black p-2 my-2 rounded">
-        <option value="OFF"          <#if model.optimizationLevel == "OFF"          >selected</#if>>No optimization</option>
-        <option value="BASIC"        <#if model.optimizationLevel == "BASIC"        >selected</#if>>Basic optimization</option>
-        <option value="ADVANCED"     <#if model.optimizationLevel == "ADVANCED"     >selected</#if>>Advanced optimization</option>
-        <option value="EXPERIMENTAL" <#if model.optimizationLevel == "EXPERIMENTAL" >selected</#if>>Experimental optimization</option>
+    <select aria-label="Optimization level" name="optimizationLevel" id="optimization" class="border-2 border-black dark:border-gray-600 p-2 my-2 rounded">
+        <option class="dark:bg-gray-800" value="OFF"          <#if model.optimizationLevel == "OFF"          >selected</#if>>No optimization</option>
+        <option class="dark:bg-gray-800" value="BASIC"        <#if model.optimizationLevel == "BASIC"        >selected</#if>>Basic optimization</option>
+        <option class="dark:bg-gray-800" value="ADVANCED"     <#if model.optimizationLevel == "ADVANCED"     >selected</#if>>Advanced optimization</option>
+        <option class="dark:bg-gray-800" value="EXPERIMENTAL" <#if model.optimizationLevel == "EXPERIMENTAL" >selected</#if>>Experimental optimization</option>
     </select>
 </#macro>
 
