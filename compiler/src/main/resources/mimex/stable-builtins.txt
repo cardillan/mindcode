@@ -256,6 +256,7 @@
 @world-processor
 @world-cell
 @world-message
+@tile-logic-display
 @world-switch
 @dagger
 @mace

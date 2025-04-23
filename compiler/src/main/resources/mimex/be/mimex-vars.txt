@@ -47,7 +47,7 @@ name;global;isobj;constant;numval
 @blast-door;global;true;true;0.0
 @blast-drill;global;true;true;0.0
 @blast-mixer;global;true;true;0.0
-@blockCount;global;false;true;259.0
+@blockCount;global;false;true;260.0
 @blue;global;true;true;0.0
 @bluemat;global;true;true;0.0
 @boosting;global;true;true;0.0
@@ -56,6 +56,7 @@ name;global;isobj;constant;numval
 @bridge-conduit;global;true;true;0.0
 @bridge-conveyor;global;true;true;0.0
 @bryde;global;true;true;0.0
+@bufferUsage;global;true;true;0.0
 @build-tower;global;true;true;0.0
 @build1;global;true;true;0.0
 @build10;global;true;true;0.0
@@ -215,6 +216,8 @@ name;global;isobj;constant;numval
 @dirt-wall;global;true;true;0.0
 @disassembler;global;true;true;0.0
 @disperse;global;true;true;0.0
+@displayHeight;global;true;true;0.0
+@displayWidth;global;true;true;0.0
 @disrupt;global;true;true;0.0
 @disrupt-missile;global;true;true;0.0
 @distributor;global;true;true;0.0
@@ -705,6 +708,7 @@ name;global;isobj;constant;numval
 @thorium-wall-large;global;true;true;0.0
 @thruster;global;true;true;0.0
 @tick;global;false;true;0.0
+@tile-logic-display;global;true;true;0.0
 @time;global;false;true;0.0
 @timescale;global;true;true;0.0
 @titan;global;true;true;0.0

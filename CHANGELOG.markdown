@@ -21,8 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Small improvements in chained random array access optimizations.
 
 ### Miscellaneous
-
-* Added new documentation on [optimizing mindcode for performance](doc/syntax/PERFORMANCE-TIPS.markdown).
+ 
 * Updated BE metadata to the last available BE build.  
 
 ## 3.3.0 - 2025-04-11

@@ -346,7 +346,7 @@ spectre;342;112;shown;4;ItemTurret;false;turret;0.0;true;true;false;10;false;tru
 meltdown;343;113;shown;4;LaserTurret;false;turret;0.0;false;false;false;10;false;true;true;false;20.0;true;true;false;true;false;0;true;false;
 breach;344;157;shown;3;ItemTurret;false;turret;0.0;true;true;false;10;false;true;true;false;20.0;false;true;false;true;false;0;true;false;
 diffuse;345;231;shown;3;ItemTurret;false;turret;0.0;true;true;false;10;false;true;true;false;20.0;false;true;false;true;false;0;true;false;
-sublimate;346;189;shown;3;ContinuousLiquidTurret;false;turret;0.0;false;false;false;10;false;true;true;false;20.0;false;true;false;true;false;0;true;false;
+sublimate;346;189;shown;3;ContinuousLiquidTurret;false;turret;0.0;false;false;false;10;false;true;true;false;50.0;false;true;false;true;false;0;true;false;
 titan;347;198;shown;4;ItemTurret;false;turret;0.0;true;true;false;10;false;true;true;false;20.0;false;true;false;true;false;0;true;false;
 disperse;348;216;shown;4;ItemTurret;false;turret;0.0;true;true;false;10;false;true;true;false;20.0;false;true;false;true;false;0;true;false;
 afflict;349;239;shown;4;PowerTurret;false;turret;0.0;false;false;false;10;false;true;false;false;20.0;true;true;false;true;false;0;true;false;
@@ -415,9 +415,10 @@ memory-cell;411;142;shown;1;MemoryBlock;false;logic;0.0;false;false;false;10;fal
 memory-bank;412;143;shown;2;MemoryBlock;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 logic-display;413;144;shown;3;LogicDisplay;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
 large-logic-display;414;145;shown;6;LogicDisplay;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-canvas;415;228;shown;2;CanvasBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-reinforced-message;416;252;shown;1;MessageBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-world-processor;417;213;worldProcessorOnly;1;LogicBlock;true;logic;4.2535293329816107E37;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-world-cell;418;219;worldProcessorOnly;1;MemoryBlock;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-world-message;419;253;worldProcessorOnly;1;MessageBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
-world-switch;420;254;worldProcessorOnly;1;SwitchBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+tile-logic-display;415;259;shown;1;TileableLogicDisplay;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+canvas;416;228;shown;2;CanvasBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+reinforced-message;417;252;shown;1;MessageBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+world-processor;418;213;worldProcessorOnly;1;LogicBlock;true;logic;4.2535293329816107E37;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+world-cell;419;219;worldProcessorOnly;1;MemoryBlock;false;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+world-message;420;253;worldProcessorOnly;1;MessageBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
+world-switch;421;254;worldProcessorOnly;1;SwitchBlock;true;logic;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;false;
