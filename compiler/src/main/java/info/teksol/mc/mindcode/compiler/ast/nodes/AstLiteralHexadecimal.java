@@ -10,8 +10,8 @@ public class AstLiteralHexadecimal extends AstLiteralNumeric {
 
     public AstLiteralHexadecimal(SourcePosition sourcePosition, String literal, boolean suppressWarning) {
         super(sourcePosition, literal, suppressWarning);
-        if (!literal.startsWith("0x")) {
-            throw new IllegalArgumentException("Binary literal must start with '0x'");
+        if (!literal.startsWith("0x") && !literal.startsWith("-0x")) {
+            throw new IllegalArgumentException("Hexadecimal literal must start with '0x'");
         }
     }
 

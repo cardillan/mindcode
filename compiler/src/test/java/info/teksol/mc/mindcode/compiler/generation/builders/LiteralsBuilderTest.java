@@ -146,9 +146,9 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                         a = -01;
                         a = -123;
                         """,
-                createInstruction(SET, ":a", "-3"),
-                createInstruction(SET, ":a", "-81985529216486900"),
-                createInstruction(SET, ":a", "-1147797409030816500"),
+                createInstruction(SET, ":a", "-0b11"),
+                createInstruction(SET, ":a", "-0x123456789abcdf0"),
+                createInstruction(SET, ":a", "-0xfedcba987654300"),
                 createInstruction(SET, ":a", "0"),
                 createInstruction(SET, ":a", "-1"),
                 createInstruction(SET, ":a", "-123")
@@ -241,7 +241,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages()
                         .add("Literal '0x7fffffffffffffff' exceeds safe range for integer operations (0 .. 2**52).")
-                        .add("Literal '0x8000000000000000' exceeds maximum possible value (0x7fffffffffffffff)."),
+                        .add("Value '-9223372036854775808' does not have a valid mlog representation."),
                 """
                         var a = 0x7fffffffffffffff;
                         var b = 0x8000000000000000;
@@ -254,7 +254,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessages(
                 expectedMessages()
                         .add("Literal '0b0111111111111111111111111111111111111111111111111111111111111111' exceeds safe range for integer operations (0 .. 2**52).")
-                        .add("Literal '0b1000000000000000000000000000000000000000000000000000000000000000' exceeds maximum possible value (0b111111111111111111111111111111111111111111111111111111111111111)."),
+                        .add("Value '-9223372036854775808' does not have a valid mlog representation."),
                 """
                         var a = 0b0111111111111111111111111111111111111111111111111111111111111111;
                         var b = 0b1000000000000000000000000000000000000000000000000000000000000000;

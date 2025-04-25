@@ -107,16 +107,20 @@ public class LiteralsBuilder extends AbstractBuilder implements
         String literal = node.getLiteral();
         boolean negative = literal.startsWith("-");
         try {
-            long value = Long.parseLong(literal, beginIndex + (negative ? 1 : 0), literal.length(), radix);
+            long absValue = radix == 10
+                    ? Long.parseLong(literal, beginIndex + (negative ? 1 : 0), literal.length(), radix)
+                    : Long.parseUnsignedLong(literal, beginIndex + (negative ? 1 : 0), literal.length(), radix);
 
-            if (!processor.isValidIntegerLiteral(value)) {
-                error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, value);
-            }
-
-            if (!node.isSuppressWarning() && value > (1L << 52)) {
+            if (!processor.isValidIntegerLiteral(absValue)) {
+                error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, absValue);
+            } else if (!node.isSuppressWarning() && (absValue == Long.MIN_VALUE || Math.abs(absValue) > (1L << 52))) {
                 warn(node, WARN.LITERAL_UNSAFE_DECIMAL_RANGE, literal);
             }
-            return LogicNumber.create(node.sourcePosition(), literal, negative ? -value : value);
+
+            long value = negative ? -absValue : absValue;
+            return processor.isValidHexLiteral(value)
+                    ? LogicNumber.create(node.sourcePosition(), literal, value)
+                    : LogicNumber.create(node.sourcePosition(), value);
         } catch (NumberFormatException e) {
             error(node, ERR.LITERAL_INTEGER_TOO_LARGE, literal, getMaxLiteralValue(radix));
             return LogicNumber.create(node.sourcePosition(), MAX_LONG_VALUE, Long.MAX_VALUE);

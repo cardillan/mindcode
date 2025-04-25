@@ -13,9 +13,13 @@ public class MindustryInstructionProcessor8 extends BaseInstructionProcessor {
     }
 
     @Override
+    public boolean isValidHexLiteral(long value) {
+        return value > 0x800000000000000FL && value != Integer.MIN_VALUE;
+    }
+
+    @Override
     public boolean isValidIntegerLiteral(long value) {
-        // We always encode negative literals as decimal ones, so we avoid the bug.
-        return true;
+        return value != Long.MIN_VALUE;
     }
 
     @Override

@@ -424,7 +424,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = -0b1111;
                             """,
-                    createInstruction(SET, "a", "-15"));
+                    createInstruction(SET, ":a", "-0b1111")
+            );
         }
 
         @Test
@@ -432,7 +433,8 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a = -0xFF;
                             """,
-                    createInstruction(SET, "a", "-255"));
+                    createInstruction(SET, ":a", "-0xff")
+            );
         }
 
         @Test

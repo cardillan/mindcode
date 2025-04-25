@@ -147,8 +147,12 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @return true if the built-in variable is volatile.
     boolean isVolatileBuiltIn(String builtin);
 
-    /// Mindustry Logic is unable to parse some specific integer literal values. This method identifies supported
-    /// and unsupported integer literals.
+    /// Mindustry is not capable of parsing some literals in non-decimal bases. THis method identifies such numbers,
+    /// so that they can be encoded into mlog as decimals.
+    boolean isValidHexLiteral(long value);
+
+    /// Prior to version 8, Mindustry Logic was unable to parse some specific integer literal values in all bases.
+    /// This method identifies supported and unsupported integer literals.
     boolean isValidIntegerLiteral(long value);
 
     /// Rewrites the literal to conform to mlog limitations. If such a conversion isn't possible, an empty optional

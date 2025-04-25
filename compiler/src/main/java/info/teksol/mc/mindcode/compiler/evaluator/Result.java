@@ -31,14 +31,28 @@ class Result implements LogicWritable {
         this.valueType = ValueType.BOOLEAN;
     }
 
-    public AstLiteral toAstMindcodeNode(AstMindcodeNode source) {
-        return switch (valueType) {
-            case NULL       -> new AstLiteralNull(source.sourcePosition());
-            case BOOLEAN    -> new AstLiteralBoolean(source.sourcePosition(), value != 0);
-            case LONG       -> new AstLiteralDecimal(source.sourcePosition(), String.valueOf((long) value));
-            case DOUBLE     -> Double.isNaN(value) || Double.isInfinite(value)
-                    ? new AstLiteralNull(source.sourcePosition())
-                    : new IntermediateValue(source.sourcePosition(), value);
+    public AstLiteral toAstMindcodeNode(AstMindcodeNode source, int radix) {
+        return switch (radix) {
+            case 2  -> new AstLiteralBinary(source.sourcePosition(), addPrefix(Long.toString((long)value, radix), "0b"));
+            case 16 -> new AstLiteralHexadecimal(source.sourcePosition(), addPrefix(Long.toString((long)value, radix), "0x"));
+            default -> switch (valueType) {
+                case NULL       -> new AstLiteralNull(source.sourcePosition());
+                case BOOLEAN    -> new AstLiteralBoolean(source.sourcePosition(), value != 0);
+                case LONG       -> new AstLiteralDecimal(source.sourcePosition(), String.valueOf((long) value));
+                case DOUBLE     -> Double.isNaN(value) || Double.isInfinite(value)
+                        ? new AstLiteralNull(source.sourcePosition())
+                        : new IntermediateValue(source.sourcePosition(), value);
+            };
         };
+    }
+
+    private String addPrefix(String literal, String prefix) {
+        return prefix.isEmpty() ? literal
+                : literal.startsWith("-") ? "-" + prefix + literal.substring(1)
+                : prefix + literal;
+    }
+
+    public AstLiteral toAstMindcodeNode(AstMindcodeNode source) {
+        return toAstMindcodeNode(source, 10);
     }
 }

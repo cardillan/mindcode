@@ -104,10 +104,14 @@ public class MindustryVariables {
             return MindustryVariable.createConst(value, Color.parseColor(value));
         } else {
             try {
-                // TODO This code is duplicated in NumericLiteral. Will be removed from here once typed arguments are implemented.
-                return value.startsWith("0x") ? MindustryVariable.createConst(value, Long.decode(value)) :
-                        value.startsWith("0b") ? MindustryVariable.createConst(value, Long.parseLong(value, 2, value.length(), 2)) :
-                                MindustryVariable.createConst(value, instructionProcessor.parseNumber(value));
+                boolean negative = value.startsWith("-");
+                String number = negative ? value.substring(1) : value;
+                if (number.startsWith("0x") || number.startsWith("0b")) {
+                    long parsed = Long.parseUnsignedLong(number, 2, number.length(), number.startsWith("0x") ? 16 : 2);
+                    return MindustryVariable.createConst(value, negative ? -parsed : parsed);
+                } else {
+                    return MindustryVariable.createConst(value, instructionProcessor.parseNumber(value));
+                }
             } catch (NumberFormatException ex) {
                 if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
                     if (processor.getFlag(ERR_UNINITIALIZED_VAR)) {

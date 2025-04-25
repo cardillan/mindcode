@@ -328,10 +328,11 @@ Mindcode supports the classic decimal notation for integers and floats, includin
 Mindustry also supports hexadecimal and binary representation for integers:
 
 * `0x35`
-* `0xf1`
+* `-0xf1`
 * `0b010001101`
+* `0xFFFFFFFFFFFFFFFF`
 
-These literals are written into the mlog code exactly as they appear in Mindcode. If the value of the literal exceeds the maximum allowed range for a 64-bit signed integer, a compilation error occurs.    
+When the target version of Mindustry is capable to parse the literal as given, it is written into the mlog code exactly as it appears in Mindcode, otherwise the literal is encoded as a decimal literal. When the value of the literal exceeds the maximum allowed range of a 64-bit integer, or the value of the literal cannot be represented in mlog at all, a compilation error occurs.    
 
 ### Color literals
 
@@ -391,9 +392,9 @@ println(FORMAT);
 When Mindustry processes the mlog code in Mindustry Logic, it handles numeric literals with some limitations:
 
 * Decimal numeric literal can be an integer, a decimal number or a number in exponential notation where the mantissa doesn't contain a decimal separator, and may include a leading minus. `15`, `-187.5786` and `1e10` are valid numbers, while `1.4e10` is not, as it contains both `.` and `e` characters.
-* Binary and hexadecimal literals always start with `0b` or `0x` prefix. Negative values aren't supported.   
+* Binary and hexadecimal literals always start with `0b` or `0x` prefix. In Mindustry 8, it is possible to use a minus sign for negative numbers.   
 * Integers and decimal numbers are ultimately stored with `double` precision - this representation supports up to about 16 valid digits. Decimal numbers may specify a lot more digits after the decimal separator, but superfluous ones will be ignored.
-* Some specific literal values (namely, `-2147483648` can't be parsed and are converted to `null`).
+* Some specific literal values (for example, `-2147483648` in Mindustry 7) can't be parsed and are converted to `null`.
 * All integers up to 9,007,199,254,740,992 (2<sup>53</sup>) can be represented precisely in `double` precision.
 * Integers between 2<sup>53</sup> and 2<sup>63</sup>-1 may lose precision when converted to `double`.
 * The maximum value of integers and decimal numbers is 9,223,372,036,854,775,807 (2<sup>63</sup>-1). The results of parsing integer literals larger than this value are not consistent; apparently, sometimes an arithmetic overflow happens, otherwise the result is `null`.
@@ -414,7 +415,7 @@ To find a way around these constraints, Mindcode always reads the value of the n
    7. If none of the above rules is applicable, the conversion isn't possible and a compilation error is produced.
 2. Binary, decimal or hexadecimal integer literals:
    1. If the literal is a positive binary, hexadecimal or decimal integer lower than 2<sup>63</sup>, the literal is used exactly as specified in the source code.
-   2. If the literal is negative, it is converted to decimal representation prepended by a unary minus.
+   2. If the literal can't be represented in binary or hexadecimal in the target Mindustry version, it is converted to decimal representation.
    3. If the value is equal to `-2147483648`, it can't be represented as an mlog literal in any way and a compilation error is produced.
    4. If the value of the literal exceeds the maximum supported value, a compilation error is produced.
    5. If the value of the literal is larger than 2<sup>52</sup>, Mindcode emits a 'Literal exceeds safe range for integer operations' warning (the warning threshold is set to 2<sup>52</sup> and not 2<sup>53</sup>, because values above 2<sup>52</sup> are potentially unsafe for binary complement operations).
@@ -423,20 +424,21 @@ This processing ensures that numbers within a reasonable range are encoded to us
 
 Examples of Mindcode literals and their conversion into mlog:
 
-| Mindcode literal | mlog 7 representation  | mlog 8 representation  |
-|:-----------------|:-----------------------|:-----------------------|
-| `1`              | `1`                    | `1`                    |
-| `-008`           | `-008`                 | `-008`                 |
-| `0b10101`        | `0b10101`              | `0b10101`              |
-| `-0xFF`          | `-255`                 | `-255`                 |
-| `3.0`            | `3`                    | `3`                    |
-| `1e10`           | `10000000000`          | `10000000000`          |
-| `-1e-10`         | `-0.0000000001`        | `-0.0000000001`        |
-| `1.23456789e10`  | `12345678900`          | `12345678900`          |
-| `1.23456789e-10` | `0.000000000123456789` | `0.000000000123456789` |
-| `1.23456789e25`  | `1234568E19`           | `123456789E17`         |
-| `1.23456789e-25` | `12345679E-32`         | `123456789E-33`        |
-| `1.23456789e100` | _Cannot be encoded_    | `123456789E92`         |
+| Mindcode literal     | mlog 7 representation  | mlog 8 representation  |
+|:---------------------|:-----------------------|:-----------------------|
+| `1`                  | `1`                    | `1`                    |
+| `-008`               | `-008`                 | `-008`                 |
+| `0b10101`            | `0b10101`              | `0b10101`              |
+| `0xFFFFFFFFFFFFFFFF` | `-1`                   | `0xFFFFFFFFFFFFFFFF`   |
+| `-0xFF`              | `-255`                 | `-0xff`                |
+| `3.0`                | `3`                    | `3`                    |
+| `1e10`               | `10000000000`          | `10000000000`          |
+| `-1e-10`             | `-0.0000000001`        | `-0.0000000001`        |
+| `1.23456789e10`      | `12345678900`          | `12345678900`          |
+| `1.23456789e-10`     | `0.000000000123456789` | `0.000000000123456789` |
+| `1.23456789e25`      | `1234568E19`           | `123456789E17`         |
+| `1.23456789e-25`     | `12345679E-32`         | `123456789E-33`        |
+| `1.23456789e100`     | _Cannot be encoded_    | `123456789E92`         |
 
 The last three examples show the loss of precision when the number needs to be encoded using exponential notation into Mindustry Logic version 7, and an inability to represent a literal value in mlog 7 at all.
 

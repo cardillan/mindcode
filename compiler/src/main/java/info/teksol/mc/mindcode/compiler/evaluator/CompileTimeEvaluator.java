@@ -110,6 +110,11 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         LogicOperation eval = ExpressionEvaluator.getOperation(node.getOperation());
         if (operation.isDeterministic() && eval != null) {
             if (operation == Operation.ADD || operation == Operation.SUB || operation.getOperands() == 1) {
+                int base = switch (node.getOperand()) {
+                    case AstLiteralBinary n -> 2;
+                    case AstLiteralHexadecimal n -> 16;
+                    default -> 10;
+                };
                 ExpressionValue right = ExpressionValue.create(profile, processor, evaluateNode(node.getOperand(), local));
                 ExpressionValue left = operation.getOperands() == 1 ? right : ExpressionValue.zero(processor);
                 if (right.isString()) {
@@ -117,7 +122,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 } else if (right.isValid()) {
                     Result result = new Result();
                     eval.execute(result, left, right);
-                    return result.toAstMindcodeNode(node);
+                    return result.toAstMindcodeNode(node, base);
                 }
             }
         }

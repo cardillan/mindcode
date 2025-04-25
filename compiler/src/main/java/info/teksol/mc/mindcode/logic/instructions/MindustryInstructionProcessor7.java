@@ -13,8 +13,13 @@ public class MindustryInstructionProcessor7 extends BaseInstructionProcessor {
     }
 
     @Override
+    public boolean isValidHexLiteral(long value) {
+        return value >= 0;
+    }
+
+    @Override
     public boolean isValidIntegerLiteral(long value) {
-        return value != Integer.MIN_VALUE;
+        return value != Long.MIN_VALUE && value != Integer.MIN_VALUE;
     }
 
     @Override

@@ -9,7 +9,7 @@
 [![Static Badge](https://img.shields.io/badge/doc-mincdcode-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](doc/syntax/SYNTAX.markdown)
 [![Static Badge](https://img.shields.io/badge/doc-mlog-green?link=doc%2Fsyntax%2FSYNTAX.markdown)](https://yrueii.github.io/Mlog%20Documentation/)
 [![GitHub issue custom search in repo](https://img.shields.io/github/issues-search/cardillan/mindcode?query=is%3Aopen%20label%3Abug&label=open%20bugs&color=red&link=https%3A%2F%2Fgithub.com%2Fcardillan%2Fmindcode%2Fissues%3Fq%3Dis%253Aissue%2520state%253Aopen%2520label%253Abug)](https://github.com/cardillan/mindcode/issues?q=is%3Aissue%20state%3Aopen%20label%3Abug)
-[![Static Badge](https://img.shields.io/badge/chat-discord-blue?link=https%3A%2F%2Fdiscord.gg%2FA8vdVdvf)](https://discord.gg/A8vdVdvf)
+[![Static Badge](https://img.shields.io/badge/chat-discord-blue?link=https%3A%2F%2Fdiscord.gg%2FA8vdVdvf)](https://discord.gg/q4eGwpu2mp)
 
 </div>
 <br>
@@ -87,7 +87,7 @@ If you don't know much about Mindustry Logic, you can read more information abou
 You can also get help on these Discord servers:
 
 * [Logic channel on the Mindustry server](https://discord.gg/YkMMPMYABE)
-* [Mindustry Logic server](https://discord.gg/TbkC728p)
+* [Mindustry Logic server](https://discord.gg/WkFD3E8bXv)
 
 ## Roadmap
 

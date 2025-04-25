@@ -243,6 +243,10 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         }
     }
 
+    private LogicVariable stackPointer() {
+        return LogicVariable.STACK_POINTER;
+    }
+
     @Override
     public void resolve(CompilerProfile profile, LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
         AstContext astContext = instruction.getAstContext();
@@ -544,10 +548,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     @Override
     public boolean isVolatileBuiltIn(String builtin) {
         return VOLATILE_NAMES.contains(builtin);
-    }
-
-    private LogicVariable stackPointer() {
-        return LogicVariable.STACK_POINTER;
     }
 
     @Override
