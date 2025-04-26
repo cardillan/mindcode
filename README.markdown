@@ -37,6 +37,7 @@ The most important recent changes to Mindcode include:
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
   * New string/character based instructions and character literals.
+  * Support for named color literals: `%[red]`.
 * Language features
   * Passing arguments (including arrays) to inline functions by reference.
   * Specific syntax for [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords).
