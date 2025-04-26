@@ -83,7 +83,7 @@
         <ul class="list-disc list-inside">
             <#list model.errors>
                 <#items as msg>
-                    <li class="text-red-700">
+                    <li class="text-red-700 dark:text-yellow-400">
                         <#if msg.hasPosition()>
                             <a class="underline" href="#" onclick="jumpToPosition(${msg.startLine}, ${msg.startColumn}, ${msg.endLine}, ${msg.endColumn}); return false;">${msg.position}</a>:
                         </#if>
@@ -101,7 +101,7 @@
         <#list model.warnings>
             <ul class="list-disc list-inside">
                 <#items as msg>
-                    <li class="text-red-700">
+                    <li class="text-red-700 dark:text-yellow-400">
                         <#if msg.hasPosition()>
                             <a class="underline" href="#" onclick="jumpToPosition(${msg.startLine}, ${msg.startColumn}, ${msg.endLine}, ${msg.endColumn}); return false;">${msg.position}</a>
                         </#if>
