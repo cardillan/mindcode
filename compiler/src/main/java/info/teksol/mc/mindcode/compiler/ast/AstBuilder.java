@@ -638,7 +638,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
-    public AstMindcodeNode visitAstLiteralColor(AstLiteralColorContext ctx) {
+    public AstLiteralColor visitAstLiteralColor(AstLiteralColorContext ctx) {
         String literal = ctx.COLOR().getText();
         if (literal.length() != 7 && literal.length() != 9) {
             context.error(pos(ctx), ERR.LITERAL_INVALID_COLOR_FORMAT);
@@ -652,6 +652,12 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         } else {
             return new AstLiteralColor(pos(ctx), literal);
         }
+    }
+
+    @Override
+    public AstLiteralNamedColor visitAstLiteralNamedColor(AstLiteralNamedColorContext ctx) {
+        String literal = ctx.NAMEDCOLOR().getText();
+        return new AstLiteralNamedColor(pos(ctx), literal);
     }
 
     @Override

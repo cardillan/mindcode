@@ -1,13 +1,13 @@
-   372 instructions before optimizations.
+   374 instructions before optimizations.
     62 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
    181 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
     11 instructions added by Function Inlining (4 iterations).
      6 function calls inlined by Function Inlining.
-   139 instructions after optimizations.
+   141 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 828):
+Pass 1: speed optimization selection (cost limit 826):
   * Inline function 'assertEqualsRound' defined at line 3:1      cost    19, benefit       27.0, efficiency        1.4 (-31 instructions)
     Inline function call at line 78:1                            cost     4, benefit        4.5, efficiency        1.1
     Inline function call at line 79:1                            cost     4, benefit        4.5, efficiency        1.1
@@ -529,15 +529,15 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-62 ins
    413 op or *tmp172 :a *tmp170
    414 op notEqual :a *tmp172 false
  
-   421 # "Function: inline def round(in x)"
-   422 set :round:x *tmp173
-   423 op add *tmp175 :round:x 0.5
+   423 # "Function: inline def round(in x)"
+   424 set :round:x *tmp173
+   425 op add *tmp175 :round:x 0.5
 -    * op floor *tmp176 *tmp175
 -    * set *tmp174 *tmp176
-+  424 op floor *tmp174 *tmp175
-   425 label *label66
-   426 op div *tmp177 *tmp174 100000000
-   427 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
++  426 op floor *tmp174 *tmp175
+   427 label *label66
+   428 op div *tmp177 *tmp174 100000000
+   429 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1011,16 +1011,16 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  413 op or *tmp172 0 *tmp170
    414 op notEqual :a *tmp172 false
    415 assertequals true :a "||="
-   416 stop
+   416 assertequals %ff0000ff %ff0000 "short color literals"
  
-   420 op mul *tmp173 :assertEqualsRound:actual 100000000
-   421 # "Function: inline def round(in x)"
-   422 set :round:x *tmp173
+   422 op mul *tmp173 :assertEqualsRound:actual 100000000
+   423 # "Function: inline def round(in x)"
+   424 set :round:x *tmp173
 -    * op add *tmp175 :round:x 0.5
-+  423 op add *tmp175 *tmp173 0.5
-   424 op floor *tmp174 *tmp175
-   425 label *label66
-   426 op div *tmp177 *tmp174 100000000
++  425 op add *tmp175 *tmp173 0.5
+   426 op floor *tmp174 *tmp175
+   427 label *label66
+   428 op div *tmp177 *tmp174 100000000
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-79 instructions):
      0 set NULL null
@@ -1474,15 +1474,15 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
 +  335 op or *tmp172 0 *tmp6
    336 op notEqual :a *tmp172 false
    337 assertequals true :a "||="
-   338 stop
+   338 assertequals %ff0000ff %ff0000 "short color literals"
  
-   341 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   342 op mul *tmp173 :assertEqualsRound:actual 100000000
-   343 # "Function: inline def round(in x)"
+   343 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   344 op mul *tmp173 :assertEqualsRound:actual 100000000
+   345 # "Function: inline def round(in x)"
 -    * set :round:x *tmp173
-   344 op add *tmp175 *tmp173 0.5
-   345 op floor *tmp174 *tmp175
-   346 label *label66
+   346 op add *tmp175 *tmp173 0.5
+   347 op floor *tmp174 *tmp175
+   348 label *label66
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-57 instructions):
      0 set NULL null
@@ -1875,9 +1875,9 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    269 label *label46
    270 op sub *tmp132 -8 zero
  
-   332 assertequals true :a "||="
-   333 stop
-   334 end
+   334 assertequals %ffffffff %[white] "named color literals"
+   335 stop
+   336 end
 -    * label *label3
 -    * # "Function: void assertEqualsRound(in expected, in actual, in title)"
 -    * op mul *tmp173 :assertEqualsRound:actual 100000000
@@ -2449,9 +2449,9 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   209 op notEqual :a *tmp172 false
-   210 assertequals true :a "||="
-   211 stop
+   211 assertequals %ff0000ff %ff0000 "short color literals"
+   212 assertequals %ffffffff %[white] "named color literals"
+   213 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -2667,4 +2667,6 @@ assertequals true *tmp47 "&&="
 op or *tmp172 0 *tmp6
 op notEqual :a *tmp172 false
 assertequals true :a "||="
+assertequals %ff0000ff %ff0000 "short color literals"
+assertequals %ffffffff %[white] "named color literals"
 stop

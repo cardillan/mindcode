@@ -89,7 +89,8 @@ public class ERR {
     public static final String INTERNAL_ERROR = "An internal error was encountered.";
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
-    public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals requires language target 7 or higher.";
+    public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target 7 or higher.";
+    public static final String LITERAL_NAMED_COLOR_REQUIRES_TARGET_8 = "Named color literals require language target 8 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";
     public static final String LITERAL_INVALID_CHAR_FORMAT = "Invalid format of character literal.";
     public static final String LITERAL_INVALID_COLOR_FORMAT = "Invalid format of color literal (supported formats are %%rrggbb or %%rrggbbaa).";

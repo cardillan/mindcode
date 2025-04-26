@@ -11,6 +11,7 @@ public class WARN {
     public static final String LOOP_KEYWORD_DEPRECATED = "The 'loop' keyword is deprecated. Use 'while' instead of 'loop while'.";
     public static final String MISSING_MLOG_KEYWORD_PREFIX = "Using mlog keywords without the ':' prefix is deprecated (use ':%s' instead).";
     public static final String MISSING_PRINTFLUSH_ADDED = "Automatically added missing 'printflush(message1);' call to the end of the program.";
+    public static final String NAMED_COLOR_NOT_RECOGNIZED = "Named color '%s' not recognized.";
     public static final String OPTIMIZATION_PASSES_LIMIT_REACHED = "Optimization passes limit (%d) reached.";
     public static final String PRINTF_NOT_ENOUGH_ARGUMENTS = "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).";
     public static final String PRINTF_NO_PLACEHOLDERS = "The 'printf' function is called with a literal format string which doesn't contain any format placeholders.";

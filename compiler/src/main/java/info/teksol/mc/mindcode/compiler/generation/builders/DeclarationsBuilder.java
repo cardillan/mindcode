@@ -44,6 +44,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             NULL_LITERAL,
             BOOLEAN_LITERAL,
             COLOR_LITERAL,
+            NAMED_COLOR_LITERAL,
             NUMERIC_LITERAL,
             STRING_LITERAL,
             BUILT_IN,

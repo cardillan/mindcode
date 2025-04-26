@@ -1,13 +1,13 @@
-   372 instructions before optimizations.
+   374 instructions before optimizations.
     63 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
    180 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
     11 instructions added by Function Inlining (4 iterations).
      6 function calls inlined by Function Inlining.
-   139 instructions after optimizations.
+   141 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 828):
+Pass 1: speed optimization selection (cost limit 826):
   * Inline function 'assertEqualsRound' defined at line 3:1      cost    19, benefit       27.0, efficiency        1.4 (-31 instructions)
     Inline function call at line 78:1                            cost     4, benefit        4.5, efficiency        1.1
     Inline function call at line 79:1                            cost     4, benefit        4.5, efficiency        1.1
@@ -471,19 +471,19 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-63 ins
    364 op or *tmp172 :a *tmp170
    365 op notEqual :a *tmp172 false
  
-   367 stop
-   368 end
-   369 label *label3
+   369 stop
+   370 end
+   371 label *label3
 -    * op mul *tmp173 :assertEqualsRound:actual 100000000
 -    * set :round:x *tmp173
-+  370 op mul :round:x :assertEqualsRound:actual 100000000
-   371 op add *tmp175 :round:x 0.5
++  372 op mul :round:x :assertEqualsRound:actual 100000000
+   373 op add *tmp175 :round:x 0.5
 -    * op floor *tmp176 *tmp175
 -    * set *tmp174 *tmp176
-+  372 op floor *tmp174 *tmp175
-   373 label *label72
-   374 op div *tmp177 *tmp174 100000000
-   375 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
++  374 op floor *tmp174 *tmp175
+   375 label *label72
+   376 op div *tmp177 *tmp174 100000000
+   377 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set NULL null
@@ -898,7 +898,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  364 op or *tmp172 0 *tmp170
    365 op notEqual :a *tmp172 false
    366 assertequals true :a "||="
-   367 stop
+   367 assertequals %ff0000ff %ff0000 "short color literals"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-78 instructions):
      0 set NULL null
@@ -1292,7 +1292,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
 +  286 op or *tmp172 0 *tmp6
    287 op notEqual :a *tmp172 false
    288 assertequals true :a "||="
-   289 stop
+   289 assertequals %ff0000ff %ff0000 "short color literals"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-57 instructions):
      0 set NULL null
@@ -1646,9 +1646,9 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    215 op sub *tmp132 -8 zero
    216 assertequals -8 *tmp132 "unary minus"
  
-   259 assertequals true :a "||="
-   260 stop
-   261 end
+   261 assertequals %ffffffff %[white] "named color literals"
+   262 stop
+   263 end
 -    * label *label3
 -    * op mul :round:x :assertEqualsRound:actual 100000000
 -    * op add *tmp175 :round:x 0.5
@@ -2120,9 +2120,9 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   136 op notEqual :a *tmp172 false
-   137 assertequals true :a "||="
-   138 stop
+   138 assertequals %ff0000ff %ff0000 "short color literals"
+   139 assertequals %ffffffff %[white] "named color literals"
+   140 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -2265,4 +2265,6 @@ assertequals true *tmp47 "&&="
 op or *tmp172 0 *tmp6
 op notEqual :a *tmp172 false
 assertequals true :a "||="
+assertequals %ff0000ff %ff0000 "short color literals"
+assertequals %ffffffff %[white] "named color literals"
 stop

@@ -29,6 +29,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
         AstLiteralEscapeVisitor<ValueStore>,
         AstLiteralFloatVisitor<ValueStore>,
         AstLiteralHexadecimalVisitor<ValueStore>,
+        AstLiteralNamedColorVisitor<ValueStore>,
         AstLiteralNullVisitor<ValueStore>,
         AstLiteralStringVisitor<ValueStore>
 {
@@ -91,6 +92,19 @@ public class LiteralsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitLiteralHexadecimal(AstLiteralHexadecimal node) {
         return visitIntegerLiteral(node, 2, 16);
+    }
+
+    @Override
+    public ValueStore visitLiteralNamedColor(AstLiteralNamedColor node) {
+        String color = node.getLiteral().substring(2, node.getLiteral().length() - 1);
+
+        if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+            error(node, ERR.LITERAL_NAMED_COLOR_REQUIRES_TARGET_8);
+        } else if (!metadata.isValidColorName(color)) {
+            warn(node, WARN.NAMED_COLOR_NOT_RECOGNIZED, color);
+        }
+
+        return LogicNamedColor.create(node.sourcePosition(), node.getLiteral());
     }
 
     @Override

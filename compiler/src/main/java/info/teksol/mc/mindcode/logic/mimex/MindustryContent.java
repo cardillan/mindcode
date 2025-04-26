@@ -7,16 +7,10 @@ import org.jspecify.annotations.Nullable;
 /// Represents a Mindustry content. There are various kind of contents - building types, unit types,
 /// items, liquids.
 @NullMarked
-public interface MindustryContent extends MindustryObject, Comparable<MindustryContent> {
+public interface MindustryContent extends NamedContent, MindustryObject, Comparable<MindustryContent> {
 
     /// @return the type of this content
     ContentType contentType();
-
-    /// @return content name of the content (not including the `@` prefix)
-    String contentName();
-
-    /// @return name of the content (includes the "@" prefix)
-    String name();
 
     /// Provides the ID of the object. Used by the schematic builder.
     ///

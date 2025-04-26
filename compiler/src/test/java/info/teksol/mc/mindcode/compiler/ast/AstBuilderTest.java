@@ -1773,20 +1773,22 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             0;
                             %00ff00ff;
                             %ff00ff;
+                            %[fluffybunny];
                             """,
                     List.of(
                             number(156),
-                            new AstLiteralFloat(EMPTY, "156.156"),
+                            new AstLiteralFloat(EMPTY, "156.156", false),
                             new AstLiteralString(EMPTY, "156"),
                             new AstLiteralString(EMPTY, ""),
-                            new AstLiteralHexadecimal(EMPTY, "0xFF"),
-                            new AstLiteralBinary(EMPTY, "0b10101010"),
+                            new AstLiteralHexadecimal(EMPTY, "0xFF", false),
+                            new AstLiteralBinary(EMPTY, "0b10101010", false),
                             new AstLiteralBoolean(EMPTY, "true"),
                             new AstLiteralBoolean(EMPTY, "false"),
                             new AstLiteralNull(EMPTY, "null"),
                             number(0),
                             new AstLiteralColor(EMPTY, "%00ff00ff"),
-                            new AstLiteralColor(EMPTY, "%ff00ff")
+                            new AstLiteralColor(EMPTY, "%ff00ff"),
+                            new AstLiteralNamedColor(EMPTY, "%[fluffybunny]")
                     )
             );
         }

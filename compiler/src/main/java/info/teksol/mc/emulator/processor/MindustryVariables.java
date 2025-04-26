@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import info.teksol.mc.mindcode.logic.mimex.NamedColor;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Comparator;
@@ -17,8 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_INVALID_IDENTIFIER;
-import static info.teksol.mc.emulator.processor.ExecutionFlag.ERR_UNINITIALIZED_VAR;
+import static info.teksol.mc.emulator.processor.ExecutionFlag.*;
 
 @NullMarked
 public class MindustryVariables {
@@ -100,7 +100,19 @@ public class MindustryVariables {
             return content == null
                     ? MindustryVariable.createUnregisteredContent(value)
                     : MindustryVariable.createConstObject(content);
-        } if (value.startsWith("%")) {
+        } if (value.startsWith("%[")) {
+            NamedColor color = metadata.getColorByName(value.substring(2, value.length() - 1));
+            double rgba;
+            if (color == null) {
+                if (processor.getFlag(ERR_UNKNOWN_COLOR)) {
+                    throw new ExecutionException(ERR_UNKNOWN_COLOR, "Unknown color in color literal '%s'.", value);
+                }
+                rgba = Color.parseColor("%00000000");
+            } else {
+                rgba = color.color();
+            }
+            return MindustryVariable.createConst(value, rgba);
+        } else if (value.startsWith("%")) {
             return MindustryVariable.createConst(value, Color.parseColor(value));
         } else {
             try {

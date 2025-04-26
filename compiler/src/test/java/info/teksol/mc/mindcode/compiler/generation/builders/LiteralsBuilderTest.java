@@ -23,6 +23,19 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void compilesNamedColorLiterals() {
+        assertCompilesTo("""
+                        a = %[red];
+                        a = %[salmon];
+                        a = %[yellow];
+                        """,
+                createInstruction(SET, ":a", "%[red]"),
+                createInstruction(SET, ":a", "%[salmon]"),
+                createInstruction(SET, ":a", "%[yellow]")
+        );
+    }
+
+    @Test
     void compilesStringLiterals() {
         assertCompilesTo("""
                         a = "";
@@ -265,7 +278,21 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void refusesColorLiteralsIn6() {
         assertGeneratesMessage(
-                "Color literals requires language target 7 or higher.",
+                "Color literals require language target 7 or higher.",
                 "#set target = 6; a = %123456;");
+    }
+
+    @Test
+    void refusesNamedColorLiteralsIn7() {
+        assertGeneratesMessage(
+                "Named color literals require language target 8 or higher.",
+                "#set target = 7; a = %[red];");
+    }
+
+    @Test
+    void generatesWarningForUnrecognizedColors() {
+        assertGeneratesMessage(
+                "Named color 'fluffybunny' not recognized.",
+                "a = %[fluffybunny];");
     }
 }

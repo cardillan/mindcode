@@ -4,16 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.3.2 - 2025-04-25
+## 3.3.2 - 2025-04-26
 
 ### Added
 
 * Support for dark mode in the web application (courtesy of 3bd). Light/dark mode follows the browser preference.
+* Support for named color literals (e.g. `%[red]`) in target 8.
 
 ### Changed
 
 * Hexadecimal and binary literals can be specified as 64-bit unsigned numbers (e.g. `0xFFFFFFFFFFFFFFFF` represents `-1`). These literals are encoded to mlog as is when possible. If the literal wouldn't be properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
 * Negative hexadecimal and binary literals are encoded to mlog as is (with possible conversion to lower case). If the literal wouldn't be properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
+
+### Miscellaneous
+
+* Fixed (hopefully) Discord links in the Readme.
 
 ## 3.3.1 - 2025-04-16
 

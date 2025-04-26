@@ -103,7 +103,8 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
                 [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
                 [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
+                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
                 [--err-graphics-buffer-overflow {true,false}] [--err-runtime-check-failed {true,false}] [-o LEVEL]
@@ -223,6 +224,8 @@ run options:
                          stop execution when a numeric value is used instead of an object
   --err-not-a-number {true,false}
                          stop execution when an object is used instead of a numeric value
+  --err-unknown-color {true,false}
+                         stop execution when an unknown color is used in a named color literal
   --err-invalid-content {true,false}
                          stop execution when an invalid index is used in the 'lookup' instruction
   --err-invalid-link {true,false}

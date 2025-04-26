@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.mimex;
 
+import info.teksol.mc.evaluator.Color;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -31,6 +32,7 @@ public class MindustryMetadata {
 
     private final AtomicReference<Set<String>> stableBuiltins = new AtomicReference<>();
     private final AtomicReference<Icons> icons = new AtomicReference<>();
+    private final AtomicReference<Map<String, NamedColor>> colors = new AtomicReference<>();
 
     private final AtomicReference<Map<String, BlockType>> blockMap = new AtomicReference<>();
     private final AtomicReference<Map<String, Item>> itemMap = new AtomicReference<>();
@@ -86,6 +88,11 @@ public class MindustryMetadata {
     // Icons
     public Icons getIcons() {
         return cacheInstance(icons, () -> new Icons(processorVersion.mimexVersion));
+    }
+
+    // Named color
+    private Map<String, NamedColor> getNamedColors() {
+        return cacheInstance(colors, () -> new NamedColorReader("mimex-colors.txt").createFromResource());
     }
 
     // Name to instance maps
@@ -220,6 +227,16 @@ public class MindustryMetadata {
     }
     //</editor-fold>
 
+    //<editor-fold desc="Colors">
+    public boolean isValidColorName(String name) {
+        return getNamedColors().containsKey(name);
+    }
+
+    public @Nullable NamedColor getColorByName(String name) {
+        return getNamedColors().get(name);
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Items">
     public int getItemCount() {
         return getItemLogicIdMap().size();
@@ -287,7 +304,7 @@ public class MindustryMetadata {
     //</editor-fold>
 
     //<editor-fold desc="Metadata loading">
-    private abstract class AbstractReader<T extends MindustryContent> {
+    private abstract class AbstractReader<T extends NamedContent> {
         private final String resourceName;
         private final List<String> lines;
         private final List<String> header;
@@ -429,6 +446,27 @@ public class MindustryMetadata {
 
         private List<String> parseUnitPlans(String unitPlans) {
             return unitPlans.isBlank() ? List.of() : Stream.of(unitPlans.split("\\|")).map("@"::concat).toList();
+        }
+    }
+
+    private class NamedColorReader extends AbstractReader<NamedColor> {
+        private int name, rgba;
+
+        public NamedColorReader(String resource) {
+            super(resource);
+        }
+
+        @Override
+        protected void parseHeader() {
+            name = findColumn("name");
+            rgba = findColumn("rgba");
+        }
+
+        @Override
+        protected NamedColor create(String[] columns) {
+            return new NamedColor(
+                    columns[name],
+                    Color.parseColor(columns[rgba]));
         }
     }
 

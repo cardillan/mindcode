@@ -8,10 +8,14 @@ import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 public class Color {
 
     public static double parseColor(String symbol) {
-        int r = Integer.parseInt(symbol.substring(1, 3), 16);
-        int g = Integer.parseInt(symbol.substring(3, 5), 16);
-        int b = Integer.parseInt(symbol.substring(5, 7), 16);
-        int a = symbol.length() == 9 ? Integer.parseInt(symbol.substring(7, 9), 16) : 255;
+        return parseColor(symbol, symbol.startsWith("%") ? 1 : 0);
+    }
+
+    private static double parseColor(String symbol, int offset) {
+        int r = Integer.parseInt(symbol, offset, offset + 2, 16);
+        int g = Integer.parseInt(symbol, offset + 2, offset + 4, 16);
+        int b = Integer.parseInt(symbol, offset + 4, offset + 6, 16);
+        int a = symbol.length() - offset == 8 ? Integer.parseInt(symbol, offset + 6, offset + 8, 16) : 255;
         return toDoubleBitsClamped(r / 255f, g / 255f, b / 255f, a / 255f);
     }
 

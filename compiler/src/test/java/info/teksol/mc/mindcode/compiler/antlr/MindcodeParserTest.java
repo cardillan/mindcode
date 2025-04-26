@@ -933,6 +933,7 @@ class MindcodeParserTest extends AbstractParserTest {
                     %123456;
                     %ABCDEF00;
                     %12345678;
+                    %[red];
                     """);
         }
 
@@ -989,6 +990,36 @@ class MindcodeParserTest extends AbstractParserTest {
         void refusesEmptyCharLiteral() {
             assertGeneratesMessageRegex(1, 5, "Parse error: .*",
                     "a = '';\n");
+        }
+
+        @Test
+        void refusesEmptyNamedColorLiteral() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 5, "Parse error: .*")
+                            .addRegex(1, 6, "Parse error: .*"),
+                    "a = %[];");
+        }
+
+        @Test
+        void refusesUnclosedNamedColorLiteral() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 5, "Parse error: .*")
+                            .addRegex(1, 6, "Parse error: .*")
+                            .addRegex(1, 12, "Parse error: .*"),
+                    "a = %[red;n");
+        }
+
+
+        @Test
+        void refusesMalformedNamedColorLiteral() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .addRegex(1, 5, "Parse error: .*")
+                            .addRegex(1, 6, "Parse error: .*")
+                            .addRegex(1, 19, "Parse error: .*"),
+                    "a = %[fluffy-bunny];");
         }
 
         @Test

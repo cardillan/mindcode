@@ -166,6 +166,7 @@ KEYWORD                 : COLON Letter
 
 STRING                  : '"' ~[\r\n"]* '"' ;
 COLOR                   : '%'  HexDigit+ ;
+NAMEDCOLOR              : '%[' Letter+ ']';
 BINARY                  : '0b' BinDigit+ ;
 HEXADECIMAL             : '0x' HexDigit+ ;
 DECIMAL                 : DecDigit+ ;

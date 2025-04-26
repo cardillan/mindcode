@@ -79,11 +79,11 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
     }
 
     protected static AstLiteralDecimal number(int number) {
-        return new AstLiteralDecimal(EMPTY, String.valueOf(number));
+        return new AstLiteralDecimal(EMPTY, String.valueOf(number), false);
     }
 
     protected static AstLiteralFloat number(double number) {
-        return new AstLiteralFloat(EMPTY, String.valueOf(number));
+        return new AstLiteralFloat(EMPTY, String.valueOf(number), false);
     }
 
     protected static AstFunctionArgument arg(AstExpression expression) {

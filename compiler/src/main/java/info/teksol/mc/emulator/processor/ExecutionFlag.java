@@ -22,6 +22,7 @@ public enum ExecutionFlag {
     ERR_ASSIGNMENT_TO_FIXED_VAR     ("stop execution on attempts to write a value to an unmodifiable built-in variable"),
     ERR_NOT_AN_OBJECT               ("stop execution when a numeric value is used instead of an object"),
     ERR_NOT_A_NUMBER                ("stop execution when an object is used instead of a numeric value"),
+    ERR_UNKNOWN_COLOR               ("stop execution when an unknown color is used in a named color literal"),
     ERR_INVALID_CONTENT             ("stop execution when an invalid index is used in the 'lookup' instruction"),
     ERR_INVALID_LINK                ("stop execution when an invalid index is used in the 'getlink' instruction"),
     ERR_MEMORY_ACCESS               ("stop execution when accessing invalid memory-cell or memory-bank index "),

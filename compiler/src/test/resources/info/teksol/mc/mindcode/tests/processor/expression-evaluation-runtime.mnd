@@ -106,4 +106,7 @@ a = 1; assertEquals(false,  a &&= d(0),                 "&&=");
 a = 1; assertEquals( true,  a &&= d(2),                 "&&=");
 a = 0; assertEquals( true,  a ||= d(2),                 "||=");
 
+assertEquals(%ff0000ff,     %ff0000,                    "short color literals");
+assertEquals(%ffffffff,     %[white],                   "named color literals");
+
 stopProcessor();

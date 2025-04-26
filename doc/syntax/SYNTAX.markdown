@@ -336,7 +336,7 @@ When the target version of Mindustry is capable to parse the literal as given, i
 
 ### Color literals
 
-Mindustry Logic recognizes special literals designed for encoding colors. These literals use `%` (a percent character) as a prefix, followed by six or eight hexadecimal digits. The first six digits encode red, green and blue channels respectively, the (optional) 7th-8th digits encode the alpha channel (0 = transparent, 255 = opaque), when not specified, the alpha channel defaults to opaque:
+Mindustry Logic recognizes special literals designed for encoding colors in version 7 and higher. These literals use `%` (a percent character) as a prefix, followed by six or eight hexadecimal digits. The first six digits encode red, green and blue channels respectively, the (optional) 7th-8th digits encode the alpha channel (0 = transparent, 255 = opaque), when not specified, the alpha channel defaults to opaque:
 
 * `%FF0000`: bright red
 * `%007F00`: dark green
@@ -345,6 +345,12 @@ Mindustry Logic recognizes special literals designed for encoding colors. These 
 These literals are written into the mlog code exactly as they appear in Mindcode. If the value of the literal doesn't fit the supported format, a compilation error occurs.
 
 If the result of a compile-time evaluated expression lies within the range of color literals, it is encoded into mlog as a color literal.
+
+### Named color literals
+
+Since version 8, Mindustry supports named color literals, where the color name is enclosed in brackets: `%[salmon]`. These can be used as is in Mindcode.
+
+Named color literals are written to the mlog as is. Mindcode generates a warning when the color name doesn't match any of the known Mindustry colors. Named color literals aren't compile-time evaluated by Mindcode.
 
 ### Character literals
 

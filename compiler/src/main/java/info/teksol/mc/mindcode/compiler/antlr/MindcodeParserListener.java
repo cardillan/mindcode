@@ -420,6 +420,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstKeyword(MindcodeParser.AstKeywordContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astLiteralNamedColor}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstLiteralNamedColor(MindcodeParser.AstLiteralNamedColorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astLiteralNamedColor}
+	 * labeled alternative in {@link MindcodeParser#expression}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstLiteralNamedColor(MindcodeParser.AstLiteralNamedColorContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astOperatorBinaryAdd}
 	 * labeled alternative in {@link MindcodeParser#expression}.
 	 * @param ctx the parse tree

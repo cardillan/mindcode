@@ -67,11 +67,6 @@ public class LogicColor extends AbstractArgument implements LogicLiteral {
     }
 
     @Override
-    public long getLongValue() {
-        return (long) doubleValue;
-    }
-
-    @Override
     public @Nullable Object getObject() {
         return null;
     }

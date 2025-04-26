@@ -136,6 +136,7 @@ expression
     | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # astFormattableLiteral
     | STRING                                                                            # astLiteralString
     | COLOR                                                                             # astLiteralColor
+    | NAMEDCOLOR                                                                        # astLiteralNamedColor
     | BINARY                                                                            # astLiteralBinary
     | HEXADECIMAL                                                                       # astLiteralHexadecimal
     | DECIMAL                                                                           # astLiteralDecimal
