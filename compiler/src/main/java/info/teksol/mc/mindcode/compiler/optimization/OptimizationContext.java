@@ -372,7 +372,7 @@ class OptimizationContext {
                 Set<LogicVariable> writes = functionDataFlow.functionWrites.computeIfAbsent(function, f -> new HashSet<>());
                 int size = reads.size() + writes.size() + functionDataFlow.endingFunctions.size();
                 function.getDirectCalls().stream()
-                        .filter(f -> !f.isInline() && !f.isMain())
+                        .filter(f -> f.isUsed() && !f.isInline() && !f.isMain())
                         .forEachOrdered(callee -> {
                             reads.addAll(functionDataFlow.functionReads.get(callee));
                             writes.addAll(functionDataFlow.functionWrites.get(callee));

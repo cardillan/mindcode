@@ -183,4 +183,15 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
                     """, message.message());
         });
     }
+
+    @Test
+    public void compilesUnusedFunctions() {
+        assertCompiles("""
+                for i in 0 ... @itemCount do
+                    print(i);
+                end;
+                def b(y) c(y); end;
+                def c(z) print(z); end;
+                """);
+    }
 }

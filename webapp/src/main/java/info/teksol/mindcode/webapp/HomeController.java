@@ -118,7 +118,7 @@ public class HomeController {
                 InputFiles.fromSource(sourceCode));
 
         final long start = System.nanoTime();
-        compiler.compile();
+        compiler.safeCompile();
         final long end = System.nanoTime();
         logger.info("performance compiled_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 

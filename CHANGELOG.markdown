@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.3.3 - 2025-04-26
+
+### Fixed
+
+* Fixed internal error when compiling unused functions ([#247](https://github.com/cardillan/mindcode/issues/247)).
+* Fixed whitelabel error in the web application when an internal compilation error occurs. The error is reported as a standard error message instead.
+
 ## 3.3.2 - 2025-04-26
 
 ### Added

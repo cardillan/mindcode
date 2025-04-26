@@ -40,7 +40,7 @@ public class MindcodeFunction {
     private String prefix = "";
 
     /// Number of times the function will be compiled into the code
-    /// At most 1 for non-inine function, any number for inlined functions
+    /// At most 1 for non-inline function, any number for inlined functions
     private int placementCount = 0;
 
     /// Indicates the function was visited while constructing the call tree.
