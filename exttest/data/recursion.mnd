@@ -7,3 +7,11 @@ end;
 assertEquals(0, fib(0), "recursion");
 
 stopProcessor();
+
+def bbb(y)
+    ccc(y);
+end;
+
+def ccc(z)
+    print(z);
+end;

@@ -56,3 +56,11 @@ end;
 assertEquals(21536, sumPrimesUpTo(500), "sum of primes up to 500");
 
 stopProcessor();
+
+def bbb(y)
+    ccc(y);
+end;
+
+def ccc(z)
+    print(z);
+end;

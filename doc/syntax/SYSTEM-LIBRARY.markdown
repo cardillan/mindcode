@@ -215,6 +215,50 @@ all four color channels.
 - `b`: variable to receive the value corresponding to the blue channel
 - `a`: variable to receive the value corresponding to the alpha channel
 
+### setAlpha
+
+**Definition:** `def setAlpha(color, alpha)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   4 |                  4 |
+| Function body                  |                   5 |                  5 |
+| Function call                  |                   5 |                  5 |
+
+Allows to redefine the alpha channel of an existing color. When used with constant value of alpha and a built-in
+color literal (e.g. `@colorSalmon`), the value will be compile-time evaluated. When a named color literal is used
+(e.g. `%[salmon]`), compile time evaluation is not possible.
+
+This function is significantly more efficient than unpacking the color into individual color channels
+and repackaging them back.
+
+**Inputs and outputs:**
+
+- `color`: the color to modify, in packed color format
+- `alpha`: new value of the alpha channel, 0 to 255
+- return the packed color representation of the altered color.
+
+### packHsv
+
+**Definition:** `def packHsv(hue, saturation, value, alpha)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                  26 |                 26 |
+| Function body                  |                  27 |                 27 |
+| Function call                  |                   7 |                  7 |
+
+Creates a packed color using the HSV color model. The individual components (hue, saturation, value, alpha)
+must be real numbers between 0 and 1.
+
+**Inputs and outputs:**
+
+- `hue`: desired hue of the color
+- `saturation`: desired saturation of the color
+- `value`: desired value of the color
+- `alpha`: desired alpha channel of the color
+- returns the desired color in the packed color representation
+
 ### drawflush
 
 **Definition:** `inline void drawflush()`

@@ -78,3 +78,12 @@ for i in 1 .. SIZE - 1 do
 end;
 
 stopProcessor();
+
+
+def bbb(y)
+    ccc(y);
+end;
+
+def ccc(z)
+    print(z);
+end;

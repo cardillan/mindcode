@@ -246,7 +246,7 @@ end;
 
 ### Parallel iteration
 
-It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. THe only requirement is that all iterator group must be provided with data for the same number of iterations. 
+It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. The only requirement is that all iterator group must be provided with data for the same number of iterations. 
 
 ```Mindcode
 var a[20], b[10];

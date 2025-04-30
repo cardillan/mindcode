@@ -1,0 +1,106 @@
+#set target = 8W;
+#set syntax = strict;
+#set symbolic-labels = true;
+
+const startY = 150;
+const endY = 299;
+const wall = @shrubs;
+const maxShrunk = 150;     // Max wall distance from center
+
+linked noinit decLeft = switch1;
+linked noinit incLeft = switch2;
+linked noinit decRight = switch3;
+linked noinit incRight = switch4;
+linked noinit decLeft10 = switch5;
+linked noinit incLeft10 = switch6;
+linked noinit decRight10 = switch7;
+linked noinit incRight10 = switch8;
+
+linked noinit displayLeft = display1;
+linked noinit displayRight = display2;
+
+var center = @mapw / 2 - 0.5;
+
+begin
+    setrate(1000);
+
+    // Automatically find coordinates
+    var leftX = 0;
+    while getblock(:block, leftX, startY) == @shrubs do leftX++; end;
+
+    var rightX = @mapw - 1;
+    while getblock(:block, rightX, startY) == @shrubs do rightX--; end;
+
+    while true do
+        shrinkWall(decLeft,    out leftX,  -1, 1);
+        expandWall(incLeft,    out leftX,  +1, 1);
+        expandWall(decRight,   out rightX, -1, 1);
+        shrinkWall(incRight,   out rightX, +1, 1);
+        shrinkWall(decLeft10,  out leftX,  -1, 10);
+        expandWall(incLeft10,  out leftX,  +1, 10);
+        expandWall(decRight10, out rightX, -1, 10);
+        shrinkWall(incRight10, out rightX, +1, 10);
+
+        displayNumber(displayLeft, center - leftX + 0.5);
+        displayNumber(displayRight, rightX - center + 0.5);
+
+        if @this.radar(:enemy, :any, :any, :distance, 0) != null then
+            // An enemy unit was found: wave has started
+            var i = 0;
+            do
+                var block = getlink(i);
+                if block.@displayWidth > 0 then     // A display
+                    i++;
+                else
+                    setblock(:block, @air, block.@x, block.@y, 0, 0);
+                end;
+            while i < @links;
+            stopProcessor();
+        end;
+    end;
+end;
+
+void displayNumber(display, number)
+    reset();
+    translate(display.@displayWidth / 2, display.@displayHeight / 2);
+    scale(3.8, 3.8);
+    col(%[green]);
+
+    clear(0, 0, 0);
+    print(number);
+    drawPrint(0, 2, :center);
+    // For somewhat bolder font
+    print(number);
+    drawPrint(0.25, 2, :center);
+    drawflush(display);
+end;
+
+inline void expandWall(switch, in out x, direction, steps)
+    if switch.enabled then
+        for var i in 0 ... steps do
+            if abs(center - x) > 1 then
+                buildWall(x, wall);
+                x += direction;
+            end;
+        end;
+        switch.enabled = false;
+    end;
+end;
+
+inline void shrinkWall(switch, in out x, direction, steps)
+    if switch.enabled then
+        for var i in 0 ... steps do
+            if abs(center - x) <= maxShrunk - 1 then
+                x += direction;
+                buildWall(x, @air);
+            end;
+        end;
+        switch.enabled = false;
+    end;
+end;
+
+noinline void buildWall(x, material)
+    for var y in startY .. endY do
+        setblock(:block, material, x, y, 0, 0);
+    end;
+end;

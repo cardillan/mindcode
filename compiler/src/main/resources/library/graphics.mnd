@@ -41,6 +41,52 @@ void unpackcolor(packedColor, out r, out g, out b, out a)
     a = (bits & (0xFF <<  0)) / (255 <<  0);
 end;
 
+/**
+ * Allows to redefine the alpha channel of an existing color. When used with constant value of alpha and a built-in
+ * color literal (e.g. `@colorSalmon`), the value will be compile-time evaluated. When a named color literal is used
+ * (e.g. `%[salmon]`), compile time evaluation is not possible.
+ *
+ * This function is significantly more efficient than unpacking the color into individual color channels
+ * and repackaging them back.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `color`: the color to modify, in packed color format
+ * - `alpha`: new value of the alpha channel, 0 to 255
+ * - return the packed color representation of the altered color.
+ */
+def setAlpha(color, alpha)
+    return color - (color % %00000100) + alpha * %00000001;
+end;
+
+/**
+ * Creates a packed color using the HSV color model. The individual components (hue, saturation, value, alpha)
+ * must be real numbers between 0 and 1.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `hue`: desired hue of the color
+ * - `saturation`: desired saturation of the color
+ * - `value`: desired value of the color
+ * - `alpha`: desired alpha channel of the color
+ * - returns the desired color in the packed color representation
+ */
+def packHsv(hue, saturation, value, alpha)
+    var h = floor(hue * 6);
+    var f = hue * 6 - h;
+    var p = value * (1 - saturation);
+    var q = value * (1 - f * saturation);
+    var t = value * (1 - saturation + f * saturation);
+
+    case h
+        when 0 then packcolor(value, t, p, alpha);
+        when 1 then packcolor(q, value, p, alpha);
+        when 2 then packcolor(p, value, t, alpha);
+        when 3 then packcolor(p, q, value, alpha);
+        when 4 then packcolor(t, p, value, alpha);
+        else packcolor(value, p, q, alpha);
+    end;
+end;
 
 /**
  * Clears the processor's graphics buffer without outputting the contents into any display. Equivalent to

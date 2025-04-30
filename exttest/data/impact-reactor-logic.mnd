@@ -322,3 +322,12 @@ def update_reactors_desired()
         REACTORS_DESIRED = min(5, needed + REACTORS_DESIRED);
     end;
 end;
+
+
+def bbb(y)
+    ccc(y);
+end;
+
+def ccc(z)
+    print(z);
+end;
