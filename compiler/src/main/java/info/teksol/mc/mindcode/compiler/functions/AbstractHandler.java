@@ -108,7 +108,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
 
         List<String> strArguments = arguments.stream()
                 .filter(a -> !a.type().isUnused() && !a.type().isFunctionName())
-                .map(a -> a.type().isKeyword() || a.type().isSelector() ? ":" + a.name() : a.type().isOutput() ? "out " + a.name() : a.name())
+                .map(a -> a.type().isSelector() ? ":" + a.name() : a.type().isOutput() ? "out " + a.name() : a.name())
                 .collect(Collectors.toList());
 
         str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");

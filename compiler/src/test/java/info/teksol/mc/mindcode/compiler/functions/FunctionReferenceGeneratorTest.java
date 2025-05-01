@@ -85,6 +85,20 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             w.println();
             w.print(PREAMBLE.replaceAll("\n", System.lineSeparator()));
             w.println();
+            w.println("# Index");
+            w.println();
+
+            for (ProcessorEdition edition : ProcessorEdition.values()) {
+                w.println("* " + edition.getTitle());
+
+                for (Opcode opcode : Opcode.values()) {
+                    // Does this opcode exist in edition?
+                    if (opcode.isVirtual() || processor.getOpcodeVariants().stream().noneMatch(v -> v.edition() == edition && v.opcode() == opcode)) {
+                        continue;
+                    }
+                    w.println("  * [Instruction `" + opcode + "`](#instruction-" + opcode + ")");
+                }
+            }
 
             for (ProcessorEdition edition : ProcessorEdition.values()) {
                 boolean first = true;
@@ -96,6 +110,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
                     }
 
                     if (first) {
+                        w.println();
                         w.println("# " + edition.getTitle());
                         w.println();
                         if (edition == WORLD_PROCESSOR) {
@@ -150,6 +165,16 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         if (!sample.note().isEmpty()) {
             w.print("<br/>");
             w.print(sample.note().replace('\'', '`'));
+        } else {
+            sample.instruction().getTypedArguments().stream()
+                    .filter(arg -> arg.type().isKeyword())
+                    .forEach(arg -> {
+                        w.print("<br/>`");
+                        w.print(arg.argument().toMlog());
+                        w.print("` - one of `:");
+                        w.print(String.join("`, `:", processor.getParameterValues(arg.type())));
+                        w.print("`.");
+                    });
         }
         w.print("|`");
         w.print(LogicInstructionPrinter.toString(processor, sample.instruction()));
