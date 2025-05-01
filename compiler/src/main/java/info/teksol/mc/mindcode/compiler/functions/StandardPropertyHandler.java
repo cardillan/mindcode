@@ -20,10 +20,10 @@ class StandardPropertyHandler extends AbstractHandler implements PropertyHandler
     }
 
     @Override
-    protected String generateCall(List<NamedParameter> arguments) {
+    protected String generateCall(List<NamedParameter> arguments, boolean useKeywordPrefixes) {
         NamedParameter block = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.BLOCK);
         Objects.requireNonNull(block);
-        String methodCall = super.generateCall(arguments);
+        String methodCall = super.generateCall(arguments, useKeywordPrefixes);
         return methodCall.contains(" = ")
                 ? methodCall.replace(" = ", " = " + block.name() + '.')
                 : block.name() + '.' + methodCall;

@@ -5,9 +5,7 @@ import info.teksol.mc.mindcode.compiler.functions.FunctionMapper.FunctionSample;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.mindcode.logic.opcodes.*;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +16,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.W;
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.WORLD_PROCESSOR;
@@ -41,6 +41,9 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             Output parameters are optional, and you may omit them if you don't need the value they return. Mindcode allows
             you to omit all optional argument, but in this case the entire instruction will be considered useless
             and may be removed by the optimizer.
+            
+            Instruction names in this documentation are present as they appear in Mindustry user interface. Examples of
+            generated code use mlog opcodes.
             """;
 
     private static final String[] navigation = {
@@ -53,6 +56,12 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
     };
 
     private static final AstContext STATIC_AST_CONTEXT = AstContext.createStaticRootNode();
+
+    private static final Set<Opcode> RELEASED_OPCODES =
+            MindustryOpcodeVariants.getSpecificOpcodeVariants(ProcessorVersion.V7A, W)
+                    .stream()
+                    .map(OpcodeVariant::opcode)
+                    .collect(Collectors.toSet());
 
     @Test
     void createFunctionReferenceForV6() throws IOException {
@@ -96,7 +105,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
                     if (opcode.isVirtual() || processor.getOpcodeVariants().stream().noneMatch(v -> v.edition() == edition && v.opcode() == opcode)) {
                         continue;
                     }
-                    w.println("  * [Instruction `" + opcode + "`](#instruction-" + opcode + ")");
+                    w.println("  * [Instruction `" + instructionName(opcode) + "`](#instruction-" + linkify(opcode) + ")");
                 }
             }
 
@@ -143,9 +152,11 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         }
 
         w.println();
-        w.println("## Instruction `" + opcode + "`");
+        w.println("## Instruction `" + instructionName(opcode) + "`");
         w.println();
         w.println(opcode.getDescription());
+        w.println();
+        w.println("[Yruei's documentation](" + yrueiDocsLink(opcode) + ")");
         w.println();
         String padding1 = String.join("", Collections.nCopies(80, "&nbsp;"));
         String padding2 = String.join("", Collections.nCopies(50, "&nbsp;"));
@@ -179,5 +190,29 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         w.print("|`");
         w.print(LogicInstructionPrinter.toString(processor, sample.instruction()));
         w.println("`|");
+    }
+
+    private static String instructionName(Opcode opcode) {
+        String s = opcode.getName();
+        StringBuilder result = new StringBuilder(s.length() + 3);
+
+        for(int i = 0; i < s.length(); ++i) {
+            char c = s.charAt(i);
+            if (i > 0 && Character.isUpperCase(c)) {
+                result.append(' ');
+            }
+
+            result.append(c);
+        }
+
+        return result.toString();
+    }
+
+    private static String linkify(Opcode opcode) {
+        return instructionName(opcode).toLowerCase().replace(' ', '-');
+    }
+
+    private static String yrueiDocsLink(Opcode opcode) {
+        return "https://yrueii.github.io/MlogDocs/#" + (RELEASED_OPCODES.contains(opcode) ? linkify(opcode) : "bleeding-edge");
     }
 }

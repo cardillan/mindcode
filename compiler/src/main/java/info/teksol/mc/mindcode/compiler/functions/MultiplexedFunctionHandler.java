@@ -49,7 +49,7 @@ class MultiplexedFunctionHandler extends AbstractHandler implements FunctionHand
     }
 
     @Override
-    protected String generateCall(List<NamedParameter> arguments) {
+    protected String generateCall(List<NamedParameter> arguments, boolean useKeywordPrefixes) {
         throw new UnsupportedOperationException("Not supported for MultiplexedFunctionHandler");
     }
 }

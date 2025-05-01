@@ -91,7 +91,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
     }
 
     public String generateSampleCall() {
-        return generateCall(new ArrayList<>(opcodeVariant.namedParameters()));
+        return generateCall(new ArrayList<>(opcodeVariant.namedParameters()), false);
     }
 
     @Override
@@ -99,7 +99,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         return generateSecondaryCall(new ArrayList<>(opcodeVariant.namedParameters()), true);
     }
 
-    protected String generateCall(List<NamedParameter> arguments) {
+    protected String generateCall(List<NamedParameter> arguments, boolean useKeywordPrefixes) {
         StringBuilder str = new StringBuilder();
         NamedParameter result = CollectionUtils.removeFirstMatching(arguments, a -> a.type() == InstructionParameterType.RESULT);
         if (result != null) {
@@ -108,7 +108,8 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
 
         List<String> strArguments = arguments.stream()
                 .filter(a -> !a.type().isUnused() && !a.type().isFunctionName())
-                .map(a -> a.type().isSelector() ? ":" + a.name() : a.type().isOutput() ? "out " + a.name() : a.name())
+                .map(a -> useKeywordPrefixes && a.type().isKeyword() || a.type().isSelector() ?
+                        ":" + a.name() : a.type().isOutput() ? "out " + a.name() : a.name())
                 .collect(Collectors.toList());
 
         str.append(getName()).append("(").append(String.join(", ", strArguments)).append(")");
@@ -133,7 +134,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
 
             // Prefer secondary version  when available
             String secondary = generateSecondaryCall(arguments, false);
-            return secondary == null ? generateCall(arguments) : secondary;
+            return secondary == null ? generateCall(arguments, true) : secondary;
         }
         return null;
     }
