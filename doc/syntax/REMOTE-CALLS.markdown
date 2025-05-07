@@ -123,7 +123,7 @@ The above module compiles into this mlog:
 ```mlog
 set .invocations -1
 set :foo*address 9
-set *mainProcessor @this
+set *initialized true
 op add .invocations .invocations 1
 print "Number of method calls: "
 print .invocations
@@ -131,8 +131,7 @@ printflush message1
 wait 1e12
 jump 3 always 0 0
 op mul :foo:b 2 :foo:a
-write :foo:b *mainProcessor ":foo:b"
-write true *mainProcessor ":foo*finished"
+set :foo*finished true
 jump 3 always 0 0
 ```
 

@@ -7,6 +7,8 @@ import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeParser.AstModuleContext;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Objects;
+
 @NullMarked
 public abstract class AbstractParserTest extends AbstractTestBase {
 
@@ -15,7 +17,8 @@ public abstract class AbstractParserTest extends AbstractTestBase {
     }
 
     protected AstModuleContext parse(ExpectedMessages expectedMessages, InputFiles inputFiles) {
-        return process(expectedMessages, inputFiles, null, c -> c.getParseTree(inputFiles.getMainInputFile()));
+        return Objects.requireNonNull(process(expectedMessages, inputFiles, null,
+                c -> c.getParseTree(inputFiles.getMainInputFile())));
     }
 
     protected void assertParses(String source) {

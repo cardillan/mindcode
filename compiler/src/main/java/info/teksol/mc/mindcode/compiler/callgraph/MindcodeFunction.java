@@ -35,7 +35,6 @@ public class MindcodeFunction {
     private Map<String, AstFunctionParameter> parameterMap = Map.of();
 
     private List<FunctionParameter> parameters = List.of();
-    private List<FunctionParameter> localParameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";
 
@@ -187,20 +186,9 @@ public class MindcodeFunction {
         return parameters;
     }
 
-    public List<FunctionParameter> getLocalParameters() {
-        return localParameters;
-    }
-
     /// @return function parameter at given index
     public FunctionParameter getParameter(int index) {
         return parameters.get(index);
-    }
-
-    /// Provides access to local parameters. Local parameters differ from remote parameters
-    /// for remote calls.
-    /// @return function local parameter at given index
-    public FunctionParameter getLocalParameter(int index) {
-        return localParameters.get(index);
     }
 
     public boolean isInputFunctionParameter(LogicVariable variable) {
@@ -358,8 +346,7 @@ public class MindcodeFunction {
                Collectors.toMap(AstFunctionParameter::getName, v -> v));
 
         parameters = getDeclaredParameters().stream()
-                .map(p -> (FunctionParameter) LogicVariable.parameter(p, this)).toList();
-        localParameters = parameters;
+                .map(p -> (FunctionParameter) LogicVariable.parameter(p, this, isRemote())).toList();
     }
 
     public void createRemoteParameters(CodeAssembler assembler, LogicVariable processor) {
@@ -369,7 +356,7 @@ public class MindcodeFunction {
     }
 
     private RemoteVariable createRemoteParameter(AstFunctionParameter parameter, CodeAssembler assembler, LogicVariable processor) {
-        return new RemoteVariable(parameter.sourcePosition(), processor,
+        return new RemoteVariable(parameter.sourcePosition(), processor, parameter.getName(),
                 LogicString.create(parameter.sourcePosition(),prefix + ":" + parameter.getName()),
                 assembler.nextTemp(), parameter.isInput(), parameter.isOutput());
     }

@@ -2,10 +2,12 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
 
+@NullMarked
 public class StructuredValueStore extends CompoundValueStore {
     private final String name;
     private final Map<String, ValueStore> members;

@@ -25,13 +25,14 @@ begin
     setrate(1000);
 
     // Automatically find coordinates
-    var leftX = 0;
-    while getblock(:block, leftX, startY) == @shrubs do leftX++; end;
+    var leftX = floor(center);
+    do while getblock(:block, --leftX, (startY + endY) / 2) == @air; leftX++;
 
-    var rightX = @mapw - 1;
-    while getblock(:block, rightX, startY) == @shrubs do rightX--; end;
+    var rightX = floor(center) + 1;
+    do while getblock(:block, ++rightX, (startY + endY) / 2) == @air; rightX--;
 
     while true do
+        wait(1e-15);
         shrinkWall(decLeft,    out leftX,  -1, 1);
         expandWall(incLeft,    out leftX,  +1, 1);
         expandWall(decRight,   out rightX, -1, 1);
@@ -79,7 +80,7 @@ inline void expandWall(switch, in out x, direction, steps)
     if switch.enabled then
         for var i in 0 ... steps do
             if abs(center - x) > 1 then
-                buildWall(x, wall);
+                replaceBlock(x, @air, wall);
                 x += direction;
             end;
         end;
@@ -92,15 +93,17 @@ inline void shrinkWall(switch, in out x, direction, steps)
         for var i in 0 ... steps do
             if abs(center - x) <= maxShrunk - 1 then
                 x += direction;
-                buildWall(x, @air);
+                replaceBlock(x, wall, @air);
             end;
         end;
         switch.enabled = false;
     end;
 end;
 
-noinline void buildWall(x, material)
+noinline void replaceBlock(x, from, to)
     for var y in startY .. endY do
-        setblock(:block, material, x, y, 0, 0);
+        if getblock(:block, x, y) == from then
+            setblock(:block, to, x, y, 0, 0);
+        end;
     end;
 end;

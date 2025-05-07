@@ -23,7 +23,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
             PRESERVED, ValueMutability.IMMUTABLE, "0");
 
     public static final LogicVariable STACK_POINTER = LogicVariable.preserved("*sp");
-    public static final LogicVariable MAIN_PROCESSOR = LogicVariable.globalPreserved("*mainProcessor");
+    public static final LogicVariable INITIALIZED = LogicVariable.preserved("*initialized");
     public static final LogicVariable INVALID = LogicVariable.preserved("*invalid");
 
     private static final String RETURN_VALUE = "*retval";
@@ -41,6 +41,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     protected final boolean input;
     protected final boolean output;
     protected final boolean optional;
+    protected final boolean preserved;
 
     // Copy constructor
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability,
@@ -57,6 +58,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.input = input;
         this.output = output;
         this.optional = false;
+        this.preserved = false;
     }
 
     // For block/parameter
@@ -72,6 +74,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.input = false;
         this.output = false;
         this.optional = false;
+        this.preserved = false;
     }
 
     // Global/main
@@ -88,11 +91,12 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.input = false;
         this.output = false;
         this.optional = optional;
+        this.preserved = false;
     }
 
     // Local/parameter
     private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String functionName,
-            String functionPrefix, String name, String mlog, boolean noinit, boolean input, boolean output) {
+            String functionPrefix, String name, String mlog, boolean noinit, boolean input, boolean output, boolean preserved) {
         super(argumentType, ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = Objects.requireNonNull(functionPrefix);
@@ -110,6 +114,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         this.input = input;
         this.output = output;
         this.optional = false;
+        this.preserved = preserved;
     }
 
     @Override
@@ -154,7 +159,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isPreserved() {
-        return getType() == PRESERVED || getType() == GLOBAL_PRESERVED;
+        return preserved || getType() == PRESERVED || getType() == GLOBAL_PRESERVED;
     }
 
     @Override
@@ -239,14 +244,14 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable local(AstIdentifier identifier, String functionName, String functionPrefix, String mlogSuffix, boolean noinit) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, functionName,
                 functionPrefix, identifier.getName(), functionPrefix + ":" + identifier.getName() + mlogSuffix,
-                noinit, false, false);
+                noinit, false, false, false);
     }
 
-    public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function) {
+    public static LogicVariable parameter(AstFunctionParameter parameter, MindcodeFunction function, boolean preserved) {
         AstIdentifier identifier = parameter.getIdentifier();
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE, function.getName(),
                 function.getPrefix(), identifier.getName(), function.getPrefix() + ":" + identifier.getName(),
-                false, parameter.isInput(), parameter.isOutput());
+                false, parameter.isInput(), parameter.isOutput(), preserved);
     }
 
     public static LogicVariable temporary(String name) {
@@ -260,25 +265,28 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     public static LogicVariable fnRetVal(MindcodeFunction function) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE,
-                function.getPrefix() + RETURN_VALUE, false, false, true);
+                function.getPrefix() + RETURN_VALUE, false, false, true, function.isRemote());
     }
 
-    public static LogicVariable fnAddress(MindcodeFunction function) {
+    public static LogicVariable fnAddress(MindcodeFunction function, @Nullable LogicVariable remoteProcessor) {
+        String mlog = remoteProcessor == null
+                ? function.getPrefix() + FUNCTION_ADDRESS
+                : function.getPrefix() + "*" + remoteProcessor.getName() + FUNCTION_ADDRESS;
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_ADDRESS,
-                function.getPrefix() + FUNCTION_ADDRESS, false, false, true);
+                mlog, false, false, true, false);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function) {
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED,
-                function.getPrefix() + FUNCTION_FINISHED, false, false, true);
+                function.getPrefix() + FUNCTION_FINISHED, false, false, true, true);
     }
 
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 functionName, functionPrefix, functionPrefix + RETURN_VALUE,
-                functionPrefix + RETURN_VALUE, false, false, true);
+                functionPrefix + RETURN_VALUE, false, false, true, false);
     }
 
     public static LogicVariable fnRetAddr(String functionPrefix) {

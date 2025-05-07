@@ -1,7 +1,10 @@
 package info.teksol.mc.util;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.*;
 
+@NullMarked
 public class StringSimilarity {
 
     // Implementation of the Levenshtein Edit Distance

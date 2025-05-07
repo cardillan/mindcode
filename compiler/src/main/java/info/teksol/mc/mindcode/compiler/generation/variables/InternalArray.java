@@ -46,6 +46,7 @@ public class InternalArray extends AbstractArrayStore {
             CodeAssembler assembler = MindcodeCompiler.getContext().assembler();
             return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.range(0, size)
                     .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
+                            identifier.getName() + "[" + index + "]",
                             LogicString.create(LogicVariable.arrayVariableMlog(identifier, index)),
                             assembler.nextTemp(), false, false)).toList(), true);
         } else {

@@ -1,5 +1,8 @@
 package info.teksol.mc.messages;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public class WARN {
     public static final String ABSOLUTE_ADDRESSING = "Unable to meet the requirement for symbolic links. Some portions of the program still depend on absolute addressing.";
     public static final String BUILT_IN_VARIABLE_NOT_RECOGNIZED = "Built-in variable '%s' not recognized.";

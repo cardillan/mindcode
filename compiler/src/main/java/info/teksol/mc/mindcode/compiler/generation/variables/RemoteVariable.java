@@ -15,16 +15,18 @@ import java.util.function.Consumer;
 public class RemoteVariable implements FunctionParameter {
     private final SourcePosition sourcePosition;
     private final LogicVariable processor;
-    private final LogicValue variableName;
+    private final String name;
+    private final LogicValue remoteName;
     private final LogicVariable transferVariable;
     private final boolean input;
     private final boolean output;
 
-    public RemoteVariable(SourcePosition sourcePosition, LogicVariable processor, LogicValue variableName, LogicVariable transferVariable,
+    public RemoteVariable(SourcePosition sourcePosition, LogicVariable processor, String name, LogicValue remoteName, LogicVariable transferVariable,
             boolean input, boolean output) {
         this.sourcePosition = sourcePosition;
         this.processor = processor;
-        this.variableName = variableName;
+        this.name = name;
+        this.remoteName = remoteName;
         this.transferVariable = transferVariable;
         this.input = input;
         this.output = output;
@@ -34,13 +36,13 @@ public class RemoteVariable implements FunctionParameter {
         return processor;
     }
 
-    public LogicValue getVariableName() {
-        return variableName;
+    public LogicValue getRemoteName() {
+        return remoteName;
     }
 
     @Override
     public String getName() {
-        return "";
+        return name;
     }
 
     @Override
@@ -70,24 +72,24 @@ public class RemoteVariable implements FunctionParameter {
 
     @Override
     public LogicValue getValue(ContextfulInstructionCreator creator) {
-        creator.createRead(transferVariable, processor, variableName);
+        creator.createRead(transferVariable, processor, remoteName);
         return transferVariable;
     }
 
     @Override
     public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-        creator.createRead(target, processor, variableName);
+        creator.createRead(target, processor, remoteName);
     }
 
     @Override
     public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
-        creator.createWrite(value, processor, variableName);
+        creator.createWrite(value, processor, remoteName);
     }
 
     @Override
     public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        creator.createWrite(transferVariable, processor, variableName);
+        creator.createWrite(transferVariable, processor, remoteName);
     }
 
     @Override
@@ -97,6 +99,6 @@ public class RemoteVariable implements FunctionParameter {
 
     @Override
     public void storeValue(ContextfulInstructionCreator creator) {
-        creator.createWrite(transferVariable, processor, variableName);
+        creator.createWrite(transferVariable, processor, remoteName);
     }
 }

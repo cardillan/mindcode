@@ -170,14 +170,15 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         assert node.getProcessor() != null;
         LogicVariable processor = (LogicVariable) evaluate(node.getProcessor());
 
+        // Only initialize statically bound processors
+        if (processor.getType() != BLOCK) return;
+
         // Generate guard code for processor
-        LogicString mainProcessorMlog = LogicVariable.MAIN_PROCESSOR.getMlogString();
+        LogicString initializedName = LogicVariable.INITIALIZED.getMlogString();
         LogicVariable tmp = assembler.unprotectedTemp();
         LogicLabel label = assembler.createNextLabel();
-        assembler.createRead(tmp, processor, mainProcessorMlog);
-        assembler.createJump(label, Condition.EQUAL, tmp, LogicNull.NULL);
-
-        assembler.createWrite(LogicBuiltIn.THIS, processor, mainProcessorMlog);
+        assembler.createRead(tmp, processor, initializedName);
+        assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicBoolean.TRUE);
 
         // Initialize function addresses and function parameters
         // Create function output variables
@@ -185,14 +186,13 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 .filter(f -> f.getModule().getRemoteProcessor() == node.getProcessor() && f.isUsed())
                 .forEach(function -> {
                     function.createRemoteParameters(assembler, processor);
-                    LogicVariable v = LogicVariable.fnAddress(function);
-                    assembler.createRead(v, processor, v.getMlogString());
+                    assembler.createRead(LogicVariable.fnAddress(function, processor), processor,
+                            LogicVariable.fnAddress(function, null).getMlogString());
 
-                    Map<String, ValueStore> members = function.getDeclaration().getParameters()
+                    Map<String, ValueStore> members = function.getParameters()
                             .stream()
-                            .filter(AstFunctionParameter::isOutput)
-                            .collect(Collectors.toMap(AstFunctionParameter::getName,
-                                    (parameter -> LogicVariable.parameter(parameter, function))));
+                            .filter(FunctionParameter::isOutput)
+                            .collect(Collectors.toMap(FunctionParameter::getName, p -> p));
                     StructuredValueStore variable = new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
                     variables.registerRemoteCallStore(function.getDeclaration().getIdentifier(), variable);
                 });
@@ -244,7 +244,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
                 processArray(modifiers, specification, processor);
             } else {
-                RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor,
+                RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor, name,
                         LogicVariable.global(identifier).getMlogString(), assembler.nextTemp(), false, false);
 
                 variables.registerRemoteVariable(identifier, variable);

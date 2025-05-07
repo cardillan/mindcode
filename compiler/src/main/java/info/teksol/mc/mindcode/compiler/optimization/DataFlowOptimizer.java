@@ -810,6 +810,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             // but they do break the control flow and therefore need to be handled here.
             if (!variableStates.isIsolated() && instruction instanceof JumpInstruction jump
                     && !context.matches(ARRAY, REMOTE_INIT)
+                    && !jump.getAstContext().matches(ARRAY, REMOTE_INIT)
                     && (context.matches(AstContextType.RETURN, FLOW_CONTROL) ||
                         !getLabelInstruction(jump.getTarget()).belongsTo(localContext))) {
 
@@ -1012,6 +1013,8 @@ class DataFlowOptimizer extends BaseOptimizer {
             case PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PARAMETER -> false;
 
             case LOCAL_VARIABLE, FUNCTION_RETVAL -> {
+                if (variable.isPreserved()) yield false;
+
                 // Function output variables cannot be eliminated inside their functions - at this point we have no
                 // information whether they're read somewhere. Outside their functions they're processed normally
                 // (can be optimized freely).

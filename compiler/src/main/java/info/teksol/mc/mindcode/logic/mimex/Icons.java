@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.logic.mimex;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.LogicString;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.io.BufferedReader;
@@ -15,6 +16,7 @@ import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@NullMarked
 public class Icons {
     public static final String RESOURCE_NAME = "mimex-icons.txt";
 

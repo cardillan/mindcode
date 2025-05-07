@@ -1,9 +1,12 @@
 package info.teksol.mc.util;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+@NullMarked
 public class EnumUtils {
 
     public static <E extends Enum<E>> Map<String, E> createValueMap(E[] values) {

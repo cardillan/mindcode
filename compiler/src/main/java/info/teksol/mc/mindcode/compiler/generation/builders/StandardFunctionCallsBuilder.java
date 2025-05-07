@@ -9,12 +9,8 @@ import info.teksol.mc.mindcode.compiler.functions.BaseFunctionMapper;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
-import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
-import info.teksol.mc.mindcode.compiler.generation.variables.IdentifierFunctionArgument;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -231,7 +227,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         return returnValue;
     }
 
-    private LogicValue handleStacklessFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
+    private ValueStore handleStacklessFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
         assert function.getLabel() != null;
         String functionPrefix = function.getPrefix();
 
@@ -257,7 +253,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         retrieveFunctionParameters(function, arguments, false);
-        return passReturnValue(function);
+        return passReturnValue(function, null);
     }
 
     private List<LogicVariable> getStackVariables(MindcodeFunction function, List<FunctionArgument> arguments) {
@@ -279,7 +275,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         return new ArrayList<>(result);
     }
 
-    private LogicValue handleRecursiveFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
+    private ValueStore handleRecursiveFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments) {
         assert function.getLabel() != null;
         LogicVariable stack = stackTracker.getStackMemory();
 
@@ -307,10 +303,10 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             variables.forEach(v -> assembler.createPop(stack, v));
         }
 
-        return passReturnValue(function);
+        return passReturnValue(function, null);
     }
 
-    private LogicValue handleRemoteFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments, boolean async) {
+    private ValueStore handleRemoteFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments, boolean async) {
         assert function.getModule().getRemoteProcessor() != null;
         LogicVariable processor = (LogicVariable) evaluate(function.getModule().getRemoteProcessor());
 
@@ -320,19 +316,21 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         LogicVariable finished = LogicVariable.fnFinished(function);
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
-        assembler.createSet(finished, LogicBoolean.FALSE);
-        assembler.createWrite(LogicVariable.fnAddress(function), processor, LogicString.create("@counter"));
+        assembler.createWrite(LogicBoolean.FALSE, processor, finished.getMlogString());
+        assembler.createWrite(LogicVariable.fnAddress(function, processor), processor, LogicString.create("@counter"));
 
         if (async) return LogicVoid.VOID;
 
-        SideEffects sideEffects = createRemoteCallSideEffects(function);
         LogicLabel label = assembler.createNextLabel();
-        assembler.createYieldExecution().setSideEffects(sideEffects);
-        assembler.createJump(label, Condition.EQUAL, finished, LogicBoolean.FALSE);
+        assembler.createYieldExecution();
+        LogicVariable tmp = assembler.nextTemp();
+        assembler.createRead(tmp, processor, finished.getMlogString());
+        assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         retrieveFunctionParameters(function, arguments, false);
-        return passReturnValue(function);
+
+        return passReturnValue(function, processor);
     }
 
     private @Nullable MindcodeFunction verifyRemoteFunctionName(AstFunctionCall call) {
@@ -363,35 +361,36 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
     }
 
-    private SideEffects createRemoteCallSideEffects(MindcodeFunction function) {
-        List<LogicVariable> outputs = new ArrayList<>();
-        function.getLocalParameters().stream()
-                .filter(FunctionParameter::isOutput)
-                .map(LogicVariable.class::cast)
-                .forEach(outputs::add);
-        if (!function.isVoid()) {
-            outputs.add(LogicVariable.fnRetVal(function));
-        }
-
-        return SideEffects.writes(outputs);
-    }
-
     public ValueStore handleFinished(AstFunctionCall call) {
         MindcodeFunction function = verifyRemoteFunctionName(call);
-        return function == null ? LogicVariable.INVALID : LogicVariable.fnFinished(function);
+        if (function == null) return LogicVariable.INVALID;
+
+        assert function.getModule().getRemoteProcessor() != null;
+        LogicVariable processor = (LogicVariable) evaluate(function.getModule().getRemoteProcessor());
+
+        return new RemoteVariable(call.sourcePosition(), processor, "finished",
+                LogicVariable.fnFinished(function).getMlogString(), assembler.nextTemp(),
+                false, false);
     }
 
     public ValueStore handleAwait(AstFunctionCall call) {
         MindcodeFunction function = verifyRemoteFunctionName(call);
         if (function == null) return LogicVariable.INVALID;
-        SideEffects sideEffects = createRemoteCallSideEffects(function);
+
+        assert function.getModule().getRemoteProcessor() != null;
+        LogicVariable processor = (LogicVariable) evaluate(function.getModule().getRemoteProcessor());
 
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
         LogicLabel label = assembler.createNextLabel();
-        assembler.createYieldExecution().setSideEffects(sideEffects);
-        assembler.createJump(label, Condition.EQUAL, LogicVariable.fnFinished(function), LogicBoolean.FALSE);
+        assembler.createYieldExecution();
+        LogicVariable tmp = assembler.nextTemp();
+        assembler.createRead(tmp, processor, LogicVariable.fnFinished(function).getMlogString());
+        assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
         assembler.clearSubcontextType();
-        return LogicVariable.fnRetVal(function);
+
+        return new RemoteVariable(function.getSourcePosition(), processor, function.getName() + "()",
+                LogicVariable.fnRetVal(function).getMlogString(),
+                assembler.nextTemp(), false, false);
     }
 
     /// Returns a predicate which detects misplaced input arguments. Such arguments need to be handled specifically
@@ -490,7 +489,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         for (int i = 0; i < arguments.size(); i++) {
             FunctionArgument argument = arguments.get(i);
             if (argument.isOutput()) {
-                FunctionParameter parameter = function.getLocalParameter(i);
+                FunctionParameter parameter = function.getParameter(i);
                 if (misplacedOutput(function, argument, parameter)) {
                     LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, parameter.getValue(assembler));
@@ -504,7 +503,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         finalizers.forEach(t -> t.e1().setValue(assembler, t.e2()));
     }
 
-    private LogicValue passReturnValue(MindcodeFunction function) {
+    private ValueStore passReturnValue(MindcodeFunction function, @Nullable LogicVariable processor) {
         if (function.isVoid()) {
             return LogicVoid.VOID;
         } else if (variables.currentFunction().isRepeatedCall(function)) {
@@ -516,12 +515,20 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             // that received return values from functions.
             final LogicVariable resultVariable = assembler.nextNodeResultTemp();
             assembler.setSubcontextType(function, AstSubcontextType.RETURN_VALUE);
-            assembler.createSet(resultVariable, LogicVariable.fnRetVal(function));
+            if (processor != null) {
+                assembler.createRead(resultVariable, processor, LogicVariable.fnRetVal(function).getMlogString());
+            } else {
+                assembler.createSet(resultVariable, LogicVariable.fnRetVal(function));
+            }
             return resultVariable;
         } else {
             // Use the function return value directly - there's only one place where it is produced
             // within this function's call tree
-            return LogicVariable.fnRetVal(function);
+            return processor != null
+                    ? new RemoteVariable(function.getSourcePosition(), processor, function.getName() + "()",
+                        LogicVariable.fnRetVal(function).getMlogString(),assembler.nextTemp(),
+                        false, false)
+                    :   LogicVariable.fnRetVal(function);
         }
     }
 }

@@ -8,6 +8,8 @@ import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
+import java.util.Objects;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
@@ -19,7 +21,8 @@ class CallGraphCreatorTest extends AbstractTestBase {
     }
 
     private CallGraph buildCallGraph(ExpectedMessages expectedMessages, InputFiles inputFiles) {
-        return process(expectedMessages, inputFiles, null, MindcodeCompiler::getCallGraph);
+        return Objects.requireNonNull(process(expectedMessages, inputFiles, null,
+                MindcodeCompiler::getCallGraph));
     }
 
     private MindcodeFunction find(CallGraph graph, String name) {

@@ -1,5 +1,8 @@
 package info.teksol.mc.messages;
 
+import org.jspecify.annotations.NullMarked;
+
+@NullMarked
 public class ERR {
     public static final String ALLOCATION_MULTIPLE_HEAP = "Multiple heap allocation declarations.";
     public static final String ALLOCATION_MULTIPLE_STACK = "Multiple stack allocation declarations.";

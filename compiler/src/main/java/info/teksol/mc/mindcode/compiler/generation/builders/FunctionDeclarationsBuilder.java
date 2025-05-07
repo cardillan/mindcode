@@ -5,7 +5,6 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
-import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -99,7 +98,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
             assembler.setSubcontextType(AstSubcontextType.REMOTE_INIT, 1.0);
             assembler.createLabel(LogicLabel.symbolic("*setAddr-" + function.getName()).withoutStateTransfer());
             assembler.createInstruction(Opcode.OP, Operation.ADD,
-                    LogicVariable.fnAddress(function), LogicBuiltIn.COUNTER, LogicNumber.ONE);
+                    LogicVariable.fnAddress(function, null), LogicBuiltIn.COUNTER, LogicNumber.ONE);
             assembler.createJumpUnconditional(LogicLabel.symbolic("*retAddr-" + function.getName()).withoutStateTransfer());
             assembler.clearSubcontextType();
         }
@@ -108,21 +107,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         assembler.createLabel(function.getLabel().setRemote());
         compileFunctionBody(function);
 
-        // Return value
-        if (!function.isVoid()) {
-            assembler.createWrite(LogicVariable.fnRetVal(function), LogicVariable.MAIN_PROCESSOR,
-                    LogicVariable.fnRetVal(function).getMlogString());
-        }
-
-        // Output parameters
-        function.getParameters().stream()
-                .filter(FunctionParameter::isOutput)
-                .map(LogicVariable.class::cast)
-                .forEach(p -> assembler.createWrite(p, LogicVariable.MAIN_PROCESSOR,p.getMlogString()));
-
-        // Finished flag
-        assembler.createWrite(LogicBoolean.TRUE, LogicVariable.MAIN_PROCESSOR,
-                LogicVariable.fnFinished(function).getMlogString());
+        assembler.createSet(LogicVariable.fnFinished(function), LogicBoolean.TRUE);
 
         // Jump to remote wait
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);

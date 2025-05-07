@@ -19,7 +19,7 @@ import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
-import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
+import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
@@ -164,7 +164,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         callGraph.getFunctions().stream()
                 .filter(f -> f.isRemote() && f.isEntryPoint())
                 .forEach(this::setupRemoteFunctionAddress);
-        assembler.createSet(LogicVariable.MAIN_PROCESSOR, LogicBuiltIn.THIS);
+        assembler.createSet(LogicVariable.INITIALIZED, LogicBoolean.TRUE);
         assembler.clearContextType(program);
 
         assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);
@@ -185,7 +185,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
             assembler.createJumpUnconditional(LogicLabel.symbolic("*setAddr-" + function.getName()).withoutStateTransfer());
             assembler.createLabel(LogicLabel.symbolic("*retAddr-" + function.getName()).withoutStateTransfer());
         } else {
-            assembler.createSetAddress(LogicVariable.fnAddress(function), Objects.requireNonNull(function.getLabel()));
+            assembler.createSetAddress(LogicVariable.fnAddress(function, null), Objects.requireNonNull(function.getLabel()));
         }
     }
 

@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler;
 
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+@NullMarked
 public enum CallType {
     NONE            (-1),
     INLINE          (MindcodeLexer.INLINE),

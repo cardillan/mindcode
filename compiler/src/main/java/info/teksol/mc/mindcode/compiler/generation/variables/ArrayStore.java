@@ -3,9 +3,11 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
+@NullMarked
 public interface ArrayStore extends ValueStore {
 
     ArrayType getArrayType();

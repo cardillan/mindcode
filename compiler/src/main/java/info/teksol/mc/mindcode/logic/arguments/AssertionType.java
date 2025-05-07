@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments;
 
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Map;
@@ -7,6 +8,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@NullMarked
 public enum AssertionType {
     any(num -> true, obj -> true),
     notNull(num -> true, Objects::nonNull),
@@ -34,7 +36,7 @@ public enum AssertionType {
     }
 
     public interface AssertionTypeObjLambda {
-        boolean get(Object obj);
+        boolean get(@Nullable Object obj);
     }
 
     public interface AssertionTypeLambda {

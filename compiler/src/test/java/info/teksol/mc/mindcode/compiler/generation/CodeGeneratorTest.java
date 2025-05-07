@@ -197,7 +197,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                         """,
                 createInstruction(SETADDR, ":foo*address", label(0)),
                 createInstruction(SETADDR, ":bar*address", label(1)),
-                createInstruction(SET, "*mainProcessor", "@this"),
+                createInstruction(SET, "*initialized", "true"),
                 createInstruction(LABEL, label(2)),
                 createInstruction(WAIT, "1e12"),
                 createInstruction(JUMP, label(2), "always"),
@@ -206,8 +206,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                 createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
                 createInstruction(SET, ":foo:b", tmp(0)),
                 createInstruction(LABEL, label(3)),
-                createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
-                createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
+                createInstruction(SET, ":foo*finished", "true"),
                 createInstruction(JUMP, label(2), "always"),
                 createInstruction(END),
                 createInstruction(LABEL, label(1)),
@@ -215,8 +214,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                 createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
                 createInstruction(SET, ":bar*retval", tmp(2)),
                 createInstruction(LABEL, label(4)),
-                createInstruction(WRITE, ":bar*retval", "*mainProcessor", q(":bar*retval")),
-                createInstruction(WRITE, "true", "*mainProcessor", q(":bar*finished")),
+                createInstruction(SET, ":bar*finished", "true"),
                 createInstruction(JUMP, label(2), "always")
         );
     }
@@ -244,7 +242,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                 createInstruction(SET, ".invocations", "-1"),
                 createInstruction(SETADDR, ":foo*address", label(0)),
                 createInstruction(SETADDR, ":bar*address", label(1)),
-                createInstruction(SET, "*mainProcessor", "@this"),
+                createInstruction(SET, "*initialized", "true"),
                 createInstruction(LABEL, label(3)),
                 createInstruction(OP, "add", ".invocations", ".invocations", "1"),
                 createInstruction(PRINT, q("Number of invocations: ")),
@@ -258,8 +256,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                 createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
                 createInstruction(SET, ":foo:b", tmp(0)),
                 createInstruction(LABEL, label(5)),
-                createInstruction(WRITE, ":foo:b", "*mainProcessor", q(":foo:b")),
-                createInstruction(WRITE, "true", "*mainProcessor", q(":foo*finished")),
+                createInstruction(SET, ":foo*finished", "true"),
                 createInstruction(JUMP, label(3), "always"),
                 createInstruction(END),
                 createInstruction(LABEL, label(1)),
@@ -267,8 +264,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                 createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
                 createInstruction(SET, ":bar*retval", tmp(2)),
                 createInstruction(LABEL, label(6)),
-                createInstruction(WRITE, ":bar*retval", "*mainProcessor", q(":bar*retval")),
-                createInstruction(WRITE, "true", "*mainProcessor", q(":bar*finished")),
+                createInstruction(SET, ":bar*finished", "true"),
                 createInstruction(JUMP, label(3), "always")
         );
     }

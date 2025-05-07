@@ -1,11 +1,13 @@
 package info.teksol.mc.profile;
 
 import info.teksol.mc.util.EnumUtils;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Map;
 
+@NullMarked
 public enum FileReferences {
     PATH,
     URI,

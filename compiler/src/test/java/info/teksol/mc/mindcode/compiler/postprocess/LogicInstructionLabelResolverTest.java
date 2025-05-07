@@ -29,7 +29,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         remote a[10];
                         """,
                 """
-                        set *mainProcessor @this
+                        set *initialized true
                         wait 1e12
                         jump 1 always 0 0
                         end
