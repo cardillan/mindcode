@@ -7,6 +7,7 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.IntermediateValue;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
@@ -173,22 +174,27 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         // Only initialize statically bound processors
         if (processor.getType() != BLOCK) return;
 
+        // Remote signature
+        String remoteSignature = createRemoteSignature(callGraph.getFunctions().stream()
+                .filter(f -> f.getModule().getRemoteProcessor() == node.getProcessor())
+                .map(MindcodeFunction::getDeclaration));
+
         // Generate guard code for processor
-        LogicString initializedName = LogicVariable.INITIALIZED.getMlogString();
+        LogicString initializedName = LogicVariable.REMOTE_SIGNATURE.getMlogString();
         LogicVariable tmp = assembler.unprotectedTemp();
         LogicLabel label = assembler.createNextLabel();
         assembler.createRead(tmp, processor, initializedName);
-        assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicBoolean.TRUE);
+        assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicString.create(remoteSignature));
 
-        // Initialize function addresses and function parameters
+        // Assign remote function indexes
+        callGraph.assignRemoteFunctionIndexes(f -> f.getModule().getRemoteProcessor() == node.getProcessor());
+
+        // Initialize function parameters
         // Create function output variables
         callGraph.getFunctions().stream()
                 .filter(f -> f.getModule().getRemoteProcessor() == node.getProcessor() && f.isUsed())
                 .forEach(function -> {
                     function.createRemoteParameters(assembler, processor);
-                    assembler.createRead(LogicVariable.fnAddress(function, processor), processor,
-                            LogicVariable.fnAddress(function, null).getMlogString());
-
                     Map<String, ValueStore> members = function.getParameters()
                             .stream()
                             .filter(FunctionParameter::isOutput)

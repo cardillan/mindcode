@@ -38,6 +38,10 @@ public class MindcodeFunction {
     private @Nullable LogicLabel label;
     private String prefix = "";
 
+    /// Index of the function in the remote call dispatch table
+    /// The dispatch table starts at index 1.
+    private int remoteIndex = 0;
+
     /// Number of times the function will be compiled into the code
     /// At most 1 for non-inline function, any number for inlined functions
     private int placementCount = 0;
@@ -132,6 +136,14 @@ public class MindcodeFunction {
     /// @return true if this function is declared `remote`
     public boolean isRemote() {
         return declaration.isRemote();
+    }
+
+    public int getRemoteIndex() {
+        return remoteIndex;
+    }
+
+    public void setRemoteIndex(int remoteIndex) {
+        this.remoteIndex = remoteIndex;
     }
 
     /// @return true if this function cannot be inlined

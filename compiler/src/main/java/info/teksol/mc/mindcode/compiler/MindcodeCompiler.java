@@ -62,6 +62,9 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 @NullMarked
 public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
         CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext, VariablesContext {
+
+    public static final String REMOTE_PROTOCOL_VERSION = "v1";
+
     // MindcodeCompiler serves as a compiler context too
     private static final ThreadLocal<MindcodeCompiler> context = new ThreadLocal<>();
 

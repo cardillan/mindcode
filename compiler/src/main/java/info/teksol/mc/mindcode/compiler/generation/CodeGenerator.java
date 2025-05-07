@@ -6,6 +6,7 @@ import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CallType;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -19,8 +20,8 @@ import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
-import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
@@ -30,13 +31,17 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
+import info.teksol.mc.util.CRC64;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @NullMarked
 public class CodeGenerator extends AbstractMessageEmitter {
@@ -98,6 +103,15 @@ public class CodeGenerator extends AbstractMessageEmitter {
         functionCompiler = new FunctionDeclarationsBuilder(this, context);
     }
 
+    public String createRemoteSignature(Stream<AstFunctionDeclaration> functions) {
+        String text = functions
+                .sorted(Comparator.comparing(AstFunctionDeclaration::getName))
+                .map(AstFunctionDeclaration::toSourceCode)
+                .collect(Collectors.joining("\n"));
+
+        return Long.toHexString(CRC64.hash1(text)) + ":" + MindcodeCompiler.REMOTE_PROTOCOL_VERSION;
+    }
+
     public boolean isLocalContext() {
         return nested > 0;
     }
@@ -121,6 +135,10 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void generateCode() {
+        if (!program.isMainProgram()) {
+            generateRemoteJumpTable();
+        }
+
         variables.enterFunction(callGraph.getMain(), List.of());
         assembler.enterAstNode(program);
         visit(program, false);
@@ -159,13 +177,26 @@ public class CodeGenerator extends AbstractMessageEmitter {
         }
     }
 
-    private void generateRemoteInitialization() {
-        assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
-        callGraph.getFunctions().stream()
-                .filter(f -> f.isRemote() && f.isEntryPoint())
-                .forEach(this::setupRemoteFunctionAddress);
-        assembler.createSet(LogicVariable.INITIALIZED, LogicBoolean.TRUE);
+    private void generateRemoteJumpTable() {
+        List<MindcodeFunction> remoteFunctions = callGraph.assignRemoteFunctionIndexes(f -> f.isRemote() && f.isEntryPoint());
+        if (remoteFunctions.isEmpty()) return;
+
+        assembler.setContextType(program, AstContextType.JUMPS, AstSubcontextType.REMOTE_INIT);
+        LogicLabel jumpTableLabel = assembler.nextLabel().withoutStateTransfer();
+        assembler.createJumpUnconditional(jumpTableLabel);
+        remoteFunctions.stream().map(function -> Objects.requireNonNull(function.getLabel())).forEach(assembler::createJumpUnconditional);
+        assembler.createLabel(jumpTableLabel);
         assembler.clearContextType(program);
+    }
+
+    private void generateRemoteInitialization() {
+        List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isRemote() && f.isEntryPoint()).toList();
+        if (!remoteFunctions.isEmpty()) {
+            assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
+            String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
+            assembler.createSet(LogicVariable.REMOTE_SIGNATURE, LogicString.create(remoteSignature));
+            assembler.clearContextType(program);
+        }
 
         assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
@@ -178,15 +209,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.createJumpUnconditional(remoteWaitLabel);
         assembler.clearSubcontextType();
         assembler.clearContextType(program);
-    }
-
-    private void setupRemoteFunctionAddress(MindcodeFunction function) {
-        if (profile.isSymbolicLabels()) {
-            assembler.createJumpUnconditional(LogicLabel.symbolic("*setAddr-" + function.getName()).withoutStateTransfer());
-            assembler.createLabel(LogicLabel.symbolic("*retAddr-" + function.getName()).withoutStateTransfer());
-        } else {
-            assembler.createSetAddress(LogicVariable.fnAddress(function, null), Objects.requireNonNull(function.getLabel()));
-        }
     }
 
     private Optional<MindcodeFunction> findBackgroundProcessFunction() {

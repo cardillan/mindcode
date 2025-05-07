@@ -23,12 +23,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
             PRESERVED, ValueMutability.IMMUTABLE, "0");
 
     public static final LogicVariable STACK_POINTER = LogicVariable.preserved("*sp");
-    public static final LogicVariable INITIALIZED = LogicVariable.preserved("*initialized");
+    public static final LogicVariable REMOTE_SIGNATURE = LogicVariable.preserved("*signature");
     public static final LogicVariable INVALID = LogicVariable.preserved("*invalid");
 
     private static final String RETURN_VALUE = "*retval";
     private static final String RETURN_ADDRESS = "*retaddr";
-    private static final String FUNCTION_ADDRESS = "*address";
     private static final String FUNCTION_FINISHED = "*finished";
 
     protected final SourcePosition sourcePosition;
@@ -266,15 +265,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(EMPTY, FUNCTION_RETVAL,
                 function.getName(), function.getPrefix(), function.getPrefix() + RETURN_VALUE,
                 function.getPrefix() + RETURN_VALUE, false, false, true, function.isRemote());
-    }
-
-    public static LogicVariable fnAddress(MindcodeFunction function, @Nullable LogicVariable remoteProcessor) {
-        String mlog = remoteProcessor == null
-                ? function.getPrefix() + FUNCTION_ADDRESS
-                : function.getPrefix() + "*" + remoteProcessor.getName() + FUNCTION_ADDRESS;
-        return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
-                function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_ADDRESS,
-                mlog, false, false, true, false);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function) {

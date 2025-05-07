@@ -1,6 +1,8 @@
-package info.teksol.mc.mindcode.tests;
+package info.teksol.mc.util;
 
 import org.jspecify.annotations.NullMarked;
+
+import java.nio.charset.StandardCharsets;
 
 /// CRC64 checksum calculator based on the polynomial specified in ISO 3309. The
 /// implementation is based on the following publication:
@@ -40,6 +42,10 @@ public final class CRC64 {
             sum = (sum >>> 8) ^ LOOKUPTABLE[lookupidx];
         }
         return sum;
+    }
+
+    public static long hash1(String text) {
+        return hash1(text.getBytes(StandardCharsets.UTF_8));
     }
 
     private CRC64() {

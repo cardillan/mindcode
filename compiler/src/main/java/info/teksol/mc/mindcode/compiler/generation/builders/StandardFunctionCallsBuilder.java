@@ -317,7 +317,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         LogicVariable finished = LogicVariable.fnFinished(function);
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
         assembler.createWrite(LogicBoolean.FALSE, processor, finished.getMlogString());
-        assembler.createWrite(LogicVariable.fnAddress(function, processor), processor, LogicString.create("@counter"));
+        assembler.createWrite(LogicNumber.create(function.getRemoteIndex()), processor, LogicString.create("@counter"));
 
         if (async) return LogicVoid.VOID;
 

@@ -17,6 +17,7 @@ import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.util.CRC64;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
@@ -104,9 +105,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
                 String.format("%-40s %12s   %-16s   %-16s", "Name", "Instructions", "Source CRC", "Compiled CRC"));
         String info = String.format(Locale.US,
                 "%-40s %12d   %016X   %016X",
-                name + ":", instructions,
-                CRC64.hash1(code.getBytes(StandardCharsets.UTF_8)),
-                CRC64.hash1(compiled.getBytes(StandardCharsets.UTF_8)));
+                name + ":", instructions, CRC64.hash1(code), CRC64.hash1(compiled));
         System.out.println(info);
         results.computeIfAbsent(getClass().getSimpleName(), k -> new ConcurrentLinkedDeque<>()).add(info);
     }

@@ -1216,18 +1216,20 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             b = 2 * a;
                         end;
                         """,
-                    createInstruction(SETADDR, ":foo*address", label(0)),
-                    createInstruction(SET, "*initialized", "true"),
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(WAIT, "1e12"),
                     createInstruction(JUMP, label(1), "always"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, "*signature", q("974935c9f6b9c503:v1")),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(WAIT, "1e12"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
                     createInstruction(SET, ":foo:b", tmp(0)),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(3)),
                     createInstruction(SET, ":foo*finished", "true"),
-                    createInstruction(JUMP, label(1), "always")
+                    createInstruction(JUMP, label(2), "always")
             );
         }
 
@@ -1240,22 +1242,24 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             return a++ / 2;
                         end;
                         """,
-                    createInstruction(SETADDR, ":foo*address", label(0)),
-                    createInstruction(SET, "*initialized", "true"),
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(WAIT, "1e12"),
                     createInstruction(JUMP, label(1), "always"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, "*signature", q("c2c29e7275993c36:v1")),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(WAIT, "1e12"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(SET, tmp(0), ":foo:a"),
                     createInstruction(OP, "add", ":foo:a", ":foo:a", "1"),
                     createInstruction(OP, "div", tmp(1), tmp(0), "2"),
                     createInstruction(SET, ":foo*retval", tmp(1)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(JUMP, label(3), "always"),
                     createInstruction(SET, ":foo*retval", "null"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(3)),
                     createInstruction(SET, ":foo*finished", "true"),
-                    createInstruction(JUMP, label(1), "always")
+                    createInstruction(JUMP, label(2), "always")
             );
         }
 

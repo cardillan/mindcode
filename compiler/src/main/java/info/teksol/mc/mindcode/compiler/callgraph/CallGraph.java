@@ -4,8 +4,10 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 /// Holds information about calls between individual user-defined functions. Information is gathered by inspecting
@@ -23,6 +25,20 @@ public final class CallGraph {
 
     public static CallGraph createEmpty() {
         return new CallGraph(new FunctionDefinitions(mindcodeMessage -> {}));
+    }
+
+    public List<MindcodeFunction> assignRemoteFunctionIndexes(Predicate<MindcodeFunction> functionSelector) {
+        List<MindcodeFunction> remoteFunctions = getFunctions().stream()
+                .filter(functionSelector)
+                .sorted(Comparator.comparing(f -> f.getDeclaration().getName()))
+                .toList();
+
+        int index = 0;
+        for (MindcodeFunction function : remoteFunctions) {
+            function.setRemoteIndex(++index);
+        }
+
+        return remoteFunctions;
     }
 
     /// Returns the representation of the main function, that is the main program body.

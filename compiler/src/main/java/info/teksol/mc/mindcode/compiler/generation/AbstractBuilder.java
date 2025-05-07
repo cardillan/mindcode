@@ -4,10 +4,7 @@ import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstRange;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
@@ -25,6 +22,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Stream;
 
 /// Base class for code builders. Each builder generates code for a subset os AST node types.
 /// Instances of these classes need to be registered in CodeGenerator, and no two classes may handle the
@@ -105,6 +103,10 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
     protected SourcePosition pos(List<? extends SourceElement> elements) {
         return elements.getFirst().sourcePosition().upTo(elements.getLast().sourcePosition());
+    }
+
+    public String createRemoteSignature(Stream<AstFunctionDeclaration> functions) {
+        return codeGenerator.createRemoteSignature(functions);
     }
 
     protected boolean isLocalContext() {

@@ -6,8 +6,10 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -94,15 +96,6 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void appendRemoteFunctionDeclaration(MindcodeFunction function) {
-        if (profile.isSymbolicLabels()) {
-            assembler.setSubcontextType(AstSubcontextType.REMOTE_INIT, 1.0);
-            assembler.createLabel(LogicLabel.symbolic("*setAddr-" + function.getName()).withoutStateTransfer());
-            assembler.createInstruction(Opcode.OP, Operation.ADD,
-                    LogicVariable.fnAddress(function, null), LogicBuiltIn.COUNTER, LogicNumber.ONE);
-            assembler.createJumpUnconditional(LogicLabel.symbolic("*retAddr-" + function.getName()).withoutStateTransfer());
-            assembler.clearSubcontextType();
-        }
-
         assert function.getLabel() != null;
         assembler.createLabel(function.getLabel().setRemote());
         compileFunctionBody(function);

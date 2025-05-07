@@ -1,8 +1,10 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.BitSet;
@@ -26,7 +28,8 @@ class UnreachableCodeEliminator extends BaseOptimizer {
 
         List<LogicInstruction> program = optimizationContext.getProgram();
         for (int index = program.size() - 1; index >= 0; index--) {
-            if (unused.get(index)) {
+            LogicInstruction ix = program.get(index);
+            if (unused.get(index) && (!ix.getAstContext().matches(AstContextType.JUMPS) || ix.getOpcode() == Opcode.END)) {
                 removeInstruction(index);
             }
         }
