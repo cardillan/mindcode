@@ -252,6 +252,14 @@ done = finished(processor1.foo);
 
 The function returns `true` if the asynchronous call to the given remote function is finished.
 
+The `finished()` function has an optional output parameter that receives the return value of the function when it successfully completes:
+
+```
+if finished(foo, out value) then
+    println("The resulting value of foo is ", value);
+end;
+```
+
 Function return value may be obtained via the `await()` function (not to be confused with the `wait()` function mapped to the `wait` instruction):
 
 ```

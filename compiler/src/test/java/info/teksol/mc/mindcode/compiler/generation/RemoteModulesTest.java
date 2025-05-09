@@ -130,6 +130,34 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesFinished() {
+            assertCompilesTo("""
+                            require "remote.mnd" remote processor1;
+                            async(foo(10));
+                            do while !finished(foo, out z);
+                            print(z, foo.count);
+                            """,
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(READ, tmp(8), "processor1", q("*signature")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(8), q("fe196785ecf7cd23:v1")),
+                    createInstruction(WRITE, "10", "processor1", q(":foo:a")),
+                    createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
+                    createInstruction(WRITE, "2", "processor1", q("@counter")),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(READ, tmp(9), "processor1", q(":foo*finished")),
+                    createInstruction(READ, tmp(10), "processor1", q(":foo*retval")),
+                    createInstruction(SET, ":z", tmp(10)),
+                    createInstruction(OP, "equal", tmp(11), tmp(9), "false"),
+                    createInstruction(JUMP, label(3), "notEqual", tmp(11), "false"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(PRINT, ":z"),
+                    createInstruction(READ, tmp(12), "processor1", q(":foo:count")),
+                    createInstruction(PRINT, tmp(12))
+            );
+        }
+
+        @Test
         void compilesMultipleModules() {
             assertCompilesTo("""
                             require "remote.mnd" remote processor1;

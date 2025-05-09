@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added module signatures to the remote call mechanism prevent binding to an incompatible remote module.
 * Added support for [using the same module in multiple remote processors](doc/syntax/REMOTE-CALLS.markdown#multiple-instantiations-of-a-remote-module).
+* Added an optional output parameter to the `finish()` function, which receives the resulting value of the remote function call if finished.  
 
 ### Changed
 

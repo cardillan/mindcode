@@ -343,11 +343,13 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         return passReturnValue(function, processor);
     }
 
-    private @Nullable RemoteFunction verifyRemoteFunctionName(AstFunctionCall call) {
+    private @Nullable RemoteFunction verifyRemoteFunctionName(AstFunctionCall call, boolean outputValue) {
         if (call.getArguments().size() != 1) {
-            error(call, FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
-                    call.getFunctionName(), 1, call.getArguments().size());
-            return null;
+            if (!outputValue || call.getArguments().size() != 2 || !call.getArgument(1).hasOutModifier()) {
+                error(call, FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
+                        call.getFunctionName(), outputValue ? 1 : 2, call.getArguments().size());
+                return null;
+            }
         }
 
         AstExpression functionNode = Objects.requireNonNull(call.getArgument(0).getExpression());
@@ -428,16 +430,26 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     public ValueStore handleFinished(AstFunctionCall call) {
-        RemoteFunction remote = verifyRemoteFunctionName(call);
+        RemoteFunction remote = verifyRemoteFunctionName(call, true);
         if (remote == null) return LogicVariable.INVALID;
 
-        return new RemoteVariable(call.sourcePosition(), remote.processor, "finished",
-                LogicVariable.fnFinished(remote.function).getMlogString(), assembler.nextTemp(),
-                false, false);
+        final List<FunctionArgument> arguments = processArguments(call);
+
+        assembler.setSubcontextType(remote.function, AstSubcontextType.REMOTE_CALL);
+        LogicVariable result = assembler.nextNodeResultTemp();
+        assembler.createRead(result, remote.processor, LogicVariable.fnFinished(remote.function).getMlogString());
+        if (arguments.size() > 1) {
+            LogicVariable tmp = assembler.nextTemp();
+            assembler.createRead(tmp, remote.processor, LogicVariable.fnRetVal(remote.function).getMlogString());
+            arguments.get(1).setValue(assembler, tmp);
+        }
+        assembler.clearSubcontextType();
+
+        return result;
     }
 
     public ValueStore handleAwait(AstFunctionCall call) {
-        RemoteFunction remote = verifyRemoteFunctionName(call);
+        RemoteFunction remote = verifyRemoteFunctionName(call, false);
         if (remote == null) return LogicVariable.INVALID;
 
         assembler.setSubcontextType(remote.function, AstSubcontextType.REMOTE_CALL);
