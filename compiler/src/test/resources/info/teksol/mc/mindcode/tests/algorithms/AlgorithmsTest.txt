@@ -11,4 +11,4 @@ sorting with heap-sort.mnd:                        54    64559     100.0%   0CEF
 sorting with insert-sort.mnd:                      27    26064     100.0%   0AF6F57A5EBA45E2   F2B842147528A850
 sorting with quick-sort.mnd:                       66    48456      98.4%   24EED06D28A2DCC0   11735B51D1323BE2
 sorting with select-sort.mnd:                      30    35153     100.0%   3F4EE1C8DB9B8B18   5065B9B69217B56E
-storage-display.mnd:                              655      776      24.5%   04F7DC90B38FD002   F8D9D389D041FAEC
+storage-display.mnd:                              714     1185      29.8%   B4ED783B7214A93E   8269067480D05439
