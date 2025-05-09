@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstCaseExpression;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
@@ -23,9 +24,6 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
 @NullMarked
 class CaseSwitcher extends BaseOptimizer {
-    // Activates generating range limiting instructions for case switching.
-    // Only set to false for the purposes of benchmarking.
-    private static final boolean RANGE_LIMITING = true;
 
     public CaseSwitcher(OptimizationContext optimizationContext) {
         super(Optimization.CASE_SWITCHING, optimizationContext);
@@ -63,6 +61,9 @@ class CaseSwitcher extends BaseOptimizer {
         if (context.findSubcontext(CONDITION) == null) {
             return null;
         }
+
+        boolean removeRangeCheck = getProfile().isUnsafeCaseOptimization()
+                && context.node() instanceof AstCaseExpression exp && !exp.isElseDefined();
 
         int removed = 0;
 
@@ -114,19 +115,20 @@ class CaseSwitcher extends BaseOptimizer {
         if (targets.isEmpty()) return null;
 
         // Cost calculation:
-        // Adding three fixed instructions: jump lessThan, jump greaterThan, goto offset
+        // Adding three fixed instructions: [jump lessThan, jump greaterThan, goto offset]
+        // or just one when range check is removed
         // Adding one jump for each value between min and max inclusive (the jump table)
         // Saving one jump per each jump instruction
         int min = targets.firstEntry().getKey();
         int max = targets.lastEntry().getKey();
-        int cost = 3 + (max - min + 1) - removed;
+        int cost = removeRangeCheck ? 1 : 3 + (max - min + 1) - removed;
 
         // New sequence of executed instructions will be: jump lessThan / jump greaterThan / goto offset / jump to branch
         // We save half of the switch jumps on average
-        double benefit = (removed / 2.0 - 4) * context.totalWeight();
+        double benefit = ((removed + 1) / 2.0 - (removeRangeCheck ? 2 : 4)) * context.totalWeight();
 
         return benefit <= 0 || cost > costLimit ? null
-                : new ConvertCaseExpressionAction(context, cost, benefit, variable, targets);
+                : new ConvertCaseExpressionAction(context, cost, benefit, variable, targets, removeRangeCheck);
     }
 
     private OptimizationResult convertCaseExpression(ConvertCaseExpressionAction action, int costLimit) {
@@ -145,7 +147,7 @@ class CaseSwitcher extends BaseOptimizer {
         LogicLabel marker = instructionProcessor.nextLabel();
         List<LogicLabel> labels = IntStream.rangeClosed(min, max).mapToObj(i -> instructionProcessor.nextLabel()).toList();
 
-        if (RANGE_LIMITING) {
+        if (!action.removeRangeCheck) {
             insertInstruction(index++, createJump(newContext, finalLabel, Condition.LESS_THAN, action.variable, LogicNumber.create(min)));
             insertInstruction(index++, createJump(newContext, finalLabel, Condition.GREATER_THAN, action.variable, LogicNumber.create(max)));
         }
@@ -168,12 +170,14 @@ class CaseSwitcher extends BaseOptimizer {
     private class ConvertCaseExpressionAction extends AbstractOptimizationAction {
         private final LogicVariable variable;
         private final NavigableMap<Integer, LogicLabel> targets;
+        private final boolean removeRangeCheck;
 
         public ConvertCaseExpressionAction(AstContext astContext, int cost, double benefit,
-                LogicVariable variable, NavigableMap<Integer, LogicLabel> targets) {
+                LogicVariable variable, NavigableMap<Integer, LogicLabel> targets, boolean removeRangeCheck) {
             super(astContext, cost, benefit);
             this.variable = variable;
             this.targets = targets;
+            this.removeRangeCheck = removeRangeCheck;
         }
 
         @Override

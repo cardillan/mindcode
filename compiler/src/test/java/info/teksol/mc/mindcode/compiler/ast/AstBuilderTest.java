@@ -538,7 +538,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstCaseAlternative(EMPTY, List.of(number((1))), List.of(a)),
                                             new AstCaseAlternative(EMPTY, List.of(number((2))), List.of(b))
                                     ),
-                                    List.of()
+                                    List.of(),
+                                    false
                             )
                     )
             );
@@ -560,7 +561,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             new AstCaseAlternative(EMPTY, List.of(number((1))), List.of(a)),
                                             new AstCaseAlternative(EMPTY, List.of(number((2))), List.of(b))
                                     ),
-                                    List.of(c)
+                                    List.of(c),
+                                    true
                             )
                     )
             );
@@ -577,7 +579,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstCaseExpression(EMPTY,
                                     identifier,
                                     List.of(),
-                                    List.of(c)
+                                    List.of(c),
+                                    true
                             )
                     )
             );
@@ -593,7 +596,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstCaseExpression(EMPTY,
                                     identifier,
                                     List.of(),
-                                    List.of()
+                                    List.of(),
+                                    false
                             )
                     )
             );
@@ -627,7 +631,8 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                                     ),
                                                     List.of(b))
                                     ),
-                                    List.of(c)
+                                    List.of(c),
+                                    true
                             )
                     )
             );

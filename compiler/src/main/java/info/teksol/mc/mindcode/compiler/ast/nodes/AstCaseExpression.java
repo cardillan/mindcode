@@ -14,13 +14,15 @@ public class AstCaseExpression extends AstExpression {
     private final AstExpression expression;
     private final List<AstCaseAlternative> alternatives;
     private final List<AstMindcodeNode> elseBranch;
+    private final boolean elseDefined;
 
-    public AstCaseExpression(SourcePosition sourcePosition, AstExpression expression,
-            List<AstCaseAlternative> alternatives, List<AstMindcodeNode> elseBranch) {
+    public AstCaseExpression(SourcePosition sourcePosition, AstExpression expression, List<AstCaseAlternative> alternatives,
+            List<AstMindcodeNode> elseBranch, boolean elseDefined) {
         super(sourcePosition, children(list(expression), alternatives, elseBranch));
         this.expression = expression;
         this.alternatives = alternatives;
         this.elseBranch = elseBranch;
+        this.elseDefined = elseDefined;
     }
 
     public AstExpression getExpression() {
@@ -35,12 +37,19 @@ public class AstCaseExpression extends AstExpression {
         return elseBranch;
     }
 
+    public boolean isElseDefined() {
+        return elseDefined;
+    }
+
     @Override
     public boolean equals(@Nullable Object o) {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstCaseExpression that = (AstCaseExpression) o;
-        return expression.equals(that.expression) && alternatives.equals(that.alternatives) && elseBranch.equals(that.elseBranch);
+        return expression.equals(that.expression)
+                && alternatives.equals(that.alternatives)
+                && elseBranch.equals(that.elseBranch)
+                && elseDefined == that.elseDefined;
     }
 
     @Override

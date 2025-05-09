@@ -149,7 +149,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                                         refModifier = false
                                                     }
                                                 }
-                                            }
+                                            },
+                                            elseDefined = true
                                         }
                                     },
                                     callType = NONE

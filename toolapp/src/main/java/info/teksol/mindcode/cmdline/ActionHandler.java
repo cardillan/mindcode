@@ -75,6 +75,13 @@ abstract class ActionHandler {
                 .type(Arguments.booleanType("specific", "compatible"));
 
         createArgument(container, defaults,
+                CompilerProfile::isUnsafeCaseOptimization,
+                (profile, arguments, name) -> profile.setUnsafeCaseOptimization(arguments.getBoolean(name)),
+                "--unsafe-case-optimization")
+                .help("omits range checking of case expressions without an else branch during optimization")
+                .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
                 CompilerProfile::getSyntacticMode,
                 (profile, arguments, name) -> profile.setSyntacticMode(arguments.get(name)),
                 "-y", "--syntax")

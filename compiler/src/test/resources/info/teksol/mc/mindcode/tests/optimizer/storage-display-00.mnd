@@ -1,3 +1,5 @@
+#set unsafe-case-optimization = true;
+
 const SLANTED = false;
 
 CONTAINER = null;

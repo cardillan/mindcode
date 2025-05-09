@@ -1,4 +1,5 @@
 #set err-graphics-buffer-overflow = false;
+#set unsafe-case-optimization = true;
 
 // Sizing
 const HEIGHT    = 12;

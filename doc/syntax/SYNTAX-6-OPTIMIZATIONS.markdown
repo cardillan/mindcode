@@ -1084,16 +1084,13 @@ To build the jump table, the minimum and maximum value of existing `when` branch
 
 The first two instructions in the example above (`jump lessThan`, `jump greaterThan`) handle the cases where the input value lies outside the range supported by the jump table. The `op add @counter` instruction then transfers the control to the corresponding specific jump in the jump table and consequently to the proper `when` branch.
 
-The jump table executes at most four instructions on each case expression execution (less if the input value lies outside the supported range). We've mentioned above that the original case statement executes half of the conditional jumps on average. This means that converting the case expression to a jump table only makes sense when there's more than 8 conditional jumps in the case expression.
+The jump table executes at most four instructions on each case expression execution (less if the input value lies outside the supported range). We've mentioned above that the original case statement executes half of the conditional jumps on average. This means that converting the case expression to a jump table only makes sense when there's at least 8 conditional jumps in the case expression.
 
 Notes:
 
 * If you put the more frequent values first in the case expression, and the value distribution is very skewed, converting the case expression to the jump table might actually worsen the average execution time. Mindcode has no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching optimization for your program.
-* If the input value of the case expression could be determined by Mindcode to already lie in a specific range, it would be possible to avoid the `jump lessThan` and/or `jump greaterThan` instructions at the beginning of the jump table, as their function is to ensure the value lies in a proper range. This would provide a potentially 
-  significant additional speedup and is planned for some future version.
-* Currently, there's no limit on the size of the jump table. For a case expression handling values 1 to 10 and then a value of 100, the jump table would have 100 entries. This affects computation of the optimization's benefit, and might make the optimization less favorable compared to other optimizations; however if available space permits 
-  it, such a jump table would be created.
-  
+* Currently, there's no limit on the size of the jump table. For a case expression handling values 1 to 10 and then a value of 100, the jump table would have 100 entries. This affects computation of the optimization's benefit, and might make the optimization less favorable compared to other optimizations; however if available space permits it, such a jump table would be created.
+ 
 ### Preconditions
 
 The following conditions must be met for a case expression to be processed by this optimization:
@@ -1150,6 +1147,12 @@ jump 27 always 0 0
 set *tmp2 "I don't known this number!"
 print *tmp2
 ```
+
+### Unsafe case optimization
+
+When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable to determine this is the case, and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions that do not have an `else` branch. This prevents the range-limiting jumps from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
+
+If you activate the `unsafe-case-optimization` directive, but not all input values are handled in your case expressions, the behavior of the generated code is undefined, when an unhandled input value is encountered. 
 
 ## Array Optimization
 

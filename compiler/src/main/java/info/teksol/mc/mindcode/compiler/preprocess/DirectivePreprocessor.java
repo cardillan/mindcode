@@ -178,24 +178,25 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
     private Map<String, Consumer<AstDirectiveSet>> createOptionHandlers() {
         Map<String, Consumer<AstDirectiveSet>> map = new HashMap<>();
 
-        map.put("auto-printflush",      node -> setBooleanOption(node, profile::setAutoPrintflush));
-        map.put("boolean-eval",         node -> setBooleanOption(node, profile::setShortCircuitEval, "short", "full"));
-        map.put("boundary-checks",      node -> setEnumOption(node, RuntimeChecks::byName, profile::setBoundaryChecks, RuntimeChecks::allowedValues));
-        map.put("function-prefix",      node -> setBooleanOption(node, profile::setShortFunctionPrefix, "short", "long"));
-        map.put("goal",                 node -> setEnumOption(node, GenerationGoal::byName, profile::setGoal, GenerationGoal::allowedValues));
-        map.put("instruction-limit",    node -> setIntOption(node, profile::setInstructionLimit, 1, profile.getMaxInstructionLimit()));
-        map.put("link-guards",          node -> setBooleanOption(node, profile::setLinkedBlockGuards));
-        map.put("mlog-indent",          node -> setIntOption(node, profile::setMlogIndent, 0, CompilerProfile.MAX_MLOG_INDENT));
-        map.put("optimization",         node -> setEnumOption(node, OptimizationLevel::byName, profile::setAllOptimizationLevels, OptimizationLevel::allowedValues));
-        map.put("passes",               node -> setIntOption(node, profile::setOptimizationPasses, 1, profile.getMaxPasses()));
-        map.put("print-unresolved",     node -> setEnumOption(node, FinalCodeOutput::byName, profile::setFinalCodeOutput, FinalCodeOutput::allowedValues));
-        map.put("profile",              this::setProfile);
-        map.put("remarks",              node -> setEnumOption(node, Remarks::byName, profile::setRemarks, Remarks::allowedValues));
-        map.put("sort-variables",       this::setSortVariables);
-        map.put("symbolic-labels",      node ->  setBooleanOption(node, profile::setSymbolicLabels));
-        map.put("syntax",               node ->  setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode, SyntacticMode::allowedValues));
-        map.put("target",               this::setTarget);
-        map.put("target-optimization",  node -> setBooleanOption(node, profile::setTargetOptimization, "specific", "compatible"));
+        map.put("auto-printflush",          node -> setBooleanOption(node, profile::setAutoPrintflush));
+        map.put("boolean-eval",             node -> setBooleanOption(node, profile::setShortCircuitEval, "short", "full"));
+        map.put("boundary-checks",          node -> setEnumOption(node, RuntimeChecks::byName, profile::setBoundaryChecks, RuntimeChecks::allowedValues));
+        map.put("function-prefix",          node -> setBooleanOption(node, profile::setShortFunctionPrefix, "short", "long"));
+        map.put("goal",                     node -> setEnumOption(node, GenerationGoal::byName, profile::setGoal, GenerationGoal::allowedValues));
+        map.put("instruction-limit",        node -> setIntOption(node, profile::setInstructionLimit, 1, profile.getMaxInstructionLimit()));
+        map.put("link-guards",              node -> setBooleanOption(node, profile::setLinkedBlockGuards));
+        map.put("mlog-indent",              node -> setIntOption(node, profile::setMlogIndent, 0, CompilerProfile.MAX_MLOG_INDENT));
+        map.put("optimization",             node -> setEnumOption(node, OptimizationLevel::byName, profile::setAllOptimizationLevels, OptimizationLevel::allowedValues));
+        map.put("passes",                   node -> setIntOption(node, profile::setOptimizationPasses, 1, profile.getMaxPasses()));
+        map.put("print-unresolved",         node -> setEnumOption(node, FinalCodeOutput::byName, profile::setFinalCodeOutput, FinalCodeOutput::allowedValues));
+        map.put("profile",                  this::setProfile);
+        map.put("remarks",                  node -> setEnumOption(node, Remarks::byName, profile::setRemarks, Remarks::allowedValues));
+        map.put("sort-variables",           this::setSortVariables);
+        map.put("symbolic-labels",          node ->  setBooleanOption(node, profile::setSymbolicLabels));
+        map.put("syntax",                   node ->  setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode, SyntacticMode::allowedValues));
+        map.put("target",                   this::setTarget);
+        map.put("target-optimization",      node -> setBooleanOption(node, profile::setTargetOptimization, "specific", "compatible"));
+        map.put("unsafe-case-optimization", node -> setBooleanOption(node, profile::setUnsafeCaseOptimization));
 
 
         for (Optimization optimization : Optimization.LIST) {

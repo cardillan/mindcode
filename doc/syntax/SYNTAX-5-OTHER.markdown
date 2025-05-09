@@ -360,7 +360,7 @@ To use a world-processor variant of Mindcode language, it is necessary to add `W
 
 The same names of version targets is used with the `-t` / `--target` command-line option.
 
-## Option target-optimization
+## Option `target-optimization`
 
 Chooses how Mindcode takes into account the [`target` option](#option-target). Possible values are:
 
@@ -414,6 +414,9 @@ print "tungsten\noxide\ncarbide\n"
 printflush message1
 ```
 
+## Option `unsafe-case-optimization`
+
+This option instructs the compiler to drop range checking when performing case expression optimization. For more information, see [Unsafe case optimization](SYNTAX-6-OPTIMIZATIONS.markdown#unsafe-case-optimization).
 
 ## Individual optimization options
 

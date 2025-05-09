@@ -25,7 +25,7 @@ public abstract class AlgorithmsTestBase extends AbstractProcessorTest {
     @Test
     void storageDisplayTest() throws IOException {
         testAndEvaluateFile("storage-display.mnd",
-                s -> "AMOUNT = 12345;\n" + s,
+                s -> "param AMOUNT = 12345;\n" + s,
                 Map.of("display1", LogicDisplay.createLargeLogicDisplay(ip.getMetadata())),
                 List.of()
         );

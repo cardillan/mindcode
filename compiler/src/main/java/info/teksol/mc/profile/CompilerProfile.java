@@ -58,6 +58,7 @@ public class CompilerProfile {
     private boolean printStackTrace = false;
     private Remarks remarks = Remarks.PASSIVE;
     private boolean targetOptimization = false;
+    private boolean unsafeCaseOptimization = false;
     private boolean shortCircuitEval = false;
     private boolean shortFunctionPrefix = false;
     private boolean signature = true;
@@ -415,6 +416,15 @@ public class CompilerProfile {
 
     public CompilerProfile setTargetOptimization(boolean targetOptimization) {
         this.targetOptimization = targetOptimization;
+        return this;
+    }
+
+    public boolean isUnsafeCaseOptimization() {
+        return unsafeCaseOptimization;
+    }
+
+    public CompilerProfile setUnsafeCaseOptimization(boolean unsafeCaseOptimization) {
+        this.unsafeCaseOptimization = unsafeCaseOptimization;
         return this;
     }
 

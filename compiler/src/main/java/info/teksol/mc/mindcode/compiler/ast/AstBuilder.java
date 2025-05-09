@@ -601,7 +601,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return new AstCaseExpression(pos(ctx),
                 visitAstExpression(ctx.exp),
                 processCaseAlternatives(ctx.alternatives),
-                processBody(ctx.elseBranch));
+                processBody(ctx.elseBranch),
+                ctx.elseBranch != null);
     }
 
     private List<AstCaseAlternative> processCaseAlternatives(@Nullable CaseAlternativesContext ctx) {

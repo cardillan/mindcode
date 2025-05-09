@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added new functions to the [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):
   * Added `setAlpha()` function which takes a packed color as an argument (including e.g. named color literals) and returns a packed color with updated alpha channel.
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
+* Added the [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unsafe-case-optimization) command-line option and compiler directive. 
 
 #### Experimental features
 
