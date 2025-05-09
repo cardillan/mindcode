@@ -96,6 +96,18 @@ class MemberAccessBuilderTest extends AbstractCodeGeneratorTest {
                             a[1].enabled = false;
                             """);
         }
+
+        @Test
+        void refusesUnknownProcessors() {
+            assertGeneratesMessages(
+                    expectedMessages()
+                            .add("Unrecognized remote processor.")
+                            .add("'a' is not an external memory."),
+                    """
+                            var a[2];
+                            processor.a[1] = 10;
+                            """);
+        }
     }
 
     @Nested

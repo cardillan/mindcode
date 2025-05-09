@@ -41,6 +41,7 @@ public class Variables extends AbstractMessageEmitter {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final Map<String, ValueStore> globalVariables;
+    private final Map<String, StructuredValueStore> structuredVariables = new HashMap<>();
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
     private FunctionContext functionContext = new GlobalContext();
 
@@ -93,8 +94,20 @@ public class Variables extends AbstractMessageEmitter {
         return processor.isBlockName(identifier.getName());
     }
 
+    private @Nullable ValueStore putVariable(String name, ValueStore variable) {
+        return globalVariables.put(name, variable);
+    }
+
+    private void putVariableIfAbsent(String name, ValueStore variable) {
+        globalVariables.putIfAbsent(name, variable);
+    }
+
+    private void putStructuredVariable(String name, StructuredValueStore variable) {
+        structuredVariables.put(name, variable);
+    }
+
     private ValueStore registerGlobalVariable(AstIdentifier identifier, ValueStore variable) {
-        ValueStore existing = globalVariables.put(identifier.getName(), variable);
+        ValueStore existing = putVariable(identifier.getName(), variable);
         if (existing != null) {
             throw new MindcodeInternalError("Repeated registration of global variable (existing variable: %s, new variable: %s).",
                     existing, variable);
@@ -103,14 +116,18 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     public void registerRemoteCallStore(AstIdentifier identifier, ValueStore variable) {
-        ValueStore existing = globalVariables.put(identifier.getName(), variable);
+        ValueStore existing = putVariable(identifier.getName(), variable);
         if (existing != null) {
             error(existing, ERR.VARIABLE_MULTIPLE_DECLARATIONS_REMOTE, identifier.getName());
         }
     }
 
+    public void registerStructuredVariable(AstIdentifier identifier, StructuredValueStore structure) {
+        putStructuredVariable(identifier.getName(), structure);
+    }
+
     public void registerRemoteVariable(AstIdentifier identifier, ValueStore variable) {
-        ValueStore existing = globalVariables.put(identifier.getName(), variable);
+        ValueStore existing = putVariable(identifier.getName(), variable);
         if (existing != null) {
             error(existing, ERR.VARIABLE_MULTIPLE_DECLARATIONS, identifier.getName());
         }
@@ -143,7 +160,7 @@ public class Variables extends AbstractMessageEmitter {
     /// @param value compile-time value associated with the constant
     public void createConstant(AstConstant constant, ValueStore value) {
         verifyGlobalDeclaration(constant, constant.getName());
-        globalVariables.putIfAbsent(constant.getConstantName(), value);
+        putVariableIfAbsent(constant.getConstantName(), value);
     }
 
     /// Registers a parameter. Reports possible name clashes.
@@ -158,7 +175,7 @@ public class Variables extends AbstractMessageEmitter {
                 ? LogicParameter.parameter(parameter.getName(), value)
                 : LogicParameter.parameter(new AstIdentifier(SourcePosition.EMPTY, "invalid"), value);
 
-        globalVariables.putIfAbsent(parameter.getParameterName(), result);
+        putVariableIfAbsent(parameter.getParameterName(), result);
         return result;
     }
 
@@ -175,7 +192,7 @@ public class Variables extends AbstractMessageEmitter {
         }
 
         LogicVariable result = LogicVariable.block(linkedTo);
-        globalVariables.putIfAbsent(identifier.getName(), result);
+        putVariableIfAbsent(identifier.getName(), result);
         return result;
     }
 
@@ -193,7 +210,7 @@ public class Variables extends AbstractMessageEmitter {
         }
 
         ValueStore result = getHeapTracker(modifiers).createVariable(identifier, modifiers);
-        globalVariables.putIfAbsent(identifier.getName(), result);
+        putVariableIfAbsent(identifier.getName(), result);
         return result;
     }
 
@@ -214,7 +231,7 @@ public class Variables extends AbstractMessageEmitter {
             result = InternalArray.create(identifier, size, isVolatile, processor);
         }
 
-        globalVariables.putIfAbsent(identifier.getName(), result);
+        putVariableIfAbsent(identifier.getName(), result);
         return result;
     }
 
@@ -304,6 +321,10 @@ public class Variables extends AbstractMessageEmitter {
             return Objects.requireNonNull(globalVariables.get(identifier.getName()));
         }
         return null;
+    }
+
+    public @Nullable StructuredValueStore findStructuredVariable(String name) {
+        return structuredVariables.get(name);
     }
 
     /// Indicates a new function is being processed. Function processing can become nested when

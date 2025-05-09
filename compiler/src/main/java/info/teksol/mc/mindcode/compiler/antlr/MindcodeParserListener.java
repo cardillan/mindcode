@@ -38,6 +38,16 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitExpressionList(MindcodeParser.ExpressionListContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#identifierList}.
+	 * @param ctx the parse tree
+	 */
+	void enterIdentifierList(MindcodeParser.IdentifierListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#identifierList}.
+	 * @param ctx the parse tree
+	 */
+	void exitIdentifierList(MindcodeParser.IdentifierListContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
@@ -407,6 +417,30 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAstSubarray(MindcodeParser.AstSubarrayContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astRemoteArray}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstRemoteArray(MindcodeParser.AstRemoteArrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astRemoteArray}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstRemoteArray(MindcodeParser.AstRemoteArrayContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astRemoteSubarray}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstRemoteSubarray(MindcodeParser.AstRemoteSubarrayContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astRemoteSubarray}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstRemoteSubarray(MindcodeParser.AstRemoteSubarrayContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code astKeyword}
 	 * labeled alternative in {@link MindcodeParser#expression}.

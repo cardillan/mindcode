@@ -18,8 +18,6 @@ generated code use mlog opcodes.
 # Index
 
 * Micro Processor, Logic Processor and Hyper Processor
-  * [Instruction `Read`](#instruction-read)
-  * [Instruction `Write`](#instruction-write)
   * [Instruction `Draw`](#instruction-draw)
   * [Instruction `Print`](#instruction-print)
   * [Instruction `Draw Flush`](#instruction-draw-flush)
@@ -28,14 +26,12 @@ generated code use mlog opcodes.
   * [Instruction `Control`](#instruction-control)
   * [Instruction `Radar`](#instruction-radar)
   * [Instruction `Sensor`](#instruction-sensor)
-  * [Instruction `Set`](#instruction-set)
   * [Instruction `Operation`](#instruction-operation)
   * [Instruction `Lookup`](#instruction-lookup)
   * [Instruction `Pack Color`](#instruction-pack-color)
   * [Instruction `Wait`](#instruction-wait)
   * [Instruction `Stop`](#instruction-stop)
   * [Instruction `End`](#instruction-end)
-  * [Instruction `Jump`](#instruction-jump)
   * [Instruction `Unit Bind`](#instruction-unit-bind)
   * [Instruction `Unit Control`](#instruction-unit-control)
   * [Instruction `Unit Radar`](#instruction-unit-radar)
@@ -48,7 +44,7 @@ generated code use mlog opcodes.
   * [Instruction `Spawn Wave`](#instruction-spawn-wave)
   * [Instruction `Set Rule`](#instruction-set-rule)
   * [Instruction `Flush Message`](#instruction-flush-message)
-  * [Instruction `Cut Scene`](#instruction-cut-scene)
+  * [Instruction `Cutscene`](#instruction-cutscene)
   * [Instruction `Effect`](#instruction-effect)
   * [Instruction `Explosion`](#instruction-explosion)
   * [Instruction `Set Rate`](#instruction-set-rate)
@@ -407,11 +403,11 @@ Display a message on the screen from the text buffer. If the success result vari
 |`message(:announce, duration)`|`message announce duration`|
 |`message(:toast, duration)`|`message toast duration`|
 
-## Instruction `Cut Scene`
+## Instruction `Cutscene`
 
 Manipulate the player camera.
 
-[Yruei's documentation](https://yrueii.github.io/MlogDocs/#cut-scene)
+[Yruei's documentation](https://yrueii.github.io/MlogDocs/#cutscene)
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|

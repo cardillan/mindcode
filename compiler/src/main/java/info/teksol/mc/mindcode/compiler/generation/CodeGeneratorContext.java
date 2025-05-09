@@ -1,6 +1,8 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstAllocation;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstRequire;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
@@ -20,6 +22,7 @@ public interface CodeGeneratorContext extends
     CompileTimeEvaluator compileTimeEvaluator();
     ReturnStack returnStack();
     StackTracker stackTracker();
+    AstModule getModule(AstRequire node);
     void setHeapAllocation(AstAllocation heapAllocation);
     @Nullable AstAllocation heapAllocation();
     MindustryMetadata metadata();

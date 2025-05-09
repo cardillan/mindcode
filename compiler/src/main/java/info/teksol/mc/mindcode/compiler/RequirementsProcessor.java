@@ -41,7 +41,7 @@ public class RequirementsProcessor extends AbstractMessageEmitter {
         this.profile = profile;
     }
 
-    public @Nullable InputFile processRequirement(AstRequire requirement) {
+    public @Nullable InputFile loadFile(AstRequire requirement) {
         if (requirement.isLibrary()) {
             return loadLibrary((AstRequireLibrary) requirement);
         } else if (inputFiles.hasPackagedFile(requirement.getName())) {

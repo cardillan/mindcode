@@ -5,18 +5,21 @@ import info.teksol.mc.common.SourcePosition;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @NullMarked
 @AstNode(printFlat = true)
 public class AstRequireLibrary extends AstRequire {
     private final AstIdentifier library;
-    private final @Nullable AstIdentifier processor;
+    private final SortedSet<AstIdentifier> processors;
 
-    public AstRequireLibrary(SourcePosition sourcePosition, AstIdentifier library, @Nullable AstIdentifier processor) {
+    public AstRequireLibrary(SourcePosition sourcePosition, AstIdentifier library, Collection<AstIdentifier> processors) {
         super(sourcePosition, library);
         this.library = Objects.requireNonNull(library);
-        this.processor = processor;
+        this.processors = new TreeSet<>(processors);
     }
 
     public AstIdentifier getLibrary() {
@@ -34,8 +37,8 @@ public class AstRequireLibrary extends AstRequire {
     }
 
     @Override
-    public @Nullable AstIdentifier getProcessor() {
-        return processor;
+    public SortedSet<AstIdentifier> getProcessors() {
+        return processors;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class AstRequireLibrary extends AstRequire {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstRequireLibrary that = (AstRequireLibrary) o;
-        return library.equals(that.library) && Objects.equals(processor, that.processor);
+        return library.equals(that.library) && Objects.equals(processors, that.processors);
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -59,6 +60,57 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             """,
                     List.of(
                             new AstSubarray(EMPTY,
+                                    new AstIdentifier(EMPTY, "array"),
+                                    new AstRange(EMPTY, number(10), number(20), true)
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
+    class ArraysRemote {
+        @Test
+        void buildsArrayAccess() {
+            assertBuildsTo("""
+                            processor.array[index];
+                            """,
+                    List.of(
+                            new AstArrayAccess(EMPTY,
+                                    new AstIdentifier(EMPTY, "processor"),
+                                    new AstIdentifier(EMPTY, "array"),
+                                    new AstIdentifier(EMPTY, "index")
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsNestedArrayAccess() {
+            assertBuildsTo("""
+                            processor.outer[processor.inner[index]];
+                            """,
+                    List.of(
+                            new AstArrayAccess(EMPTY,
+                                    new AstIdentifier(EMPTY, "processor"),
+                                    new AstIdentifier(EMPTY, "outer"),
+                                    new AstArrayAccess(EMPTY,
+                                            new AstIdentifier(EMPTY, "processor"),
+                                            new AstIdentifier(EMPTY, "inner"),
+                                            new AstIdentifier(EMPTY, "index"))
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsSubarray() {
+            assertBuildsTo("""
+                            processor.array[10 ... 20];
+                            """,
+                    List.of(
+                            new AstSubarray(EMPTY,
+                                    new AstIdentifier(EMPTY, "processor"),
                                     new AstIdentifier(EMPTY, "array"),
                                     new AstRange(EMPTY, number(10), number(20), true)
                             )
@@ -691,7 +743,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             )
                                     )
                             ),
-                            null
+                            Collections.emptySortedSet()
                     )
             );
         }
@@ -734,7 +786,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                             )
                                     )
                             ),
-                            null
+                            Collections.emptySortedSet()
                     )
             );
         }
@@ -1897,7 +1949,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         void buildsLibraryRequire() {
             assertBuildsTo("require math;",
                     List.of(
-                            new AstRequireLibrary(EMPTY, new AstIdentifier(EMPTY, "math"), null)
+                            new AstRequireLibrary(EMPTY, new AstIdentifier(EMPTY, "math"), List.of())
                     )
             );
         }
@@ -1911,7 +1963,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     expectedMessages().add(1, 9, "Error reading file '" + fileName + "'."),
                     "require \"" + fileName + "\";",
                     List.of(
-                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName), null)
+                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName), List.of())
                     )
             );
         }
@@ -1926,7 +1978,22 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     "require \"" + fileName + "\" remote processor1;",
                     List.of(
                             new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName),
-                                    id("processor1"))
+                                    ids("processor1"))
+                    )
+            );
+        }
+
+        @Test
+        void buildsFileRequireRemoteMultiple() {
+            // If this file exists, the test will fail
+            final String fileName = "s6zoH0%IbSsQH4!MOmpu%eDO-H!#Z81dr2xSYGds6xhTzx^V#ie7UNikF$xtYUAi";
+
+            assertBuildsTo(
+                    expectedMessages().add(1, 9, "Error reading file '" + fileName + "'."),
+                    "require \"" + fileName + "\" remote processor1, processor2, processor3;",
+                    List.of(
+                            new AstRequireFile(EMPTY, new AstLiteralString(EMPTY, fileName),
+                                    ids("processor1", "processor2", "processor3"))
                     )
             );
         }

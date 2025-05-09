@@ -75,7 +75,7 @@ public class ERR {
     public static final String FOR_EACH_ITERATORS_VALUES_MISMATCH = "Number of iterator specifications (%d) doesn't match number of value lists (%d).";
     public static final String FOR_EACH_UNBALANCED_GROUPS = "Not enough values to supply this iterator group (provided: %d, required: %d).";
     public static final String FOR_EACH_WRONG_NUMBER_OF_VALUES = "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).";
-    public static final String FUNCTION_CALL_ASYNC_UNSUPPORTED = "Function '%s' cannot be called asynchronously.";
+    public static final String FUNCTION_CALL_ASYNC_UNSUPPORTED = "Function or method '%s' cannot be called asynchronously.";
     public static final String FUNCTION_CALL_NOT_ENOUGH_ARGS = "Not enough arguments to the '%s' function (expected %d or more, found %d).";
     public static final String FUNCTION_CALL_UNDEFINED = "Unknown function '%s'.";
     public static final String FUNCTION_CALL_UNRESOLVED = "Cannot resolve function '%s'.";
@@ -106,7 +106,8 @@ public class ERR {
     public static final String LVALUE_CANNOT_ASSIGN_TO_ARGUMENT = "Function is trying to assign a value to an argument not declared 'out'.";
     public static final String LVALUE_CANNOT_ASSIGN_TO_EXPRESSION = "Cannot assign a value to this expression.";
     public static final String LVALUE_VARIABLE_EXPECTED = "Variable expected.";
-    public static final String METHOD_CALL_UNDEFINED = "Unknown function '%s'.";
+    public static final String METHOD_CALL_UNDEFINED = "Unknown method '%s'.";
+    public static final String METHOD_CALL_UNRESOLVED = "Cannot resolve method '%s'.";
     public static final String MLOG_FIRST_ARGUMENT_NOT_LITERAL = "First argument to the '%s' function must be a string literal.";
     public static final String MLOG_FIRST_ARGUMENT_NO_MODIFIERS = "First argument to the '%s' function must not use any modifier.";
     public static final String MLOG_IN_OUT_KEYWORD_NOT_ALLOWED = "A keyword passed to the '%s' function must not use any modifier.";
@@ -117,6 +118,7 @@ public class ERR {
     public static final String MLOG_VARIABLE_WITHOUT_MODIFIERS = "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.";
     public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
     public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of file '%s'.";
+    public static final String MULTIPLE_PROCESSOR_BINDINGS = "Multiple bindings of processor '%s'.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
     public static final String PARAMETER_VARARGS_NOT_LAST = "Parameter '%s' of function '%s' is declared vararg, but is not last in the parameter list.";
@@ -129,6 +131,8 @@ public class ERR {
     public static final String REMOTE_REQUIRES_TARGET_8 = "Remote functionality requires target 8 or higher.";
     public static final String REMOTE_UNKNOWN_PARAMETER = "Function '%s': unknown output parameter '%s'.";
     public static final String REMOTE_WRONG_ARGUMENT = "The '%s' function requires a remote function name as an argument.";
+    public static final String REMOTE_WRONG_PROCESSOR = "Unrecognized remote processor.";
+    public static final String REMOTE_PROCESSOR_NOT_GLOBAL = "A global variable or a linked block required.";
     public static final String REQUIRE_ERROR_READING_FILE = "Error reading file '%s'.";
     public static final String REQUIRE_ERROR_READING_SYSTEM_FILE = "Error reading system library file '%s'.";
     public static final String REQUIRE_UNKNOWN_SYSTEM_LIBRARY = "Unknown system library '%s'.";

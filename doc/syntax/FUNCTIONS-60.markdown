@@ -18,8 +18,6 @@ generated code use mlog opcodes.
 # Index
 
 * Micro Processor, Logic Processor and Hyper Processor
-  * [Instruction `Read`](#instruction-read)
-  * [Instruction `Write`](#instruction-write)
   * [Instruction `Draw`](#instruction-draw)
   * [Instruction `Print`](#instruction-print)
   * [Instruction `Draw Flush`](#instruction-draw-flush)
@@ -28,10 +26,8 @@ generated code use mlog opcodes.
   * [Instruction `Control`](#instruction-control)
   * [Instruction `Radar`](#instruction-radar)
   * [Instruction `Sensor`](#instruction-sensor)
-  * [Instruction `Set`](#instruction-set)
   * [Instruction `Operation`](#instruction-operation)
   * [Instruction `End`](#instruction-end)
-  * [Instruction `Jump`](#instruction-jump)
   * [Instruction `Unit Bind`](#instruction-unit-bind)
   * [Instruction `Unit Control`](#instruction-unit-control)
   * [Instruction `Unit Radar`](#instruction-unit-radar)

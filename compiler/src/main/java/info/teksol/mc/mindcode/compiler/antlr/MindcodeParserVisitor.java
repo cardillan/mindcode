@@ -29,6 +29,12 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitExpressionList(MindcodeParser.ExpressionListContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#identifierList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitIdentifierList(MindcodeParser.IdentifierListContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
@@ -245,6 +251,20 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAstSubarray(MindcodeParser.AstSubarrayContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astRemoteArray}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstRemoteArray(MindcodeParser.AstRemoteArrayContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astRemoteSubarray}
+	 * labeled alternative in {@link MindcodeParser#lvalue}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstRemoteSubarray(MindcodeParser.AstRemoteSubarrayContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code astKeyword}
 	 * labeled alternative in {@link MindcodeParser#expression}.

@@ -5,18 +5,21 @@ import info.teksol.mc.common.SourcePosition;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.Objects;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 @NullMarked
 @AstNode(printFlat = true)
 public class AstRequireFile extends AstRequire {
     private final AstLiteralString file;
-    private final @Nullable AstIdentifier processor;
+    private final SortedSet<AstIdentifier> processors;
 
-    public AstRequireFile(SourcePosition sourcePosition, AstLiteralString file, @Nullable AstIdentifier processor) {
+    public AstRequireFile(SourcePosition sourcePosition, AstLiteralString file, Collection<AstIdentifier> processors) {
         super(sourcePosition, file);
         this.file = Objects.requireNonNull(file);
-        this.processor = processor;
+        this.processors = new TreeSet<>(processors);
     }
 
     public AstLiteralString getFile() {
@@ -34,8 +37,8 @@ public class AstRequireFile extends AstRequire {
     }
 
     @Override
-    public @Nullable AstIdentifier getProcessor() {
-        return processor;
+    public SortedSet<AstIdentifier> getProcessors() {
+        return processors;
     }
 
     @Override
@@ -44,7 +47,7 @@ public class AstRequireFile extends AstRequire {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstRequireFile that = (AstRequireFile) o;
-        return file.equals(that.file) && Objects.equals(processor, that.processor);
+        return file.equals(that.file) && Objects.equals(processors, that.processors);
     }
 
     @Override

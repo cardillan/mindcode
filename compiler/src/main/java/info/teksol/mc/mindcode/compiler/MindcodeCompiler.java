@@ -77,10 +77,13 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private @Nullable CompileTimeEvaluator compileTimeEvaluator;
 
     // Intermediate and final results
+    private final Map<InputFile, SortedSet<AstIdentifier>> moduleProcessors = new HashMap<>();
+    private final Set<AstIdentifier> foundProcessors = new HashSet<>();
+
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
     private final Map<InputFile, AstModuleContext> parseTrees = new HashMap<>();
-    private final Map<InputFile, @Nullable AstIdentifier> processors = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
+    private final Map<AstRequire, InputFile> requiredFiles = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
     private final List<LogicArgument> remoteVariables = new ArrayList<>();
     private final ReturnStack returnStack;
@@ -154,7 +157,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     private void compile(List<InputFile> files) {
-        Queue<ModulePlacement> inputs = files.stream().map(f -> new ModulePlacement(f, null)).collect(Collectors.toCollection(LinkedList::new));
+        Queue<ModulePlacement> inputs = files.stream()
+                .map(f -> new ModulePlacement(f, Collections.emptySortedSet()))
+                .collect(Collectors.toCollection(LinkedList::new));
         Set<InputFile> processedFiles = new HashSet<>();
         List<AstModule> moduleList = new LinkedList<>();
         RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, profile, inputFiles);
@@ -176,26 +181,41 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                     parseTrees.put(input.inputFile, parseTree);
                     if (targetPhase == CompilationPhase.PARSER) continue;
 
-                    AstModule module = AstBuilder.build(this, input.inputFile, tokenStream, parseTree, input.remoteProcessor);
+                    AstModule module = AstBuilder.build(this, input.inputFile, tokenStream, parseTree, input.remoteProcessors);
                     modules.put(input.inputFile, module);
                     moduleList.addFirst(module);
                     parseTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 
+                    Set<InputFile> inputFilesInModule = new HashSet<>();
+
                     // Requirements are added by the AstBuilder via AstBuilderContext
                     for (AstRequire requirement : requirements) {
-                        InputFile inputFile = requirementsProcessor.processRequirement(requirement);
+                        InputFile inputFile = requirementsProcessor.loadFile(requirement);
                         if (inputFile == null) continue;
 
-                        if (processors.containsKey(inputFile)) {
-                            if (requirement.getProcessor() != null || processors.get(inputFile) != null) {
+                        requiredFiles.put(requirement, inputFile);
+
+                        // A module may be included locally an unlimited number of times, or remotely just once.
+                        if (moduleProcessors.containsKey(inputFile)) {
+                            if (!requirement.getProcessors().isEmpty() || !moduleProcessors.get(inputFile).isEmpty()) {
                                 error(requirement, ERR.MULTIPLE_MODULE_INSTANTIATIONS, inputFile.getDistinctTitle());
                             }
                         } else {
-                            processors.put(inputFile, input.remoteProcessor);
+                            if (!inputFilesInModule.add(inputFile)) {
+                                error(requirement, ERR.MULTIPLE_MODULE_INSTANTIATIONS, inputFile.getDistinctTitle());
+                            }
+
+                            moduleProcessors.put(inputFile, input.remoteProcessors);
 
                             // Do not process requirements of modules representing remote processors
-                            if (input.remoteProcessor == null) {
-                                inputs.add(new ModulePlacement(inputFile, requirement.getProcessor()));
+                            if (input.remoteProcessors.isEmpty()) {
+                                inputs.add(new ModulePlacement(inputFile, requirement.getProcessors()));
+                            }
+                        }
+
+                        for (AstIdentifier processor : requirement.getProcessors()) {
+                            if (!foundProcessors.add(processor)) {
+                                error(processor, ERR.MULTIPLE_PROCESSOR_BINDINGS, processor.getName());
                             }
                         }
                     }
@@ -482,6 +502,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         requirements.add(requirement);
     }
 
+    public AstModule getModule(AstRequire node) {
+        return modules.get(requiredFiles.get(node));
+    }
+
     @Override
     public void setHeapAllocation(AstAllocation heapAllocation) {
         this.heapAllocation = heapAllocation;
@@ -526,6 +550,6 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         remoteVariables.add(variable);
     }
 
-    private record ModulePlacement(InputFile inputFile, @Nullable AstIdentifier remoteProcessor) {
+    private record ModulePlacement(InputFile inputFile, SortedSet<AstIdentifier> remoteProcessors) {
     }
 }

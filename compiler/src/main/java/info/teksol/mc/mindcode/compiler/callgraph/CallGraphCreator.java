@@ -67,7 +67,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private void visitFunctionDeclaration(AstFunctionDeclaration functionDeclaration) {
         Objects.requireNonNull(activeModule, "No active module");
 
-        if (activeModule.getRemoteProcessor() == null) {
+        if (activeModule.getRemoteProcessors().isEmpty()) {
             // Only process function bodies in non-remote modules
             MindcodeFunction previousFunction = activeFunction;
             activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration, activeModule,

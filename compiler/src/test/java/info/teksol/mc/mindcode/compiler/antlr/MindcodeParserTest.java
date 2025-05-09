@@ -79,6 +79,30 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
+        void parsesRemoteArrays() {
+            assertParses("""
+                    processor1.array[index];
+                    processor1.array[processor1.array[index]];
+                    """
+            );
+        }
+
+        @Test
+        void parsesSubarrays() {
+            assertParses("""
+                    array[3 .. 8];
+                    """
+            );
+        }
+
+        @Test
+        void parsesRemoteSubarrays() {
+            assertParses("""
+                    processor1.array[3 .. 8];
+                    """
+            );
+        }
+        @Test
         void refusesInvalidArrays() {
             assertGeneratesMessages(
                     expectedMessages()
@@ -1032,6 +1056,35 @@ class MindcodeParserTest extends AbstractParserTest {
                     """
                             a = '\\n';
                             """);
+        }
+    }
+
+    @Nested
+    class Requires {
+        @Test
+        void parsesLibraryRequire() {
+            assertParses("require units;");
+        }
+
+        @Test
+        void parsesFileRequire() {
+            assertParses("""
+                    require "file.mnd";
+                    """);
+        }
+
+        @Test
+        void parsesRemoteFileRequire() {
+            assertParses("""
+                    require "file.mnd" remote processor1;
+                    """);
+        }
+
+        @Test
+        void parsesMultipleRemoteFileRequire() {
+            assertParses("""
+                    require "file.mnd" remote processor1, processor2, processor3;
+                    """);
         }
     }
 

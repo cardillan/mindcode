@@ -10,14 +10,27 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode
-public class AstArrayAccess extends AstExpression {
+public class AstArrayAccess extends AstExpression implements AstArray {
+    private final @Nullable AstIdentifier processor;
     private final AstIdentifier array;
     private final AstExpression index;
 
     public AstArrayAccess(SourcePosition sourcePosition, AstIdentifier array, AstExpression index) {
         super(sourcePosition, children(array, index));
+        this.processor = null;
         this.array = Objects.requireNonNull(array);
         this.index = Objects.requireNonNull(index);
+    }
+
+    public AstArrayAccess(SourcePosition sourcePosition, AstIdentifier processor, AstIdentifier array, AstExpression index) {
+        super(sourcePosition, children(array, index));
+        this.processor = Objects.requireNonNull(processor);
+        this.array = Objects.requireNonNull(array);
+        this.index = Objects.requireNonNull(index);
+    }
+
+    public @Nullable AstIdentifier getProcessor() {
+        return processor;
     }
 
     public AstIdentifier getArray() {

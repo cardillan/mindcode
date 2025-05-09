@@ -54,7 +54,7 @@ public enum Opcode {
     SPAWNWAVE       ("spawnwave",       "SpawnWave", "Spawn a wave."),
     SETRULE         ("setrule",         "SetRule", "Set a game rule."),
     MESSAGE         (false, "message", "FlushMessage",  "Display a message on the screen from the text buffer. If the success result variable is @wait, will wait until the previous message finishes. Otherwise, outputs whether displaying the message succeeded."),
-    CUTSCENE        ("cutscene",        "CutScene", "Manipulate the player camera.", 1),
+    CUTSCENE        ("cutscene",        "Cutscene", "Manipulate the player camera.", 1),
     EFFECT          ("effect",          "Effect", "Create a particle effect."),
     EXPLOSION       ("explosion",       "Explosion", "Create an explosion at a location."),
     SETRATE         ("setrate",         "SetRate", "Set processor execution speed in instructions/tick."),

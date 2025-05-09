@@ -53,6 +53,10 @@ public class MindcodeFunction {
     /// Inlined by any reason: declaration, compiler or optimizer
     private boolean inlined = false;
 
+    /// Indicates this is a remote function which is statically bound to a single processor,
+    /// therefore callable as a function as well as a method.
+    private boolean staticallyBound = false;
+
     /// All calls in this function, including unresolved ones
     private final List<AstFunctionCall> functionCalls = new ArrayList<>();
 
@@ -258,6 +262,11 @@ public class MindcodeFunction {
         return visited;
     }
 
+    /// @return true if this function is statically bound
+    public boolean isStaticallyBound() {
+        return staticallyBound;
+    }
+
     /// @return the number of places the function is called from
     public int getPlacementCount() {
         return placementCount;
@@ -361,8 +370,13 @@ public class MindcodeFunction {
                 .map(p -> (FunctionParameter) LogicVariable.parameter(p, this, isRemote())).toList();
     }
 
-    public void createRemoteParameters(CodeAssembler assembler, LogicVariable processor) {
-        parameters = getDeclaredParameters().stream()
+    public void setupRemoteParameters(CodeAssembler assembler, LogicVariable processor) {
+        parameters = createRemoteParameters(assembler, processor);
+        staticallyBound = true;
+    }
+
+    public List<FunctionParameter> createRemoteParameters(CodeAssembler assembler, LogicVariable processor) {
+        return getDeclaredParameters().stream()
                 .map(p -> (FunctionParameter) createRemoteParameter(p, assembler, processor))
                 .toList();
     }

@@ -22,7 +22,6 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /// Base class for code builders. Each builder generates code for a subset os AST node types.
 /// Instances of these classes need to be registered in CodeGenerator, and no two classes may handle the
@@ -105,8 +104,12 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         return elements.getFirst().sourcePosition().upTo(elements.getLast().sourcePosition());
     }
 
-    public String createRemoteSignature(Stream<AstFunctionDeclaration> functions) {
-        return codeGenerator.createRemoteSignature(functions);
+    public AstModule getModule(AstRequire node) {
+        return codeGenerator.getModule(node);
+    }
+
+    public String createRemoteSignature(AstModule module) {
+        return codeGenerator.createRemoteSignature(module);
     }
 
     protected boolean isLocalContext() {
@@ -154,7 +157,6 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     ///
     /// @param node node to process
     /// @return a `ValueStore` instance representing the value of the node
-
     protected ValueStore evaluate(AstMindcodeNode node) {
         return codeGenerator.visit(node, true);
     }

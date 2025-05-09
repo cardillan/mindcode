@@ -29,6 +29,14 @@ public class MemberAccessBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitMemberAccess(AstMemberAccess node) {
         ValueStore target = resolveTarget(node.getObject(), true, false, ERR.CANNOT_INVOKE_PROPERTIES);
+
+        if (target instanceof LogicVariable variable && (variable.isGlobalVariable() || variable.getType() == ArgumentType.BLOCK)) {
+            StructuredValueStore structuredVariable = variables.findStructuredVariable(variable.getName());
+            if (structuredVariable != null) {
+                target = structuredVariable;
+            }
+        }
+
         String name = node.getMember().getName();
         if (target instanceof StructuredValueStore store) {
             ValueStore member = store.getMember(name);

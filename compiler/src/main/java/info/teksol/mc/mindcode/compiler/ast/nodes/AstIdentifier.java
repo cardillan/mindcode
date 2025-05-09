@@ -9,7 +9,7 @@ import java.util.Objects;
 
 @NullMarked
 @AstNode(printFlat = true)
-public class AstIdentifier extends AstExpression {
+public class AstIdentifier extends AstExpression implements Comparable<AstIdentifier> {
     private final String name;
     private final boolean external;
 
@@ -49,4 +49,8 @@ public class AstIdentifier extends AstExpression {
         return result;
     }
 
+    @Override
+    public int compareTo(AstIdentifier o) {
+        return external == o.external ? name.compareTo(o.name) : Boolean.compare(external, o.external);
+    }
 }

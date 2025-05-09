@@ -32,67 +32,58 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         stackTracker = context.stackTracker();
     }
 
-    public ValueStore handleMethodCall(AstFunctionCall call) {
-        // Evaluate target and function arguments and create value list
-        ValueStore target = evaluate(Objects.requireNonNull(call.getObject()));
+    public ValueStore handleCall(AstFunctionCall call, boolean async) {
+        ValueStore target = call.getObject() == null ? null : evaluate(call.getObject());
+
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
         final List<FunctionArgument> arguments = processArguments(call);
 
-        ValueStore result = functionMapper.handleProperty(call, target, arguments);
-        assembler.clearSubcontextType();
-        if (result == null) {
-            error(call.getIdentifier(), ERR.METHOD_CALL_UNDEFINED, call.getFunctionName());
-            return LogicNull.NULL;
-        } else {
-            return result;
-        }
-    }
+        ValueStore result = processCall(call, arguments, target, async);
 
-    public ValueStore handleFunctionCall(AstFunctionCall call, boolean async) {
-        // Evaluate function arguments and create value list
-        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        final List<FunctionArgument> arguments = processArguments(call);
-
-        ValueStore result = processFunctionCall(call, arguments, async);
         assembler.clearSubcontextType();
         return result;
     }
 
-    private ValueStore processFunctionCall(AstFunctionCall call, List<FunctionArgument> arguments, boolean async) {
+    private ValueStore processCall(AstFunctionCall call, List<FunctionArgument> arguments,
+            @Nullable ValueStore target, boolean async) {
         List<MindcodeFunction> exactMatches = callGraph.getExactMatches(call, arguments);
         if (!exactMatches.isEmpty()) {
             // There are user functions exactly matching the call. Process them.
-            return processMatchedFunctionCalls(call, arguments, exactMatches, async);
+            return processMatchedCalls(call, arguments, target, exactMatches, async);
         } else {
             // No exact match. Try built-in function, and if it fails, evaluate possible loose matches
             if (call.getArguments().stream().noneMatch(AstFunctionArgument::isReference)) {
-                ValueStore result = functionMapper.handleFunction(call, arguments);
+                ValueStore result = target == null
+                        ? functionMapper.handleFunction(call, arguments)
+                        : functionMapper.handleProperty(call, target, arguments);
                 if (result != null) {
                     if (async) error(call, ERR.FUNCTION_CALL_ASYNC_UNSUPPORTED, call.getFunctionName());
                     return result;
                 }
             }
 
-            return processMatchedFunctionCalls(call, arguments, callGraph.getLooseMatches(call), async);
+            return processMatchedCalls(call, arguments, target, callGraph.getLooseMatches(call), async);
         }
     }
 
-    private ValueStore processMatchedFunctionCalls(AstFunctionCall call, List<FunctionArgument> arguments,
-            List<MindcodeFunction> matches, boolean async) {
+    private ValueStore processMatchedCalls(AstFunctionCall call, List<FunctionArgument> arguments,
+            @Nullable ValueStore target, List<MindcodeFunction> matches, boolean async) {
         if (matches.size() == 1) {
             // Exactly one match by name: process the function
             // If it was a loose match, the call will provide detailed error messages on argument mismatches
-            return processMatchedFunctionCall(matches.getFirst(), call, arguments, async);
+            return processMatchedFunctionCall(matches.getFirst(), call, target, arguments, async);
         } else {
             // No matches or multiple matches.
-            error(call.getIdentifier(), matches.isEmpty() ? ERR.FUNCTION_CALL_UNDEFINED : ERR.FUNCTION_CALL_UNRESOLVED,
+            error(call.getIdentifier(), target == null
+                    ? matches.isEmpty() ? ERR.FUNCTION_CALL_UNDEFINED : ERR.FUNCTION_CALL_UNRESOLVED
+                    : matches.isEmpty() ? ERR.METHOD_CALL_UNDEFINED : ERR.METHOD_CALL_UNRESOLVED,
                     call.getFunctionName());
             return LogicNull.NULL;
         }
     }
 
     private ValueStore processMatchedFunctionCall(MindcodeFunction function, AstFunctionCall call,
-            List<FunctionArgument> arguments, boolean async) {
+            @Nullable ValueStore target, List<FunctionArgument> arguments, boolean async) {
         String functionName = call.getFunctionName();
         int parameterCount = function.getStandardParameterCount();
 
@@ -100,9 +91,13 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // (in case of inline functions, they could get evaluated in the context of the function)
         arguments.forEach(FunctionArgument::unwrap);
 
-        if (function.isRemote() && function.getModule().getRemoteProcessor() == null) {
-            error(call, ERR.FUNCTION_REMOTE_CALLED_LOCALLY, functionName);
-            return LogicVariable.INVALID;
+        if (function.isRemote()) {
+            if (function.getModule().getRemoteProcessors().isEmpty()) {
+                error(call, ERR.FUNCTION_REMOTE_CALLED_LOCALLY, functionName);
+                return LogicVariable.INVALID;
+            }
+        } else if (target != null) {
+            throw new MindcodeInternalError("Target should be null for non-remote function calls.");
         }
 
         if (function.isVarargs()) {
@@ -125,7 +120,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                 error(call, ERR.ASYNC_OUTPUT_ARGUMENT, function.getName());
             }
 
-            return handleRemoteFunctionCall(function, arguments, async);
+            return handleRemoteFunctionCall(function, arguments, target, async);
         }
 
         if (async) {
@@ -206,7 +201,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(AstSubcontextType.INLINE_CALL, 1.0);
         enterFunction(function,  varargs);
-        setupFunctionParameters(function, arguments.subList(0, nonVarargCount), false);
+        setupFunctionParameters(function, function.getParameters(), arguments.subList(0, nonVarargCount), false);
 
         final LogicValue returnValue = function.isVoid() ? LogicVoid.VOID : assembler.nextNodeResultTemp();
         final LogicLabel returnLabel = assembler.nextLabel();
@@ -221,7 +216,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // after the code which sets the return value from the function body.
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
         assembler.createLabel(returnLabel);
-        retrieveFunctionParameters(function, arguments.subList(0, nonVarargCount), false);
+        retrieveFunctionParameters(function, function.getParameters(), arguments.subList(0, nonVarargCount), false);
         returnStack.exitFunction();
         exitFunction(function);
         return returnValue;
@@ -232,7 +227,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         String functionPrefix = function.getPrefix();
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
-        setupFunctionParameters(function, arguments, false);
+        setupFunctionParameters(function, function.getParameters(), arguments, false);
         final boolean isVoid = function.isVoid();
 
         LogicVariable retAddr = LogicVariable.fnRetAddr(functionPrefix);
@@ -252,7 +247,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
-        retrieveFunctionParameters(function, arguments, false);
+        retrieveFunctionParameters(function, function.getParameters(), arguments, false);
         return passReturnValue(function, null);
     }
 
@@ -288,14 +283,14 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             variables.forEach(v -> assembler.createPush(stack, v));
         }
 
-        setupFunctionParameters(function, arguments, recursiveCall);
+        setupFunctionParameters(function, function.getParameters(), arguments, recursiveCall);
 
         // Recursive function call
         final LogicLabel returnLabel = assembler.nextLabel();
         assembler.createCallRecursive(stack, function.getLabel(), returnLabel, LogicVariable.fnRetVal(function));
         assembler.createLabel(returnLabel); // where the function must return
 
-        retrieveFunctionParameters(function, arguments, recursiveCall);
+        retrieveFunctionParameters(function, function.getParameters(), arguments, recursiveCall);
 
         if (recursiveCall) {
             // Restore all local variables (both user defined and temporary) from the stack
@@ -306,13 +301,28 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         return passReturnValue(function, null);
     }
 
-    private ValueStore handleRemoteFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments, boolean async) {
-        assert function.getModule().getRemoteProcessor() != null;
-        LogicVariable processor = (LogicVariable) evaluate(function.getModule().getRemoteProcessor());
+    private LogicVariable getRemoteProcessor(MindcodeFunction function, @Nullable ValueStore target) {
+        return switch(target) {
+            case LogicVariable v when v.isGlobalVariable() || v.getType() == ArgumentType.BLOCK -> v;
+            case null -> (LogicVariable) evaluate(function.getModule().getRemoteProcessors().getFirst());
+            default -> {
+                error(target.sourcePosition(), ERR.REMOTE_WRONG_PROCESSOR);
+                yield LogicVariable.INVALID;
+            }
+        };
+    }
+
+    private ValueStore handleRemoteFunctionCall(MindcodeFunction function, List<FunctionArgument> arguments,
+            @Nullable ValueStore target, boolean async) {
+        assert !function.getModule().getRemoteProcessors().isEmpty();
+        LogicVariable processor = getRemoteProcessor(function, target);
+
+        List<FunctionParameter> parameters = target == null
+                ? function.getParameters() : function.createRemoteParameters(assembler, processor);
 
         // Function parameters will be set up using RemoteVariable value stores created for the remote function
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
-        setupFunctionParameters(function, arguments, false);
+        setupFunctionParameters(function, parameters, arguments, false);
 
         LogicVariable finished = LogicVariable.fnFinished(function);
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
@@ -328,68 +338,118 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
-        retrieveFunctionParameters(function, arguments, false);
+        retrieveFunctionParameters(function, parameters, arguments, false);
 
         return passReturnValue(function, processor);
     }
 
-    private @Nullable MindcodeFunction verifyRemoteFunctionName(AstFunctionCall call) {
+    private @Nullable RemoteFunction verifyRemoteFunctionName(AstFunctionCall call) {
         if (call.getArguments().size() != 1) {
             error(call, FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
                     call.getFunctionName(), 1, call.getArguments().size());
             return null;
         }
 
-        AstExpression function = Objects.requireNonNull(call.getArgument(0).getExpression());
+        AstExpression functionNode = Objects.requireNonNull(call.getArgument(0).getExpression());
 
-        if (function instanceof AstIdentifier functionName) {
-            List<MindcodeFunction> functions = callGraph.getFunctions().stream()
-                    .filter(f -> f.isRemote() && f.getName().equals(functionName.getName())).toList();
-            if (functions.isEmpty()) {
-                error(call, ERR.REMOTE_WRONG_ARGUMENT, call.getFunctionName());
-                return null;
-            } else if (functions.size() > 1) {
-                error(call, ERR.REMOTE_MULTIPLE_FUNCTIONS, functionName.getName());
-                return null;
-            } else {
-                return functions.getFirst();
-            }
-        } else {
+        AstIdentifier functionName = switch (functionNode) {
+            case AstIdentifier identifier -> identifier;
+            case AstMemberAccess memberAccess -> memberAccess.getMember();
+            default -> null;
+        };
+
+        if (functionName == null) {
             error(call, ERR.REMOTE_WRONG_ARGUMENT, call.getFunctionName());
-            evaluate(function);
+            evaluate(functionNode);
             return null;
+        }
+
+        List<MindcodeFunction> functions = callGraph.getFunctions().stream()
+                .filter(f -> f.isRemote() && f.getName().equals(functionName.getName())).toList();
+        if (functions.isEmpty()) {
+            error(call, ERR.REMOTE_WRONG_ARGUMENT, call.getFunctionName());
+            return null;
+        } else if (functions.size() > 1) {
+            error(call, ERR.REMOTE_MULTIPLE_FUNCTIONS, functionName.getName());
+            return null;
+        } else {
+            MindcodeFunction function = functions.getFirst();
+            AstExpression processorExpression = functionNode instanceof AstMemberAccess memberAccess
+                ? memberAccess.getObject() : function.getModule().getRemoteProcessors().getFirst();
+            ValueStore processor = evaluate(processorExpression);
+
+            if (processor instanceof LogicVariable v && (v.isGlobalVariable() || v.getType() == ArgumentType.BLOCK)) {
+                return new RemoteFunction(function, v);
+            } else {
+                error(processorExpression, ERR.REMOTE_WRONG_PROCESSOR);
+                return null;
+            }
         }
     }
 
+    public ValueStore handleVerifySignature(AstFunctionCall call) {
+        if (call.getArguments().size() != 1) {
+            error(call, FUNCTION_CALL_WRONG_NUMBER_OF_ARGS,
+                    call.getFunctionName(), 1, call.getArguments().size());
+            return LogicVariable.INVALID;
+        }
+
+        AstExpression expression = Objects.requireNonNull(call.getArgument(0).getExpression());
+        if (!(expression instanceof AstIdentifier remoteProcessorId) || !(evaluate(expression) instanceof LogicVariable remoteProcessor)
+                || !remoteProcessor.isGlobalVariable() && remoteProcessor.getType() != ArgumentType.BLOCK) {
+            error(call.getArgument(0), ERR.REMOTE_WRONG_PROCESSOR);
+            return LogicVariable.INVALID;
+        }
+
+        // Find module using callGraph.
+        // This is very convoluted, but essentially a temporary solution until types get introduced
+        Optional<AstModule> module = callGraph.getFunctions().stream()
+                .filter(f -> f.isRemote() && f.getModule().matchesProcessor(remoteProcessorId.getName()))
+                .map(MindcodeFunction::getModule)
+                .findFirst();
+
+        if (module.isEmpty()) {
+            error(call.getArgument(0), ERR.REMOTE_WRONG_PROCESSOR);
+            return LogicVariable.INVALID;
+        }
+
+        assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+        String remoteSignature = createRemoteSignature(module.get());
+        LogicString initializedName = LogicVariable.REMOTE_SIGNATURE.getMlogString();
+        LogicVariable tmp = assembler.unprotectedTemp();
+        LogicLabel label = assembler.createNextLabel();
+        assembler.createRead(tmp, remoteProcessor, initializedName);
+        assembler.createJump(label, Condition.EQUAL, tmp, LogicNull.NULL);
+        LogicVariable result = assembler.nextNodeResultTemp();
+        assembler.createOp(Operation.EQUAL, result, tmp, LogicString.create(remoteSignature));
+        assembler.clearSubcontextType();
+
+        return result;
+    }
+
     public ValueStore handleFinished(AstFunctionCall call) {
-        MindcodeFunction function = verifyRemoteFunctionName(call);
-        if (function == null) return LogicVariable.INVALID;
+        RemoteFunction remote = verifyRemoteFunctionName(call);
+        if (remote == null) return LogicVariable.INVALID;
 
-        assert function.getModule().getRemoteProcessor() != null;
-        LogicVariable processor = (LogicVariable) evaluate(function.getModule().getRemoteProcessor());
-
-        return new RemoteVariable(call.sourcePosition(), processor, "finished",
-                LogicVariable.fnFinished(function).getMlogString(), assembler.nextTemp(),
+        return new RemoteVariable(call.sourcePosition(), remote.processor, "finished",
+                LogicVariable.fnFinished(remote.function).getMlogString(), assembler.nextTemp(),
                 false, false);
     }
 
     public ValueStore handleAwait(AstFunctionCall call) {
-        MindcodeFunction function = verifyRemoteFunctionName(call);
-        if (function == null) return LogicVariable.INVALID;
+        RemoteFunction remote = verifyRemoteFunctionName(call);
+        if (remote == null) return LogicVariable.INVALID;
 
-        assert function.getModule().getRemoteProcessor() != null;
-        LogicVariable processor = (LogicVariable) evaluate(function.getModule().getRemoteProcessor());
-
-        assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
+        assembler.setSubcontextType(remote.function, AstSubcontextType.REMOTE_CALL);
         LogicLabel label = assembler.createNextLabel();
         assembler.createYieldExecution();
         LogicVariable tmp = assembler.nextTemp();
-        assembler.createRead(tmp, processor, LogicVariable.fnFinished(function).getMlogString());
+        assembler.createRead(tmp, remote.processor, LogicVariable.fnFinished(remote.function).getMlogString());
         assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
         assembler.clearSubcontextType();
 
-        return new RemoteVariable(function.getSourcePosition(), processor, function.getName() + "()",
-                LogicVariable.fnRetVal(function).getMlogString(),
+        return new RemoteVariable(remote.function.getSourcePosition(), remote.processor, remote.function.getName() + "()",
+                LogicVariable.fnRetVal(remote.function).getMlogString(),
                 assembler.nextTemp(), false, false);
     }
 
@@ -417,7 +477,8 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                && !functionParameter.equals(argument.unwrap());
     }
 
-    private void setupFunctionParameters(MindcodeFunction function, List<FunctionArgument> arguments, boolean recursiveCall) {
+    private void setupFunctionParameters(MindcodeFunction function, List<FunctionParameter> parameters,
+            List<FunctionArgument> arguments, boolean recursiveCall) {
         // List of values to be passed to parameters
         Queue<@NonNull ValueStore> argumentValues = new ArrayDeque<>(arguments.size());
         int limit = Math.min(arguments.size(), function.getDeclaredParameters().size());
@@ -427,7 +488,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             if (function.getDeclaredParameter(index).isReference()) {
                 argumentValues.offer(argument);
             } else if (function.getDeclaredParameter(index).isInput()) {
-                if (misplacedInput(function, argument, function.getParameter(index))) {
+                if (misplacedInput(function, argument, parameters.get(index))) {
                     LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, argument.getValue(assembler));
                     argumentValues.offer(temp);
@@ -449,7 +510,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                 if (function.getDeclaration().isInline() && !argument.unwrap().isMlogRepresentable()) {
                     variables.replaceFunctionVariable(parameter.getIdentifier(), argument.unwrap());
                 } else {
-                    function.getParameter(index).setValue(assembler, argument.getValue(assembler));
+                    parameters.get(index).setValue(assembler, argument.getValue(assembler));
                 }
             }
         }
@@ -482,14 +543,15 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                && !functionParameter.equals(argument.unwrap());
     }
 
-    private void retrieveFunctionParameters(MindcodeFunction function, List<FunctionArgument> arguments, boolean recursiveCall) {
+    private void retrieveFunctionParameters(MindcodeFunction function, List<FunctionParameter> parameters,
+            List<FunctionArgument> arguments, boolean recursiveCall) {
         List<Tuple2<ValueStore, LogicVariable>> finalizers = new ArrayList<>();
 
         // Setup variables representing function parameters with values from this call
         for (int i = 0; i < arguments.size(); i++) {
             FunctionArgument argument = arguments.get(i);
             if (argument.isOutput()) {
-                FunctionParameter parameter = function.getParameter(i);
+                FunctionParameter parameter = parameters.get(i);
                 if (misplacedOutput(function, argument, parameter)) {
                     LogicVariable temp = assembler.unprotectedTemp();
                     assembler.createSet(temp, parameter.getValue(assembler));
@@ -530,6 +592,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                         false, false)
                     :   LogicVariable.fnRetVal(function);
         }
+    }
+
+    private record RemoteFunction(MindcodeFunction function, LogicVariable processor) {
     }
 }
 

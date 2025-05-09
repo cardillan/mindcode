@@ -62,7 +62,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     }
                                 }
                             ],
-                            remoteProcessor = null
+                            remoteProcessors = []
                         }"""
         );
     }
@@ -174,7 +174,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     }
                                 }
                             ],
-                            remoteProcessor = null
+                            remoteProcessors = []
                         }"""
         );
     }
@@ -223,6 +223,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                                     AstAssignment {
                                                         operation = null,
                                                         target = AstArrayAccess {
+                                                            processor = null,
                                                             array = AstIdentifier{name = "a", external = false},
                                                             index = AstIdentifier{name = "i", external = false}
                                                         },
@@ -247,7 +248,7 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     }
                                 }
                             ],
-                            remoteProcessor = null
+                            remoteProcessors = []
                         }"""
         );
     }

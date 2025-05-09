@@ -8,8 +8,10 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Assertions;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Stream;
 
 @NullMarked
 public class AbstractAstBuilderTest extends AbstractTestBase {
@@ -31,7 +33,8 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
     }
 
     protected void assertBuildsTo(ExpectedMessages expectedMessages, String source, List<AstMindcodeNode> expected) {
-        assertBuildsTo(expectedMessages, source, new AstModule(EMPTY, null, expected, null));
+        assertBuildsTo(expectedMessages, source,
+                new AstModule(EMPTY, null, expected, Collections.emptySortedSet()));
     }
 
     protected void assertBuildsTo(String source, List<AstMindcodeNode> expected) {
@@ -68,6 +71,10 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
 
     protected static AstIdentifier id(String name) {
         return new AstIdentifier(EMPTY, name);
+    }
+
+    protected static List<AstIdentifier> ids(String... name) {
+        return Stream.of(name).map(AbstractAstBuilderTest::id).toList();
     }
 
     protected static AstIdentifier ext(String name) {

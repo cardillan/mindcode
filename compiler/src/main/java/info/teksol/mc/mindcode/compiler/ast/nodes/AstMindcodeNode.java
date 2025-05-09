@@ -11,8 +11,10 @@ import java.util.List;
 @NullMarked
 public interface AstMindcodeNode extends SourceElement {
 
-    /// Defines scope of the current node. `AstProgram` and `AstModule` provide global scope, all other
+    /// Defines scope of the current node. `AstProgram`, `AstModule` and `AstRequire` provide global scope, all other
     /// nodes correspond to either a local, or unspecified scope.
+    ///
+    /// `AstRequire` provides a global scope, because remote variable declarations are handled in it.
     ///
     /// @return the scope which is valid inside this node
     default AstNodeScope getScope() {

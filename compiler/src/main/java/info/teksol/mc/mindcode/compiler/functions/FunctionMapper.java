@@ -14,11 +14,9 @@ import java.util.List;
 @NullMarked
 public interface FunctionMapper {
 
-    @Nullable
-    ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments);
+    @Nullable ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments);
 
-    @Nullable
-    ValueStore handleProperty(AstFunctionCall astNode, ValueStore target, List<FunctionArgument> arguments);
+    @Nullable ValueStore handleProperty(AstFunctionCall astNode, ValueStore target, List<FunctionArgument> arguments);
 
     @Nullable String decompile(MlogInstruction instruction);
 

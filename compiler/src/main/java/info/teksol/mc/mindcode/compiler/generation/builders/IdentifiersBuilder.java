@@ -5,15 +5,11 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
-import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
-import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.ExternalArray;
-import info.teksol.mc.mindcode.compiler.generation.variables.ExternalVariable;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
@@ -44,11 +40,11 @@ public class IdentifiersBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitArrayAccess(AstArrayAccess node) {
-        ValueStore valueStore = evaluate(node.getArray());
+        ValueStore valueStore = evaluateArrayAccess(node);
         return switch (valueStore) {
             case LogicVariable memory -> memoryArrayAccess(node, memory);
             case ArrayStore array -> storeArrayAccess(node, array);
-            default -> {
+            case null, default -> {
                 error(node.getArray(), ERR.ARRAY_INVALID, node.getArray().getName());
                 yield LogicVariable.INVALID;
             }
@@ -81,12 +77,29 @@ public class IdentifiersBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitSubarray(AstSubarray node) {
-        ValueStore valueStore = evaluate(node.getArray());
+        ValueStore valueStore = evaluateArrayAccess(node);
         return switch (valueStore) {
             case LogicVariable memory -> memorySubarrayAccess(node, memory);
             case ArrayStore array -> storeSubarrayAccess(node, array);
-            default -> throw new MindcodeInternalError("Unhandled valueStore type: " + valueStore);
+            case null, default -> {
+                error(node.getArray(), ERR.ARRAY_INVALID, node.getArray().getName());
+                yield LogicVariable.INVALID;
+            }
         };
+    }
+
+    private @Nullable ValueStore evaluateArrayAccess(AstArray node) {
+        if (node.getProcessor() != null) {
+            ValueStore valueStore = variables.findStructuredVariable(node.getProcessor().getName());
+            if (valueStore instanceof StructuredValueStore structuredStore) {
+                return structuredStore.getMember(node.getArray().getName());
+            } else {
+                error(node.getProcessor(), ERR.REMOTE_WRONG_PROCESSOR);
+                return LogicVariable.INVALID;
+            }
+        } else {
+            return evaluate(node.getArray());
+        }
     }
 
     private ValueStore memoryArrayAccess(AstArrayAccess node, LogicVariable memory) {

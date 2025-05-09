@@ -19,9 +19,11 @@ Code for each processor in a distributed system is compiled separately from a st
 
 ## Module signatures
 
-During compilation, a CRC64 value based on all remote function declarations is computed for each module. Function name, call type, return type, parameter names, types and modifiers are included in the calculation. Additionally, the version number of the remote call protocol is appended to the text representation of the CRC64 value.
+During compilation, a CRC64 value, based on all remote function declarations, is computed for each module. Function name, call type, return type, parameter names, types and modifiers are included in the calculation. Additionally, the version number of the remote call protocol used by the compiler is appended to the text representation of the CRC64 value.
 
-A remote processor is successfully initialized only when the signature stored in the remote processor matches the signature expected by its main processor. This ensures that the remote code won't be called if it is not compatible with the main processor. If any remote method's signature is altered, or remote methods are added or removed from the module, the signature changes, and the code in the processor that binds to the remote processor needs to be recompiled too.
+A remote processor is successfully initialized only when the signature stored in the remote processor matches the signature expected by its main processor. This ensures that the remote code won't be called if it is not compatible with the main processor. If any remote method's signature is altered, or remote methods are added or removed from the module, the signature changes, and the code in the processor that binds to the remote processor needs to be recompiled too. Similarly, if a new compiler using a different remote call protocol is used to recompile some processor's code, all processors related to the altered one through the remote call mechanism need to be recompiled too.
+
+Remote variables are not included in module signatures. If a variable that was used by the main processor gets removed from the remote module, and the remote processor's code is updated with the new code, access to the remote variable from the main processor will be broken (writes to the removed variable will be ignored, while reads from the removed variable will always return `null`).    
 
 ## Remote processors code
 
@@ -161,11 +163,30 @@ require "library.mnd" remote processor1;
 
 The required file (in this example stored in `library.mnd` file) must be a module, and the compiled code of this module must be stored in processor `processor1`. The processor can be specified using a linked block name, a parameter, or a variable. The variable needs to be initialized, e.g. by a function.
 
-When a module is being requested for remote access using two different processors, or is being requested both locally end remotely, a compilation error occurs.
-
 Modules imported remotely aren't compiled into the code, but remote variables and functions declared in them are available to the main processor.
 
 When at least one remote function is called from a processor, guard code for the processor is generated. The guard code waits for the processor to be created and its `*signature` variable initialized. If the signature found in the remote processor doesn't match the expected signature, the main processor remains stuck at the initialization.
+
+A module which is being requested for remote access may appear in only one `require` clause. Using it in two clauses, even if one of them is in a different module, or is required locally, causes a compilation error.
+
+### Multiple instantiations of a remote module
+
+The same remote module might be compiled into two or more different remote processors. In this case, remote functions can be run concurrently in any number of remote processors. This is done by including more than one processor in the `remote` clause:
+
+```
+require "library.mnd" remote processor1, processor2, processor3;
+
+async(processor1.foo(1));
+async(processor2.foo(2));
+async(processor3.foo(3));
+
+// The code in the three processors executes concurrently. Here we'll wait for all of them to finish
+await(processor1.foo);
+await(processor2.foo);
+await(processor3.foo);
+```
+
+When a module is instantiated multiple times, its functions need to be called as methods on one of the bound processors. Calling a remote function within such a module without specifying the processor name causes a compilation error, since the compiler cannot figure out which processor to use for the call.  
 
 ### Remote variables
 
@@ -173,12 +194,27 @@ All variables declared `remote` in remotely requested modules are accessible in 
 
 An array declared `remote` in remotely imported modules is accessible in the main processor. The array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random access, jump tables are generated in the main processor code, meaning that random access to remote arrays has he same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
 
+When a remote module is instantiated multiple times, remote variables can be accessed as properties on bound processors, for example:
+
+```
+require "library.mnd" remote processor1, processor2;
+
+print(processor1.variable);
+processor2.array[10]++;
+```
+
 ### Synchronous remote calls
 
 The syntax to call functions remotely is the same as for local function call:
 
 ```
 product = foo(10, 20, out sum);
+```
+
+For multiple instances of the remote module, a processor needs to be specified:
+
+```
+product = processor3.foo(10, 20, out sum);
 ```
 
 Execution of the code is paused until the remote function completes and returns. The effect of calling a remote function is the same as calling local function: function return value and output variables are set up as usual.
@@ -193,6 +229,13 @@ Asynchronous calls are started using the built-in `async()` function:
 async(foo(10, 20));
 ```
 
+For multiple instances of the remote module, a processor needs to be specified as usual:
+
+```
+async(processor1.foo(10, 20));
+async(processor2.foo(20, 30));
+```
+
 The `out` modifiers are disallowed in asynchronous function calls, and output only arguments need to be completely omitted.
 
 To check for completion, call the `finished()` function, passing the name of the remote function as an argument:
@@ -201,7 +244,13 @@ To check for completion, call the `finished()` function, passing the name of the
 done = finished(foo);
 ```
 
-The function returns true if the asynchronous call to the given remote function is finished.
+For multiple instances of the remote module, a processor needs to be specified as usual:
+
+```
+done = finished(processor1.foo);
+```
+
+The function returns `true` if the asynchronous call to the given remote function is finished.
 
 Function return value may be obtained via the `await()` function (not to be confused with the `wait()` function mapped to the `wait` instruction):
 
@@ -212,7 +261,76 @@ sum = foo.z;
 
 This call functions waits for `foo` completion, and then returns its return value. Other output parameters are available under their fully qualified names, e.g. `foo.z`. The output parameters may be queried as soon as `finished()` returned true. Calling `await()` is not necessary before starting another remote call on the same processor.
 
-## Mechanism of the remote calls
+For multiple instances of the remote module, a processor needs to be specified as usual:
+
+```
+product = await(processor1.foo);
+```
+
+### Dynamic binding
+
+A processor containing the remote code can also be located dynamically. In this case, the `remote` clause in the `require` directive contains a variable, not a linked block reference.
+
+> [!NOTE]
+> Variable which holds the reference to a dynamically bound processor needs to be global. The best way to ensure this is to declare the variable before the `require` clause, which works in both strict and relaxed syntax modes. it is possible to use an implicitly declared global variable in relaxed syntax mode, in which case the variable needs to be named in upper case. The recommended solution is to explicitly declare the variable regardless of the syntax mode.   
+
+```
+var proc;
+require "remote.mnd" remote proc;
+```
+
+`proc` is the variable which provides access to the remote module.
+
+> [!NOTE]
+> When dynamic binding is used, remote functions and variables needs to be referenced using the processor variable. 
+
+The compiler doesn't automatically generate code to verify the module signature for dynamically bound processors. It is possible to verify the signature using a `verifySignature()` built-in function. This function takes a processor as an argument, and returns `true` if the processor contains the expected module code.  
+
+```
+for var i in 0 ... @links do
+    proc = getlink(i);
+    if verifySignature(proc) then
+        async(proc.foo(10));
+    end;
+end;
+```
+
+Using `verifySignature` ensures it is safe to call a remote function in the given processor. When `verifySignature` returns `false`, it may mean ony of these things:
+
+* the block being inspected is not a processor,
+* the processor doesn't contain code corresponding to the remote module, or the code is not compatible with expected version (module signatures differ),
+* the processor contains the correct remote module code, but the initialization hasn't completed yet. 
+
+It is possible to use several variables in the `remote` clause, in which case the remote module can be accessed though any of them. Mindcode doesn't make any assumptions about the identity of these processors (particularly, whether they point to the same processor or not).
+
+Processor references can also be stored in an array. However, individual array elements cannot be directly used to access the remote module. instead, the reference needs to be stored to a bound processor variable first:
+
+```
+var p1, p2;
+require "remote.mnd" remote p1, p2;
+
+var processors[10];
+
+// Fills array with valid processors
+index = 0;
+MainLoop:
+for out p1 in processors do
+    while true do
+        if index >= @links then break MainLoop; end;
+        p1 = getlink(index++);
+        if verifySignature(p1) then break; end;
+    end;
+end;
+
+// Not possible
+processors[1].foo(10);
+
+// Possible
+p2 = processors[1];
+p2.foo(10);
+```
+
+## Remote call mechanism
 
 This chapter briefly describes how synchronous and asynchronous calls are implemented.
 

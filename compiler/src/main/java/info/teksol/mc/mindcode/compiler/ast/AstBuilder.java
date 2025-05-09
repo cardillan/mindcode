@@ -25,6 +25,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
 import java.util.stream.Collectors;
 
 @NullMarked
@@ -32,21 +33,21 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private final AstBuilderContext context;
     private final InputFile inputFile;
     private final CommonTokenStream tokenStream;
-    private final @Nullable AstIdentifier remoteProcessor;
+    private final SortedSet<AstIdentifier> remoteProcessors;
 
     @Nullable AstModuleDeclaration moduleDeclaration;
 
     private AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream,
-            @Nullable AstIdentifier remoteProcessor) {
+            SortedSet<AstIdentifier> remoteProcessors) {
         this.context = context;
         this.inputFile = inputFile;
         this.tokenStream = tokenStream;
-        this.remoteProcessor = remoteProcessor;
+        this.remoteProcessors = remoteProcessors;
     }
 
     public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream, ParseTree tree,
-            @Nullable AstIdentifier remoteProcessor) {
-        AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream, remoteProcessor);
+            SortedSet<AstIdentifier> remoteProcessors) {
+        AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream, remoteProcessors);
         return (AstModule) astBuilder.visitNonNull(tree);
     }
 
@@ -169,6 +170,10 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 : null;
     }
 
+    private List<AstIdentifier> identifiers(List<TerminalNode> tokens) {
+        return tokens.stream().map(TerminalNode::getSymbol).map(this::identifier).toList();
+    }
+
     private @Nullable AstDocComment findDocComment(Token token) {
         int tokenIndex = token.getTokenIndex();
         List<Token> docTokens = Objects.requireNonNullElse(
@@ -189,7 +194,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstModule visitAstModule(MindcodeParser.AstModuleContext ctx) {
         moduleDeclaration = null;
         List<AstMindcodeNode> body = processBody(ctx.astStatementList());
-        return new AstModule(pos(ctx), moduleDeclaration, body, remoteProcessor);
+        return new AstModule(pos(ctx), moduleDeclaration, body, remoteProcessors);
     }
 
     @Override
@@ -296,7 +301,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstRequireFile visitAstRequireFile(MindcodeParser.AstRequireFileContext ctx) {
         AstRequireFile requirement = new AstRequireFile(pos(ctx), literalString(ctx.STRING()),
-                identifierIfNonNull(ctx.processor));
+                ctx.processors == null ? List.of() : identifiers(ctx.processors.IDENTIFIER()));
         context.addRequirement(requirement);
         return requirement;
     }
@@ -304,7 +309,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstRequireLibrary visitAstRequireLibrary(MindcodeParser.AstRequireLibraryContext ctx) {
         AstRequireLibrary requirement = new AstRequireLibrary(pos(ctx), identifier(ctx.library),
-                identifierIfNonNull(ctx.processor));
+                ctx.processors == null ? List.of() : identifiers(ctx.processors.IDENTIFIER()));
         context.addRequirement(requirement);
         return requirement;
     }
@@ -502,6 +507,22 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstMindcodeNode visitAstSubarray(AstSubarrayContext ctx) {
         return new AstSubarray(pos(ctx),
+                identifier(ctx.array),
+                visitAstRange(ctx.range));
+    }
+
+    @Override
+    public AstMindcodeNode visitAstRemoteArray(AstRemoteArrayContext ctx) {
+        return new AstArrayAccess(pos(ctx),
+                identifier(ctx.processor),
+                identifier(ctx.array),
+                visitAstExpression(ctx.index));
+    }
+
+    @Override
+    public AstMindcodeNode visitAstRemoteSubarray(AstRemoteSubarrayContext ctx) {
+        return new AstSubarray(pos(ctx),
+                identifier(ctx.processor),
                 identifier(ctx.array),
                 visitAstRange(ctx.range));
     }

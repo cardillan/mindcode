@@ -44,9 +44,10 @@ public class InternalArray extends AbstractArrayStore {
     public static InternalArray create(AstIdentifier identifier, int size, boolean isVolatile, @Nullable LogicVariable processor) {
         if (processor != null) {
             CodeAssembler assembler = MindcodeCompiler.getContext().assembler();
-            return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.range(0, size)
-                    .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
-                            identifier.getName() + "[" + index + "]",
+            return new InternalArray(identifier.sourcePosition(), "." + processor.getName() + "." + identifier.getName(),
+                    IntStream.range(0, size)
+                            .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
+                            processor.getName() + "." + identifier.getName() + "[" + index + "]",
                             LogicString.create(LogicVariable.arrayVariableMlog(identifier, index)),
                             assembler.nextTemp(), false, false)).toList(), true);
         } else {

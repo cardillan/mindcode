@@ -22,6 +22,13 @@ expressionList
     : (expression COMMA)* expression
     ;
 
+// List of identifiers separated by commas
+// At least one identifier needs to be present, multiple consecutive commas aren't allowed.
+// Used by the require directive.
+identifierList
+    : (IDENTIFIER COMMA)* IDENTIFIER
+    ;
+
 // A statement is an expression, which provides a value, or an executable statement, which is executable, but doesn't
 // provide a value, or a declaration. Using a statement/declaration where an expression is expected is an error,
 // recognized by the grammar.
@@ -37,8 +44,8 @@ statement
     | ALLOCATE allocations                                                              # astAllocations
     | CONST name = IDENTIFIER ASSIGN value = expression                                 # astConstant
     | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
-    | REQUIRE file = STRING (REMOTE processor = IDENTIFIER)?                            # astRequireFile
-    | REQUIRE library = IDENTIFIER (REMOTE processor = IDENTIFIER)?                     # astRequireLibrary
+    | REQUIRE file = STRING (REMOTE processors = identifierList)?                       # astRequireFile
+    | REQUIRE library = IDENTIFIER (REMOTE processors = identifierList)?                # astRequireLibrary
     | callType = (INLINE | NOINLINE | REMOTE)? type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = astStatementList? END                             # astFunctionDeclaration
     | (label = IDENTIFIER COLON)? FOR iterators = iteratorsValuesGroups
@@ -106,11 +113,13 @@ valueList
 // For assignments, a generic expression can be a target, to support constructs like
 // getlink(index).enabled = true
 lvalue
-    : id = IDENTIFIER                                                                   # astIdentifier
-    | id = EXTIDENTIFIER                                                                # astIdentifierExt
-    | builtin = BUILTINIDENTIFIER                                                       # astBuiltInIdentifier
-    | array = (IDENTIFIER | EXTIDENTIFIER) LBRACKET index = expression RBRACKET         # astArrayAccess
-    | array = (IDENTIFIER | EXTIDENTIFIER) LBRACKET range = astRange RBRACKET           # astSubarray
+    : id = IDENTIFIER                                                                       # astIdentifier
+    | id = EXTIDENTIFIER                                                                    # astIdentifierExt
+    | builtin = BUILTINIDENTIFIER                                                           # astBuiltInIdentifier
+    | array = (IDENTIFIER | EXTIDENTIFIER) LBRACKET index = expression RBRACKET             # astArrayAccess
+    | array = (IDENTIFIER | EXTIDENTIFIER) LBRACKET range = astRange RBRACKET               # astSubarray
+    | processor = IDENTIFIER DOT array = IDENTIFIER LBRACKET index = expression RBRACKET    # astRemoteArray
+    | processor = IDENTIFIER DOT array = IDENTIFIER LBRACKET range = astRange RBRACKET      # astRemoteSubarray
     ;
 
 

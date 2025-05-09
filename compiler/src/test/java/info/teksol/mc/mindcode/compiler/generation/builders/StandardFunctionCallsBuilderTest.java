@@ -1504,7 +1504,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesUnknownMethods() {
             assertGeneratesMessage(
-                    "Unknown function 'fluffyBunny'.",
+                    "Unknown method 'fluffyBunny'.",
                     "cell1.fluffyBunny(Hohoho);"
             );
         }

@@ -17,10 +17,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.EnumMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
@@ -165,51 +162,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return LogicVoid.VOID;
     }
 
-    private void initializeRemoteProcessor(AstRequire node) {
-        verifyMinimalRemoteTarget(node);
-
-        assert node.getProcessor() != null;
-        LogicVariable processor = (LogicVariable) evaluate(node.getProcessor());
-
-        // Only initialize statically bound processors
-        if (processor.getType() != BLOCK) return;
-
-        // Remote signature
-        String remoteSignature = createRemoteSignature(callGraph.getFunctions().stream()
-                .filter(f -> f.getModule().getRemoteProcessor() == node.getProcessor())
-                .map(MindcodeFunction::getDeclaration));
-
-        // Generate guard code for processor
-        LogicString initializedName = LogicVariable.REMOTE_SIGNATURE.getMlogString();
-        LogicVariable tmp = assembler.unprotectedTemp();
-        LogicLabel label = assembler.createNextLabel();
-        assembler.createRead(tmp, processor, initializedName);
-        assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicString.create(remoteSignature));
-
-        // Assign remote function indexes
-        callGraph.assignRemoteFunctionIndexes(f -> f.getModule().getRemoteProcessor() == node.getProcessor());
-
-        // Initialize function parameters
-        // Create function output variables
-        callGraph.getFunctions().stream()
-                .filter(f -> f.getModule().getRemoteProcessor() == node.getProcessor() && f.isUsed())
-                .forEach(function -> {
-                    function.createRemoteParameters(assembler, processor);
-                    Map<String, ValueStore> members = function.getParameters()
-                            .stream()
-                            .filter(FunctionParameter::isOutput)
-                            .collect(Collectors.toMap(FunctionParameter::getName, p -> p));
-                    StructuredValueStore variable = new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
-                    variables.registerRemoteCallStore(function.getDeclaration().getIdentifier(), variable);
-                });
-    }
-
     @Override
     public ValueStore visitRequireFile(AstRequireFile node) {
-        // When a processor is part of the declaration, evaluate it.
-        // It creates the variable representing the processor, if not already present.
-        if (node.getProcessor() != null) {
-            initializeRemoteProcessor(node);
+        if (!node.getProcessors().isEmpty()) {
+            initializeRemoteProcessors(node);
         }
 
         // Requires have no value
@@ -218,46 +174,13 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitRequireLibrary(AstRequireLibrary node) {
-        // When a processor is part of the declaration, evaluate it.
-        // It creates the variable representing the processor, if not already present.
-        if (node.getProcessor() != null) {
-            initializeRemoteProcessor(node);
+        if (!node.getProcessors().isEmpty()) {
+            initializeRemoteProcessors(node);
         }
 
         // Requires have no value
         return LogicVoid.VOID;
     }
-
-    public void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node) {
-        Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
-
-        assert module.getRemoteProcessor() != null;
-        LogicVariable processor = (LogicVariable) evaluate(module.getRemoteProcessor());
-
-        if (isLocalContext()) {
-            node.getModifiers().forEach(this::verifyLocalContextModifiers);
-        }
-
-        for (AstVariableSpecification specification : node.getVariables()) {
-            AstIdentifier identifier = specification.getIdentifier();
-            String name = identifier.getName();
-
-            if (specification.isArray()) {
-                node.getModifiers().forEach(this::verifyArrayModifiers);
-                if (isLocalContext()) {
-                    error(specification, ERR.ARRAY_LOCAL);
-                }
-
-                processArray(modifiers, specification, processor);
-            } else {
-                RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor, name,
-                        LogicVariable.global(identifier).getMlogString(), assembler.nextTemp(), false, false);
-
-                variables.registerRemoteVariable(identifier, variable);
-            }
-        }
-    }
-
 
     // Note: remote modules are not processed by code generator. Any variables declared `remote` encountered here
     //       are compiled as part of a remote processor code and are created as volatile variables.
@@ -276,13 +199,140 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     error(specification, ERR.ARRAY_LOCAL);
                 }
 
-                processArray(modifiers, specification, null);
+                processArray(modifiers, specification, true, null);
             } else {
                 processVariable(modifiers, specification);
             }
         }
 
         return LogicVoid.VOID;
+    }
+
+    private void initializeRemoteProcessors(AstRequire node) {
+        verifyMinimalRemoteTarget(node);
+        boolean reportRemoteErrors = true;
+
+        // Assign remote function indexes
+        AstModule module = getModule(node);
+        callGraph.assignRemoteFunctionIndexes(f -> f.getModule() == module);
+
+        List<LogicVariable> processors = node.getProcessors().stream().map(this::evaluateProcessor).toList();
+
+        // If there's exactly one remote processor, import functions and variables to local namespace
+        if (processors.size() == 1 && processors.getFirst().getType() == BLOCK) {
+            createRemoteVariables(module, processors.getFirst(), true, null);
+            reportRemoteErrors = false;
+
+            // Initialize function parameters
+            // Create function output variables
+            callGraph.getFunctions().stream()
+                    .filter(f -> f.getModule() == module && f.isUsed())
+                    .forEach(function -> {
+                        function.setupRemoteParameters(assembler, processors.getFirst());
+                        Map<String, ValueStore> members = function.getParameters()
+                                .stream()
+                                .filter(FunctionParameter::isOutput)
+                                .collect(Collectors.toMap(FunctionParameter::getName, p -> p));
+                        StructuredValueStore variable = new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
+                        variables.registerRemoteCallStore(function.getDeclaration().getIdentifier(), variable);
+                    });
+        }
+
+        // Remote signature
+        String remoteSignature = createRemoteSignature(module);
+
+        int index = 0;
+        for (AstIdentifier identifier : node.getProcessors()) {
+            LogicVariable processor = processors.get(index++);
+
+            // Processor members
+            Map<String, ValueStore> members = callGraph.getFunctions().stream()
+                    .filter(f -> f.getModule() == module)
+                    .collect(Collectors.toMap(MindcodeFunction::getName, f -> createFunctionOutputs(f, processor)));
+            createRemoteVariables(module, processor, reportRemoteErrors, members);
+            reportRemoteErrors = false;
+
+            StructuredValueStore processorStructure = new StructuredValueStore(identifier.sourcePosition(), identifier.getName(), members);
+            variables.registerStructuredVariable(identifier, processorStructure);
+
+            // Generate guard code for processor
+            if (processor.getType() == BLOCK) {
+                LogicString initializedName = LogicVariable.REMOTE_SIGNATURE.getMlogString();
+                LogicVariable tmp = assembler.unprotectedTemp();
+                LogicLabel label = assembler.createNextLabel();
+                assembler.createRead(tmp, processor, initializedName);
+                assembler.createJump(label, Condition.NOT_EQUAL, tmp, LogicString.create(remoteSignature));
+            }
+        }
+    }
+
+    private LogicVariable evaluateProcessor(AstIdentifier identifier) {
+        ValueStore value = processInLocalScope(() -> evaluate(identifier));
+        if (value instanceof LogicVariable proc) {
+            if (proc.isGlobalVariable() || proc.getType() == BLOCK) {
+                return proc;
+            }
+            error(identifier, ERR.REMOTE_PROCESSOR_NOT_GLOBAL);
+        } else {
+            error(identifier, ERR.IDENTIFIER_EXPECTED);
+        }
+
+        return LogicVariable.INVALID;
+    }
+
+    private void createRemoteVariables(AstModule module, LogicVariable processor, boolean reportArrayErrors,
+            @Nullable Map<String, ValueStore> structureMembers) {
+        module.getChildren().stream()
+                .filter(AstVariablesDeclaration.class::isInstance)
+                .map(AstVariablesDeclaration.class::cast)
+                .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == Modifier.REMOTE))
+                .forEach(n -> visitRemoteVariablesDeclaration(module, n, processor, reportArrayErrors, structureMembers));
+    }
+
+    public void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node,
+            LogicVariable processor, boolean reportArrayErrors, @Nullable Map<String, ValueStore> structureMembers) {
+        Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
+
+        if (isLocalContext()) {
+            node.getModifiers().forEach(this::verifyLocalContextModifiers);
+        }
+
+        for (AstVariableSpecification specification : node.getVariables()) {
+            AstIdentifier identifier = specification.getIdentifier();
+            String name = identifier.getName();
+
+            if (specification.isArray()) {
+                node.getModifiers().forEach(this::verifyArrayModifiers);
+                if (isLocalContext()) {
+                    error(specification, ERR.ARRAY_LOCAL);
+                }
+
+                if (structureMembers != null) {
+                    int arraySize = getArraySize(modifiers, specification, reportArrayErrors);
+                    InternalArray array = InternalArray.create(identifier, arraySize, true, processor);
+                    structureMembers.put(name, array);
+                } else {
+                    processArray(modifiers, specification, reportArrayErrors, processor);
+                }
+            } else {
+                RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor, name,
+                        LogicVariable.global(identifier).getMlogString(), assembler.nextTemp(), false, false);
+
+                if (structureMembers != null) {
+                    structureMembers.put(name, variable);
+                } else {
+                    variables.registerRemoteVariable(identifier, variable);
+                }
+            }
+        }
+    }
+
+    private StructuredValueStore createFunctionOutputs(MindcodeFunction function, LogicVariable processor) {
+        List<FunctionParameter> parameters = function.createRemoteParameters(assembler, processor);
+        Map<String, ValueStore> members = parameters.stream()
+                .filter(FunctionParameter::isOutput)
+                .collect(Collectors.toMap(FunctionParameter::getName, p -> p));
+        return new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
     }
 
     private void verifyLocalContextModifiers(AstVariableModifier element) {
@@ -294,23 +344,30 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
     }
 
-    private void processArray(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification,
-            @Nullable LogicVariable processor) {
+    private int getArraySize(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification, boolean reportArrayErrors) {
         int declaredSize = getDeclaredArraySize(modifiers, specification);
         int initialSize = specification.getExpressions().size();
 
         if (declaredSize > 0 && initialSize > 0) {
-            if (initialSize != declaredSize) {
+            if (reportArrayErrors && initialSize != declaredSize) {
                 error(specification, ERR.ARRAY_SIZE_MISMATCH);
             }
             declaredSize = initialSize;
-        } else if (declaredSize < 0 && initialSize == 0) {
+        } else if (reportArrayErrors && declaredSize < 0 && initialSize == 0) {
             error(specification, ERR.ARRAY_SIZE_NOT_SPECIFIED);
         }
 
         if (declaredSize <= 0) {
             declaredSize = initialSize;
         }
+
+        return declaredSize;
+    }
+
+    private void processArray(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification,
+            boolean reportArrayErrors, @Nullable LogicVariable processor) {
+        int declaredSize = getArraySize(modifiers, specification, reportArrayErrors);
+        int initialSize = specification.getExpressions().size();
 
         ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers, processor);
 

@@ -15,6 +15,21 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         InputFiles inputFiles = InputFiles.fromSource(source);
 
         inputFiles.addPackagedFile(
+                "local.mnd",
+                """
+                        module local;
+                        
+                        require "remote.mnd" remote processor1;
+                        
+                        def localFoo(in a, out count)
+                            print("Before foo");
+                            var result = foo(a, out count);
+                            print("After foo");
+                            result;
+                        end;
+                        """);
+
+        inputFiles.addPackagedFile(
                 "remote.mnd",
                 """
                         module test;
@@ -158,6 +173,111 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesVerifySignature() {
+            assertCompilesTo("""
+                            require "remote.mnd" remote PROC;
+                            PROC = getlink(0);
+                            if verifySignature(PROC) then
+                                async(PROC.foo(10));
+                            end;
+                            """,
+                    createInstruction(GETLINK, tmp(6), "0"),
+                    createInstruction(SET, ".proc", tmp(6)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(READ, tmp(7), ".proc", q("*signature")),
+                    createInstruction(JUMP, label(2), "equal", tmp(7), "null"),
+                    createInstruction(OP, "equal", tmp(8), tmp(7), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(3), "equal", tmp(8), "false"),
+                    createInstruction(WRITE, "10", ".proc", q(":foo:a")),
+                    createInstruction(WRITE, "false", ".proc", q(":foo*finished")),
+                    createInstruction(WRITE, "2", ".proc", q("@counter")),
+                    createInstruction(SET, tmp(9), "null"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, tmp(9), "null"),
+                    createInstruction(LABEL, label(4))
+            );
+        }
+
+
+        @Test
+        void compilesMultipleInstantiations() {
+            assertCompilesTo("""
+                            require "remote.mnd" remote processor1, processor2;
+                            y = processor1.foo(10, out a);
+                            z = processor2.foo(11, out b);
+                            print(y, z, a, b);
+                            """,
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(READ, tmp(5), "processor1", q("*signature")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(5), q("fe196785ecf7cd23:v1")),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(READ, tmp(11), "processor2", q("*signature")),
+                    createInstruction(JUMP, label(3), "notEqual", tmp(11), q("fe196785ecf7cd23:v1")),
+                    createInstruction(WRITE, "10", "processor1", q(":foo:a")),
+                    createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
+                    createInstruction(WRITE, "2", "processor1", q("@counter")),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(WAIT, "1e-15"),
+                    createInstruction(READ, tmp(14), "processor1", q(":foo*finished")),
+                    createInstruction(JUMP, label(4), "equal", tmp(14), "false"),
+                    createInstruction(READ, tmp(13), "processor1", q(":foo:count")),
+                    createInstruction(SET, ":a", tmp(13)),
+                    createInstruction(READ, tmp(15), "processor1", q(":foo*retval")),
+                    createInstruction(SET, ":y", tmp(15)),
+                    createInstruction(WRITE, "11", "processor2", q(":foo:a")),
+                    createInstruction(WRITE, "false", "processor2", q(":foo*finished")),
+                    createInstruction(WRITE, "2", "processor2", q("@counter")),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(WAIT, "1e-15"),
+                    createInstruction(READ, tmp(18), "processor2", q(":foo*finished")),
+                    createInstruction(JUMP, label(5), "equal", tmp(18), "false"),
+                    createInstruction(READ, tmp(17), "processor2", q(":foo:count")),
+                    createInstruction(SET, ":b", tmp(17)),
+                    createInstruction(READ, tmp(19), "processor2", q(":foo*retval")),
+                    createInstruction(SET, ":z", tmp(19)),
+                    createInstruction(PRINT, ":y"),
+                    createInstruction(PRINT, ":z"),
+                    createInstruction(PRINT, ":a"),
+                    createInstruction(PRINT, ":b")
+            );
+        }
+
+        @Test
+        void compilesNestedRemoteModule() {
+            assertCompilesTo("""
+                            require "local.mnd";
+                            x = localFoo(10, out a);
+                            print(x, a);
+                            """,
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(READ, tmp(7), "processor1", q("*signature")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(7), q("fe196785ecf7cd23:v1")),
+                    createInstruction(SET, ":localFoo:a", "10"),
+                    createInstruction(PRINT, q("Before foo")),
+                    createInstruction(WRITE, ":localFoo:a", "processor1", q(":foo:a")),
+                    createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
+                    createInstruction(WRITE, "2", "processor1", q("@counter")),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(WAIT, "1e-15"),
+                    createInstruction(READ, tmp(9), "processor1", q(":foo*finished")),
+                    createInstruction(JUMP, label(4), "equal", tmp(9), "false"),
+                    createInstruction(READ, tmp(2), "processor1", q(":foo:count")),
+                    createInstruction(SET, ":localFoo:count", tmp(2)),
+                    createInstruction(READ, tmp(10), "processor1", q(":foo*retval")),
+                    createInstruction(SET, ":localFoo:result", tmp(10)),
+                    createInstruction(PRINT, q("After foo")),
+                    createInstruction(SET, tmp(8), ":localFoo:result"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, ":a", ":localFoo:count"),
+                    createInstruction(WRITE, tmp(8), "processor1", q(".x")),
+                    createInstruction(READ, tmp(0), "processor1", q(".x")),
+                    createInstruction(PRINT, tmp(0)),
+                    createInstruction(PRINT, ":a")
+            );
+        }
+
+        @Test
         void compilesRemoteArrayAccess() {
             assertCompilesTo("""
                             require "remote2.mnd" remote processor1;
@@ -209,6 +329,60 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
             );
         }
 
+        @Test
+        void compilesMultipleRemoteArrayAccess() {
+            assertCompilesTo("""
+                            require "remote2.mnd" remote processor1, processor2;
+                            for out i in processor1.array[0..2] do
+                                i = rand(100);
+                            end;
+                            processor2.array[floor(rand(10))]++;
+                            print(processor2.array[2..4]);
+                            """,
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(READ, tmp(13), "processor1", q("*signature")),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(13), q("32deff56ad045d71:v1")),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(READ, tmp(27), "processor2", q("*signature")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(27), q("32deff56ad045d71:v1")),
+                    createInstruction(READ, tmp(3), "processor1", q(".array*0")),
+                    createInstruction(SET, ":i", tmp(3)),
+                    createInstruction(SETADDR, tmp(28), label(6)),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(MULTILABEL, label(6)),
+                    createInstruction(WRITE, ":i", "processor1", q(".array*0")),
+                    createInstruction(READ, tmp(4), "processor1", q(".array*1")),
+                    createInstruction(SET, ":i", tmp(4)),
+                    createInstruction(SETADDR, tmp(28), label(7)),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(MULTILABEL, label(7)),
+                    createInstruction(WRITE, ":i", "processor1", q(".array*1")),
+                    createInstruction(READ, tmp(5), "processor1", q(".array*2")),
+                    createInstruction(SET, ":i", tmp(5)),
+                    createInstruction(SETADDR, tmp(28), label(8)),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(OP, "rand", tmp(29), "100"),
+                    createInstruction(SET, ":i", tmp(29)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(MULTIJUMP, tmp(28), "0", "0"),
+                    createInstruction(MULTILABEL, label(8)),
+                    createInstruction(WRITE, ":i", "processor1", q(".array*2")),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(OP, "rand", tmp(30), "10"),
+                    createInstruction(OP, "floor", tmp(31), tmp(30)),
+                    createInstruction(SET, tmp(32), tmp(31)),
+                    createInstruction(READARR, tmp(33), ".processor2.array[]", tmp(32)),
+                    createInstruction(SET, tmp(34), tmp(33)),
+                    createInstruction(OP, "add", tmp(33), tmp(33), "1"),
+                    createInstruction(WRITEARR, tmp(33), ".processor2.array[]", tmp(32)),
+                    createInstruction(READ, tmp(19), "processor2", q(".array*2")),
+                    createInstruction(PRINT, tmp(19)),
+                    createInstruction(READ, tmp(20), "processor2", q(".array*3")),
+                    createInstruction(PRINT, tmp(20)),
+                    createInstruction(READ, tmp(35), "processor2", q(".array*4")),
+                    createInstruction(PRINT, tmp(35))
+            );
+        }
     }
 
     @Nested
@@ -217,7 +391,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesAsyncOnLogicFunction() {
             assertGeneratesMessage(
-                    "Function 'printflush' cannot be called asynchronously.",
+                    "Function or method 'printflush' cannot be called asynchronously.",
                     "async(printflush(message1));"
             );
         }
@@ -225,7 +399,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesAsyncOnLibraryFunction() {
             assertGeneratesMessage(
-                    "Function 'print' cannot be called asynchronously.",
+                    "Function or method 'print' cannot be called asynchronously.",
                     "async(print(10));"
             );
         }
@@ -233,7 +407,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesAsyncOnAsyncFunction() {
             assertGeneratesMessage(
-                    "Function 'async' cannot be called asynchronously.",
+                    "Function or method 'async' cannot be called asynchronously.",
                     """
                             require "remote.mnd" remote processor1;
                             async(async(foo(10)));"""
@@ -287,7 +461,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     "Remote function 'foo(in a, out count)' conflicts with remote function 'foo()': names of remote functions must be unique.",
                     """
                             require "remote.mnd" remote processor1;
-                            require "conflict.mnd" remote processor1;
+                            require "conflict.mnd" remote processor2;
                             foo();
                             """
             );
@@ -326,6 +500,17 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
             );
         }
 
+
+        @Test
+        void refusesWrongVerifySignatureParameter() {
+            assertGeneratesMessage(
+                    "Unrecognized remote processor.",
+                    """
+                            verifySignature(print);
+                            """
+            );
+        }
+
         @Test
         void refusesRemoteVariablesInLocalScope() {
             assertGeneratesMessage(
@@ -357,6 +542,17 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     """
                             require "remote.mnd" remote processor1;
                             async(foo(10, out a));
+                            """
+            );
+        }
+
+        @Test
+        void refusesUnknownProcessor() {
+            assertGeneratesMessage(
+                    "Unknown method 'foo'.",
+                    """
+                            require "remote.mnd" remote processor1;
+                            async(processor2.foo(10));
                             """
             );
         }

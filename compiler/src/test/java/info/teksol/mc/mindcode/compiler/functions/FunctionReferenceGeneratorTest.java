@@ -102,7 +102,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
 
                 for (Opcode opcode : Opcode.values()) {
                     // Does this opcode exist in edition?
-                    if (opcode.isVirtual() || processor.getOpcodeVariants().stream().noneMatch(v -> v.edition() == edition && v.opcode() == opcode)) {
+                    if (samples.stream().noneMatch(v -> v.edition() == edition && v.instruction().getOpcode() == opcode)) {
                         continue;
                     }
                     w.println("  * [Instruction `" + instructionName(opcode) + "`](#instruction-" + linkify(opcode) + ")");
@@ -114,7 +114,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
 
                 for (Opcode opcode : Opcode.values()) {
                     // Does this opcode exist in edition?
-                    if (processor.getOpcodeVariants().stream().noneMatch(v -> v.edition() == edition && v.opcode() == opcode)) {
+                    if (samples.stream().noneMatch(v -> v.edition() == edition && v.instruction().getOpcode() == opcode)) {
                         continue;
                     }
 
@@ -146,8 +146,8 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         }
     }
 
-    private void printOpcode(InstructionProcessor processor, PrintWriter w, Opcode opcode, List<FunctionSample> list) {
-        if (list.stream().noneMatch(v -> v.instruction().getOpcode() == opcode)) {
+    private void printOpcode(InstructionProcessor processor, PrintWriter w, Opcode opcode, List<FunctionSample> samples) {
+        if (samples.stream().noneMatch(v -> v.instruction().getOpcode() == opcode)) {
             return;
         }
 
@@ -163,7 +163,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         w.println("|Function&nbsp;call" + padding1 + "|Generated&nbsp;instruction" + padding2 + "|");
         w.println("|-------------|---------------------|");
 
-        list.stream()
+        samples.stream()
                 .filter(v -> v.instruction().getOpcode() == opcode)
                 .sorted(Comparator.comparingInt(FunctionSample::order))
                 .forEach(s -> printSample(processor, w, s));

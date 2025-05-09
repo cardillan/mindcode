@@ -22,7 +22,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
     public void compileFunction(MindcodeFunction function) {
         // Do not compile functions from modules included remotely
-        if (function.getModule().getRemoteProcessor() != null) return;
+        if (!function.getModule().getRemoteProcessors().isEmpty()) return;
 
         // Unused function are compiled to report syntax errors, except libraries
         if (!function.isUsed() && function.getSourcePosition().isLibrary()) return;

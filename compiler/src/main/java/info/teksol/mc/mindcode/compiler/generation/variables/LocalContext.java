@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -39,7 +40,11 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
         this.function = Objects.requireNonNull(function);
         this.varargs = Objects.requireNonNull(varargs);
         this.loopStack = new LoopStack(messageConsumer);
-        function.getParameters().forEach(p -> variables.put(p.getName(), p));
+        function.getParameters().forEach(p -> putVariable(p.getName(), p));
+    }
+
+    private @Nullable ValueStore putVariable(String name, ValueStore variable) {
+        return variables.put(name, variable);
     }
 
     public LoopStack loopStack() {
@@ -62,13 +67,13 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
     }
 
     public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
-        variables.put(identifier.getName(), variable);
+        putVariable(identifier.getName(), variable);
     }
 
     @Override
     public ValueStore registerFunctionVariable(AstIdentifier identifier, VariableScope scope, boolean noinit, boolean implicitDeclaration) {
         ValueStore variable = createFunctionVariable(identifier, noinit, implicitDeclaration);
-        ValueStore existing = variables.put(identifier.getName(), variable);
+        ValueStore existing = putVariable(identifier.getName(), variable);
         if (existing != null) {
             throw new MindcodeInternalError("Repeated registration of function variable (existing variable: %s, AST identifier: %s).",
                     existing, identifier);

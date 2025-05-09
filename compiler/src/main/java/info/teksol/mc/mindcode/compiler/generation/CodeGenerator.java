@@ -8,7 +8,6 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -56,7 +55,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     private final ComposedAstNodeVisitor<ValueStore> nodeVisitor;
     private final FunctionDeclarationsBuilder functionCompiler;
-    private final DeclarationsBuilder declarationsBuilder;
 
     private LogicLabel remoteWaitLabel = LogicLabel.INVALID;
 
@@ -87,7 +85,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor.registerVisitor(new AssignmentsBuilder(this, context));
         nodeVisitor.registerVisitor(new BreakContinueStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new CaseExpressionsBuilder(this, context));
-        nodeVisitor.registerVisitor(declarationsBuilder = new DeclarationsBuilder(this, context));
+        nodeVisitor.registerVisitor(new DeclarationsBuilder(this, context));
         nodeVisitor.registerVisitor(new ForEachLoopStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new FunctionCallsBuilder(this, context));
         nodeVisitor.registerVisitor(new IdentifiersBuilder(this, context));
@@ -110,6 +108,16 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 .collect(Collectors.joining("\n"));
 
         return Long.toHexString(CRC64.hash1(text)) + ":" + MindcodeCompiler.REMOTE_PROTOCOL_VERSION;
+    }
+
+    public String createRemoteSignature(AstModule module) {
+        return createRemoteSignature(callGraph.getFunctions().stream()
+                .filter(f -> f.getModule() == module)
+                .map(MindcodeFunction::getDeclaration));
+    }
+
+    public AstModule getModule(AstRequire node) {
+        return context.getModule(node);
     }
 
     public boolean isLocalContext() {
@@ -189,7 +197,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.clearContextType(program);
     }
 
-    private void generateRemoteInitialization() {
+    private void generateVerifySignatureialization() {
         List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isRemote() && f.isEntryPoint()).toList();
         if (!remoteFunctions.isEmpty()) {
             assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
@@ -277,9 +285,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
             return LogicVoid.VOID;
         }
 
-        // Skip remote modules
-        if (node instanceof AstModule module && module.getRemoteProcessor() != null) {
-            createRemoteVariables(module);
+        // Do not compile code from remote modules
+        if (node instanceof AstModule module && !module.getRemoteProcessors().isEmpty()) {
             return LogicVoid.VOID;
         }
 
@@ -294,7 +301,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
             mainBodyContext = assembler.getAstContext();
             mainBodyEndIndex = assembler.getInstructions().size();
             if (!program.isMainProgram()) {
-                generateRemoteInitialization();
+                generateVerifySignatureialization();
             }
         }
 
@@ -308,13 +315,5 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (node instanceof AstCodeBlock) codeInGlobalScopeWarning = false;
 
         return result;
-    }
-
-    private void createRemoteVariables(AstModule module) {
-        module.getChildren().stream()
-                .filter(AstVariablesDeclaration.class::isInstance)
-                .map(AstVariablesDeclaration.class::cast)
-                .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == Modifier.REMOTE))
-                .forEach(n -> declarationsBuilder.visitRemoteVariablesDeclaration(module, n));
     }
 }

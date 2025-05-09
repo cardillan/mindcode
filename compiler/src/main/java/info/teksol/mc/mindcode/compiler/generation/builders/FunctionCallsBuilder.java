@@ -59,12 +59,8 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     }
 
     @Override
-    public ValueStore visitFunctionCall(AstFunctionCall node) {
-        if (node.hasObject()) {
-            return handleMethodCall(node);
-        } else {
-            return handleFunctionCall(node, false);
-        }
+    public ValueStore visitFunctionCall(AstFunctionCall call) {
+        return handleCall(call, false);
     }
 
     @Override
@@ -103,15 +99,21 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         return LogicVoid.VOID;
     }
 
-    private ValueStore handleFunctionCall(AstFunctionCall call, boolean async) {
-        Function<AstFunctionCall, ValueStore> handler = builtinHandlers.get(call.getFunctionName());
-        if (handler != null) {
-            if (async) {
-                error(call, ERR.FUNCTION_CALL_ASYNC_UNSUPPORTED, call.getFunctionName());
-            }
-            return handler.apply(call);
+    private ValueStore handleCall(AstFunctionCall call, boolean async) {
+        if (call.hasObject()) {
+            // Method call
+            return callBuilder.get().handleCall(call, async);
         } else {
-            return callBuilder.get().handleFunctionCall(call, async);
+            // Function call: try built-in functions first
+            Function<AstFunctionCall, ValueStore> handler = builtinHandlers.get(call.getFunctionName());
+            if (handler != null) {
+                if (async) {
+                    error(call, ERR.FUNCTION_CALL_ASYNC_UNSUPPORTED, call.getFunctionName());
+                }
+                return handler.apply(call);
+            } else {
+                return callBuilder.get().handleCall(call, async);
+            }
         }
     }
 
@@ -125,7 +127,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         AstExpression innerCall = Objects.requireNonNull(call.getArgument(0).getExpression());
 
         if (innerCall instanceof AstFunctionCall asyncCall) {
-            handleFunctionCall(asyncCall, true);
+            handleCall(asyncCall, true);
         } else {
             error(call, ERR.ASYNC_WRONG_ARGUMENT, call.getFunctionName());
             evaluate(innerCall);        // Report syntax errors here
@@ -137,28 +139,25 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
     private Map<String, Function<AstFunctionCall, ValueStore>> createBuiltinFunctionHandlers() {
         Map<String, Function<AstFunctionCall, ValueStore>> map = new HashMap<>();
 
-        map.put("assertEquals", call -> assertsBuilder.get().handleAssertEquals(call));
-        map.put("assertPrints", call -> assertsBuilder.get().handleAssertPrints(call));
-        map.put("async",        this::handleAsync);
-        map.put("await",        call -> callBuilder.get().handleAwait(call));
-        map.put("finished",     call -> callBuilder.get().handleFinished(call));
-        map.put("length",       call -> varargsBuilder.get().handleLength(call));
-        map.put("min",          call -> varargsBuilder.get().handleMinMax(call));
-        map.put("max",          call -> varargsBuilder.get().handleMinMax(call));
-        map.put("mlog",         call -> mlogBuilder.get().handleMlog(call, false, false));
-        map.put("mlogSafe",     call -> mlogBuilder.get().handleMlog(call, true, false));
-        map.put("mlogText",     call -> mlogBuilder.get().handleMlog(call, false, true));
-        map.put("ascii",        call -> textBuilder.get().handleAscii(call));
-        map.put("char",         call -> textBuilder.get().handleChar(call));
-        map.put("printf",       call -> textBuilder.get().handlePrintf(call));
-        map.put("print",        call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT));
-        map.put("println",      call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN));
-        map.put("remark",       call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.REMARK));
-        map.put("strlen",       call -> textBuilder.get().handleStrlen(call));
+        map.put("assertEquals",     call -> assertsBuilder.get().handleAssertEquals(call));
+        map.put("assertPrints",     call -> assertsBuilder.get().handleAssertPrints(call));
+        map.put("async",            this::handleAsync);
+        map.put("await",            call -> callBuilder.get().handleAwait(call));
+        map.put("finished",         call -> callBuilder.get().handleFinished(call));
+        map.put("verifySignature",  call -> callBuilder.get().handleVerifySignature(call));
+        map.put("length",           call -> varargsBuilder.get().handleLength(call));
+        map.put("min",              call -> varargsBuilder.get().handleMinMax(call));
+        map.put("max",              call -> varargsBuilder.get().handleMinMax(call));
+        map.put("mlog",             call -> mlogBuilder.get().handleMlog(call, false, false));
+        map.put("mlogSafe",         call -> mlogBuilder.get().handleMlog(call, true, false));
+        map.put("mlogText",         call -> mlogBuilder.get().handleMlog(call, false, true));
+        map.put("ascii",            call -> textBuilder.get().handleAscii(call));
+        map.put("char",             call -> textBuilder.get().handleChar(call));
+        map.put("printf",           call -> textBuilder.get().handlePrintf(call));
+        map.put("print",            call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT));
+        map.put("println",          call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN));
+        map.put("remark",           call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.REMARK));
+        map.put("strlen",           call -> textBuilder.get().handleStrlen(call));
         return map;
-    }
-
-    private ValueStore handleMethodCall(AstFunctionCall call) {
-        return callBuilder.get().handleMethodCall(call);
     }
 }
