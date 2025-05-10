@@ -10,16 +10,30 @@ import java.util.stream.Stream;
 @NullMarked
 public enum ContentType {
     UNKNOWN,
-    BLOCK,
-    ITEM,
-    LIQUID,
+    BLOCK(true),
+    ITEM(true),
+    LIQUID(true),
     STATUS,
-    TEAM,
-    UNIT,
+    TEAM(true),
+    UNIT(true),
     UNIT_COMMAND,
     LACCESS,
     LVAR,
     ;
+
+    public final boolean hasLookup;
+
+    ContentType(boolean hasLookup) {
+        this.hasLookup = hasLookup;
+    }
+
+    ContentType() {
+        this.hasLookup = false;
+    }
+
+    public @Nullable String getLookupKeyword() {
+        return hasLookup ? name().toLowerCase() : null;
+    }
 
     private static final Map<String, ContentType> VALUE_MAP = createValueMap();
 

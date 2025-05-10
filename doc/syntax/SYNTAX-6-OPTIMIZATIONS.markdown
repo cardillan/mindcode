@@ -1150,9 +1150,34 @@ print *tmp2
 
 ### Unsafe case optimization
 
-When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable to determine this is the case, and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions that do not have an `else` branch. This prevents the range-limiting jumps from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
+When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable to determine this is the case, and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions that do not have an `else` branch. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
 
-If you activate the `unsafe-case-optimization` directive, but not all input values are handled in your case expressions, the behavior of the generated code is undefined, when an unhandled input value is encountered. 
+If you activate the `unsafe-case-optimization` directive, but not all input values are handled in your case expressions, the behavior of the generated code is undefined, when an unhandled input value is encountered.
+
+### Symbolic labels
+
+When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation is needed when the minimal value handled by the jump table is different from 0, to account for the offset. This additional operation increases both optimization cost and execution cost. To prevent the increase in the execution cost, the jump table is padded with additional jumps when the minimal value is between `1` and `3`.
+
+When `symbolic-labels` is set to `false`, the offset is computed at compile time, therefore no additional instruction is needed and no jump table padding occurs.
+
+### Mindustry content conversion
+
+When all `when` branches in the case expression contain built-in constants representing Mindustry content of the same type (items, liquids, unit types or block types) and the optimization level is set to `advanced`, the case switcher converts these built-in constants to logic IDs, adds an instruction to convert the input value to a logic id (using the `sensor` instruction with the `@id` property) and attempts to build a jump table over the resulting numeric values.
+
+The following preconditions need to be met to apply content conversion:
+
+* All values in `when` branches must be of the same type (all items, all building types and so on).
+* The logic id must be known by Mindcode for all `when` values. 
+* All logic ids must be stable, or `target-optimization` mode must be set to `specific`.
+* The optimization level must be set to advanced.
+
+The optimization is applied with these differences:
+
+* The input value is converted to numeric id using the `sensor ... @id` instruction. This instruction is accounted for when computing optimization costs.
+* The out-of-range handling is modified to distinguish `null` from zero id: if zero id is included in the jump table, `null` is redirected to the else branch in the out-of-range handling.    
+
+> [!NOTE]
+> The out-of-range handling instructions are omitted when `unsafe-case-optimization` is `true` and there's no `else` branch. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g. item selected in a sorter), keep in mind the value obtained this way might be null.  
 
 ## Array Optimization
 

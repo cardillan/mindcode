@@ -32,7 +32,7 @@ Pass 1: speed optimization selection (cost limit 737):
     Inline function call at line 53:9                            cost   102, benefit       50.0, efficiency        0.5
     Inline function call at line 55:9                            cost   102, benefit       50.0, efficiency        0.5
     Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency       10.9
-  * Convert case at line 100:5                                   cost     1, benefit     1890.7, efficiency     1890.7 (+1 instructions)
+  * Convert case at line 100:5                                   cost     0, benefit     2187.5, efficiency   Infinity (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 736):
     Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8

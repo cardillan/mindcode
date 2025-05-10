@@ -74,7 +74,10 @@ public enum InstructionParameterType {
 
     /// A const parameter. Specifies lookup category. The entire instruction is only available in V7;
     /// the parameter keywords therefore aren't version specific.
-    LOOKUP          ("itemType", Flags.KEYWORD, "block", "unit", "item", "liquid"),
+    LOOKUP          ("itemType", Flags.KEYWORD,
+            allVersions("block", "unit", "item", "liquid"),
+            specificVersions(V8A, MAX, "team")
+    ),
 
     ///  Type of message in MESSAGE instruction 
     MAKE_MARKER     ("markerType", Flags.KEYWORD, "shapeText", "point", "shape", "text", "line", "texture", "quad"),
