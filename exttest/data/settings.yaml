@@ -43,7 +43,7 @@ defaults:
   # List of optimization levels for each given optimization
   array-optimization: [ none, basic ]
   case-expression-optimization: [ none, basic ]
-  case-switching: [ none, basic ]
+  case-switching: [ none, basic, advanced ]
   data-flow-optimization: [ none, basic ]
   dead-code-elimination: [ none, basic ]
   expression-optimization: [ none, basic, advanced ]
