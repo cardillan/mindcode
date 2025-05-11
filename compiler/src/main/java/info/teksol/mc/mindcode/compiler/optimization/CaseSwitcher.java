@@ -236,7 +236,7 @@ class CaseSwitcher extends BaseOptimizer {
         }
 
         private void debug(Object message) {
-            System.out.println(message);
+            //System.out.println(message);
         }
 
         @Override

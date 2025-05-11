@@ -84,7 +84,8 @@ public class MlogParser {
                 tokens.add(string);
                 expectSeparator = true;
             } else if (c != ' ' && c != '\t') {
-                tokens.add(parseToken());
+                String token = parseToken();
+                tokens.add(tokens.isEmpty() ? token : convert(token));
                 expectSeparator = true;
             } else {
                 pos++;
@@ -147,5 +148,34 @@ public class MlogParser {
         }
 
         return mlog.substring(from, pos);
+    }
+
+    private final Set<String> usedVariables = new HashSet<>();
+    private final Map<String, String> variables = new HashMap<>();
+
+    private String convert(String id) {
+        if (id.isEmpty()) return id;
+        return switch (id.charAt(0)) {
+            case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '+', '-', '@', '%' -> id;
+            default -> variables.computeIfAbsent(id, this::normalize);
+        };
+    }
+
+    private String normalize(String id) {
+        if (id.startsWith(".") || id.startsWith(":")) id = id.substring(1);
+
+        char[] chars = id.toCharArray();
+        for (int i = 0; i < chars.length; i++) {
+            char ch = chars[i];
+            if (ch != '_' && (ch < 'A' || ch > 'Z') && (ch < 'a' || ch > 'z') && (ch < '0' || ch > '9')) {
+                chars[i] = '_';
+            }
+        }
+        String normalized = new String(chars);
+        if (usedVariables.add(normalized)) return normalized;
+
+        int index = 1;
+        while (!usedVariables.add(normalized + index)) index++;
+        return normalized + index;
     }
 }

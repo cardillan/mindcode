@@ -4,19 +4,19 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.4.0 - Unreleased
+## 3.4.0 - 2025-05-11
 
 ### Fixed
 
-* Fixed unnecessary condition duplication for empty loops ([#252](https://github.com/cardillan/mindcode/issues/252)).
+* Removed unnecessary condition duplication for empty loops ([#252](https://github.com/cardillan/mindcode/issues/252)).
 
 ### Added
 
 * Added new functions to the [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):
   * Added `setAlpha()` function which takes a packed color as an argument (including e.g. named color literals) and returns a packed color with updated alpha channel.
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
-* Added new functionalities to the [Case switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
-  * Explicit range checking may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unsafe-case-optimization) compiler directive.
+* Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
+  * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unsafe-case-optimization) compiler directive.
   * Case expressions based on Mindustry content (e.g. items, block types and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
   * Large jump tables containing a lot of unused values may be [split into two or more segments](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#discontinuous-jump-tables) to save space.
 
@@ -28,7 +28,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* The remote call mechanism was redesigned. When recompiling code in a processor which utilizes remote calls, all related processors need to be recompiled too.
+* **Breaking**: the remote call mechanism was redesigned. When recompiling code in a processor which utilizes remote calls, all related processors need to be recompiled too.
+* The Mlog decompiler replaces illegal characters in mlog variable names. If the names after conversion collides with another variable name, a numeric index is appended. 
 
 ### Miscellaneous
 

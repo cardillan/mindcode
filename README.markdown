@@ -46,15 +46,9 @@ The most important recent changes to Mindcode include:
   * Expressions in string interpolation: `print($"Sum: ${a + b}.")`.
   * Support for color literals: `%00ffff80`.
   * Prefix/postfix increment/decrement operators: `i++`, `--j`.
-  * Redefined [strict and relaxed syntax modes](/doc/syntax/SYNTAX.markdown#syntax-modes).
-  * Variable declaration (optional in relaxed syntax, compulsory in strict syntax).
 * Basic functionality
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
   * Using Mindustry Logic metadata corresponding to the target selected for compilation.  
-  * A built-in [library of system functions](doc/syntax/SYSTEM-LIBRARY.markdown).
-  * Ability to inject the mlog code to Mindustry processors via the [Mlog Watcher mod](doc/syntax/TOOLS-MLOG-WATCHER.markdown).
-  * Support for running the compiled mlog code in an emulated processor.
-  * Tool for [partial decompilation](doc/syntax/TOOLS-MLOG-DECOMPILER.markdown) of an existing mlog code into Mindcode.
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 
