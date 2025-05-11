@@ -20,69 +20,69 @@
    698 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 737):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency        0.3
-    Unroll loop at line 90:5                                     cost   252, benefit     5000.0, efficiency       19.8
-    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3
-    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency       15.8
-    Inline function 'displayItem' defined at line 86:1           cost   101, benefit      100.0, efficiency        1.0
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   102, benefit       50.0, efficiency        0.5
-    Inline function call at line 55:9                            cost   102, benefit       50.0, efficiency        0.5
-    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency       10.9
-  * Convert case at line 100:5                                   cost     0, benefit     2187.5, efficiency   Infinity (+1 instructions)
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency      0.261
+    Unroll loop at line 90:5                                     cost   252, benefit     5000.0, efficiency     19.841
+    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333
+    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency     15.750
+    Inline function 'displayItem' defined at line 86:1           cost   101, benefit      100.0, efficiency      0.990
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   102, benefit       50.0, efficiency      0.490
+    Inline function call at line 55:9                            cost   102, benefit       50.0, efficiency      0.490
+    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency     10.938
+  * Convert case at line 100:5 (segments: 1)                     cost     1, benefit     2187.5, efficiency   2187.500 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 736):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency        0.3
-  * Unroll loop at line 90:5                                     cost   255, benefit     5000.0, efficiency       19.6 (+255 instructions)
-    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3
-    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency       15.8
-    Inline function 'displayItem' defined at line 86:1           cost   102, benefit      100.0, efficiency        1.0
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   103, benefit       50.0, efficiency        0.5
-    Inline function call at line 55:9                            cost   103, benefit       50.0, efficiency        0.5
-    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency       10.9
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency      0.261
+  * Unroll loop at line 90:5                                     cost   255, benefit     5000.0, efficiency     19.608 (+255 instructions)
+    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333
+    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency     15.750
+    Inline function 'displayItem' defined at line 86:1           cost   102, benefit      100.0, efficiency      0.980
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   103, benefit       50.0, efficiency      0.485
+    Inline function call at line 55:9                            cost   103, benefit       50.0, efficiency      0.485
+    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency     10.938
 
 Pass 1: speed optimization selection (cost limit 481):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency        0.3
-    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3
-  * Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency       15.8 (-3 instructions)
-    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency       10.9
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency      0.261
+    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333
+  * Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency     15.750 (-3 instructions)
+    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency     10.938
 
 Pass 1: speed optimization selection (cost limit 484):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency        0.2
-  * Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3 (-3 instructions)
-    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency      0.231
+  * Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333 (-3 instructions)
+    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
 
 Pass 1: speed optimization selection (cost limit 487):
-  * Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8 (-12 instructions)
-    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency        0.2
-    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
+  * Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778 (-12 instructions)
+    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency      0.231
+    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
 
 Pass 1: speed optimization selection (cost limit 499):
-    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency        0.2
-  * Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3 (+249 instructions)
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
+    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency      0.231
+  * Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280 (+249 instructions)
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -1275,32 +1275,32 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    327 # "Function: def drawDigit12(in x, in y, in digit)"
    328 jump *label82 notEqual :displayItem:amount 1
 
-Modifications by Convert case at line 100:5 (+1 instructions):
+Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
  
    212 label *label84
    213 op mod *tmp19 :displayItem:amount 10
    214 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label59 notEqual *tmp19 0
-+  215 multijump *label87 *tmp19 0 (m:*label86)
-+  216 multilabel *label87 (m:*label86)
++  215 multijump *label86 *tmp19 0 (m:*label96)
++  216 multilabel *label86 (m:*label96)
 +  217 jump *label60 always
-+  218 multilabel *label88 (m:*label86)
++  218 multilabel *label87 (m:*label96)
 +  219 jump *label62 always
-+  220 multilabel *label89 (m:*label86)
++  220 multilabel *label88 (m:*label96)
 +  221 jump *label64 always
-+  222 multilabel *label90 (m:*label86)
++  222 multilabel *label89 (m:*label96)
 +  223 jump *label66 always
-+  224 multilabel *label91 (m:*label86)
++  224 multilabel *label90 (m:*label96)
 +  225 jump *label68 always
-+  226 multilabel *label92 (m:*label86)
++  226 multilabel *label91 (m:*label96)
 +  227 jump *label70 always
-+  228 multilabel *label93 (m:*label86)
++  228 multilabel *label92 (m:*label96)
 +  229 jump *label72 always
-+  230 multilabel *label94 (m:*label86)
++  230 multilabel *label93 (m:*label96)
 +  231 jump *label74 always
-+  232 multilabel *label95 (m:*label86)
++  232 multilabel *label94 (m:*label96)
 +  233 jump *label76 always
-+  234 multilabel *label96 (m:*label86)
++  234 multilabel *label95 (m:*label96)
 +  235 jump *label78 always
    236 label *label60
    237 op sub *tmp24 :displayItem:x 1
@@ -1394,26 +1394,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 -    * label *label84
 -    * op mod *tmp19 :displayItem:amount 10
 -    * # "Function: def drawDigit(in x, in y, in digit)"
--    * multijump *label87 *tmp19 0 (m:*label86)
--    * multilabel *label87 (m:*label86)
+-    * multijump *label86 *tmp19 0 (m:*label96)
+-    * multilabel *label86 (m:*label96)
 -    * jump *label60 always
--    * multilabel *label88 (m:*label86)
+-    * multilabel *label87 (m:*label96)
 -    * jump *label62 always
--    * multilabel *label89 (m:*label86)
+-    * multilabel *label88 (m:*label96)
 -    * jump *label64 always
--    * multilabel *label90 (m:*label86)
+-    * multilabel *label89 (m:*label96)
 -    * jump *label66 always
--    * multilabel *label91 (m:*label86)
+-    * multilabel *label90 (m:*label96)
 -    * jump *label68 always
--    * multilabel *label92 (m:*label86)
+-    * multilabel *label91 (m:*label96)
 -    * jump *label70 always
--    * multilabel *label93 (m:*label86)
+-    * multilabel *label92 (m:*label96)
 -    * jump *label72 always
--    * multilabel *label94 (m:*label86)
+-    * multilabel *label93 (m:*label96)
 -    * jump *label74 always
--    * multilabel *label95 (m:*label86)
+-    * multilabel *label94 (m:*label96)
 -    * jump *label76 always
--    * multilabel *label96 (m:*label86)
+-    * multilabel *label95 (m:*label96)
 -    * jump *label78 always
 -    * label *label60
 -    * op sub *tmp24 :displayItem:x 1
@@ -1523,26 +1523,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  212 label *label98
 +  213 op mod *tmp19 :displayItem:amount 10
 +  214 # "Function: def drawDigit(in x, in y, in digit)"
-+  215 multijump *label99 *tmp19 0 (m:*label86)
-+  216 multilabel *label99 (m:*label86)
++  215 multijump *label99 *tmp19 0 (m:*label96)
++  216 multilabel *label99 (m:*label96)
 +  217 jump *label109 always
-+  218 multilabel *label100 (m:*label86)
++  218 multilabel *label100 (m:*label96)
 +  219 jump *label111 always
-+  220 multilabel *label101 (m:*label86)
++  220 multilabel *label101 (m:*label96)
 +  221 jump *label113 always
-+  222 multilabel *label102 (m:*label86)
++  222 multilabel *label102 (m:*label96)
 +  223 jump *label115 always
-+  224 multilabel *label103 (m:*label86)
++  224 multilabel *label103 (m:*label96)
 +  225 jump *label117 always
-+  226 multilabel *label104 (m:*label86)
++  226 multilabel *label104 (m:*label96)
 +  227 jump *label119 always
-+  228 multilabel *label105 (m:*label86)
++  228 multilabel *label105 (m:*label96)
 +  229 jump *label121 always
-+  230 multilabel *label106 (m:*label86)
++  230 multilabel *label106 (m:*label96)
 +  231 jump *label123 always
-+  232 multilabel *label107 (m:*label86)
++  232 multilabel *label107 (m:*label96)
 +  233 jump *label125 always
-+  234 multilabel *label108 (m:*label86)
++  234 multilabel *label108 (m:*label96)
 +  235 jump *label127 always
 +  236 label *label109
 +  237 op sub *tmp24 :displayItem:x 1
@@ -1648,26 +1648,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  337 label *label136
 +  338 op mod *tmp19 :displayItem:amount 10
 +  339 # "Function: def drawDigit(in x, in y, in digit)"
-+  340 multijump *label137 *tmp19 0 (m:*label86)
-+  341 multilabel *label137 (m:*label86)
++  340 multijump *label137 *tmp19 0 (m:*label96)
++  341 multilabel *label137 (m:*label96)
 +  342 jump *label147 always
-+  343 multilabel *label138 (m:*label86)
++  343 multilabel *label138 (m:*label96)
 +  344 jump *label149 always
-+  345 multilabel *label139 (m:*label86)
++  345 multilabel *label139 (m:*label96)
 +  346 jump *label151 always
-+  347 multilabel *label140 (m:*label86)
++  347 multilabel *label140 (m:*label96)
 +  348 jump *label153 always
-+  349 multilabel *label141 (m:*label86)
++  349 multilabel *label141 (m:*label96)
 +  350 jump *label155 always
-+  351 multilabel *label142 (m:*label86)
++  351 multilabel *label142 (m:*label96)
 +  352 jump *label157 always
-+  353 multilabel *label143 (m:*label86)
++  353 multilabel *label143 (m:*label96)
 +  354 jump *label159 always
-+  355 multilabel *label144 (m:*label86)
++  355 multilabel *label144 (m:*label96)
 +  356 jump *label161 always
-+  357 multilabel *label145 (m:*label86)
++  357 multilabel *label145 (m:*label96)
 +  358 jump *label163 always
-+  359 multilabel *label146 (m:*label86)
++  359 multilabel *label146 (m:*label96)
 +  360 jump *label165 always
 +  361 label *label147
 +  362 op sub *tmp24 :displayItem:x 1
@@ -1773,26 +1773,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  462 label *label174
 +  463 op mod *tmp19 :displayItem:amount 10
 +  464 # "Function: def drawDigit(in x, in y, in digit)"
-+  465 multijump *label175 *tmp19 0 (m:*label86)
-+  466 multilabel *label175 (m:*label86)
++  465 multijump *label175 *tmp19 0 (m:*label96)
++  466 multilabel *label175 (m:*label96)
 +  467 jump *label185 always
-+  468 multilabel *label176 (m:*label86)
++  468 multilabel *label176 (m:*label96)
 +  469 jump *label187 always
-+  470 multilabel *label177 (m:*label86)
++  470 multilabel *label177 (m:*label96)
 +  471 jump *label189 always
-+  472 multilabel *label178 (m:*label86)
++  472 multilabel *label178 (m:*label96)
 +  473 jump *label191 always
-+  474 multilabel *label179 (m:*label86)
++  474 multilabel *label179 (m:*label96)
 +  475 jump *label193 always
-+  476 multilabel *label180 (m:*label86)
++  476 multilabel *label180 (m:*label96)
 +  477 jump *label195 always
-+  478 multilabel *label181 (m:*label86)
++  478 multilabel *label181 (m:*label96)
 +  479 jump *label197 always
-+  480 multilabel *label182 (m:*label86)
++  480 multilabel *label182 (m:*label96)
 +  481 jump *label199 always
-+  482 multilabel *label183 (m:*label86)
++  482 multilabel *label183 (m:*label96)
 +  483 jump *label201 always
-+  484 multilabel *label184 (m:*label86)
++  484 multilabel *label184 (m:*label96)
 +  485 jump *label203 always
 +  486 label *label185
 +  487 op sub *tmp24 :displayItem:x 1
@@ -1898,26 +1898,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  587 label *label212
 +  588 op mod *tmp19 :displayItem:amount 10
 +  589 # "Function: def drawDigit(in x, in y, in digit)"
-+  590 multijump *label213 *tmp19 0 (m:*label86)
-+  591 multilabel *label213 (m:*label86)
++  590 multijump *label213 *tmp19 0 (m:*label96)
++  591 multilabel *label213 (m:*label96)
 +  592 jump *label223 always
-+  593 multilabel *label214 (m:*label86)
++  593 multilabel *label214 (m:*label96)
 +  594 jump *label225 always
-+  595 multilabel *label215 (m:*label86)
++  595 multilabel *label215 (m:*label96)
 +  596 jump *label227 always
-+  597 multilabel *label216 (m:*label86)
++  597 multilabel *label216 (m:*label96)
 +  598 jump *label229 always
-+  599 multilabel *label217 (m:*label86)
++  599 multilabel *label217 (m:*label96)
 +  600 jump *label231 always
-+  601 multilabel *label218 (m:*label86)
++  601 multilabel *label218 (m:*label96)
 +  602 jump *label233 always
-+  603 multilabel *label219 (m:*label86)
++  603 multilabel *label219 (m:*label96)
 +  604 jump *label235 always
-+  605 multilabel *label220 (m:*label86)
++  605 multilabel *label220 (m:*label96)
 +  606 jump *label237 always
-+  607 multilabel *label221 (m:*label86)
++  607 multilabel *label221 (m:*label96)
 +  608 jump *label239 always
-+  609 multilabel *label222 (m:*label86)
++  609 multilabel *label222 (m:*label96)
 +  610 jump *label241 always
 +  611 label *label223
 +  612 op sub *tmp24 :displayItem:x 1
@@ -3143,26 +3143,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  221 label *label365
 +  222 op mod *tmp19 :displayItem:amount 10
 +  223 # "Function: def drawDigit(in x, in y, in digit)"
-+  224 multijump *label366 *tmp19 0 (m:*label86)
-+  225 multilabel *label366 (m:*label86)
++  224 multijump *label366 *tmp19 0 (m:*label96)
++  225 multilabel *label366 (m:*label96)
 +  226 jump *label376 always
-+  227 multilabel *label367 (m:*label86)
++  227 multilabel *label367 (m:*label96)
 +  228 jump *label378 always
-+  229 multilabel *label368 (m:*label86)
++  229 multilabel *label368 (m:*label96)
 +  230 jump *label380 always
-+  231 multilabel *label369 (m:*label86)
++  231 multilabel *label369 (m:*label96)
 +  232 jump *label382 always
-+  233 multilabel *label370 (m:*label86)
++  233 multilabel *label370 (m:*label96)
 +  234 jump *label384 always
-+  235 multilabel *label371 (m:*label86)
++  235 multilabel *label371 (m:*label96)
 +  236 jump *label386 always
-+  237 multilabel *label372 (m:*label86)
++  237 multilabel *label372 (m:*label96)
 +  238 jump *label388 always
-+  239 multilabel *label373 (m:*label86)
++  239 multilabel *label373 (m:*label96)
 +  240 jump *label390 always
-+  241 multilabel *label374 (m:*label86)
++  241 multilabel *label374 (m:*label96)
 +  242 jump *label392 always
-+  243 multilabel *label375 (m:*label86)
++  243 multilabel *label375 (m:*label96)
 +  244 jump *label394 always
 +  245 label *label376
 +  246 op sub *tmp24 :displayItem:x 1
@@ -3267,26 +3267,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  345 label *label402
 +  346 op mod *tmp19 :displayItem:amount 10
 +  347 # "Function: def drawDigit(in x, in y, in digit)"
-+  348 multijump *label403 *tmp19 0 (m:*label86)
-+  349 multilabel *label403 (m:*label86)
++  348 multijump *label403 *tmp19 0 (m:*label96)
++  349 multilabel *label403 (m:*label96)
 +  350 jump *label413 always
-+  351 multilabel *label404 (m:*label86)
++  351 multilabel *label404 (m:*label96)
 +  352 jump *label415 always
-+  353 multilabel *label405 (m:*label86)
++  353 multilabel *label405 (m:*label96)
 +  354 jump *label417 always
-+  355 multilabel *label406 (m:*label86)
++  355 multilabel *label406 (m:*label96)
 +  356 jump *label419 always
-+  357 multilabel *label407 (m:*label86)
++  357 multilabel *label407 (m:*label96)
 +  358 jump *label421 always
-+  359 multilabel *label408 (m:*label86)
++  359 multilabel *label408 (m:*label96)
 +  360 jump *label423 always
-+  361 multilabel *label409 (m:*label86)
++  361 multilabel *label409 (m:*label96)
 +  362 jump *label425 always
-+  363 multilabel *label410 (m:*label86)
++  363 multilabel *label410 (m:*label96)
 +  364 jump *label427 always
-+  365 multilabel *label411 (m:*label86)
++  365 multilabel *label411 (m:*label96)
 +  366 jump *label429 always
-+  367 multilabel *label412 (m:*label86)
++  367 multilabel *label412 (m:*label96)
 +  368 jump *label431 always
 +  369 label *label413
 +  370 op sub *tmp24 :displayItem:x 1
@@ -3391,26 +3391,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  469 label *label439
 +  470 op mod *tmp19 :displayItem:amount 10
 +  471 # "Function: def drawDigit(in x, in y, in digit)"
-+  472 multijump *label440 *tmp19 0 (m:*label86)
-+  473 multilabel *label440 (m:*label86)
++  472 multijump *label440 *tmp19 0 (m:*label96)
++  473 multilabel *label440 (m:*label96)
 +  474 jump *label450 always
-+  475 multilabel *label441 (m:*label86)
++  475 multilabel *label441 (m:*label96)
 +  476 jump *label452 always
-+  477 multilabel *label442 (m:*label86)
++  477 multilabel *label442 (m:*label96)
 +  478 jump *label454 always
-+  479 multilabel *label443 (m:*label86)
++  479 multilabel *label443 (m:*label96)
 +  480 jump *label456 always
-+  481 multilabel *label444 (m:*label86)
++  481 multilabel *label444 (m:*label96)
 +  482 jump *label458 always
-+  483 multilabel *label445 (m:*label86)
++  483 multilabel *label445 (m:*label96)
 +  484 jump *label460 always
-+  485 multilabel *label446 (m:*label86)
++  485 multilabel *label446 (m:*label96)
 +  486 jump *label462 always
-+  487 multilabel *label447 (m:*label86)
++  487 multilabel *label447 (m:*label96)
 +  488 jump *label464 always
-+  489 multilabel *label448 (m:*label86)
++  489 multilabel *label448 (m:*label96)
 +  490 jump *label466 always
-+  491 multilabel *label449 (m:*label86)
++  491 multilabel *label449 (m:*label96)
 +  492 jump *label468 always
 +  493 label *label450
 +  494 op sub *tmp24 :displayItem:x 1
@@ -3515,26 +3515,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  593 label *label476
 +  594 op mod *tmp19 :displayItem:amount 10
 +  595 # "Function: def drawDigit(in x, in y, in digit)"
-+  596 multijump *label477 *tmp19 0 (m:*label86)
-+  597 multilabel *label477 (m:*label86)
++  596 multijump *label477 *tmp19 0 (m:*label96)
++  597 multilabel *label477 (m:*label96)
 +  598 jump *label487 always
-+  599 multilabel *label478 (m:*label86)
++  599 multilabel *label478 (m:*label96)
 +  600 jump *label489 always
-+  601 multilabel *label479 (m:*label86)
++  601 multilabel *label479 (m:*label96)
 +  602 jump *label491 always
-+  603 multilabel *label480 (m:*label86)
++  603 multilabel *label480 (m:*label96)
 +  604 jump *label493 always
-+  605 multilabel *label481 (m:*label86)
++  605 multilabel *label481 (m:*label96)
 +  606 jump *label495 always
-+  607 multilabel *label482 (m:*label86)
++  607 multilabel *label482 (m:*label96)
 +  608 jump *label497 always
-+  609 multilabel *label483 (m:*label86)
++  609 multilabel *label483 (m:*label96)
 +  610 jump *label499 always
-+  611 multilabel *label484 (m:*label86)
++  611 multilabel *label484 (m:*label96)
 +  612 jump *label501 always
-+  613 multilabel *label485 (m:*label86)
++  613 multilabel *label485 (m:*label96)
 +  614 jump *label503 always
-+  615 multilabel *label486 (m:*label86)
++  615 multilabel *label486 (m:*label96)
 +  616 jump *label505 always
 +  617 label *label487
 +  618 op sub *tmp24 :displayItem:x 1
@@ -3668,26 +3668,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  745 label *label521
 +  746 op mod *tmp19 :displayItem:amount 10
 +  747 # "Function: def drawDigit(in x, in y, in digit)"
-+  748 multijump *label522 *tmp19 0 (m:*label86)
-+  749 multilabel *label522 (m:*label86)
++  748 multijump *label522 *tmp19 0 (m:*label96)
++  749 multilabel *label522 (m:*label96)
 +  750 jump *label532 always
-+  751 multilabel *label523 (m:*label86)
++  751 multilabel *label523 (m:*label96)
 +  752 jump *label534 always
-+  753 multilabel *label524 (m:*label86)
++  753 multilabel *label524 (m:*label96)
 +  754 jump *label536 always
-+  755 multilabel *label525 (m:*label86)
++  755 multilabel *label525 (m:*label96)
 +  756 jump *label538 always
-+  757 multilabel *label526 (m:*label86)
++  757 multilabel *label526 (m:*label96)
 +  758 jump *label540 always
-+  759 multilabel *label527 (m:*label86)
++  759 multilabel *label527 (m:*label96)
 +  760 jump *label542 always
-+  761 multilabel *label528 (m:*label86)
++  761 multilabel *label528 (m:*label96)
 +  762 jump *label544 always
-+  763 multilabel *label529 (m:*label86)
++  763 multilabel *label529 (m:*label96)
 +  764 jump *label546 always
-+  765 multilabel *label530 (m:*label86)
++  765 multilabel *label530 (m:*label96)
 +  766 jump *label548 always
-+  767 multilabel *label531 (m:*label86)
++  767 multilabel *label531 (m:*label96)
 +  768 jump *label550 always
 +  769 label *label532
 +  770 op sub *tmp24 :displayItem:x 1
@@ -3792,26 +3792,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  869 label *label558
 +  870 op mod *tmp19 :displayItem:amount 10
 +  871 # "Function: def drawDigit(in x, in y, in digit)"
-+  872 multijump *label559 *tmp19 0 (m:*label86)
-+  873 multilabel *label559 (m:*label86)
++  872 multijump *label559 *tmp19 0 (m:*label96)
++  873 multilabel *label559 (m:*label96)
 +  874 jump *label569 always
-+  875 multilabel *label560 (m:*label86)
++  875 multilabel *label560 (m:*label96)
 +  876 jump *label571 always
-+  877 multilabel *label561 (m:*label86)
++  877 multilabel *label561 (m:*label96)
 +  878 jump *label573 always
-+  879 multilabel *label562 (m:*label86)
++  879 multilabel *label562 (m:*label96)
 +  880 jump *label575 always
-+  881 multilabel *label563 (m:*label86)
++  881 multilabel *label563 (m:*label96)
 +  882 jump *label577 always
-+  883 multilabel *label564 (m:*label86)
++  883 multilabel *label564 (m:*label96)
 +  884 jump *label579 always
-+  885 multilabel *label565 (m:*label86)
++  885 multilabel *label565 (m:*label96)
 +  886 jump *label581 always
-+  887 multilabel *label566 (m:*label86)
++  887 multilabel *label566 (m:*label96)
 +  888 jump *label583 always
-+  889 multilabel *label567 (m:*label86)
++  889 multilabel *label567 (m:*label96)
 +  890 jump *label585 always
-+  891 multilabel *label568 (m:*label86)
++  891 multilabel *label568 (m:*label96)
 +  892 jump *label587 always
 +  893 label *label569
 +  894 op sub *tmp24 :displayItem:x 1
@@ -3916,26 +3916,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  993 label *label595
 +  994 op mod *tmp19 :displayItem:amount 10
 +  995 # "Function: def drawDigit(in x, in y, in digit)"
-+  996 multijump *label596 *tmp19 0 (m:*label86)
-+  997 multilabel *label596 (m:*label86)
++  996 multijump *label596 *tmp19 0 (m:*label96)
++  997 multilabel *label596 (m:*label96)
 +  998 jump *label606 always
-+  999 multilabel *label597 (m:*label86)
++  999 multilabel *label597 (m:*label96)
 + 1000 jump *label608 always
-+ 1001 multilabel *label598 (m:*label86)
++ 1001 multilabel *label598 (m:*label96)
 + 1002 jump *label610 always
-+ 1003 multilabel *label599 (m:*label86)
++ 1003 multilabel *label599 (m:*label96)
 + 1004 jump *label612 always
-+ 1005 multilabel *label600 (m:*label86)
++ 1005 multilabel *label600 (m:*label96)
 + 1006 jump *label614 always
-+ 1007 multilabel *label601 (m:*label86)
++ 1007 multilabel *label601 (m:*label96)
 + 1008 jump *label616 always
-+ 1009 multilabel *label602 (m:*label86)
++ 1009 multilabel *label602 (m:*label96)
 + 1010 jump *label618 always
-+ 1011 multilabel *label603 (m:*label86)
++ 1011 multilabel *label603 (m:*label96)
 + 1012 jump *label620 always
-+ 1013 multilabel *label604 (m:*label86)
++ 1013 multilabel *label604 (m:*label96)
 + 1014 jump *label622 always
-+ 1015 multilabel *label605 (m:*label86)
++ 1015 multilabel *label605 (m:*label96)
 + 1016 jump *label624 always
 + 1017 label *label606
 + 1018 op sub *tmp24 :displayItem:x 1
@@ -4040,26 +4040,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 + 1117 label *label632
 + 1118 op mod *tmp19 :displayItem:amount 10
 + 1119 # "Function: def drawDigit(in x, in y, in digit)"
-+ 1120 multijump *label633 *tmp19 0 (m:*label86)
-+ 1121 multilabel *label633 (m:*label86)
++ 1120 multijump *label633 *tmp19 0 (m:*label96)
++ 1121 multilabel *label633 (m:*label96)
 + 1122 jump *label643 always
-+ 1123 multilabel *label634 (m:*label86)
++ 1123 multilabel *label634 (m:*label96)
 + 1124 jump *label645 always
-+ 1125 multilabel *label635 (m:*label86)
++ 1125 multilabel *label635 (m:*label96)
 + 1126 jump *label647 always
-+ 1127 multilabel *label636 (m:*label86)
++ 1127 multilabel *label636 (m:*label96)
 + 1128 jump *label649 always
-+ 1129 multilabel *label637 (m:*label86)
++ 1129 multilabel *label637 (m:*label96)
 + 1130 jump *label651 always
-+ 1131 multilabel *label638 (m:*label86)
++ 1131 multilabel *label638 (m:*label96)
 + 1132 jump *label653 always
-+ 1133 multilabel *label639 (m:*label86)
++ 1133 multilabel *label639 (m:*label96)
 + 1134 jump *label655 always
-+ 1135 multilabel *label640 (m:*label86)
++ 1135 multilabel *label640 (m:*label96)
 + 1136 jump *label657 always
-+ 1137 multilabel *label641 (m:*label86)
++ 1137 multilabel *label641 (m:*label96)
 + 1138 jump *label659 always
-+ 1139 multilabel *label642 (m:*label86)
++ 1139 multilabel *label642 (m:*label96)
 + 1140 jump *label661 always
 + 1141 label *label643
 + 1142 op sub *tmp24 :displayItem:x 1
@@ -4195,26 +4195,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label98
 -    * op mod *tmp19 :displayItem:amount 10
 -    * # "Function: def drawDigit(in x, in y, in digit)"
--    * multijump *label99 *tmp19 0 (m:*label86)
--    * multilabel *label99 (m:*label86)
+-    * multijump *label99 *tmp19 0 (m:*label96)
+-    * multilabel *label99 (m:*label96)
 -    * jump *label109 always
--    * multilabel *label100 (m:*label86)
+-    * multilabel *label100 (m:*label96)
 -    * jump *label111 always
--    * multilabel *label101 (m:*label86)
+-    * multilabel *label101 (m:*label96)
 -    * jump *label113 always
--    * multilabel *label102 (m:*label86)
+-    * multilabel *label102 (m:*label96)
 -    * jump *label115 always
--    * multilabel *label103 (m:*label86)
+-    * multilabel *label103 (m:*label96)
 -    * jump *label117 always
--    * multilabel *label104 (m:*label86)
+-    * multilabel *label104 (m:*label96)
 -    * jump *label119 always
--    * multilabel *label105 (m:*label86)
+-    * multilabel *label105 (m:*label96)
 -    * jump *label121 always
--    * multilabel *label106 (m:*label86)
+-    * multilabel *label106 (m:*label96)
 -    * jump *label123 always
--    * multilabel *label107 (m:*label86)
+-    * multilabel *label107 (m:*label96)
 -    * jump *label125 always
--    * multilabel *label108 (m:*label86)
+-    * multilabel *label108 (m:*label96)
 -    * jump *label127 always
 -    * label *label109
 -    * op sub *tmp24 :displayItem:x 1
@@ -4319,26 +4319,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label136
 -    * op mod *tmp19 :displayItem:amount 10
 -    * # "Function: def drawDigit(in x, in y, in digit)"
--    * multijump *label137 *tmp19 0 (m:*label86)
--    * multilabel *label137 (m:*label86)
+-    * multijump *label137 *tmp19 0 (m:*label96)
+-    * multilabel *label137 (m:*label96)
 -    * jump *label147 always
--    * multilabel *label138 (m:*label86)
+-    * multilabel *label138 (m:*label96)
 -    * jump *label149 always
--    * multilabel *label139 (m:*label86)
+-    * multilabel *label139 (m:*label96)
 -    * jump *label151 always
--    * multilabel *label140 (m:*label86)
+-    * multilabel *label140 (m:*label96)
 -    * jump *label153 always
--    * multilabel *label141 (m:*label86)
+-    * multilabel *label141 (m:*label96)
 -    * jump *label155 always
--    * multilabel *label142 (m:*label86)
+-    * multilabel *label142 (m:*label96)
 -    * jump *label157 always
--    * multilabel *label143 (m:*label86)
+-    * multilabel *label143 (m:*label96)
 -    * jump *label159 always
--    * multilabel *label144 (m:*label86)
+-    * multilabel *label144 (m:*label96)
 -    * jump *label161 always
--    * multilabel *label145 (m:*label86)
+-    * multilabel *label145 (m:*label96)
 -    * jump *label163 always
--    * multilabel *label146 (m:*label86)
+-    * multilabel *label146 (m:*label96)
 -    * jump *label165 always
 -    * label *label147
 -    * op sub *tmp24 :displayItem:x 1
@@ -4443,26 +4443,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label174
 -    * op mod *tmp19 :displayItem:amount 10
 -    * # "Function: def drawDigit(in x, in y, in digit)"
--    * multijump *label175 *tmp19 0 (m:*label86)
--    * multilabel *label175 (m:*label86)
+-    * multijump *label175 *tmp19 0 (m:*label96)
+-    * multilabel *label175 (m:*label96)
 -    * jump *label185 always
--    * multilabel *label176 (m:*label86)
+-    * multilabel *label176 (m:*label96)
 -    * jump *label187 always
--    * multilabel *label177 (m:*label86)
+-    * multilabel *label177 (m:*label96)
 -    * jump *label189 always
--    * multilabel *label178 (m:*label86)
+-    * multilabel *label178 (m:*label96)
 -    * jump *label191 always
--    * multilabel *label179 (m:*label86)
+-    * multilabel *label179 (m:*label96)
 -    * jump *label193 always
--    * multilabel *label180 (m:*label86)
+-    * multilabel *label180 (m:*label96)
 -    * jump *label195 always
--    * multilabel *label181 (m:*label86)
+-    * multilabel *label181 (m:*label96)
 -    * jump *label197 always
--    * multilabel *label182 (m:*label86)
+-    * multilabel *label182 (m:*label96)
 -    * jump *label199 always
--    * multilabel *label183 (m:*label86)
+-    * multilabel *label183 (m:*label96)
 -    * jump *label201 always
--    * multilabel *label184 (m:*label86)
+-    * multilabel *label184 (m:*label96)
 -    * jump *label203 always
 -    * label *label185
 -    * op sub *tmp24 :displayItem:x 1
@@ -4567,26 +4567,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label212
 -    * op mod *tmp19 :displayItem:amount 10
 -    * # "Function: def drawDigit(in x, in y, in digit)"
--    * multijump *label213 *tmp19 0 (m:*label86)
--    * multilabel *label213 (m:*label86)
+-    * multijump *label213 *tmp19 0 (m:*label96)
+-    * multilabel *label213 (m:*label96)
 -    * jump *label223 always
--    * multilabel *label214 (m:*label86)
+-    * multilabel *label214 (m:*label96)
 -    * jump *label225 always
--    * multilabel *label215 (m:*label86)
+-    * multilabel *label215 (m:*label96)
 -    * jump *label227 always
--    * multilabel *label216 (m:*label86)
+-    * multilabel *label216 (m:*label96)
 -    * jump *label229 always
--    * multilabel *label217 (m:*label86)
+-    * multilabel *label217 (m:*label96)
 -    * jump *label231 always
--    * multilabel *label218 (m:*label86)
+-    * multilabel *label218 (m:*label96)
 -    * jump *label233 always
--    * multilabel *label219 (m:*label86)
+-    * multilabel *label219 (m:*label96)
 -    * jump *label235 always
--    * multilabel *label220 (m:*label86)
+-    * multilabel *label220 (m:*label96)
 -    * jump *label237 always
--    * multilabel *label221 (m:*label86)
+-    * multilabel *label221 (m:*label96)
 -    * jump *label239 always
--    * multilabel *label222 (m:*label86)
+-    * multilabel *label222 (m:*label96)
 -    * jump *label241 always
 -    * label *label223
 -    * op sub *tmp24 :displayItem:x 1
@@ -4712,7 +4712,7 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   243 multilabel *label375 (m:*label86)
+   243 multilabel *label375 (m:*label96)
    244 jump *label394 always
    245 label *label376
 -    * op sub *tmp24 :displayItem:x 1
@@ -4874,7 +4874,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    340 jump *label399 notEqual :displayItem:amount 0
    341 jump *label517 always
  
-   367 multilabel *label412 (m:*label86)
+   367 multilabel *label412 (m:*label96)
    368 jump *label431 always
    369 label *label413
 -    * op sub *tmp24 :displayItem:x 1
@@ -5036,7 +5036,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    464 jump *label436 notEqual :displayItem:amount 0
    465 jump *label517 always
  
-   491 multilabel *label449 (m:*label86)
+   491 multilabel *label449 (m:*label96)
    492 jump *label468 always
    493 label *label450
 -    * op sub *tmp24 :displayItem:x 1
@@ -5198,7 +5198,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    588 jump *label473 notEqual :displayItem:amount 0
    589 jump *label517 always
  
-   615 multilabel *label486 (m:*label86)
+   615 multilabel *label486 (m:*label96)
    616 jump *label505 always
    617 label *label487
 -    * op sub *tmp24 :displayItem:x 1
@@ -5391,7 +5391,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    734 label *label516
    735 label *label517
  
-   767 multilabel *label531 (m:*label86)
+   767 multilabel *label531 (m:*label96)
    768 jump *label550 always
    769 label *label532
 -    * op sub *tmp24 :displayItem:x 1
@@ -5553,7 +5553,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    864 jump *label555 notEqual :displayItem:amount 0
    865 jump *label673 always
  
-   891 multilabel *label568 (m:*label86)
+   891 multilabel *label568 (m:*label96)
    892 jump *label587 always
    893 label *label569
 -    * op sub *tmp24 :displayItem:x 1
@@ -5715,7 +5715,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    988 jump *label592 notEqual :displayItem:amount 0
    989 jump *label673 always
  
-  1015 multilabel *label605 (m:*label86)
+  1015 multilabel *label605 (m:*label96)
   1016 jump *label624 always
   1017 label *label606
 -    * op sub *tmp24 :displayItem:x 1
@@ -5877,7 +5877,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
   1112 jump *label629 notEqual :displayItem:amount 0
   1113 jump *label673 always
  
-  1139 multilabel *label642 (m:*label86)
+  1139 multilabel *label642 (m:*label96)
   1140 jump *label661 always
   1141 label *label643
 -    * op sub *tmp24 :displayItem:x 1
@@ -6081,7 +6081,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    215 # "Function: void displayItem(in x, in y)"
    216 op max :displayItem:amount AMOUNT 0
  
-   241 multilabel *label375 (m:*label86)
+   241 multilabel *label375 (m:*label96)
    242 jump *label394 always
    243 label *label376
 -    * op sub *tmp24 71 1
@@ -6165,7 +6165,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    326 jump *label399 notEqual :displayItem:amount 0
    327 jump *label517 always
  
-   353 multilabel *label412 (m:*label86)
+   353 multilabel *label412 (m:*label96)
    354 jump *label431 always
    355 label *label413
 -    * op sub *tmp24 60 1
@@ -6249,7 +6249,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    438 jump *label436 notEqual :displayItem:amount 0
    439 jump *label517 always
  
-   465 multilabel *label449 (m:*label86)
+   465 multilabel *label449 (m:*label96)
    466 jump *label468 always
    467 label *label450
 -    * op sub *tmp24 49 1
@@ -6333,7 +6333,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    550 jump *label473 notEqual :displayItem:amount 0
    551 jump *label517 always
  
-   577 multilabel *label486 (m:*label86)
+   577 multilabel *label486 (m:*label96)
    578 jump *label505 always
    579 label *label487
 -    * op sub *tmp24 38 1
@@ -6439,7 +6439,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    687 # "Function: void displayItem(in x, in y)"
    688 op max :displayItem:amount AMOUNT 0
  
-   713 multilabel *label531 (m:*label86)
+   713 multilabel *label531 (m:*label96)
    714 jump *label550 always
    715 label *label532
 -    * op sub *tmp24 157 1
@@ -6523,7 +6523,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    798 jump *label555 notEqual :displayItem:amount 0
    799 jump *label673 always
  
-   825 multilabel *label568 (m:*label86)
+   825 multilabel *label568 (m:*label96)
    826 jump *label587 always
    827 label *label569
 -    * op sub *tmp24 146 1
@@ -6607,7 +6607,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    910 jump *label592 notEqual :displayItem:amount 0
    911 jump *label673 always
  
-   937 multilabel *label605 (m:*label86)
+   937 multilabel *label605 (m:*label96)
    938 jump *label624 always
    939 label *label606
 -    * op sub *tmp24 135 1
@@ -6691,7 +6691,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
   1022 jump *label629 notEqual :displayItem:amount 0
   1023 jump *label673 always
  
-  1049 multilabel *label642 (m:*label86)
+  1049 multilabel *label642 (m:*label96)
   1050 jump *label661 always
   1051 label *label643
 -    * op sub *tmp24 124 1
@@ -7112,7 +7112,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label365
    156 op mod *tmp19 :displayItem:amount 10
    157 # "Function: def drawDigit(in x, in y, in digit)"
-   158 multijump *label366 *tmp19 0 (m:*label86)
+   158 multijump *label366 *tmp19 0 (m:*label96)
  
    180 op sub *tmp26 :y 1
    181 draw lineRect 70 *tmp26 9 14
@@ -7196,7 +7196,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label402
    253 op mod *tmp19 :displayItem:amount 10
    254 # "Function: def drawDigit(in x, in y, in digit)"
-   255 multijump *label403 *tmp19 0 (m:*label86)
+   255 multijump *label403 *tmp19 0 (m:*label96)
  
    277 op sub *tmp26 :y 1
    278 draw lineRect 59 *tmp26 9 14
@@ -7280,7 +7280,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label439
    350 op mod *tmp19 :displayItem:amount 10
    351 # "Function: def drawDigit(in x, in y, in digit)"
-   352 multijump *label440 *tmp19 0 (m:*label86)
+   352 multijump *label440 *tmp19 0 (m:*label96)
  
    374 op sub *tmp26 :y 1
    375 draw lineRect 48 *tmp26 9 14
@@ -7364,7 +7364,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label476
    447 op mod *tmp19 :displayItem:amount 10
    448 # "Function: def drawDigit(in x, in y, in digit)"
-   449 multijump *label477 *tmp19 0 (m:*label86)
+   449 multijump *label477 *tmp19 0 (m:*label96)
  
    471 op sub *tmp26 :y 1
    472 draw lineRect 37 *tmp26 9 14
@@ -7465,7 +7465,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label521
    564 op mod *tmp19 :displayItem:amount 10
    565 # "Function: def drawDigit(in x, in y, in digit)"
-   566 multijump *label522 *tmp19 0 (m:*label86)
+   566 multijump *label522 *tmp19 0 (m:*label96)
  
    588 op sub *tmp26 :y 1
    589 draw lineRect 156 *tmp26 9 14
@@ -7549,7 +7549,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label558
    661 op mod *tmp19 :displayItem:amount 10
    662 # "Function: def drawDigit(in x, in y, in digit)"
-   663 multijump *label559 *tmp19 0 (m:*label86)
+   663 multijump *label559 *tmp19 0 (m:*label96)
  
    685 op sub *tmp26 :y 1
    686 draw lineRect 145 *tmp26 9 14
@@ -7633,7 +7633,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label595
    758 op mod *tmp19 :displayItem:amount 10
    759 # "Function: def drawDigit(in x, in y, in digit)"
-   760 multijump *label596 *tmp19 0 (m:*label86)
+   760 multijump *label596 *tmp19 0 (m:*label96)
  
    782 op sub *tmp26 :y 1
    783 draw lineRect 134 *tmp26 9 14
@@ -7717,7 +7717,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label632
    855 op mod *tmp19 :displayItem:amount 10
    856 # "Function: def drawDigit(in x, in y, in digit)"
-   857 multijump *label633 *tmp19 0 (m:*label86)
+   857 multijump *label633 *tmp19 0 (m:*label96)
  
    879 op sub *tmp26 :y 1
    880 draw lineRect 123 *tmp26 9 14
@@ -7922,7 +7922,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label399
    251 op mod *tmp19 :displayItem:amount 10
    252 # "Function: def drawDigit(in x, in y, in digit)"
-   253 multijump *label403 *tmp19 0 (m:*label86)
+   253 multijump *label403 *tmp19 0 (m:*label96)
  
    343 label *label434
    344 op idiv :displayItem:amount :displayItem:amount 10
@@ -7930,7 +7930,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label436
    346 op mod *tmp19 :displayItem:amount 10
    347 # "Function: def drawDigit(in x, in y, in digit)"
-   348 multijump *label440 *tmp19 0 (m:*label86)
+   348 multijump *label440 *tmp19 0 (m:*label96)
  
    438 label *label471
    439 op idiv :displayItem:amount :displayItem:amount 10
@@ -7938,7 +7938,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label473
    441 op mod *tmp19 :displayItem:amount 10
    442 # "Function: def drawDigit(in x, in y, in digit)"
-   443 multijump *label477 *tmp19 0 (m:*label86)
+   443 multijump *label477 *tmp19 0 (m:*label96)
  
    533 label *label508
    534 op idiv :displayItem:amount :displayItem:amount 10
@@ -7954,7 +7954,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label555
    651 op mod *tmp19 :displayItem:amount 10
    652 # "Function: def drawDigit(in x, in y, in digit)"
-   653 multijump *label559 *tmp19 0 (m:*label86)
+   653 multijump *label559 *tmp19 0 (m:*label96)
  
    743 label *label590
    744 op idiv :displayItem:amount :displayItem:amount 10
@@ -7962,7 +7962,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label592
    746 op mod *tmp19 :displayItem:amount 10
    747 # "Function: def drawDigit(in x, in y, in digit)"
-   748 multijump *label596 *tmp19 0 (m:*label86)
+   748 multijump *label596 *tmp19 0 (m:*label96)
  
    838 label *label627
    839 op idiv :displayItem:amount :displayItem:amount 10
@@ -7970,7 +7970,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label629
    841 op mod *tmp19 :displayItem:amount 10
    842 # "Function: def drawDigit(in x, in y, in digit)"
-   843 multijump *label633 *tmp19 0 (m:*label86)
+   843 multijump *label633 *tmp19 0 (m:*label96)
  
    933 label *label664
    934 op idiv :displayItem:amount :displayItem:amount 10
@@ -7989,7 +7989,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +  250 jump *label44 equal :displayItem:amount 0
    251 op mod *tmp19 :displayItem:amount 10
    252 # "Function: def drawDigit(in x, in y, in digit)"
-   253 multijump *label403 *tmp19 0 (m:*label86)
+   253 multijump *label403 *tmp19 0 (m:*label96)
  
    342 draw line 60 *tmp104 67 *tmp104
    343 label *label434
@@ -7998,7 +7998,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +  345 jump *label44 equal :displayItem:amount 0
    346 op mod *tmp19 :displayItem:amount 10
    347 # "Function: def drawDigit(in x, in y, in digit)"
-   348 multijump *label440 *tmp19 0 (m:*label86)
+   348 multijump *label440 *tmp19 0 (m:*label96)
  
    437 draw line 49 *tmp104 56 *tmp104
    438 label *label471
@@ -8007,7 +8007,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +  440 jump *label44 equal :displayItem:amount 0
    441 op mod *tmp19 :displayItem:amount 10
    442 # "Function: def drawDigit(in x, in y, in digit)"
-   443 multijump *label477 *tmp19 0 (m:*label86)
+   443 multijump *label477 *tmp19 0 (m:*label96)
  
    532 draw line 38 *tmp104 45 *tmp104
    533 label *label508

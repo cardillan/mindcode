@@ -20,95 +20,95 @@ Pass 1: speed optimization selection (cost limit 804):
     Unroll loop at line 81:9                                     cost     0, benefit      625.0, efficiency   Infinity
     Unroll loop at line 81:9                                     cost     0, benefit      625.0, efficiency   Infinity
     Unroll loop at line 93:9                                     cost     0, benefit      625.0, efficiency   Infinity
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency    21114.9
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency  21114.865
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 807):
   * Unroll loop at line 81:9                                     cost     0, benefit      625.0, efficiency   Infinity (-3 instructions)
     Unroll loop at line 81:9                                     cost     0, benefit      625.0, efficiency   Infinity
     Unroll loop at line 93:9                                     cost     0, benefit      625.0, efficiency   Infinity
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency    21114.9
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency  21114.865
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 810):
   * Unroll loop at line 81:9                                     cost     0, benefit      625.0, efficiency   Infinity (-3 instructions)
     Unroll loop at line 93:9                                     cost     0, benefit      625.0, efficiency   Infinity
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency    21114.9
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency  21114.865
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 813):
   * Unroll loop at line 93:9                                     cost     0, benefit      625.0, efficiency   Infinity (-3 instructions)
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency    21114.9
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency  21114.865
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 816):
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-  * Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency    21114.9 (+444 instructions)
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+  * Unroll loop at line 104:5                                    cost   444, benefit  9375000.0, efficiency  21114.865 (+444 instructions)
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 372):
-  * Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1 (+78 instructions)
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+  * Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128 (+78 instructions)
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 294):
-  * Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1 (+78 instructions)
-    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+  * Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128 (+78 instructions)
+    Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 216):
-  * Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency       80.1 (+78 instructions)
-    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+  * Unroll loop at line 81:9                                     cost    78, benefit     6250.0, efficiency     80.128 (+78 instructions)
+    Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 138):
-  * Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency       80.1 (+78 instructions)
-    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+  * Unroll loop at line 93:9                                     cost    78, benefit     6250.0, efficiency     80.128 (+78 instructions)
+    Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Pass 1: speed optimization selection (cost limit 60):
-  * Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency       16.7 (+4 instructions)
-    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency        7.7
-    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency        7.7
+  * Inline function 'displayNumber' defined at line 64:1         cost    12, benefit      200.0, efficiency     16.667 (+4 instructions)
+    Inline function call at line 45:9                            cost    13, benefit      100.0, efficiency      7.692
+    Inline function call at line 46:9                            cost    13, benefit      100.0, efficiency      7.692
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-40 instructions):
  

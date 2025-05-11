@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 abstract class AbstractOptimizationAction implements OptimizationAction {
@@ -19,16 +18,6 @@ abstract class AbstractOptimizationAction implements OptimizationAction {
     @Override
     public AstContext astContext() {
         return astContext;
-    }
-
-    @Override
-    public boolean inlining() {
-        return false;
-    }
-
-    @Override
-    public @Nullable String functionPrefix() {
-        return null;
     }
 
     @Override

@@ -8,13 +8,13 @@
     71 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 897):
-  * Inline function 'assertEqualsRound' defined at line 3:1      cost    19, benefit       27.0, efficiency        1.4 (-31 instructions)
-    Inline function call at line 71:1                            cost     4, benefit        4.5, efficiency        1.1
-    Inline function call at line 72:1                            cost     4, benefit        4.5, efficiency        1.1
-    Inline function call at line 73:1                            cost     4, benefit        4.5, efficiency        1.1
-    Inline function call at line 75:1                            cost     4, benefit        4.5, efficiency        1.1
-    Inline function call at line 76:1                            cost     4, benefit        4.5, efficiency        1.1
-    Inline function call at line 77:1                            cost     4, benefit        4.5, efficiency        1.1
+  * Inline function 'assertEqualsRound' defined at line 3:1      cost    19, benefit       27.0, efficiency      1.421 (-31 instructions)
+    Inline function call at line 71:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 72:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 73:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 75:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 76:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 77:1                            cost     4, benefit        4.5, efficiency      1.125
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
  

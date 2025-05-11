@@ -15,48 +15,48 @@
    900 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 955):
-  * Unroll loop at line 4:5                                      cost    45, benefit    40000.0, efficiency      888.9 (+45 instructions)
-    Inline function 'foo' defined at line 1:1                    cost    35, benefit       56.0, efficiency        1.6
-    Inline function 'bar' defined at line 10:1                   cost    32, benefit       14.0, efficiency        0.4
-    Inline function call at line 18:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 19:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 20:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 21:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 11:5                            cost    12, benefit       14.0, efficiency        1.2
-    Inline function call at line 12:5                            cost    12, benefit       14.0, efficiency        1.2
-    Inline function call at line 13:5                            cost    12, benefit       14.0, efficiency        1.2
-    Inline function call at line 14:5                            cost    12, benefit       14.0, efficiency        1.2
+  * Unroll loop at line 4:5                                      cost    45, benefit    40000.0, efficiency    888.889 (+45 instructions)
+    Inline function 'foo' defined at line 1:1                    cost    35, benefit       56.0, efficiency      1.600
+    Inline function 'bar' defined at line 10:1                   cost    32, benefit       14.0, efficiency      0.438
+    Inline function call at line 18:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 19:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 20:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 21:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 11:5                            cost    12, benefit       14.0, efficiency      1.167
+    Inline function call at line 12:5                            cost    12, benefit       14.0, efficiency      1.167
+    Inline function call at line 13:5                            cost    12, benefit       14.0, efficiency      1.167
+    Inline function call at line 14:5                            cost    12, benefit       14.0, efficiency      1.167
 
 Pass 1: speed optimization selection (cost limit 910):
-    Inline function 'foo' defined at line 1:1                    cost   170, benefit       56.0, efficiency        0.3
-  * Inline function 'bar' defined at line 10:1                   cost    32, benefit       14.0, efficiency        0.4 (+22 instructions)
-    Inline function call at line 18:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 19:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 20:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 21:5                            cost    11, benefit        3.5, efficiency        0.3
-    Inline function call at line 11:5                            cost    57, benefit       14.0, efficiency        0.2
-    Inline function call at line 12:5                            cost    57, benefit       14.0, efficiency        0.2
-    Inline function call at line 13:5                            cost    57, benefit       14.0, efficiency        0.2
-    Inline function call at line 14:5                            cost    57, benefit       14.0, efficiency        0.2
+    Inline function 'foo' defined at line 1:1                    cost   170, benefit       56.0, efficiency      0.329
+  * Inline function 'bar' defined at line 10:1                   cost    32, benefit       14.0, efficiency      0.438 (+22 instructions)
+    Inline function call at line 18:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 19:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 20:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 21:5                            cost    11, benefit        3.5, efficiency      0.318
+    Inline function call at line 11:5                            cost    57, benefit       14.0, efficiency      0.246
+    Inline function call at line 12:5                            cost    57, benefit       14.0, efficiency      0.246
+    Inline function call at line 13:5                            cost    57, benefit       14.0, efficiency      0.246
+    Inline function call at line 14:5                            cost    57, benefit       14.0, efficiency      0.246
 
 Pass 1: speed optimization selection (cost limit 888):
-  * Inline function 'foo' defined at line 1:1                    cost   854, benefit       56.0, efficiency        0.1 (+820 instructions)
-    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency        0.1
-    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency        0.1
+  * Inline function 'foo' defined at line 1:1                    cost   854, benefit       56.0, efficiency      0.066 (+820 instructions)
+    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 11:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 12:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 13:5                            cost    57, benefit        3.5, efficiency      0.061
+    Inline function call at line 14:5                            cost    57, benefit        3.5, efficiency      0.061
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-7 instructions):
  

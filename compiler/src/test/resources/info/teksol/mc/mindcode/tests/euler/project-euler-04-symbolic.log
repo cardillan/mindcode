@@ -9,13 +9,13 @@
     22 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 977):
-  ! Unroll loop at line 4:1                                      cost  1421, benefit     4500.0, efficiency        3.2
+  ! Unroll loop at line 4:1                                      cost  1421, benefit     4500.0, efficiency      3.167
 
 Pass 2: speed optimization selection (cost limit 977):
-  ! Unroll loop at line 4:1                                      cost  1421, benefit     4500.0, efficiency        3.2
+  ! Unroll loop at line 4:1                                      cost  1421, benefit     4500.0, efficiency      3.167
 
 Pass 3: speed optimization selection (cost limit 977):
-  ! Unroll loop at line 4:1                                      cost  1421, benefit     4500.0, efficiency        3.2
+  ! Unroll loop at line 4:1                                      cost  1421, benefit     4500.0, efficiency      3.167
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  

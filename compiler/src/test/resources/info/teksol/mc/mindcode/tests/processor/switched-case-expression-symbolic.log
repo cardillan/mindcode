@@ -12,7 +12,7 @@
     61 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 941):
-  * Convert case at line 27:5                                    cost     2, benefit      937.5, efficiency      468.8 (+3 instructions)
+  * Convert case at line 27:5 (segments: 1)                      cost     3, benefit      937.5, efficiency    312.500 (+3 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -470,7 +470,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     80 assertequals 11 .S0 "Unexpected value of S0"
     81 assertequals 21 .S1 "Unexpected value of S1"
 
-Modifications by Convert case at line 27:5 (+3 instructions):
+Modifications by Convert case at line 27:5 (segments: 1) (+3 instructions):
  
     17 label *label30
     18 op mod *tmp2 :processNumber:n 10
@@ -478,26 +478,26 @@ Modifications by Convert case at line 27:5 (+3 instructions):
 -    * jump *label9 notEqual *tmp2 0
 +   20 jump *label31 lessThan *tmp2 0
 +   21 jump *label31 greaterThan *tmp2 9
-+   22 multijump *label33 *tmp2 0 (m:*label32)
-+   23 multilabel *label33 (m:*label32)
++   22 multijump *label32 *tmp2 0 (m:*label42)
++   23 multilabel *label32 (m:*label42)
 +   24 jump *label10 always
-+   25 multilabel *label34 (m:*label32)
++   25 multilabel *label33 (m:*label42)
 +   26 jump *label12 always
-+   27 multilabel *label35 (m:*label32)
++   27 multilabel *label34 (m:*label42)
 +   28 jump *label14 always
-+   29 multilabel *label36 (m:*label32)
++   29 multilabel *label35 (m:*label42)
 +   30 jump *label16 always
-+   31 multilabel *label37 (m:*label32)
++   31 multilabel *label36 (m:*label42)
 +   32 jump *label18 always
-+   33 multilabel *label38 (m:*label32)
++   33 multilabel *label37 (m:*label42)
 +   34 jump *label20 always
-+   35 multilabel *label39 (m:*label32)
++   35 multilabel *label38 (m:*label42)
 +   36 jump *label22 always
-+   37 multilabel *label40 (m:*label32)
++   37 multilabel *label39 (m:*label42)
 +   38 jump *label24 always
-+   39 multilabel *label41 (m:*label32)
++   39 multilabel *label40 (m:*label42)
 +   40 jump *label26 always
-+   41 multilabel *label42 (m:*label32)
++   41 multilabel *label41 (m:*label42)
 +   42 jump *label28 always
     43 label *label10
     44 op add .S0 .S0 1
@@ -661,26 +661,26 @@ op mod *tmp2 :processNumber:n 10
 # "Function: def processDigit(in n)"
 jump *label31 lessThan *tmp2 0
 jump *label31 greaterThan *tmp2 9
-multijump *label33 *tmp2 0
-multilabel *label33
+multijump *label32 *tmp2 0
+multilabel *label32
 jump *label10 always
-multilabel *label34
+multilabel *label33
 jump *label12 always
-multilabel *label35
+multilabel *label34
 jump *label14 always
-multilabel *label36
+multilabel *label35
 jump *label16 always
-multilabel *label37
+multilabel *label36
 jump *label18 always
-multilabel *label38
+multilabel *label37
 jump *label20 always
-multilabel *label39
+multilabel *label38
 jump *label22 always
-multilabel *label40
+multilabel *label39
 jump *label24 always
-multilabel *label41
+multilabel *label40
 jump *label26 always
-multilabel *label42
+multilabel *label41
 jump *label28 always
 label *label10
 op add .S0 .S0 1

@@ -234,10 +234,10 @@ public class OptimizationCoordinator {
     private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference) {
         OptimizerMessage message;
         if (opt == selected) {
-            message = OptimizerMessage.debug("  * %-60s cost %5d, benefit %10.1f, efficiency %10.1f (%+d instructions)",
+            message = OptimizerMessage.debug("  * %-60s cost %5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
                     opt, opt.cost(), opt.benefit(), opt.efficiency(), difference);
         } else {
-            message = OptimizerMessage.debug("  %s %-60s cost %5d, benefit %10.1f, efficiency %10.1f",
+            message = OptimizerMessage.debug("  %s %-60s cost %5d, benefit %10.1f, efficiency %10.3f",
                     opt.cost() > costLimit ? "!" : " ", opt, opt.cost(), opt.benefit(), opt.efficiency());
         }
         optimizationStatistics.add(message);

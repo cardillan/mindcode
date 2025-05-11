@@ -11,140 +11,140 @@
    837 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 856):
-  * Unroll loop at line 9:5                                      cost   218, benefit      700.0, efficiency        3.2 (+162 instructions)
+  * Unroll loop at line 9:5                                      cost   218, benefit      700.0, efficiency      3.211 (+162 instructions)
 
 Pass 1: speed optimization selection (cost limit 694):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6
-    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency        6.8
-    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency        7.0
-    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency        7.3
-    Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency        7.8
-    Unroll loop at line 10:9                                     cost    23, benefit      200.0, efficiency        8.7
-    Unroll loop at line 10:9                                     cost    14, benefit      150.0, efficiency       10.7
-  * Unroll loop at line 10:9                                     cost     5, benefit      100.0, efficiency       20.0 (-1 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618
+    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency      6.780
+    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency      7.000
+    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency      7.317
+    Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency      7.813
+    Unroll loop at line 10:9                                     cost    23, benefit      200.0, efficiency      8.696
+    Unroll loop at line 10:9                                     cost    14, benefit      150.0, efficiency     10.714
+  * Unroll loop at line 10:9                                     cost     5, benefit      100.0, efficiency     20.000 (-1 instructions)
 
 Pass 1: speed optimization selection (cost limit 695):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6
-    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency        6.8
-    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency        7.0
-    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency        7.3
-    Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency        7.8
-    Unroll loop at line 10:9                                     cost    23, benefit      200.0, efficiency        8.7
-  * Unroll loop at line 10:9                                     cost    14, benefit      150.0, efficiency       10.7 (+5 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618
+    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency      6.780
+    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency      7.000
+    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency      7.317
+    Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency      7.813
+    Unroll loop at line 10:9                                     cost    23, benefit      200.0, efficiency      8.696
+  * Unroll loop at line 10:9                                     cost    14, benefit      150.0, efficiency     10.714 (+5 instructions)
 
 Pass 1: speed optimization selection (cost limit 690):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6
-    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency        6.8
-    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency        7.0
-    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency        7.3
-    Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency        7.8
-  * Unroll loop at line 10:9                                     cost    23, benefit      200.0, efficiency        8.7 (+11 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618
+    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency      6.780
+    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency      7.000
+    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency      7.317
+    Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency      7.813
+  * Unroll loop at line 10:9                                     cost    23, benefit      200.0, efficiency      8.696 (+11 instructions)
 
 Pass 1: speed optimization selection (cost limit 679):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6
-    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency        6.8
-    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency        7.0
-    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency        7.3
-  * Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency        7.8 (+17 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618
+    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency      6.780
+    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency      7.000
+    Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency      7.317
+  * Unroll loop at line 10:9                                     cost    32, benefit      250.0, efficiency      7.813 (+17 instructions)
 
 Pass 1: speed optimization selection (cost limit 662):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6
-    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency        6.8
-    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency        7.0
-  * Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency        7.3 (+23 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618
+    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency      6.780
+    Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency      7.000
+  * Unroll loop at line 10:9                                     cost    41, benefit      300.0, efficiency      7.317 (+23 instructions)
 
 Pass 1: speed optimization selection (cost limit 639):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6
-    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency        6.8
-  * Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency        7.0 (+29 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618
+    Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency      6.780
+  * Unroll loop at line 10:9                                     cost    50, benefit      350.0, efficiency      7.000 (+29 instructions)
 
 Pass 1: speed optimization selection (cost limit 610):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6
-  * Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency        6.8 (+35 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+    Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618
+  * Unroll loop at line 10:9                                     cost    59, benefit      400.0, efficiency      6.780 (+35 instructions)
 
 Pass 1: speed optimization selection (cost limit 575):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5
-  * Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency        6.6 (+41 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+    Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494
+  * Unroll loop at line 10:9                                     cost    68, benefit      450.0, efficiency      6.618 (+41 instructions)
 
 Pass 1: speed optimization selection (cost limit 534):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4
-  * Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency        6.5 (+47 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+    Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395
+  * Unroll loop at line 10:9                                     cost    77, benefit      500.0, efficiency      6.494 (+47 instructions)
 
 Pass 1: speed optimization selection (cost limit 487):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3
-  * Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency        6.4 (+53 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+    Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316
+  * Unroll loop at line 10:9                                     cost    86, benefit      550.0, efficiency      6.395 (+53 instructions)
 
 Pass 1: speed optimization selection (cost limit 434):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3
-  * Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency        6.3 (+59 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+    Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250
+  * Unroll loop at line 10:9                                     cost    95, benefit      600.0, efficiency      6.316 (+59 instructions)
 
 Pass 1: speed optimization selection (cost limit 375):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2
-  * Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency        6.3 (+65 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+    Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195
+  * Unroll loop at line 10:9                                     cost   104, benefit      650.0, efficiency      6.250 (+65 instructions)
 
 Pass 1: speed optimization selection (cost limit 310):
-    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1
-  * Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency        6.2 (+71 instructions)
+    Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148
+  * Unroll loop at line 10:9                                     cost   113, benefit      700.0, efficiency      6.195 (+71 instructions)
 
 Pass 1: speed optimization selection (cost limit 239):
-  * Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency        6.1 (+77 instructions)
+  * Unroll loop at line 10:9                                     cost   122, benefit      750.0, efficiency      6.148 (+77 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-122 instructions):
  

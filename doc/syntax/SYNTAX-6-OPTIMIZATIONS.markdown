@@ -1056,8 +1056,7 @@ It is therefore no longer necessary to use the `inline` keyword, except in cases
 
 Case Switching is a [speed optimization](#optimization-for-speed), and as such is only active when the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) is set to `speed` or `auto`.
 
-Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates - on average - 
-half of all existing conditions, assuming even distribution of the input values of the case expression. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
+Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates - on average - half of all existing conditions, assuming even distribution of the input values of the case expression. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
 
 The Case Switching optimization improves case expressions which branch on integer values of the expression.
 
@@ -1088,77 +1087,30 @@ The jump table executes at most four instructions on each case expression execut
 
 Notes:
 
-* If you put the more frequent values first in the case expression, and the value distribution is very skewed, converting the case expression to the jump table might actually worsen the average execution time. Mindcode has no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching optimization for your program.
+* When evaluating execution speed, the optimizer computes and averages execution costs of each individual value present in a `when` clause. All of these values are deemed equally probable to occur, and values leading to an `else` branch are not considered at all. In an unoptimized `case` expression, values handled by the `else` branch take the longest time to handle, while in the optimized case expression, values completely outside the range of `when` values are executed faster than any other values. This is a side effect of the optimization.  
+* As a consequence of the previous point, if you put the more frequent values first in the case expression, and the value distribution is very skewed, converting the case expression to the jump table might actually worsen the average execution time. Mindcode has no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching optimization for your program.
 * Currently, there's no limit on the size of the jump table. For a case expression handling values 1 to 10 and then a value of 100, the jump table would have 100 entries. This affects computation of the optimization's benefit, and might make the optimization less favorable compared to other optimizations; however if available space permits it, such a jump table would be created.
  
 ### Preconditions
 
 The following conditions must be met for a case expression to be processed by this optimization:
 
-* All values used in `when` clauses must be effectively constant.
-* All values used in `when` clauses must be integers.
-* Values used in `when` clauses must be unique. 
-* There are no ranges in the `when` clauses.
-
-### Example
-
-```Mindcode
-value = floor(rand(20));
-text = case value
-    when 0 then "None";
-    when 1 then "One";
-    when 2, 3, 4 then "A few";
-    when 5, 6, 7, 8 then "Many";
-    when 10 then "Ten";
-    else "I don't known this number!";
-end;
-print(text);
-```
-
-The above case expression is transformed to this:
-
-```mlog
-op rand *tmp0 20 0
-op floor :value *tmp0 0
-jump 26 lessThan :value 0
-jump 26 greaterThan :value 10
-op add @counter :value 5
-jump 16 always 0 0
-jump 18 always 0 0
-jump 20 always 0 0
-jump 20 always 0 0
-jump 20 always 0 0
-jump 22 always 0 0
-jump 22 always 0 0
-jump 22 always 0 0
-jump 22 always 0 0
-jump 26 always 0 0
-jump 24 always 0 0
-set *tmp2 "None"
-jump 27 always 0 0
-set *tmp2 "One"
-jump 27 always 0 0
-set *tmp2 "A few"
-jump 27 always 0 0
-set *tmp2 "Many"
-jump 27 always 0 0
-set *tmp2 "Ten"
-jump 27 always 0 0
-set *tmp2 "I don't known this number!"
-print *tmp2
-```
-
-### Unsafe case optimization
-
-When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable to determine this is the case, and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions that do not have an `else` branch. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
-
-If you activate the `unsafe-case-optimization` directive, but not all input values are handled in your case expressions, the behavior of the generated code is undefined, when an unhandled input value is encountered.
+* All values used in `when` clauses are effectively constant.
+* All values used in `when` clauses are integers.
+* Values used in `when` clauses are unique. 
+* Only direct comparisons, no ranges are used in the `when` clauses.
 
 ### Symbolic labels
 
 When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation is needed when the minimal value handled by the jump table is different from 0, to account for the offset. This additional operation increases both optimization cost and execution cost. To prevent the increase in the execution cost, the jump table is padded with additional jumps when the minimal value is between `1` and `3`.
 
 When `symbolic-labels` is set to `false`, the offset is computed at compile time, therefore no additional instruction is needed and no jump table padding occurs.
+
+### Unsafe case optimization
+
+When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable to determine this is the case, and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions that do not have an `else` branch. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
+
+If you activate the `unsafe-case-optimization` directive, but not all input values are handled in your case expressions, the behavior of the generated code is undefined, when an unhandled input value is encountered.
 
 ### Mindustry content conversion
 
@@ -1178,6 +1130,140 @@ The optimization is applied with these differences:
 
 > [!NOTE]
 > The out-of-range handling instructions are omitted when `unsafe-case-optimization` is `true` and there's no `else` branch. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g. item selected in a sorter), keep in mind the value obtained this way might be null.  
+
+### Discontinuous jump tables
+
+When there's a large continuous gap of unused values in the jump table ("unused values" being values targeting the `else` branch), the table can be split into two or more segments. Each additional segment adds 3 instructions (4 in case of symbolic labels): lower bound check, upper bound check, `@counter` manipulation, and offset computation for symbolic labels.
+
+If, after splitting, some remaining jump table segment ends up containing too few matching values, it can be replaced back with a sequence of jump instructions, if those would be executed faster on average.     
+
+This optimization is particularly useful when using block types in case expressions, as, given large dispersion of block type ids, the jump tables tend to get quite large.
+
+Notes:
+
+* Only continuous segments leading to the `else` branch are considered. If the jump table happens to contain a large continuous segment leading to a branch other than `else`, it is not considered for discontinuous optimization.
+* Splitting a jump table leads to a smaller, slower code compared to the original jump table. Jump table splitting is only considered when it is still faster than the original, non-optimized `case` expression.
+* Since the split jump table consumes less instruction space, it might be more efficient than the continuous jump table in terms of efficiency (i.e. number of execution steps saved per additional instruction). However, the split jump table, while more efficient with respect to code size, is still slower than a continuous jump table, and if there are no other ways to utilize the instruction space, it doesn't make sense to prefer the smaller but slower solution. The optimization won't consider splitting the jump table unless the last considered solution consumed more than half of the available instruction space.
+* The execution speed of discontinuous jump tables is computed according to the same principle - as an average execution cost of all individual values present in a `when` clause.
+
+### Example
+
+The example illustrates the following optimization aspects:
+
+* Case switching optimization in general,
+* Mindustry content conversion,
+* Discontinuous jump tables.
+
+The instruction limit has been artificially lowered to ensure the optimizer will consider splitting the jump table. 
+
+```Mindcode
+#set symbolic-labels = true;
+#set instruction-limit = 300;
+
+print(case getlink(0).@type
+    when @copper-wall,
+         @copper-wall-large,
+         @titanium-wall,
+         @titanium-wall-large,
+         @plastanium-wall,
+         @plastanium-wall-large,
+         @thorium-wall,
+         @thorium-wall-large,
+         @phase-wall,
+         @phase-wall-large,
+         @surge-wall,
+         @surge-wall-large,
+         @scrap-wall,
+         @scrap-wall-large,
+         @scrap-wall-huge,
+         @scrap-wall-gigantic,
+         @beryllium-wall,
+         @beryllium-wall-large,
+         @tungsten-wall,
+         @tungsten-wall-large,
+         @reinforced-surge-wall,
+         @reinforced-surge-wall-large,
+         @carbide-wall,
+         @carbide-wall-large then "Wall";
+     else "Not wall";
+end);
+```
+
+The above case expression is transformed to this:
+
+```mlog
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+    getlink *tmp1 0
+    sensor *tmp2 *tmp1 @type
+        sensor *tmp4 *tmp2 @id
+        jump label_62 lessThan *tmp4 17
+        jump label_25 greaterThan *tmp4 34
+        op sub *tmp5 *tmp4 17
+        op add @counter @counter *tmp5
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+    label_25:
+        jump label_62 lessThan *tmp4 203
+        jump label_62 greaterThan *tmp4 234
+        op sub *tmp6 *tmp4 203
+        op add @counter @counter *tmp6
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_62 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_60 always 0 0
+        jump label_60 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_60 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+        jump label_62 always 0 0
+    label_60:
+        set *tmp0 "Wall"
+        jump label_63 always 0 0
+label_62:
+    set *tmp0 "Not wall"
+    label_63:
+    print *tmp0
+```
 
 ## Array Optimization
 

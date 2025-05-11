@@ -445,7 +445,7 @@ Most optimizations don't support the `advanced` level. For those the level `adva
 | [Function Inlining](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining)                             | function-inlining            |    N     |
 | [Case Switching](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)                                   | case-switching               |    N     |
 | [Array Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization)                           | array-optimization           |    N     |
-| [Return Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                         | case-switching               |    N     |
+| [Return Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                         | case-switching               |    Y     |
 | [Jump Straightening](SYNTAX-6-OPTIMIZATIONS.markdown#jump-straightening)                           | return-optimization          |    N     |
 | [Jump Threading](SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading)                                   | jump-threading               |    N     |
 | [Unreachable Code Elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination)       | unreachable-code-elimination |    N     |

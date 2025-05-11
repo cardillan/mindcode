@@ -13,16 +13,18 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
-import java.util.NavigableMap;
-import java.util.Objects;
-import java.util.TreeMap;
+import java.util.*;
 import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
 @NullMarked
 class CaseSwitcher extends BaseOptimizer {
+    private static final int MINIMAL_GAP = 4;
+
+    // If the optimization allocates less space than specified by the quota, no further
+    // variants will be considered.
+    private static final double QUOTA_USAGE_LIMIT = 0.5;
 
     public CaseSwitcher(OptimizationContext optimizationContext) {
         super(Optimization.CASE_SWITCHING, optimizationContext);
@@ -48,16 +50,54 @@ class CaseSwitcher extends BaseOptimizer {
     @Override
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
         invocations++;
-        return forEachContext(AstContextType.CASE, BASIC,
-                context -> findPossibleCaseSwitches(context, costLimit));
+        List<OptimizationAction> result = new ArrayList<>();
+        forEachContext(AstContextType.CASE, BASIC,
+                returningNull((context -> findPossibleCaseSwitches(context, costLimit, result))));
+        return result;
     }
 
-    private @Nullable OptimizationAction findPossibleCaseSwitches(AstContext context, int costLimit) {
+    private List<Gap> findGaps(TreeMap<Integer, LogicLabel> targets) {
+        List<Gap> gaps = new ArrayList<>();
+        int last = targets.firstKey();
+
+        // Else branch gaps
+        for (Integer key : targets.keySet()) {
+            if (key - last > MINIMAL_GAP) {
+                int start = last + 1;
+                gaps.add(new Gap(start, key - start, null));
+            }
+            last = key;
+        }
+
+//        // Consequent values
+//        LogicLabel label = null;
+//        int size = 0;
+//        for (Map.Entry<Integer, LogicLabel> entry : targets.entrySet()) {
+//            if (label == null) {
+//                label = entry.getValue();
+//                last = entry.getKey();
+//                size = 1;
+//            } else if (label.equals(entry.getValue()) && entry.getKey() == last + 1) {
+//                size++;
+//                last++;
+//            } else {
+//                if (size > MINIMAL_GAP) {
+//                    gaps.add(new Gap(last - size + 1, size, label));
+//                }
+//                label = null;
+//            }
+//        }
+
+        gaps.sort(null);
+        return gaps;
+    }
+
+    private void findPossibleCaseSwitches(AstContext context, int costLimit, List<OptimizationAction> result) {
         LogicVariable variable = null;
-        NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
+        TreeMap<Integer, LogicLabel> targets = new TreeMap<>();
 
         if (context.findSubcontext(CONDITION) == null) {
-            return null;
+            return;
         }
 
         boolean removeRangeCheck = getProfile().isUnsafeCaseOptimization()
@@ -92,135 +132,278 @@ class CaseSwitcher extends BaseOptimizer {
                                 if (bodyContext != null && iterator.peek(0).belongsTo(bodyContext)) {
                                     target = obtainContextLabel(bodyContext);
                                 } else {
-                                    return null;
+                                    return;
                                 }
                             }
 
                             if (targets.put(analyzer.getLastValue(), target) != null) {
-                                return null;
+                                return;
                             }
                         } else if (!jump.isUnconditional()) {
                             // Unconditional jump is a jump to next when branch
-                            return null;
+                            return;
                         }
                     } else {
                         // Something different from a jump in condition --> unsupported structure
-                        return null;
+                        return;
                     }
                 }
             }
         }
 
         // Degenerate case expressions: no branches
-        if (targets.isEmpty()) return null;
+        if (targets.isEmpty()) return;
+        List<Gap> gaps = findGaps(targets);
 
         boolean symbolic = getProfile().isSymbolicLabels();
 
         // Cost calculation
         int min = targets.firstEntry().getKey();
-        int max = targets.lastEntry().getKey();
 
         // In symbolic labels mode, having min different from 0 requires an additional executable instruction
         // This expands the jump table instead to avoid that instruction
-        if (symbolic && min >= 1 && min <= 3) min = 0;
+        if (symbolic && min > 0 && min < MINIMAL_GAP) min = 0;
 
-        // Cost of computing offset
-        int symbolicCost = symbolic && min != 0 ? 1 : 0;
+        ConvertCaseExpressionAction action = new ConvertCaseExpressionAction(context, removed, variable, targets,
+                List.of(), min, analyzer.getContentType(), removeRangeCheck);
 
-        // Cost of converting type to logic ID
-        int contentCost = analyzer.getContentType() != ContentType.UNKNOWN ? 1 : 0;
-
-        // Cost of range check
-        int rangeCheckCost = removeRangeCheck ? 0 : 2;
-
-        // Jump table cost
-        int jumpTableCost = (max - min + 1);
-
-        // Adding one jump for each value between min and max inclusive (the jump table)
-        // Savings are equal to removed instructions
-        int cost = jumpTableCost + rangeCheckCost + symbolicCost + contentCost - removed;
-
-        // New sequence of executed instructions will be: jump lessThan / jump greaterThan / goto offset / jump to branch
-        // We save half of the switch jumps on average
-        int executionSteps = 2 + rangeCheckCost + symbolicCost + contentCost;
-        double benefit = ((removed + 1) / 2.0 - executionSteps) * context.totalWeight();
-
-        return benefit <= 0 || cost > costLimit ? null
-                : new ConvertCaseExpressionAction(context, cost, benefit, variable, targets, min, analyzer.getContentType(), removeRangeCheck);
-    }
-
-    private OptimizationResult convertCaseExpression(ConvertCaseExpressionAction action, int costLimit) {
-        AstContext context = action.astContext;
-        NavigableMap<Integer, LogicLabel> targets = action.targets;
-
-        int index = firstInstructionIndex(Objects.requireNonNull(context.findSubcontext(CONDITION)));
-        AstContext elseContext = context.findSubcontext(ELSE);
-        AstContext finalContext = elseContext != null ? elseContext : Objects.requireNonNull(context.lastChild());
-        LogicLabel finalLabel = obtainContextLabel(finalContext);
-        AstContext newContext = context.createSubcontext(FLOW_CONTROL, 1.0);
-        int min = action.min;
-        int max = targets.lastEntry().getKey();
-
-        LogicLabel marker = instructionProcessor.nextLabel();
-        List<LogicLabel> labels = IntStream.rangeClosed(min, max).mapToObj(i -> instructionProcessor.nextLabel()).toList();
-
-        LogicVariable caseVariable;
-        if (action.contentType == ContentType.UNKNOWN) {
-            caseVariable = action.variable;
-        } else {
-            caseVariable = instructionProcessor.nextTemp();
-            insertInstruction(index++, createSensor(newContext, caseVariable, action.variable, LogicBuiltIn.ID));
+        if (action.benefit() > 0 && action.cost() <= costLimit) {
+            result.add(action);
         }
 
-        if (!action.removeRangeCheck) {
-            if (action.contentType != ContentType.UNKNOWN && min == 0) {
-                insertInstruction(index++, createJump(newContext, finalLabel, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
-            } else {
-                insertInstruction(index++, createJump(newContext, finalLabel, Condition.LESS_THAN, caseVariable, LogicNumber.create(min)));
+        if (removeRangeCheck) return;
+
+        int instructionSpace = getProfile().getInstructionLimit() - optimizationContext.getProgram().size();
+        for (int i = 0; i < gaps.size(); i++) {
+            // Stop producing additional optimizations if the last one allocated less free space than given by the quota
+            if (action.cost() < instructionSpace * QUOTA_USAGE_LIMIT) return;
+
+            action = new ConvertCaseExpressionAction(context, removed, variable, targets,
+                    gaps.subList(0, i + 1), min, analyzer.getContentType(), removeRangeCheck);
+            if (action.benefit() > 0 && action.cost() <= costLimit) {
+                result.add(action);
             }
-            insertInstruction(index++, createJump(newContext, finalLabel, Condition.GREATER_THAN, caseVariable, LogicNumber.create(max)));
         }
-        insertInstruction(index++, createMultiJump(newContext, labels.getFirst(), caseVariable, LogicNumber.create(min), marker));
-
-        for (int i = 0; i < labels.size(); i++) {
-            insertInstruction(index++, createMultiLabel(newContext, labels.get(i), marker));
-            insertInstruction(index++, createJumpUnconditional(newContext, targets.getOrDefault(min + i, finalLabel)));
-        }
-
-        // Remove all conditions
-        for (AstContext condition : context.findSubcontexts(CONDITION)) {
-            removeMatchingInstructions(ix -> ix.belongsTo(condition));
-        }
-
-        count++;
-        return OptimizationResult.REALIZED;
     }
 
-    private class ConvertCaseExpressionAction extends AbstractOptimizationAction {
+    private class ConvertCaseExpressionAction implements OptimizationAction {
+        private final AstContext astContext;
+        private int cost;
+        private double benefit;
         private final LogicVariable variable;
-        private final NavigableMap<Integer, LogicLabel> targets;
+        private final TreeMap<Integer, LogicLabel> targets;
+        private final List<Gap> gaps;
         private final int min;
         private final ContentType contentType;
         private final boolean removeRangeCheck;
+        private final boolean symbolic = getProfile().isSymbolicLabels();
+        private final int minJumpTableEntries = 2 * (symbolic ? 4 : 3) - 1;
 
-        public ConvertCaseExpressionAction(AstContext astContext, int cost, double benefit, LogicVariable variable,
-                NavigableMap<Integer, LogicLabel> targets, int min, ContentType contentType, boolean removeRangeCheck) {
-            super(astContext, cost, benefit);
+        public ConvertCaseExpressionAction(AstContext astContext, int removed, LogicVariable variable,
+                TreeMap<Integer, LogicLabel> targets, List<Gap> gaps, int min, ContentType contentType, boolean removeRangeCheck) {
+            this.astContext = astContext;
             this.variable = variable;
             this.targets = targets;
+            this.gaps = gaps.stream().sorted(Comparator.comparing(Gap::start)).toList();
             this.min = min;
             this.contentType = contentType;
             this.removeRangeCheck = removeRangeCheck;
+            if (removeRangeCheck) {
+                computeCostAndBenefitNoRangeCheck(removed);
+            } else {
+                computeCostAndBenefit(removed);
+            }
+        }
+
+        @Override
+        public AstContext astContext() {
+            return astContext;
+        }
+
+        @Override
+        public int cost() {
+            return cost;
+        }
+
+        @Override
+        public double benefit() {
+            return benefit;
         }
 
         @Override
         public OptimizationResult apply(int costLimit) {
-            return applyOptimization(() -> convertCaseExpression(this, costLimit), toString());
+            return applyOptimization(() -> convertCaseExpression(costLimit), toString());
+        }
+
+        private void debug(Object message) {
+            System.out.println(message);
         }
 
         @Override
         public String toString() {
-            return "Convert case at " + Objects.requireNonNull(astContext.node()).sourcePosition().formatForLog();
+            return "Convert case at " + Objects.requireNonNull(astContext.node()).sourcePosition().formatForLog() +
+                    " (segments: " + (gaps.size() + 1) + ")";
+        }
+
+        private void computeCostAndBenefitNoRangeCheck(int removed) {
+            int max = targets.lastEntry().getKey();
+            int symbolicCost = symbolic && min != 0 ? 1 : 0;                // Cost of computing offset
+            int contentCost = contentType == ContentType.UNKNOWN ? 0 : 1;   // Cost of converting type to logic ID
+            int jumpTableCost = (max - min + 1) + 1;                        // Table size plus initial jump
+            cost = jumpTableCost + symbolicCost + contentCost - removed;
+
+            double executionSteps = 2 + symbolicCost + contentCost;         // MultiJump + jump table + additional costs
+            double savedSteps = (removed + 1) / 2.0;
+            benefit = (savedSteps - executionSteps) * astContext.totalWeight();
+        }
+
+        double executionSteps = 0.0;
+
+        private void computeCostAndBenefit(int removed) {
+            // One time costs
+            int symbolicCost = symbolic && min != 0 ? 1 : 0;                // Cost of computing offset
+            int contentCost = contentType == ContentType.UNKNOWN ? 0 : 1;   // Cost of converting type to logic ID
+            cost = contentCost - removed;
+            executionSteps = contentCost;
+
+            debug(this);
+            debug("Initial execution steps: " + executionSteps);
+
+            int segmentMin = min;
+            for (Gap gap : gaps) {
+                int segmentMax = gap.start() - 1;
+                computeSegmentCostAndBenefit(segmentMin, segmentMax);
+                segmentMin = gap.start() + gap.size();
+            }
+
+            // Final segment
+            computeSegmentCostAndBenefit(segmentMin, targets.lastEntry().getKey());
+
+            double savedSteps = (removed + 1) / 2.0;
+            debug("Saved steps: " + savedSteps + ", new steps: " + executionSteps);
+            debug("");
+            benefit = (savedSteps - executionSteps) * astContext.totalWeight();
+        }
+
+        private void computeSegmentCostAndBenefit(int min, int max) {
+            boolean lastSegment = max >= targets.lastKey();
+            int allTargets = targets.size();
+            int activeTargets = (int) targets.keySet().stream().filter(i -> i >= min && i <= max).count();
+            int remainingTargets = (int) targets.keySet().stream().filter(i -> i >= min).count();
+
+            if (activeTargets <= minJumpTableEntries) {
+                int jumps = activeTargets + (lastSegment ? 1 : 0);
+                int segmentSteps = activeTargets * (activeTargets + 1) / 2;
+                int remainingSteps = (remainingTargets - activeTargets) * activeTargets;
+                double additionalSteps = (double)(segmentSteps + remainingSteps) * remainingTargets / allTargets;
+
+                debug("Segment " + min + " to " + max + " execution steps: " + additionalSteps);
+                cost += jumps;
+                executionSteps += additionalSteps;
+                return;
+            }
+
+            // range check (2)
+            // multijump (one or two depending on symbolic)
+            int instructions = 2 + (symbolic && min != 0 ? 2 : 1);
+
+            // jump table (one per slot)
+            int jumpTable = (max - min + 1);
+
+            debug("Segment " + min + " to " + max + " execution steps: " + (instructions + 1));
+            cost += instructions + jumpTable;
+            executionSteps += (double)(instructions + 1) * remainingTargets / allTargets;
+        }
+
+        private @Nullable AstContext newAstContext;
+        private @Nullable LogicVariable caseVariable;
+        private int index;
+
+        protected void insertInstruction(LogicInstruction instruction) {
+            optimizationContext.insertInstruction(index++, instruction);
+        }
+
+        private OptimizationResult convertCaseExpression(int costLimit) {
+            index = firstInstructionIndex(Objects.requireNonNull(astContext.findSubcontext(CONDITION)));
+            AstContext elseContext = astContext.findSubcontext(ELSE);
+            AstContext finalContext = elseContext != null ? elseContext : Objects.requireNonNull(astContext.lastChild());
+            LogicLabel finalLabel = obtainContextLabel(finalContext);
+
+            newAstContext = astContext.createSubcontext(FLOW_CONTROL, 1.0);
+
+            if (contentType == ContentType.UNKNOWN) {
+                caseVariable = variable;
+            } else {
+                caseVariable = instructionProcessor.nextTemp();
+                insertInstruction(createSensor(newAstContext, caseVariable, variable, LogicBuiltIn.ID));
+            }
+
+            int segmentMin = min;
+            for (Gap gap : gaps) {
+                int segmentMax = gap.start() - 1;
+                LogicLabel nextSegmentLabel = instructionProcessor.nextLabel();
+                generateJumpTable(segmentMin, segmentMax, nextSegmentLabel, gap.label() == null ? finalLabel : gap.label());
+                insertInstruction(createLabel(newAstContext, nextSegmentLabel));
+                segmentMin = gap.start() + gap.size();
+            }
+
+            // Final segment
+            generateJumpTable(segmentMin, targets.lastEntry().getKey(), finalLabel, finalLabel);
+
+            // Remove all conditions
+            for (AstContext condition : astContext.findSubcontexts(CONDITION)) {
+                removeMatchingInstructions(ix -> ix.belongsTo(condition));
+            }
+
+            count++;
+            return OptimizationResult.REALIZED;
+        }
+
+        // Generates a jump table
+        // Values less than min are sent to final label
+        // Values greater than max are sent to the next segment
+        private void generateJumpTable(int min, int max, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
+            assert newAstContext != null;
+            assert caseVariable != null;
+
+            int activeTargets = (int) targets.keySet().stream().filter(i -> i >= min && i <= max).count();
+            if (activeTargets <= minJumpTableEntries) {
+                generateSelectTable(min, max, finalLabel, nextSegmentLabel == finalLabel);
+                return;
+            }
+
+            // Range check
+            if (!removeRangeCheck) {
+                if (contentType != ContentType.UNKNOWN && min == 0) {
+                    insertInstruction(createJump(newAstContext, finalLabel, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
+                } else {
+                    insertInstruction(createJump(newAstContext, finalLabel, Condition.LESS_THAN, caseVariable, LogicNumber.create(min)));
+                }
+                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN, caseVariable, LogicNumber.create(max)));
+            }
+
+            List<LogicLabel> labels = IntStream.rangeClosed(min, max).mapToObj(i -> instructionProcessor.nextLabel()).toList();
+            LogicLabel marker = instructionProcessor.nextLabel();
+            insertInstruction(createMultiJump(newAstContext, labels.getFirst(), caseVariable, LogicNumber.create(min), marker));
+
+            for (int i = 0; i < labels.size(); i++) {
+                insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
+                insertInstruction(createJumpUnconditional(newAstContext, targets.getOrDefault(min + i, finalLabel)));
+            }
+        }
+
+        private void generateSelectTable(int min, int max, LogicLabel finalLabel, boolean lastSegment) {
+            assert newAstContext != null;
+            assert caseVariable != null;
+
+            targets.entrySet().stream().filter(e -> e.getKey() >= min && e.getKey() <= max)
+                    .forEach(e -> insertInstruction(createJump(newAstContext, e.getValue(),
+                                    Condition.EQUAL, caseVariable, LogicNumber.create(e.getKey())))
+                    );
+
+            if (lastSegment) {
+                insertInstruction(createJumpUnconditional(newAstContext, finalLabel));
+            }
         }
     }
 
@@ -266,6 +449,15 @@ class CaseSwitcher extends BaseOptimizer {
 
         public ContentType getContentType() {
             return Objects.requireNonNull(contentType);
+        }
+    }
+
+    private record Gap(int start, int size, @Nullable LogicLabel label) implements Comparable<Gap> {
+        @Override
+        public int compareTo(Gap other) {
+            return size == other.size
+                    ? Integer.compare(start, other.start)
+                    : Integer.compare(other.size, size);
         }
     }
 }

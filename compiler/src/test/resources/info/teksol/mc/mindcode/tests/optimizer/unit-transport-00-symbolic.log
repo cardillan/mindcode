@@ -20,46 +20,46 @@
    675 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 252):
-  * Replicate loop condition at line 172:9                       cost     1, benefit      312.5, efficiency      312.5 (+0 instructions)
-    Replicate loop condition at line 176:9                       cost     4, benefit      312.5, efficiency       78.1
-    Replicate loop condition at line 184:13                      cost     5, benefit      156.3, efficiency       31.3
-    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency        8.3
-    Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency       12.5
-    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency        4.2
-    Convert case at line 712:5                                   cost     3, benefit       21.9, efficiency        7.3
+  * Replicate loop condition at line 172:9                       cost     1, benefit      312.5, efficiency    312.500 (+0 instructions)
+    Replicate loop condition at line 176:9                       cost     4, benefit      312.5, efficiency     78.125
+    Replicate loop condition at line 184:13                      cost     5, benefit      156.3, efficiency     31.250
+    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
+    Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
+    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
 
 Pass 1: speed optimization selection (cost limit 252):
-  * Replicate loop condition at line 176:9                       cost     4, benefit      312.5, efficiency       78.1 (+4 instructions)
-    Replicate loop condition at line 184:13                      cost     5, benefit      156.3, efficiency       31.3
-    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency        8.3
-    Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency       12.5
-    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency        4.2
-    Convert case at line 712:5                                   cost     3, benefit       21.9, efficiency        7.3
+  * Replicate loop condition at line 176:9                       cost     4, benefit      312.5, efficiency     78.125 (+4 instructions)
+    Replicate loop condition at line 184:13                      cost     5, benefit      156.3, efficiency     31.250
+    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
+    Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
+    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
 
 Pass 1: speed optimization selection (cost limit 248):
-  * Replicate loop condition at line 184:13                      cost     5, benefit      156.3, efficiency       31.3 (+5 instructions)
-    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency        8.3
-    Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency       12.5
-    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency        4.2
-    Convert case at line 712:5                                   cost     3, benefit       21.9, efficiency        7.3
+  * Replicate loop condition at line 184:13                      cost     5, benefit      156.3, efficiency     31.250 (+5 instructions)
+    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
+    Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
+    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
 
 Pass 1: speed optimization selection (cost limit 243):
-    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency        8.3
-  * Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency       12.5 (+1 instructions)
-    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency        4.2
-    Convert case at line 712:5                                   cost     3, benefit       21.9, efficiency        7.3
+    Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
+  * Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500 (+1 instructions)
+    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
 
 Pass 1: speed optimization selection (cost limit 242):
-  * Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency        8.3 (+3 instructions)
-    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency        4.2
-    Convert case at line 712:5                                   cost     3, benefit       21.9, efficiency        7.3
+  * Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333 (+3 instructions)
+    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
 
 Pass 1: speed optimization selection (cost limit 239):
-    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency        4.2
-  * Convert case at line 712:5                                   cost     3, benefit       21.9, efficiency        7.3 (+4 instructions)
+    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
+  * Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469 (+4 instructions)
 
 Pass 1: speed optimization selection (cost limit 235):
-  * Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency        4.2 (+3 instructions)
+  * Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167 (+3 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -3363,7 +3363,7 @@ Modifications by Replicate loop condition at line 203:1 (+3 instructions):
    218 jump *label47 notEqual :sorter_type @sorter
    219 set .SHOW_REMOTE_LEVEL true
 
-Modifications by Convert case at line 712:5 (+4 instructions):
+Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
  
    424 label *label85
    425 set .LAST_ITEM .ITEM
@@ -3372,38 +3372,38 @@ Modifications by Convert case at line 712:5 (+4 instructions):
 +  427 sensor *tmp376 .ITEM @id
 +  428 jump *label228 strictEqual *tmp376 null
 +  429 jump *label228 greaterThan *tmp376 15
-+  430 multijump *label230 *tmp376 0 (m:*label229)
-+  431 multilabel *label230 (m:*label229)
++  430 multijump *label229 *tmp376 0 (m:*label245)
++  431 multilabel *label229 (m:*label245)
 +  432 jump *label93 always
-+  433 multilabel *label231 (m:*label229)
++  433 multilabel *label230 (m:*label245)
 +  434 jump *label97 always
-+  435 multilabel *label232 (m:*label229)
++  435 multilabel *label231 (m:*label245)
 +  436 jump *label99 always
-+  437 multilabel *label233 (m:*label229)
++  437 multilabel *label232 (m:*label245)
 +  438 jump *label95 always
-+  439 multilabel *label234 (m:*label229)
++  439 multilabel *label233 (m:*label245)
 +  440 jump *label107 always
-+  441 multilabel *label235 (m:*label229)
++  441 multilabel *label234 (m:*label245)
 +  442 jump *label91 always
-+  443 multilabel *label236 (m:*label229)
++  443 multilabel *label235 (m:*label245)
 +  444 jump *label119 always
-+  445 multilabel *label237 (m:*label229)
++  445 multilabel *label236 (m:*label245)
 +  446 jump *label117 always
-+  447 multilabel *label238 (m:*label229)
++  447 multilabel *label237 (m:*label245)
 +  448 jump *label109 always
-+  449 multilabel *label239 (m:*label229)
++  449 multilabel *label238 (m:*label245)
 +  450 jump *label111 always
-+  451 multilabel *label240 (m:*label229)
++  451 multilabel *label239 (m:*label245)
 +  452 jump *label103 always
-+  453 multilabel *label241 (m:*label229)
++  453 multilabel *label240 (m:*label245)
 +  454 jump *label101 always
-+  455 multilabel *label242 (m:*label229)
++  455 multilabel *label241 (m:*label245)
 +  456 jump *label115 always
-+  457 multilabel *label243 (m:*label229)
++  457 multilabel *label242 (m:*label245)
 +  458 jump *label113 always
-+  459 multilabel *label244 (m:*label229)
++  459 multilabel *label243 (m:*label245)
 +  460 jump *label89 always
-+  461 multilabel *label245 (m:*label229)
++  461 multilabel *label244 (m:*label245)
 +  462 jump *label105 always
    463 label *label89
    464 set *tmp166 "[]"
@@ -3561,7 +3561,7 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
-   457 multilabel *label245 (m:*label229)
+   457 multilabel *label244 (m:*label245)
    458 jump *label105 always
    459 label *label89
 -    * set *tmp166 "[]"
@@ -5089,38 +5089,38 @@ set .LAST_ITEM .ITEM
 sensor *tmp376 .ITEM @id
 jump *label228 strictEqual *tmp376 null
 jump *label228 greaterThan *tmp376 15
-multijump *label230 *tmp376 0
-multilabel *label230
+multijump *label229 *tmp376 0
+multilabel *label229
 jump *label93 always
-multilabel *label231
+multilabel *label230
 jump *label97 always
-multilabel *label232
+multilabel *label231
 jump *label99 always
-multilabel *label233
+multilabel *label232
 jump *label95 always
-multilabel *label234
+multilabel *label233
 jump *label107 always
-multilabel *label235
+multilabel *label234
 jump *label91 always
-multilabel *label236
+multilabel *label235
 jump *label119 always
-multilabel *label237
+multilabel *label236
 jump *label117 always
-multilabel *label238
+multilabel *label237
 jump *label109 always
-multilabel *label239
+multilabel *label238
 jump *label111 always
-multilabel *label240
+multilabel *label239
 jump *label103 always
-multilabel *label241
+multilabel *label240
 jump *label101 always
-multilabel *label242
+multilabel *label241
 jump *label115 always
-multilabel *label243
+multilabel *label242
 jump *label113 always
-multilabel *label244
+multilabel *label243
 jump *label89 always
-multilabel *label245
+multilabel *label244
 jump *label105 always
 label *label89
 set .ITEM_ICON "[]"

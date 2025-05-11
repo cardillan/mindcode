@@ -13,7 +13,7 @@
    184 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 804):
-  * Replicate loop condition at line 26:1                        cost     1, benefit       25.0, efficiency       25.0 (+1 instructions)
+  * Replicate loop condition at line 26:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-26 instructions):
  

@@ -20,69 +20,69 @@
    698 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 737):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency        0.3
-    Unroll loop at line 90:5                                     cost   252, benefit     5000.0, efficiency       19.8
-    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3
-    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency       15.8
-    Inline function 'displayItem' defined at line 86:1           cost   101, benefit      100.0, efficiency        1.0
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   102, benefit       50.0, efficiency        0.5
-    Inline function call at line 55:9                            cost   102, benefit       50.0, efficiency        0.5
-    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency       10.9
-  * Convert case at line 100:5                                   cost     0, benefit     2187.5, efficiency   Infinity (+1 instructions)
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency      0.261
+    Unroll loop at line 90:5                                     cost   252, benefit     5000.0, efficiency     19.841
+    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333
+    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency     15.750
+    Inline function 'displayItem' defined at line 86:1           cost   101, benefit      100.0, efficiency      0.990
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   102, benefit       50.0, efficiency      0.490
+    Inline function call at line 55:9                            cost   102, benefit       50.0, efficiency      0.490
+    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency     10.938
+  * Convert case at line 100:5 (segments: 1)                     cost     1, benefit     2187.5, efficiency   2187.500 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 736):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency        0.3
-  * Unroll loop at line 90:5                                     cost   255, benefit     5000.0, efficiency       19.6 (+255 instructions)
-    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3
-    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency       15.8
-    Inline function 'displayItem' defined at line 86:1           cost   102, benefit      100.0, efficiency        1.0
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   103, benefit       50.0, efficiency        0.5
-    Inline function call at line 55:9                            cost   103, benefit       50.0, efficiency        0.5
-    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency       10.9
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency      0.261
+  * Unroll loop at line 90:5                                     cost   255, benefit     5000.0, efficiency     19.608 (+255 instructions)
+    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333
+    Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency     15.750
+    Inline function 'displayItem' defined at line 86:1           cost   102, benefit      100.0, efficiency      0.980
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   103, benefit       50.0, efficiency      0.485
+    Inline function call at line 55:9                            cost   103, benefit       50.0, efficiency      0.485
+    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency     10.938
 
 Pass 1: speed optimization selection (cost limit 481):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency        0.3
-    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3
-  * Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency       15.8 (-3 instructions)
-    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency       10.9
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   241, benefit       63.0, efficiency      0.261
+    Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333
+  * Inline function 'eraseNumbers' defined at line 77:1          cost     3, benefit       47.3, efficiency     15.750 (-3 instructions)
+    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 46:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 62:9                            cost     4, benefit       43.8, efficiency     10.938
 
 Pass 1: speed optimization selection (cost limit 484):
-    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8
-    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency        0.2
-  * Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency        2.3 (-3 instructions)
-    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3
-    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency        0.9
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
+    Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778
+    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency      0.231
+  * Inline function 'eraseImages' defined at line 68:1           cost     3, benefit        7.0, efficiency      2.333 (-3 instructions)
+    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280
+    Inline function call at line 27:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 28:1                            cost     4, benefit        3.5, efficiency      0.875
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
 
 Pass 1: speed optimization selection (cost limit 487):
-  * Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency        0.8 (-12 instructions)
-    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency        0.2
-    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
+  * Unroll iteration loop at line 32:1                           cost    81, benefit       63.0, efficiency      0.778 (-12 instructions)
+    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency      0.231
+    Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
 
 Pass 1: speed optimization selection (cost limit 499):
-    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency        0.2
-  * Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency        0.3 (+249 instructions)
-    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency        0.1
-    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency        0.1
+    Unroll iteration loop at line 49:1                           cost   273, benefit       63.0, efficiency      0.231
+  * Inline function 'displayItem' defined at line 86:1           cost   357, benefit      100.0, efficiency      0.280 (+249 instructions)
+    Inline function call at line 53:9                            cost   358, benefit       50.0, efficiency      0.140
+    Inline function call at line 55:9                            cost   358, benefit       50.0, efficiency      0.140
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -1279,32 +1279,32 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    335 jump *label88 notEqual :displayItem:amount 1
    336 op add *tmp119 :displayItem:x 6
 
-Modifications by Convert case at line 100:5 (+1 instructions):
+Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
  
    220 label *label60
    221 label *label90
    222 op mod *tmp19 :displayItem:amount 10
 -    * jump *label65 notEqual *tmp19 0
-+  223 multijump *label93 *tmp19 0 (m:*label92)
-+  224 multilabel *label93 (m:*label92)
++  223 multijump *label92 *tmp19 0 (m:*label102)
++  224 multilabel *label92 (m:*label102)
 +  225 jump *label66 always
-+  226 multilabel *label94 (m:*label92)
++  226 multilabel *label93 (m:*label102)
 +  227 jump *label68 always
-+  228 multilabel *label95 (m:*label92)
++  228 multilabel *label94 (m:*label102)
 +  229 jump *label70 always
-+  230 multilabel *label96 (m:*label92)
++  230 multilabel *label95 (m:*label102)
 +  231 jump *label72 always
-+  232 multilabel *label97 (m:*label92)
++  232 multilabel *label96 (m:*label102)
 +  233 jump *label74 always
-+  234 multilabel *label98 (m:*label92)
++  234 multilabel *label97 (m:*label102)
 +  235 jump *label76 always
-+  236 multilabel *label99 (m:*label92)
++  236 multilabel *label98 (m:*label102)
 +  237 jump *label78 always
-+  238 multilabel *label100 (m:*label92)
++  238 multilabel *label99 (m:*label102)
 +  239 jump *label80 always
-+  240 multilabel *label101 (m:*label92)
++  240 multilabel *label100 (m:*label102)
 +  241 jump *label82 always
-+  242 multilabel *label102 (m:*label92)
++  242 multilabel *label101 (m:*label102)
 +  243 jump *label84 always
    244 label *label66
    245 op sub *tmp24 :displayItem:x 1
@@ -1397,26 +1397,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 -    * label *label60
 -    * label *label90
 -    * op mod *tmp19 :displayItem:amount 10
--    * multijump *label93 *tmp19 0 (m:*label92)
--    * multilabel *label93 (m:*label92)
+-    * multijump *label92 *tmp19 0 (m:*label102)
+-    * multilabel *label92 (m:*label102)
 -    * jump *label66 always
--    * multilabel *label94 (m:*label92)
+-    * multilabel *label93 (m:*label102)
 -    * jump *label68 always
--    * multilabel *label95 (m:*label92)
+-    * multilabel *label94 (m:*label102)
 -    * jump *label70 always
--    * multilabel *label96 (m:*label92)
+-    * multilabel *label95 (m:*label102)
 -    * jump *label72 always
--    * multilabel *label97 (m:*label92)
+-    * multilabel *label96 (m:*label102)
 -    * jump *label74 always
--    * multilabel *label98 (m:*label92)
+-    * multilabel *label97 (m:*label102)
 -    * jump *label76 always
--    * multilabel *label99 (m:*label92)
+-    * multilabel *label98 (m:*label102)
 -    * jump *label78 always
--    * multilabel *label100 (m:*label92)
+-    * multilabel *label99 (m:*label102)
 -    * jump *label80 always
--    * multilabel *label101 (m:*label92)
+-    * multilabel *label100 (m:*label102)
 -    * jump *label82 always
--    * multilabel *label102 (m:*label92)
+-    * multilabel *label101 (m:*label102)
 -    * jump *label84 always
 -    * label *label66
 -    * op sub *tmp24 :displayItem:x 1
@@ -1525,26 +1525,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  220 label *label103
 +  221 label *label104
 +  222 op mod *tmp19 :displayItem:amount 10
-+  223 multijump *label105 *tmp19 0 (m:*label92)
-+  224 multilabel *label105 (m:*label92)
++  223 multijump *label105 *tmp19 0 (m:*label102)
++  224 multilabel *label105 (m:*label102)
 +  225 jump *label115 always
-+  226 multilabel *label106 (m:*label92)
++  226 multilabel *label106 (m:*label102)
 +  227 jump *label117 always
-+  228 multilabel *label107 (m:*label92)
++  228 multilabel *label107 (m:*label102)
 +  229 jump *label119 always
-+  230 multilabel *label108 (m:*label92)
++  230 multilabel *label108 (m:*label102)
 +  231 jump *label121 always
-+  232 multilabel *label109 (m:*label92)
++  232 multilabel *label109 (m:*label102)
 +  233 jump *label123 always
-+  234 multilabel *label110 (m:*label92)
++  234 multilabel *label110 (m:*label102)
 +  235 jump *label125 always
-+  236 multilabel *label111 (m:*label92)
++  236 multilabel *label111 (m:*label102)
 +  237 jump *label127 always
-+  238 multilabel *label112 (m:*label92)
++  238 multilabel *label112 (m:*label102)
 +  239 jump *label129 always
-+  240 multilabel *label113 (m:*label92)
++  240 multilabel *label113 (m:*label102)
 +  241 jump *label131 always
-+  242 multilabel *label114 (m:*label92)
++  242 multilabel *label114 (m:*label102)
 +  243 jump *label133 always
 +  244 label *label115
 +  245 op sub *tmp24 :displayItem:x 1
@@ -1649,26 +1649,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  344 op add :displayItem:i :displayItem:i 1
 +  345 label *label142
 +  346 op mod *tmp19 :displayItem:amount 10
-+  347 multijump *label143 *tmp19 0 (m:*label92)
-+  348 multilabel *label143 (m:*label92)
++  347 multijump *label143 *tmp19 0 (m:*label102)
++  348 multilabel *label143 (m:*label102)
 +  349 jump *label153 always
-+  350 multilabel *label144 (m:*label92)
++  350 multilabel *label144 (m:*label102)
 +  351 jump *label155 always
-+  352 multilabel *label145 (m:*label92)
++  352 multilabel *label145 (m:*label102)
 +  353 jump *label157 always
-+  354 multilabel *label146 (m:*label92)
++  354 multilabel *label146 (m:*label102)
 +  355 jump *label159 always
-+  356 multilabel *label147 (m:*label92)
++  356 multilabel *label147 (m:*label102)
 +  357 jump *label161 always
-+  358 multilabel *label148 (m:*label92)
++  358 multilabel *label148 (m:*label102)
 +  359 jump *label163 always
-+  360 multilabel *label149 (m:*label92)
++  360 multilabel *label149 (m:*label102)
 +  361 jump *label165 always
-+  362 multilabel *label150 (m:*label92)
++  362 multilabel *label150 (m:*label102)
 +  363 jump *label167 always
-+  364 multilabel *label151 (m:*label92)
++  364 multilabel *label151 (m:*label102)
 +  365 jump *label169 always
-+  366 multilabel *label152 (m:*label92)
++  366 multilabel *label152 (m:*label102)
 +  367 jump *label171 always
 +  368 label *label153
 +  369 op sub *tmp24 :displayItem:x 1
@@ -1773,26 +1773,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  468 op add :displayItem:i :displayItem:i 1
 +  469 label *label180
 +  470 op mod *tmp19 :displayItem:amount 10
-+  471 multijump *label181 *tmp19 0 (m:*label92)
-+  472 multilabel *label181 (m:*label92)
++  471 multijump *label181 *tmp19 0 (m:*label102)
++  472 multilabel *label181 (m:*label102)
 +  473 jump *label191 always
-+  474 multilabel *label182 (m:*label92)
++  474 multilabel *label182 (m:*label102)
 +  475 jump *label193 always
-+  476 multilabel *label183 (m:*label92)
++  476 multilabel *label183 (m:*label102)
 +  477 jump *label195 always
-+  478 multilabel *label184 (m:*label92)
++  478 multilabel *label184 (m:*label102)
 +  479 jump *label197 always
-+  480 multilabel *label185 (m:*label92)
++  480 multilabel *label185 (m:*label102)
 +  481 jump *label199 always
-+  482 multilabel *label186 (m:*label92)
++  482 multilabel *label186 (m:*label102)
 +  483 jump *label201 always
-+  484 multilabel *label187 (m:*label92)
++  484 multilabel *label187 (m:*label102)
 +  485 jump *label203 always
-+  486 multilabel *label188 (m:*label92)
++  486 multilabel *label188 (m:*label102)
 +  487 jump *label205 always
-+  488 multilabel *label189 (m:*label92)
++  488 multilabel *label189 (m:*label102)
 +  489 jump *label207 always
-+  490 multilabel *label190 (m:*label92)
++  490 multilabel *label190 (m:*label102)
 +  491 jump *label209 always
 +  492 label *label191
 +  493 op sub *tmp24 :displayItem:x 1
@@ -1897,26 +1897,26 @@ Modifications by Unroll loop at line 90:5 (+260 instructions):
 +  592 op add :displayItem:i :displayItem:i 1
 +  593 label *label218
 +  594 op mod *tmp19 :displayItem:amount 10
-+  595 multijump *label219 *tmp19 0 (m:*label92)
-+  596 multilabel *label219 (m:*label92)
++  595 multijump *label219 *tmp19 0 (m:*label102)
++  596 multilabel *label219 (m:*label102)
 +  597 jump *label229 always
-+  598 multilabel *label220 (m:*label92)
++  598 multilabel *label220 (m:*label102)
 +  599 jump *label231 always
-+  600 multilabel *label221 (m:*label92)
++  600 multilabel *label221 (m:*label102)
 +  601 jump *label233 always
-+  602 multilabel *label222 (m:*label92)
++  602 multilabel *label222 (m:*label102)
 +  603 jump *label235 always
-+  604 multilabel *label223 (m:*label92)
++  604 multilabel *label223 (m:*label102)
 +  605 jump *label237 always
-+  606 multilabel *label224 (m:*label92)
++  606 multilabel *label224 (m:*label102)
 +  607 jump *label239 always
-+  608 multilabel *label225 (m:*label92)
++  608 multilabel *label225 (m:*label102)
 +  609 jump *label241 always
-+  610 multilabel *label226 (m:*label92)
++  610 multilabel *label226 (m:*label102)
 +  611 jump *label243 always
-+  612 multilabel *label227 (m:*label92)
++  612 multilabel *label227 (m:*label102)
 +  613 jump *label245 always
-+  614 multilabel *label228 (m:*label92)
++  614 multilabel *label228 (m:*label102)
 +  615 jump *label247 always
 +  616 label *label229
 +  617 op sub *tmp24 :displayItem:x 1
@@ -2033,7 +2033,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  344 op add :displayItem:i 0 1
    345 label *label142
    346 op mod *tmp19 :displayItem:amount 10
-   347 multijump *label143 *tmp19 0 (m:*label92)
+   347 multijump *label143 *tmp19 0 (m:*label102)
  
    465 label *label176
    466 label *label177
@@ -2042,7 +2042,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  468 op add :displayItem:i 1 1
    469 label *label180
    470 op mod *tmp19 :displayItem:amount 10
-   471 multijump *label181 *tmp19 0 (m:*label92)
+   471 multijump *label181 *tmp19 0 (m:*label102)
  
    589 label *label214
    590 label *label215
@@ -2051,7 +2051,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +  592 op add :displayItem:i 2 1
    593 label *label218
    594 op mod *tmp19 :displayItem:amount 10
-   595 multijump *label219 *tmp19 0 (m:*label92)
+   595 multijump *label219 *tmp19 0 (m:*label102)
  
    713 label *label252
    714 label *label253
@@ -2078,7 +2078,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op add :displayItem:i 0 1
    343 label *label142
    344 op mod *tmp19 :displayItem:amount 10
-   345 multijump *label143 *tmp19 0 (m:*label92)
+   345 multijump *label143 *tmp19 0 (m:*label102)
  
    463 label *label176
    464 label *label177
@@ -2086,7 +2086,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op add :displayItem:i 1 1
    466 label *label180
    467 op mod *tmp19 :displayItem:amount 10
-   468 multijump *label181 *tmp19 0 (m:*label92)
+   468 multijump *label181 *tmp19 0 (m:*label102)
  
    586 label *label214
    587 label *label215
@@ -2094,7 +2094,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * op add :displayItem:i 2 1
    589 label *label218
    590 op mod *tmp19 :displayItem:amount 10
-   591 multijump *label219 *tmp19 0 (m:*label92)
+   591 multijump *label219 *tmp19 0 (m:*label102)
  
    709 label *label252
    710 label *label253
@@ -3144,26 +3144,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  216 label *label370
 +  217 label *label371
 +  218 op mod *tmp19 :displayItem:amount 10
-+  219 multijump *label372 *tmp19 0 (m:*label92)
-+  220 multilabel *label372 (m:*label92)
++  219 multijump *label372 *tmp19 0 (m:*label102)
++  220 multilabel *label372 (m:*label102)
 +  221 jump *label382 always
-+  222 multilabel *label373 (m:*label92)
++  222 multilabel *label373 (m:*label102)
 +  223 jump *label384 always
-+  224 multilabel *label374 (m:*label92)
++  224 multilabel *label374 (m:*label102)
 +  225 jump *label386 always
-+  226 multilabel *label375 (m:*label92)
++  226 multilabel *label375 (m:*label102)
 +  227 jump *label388 always
-+  228 multilabel *label376 (m:*label92)
++  228 multilabel *label376 (m:*label102)
 +  229 jump *label390 always
-+  230 multilabel *label377 (m:*label92)
++  230 multilabel *label377 (m:*label102)
 +  231 jump *label392 always
-+  232 multilabel *label378 (m:*label92)
++  232 multilabel *label378 (m:*label102)
 +  233 jump *label394 always
-+  234 multilabel *label379 (m:*label92)
++  234 multilabel *label379 (m:*label102)
 +  235 jump *label396 always
-+  236 multilabel *label380 (m:*label92)
++  236 multilabel *label380 (m:*label102)
 +  237 jump *label398 always
-+  238 multilabel *label381 (m:*label92)
++  238 multilabel *label381 (m:*label102)
 +  239 jump *label400 always
 +  240 label *label382
 +  241 op sub *tmp24 :displayItem:x 1
@@ -3267,26 +3267,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  339 label *label407
 +  340 label *label408
 +  341 op mod *tmp19 :displayItem:amount 10
-+  342 multijump *label409 *tmp19 0 (m:*label92)
-+  343 multilabel *label409 (m:*label92)
++  342 multijump *label409 *tmp19 0 (m:*label102)
++  343 multilabel *label409 (m:*label102)
 +  344 jump *label419 always
-+  345 multilabel *label410 (m:*label92)
++  345 multilabel *label410 (m:*label102)
 +  346 jump *label421 always
-+  347 multilabel *label411 (m:*label92)
++  347 multilabel *label411 (m:*label102)
 +  348 jump *label423 always
-+  349 multilabel *label412 (m:*label92)
++  349 multilabel *label412 (m:*label102)
 +  350 jump *label425 always
-+  351 multilabel *label413 (m:*label92)
++  351 multilabel *label413 (m:*label102)
 +  352 jump *label427 always
-+  353 multilabel *label414 (m:*label92)
++  353 multilabel *label414 (m:*label102)
 +  354 jump *label429 always
-+  355 multilabel *label415 (m:*label92)
++  355 multilabel *label415 (m:*label102)
 +  356 jump *label431 always
-+  357 multilabel *label416 (m:*label92)
++  357 multilabel *label416 (m:*label102)
 +  358 jump *label433 always
-+  359 multilabel *label417 (m:*label92)
++  359 multilabel *label417 (m:*label102)
 +  360 jump *label435 always
-+  361 multilabel *label418 (m:*label92)
++  361 multilabel *label418 (m:*label102)
 +  362 jump *label437 always
 +  363 label *label419
 +  364 op sub *tmp24 :displayItem:x 1
@@ -3390,26 +3390,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  462 label *label444
 +  463 label *label445
 +  464 op mod *tmp19 :displayItem:amount 10
-+  465 multijump *label446 *tmp19 0 (m:*label92)
-+  466 multilabel *label446 (m:*label92)
++  465 multijump *label446 *tmp19 0 (m:*label102)
++  466 multilabel *label446 (m:*label102)
 +  467 jump *label456 always
-+  468 multilabel *label447 (m:*label92)
++  468 multilabel *label447 (m:*label102)
 +  469 jump *label458 always
-+  470 multilabel *label448 (m:*label92)
++  470 multilabel *label448 (m:*label102)
 +  471 jump *label460 always
-+  472 multilabel *label449 (m:*label92)
++  472 multilabel *label449 (m:*label102)
 +  473 jump *label462 always
-+  474 multilabel *label450 (m:*label92)
++  474 multilabel *label450 (m:*label102)
 +  475 jump *label464 always
-+  476 multilabel *label451 (m:*label92)
++  476 multilabel *label451 (m:*label102)
 +  477 jump *label466 always
-+  478 multilabel *label452 (m:*label92)
++  478 multilabel *label452 (m:*label102)
 +  479 jump *label468 always
-+  480 multilabel *label453 (m:*label92)
++  480 multilabel *label453 (m:*label102)
 +  481 jump *label470 always
-+  482 multilabel *label454 (m:*label92)
++  482 multilabel *label454 (m:*label102)
 +  483 jump *label472 always
-+  484 multilabel *label455 (m:*label92)
++  484 multilabel *label455 (m:*label102)
 +  485 jump *label474 always
 +  486 label *label456
 +  487 op sub *tmp24 :displayItem:x 1
@@ -3513,26 +3513,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  585 label *label481
 +  586 label *label482
 +  587 op mod *tmp19 :displayItem:amount 10
-+  588 multijump *label483 *tmp19 0 (m:*label92)
-+  589 multilabel *label483 (m:*label92)
++  588 multijump *label483 *tmp19 0 (m:*label102)
++  589 multilabel *label483 (m:*label102)
 +  590 jump *label493 always
-+  591 multilabel *label484 (m:*label92)
++  591 multilabel *label484 (m:*label102)
 +  592 jump *label495 always
-+  593 multilabel *label485 (m:*label92)
++  593 multilabel *label485 (m:*label102)
 +  594 jump *label497 always
-+  595 multilabel *label486 (m:*label92)
++  595 multilabel *label486 (m:*label102)
 +  596 jump *label499 always
-+  597 multilabel *label487 (m:*label92)
++  597 multilabel *label487 (m:*label102)
 +  598 jump *label501 always
-+  599 multilabel *label488 (m:*label92)
++  599 multilabel *label488 (m:*label102)
 +  600 jump *label503 always
-+  601 multilabel *label489 (m:*label92)
++  601 multilabel *label489 (m:*label102)
 +  602 jump *label505 always
-+  603 multilabel *label490 (m:*label92)
++  603 multilabel *label490 (m:*label102)
 +  604 jump *label507 always
-+  605 multilabel *label491 (m:*label92)
++  605 multilabel *label491 (m:*label102)
 +  606 jump *label509 always
-+  607 multilabel *label492 (m:*label92)
++  607 multilabel *label492 (m:*label102)
 +  608 jump *label511 always
 +  609 label *label493
 +  610 op sub *tmp24 :displayItem:x 1
@@ -3665,26 +3665,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  734 label *label526
 +  735 label *label527
 +  736 op mod *tmp19 :displayItem:amount 10
-+  737 multijump *label528 *tmp19 0 (m:*label92)
-+  738 multilabel *label528 (m:*label92)
++  737 multijump *label528 *tmp19 0 (m:*label102)
++  738 multilabel *label528 (m:*label102)
 +  739 jump *label538 always
-+  740 multilabel *label529 (m:*label92)
++  740 multilabel *label529 (m:*label102)
 +  741 jump *label540 always
-+  742 multilabel *label530 (m:*label92)
++  742 multilabel *label530 (m:*label102)
 +  743 jump *label542 always
-+  744 multilabel *label531 (m:*label92)
++  744 multilabel *label531 (m:*label102)
 +  745 jump *label544 always
-+  746 multilabel *label532 (m:*label92)
++  746 multilabel *label532 (m:*label102)
 +  747 jump *label546 always
-+  748 multilabel *label533 (m:*label92)
++  748 multilabel *label533 (m:*label102)
 +  749 jump *label548 always
-+  750 multilabel *label534 (m:*label92)
++  750 multilabel *label534 (m:*label102)
 +  751 jump *label550 always
-+  752 multilabel *label535 (m:*label92)
++  752 multilabel *label535 (m:*label102)
 +  753 jump *label552 always
-+  754 multilabel *label536 (m:*label92)
++  754 multilabel *label536 (m:*label102)
 +  755 jump *label554 always
-+  756 multilabel *label537 (m:*label92)
++  756 multilabel *label537 (m:*label102)
 +  757 jump *label556 always
 +  758 label *label538
 +  759 op sub *tmp24 :displayItem:x 1
@@ -3788,26 +3788,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  857 label *label563
 +  858 label *label564
 +  859 op mod *tmp19 :displayItem:amount 10
-+  860 multijump *label565 *tmp19 0 (m:*label92)
-+  861 multilabel *label565 (m:*label92)
++  860 multijump *label565 *tmp19 0 (m:*label102)
++  861 multilabel *label565 (m:*label102)
 +  862 jump *label575 always
-+  863 multilabel *label566 (m:*label92)
++  863 multilabel *label566 (m:*label102)
 +  864 jump *label577 always
-+  865 multilabel *label567 (m:*label92)
++  865 multilabel *label567 (m:*label102)
 +  866 jump *label579 always
-+  867 multilabel *label568 (m:*label92)
++  867 multilabel *label568 (m:*label102)
 +  868 jump *label581 always
-+  869 multilabel *label569 (m:*label92)
++  869 multilabel *label569 (m:*label102)
 +  870 jump *label583 always
-+  871 multilabel *label570 (m:*label92)
++  871 multilabel *label570 (m:*label102)
 +  872 jump *label585 always
-+  873 multilabel *label571 (m:*label92)
++  873 multilabel *label571 (m:*label102)
 +  874 jump *label587 always
-+  875 multilabel *label572 (m:*label92)
++  875 multilabel *label572 (m:*label102)
 +  876 jump *label589 always
-+  877 multilabel *label573 (m:*label92)
++  877 multilabel *label573 (m:*label102)
 +  878 jump *label591 always
-+  879 multilabel *label574 (m:*label92)
++  879 multilabel *label574 (m:*label102)
 +  880 jump *label593 always
 +  881 label *label575
 +  882 op sub *tmp24 :displayItem:x 1
@@ -3911,26 +3911,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 +  980 label *label600
 +  981 label *label601
 +  982 op mod *tmp19 :displayItem:amount 10
-+  983 multijump *label602 *tmp19 0 (m:*label92)
-+  984 multilabel *label602 (m:*label92)
++  983 multijump *label602 *tmp19 0 (m:*label102)
++  984 multilabel *label602 (m:*label102)
 +  985 jump *label612 always
-+  986 multilabel *label603 (m:*label92)
++  986 multilabel *label603 (m:*label102)
 +  987 jump *label614 always
-+  988 multilabel *label604 (m:*label92)
++  988 multilabel *label604 (m:*label102)
 +  989 jump *label616 always
-+  990 multilabel *label605 (m:*label92)
++  990 multilabel *label605 (m:*label102)
 +  991 jump *label618 always
-+  992 multilabel *label606 (m:*label92)
++  992 multilabel *label606 (m:*label102)
 +  993 jump *label620 always
-+  994 multilabel *label607 (m:*label92)
++  994 multilabel *label607 (m:*label102)
 +  995 jump *label622 always
-+  996 multilabel *label608 (m:*label92)
++  996 multilabel *label608 (m:*label102)
 +  997 jump *label624 always
-+  998 multilabel *label609 (m:*label92)
++  998 multilabel *label609 (m:*label102)
 +  999 jump *label626 always
-+ 1000 multilabel *label610 (m:*label92)
++ 1000 multilabel *label610 (m:*label102)
 + 1001 jump *label628 always
-+ 1002 multilabel *label611 (m:*label92)
++ 1002 multilabel *label611 (m:*label102)
 + 1003 jump *label630 always
 + 1004 label *label612
 + 1005 op sub *tmp24 :displayItem:x 1
@@ -4034,26 +4034,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 + 1103 label *label637
 + 1104 label *label638
 + 1105 op mod *tmp19 :displayItem:amount 10
-+ 1106 multijump *label639 *tmp19 0 (m:*label92)
-+ 1107 multilabel *label639 (m:*label92)
++ 1106 multijump *label639 *tmp19 0 (m:*label102)
++ 1107 multilabel *label639 (m:*label102)
 + 1108 jump *label649 always
-+ 1109 multilabel *label640 (m:*label92)
++ 1109 multilabel *label640 (m:*label102)
 + 1110 jump *label651 always
-+ 1111 multilabel *label641 (m:*label92)
++ 1111 multilabel *label641 (m:*label102)
 + 1112 jump *label653 always
-+ 1113 multilabel *label642 (m:*label92)
++ 1113 multilabel *label642 (m:*label102)
 + 1114 jump *label655 always
-+ 1115 multilabel *label643 (m:*label92)
++ 1115 multilabel *label643 (m:*label102)
 + 1116 jump *label657 always
-+ 1117 multilabel *label644 (m:*label92)
++ 1117 multilabel *label644 (m:*label102)
 + 1118 jump *label659 always
-+ 1119 multilabel *label645 (m:*label92)
++ 1119 multilabel *label645 (m:*label102)
 + 1120 jump *label661 always
-+ 1121 multilabel *label646 (m:*label92)
++ 1121 multilabel *label646 (m:*label102)
 + 1122 jump *label663 always
-+ 1123 multilabel *label647 (m:*label92)
++ 1123 multilabel *label647 (m:*label102)
 + 1124 jump *label665 always
-+ 1125 multilabel *label648 (m:*label92)
++ 1125 multilabel *label648 (m:*label102)
 + 1126 jump *label667 always
 + 1127 label *label649
 + 1128 op sub *tmp24 :displayItem:x 1
@@ -4186,26 +4186,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label103
 -    * label *label104
 -    * op mod *tmp19 :displayItem:amount 10
--    * multijump *label105 *tmp19 0 (m:*label92)
--    * multilabel *label105 (m:*label92)
+-    * multijump *label105 *tmp19 0 (m:*label102)
+-    * multilabel *label105 (m:*label102)
 -    * jump *label115 always
--    * multilabel *label106 (m:*label92)
+-    * multilabel *label106 (m:*label102)
 -    * jump *label117 always
--    * multilabel *label107 (m:*label92)
+-    * multilabel *label107 (m:*label102)
 -    * jump *label119 always
--    * multilabel *label108 (m:*label92)
+-    * multilabel *label108 (m:*label102)
 -    * jump *label121 always
--    * multilabel *label109 (m:*label92)
+-    * multilabel *label109 (m:*label102)
 -    * jump *label123 always
--    * multilabel *label110 (m:*label92)
+-    * multilabel *label110 (m:*label102)
 -    * jump *label125 always
--    * multilabel *label111 (m:*label92)
+-    * multilabel *label111 (m:*label102)
 -    * jump *label127 always
--    * multilabel *label112 (m:*label92)
+-    * multilabel *label112 (m:*label102)
 -    * jump *label129 always
--    * multilabel *label113 (m:*label92)
+-    * multilabel *label113 (m:*label102)
 -    * jump *label131 always
--    * multilabel *label114 (m:*label92)
+-    * multilabel *label114 (m:*label102)
 -    * jump *label133 always
 -    * label *label115
 -    * op sub *tmp24 :displayItem:x 1
@@ -4309,26 +4309,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label140
 -    * label *label142
 -    * op mod *tmp19 :displayItem:amount 10
--    * multijump *label143 *tmp19 0 (m:*label92)
--    * multilabel *label143 (m:*label92)
+-    * multijump *label143 *tmp19 0 (m:*label102)
+-    * multilabel *label143 (m:*label102)
 -    * jump *label153 always
--    * multilabel *label144 (m:*label92)
+-    * multilabel *label144 (m:*label102)
 -    * jump *label155 always
--    * multilabel *label145 (m:*label92)
+-    * multilabel *label145 (m:*label102)
 -    * jump *label157 always
--    * multilabel *label146 (m:*label92)
+-    * multilabel *label146 (m:*label102)
 -    * jump *label159 always
--    * multilabel *label147 (m:*label92)
+-    * multilabel *label147 (m:*label102)
 -    * jump *label161 always
--    * multilabel *label148 (m:*label92)
+-    * multilabel *label148 (m:*label102)
 -    * jump *label163 always
--    * multilabel *label149 (m:*label92)
+-    * multilabel *label149 (m:*label102)
 -    * jump *label165 always
--    * multilabel *label150 (m:*label92)
+-    * multilabel *label150 (m:*label102)
 -    * jump *label167 always
--    * multilabel *label151 (m:*label92)
+-    * multilabel *label151 (m:*label102)
 -    * jump *label169 always
--    * multilabel *label152 (m:*label92)
+-    * multilabel *label152 (m:*label102)
 -    * jump *label171 always
 -    * label *label153
 -    * op sub *tmp24 :displayItem:x 1
@@ -4432,26 +4432,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label178
 -    * label *label180
 -    * op mod *tmp19 :displayItem:amount 10
--    * multijump *label181 *tmp19 0 (m:*label92)
--    * multilabel *label181 (m:*label92)
+-    * multijump *label181 *tmp19 0 (m:*label102)
+-    * multilabel *label181 (m:*label102)
 -    * jump *label191 always
--    * multilabel *label182 (m:*label92)
+-    * multilabel *label182 (m:*label102)
 -    * jump *label193 always
--    * multilabel *label183 (m:*label92)
+-    * multilabel *label183 (m:*label102)
 -    * jump *label195 always
--    * multilabel *label184 (m:*label92)
+-    * multilabel *label184 (m:*label102)
 -    * jump *label197 always
--    * multilabel *label185 (m:*label92)
+-    * multilabel *label185 (m:*label102)
 -    * jump *label199 always
--    * multilabel *label186 (m:*label92)
+-    * multilabel *label186 (m:*label102)
 -    * jump *label201 always
--    * multilabel *label187 (m:*label92)
+-    * multilabel *label187 (m:*label102)
 -    * jump *label203 always
--    * multilabel *label188 (m:*label92)
+-    * multilabel *label188 (m:*label102)
 -    * jump *label205 always
--    * multilabel *label189 (m:*label92)
+-    * multilabel *label189 (m:*label102)
 -    * jump *label207 always
--    * multilabel *label190 (m:*label92)
+-    * multilabel *label190 (m:*label102)
 -    * jump *label209 always
 -    * label *label191
 -    * op sub *tmp24 :displayItem:x 1
@@ -4555,26 +4555,26 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 -    * label *label216
 -    * label *label218
 -    * op mod *tmp19 :displayItem:amount 10
--    * multijump *label219 *tmp19 0 (m:*label92)
--    * multilabel *label219 (m:*label92)
+-    * multijump *label219 *tmp19 0 (m:*label102)
+-    * multilabel *label219 (m:*label102)
 -    * jump *label229 always
--    * multilabel *label220 (m:*label92)
+-    * multilabel *label220 (m:*label102)
 -    * jump *label231 always
--    * multilabel *label221 (m:*label92)
+-    * multilabel *label221 (m:*label102)
 -    * jump *label233 always
--    * multilabel *label222 (m:*label92)
+-    * multilabel *label222 (m:*label102)
 -    * jump *label235 always
--    * multilabel *label223 (m:*label92)
+-    * multilabel *label223 (m:*label102)
 -    * jump *label237 always
--    * multilabel *label224 (m:*label92)
+-    * multilabel *label224 (m:*label102)
 -    * jump *label239 always
--    * multilabel *label225 (m:*label92)
+-    * multilabel *label225 (m:*label102)
 -    * jump *label241 always
--    * multilabel *label226 (m:*label92)
+-    * multilabel *label226 (m:*label102)
 -    * jump *label243 always
--    * multilabel *label227 (m:*label92)
+-    * multilabel *label227 (m:*label102)
 -    * jump *label245 always
--    * multilabel *label228 (m:*label92)
+-    * multilabel *label228 (m:*label102)
 -    * jump *label247 always
 -    * label *label229
 -    * op sub *tmp24 :displayItem:x 1
@@ -4699,7 +4699,7 @@ Modifications by Inline function 'displayItem' defined at line 86:1 (+353 instru
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   238 multilabel *label381 (m:*label92)
+   238 multilabel *label381 (m:*label102)
    239 jump *label400 always
    240 label *label382
 -    * op sub *tmp24 :displayItem:x 1
@@ -4861,7 +4861,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    335 jump *label405 notEqual :displayItem:amount 0
    336 jump *label523 always
  
-   361 multilabel *label418 (m:*label92)
+   361 multilabel *label418 (m:*label102)
    362 jump *label437 always
    363 label *label419
 -    * op sub *tmp24 :displayItem:x 1
@@ -5023,7 +5023,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    458 jump *label442 notEqual :displayItem:amount 0
    459 jump *label523 always
  
-   484 multilabel *label455 (m:*label92)
+   484 multilabel *label455 (m:*label102)
    485 jump *label474 always
    486 label *label456
 -    * op sub *tmp24 :displayItem:x 1
@@ -5185,7 +5185,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    581 jump *label479 notEqual :displayItem:amount 0
    582 jump *label523 always
  
-   607 multilabel *label492 (m:*label92)
+   607 multilabel *label492 (m:*label102)
    608 jump *label511 always
    609 label *label493
 -    * op sub *tmp24 :displayItem:x 1
@@ -5378,7 +5378,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    725 label *label522
    726 label *label523
  
-   756 multilabel *label537 (m:*label92)
+   756 multilabel *label537 (m:*label102)
    757 jump *label556 always
    758 label *label538
 -    * op sub *tmp24 :displayItem:x 1
@@ -5540,7 +5540,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    853 jump *label561 notEqual :displayItem:amount 0
    854 jump *label679 always
  
-   879 multilabel *label574 (m:*label92)
+   879 multilabel *label574 (m:*label102)
    880 jump *label593 always
    881 label *label575
 -    * op sub *tmp24 :displayItem:x 1
@@ -5702,7 +5702,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    976 jump *label598 notEqual :displayItem:amount 0
    977 jump *label679 always
  
-  1002 multilabel *label611 (m:*label92)
+  1002 multilabel *label611 (m:*label102)
   1003 jump *label630 always
   1004 label *label612
 -    * op sub *tmp24 :displayItem:x 1
@@ -5864,7 +5864,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
   1099 jump *label635 notEqual :displayItem:amount 0
   1100 jump *label679 always
  
-  1125 multilabel *label648 (m:*label92)
+  1125 multilabel *label648 (m:*label102)
   1126 jump *label667 always
   1127 label *label649
 -    * op sub *tmp24 :displayItem:x 1
@@ -6068,7 +6068,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    212 op max :displayItem:amount AMOUNT 0
    213 draw color 0 255 0 255
  
-   236 multilabel *label381 (m:*label92)
+   236 multilabel *label381 (m:*label102)
    237 jump *label400 always
    238 label *label382
 -    * op sub *tmp24 71 1
@@ -6152,7 +6152,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    321 jump *label405 notEqual :displayItem:amount 0
    322 jump *label523 always
  
-   347 multilabel *label418 (m:*label92)
+   347 multilabel *label418 (m:*label102)
    348 jump *label437 always
    349 label *label419
 -    * op sub *tmp24 60 1
@@ -6236,7 +6236,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    432 jump *label442 notEqual :displayItem:amount 0
    433 jump *label523 always
  
-   458 multilabel *label455 (m:*label92)
+   458 multilabel *label455 (m:*label102)
    459 jump *label474 always
    460 label *label456
 -    * op sub *tmp24 49 1
@@ -6320,7 +6320,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    543 jump *label479 notEqual :displayItem:amount 0
    544 jump *label523 always
  
-   569 multilabel *label492 (m:*label92)
+   569 multilabel *label492 (m:*label102)
    570 jump *label511 always
    571 label *label493
 -    * op sub *tmp24 38 1
@@ -6426,7 +6426,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    678 op max :displayItem:amount AMOUNT 0
    679 draw color 0 255 0 255
  
-   702 multilabel *label537 (m:*label92)
+   702 multilabel *label537 (m:*label102)
    703 jump *label556 always
    704 label *label538
 -    * op sub *tmp24 157 1
@@ -6510,7 +6510,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    787 jump *label561 notEqual :displayItem:amount 0
    788 jump *label679 always
  
-   813 multilabel *label574 (m:*label92)
+   813 multilabel *label574 (m:*label102)
    814 jump *label593 always
    815 label *label575
 -    * op sub *tmp24 146 1
@@ -6594,7 +6594,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    898 jump *label598 notEqual :displayItem:amount 0
    899 jump *label679 always
  
-   924 multilabel *label611 (m:*label92)
+   924 multilabel *label611 (m:*label102)
    925 jump *label630 always
    926 label *label612
 -    * op sub *tmp24 135 1
@@ -6678,7 +6678,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
   1009 jump *label635 notEqual :displayItem:amount 0
   1010 jump *label679 always
  
-  1035 multilabel *label648 (m:*label92)
+  1035 multilabel *label648 (m:*label102)
   1036 jump *label667 always
   1037 label *label649
 -    * op sub *tmp24 124 1
@@ -7095,8 +7095,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label370
 -    * label *label371
    152 op mod *tmp19 :displayItem:amount 10
-   153 multijump *label372 *tmp19 0 (m:*label92)
-   154 multilabel *label372 (m:*label92)
+   153 multijump *label372 *tmp19 0 (m:*label102)
+   154 multilabel *label372 (m:*label102)
  
    175 op sub *tmp26 :y 1
    176 draw lineRect 70 *tmp26 9 14
@@ -7179,8 +7179,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label407
 -    * label *label408
    248 op mod *tmp19 :displayItem:amount 10
-   249 multijump *label409 *tmp19 0 (m:*label92)
-   250 multilabel *label409 (m:*label92)
+   249 multijump *label409 *tmp19 0 (m:*label102)
+   250 multilabel *label409 (m:*label102)
  
    271 op sub *tmp26 :y 1
    272 draw lineRect 59 *tmp26 9 14
@@ -7263,8 +7263,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label444
 -    * label *label445
    344 op mod *tmp19 :displayItem:amount 10
-   345 multijump *label446 *tmp19 0 (m:*label92)
-   346 multilabel *label446 (m:*label92)
+   345 multijump *label446 *tmp19 0 (m:*label102)
+   346 multilabel *label446 (m:*label102)
  
    367 op sub *tmp26 :y 1
    368 draw lineRect 48 *tmp26 9 14
@@ -7347,8 +7347,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label481
 -    * label *label482
    440 op mod *tmp19 :displayItem:amount 10
-   441 multijump *label483 *tmp19 0 (m:*label92)
-   442 multilabel *label483 (m:*label92)
+   441 multijump *label483 *tmp19 0 (m:*label102)
+   442 multilabel *label483 (m:*label102)
  
    463 op sub *tmp26 :y 1
    464 draw lineRect 37 *tmp26 9 14
@@ -7447,8 +7447,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label526
 -    * label *label527
    554 op mod *tmp19 :displayItem:amount 10
-   555 multijump *label528 *tmp19 0 (m:*label92)
-   556 multilabel *label528 (m:*label92)
+   555 multijump *label528 *tmp19 0 (m:*label102)
+   556 multilabel *label528 (m:*label102)
  
    577 op sub *tmp26 :y 1
    578 draw lineRect 156 *tmp26 9 14
@@ -7531,8 +7531,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label563
 -    * label *label564
    650 op mod *tmp19 :displayItem:amount 10
-   651 multijump *label565 *tmp19 0 (m:*label92)
-   652 multilabel *label565 (m:*label92)
+   651 multijump *label565 *tmp19 0 (m:*label102)
+   652 multilabel *label565 (m:*label102)
  
    673 op sub *tmp26 :y 1
    674 draw lineRect 145 *tmp26 9 14
@@ -7615,8 +7615,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label600
 -    * label *label601
    746 op mod *tmp19 :displayItem:amount 10
-   747 multijump *label602 *tmp19 0 (m:*label92)
-   748 multilabel *label602 (m:*label92)
+   747 multijump *label602 *tmp19 0 (m:*label102)
+   748 multilabel *label602 (m:*label102)
  
    769 op sub *tmp26 :y 1
    770 draw lineRect 134 *tmp26 9 14
@@ -7699,8 +7699,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label637
 -    * label *label638
    842 op mod *tmp19 :displayItem:amount 10
-   843 multijump *label639 *tmp19 0 (m:*label92)
-   844 multilabel *label639 (m:*label92)
+   843 multijump *label639 *tmp19 0 (m:*label102)
+   844 multilabel *label639 (m:*label102)
  
    865 op sub *tmp26 :y 1
    866 draw lineRect 123 *tmp26 9 14
@@ -7825,7 +7825,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
 +  245 jump *label523 equal :displayItem:amount 0
    246 label *label405
    247 op mod *tmp19 :displayItem:amount 10
-   248 multijump *label409 *tmp19 0 (m:*label92)
+   248 multijump *label409 *tmp19 0 (m:*label102)
  
    337 draw line 60 *tmp104 67 *tmp104
    338 label *label440
@@ -7835,7 +7835,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
 +  340 jump *label523 equal :displayItem:amount 0
    341 label *label442
    342 op mod *tmp19 :displayItem:amount 10
-   343 multijump *label446 *tmp19 0 (m:*label92)
+   343 multijump *label446 *tmp19 0 (m:*label102)
  
    432 draw line 49 *tmp104 56 *tmp104
    433 label *label477
@@ -7845,7 +7845,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
 +  435 jump *label523 equal :displayItem:amount 0
    436 label *label479
    437 op mod *tmp19 :displayItem:amount 10
-   438 multijump *label483 *tmp19 0 (m:*label92)
+   438 multijump *label483 *tmp19 0 (m:*label102)
  
    527 draw line 38 *tmp104 45 *tmp104
    528 label *label514
@@ -7865,7 +7865,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
 +  643 jump *label679 equal :displayItem:amount 0
    644 label *label561
    645 op mod *tmp19 :displayItem:amount 10
-   646 multijump *label565 *tmp19 0 (m:*label92)
+   646 multijump *label565 *tmp19 0 (m:*label102)
  
    735 draw line 146 *tmp104 153 *tmp104
    736 label *label596
@@ -7875,7 +7875,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
 +  738 jump *label679 equal :displayItem:amount 0
    739 label *label598
    740 op mod *tmp19 :displayItem:amount 10
-   741 multijump *label602 *tmp19 0 (m:*label92)
+   741 multijump *label602 *tmp19 0 (m:*label102)
  
    830 draw line 135 *tmp104 142 *tmp104
    831 label *label633
@@ -7885,7 +7885,7 @@ Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-8 instru
 +  833 jump *label679 equal :displayItem:amount 0
    834 label *label635
    835 op mod *tmp19 :displayItem:amount 10
-   836 multijump *label639 *tmp19 0 (m:*label92)
+   836 multijump *label639 *tmp19 0 (m:*label102)
  
    925 draw line 124 *tmp104 131 *tmp104
    926 label *label670
@@ -7904,24 +7904,24 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
    245 jump *label523 equal :displayItem:amount 0
 -    * label *label405
    246 op mod *tmp19 :displayItem:amount 10
-   247 multijump *label409 *tmp19 0 (m:*label92)
-   248 multilabel *label409 (m:*label92)
+   247 multijump *label409 *tmp19 0 (m:*label102)
+   248 multilabel *label409 (m:*label102)
  
    337 label *label440
    338 op idiv :displayItem:amount :displayItem:amount 10
    339 jump *label523 equal :displayItem:amount 0
 -    * label *label442
    340 op mod *tmp19 :displayItem:amount 10
-   341 multijump *label446 *tmp19 0 (m:*label92)
-   342 multilabel *label446 (m:*label92)
+   341 multijump *label446 *tmp19 0 (m:*label102)
+   342 multilabel *label446 (m:*label102)
  
    431 label *label477
    432 op idiv :displayItem:amount :displayItem:amount 10
    433 jump *label523 equal :displayItem:amount 0
 -    * label *label479
    434 op mod *tmp19 :displayItem:amount 10
-   435 multijump *label483 *tmp19 0 (m:*label92)
-   436 multilabel *label483 (m:*label92)
+   435 multijump *label483 *tmp19 0 (m:*label102)
+   436 multilabel *label483 (m:*label102)
  
    525 label *label514
    526 op idiv :displayItem:amount :displayItem:amount 10
@@ -7936,24 +7936,24 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
    639 jump *label679 equal :displayItem:amount 0
 -    * label *label561
    640 op mod *tmp19 :displayItem:amount 10
-   641 multijump *label565 *tmp19 0 (m:*label92)
-   642 multilabel *label565 (m:*label92)
+   641 multijump *label565 *tmp19 0 (m:*label102)
+   642 multilabel *label565 (m:*label102)
  
    731 label *label596
    732 op idiv :displayItem:amount :displayItem:amount 10
    733 jump *label679 equal :displayItem:amount 0
 -    * label *label598
    734 op mod *tmp19 :displayItem:amount 10
-   735 multijump *label602 *tmp19 0 (m:*label92)
-   736 multilabel *label602 (m:*label92)
+   735 multijump *label602 *tmp19 0 (m:*label102)
+   736 multilabel *label602 (m:*label102)
  
    825 label *label633
    826 op idiv :displayItem:amount :displayItem:amount 10
    827 jump *label679 equal :displayItem:amount 0
 -    * label *label635
    828 op mod *tmp19 :displayItem:amount 10
-   829 multijump *label639 *tmp19 0 (m:*label92)
-   830 multilabel *label639 (m:*label92)
+   829 multijump *label639 *tmp19 0 (m:*label102)
+   830 multilabel *label639 (m:*label102)
  
    919 label *label670
    920 op idiv :displayItem:amount :displayItem:amount 10
@@ -7971,8 +7971,8 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label523 equal :displayItem:amount 0
 +  245 jump *label47 equal :displayItem:amount 0
    246 op mod *tmp19 :displayItem:amount 10
-   247 multijump *label409 *tmp19 0 (m:*label92)
-   248 multilabel *label409 (m:*label92)
+   247 multijump *label409 *tmp19 0 (m:*label102)
+   248 multilabel *label409 (m:*label102)
  
    336 draw line 60 *tmp104 67 *tmp104
    337 label *label440
@@ -7980,8 +7980,8 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label523 equal :displayItem:amount 0
 +  339 jump *label47 equal :displayItem:amount 0
    340 op mod *tmp19 :displayItem:amount 10
-   341 multijump *label446 *tmp19 0 (m:*label92)
-   342 multilabel *label446 (m:*label92)
+   341 multijump *label446 *tmp19 0 (m:*label102)
+   342 multilabel *label446 (m:*label102)
  
    430 draw line 49 *tmp104 56 *tmp104
    431 label *label477
@@ -7989,8 +7989,8 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 -    * jump *label523 equal :displayItem:amount 0
 +  433 jump *label47 equal :displayItem:amount 0
    434 op mod *tmp19 :displayItem:amount 10
-   435 multijump *label483 *tmp19 0 (m:*label92)
-   436 multilabel *label483 (m:*label92)
+   435 multijump *label483 *tmp19 0 (m:*label102)
+   436 multilabel *label483 (m:*label102)
  
    524 draw line 38 *tmp104 45 *tmp104
    525 label *label514

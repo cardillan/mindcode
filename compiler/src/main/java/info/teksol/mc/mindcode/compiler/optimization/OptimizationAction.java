@@ -2,7 +2,6 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public interface OptimizationAction {
@@ -12,25 +11,6 @@ public interface OptimizationAction {
     ///
     /// @return context containing the construct being optimized.
     AstContext astContext();
-
-    /// Indicates this optimization is a function inlining proposal. Inlining of each call site must be proposed
-    /// separately. The optimization coordinator may choose to inline only some of the function calls. Additional
-    /// savings from inlining all invocations of the function are computed by the coordinator.
-    ///
-    /// Cost of inlining a function is the size of the function body minus the size of the call and return instructions.
-    /// Benefits are the CALL and RETURN instructions and, in an individual call, each SET instruction assigning a
-    /// variable (not a constant) to the argument (when inlining, these SET instructions will be saved).
-    ///
-    /// For inline functions, the cost can be non-positive, for example when inlining a single-instruction function.
-    ///
-    /// @return true if this proposal concerns function inlining
-    boolean inlining();
-
-    /// For inlining proposals, returns the function prefix of the function being inlined. Will not be called for
-    /// a non-inlining proposal.
-    ///
-    /// @return function prefix of the inlined function
-    @Nullable String functionPrefix();
 
     /// Cost of the optimization in terms of additional instructions that will be generated (real, not virtual). The
     /// cost of non-inlining optimization must be positive -- optimizations with negative costs should be done

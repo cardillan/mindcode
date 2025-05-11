@@ -19,37 +19,37 @@
    645 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 630):
-    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency        3.6
-    Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency       19.4
-    Unroll loop at line 152:5                                    cost   521, benefit   156250.0, efficiency      299.9
-    Convert case at line 17:9                                    cost    49, benefit      625.0, efficiency       12.8
-  * Convert case at line 213:5                                   cost     0, benefit    27343.8, efficiency   Infinity (+1 instructions)
-    Convert case at line 165:5                                   cost     0, benefit    27343.8, efficiency   Infinity
+    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
+    Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444
+    Unroll loop at line 152:5                                    cost   521, benefit   156250.0, efficiency    299.904
+    Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
+  * Convert case at line 213:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750 (+1 instructions)
+    Convert case at line 165:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750
 
 Pass 1: speed optimization selection (cost limit 629):
-    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency        3.6
-    Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency       19.4
-    Unroll loop at line 152:5                                    cost   525, benefit   156250.0, efficiency      297.6
-    Convert case at line 17:9                                    cost    49, benefit      625.0, efficiency       12.8
-  * Convert case at line 165:5                                   cost     0, benefit    27343.8, efficiency   Infinity (+1 instructions)
+    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
+    Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444
+    Unroll loop at line 152:5                                    cost   525, benefit   156250.0, efficiency    297.619
+    Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
+  * Convert case at line 165:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 628):
-    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency        3.6
-    Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency       19.4
-  * Unroll loop at line 152:5                                    cost   529, benefit   156250.0, efficiency      295.4 (+527 instructions)
-    Convert case at line 17:9                                    cost    49, benefit      625.0, efficiency       12.8
+    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
+    Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444
+  * Unroll loop at line 152:5                                    cost   529, benefit   156250.0, efficiency    295.369 (+527 instructions)
+    Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
 
 Pass 1: speed optimization selection (cost limit 101):
-    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency        3.6
-  * Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency       19.4 (-12 instructions)
-    Convert case at line 17:9                                    cost    49, benefit      625.0, efficiency       12.8
+    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
+  * Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444 (-12 instructions)
+    Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
 
 Pass 1: speed optimization selection (cost limit 113):
-    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency        3.6
-  * Convert case at line 17:9                                    cost    49, benefit      625.0, efficiency       12.8 (+50 instructions)
+    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
+  * Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500 (+50 instructions)
 
 Pass 1: speed optimization selection (cost limit 63):
-  * Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency        3.6 (+7 instructions)
+  * Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571 (+7 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-3 instructions):
  
@@ -2641,32 +2641,32 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    479 label *label69
    480 op add :index :index 1
 
-Modifications by Convert case at line 213:5 (+1 instructions):
+Modifications by Convert case at line 213:5 (segments: 1) (+1 instructions):
  
    293 label *label139
    294 jump *label83 always
    295 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
 -    * jump *label87 notEqual *tmp53 0
-+  296 multijump *label142 *tmp53 0 (m:*label141)
-+  297 multilabel *label142 (m:*label141)
++  296 multijump *label141 *tmp53 0 (m:*label151)
++  297 multilabel *label141 (m:*label151)
 +  298 jump *label88 always
-+  299 multilabel *label143 (m:*label141)
++  299 multilabel *label142 (m:*label151)
 +  300 jump *label90 always
-+  301 multilabel *label144 (m:*label141)
++  301 multilabel *label143 (m:*label151)
 +  302 jump *label92 always
-+  303 multilabel *label145 (m:*label141)
++  303 multilabel *label144 (m:*label151)
 +  304 jump *label94 always
-+  305 multilabel *label146 (m:*label141)
++  305 multilabel *label145 (m:*label151)
 +  306 jump *label96 always
-+  307 multilabel *label147 (m:*label141)
++  307 multilabel *label146 (m:*label151)
 +  308 jump *label98 always
-+  309 multilabel *label148 (m:*label141)
++  309 multilabel *label147 (m:*label151)
 +  310 jump *label100 always
-+  311 multilabel *label149 (m:*label141)
++  311 multilabel *label148 (m:*label151)
 +  312 jump *label102 always
-+  313 multilabel *label150 (m:*label141)
++  313 multilabel *label149 (m:*label151)
 +  314 jump *label104 always
-+  315 multilabel *label151 (m:*label141)
++  315 multilabel *label150 (m:*label151)
 +  316 jump *label106 always
    317 label *label88
    318 draw lineRect *tmp58 *tmp60 9 14
@@ -2747,32 +2747,32 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     12 op sub :n :n 1
     13 getlink :block :n
 
-Modifications by Convert case at line 165:5 (+1 instructions):
+Modifications by Convert case at line 165:5 (segments: 1) (+1 instructions):
  
    375 label *label83
    376 op mod *tmp133 :displayItem:amount 10
    377 # "Function: inline def drawDigit(in x, in y, in digit)"
 -    * jump *label109 notEqual *tmp133 0
-+  378 multijump *label154 *tmp133 0 (m:*label153)
-+  379 multilabel *label154 (m:*label153)
++  378 multijump *label153 *tmp133 0 (m:*label163)
++  379 multilabel *label153 (m:*label163)
 +  380 jump *label110 always
-+  381 multilabel *label155 (m:*label153)
++  381 multilabel *label154 (m:*label163)
 +  382 jump *label112 always
-+  383 multilabel *label156 (m:*label153)
++  383 multilabel *label155 (m:*label163)
 +  384 jump *label114 always
-+  385 multilabel *label157 (m:*label153)
++  385 multilabel *label156 (m:*label163)
 +  386 jump *label116 always
-+  387 multilabel *label158 (m:*label153)
++  387 multilabel *label157 (m:*label163)
 +  388 jump *label118 always
-+  389 multilabel *label159 (m:*label153)
++  389 multilabel *label158 (m:*label163)
 +  390 jump *label120 always
-+  391 multilabel *label160 (m:*label153)
++  391 multilabel *label159 (m:*label163)
 +  392 jump *label122 always
-+  393 multilabel *label161 (m:*label153)
++  393 multilabel *label160 (m:*label163)
 +  394 jump *label124 always
-+  395 multilabel *label162 (m:*label153)
++  395 multilabel *label161 (m:*label163)
 +  396 jump *label126 always
-+  397 multilabel *label163 (m:*label153)
++  397 multilabel *label162 (m:*label163)
 +  398 jump *label128 always
    399 label *label110
    400 op sub *tmp138 :displayItem:x 1
@@ -2866,26 +2866,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 -    * label *label139
 -    * jump *label83 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
--    * multijump *label142 *tmp53 0 (m:*label141)
--    * multilabel *label142 (m:*label141)
+-    * multijump *label141 *tmp53 0 (m:*label151)
+-    * multilabel *label141 (m:*label151)
 -    * jump *label88 always
--    * multilabel *label143 (m:*label141)
+-    * multilabel *label142 (m:*label151)
 -    * jump *label90 always
--    * multilabel *label144 (m:*label141)
+-    * multilabel *label143 (m:*label151)
 -    * jump *label92 always
--    * multilabel *label145 (m:*label141)
+-    * multilabel *label144 (m:*label151)
 -    * jump *label94 always
--    * multilabel *label146 (m:*label141)
+-    * multilabel *label145 (m:*label151)
 -    * jump *label96 always
--    * multilabel *label147 (m:*label141)
+-    * multilabel *label146 (m:*label151)
 -    * jump *label98 always
--    * multilabel *label148 (m:*label141)
+-    * multilabel *label147 (m:*label151)
 -    * jump *label100 always
--    * multilabel *label149 (m:*label141)
+-    * multilabel *label148 (m:*label151)
 -    * jump *label102 always
--    * multilabel *label150 (m:*label141)
+-    * multilabel *label149 (m:*label151)
 -    * jump *label104 always
--    * multilabel *label151 (m:*label141)
+-    * multilabel *label150 (m:*label151)
 -    * jump *label106 always
 -    * label *label88
 -    * draw lineRect *tmp58 *tmp60 9 14
@@ -2948,26 +2948,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 -    * label *label83
 -    * op mod *tmp133 :displayItem:amount 10
 -    * # "Function: inline def drawDigit(in x, in y, in digit)"
--    * multijump *label154 *tmp133 0 (m:*label153)
--    * multilabel *label154 (m:*label153)
+-    * multijump *label153 *tmp133 0 (m:*label163)
+-    * multilabel *label153 (m:*label163)
 -    * jump *label110 always
--    * multilabel *label155 (m:*label153)
+-    * multilabel *label154 (m:*label163)
 -    * jump *label112 always
--    * multilabel *label156 (m:*label153)
+-    * multilabel *label155 (m:*label163)
 -    * jump *label114 always
--    * multilabel *label157 (m:*label153)
+-    * multilabel *label156 (m:*label163)
 -    * jump *label116 always
--    * multilabel *label158 (m:*label153)
+-    * multilabel *label157 (m:*label163)
 -    * jump *label118 always
--    * multilabel *label159 (m:*label153)
+-    * multilabel *label158 (m:*label163)
 -    * jump *label120 always
--    * multilabel *label160 (m:*label153)
+-    * multilabel *label159 (m:*label163)
 -    * jump *label122 always
--    * multilabel *label161 (m:*label153)
+-    * multilabel *label160 (m:*label163)
 -    * jump *label124 always
--    * multilabel *label162 (m:*label153)
+-    * multilabel *label161 (m:*label163)
 -    * jump *label126 always
--    * multilabel *label163 (m:*label153)
+-    * multilabel *label162 (m:*label163)
 -    * jump *label128 always
 -    * label *label110
 -    * op sub *tmp138 :displayItem:x 1
@@ -3078,26 +3078,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  293 label *label165
 +  294 jump *label199 always
 +  295 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-+  296 multijump *label166 *tmp53 0 (m:*label141)
-+  297 multilabel *label166 (m:*label141)
++  296 multijump *label166 *tmp53 0 (m:*label151)
++  297 multilabel *label166 (m:*label151)
 +  298 jump *label176 always
-+  299 multilabel *label167 (m:*label141)
++  299 multilabel *label167 (m:*label151)
 +  300 jump *label178 always
-+  301 multilabel *label168 (m:*label141)
++  301 multilabel *label168 (m:*label151)
 +  302 jump *label180 always
-+  303 multilabel *label169 (m:*label141)
++  303 multilabel *label169 (m:*label151)
 +  304 jump *label182 always
-+  305 multilabel *label170 (m:*label141)
++  305 multilabel *label170 (m:*label151)
 +  306 jump *label184 always
-+  307 multilabel *label171 (m:*label141)
++  307 multilabel *label171 (m:*label151)
 +  308 jump *label186 always
-+  309 multilabel *label172 (m:*label141)
++  309 multilabel *label172 (m:*label151)
 +  310 jump *label188 always
-+  311 multilabel *label173 (m:*label141)
++  311 multilabel *label173 (m:*label151)
 +  312 jump *label190 always
-+  313 multilabel *label174 (m:*label141)
++  313 multilabel *label174 (m:*label151)
 +  314 jump *label192 always
-+  315 multilabel *label175 (m:*label141)
++  315 multilabel *label175 (m:*label151)
 +  316 jump *label194 always
 +  317 label *label176
 +  318 draw lineRect *tmp58 *tmp60 9 14
@@ -3160,26 +3160,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  375 label *label199
 +  376 op mod *tmp133 :displayItem:amount 10
 +  377 # "Function: inline def drawDigit(in x, in y, in digit)"
-+  378 multijump *label200 *tmp133 0 (m:*label153)
-+  379 multilabel *label200 (m:*label153)
++  378 multijump *label200 *tmp133 0 (m:*label163)
++  379 multilabel *label200 (m:*label163)
 +  380 jump *label210 always
-+  381 multilabel *label201 (m:*label153)
++  381 multilabel *label201 (m:*label163)
 +  382 jump *label212 always
-+  383 multilabel *label202 (m:*label153)
++  383 multilabel *label202 (m:*label163)
 +  384 jump *label214 always
-+  385 multilabel *label203 (m:*label153)
++  385 multilabel *label203 (m:*label163)
 +  386 jump *label216 always
-+  387 multilabel *label204 (m:*label153)
++  387 multilabel *label204 (m:*label163)
 +  388 jump *label218 always
-+  389 multilabel *label205 (m:*label153)
++  389 multilabel *label205 (m:*label163)
 +  390 jump *label220 always
-+  391 multilabel *label206 (m:*label153)
++  391 multilabel *label206 (m:*label163)
 +  392 jump *label222 always
-+  393 multilabel *label207 (m:*label153)
++  393 multilabel *label207 (m:*label163)
 +  394 jump *label224 always
-+  395 multilabel *label208 (m:*label153)
++  395 multilabel *label208 (m:*label163)
 +  396 jump *label226 always
-+  397 multilabel *label209 (m:*label153)
++  397 multilabel *label209 (m:*label163)
 +  398 jump *label228 always
 +  399 label *label210
 +  400 op sub *tmp138 :displayItem:x 1
@@ -3286,26 +3286,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  501 label *label239
 +  502 jump *label273 always
 +  503 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-+  504 multijump *label240 *tmp53 0 (m:*label141)
-+  505 multilabel *label240 (m:*label141)
++  504 multijump *label240 *tmp53 0 (m:*label151)
++  505 multilabel *label240 (m:*label151)
 +  506 jump *label250 always
-+  507 multilabel *label241 (m:*label141)
++  507 multilabel *label241 (m:*label151)
 +  508 jump *label252 always
-+  509 multilabel *label242 (m:*label141)
++  509 multilabel *label242 (m:*label151)
 +  510 jump *label254 always
-+  511 multilabel *label243 (m:*label141)
++  511 multilabel *label243 (m:*label151)
 +  512 jump *label256 always
-+  513 multilabel *label244 (m:*label141)
++  513 multilabel *label244 (m:*label151)
 +  514 jump *label258 always
-+  515 multilabel *label245 (m:*label141)
++  515 multilabel *label245 (m:*label151)
 +  516 jump *label260 always
-+  517 multilabel *label246 (m:*label141)
++  517 multilabel *label246 (m:*label151)
 +  518 jump *label262 always
-+  519 multilabel *label247 (m:*label141)
++  519 multilabel *label247 (m:*label151)
 +  520 jump *label264 always
-+  521 multilabel *label248 (m:*label141)
++  521 multilabel *label248 (m:*label151)
 +  522 jump *label266 always
-+  523 multilabel *label249 (m:*label141)
++  523 multilabel *label249 (m:*label151)
 +  524 jump *label268 always
 +  525 label *label250
 +  526 draw lineRect *tmp58 *tmp60 9 14
@@ -3368,26 +3368,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  583 label *label273
 +  584 op mod *tmp133 :displayItem:amount 10
 +  585 # "Function: inline def drawDigit(in x, in y, in digit)"
-+  586 multijump *label274 *tmp133 0 (m:*label153)
-+  587 multilabel *label274 (m:*label153)
++  586 multijump *label274 *tmp133 0 (m:*label163)
++  587 multilabel *label274 (m:*label163)
 +  588 jump *label284 always
-+  589 multilabel *label275 (m:*label153)
++  589 multilabel *label275 (m:*label163)
 +  590 jump *label286 always
-+  591 multilabel *label276 (m:*label153)
++  591 multilabel *label276 (m:*label163)
 +  592 jump *label288 always
-+  593 multilabel *label277 (m:*label153)
++  593 multilabel *label277 (m:*label163)
 +  594 jump *label290 always
-+  595 multilabel *label278 (m:*label153)
++  595 multilabel *label278 (m:*label163)
 +  596 jump *label292 always
-+  597 multilabel *label279 (m:*label153)
++  597 multilabel *label279 (m:*label163)
 +  598 jump *label294 always
-+  599 multilabel *label280 (m:*label153)
++  599 multilabel *label280 (m:*label163)
 +  600 jump *label296 always
-+  601 multilabel *label281 (m:*label153)
++  601 multilabel *label281 (m:*label163)
 +  602 jump *label298 always
-+  603 multilabel *label282 (m:*label153)
++  603 multilabel *label282 (m:*label163)
 +  604 jump *label300 always
-+  605 multilabel *label283 (m:*label153)
++  605 multilabel *label283 (m:*label163)
 +  606 jump *label302 always
 +  607 label *label284
 +  608 op sub *tmp138 :displayItem:x 1
@@ -3494,26 +3494,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  709 label *label313
 +  710 jump *label347 always
 +  711 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-+  712 multijump *label314 *tmp53 0 (m:*label141)
-+  713 multilabel *label314 (m:*label141)
++  712 multijump *label314 *tmp53 0 (m:*label151)
++  713 multilabel *label314 (m:*label151)
 +  714 jump *label324 always
-+  715 multilabel *label315 (m:*label141)
++  715 multilabel *label315 (m:*label151)
 +  716 jump *label326 always
-+  717 multilabel *label316 (m:*label141)
++  717 multilabel *label316 (m:*label151)
 +  718 jump *label328 always
-+  719 multilabel *label317 (m:*label141)
++  719 multilabel *label317 (m:*label151)
 +  720 jump *label330 always
-+  721 multilabel *label318 (m:*label141)
++  721 multilabel *label318 (m:*label151)
 +  722 jump *label332 always
-+  723 multilabel *label319 (m:*label141)
++  723 multilabel *label319 (m:*label151)
 +  724 jump *label334 always
-+  725 multilabel *label320 (m:*label141)
++  725 multilabel *label320 (m:*label151)
 +  726 jump *label336 always
-+  727 multilabel *label321 (m:*label141)
++  727 multilabel *label321 (m:*label151)
 +  728 jump *label338 always
-+  729 multilabel *label322 (m:*label141)
++  729 multilabel *label322 (m:*label151)
 +  730 jump *label340 always
-+  731 multilabel *label323 (m:*label141)
++  731 multilabel *label323 (m:*label151)
 +  732 jump *label342 always
 +  733 label *label324
 +  734 draw lineRect *tmp58 *tmp60 9 14
@@ -3576,26 +3576,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  791 label *label347
 +  792 op mod *tmp133 :displayItem:amount 10
 +  793 # "Function: inline def drawDigit(in x, in y, in digit)"
-+  794 multijump *label348 *tmp133 0 (m:*label153)
-+  795 multilabel *label348 (m:*label153)
++  794 multijump *label348 *tmp133 0 (m:*label163)
++  795 multilabel *label348 (m:*label163)
 +  796 jump *label358 always
-+  797 multilabel *label349 (m:*label153)
++  797 multilabel *label349 (m:*label163)
 +  798 jump *label360 always
-+  799 multilabel *label350 (m:*label153)
++  799 multilabel *label350 (m:*label163)
 +  800 jump *label362 always
-+  801 multilabel *label351 (m:*label153)
++  801 multilabel *label351 (m:*label163)
 +  802 jump *label364 always
-+  803 multilabel *label352 (m:*label153)
++  803 multilabel *label352 (m:*label163)
 +  804 jump *label366 always
-+  805 multilabel *label353 (m:*label153)
++  805 multilabel *label353 (m:*label163)
 +  806 jump *label368 always
-+  807 multilabel *label354 (m:*label153)
++  807 multilabel *label354 (m:*label163)
 +  808 jump *label370 always
-+  809 multilabel *label355 (m:*label153)
++  809 multilabel *label355 (m:*label163)
 +  810 jump *label372 always
-+  811 multilabel *label356 (m:*label153)
++  811 multilabel *label356 (m:*label163)
 +  812 jump *label374 always
-+  813 multilabel *label357 (m:*label153)
++  813 multilabel *label357 (m:*label163)
 +  814 jump *label376 always
 +  815 label *label358
 +  816 op sub *tmp138 :displayItem:x 1
@@ -3702,26 +3702,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  917 label *label387
 +  918 jump *label421 always
 +  919 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-+  920 multijump *label388 *tmp53 0 (m:*label141)
-+  921 multilabel *label388 (m:*label141)
++  920 multijump *label388 *tmp53 0 (m:*label151)
++  921 multilabel *label388 (m:*label151)
 +  922 jump *label398 always
-+  923 multilabel *label389 (m:*label141)
++  923 multilabel *label389 (m:*label151)
 +  924 jump *label400 always
-+  925 multilabel *label390 (m:*label141)
++  925 multilabel *label390 (m:*label151)
 +  926 jump *label402 always
-+  927 multilabel *label391 (m:*label141)
++  927 multilabel *label391 (m:*label151)
 +  928 jump *label404 always
-+  929 multilabel *label392 (m:*label141)
++  929 multilabel *label392 (m:*label151)
 +  930 jump *label406 always
-+  931 multilabel *label393 (m:*label141)
++  931 multilabel *label393 (m:*label151)
 +  932 jump *label408 always
-+  933 multilabel *label394 (m:*label141)
++  933 multilabel *label394 (m:*label151)
 +  934 jump *label410 always
-+  935 multilabel *label395 (m:*label141)
++  935 multilabel *label395 (m:*label151)
 +  936 jump *label412 always
-+  937 multilabel *label396 (m:*label141)
++  937 multilabel *label396 (m:*label151)
 +  938 jump *label414 always
-+  939 multilabel *label397 (m:*label141)
++  939 multilabel *label397 (m:*label151)
 +  940 jump *label416 always
 +  941 label *label398
 +  942 draw lineRect *tmp58 *tmp60 9 14
@@ -3784,26 +3784,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 +  999 label *label421
 + 1000 op mod *tmp133 :displayItem:amount 10
 + 1001 # "Function: inline def drawDigit(in x, in y, in digit)"
-+ 1002 multijump *label422 *tmp133 0 (m:*label153)
-+ 1003 multilabel *label422 (m:*label153)
++ 1002 multijump *label422 *tmp133 0 (m:*label163)
++ 1003 multilabel *label422 (m:*label163)
 + 1004 jump *label432 always
-+ 1005 multilabel *label423 (m:*label153)
++ 1005 multilabel *label423 (m:*label163)
 + 1006 jump *label434 always
-+ 1007 multilabel *label424 (m:*label153)
++ 1007 multilabel *label424 (m:*label163)
 + 1008 jump *label436 always
-+ 1009 multilabel *label425 (m:*label153)
++ 1009 multilabel *label425 (m:*label163)
 + 1010 jump *label438 always
-+ 1011 multilabel *label426 (m:*label153)
++ 1011 multilabel *label426 (m:*label163)
 + 1012 jump *label440 always
-+ 1013 multilabel *label427 (m:*label153)
++ 1013 multilabel *label427 (m:*label163)
 + 1014 jump *label442 always
-+ 1015 multilabel *label428 (m:*label153)
++ 1015 multilabel *label428 (m:*label163)
 + 1016 jump *label444 always
-+ 1017 multilabel *label429 (m:*label153)
++ 1017 multilabel *label429 (m:*label163)
 + 1018 jump *label446 always
-+ 1019 multilabel *label430 (m:*label153)
++ 1019 multilabel *label430 (m:*label163)
 + 1020 jump *label448 always
-+ 1021 multilabel *label431 (m:*label153)
++ 1021 multilabel *label431 (m:*label163)
 + 1022 jump *label450 always
 + 1023 label *label432
 + 1024 op sub *tmp138 :displayItem:x 1
@@ -3910,26 +3910,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 + 1125 label *label461
 + 1126 jump *label495 always
 + 1127 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-+ 1128 multijump *label462 *tmp53 0 (m:*label141)
-+ 1129 multilabel *label462 (m:*label141)
++ 1128 multijump *label462 *tmp53 0 (m:*label151)
++ 1129 multilabel *label462 (m:*label151)
 + 1130 jump *label472 always
-+ 1131 multilabel *label463 (m:*label141)
++ 1131 multilabel *label463 (m:*label151)
 + 1132 jump *label474 always
-+ 1133 multilabel *label464 (m:*label141)
++ 1133 multilabel *label464 (m:*label151)
 + 1134 jump *label476 always
-+ 1135 multilabel *label465 (m:*label141)
++ 1135 multilabel *label465 (m:*label151)
 + 1136 jump *label478 always
-+ 1137 multilabel *label466 (m:*label141)
++ 1137 multilabel *label466 (m:*label151)
 + 1138 jump *label480 always
-+ 1139 multilabel *label467 (m:*label141)
++ 1139 multilabel *label467 (m:*label151)
 + 1140 jump *label482 always
-+ 1141 multilabel *label468 (m:*label141)
++ 1141 multilabel *label468 (m:*label151)
 + 1142 jump *label484 always
-+ 1143 multilabel *label469 (m:*label141)
++ 1143 multilabel *label469 (m:*label151)
 + 1144 jump *label486 always
-+ 1145 multilabel *label470 (m:*label141)
++ 1145 multilabel *label470 (m:*label151)
 + 1146 jump *label488 always
-+ 1147 multilabel *label471 (m:*label141)
++ 1147 multilabel *label471 (m:*label151)
 + 1148 jump *label490 always
 + 1149 label *label472
 + 1150 draw lineRect *tmp58 *tmp60 9 14
@@ -3992,26 +3992,26 @@ Modifications by Unroll loop at line 152:5 (+535 instructions):
 + 1207 label *label495
 + 1208 op mod *tmp133 :displayItem:amount 10
 + 1209 # "Function: inline def drawDigit(in x, in y, in digit)"
-+ 1210 multijump *label496 *tmp133 0 (m:*label153)
-+ 1211 multilabel *label496 (m:*label153)
++ 1210 multijump *label496 *tmp133 0 (m:*label163)
++ 1211 multilabel *label496 (m:*label163)
 + 1212 jump *label506 always
-+ 1213 multilabel *label497 (m:*label153)
++ 1213 multilabel *label497 (m:*label163)
 + 1214 jump *label508 always
-+ 1215 multilabel *label498 (m:*label153)
++ 1215 multilabel *label498 (m:*label163)
 + 1216 jump *label510 always
-+ 1217 multilabel *label499 (m:*label153)
++ 1217 multilabel *label499 (m:*label163)
 + 1218 jump *label512 always
-+ 1219 multilabel *label500 (m:*label153)
++ 1219 multilabel *label500 (m:*label163)
 + 1220 jump *label514 always
-+ 1221 multilabel *label501 (m:*label153)
++ 1221 multilabel *label501 (m:*label163)
 + 1222 jump *label516 always
-+ 1223 multilabel *label502 (m:*label153)
++ 1223 multilabel *label502 (m:*label163)
 + 1224 jump *label518 always
-+ 1225 multilabel *label503 (m:*label153)
++ 1225 multilabel *label503 (m:*label163)
 + 1226 jump *label520 always
-+ 1227 multilabel *label504 (m:*label153)
++ 1227 multilabel *label504 (m:*label163)
 + 1228 jump *label522 always
-+ 1229 multilabel *label505 (m:*label153)
++ 1229 multilabel *label505 (m:*label163)
 + 1230 jump *label524 always
 + 1231 label *label506
 + 1232 op sub *tmp138 :displayItem:x 1
@@ -4190,7 +4190,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    371 label *label196
    372 label *label197
  
-   397 multilabel *label209 (m:*label153)
+   397 multilabel *label209 (m:*label163)
    398 jump *label228 always
    399 label *label210
 -    * op sub *tmp138 :displayItem:x 1
@@ -5321,125 +5321,125 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    210 draw color 255 255 255 255
    211 label *label626
 
-Modifications by Convert case at line 17:9 (+50 instructions):
+Modifications by Convert case at line 17:9 (segments: 1) (+50 instructions):
  
     15 print :block
     16 print "\n"
     17 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
 +   18 sensor *tmp236 *tmp5 @id
-+   19 multijump *label634 *tmp236 90 (m:*label633)
-+   20 multilabel *label634 (m:*label633)
++   19 multijump *label633 *tmp236 90 (m:*label689)
++   20 multilabel *label633 (m:*label689)
 +   21 jump *label12 always
-+   22 multilabel *label635 (m:*label633)
++   22 multilabel *label634 (m:*label689)
 +   23 jump *label12 always
-+   24 multilabel *label636 (m:*label633)
++   24 multilabel *label635 (m:*label689)
 +   25 jump *label12 always
-+   26 multilabel *label637 (m:*label633)
++   26 multilabel *label636 (m:*label689)
 +   27 jump *label12 always
-+   28 multilabel *label638 (m:*label633)
++   28 multilabel *label637 (m:*label689)
 +   29 jump *label12 always
-+   30 multilabel *label639 (m:*label633)
++   30 multilabel *label638 (m:*label689)
 +   31 jump *label632 always
-+   32 multilabel *label640 (m:*label633)
++   32 multilabel *label639 (m:*label689)
 +   33 jump *label632 always
-+   34 multilabel *label641 (m:*label633)
++   34 multilabel *label640 (m:*label689)
 +   35 jump *label632 always
-+   36 multilabel *label642 (m:*label633)
++   36 multilabel *label641 (m:*label689)
 +   37 jump *label632 always
-+   38 multilabel *label643 (m:*label633)
++   38 multilabel *label642 (m:*label689)
 +   39 jump *label632 always
-+   40 multilabel *label644 (m:*label633)
++   40 multilabel *label643 (m:*label689)
 +   41 jump *label632 always
-+   42 multilabel *label645 (m:*label633)
++   42 multilabel *label644 (m:*label689)
 +   43 jump *label632 always
-+   44 multilabel *label646 (m:*label633)
++   44 multilabel *label645 (m:*label689)
 +   45 jump *label632 always
-+   46 multilabel *label647 (m:*label633)
++   46 multilabel *label646 (m:*label689)
 +   47 jump *label632 always
-+   48 multilabel *label648 (m:*label633)
++   48 multilabel *label647 (m:*label689)
 +   49 jump *label632 always
-+   50 multilabel *label649 (m:*label633)
++   50 multilabel *label648 (m:*label689)
 +   51 jump *label632 always
-+   52 multilabel *label650 (m:*label633)
++   52 multilabel *label649 (m:*label689)
 +   53 jump *label632 always
-+   54 multilabel *label651 (m:*label633)
++   54 multilabel *label650 (m:*label689)
 +   55 jump *label632 always
-+   56 multilabel *label652 (m:*label633)
++   56 multilabel *label651 (m:*label689)
 +   57 jump *label632 always
-+   58 multilabel *label653 (m:*label633)
++   58 multilabel *label652 (m:*label689)
 +   59 jump *label632 always
-+   60 multilabel *label654 (m:*label633)
++   60 multilabel *label653 (m:*label689)
 +   61 jump *label632 always
-+   62 multilabel *label655 (m:*label633)
++   62 multilabel *label654 (m:*label689)
 +   63 jump *label632 always
-+   64 multilabel *label656 (m:*label633)
++   64 multilabel *label655 (m:*label689)
 +   65 jump *label632 always
-+   66 multilabel *label657 (m:*label633)
++   66 multilabel *label656 (m:*label689)
 +   67 jump *label632 always
-+   68 multilabel *label658 (m:*label633)
++   68 multilabel *label657 (m:*label689)
 +   69 jump *label632 always
-+   70 multilabel *label659 (m:*label633)
++   70 multilabel *label658 (m:*label689)
 +   71 jump *label632 always
-+   72 multilabel *label660 (m:*label633)
++   72 multilabel *label659 (m:*label689)
 +   73 jump *label632 always
-+   74 multilabel *label661 (m:*label633)
++   74 multilabel *label660 (m:*label689)
 +   75 jump *label632 always
-+   76 multilabel *label662 (m:*label633)
++   76 multilabel *label661 (m:*label689)
 +   77 jump *label632 always
-+   78 multilabel *label663 (m:*label633)
++   78 multilabel *label662 (m:*label689)
 +   79 jump *label632 always
-+   80 multilabel *label664 (m:*label633)
++   80 multilabel *label663 (m:*label689)
 +   81 jump *label632 always
-+   82 multilabel *label665 (m:*label633)
++   82 multilabel *label664 (m:*label689)
 +   83 jump *label632 always
-+   84 multilabel *label666 (m:*label633)
++   84 multilabel *label665 (m:*label689)
 +   85 jump *label632 always
-+   86 multilabel *label667 (m:*label633)
++   86 multilabel *label666 (m:*label689)
 +   87 jump *label632 always
-+   88 multilabel *label668 (m:*label633)
++   88 multilabel *label667 (m:*label689)
 +   89 jump *label632 always
-+   90 multilabel *label669 (m:*label633)
++   90 multilabel *label668 (m:*label689)
 +   91 jump *label632 always
-+   92 multilabel *label670 (m:*label633)
++   92 multilabel *label669 (m:*label689)
 +   93 jump *label632 always
-+   94 multilabel *label671 (m:*label633)
++   94 multilabel *label670 (m:*label689)
 +   95 jump *label632 always
-+   96 multilabel *label672 (m:*label633)
++   96 multilabel *label671 (m:*label689)
 +   97 jump *label632 always
-+   98 multilabel *label673 (m:*label633)
++   98 multilabel *label672 (m:*label689)
 +   99 jump *label632 always
-+  100 multilabel *label674 (m:*label633)
++  100 multilabel *label673 (m:*label689)
 +  101 jump *label632 always
-+  102 multilabel *label675 (m:*label633)
++  102 multilabel *label674 (m:*label689)
 +  103 jump *label632 always
-+  104 multilabel *label676 (m:*label633)
++  104 multilabel *label675 (m:*label689)
 +  105 jump *label632 always
-+  106 multilabel *label677 (m:*label633)
++  106 multilabel *label676 (m:*label689)
 +  107 jump *label632 always
-+  108 multilabel *label678 (m:*label633)
++  108 multilabel *label677 (m:*label689)
 +  109 jump *label632 always
-+  110 multilabel *label679 (m:*label633)
++  110 multilabel *label678 (m:*label689)
 +  111 jump *label632 always
-+  112 multilabel *label680 (m:*label633)
++  112 multilabel *label679 (m:*label689)
 +  113 jump *label632 always
-+  114 multilabel *label681 (m:*label633)
++  114 multilabel *label680 (m:*label689)
 +  115 jump *label8 always
-+  116 multilabel *label682 (m:*label633)
++  116 multilabel *label681 (m:*label689)
 +  117 jump *label632 always
-+  118 multilabel *label683 (m:*label633)
++  118 multilabel *label682 (m:*label689)
 +  119 jump *label632 always
-+  120 multilabel *label684 (m:*label633)
++  120 multilabel *label683 (m:*label689)
 +  121 jump *label632 always
-+  122 multilabel *label685 (m:*label633)
++  122 multilabel *label684 (m:*label689)
 +  123 jump *label632 always
-+  124 multilabel *label686 (m:*label633)
++  124 multilabel *label685 (m:*label689)
 +  125 jump *label10 always
-+  126 multilabel *label687 (m:*label633)
++  126 multilabel *label686 (m:*label689)
 +  127 jump *label10 always
-+  128 multilabel *label688 (m:*label633)
++  128 multilabel *label687 (m:*label689)
 +  129 jump *label632 always
-+  130 multilabel *label689 (m:*label633)
++  130 multilabel *label688 (m:*label689)
 +  131 jump *label14 always
    132 label *label8
    133 set .MESSAGE :block
@@ -5883,7 +5883,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label165
    361 jump *label199 always
    362 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-   363 multijump *label166 *tmp53 0 (m:*label141)
+   363 multijump *label166 *tmp53 0 (m:*label151)
  
    384 label *label176
    385 draw lineRect *tmp58 *tmp60 9 14
@@ -6033,7 +6033,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label239
    541 jump *label273 always
    542 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-   543 multijump *label240 *tmp53 0 (m:*label141)
+   543 multijump *label240 *tmp53 0 (m:*label151)
  
    564 label *label250
    565 draw lineRect *tmp58 *tmp60 9 14
@@ -6183,7 +6183,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label313
    721 jump *label347 always
    722 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-   723 multijump *label314 *tmp53 0 (m:*label141)
+   723 multijump *label314 *tmp53 0 (m:*label151)
  
    744 label *label324
    745 draw lineRect *tmp58 *tmp60 9 14
@@ -6333,7 +6333,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label387
    901 jump *label421 always
    902 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-   903 multijump *label388 *tmp53 0 (m:*label141)
+   903 multijump *label388 *tmp53 0 (m:*label151)
  
    924 label *label398
    925 draw lineRect *tmp58 *tmp60 9 14
@@ -6483,7 +6483,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label461
   1081 jump *label495 always
   1082 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-  1083 multijump *label462 *tmp53 0 (m:*label141)
+  1083 multijump *label462 *tmp53 0 (m:*label151)
  
   1104 label *label472
   1105 draw lineRect *tmp58 *tmp60 9 14
@@ -6710,7 +6710,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label234
    539 jump *label273 always
    540 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-   541 multijump *label240 *tmp53 0 (m:*label141)
+   541 multijump *label240 *tmp53 0 (m:*label151)
  
    714 op sub :displayItem:x :x 22
    715 op idiv :displayItem:amount :displayItem:amount 10
@@ -6718,7 +6718,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label308
    717 jump *label347 always
    718 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-   719 multijump *label314 *tmp53 0 (m:*label141)
+   719 multijump *label314 *tmp53 0 (m:*label151)
  
    892 op sub :displayItem:x :x 33
    893 op idiv :displayItem:amount :displayItem:amount 10
@@ -6726,7 +6726,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label382
    895 jump *label421 always
    896 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-   897 multijump *label388 *tmp53 0 (m:*label141)
+   897 multijump *label388 *tmp53 0 (m:*label151)
  
   1070 op sub :displayItem:x :x 44
   1071 op idiv :displayItem:amount :displayItem:amount 10
@@ -6734,7 +6734,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label456
   1073 jump *label495 always
   1074 # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
-  1075 multijump *label462 *tmp53 0 (m:*label141)
+  1075 multijump *label462 *tmp53 0 (m:*label151)
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -7164,26 +7164,26 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
 -    * label *label71
    338 jump *label199 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
--    * multijump *label166 *tmp53 0 (m:*label141)
--    * multilabel *label166 (m:*label141)
+-    * multijump *label166 *tmp53 0 (m:*label151)
+-    * multilabel *label166 (m:*label151)
 -    * jump *label176 always
--    * multilabel *label167 (m:*label141)
+-    * multilabel *label167 (m:*label151)
 -    * jump *label178 always
--    * multilabel *label168 (m:*label141)
+-    * multilabel *label168 (m:*label151)
 -    * jump *label180 always
--    * multilabel *label169 (m:*label141)
+-    * multilabel *label169 (m:*label151)
 -    * jump *label182 always
--    * multilabel *label170 (m:*label141)
+-    * multilabel *label170 (m:*label151)
 -    * jump *label184 always
--    * multilabel *label171 (m:*label141)
+-    * multilabel *label171 (m:*label151)
 -    * jump *label186 always
--    * multilabel *label172 (m:*label141)
+-    * multilabel *label172 (m:*label151)
 -    * jump *label188 always
--    * multilabel *label173 (m:*label141)
+-    * multilabel *label173 (m:*label151)
 -    * jump *label190 always
--    * multilabel *label174 (m:*label141)
+-    * multilabel *label174 (m:*label151)
 -    * jump *label192 always
--    * multilabel *label175 (m:*label141)
+-    * multilabel *label175 (m:*label151)
 -    * jump *label194 always
 -    * label *label176
 -    * draw lineRect *tmp58 *tmp60 9 14
@@ -7239,26 +7239,26 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    447 jump *label82 equal :displayItem:amount 0
    448 jump *label273 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
--    * multijump *label240 *tmp53 0 (m:*label141)
--    * multilabel *label240 (m:*label141)
+-    * multijump *label240 *tmp53 0 (m:*label151)
+-    * multilabel *label240 (m:*label151)
 -    * jump *label250 always
--    * multilabel *label241 (m:*label141)
+-    * multilabel *label241 (m:*label151)
 -    * jump *label252 always
--    * multilabel *label242 (m:*label141)
+-    * multilabel *label242 (m:*label151)
 -    * jump *label254 always
--    * multilabel *label243 (m:*label141)
+-    * multilabel *label243 (m:*label151)
 -    * jump *label256 always
--    * multilabel *label244 (m:*label141)
+-    * multilabel *label244 (m:*label151)
 -    * jump *label258 always
--    * multilabel *label245 (m:*label141)
+-    * multilabel *label245 (m:*label151)
 -    * jump *label260 always
--    * multilabel *label246 (m:*label141)
+-    * multilabel *label246 (m:*label151)
 -    * jump *label262 always
--    * multilabel *label247 (m:*label141)
+-    * multilabel *label247 (m:*label151)
 -    * jump *label264 always
--    * multilabel *label248 (m:*label141)
+-    * multilabel *label248 (m:*label151)
 -    * jump *label266 always
--    * multilabel *label249 (m:*label141)
+-    * multilabel *label249 (m:*label151)
 -    * jump *label268 always
 -    * label *label250
 -    * draw lineRect *tmp58 *tmp60 9 14
@@ -7314,26 +7314,26 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    557 jump *label82 equal :displayItem:amount 0
    558 jump *label347 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
--    * multijump *label314 *tmp53 0 (m:*label141)
--    * multilabel *label314 (m:*label141)
+-    * multijump *label314 *tmp53 0 (m:*label151)
+-    * multilabel *label314 (m:*label151)
 -    * jump *label324 always
--    * multilabel *label315 (m:*label141)
+-    * multilabel *label315 (m:*label151)
 -    * jump *label326 always
--    * multilabel *label316 (m:*label141)
+-    * multilabel *label316 (m:*label151)
 -    * jump *label328 always
--    * multilabel *label317 (m:*label141)
+-    * multilabel *label317 (m:*label151)
 -    * jump *label330 always
--    * multilabel *label318 (m:*label141)
+-    * multilabel *label318 (m:*label151)
 -    * jump *label332 always
--    * multilabel *label319 (m:*label141)
+-    * multilabel *label319 (m:*label151)
 -    * jump *label334 always
--    * multilabel *label320 (m:*label141)
+-    * multilabel *label320 (m:*label151)
 -    * jump *label336 always
--    * multilabel *label321 (m:*label141)
+-    * multilabel *label321 (m:*label151)
 -    * jump *label338 always
--    * multilabel *label322 (m:*label141)
+-    * multilabel *label322 (m:*label151)
 -    * jump *label340 always
--    * multilabel *label323 (m:*label141)
+-    * multilabel *label323 (m:*label151)
 -    * jump *label342 always
 -    * label *label324
 -    * draw lineRect *tmp58 *tmp60 9 14
@@ -7389,26 +7389,26 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    667 jump *label82 equal :displayItem:amount 0
    668 jump *label421 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
--    * multijump *label388 *tmp53 0 (m:*label141)
--    * multilabel *label388 (m:*label141)
+-    * multijump *label388 *tmp53 0 (m:*label151)
+-    * multilabel *label388 (m:*label151)
 -    * jump *label398 always
--    * multilabel *label389 (m:*label141)
+-    * multilabel *label389 (m:*label151)
 -    * jump *label400 always
--    * multilabel *label390 (m:*label141)
+-    * multilabel *label390 (m:*label151)
 -    * jump *label402 always
--    * multilabel *label391 (m:*label141)
+-    * multilabel *label391 (m:*label151)
 -    * jump *label404 always
--    * multilabel *label392 (m:*label141)
+-    * multilabel *label392 (m:*label151)
 -    * jump *label406 always
--    * multilabel *label393 (m:*label141)
+-    * multilabel *label393 (m:*label151)
 -    * jump *label408 always
--    * multilabel *label394 (m:*label141)
+-    * multilabel *label394 (m:*label151)
 -    * jump *label410 always
--    * multilabel *label395 (m:*label141)
+-    * multilabel *label395 (m:*label151)
 -    * jump *label412 always
--    * multilabel *label396 (m:*label141)
+-    * multilabel *label396 (m:*label151)
 -    * jump *label414 always
--    * multilabel *label397 (m:*label141)
+-    * multilabel *label397 (m:*label151)
 -    * jump *label416 always
 -    * label *label398
 -    * draw lineRect *tmp58 *tmp60 9 14
@@ -7464,26 +7464,26 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 
    777 jump *label82 equal :displayItem:amount 0
    778 jump *label495 always
 -    * # "Function: inline def drawDigitSlanted(in x, in y, in digit)"
--    * multijump *label462 *tmp53 0 (m:*label141)
--    * multilabel *label462 (m:*label141)
+-    * multijump *label462 *tmp53 0 (m:*label151)
+-    * multilabel *label462 (m:*label151)
 -    * jump *label472 always
--    * multilabel *label463 (m:*label141)
+-    * multilabel *label463 (m:*label151)
 -    * jump *label474 always
--    * multilabel *label464 (m:*label141)
+-    * multilabel *label464 (m:*label151)
 -    * jump *label476 always
--    * multilabel *label465 (m:*label141)
+-    * multilabel *label465 (m:*label151)
 -    * jump *label478 always
--    * multilabel *label466 (m:*label141)
+-    * multilabel *label466 (m:*label151)
 -    * jump *label480 always
--    * multilabel *label467 (m:*label141)
+-    * multilabel *label467 (m:*label151)
 -    * jump *label482 always
--    * multilabel *label468 (m:*label141)
+-    * multilabel *label468 (m:*label151)
 -    * jump *label484 always
--    * multilabel *label469 (m:*label141)
+-    * multilabel *label469 (m:*label151)
 -    * jump *label486 always
--    * multilabel *label470 (m:*label141)
+-    * multilabel *label470 (m:*label151)
 -    * jump *label488 always
--    * multilabel *label471 (m:*label141)
+-    * multilabel *label471 (m:*label151)
 -    * jump *label490 always
 -    * label *label472
 -    * draw lineRect *tmp58 *tmp60 9 14
@@ -7784,7 +7784,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label273
    410 op mod *tmp133 :displayItem:amount 10
    411 # "Function: inline def drawDigit(in x, in y, in digit)"
-   412 multijump *label274 *tmp133 0 (m:*label153)
+   412 multijump *label274 *tmp133 0 (m:*label163)
  
    514 op sub :displayItem:x :x 22
    515 op idiv :displayItem:amount :displayItem:amount 10
@@ -7792,7 +7792,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label347
    517 op mod *tmp133 :displayItem:amount 10
    518 # "Function: inline def drawDigit(in x, in y, in digit)"
-   519 multijump *label348 *tmp133 0 (m:*label153)
+   519 multijump *label348 *tmp133 0 (m:*label163)
  
    621 op sub :displayItem:x :x 33
    622 op idiv :displayItem:amount :displayItem:amount 10
@@ -7800,7 +7800,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label421
    624 op mod *tmp133 :displayItem:amount 10
    625 # "Function: inline def drawDigit(in x, in y, in digit)"
-   626 multijump *label422 *tmp133 0 (m:*label153)
+   626 multijump *label422 *tmp133 0 (m:*label163)
  
    728 op sub :displayItem:x :x 44
    729 op idiv :displayItem:amount :displayItem:amount 10
@@ -7808,7 +7808,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label495
    731 op mod *tmp133 :displayItem:amount 10
    732 # "Function: inline def drawDigit(in x, in y, in digit)"
-   733 multijump *label496 *tmp133 0 (m:*label153)
+   733 multijump *label496 *tmp133 0 (m:*label163)
  
    841 set :x 157
    842 # "Function: inline def eraseNumbers(in first_column)"
@@ -7839,7 +7839,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 +   14 format :block
     15 sensor *tmp5 :block @type
     16 sensor *tmp236 *tmp5 @id
-    17 multijump *label634 *tmp236 90 (m:*label633)
+    17 multijump *label633 *tmp236 90 (m:*label689)
  
    142 label *label6
    143 jump *label138 greaterThan :n 0
@@ -7906,7 +7906,9 @@ print "Found: {0}\n"
 format :block
 sensor *tmp5 :block @type
 sensor *tmp236 *tmp5 @id
-multijump *label634 *tmp236 90
+multijump *label633 *tmp236 90
+multilabel *label633
+jump *label12 always
 multilabel *label634
 jump *label12 always
 multilabel *label635
@@ -7916,7 +7918,7 @@ jump *label12 always
 multilabel *label637
 jump *label12 always
 multilabel *label638
-jump *label12 always
+jump *label632 always
 multilabel *label639
 jump *label632 always
 multilabel *label640
@@ -8000,9 +8002,9 @@ jump *label632 always
 multilabel *label679
 jump *label632 always
 multilabel *label680
-jump *label632 always
-multilabel *label681
 jump *label8 always
+multilabel *label681
+jump *label632 always
 multilabel *label682
 jump *label632 always
 multilabel *label683
@@ -8010,14 +8012,12 @@ jump *label632 always
 multilabel *label684
 jump *label632 always
 multilabel *label685
-jump *label632 always
+jump *label10 always
 multilabel *label686
 jump *label10 always
 multilabel *label687
-jump *label10 always
-multilabel *label688
 jump *label632 always
-multilabel *label689
+multilabel *label688
 jump *label14 always
 label *label8
 set .MESSAGE :block
