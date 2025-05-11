@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.4.0 - Unreleased
 
+### Fixed
+
+* Fixed unnecessary condition duplication for empty loops ([#252](https://github.com/cardillan/mindcode/issues/252)).
+
 ### Added
 
 * Added new functions to the [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):

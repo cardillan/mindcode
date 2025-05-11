@@ -66,6 +66,12 @@ class LoopOptimizer extends BaseOptimizer {
         List<AstContext> conditions = loop.findSubcontexts(CONDITION);
         if (conditions.size() != 1) return null;
 
+        List<AstContext> bodies = loop.findSubcontexts(BODY);
+        if (bodies.size() != 1) return null;
+
+        LogicList body = contextInstructions(bodies.getFirst());
+        if (body.stream().allMatch(ix -> ix.getRealSize(null) == 0)) return null;
+
         LogicList condition = contextInstructions(conditions.getFirst());
         LogicList next = contextInstructions(loop.findSubcontext(FLOW_CONTROL));
         if (condition.isEmpty() || next.isEmpty() || !hasConditionAtFront(loop)) {
