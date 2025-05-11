@@ -31,6 +31,10 @@ public enum OptimizationLevel {
         return VALUE_MAP.get(level.toLowerCase());
     }
 
+    public static OptimizationLevel byIndex(int index) {
+        return (index >= 0 && index < values().length) ? values()[index] : BASIC;
+    }
+
     public static OptimizationLevel byName(String level, OptimizationLevel defaultValue) {
         return VALUE_MAP.getOrDefault(level.toLowerCase(), defaultValue);
     }

@@ -203,10 +203,22 @@ abstract class ActionHandler {
         createArgument(container, defaults,
                 profile -> OptimizationLevel.EXPERIMENTAL,
                 (profile, arguments, name) -> profile.setAllOptimizationLevels(arguments.get(name)),
-                "-o", "--optimization")
+                "--optimization")
                 .help("sets global optimization level for all optimizers")
                 .type(LowerCaseEnumArgumentType.forEnum(OptimizationLevel.class))
                 .metavar("LEVEL");
+
+        createArgument(container, defaults,
+                profile -> null,
+                (profile, arguments, name) -> {
+                    if (arguments.get(name) != null) {
+                        profile.setAllOptimizationLevels(OptimizationLevel.byIndex(arguments.getInt(name)));
+                    }
+                },
+                "-O")
+                .help("sets global optimization level for all optimizers using numeric codes 0-3 (none, basic, advanced, experimental)")
+                .choices(Arguments.range(0, 3))
+                .type(Integer.class);
 
         for (Optimization optimization : Optimization.LIST) {
             createArgument(container, defaults,

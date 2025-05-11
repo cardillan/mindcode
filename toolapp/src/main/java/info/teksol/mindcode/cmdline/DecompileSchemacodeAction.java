@@ -43,7 +43,7 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .help("Mindustry schematic file to be decompiled into Schematic Definition File.")
                 .type(inputFileType);
 
-        subparser.addArgument("output")
+        subparser.addArgument("-o", "--output")
                 .help("Output file to receive compiled mlog code; uses input file name with .sdf extension if not specified.")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());

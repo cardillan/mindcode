@@ -69,6 +69,21 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
+        class UnsafeCaseOptimizationArgumentTest {
+            @Test
+            public void longArgumentTrue() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--unsafe-case-optimization true");
+                assertTrue(profile.isUnsafeCaseOptimization());
+            }
+
+            @Test
+            public void longArgumentFalse() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--unsafe-case-optimization false");
+                assertFalse(profile.isUnsafeCaseOptimization());
+            }
+        }
+
+        @Nested
         class SyntaxArgumentTest {
             @Test
             public void shortArgumentRelaxed() throws ArgumentParserException {
@@ -381,25 +396,25 @@ public abstract class AbstractCommandLineTest {
         class OptimizationLevelsArgumentTest {
             @Test
             public void shortArgumentNone() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-o none");
+                CompilerProfile profile = parseToProfile("-O0");
                 assertEquals(OptimizationLevel.NONE, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
 
             @Test
             public void shortArgumentBasic() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-o basic");
+                CompilerProfile profile = parseToProfile("-O1");
                 assertEquals(OptimizationLevel.BASIC, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
 
             @Test
             public void shortArgumentAdvanced() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-o advanced");
+                CompilerProfile profile = parseToProfile("-O2");
                 assertEquals(OptimizationLevel.ADVANCED, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
 
             @Test
             public void shortArgumentExperimental() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-o experimental");
+                CompilerProfile profile = parseToProfile("-03");
                 assertEquals(OptimizationLevel.EXPERIMENTAL, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
             @Test

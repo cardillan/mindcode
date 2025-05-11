@@ -28,13 +28,13 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         class ClipboardArgumentsTest {
             @Test
             public void clipboardArgument() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog -c");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog -c");
                 assertTrue(arguments.getBoolean("clipboard"));
             }
 
             @Test
             public void noClipboardArgument() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
                 assertFalse(arguments.getBoolean("clipboard"));
             }
         }
@@ -43,7 +43,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         class WatcherArgumentsTest {
             @Test
             public void watcherArgument() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog -w --watcher-port 1234 --watcher-timeout 2000");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog -w --watcher-port 1234 --watcher-timeout 2000");
                 assertTrue(arguments.getBoolean("watcher"));
                 assertEquals(1234, arguments.getInt("watcher_port"));
                 assertEquals(2000, arguments.getInt("watcher_timeout"));
@@ -51,7 +51,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
             @Test
             public void noWatcherArgument() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
                 assertFalse(arguments.getBoolean("watcher"));
             }
         }
@@ -73,7 +73,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
             @Test
             public void excerptArgument() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog --excerpt 3:5-7:4");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog --excerpt 3:5-7:4");
                 assertEquals(new ExcerptSpecification(3, 5, 7, 4), arguments.get("excerpt"));
             }
         }
@@ -97,7 +97,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
             @Test
             public void outputArgumentFile() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
                 File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
                 assertEquals(output, arguments.get("output"));
             }
@@ -107,21 +107,21 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         class LogArgumentsTest {
             @Test
             public void logArgumentNone() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
                 File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
                 assertEquals(new File("-"), output);
             }
 
             @Test
             public void logArgumentDefault() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog -l");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog -l");
                 File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
                 assertEquals(new File("input.log"), output);
             }
 
             @Test
             public void logArgumentFile() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog -l log.log");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog -l log.log");
                 File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
                 assertEquals(new File("log.log"), output);
             }
@@ -131,7 +131,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         class AppendArgumentsTest {
             @Test
             public void appendNotGiven() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
                 assertNull(arguments.<List<File>>get("append"));
             }
 
@@ -143,13 +143,13 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
             @Test
             public void appendArgumentOneFile() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog -a file1.mnd");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog -a file1.mnd");
                 assertEquals(List.of(new File("file1.mnd")), arguments.get("append"));
             }
 
             @Test
             public void appendArgumentTwoFiles() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("input.mnd output.mlog -a file1.mnd file2.mnd");
+                Namespace arguments = parseCommandLine("input.mnd -o output.mlog -a file1.mnd file2.mnd");
                 assertEquals(List.of(new File("file1.mnd"), new File("file2.mnd")), arguments.get("append"));
             }
         }

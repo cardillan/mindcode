@@ -41,7 +41,7 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .type(inputFileType.acceptSystemIn())
                 .setDefault(new File("-"));
 
-        files.addArgument("output")
+        files.addArgument("-o", "--output")
                 .help("Output file to receive the resulting binary Mindustry schematic file (.msch).")
                 .nargs("?")
                 .type(Arguments.fileType().verifyCanCreate());

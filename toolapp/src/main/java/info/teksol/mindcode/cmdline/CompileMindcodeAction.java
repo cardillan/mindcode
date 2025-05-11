@@ -55,12 +55,6 @@ public class CompileMindcodeAction extends ActionHandler {
                 .type(inputFileType.acceptSystemIn())
                 .setDefault(new File("-"));
 
-        files.addArgument("output")
-                .help("Output file to receive compiled mlog code; uses input file with .mlog extension when not specified, " +
-                      "or stdout when input is stdin. Use \"-\" to force stdout output.")
-                .nargs("?")
-                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
-
         files.addArgument("--excerpt")
                 .help("Allows to specify a portion of the input file for processing, parts outside the specified excerpt are ignored. " +
                       "The excerpt needs to be specified as 'line:column-line:column' (':column' may be omitted if it is equal to 1), " +
@@ -68,6 +62,12 @@ public class CompileMindcodeAction extends ActionHandler {
                       "the end position.")
                 .type(ExcerptSpecification.class)
                 .nargs("?");
+
+        files.addArgument("-o", "--output")
+                .help("Output file to receive compiled mlog code; uses input file with .mlog extension when not specified, " +
+                        "or stdout when input is stdin. Use \"-\" to force stdout output.")
+                .nargs("?")
+                .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
         files.addArgument("-l", "--log")
                 .help("Output file to receive compiler messages; uses input file with .log extension when no file is specified.")

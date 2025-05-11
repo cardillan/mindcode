@@ -15,6 +15,7 @@ import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -34,7 +35,7 @@ class DirectivePreprocessorTest {
                                                 new AstDirectiveValue(EMPTY, option),
                                                 Stream.of(values).map(this::directiveValue).toList())
                                 ),
-                                null
+                                Collections.emptySortedSet()
                         )
                 )
         );
@@ -100,13 +101,20 @@ class DirectivePreprocessorTest {
         assertFalse(profile.isShortFunctionPrefix());
     }
 
-
     @Test
     void processesDirectiveTargetOptimization() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setTargetOptimization(false);
         processDirective(profile, "target-optimization", "specific");
         assertTrue(profile.isTargetOptimization());
+    }
+
+    @Test
+    void processesDirectiveUnsafeCaseOptimization() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setUnsafeCaseOptimization(false);
+        processDirective(profile, "unsafe-case-optimization", "true");
+        assertTrue(profile.isUnsafeCaseOptimization());
     }
 
     @Test

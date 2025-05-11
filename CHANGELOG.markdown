@@ -28,8 +28,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* **Breaking**: changed the command-line arguments of the offline compiler:
+  * The `-o` command-line option no longer sets the optimization level, but specifies the name of the output file. 
+  * The output file needs to be specified using the `-o` or `--output` named argument.
+  * There's a new `-O` option taking a numerical value (optimization level). Values `0` to `3` correspond to optimization levels `none`, `basic`, `advanced` and `experimental`.  
 * **Breaking**: the remote call mechanism was redesigned. When recompiling code in a processor which utilizes remote calls, all related processors need to be recompiled too.
-* The Mlog decompiler replaces illegal characters in mlog variable names. If the names after conversion collides with another variable name, a numeric index is appended. 
+* The mlog decompiler replaces illegal characters in mlog variable names with underscores. If names of some variables collide due to these conversions, a numeric index is appended to some of them until a unique name is found. 
 
 ### Miscellaneous
 

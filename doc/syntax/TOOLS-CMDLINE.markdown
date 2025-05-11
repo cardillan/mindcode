@@ -90,7 +90,7 @@ Actions:
 
 ```
 usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
-                [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
+                [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
                 [--unsafe-case-optimization {true,false}] [-y {strict,mixed,relaxed}] [-i {1..100000}]
                 [-g {size,speed,auto}] [-e {1..1000}] [-r {none,comments,passive,active}]
@@ -108,16 +108,16 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
-                [--err-graphics-buffer-overflow {true,false}] [--err-runtime-check-failed {true,false}] [-o LEVEL]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
-                [input] [output]
+                [--err-graphics-buffer-overflow {true,false}] [--err-runtime-check-failed {true,false}]
+                [--optimization LEVEL] [-O {0..3}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}] [-d {0..3}]
+                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [input]
 
 Compile a Mindcode source file into text mlog file.
 
@@ -133,12 +133,12 @@ named arguments:
 
 input/output files:
   input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified
-  output                 Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
-                         specified, or stdout when input is stdin. Use "-" to force stdout output.
   --excerpt [EXCERPT]    Allows to specify a portion  of  the  input  file  for  processing, parts outside the specified
                          excerpt are ignored. The excerpt needs  to be specified as 'line:column-line:column' (':column'
                          may be omitted if it is equal to 1),  giving two positions inside the main input file separated
                          by a dash. The start position must precede the end position.
+  -o, --output [OUTPUT]  Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
+                         specified, or stdout when input is stdin. Use "-" to force stdout output.
   -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
                          specified.
   --file-references {path,uri,windows-uri}
@@ -250,8 +250,9 @@ optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
   explicitly set. Available optimization levels are {none,basic,advanced}.
 
-  -o, --optimization LEVEL
-                         sets global optimization level for all optimizers
+  --optimization LEVEL   sets global optimization level for all optimizers
+  -O {0..3}              sets global optimization  level  for  all  optimizers  using  numeric  codes  0-3 (none, basic,
+                         advanced, experimental)
   --temp-variables-elimination LEVEL
                          optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
                          instructions
@@ -313,23 +314,23 @@ debug output options:
 ## Decompile Mlog action help
 
 ```
-usage: mindcode dm [-h] input [output]
+usage: mindcode dm [-h] [-o [OUTPUT]] input
 
 Partially decompile a text mlog file into Mindcode source file.
 
 positional arguments:
   input                  Mlog text file to be decompiled into Mindcode source file.
-  output                 Output file to receive decompiled Mindcode; uses  input  file  name with .dmnd extension if not
-                         specified.
 
 named arguments:
   -h, --help             show this help message and exit
+  -o, --output [OUTPUT]  Output file to receive decompiled Mindcode; uses  input  file  name with .dmnd extension if not
+                         specified.
 ```
 
 ## Compile Schematic action help
 
 ```
-usage: mindcode cs [-h] [-c] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a TAG [TAG ...]]
+usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a TAG [TAG ...]]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
                 [--unsafe-case-optimization {true,false}] [-y {strict,mixed,relaxed}] [-i {1..100000}]
                 [-g {size,speed,auto}] [-e {1..1000}] [-r {none,comments,passive,active}]
@@ -337,15 +338,15 @@ usage: mindcode cs [-h] [-c] [-l [LOG]] [--file-references {path,uri,windows-uri
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--link-guards {true,false}] [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [-o LEVEL] [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL] [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s]
-                [input] [output]
+                [--optimization LEVEL] [-O {0..3}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL] [-p {0..2}] [-d {0..3}]
+                [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [input]
 
 Compile a schematic definition file into binary msch file.
 
@@ -355,7 +356,7 @@ named arguments:
 
 input/output files:
   input                  Schematic definition file to be compiled into a binary msch file.
-  output                 Output file to receive the resulting binary Mindustry schematic file (.msch).
+  -o, --output [OUTPUT]  Output file to receive the resulting binary Mindustry schematic file (.msch).
   -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
   --file-references {path,uri,windows-uri}
                          specifies the format in which a reference to a  location  in a source file is output on console
@@ -415,8 +416,9 @@ optimization levels:
   Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
   explicitly set. Available optimization levels are {none,basic,advanced}.
 
-  -o, --optimization LEVEL
-                         sets global optimization level for all optimizers
+  --optimization LEVEL   sets global optimization level for all optimizers
+  -O {0..3}              sets global optimization  level  for  all  optimizers  using  numeric  codes  0-3 (none, basic,
+                         advanced, experimental)
   --temp-variables-elimination LEVEL
                          optimization  level  of  eliminating  temporary  variables   created  to  extract  values  from
                          instructions
@@ -478,18 +480,18 @@ debug output options:
 ## Decompile Schematic action help
 
 ```
-usage: mindcode ds [-h] [-p] [-P] [-c] [-C] [-l] [-L] [-s {original,horizontal,vertical}]
-                [-d {rotatable,non-default,all}] input [output]
+usage: mindcode ds [-h] [-o [OUTPUT]] [-p] [-P] [-c] [-C] [-l] [-L] [-s {original,horizontal,vertical}]
+                [-d {rotatable,non-default,all}] input
 
 Decompile a binary msch file into schematic definition file.
 
 positional arguments:
   input                  Mindustry schematic file to be decompiled into Schematic Definition File.
-  output                 Output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
-                         specified.
 
 named arguments:
   -h, --help             show this help message and exit
+  -o, --output [OUTPUT]  Output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
+                         specified.
   -p, --relative-positions
                          use relative coordinates for block positions where possible
   -P, --absolute-positions

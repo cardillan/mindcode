@@ -198,7 +198,6 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("target-optimization",      node -> setBooleanOption(node, profile::setTargetOptimization, "specific", "compatible"));
         map.put("unsafe-case-optimization", node -> setBooleanOption(node, profile::setUnsafeCaseOptimization));
 
-
         for (Optimization optimization : Optimization.LIST) {
             map.put(optimization.getOptionName(), node ->  setEnumOption(node,
                     OptimizationLevel::byName, value -> profile.setOptimizationLevel(optimization,value),

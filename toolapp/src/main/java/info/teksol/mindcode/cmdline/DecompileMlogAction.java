@@ -24,7 +24,7 @@ public class DecompileMlogAction extends ActionHandler {
                 .help("Mlog text file to be decompiled into Mindcode source file.")
                 .type(inputFileType);
 
-        subparser.addArgument("output")
+        subparser.addArgument("-o", "--output")
                 .help("Output file to receive decompiled Mindcode; uses input file name with .dmnd extension if not specified.")
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());

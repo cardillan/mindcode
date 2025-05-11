@@ -49,28 +49,28 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
 
         @Test
         public void outputArgumentFile() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("input.sdf output.msch");
+            Namespace arguments = parseCommandLine("input.sdf -o output.msch");
             File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".msch");
             assertEquals(output, arguments.get("output"));
         }
 
         @Test
         public void logArgumentNone() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("input.sdf output.msch");
+            Namespace arguments = parseCommandLine("input.sdf -o output.msch");
             File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
             assertEquals(new File("-"), output);
         }
 
         @Test
         public void logArgumentDefault() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("input.sdf output.msch -l");
+            Namespace arguments = parseCommandLine("input.sdf -o output.msch -l");
             File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
             assertEquals(new File("input.log"), output);
         }
 
         @Test
         public void logArgumentFile() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("input.sdf output.msch -l log.log");
+            Namespace arguments = parseCommandLine("input.sdf -o output.msch -l log.log");
             File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
             assertEquals(new File("log.log"), output);
         }
