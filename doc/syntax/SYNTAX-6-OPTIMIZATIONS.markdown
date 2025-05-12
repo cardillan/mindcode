@@ -1102,7 +1102,7 @@ The following conditions must be met for a case expression to be processed by th
 
 ### Symbolic labels
 
-When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation is needed when the minimal value handled by the jump table is different from 0, to account for the offset. This additional operation increases both optimization cost and execution cost. To prevent the increase in the execution cost, the jump table is padded with additional jumps when the minimal value is between `1` and `3`.
+When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation is needed when the minimal value handled by the jump table is different from 0, to account for the offset. This additional operation increases both optimization cost and execution cost. To prevent the increase in the execution cost, the jump table is padded with additional entries to remove the offset, when the minimal value is between `1` and `3`.
 
 When `symbolic-labels` is set to `false`, the offset is computed at compile time, therefore no additional instruction is needed and no jump table padding occurs.
 
@@ -1133,18 +1133,17 @@ The optimization is applied with these differences:
 
 ### Discontinuous jump tables
 
-When there's a large continuous gap of unused values in the jump table ("unused values" being values targeting the `else` branch), the table can be split into two or more segments. Each additional segment adds 3 instructions (4 in case of symbolic labels): lower bound check, upper bound check, `@counter` manipulation, and offset computation for symbolic labels.
+When there's a large continuous gap of unused values in the jump table ("unused values" being values targeting the `else` branch), the table can be split into two or more segments. The `jump` instruction skipping to the next segment is always placed first, to keep the overall execution speed of the case expression minimal.    
 
-If, after splitting, some remaining jump table segment ends up containing too few matching values, it can be replaced back with a sequence of jump instructions, if those would be executed faster on average.     
+Jump table segments created by this optimization, which contain too few used values, can be replaced with a sequence of conditional `jump` instructions, if those would be executed faster than a regular jump table.     
 
 This optimization is particularly useful when using block types in case expressions, as, given large dispersion of block type ids, the jump tables tend to get quite large.
 
 Notes:
 
 * Only continuous segments leading to the `else` branch are considered. If the jump table happens to contain a large continuous segment leading to a branch other than `else`, it is not considered for discontinuous optimization.
-* Splitting a jump table leads to a smaller, slower code compared to the original jump table. Jump table splitting is only considered when it is still faster than the original, non-optimized `case` expression.
-* Since the split jump table consumes less instruction space, it might be more efficient than the continuous jump table in terms of efficiency (i.e. number of execution steps saved per additional instruction). However, the split jump table, while more efficient with respect to code size, is still slower than a continuous jump table, and if there are no other ways to utilize the instruction space, it doesn't make sense to prefer the smaller but slower solution. The optimization won't consider splitting the jump table unless the last considered solution consumed more than half of the available instruction space.
-* The execution speed of discontinuous jump tables is computed according to the same principle - as an average execution cost of all individual values present in a `when` clause.
+* Splitting a jump table leads to a smaller, but slightly slower code compared to a full jump table. Jump table splitting is only considered when its average  execution is still faster than the one of the original, non-optimized `case` expression.
+* Since the split jump table consumes less instruction space, it might be more efficient than the continuous jump table, when considered as the number of execution steps saved divided by the number of additional instructions. However, the split jump table, even when more efficient with respect to code size, is still slower than a continuous jump table. In situations where there are no other optimizations that could utilize the instruction space, preferring the smaller but slower solution doesn't bring any benefit. For this reason, the optimization won't consider splitting the jump table, unless the last considered solution consumed more than half of the available instruction space.
 
 ### Example
 
@@ -1198,8 +1197,8 @@ The above case expression is transformed to this:
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
         sensor *tmp4 *tmp2 @id
-        jump label_62 lessThan *tmp4 17
         jump label_25 greaterThan *tmp4 34
+        jump label_62 lessThan *tmp4 17
         op sub *tmp5 *tmp4 17
         op add @counter @counter *tmp5
         jump label_60 always 0 0
@@ -1221,8 +1220,8 @@ The above case expression is transformed to this:
         jump label_60 always 0 0
         jump label_60 always 0 0
     label_25:
-        jump label_62 lessThan *tmp4 203
         jump label_62 greaterThan *tmp4 234
+        jump label_62 lessThan *tmp4 203
         op sub *tmp6 *tmp4 203
         op add @counter @counter *tmp6
         jump label_60 always 0 0

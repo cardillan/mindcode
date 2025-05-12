@@ -1796,8 +1796,8 @@ Modifications by Convert case at line 419:9 (segments: 1) (+40 instructions):
    466 sensor *tmp204 :block @type
 -    * jump *label107 notEqual *tmp204 @impact-reactor
 +  467 sensor *tmp225 *tmp204 @id
-+  468 jump *label122 lessThan *tmp225 37
-+  469 jump *label122 greaterThan *tmp225 82
++  468 jump *label122 greaterThan *tmp225 82
++  469 jump *label122 lessThan *tmp225 37
 +  470 multijump *label123 *tmp225 37 (m:*label169)
 +  471 multilabel *label123 (m:*label169)
 +  472 jump *label112 always
@@ -2968,8 +2968,8 @@ label *label121
 getlink :block :n
 sensor *tmp204 :block @type
 sensor *tmp225 *tmp204 @id
-jump *label122 lessThan *tmp225 37
 jump *label122 greaterThan *tmp225 82
+jump *label122 lessThan *tmp225 37
 multijump *label123 *tmp225 37
 multilabel *label123
 jump *label112 always

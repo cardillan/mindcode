@@ -4,6 +4,16 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.4.1 - Unreleased
+
+### Fixed
+
+* Fixed wrong `unsafe-case-switching` optimization for small jump tables ([#253](https://github.com/cardillan/mindcode/issues/253)).
+
+### Changed
+
+* When splitting jump tables into multiple segments, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster. 
+
 ## 3.4.0 - 2025-05-11
 
 ### Fixed

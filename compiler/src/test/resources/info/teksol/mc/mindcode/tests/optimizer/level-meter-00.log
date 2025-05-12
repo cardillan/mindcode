@@ -614,8 +614,8 @@ Modifications by Convert case at line 34:9 (segments: 1) (+74 instructions):
     28 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
 +   29 sensor *tmp52 *tmp5 @id
-+   30 jump *label40 lessThan *tmp52 64
-+   31 jump *label40 greaterThan *tmp52 146
++   30 jump *label40 greaterThan *tmp52 146
++   31 jump *label40 lessThan *tmp52 64
 +   32 multijump *label41 *tmp52 64 (m:*label124)
 +   33 multilabel *label41 (m:*label124)
 +   34 jump *label20 always
@@ -1117,8 +1117,8 @@ print "\nFound: "
 print :block
 sensor *tmp5 :block @type
 sensor *tmp52 *tmp5 @id
-jump *label40 lessThan *tmp52 64
 jump *label40 greaterThan *tmp52 146
+jump *label40 lessThan *tmp52 64
 multijump *label41 *tmp52 64
 multilabel *label41
 jump *label20 always

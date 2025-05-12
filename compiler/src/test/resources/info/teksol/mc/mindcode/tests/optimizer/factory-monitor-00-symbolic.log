@@ -1851,8 +1851,8 @@ Modifications by Convert case at line 20:9 (segments: 1) (+139 instructions):
     26 sensor *tmp8 :block @type
 -    * jump *label7 notEqual *tmp8 @message
 +   27 sensor *tmp178 *tmp8 @id
-+   28 jump *label87 strictEqual *tmp178 null
-+   29 jump *label87 greaterThan *tmp178 145
++   28 jump *label87 greaterThan *tmp178 145
++   29 jump *label87 strictEqual *tmp178 null
 +   30 multijump *label88 *tmp178 0 (m:*label234)
 +   31 multilabel *label88 (m:*label234)
 +   32 jump *label87 always
@@ -2709,8 +2709,8 @@ op sub :n :n 1
 getlink :block :n
 sensor *tmp8 :block @type
 sensor *tmp178 *tmp8 @id
-jump *label87 strictEqual *tmp178 null
 jump *label87 greaterThan *tmp178 145
+jump *label87 strictEqual *tmp178 null
 multijump *label88 *tmp178 0
 multilabel *label88
 jump *label87 always

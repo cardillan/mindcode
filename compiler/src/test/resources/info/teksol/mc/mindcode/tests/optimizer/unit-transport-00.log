@@ -3370,8 +3370,8 @@ Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
    425 set .LAST_ITEM .ITEM
 -    * jump *label88 notEqual .ITEM @blast-compound
 +  426 sensor *tmp376 .ITEM @id
-+  427 jump *label228 strictEqual *tmp376 null
-+  428 jump *label228 greaterThan *tmp376 15
++  427 jump *label228 greaterThan *tmp376 15
++  428 jump *label228 strictEqual *tmp376 null
 +  429 multijump *label229 *tmp376 0 (m:*label245)
 +  430 multilabel *label229 (m:*label245)
 +  431 jump *label93 always
@@ -5086,8 +5086,8 @@ jump *label222 equal .ITEM null
 label *label85
 set .LAST_ITEM .ITEM
 sensor *tmp376 .ITEM @id
-jump *label228 strictEqual *tmp376 null
 jump *label228 greaterThan *tmp376 15
+jump *label228 strictEqual *tmp376 null
 multijump *label229 *tmp376 0
 multilabel *label229
 jump *label93 always

@@ -197,7 +197,6 @@ class CaseSwitcher extends BaseOptimizer {
         private final ContentType contentType;
         private final boolean removeRangeCheck;
         private final boolean symbolic = getProfile().isSymbolicLabels();
-        private final int minJumpTableEntries = 2 * (symbolic ? 4 : 3) - 1;
 
         public ConvertCaseExpressionAction(AstContext astContext, int removed, LogicVariable variable,
                 TreeMap<Integer, LogicLabel> targets, List<Gap> gaps, int min, ContentType contentType, boolean removeRangeCheck) {
@@ -285,34 +284,47 @@ class CaseSwitcher extends BaseOptimizer {
             benefit = (savedSteps - executionSteps) * astContext.totalWeight();
         }
 
+        private int maxSelectEntries(int min) {
+            return symbolic && min != 0 ? 4 : 3;
+        }
+
         private void computeSegmentCostAndBenefit(int min, int max) {
-            boolean lastSegment = max >= targets.lastKey();
+            // Number of instructions without the jump table:
+            //     range check (2)
+            //     multijump (one or two depending on symbolic)
+            int instructions = 2 + (symbolic && min != 0 ? 2 : 1);
+
+            // Number of steps taken through the jump table: additional jump in the jump table
+            int jumpTableSteps = instructions + 1;
+
             int allTargets = targets.size();
             int activeTargets = (int) targets.keySet().stream().filter(i -> i >= min && i <= max).count();
             int remainingTargets = (int) targets.keySet().stream().filter(i -> i >= min).count();
 
-            if (activeTargets <= minJumpTableEntries) {
-                int jumps = activeTargets + (lastSegment ? 1 : 0);
+            if (activeTargets <= maxSelectEntries(min)) {
+                int jumps = activeTargets + 1;
                 int segmentSteps = activeTargets * (activeTargets + 1) / 2;
-                int remainingSteps = (remainingTargets - activeTargets) * activeTargets;
-                double additionalSteps = (double)(segmentSteps + remainingSteps) * remainingTargets / allTargets;
+                int remainingSteps = (remainingTargets - activeTargets);
+                double additionalSteps = (double)(segmentSteps + remainingSteps) / allTargets;
 
-                debug("Segment " + min + " to " + max + " execution steps: " + additionalSteps);
-                cost += jumps;
+                debug("Segment " + min + " to " + max + ": selector, execution steps: " + additionalSteps + ", total segment steps: " + segmentSteps);
+                cost += jumps + 1;
                 executionSteps += additionalSteps;
                 return;
             }
 
-            // range check (2)
-            // multijump (one or two depending on symbolic)
-            int instructions = 2 + (symbolic && min != 0 ? 2 : 1);
+
+            int segmentSteps = jumpTableSteps * activeTargets;      // Jump table execution steps
+            int remainingSteps = remainingTargets - activeTargets;  // One instruction - initial jump
+
+            double additionalSteps = (double)(segmentSteps + remainingSteps) / allTargets;
+
+            debug("Segment " + min + " to " + max + ": jump table, execution steps: " + additionalSteps + ", total segment steps: " + segmentSteps);
 
             // jump table (one per slot)
             int jumpTable = (max - min + 1);
-
-            debug("Segment " + min + " to " + max + " execution steps: " + (instructions + 1));
             cost += instructions + jumpTable;
-            executionSteps += (double)(instructions + 1) * remainingTargets / allTargets;
+            executionSteps += additionalSteps;
         }
 
         private @Nullable AstContext newAstContext;
@@ -363,23 +375,23 @@ class CaseSwitcher extends BaseOptimizer {
         // Values less than min are sent to final label
         // Values greater than max are sent to the next segment
         private void generateJumpTable(int min, int max, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
-            assert newAstContext != null;
-            assert caseVariable != null;
-
             int activeTargets = (int) targets.keySet().stream().filter(i -> i >= min && i <= max).count();
-            if (activeTargets <= minJumpTableEntries) {
-                generateSelectTable(min, max, finalLabel, nextSegmentLabel == finalLabel);
+            if (!removeRangeCheck && (activeTargets <= maxSelectEntries(min))) {
+                generateSelectTable(min, max, nextSegmentLabel, finalLabel);
                 return;
             }
 
+            assert newAstContext != null;
+            assert caseVariable != null;
+
             // Range check
             if (!removeRangeCheck) {
+                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN, caseVariable, LogicNumber.create(max)));
                 if (contentType != ContentType.UNKNOWN && min == 0) {
                     insertInstruction(createJump(newAstContext, finalLabel, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
                 } else {
                     insertInstruction(createJump(newAstContext, finalLabel, Condition.LESS_THAN, caseVariable, LogicNumber.create(min)));
                 }
-                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN, caseVariable, LogicNumber.create(max)));
             }
 
             List<LogicLabel> labels = IntStream.rangeClosed(min, max).mapToObj(i -> instructionProcessor.nextLabel()).toList();
@@ -392,16 +404,20 @@ class CaseSwitcher extends BaseOptimizer {
             }
         }
 
-        private void generateSelectTable(int min, int max, LogicLabel finalLabel, boolean lastSegment) {
+        private void generateSelectTable(int min, int max, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
             assert newAstContext != null;
             assert caseVariable != null;
+
+            if (nextSegmentLabel != finalLabel) {
+                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN, caseVariable, LogicNumber.create(max)));
+            }
 
             targets.entrySet().stream().filter(e -> e.getKey() >= min && e.getKey() <= max)
                     .forEach(e -> insertInstruction(createJump(newAstContext, e.getValue(),
                                     Condition.EQUAL, caseVariable, LogicNumber.create(e.getKey())))
                     );
 
-            if (lastSegment) {
+            if (nextSegmentLabel == finalLabel) {
                 insertInstruction(createJumpUnconditional(newAstContext, finalLabel));
             }
         }

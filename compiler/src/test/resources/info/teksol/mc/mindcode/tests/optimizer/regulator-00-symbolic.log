@@ -924,8 +924,8 @@ Modifications by Convert case at line 25:9 (segments: 1) (+86 instructions):
     21 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
 +   22 sensor *tmp56 *tmp5 @id
-+   23 jump *label54 lessThan *tmp56 48
-+   24 jump *label54 greaterThan *tmp56 146
++   23 jump *label54 greaterThan *tmp56 146
++   24 jump *label54 lessThan *tmp56 48
 +   25 multijump *label55 *tmp56 48 (m:*label154)
 +   26 multilabel *label55 (m:*label154)
 +   27 jump *label12 always
@@ -1473,7 +1473,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 +   18 format :block
     19 sensor *tmp5 :block @type
     20 sensor *tmp56 *tmp5 @id
-    21 jump *label54 lessThan *tmp56 48
+    21 jump *label54 greaterThan *tmp56 146
  
    255 label *label6
    256 jump *label52 greaterThan :n 0
@@ -1603,8 +1603,8 @@ print "Found: {0}\n"
 format :block
 sensor *tmp5 :block @type
 sensor *tmp56 *tmp5 @id
-jump *label54 lessThan *tmp56 48
 jump *label54 greaterThan *tmp56 146
+jump *label54 lessThan *tmp56 48
 multijump *label55 *tmp56 48
 multilabel *label55
 jump *label12 always
