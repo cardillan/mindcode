@@ -31,6 +31,7 @@ public enum Opcode {
     OP              ("op",              "Operation", "Perform an operation on 1-2 variables."),
     LOOKUP          ("lookup",          "Lookup", "Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount."),
     PACKCOLOR       ("packcolor",       "PackColor", "Pack [0, 1] RGBA components into a single number for drawing or rule-setting."),
+    UNPACKCOLOR     ("unpackcolor",     "UnpackColor", "Unpack RGBA components from a color that was packed using Pack Color."),
 
     // FLOW CONTROL
     WAIT            ("wait",            "Wait", "Wait a certain number of seconds."),

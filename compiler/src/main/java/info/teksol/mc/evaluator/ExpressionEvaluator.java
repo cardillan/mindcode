@@ -35,6 +35,14 @@ public class ExpressionEvaluator {
         );
     }
 
+    public static void evaluateUnpackColor(LogicReadable color, LogicWritable r, LogicWritable g, LogicWritable b, LogicWritable a) {
+        Color unpacked = Color.fromDouble(color.getDoubleValue());
+        r.setDoubleValue(unpacked.r());
+        g.setDoubleValue(unpacked.g());
+        b.setDoubleValue(unpacked.b());
+        a.setDoubleValue(unpacked.a());
+    }
+
     public static boolean invalid(double d) {
         return Double.isNaN(d) || Double.isInfinite(d);
     }
@@ -114,6 +122,7 @@ public class ExpressionEvaluator {
         map.put(Operation.ANGLEDIFF,        (r, a, b) -> r.setDoubleValue(angleDiff(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.LEN,              (r, a, b) -> r.setDoubleValue(len(a.getDoubleValue(), b.getDoubleValue())));
         map.put(Operation.ABS,              (r, a, b) -> r.setDoubleValue(Math.abs(a.getDoubleValue())));
+        map.put(Operation.SIGN,             (r, a, b) -> r.setDoubleValue(Math.signum(a.getDoubleValue())));
         map.put(Operation.LOG,              (r, a, b) -> r.setDoubleValue(Math.log(a.getDoubleValue())));
         map.put(Operation.LOG10,            (r, a, b) -> r.setDoubleValue(Math.log10(a.getDoubleValue())));
         map.put(Operation.FLOOR,            (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue())));
@@ -141,6 +150,7 @@ public class ExpressionEvaluator {
         map.put(Operation.ANGLEDIFF,    2);
         map.put(Operation.LEN,          2);
         map.put(Operation.ABS,          1);
+        map.put(Operation.SIGN,         1);
         map.put(Operation.LOG,          1);
         map.put(Operation.LOG10,        1);
         map.put(Operation.FLOOR,        1);

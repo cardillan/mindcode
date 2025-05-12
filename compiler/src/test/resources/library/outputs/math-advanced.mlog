@@ -7,22 +7,22 @@ assertequals 3 3 "round(2.5)"
 assertequals -3 -3 "round(-3.5)"
 assertequals 0.5 0.5 "frac(3.5)"
 assertequals -0.5 -0.5 "frac(-1.5)"
-set :sign:x 0
-set :sign*retaddr 12
+set :signInexact:x 0
+set :signInexact*retaddr 12
 jump 951 always 0 0
-assertequals 0 :sign*retval "sign(0)"
-set :sign:x 0.0000001
-set :sign*retaddr 16
+assertequals 0 :signInexact*retval "signInexact(0)"
+set :signInexact:x 0.0000001
+set :signInexact*retaddr 16
 jump 951 always 0 0
-assertequals 0 :sign*retval "sign(1e-7)"
-set :sign:x 0.00001
-set :sign*retaddr 20
+assertequals 0 :signInexact*retval "signInexact(1e-7)"
+set :signInexact:x 0.00001
+set :signInexact*retaddr 20
 jump 951 always 0 0
-assertequals 1 :sign*retval "sign(1e-5)"
-set :sign:x -5
-set :sign*retaddr 24
+assertequals 1 :signInexact*retval "signInexact(1e-5)"
+set :signInexact:x -5
+set :signInexact*retaddr 24
 jump 951 always 0 0
-assertequals -1 :sign*retval "sign(-5)"
+assertequals -1 :signInexact*retval "signInexact(-5)"
 assertequals 0 0 "signExact(0)"
 assertequals 1 1 "signExact(1e-7)"
 assertequals -1 -1 "signExact(-1e-7)"
@@ -949,12 +949,12 @@ op div *tmp381 :_median.11:best :_median.11:count
 assertequals 5 *tmp381 "median(1,1,1,1,9,9,9,9,5)"
 stop
 end
-set :sign*retval 0
-jump 956 equal :sign:x 0
-set :sign*retval 1
-jump 956 greaterThanEq :sign:x 0
-set :sign*retval -1
-set @counter :sign*retaddr
+set :signInexact*retval 0
+jump 956 equal :signInexact:x 0
+set :signInexact*retval 1
+jump 956 greaterThanEq :signInexact:x 0
+set :signInexact*retval -1
+set @counter :signInexact*retaddr
 op max :median:y2 :median:x1 :median:x2
 op min :median:y3 :median:x3 :median:x4
 jump 963 greaterThan :median:y2 :median:y3

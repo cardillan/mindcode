@@ -63,6 +63,9 @@ assertEquals(4,             max(2, d(4)),               "max");
 assertEquals(2,             min(2, d(4)),               "min");
 
 assertEquals(2,             abs(d(-2)),                 "abs");
+assertEquals(-1,            sign(d(-2)),                "sign(-2)");
+assertEquals(1,             sign(d(2)),                 "sign(2)");
+assertEquals(0,             sign(d(0)),                 "sign(0)");
 assertEquals(1,             log(d(2.718281828459045)),  "log");
 assertEquals(1,             log10(d(10)),               "log10");
 

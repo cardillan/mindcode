@@ -5,7 +5,7 @@ import org.jspecify.annotations.NullMarked;
 import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 
 @NullMarked
-public class Color {
+public record Color(float r, float g, float b, float a) {
 
     public static double parseColor(String symbol) {
         return parseColor(symbol, symbol.startsWith("%") ? 1 : 0);
@@ -45,6 +45,18 @@ public class Color {
         return intA == 255
                 ? String.format("%%%02x%02x%02x", intR, intG, intB)
                 : String.format("%%%02x%02x%02x%02x", intR, intG, intB, intA);
+    }
+
+    public static Color fromDouble(double value) {
+        return rgba8888((int)Double.doubleToRawLongBits(value));
+    }
+
+    private static Color rgba8888(int value) {
+        float r = (float)((value & -16777216) >>> 24) / 255.0F;
+        float g = (float)((value & 16711680) >>> 16) / 255.0F;
+        float b = (float)((value & '\uff00') >>> 8) / 255.0F;
+        float a = (float)(value & 255) / 255.0F;
+        return new Color(r, g, b, a);
     }
 
     public static String unpack(double packed) {

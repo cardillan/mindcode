@@ -61,30 +61,30 @@ Final code before resolving virtual instructions:
    49:  set *tmp25 *tmp26
         label *label11
    50:  assertequals -0.5 *tmp25 "frac(-1.5)"
-   51:  set :sign:x 0
-   52:  setaddr :sign*retaddr *label12
-   53:  call *label0 *invalid :sign*retval
+   51:  set :signInexact:x 0
+   52:  setaddr :signInexact*retaddr *label12
+   53:  call *label0 *invalid :signInexact*retval
         label *label12
-   54:  set *tmp27 :sign*retval
-   55:  assertequals 0 *tmp27 "sign(0)"
-   56:  set :sign:x 0.0000001
-   57:  setaddr :sign*retaddr *label13
-   58:  call *label0 *invalid :sign*retval
+   54:  set *tmp27 :signInexact*retval
+   55:  assertequals 0 *tmp27 "signInexact(0)"
+   56:  set :signInexact:x 0.0000001
+   57:  setaddr :signInexact*retaddr *label13
+   58:  call *label0 *invalid :signInexact*retval
         label *label13
-   59:  set *tmp28 :sign*retval
-   60:  assertequals 0 *tmp28 "sign(1e-7)"
-   61:  set :sign:x 0.00001
-   62:  setaddr :sign*retaddr *label14
-   63:  call *label0 *invalid :sign*retval
+   59:  set *tmp28 :signInexact*retval
+   60:  assertequals 0 *tmp28 "signInexact(1e-7)"
+   61:  set :signInexact:x 0.00001
+   62:  setaddr :signInexact*retaddr *label14
+   63:  call *label0 *invalid :signInexact*retval
         label *label14
-   64:  set *tmp29 :sign*retval
-   65:  assertequals 1 *tmp29 "sign(1e-5)"
-   66:  set :sign:x -5
-   67:  setaddr :sign*retaddr *label15
-   68:  call *label0 *invalid :sign*retval
+   64:  set *tmp29 :signInexact*retval
+   65:  assertequals 1 *tmp29 "signInexact(1e-5)"
+   66:  set :signInexact:x -5
+   67:  setaddr :signInexact*retaddr *label15
+   68:  call *label0 *invalid :signInexact*retval
         label *label15
-   69:  set *tmp30 :sign*retval
-   70:  assertequals -1 *tmp30 "sign(-5)"
+   69:  set *tmp30 :signInexact*retval
+   70:  assertequals -1 *tmp30 "signInexact(-5)"
    71:  set :signExact:x 0
    72:  op greaterThan *tmp32 :signExact:x 0
    73:  op lessThan *tmp33 :signExact:x 0
@@ -2074,12 +2074,12 @@ Final code before resolving virtual instructions:
  1576:  stop
  1577:  end
         label *label0
- 1578:  op equal *tmp402 :sign:x 0
+ 1578:  op equal *tmp402 :signInexact:x 0
  1579:  jump *label498 equal *tmp402 false
  1580:  set *tmp403 0
  1581:  jump *label499 always 0 0
         label *label498
- 1582:  op lessThan *tmp404 :sign:x 0
+ 1582:  op lessThan *tmp404 :signInexact:x 0
  1583:  jump *label500 equal *tmp404 false
  1584:  set *tmp405 -1
  1585:  jump *label501 always 0 0
@@ -2088,9 +2088,9 @@ Final code before resolving virtual instructions:
         label *label501
  1587:  set *tmp403 *tmp405
         label *label499
- 1588:  set :sign*retval *tmp403
+ 1588:  set :signInexact*retval *tmp403
         label *label497
- 1589:  return :sign*retaddr
+ 1589:  return :signInexact*retaddr
  1590:  end
         label *label1
  1591:  op max *tmp406 :median:x1 :median:x2
@@ -2828,12 +2828,12 @@ stop instruction encountered, dumping variable values:
 :round.3:x: 2.5
 :round.4:x: -3.5
 :round:x: 1.5
-:sign*retaddr: 69.0
-:sign*retval: -1.0
-:sign:x: -5.0
 :signExact.1:x: 1.0E-7
 :signExact.2:x: -1.0E-7
 :signExact:x: 0.0
+:signInexact*retaddr: 69.0
+:signInexact*retval: -1.0
+:signInexact:x: -5.0
 :sum.1:i: 4.0
 :sum.1:sum: 10.0
 :sum.1:x1: 1.0

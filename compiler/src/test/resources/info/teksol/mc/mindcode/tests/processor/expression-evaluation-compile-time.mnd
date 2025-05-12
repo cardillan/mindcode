@@ -56,6 +56,9 @@ assertEquals(4,             max(2, 4),              "max");
 assertEquals(2,             min(2, 4),              "min");
 
 assertEquals(2,             abs(-2),                "abs");
+assertEquals(-1,            sign(-2),               "sign(-2)");
+assertEquals(1,             sign(2),                "sign(2)");
+assertEquals(0,             sign(0),                "sign(0)");
 assertEquals(1,             log(2.718281828459045), "log");
 assertEquals(1,             log10(10),              "log10");
 

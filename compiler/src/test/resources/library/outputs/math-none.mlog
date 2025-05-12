@@ -49,26 +49,26 @@ set :frac.1:x -1.5
 op mod *tmp26 :frac.1:x 1
 set *tmp25 *tmp26
 assertequals -0.5 *tmp25 "frac(-1.5)"
-set :sign:x 0
-set :sign*retaddr 54
+set :signInexact:x 0
+set :signInexact*retaddr 54
 jump 1578 always 0 0
-set *tmp27 :sign*retval
-assertequals 0 *tmp27 "sign(0)"
-set :sign:x 0.0000001
-set :sign*retaddr 59
+set *tmp27 :signInexact*retval
+assertequals 0 *tmp27 "signInexact(0)"
+set :signInexact:x 0.0000001
+set :signInexact*retaddr 59
 jump 1578 always 0 0
-set *tmp28 :sign*retval
-assertequals 0 *tmp28 "sign(1e-7)"
-set :sign:x 0.00001
-set :sign*retaddr 64
+set *tmp28 :signInexact*retval
+assertequals 0 *tmp28 "signInexact(1e-7)"
+set :signInexact:x 0.00001
+set :signInexact*retaddr 64
 jump 1578 always 0 0
-set *tmp29 :sign*retval
-assertequals 1 *tmp29 "sign(1e-5)"
-set :sign:x -5
-set :sign*retaddr 69
+set *tmp29 :signInexact*retval
+assertequals 1 *tmp29 "signInexact(1e-5)"
+set :signInexact:x -5
+set :signInexact*retaddr 69
 jump 1578 always 0 0
-set *tmp30 :sign*retval
-assertequals -1 *tmp30 "sign(-5)"
+set *tmp30 :signInexact*retval
+assertequals -1 *tmp30 "signInexact(-5)"
 set :signExact:x 0
 op greaterThan *tmp32 :signExact:x 0
 op lessThan *tmp33 :signExact:x 0
@@ -1576,18 +1576,18 @@ set *tmp380 *tmp381
 assertequals 5 *tmp380 "median(1,1,1,1,9,9,9,9,5)"
 stop
 end
-op equal *tmp402 :sign:x 0
+op equal *tmp402 :signInexact:x 0
 jump 1582 equal *tmp402 false
 set *tmp403 0
 jump 1588 always 0 0
-op lessThan *tmp404 :sign:x 0
+op lessThan *tmp404 :signInexact:x 0
 jump 1586 equal *tmp404 false
 set *tmp405 -1
 jump 1587 always 0 0
 set *tmp405 1
 set *tmp403 *tmp405
-set :sign*retval *tmp403
-set @counter :sign*retaddr
+set :signInexact*retval *tmp403
+set @counter :signInexact*retaddr
 end
 op max *tmp406 :median:x1 :median:x2
 set :median:y2 *tmp406

@@ -1,22 +1,22 @@
-   374 instructions before optimizations.
-    62 instructions eliminated by Temp Variables Elimination.
+   389 instructions before optimizations.
+    65 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-   181 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+   187 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
     11 instructions added by Function Inlining (4 iterations).
      6 function calls inlined by Function Inlining.
-   141 instructions after optimizations.
+   147 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 826):
+Pass 1: speed optimization selection (cost limit 820):
   * Inline function 'assertEqualsRound' defined at line 3:1      cost    19, benefit       27.0, efficiency      1.421 (-31 instructions)
-    Inline function call at line 78:1                            cost     4, benefit        4.5, efficiency      1.125
-    Inline function call at line 79:1                            cost     4, benefit        4.5, efficiency      1.125
-    Inline function call at line 80:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 81:1                            cost     4, benefit        4.5, efficiency      1.125
     Inline function call at line 82:1                            cost     4, benefit        4.5, efficiency      1.125
     Inline function call at line 83:1                            cost     4, benefit        4.5, efficiency      1.125
-    Inline function call at line 84:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 85:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 86:1                            cost     4, benefit        4.5, efficiency      1.125
+    Inline function call at line 87:1                            cost     4, benefit        4.5, efficiency      1.125
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-62 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-65 instructions):
  
      1 set zero 0
      2 # "Function: inline def d(in n)"
@@ -304,240 +304,264 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-62 ins
    217 op abs *tmp108 *tmp106
    218 assertequals 2 *tmp108 "abs"
    219 # "Function: inline def d(in n)"
-   220 set :d.35:n 2.718281828459045
+   220 set :d.35:n -2
 -    * op add *tmp110 zero :d.35:n
 -    * set *tmp109 *tmp110
 +  221 op add *tmp109 zero :d.35:n
    222 label *label39
-   223 op log *tmp111 *tmp109
-   224 assertequals 1 *tmp111 "log"
+   223 op sign *tmp111 *tmp109
+   224 assertequals -1 *tmp111 "sign(-2)"
    225 # "Function: inline def d(in n)"
-   226 set :d.36:n 10
+   226 set :d.36:n 2
 -    * op add *tmp113 zero :d.36:n
 -    * set *tmp112 *tmp113
 +  227 op add *tmp112 zero :d.36:n
    228 label *label40
-   229 op log10 *tmp114 *tmp112
-   230 assertequals 1 *tmp114 "log10"
+   229 op sign *tmp114 *tmp112
+   230 assertequals 1 *tmp114 "sign(2)"
    231 # "Function: inline def d(in n)"
-   232 set :d.37:n 2.5
+   232 set :d.37:n 0
 -    * op add *tmp116 zero :d.37:n
 -    * set *tmp115 *tmp116
 +  233 op add *tmp115 zero :d.37:n
    234 label *label41
-   235 op floor *tmp117 *tmp115
-   236 assertequals 2 *tmp117 "floor"
+   235 op sign *tmp117 *tmp115
+   236 assertequals 0 *tmp117 "sign(0)"
    237 # "Function: inline def d(in n)"
-   238 set :d.38:n 2.5
+   238 set :d.38:n 2.718281828459045
 -    * op add *tmp119 zero :d.38:n
 -    * set *tmp118 *tmp119
 +  239 op add *tmp118 zero :d.38:n
    240 label *label42
-   241 op ceil *tmp120 *tmp118
-   242 assertequals 3 *tmp120 "ceil"
+   241 op log *tmp120 *tmp118
+   242 assertequals 1 *tmp120 "log"
    243 # "Function: inline def d(in n)"
-   244 set :d.39:n 16
+   244 set :d.39:n 10
 -    * op add *tmp122 zero :d.39:n
 -    * set *tmp121 *tmp122
 +  245 op add *tmp121 zero :d.39:n
    246 label *label43
-   247 op sqrt *tmp123 *tmp121
-   248 assertequals 4 *tmp123 "sqrt"
+   247 op log10 *tmp123 *tmp121
+   248 assertequals 1 *tmp123 "log10"
    249 # "Function: inline def d(in n)"
-   250 set :d.40:n 1
+   250 set :d.40:n 2.5
 -    * op add *tmp125 zero :d.40:n
 -    * set *tmp124 *tmp125
 +  251 op add *tmp124 zero :d.40:n
    252 label *label44
-   253 op angle *tmp126 1 *tmp124
-   254 assertequals 45 *tmp126 "angle"
+   253 op floor *tmp126 *tmp124
+   254 assertequals 2 *tmp126 "floor"
    255 # "Function: inline def d(in n)"
-   256 set :d.41:n 135
+   256 set :d.41:n 2.5
 -    * op add *tmp128 zero :d.41:n
 -    * set *tmp127 *tmp128
 +  257 op add *tmp127 zero :d.41:n
    258 label *label45
-   259 op angleDiff *tmp129 45 *tmp127
-   260 assertequals 90 *tmp129 "angleDiff"
- 
-   285 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-   286 # "Function: inline def d(in n)"
-   287 set :d.42:n 8
+   259 op ceil *tmp129 *tmp127
+   260 assertequals 3 *tmp129 "ceil"
+   261 # "Function: inline def d(in n)"
+   262 set :d.42:n 16
 -    * op add *tmp131 zero :d.42:n
 -    * set *tmp130 *tmp131
-+  288 op add *tmp130 zero :d.42:n
-   289 label *label46
-   290 op sub *tmp132 0 *tmp130
-   291 assertequals -8 *tmp132 "unary minus"
-   292 # "Function: inline def d(in n)"
-   293 set :d.43:n 0
++  263 op add *tmp130 zero :d.42:n
+   264 label *label46
+   265 op sqrt *tmp132 *tmp130
+   266 assertequals 4 *tmp132 "sqrt"
+   267 # "Function: inline def d(in n)"
+   268 set :d.43:n 1
 -    * op add *tmp134 zero :d.43:n
 -    * set *tmp133 *tmp134
-+  294 op add *tmp133 zero :d.43:n
-   295 label *label47
-   296 op equal *tmp135 *tmp133 false
-   297 assertequals 1 *tmp135 "boolean negation 1"
-   298 # "Function: inline def d(in n)"
-   299 set :d.44:n 1
++  269 op add *tmp133 zero :d.43:n
+   270 label *label47
+   271 op angle *tmp135 1 *tmp133
+   272 assertequals 45 *tmp135 "angle"
+   273 # "Function: inline def d(in n)"
+   274 set :d.44:n 135
 -    * op add *tmp137 zero :d.44:n
 -    * set *tmp136 *tmp137
-+  300 op add *tmp136 zero :d.44:n
-   301 label *label48
-   302 op equal *tmp138 *tmp136 false
-   303 assertequals 0 *tmp138 "boolean negation 2"
++  275 op add *tmp136 zero :d.44:n
+   276 label *label48
+   277 op angleDiff *tmp138 45 *tmp136
+   278 assertequals 90 *tmp138 "angleDiff"
+ 
+   303 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
    304 # "Function: inline def d(in n)"
-   305 set :d.45:n 2
+   305 set :d.45:n 8
 -    * op add *tmp140 zero :d.45:n
 -    * set *tmp139 *tmp140
 +  306 op add *tmp139 zero :d.45:n
    307 label *label49
-   308 op equal *tmp141 *tmp139 false
-   309 assertequals 0 *tmp141 "boolean negation 3"
-   310 set :a 2
-   311 # "Function: inline def d(in n)"
-   312 set :d.46:n 4
+   308 op sub *tmp141 0 *tmp139
+   309 assertequals -8 *tmp141 "unary minus"
+   310 # "Function: inline def d(in n)"
+   311 set :d.46:n 0
 -    * op add *tmp143 zero :d.46:n
 -    * set *tmp142 *tmp143
-+  313 op add *tmp142 zero :d.46:n
-   314 label *label50
-   315 op pow :a :a *tmp142
-   316 assertequals 16 :a "**="
-   317 set :a 2
-   318 # "Function: inline def d(in n)"
-   319 set :d.47:n 4
--    * op add *tmp145 zero :d.47:n
--    * set *tmp144 *tmp145
-+  320 op add *tmp144 zero :d.47:n
-   321 label *label51
-   322 op mul :a :a *tmp144
-   323 assertequals 8 :a "*="
-   324 set :a 6
-   325 # "Function: inline def d(in n)"
-   326 set :d.48:n 4
--    * op add *tmp147 zero :d.48:n
--    * set *tmp146 *tmp147
-+  327 op add *tmp146 zero :d.48:n
-   328 label *label52
-   329 op div :a :a *tmp146
-   330 assertequals 1.5 :a "/="
-   331 set :a 6
-   332 # "Function: inline def d(in n)"
-   333 set :d.49:n 4
--    * op add *tmp149 zero :d.49:n
++  312 op add *tmp142 zero :d.46:n
+   313 label *label50
+   314 op equal *tmp144 *tmp142 false
+   315 assertequals 1 *tmp144 "boolean negation 1"
+   316 # "Function: inline def d(in n)"
+   317 set :d.47:n 1
+-    * op add *tmp146 zero :d.47:n
+-    * set *tmp145 *tmp146
++  318 op add *tmp145 zero :d.47:n
+   319 label *label51
+   320 op equal *tmp147 *tmp145 false
+   321 assertequals 0 *tmp147 "boolean negation 2"
+   322 # "Function: inline def d(in n)"
+   323 set :d.48:n 2
+-    * op add *tmp149 zero :d.48:n
 -    * set *tmp148 *tmp149
-+  334 op add *tmp148 zero :d.49:n
-   335 label *label53
-   336 op idiv :a :a *tmp148
-   337 assertequals 1 :a "\="
-   338 set :a 6
-   339 # "Function: inline def d(in n)"
-   340 set :d.50:n 4
--    * op add *tmp151 zero :d.50:n
--    * set *tmp150 *tmp151
-+  341 op add *tmp150 zero :d.50:n
-   342 label *label54
-   343 op mod :a :a *tmp150
-   344 assertequals 2 :a "%="
-   345 set :a 4
-   346 # "Function: inline def d(in n)"
-   347 set :d.51:n 2
--    * op add *tmp153 zero :d.51:n
--    * set *tmp152 *tmp153
-+  348 op add *tmp152 zero :d.51:n
-   349 label *label55
-   350 op add :a :a *tmp152
-   351 assertequals 6 :a "+="
-   352 set :a 4
-   353 # "Function: inline def d(in n)"
-   354 set :d.52:n 2
--    * op add *tmp155 zero :d.52:n
--    * set *tmp154 *tmp155
-+  355 op add *tmp154 zero :d.52:n
-   356 label *label56
-   357 op sub :a :a *tmp154
-   358 assertequals 2 :a "-="
-   359 set :a 1
-   360 # "Function: inline def d(in n)"
-   361 set :d.53:n 2
--    * op add *tmp157 zero :d.53:n
--    * set *tmp156 *tmp157
-+  362 op add *tmp156 zero :d.53:n
-   363 label *label57
-   364 op shl :a :a *tmp156
-   365 assertequals 4 :a "<<="
-   366 set :a 9
-   367 # "Function: inline def d(in n)"
-   368 set :d.54:n 2
--    * op add *tmp159 zero :d.54:n
--    * set *tmp158 *tmp159
-+  369 op add *tmp158 zero :d.54:n
-   370 label *label58
-   371 op shr :a :a *tmp158
-   372 assertequals 2 :a ">>="
-   373 set :a 1
-   374 # "Function: inline def d(in n)"
-   375 set :d.55:n 2
--    * op add *tmp161 zero :d.55:n
--    * set *tmp160 *tmp161
-+  376 op add *tmp160 zero :d.55:n
-   377 label *label59
-   378 op or :a :a *tmp160
-   379 assertequals 3 :a "|="
-   380 set :a 3
-   381 # "Function: inline def d(in n)"
-   382 set :d.56:n 2
--    * op add *tmp163 zero :d.56:n
--    * set *tmp162 *tmp163
-+  383 op add *tmp162 zero :d.56:n
-   384 label *label60
-   385 op and :a :a *tmp162
-   386 assertequals 2 :a "&="
-   387 set :a 3
-   388 # "Function: inline def d(in n)"
-   389 set :d.57:n 2
--    * op add *tmp165 zero :d.57:n
--    * set *tmp164 *tmp165
-+  390 op add *tmp164 zero :d.57:n
-   391 label *label61
-   392 op xor :a :a *tmp164
-   393 assertequals 1 :a "^="
-   394 set :a 1
-   395 # "Function: inline def d(in n)"
-   396 set :d.58:n 0
--    * op add *tmp167 zero :d.58:n
--    * set *tmp166 *tmp167
-+  397 op add *tmp166 zero :d.58:n
-   398 label *label62
-   399 op land :a :a *tmp166
-   400 assertequals false :a "&&="
-   401 set :a 1
-   402 # "Function: inline def d(in n)"
-   403 set :d.59:n 2
--    * op add *tmp169 zero :d.59:n
--    * set *tmp168 *tmp169
-+  404 op add *tmp168 zero :d.59:n
-   405 label *label63
-   406 op land :a :a *tmp168
-   407 assertequals true :a "&&="
-   408 set :a 0
-   409 # "Function: inline def d(in n)"
-   410 set :d.60:n 2
--    * op add *tmp171 zero :d.60:n
--    * set *tmp170 *tmp171
-+  411 op add *tmp170 zero :d.60:n
-   412 label *label64
-   413 op or *tmp172 :a *tmp170
-   414 op notEqual :a *tmp172 false
++  324 op add *tmp148 zero :d.48:n
+   325 label *label52
+   326 op equal *tmp150 *tmp148 false
+   327 assertequals 0 *tmp150 "boolean negation 3"
+   328 set :a 2
+   329 # "Function: inline def d(in n)"
+   330 set :d.49:n 4
+-    * op add *tmp152 zero :d.49:n
+-    * set *tmp151 *tmp152
++  331 op add *tmp151 zero :d.49:n
+   332 label *label53
+   333 op pow :a :a *tmp151
+   334 assertequals 16 :a "**="
+   335 set :a 2
+   336 # "Function: inline def d(in n)"
+   337 set :d.50:n 4
+-    * op add *tmp154 zero :d.50:n
+-    * set *tmp153 *tmp154
++  338 op add *tmp153 zero :d.50:n
+   339 label *label54
+   340 op mul :a :a *tmp153
+   341 assertequals 8 :a "*="
+   342 set :a 6
+   343 # "Function: inline def d(in n)"
+   344 set :d.51:n 4
+-    * op add *tmp156 zero :d.51:n
+-    * set *tmp155 *tmp156
++  345 op add *tmp155 zero :d.51:n
+   346 label *label55
+   347 op div :a :a *tmp155
+   348 assertequals 1.5 :a "/="
+   349 set :a 6
+   350 # "Function: inline def d(in n)"
+   351 set :d.52:n 4
+-    * op add *tmp158 zero :d.52:n
+-    * set *tmp157 *tmp158
++  352 op add *tmp157 zero :d.52:n
+   353 label *label56
+   354 op idiv :a :a *tmp157
+   355 assertequals 1 :a "\="
+   356 set :a 6
+   357 # "Function: inline def d(in n)"
+   358 set :d.53:n 4
+-    * op add *tmp160 zero :d.53:n
+-    * set *tmp159 *tmp160
++  359 op add *tmp159 zero :d.53:n
+   360 label *label57
+   361 op mod :a :a *tmp159
+   362 assertequals 2 :a "%="
+   363 set :a 4
+   364 # "Function: inline def d(in n)"
+   365 set :d.54:n 2
+-    * op add *tmp162 zero :d.54:n
+-    * set *tmp161 *tmp162
++  366 op add *tmp161 zero :d.54:n
+   367 label *label58
+   368 op add :a :a *tmp161
+   369 assertequals 6 :a "+="
+   370 set :a 4
+   371 # "Function: inline def d(in n)"
+   372 set :d.55:n 2
+-    * op add *tmp164 zero :d.55:n
+-    * set *tmp163 *tmp164
++  373 op add *tmp163 zero :d.55:n
+   374 label *label59
+   375 op sub :a :a *tmp163
+   376 assertequals 2 :a "-="
+   377 set :a 1
+   378 # "Function: inline def d(in n)"
+   379 set :d.56:n 2
+-    * op add *tmp166 zero :d.56:n
+-    * set *tmp165 *tmp166
++  380 op add *tmp165 zero :d.56:n
+   381 label *label60
+   382 op shl :a :a *tmp165
+   383 assertequals 4 :a "<<="
+   384 set :a 9
+   385 # "Function: inline def d(in n)"
+   386 set :d.57:n 2
+-    * op add *tmp168 zero :d.57:n
+-    * set *tmp167 *tmp168
++  387 op add *tmp167 zero :d.57:n
+   388 label *label61
+   389 op shr :a :a *tmp167
+   390 assertequals 2 :a ">>="
+   391 set :a 1
+   392 # "Function: inline def d(in n)"
+   393 set :d.58:n 2
+-    * op add *tmp170 zero :d.58:n
+-    * set *tmp169 *tmp170
++  394 op add *tmp169 zero :d.58:n
+   395 label *label62
+   396 op or :a :a *tmp169
+   397 assertequals 3 :a "|="
+   398 set :a 3
+   399 # "Function: inline def d(in n)"
+   400 set :d.59:n 2
+-    * op add *tmp172 zero :d.59:n
+-    * set *tmp171 *tmp172
++  401 op add *tmp171 zero :d.59:n
+   402 label *label63
+   403 op and :a :a *tmp171
+   404 assertequals 2 :a "&="
+   405 set :a 3
+   406 # "Function: inline def d(in n)"
+   407 set :d.60:n 2
+-    * op add *tmp174 zero :d.60:n
+-    * set *tmp173 *tmp174
++  408 op add *tmp173 zero :d.60:n
+   409 label *label64
+   410 op xor :a :a *tmp173
+   411 assertequals 1 :a "^="
+   412 set :a 1
+   413 # "Function: inline def d(in n)"
+   414 set :d.61:n 0
+-    * op add *tmp176 zero :d.61:n
+-    * set *tmp175 *tmp176
++  415 op add *tmp175 zero :d.61:n
+   416 label *label65
+   417 op land :a :a *tmp175
+   418 assertequals false :a "&&="
+   419 set :a 1
+   420 # "Function: inline def d(in n)"
+   421 set :d.62:n 2
+-    * op add *tmp178 zero :d.62:n
+-    * set *tmp177 *tmp178
++  422 op add *tmp177 zero :d.62:n
+   423 label *label66
+   424 op land :a :a *tmp177
+   425 assertequals true :a "&&="
+   426 set :a 0
+   427 # "Function: inline def d(in n)"
+   428 set :d.63:n 2
+-    * op add *tmp180 zero :d.63:n
+-    * set *tmp179 *tmp180
++  429 op add *tmp179 zero :d.63:n
+   430 label *label67
+   431 op or *tmp181 :a *tmp179
+   432 op notEqual :a *tmp181 false
  
-   423 # "Function: inline def round(in x)"
-   424 set :round:x *tmp173
-   425 op add *tmp175 :round:x 0.5
--    * op floor *tmp176 *tmp175
--    * set *tmp174 *tmp176
-+  426 op floor *tmp174 *tmp175
-   427 label *label66
-   428 op div *tmp177 *tmp174 100000000
-   429 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
+   441 # "Function: inline def round(in x)"
+   442 set :round:x *tmp182
+   443 op add *tmp184 :round:x 0.5
+-    * op floor *tmp185 *tmp184
+-    * set *tmp183 *tmp185
++  444 op floor *tmp183 *tmp184
+   445 label *label69
+   446 op div *tmp186 *tmp183 100000000
+   447 assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -797,232 +821,253 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    217 op abs *tmp108 *tmp106
    218 assertequals 2 *tmp108 "abs"
    219 # "Function: inline def d(in n)"
-   220 set :d.35:n 2.718281828459045
+   220 set :d.35:n -2
 -    * op add *tmp109 zero :d.35:n
-+  221 op add *tmp109 zero 2.718281828459045
++  221 op add *tmp109 zero -2
    222 label *label39
-   223 op log *tmp111 *tmp109
-   224 assertequals 1 *tmp111 "log"
+   223 op sign *tmp111 *tmp109
+   224 assertequals -1 *tmp111 "sign(-2)"
    225 # "Function: inline def d(in n)"
-   226 set :d.36:n 10
+   226 set :d.36:n 2
 -    * op add *tmp112 zero :d.36:n
-+  227 op add *tmp112 zero 10
++  227 op add *tmp112 zero 2
    228 label *label40
-   229 op log10 *tmp114 *tmp112
-   230 assertequals 1 *tmp114 "log10"
+   229 op sign *tmp114 *tmp112
+   230 assertequals 1 *tmp114 "sign(2)"
    231 # "Function: inline def d(in n)"
-   232 set :d.37:n 2.5
+   232 set :d.37:n 0
 -    * op add *tmp115 zero :d.37:n
-+  233 op add *tmp115 zero 2.5
++  233 op add *tmp115 zero 0
    234 label *label41
-   235 op floor *tmp117 *tmp115
-   236 assertequals 2 *tmp117 "floor"
+   235 op sign *tmp117 *tmp115
+   236 assertequals 0 *tmp117 "sign(0)"
    237 # "Function: inline def d(in n)"
-   238 set :d.38:n 2.5
+   238 set :d.38:n 2.718281828459045
 -    * op add *tmp118 zero :d.38:n
-+  239 op add *tmp118 zero 2.5
++  239 op add *tmp118 zero 2.718281828459045
    240 label *label42
-   241 op ceil *tmp120 *tmp118
-   242 assertequals 3 *tmp120 "ceil"
+   241 op log *tmp120 *tmp118
+   242 assertequals 1 *tmp120 "log"
    243 # "Function: inline def d(in n)"
-   244 set :d.39:n 16
+   244 set :d.39:n 10
 -    * op add *tmp121 zero :d.39:n
-+  245 op add *tmp121 zero 16
++  245 op add *tmp121 zero 10
    246 label *label43
-   247 op sqrt *tmp123 *tmp121
-   248 assertequals 4 *tmp123 "sqrt"
+   247 op log10 *tmp123 *tmp121
+   248 assertequals 1 *tmp123 "log10"
    249 # "Function: inline def d(in n)"
-   250 set :d.40:n 1
+   250 set :d.40:n 2.5
 -    * op add *tmp124 zero :d.40:n
-+  251 op add *tmp124 zero 1
++  251 op add *tmp124 zero 2.5
    252 label *label44
-   253 op angle *tmp126 1 *tmp124
-   254 assertequals 45 *tmp126 "angle"
+   253 op floor *tmp126 *tmp124
+   254 assertequals 2 *tmp126 "floor"
    255 # "Function: inline def d(in n)"
-   256 set :d.41:n 135
+   256 set :d.41:n 2.5
 -    * op add *tmp127 zero :d.41:n
-+  257 op add *tmp127 zero 135
++  257 op add *tmp127 zero 2.5
    258 label *label45
-   259 op angleDiff *tmp129 45 *tmp127
-   260 assertequals 90 *tmp129 "angleDiff"
- 
-   285 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-   286 # "Function: inline def d(in n)"
-   287 set :d.42:n 8
+   259 op ceil *tmp129 *tmp127
+   260 assertequals 3 *tmp129 "ceil"
+   261 # "Function: inline def d(in n)"
+   262 set :d.42:n 16
 -    * op add *tmp130 zero :d.42:n
-+  288 op add *tmp130 zero 8
-   289 label *label46
-   290 op sub *tmp132 0 *tmp130
-   291 assertequals -8 *tmp132 "unary minus"
-   292 # "Function: inline def d(in n)"
-   293 set :d.43:n 0
++  263 op add *tmp130 zero 16
+   264 label *label46
+   265 op sqrt *tmp132 *tmp130
+   266 assertequals 4 *tmp132 "sqrt"
+   267 # "Function: inline def d(in n)"
+   268 set :d.43:n 1
 -    * op add *tmp133 zero :d.43:n
-+  294 op add *tmp133 zero 0
-   295 label *label47
-   296 op equal *tmp135 *tmp133 false
-   297 assertequals 1 *tmp135 "boolean negation 1"
-   298 # "Function: inline def d(in n)"
-   299 set :d.44:n 1
++  269 op add *tmp133 zero 1
+   270 label *label47
+   271 op angle *tmp135 1 *tmp133
+   272 assertequals 45 *tmp135 "angle"
+   273 # "Function: inline def d(in n)"
+   274 set :d.44:n 135
 -    * op add *tmp136 zero :d.44:n
-+  300 op add *tmp136 zero 1
-   301 label *label48
-   302 op equal *tmp138 *tmp136 false
-   303 assertequals 0 *tmp138 "boolean negation 2"
-   304 # "Function: inline def d(in n)"
-   305 set :d.45:n 2
--    * op add *tmp139 zero :d.45:n
-+  306 op add *tmp139 zero 2
-   307 label *label49
-   308 op equal *tmp141 *tmp139 false
-   309 assertequals 0 *tmp141 "boolean negation 3"
-   310 set :a 2
-   311 # "Function: inline def d(in n)"
-   312 set :d.46:n 4
--    * op add *tmp142 zero :d.46:n
-+  313 op add *tmp142 zero 4
-   314 label *label50
--    * op pow :a :a *tmp142
-+  315 op pow :a 2 *tmp142
-   316 assertequals 16 :a "**="
-   317 set :a 2
-   318 # "Function: inline def d(in n)"
-   319 set :d.47:n 4
--    * op add *tmp144 zero :d.47:n
-+  320 op add *tmp144 zero 4
-   321 label *label51
--    * op mul :a :a *tmp144
-+  322 op mul :a 2 *tmp144
-   323 assertequals 8 :a "*="
-   324 set :a 6
-   325 # "Function: inline def d(in n)"
-   326 set :d.48:n 4
--    * op add *tmp146 zero :d.48:n
-+  327 op add *tmp146 zero 4
-   328 label *label52
--    * op div :a :a *tmp146
-+  329 op div :a 6 *tmp146
-   330 assertequals 1.5 :a "/="
-   331 set :a 6
-   332 # "Function: inline def d(in n)"
-   333 set :d.49:n 4
--    * op add *tmp148 zero :d.49:n
-+  334 op add *tmp148 zero 4
-   335 label *label53
--    * op idiv :a :a *tmp148
-+  336 op idiv :a 6 *tmp148
-   337 assertequals 1 :a "\="
-   338 set :a 6
-   339 # "Function: inline def d(in n)"
-   340 set :d.50:n 4
--    * op add *tmp150 zero :d.50:n
-+  341 op add *tmp150 zero 4
-   342 label *label54
--    * op mod :a :a *tmp150
-+  343 op mod :a 6 *tmp150
-   344 assertequals 2 :a "%="
-   345 set :a 4
-   346 # "Function: inline def d(in n)"
-   347 set :d.51:n 2
--    * op add *tmp152 zero :d.51:n
-+  348 op add *tmp152 zero 2
-   349 label *label55
--    * op add :a :a *tmp152
-+  350 op add :a 4 *tmp152
-   351 assertequals 6 :a "+="
-   352 set :a 4
-   353 # "Function: inline def d(in n)"
-   354 set :d.52:n 2
--    * op add *tmp154 zero :d.52:n
-+  355 op add *tmp154 zero 2
-   356 label *label56
--    * op sub :a :a *tmp154
-+  357 op sub :a 4 *tmp154
-   358 assertequals 2 :a "-="
-   359 set :a 1
-   360 # "Function: inline def d(in n)"
-   361 set :d.53:n 2
--    * op add *tmp156 zero :d.53:n
-+  362 op add *tmp156 zero 2
-   363 label *label57
--    * op shl :a :a *tmp156
-+  364 op shl :a 1 *tmp156
-   365 assertequals 4 :a "<<="
-   366 set :a 9
-   367 # "Function: inline def d(in n)"
-   368 set :d.54:n 2
--    * op add *tmp158 zero :d.54:n
-+  369 op add *tmp158 zero 2
-   370 label *label58
--    * op shr :a :a *tmp158
-+  371 op shr :a 9 *tmp158
-   372 assertequals 2 :a ">>="
-   373 set :a 1
-   374 # "Function: inline def d(in n)"
-   375 set :d.55:n 2
--    * op add *tmp160 zero :d.55:n
-+  376 op add *tmp160 zero 2
-   377 label *label59
--    * op or :a :a *tmp160
-+  378 op or :a 1 *tmp160
-   379 assertequals 3 :a "|="
-   380 set :a 3
-   381 # "Function: inline def d(in n)"
-   382 set :d.56:n 2
--    * op add *tmp162 zero :d.56:n
-+  383 op add *tmp162 zero 2
-   384 label *label60
--    * op and :a :a *tmp162
-+  385 op and :a 3 *tmp162
-   386 assertequals 2 :a "&="
-   387 set :a 3
-   388 # "Function: inline def d(in n)"
-   389 set :d.57:n 2
--    * op add *tmp164 zero :d.57:n
-+  390 op add *tmp164 zero 2
-   391 label *label61
--    * op xor :a :a *tmp164
-+  392 op xor :a 3 *tmp164
-   393 assertequals 1 :a "^="
-   394 set :a 1
-   395 # "Function: inline def d(in n)"
-   396 set :d.58:n 0
--    * op add *tmp166 zero :d.58:n
-+  397 op add *tmp166 zero 0
-   398 label *label62
--    * op land :a :a *tmp166
-+  399 op land :a 1 *tmp166
-   400 assertequals false :a "&&="
-   401 set :a 1
-   402 # "Function: inline def d(in n)"
-   403 set :d.59:n 2
--    * op add *tmp168 zero :d.59:n
-+  404 op add *tmp168 zero 2
-   405 label *label63
--    * op land :a :a *tmp168
-+  406 op land :a 1 *tmp168
-   407 assertequals true :a "&&="
-   408 set :a 0
-   409 # "Function: inline def d(in n)"
-   410 set :d.60:n 2
--    * op add *tmp170 zero :d.60:n
-+  411 op add *tmp170 zero 2
-   412 label *label64
--    * op or *tmp172 :a *tmp170
-+  413 op or *tmp172 0 *tmp170
-   414 op notEqual :a *tmp172 false
-   415 assertequals true :a "||="
-   416 assertequals %ff0000ff %ff0000 "short color literals"
++  275 op add *tmp136 zero 135
+   276 label *label48
+   277 op angleDiff *tmp138 45 *tmp136
+   278 assertequals 90 *tmp138 "angleDiff"
  
-   422 op mul *tmp173 :assertEqualsRound:actual 100000000
-   423 # "Function: inline def round(in x)"
-   424 set :round:x *tmp173
--    * op add *tmp175 :round:x 0.5
-+  425 op add *tmp175 *tmp173 0.5
-   426 op floor *tmp174 *tmp175
-   427 label *label66
-   428 op div *tmp177 *tmp174 100000000
+   303 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
+   304 # "Function: inline def d(in n)"
+   305 set :d.45:n 8
+-    * op add *tmp139 zero :d.45:n
++  306 op add *tmp139 zero 8
+   307 label *label49
+   308 op sub *tmp141 0 *tmp139
+   309 assertequals -8 *tmp141 "unary minus"
+   310 # "Function: inline def d(in n)"
+   311 set :d.46:n 0
+-    * op add *tmp142 zero :d.46:n
++  312 op add *tmp142 zero 0
+   313 label *label50
+   314 op equal *tmp144 *tmp142 false
+   315 assertequals 1 *tmp144 "boolean negation 1"
+   316 # "Function: inline def d(in n)"
+   317 set :d.47:n 1
+-    * op add *tmp145 zero :d.47:n
++  318 op add *tmp145 zero 1
+   319 label *label51
+   320 op equal *tmp147 *tmp145 false
+   321 assertequals 0 *tmp147 "boolean negation 2"
+   322 # "Function: inline def d(in n)"
+   323 set :d.48:n 2
+-    * op add *tmp148 zero :d.48:n
++  324 op add *tmp148 zero 2
+   325 label *label52
+   326 op equal *tmp150 *tmp148 false
+   327 assertequals 0 *tmp150 "boolean negation 3"
+   328 set :a 2
+   329 # "Function: inline def d(in n)"
+   330 set :d.49:n 4
+-    * op add *tmp151 zero :d.49:n
++  331 op add *tmp151 zero 4
+   332 label *label53
+-    * op pow :a :a *tmp151
++  333 op pow :a 2 *tmp151
+   334 assertequals 16 :a "**="
+   335 set :a 2
+   336 # "Function: inline def d(in n)"
+   337 set :d.50:n 4
+-    * op add *tmp153 zero :d.50:n
++  338 op add *tmp153 zero 4
+   339 label *label54
+-    * op mul :a :a *tmp153
++  340 op mul :a 2 *tmp153
+   341 assertequals 8 :a "*="
+   342 set :a 6
+   343 # "Function: inline def d(in n)"
+   344 set :d.51:n 4
+-    * op add *tmp155 zero :d.51:n
++  345 op add *tmp155 zero 4
+   346 label *label55
+-    * op div :a :a *tmp155
++  347 op div :a 6 *tmp155
+   348 assertequals 1.5 :a "/="
+   349 set :a 6
+   350 # "Function: inline def d(in n)"
+   351 set :d.52:n 4
+-    * op add *tmp157 zero :d.52:n
++  352 op add *tmp157 zero 4
+   353 label *label56
+-    * op idiv :a :a *tmp157
++  354 op idiv :a 6 *tmp157
+   355 assertequals 1 :a "\="
+   356 set :a 6
+   357 # "Function: inline def d(in n)"
+   358 set :d.53:n 4
+-    * op add *tmp159 zero :d.53:n
++  359 op add *tmp159 zero 4
+   360 label *label57
+-    * op mod :a :a *tmp159
++  361 op mod :a 6 *tmp159
+   362 assertequals 2 :a "%="
+   363 set :a 4
+   364 # "Function: inline def d(in n)"
+   365 set :d.54:n 2
+-    * op add *tmp161 zero :d.54:n
++  366 op add *tmp161 zero 2
+   367 label *label58
+-    * op add :a :a *tmp161
++  368 op add :a 4 *tmp161
+   369 assertequals 6 :a "+="
+   370 set :a 4
+   371 # "Function: inline def d(in n)"
+   372 set :d.55:n 2
+-    * op add *tmp163 zero :d.55:n
++  373 op add *tmp163 zero 2
+   374 label *label59
+-    * op sub :a :a *tmp163
++  375 op sub :a 4 *tmp163
+   376 assertequals 2 :a "-="
+   377 set :a 1
+   378 # "Function: inline def d(in n)"
+   379 set :d.56:n 2
+-    * op add *tmp165 zero :d.56:n
++  380 op add *tmp165 zero 2
+   381 label *label60
+-    * op shl :a :a *tmp165
++  382 op shl :a 1 *tmp165
+   383 assertequals 4 :a "<<="
+   384 set :a 9
+   385 # "Function: inline def d(in n)"
+   386 set :d.57:n 2
+-    * op add *tmp167 zero :d.57:n
++  387 op add *tmp167 zero 2
+   388 label *label61
+-    * op shr :a :a *tmp167
++  389 op shr :a 9 *tmp167
+   390 assertequals 2 :a ">>="
+   391 set :a 1
+   392 # "Function: inline def d(in n)"
+   393 set :d.58:n 2
+-    * op add *tmp169 zero :d.58:n
++  394 op add *tmp169 zero 2
+   395 label *label62
+-    * op or :a :a *tmp169
++  396 op or :a 1 *tmp169
+   397 assertequals 3 :a "|="
+   398 set :a 3
+   399 # "Function: inline def d(in n)"
+   400 set :d.59:n 2
+-    * op add *tmp171 zero :d.59:n
++  401 op add *tmp171 zero 2
+   402 label *label63
+-    * op and :a :a *tmp171
++  403 op and :a 3 *tmp171
+   404 assertequals 2 :a "&="
+   405 set :a 3
+   406 # "Function: inline def d(in n)"
+   407 set :d.60:n 2
+-    * op add *tmp173 zero :d.60:n
++  408 op add *tmp173 zero 2
+   409 label *label64
+-    * op xor :a :a *tmp173
++  410 op xor :a 3 *tmp173
+   411 assertequals 1 :a "^="
+   412 set :a 1
+   413 # "Function: inline def d(in n)"
+   414 set :d.61:n 0
+-    * op add *tmp175 zero :d.61:n
++  415 op add *tmp175 zero 0
+   416 label *label65
+-    * op land :a :a *tmp175
++  417 op land :a 1 *tmp175
+   418 assertequals false :a "&&="
+   419 set :a 1
+   420 # "Function: inline def d(in n)"
+   421 set :d.62:n 2
+-    * op add *tmp177 zero :d.62:n
++  422 op add *tmp177 zero 2
+   423 label *label66
+-    * op land :a :a *tmp177
++  424 op land :a 1 *tmp177
+   425 assertequals true :a "&&="
+   426 set :a 0
+   427 # "Function: inline def d(in n)"
+   428 set :d.63:n 2
+-    * op add *tmp179 zero :d.63:n
++  429 op add *tmp179 zero 2
+   430 label *label67
+-    * op or *tmp181 :a *tmp179
++  431 op or *tmp181 0 *tmp179
+   432 op notEqual :a *tmp181 false
+   433 assertequals true :a "||="
+   434 assertequals %ff0000ff %ff0000 "short color literals"
+ 
+   440 op mul *tmp182 :assertEqualsRound:actual 100000000
+   441 # "Function: inline def round(in x)"
+   442 set :round:x *tmp182
+-    * op add *tmp184 :round:x 0.5
++  443 op add *tmp184 *tmp182 0.5
+   444 op floor *tmp183 *tmp184
+   445 label *label69
+   446 op div *tmp186 *tmp183 100000000
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-79 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-82 instructions):
      0 set NULL null
      1 set zero 0
      2 # "Function: inline def d(in n)"
@@ -1269,222 +1314,243 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
    180 op abs *tmp108 *tmp106
    181 assertequals 2 *tmp108 "abs"
    182 # "Function: inline def d(in n)"
--    * set :d.35:n 2.718281828459045
-   183 op add *tmp109 zero 2.718281828459045
+-    * set :d.35:n -2
+   183 op add *tmp109 zero -2
    184 label *label39
-   185 op log *tmp111 *tmp109
-   186 assertequals 1 *tmp111 "log"
+-    * op sign *tmp111 *tmp109
++  185 op sign *tmp111 *tmp106
+   186 assertequals -1 *tmp111 "sign(-2)"
    187 # "Function: inline def d(in n)"
--    * set :d.36:n 10
-   188 op add *tmp112 zero 10
+-    * set :d.36:n 2
+   188 op add *tmp112 zero 2
    189 label *label40
-   190 op log10 *tmp114 *tmp112
-   191 assertequals 1 *tmp114 "log10"
+-    * op sign *tmp114 *tmp112
++  190 op sign *tmp114 *tmp6
+   191 assertequals 1 *tmp114 "sign(2)"
    192 # "Function: inline def d(in n)"
--    * set :d.37:n 2.5
-   193 op add *tmp115 zero 2.5
+-    * set :d.37:n 0
+   193 op add *tmp115 zero 0
    194 label *label41
-   195 op floor *tmp117 *tmp115
-   196 assertequals 2 *tmp117 "floor"
+-    * op sign *tmp117 *tmp115
++  195 op sign *tmp117 *tmp42
+   196 assertequals 0 *tmp117 "sign(0)"
    197 # "Function: inline def d(in n)"
--    * set :d.38:n 2.5
-   198 op add *tmp118 zero 2.5
+-    * set :d.38:n 2.718281828459045
+   198 op add *tmp118 zero 2.718281828459045
    199 label *label42
--    * op ceil *tmp120 *tmp118
-+  200 op ceil *tmp120 *tmp115
-   201 assertequals 3 *tmp120 "ceil"
+   200 op log *tmp120 *tmp118
+   201 assertequals 1 *tmp120 "log"
    202 # "Function: inline def d(in n)"
--    * set :d.39:n 16
-   203 op add *tmp121 zero 16
+-    * set :d.39:n 10
+   203 op add *tmp121 zero 10
    204 label *label43
-   205 op sqrt *tmp123 *tmp121
-   206 assertequals 4 *tmp123 "sqrt"
+   205 op log10 *tmp123 *tmp121
+   206 assertequals 1 *tmp123 "log10"
    207 # "Function: inline def d(in n)"
--    * set :d.40:n 1
-   208 op add *tmp124 zero 1
+-    * set :d.40:n 2.5
+   208 op add *tmp124 zero 2.5
    209 label *label44
--    * op angle *tmp126 1 *tmp124
-+  210 op angle *tmp126 1 *tmp48
-   211 assertequals 45 *tmp126 "angle"
+   210 op floor *tmp126 *tmp124
+   211 assertequals 2 *tmp126 "floor"
    212 # "Function: inline def d(in n)"
--    * set :d.41:n 135
-   213 op add *tmp127 zero 135
+-    * set :d.41:n 2.5
+   213 op add *tmp127 zero 2.5
    214 label *label45
-   215 op angleDiff *tmp129 45 *tmp127
+-    * op ceil *tmp129 *tmp127
++  215 op ceil *tmp129 *tmp124
+   216 assertequals 3 *tmp129 "ceil"
+   217 # "Function: inline def d(in n)"
+-    * set :d.42:n 16
+   218 op add *tmp130 zero 16
+   219 label *label46
+   220 op sqrt *tmp132 *tmp130
+   221 assertequals 4 *tmp132 "sqrt"
+   222 # "Function: inline def d(in n)"
+-    * set :d.43:n 1
+   223 op add *tmp133 zero 1
+   224 label *label47
+-    * op angle *tmp135 1 *tmp133
++  225 op angle *tmp135 1 *tmp48
+   226 assertequals 45 *tmp135 "angle"
+   227 # "Function: inline def d(in n)"
+-    * set :d.44:n 135
+   228 op add *tmp136 zero 135
+   229 label *label48
+   230 op angleDiff *tmp138 45 *tmp136
  
-   240 set :assertEqualsRound:title "atan"
-   241 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-   242 # "Function: inline def d(in n)"
--    * set :d.42:n 8
-   243 op add *tmp130 zero 8
-   244 label *label46
--    * op sub *tmp132 0 *tmp130
-+  245 op sub *tmp132 -8 zero
-   246 assertequals -8 *tmp132 "unary minus"
-   247 # "Function: inline def d(in n)"
--    * set :d.43:n 0
-   248 op add *tmp133 zero 0
-   249 label *label47
--    * op equal *tmp135 *tmp133 false
-+  250 op equal *tmp135 *tmp42 false
-   251 assertequals 1 *tmp135 "boolean negation 1"
-   252 # "Function: inline def d(in n)"
--    * set :d.44:n 1
-   253 op add *tmp136 zero 1
-   254 label *label48
--    * op equal *tmp138 *tmp136 false
-+  255 op equal *tmp138 *tmp48 false
-   256 assertequals 0 *tmp138 "boolean negation 2"
+   255 set :assertEqualsRound:title "atan"
+   256 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
    257 # "Function: inline def d(in n)"
--    * set :d.45:n 2
-   258 op add *tmp139 zero 2
+-    * set :d.45:n 8
+   258 op add *tmp139 zero 8
    259 label *label49
--    * op equal *tmp141 *tmp139 false
-+  260 op equal *tmp141 *tmp6 false
-   261 assertequals 0 *tmp141 "boolean negation 3"
--    * set :a 2
+-    * op sub *tmp141 0 *tmp139
++  260 op sub *tmp141 -8 zero
+   261 assertequals -8 *tmp141 "unary minus"
    262 # "Function: inline def d(in n)"
--    * set :d.46:n 4
-   263 op add *tmp142 zero 4
+-    * set :d.46:n 0
+   263 op add *tmp142 zero 0
    264 label *label50
--    * op pow :a 2 *tmp142
--    * assertequals 16 :a "**="
--    * set :a 2
-+  265 op pow :a 2 *tmp9
-+  266 assertequals 16 *tmp23 "**="
+-    * op equal *tmp144 *tmp142 false
++  265 op equal *tmp144 *tmp42 false
+   266 assertequals 1 *tmp144 "boolean negation 1"
    267 # "Function: inline def d(in n)"
--    * set :d.47:n 4
-   268 op add *tmp144 zero 4
+-    * set :d.47:n 1
+   268 op add *tmp145 zero 1
    269 label *label51
--    * op mul :a 2 *tmp144
-+  270 op mul :a 2 *tmp9
-   271 assertequals 8 :a "*="
--    * set :a 6
+-    * op equal *tmp147 *tmp145 false
++  270 op equal *tmp147 *tmp48 false
+   271 assertequals 0 *tmp147 "boolean negation 2"
    272 # "Function: inline def d(in n)"
--    * set :d.48:n 4
-   273 op add *tmp146 zero 4
+-    * set :d.48:n 2
+   273 op add *tmp148 zero 2
    274 label *label52
--    * op div :a 6 *tmp146
--    * assertequals 1.5 :a "/="
--    * set :a 6
-+  275 op div :a 6 *tmp9
-+  276 assertequals 1.5 *tmp11 "/="
+-    * op equal *tmp150 *tmp148 false
++  275 op equal *tmp150 *tmp6 false
+   276 assertequals 0 *tmp150 "boolean negation 3"
+-    * set :a 2
    277 # "Function: inline def d(in n)"
 -    * set :d.49:n 4
-   278 op add *tmp148 zero 4
+   278 op add *tmp151 zero 4
    279 label *label53
--    * op idiv :a 6 *tmp148
--    * assertequals 1 :a "\="
--    * set :a 6
-+  280 op idiv :a 6 *tmp9
-+  281 assertequals 1 *tmp17 "\="
+-    * op pow :a 2 *tmp151
+-    * assertequals 16 :a "**="
+-    * set :a 2
++  280 op pow :a 2 *tmp9
++  281 assertequals 16 *tmp23 "**="
    282 # "Function: inline def d(in n)"
 -    * set :d.50:n 4
-   283 op add *tmp150 zero 4
+   283 op add *tmp153 zero 4
    284 label *label54
--    * op mod :a 6 *tmp150
+-    * op mul :a 2 *tmp153
++  285 op mul :a 2 *tmp9
+   286 assertequals 8 :a "*="
+-    * set :a 6
+   287 # "Function: inline def d(in n)"
+-    * set :d.51:n 4
+   288 op add *tmp155 zero 4
+   289 label *label55
+-    * op div :a 6 *tmp155
+-    * assertequals 1.5 :a "/="
+-    * set :a 6
++  290 op div :a 6 *tmp9
++  291 assertequals 1.5 *tmp11 "/="
+   292 # "Function: inline def d(in n)"
+-    * set :d.52:n 4
+   293 op add *tmp157 zero 4
+   294 label *label56
+-    * op idiv :a 6 *tmp157
+-    * assertequals 1 :a "\="
+-    * set :a 6
++  295 op idiv :a 6 *tmp9
++  296 assertequals 1 *tmp17 "\="
+   297 # "Function: inline def d(in n)"
+-    * set :d.53:n 4
+   298 op add *tmp159 zero 4
+   299 label *label57
+-    * op mod :a 6 *tmp159
 -    * assertequals 2 :a "%="
 -    * set :a 4
-+  285 op mod :a 6 *tmp9
-+  286 assertequals 2 *tmp20 "%="
-   287 # "Function: inline def d(in n)"
--    * set :d.51:n 2
-   288 op add *tmp152 zero 2
-   289 label *label55
--    * op add :a 4 *tmp152
-+  290 op add :a 4 *tmp6
-   291 assertequals 6 :a "+="
--    * set :a 4
-   292 # "Function: inline def d(in n)"
--    * set :d.52:n 2
-   293 op add *tmp154 zero 2
-   294 label *label56
--    * op sub :a 4 *tmp154
-+  295 op sub :a 4 *tmp6
-   296 assertequals 2 :a "-="
--    * set :a 1
-   297 # "Function: inline def d(in n)"
--    * set :d.53:n 2
-   298 op add *tmp156 zero 2
-   299 label *label57
--    * op shl :a 1 *tmp156
--    * assertequals 4 :a "<<="
--    * set :a 9
-+  300 op shl :a 1 *tmp6
-+  301 assertequals 4 *tmp76 "<<="
++  300 op mod :a 6 *tmp9
++  301 assertequals 2 *tmp20 "%="
    302 # "Function: inline def d(in n)"
 -    * set :d.54:n 2
-   303 op add *tmp158 zero 2
+   303 op add *tmp161 zero 2
    304 label *label58
--    * op shr :a 9 *tmp158
--    * assertequals 2 :a ">>="
--    * set :a 1
-+  305 op shr :a 9 *tmp6
-+  306 assertequals 2 *tmp79 ">>="
+-    * op add :a 4 *tmp161
++  305 op add :a 4 *tmp6
+   306 assertequals 6 :a "+="
+-    * set :a 4
    307 # "Function: inline def d(in n)"
 -    * set :d.55:n 2
-   308 op add *tmp160 zero 2
+   308 op add *tmp163 zero 2
    309 label *label59
--    * op or :a 1 *tmp160
--    * assertequals 3 :a "|="
--    * set :a 3
-+  310 op or :a 1 *tmp6
-+  311 assertequals 3 *tmp82 "|="
+-    * op sub :a 4 *tmp163
++  310 op sub :a 4 *tmp6
+   311 assertequals 2 :a "-="
+-    * set :a 1
    312 # "Function: inline def d(in n)"
 -    * set :d.56:n 2
-   313 op add *tmp162 zero 2
+   313 op add *tmp165 zero 2
    314 label *label60
--    * op and :a 3 *tmp162
--    * assertequals 2 :a "&="
--    * set :a 3
-+  315 op and :a 3 *tmp6
-+  316 assertequals 2 *tmp85 "&="
+-    * op shl :a 1 *tmp165
+-    * assertequals 4 :a "<<="
+-    * set :a 9
++  315 op shl :a 1 *tmp6
++  316 assertequals 4 *tmp76 "<<="
    317 # "Function: inline def d(in n)"
 -    * set :d.57:n 2
-   318 op add *tmp164 zero 2
+   318 op add *tmp167 zero 2
    319 label *label61
--    * op xor :a 3 *tmp164
--    * assertequals 1 :a "^="
+-    * op shr :a 9 *tmp167
+-    * assertequals 2 :a ">>="
 -    * set :a 1
-+  320 op xor :a 3 *tmp6
-+  321 assertequals 1 *tmp88 "^="
++  320 op shr :a 9 *tmp6
++  321 assertequals 2 *tmp79 ">>="
    322 # "Function: inline def d(in n)"
--    * set :d.58:n 0
-   323 op add *tmp166 zero 0
+-    * set :d.58:n 2
+   323 op add *tmp169 zero 2
    324 label *label62
--    * op land :a 1 *tmp166
--    * assertequals false :a "&&="
--    * set :a 1
-+  325 op land :a 1 *tmp42
-+  326 assertequals false *tmp44 "&&="
+-    * op or :a 1 *tmp169
+-    * assertequals 3 :a "|="
+-    * set :a 3
++  325 op or :a 1 *tmp6
++  326 assertequals 3 *tmp82 "|="
    327 # "Function: inline def d(in n)"
 -    * set :d.59:n 2
-   328 op add *tmp168 zero 2
+   328 op add *tmp171 zero 2
    329 label *label63
--    * op land :a 1 *tmp168
--    * assertequals true :a "&&="
--    * set :a 0
-+  330 op land :a 1 *tmp6
-+  331 assertequals true *tmp47 "&&="
+-    * op and :a 3 *tmp171
+-    * assertequals 2 :a "&="
+-    * set :a 3
++  330 op and :a 3 *tmp6
++  331 assertequals 2 *tmp85 "&="
    332 # "Function: inline def d(in n)"
 -    * set :d.60:n 2
-   333 op add *tmp170 zero 2
+   333 op add *tmp173 zero 2
    334 label *label64
--    * op or *tmp172 0 *tmp170
-+  335 op or *tmp172 0 *tmp6
-   336 op notEqual :a *tmp172 false
-   337 assertequals true :a "||="
-   338 assertequals %ff0000ff %ff0000 "short color literals"
+-    * op xor :a 3 *tmp173
+-    * assertequals 1 :a "^="
+-    * set :a 1
++  335 op xor :a 3 *tmp6
++  336 assertequals 1 *tmp88 "^="
+   337 # "Function: inline def d(in n)"
+-    * set :d.61:n 0
+   338 op add *tmp175 zero 0
+   339 label *label65
+-    * op land :a 1 *tmp175
+-    * assertequals false :a "&&="
+-    * set :a 1
++  340 op land :a 1 *tmp42
++  341 assertequals false *tmp44 "&&="
+   342 # "Function: inline def d(in n)"
+-    * set :d.62:n 2
+   343 op add *tmp177 zero 2
+   344 label *label66
+-    * op land :a 1 *tmp177
+-    * assertequals true :a "&&="
+-    * set :a 0
++  345 op land :a 1 *tmp6
++  346 assertequals true *tmp47 "&&="
+   347 # "Function: inline def d(in n)"
+-    * set :d.63:n 2
+   348 op add *tmp179 zero 2
+   349 label *label67
+-    * op or *tmp181 0 *tmp179
++  350 op or *tmp181 0 *tmp6
+   351 op notEqual :a *tmp181 false
+   352 assertequals true :a "||="
+   353 assertequals %ff0000ff %ff0000 "short color literals"
  
-   343 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   344 op mul *tmp173 :assertEqualsRound:actual 100000000
-   345 # "Function: inline def round(in x)"
--    * set :round:x *tmp173
-   346 op add *tmp175 *tmp173 0.5
-   347 op floor *tmp174 *tmp175
-   348 label *label66
+   358 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   359 op mul *tmp182 :assertEqualsRound:actual 100000000
+   360 # "Function: inline def round(in x)"
+-    * set :round:x *tmp182
+   361 op add *tmp184 *tmp182 0.5
+   362 op floor *tmp183 *tmp184
+   363 label *label69
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-57 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-60 instructions):
      0 set NULL null
      1 set zero 0
      2 # "Function: inline def d(in n)"
@@ -1640,121 +1706,139 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-5
    150 op min *tmp105 2 *tmp9
    151 assertequals 2 *tmp105 "min"
  
-   170 op floor *tmp117 *tmp115
-   171 assertequals 2 *tmp117 "floor"
-   172 # "Function: inline def d(in n)"
--    * op add *tmp118 zero 2.5
-   173 label *label42
-   174 op ceil *tmp120 *tmp115
-   175 assertequals 3 *tmp120 "ceil"
+   155 op abs *tmp108 *tmp106
+   156 assertequals 2 *tmp108 "abs"
+   157 # "Function: inline def d(in n)"
+-    * op add *tmp109 zero -2
+   158 label *label39
+   159 op sign *tmp111 *tmp106
+   160 assertequals -1 *tmp111 "sign(-2)"
+   161 # "Function: inline def d(in n)"
+-    * op add *tmp112 zero 2
+   162 label *label40
+   163 op sign *tmp114 *tmp6
+   164 assertequals 1 *tmp114 "sign(2)"
+   165 # "Function: inline def d(in n)"
+-    * op add *tmp115 zero 0
+   166 label *label41
+   167 op sign *tmp117 *tmp42
+   168 assertequals 0 *tmp117 "sign(0)"
  
-   179 op sqrt *tmp123 *tmp121
-   180 assertequals 4 *tmp123 "sqrt"
-   181 # "Function: inline def d(in n)"
--    * op add *tmp124 zero 1
-   182 label *label44
-   183 op angle *tmp126 1 *tmp48
-   184 assertequals 45 *tmp126 "angle"
+   182 op floor *tmp126 *tmp124
+   183 assertequals 2 *tmp126 "floor"
+   184 # "Function: inline def d(in n)"
+-    * op add *tmp127 zero 2.5
+   185 label *label45
+   186 op ceil *tmp129 *tmp124
+   187 assertequals 3 *tmp129 "ceil"
  
-   213 set :assertEqualsRound:title "atan"
-   214 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-   215 # "Function: inline def d(in n)"
--    * op add *tmp130 zero 8
-   216 label *label46
-   217 op sub *tmp132 -8 zero
-   218 assertequals -8 *tmp132 "unary minus"
-   219 # "Function: inline def d(in n)"
--    * op add *tmp133 zero 0
-   220 label *label47
-   221 op equal *tmp135 *tmp42 false
-   222 assertequals 1 *tmp135 "boolean negation 1"
-   223 # "Function: inline def d(in n)"
--    * op add *tmp136 zero 1
-   224 label *label48
-   225 op equal *tmp138 *tmp48 false
-   226 assertequals 0 *tmp138 "boolean negation 2"
+   191 op sqrt *tmp132 *tmp130
+   192 assertequals 4 *tmp132 "sqrt"
+   193 # "Function: inline def d(in n)"
+-    * op add *tmp133 zero 1
+   194 label *label47
+   195 op angle *tmp135 1 *tmp48
+   196 assertequals 45 *tmp135 "angle"
+ 
+   225 set :assertEqualsRound:title "atan"
+   226 call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
    227 # "Function: inline def d(in n)"
--    * op add *tmp139 zero 2
+-    * op add *tmp139 zero 8
    228 label *label49
-   229 op equal *tmp141 *tmp6 false
-   230 assertequals 0 *tmp141 "boolean negation 3"
+   229 op sub *tmp141 -8 zero
+   230 assertequals -8 *tmp141 "unary minus"
    231 # "Function: inline def d(in n)"
--    * op add *tmp142 zero 4
+-    * op add *tmp142 zero 0
    232 label *label50
+   233 op equal *tmp144 *tmp42 false
+   234 assertequals 1 *tmp144 "boolean negation 1"
+   235 # "Function: inline def d(in n)"
+-    * op add *tmp145 zero 1
+   236 label *label51
+   237 op equal *tmp147 *tmp48 false
+   238 assertequals 0 *tmp147 "boolean negation 2"
+   239 # "Function: inline def d(in n)"
+-    * op add *tmp148 zero 2
+   240 label *label52
+   241 op equal *tmp150 *tmp6 false
+   242 assertequals 0 *tmp150 "boolean negation 3"
+   243 # "Function: inline def d(in n)"
+-    * op add *tmp151 zero 4
+   244 label *label53
 -    * op pow :a 2 *tmp9
-   233 assertequals 16 *tmp23 "**="
-   234 # "Function: inline def d(in n)"
--    * op add *tmp144 zero 4
-   235 label *label51
-   236 op mul :a 2 *tmp9
-   237 assertequals 8 :a "*="
-   238 # "Function: inline def d(in n)"
--    * op add *tmp146 zero 4
-   239 label *label52
+   245 assertequals 16 *tmp23 "**="
+   246 # "Function: inline def d(in n)"
+-    * op add *tmp153 zero 4
+   247 label *label54
+   248 op mul :a 2 *tmp9
+   249 assertequals 8 :a "*="
+   250 # "Function: inline def d(in n)"
+-    * op add *tmp155 zero 4
+   251 label *label55
 -    * op div :a 6 *tmp9
-   240 assertequals 1.5 *tmp11 "/="
-   241 # "Function: inline def d(in n)"
--    * op add *tmp148 zero 4
-   242 label *label53
+   252 assertequals 1.5 *tmp11 "/="
+   253 # "Function: inline def d(in n)"
+-    * op add *tmp157 zero 4
+   254 label *label56
 -    * op idiv :a 6 *tmp9
-   243 assertequals 1 *tmp17 "\="
-   244 # "Function: inline def d(in n)"
--    * op add *tmp150 zero 4
-   245 label *label54
+   255 assertequals 1 *tmp17 "\="
+   256 # "Function: inline def d(in n)"
+-    * op add *tmp159 zero 4
+   257 label *label57
 -    * op mod :a 6 *tmp9
-   246 assertequals 2 *tmp20 "%="
-   247 # "Function: inline def d(in n)"
--    * op add *tmp152 zero 2
-   248 label *label55
+   258 assertequals 2 *tmp20 "%="
+   259 # "Function: inline def d(in n)"
+-    * op add *tmp161 zero 2
+   260 label *label58
 -    * op add :a 4 *tmp6
-+  249 op add :a zero 6
-   250 assertequals 6 :a "+="
-   251 # "Function: inline def d(in n)"
--    * op add *tmp154 zero 2
-   252 label *label56
++  261 op add :a zero 6
+   262 assertequals 6 :a "+="
+   263 # "Function: inline def d(in n)"
+-    * op add *tmp163 zero 2
+   264 label *label59
 -    * op sub :a 4 *tmp6
-+  253 op sub :a 2 zero
-   254 assertequals 2 :a "-="
-   255 # "Function: inline def d(in n)"
--    * op add *tmp156 zero 2
-   256 label *label57
--    * op shl :a 1 *tmp6
-   257 assertequals 4 *tmp76 "<<="
-   258 # "Function: inline def d(in n)"
--    * op add *tmp158 zero 2
-   259 label *label58
--    * op shr :a 9 *tmp6
-   260 assertequals 2 *tmp79 ">>="
-   261 # "Function: inline def d(in n)"
--    * op add *tmp160 zero 2
-   262 label *label59
--    * op or :a 1 *tmp6
-   263 assertequals 3 *tmp82 "|="
-   264 # "Function: inline def d(in n)"
--    * op add *tmp162 zero 2
-   265 label *label60
--    * op and :a 3 *tmp6
-   266 assertequals 2 *tmp85 "&="
++  265 op sub :a 2 zero
+   266 assertequals 2 :a "-="
    267 # "Function: inline def d(in n)"
--    * op add *tmp164 zero 2
-   268 label *label61
--    * op xor :a 3 *tmp6
-   269 assertequals 1 *tmp88 "^="
+-    * op add *tmp165 zero 2
+   268 label *label60
+-    * op shl :a 1 *tmp6
+   269 assertequals 4 *tmp76 "<<="
    270 # "Function: inline def d(in n)"
--    * op add *tmp166 zero 0
-   271 label *label62
--    * op land :a 1 *tmp42
-   272 assertequals false *tmp44 "&&="
+-    * op add *tmp167 zero 2
+   271 label *label61
+-    * op shr :a 9 *tmp6
+   272 assertequals 2 *tmp79 ">>="
    273 # "Function: inline def d(in n)"
--    * op add *tmp168 zero 2
-   274 label *label63
--    * op land :a 1 *tmp6
-   275 assertequals true *tmp47 "&&="
+-    * op add *tmp169 zero 2
+   274 label *label62
+-    * op or :a 1 *tmp6
+   275 assertequals 3 *tmp82 "|="
    276 # "Function: inline def d(in n)"
--    * op add *tmp170 zero 2
-   277 label *label64
-   278 op or *tmp172 0 *tmp6
-   279 op notEqual :a *tmp172 false
+-    * op add *tmp171 zero 2
+   277 label *label63
+-    * op and :a 3 *tmp6
+   278 assertequals 2 *tmp85 "&="
+   279 # "Function: inline def d(in n)"
+-    * op add *tmp173 zero 2
+   280 label *label64
+-    * op xor :a 3 *tmp6
+   281 assertequals 1 *tmp88 "^="
+   282 # "Function: inline def d(in n)"
+-    * op add *tmp175 zero 0
+   283 label *label65
+-    * op land :a 1 *tmp42
+   284 assertequals false *tmp44 "&&="
+   285 # "Function: inline def d(in n)"
+-    * op add *tmp177 zero 2
+   286 label *label66
+-    * op land :a 1 *tmp6
+   287 assertequals true *tmp47 "&&="
+   288 # "Function: inline def d(in n)"
+-    * op add *tmp179 zero 2
+   289 label *label67
+   290 op or *tmp181 0 *tmp6
+   291 op notEqual :a *tmp181 false
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
  
@@ -1766,326 +1850,326 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1
     40 op equal *tmp26 5 *tmp2
     41 assertequals true *tmp26 "equal 1"
  
-   246 # "Function: inline def d(in n)"
-   247 label *label55
-   248 op add :a zero 6
+   258 # "Function: inline def d(in n)"
+   259 label *label58
+   260 op add :a zero 6
 -    * assertequals 6 :a "+="
-+  249 assertequals 6 *tmp3 "+="
-   250 # "Function: inline def d(in n)"
-   251 label *label56
-   252 op sub :a 2 zero
++  261 assertequals 6 *tmp3 "+="
+   262 # "Function: inline def d(in n)"
+   263 label *label59
+   264 op sub :a 2 zero
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1 instructions):
  
-   245 assertequals 2 *tmp20 "%="
-   246 # "Function: inline def d(in n)"
-   247 label *label55
+   257 assertequals 2 *tmp20 "%="
+   258 # "Function: inline def d(in n)"
+   259 label *label58
 -    * op add :a zero 6
-   248 assertequals 6 *tmp3 "+="
-   249 # "Function: inline def d(in n)"
-   250 label *label56
+   260 assertequals 6 *tmp3 "+="
+   261 # "Function: inline def d(in n)"
+   262 label *label59
 
 Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 instructions):
  
-   190 set :assertEqualsRound:expected 1
-   191 set :assertEqualsRound:actual 1
-   192 set :assertEqualsRound:title "sin"
+   202 set :assertEqualsRound:expected 1
+   203 set :assertEqualsRound:actual 1
+   204 set :assertEqualsRound:title "sin"
 -    * call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-+  193 label *label67
-+  194 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-+  195 op mul *tmp173 :assertEqualsRound:actual 100000000
-+  196 # "Function: inline def round(in x)"
-+  197 op add *tmp175 *tmp173 0.5
-+  198 op floor *tmp174 *tmp175
-+  199 label *label68
-+  200 op div *tmp177 *tmp174 100000000
-+  201 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  202 label *label69
-   203 set :assertEqualsRound:expected -1
-   204 set :assertEqualsRound:actual -1
-   205 set :assertEqualsRound:title "cos"
++  205 label *label70
++  206 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  207 op mul *tmp182 :assertEqualsRound:actual 100000000
++  208 # "Function: inline def round(in x)"
++  209 op add *tmp184 *tmp182 0.5
++  210 op floor *tmp183 *tmp184
++  211 label *label71
++  212 op div *tmp186 *tmp183 100000000
++  213 assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  214 label *label72
+   215 set :assertEqualsRound:expected -1
+   216 set :assertEqualsRound:actual -1
+   217 set :assertEqualsRound:title "cos"
 -    * call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-+  206 label *label70
-+  207 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-+  208 op mul *tmp173 :assertEqualsRound:actual 100000000
-+  209 # "Function: inline def round(in x)"
-+  210 op add *tmp175 *tmp173 0.5
-+  211 op floor *tmp174 *tmp175
-+  212 label *label71
-+  213 op div *tmp177 *tmp174 100000000
-+  214 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  215 label *label72
-   216 set :assertEqualsRound:expected 1
-   217 set :assertEqualsRound:actual 0.9999999999999999
-   218 set :assertEqualsRound:title "tan"
++  218 label *label73
++  219 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  220 op mul *tmp182 :assertEqualsRound:actual 100000000
++  221 # "Function: inline def round(in x)"
++  222 op add *tmp184 *tmp182 0.5
++  223 op floor *tmp183 *tmp184
++  224 label *label74
++  225 op div *tmp186 *tmp183 100000000
++  226 assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  227 label *label75
+   228 set :assertEqualsRound:expected 1
+   229 set :assertEqualsRound:actual 0.9999999999999999
+   230 set :assertEqualsRound:title "tan"
 -    * call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-+  219 label *label73
-+  220 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-+  221 op mul *tmp173 :assertEqualsRound:actual 100000000
-+  222 # "Function: inline def round(in x)"
-+  223 op add *tmp175 *tmp173 0.5
-+  224 op floor *tmp174 *tmp175
-+  225 label *label74
-+  226 op div *tmp177 *tmp174 100000000
-+  227 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  228 label *label75
-   229 set :assertEqualsRound:expected 90
-   230 set :assertEqualsRound:actual 90
-   231 set :assertEqualsRound:title "asin"
++  231 label *label76
++  232 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  233 op mul *tmp182 :assertEqualsRound:actual 100000000
++  234 # "Function: inline def round(in x)"
++  235 op add *tmp184 *tmp182 0.5
++  236 op floor *tmp183 *tmp184
++  237 label *label77
++  238 op div *tmp186 *tmp183 100000000
++  239 assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  240 label *label78
+   241 set :assertEqualsRound:expected 90
+   242 set :assertEqualsRound:actual 90
+   243 set :assertEqualsRound:title "asin"
 -    * call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-+  232 label *label76
-+  233 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-+  234 op mul *tmp173 :assertEqualsRound:actual 100000000
-+  235 # "Function: inline def round(in x)"
-+  236 op add *tmp175 *tmp173 0.5
-+  237 op floor *tmp174 *tmp175
-+  238 label *label77
-+  239 op div *tmp177 *tmp174 100000000
-+  240 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  241 label *label78
-   242 set :assertEqualsRound:expected 0
-   243 set :assertEqualsRound:actual 0
-   244 set :assertEqualsRound:title "acos"
++  244 label *label79
++  245 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  246 op mul *tmp182 :assertEqualsRound:actual 100000000
++  247 # "Function: inline def round(in x)"
++  248 op add *tmp184 *tmp182 0.5
++  249 op floor *tmp183 *tmp184
++  250 label *label80
++  251 op div *tmp186 *tmp183 100000000
++  252 assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  253 label *label81
+   254 set :assertEqualsRound:expected 0
+   255 set :assertEqualsRound:actual 0
+   256 set :assertEqualsRound:title "acos"
 -    * call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-+  245 label *label79
-+  246 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-+  247 op mul *tmp173 :assertEqualsRound:actual 100000000
-+  248 # "Function: inline def round(in x)"
-+  249 op add *tmp175 *tmp173 0.5
-+  250 op floor *tmp174 *tmp175
-+  251 label *label80
-+  252 op div *tmp177 *tmp174 100000000
-+  253 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  254 label *label81
-   255 set :assertEqualsRound:expected 45
-   256 set :assertEqualsRound:actual 45
-   257 set :assertEqualsRound:title "atan"
++  257 label *label82
++  258 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  259 op mul *tmp182 :assertEqualsRound:actual 100000000
++  260 # "Function: inline def round(in x)"
++  261 op add *tmp184 *tmp182 0.5
++  262 op floor *tmp183 *tmp184
++  263 label *label83
++  264 op div *tmp186 *tmp183 100000000
++  265 assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  266 label *label84
+   267 set :assertEqualsRound:expected 45
+   268 set :assertEqualsRound:actual 45
+   269 set :assertEqualsRound:title "atan"
 -    * call *label3 :assertEqualsRound*retaddr :assertEqualsRound*retval
-+  258 label *label82
-+  259 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-+  260 op mul *tmp173 :assertEqualsRound:actual 100000000
-+  261 # "Function: inline def round(in x)"
-+  262 op add *tmp175 *tmp173 0.5
-+  263 op floor *tmp174 *tmp175
-+  264 label *label83
-+  265 op div *tmp177 *tmp174 100000000
-+  266 assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  267 label *label84
-   268 # "Function: inline def d(in n)"
-   269 label *label46
-   270 op sub *tmp132 -8 zero
++  270 label *label85
++  271 # "Function: void assertEqualsRound(in expected, in actual, in title)"
++  272 op mul *tmp182 :assertEqualsRound:actual 100000000
++  273 # "Function: inline def round(in x)"
++  274 op add *tmp184 *tmp182 0.5
++  275 op floor *tmp183 *tmp184
++  276 label *label86
++  277 op div *tmp186 *tmp183 100000000
++  278 assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  279 label *label87
+   280 # "Function: inline def d(in n)"
+   281 label *label49
+   282 op sub *tmp141 -8 zero
  
-   334 assertequals %ffffffff %[white] "named color literals"
-   335 stop
-   336 end
+   346 assertequals %ffffffff %[white] "named color literals"
+   347 stop
+   348 end
 -    * label *label3
 -    * # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 :assertEqualsRound:actual 100000000
+-    * op mul *tmp182 :assertEqualsRound:actual 100000000
 -    * # "Function: inline def round(in x)"
--    * op add *tmp175 *tmp173 0.5
--    * op floor *tmp174 *tmp175
--    * label *label66
--    * op div *tmp177 *tmp174 100000000
--    * assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
--    * label *label65
+-    * op add *tmp184 *tmp182 0.5
+-    * op floor *tmp183 *tmp184
+-    * label *label69
+-    * op div *tmp186 *tmp183 100000000
+-    * assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
+-    * label *label68
 -    * return :assertEqualsRound*retaddr
 -    * end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-   192 set :assertEqualsRound:title "sin"
-   193 label *label67
-   194 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 :assertEqualsRound:actual 100000000
-+  195 op mul *tmp173 1 100000000
-   196 # "Function: inline def round(in x)"
--    * op add *tmp175 *tmp173 0.5
--    * op floor *tmp174 *tmp175
-+  197 op add *tmp175 100000000 0.5
-+  198 op floor *tmp174 100000000.5
-   199 label *label68
--    * op div *tmp177 *tmp174 100000000
--    * assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  200 op div *tmp177 100000000 100000000
-+  201 assertequals 1 1 "sin"
-   202 label *label69
-   203 set :assertEqualsRound:expected -1
-   204 set :assertEqualsRound:actual -1
-   205 set :assertEqualsRound:title "cos"
-   206 label *label70
-   207 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 :assertEqualsRound:actual 100000000
-+  208 op mul *tmp173 -1 100000000
-   209 # "Function: inline def round(in x)"
--    * op add *tmp175 *tmp173 0.5
--    * op floor *tmp174 *tmp175
-+  210 op add *tmp175 -100000000 0.5
-+  211 op floor *tmp174 -99999999.5
-   212 label *label71
--    * op div *tmp177 *tmp174 100000000
--    * assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  213 op div *tmp177 -100000000 100000000
-+  214 assertequals -1 -1 "cos"
-   215 label *label72
-   216 set :assertEqualsRound:expected 1
-   217 set :assertEqualsRound:actual 0.9999999999999999
-   218 set :assertEqualsRound:title "tan"
-   219 label *label73
-   220 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 :assertEqualsRound:actual 100000000
-+  221 op mul *tmp173 0.9999999999999999 100000000
-   222 # "Function: inline def round(in x)"
--    * op add *tmp175 *tmp173 0.5
--    * op floor *tmp174 *tmp175
-+  223 op add *tmp175 99999999.99999999 0.5
-+  224 op floor *tmp174 100000000.49999999
-   225 label *label74
--    * op div *tmp177 *tmp174 100000000
--    * assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  226 op div *tmp177 100000000 100000000
-+  227 assertequals 1 1 "tan"
-   228 label *label75
-   229 set :assertEqualsRound:expected 90
-   230 set :assertEqualsRound:actual 90
-   231 set :assertEqualsRound:title "asin"
-   232 label *label76
-   233 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 :assertEqualsRound:actual 100000000
-+  234 op mul *tmp173 90 100000000
-   235 # "Function: inline def round(in x)"
--    * op add *tmp175 *tmp173 0.5
--    * op floor *tmp174 *tmp175
-+  236 op add *tmp175 9000000000 0.5
-+  237 op floor *tmp174 9000000000.5
-   238 label *label77
--    * op div *tmp177 *tmp174 100000000
--    * assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  239 op div *tmp177 9000000000 100000000
-+  240 assertequals 90 90 "asin"
-   241 label *label78
-   242 set :assertEqualsRound:expected 0
-   243 set :assertEqualsRound:actual 0
-   244 set :assertEqualsRound:title "acos"
-   245 label *label79
-   246 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 :assertEqualsRound:actual 100000000
-+  247 op mul *tmp173 0 100000000
-   248 # "Function: inline def round(in x)"
--    * op add *tmp175 *tmp173 0.5
--    * op floor *tmp174 *tmp175
-+  249 op add *tmp175 0 0.5
-+  250 op floor *tmp174 0.5
-   251 label *label80
--    * op div *tmp177 *tmp174 100000000
--    * assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  252 op div *tmp177 0 100000000
-+  253 assertequals 0 0 "acos"
-   254 label *label81
-   255 set :assertEqualsRound:expected 45
-   256 set :assertEqualsRound:actual 45
-   257 set :assertEqualsRound:title "atan"
-   258 label *label82
-   259 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 :assertEqualsRound:actual 100000000
-+  260 op mul *tmp173 45 100000000
-   261 # "Function: inline def round(in x)"
--    * op add *tmp175 *tmp173 0.5
--    * op floor *tmp174 *tmp175
-+  262 op add *tmp175 4500000000 0.5
-+  263 op floor *tmp174 4500000000.5
-   264 label *label83
--    * op div *tmp177 *tmp174 100000000
--    * assertequals :assertEqualsRound:expected *tmp177 :assertEqualsRound:title
-+  265 op div *tmp177 4500000000 100000000
-+  266 assertequals 45 45 "atan"
-   267 label *label84
-   268 # "Function: inline def d(in n)"
-   269 label *label46
+   204 set :assertEqualsRound:title "sin"
+   205 label *label70
+   206 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 :assertEqualsRound:actual 100000000
++  207 op mul *tmp182 1 100000000
+   208 # "Function: inline def round(in x)"
+-    * op add *tmp184 *tmp182 0.5
+-    * op floor *tmp183 *tmp184
++  209 op add *tmp184 100000000 0.5
++  210 op floor *tmp183 100000000.5
+   211 label *label71
+-    * op div *tmp186 *tmp183 100000000
+-    * assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  212 op div *tmp186 100000000 100000000
++  213 assertequals 1 1 "sin"
+   214 label *label72
+   215 set :assertEqualsRound:expected -1
+   216 set :assertEqualsRound:actual -1
+   217 set :assertEqualsRound:title "cos"
+   218 label *label73
+   219 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 :assertEqualsRound:actual 100000000
++  220 op mul *tmp182 -1 100000000
+   221 # "Function: inline def round(in x)"
+-    * op add *tmp184 *tmp182 0.5
+-    * op floor *tmp183 *tmp184
++  222 op add *tmp184 -100000000 0.5
++  223 op floor *tmp183 -99999999.5
+   224 label *label74
+-    * op div *tmp186 *tmp183 100000000
+-    * assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  225 op div *tmp186 -100000000 100000000
++  226 assertequals -1 -1 "cos"
+   227 label *label75
+   228 set :assertEqualsRound:expected 1
+   229 set :assertEqualsRound:actual 0.9999999999999999
+   230 set :assertEqualsRound:title "tan"
+   231 label *label76
+   232 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 :assertEqualsRound:actual 100000000
++  233 op mul *tmp182 0.9999999999999999 100000000
+   234 # "Function: inline def round(in x)"
+-    * op add *tmp184 *tmp182 0.5
+-    * op floor *tmp183 *tmp184
++  235 op add *tmp184 99999999.99999999 0.5
++  236 op floor *tmp183 100000000.49999999
+   237 label *label77
+-    * op div *tmp186 *tmp183 100000000
+-    * assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  238 op div *tmp186 100000000 100000000
++  239 assertequals 1 1 "tan"
+   240 label *label78
+   241 set :assertEqualsRound:expected 90
+   242 set :assertEqualsRound:actual 90
+   243 set :assertEqualsRound:title "asin"
+   244 label *label79
+   245 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 :assertEqualsRound:actual 100000000
++  246 op mul *tmp182 90 100000000
+   247 # "Function: inline def round(in x)"
+-    * op add *tmp184 *tmp182 0.5
+-    * op floor *tmp183 *tmp184
++  248 op add *tmp184 9000000000 0.5
++  249 op floor *tmp183 9000000000.5
+   250 label *label80
+-    * op div *tmp186 *tmp183 100000000
+-    * assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  251 op div *tmp186 9000000000 100000000
++  252 assertequals 90 90 "asin"
+   253 label *label81
+   254 set :assertEqualsRound:expected 0
+   255 set :assertEqualsRound:actual 0
+   256 set :assertEqualsRound:title "acos"
+   257 label *label82
+   258 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 :assertEqualsRound:actual 100000000
++  259 op mul *tmp182 0 100000000
+   260 # "Function: inline def round(in x)"
+-    * op add *tmp184 *tmp182 0.5
+-    * op floor *tmp183 *tmp184
++  261 op add *tmp184 0 0.5
++  262 op floor *tmp183 0.5
+   263 label *label83
+-    * op div *tmp186 *tmp183 100000000
+-    * assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  264 op div *tmp186 0 100000000
++  265 assertequals 0 0 "acos"
+   266 label *label84
+   267 set :assertEqualsRound:expected 45
+   268 set :assertEqualsRound:actual 45
+   269 set :assertEqualsRound:title "atan"
+   270 label *label85
+   271 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 :assertEqualsRound:actual 100000000
++  272 op mul *tmp182 45 100000000
+   273 # "Function: inline def round(in x)"
+-    * op add *tmp184 *tmp182 0.5
+-    * op floor *tmp183 *tmp184
++  274 op add *tmp184 4500000000 0.5
++  275 op floor *tmp183 4500000000.5
+   276 label *label86
+-    * op div *tmp186 *tmp183 100000000
+-    * assertequals :assertEqualsRound:expected *tmp186 :assertEqualsRound:title
++  277 op div *tmp186 4500000000 100000000
++  278 assertequals 45 45 "atan"
+   279 label *label87
+   280 # "Function: inline def d(in n)"
+   281 label *label49
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-42 instructions):
  
-   187 op angleDiff *tmp129 45 *tmp127
-   188 assertequals 90 *tmp129 "angleDiff"
-   189 assertequals 5 5 "len"
+   199 op angleDiff *tmp138 45 *tmp136
+   200 assertequals 90 *tmp138 "angleDiff"
+   201 assertequals 5 5 "len"
 -    * set :assertEqualsRound:expected 1
 -    * set :assertEqualsRound:actual 1
 -    * set :assertEqualsRound:title "sin"
-   190 label *label67
-   191 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 1 100000000
-   192 # "Function: inline def round(in x)"
--    * op add *tmp175 100000000 0.5
--    * op floor *tmp174 100000000.5
-   193 label *label68
--    * op div *tmp177 100000000 100000000
-   194 assertequals 1 1 "sin"
-   195 label *label69
+   202 label *label70
+   203 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 1 100000000
+   204 # "Function: inline def round(in x)"
+-    * op add *tmp184 100000000 0.5
+-    * op floor *tmp183 100000000.5
+   205 label *label71
+-    * op div *tmp186 100000000 100000000
+   206 assertequals 1 1 "sin"
+   207 label *label72
 -    * set :assertEqualsRound:expected -1
 -    * set :assertEqualsRound:actual -1
 -    * set :assertEqualsRound:title "cos"
-   196 label *label70
-   197 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 -1 100000000
-   198 # "Function: inline def round(in x)"
--    * op add *tmp175 -100000000 0.5
--    * op floor *tmp174 -99999999.5
-   199 label *label71
--    * op div *tmp177 -100000000 100000000
-   200 assertequals -1 -1 "cos"
-   201 label *label72
+   208 label *label73
+   209 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 -1 100000000
+   210 # "Function: inline def round(in x)"
+-    * op add *tmp184 -100000000 0.5
+-    * op floor *tmp183 -99999999.5
+   211 label *label74
+-    * op div *tmp186 -100000000 100000000
+   212 assertequals -1 -1 "cos"
+   213 label *label75
 -    * set :assertEqualsRound:expected 1
 -    * set :assertEqualsRound:actual 0.9999999999999999
 -    * set :assertEqualsRound:title "tan"
-   202 label *label73
-   203 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 0.9999999999999999 100000000
-   204 # "Function: inline def round(in x)"
--    * op add *tmp175 99999999.99999999 0.5
--    * op floor *tmp174 100000000.49999999
-   205 label *label74
--    * op div *tmp177 100000000 100000000
-   206 assertequals 1 1 "tan"
-   207 label *label75
+   214 label *label76
+   215 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 0.9999999999999999 100000000
+   216 # "Function: inline def round(in x)"
+-    * op add *tmp184 99999999.99999999 0.5
+-    * op floor *tmp183 100000000.49999999
+   217 label *label77
+-    * op div *tmp186 100000000 100000000
+   218 assertequals 1 1 "tan"
+   219 label *label78
 -    * set :assertEqualsRound:expected 90
 -    * set :assertEqualsRound:actual 90
 -    * set :assertEqualsRound:title "asin"
-   208 label *label76
-   209 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 90 100000000
-   210 # "Function: inline def round(in x)"
--    * op add *tmp175 9000000000 0.5
--    * op floor *tmp174 9000000000.5
-   211 label *label77
--    * op div *tmp177 9000000000 100000000
-   212 assertequals 90 90 "asin"
-   213 label *label78
+   220 label *label79
+   221 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 90 100000000
+   222 # "Function: inline def round(in x)"
+-    * op add *tmp184 9000000000 0.5
+-    * op floor *tmp183 9000000000.5
+   223 label *label80
+-    * op div *tmp186 9000000000 100000000
+   224 assertequals 90 90 "asin"
+   225 label *label81
 -    * set :assertEqualsRound:expected 0
 -    * set :assertEqualsRound:actual 0
 -    * set :assertEqualsRound:title "acos"
-   214 label *label79
-   215 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 0 100000000
-   216 # "Function: inline def round(in x)"
--    * op add *tmp175 0 0.5
--    * op floor *tmp174 0.5
-   217 label *label80
--    * op div *tmp177 0 100000000
-   218 assertequals 0 0 "acos"
-   219 label *label81
+   226 label *label82
+   227 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 0 100000000
+   228 # "Function: inline def round(in x)"
+-    * op add *tmp184 0 0.5
+-    * op floor *tmp183 0.5
+   229 label *label83
+-    * op div *tmp186 0 100000000
+   230 assertequals 0 0 "acos"
+   231 label *label84
 -    * set :assertEqualsRound:expected 45
 -    * set :assertEqualsRound:actual 45
 -    * set :assertEqualsRound:title "atan"
-   220 label *label82
-   221 # "Function: void assertEqualsRound(in expected, in actual, in title)"
--    * op mul *tmp173 45 100000000
-   222 # "Function: inline def round(in x)"
--    * op add *tmp175 4500000000 0.5
--    * op floor *tmp174 4500000000.5
-   223 label *label83
--    * op div *tmp177 4500000000 100000000
-   224 assertequals 45 45 "atan"
-   225 label *label84
-   226 # "Function: inline def d(in n)"
+   232 label *label85
+   233 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+-    * op mul *tmp182 45 100000000
+   234 # "Function: inline def round(in x)"
+-    * op add *tmp184 4500000000 0.5
+-    * op floor *tmp183 4500000000.5
+   235 label *label86
+-    * op div *tmp186 4500000000 100000000
+   236 assertequals 45 45 "atan"
+   237 label *label87
+   238 # "Function: inline def d(in n)"
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
@@ -2136,14 +2220,23 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
    133 # "Function: inline def d(in n)"
    134 op add *tmp92 zero 65535
  
-   229 assertequals -8 *tmp132 "unary minus"
-   230 # "Function: inline def d(in n)"
-   231 label *label47
--    * op equal *tmp135 *tmp42 false
-+  232 op equal *tmp135 zero false
-   233 assertequals 1 *tmp135 "boolean negation 1"
-   234 # "Function: inline def d(in n)"
-   235 label *label48
+   163 assertequals 1 *tmp114 "sign(2)"
+   164 # "Function: inline def d(in n)"
+   165 label *label41
+-    * op sign *tmp117 *tmp42
++  166 op sign *tmp117 zero
+   167 assertequals 0 *tmp117 "sign(0)"
+   168 # "Function: inline def d(in n)"
+   169 op add *tmp118 zero 2.718281828459045
+ 
+   241 assertequals -8 *tmp141 "unary minus"
+   242 # "Function: inline def d(in n)"
+   243 label *label50
+-    * op equal *tmp144 *tmp42 false
++  244 op equal *tmp144 zero false
+   245 assertequals 1 *tmp144 "boolean negation 1"
+   246 # "Function: inline def d(in n)"
+   247 label *label51
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
  
@@ -2312,146 +2405,158 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    118 op abs *tmp108 *tmp106
    119 assertequals 2 *tmp108 "abs"
    120 # "Function: inline def d(in n)"
-   121 op add *tmp109 zero 2.718281828459045
 -    * label *label39
-   122 op log *tmp111 *tmp109
-   123 assertequals 1 *tmp111 "log"
-   124 # "Function: inline def d(in n)"
-   125 op add *tmp112 zero 10
+   121 op sign *tmp111 *tmp106
+   122 assertequals -1 *tmp111 "sign(-2)"
+   123 # "Function: inline def d(in n)"
 -    * label *label40
-   126 op log10 *tmp114 *tmp112
-   127 assertequals 1 *tmp114 "log10"
-   128 # "Function: inline def d(in n)"
-   129 op add *tmp115 zero 2.5
+   124 op sign *tmp114 *tmp6
+   125 assertequals 1 *tmp114 "sign(2)"
+   126 # "Function: inline def d(in n)"
 -    * label *label41
-   130 op floor *tmp117 *tmp115
-   131 assertequals 2 *tmp117 "floor"
-   132 # "Function: inline def d(in n)"
+   127 op sign *tmp117 zero
+   128 assertequals 0 *tmp117 "sign(0)"
+   129 # "Function: inline def d(in n)"
+   130 op add *tmp118 zero 2.718281828459045
 -    * label *label42
-   133 op ceil *tmp120 *tmp115
-   134 assertequals 3 *tmp120 "ceil"
-   135 # "Function: inline def d(in n)"
-   136 op add *tmp121 zero 16
+   131 op log *tmp120 *tmp118
+   132 assertequals 1 *tmp120 "log"
+   133 # "Function: inline def d(in n)"
+   134 op add *tmp121 zero 10
 -    * label *label43
-   137 op sqrt *tmp123 *tmp121
-   138 assertequals 4 *tmp123 "sqrt"
-   139 # "Function: inline def d(in n)"
+   135 op log10 *tmp123 *tmp121
+   136 assertequals 1 *tmp123 "log10"
+   137 # "Function: inline def d(in n)"
+   138 op add *tmp124 zero 2.5
 -    * label *label44
-   140 op angle *tmp126 1 *tmp48
-   141 assertequals 45 *tmp126 "angle"
-   142 # "Function: inline def d(in n)"
-   143 op add *tmp127 zero 135
+   139 op floor *tmp126 *tmp124
+   140 assertequals 2 *tmp126 "floor"
+   141 # "Function: inline def d(in n)"
 -    * label *label45
-   144 op angleDiff *tmp129 45 *tmp127
-   145 assertequals 90 *tmp129 "angleDiff"
-   146 assertequals 5 5 "len"
--    * label *label67
-   147 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   148 # "Function: inline def round(in x)"
--    * label *label68
-   149 assertequals 1 1 "sin"
--    * label *label69
+   142 op ceil *tmp129 *tmp124
+   143 assertequals 3 *tmp129 "ceil"
+   144 # "Function: inline def d(in n)"
+   145 op add *tmp130 zero 16
+-    * label *label46
+   146 op sqrt *tmp132 *tmp130
+   147 assertequals 4 *tmp132 "sqrt"
+   148 # "Function: inline def d(in n)"
+-    * label *label47
+   149 op angle *tmp135 1 *tmp48
+   150 assertequals 45 *tmp135 "angle"
+   151 # "Function: inline def d(in n)"
+   152 op add *tmp136 zero 135
+-    * label *label48
+   153 op angleDiff *tmp138 45 *tmp136
+   154 assertequals 90 *tmp138 "angleDiff"
+   155 assertequals 5 5 "len"
 -    * label *label70
-   150 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   151 # "Function: inline def round(in x)"
--    * label *label71
-   152 assertequals -1 -1 "cos"
--    * label *label72
--    * label *label73
-   153 # "Function: void assertEqualsRound(in expected, in actual, in title)"
-   154 # "Function: inline def round(in x)"
--    * label *label74
-   155 assertequals 1 1 "tan"
--    * label *label75
--    * label *label76
    156 # "Function: void assertEqualsRound(in expected, in actual, in title)"
    157 # "Function: inline def round(in x)"
--    * label *label77
-   158 assertequals 90 90 "asin"
--    * label *label78
--    * label *label79
+-    * label *label71
+   158 assertequals 1 1 "sin"
+-    * label *label72
+-    * label *label73
    159 # "Function: void assertEqualsRound(in expected, in actual, in title)"
    160 # "Function: inline def round(in x)"
--    * label *label80
-   161 assertequals 0 0 "acos"
--    * label *label81
--    * label *label82
+-    * label *label74
+   161 assertequals -1 -1 "cos"
+-    * label *label75
+-    * label *label76
    162 # "Function: void assertEqualsRound(in expected, in actual, in title)"
    163 # "Function: inline def round(in x)"
+-    * label *label77
+   164 assertequals 1 1 "tan"
+-    * label *label78
+-    * label *label79
+   165 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   166 # "Function: inline def round(in x)"
+-    * label *label80
+   167 assertequals 90 90 "asin"
+-    * label *label81
+-    * label *label82
+   168 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   169 # "Function: inline def round(in x)"
 -    * label *label83
-   164 assertequals 45 45 "atan"
+   170 assertequals 0 0 "acos"
 -    * label *label84
-   165 # "Function: inline def d(in n)"
--    * label *label46
-   166 op sub *tmp132 -8 zero
-   167 assertequals -8 *tmp132 "unary minus"
-   168 # "Function: inline def d(in n)"
--    * label *label47
-   169 op equal *tmp135 zero false
-   170 assertequals 1 *tmp135 "boolean negation 1"
-   171 # "Function: inline def d(in n)"
--    * label *label48
-   172 op equal *tmp138 *tmp48 false
-   173 assertequals 0 *tmp138 "boolean negation 2"
+-    * label *label85
+   171 # "Function: void assertEqualsRound(in expected, in actual, in title)"
+   172 # "Function: inline def round(in x)"
+-    * label *label86
+   173 assertequals 45 45 "atan"
+-    * label *label87
    174 # "Function: inline def d(in n)"
 -    * label *label49
-   175 op equal *tmp141 *tmp6 false
-   176 assertequals 0 *tmp141 "boolean negation 3"
+   175 op sub *tmp141 -8 zero
+   176 assertequals -8 *tmp141 "unary minus"
    177 # "Function: inline def d(in n)"
 -    * label *label50
-   178 assertequals 16 *tmp23 "**="
-   179 # "Function: inline def d(in n)"
+   178 op equal *tmp144 zero false
+   179 assertequals 1 *tmp144 "boolean negation 1"
+   180 # "Function: inline def d(in n)"
 -    * label *label51
-   180 op mul :a 2 *tmp9
-   181 assertequals 8 :a "*="
-   182 # "Function: inline def d(in n)"
+   181 op equal *tmp147 *tmp48 false
+   182 assertequals 0 *tmp147 "boolean negation 2"
+   183 # "Function: inline def d(in n)"
 -    * label *label52
-   183 assertequals 1.5 *tmp11 "/="
-   184 # "Function: inline def d(in n)"
--    * label *label53
-   185 assertequals 1 *tmp17 "\="
+   184 op equal *tmp150 *tmp6 false
+   185 assertequals 0 *tmp150 "boolean negation 3"
    186 # "Function: inline def d(in n)"
--    * label *label54
-   187 assertequals 2 *tmp20 "%="
+-    * label *label53
+   187 assertequals 16 *tmp23 "**="
    188 # "Function: inline def d(in n)"
+-    * label *label54
+   189 op mul :a 2 *tmp9
+   190 assertequals 8 :a "*="
+   191 # "Function: inline def d(in n)"
 -    * label *label55
-   189 assertequals 6 *tmp3 "+="
-   190 # "Function: inline def d(in n)"
--    * label *label56
-   191 op sub :a 2 zero
-   192 assertequals 2 :a "-="
+   192 assertequals 1.5 *tmp11 "/="
    193 # "Function: inline def d(in n)"
--    * label *label57
-   194 assertequals 4 *tmp76 "<<="
+-    * label *label56
+   194 assertequals 1 *tmp17 "\="
    195 # "Function: inline def d(in n)"
--    * label *label58
-   196 assertequals 2 *tmp79 ">>="
+-    * label *label57
+   196 assertequals 2 *tmp20 "%="
    197 # "Function: inline def d(in n)"
--    * label *label59
-   198 assertequals 3 *tmp82 "|="
+-    * label *label58
+   198 assertequals 6 *tmp3 "+="
    199 # "Function: inline def d(in n)"
+-    * label *label59
+   200 op sub :a 2 zero
+   201 assertequals 2 :a "-="
+   202 # "Function: inline def d(in n)"
 -    * label *label60
-   200 assertequals 2 *tmp85 "&="
-   201 # "Function: inline def d(in n)"
+   203 assertequals 4 *tmp76 "<<="
+   204 # "Function: inline def d(in n)"
 -    * label *label61
-   202 assertequals 1 *tmp88 "^="
-   203 # "Function: inline def d(in n)"
+   205 assertequals 2 *tmp79 ">>="
+   206 # "Function: inline def d(in n)"
 -    * label *label62
-   204 assertequals false *tmp44 "&&="
-   205 # "Function: inline def d(in n)"
+   207 assertequals 3 *tmp82 "|="
+   208 # "Function: inline def d(in n)"
 -    * label *label63
-   206 assertequals true *tmp47 "&&="
-   207 # "Function: inline def d(in n)"
+   209 assertequals 2 *tmp85 "&="
+   210 # "Function: inline def d(in n)"
 -    * label *label64
-   208 op or *tmp172 0 *tmp6
-   209 op notEqual :a *tmp172 false
-   210 assertequals true :a "||="
+   211 assertequals 1 *tmp88 "^="
+   212 # "Function: inline def d(in n)"
+-    * label *label65
+   213 assertequals false *tmp44 "&&="
+   214 # "Function: inline def d(in n)"
+-    * label *label66
+   215 assertequals true *tmp47 "&&="
+   216 # "Function: inline def d(in n)"
+-    * label *label67
+   217 op or *tmp181 0 *tmp6
+   218 op notEqual :a *tmp181 false
+   219 assertequals true :a "||="
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   211 assertequals %ff0000ff %ff0000 "short color literals"
-   212 assertequals %ffffffff %[white] "named color literals"
-   213 stop
+   220 assertequals %ff0000ff %ff0000 "short color literals"
+   221 assertequals %ffffffff %[white] "named color literals"
+   222 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -2577,31 +2682,40 @@ op add *tmp106 zero -2
 op abs *tmp108 *tmp106
 assertequals 2 *tmp108 "abs"
 # "Function: inline def d(in n)"
-op add *tmp109 zero 2.718281828459045
-op log *tmp111 *tmp109
-assertequals 1 *tmp111 "log"
+op sign *tmp111 *tmp106
+assertequals -1 *tmp111 "sign(-2)"
 # "Function: inline def d(in n)"
-op add *tmp112 zero 10
-op log10 *tmp114 *tmp112
-assertequals 1 *tmp114 "log10"
+op sign *tmp114 *tmp6
+assertequals 1 *tmp114 "sign(2)"
 # "Function: inline def d(in n)"
-op add *tmp115 zero 2.5
-op floor *tmp117 *tmp115
-assertequals 2 *tmp117 "floor"
+op sign *tmp117 zero
+assertequals 0 *tmp117 "sign(0)"
 # "Function: inline def d(in n)"
-op ceil *tmp120 *tmp115
-assertequals 3 *tmp120 "ceil"
+op add *tmp118 zero 2.718281828459045
+op log *tmp120 *tmp118
+assertequals 1 *tmp120 "log"
 # "Function: inline def d(in n)"
-op add *tmp121 zero 16
-op sqrt *tmp123 *tmp121
-assertequals 4 *tmp123 "sqrt"
+op add *tmp121 zero 10
+op log10 *tmp123 *tmp121
+assertequals 1 *tmp123 "log10"
 # "Function: inline def d(in n)"
-op angle *tmp126 1 *tmp48
-assertequals 45 *tmp126 "angle"
+op add *tmp124 zero 2.5
+op floor *tmp126 *tmp124
+assertequals 2 *tmp126 "floor"
 # "Function: inline def d(in n)"
-op add *tmp127 zero 135
-op angleDiff *tmp129 45 *tmp127
-assertequals 90 *tmp129 "angleDiff"
+op ceil *tmp129 *tmp124
+assertequals 3 *tmp129 "ceil"
+# "Function: inline def d(in n)"
+op add *tmp130 zero 16
+op sqrt *tmp132 *tmp130
+assertequals 4 *tmp132 "sqrt"
+# "Function: inline def d(in n)"
+op angle *tmp135 1 *tmp48
+assertequals 45 *tmp135 "angle"
+# "Function: inline def d(in n)"
+op add *tmp136 zero 135
+op angleDiff *tmp138 45 *tmp136
+assertequals 90 *tmp138 "angleDiff"
 assertequals 5 5 "len"
 # "Function: void assertEqualsRound(in expected, in actual, in title)"
 # "Function: inline def round(in x)"
@@ -2622,17 +2736,17 @@ assertequals 0 0 "acos"
 # "Function: inline def round(in x)"
 assertequals 45 45 "atan"
 # "Function: inline def d(in n)"
-op sub *tmp132 -8 zero
-assertequals -8 *tmp132 "unary minus"
+op sub *tmp141 -8 zero
+assertequals -8 *tmp141 "unary minus"
 # "Function: inline def d(in n)"
-op equal *tmp135 zero false
-assertequals 1 *tmp135 "boolean negation 1"
+op equal *tmp144 zero false
+assertequals 1 *tmp144 "boolean negation 1"
 # "Function: inline def d(in n)"
-op equal *tmp138 *tmp48 false
-assertequals 0 *tmp138 "boolean negation 2"
+op equal *tmp147 *tmp48 false
+assertequals 0 *tmp147 "boolean negation 2"
 # "Function: inline def d(in n)"
-op equal *tmp141 *tmp6 false
-assertequals 0 *tmp141 "boolean negation 3"
+op equal *tmp150 *tmp6 false
+assertequals 0 *tmp150 "boolean negation 3"
 # "Function: inline def d(in n)"
 assertequals 16 *tmp23 "**="
 # "Function: inline def d(in n)"
@@ -2664,8 +2778,8 @@ assertequals false *tmp44 "&&="
 # "Function: inline def d(in n)"
 assertequals true *tmp47 "&&="
 # "Function: inline def d(in n)"
-op or *tmp172 0 *tmp6
-op notEqual :a *tmp172 false
+op or *tmp181 0 *tmp6
+op notEqual :a *tmp181 false
 assertequals true :a "||="
 assertequals %ff0000ff %ff0000 "short color literals"
 assertequals %ffffffff %[white] "named color literals"

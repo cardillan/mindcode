@@ -51,6 +51,7 @@ public enum Operation implements LogicArgument {
     LEN             (2, true,  "len"),
     NOISE           (2, false, "noise"),
     ABS             (1, true,  "abs"),
+    SIGN            (1, true,  "sign"),
     LOG             (1, true,  "log"),
     LOG10           (1, true,  "log10"),
     FLOOR           (1, true,  "floor"),

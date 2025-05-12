@@ -40,12 +40,16 @@ end;
  * Returns the sign of the number. The return value is `0` precisely when `x == 0`
  * (using the Mindustry Logic native comparison precision).
  */
-def sign(x)
+def signInexact(x)
     // Using equality here to get sign behavior consistent with equality operator
     x == 0 ? 0 : x < 0 ? -1 : 1;
 end;
 
-/** Returns the sign of the number. The return value is `0` when `x` is null or exactly zero. */
+/**
+ * Returns the sign of the number. The return value is `0` when `x` is null or exactly zero.
+ *
+ * **Note:** When compiling for Mindustry 8, use the built-in `sign` function instead.
+ */
 inline def signExact(x)
     // Use branchless sign computation
     (x > 0) - (x < 0);

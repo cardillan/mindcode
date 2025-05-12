@@ -11,10 +11,10 @@ round(2.5)                :: 3
 round(-3.5)               :: -3
 frac(3.5)                 :: 0.5
 frac(-1.5)                :: -0.5
-sign(0)                   :: 0
-sign(1e-7)                :: 0
-sign(1e-5)                :: 1
-sign(-5)                  :: -1
+signInexact(0)            :: 0
+signInexact(1e-7)         :: 0
+signInexact(1e-5)         :: 1
+signInexact(-5)           :: -1
 signExact(0)              :: 0
 signExact(1e-7)           :: 1
 signExact(-1e-7)          :: -1

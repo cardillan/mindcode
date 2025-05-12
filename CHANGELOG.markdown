@@ -10,9 +10,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed wrong `unsafe-case-switching` optimization for small jump tables ([#253](https://github.com/cardillan/mindcode/issues/253)).
 
+### Added
+
+* Added support for the new `op sign` and `unpackcolor` Mindustry BE instructions to the compiler and processor emulator.
+
 ### Changed
 
-* When splitting jump tables into multiple segments, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster. 
+* **Breaking**: the `sign` function in the `math` library was renamed to `signInexact`. The `sign` function now maps to the Mindustry BE instruction `op sign`.
+* **Breaking**: the `unpackcolor` function in the `graphics` library was renamed to `unpackcolor7`. The `unpackcolor` function now maps to the Mindustry BE instruction `unpackcolor`.
+* When splitting jump tables into multiple segments, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
 
 ## 3.4.0 - 2025-05-11
 

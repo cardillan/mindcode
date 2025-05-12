@@ -14,35 +14,35 @@
    992 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 0):
-  * Unroll iteration loop at *math:113:5                         cost     0, benefit        7.0, efficiency   Infinity (-8 instructions)
-    Unroll iteration loop at *math:125:5                         cost     0, benefit        7.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:220:5                         cost   145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:238:5                         cost     0, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:238:5                         cost     0, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    14, benefit       14.0, efficiency      1.000
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   125, benefit       44.0, efficiency      0.352
+  * Unroll iteration loop at *math:117:5                         cost     0, benefit        7.0, efficiency   Infinity (-8 instructions)
+    Unroll iteration loop at *math:129:5                         cost     0, benefit        7.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:224:5                         cost   145, benefit       23.0, efficiency      0.159
+    Unroll iteration loop at *math:242:5                         cost     0, benefit      575.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   145, benefit       23.0, efficiency      0.159
+    Unroll iteration loop at *math:242:5                         cost     0, benefit      575.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    14, benefit       14.0, efficiency      1.000
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   125, benefit       44.0, efficiency      0.352
   ! Inline function call at line 14:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 15:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 16:17                           cost     5, benefit        3.5, efficiency      0.700
@@ -62,34 +62,34 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Inline function call at line 62:17                           cost    18, benefit        5.5, efficiency      0.306
 
 Pass 1: speed optimization selection (cost limit 0):
-  * Unroll iteration loop at *math:125:5                         cost     0, benefit        7.0, efficiency   Infinity (-9 instructions)
-  ! Unroll iteration loop at *math:220:5                         cost   145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:238:5                         cost     0, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:238:5                         cost     0, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    14, benefit       14.0, efficiency      1.000
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   125, benefit       44.0, efficiency      0.352
+  * Unroll iteration loop at *math:129:5                         cost     0, benefit        7.0, efficiency   Infinity (-9 instructions)
+  ! Unroll iteration loop at *math:224:5                         cost   145, benefit       23.0, efficiency      0.159
+    Unroll iteration loop at *math:242:5                         cost     0, benefit      575.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   145, benefit       23.0, efficiency      0.159
+    Unroll iteration loop at *math:242:5                         cost     0, benefit      575.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    14, benefit       14.0, efficiency      1.000
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   125, benefit       44.0, efficiency      0.352
   ! Inline function call at line 14:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 15:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 16:17                           cost     5, benefit        3.5, efficiency      0.700
@@ -109,33 +109,33 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Inline function call at line 62:17                           cost    18, benefit        5.5, efficiency      0.306
 
 Pass 1: speed optimization selection (cost limit 0):
-  ! Unroll iteration loop at *math:220:5                         cost   145, benefit       23.0, efficiency      0.159
-  * Unroll iteration loop at *math:238:5                         cost     0, benefit      575.0, efficiency   Infinity (+3 instructions)
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:238:5                         cost     0, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    14, benefit       14.0, efficiency      1.000
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   125, benefit       44.0, efficiency      0.352
+  ! Unroll iteration loop at *math:224:5                         cost   145, benefit       23.0, efficiency      0.159
+  * Unroll iteration loop at *math:242:5                         cost     0, benefit      575.0, efficiency   Infinity (+3 instructions)
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   145, benefit       23.0, efficiency      0.159
+    Unroll iteration loop at *math:242:5                         cost     0, benefit      575.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    14, benefit       14.0, efficiency      1.000
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   125, benefit       44.0, efficiency      0.352
   ! Inline function call at line 14:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 15:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 16:17                           cost     5, benefit        3.5, efficiency      0.700
@@ -155,32 +155,32 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Inline function call at line 62:17                           cost    18, benefit        5.5, efficiency      0.306
 
 Pass 1: speed optimization selection (cost limit 0):
-  ! Unroll iteration loop at *math:220:5                         cost   163, benefit       23.0, efficiency      0.141
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   145, benefit       23.0, efficiency      0.159
-  * Unroll iteration loop at *math:238:5                         cost     0, benefit      575.0, efficiency   Infinity (+3 instructions)
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    14, benefit       14.0, efficiency      1.000
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   125, benefit       44.0, efficiency      0.352
+  ! Unroll iteration loop at *math:224:5                         cost   163, benefit       23.0, efficiency      0.141
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   145, benefit       23.0, efficiency      0.159
+  * Unroll iteration loop at *math:242:5                         cost     0, benefit      575.0, efficiency   Infinity (+3 instructions)
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    14, benefit       14.0, efficiency      1.000
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   125, benefit       44.0, efficiency      0.352
   ! Inline function call at line 14:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 15:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 16:17                           cost     5, benefit        3.5, efficiency      0.700
@@ -200,31 +200,31 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Inline function call at line 62:17                           cost    18, benefit        5.5, efficiency      0.306
 
 Pass 1: speed optimization selection (cost limit 0):
-  ! Unroll iteration loop at *math:220:5                         cost   163, benefit       23.0, efficiency      0.141
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   163, benefit       23.0, efficiency      0.141
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    14, benefit       14.0, efficiency      1.000
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   125, benefit       44.0, efficiency      0.352
+  ! Unroll iteration loop at *math:224:5                         cost   163, benefit       23.0, efficiency      0.141
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   163, benefit       23.0, efficiency      0.141
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    14, benefit       14.0, efficiency      1.000
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   125, benefit       44.0, efficiency      0.352
   ! Inline function call at line 14:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 15:17                           cost     5, benefit        3.5, efficiency      0.700
   ! Inline function call at line 16:17                           cost     5, benefit        3.5, efficiency      0.700
@@ -244,31 +244,31 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Inline function call at line 62:17                           cost    18, benefit        5.5, efficiency      0.306
 
 Pass 2: speed optimization selection (cost limit 21):
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  * Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500 (+13 instructions)
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-    Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-    Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-    Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-    Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-    Inline function 'sign' defined at *math:43:1                 cost    11, benefit       14.0, efficiency      1.273
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   111, benefit       44.0, efficiency      0.396
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  * Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500 (+13 instructions)
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+    Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+    Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+    Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+    Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+    Inline function 'signInexact' defined at *math:43:1          cost    11, benefit       14.0, efficiency      1.273
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   111, benefit       44.0, efficiency      0.396
     Inline function call at line 14:17                           cost     4, benefit        3.5, efficiency      0.875
     Inline function call at line 15:17                           cost     4, benefit        3.5, efficiency      0.875
     Inline function call at line 16:17                           cost     4, benefit        3.5, efficiency      0.875
@@ -288,29 +288,29 @@ Pass 2: speed optimization selection (cost limit 21):
     Inline function call at line 62:17                           cost    16, benefit        5.5, efficiency      0.344
 
 Pass 2: speed optimization selection (cost limit 8):
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  * Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143 (+7 instructions)
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-    Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    11, benefit       14.0, efficiency      1.273
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   111, benefit       44.0, efficiency      0.396
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  * Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143 (+7 instructions)
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+    Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    11, benefit       14.0, efficiency      1.273
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   111, benefit       44.0, efficiency      0.396
     Inline function call at line 14:17                           cost     4, benefit        3.5, efficiency      0.875
     Inline function call at line 15:17                           cost     4, benefit        3.5, efficiency      0.875
     Inline function call at line 16:17                           cost     4, benefit        3.5, efficiency      0.875
@@ -330,28 +330,28 @@ Pass 2: speed optimization selection (cost limit 8):
   ! Inline function call at line 62:17                           cost    16, benefit        5.5, efficiency      0.344
 
 Pass 2: speed optimization selection (cost limit 1):
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   271, benefit       23.0, efficiency      0.085
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    11, benefit       14.0, efficiency      1.273
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   111, benefit       44.0, efficiency      0.396
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   271, benefit       23.0, efficiency      0.085
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    11, benefit       14.0, efficiency      1.273
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   111, benefit       44.0, efficiency      0.396
   ! Inline function call at line 14:17                           cost     4, benefit        3.5, efficiency      0.875
   ! Inline function call at line 15:17                           cost     4, benefit        3.5, efficiency      0.875
   ! Inline function call at line 16:17                           cost     4, benefit        3.5, efficiency      0.875
@@ -371,28 +371,28 @@ Pass 2: speed optimization selection (cost limit 1):
   ! Inline function call at line 62:17                           cost    16, benefit        5.5, efficiency      0.344
 
 Pass 3: speed optimization selection (cost limit 1):
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   271, benefit       23.0, efficiency      0.085
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    11, benefit       14.0, efficiency      1.273
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   111, benefit       44.0, efficiency      0.396
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   271, benefit       23.0, efficiency      0.085
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    11, benefit       14.0, efficiency      1.273
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   111, benefit       44.0, efficiency      0.396
   ! Inline function call at line 14:17                           cost     4, benefit        3.5, efficiency      0.875
   ! Inline function call at line 15:17                           cost     4, benefit        3.5, efficiency      0.875
   ! Inline function call at line 16:17                           cost     4, benefit        3.5, efficiency      0.875
@@ -412,28 +412,28 @@ Pass 3: speed optimization selection (cost limit 1):
   ! Inline function call at line 62:17                           cost    16, benefit        5.5, efficiency      0.344
 
 Pass 4: speed optimization selection (cost limit 1):
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   271, benefit       23.0, efficiency      0.085
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost   229, benefit       23.0, efficiency      0.100
-  ! Unroll iteration loop at *math:238:5                         cost     7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:220:5                         cost    37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:220:5                         cost   424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:238:5                         cost    10, benefit      875.0, efficiency     87.500
-  ! Inline function 'sign' defined at *math:43:1                 cost    11, benefit       14.0, efficiency      1.273
-  ! Inline function 'median' defined at *math:164:1              cost    59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:181:1              cost   111, benefit       44.0, efficiency      0.396
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   271, benefit       23.0, efficiency      0.085
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost   229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:242:5                         cost     7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:224:5                         cost    37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:224:5                         cost   424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:242:5                         cost    10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:43:1          cost    11, benefit       14.0, efficiency      1.273
+  ! Inline function 'median' defined at *math:168:1              cost    59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:185:1              cost   111, benefit       44.0, efficiency      0.396
   ! Inline function call at line 14:17                           cost     4, benefit        3.5, efficiency      0.875
   ! Inline function call at line 15:17                           cost     4, benefit        3.5, efficiency      0.875
   ! Inline function call at line 16:17                           cost     4, benefit        3.5, efficiency      0.875
@@ -463,26 +463,26 @@ Final code before resolving virtual instructions:
     6:  assertequals -3 -3 "round(-3.5)"
     7:  assertequals 0.5 0.5 "frac(3.5)"
     8:  assertequals -0.5 -0.5 "frac(-1.5)"
-    9:  set :sign:x 0
-   10:  setaddr :sign*retaddr *label12
-   11:  call *label0 *invalid :sign*retval
+    9:  set :signInexact:x 0
+   10:  setaddr :signInexact*retaddr *label12
+   11:  call *label0 *invalid :signInexact*retval
         label *label12
-   12:  assertequals 0 :sign*retval "sign(0)"
-   13:  set :sign:x 0.0000001
-   14:  setaddr :sign*retaddr *label13
-   15:  call *label0 *invalid :sign*retval
+   12:  assertequals 0 :signInexact*retval "signInexact(0)"
+   13:  set :signInexact:x 0.0000001
+   14:  setaddr :signInexact*retaddr *label13
+   15:  call *label0 *invalid :signInexact*retval
         label *label13
-   16:  assertequals 0 :sign*retval "sign(1e-7)"
-   17:  set :sign:x 0.00001
-   18:  setaddr :sign*retaddr *label14
-   19:  call *label0 *invalid :sign*retval
+   16:  assertequals 0 :signInexact*retval "signInexact(1e-7)"
+   17:  set :signInexact:x 0.00001
+   18:  setaddr :signInexact*retaddr *label14
+   19:  call *label0 *invalid :signInexact*retval
         label *label14
-   20:  assertequals 1 :sign*retval "sign(1e-5)"
-   21:  set :sign:x -5
-   22:  setaddr :sign*retaddr *label15
-   23:  call *label0 *invalid :sign*retval
+   20:  assertequals 1 :signInexact*retval "signInexact(1e-5)"
+   21:  set :signInexact:x -5
+   22:  setaddr :signInexact*retaddr *label15
+   23:  call *label0 *invalid :signInexact*retval
         label *label15
-   24:  assertequals -1 :sign*retval "sign(-5)"
+   24:  assertequals -1 :signInexact*retval "signInexact(-5)"
    25:  assertequals 0 0 "signExact(0)"
    26:  assertequals 1 1 "signExact(1e-7)"
    27:  assertequals -1 -1 "signExact(-1e-7)"
@@ -1705,14 +1705,14 @@ Final code before resolving virtual instructions:
   949:  stop
   950:  end
         label *label0
-  951:  set :sign*retval 0
-  952:  jump *label499 equal :sign:x 0
-  953:  set :sign*retval 1
-  954:  jump *label501 greaterThanEq :sign:x 0
-  955:  set :sign*retval -1
+  951:  set :signInexact*retval 0
+  952:  jump *label499 equal :signInexact:x 0
+  953:  set :signInexact*retval 1
+  954:  jump *label501 greaterThanEq :signInexact:x 0
+  955:  set :signInexact*retval -1
         label *label501
         label *label499
-  956:  return :sign*retaddr
+  956:  return :signInexact*retaddr
         label *label1
   957:  op max :median:y2 :median:x1 :median:x2
   958:  op min :median:y3 :median:x3 :median:x4
@@ -1937,7 +1937,7 @@ stop instruction encountered, dumping variable values:
 :median:y4: 8.0
 :nullToZero.1:result: 1.0
 :nullToZero:result: 0.0
-:sign*retaddr: 24.0
-:sign*retval: -1.0
-:sign:x: -5.0
+:signInexact*retaddr: 24.0
+:signInexact*retval: -1.0
+:signInexact:x: -5.0
 @counter: 950.0

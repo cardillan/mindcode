@@ -1210,12 +1210,12 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesRemoteVoidFunction() {
             assertCompilesTo("""
-                        module test;
-                        
-                        remote void foo(in a, out b)
-                            b = 2 * a;
-                        end;
-                        """,
+                            module test;
+                            
+                            remote void foo(in a, out b)
+                                b = 2 * a;
+                            end;
+                            """,
                     createInstruction(JUMP, label(1), "always"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(1)),
@@ -1236,12 +1236,12 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesRemoteDefFunction() {
             assertCompilesTo("""
-                        module test;
-                        
-                        remote def foo(in out a)
-                            return a++ / 2;
-                        end;
-                        """,
+                            module test;
+                            
+                            remote def foo(in out a)
+                                return a++ / 2;
+                            end;
+                            """,
                     createInstruction(JUMP, label(1), "always"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(1)),
@@ -1718,7 +1718,6 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                             """);
         }
 
-
         @Test
         void compilesNewDrawInstructions() {
             assertCompilesTo("""
@@ -1837,13 +1836,31 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             );
         }
 
-
         @Test
         void compilesPrintChar() {
             assertCompilesTo("""
                             printchar(65);
                             """,
                     createInstruction(PRINTCHAR, "65")
+            );
+        }
+
+        @Test
+        void compilesOpSignInstruction() {
+            assertCompilesTo("""
+                            print(sign(a));
+                            """,
+                    createInstruction(OP, "sign", tmp(0), ":a"),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void compilesUnpackColorInstruction() {
+            assertCompilesTo("""
+                            unpackcolor(out r, out g, out b, out a, %[red]);
+                            """,
+                    createInstruction(UNPACKCOLOR, ":r", ":g", ":b", ":a", "%[red]")
             );
         }
     }

@@ -193,9 +193,9 @@ Length of the side of the drawing area of the `large-logic-display` block.
 
 ## Functions
 
-### unpackcolor
+### unpackcolor7
 
-**Definition:** `void unpackcolor(packedColor, out r, out g, out b, out a)`
+**Definition:** `void unpackcolor7(packedColor, out r, out g, out b, out a)`
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
@@ -206,6 +206,9 @@ Length of the side of the drawing area of the `large-logic-display` block.
 Unpacks numeric value created by the `packcolor` instruction (or a corresponding color literal) into
 individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
 all four color channels.
+
+The function is meant to be used with Mindustry version 7. In Mindustry 8, use the built-in function
+`unpackcolor`.
 
 **Inputs and outputs:**
 
@@ -524,9 +527,9 @@ Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gi
 
 Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
-### sign
+### signInexact
 
-**Definition:** `def sign(x)`
+**Definition:** `def signInexact(x)`
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
@@ -546,6 +549,8 @@ Returns the sign of the number. The return value is `0` precisely when `x == 0`
 | Inlined function               |                   3 |                  3 |
 
 Returns the sign of the number. The return value is `0` when `x` is null or exactly zero.
+
+**Note:** When compiling for Mindustry 8, use the built-in `sign` function instead.
 
 ### isZero
 

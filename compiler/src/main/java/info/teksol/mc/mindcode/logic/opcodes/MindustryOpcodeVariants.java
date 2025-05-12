@@ -112,6 +112,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("len"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("noise"),        res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("abs"),          res("result"),  in("a"));
+        add(list, V8A, MAX, S, FUNC, Opcode.OP,         op("sign"),         res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log"),          res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log10"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("floor"),        res("result"),  in("a"));
@@ -128,6 +129,8 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, S, FUNC, Opcode.LOOKUP,     lookup("type"), res("result"), in("index"));
 
         add(list, V7,  MAX, S, FUNC, Opcode.PACKCOLOR,  res("result"), in("r"), in("g"), in("b"), in("a"));
+
+        add(list, V8A, MAX, S, FUNC, Opcode.UNPACKCOLOR,out("r"), out("g"), out("b"), out("a"), in("color"));
 
         add(list, V7,  MAX, S, FUNC, Opcode.WAIT,       in("sec"));
         add(list, V7,  MAX, S, FUNC, Opcode.STOP);

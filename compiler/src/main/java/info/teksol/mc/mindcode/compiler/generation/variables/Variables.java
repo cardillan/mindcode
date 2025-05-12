@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -53,6 +54,7 @@ public class Variables extends AbstractMessageEmitter {
         processor = context.instructionProcessor();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
+        putVariable("__TARGET__", LogicString.create(profile.getProcessorVersion().mimexVersion));
     }
 
     public List<LogicVariable> getVolatileVariables() {

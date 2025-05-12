@@ -208,6 +208,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case SET         -> new SetInstruction(astContext, arguments, params);
             case SETADDR     -> new SetAddressInstruction(astContext, arguments, params);
             case STOP        -> new StopInstruction(astContext);
+            case UNPACKCOLOR -> new UnpackColorInstruction(astContext, arguments, params);
             case WRITE       -> new WriteInstruction(astContext, arguments, params);
             case WRITEARR    -> new WriteArrInstruction(astContext, arguments, params);
             default          ->  createGenericInstruction(astContext, opcode, arguments, params);
@@ -356,7 +357,8 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 + opcode.getAdditionalPrintArguments();
     }
 
-    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR, LOOKUP, NOOP, SETADDR);
+    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR,
+            UNPACKCOLOR, LOOKUP, NOOP, SETADDR);
     private static final Set<String> CONSTANT_PROPERTIES = Set.of("@size", "@speed", "@type", "@id");
 
     @Override
