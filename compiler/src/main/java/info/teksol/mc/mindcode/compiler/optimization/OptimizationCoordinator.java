@@ -189,9 +189,8 @@ public class OptimizationCoordinator {
                 break;
             }
 
-            OptimizationAction selectedAction = possibleOptimizations.stream()
-                    .filter(a -> a.cost() <= costLimit)
-                    .max(ACTION_COMPARATOR).orElse(null);
+            Set<OptimizationAction> considered = Collections.newSetFromMap(new IdentityHashMap<>());
+            OptimizationAction selectedAction = selectAction(possibleOptimizations, costLimit, considered);
             if (selectedAction != null) {
                 optimizationContext.prepare();
                 optimizationContext.debugPrintProgram(String.format("%n*** Performing optimization %s ***%n", selectedAction), true);
@@ -212,7 +211,7 @@ public class OptimizationCoordinator {
                 int difference = codeSize() - initialSize;
                 optimizationStatistics.add(OptimizerMessage.debug(
                         "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
-                possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference));
+                possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
             }
 
             if (selectedAction == null) {
@@ -223,6 +222,35 @@ public class OptimizationCoordinator {
         return modified;
     }
 
+    /// Selects an optimization action, taking action groups into account. An action in an action group with a better
+    ///
+    private @Nullable OptimizationAction selectAction(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
+        List<OptimizationAction> actions = possibleOptimizations.stream().sorted(ACTION_COMPARATOR.reversed()).toList();
+
+        // Last considered action cost per group
+        Map<String, Integer> actionCosts = new HashMap<>();
+        OptimizationAction candidate = null;
+
+        for (OptimizationAction action : actions) {
+            int effectiveLimit = costLimit + actionCosts.getOrDefault(action.getGroup(), 0);
+            if (action.cost() > effectiveLimit) continue;
+
+            if (action.getGroup() == null) {
+                return candidate != null ? candidate : action;
+            } else if (candidate == null || candidate.getGroup().equals(action.getGroup())) {
+                if (candidate == null || action.benefit() > candidate.benefit()) {
+                    // The action in this group has lower efficiency, but greater benefit
+                    candidate = action;
+                }
+            }
+
+            costLimit = costLimit - action.cost() + actionCosts.getOrDefault(action.getGroup(), 0);
+            actionCosts.put(action.getGroup(), action.cost());
+            considered.add(action);
+        }
+        return candidate;
+    }
+
     private int codeSize() {
         return InstructionCounter.globalSize(program);
     }
@@ -231,14 +259,16 @@ public class OptimizationCoordinator {
             Comparator.comparingDouble(OptimizationAction::efficiency)
                     .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed());
 
-    private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference) {
+    private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference,
+            Set<OptimizationAction> considered) {
         OptimizerMessage message;
         if (opt == selected) {
             message = OptimizerMessage.debug("  * %-60s cost %5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
                     opt, opt.cost(), opt.benefit(), opt.efficiency(), difference);
         } else {
             message = OptimizerMessage.debug("  %s %-60s cost %5d, benefit %10.1f, efficiency %10.3f",
-                    opt.cost() > costLimit ? "!" : " ", opt, opt.cost(), opt.benefit(), opt.efficiency());
+                    opt.cost() > costLimit ? "!" : considered.contains(opt) ? "o" : " ",
+                    opt, opt.cost(), opt.benefit(), opt.efficiency());
         }
         optimizationStatistics.add(message);
     }

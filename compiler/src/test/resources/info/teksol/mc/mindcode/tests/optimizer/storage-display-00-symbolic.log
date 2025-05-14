@@ -24,7 +24,7 @@ Pass 1: speed optimization selection (cost limit 630):
     Unroll loop at line 152:5                                    cost   521, benefit   156250.0, efficiency    299.904
     Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
   * Convert case at line 213:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750 (+1 instructions)
-    Convert case at line 165:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750
+  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750
 
 Pass 1: speed optimization selection (cost limit 629):
     Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571

@@ -22,16 +22,14 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 class CaseSwitcher extends BaseOptimizer {
     private static final int MINIMAL_GAP = 4;
 
-    // If the optimization allocates less space than specified by the quota, no further
-    // variants will be considered.
-    private static final double QUOTA_USAGE_LIMIT = 0.5;
-
     public CaseSwitcher(OptimizationContext optimizationContext) {
         super(Optimization.CASE_SWITCHING, optimizationContext);
     }
 
     private int invocations = 0;
     private int count = 0;
+
+    private int groupCount = 0;
 
     @Override
     public void generateFinalMessages() {
@@ -93,6 +91,8 @@ class CaseSwitcher extends BaseOptimizer {
     }
 
     private void findPossibleCaseSwitches(AstContext context, int costLimit, List<OptimizationAction> result) {
+        groupCount++;
+
         LogicVariable variable = null;
         TreeMap<Integer, LogicLabel> targets = new TreeMap<>();
 
@@ -175,9 +175,6 @@ class CaseSwitcher extends BaseOptimizer {
 
         int instructionSpace = getProfile().getInstructionLimit() - optimizationContext.getProgram().size();
         for (int i = 0; i < gaps.size(); i++) {
-            // Stop producing additional optimizations if the last one allocated less free space than given by the quota
-            if (action.cost() < instructionSpace * QUOTA_USAGE_LIMIT) return;
-
             action = new ConvertCaseExpressionAction(context, removed, variable, targets,
                     gaps.subList(0, i + 1), min, analyzer.getContentType(), removeRangeCheck);
             if (action.benefit() > 0 && action.cost() <= costLimit) {
@@ -188,6 +185,7 @@ class CaseSwitcher extends BaseOptimizer {
 
     private class ConvertCaseExpressionAction implements OptimizationAction {
         private final AstContext astContext;
+        private final int group = groupCount;
         private int cost;
         private double benefit;
         private final LogicVariable variable;
@@ -232,6 +230,11 @@ class CaseSwitcher extends BaseOptimizer {
         @Override
         public OptimizationResult apply(int costLimit) {
             return applyOptimization(() -> convertCaseExpression(costLimit), toString());
+        }
+
+        @Override
+        public @Nullable String getGroup() {
+            return "CaseSwitcher" + group;
         }
 
         private void debug(Object message) {

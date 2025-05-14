@@ -19,9 +19,13 @@
 Pass 1: speed optimization selection (cost limit 831):
   * Replicate loop condition at line 122:1                       cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
     Convert case at line 34:9 (segments: 1)                      cost    75, benefit      625.0, efficiency      8.333
+    Convert case at line 34:9 (segments: 2)                      cost    37, benefit      384.6, efficiency     10.395
+    Convert case at line 34:9 (segments: 3)                      cost    20, benefit      384.6, efficiency     19.231
 
 Pass 1: speed optimization selection (cost limit 830):
   * Convert case at line 34:9 (segments: 1)                      cost    75, benefit      625.0, efficiency      8.333 (+75 instructions)
+  o Convert case at line 34:9 (segments: 2)                      cost    37, benefit      384.6, efficiency     10.395
+  o Convert case at line 34:9 (segments: 3)                      cost    20, benefit      384.6, efficiency     19.231
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  

@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public interface OptimizationAction {
@@ -40,6 +41,13 @@ public interface OptimizationAction {
     ///
     /// @return description of the optimization
     String toString();
+
+    /// When not null, identifies a group of mutually exclusive optimization actions this optimization is part of.
+    /// All actions in a group with an efficiency better than any other action outside the group are considered.
+    /// From these, the action with better overall benefit than the other considered actions is selected.
+    ///
+    /// @return an identifier of a group this action belongs to.
+    default @Nullable String getGroup() { return null; }
 
     default double efficiency() {
         return benefit() / cost();

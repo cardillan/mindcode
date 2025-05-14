@@ -1198,69 +1198,46 @@ The above case expression is transformed to this:
     sensor *tmp2 *tmp1 @type
         sensor *tmp4 *tmp2 @id
         jump label_25 greaterThan *tmp4 34
-        jump label_62 lessThan *tmp4 17
+        jump label_37 lessThan *tmp4 17
         op sub *tmp5 *tmp4 17
         op add @counter @counter *tmp5
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_37 always 0 0
+        jump label_37 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
+        jump label_35 always 0 0
     label_25:
-        jump label_62 greaterThan *tmp4 234
-        jump label_62 lessThan *tmp4 203
-        op sub *tmp6 *tmp4 203
-        op add @counter @counter *tmp6
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_62 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_60 always 0 0
-        jump label_60 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_60 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-        jump label_62 always 0 0
-    label_60:
+        jump label_30 greaterThan *tmp4 207
+        jump label_35 equal *tmp4 203
+        jump label_35 equal *tmp4 204
+        jump label_35 equal *tmp4 206
+        jump label_35 equal *tmp4 207
+    label_30:
+        jump label_34 greaterThan *tmp4 225
+        jump label_35 equal *tmp4 220
+        jump label_35 equal *tmp4 221
+        jump label_35 equal *tmp4 225
+    label_34:
+        jump label_37 notEqual *tmp4 234
+    label_35:
         set *tmp0 "Wall"
-        jump label_63 always 0 0
-label_62:
+        jump label_38 always 0 0
+label_37:
     set *tmp0 "Not wall"
-    label_63:
+    label_38:
     print *tmp0
 ```
 

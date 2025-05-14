@@ -8,20 +8,22 @@
     20 instructions modified by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
-    74 instructions added by Case Switching (4 iterations).
+    35 instructions added by Case Switching (4 iterations).
      1 case expressions converted to switched jumps Case Switching.
      8 instructions eliminated by Jump Straightening (4 iterations).
      2 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     13 instructions eliminated by Print Merging.
-   228 instructions after optimizations.
+   189 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 831):
-  * Replicate loop condition at line 122:1                       cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
+    Replicate loop condition at line 122:1                       cost     1, benefit       25.0, efficiency     25.000
     Convert case at line 34:9 (segments: 1)                      cost    74, benefit     1250.0, efficiency     16.892
+  * Convert case at line 34:9 (segments: 2)                      cost    35, benefit     1009.6, efficiency     28.846 (+35 instructions)
+  o Convert case at line 34:9 (segments: 3)                      cost    18, benefit      913.5, efficiency     50.748
 
-Pass 1: speed optimization selection (cost limit 830):
-  * Convert case at line 34:9 (segments: 1)                      cost    74, benefit     1250.0, efficiency     16.892 (+74 instructions)
+Pass 1: speed optimization selection (cost limit 796):
+  * Replicate loop condition at line 122:1                       cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -588,267 +590,187 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    172 sensor :amount .CONTAINER .SENSOR
    173 sensor :max .CONTAINER .MAXIMUM
 
-Modifications by Replicate loop condition at line 122:1 (+1 instructions):
- 
-   150 label *label25
-   151 sensor *tmp25 .SWITCH @enabled
-   152 jump *label27 notEqual *tmp25 0
-+  153 label *label39
-   154 set :startTime @time
-   155 set :prevTick :nextTick
-   156 op add :nextTick :nextTick TICKS
- 
-   203 print "\n"
-   204 printflush .MESSAGE
-   205 label *label26
--    * jump *label25 always
-+  206 sensor *tmp25 .SWITCH @enabled
-+  207 jump *label39 equal *tmp25 0
-   208 label *label27
-   209 end
-
-Modifications by Convert case at line 34:9 (segments: 1) (+74 instructions):
+Modifications by Convert case at line 34:9 (segments: 2) (+35 instructions):
  
     26 print "\nFound: "
     27 print :block
     28 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
 +   29 sensor *tmp52 *tmp5 @id
-+   30 jump *label40 greaterThan *tmp52 146
-+   31 jump *label40 lessThan *tmp52 64
-+   32 multijump *label41 *tmp52 64 (m:*label124)
-+   33 multilabel *label41 (m:*label124)
++   30 jump *label40 greaterThan *tmp52 94
++   31 jump *label39 lessThan *tmp52 64
++   32 multijump *label41 *tmp52 64 (m:*label72)
++   33 multilabel *label41 (m:*label72)
 +   34 jump *label20 always
-+   35 multilabel *label42 (m:*label124)
-+   36 jump *label40 always
-+   37 multilabel *label43 (m:*label124)
-+   38 jump *label40 always
-+   39 multilabel *label44 (m:*label124)
-+   40 jump *label40 always
-+   41 multilabel *label45 (m:*label124)
++   35 multilabel *label42 (m:*label72)
++   36 jump *label39 always
++   37 multilabel *label43 (m:*label72)
++   38 jump *label39 always
++   39 multilabel *label44 (m:*label72)
++   40 jump *label39 always
++   41 multilabel *label45 (m:*label72)
 +   42 jump *label22 always
-+   43 multilabel *label46 (m:*label124)
++   43 multilabel *label46 (m:*label72)
 +   44 jump *label22 always
-+   45 multilabel *label47 (m:*label124)
++   45 multilabel *label47 (m:*label72)
 +   46 jump *label22 always
-+   47 multilabel *label48 (m:*label124)
-+   48 jump *label40 always
-+   49 multilabel *label49 (m:*label124)
++   47 multilabel *label48 (m:*label72)
++   48 jump *label39 always
++   49 multilabel *label49 (m:*label72)
 +   50 jump *label18 always
-+   51 multilabel *label50 (m:*label124)
++   51 multilabel *label50 (m:*label72)
 +   52 jump *label18 always
-+   53 multilabel *label51 (m:*label124)
-+   54 jump *label40 always
-+   55 multilabel *label52 (m:*label124)
-+   56 jump *label40 always
-+   57 multilabel *label53 (m:*label124)
-+   58 jump *label40 always
-+   59 multilabel *label54 (m:*label124)
-+   60 jump *label40 always
-+   61 multilabel *label55 (m:*label124)
-+   62 jump *label40 always
-+   63 multilabel *label56 (m:*label124)
-+   64 jump *label40 always
-+   65 multilabel *label57 (m:*label124)
-+   66 jump *label40 always
-+   67 multilabel *label58 (m:*label124)
-+   68 jump *label40 always
-+   69 multilabel *label59 (m:*label124)
-+   70 jump *label40 always
-+   71 multilabel *label60 (m:*label124)
-+   72 jump *label40 always
-+   73 multilabel *label61 (m:*label124)
-+   74 jump *label40 always
-+   75 multilabel *label62 (m:*label124)
-+   76 jump *label40 always
-+   77 multilabel *label63 (m:*label124)
-+   78 jump *label40 always
-+   79 multilabel *label64 (m:*label124)
-+   80 jump *label40 always
-+   81 multilabel *label65 (m:*label124)
-+   82 jump *label40 always
-+   83 multilabel *label66 (m:*label124)
-+   84 jump *label40 always
-+   85 multilabel *label67 (m:*label124)
-+   86 jump *label40 always
-+   87 multilabel *label68 (m:*label124)
-+   88 jump *label40 always
-+   89 multilabel *label69 (m:*label124)
-+   90 jump *label40 always
-+   91 multilabel *label70 (m:*label124)
++   53 multilabel *label51 (m:*label72)
++   54 jump *label39 always
++   55 multilabel *label52 (m:*label72)
++   56 jump *label39 always
++   57 multilabel *label53 (m:*label72)
++   58 jump *label39 always
++   59 multilabel *label54 (m:*label72)
++   60 jump *label39 always
++   61 multilabel *label55 (m:*label72)
++   62 jump *label39 always
++   63 multilabel *label56 (m:*label72)
++   64 jump *label39 always
++   65 multilabel *label57 (m:*label72)
++   66 jump *label39 always
++   67 multilabel *label58 (m:*label72)
++   68 jump *label39 always
++   69 multilabel *label59 (m:*label72)
++   70 jump *label39 always
++   71 multilabel *label60 (m:*label72)
++   72 jump *label39 always
++   73 multilabel *label61 (m:*label72)
++   74 jump *label39 always
++   75 multilabel *label62 (m:*label72)
++   76 jump *label39 always
++   77 multilabel *label63 (m:*label72)
++   78 jump *label39 always
++   79 multilabel *label64 (m:*label72)
++   80 jump *label39 always
++   81 multilabel *label65 (m:*label72)
++   82 jump *label39 always
++   83 multilabel *label66 (m:*label72)
++   84 jump *label39 always
++   85 multilabel *label67 (m:*label72)
++   86 jump *label39 always
++   87 multilabel *label68 (m:*label72)
++   88 jump *label39 always
++   89 multilabel *label69 (m:*label72)
++   90 jump *label39 always
++   91 multilabel *label70 (m:*label72)
 +   92 jump *label16 always
-+   93 multilabel *label71 (m:*label124)
++   93 multilabel *label71 (m:*label72)
 +   94 jump *label16 always
-+   95 multilabel *label72 (m:*label124)
-+   96 jump *label40 always
-+   97 multilabel *label73 (m:*label124)
-+   98 jump *label40 always
-+   99 multilabel *label74 (m:*label124)
-+  100 jump *label40 always
-+  101 multilabel *label75 (m:*label124)
-+  102 jump *label40 always
-+  103 multilabel *label76 (m:*label124)
-+  104 jump *label40 always
-+  105 multilabel *label77 (m:*label124)
-+  106 jump *label40 always
-+  107 multilabel *label78 (m:*label124)
-+  108 jump *label40 always
-+  109 multilabel *label79 (m:*label124)
-+  110 jump *label40 always
-+  111 multilabel *label80 (m:*label124)
-+  112 jump *label40 always
-+  113 multilabel *label81 (m:*label124)
-+  114 jump *label40 always
-+  115 multilabel *label82 (m:*label124)
-+  116 jump *label40 always
-+  117 multilabel *label83 (m:*label124)
-+  118 jump *label40 always
-+  119 multilabel *label84 (m:*label124)
-+  120 jump *label40 always
-+  121 multilabel *label85 (m:*label124)
-+  122 jump *label40 always
-+  123 multilabel *label86 (m:*label124)
-+  124 jump *label40 always
-+  125 multilabel *label87 (m:*label124)
-+  126 jump *label40 always
-+  127 multilabel *label88 (m:*label124)
-+  128 jump *label40 always
-+  129 multilabel *label89 (m:*label124)
-+  130 jump *label40 always
-+  131 multilabel *label90 (m:*label124)
-+  132 jump *label40 always
-+  133 multilabel *label91 (m:*label124)
-+  134 jump *label40 always
-+  135 multilabel *label92 (m:*label124)
-+  136 jump *label40 always
-+  137 multilabel *label93 (m:*label124)
-+  138 jump *label40 always
-+  139 multilabel *label94 (m:*label124)
-+  140 jump *label40 always
-+  141 multilabel *label95 (m:*label124)
-+  142 jump *label40 always
-+  143 multilabel *label96 (m:*label124)
-+  144 jump *label40 always
-+  145 multilabel *label97 (m:*label124)
-+  146 jump *label40 always
-+  147 multilabel *label98 (m:*label124)
-+  148 jump *label40 always
-+  149 multilabel *label99 (m:*label124)
-+  150 jump *label40 always
-+  151 multilabel *label100 (m:*label124)
-+  152 jump *label40 always
-+  153 multilabel *label101 (m:*label124)
-+  154 jump *label40 always
-+  155 multilabel *label102 (m:*label124)
-+  156 jump *label40 always
-+  157 multilabel *label103 (m:*label124)
-+  158 jump *label40 always
-+  159 multilabel *label104 (m:*label124)
-+  160 jump *label40 always
-+  161 multilabel *label105 (m:*label124)
-+  162 jump *label40 always
-+  163 multilabel *label106 (m:*label124)
-+  164 jump *label40 always
-+  165 multilabel *label107 (m:*label124)
-+  166 jump *label40 always
-+  167 multilabel *label108 (m:*label124)
-+  168 jump *label40 always
-+  169 multilabel *label109 (m:*label124)
-+  170 jump *label40 always
-+  171 multilabel *label110 (m:*label124)
-+  172 jump *label40 always
-+  173 multilabel *label111 (m:*label124)
-+  174 jump *label40 always
-+  175 multilabel *label112 (m:*label124)
-+  176 jump *label40 always
-+  177 multilabel *label113 (m:*label124)
-+  178 jump *label40 always
-+  179 multilabel *label114 (m:*label124)
-+  180 jump *label8 always
-+  181 multilabel *label115 (m:*label124)
-+  182 jump *label10 always
-+  183 multilabel *label116 (m:*label124)
-+  184 jump *label40 always
-+  185 multilabel *label117 (m:*label124)
-+  186 jump *label40 always
-+  187 multilabel *label118 (m:*label124)
-+  188 jump *label40 always
-+  189 multilabel *label119 (m:*label124)
-+  190 jump *label14 always
-+  191 multilabel *label120 (m:*label124)
-+  192 jump *label12 always
-+  193 multilabel *label121 (m:*label124)
-+  194 jump *label40 always
-+  195 multilabel *label122 (m:*label124)
-+  196 jump *label40 always
-+  197 multilabel *label123 (m:*label124)
-+  198 jump *label20 always
-   199 label *label8
-   200 set .MESSAGE :block
-   201 jump *label6 always
-   202 label *label7
++   95 label *label40
++   96 jump *label39 greaterThan *tmp52 146
++   97 jump *label39 lessThan *tmp52 137
++   98 multijump *label73 *tmp52 137 (m:*label83)
++   99 multilabel *label73 (m:*label83)
++  100 jump *label8 always
++  101 multilabel *label74 (m:*label83)
++  102 jump *label10 always
++  103 multilabel *label75 (m:*label83)
++  104 jump *label39 always
++  105 multilabel *label76 (m:*label83)
++  106 jump *label39 always
++  107 multilabel *label77 (m:*label83)
++  108 jump *label39 always
++  109 multilabel *label78 (m:*label83)
++  110 jump *label14 always
++  111 multilabel *label79 (m:*label83)
++  112 jump *label12 always
++  113 multilabel *label80 (m:*label83)
++  114 jump *label39 always
++  115 multilabel *label81 (m:*label83)
++  116 jump *label39 always
++  117 multilabel *label82 (m:*label83)
++  118 jump *label20 always
+   119 label *label8
+   120 set .MESSAGE :block
+   121 jump *label6 always
+   122 label *label7
 -    * jump *label9 notEqual *tmp5 @switch
-   203 label *label10
-   204 set .SWITCH :block
-   205 jump *label6 always
-   206 label *label9
+   123 label *label10
+   124 set .SWITCH :block
+   125 jump *label6 always
+   126 label *label9
 -    * jump *label11 notEqual *tmp5 @memory-bank
-   207 label *label12
-   208 set .MEMORY :block
-   209 set .START_INDEX 264
+   127 label *label12
+   128 set .MEMORY :block
+   129 set .START_INDEX 264
  
-   211 set .SIZE 248
-   212 jump *label6 always
-   213 label *label11
+   131 set .SIZE 248
+   132 jump *label6 always
+   133 label *label11
 -    * jump *label13 notEqual *tmp5 @memory-cell
-   214 label *label14
-   215 set .MEMORY :block
-   216 set .START_INDEX 40
+   134 label *label14
+   135 set .MEMORY :block
+   136 set .START_INDEX 40
  
-   218 set .SIZE 24
-   219 jump *label6 always
-   220 label *label13
+   138 set .SIZE 24
+   139 jump *label6 always
+   140 label *label13
 -    * jump *label16 equal *tmp5 @vault
 -    * jump *label15 notEqual *tmp5 @container
-   221 label *label16
-   222 set .CONTAINER :block
-   223 set .SENSOR @totalItems
+   141 label *label16
+   142 set .CONTAINER :block
+   143 set .SENSOR @totalItems
  
-   230 set .B1 80
-   231 jump *label6 always
-   232 label *label15
+   150 set .B1 80
+   151 jump *label6 always
+   152 label *label15
 -    * jump *label18 equal *tmp5 @battery
 -    * jump *label17 notEqual *tmp5 @battery-large
-   233 label *label18
-   234 set .CONTAINER :block
-   235 set .SENSOR @totalPower
+   153 label *label18
+   154 set .CONTAINER :block
+   155 set .SENSOR @totalPower
  
-   242 set .B1 80
-   243 jump *label6 always
-   244 label *label17
+   162 set .B1 80
+   163 jump *label6 always
+   164 label *label17
 -    * jump *label20 equal *tmp5 @liquid-tank
 -    * jump *label19 notEqual *tmp5 @liquid-container
-   245 label *label20
-   246 set .CONTAINER :block
-   247 set .SENSOR @totalLiquids
+   165 label *label20
+   166 set .CONTAINER :block
+   167 set .SENSOR @totalLiquids
  
-   254 set .B1 255
-   255 jump *label6 always
-   256 label *label19
+   174 set .B1 255
+   175 jump *label6 always
+   176 label *label19
 -    * jump *label22 equal *tmp5 @power-node
 -    * jump *label22 equal *tmp5 @power-node-large
 -    * jump *label21 notEqual *tmp5 @surge-tower
-   257 label *label22
-   258 set .CONTAINER :block
-   259 set .SENSOR @powerNetStored
+   177 label *label22
+   178 set .CONTAINER :block
+   179 set .SENSOR @powerNetStored
  
-   265 set .G1 255
-   266 set .B1 80
-   267 label *label21
-+  268 label *label40
-   269 label *label6
-   270 label *label4
-   271 jump *label37 greaterThan :n 0
+   185 set .G1 255
+   186 set .B1 80
+   187 label *label21
++  188 label *label39
+   189 label *label6
+   190 label *label4
+   191 jump *label37 greaterThan :n 0
+
+Modifications by Replicate loop condition at line 122:1 (+1 instructions):
+ 
+   228 label *label25
+   229 sensor *tmp25 .SWITCH @enabled
+   230 jump *label27 notEqual *tmp25 0
++  231 label *label84
+   232 set :startTime @time
+   233 set :prevTick :nextTick
+   234 op add :nextTick :nextTick TICKS
+ 
+   281 print "\n"
+   282 printflush .MESSAGE
+   283 label *label26
+-    * jump *label25 always
++  284 sensor *tmp25 .SWITCH @enabled
++  285 jump *label84 equal *tmp25 0
+   286 label *label27
+   287 end
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -860,114 +782,114 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     22 label *label37
     23 op sub :n :n 1
  
-   198 label *label8
-   199 set .MESSAGE :block
-   200 jump *label6 always
+   118 label *label8
+   119 set .MESSAGE :block
+   120 jump *label6 always
 -    * label *label7
-   201 label *label10
-   202 set .SWITCH :block
-   203 jump *label6 always
+   121 label *label10
+   122 set .SWITCH :block
+   123 jump *label6 always
 -    * label *label9
-   204 label *label12
-   205 set .MEMORY :block
-   206 set .START_INDEX 264
-   207 set .END_INDEX 511
-   208 set .SIZE 248
-   209 jump *label6 always
+   124 label *label12
+   125 set .MEMORY :block
+   126 set .START_INDEX 264
+   127 set .END_INDEX 511
+   128 set .SIZE 248
+   129 jump *label6 always
 -    * label *label11
-   210 label *label14
-   211 set .MEMORY :block
-   212 set .START_INDEX 40
-   213 set .END_INDEX 63
-   214 set .SIZE 24
-   215 jump *label6 always
+   130 label *label14
+   131 set .MEMORY :block
+   132 set .START_INDEX 40
+   133 set .END_INDEX 63
+   134 set .SIZE 24
+   135 jump *label6 always
 -    * label *label13
-   216 label *label16
-   217 set .CONTAINER :block
-   218 set .SENSOR @totalItems
+   136 label *label16
+   137 set .CONTAINER :block
+   138 set .SENSOR @totalItems
  
-   224 set .G1 255
-   225 set .B1 80
-   226 jump *label6 always
+   144 set .G1 255
+   145 set .B1 80
+   146 jump *label6 always
 -    * label *label15
-   227 label *label18
-   228 set .CONTAINER :block
-   229 set .SENSOR @totalPower
+   147 label *label18
+   148 set .CONTAINER :block
+   149 set .SENSOR @totalPower
  
-   235 set .G1 255
-   236 set .B1 80
-   237 jump *label6 always
+   155 set .G1 255
+   156 set .B1 80
+   157 jump *label6 always
 -    * label *label17
-   238 label *label20
-   239 set .CONTAINER :block
-   240 set .SENSOR @totalLiquids
+   158 label *label20
+   159 set .CONTAINER :block
+   160 set .SENSOR @totalLiquids
  
-   246 set .G1 192
-   247 set .B1 255
-   248 jump *label6 always
+   166 set .G1 192
+   167 set .B1 255
+   168 jump *label6 always
 -    * label *label19
-   249 label *label22
-   250 set .CONTAINER :block
-   251 set .SENSOR @powerNetStored
+   169 label *label22
+   170 set .CONTAINER :block
+   171 set .SENSOR @powerNetStored
  
-   256 set .R1 255
-   257 set .G1 255
-   258 set .B1 80
+   176 set .R1 255
+   177 set .G1 255
+   178 set .B1 80
 -    * label *label21
-   259 label *label40
-   260 label *label6
+   179 label *label39
+   180 label *label6
 -    * label *label4
-   261 jump *label37 greaterThan :n 0
-   262 label *label5
-   263 print "\nMessage: "
+   181 jump *label37 greaterThan :n 0
+   182 label *label5
+   183 print "\nMessage: "
  
-   279 printflush .MESSAGE
-   280 jump *label2 always
-   281 label *label24
+   199 printflush .MESSAGE
+   200 jump *label2 always
+   201 label *label24
 -    * label *label1
-   282 jump *label0 always
-   283 label *label2
-   284 write .START_INDEX .MEMORY 0
+   202 jump *label0 always
+   203 label *label2
+   204 write .START_INDEX .MEMORY 0
  
-   294 op min :index *tmp20 .END_INDEX
-   295 set :nextTick @tick
-   296 control enabled .SWITCH 0
+   214 op min :index *tmp20 .END_INDEX
+   215 set :nextTick @tick
+   216 control enabled .SWITCH 0
 -    * label *label25
-   297 sensor *tmp25 .SWITCH @enabled
-   298 jump *label27 notEqual *tmp25 0
-   299 label *label39
+   217 sensor *tmp25 .SWITCH @enabled
+   218 jump *label27 notEqual *tmp25 0
+   219 label *label84
  
-   305 set :prevTick @tick
-   306 op add :nextTick :prevTick TICKS
-   307 label *label28
+   225 set :prevTick @tick
+   226 op add :nextTick :prevTick TICKS
+   227 label *label28
 -    * label *label29
 -    * label *label30
-   308 jump *label32 greaterThanEq @tick :nextTick
-   309 label *label38
-   310 jump *label33 greaterThanEq @tick :prevTick
-   311 end
-   312 label *label33
+   228 jump *label32 greaterThanEq @tick :nextTick
+   229 label *label38
+   230 jump *label33 greaterThanEq @tick :prevTick
+   231 end
+   232 label *label33
 -    * label *label34
 -    * label *label31
-   313 jump *label38 lessThan @tick :nextTick
-   314 label *label32
-   315 sensor :amount .CONTAINER .SENSOR
+   233 jump *label38 lessThan @tick :nextTick
+   234 label *label32
+   235 sensor :amount .CONTAINER .SENSOR
  
-   321 jump *label35 lessThanEq :index .END_INDEX
-   322 set :index .START_INDEX
-   323 label *label35
+   241 jump *label35 lessThanEq :index .END_INDEX
+   242 set :index .START_INDEX
+   243 label *label35
 -    * label *label36
-   324 write :index .MEMORY 0
-   325 write :scaled .MEMORY :index
-   326 op sub *tmp49 :index .SIZE
+   244 write :index .MEMORY 0
+   245 write :scaled .MEMORY :index
+   246 op sub *tmp49 :index .SIZE
  
-   343 print *tmp51
-   344 print "\n"
-   345 printflush .MESSAGE
+   263 print *tmp51
+   264 print "\n"
+   265 printflush .MESSAGE
 -    * label *label26
-   346 sensor *tmp25 .SWITCH @enabled
-   347 jump *label39 equal *tmp25 0
-   348 label *label27
+   266 sensor *tmp25 .SWITCH @enabled
+   267 jump *label84 equal *tmp25 0
+   268 label *label27
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
@@ -975,71 +897,71 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
      2 set .MEMORY null
      3 set .SWITCH null
  
-   275 jump *label23 equal *tmp9 false
-   276 print "\nNo memory or container."
-   277 printflush .MESSAGE
+   195 jump *label23 equal *tmp9 false
+   196 print "\nNo memory or container."
+   197 printflush .MESSAGE
 -    * jump *label24 always
-+  278 jump *label0 always
-   279 label *label23
-   280 printflush .MESSAGE
-   281 jump *label2 always
++  198 jump *label0 always
+   199 label *label23
+   200 printflush .MESSAGE
+   201 jump *label2 always
  
-   296 set :nextTick @tick
-   297 control enabled .SWITCH 0
-   298 sensor *tmp25 .SWITCH @enabled
+   216 set :nextTick @tick
+   217 control enabled .SWITCH 0
+   218 sensor *tmp25 .SWITCH @enabled
 -    * jump *label27 notEqual *tmp25 0
-+  299 jump __start__ notEqual *tmp25 0
-   300 label *label39
-   301 set :startTime @time
-   302 set :prevTick :nextTick
++  219 jump __start__ notEqual *tmp25 0
+   220 label *label84
+   221 set :startTime @time
+   222 set :prevTick :nextTick
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   279 label *label23
-   280 printflush .MESSAGE
-   281 jump *label2 always
+   199 label *label23
+   200 printflush .MESSAGE
+   201 jump *label2 always
 -    * label *label24
 -    * jump *label0 always
-   282 label *label2
-   283 write .START_INDEX .MEMORY 0
-   284 write .END_INDEX .MEMORY 2
+   202 label *label2
+   203 write .START_INDEX .MEMORY 0
+   204 write .END_INDEX .MEMORY 2
  
-   344 printflush .MESSAGE
-   345 sensor *tmp25 .SWITCH @enabled
-   346 jump *label39 equal *tmp25 0
+   264 printflush .MESSAGE
+   265 sensor *tmp25 .SWITCH @enabled
+   266 jump *label84 equal *tmp25 0
 -    * label *label27
-   347 end
+   267 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
  
-   278 jump *label0 always
-   279 label *label23
-   280 printflush .MESSAGE
+   198 jump *label0 always
+   199 label *label23
+   200 printflush .MESSAGE
 -    * jump *label2 always
-   281 label *label2
-   282 write .START_INDEX .MEMORY 0
-   283 write .END_INDEX .MEMORY 2
+   201 label *label2
+   202 write .START_INDEX .MEMORY 0
+   203 write .END_INDEX .MEMORY 2
  
-   343 printflush .MESSAGE
-   344 sensor *tmp25 .SWITCH @enabled
-   345 jump *label39 equal *tmp25 0
+   263 printflush .MESSAGE
+   264 sensor *tmp25 .SWITCH @enabled
+   265 jump *label84 equal *tmp25 0
 -    * end
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-   278 jump *label0 always
-   279 label *label23
-   280 printflush .MESSAGE
+   198 jump *label0 always
+   199 label *label23
+   200 printflush .MESSAGE
 -    * label *label2
-   281 write .START_INDEX .MEMORY 0
-   282 write .END_INDEX .MEMORY 2
-   283 write .R0 .MEMORY 3
+   201 write .START_INDEX .MEMORY 0
+   202 write .END_INDEX .MEMORY 2
+   203 write .R0 .MEMORY 3
 
 Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
  
-   261 label *label6
-   262 jump *label37 greaterThan :n 0
-   263 label *label5
+   181 label *label6
+   182 jump *label37 greaterThan :n 0
+   183 label *label5
 -    * print "\nMessage: "
 -    * print .MESSAGE
 -    * print "\nSwitch: "
@@ -1047,17 +969,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
 -    * print "\nMemory: "
 -    * print .MEMORY
 -    * print "\nContainer: "
-+  264 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nContainer: "
-+  265 format .MESSAGE
-+  266 format .SWITCH
-+  267 format .MEMORY
-   268 print .CONTAINER
-   269 op equal *tmp7 .CONTAINER null
-   270 op equal *tmp8 .MEMORY null
++  184 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nContainer: "
++  185 format .MESSAGE
++  186 format .SWITCH
++  187 format .MEMORY
+   188 print .CONTAINER
+   189 op equal *tmp7 .CONTAINER null
+   190 op equal *tmp8 .MEMORY null
  
-   319 write :scaled .MEMORY :index
-   320 op sub *tmp49 :index .SIZE
-   321 write :scaled .MEMORY *tmp49
+   239 write :scaled .MEMORY :index
+   240 op sub *tmp49 :index .SIZE
+   241 write :scaled .MEMORY *tmp49
 -    * print "Item/Liquid/Energy Level Meter\n"
 -    * print "StartIndex: "
 -    * print .START_INDEX
@@ -1071,19 +993,19 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
 -    * print "Scaled: "
 -    * print :scaled
 -    * print "\n"
-+  322 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
-+  323 format .START_INDEX
-+  324 format :index
-+  325 format :amount
-+  326 format :scaled
-   327 op sub *tmp51 @time :startTime
++  242 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
++  243 format .START_INDEX
++  244 format :index
++  245 format :amount
++  246 format :scaled
+   247 op sub *tmp51 @time :startTime
 -    * print "Elapsed: "
 -    * print *tmp51
 -    * print "\n"
-+  328 format *tmp51
-   329 printflush .MESSAGE
-   330 sensor *tmp25 .SWITCH @enabled
-   331 jump *label39 equal *tmp25 0
++  248 format *tmp51
+   249 printflush .MESSAGE
+   250 sensor *tmp25 .SWITCH @enabled
+   251 jump *label84 equal *tmp25 0
 
 Final code before resolving virtual instructions:
 
@@ -1117,17 +1039,17 @@ print "\nFound: "
 print :block
 sensor *tmp5 :block @type
 sensor *tmp52 *tmp5 @id
-jump *label40 greaterThan *tmp52 146
-jump *label40 lessThan *tmp52 64
+jump *label40 greaterThan *tmp52 94
+jump *label39 lessThan *tmp52 64
 multijump *label41 *tmp52 64
 multilabel *label41
 jump *label20 always
 multilabel *label42
-jump *label40 always
+jump *label39 always
 multilabel *label43
-jump *label40 always
+jump *label39 always
 multilabel *label44
-jump *label40 always
+jump *label39 always
 multilabel *label45
 jump *label22 always
 multilabel *label46
@@ -1135,156 +1057,76 @@ jump *label22 always
 multilabel *label47
 jump *label22 always
 multilabel *label48
-jump *label40 always
+jump *label39 always
 multilabel *label49
 jump *label18 always
 multilabel *label50
 jump *label18 always
 multilabel *label51
-jump *label40 always
+jump *label39 always
 multilabel *label52
-jump *label40 always
+jump *label39 always
 multilabel *label53
-jump *label40 always
+jump *label39 always
 multilabel *label54
-jump *label40 always
+jump *label39 always
 multilabel *label55
-jump *label40 always
+jump *label39 always
 multilabel *label56
-jump *label40 always
+jump *label39 always
 multilabel *label57
-jump *label40 always
+jump *label39 always
 multilabel *label58
-jump *label40 always
+jump *label39 always
 multilabel *label59
-jump *label40 always
+jump *label39 always
 multilabel *label60
-jump *label40 always
+jump *label39 always
 multilabel *label61
-jump *label40 always
+jump *label39 always
 multilabel *label62
-jump *label40 always
+jump *label39 always
 multilabel *label63
-jump *label40 always
+jump *label39 always
 multilabel *label64
-jump *label40 always
+jump *label39 always
 multilabel *label65
-jump *label40 always
+jump *label39 always
 multilabel *label66
-jump *label40 always
+jump *label39 always
 multilabel *label67
-jump *label40 always
+jump *label39 always
 multilabel *label68
-jump *label40 always
+jump *label39 always
 multilabel *label69
-jump *label40 always
+jump *label39 always
 multilabel *label70
 jump *label16 always
 multilabel *label71
 jump *label16 always
-multilabel *label72
-jump *label40 always
+label *label40
+jump *label39 greaterThan *tmp52 146
+jump *label39 lessThan *tmp52 137
+multijump *label73 *tmp52 137
 multilabel *label73
-jump *label40 always
-multilabel *label74
-jump *label40 always
-multilabel *label75
-jump *label40 always
-multilabel *label76
-jump *label40 always
-multilabel *label77
-jump *label40 always
-multilabel *label78
-jump *label40 always
-multilabel *label79
-jump *label40 always
-multilabel *label80
-jump *label40 always
-multilabel *label81
-jump *label40 always
-multilabel *label82
-jump *label40 always
-multilabel *label83
-jump *label40 always
-multilabel *label84
-jump *label40 always
-multilabel *label85
-jump *label40 always
-multilabel *label86
-jump *label40 always
-multilabel *label87
-jump *label40 always
-multilabel *label88
-jump *label40 always
-multilabel *label89
-jump *label40 always
-multilabel *label90
-jump *label40 always
-multilabel *label91
-jump *label40 always
-multilabel *label92
-jump *label40 always
-multilabel *label93
-jump *label40 always
-multilabel *label94
-jump *label40 always
-multilabel *label95
-jump *label40 always
-multilabel *label96
-jump *label40 always
-multilabel *label97
-jump *label40 always
-multilabel *label98
-jump *label40 always
-multilabel *label99
-jump *label40 always
-multilabel *label100
-jump *label40 always
-multilabel *label101
-jump *label40 always
-multilabel *label102
-jump *label40 always
-multilabel *label103
-jump *label40 always
-multilabel *label104
-jump *label40 always
-multilabel *label105
-jump *label40 always
-multilabel *label106
-jump *label40 always
-multilabel *label107
-jump *label40 always
-multilabel *label108
-jump *label40 always
-multilabel *label109
-jump *label40 always
-multilabel *label110
-jump *label40 always
-multilabel *label111
-jump *label40 always
-multilabel *label112
-jump *label40 always
-multilabel *label113
-jump *label40 always
-multilabel *label114
 jump *label8 always
-multilabel *label115
+multilabel *label74
 jump *label10 always
-multilabel *label116
-jump *label40 always
-multilabel *label117
-jump *label40 always
-multilabel *label118
-jump *label40 always
-multilabel *label119
+multilabel *label75
+jump *label39 always
+multilabel *label76
+jump *label39 always
+multilabel *label77
+jump *label39 always
+multilabel *label78
 jump *label14 always
-multilabel *label120
+multilabel *label79
 jump *label12 always
-multilabel *label121
-jump *label40 always
-multilabel *label122
-jump *label40 always
-multilabel *label123
+multilabel *label80
+jump *label39 always
+multilabel *label81
+jump *label39 always
+multilabel *label82
 jump *label20 always
 label *label8
 set .MESSAGE :block
@@ -1347,7 +1189,7 @@ set .B0 0
 set .R1 255
 set .G1 255
 set .B1 80
-label *label40
+label *label39
 label *label6
 jump *label37 greaterThan :n 0
 label *label5
@@ -1380,7 +1222,7 @@ set :nextTick @tick
 control enabled .SWITCH 0
 sensor *tmp25 .SWITCH @enabled
 jump __start__ notEqual *tmp25 0
-label *label39
+label *label84
 set :startTime @time
 set :prevTick :nextTick
 op add :nextTick :nextTick TICKS
@@ -1418,4 +1260,4 @@ op sub *tmp51 @time :startTime
 format *tmp51
 printflush .MESSAGE
 sensor *tmp25 .SWITCH @enabled
-jump *label39 equal *tmp25 0
+jump *label84 equal *tmp25 0
