@@ -1,13 +1,13 @@
 #set target = 8;
 require math;
 
+assertEquals(0, signInexact(0), "signInexact(0)");
+assertEquals(0, signInexact(1e-7), "signInexact(1e-7)");
+assertEquals(1, signInexact(1e-5), "signInexact(1e-5)");
+assertEquals(-1, signInexact(-5), "signInexact(-5)");
 assertEquals(0, sign(0), "sign(0)");
-assertEquals(0, sign(1e-7), "sign(1e-7)");
-assertEquals(1, sign(1e-5), "sign(1e-5)");
-assertEquals(-1, sign(-5), "sign(-5)");
-assertEquals(0, signExact(0), "signExact(0)");
-assertEquals(1, signExact(1e-7), "signExact(1e-7)");
-assertEquals(-1, signExact(-1e-7), "signExact(-1e-7)");
+assertEquals(1, sign(1e-7), "sign(1e-7)");
+assertEquals(-1, sign(-1e-7), "sign(-1e-7)");
 assertEquals(true, isZero(0), "isZero(0)");
 assertEquals(false, isZero(1e-50), "isZero(1e-50)");
 assertEquals(false, isZero(-1e-50), "isZero(-1e-50)");

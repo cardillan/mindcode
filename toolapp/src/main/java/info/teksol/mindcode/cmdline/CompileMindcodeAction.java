@@ -4,6 +4,7 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
 import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
+import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -181,6 +182,12 @@ public class CompileMindcodeAction extends ActionHandler {
                 }
                 if (compiler.getExecutionException() != null) {
                     messageLogger.error(compiler.getExecutionException().getMessage());
+                }
+
+                if (compiler.getExecutionProfile().length >= compiler.getExecutableInstructions().size()) {
+                    String profileResult = LogicInstructionPrinter.toStringWithProfiling(compiler.instructionProcessor(),
+                            compiler.getExecutableInstructions(), compiler.getExecutionProfile());
+                    messageLogger.debug("\n\nCode profiling result:\n\n" + profileResult);
                 }
             }
         }

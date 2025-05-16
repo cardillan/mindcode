@@ -21,6 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking**: the `sign` function in the `math` library was renamed to `signInexact`. The `sign` function now maps to the Mindustry BE instruction `op sign`.
 * **Breaking**: the `unpackcolor` function in the `graphics` library was renamed to `unpackcolor7`. The `unpackcolor` function now maps to the Mindustry BE instruction `unpackcolor`.
 * When splitting jump tables into multiple segments, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
+* Other improvements to the Case Switching optimization.
 
 ## 3.4.0 - 2025-05-11
 

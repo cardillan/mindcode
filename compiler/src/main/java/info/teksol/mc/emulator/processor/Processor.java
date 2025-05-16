@@ -40,6 +40,7 @@ public class Processor extends AbstractMessageEmitter {
     private int traceCount = 0;
     private int traceLimit = 0;
     private int steps = 0;
+    private int[] profile = new int[0];
     private int instructions = 0;
     private final BitSet coverage = new BitSet();
 
@@ -87,6 +88,10 @@ public class Processor extends AbstractMessageEmitter {
         return steps;
     }
 
+    public int[] getProfile() {
+        return profile;
+    }
+
     public int getInstructions() {
         return instructions;
     }
@@ -114,6 +119,7 @@ public class Processor extends AbstractMessageEmitter {
     }
 
     public void run(List<LogicInstruction> program, int stepLimit) throws ExecutionException {
+        profile = new int[program.size()];
         steps = 0;
         textBuffer = new TextBuffer(TEXT_OUTPUT_LIMIT, TEXT_BUFFER_LIMIT,
                 getFlag(ERR_TEXT_BUFFER_OVERFLOW));
@@ -159,6 +165,7 @@ public class Processor extends AbstractMessageEmitter {
                             .forEach(v -> info("   in  %s", v));
                 }
 
+                profile[index]++;
                 steps++;
                 counter.setIntValue(index + 1);
                 if (!execute(instruction)) {

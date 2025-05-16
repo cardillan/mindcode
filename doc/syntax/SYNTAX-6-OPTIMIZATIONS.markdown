@@ -1141,9 +1141,8 @@ This optimization is particularly useful when using block types in case expressi
 
 Notes:
 
-* Only continuous segments leading to the `else` branch are considered. If the jump table happens to contain a large continuous segment leading to a branch other than `else`, it is not considered for discontinuous optimization.
-* Splitting a jump table leads to a smaller, but slightly slower code compared to a full jump table. Jump table splitting is only considered when its average  execution is still faster than the one of the original, non-optimized `case` expression.
-* Since the split jump table consumes less instruction space, it might be more efficient than the continuous jump table, when considered as the number of execution steps saved divided by the number of additional instructions. However, the split jump table, even when more efficient with respect to code size, is still slower than a continuous jump table. In situations where there are no other optimizations that could utilize the instruction space, preferring the smaller but slower solution doesn't bring any benefit. For this reason, the optimization won't consider splitting the jump table, unless the last considered solution consumed more than half of the available instruction space.
+* When a split jump table is smaller, but slower than a full jump table, it will only be selected when there isn't enough instruction space for the full jump table.
+* Splitting a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the smaller version will be selected by the optimizer over the faster version, even when there is plenty of instruction space.
 
 ### Example
 
@@ -1197,48 +1196,32 @@ The above case expression is transformed to this:
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
         sensor *tmp4 *tmp2 @id
-        jump label_25 greaterThanEq *tmp4 35
-        jump label_38 lessThan *tmp4 17
-        op sub *tmp5 *tmp4 17
-        op add @counter @counter *tmp5
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_38 always 0 0
-        jump label_38 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-        jump label_36 always 0 0
-    label_25:
-        jump label_29 greaterThanEq *tmp4 206
-        jump label_36 equal *tmp4 203
-        jump label_36 equal *tmp4 204
-        jump label_38 always 0 0
-    label_29:
-        jump label_36 lessThan *tmp4 208
-        jump label_35 greaterThanEq *tmp4 234
-        jump label_36 equal *tmp4 220
-        jump label_36 equal *tmp4 221
-        jump label_36 equal *tmp4 225
-        jump label_38 always 0 0
-    label_35:
-        jump label_38 greaterThanEq *tmp4 235
-    label_36:
+        jump label_8 greaterThanEq *tmp4 31
+        jump label_22 equal *tmp4 29
+        jump label_22 equal *tmp4 30
+        jump label_22 lessThan *tmp4 17
+        jump label_20 always 0 0
+    label_8:
+        jump label_20 lessThan *tmp4 35
+        jump label_13 greaterThanEq *tmp4 206
+        jump label_20 equal *tmp4 203
+        jump label_20 equal *tmp4 204
+        jump label_22 always 0 0
+    label_13:
+        jump label_20 lessThan *tmp4 208
+        jump label_19 greaterThanEq *tmp4 234
+        jump label_20 equal *tmp4 220
+        jump label_20 equal *tmp4 221
+        jump label_20 equal *tmp4 225
+        jump label_22 always 0 0
+    label_19:
+        jump label_22 greaterThanEq *tmp4 235
+    label_20:
         set *tmp0 "Wall"
-        jump label_39 always 0 0
-label_38:
+        jump label_23 always 0 0
+label_22:
     set *tmp0 "Not wall"
-    label_39:
+    label_23:
     print *tmp0
 ```
 

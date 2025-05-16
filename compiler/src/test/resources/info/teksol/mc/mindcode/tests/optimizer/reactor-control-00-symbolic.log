@@ -19,8 +19,7 @@
    372 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 587):
-  o Convert case at line 419:9 (segments: 3)                     cost    10, benefit      187.5, efficiency     18.750
-  * Convert case at line 419:9 (segments: 4)                     cost     4, benefit     1062.5, efficiency    265.625 (+3 instructions)
+  * Convert case at line 419:9 (segments: 4)                     cost     4, benefit      500.0, efficiency    125.000 (+3 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-4 instructions):
  
@@ -1798,9 +1797,9 @@ Modifications by Convert case at line 419:9 (segments: 4) (+4 instructions):
 -    * jump *label107 notEqual *tmp204 @impact-reactor
 +  467 sensor *tmp225 *tmp204 @id
 +  468 jump *label123 greaterThanEq *tmp225 41
-+  469 jump *label122 lessThan *tmp225 37
-+  470 jump *label122 equal *tmp225 39
-+  471 jump *label122 equal *tmp225 40
++  469 jump *label122 equal *tmp225 39
++  470 jump *label122 equal *tmp225 40
++  471 jump *label122 lessThan *tmp225 37
 +  472 jump *label112 always
 +  473 label *label123
 +  474 jump *label114 lessThan *tmp225 45
@@ -2903,9 +2902,9 @@ getlink :block :n
 sensor *tmp204 :block @type
 sensor *tmp225 *tmp204 @id
 jump *label123 greaterThanEq *tmp225 41
-jump *label122 lessThan *tmp225 37
 jump *label122 equal *tmp225 39
 jump *label122 equal *tmp225 40
+jump *label122 lessThan *tmp225 37
 jump *label112 always
 label *label123
 jump *label114 lessThan *tmp225 45

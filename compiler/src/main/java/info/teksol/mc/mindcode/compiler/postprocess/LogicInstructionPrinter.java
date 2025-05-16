@@ -20,13 +20,25 @@ import java.util.stream.Collectors;
 @NullMarked
 public class LogicInstructionPrinter {
 
+    public static String toStringWithProfiling(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
+            int[] profile) {
+        return toString(instructionProcessor, instructions, false, 0, i -> String.format("%6d: ", profile[i]));
+    }
+
     public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
             boolean symbolicLabels, int mlogIndent) {
+        return toString(instructionProcessor, instructions, symbolicLabels, mlogIndent, i -> "");
+    }
+
+    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
+            boolean symbolicLabels, int mlogIndent, Function<Integer, String> prefixSupplier) {
         final String prefix = symbolicLabels && mlogIndent == 0 ? "    " : "";
         final StringBuilder buffer = new StringBuilder();
         final Indenter indenter = new Indenter(" ".repeat(mlogIndent));
 
-        instructions.forEach((instruction) -> {
+        for (int i = 0; i < instructions.size(); i++) {
+            LogicInstruction instruction = instructions.get(i);
+            buffer.append(prefixSupplier.apply(i));
             buffer.append(indenter.getIndent(indent(instruction, symbolicLabels)));
 
             if (instruction instanceof CommentInstruction rem) {
@@ -40,7 +52,7 @@ public class LogicInstructionPrinter {
                 addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
             }
             buffer.append("\n");
-        });
+        }
 
         return buffer.toString();
     }

@@ -110,6 +110,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private List<Assertion> assertions = List.of();
     private TextBuffer textBuffer = new TextBuffer(0, 0, true);
     private int steps;
+    private int[] executionProfile = new int[0];
 
     // Message logger
     private final ListMessageLogger messageLogger;
@@ -386,6 +387,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         assertions = emulator.getAssertions();
         textBuffer = emulator.getTextBuffer();
         steps = emulator.getSteps();
+        executionProfile = emulator.getProfile();
     }
 
     public boolean hasErrors() {
@@ -465,6 +467,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     public int getSteps() {
         return steps;
+    }
+
+    public int[] getExecutionProfile() {
+        return executionProfile;
     }
 
     public Processor getEmulator() {
