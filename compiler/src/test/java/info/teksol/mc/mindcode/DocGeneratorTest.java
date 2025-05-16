@@ -367,7 +367,8 @@ public class DocGeneratorTest {
                     .setProcessorVersion(ProcessorVersion.MAX)
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL)
                     .setGoal(goal)
-                    .setSignature(false);
+                    .setSignature(false)
+                    .setLibraryPrecedence(true);
 
             MindcodeCompiler compiler = new MindcodeCompiler(CompilationPhase.ALL,
                     expectedMessages().add("The 'loop' keyword is deprecated. Use just 'while' instead.").ignored(),

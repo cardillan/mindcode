@@ -25,18 +25,17 @@ const DISPLAY_SIZE_LARGE = 176;
  * individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
  * all four color channels.
  *
- * The function is meant to be used with Mindustry version 7. In Mindustry 8, use the built-in function
- * `unpackcolor`.
+ * **Note:** When compiling for Mindustry 8, the built-in `unpackcolor` function is used instead of this one.
  *
  * **Inputs and outputs:**
  *
- * - `packedColor`: color value to unpack
  * - `r`: variable to receive the value corresponding to the red channel
  * - `g`: variable to receive the value corresponding to the green channel
  * - `b`: variable to receive the value corresponding to the blue channel
  * - `a`: variable to receive the value corresponding to the alpha channel
+ * - `packedColor`: color value to unpack
  */
-void unpackcolor7(packedColor, out r, out g, out b, out a)
+void unpackcolor(out r, out g, out b, out a, in packedColor)
     var bits = packedColor / %00000001;
     r = (bits & (0xFF << 24)) / (255 << 24);
     g = (bits & (0xFF << 16)) / (255 << 16);

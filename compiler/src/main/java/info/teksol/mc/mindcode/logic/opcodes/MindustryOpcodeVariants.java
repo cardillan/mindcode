@@ -117,6 +117,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log10"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("floor"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("ceil"),         res("result"),  in("a"));
+        add(list, V8A, MAX, S, FUNC, Opcode.OP,         op("round"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sqrt"),         res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("rand"),         res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sin"),          res("result"),  in("a"));

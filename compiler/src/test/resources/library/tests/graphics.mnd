@@ -11,7 +11,7 @@ begin
     assertEquals(DISPLAY_SIZE_SMALL, displaySize(display5), "small display size");
 
     x = packcolor(0.2, 0.4, 0.6, 0.8);
-    unpackcolor7(x, out r, out g, out b, out a);
+    unpackcolor(out r, out g, out b, out a, x);
 
     assertEquals(0.2, r, "red channel");
     assertEquals(0.4, g, "green channel");

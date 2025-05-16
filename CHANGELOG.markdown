@@ -14,13 +14,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for the new `op sign` and `unpackcolor` Mindustry BE instructions to the compiler and processor emulator.
+* Added support for the new `op sign`, `op round` and `unpackcolor` Mindustry BE instructions to the compiler and processor emulator.
 * Added support for using `null` literals in the `case` expression.
 
 ### Changed
 
-* **Breaking**: the `sign` function in the `math` library was renamed to `signInexact`. The `sign` function now maps to the Mindustry BE instruction `op sign`.
-* **Breaking**: the `unpackcolor` function in the `graphics` library was renamed to `unpackcolor7`. The `unpackcolor` function now maps to the Mindustry BE instruction `unpackcolor`.
+* **Breaking**: The system library was changed to accommodate new logic instructions:
+  * The `sign` function in the `math` library was renamed to `signInexact`.
+  * The `signExact` function in the `math` library was renamed to `sign`. This function corresponds to the Mindustry 8 instruction `op sign`, and when target 8 is selected, the instruction is used instead of the library implementation. 
+  * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to correspond to the `unpackcolor` in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
+  * Mindustry Logic functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
 * When splitting jump tables into multiple segments, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
 * Other improvements to the Case Switching optimization.
 

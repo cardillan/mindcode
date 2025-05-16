@@ -5,7 +5,7 @@ complex-case-expression.mnd:                       48      294      97.9%   E6AA
 equality-comparisons.mnd:                          85       81      95.2%   16DB5681427420C5   863C2DD09850EF61
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   62C4AA5A21DAC882
 expression-evaluation-compile-time.mnd:            75       75     100.0%   40CFDDDBE9B141D4   78AFD04A4ADEC1B3
-expression-evaluation-runtime.mnd:                151      150      99.3%   B3BDC6D695D7A468   4C429449F3CB97A5
+expression-evaluation-runtime.mnd:                157      156      99.3%   B3BDC6D695D7A468   97D8CBB22A28C74F
 fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   68D32251843AB355
 for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8BCD3905B56BCF   C576D0E7492154AF
 function-inlining.mnd:                            900      900     100.0%   B3AB880177C19FDA   48CF89C6FDF05AD0

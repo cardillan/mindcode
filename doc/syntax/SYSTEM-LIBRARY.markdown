@@ -193,9 +193,9 @@ Length of the side of the drawing area of the `large-logic-display` block.
 
 ## Functions
 
-### unpackcolor7
+### unpackcolor
 
-**Definition:** `void unpackcolor7(packedColor, out r, out g, out b, out a)`
+**Definition:** `void unpackcolor(out r, out g, out b, out a, in packedColor)`
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
@@ -207,16 +207,15 @@ Unpacks numeric value created by the `packcolor` instruction (or a corresponding
 individual color channel components. The function produces real numbers between 0 and 1 (inclusive) for
 all four color channels.
 
-The function is meant to be used with Mindustry version 7. In Mindustry 8, use the built-in function
-`unpackcolor`.
+**Note:** When compiling for Mindustry 8, the built-in `unpackcolor` function is used instead of this one.
 
 **Inputs and outputs:**
 
-- `packedColor`: color value to unpack
 - `r`: variable to receive the value corresponding to the red channel
 - `g`: variable to receive the value corresponding to the green channel
 - `b`: variable to receive the value corresponding to the blue channel
 - `a`: variable to receive the value corresponding to the alpha channel
+- `packedColor`: color value to unpack
 
 ### setAlpha
 
@@ -540,9 +539,9 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
 (using the Mindustry Logic native comparison precision).
 
-### signExact
+### sign
 
-**Definition:** `inline def signExact(x)`
+**Definition:** `inline def sign(x)`
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
@@ -550,7 +549,7 @@ Returns the sign of the number. The return value is `0` precisely when `x == 0`
 
 Returns the sign of the number. The return value is `0` when `x` is null or exactly zero.
 
-**Note:** When compiling for Mindustry 8, use the built-in `sign` function instead.
+**Note:** When compiling for Mindustry 8, the built-in `sign` function is used instead of this one.
 
 ### isZero
 

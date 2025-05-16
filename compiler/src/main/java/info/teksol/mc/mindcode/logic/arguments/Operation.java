@@ -56,6 +56,7 @@ public enum Operation implements LogicArgument {
     LOG10           (1, true,  "log10"),
     FLOOR           (1, true,  "floor"),
     CEIL            (1, true,  "ceil"),
+    ROUND           (1, true,  "round"),
     SQRT            (1, true,  "sqrt"),
     RAND            (1, false, "rand"),
     SIN             (1, true,  "sin"),

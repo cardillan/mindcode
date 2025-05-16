@@ -47,11 +47,12 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     private ValueStore processCall(AstFunctionCall call, List<FunctionArgument> arguments,
             @Nullable ValueStore target, boolean async) {
         List<MindcodeFunction> exactMatches = callGraph.getExactMatches(call, arguments);
-        if (!exactMatches.isEmpty()) {
+        if (!exactMatches.isEmpty() && (profile.isLibraryPrecedence()
+                || exactMatches.stream().noneMatch(f -> f.isLibrary() && !f.getParameters().isEmpty()))) {
             // There are user functions exactly matching the call. Process them.
             return processMatchedCalls(call, arguments, target, exactMatches, async);
         } else {
-            // No exact match. Try built-in function, and if it fails, evaluate possible loose matches
+            // No exact non-library match. Try built-in function, and if it fails, evaluate possible loose matches
             if (call.getArguments().stream().noneMatch(AstFunctionArgument::isReference)) {
                 ValueStore result = target == null
                         ? functionMapper.handleFunction(call, arguments)
@@ -62,7 +63,8 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                 }
             }
 
-            return processMatchedCalls(call, arguments, target, callGraph.getLooseMatches(call), async);
+            return processMatchedCalls(call, arguments, target,
+                    exactMatches.isEmpty() ? callGraph.getLooseMatches(call) : exactMatches, async);
         }
     }
 

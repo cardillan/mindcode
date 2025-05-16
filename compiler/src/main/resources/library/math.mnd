@@ -48,9 +48,9 @@ end;
 /**
  * Returns the sign of the number. The return value is `0` when `x` is null or exactly zero.
  *
- * **Note:** When compiling for Mindustry 8, use the built-in `sign` function instead.
+ * **Note:** When compiling for Mindustry 8, the built-in `sign` function is used instead of this one.
  */
-inline def signExact(x)
+inline def sign(x)
     // Use branchless sign computation
     (x > 0) - (x < 0);
 end;

@@ -14,10 +14,10 @@ frac(-1.5)                :: -0.5
 signInexact(0)            :: 0
 signInexact(1e-7)         :: 0
 signInexact(1e-5)         :: 1
-signInexact(-5)           :: -1
-signExact(0)              :: 0
-signExact(1e-7)           :: 1
-signExact(-1e-7)          :: -1
+sign(-5)                  :: -1
+sign(0)                   :: 0
+sign(1e-7)                :: 1
+sign(-1e-7)               :: -1
 isZero(0)                 :: true
 isZero(1e-50)             :: false
 isZero(-1e-50)            :: false

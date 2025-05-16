@@ -24,26 +24,26 @@ Final code before resolving virtual instructions:
    13:  set *tmp1 :displaySize*retval
    14:  assertequals 80 *tmp1 "small display size"
    15:  set :x %336699cc
-   16:  set :unpackcolor7:packedColor :x
-   17:  op div *tmp2 :unpackcolor7:packedColor %00000001
-   18:  set :unpackcolor7:bits *tmp2
-   19:  op and *tmp3 :unpackcolor7:bits 4278190080
+   16:  set :unpackcolor:packedColor :x
+   17:  op div *tmp2 :unpackcolor:packedColor %00000001
+   18:  set :unpackcolor:bits *tmp2
+   19:  op and *tmp3 :unpackcolor:bits 4278190080
    20:  op div *tmp4 *tmp3 4278190080
-   21:  set :unpackcolor7:r *tmp4
-   22:  op and *tmp5 :unpackcolor7:bits 16711680
+   21:  set :unpackcolor:r *tmp4
+   22:  op and *tmp5 :unpackcolor:bits 16711680
    23:  op div *tmp6 *tmp5 16711680
-   24:  set :unpackcolor7:g *tmp6
-   25:  op and *tmp7 :unpackcolor7:bits 65280
+   24:  set :unpackcolor:g *tmp6
+   25:  op and *tmp7 :unpackcolor:bits 65280
    26:  op div *tmp8 *tmp7 65280
-   27:  set :unpackcolor7:b *tmp8
-   28:  op and *tmp9 :unpackcolor7:bits 255
+   27:  set :unpackcolor:b *tmp8
+   28:  op and *tmp9 :unpackcolor:bits 255
    29:  op div *tmp10 *tmp9 255
-   30:  set :unpackcolor7:a *tmp10
+   30:  set :unpackcolor:a *tmp10
         label *label10
-   31:  set :r :unpackcolor7:r
-   32:  set :g :unpackcolor7:g
-   33:  set :b :unpackcolor7:b
-   34:  set :a :unpackcolor7:a
+   31:  set :r :unpackcolor:r
+   32:  set :g :unpackcolor:g
+   33:  set :b :unpackcolor:b
+   34:  set :a :unpackcolor:a
    35:  assertequals 0.2 :r "red channel"
    36:  assertequals 0.4 :g "green channel"
    37:  assertequals 0.6 :b "blue channel"

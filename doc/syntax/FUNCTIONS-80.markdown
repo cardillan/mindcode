@@ -236,6 +236,7 @@ Perform an operation on 1-2 variables.
 |`result = log10(a)`|`op log10 result a 0`|
 |`result = floor(a)`|`op floor result a 0`|
 |`result = ceil(a)`|`op ceil result a 0`|
+|`result = round(a)`|`op round result a 0`|
 |`result = sqrt(a)`|`op sqrt result a 0`|
 |`result = rand(a)`|`op rand result a 0`|
 |`result = sin(a)`|`op sin result a 0`|

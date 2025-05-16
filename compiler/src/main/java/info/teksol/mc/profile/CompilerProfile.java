@@ -66,6 +66,10 @@ public class CompilerProfile {
     private boolean symbolicLabels = false;
     private SyntacticMode syntacticMode = SyntacticMode.RELAXED;
 
+    // System library functions take precedence over built-in mlog functions
+    // Only used to generate library documentation
+    private boolean libraryPrecedence = false;
+
     // Compile and run
     private boolean run = false;
     private int stepLimit = DEFAULT_STEP_LIMIT_WEBAPP;
@@ -212,6 +216,15 @@ public class CompilerProfile {
 
     public CompilerProfile setInstructionLimit(int instructionLimit) {
         this.instructionLimit = Math.min(instructionLimit, getMaxInstructionLimit());
+        return this;
+    }
+
+    public boolean isLibraryPrecedence() {
+        return libraryPrecedence;
+    }
+
+    public CompilerProfile setLibraryPrecedence(boolean libraryPrecedence) {
+        this.libraryPrecedence = libraryPrecedence;
         return this;
     }
 

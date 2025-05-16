@@ -252,6 +252,10 @@ public class MindcodeFunction {
         return callCardinality;
     }
 
+    public boolean isLibrary() {
+        return getSourcePosition().isLibrary();
+    }
+
     /// @return true if the function is used (is reachable from main program body)
     public boolean isUsed() {
         return placementCount > 0;
