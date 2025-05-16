@@ -115,6 +115,48 @@ class CaseExpressionsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesCaseExpressionWithNul() {
+            assertCompilesTo("""
+                            var text = case number
+                                when 0, 1 then
+                                    "A number I like";
+                                when 10**5 .. 10**9 then
+                                    "A very big number";
+                                when null then
+                                    "Oops, a null";
+                                else
+                                    "An ugly number";
+                            end;
+                            """,
+                    createInstruction(SET, tmp(1), ":number"),
+                    createInstruction(JUMP, label(2), "strictEqual", tmp(1), "0"),
+                    createInstruction(JUMP, label(2), "equal", tmp(1), "1"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), q("A number I like")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(5), "lessThan", tmp(1), "100000"),
+                    createInstruction(JUMP, label(4), "lessThanEq", tmp(1), "1000000000"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(0), q("A very big number")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(JUMP, label(7), "strictEqual", tmp(1), "null"),
+                    createInstruction(JUMP, label(6), "always"),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(SET, tmp(0), q("Oops, a null")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(SET, tmp(0), q("An ugly number")),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ".text", tmp(0))
+            );
+        }
+
+        @Test
         void compilesCaseExpressionWithoutElse() {
             assertCompilesTo("""
                             case i

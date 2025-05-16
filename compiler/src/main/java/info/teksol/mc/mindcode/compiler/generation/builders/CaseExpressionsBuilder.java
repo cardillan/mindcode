@@ -1,10 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.generated.ast.visitors.AstCaseExpressionVisitor;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstCaseAlternative;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstCaseExpression;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstRange;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
@@ -29,6 +26,9 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
         assembler.setSubcontextType(AstSubcontextType.INIT, 1.0);
         LogicValue caseValue = assembler.defensiveCopy(evaluate(node.getExpression()), ArgumentType.AST_VARIABLE);
 
+        boolean hasNull = node.getAlternatives().stream().flatMap(a -> a.getValues().stream())
+                .anyMatch(v -> v instanceof AstLiteralNull);
+
         for (AstCaseAlternative alternative : node.getAlternatives()) {
             LogicLabel nextAlt = assembler.nextLabel();         // Next alternative
             LogicLabel bodyLabel = assembler.nextLabel();       // Body of this alternative
@@ -50,11 +50,18 @@ public class CaseExpressionsBuilder extends AbstractBuilder implements AstCaseEx
                         ValueStore maxValue = evaluate(range.getLastValue());
                         assembler.createJump(bodyLabel, insideRangeCondition(range), caseValue, maxValue.getValue(assembler));
                         assembler.createLabel(nextExp);
-                    }
-                    else {
+                    } else if (value instanceof AstLiteralNull) {
                         assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
                         ValueStore whenValue = evaluate(value);
-                        assembler.createJump(bodyLabel, Condition.EQUAL, caseValue, whenValue.getValue(assembler));
+                        assembler.createJump(bodyLabel, Condition.STRICT_EQUAL, caseValue, whenValue.getValue(assembler));
+                    } else {
+                        assembler.setSubcontextType(AstSubcontextType.CONDITION, whenMultiplier);
+                        ValueStore whenValue = evaluate(value);
+                        if (hasNull && value instanceof AstLiteralNumeric && whenValue instanceof LogicNumber n && n.getDoubleValue() == 0.0) {
+                            assembler.createJump(bodyLabel, Condition.STRICT_EQUAL, caseValue, whenValue.getValue(assembler));
+                        } else {
+                            assembler.createJump(bodyLabel, Condition.EQUAL, caseValue, whenValue.getValue(assembler));
+                        }
                     }
                 }
             });

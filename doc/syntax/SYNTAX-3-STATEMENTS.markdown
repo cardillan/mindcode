@@ -500,10 +500,40 @@ var text = case number
 end;
 ```
 
+### `null` values
+
+When a `null` literal is used as a value in the `when` clause, Mindcode generates a strict comparison to that literal:
+
+```Mindcode
+case sorter1.config
+    when null then print("Nothing selected");
+    when @coal then print("Coal selected");
+    when @lead then print("Lead selected");
+    else print("Some other item selected");
+end; 
+```
+
+If both zero literal and a `null` literal are present in your `when` values, both zero and `null` are matched using strict comparison:
+
+```Mindcode
+var text = case number
+    when 0, 1, 2**3 .. 2**5, 42, -115 then
+        "A number I like";
+    when 10**5 .. 10**9 then
+        "A very big number";
+    when null then
+        "A null";
+    else
+        "An ugly number";
+end;
+```
+
+If the `when` clause contains an expression that evaluates to `null` or zero, strict comparison isn't used. 
+
 ### Additional considerations
 
 * Some expressions after the `when` keyword might or might not get evaluated, depending on the value of the case expression. Do not use expressions with side effects (such as a function call that would modify some global variable). 
-* Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed,but the behavior might change in the future.
+* Avoid having several `when` branches matching the same value -- currently the first matching branch gets executed, but the behavior might change in the future.
 
 # The `end()` function
 
