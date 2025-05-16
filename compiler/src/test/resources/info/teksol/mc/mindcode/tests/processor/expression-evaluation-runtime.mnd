@@ -11,6 +11,8 @@ param zero = 0;
 // and remove instructions we want to test
 inline def d(n) zero + n; end;
 
+inline def o(n) zero ? null : n; end;
+
 assertEquals(5,             2 +  d(3),                  "add");
 assertEquals(1,             7 -  d(6),                  "sub");
 assertEquals(6,             3 *  d(2),                  "mul");
@@ -111,5 +113,8 @@ a = 0; assertEquals( true,  a ||= d(2),                 "||=");
 
 assertEquals(%ff0000ff,     %ff0000,                    "short color literals");
 assertEquals(%ffffffff,     %[white],                   "named color literals");
+
+// Logic IDs
+assertEquals(17,            o(@copper-wall).@id,        "Logic ID");
 
 stopProcessor();

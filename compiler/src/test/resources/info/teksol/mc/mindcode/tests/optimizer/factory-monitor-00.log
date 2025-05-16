@@ -19,8 +19,7 @@
 Pass 1: speed optimization selection (cost limit 622):
     Replicate loop condition at line 160:1                       cost     1, benefit       25.0, efficiency     25.000
     Convert case at line 20:9 (segments: 1)                      cost   137, benefit      625.0, efficiency      4.562
-  o Convert case at line 20:9 (segments: 2)                      cost    13, benefit      397.7, efficiency     30.594
-  * Convert case at line 20:9 (segments: 3)                      cost     9, benefit      852.3, efficiency     94.697 (+1 instructions)
+  * Convert case at line 20:9 (segments: 3)                      cost     7, benefit      909.1, efficiency    129.870 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 621):
   * Replicate loop condition at line 160:1                       cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
@@ -1777,7 +1776,7 @@ Modifications by Convert case at line 20:9 (segments: 3) (+7 instructions):
     29 sensor *tmp8 :block @type
 -    * jump *label7 notEqual *tmp8 @message
 +   30 sensor *tmp178 *tmp8 @id
-+   31 jump *label87 greaterThan *tmp178 9
++   31 jump *label87 greaterThanEq *tmp178 10
 +   32 jump *label86 lessThan *tmp178 2
 +   33 multijump *label88 *tmp178 2 (m:*label96)
 +   34 multilabel *label88 (m:*label96)
@@ -1797,12 +1796,12 @@ Modifications by Convert case at line 20:9 (segments: 3) (+7 instructions):
 +   48 multilabel *label95 (m:*label96)
 +   49 jump *label24 always
 +   50 label *label87
-+   51 jump *label97 greaterThan *tmp178 138
++   51 jump *label97 greaterThanEq *tmp178 144
 +   52 jump *label8 equal *tmp178 137
 +   53 jump *label10 equal *tmp178 138
-+   54 label *label97
-+   55 jump *label12 equal *tmp178 144
-+   56 jump *label12 equal *tmp178 145
++   54 jump *label86 always
++   55 label *label97
++   56 jump *label12 lessThan *tmp178 146
 +   57 jump *label86 always
     58 label *label8
     59 set .MESSAGE :block
@@ -2443,7 +2442,7 @@ op sub :n :n 1
 getlink :block :n
 sensor *tmp8 :block @type
 sensor *tmp178 *tmp8 @id
-jump *label87 greaterThan *tmp178 9
+jump *label87 greaterThanEq *tmp178 10
 jump *label86 lessThan *tmp178 2
 multijump *label88 *tmp178 2
 multilabel *label88
@@ -2463,12 +2462,12 @@ jump *label22 always
 multilabel *label95
 jump *label24 always
 label *label87
-jump *label97 greaterThan *tmp178 138
+jump *label97 greaterThanEq *tmp178 144
 jump *label8 equal *tmp178 137
 jump *label10 equal *tmp178 138
+jump *label86 always
 label *label97
-jump *label12 equal *tmp178 144
-jump *label12 equal *tmp178 145
+jump *label12 lessThan *tmp178 146
 jump *label86 always
 label *label8
 set .MESSAGE :block

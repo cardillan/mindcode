@@ -102,4 +102,7 @@ a = 1; assertEquals(false,  a &&= 0,                   "&&=");
 a = 1; assertEquals( true,  a &&= 2,                   "&&=");
 a = 0; assertEquals( true,  a ||= 2,                   "||=");
 
+// Logic IDs
+assertEquals(17,            @copper-wall.@id,          "Logic ID");
+
 stopProcessor();

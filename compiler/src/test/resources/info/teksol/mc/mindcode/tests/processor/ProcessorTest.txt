@@ -3,8 +3,8 @@ assignments-in-expressions.mnd:                    13       13     100.0%   3E55
 complex-case-expression.mnd:                       48      294      97.9%   E6AA465B5328A02F   69149BCBBCA54657
 equality-comparisons.mnd:                          85       81      95.2%   16DB5681427420C5   7ADE2A2FE44482A9
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   DA836CDEF7D4597E
-expression-evaluation-compile-time.mnd:            74       74     100.0%   CD7A944149EEAF0E   07C7B2C8D336A927
-expression-evaluation-runtime.mnd:                147      147     100.0%   467D803D60BF1073   722EC1FAE5DF0A9C
+expression-evaluation-compile-time.mnd:            75       75     100.0%   40CFDDDBE9B141D4   BFA95311B0A3B27E
+expression-evaluation-runtime.mnd:                151      150      99.3%   B3BDC6D695D7A468   1F5FBE04187559D0
 fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   F27824FD4C9C2F3F
 for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8BCD3905B56BCF   8C9F9695397D6141
 function-inlining.mnd:                            900      900     100.0%   B3AB880177C19FDA   8D420C61DBAD05FD
@@ -17,6 +17,6 @@ processesBasicCode:                                 5        5     100.0%   A4E4
 ranged-for-loop-break-continue.mnd:                24       61      95.8%   0E564BDD58072C70   7268CB94DCB41A3B
 recursive-calls.mnd:                               98      267      98.9%   9CB0965E0E62F089   B9D7608B5B1D38C8
 recursive-function-condition.mnd:                  21       25      95.2%   02C171DDB1F56F08   542FF11D14397218
-switched-case-expression.mnd:                      61     2130     100.0%   D8AE9E78FC18AFFC   EE59EB61B56C30EA
+switched-case-expression.mnd:                      61     2130     100.0%   D8AE9E78FC18AFFC   2002A1C32E98DB72
 testSuiteRecognizesUnexpectedWarnings:              1        1     100.0%   002B7E6873B65270   4A3761D7B5564792
 while-loop.mnd:                                    20       66      95.0%   D881ACAA07A1E8A0   69602CD821B8B6AB

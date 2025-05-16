@@ -25,6 +25,10 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
         return stateTransfer;
     }
 
+    public String getLabel() {
+        return label;
+    }
+
     public int getAddress() {
         return address;
     }

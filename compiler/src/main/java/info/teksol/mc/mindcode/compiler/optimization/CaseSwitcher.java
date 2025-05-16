@@ -10,17 +10,24 @@ import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 
 @NullMarked
 class CaseSwitcher extends BaseOptimizer {
+    private static final boolean DEBUG = false;
+
     private static final int MINIMAL_GAP = 4;
+
+    private static final int MINIMAL_SEGMENT_SIZE = 4;
+    private static final int MAX_EXCEPTIONS = 3;
 
     public CaseSwitcher(OptimizationContext optimizationContext) {
         super(Optimization.CASE_SWITCHING, optimizationContext);
@@ -54,6 +61,148 @@ class CaseSwitcher extends BaseOptimizer {
         return result;
     }
 
+    static List<Segment> split(NavigableMap<Integer, LogicLabel> targets) {
+        List<Segment> segments = new ArrayList<>();
+
+        LogicLabel label = targets.firstEntry().getValue();
+        int start = targets.firstKey();
+        int last = targets.firstKey();
+
+        // Else branch gaps
+        for (Map.Entry<Integer, LogicLabel> entry : targets.entrySet()) {
+            int key = entry.getKey();
+
+            if (key - last > 1) {
+                segments.add(new Segment(SegmentType.SINGLE, start, last + 1, label));
+                segments.add(new Segment(SegmentType.SINGLE, last + 1, key, LogicLabel.EMPTY));
+                label = entry.getValue();
+                start = key;
+            } else if (!label.equals(entry.getValue())) {
+                segments.add(new Segment(SegmentType.SINGLE, start, key, label));
+                label = entry.getValue();
+                start = key;
+            }
+
+            last = key;
+        }
+
+        segments.add(new Segment(SegmentType.SINGLE, start, last + 1, label));
+
+        return segments;
+    }
+
+    // Rules for merging segments:
+    // 1. Number of exceptions in the segment is <= MAX_EXCEPTIONS
+    // 2. The merged segment starts and stops with the same label, or has no neighbor at one or both ends
+    // 3. The average segment size > 1
+    static Segment findLargestSegment(List<Segment> segments) {
+        LogicLabel majorityLabel = LogicLabel.EMPTY;
+        SegmentType type = SegmentType.SINGLE;
+        int largest = -1;
+        int from = 0, to = 0;
+
+        for (int i = 0; i < segments.size(); i++) {
+            Segment start = segments.get(i);
+            Segment stop = start;
+            Segment last = start;
+
+            boolean startGap = i == 0 || segments.get(i - 1).to != start.from;
+            LogicLabel label = start.majorityLabel;
+            int size = start.size();
+            int lastSize = size;
+            int count = 1;
+            int exceptions = 0;
+
+            for (int j = i + 1; j < segments.size(); j++) {
+                Segment next = segments.get(j);
+
+                // A hole in the middle is not allowed
+                if (next.from != last.to) break;
+
+                size += next.size();
+                count++;
+                if (!label.equals(next.majorityLabel)) {
+                    exceptions += next.size();
+                }
+
+                // Exceeded exceptions
+                if (exceptions > MAX_EXCEPTIONS) {
+                    break;
+                }
+
+                if (size > count) {
+                    if (next.majorityLabel.equals(label) || startGap || j == segments.size() - 1 || segments.get(j + 1).from != next.to) {
+                        // The merged segment may stop here
+                        // Last never points at an impossible end segment
+                        stop = next;
+                        lastSize = size;
+                    }
+                }
+
+                last = next;
+            }
+
+            if (lastSize > largest) {
+                majorityLabel = label;
+                largest = lastSize;
+                from = start.from;
+                to = stop.to;
+                type = start == stop ? SegmentType.SINGLE : SegmentType.MIXED;
+            }
+
+        }
+
+        return new Segment(type, from, to, majorityLabel);
+    }
+
+    static List<Segment> mergeSegments(List<Segment> segmentList) {
+        List<Segment> segments = new ArrayList<>(segmentList);
+        List<Segment> result = new ArrayList<>();
+
+        while (segments.size() > 1) {
+            Segment largest = findLargestSegment(segments);
+            if (largest.size() < MINIMAL_SEGMENT_SIZE) break;
+
+            result.add(largest);
+            segments.removeIf(largest::touches);
+        }
+
+        // They're already sorted from largest to smallest
+        return result;
+    }
+
+    static List<Segment> completeSegments(List<Segment> singularSegments, List<Segment> mergedSegments) {
+        List<Segment> result = new ArrayList<>(mergedSegments);
+        List<Segment> segments = new ArrayList<>(singularSegments);
+        for (Segment mergedSegment : mergedSegments) {
+            segments.removeIf(mergedSegment::contains);
+        }
+
+        int i = 0;
+        while (i < segments.size()) {
+            Segment segment = segments.get(i);
+            int j = i + 1;
+            while (j < segments.size() && segments.get(j).follows(segments.get(j - 1))) j++;
+            result.add(new Segment(i == j - 1 ? SegmentType.SINGLE : SegmentType.JUMP_TABLE,
+                    segment.from, segments.get(j - 1).to, segment.majorityLabel));
+            i = j;
+        }
+
+        // Remove completely empty segments
+        result.removeIf(segment -> segment.type == SegmentType.SINGLE && segment.majorityLabel == LogicLabel.EMPTY);
+        result.sort(null);
+
+        if (DEBUG) {
+            //System.out.println("Singular segments: \n" + singularSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
+            System.out.println("Merged segments: \n" + mergedSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
+            System.out.println("Result: \n" + result.stream().map(Object::toString).collect(Collectors.joining("\n")));
+            System.out.println();
+            System.out.println();
+        }
+
+        return result;
+    }
+
     private List<Gap> findGaps(TreeMap<Integer, LogicLabel> targets) {
         List<Gap> gaps = new ArrayList<>();
         int last = targets.firstKey();
@@ -67,27 +216,28 @@ class CaseSwitcher extends BaseOptimizer {
             last = key;
         }
 
-//        // Consequent values
-//        LogicLabel label = null;
-//        int size = 0;
-//        for (Map.Entry<Integer, LogicLabel> entry : targets.entrySet()) {
-//            if (label == null) {
-//                label = entry.getValue();
-//                last = entry.getKey();
-//                size = 1;
-//            } else if (label.equals(entry.getValue()) && entry.getKey() == last + 1) {
-//                size++;
-//                last++;
-//            } else {
-//                if (size > MINIMAL_GAP) {
-//                    gaps.add(new Gap(last - size + 1, size, label));
-//                }
-//                label = null;
-//            }
-//        }
-
         gaps.sort(null);
         return gaps;
+    }
+
+    private static class ContextMatcher {
+        final List<AstContext> contexts;
+        int lastMatchIndex = 0;
+
+        public ContextMatcher(List<AstContext> contexts) {
+            this.contexts = contexts;
+        }
+
+        public boolean matches(AstContext context) {
+            for (int i = 0; i < contexts.size(); i++) {
+                int index = (i + lastMatchIndex) % contexts.size();
+                if (context.belongsTo(contexts.get(index))) {
+                    lastMatchIndex = index;
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     private void findPossibleCaseSwitches(AstContext context, int costLimit, List<OptimizationAction> result) {
@@ -96,9 +246,8 @@ class CaseSwitcher extends BaseOptimizer {
         LogicVariable variable = null;
         TreeMap<Integer, LogicLabel> targets = new TreeMap<>();
 
-        if (context.findSubcontext(CONDITION) == null) {
-            return;
-        }
+        List<AstContext> conditions = context.findSubcontexts(CONDITION);
+        ContextMatcher matcher = new ContextMatcher(conditions);
 
         boolean removeRangeCheck = getProfile().isUnsafeCaseOptimization()
                 && context.node() instanceof AstCaseExpression exp && !exp.isElseDefined();
@@ -110,7 +259,7 @@ class CaseSwitcher extends BaseOptimizer {
         try (LogicIterator iterator = createIteratorAtContext(context)) {
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
-                if (ix.getAstContext().parent() == context && ix.getAstContext().matches(CONDITION)) {
+                if (ix.getAstContext().parent() == context && ix.getAstContext().matches(CONDITION) || matcher.matches(ix.getAstContext())) {
                     if (ix instanceof JumpInstruction jump) {
                         removed++;
 
@@ -153,7 +302,12 @@ class CaseSwitcher extends BaseOptimizer {
 
         // Degenerate case expressions: no branches
         if (targets.isEmpty()) return;
-        List<Gap> gaps = findGaps(targets);
+        List<Segment> segments = split(targets);
+        List<Segment> merged = mergeSegments(segments);
+
+        if (DEBUG) {
+            System.out.println("Singular segments: \n" + segments.stream().map(Object::toString).collect(Collectors.joining("\n")));
+        }
 
         boolean symbolic = getProfile().isSymbolicLabels();
 
@@ -165,7 +319,7 @@ class CaseSwitcher extends BaseOptimizer {
         if (symbolic && min > 0 && min < MINIMAL_GAP) min = 0;
 
         ConvertCaseExpressionAction action = new ConvertCaseExpressionAction(context, removed, variable, targets,
-                List.of(), min, analyzer.getContentType(), removeRangeCheck);
+                completeSegments(segments, List.of()), min, analyzer.getContentType(), removeRangeCheck);
 
         if (action.benefit() > 0 && action.cost() <= costLimit) {
             result.add(action);
@@ -173,13 +327,18 @@ class CaseSwitcher extends BaseOptimizer {
 
         if (removeRangeCheck) return;
 
+        int lastCost = action.cost();
         int instructionSpace = getProfile().getInstructionLimit() - optimizationContext.getProgram().size();
-        for (int i = 0; i < gaps.size(); i++) {
+        for (int i = 0; i < merged.size(); i++) {
             action = new ConvertCaseExpressionAction(context, removed, variable, targets,
-                    gaps.subList(0, i + 1), min, analyzer.getContentType(), removeRangeCheck);
+                    completeSegments(segments, merged.subList(0, i + 1)), min, analyzer.getContentType(),
+                    removeRangeCheck);
+            if (action.cost() >= lastCost) break;
+
             if (action.benefit() > 0 && action.cost() <= costLimit) {
                 result.add(action);
             }
+            lastCost = action.cost();
         }
     }
 
@@ -190,20 +349,20 @@ class CaseSwitcher extends BaseOptimizer {
         private double benefit;
         private final LogicVariable variable;
         private final TreeMap<Integer, LogicLabel> targets;
-        private final List<Gap> gaps;
+        private final List<Segment> segments;
         private final int min;
-        private final ContentType contentType;
+        private final boolean logicConversion;
         private final boolean removeRangeCheck;
         private final boolean symbolic = getProfile().isSymbolicLabels();
 
         public ConvertCaseExpressionAction(AstContext astContext, int removed, LogicVariable variable,
-                TreeMap<Integer, LogicLabel> targets, List<Gap> gaps, int min, ContentType contentType, boolean removeRangeCheck) {
+                TreeMap<Integer, LogicLabel> targets, List<Segment> segments, int min, ContentType contentType, boolean removeRangeCheck) {
             this.astContext = astContext;
             this.variable = variable;
             this.targets = targets;
-            this.gaps = gaps.stream().sorted(Comparator.comparing(Gap::start)).toList();
+            this.segments = segments;
             this.min = min;
-            this.contentType = contentType;
+            this.logicConversion = contentType != ContentType.UNKNOWN;
             this.removeRangeCheck = removeRangeCheck;
             if (removeRangeCheck) {
                 computeCostAndBenefitNoRangeCheck(removed);
@@ -219,7 +378,7 @@ class CaseSwitcher extends BaseOptimizer {
 
         @Override
         public int cost() {
-            return cost;
+            return Math.max(cost, 0);
         }
 
         @Override
@@ -238,19 +397,19 @@ class CaseSwitcher extends BaseOptimizer {
         }
 
         private void debug(Object message) {
-            //System.out.println(message);
+            if (DEBUG) System.out.println(message);
         }
 
         @Override
         public String toString() {
             return "Convert case at " + Objects.requireNonNull(astContext.node()).sourcePosition().formatForLog() +
-                    " (segments: " + (gaps.size() + 1) + ")";
+                    " (segments: " + segments.size() + ")";
         }
 
         private void computeCostAndBenefitNoRangeCheck(int removed) {
             int max = targets.lastEntry().getKey();
             int symbolicCost = symbolic && min != 0 ? 1 : 0;                // Cost of computing offset
-            int contentCost = contentType == ContentType.UNKNOWN ? 0 : 1;   // Cost of converting type to logic ID
+            int contentCost = logicConversion ? 1 : 0;                      // Cost of converting type to logic ID
             int jumpTableCost = (max - min + 1) + 1;                        // Table size plus initial jump
             cost = jumpTableCost + symbolicCost + contentCost - removed;
 
@@ -263,70 +422,77 @@ class CaseSwitcher extends BaseOptimizer {
 
         private void computeCostAndBenefit(int removed) {
             // One time costs
-            int symbolicCost = symbolic && min != 0 ? 1 : 0;                // Cost of computing offset
-            int contentCost = contentType == ContentType.UNKNOWN ? 0 : 1;   // Cost of converting type to logic ID
+            int symbolicCost = symbolic && min != 0 ? 1 : 0;    // Cost of computing offset
+            int contentCost = logicConversion ? 1 : 0;          // Cost of converting type to logic ID
             cost = contentCost - removed;
             executionSteps = contentCost;
 
             debug(this);
             debug("Initial execution steps: " + executionSteps);
 
-            int segmentMin = min;
-            for (Gap gap : gaps) {
-                int segmentMax = gap.start() - 1;
-                computeSegmentCostAndBenefit(segmentMin, segmentMax);
-                segmentMin = gap.start() + gap.size();
+            int lastTo = Integer.MAX_VALUE;
+            for (Segment segment : segments) {
+                computeSegmentCostAndBenefit(segment, lastTo);
+                lastTo = segment.to;
             }
 
-            // Final segment
-            computeSegmentCostAndBenefit(segmentMin, targets.lastEntry().getKey());
-
-            double savedSteps = (removed + 1) / 2.0;
-            debug("Saved steps: " + savedSteps + ", new steps: " + executionSteps);
+            double originalSteps = (removed + 1) / 2.0;
+            debug("Original steps: " + originalSteps + ", new steps: " + executionSteps);
+            debug("Original size: " + removed + ", new size: " + (cost + removed) + ", cost: " + cost);
             debug("");
-            benefit = (savedSteps - executionSteps) * astContext.totalWeight();
+            benefit = (originalSteps - executionSteps) * astContext.totalWeight();
         }
 
         private int maxSelectEntries(int min) {
             return symbolic && min != 0 ? 4 : 3;
         }
 
-        private void computeSegmentCostAndBenefit(int min, int max) {
-            // Number of instructions without the jump table:
-            //     range check (2)
-            //     multijump (one or two depending on symbolic)
-            int instructions = 2 + (symbolic && min != 0 ? 2 : 1);
+        private void computeSegmentCostAndBenefit(Segment segment, int lastTo) {
+            boolean first = segment == segments.getFirst();
+            boolean last = segment == segments.getLast();
 
-            // Number of steps taken through the jump table: additional jump in the jump table
-            int jumpTableSteps = instructions + 1;
+            // This segment matches the value of 0 and needs to distinguish it from null
+            boolean handleNull = logicConversion && segment.from == 0;
+
+            int segmentFrom = first ? min : segment.from;
+            int instructions;
+            int activeSteps;
 
             int allTargets = targets.size();
-            int activeTargets = (int) targets.keySet().stream().filter(i -> i >= min && i <= max).count();
-            int remainingTargets = (int) targets.keySet().stream().filter(i -> i >= min).count();
+            int activeTargets = (int) targets.keySet().stream().filter(segment::contains).count();
+            int remainingTargets = (int) targets.keySet().stream().filter(i -> i >= segment.from).count();
+            int remainingSteps = remainingTargets - activeTargets;
 
-            if (activeTargets <= maxSelectEntries(min)) {
-                int jumps = activeTargets + 1;
-                int segmentSteps = activeTargets * (activeTargets + 1) / 2;
-                int remainingSteps = (remainingTargets - activeTargets);
-                double additionalSteps = (double)(segmentSteps + remainingSteps) / allTargets;
-
-                debug("Segment " + min + " to " + max + ": selector, execution steps: " + additionalSteps + ", total segment steps: " + segmentSteps);
-                cost += jumps + 1;
-                executionSteps += additionalSteps;
-                return;
+            switch (segment.type) {
+                case SINGLE -> {
+                    if (segment.from == lastTo || segment.size() == 1) {
+                        instructions = last ? 2 : 1;
+                        activeSteps = activeTargets;
+                    } else {
+                        instructions = 3;
+                        activeSteps = activeTargets * (handleNull ? 3 : 2);
+                    }
+                }
+                case MIXED -> {
+                    int firstValueHandler = first ? 1 : 0;
+//                    int dominantTargets = segment.majorityLabel == LogicLabel.EMPTY ? 0
+//                            : (int) targets.values().stream().filter(segment.majorityLabel::equals).count();
+                    instructions = activeTargets + firstValueHandler + 2;
+                    activeSteps = activeTargets * (activeTargets + firstValueHandler + 1) / 2;
+                }
+                case JUMP_TABLE -> {
+                    int leadingInstructions = 2 + (symbolic && segmentFrom != 0 ? 2 : 1);
+                    instructions = leadingInstructions + segment.size();
+                    activeSteps = activeTargets * (leadingInstructions + 1);
+                }
+                default -> throw new IllegalStateException("Unexpected value: " + segment.type);
             }
 
+            double additionalSteps = (double) (activeSteps + remainingSteps) / allTargets;
+            debug("Segment " + segmentFrom + " to " + segment.to + ": " + segment.type + ", instructions: " + instructions
+                    + ", average steps: " + activeSteps + ", total steps: " + activeSteps);
 
-            int segmentSteps = jumpTableSteps * activeTargets;      // Jump table execution steps
-            int remainingSteps = remainingTargets - activeTargets;  // One instruction - initial jump
-
-            double additionalSteps = (double)(segmentSteps + remainingSteps) / allTargets;
-
-            debug("Segment " + min + " to " + max + ": jump table, execution steps: " + additionalSteps + ", total segment steps: " + segmentSteps);
-
-            // jump table (one per slot)
-            int jumpTable = (max - min + 1);
-            cost += instructions + jumpTable;
+            cost += instructions;
             executionSteps += additionalSteps;
         }
 
@@ -346,24 +512,34 @@ class CaseSwitcher extends BaseOptimizer {
 
             newAstContext = astContext.createSubcontext(FLOW_CONTROL, 1.0);
 
-            if (contentType == ContentType.UNKNOWN) {
-                caseVariable = variable;
-            } else {
+            if (logicConversion) {
                 caseVariable = instructionProcessor.nextTemp();
                 insertInstruction(createSensor(newAstContext, caseVariable, variable, LogicBuiltIn.ID));
+            } else {
+                caseVariable = variable;
             }
 
-            int segmentMin = min;
-            for (Gap gap : gaps) {
-                int segmentMax = gap.start() - 1;
-                LogicLabel nextSegmentLabel = instructionProcessor.nextLabel();
-                generateJumpTable(segmentMin, segmentMax, nextSegmentLabel, gap.label() == null ? finalLabel : gap.label());
-                insertInstruction(createLabel(newAstContext, nextSegmentLabel));
-                segmentMin = gap.start() + gap.size();
-            }
+            int lastTo = Integer.MAX_VALUE;
+            for (Segment segment : segments) {
+                debug("Optimizing segment " + segment + ", size: " + segment.size() + ", targets: " + targets.subMap(segment.from, segment.to).size());
 
-            // Final segment
-            generateJumpTable(segmentMin, targets.lastEntry().getKey(), finalLabel, finalLabel);
+                boolean first = segment == segments.getFirst();
+                boolean last = segment == segments.getLast();
+                LogicLabel nextSegmentLabel = last ? finalLabel : instructionProcessor.nextLabel();
+                int segmentFrom = first ? min : segment.from;
+                switch (segment.type) {
+                    case SINGLE -> generateSingleSegment(segment, lastTo, nextSegmentLabel, finalLabel);
+                    case MIXED -> generateMixedSegment(segment, first, nextSegmentLabel, finalLabel);
+                    case JUMP_TABLE -> generateJumpTable(segment, segmentFrom, nextSegmentLabel, finalLabel);
+                }
+
+                if (!last) {
+                    assert newAstContext != null;
+                    insertInstruction(createLabel(newAstContext, nextSegmentLabel));
+                }
+
+                lastTo = segment.to;
+            }
 
             // Remove all conditions
             for (AstContext condition : astContext.findSubcontexts(CONDITION)) {
@@ -374,13 +550,87 @@ class CaseSwitcher extends BaseOptimizer {
             return OptimizationResult.REALIZED;
         }
 
+        private void generateSingleSegment(Segment segment, int lastTo, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
+            assert newAstContext != null;
+            assert caseVariable != null;
+
+            // This segment matches the value of 0 and needs to distinguish it from null
+            boolean handleNull = logicConversion && segment.from == 0;
+
+            LogicLabel target = segment.majorityLabel;
+
+            if (segment.from == lastTo || segment.size() == 1) {
+                if (segment.from == lastTo) {
+                    // This segment immediately follows last one
+                    // We know values smaller than segmentTo cannot appear here
+
+                    // All values in this segment lead to target (regardless of size)
+                    // We jump to target if value is smaller than segment.to
+                    insertInstruction(createJump(newAstContext, target, Condition.LESS_THAN, caseVariable, LogicNumber.create(segment.to)));
+                } else if (handleNull) {
+                    // This segment matches just the value of 0, and we need to distinguish it from null
+                    insertInstruction(createJump(newAstContext, target, Condition.STRICT_EQUAL, caseVariable, LogicNumber.ZERO));
+                } else {
+                    // This segment matches just the value of segment.from.
+                    insertInstruction(createJump(newAstContext, target, Condition.EQUAL, caseVariable, LogicNumber.create(segment.from)));
+                }
+
+                // For last segment jump to else branch, otherwise fallthrough to the next segment
+                if (nextSegmentLabel == finalLabel) {
+                    insertInstruction(createJumpUnconditional(newAstContext, finalLabel));
+                }
+            } else {
+                // This segment matches values between from and to
+                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN_EQ, caseVariable, LogicNumber.create(segment.to)));
+
+                if (handleNull) {
+                    // This segment matches values from 0 to segment.to, and we need to distinguish 0 from null
+                    insertInstruction(createJump(newAstContext, finalLabel, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
+                    insertInstruction(createJumpUnconditional(newAstContext, target));
+                } else {
+                    insertInstruction(createJump(newAstContext, target, Condition.GREATER_THAN_EQ, caseVariable, LogicNumber.create(segment.from)));
+                    insertInstruction(createJumpUnconditional(newAstContext, finalLabel));
+                }
+            }
+        }
+
+        private void generateMixedSegment(Segment segment, boolean firstSegment, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
+            assert newAstContext != null;
+            assert caseVariable != null;
+
+            if (nextSegmentLabel != finalLabel) {
+                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN_EQ, caseVariable, LogicNumber.create(segment.to)));
+            }
+            if (firstSegment) {
+                if (logicConversion && segment.from == 0) {
+                    insertInstruction(createJump(newAstContext, finalLabel, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
+                } else {
+                    insertInstruction(createJump(newAstContext, finalLabel, Condition.LESS_THAN, caseVariable, LogicNumber.create(segment.from)));
+                }
+            }
+
+            LogicLabel defaultTarget = segment.majorityLabel == LogicLabel.EMPTY ? finalLabel : segment.majorityLabel;
+            for (int value = segment.from; value < segment.to; value++) {
+                LogicLabel target = targets.getOrDefault(value, finalLabel);
+                if (!defaultTarget.equals(target)) {
+                    boolean strict = logicConversion && value == 0;
+                    insertInstruction(createJump(newAstContext, target, strict ? Condition.STRICT_EQUAL : Condition.EQUAL,
+                            caseVariable, LogicNumber.create(value)));
+                }
+            }
+
+            // Nothing matched: jump to default
+            insertInstruction(createJumpUnconditional(newAstContext, defaultTarget));
+        }
+
+
         // Generates a jump table
-        // Values less than min are sent to final label
-        // Values greater than max are sent to the next segment
-        private void generateJumpTable(int min, int max, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
-            int activeTargets = (int) targets.keySet().stream().filter(i -> i >= min && i <= max).count();
-            if (!removeRangeCheck && (activeTargets <= maxSelectEntries(min))) {
-                generateSelectTable(min, max, nextSegmentLabel, finalLabel);
+        // Values less than 'from' are sent to final label
+        // Values greater than or equal to 'to' are sent to the next segment
+        private void generateJumpTable(Segment segment, int segmentFrom, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
+            int activeTargets = (int) targets.keySet().stream().filter(i -> i >= segmentFrom && i < segment.to).count();
+            if (!removeRangeCheck && (activeTargets <= maxSelectEntries(segmentFrom))) {
+                generateSelectTable(segment, nextSegmentLabel, finalLabel);
                 return;
             }
 
@@ -389,36 +639,36 @@ class CaseSwitcher extends BaseOptimizer {
 
             // Range check
             if (!removeRangeCheck) {
-                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN, caseVariable, LogicNumber.create(max)));
-                if (contentType != ContentType.UNKNOWN && min == 0) {
+                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN_EQ, caseVariable, LogicNumber.create(segment.to)));
+                if (logicConversion && segmentFrom == 0) {
                     insertInstruction(createJump(newAstContext, finalLabel, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
                 } else {
-                    insertInstruction(createJump(newAstContext, finalLabel, Condition.LESS_THAN, caseVariable, LogicNumber.create(min)));
+                    insertInstruction(createJump(newAstContext, finalLabel, Condition.LESS_THAN, caseVariable, LogicNumber.create(segmentFrom)));
                 }
             }
 
-            List<LogicLabel> labels = IntStream.rangeClosed(min, max).mapToObj(i -> instructionProcessor.nextLabel()).toList();
+            List<LogicLabel> labels = IntStream.range(segmentFrom, segment.to).mapToObj(i -> instructionProcessor.nextLabel()).toList();
             LogicLabel marker = instructionProcessor.nextLabel();
-            insertInstruction(createMultiJump(newAstContext, labels.getFirst(), caseVariable, LogicNumber.create(min), marker));
+            insertInstruction(createMultiJump(newAstContext, labels.getFirst(), caseVariable, LogicNumber.create(segmentFrom), marker));
 
             for (int i = 0; i < labels.size(); i++) {
                 insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
-                insertInstruction(createJumpUnconditional(newAstContext, targets.getOrDefault(min + i, finalLabel)));
+                insertInstruction(createJumpUnconditional(newAstContext, targets.getOrDefault(segmentFrom + i, finalLabel)));
             }
         }
 
-        private void generateSelectTable(int min, int max, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
+        private void generateSelectTable(Segment segment, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
             assert newAstContext != null;
             assert caseVariable != null;
 
             if (nextSegmentLabel != finalLabel) {
-                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN, caseVariable, LogicNumber.create(max)));
+                insertInstruction(createJump(newAstContext, nextSegmentLabel, Condition.GREATER_THAN_EQ, caseVariable, LogicNumber.create(segment.to)));
             }
 
-            targets.entrySet().stream().filter(e -> e.getKey() >= min && e.getKey() <= max)
-                    .forEach(e -> insertInstruction(createJump(newAstContext, e.getValue(),
-                                    Condition.EQUAL, caseVariable, LogicNumber.create(e.getKey())))
-                    );
+            targets.subMap(segment.from, segment.to).forEach((value, label) ->
+                    insertInstruction(createJump(newAstContext, label,
+                            logicConversion && value == 0 ? Condition.STRICT_EQUAL : Condition.EQUAL,
+                            caseVariable, LogicNumber.create(value))));
 
             if (nextSegmentLabel == finalLabel) {
                 insertInstruction(createJumpUnconditional(newAstContext, finalLabel));
@@ -477,6 +727,45 @@ class CaseSwitcher extends BaseOptimizer {
             return size == other.size
                     ? Integer.compare(start, other.start)
                     : Integer.compare(other.size, size);
+        }
+    }
+
+    enum SegmentType {
+        /// A segment containing one distinct value
+        SINGLE,
+
+        // A merged segment containing one predominant value and a few possible exceptions
+        MIXED,
+
+        /// A segment containing multiple distinct values, produces a jump table
+        JUMP_TABLE
+    }
+
+    // Note: to is exclusive
+    record Segment(SegmentType type, int from, int to, LogicLabel majorityLabel) implements Comparable<Segment> {
+        @Override
+        public int compareTo(@NotNull CaseSwitcher.Segment o) {
+            return Integer.compare(from, o.from);
+        }
+
+        public int size() {
+            return to - from;
+        }
+
+        public boolean contains(Segment other) {
+            return from < other.to && to > other.from;
+        }
+
+        public boolean touches(Segment other) {
+            return from <= other.to && to >= other.from;
+        }
+
+        public boolean contains(int value) {
+            return from <= value && value < to;
+        }
+
+        public boolean follows(Segment other) {
+            return from == other.to;
         }
     }
 }

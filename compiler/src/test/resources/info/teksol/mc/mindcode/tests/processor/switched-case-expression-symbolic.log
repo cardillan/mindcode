@@ -476,7 +476,7 @@ Modifications by Convert case at line 27:5 (segments: 1) (+3 instructions):
     18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
 -    * jump *label9 notEqual *tmp2 0
-+   20 jump *label31 greaterThan *tmp2 9
++   20 jump *label31 greaterThanEq *tmp2 10
 +   21 jump *label31 lessThan *tmp2 0
 +   22 multijump *label32 *tmp2 0 (m:*label42)
 +   23 multilabel *label32 (m:*label42)
@@ -659,7 +659,7 @@ jump *label6 lessThanEq :i 0
 label *label30
 op mod *tmp2 :processNumber:n 10
 # "Function: def processDigit(in n)"
-jump *label31 greaterThan *tmp2 9
+jump *label31 greaterThanEq *tmp2 10
 jump *label31 lessThan *tmp2 0
 multijump *label32 *tmp2 0
 multilabel *label32

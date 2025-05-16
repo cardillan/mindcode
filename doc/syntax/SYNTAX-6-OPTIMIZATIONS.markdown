@@ -146,7 +146,7 @@ printflush(message1);
 compiles to 
 
 ```mlog
-print "dormant-cyst\n17\n"
+print "dormant-cyst\n19\n"
 printflush message1
 ```
 
@@ -1157,7 +1157,7 @@ The instruction limit has been artificially lowered to ensure the optimizer will
 
 ```Mindcode
 #set symbolic-labels = true;
-#set instruction-limit = 300;
+#set instruction-limit = 200;
 
 print(case getlink(0).@type
     when @copper-wall,
@@ -1197,47 +1197,48 @@ The above case expression is transformed to this:
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
         sensor *tmp4 *tmp2 @id
-        jump label_25 greaterThan *tmp4 34
-        jump label_37 lessThan *tmp4 17
+        jump label_25 greaterThanEq *tmp4 35
+        jump label_38 lessThan *tmp4 17
         op sub *tmp5 *tmp4 17
         op add @counter @counter *tmp5
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_37 always 0 0
-        jump label_37 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-        jump label_35 always 0 0
-    label_25:
-        jump label_30 greaterThan *tmp4 207
-        jump label_35 equal *tmp4 203
-        jump label_35 equal *tmp4 204
-        jump label_35 equal *tmp4 206
-        jump label_35 equal *tmp4 207
-    label_30:
-        jump label_34 greaterThan *tmp4 225
-        jump label_35 equal *tmp4 220
-        jump label_35 equal *tmp4 221
-        jump label_35 equal *tmp4 225
-    label_34:
-        jump label_37 notEqual *tmp4 234
-    label_35:
-        set *tmp0 "Wall"
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
         jump label_38 always 0 0
-label_37:
+        jump label_38 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+        jump label_36 always 0 0
+    label_25:
+        jump label_29 greaterThanEq *tmp4 206
+        jump label_36 equal *tmp4 203
+        jump label_36 equal *tmp4 204
+        jump label_38 always 0 0
+    label_29:
+        jump label_36 lessThan *tmp4 208
+        jump label_35 greaterThanEq *tmp4 234
+        jump label_36 equal *tmp4 220
+        jump label_36 equal *tmp4 221
+        jump label_36 equal *tmp4 225
+        jump label_38 always 0 0
+    label_35:
+        jump label_38 greaterThanEq *tmp4 235
+    label_36:
+        set *tmp0 "Wall"
+        jump label_39 always 0 0
+label_38:
     set *tmp0 "Not wall"
-    label_38:
+    label_39:
     print *tmp0
 ```
 

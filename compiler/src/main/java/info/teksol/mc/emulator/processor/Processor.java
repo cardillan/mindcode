@@ -487,11 +487,14 @@ public class Processor extends AbstractMessageEmitter {
                 return true;
             }
             case "@id" -> {
-                if (inner != null && inner.id() >= 0) {
-                    target.setLongValue(inner.id());
-                } else {
-                    target.setNull();
+                if (inner instanceof MindustryContent content) {
+                    if (content.logicId() >= 0) {
+                        target.setLongValue(content.logicId());
+                    } else {
+                        target.setNull();
+                    }
                 }
+
                 return true;
             }
         }

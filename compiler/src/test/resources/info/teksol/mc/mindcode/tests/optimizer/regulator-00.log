@@ -21,9 +21,8 @@ Pass 1: speed optimization selection (cost limit 819):
     Replicate loop condition at line 72:1                        cost     1, benefit       25.0, efficiency     25.000
   o Convert case at line 25:9 (segments: 1)                      cost    85, benefit     2812.5, efficiency     33.088
   * Convert case at line 25:9 (segments: 2)                      cost    39, benefit     2916.7, efficiency     74.786 (+38 instructions)
-  o Convert case at line 25:9 (segments: 3)                      cost    26, benefit     2604.2, efficiency    100.160
-  o Convert case at line 25:9 (segments: 4)                      cost    15, benefit     2222.2, efficiency    148.148
-  o Convert case at line 25:9 (segments: 5)                      cost    17, benefit     2256.9, efficiency    132.761
+  o Convert case at line 25:9 (segments: 4)                      cost    27, benefit     2395.8, efficiency     88.735
+  o Convert case at line 25:9 (segments: 6)                      cost     9, benefit     1979.2, efficiency    219.907
 
 Pass 1: speed optimization selection (cost limit 781):
   * Replicate loop condition at line 72:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
@@ -924,7 +923,7 @@ Modifications by Convert case at line 25:9 (segments: 2) (+38 instructions):
     21 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
 +   22 sensor *tmp56 *tmp5 @id
-+   23 jump *label55 greaterThan *tmp56 95
++   23 jump *label55 greaterThanEq *tmp56 96
 +   24 jump *label54 lessThan *tmp56 48
 +   25 multijump *label56 *tmp56 48 (m:*label104)
 +   26 multilabel *label56 (m:*label104)
@@ -1376,7 +1375,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 +   18 format :block
     19 sensor *tmp5 :block @type
     20 sensor *tmp56 *tmp5 @id
-    21 jump *label55 greaterThan *tmp56 95
+    21 jump *label55 greaterThanEq *tmp56 96
  
    158 label *label6
    159 jump *label52 greaterThan :n 0
@@ -1506,7 +1505,7 @@ print "Found: {0}\n"
 format :block
 sensor *tmp5 :block @type
 sensor *tmp56 *tmp5 @id
-jump *label55 greaterThan *tmp56 95
+jump *label55 greaterThanEq *tmp56 96
 jump *label54 lessThan *tmp56 48
 multijump *label56 *tmp56 48
 multilabel *label56

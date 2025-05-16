@@ -263,10 +263,10 @@ class ExpressionOptimizer extends BaseOptimizer {
                 } else if (property.equals(LogicBuiltIn.Y)) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.THIS_Y));
                 }
-            } else if (advanced() && property.equals(LogicBuiltIn.ID) && object.getObject() != null && object.getObject().id() != -1) {
+            } else if (advanced() && property.equals(LogicBuiltIn.ID) && object.getObject() != null && object.getObject().logicId() != -1) {
                 if (getProfile().isTargetOptimization() || metadata.isStableBuiltin(object.getObject().name())) {
                     logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
-                            LogicNumber.create(ix.sourcePosition(), object.getObject().id())));
+                            LogicNumber.create(ix.sourcePosition(), object.getObject().logicId())));
                 }
             }
         }
