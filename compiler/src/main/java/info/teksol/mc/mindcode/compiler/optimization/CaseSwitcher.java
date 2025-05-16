@@ -167,7 +167,7 @@ class CaseSwitcher extends BaseOptimizer {
             if (largest.size() < MINIMAL_SEGMENT_SIZE) break;
 
             result.add(largest);
-            segments.removeIf(largest::touches);
+            segments.removeIf(largest::contains);
         }
 
         // They're already sorted from largest to smallest

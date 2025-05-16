@@ -1196,32 +1196,31 @@ The above case expression is transformed to this:
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
         sensor *tmp4 *tmp2 @id
-        jump label_8 greaterThanEq *tmp4 31
-        jump label_22 equal *tmp4 29
-        jump label_22 equal *tmp4 30
-        jump label_22 lessThan *tmp4 17
-        jump label_20 always 0 0
+        jump label_8 greaterThanEq *tmp4 35
+        jump label_21 equal *tmp4 29
+        jump label_21 equal *tmp4 30
+        jump label_21 lessThan *tmp4 17
+        jump label_19 always 0 0
     label_8:
-        jump label_20 lessThan *tmp4 35
-        jump label_13 greaterThanEq *tmp4 206
-        jump label_20 equal *tmp4 203
-        jump label_20 equal *tmp4 204
-        jump label_22 always 0 0
-    label_13:
-        jump label_20 lessThan *tmp4 208
-        jump label_19 greaterThanEq *tmp4 234
-        jump label_20 equal *tmp4 220
-        jump label_20 equal *tmp4 221
-        jump label_20 equal *tmp4 225
-        jump label_22 always 0 0
+        jump label_12 greaterThanEq *tmp4 206
+        jump label_19 equal *tmp4 203
+        jump label_19 equal *tmp4 204
+        jump label_21 always 0 0
+    label_12:
+        jump label_19 lessThan *tmp4 208
+        jump label_18 greaterThanEq *tmp4 234
+        jump label_19 equal *tmp4 220
+        jump label_19 equal *tmp4 221
+        jump label_19 equal *tmp4 225
+        jump label_21 always 0 0
+    label_18:
+        jump label_21 greaterThanEq *tmp4 235
     label_19:
-        jump label_22 greaterThanEq *tmp4 235
-    label_20:
         set *tmp0 "Wall"
-        jump label_23 always 0 0
-label_22:
+        jump label_22 always 0 0
+label_21:
     set *tmp0 "Not wall"
-    label_23:
+    label_22:
     print *tmp0
 ```
 
