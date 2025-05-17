@@ -187,6 +187,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("link-guards",              node -> setBooleanOption(node, profile::setLinkedBlockGuards));
         map.put("mlog-indent",              node -> setIntOption(node, profile::setMlogIndent, 0, CompilerProfile.MAX_MLOG_INDENT));
         map.put("optimization",             node -> setEnumOption(node, OptimizationLevel::byName, profile::setAllOptimizationLevels, OptimizationLevel::allowedValues));
+        map.put("output-profiling",         node -> setBooleanOption(node, profile::setOutputProfiling));
         map.put("passes",                   node -> setIntOption(node, profile::setOptimizationPasses, 1, profile.getMaxPasses()));
         map.put("print-unresolved",         node -> setEnumOption(node, FinalCodeOutput::byName, profile::setFinalCodeOutput, FinalCodeOutput::allowedValues));
         map.put("profile",                  this::setProfile);

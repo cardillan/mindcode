@@ -98,7 +98,7 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--link-guards {true,false}] [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [--run] [--run-steps {1..1000000000}] [--trace-execution {true,false}]
+                [--run] [--run-steps {1..1000000000}] [--output-profiling] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
                 [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
                 [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
@@ -203,6 +203,7 @@ run options:
   --run-steps {1..1000000000}
                          the maximum number of instruction executions  to  emulate,  the execution stops when this limit
                          is reached.
+  --output-profiling     output the profiling data into the log file.
   --trace-execution {true,false}
                          output instruction and variable states at each execution step
   --dump-variables-on-stop {true,false}

@@ -117,6 +117,13 @@ public class CompileMindcodeAction extends ActionHandler {
                 .choices(Arguments.range(1, 1_000_000_000))
                 .type(Integer.class);
 
+        createArgument(container, defaults,
+                CompilerProfile::isOutputProfiling,
+                (profile, arguments, name) -> profile.setOutputProfiling(arguments.getBoolean(name)),
+                "--output-profiling")
+                .help("output the profiling data into the log file.")
+                .action(Arguments.storeTrue());
+
         for (ExecutionFlag flag : ExecutionFlag.LIST) {
             if (flag.isSettable()) {
                 createArgument(container, defaults,
@@ -184,10 +191,13 @@ public class CompileMindcodeAction extends ActionHandler {
                     messageLogger.error(compiler.getExecutionException().getMessage());
                 }
 
-                if (compiler.getExecutionProfile().length >= compiler.getExecutableInstructions().size()) {
-                    String profileResult = LogicInstructionPrinter.toStringWithProfiling(compiler.instructionProcessor(),
-                            compiler.getExecutableInstructions(), compiler.getExecutionProfile());
-                    messageLogger.debug("\n\nCode profiling result:\n\n" + profileResult);
+                if (compilerProfile.isOutputProfiling()) {
+                    int[] executionProfile = compiler.getExecutionProfile();
+                    if (executionProfile.length >= compiler.getExecutableInstructions().size()) {
+                        String profileResult = LogicInstructionPrinter.toStringWithProfiling(compiler.instructionProcessor(),
+                                compiler.getExecutableInstructions(), false, 0, executionProfile);
+                        messageLogger.debug("\n\nCode profiling result:\n\n" + profileResult);
+                    }
                 }
             }
         }

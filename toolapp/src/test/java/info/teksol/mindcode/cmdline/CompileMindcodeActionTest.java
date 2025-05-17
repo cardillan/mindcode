@@ -183,6 +183,21 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         }
 
         @Nested
+        class OutputProfilingArgumentTest {
+            @Test
+            public void longArgumentAbsent() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("");
+                assertFalse(profile.isOutputProfiling());
+            }
+
+            @Test
+            public void longArgumentPresent() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--output-profiling");
+                assertTrue(profile.isOutputProfiling());
+            }
+        }
+
+        @Nested
         class ExecutionFlagsArgumentsTest {
             @Test
             public void executionFlagsTrue() throws ArgumentParserException {

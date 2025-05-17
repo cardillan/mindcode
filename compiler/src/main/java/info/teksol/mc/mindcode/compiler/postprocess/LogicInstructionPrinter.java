@@ -21,8 +21,9 @@ import java.util.stream.Collectors;
 public class LogicInstructionPrinter {
 
     public static String toStringWithProfiling(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
-            int[] profile) {
-        return toString(instructionProcessor, instructions, false, 0, i -> String.format("%6d: ", profile[i]));
+            boolean symbolicLabels, int mlogIndent, int[] profile) {
+        return toString(instructionProcessor, instructions, symbolicLabels, mlogIndent,
+                i -> profile[i] >= 0 ? String.format("%6d: ", profile[i]) : "        ");
     }
 
     public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,

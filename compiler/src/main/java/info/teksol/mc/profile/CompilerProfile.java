@@ -56,6 +56,7 @@ public class CompilerProfile {
     private int optimizationPasses;
     private int parseTreeLevel = 0;
     private boolean printStackTrace = false;
+    private boolean outputProfiling = false;
     private Remarks remarks = Remarks.PASSIVE;
     private boolean targetOptimization = false;
     private boolean unsafeCaseOptimization = false;
@@ -260,6 +261,15 @@ public class CompilerProfile {
 
     public CompilerProfile setOptimizationPasses(int optimizationPasses) {
         this.optimizationPasses = Math.min(optimizationPasses, getMaxPasses());
+        return this;
+    }
+
+    public boolean isOutputProfiling() {
+        return outputProfiling;
+    }
+
+    public CompilerProfile setOutputProfiling(boolean outputProfiling) {
+        this.outputProfiling = outputProfiling;
         return this;
     }
 

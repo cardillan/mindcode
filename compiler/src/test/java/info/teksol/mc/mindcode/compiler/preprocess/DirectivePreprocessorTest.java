@@ -70,6 +70,13 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveOutputProfiling() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        processDirective(profile, "output-profiling", "true");
+        assertTrue(profile.isOutputProfiling());
+    }
+
+    @Test
     void processesDirectiveBooleanEval() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setShortCircuitEval(false);

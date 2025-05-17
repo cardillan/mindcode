@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added support for the new `op sign`, `op round` and `unpackcolor` Mindustry BE instructions to the compiler and processor emulator.
 * Added support for using `null` literals in the `case` expression.
+* Added the `output-profiling` compiler option, which causes the profiling output (number of times each instruction was executed) to be written to the log file.
 
 ### Changed
 
@@ -26,6 +27,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * Mindustry Logic functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
 * When splitting jump tables into multiple segments, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
 * Other improvements to the Case Switching optimization.
+
+### Miscellaneous
+
+* The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
 
 ## 3.4.0 - 2025-05-11
 
