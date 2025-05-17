@@ -1,7 +1,7 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 assignments-in-expressions.mnd:                    13       13     100.0%   3E55A40DD17DEC43   E4D6FFC453A390B8
-case-expression-optimized-null.mnd:                53     2806      96.2%   8F6A650041A5B2CC   B6200DAA06CC4626
-case-expression-optimized.mnd:                     49     2784     100.0%   89B6C37E9BCBC62D   0BA4EDB5D19B55C3
+case-expression-optimized-null.mnd:                65     2783     100.0%   8F6A650041A5B2CC   53727B91EA6AA7B9
+case-expression-optimized.mnd:                     65     2783     100.0%   89B6C37E9BCBC62D   53727B91EA6AA7B9
 complex-case-expression.mnd:                       48      294      97.9%   E6AA465B5328A02F   69149BCBBCA54657
 equality-comparisons.mnd:                          85       81      95.2%   16DB5681427420C5   7ADE2A2FE44482A9
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   DA836CDEF7D4597E

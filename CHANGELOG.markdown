@@ -15,9 +15,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added support for the new `op sign`, `op round` and `unpackcolor` Mindustry BE instructions to the compiler and processor emulator.
-* Added support for using `null` literals in the `case` expression.
 * Added the `output-profiling` compiler option, which causes the profiling output (number of times each instruction was executed) to be written to the log file.
 
+#### Experimental
+
+* Added support for using `null` literals in the `case` expression. When used in `case` expressions involving Mindustry content, the `when null` branch is supported by the Case Switching optimization too.
+ 
 ### Changed
 
 * **Breaking**: The system library was changed to accommodate new logic instructions:
@@ -25,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The `signExact` function in the `math` library was renamed to `sign`. This function corresponds to the Mindustry 8 instruction `op sign`, and when target 8 is selected, the instruction is used instead of the library implementation. 
   * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to correspond to the `unpackcolor` in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
   * Mindustry Logic functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
-* When splitting jump tables into multiple segments, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
+* When splitting jump tables into multiple segments during jump table compression, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
 * Other improvements to the Case Switching optimization.
 
 ### Miscellaneous
@@ -46,7 +49,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
   * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unsafe-case-optimization) compiler directive.
   * Case expressions based on Mindustry content (e.g. items, block types and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
-  * Large jump tables containing a lot of unused values may be [split into two or more segments](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#discontinuous-jump-tables) to save space.
+  * Large jump tables containing a lot of unused values may be [compressed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) to save space.
 
 #### Experimental features
 

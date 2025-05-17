@@ -23,6 +23,7 @@ Pass 1: speed optimization selection (cost limit 630):
     Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444
     Unroll loop at line 152:5                                    cost   521, benefit   156250.0, efficiency    299.904
     Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
+    Convert case at line 17:9 (segments: 1, zero extension)      cost   139, benefit     1250.0, efficiency      8.993
   * Convert case at line 213:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750 (+1 instructions)
   o Convert case at line 165:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750
 
@@ -31,6 +32,7 @@ Pass 1: speed optimization selection (cost limit 629):
     Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444
     Unroll loop at line 152:5                                    cost   525, benefit   156250.0, efficiency    297.619
     Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
+    Convert case at line 17:9 (segments: 1, zero extension)      cost   139, benefit     1250.0, efficiency      8.993
   * Convert case at line 165:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 628):
@@ -38,15 +40,18 @@ Pass 1: speed optimization selection (cost limit 628):
     Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444
   * Unroll loop at line 152:5                                    cost   529, benefit   156250.0, efficiency    295.369 (+527 instructions)
     Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
+    Convert case at line 17:9 (segments: 1, zero extension)      cost   139, benefit     1250.0, efficiency      8.993
 
 Pass 1: speed optimization selection (cost limit 101):
     Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
   * Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444 (-12 instructions)
     Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500
+  ! Convert case at line 17:9 (segments: 1, zero extension)      cost   139, benefit     1250.0, efficiency      8.993
 
 Pass 1: speed optimization selection (cost limit 113):
     Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
   * Convert case at line 17:9 (segments: 1)                      cost    50, benefit      625.0, efficiency     12.500 (+50 instructions)
+  ! Convert case at line 17:9 (segments: 1, zero extension)      cost   139, benefit     1250.0, efficiency      8.993
 
 Pass 1: speed optimization selection (cost limit 63):
   * Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571 (+7 instructions)

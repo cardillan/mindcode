@@ -374,6 +374,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
             assertCompilesTo("""
                             #set symbolic-labels = true;
                             #set unsafe-case-optimization = true;
+                            #set instruction-limit = 18;
                             param p = 5;
                             print(case p
                                 when 4, 6, 8 then "A";
