@@ -1134,6 +1134,8 @@ class DataFlowOptimizer extends BaseOptimizer {
 
     /// Helper class to manage variable states of branching case statements.
     private class CasedVariableStates {
+        private boolean skipFlow;
+
         /// Variable state matching the flow that enters the case expression. Each condition is processed on this flow.
         private VariableStates incoming;
 
@@ -1164,6 +1166,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                     } else {
                         body = body.merge(incoming, true, "merging case condition");
                     }
+                    skipFlow = true;
                 }
 
                 case ELSE -> {
@@ -1185,12 +1188,17 @@ class DataFlowOptimizer extends BaseOptimizer {
                         throw new MindcodeInternalError("Unexpected case statement structure (BODY without CONDITION)");
                     }
                     body = DataFlowOptimizer.this.processContext(localContext, context, body, modifyInstructions);
-                    if (outgoing == null) {
-                        outgoing = body;
+
+                    if (skipFlow) {
+                        skipFlow = false;
                     } else {
-                        outgoing = outgoing.merge(body, true, "merging body");
+                        if (outgoing == null) {
+                            outgoing = body;
+                        } else {
+                            outgoing = outgoing.merge(body, true, "merging body");
+                        }
+                        body = null;
                     }
-                    body = null;
                 }
 
                 default -> {

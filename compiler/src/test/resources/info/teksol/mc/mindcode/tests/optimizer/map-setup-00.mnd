@@ -5,7 +5,8 @@
 const startY = 150;
 const endY = 299;
 const wall = @shrubs;
-const maxShrunk = 150;     // Max wall distance from center
+const minWidth = 0;         // Min path width
+const maxShrunk = 150;      // Max wall distance from center
 
 linked noinit decLeft = switch1;
 linked noinit incLeft = switch2;
@@ -79,7 +80,8 @@ end;
 inline void expandWall(switch, in out x, direction, steps)
     if switch.enabled then
         for var i in 0 ... steps do
-            if abs(center - x) > 1 then
+            var distance = direction > 0 ? center - x : x - center;
+            if distance > minWidth then
                 replaceBlock(x, @air, wall);
                 x += direction;
             end;

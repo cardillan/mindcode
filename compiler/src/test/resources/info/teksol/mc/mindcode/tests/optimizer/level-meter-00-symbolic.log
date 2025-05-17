@@ -8,22 +8,20 @@
     20 instructions modified by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
-    13 instructions added by Case Switching (4 iterations).
+    12 instructions added by Case Switching (4 iterations).
      1 case expressions converted to switched jumps Case Switching.
      8 instructions eliminated by Jump Straightening (4 iterations).
      2 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     13 instructions eliminated by Print Merging.
-   167 instructions after optimizations.
+   166 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 831):
     Replicate loop condition at line 122:1                       cost     1, benefit       25.0, efficiency     25.000
     Convert case at line 34:9 (segments: 1)                      cost    75, benefit      625.0, efficiency      8.333
-    Convert case at line 34:9 (segments: 3)                      cost    20, benefit      288.5, efficiency     14.423
-  * Convert case at line 34:9 (segments: 4)                      cost    16, benefit      576.9, efficiency     36.058 (+13 instructions)
-  o Convert case at line 34:9 (segments: 6)                      cost     9, benefit      432.7, efficiency     48.077
+  * Convert case at line 34:9 (segments: 3)                      cost    12, benefit      769.2, efficiency     64.103 (+12 instructions)
 
-Pass 1: speed optimization selection (cost limit 818):
+Pass 1: speed optimization selection (cost limit 819):
   * Replicate loop condition at line 122:1                       cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -591,7 +589,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    172 sensor :amount .CONTAINER .SENSOR
    173 sensor :max .CONTAINER .MAXIMUM
 
-Modifications by Convert case at line 34:9 (segments: 4) (+13 instructions):
+Modifications by Convert case at line 34:9 (segments: 3) (+12 instructions):
  
     26 print "\nFound: "
     27 print :block
@@ -627,99 +625,97 @@ Modifications by Convert case at line 34:9 (segments: 4) (+13 instructions):
 +   56 jump *label16 equal *tmp52 94
 +   57 jump *label39 always
 +   58 label *label52
-+   59 jump *label53 greaterThanEq *tmp52 139
-+   60 jump *label8 equal *tmp52 137
-+   61 jump *label10 equal *tmp52 138
-+   62 label *label53
-+   63 jump *label14 equal *tmp52 142
-+   64 jump *label12 equal *tmp52 143
-+   65 jump *label20 equal *tmp52 146
-+   66 jump *label39 always
-    67 label *label8
-    68 set .MESSAGE :block
-    69 jump *label6 always
-    70 label *label7
++   59 jump *label8 equal *tmp52 137
++   60 jump *label10 equal *tmp52 138
++   61 jump *label14 equal *tmp52 142
++   62 jump *label12 equal *tmp52 143
++   63 jump *label20 equal *tmp52 146
++   64 jump *label39 always
+    65 label *label8
+    66 set .MESSAGE :block
+    67 jump *label6 always
+    68 label *label7
 -    * jump *label9 notEqual *tmp5 @switch
-    71 label *label10
-    72 set .SWITCH :block
-    73 jump *label6 always
-    74 label *label9
+    69 label *label10
+    70 set .SWITCH :block
+    71 jump *label6 always
+    72 label *label9
 -    * jump *label11 notEqual *tmp5 @memory-bank
-    75 label *label12
-    76 set .MEMORY :block
-    77 set .START_INDEX 264
+    73 label *label12
+    74 set .MEMORY :block
+    75 set .START_INDEX 264
  
-    79 set .SIZE 248
-    80 jump *label6 always
-    81 label *label11
+    77 set .SIZE 248
+    78 jump *label6 always
+    79 label *label11
 -    * jump *label13 notEqual *tmp5 @memory-cell
-    82 label *label14
-    83 set .MEMORY :block
-    84 set .START_INDEX 40
+    80 label *label14
+    81 set .MEMORY :block
+    82 set .START_INDEX 40
  
-    86 set .SIZE 24
-    87 jump *label6 always
-    88 label *label13
+    84 set .SIZE 24
+    85 jump *label6 always
+    86 label *label13
 -    * jump *label16 equal *tmp5 @vault
 -    * jump *label15 notEqual *tmp5 @container
-    89 label *label16
-    90 set .CONTAINER :block
-    91 set .SENSOR @totalItems
+    87 label *label16
+    88 set .CONTAINER :block
+    89 set .SENSOR @totalItems
  
-    98 set .B1 80
-    99 jump *label6 always
-   100 label *label15
+    96 set .B1 80
+    97 jump *label6 always
+    98 label *label15
 -    * jump *label18 equal *tmp5 @battery
 -    * jump *label17 notEqual *tmp5 @battery-large
-   101 label *label18
-   102 set .CONTAINER :block
-   103 set .SENSOR @totalPower
+    99 label *label18
+   100 set .CONTAINER :block
+   101 set .SENSOR @totalPower
  
-   110 set .B1 80
-   111 jump *label6 always
-   112 label *label17
+   108 set .B1 80
+   109 jump *label6 always
+   110 label *label17
 -    * jump *label20 equal *tmp5 @liquid-tank
 -    * jump *label19 notEqual *tmp5 @liquid-container
-   113 label *label20
-   114 set .CONTAINER :block
-   115 set .SENSOR @totalLiquids
+   111 label *label20
+   112 set .CONTAINER :block
+   113 set .SENSOR @totalLiquids
  
-   122 set .B1 255
-   123 jump *label6 always
-   124 label *label19
+   120 set .B1 255
+   121 jump *label6 always
+   122 label *label19
 -    * jump *label22 equal *tmp5 @power-node
 -    * jump *label22 equal *tmp5 @power-node-large
 -    * jump *label21 notEqual *tmp5 @surge-tower
-   125 label *label22
-   126 set .CONTAINER :block
-   127 set .SENSOR @powerNetStored
+   123 label *label22
+   124 set .CONTAINER :block
+   125 set .SENSOR @powerNetStored
  
-   133 set .G1 255
-   134 set .B1 80
-   135 label *label21
-+  136 label *label39
-   137 label *label6
-   138 label *label4
-   139 jump *label37 greaterThan :n 0
+   131 set .G1 255
+   132 set .B1 80
+   133 label *label21
++  134 label *label39
+   135 label *label6
+   136 label *label4
+   137 jump *label37 greaterThan :n 0
 
 Modifications by Replicate loop condition at line 122:1 (+1 instructions):
  
-   176 label *label25
-   177 sensor *tmp25 .SWITCH @enabled
-   178 jump *label27 notEqual *tmp25 0
-+  179 label *label54
-   180 set :startTime @time
-   181 set :prevTick :nextTick
-   182 op add :nextTick :nextTick TICKS
+   174 label *label25
+   175 sensor *tmp25 .SWITCH @enabled
+   176 jump *label27 notEqual *tmp25 0
++  177 label *label53
+   178 set :startTime @time
+   179 set :prevTick :nextTick
+   180 op add :nextTick :nextTick TICKS
  
-   229 print "\n"
-   230 printflush .MESSAGE
-   231 label *label26
+   227 print "\n"
+   228 printflush .MESSAGE
+   229 label *label26
 -    * jump *label25 always
-+  232 sensor *tmp25 .SWITCH @enabled
-+  233 jump *label54 equal *tmp25 0
-   234 label *label27
-   235 end
++  230 sensor *tmp25 .SWITCH @enabled
++  231 jump *label53 equal *tmp25 0
+   232 label *label27
+   233 end
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -731,114 +727,114 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     22 label *label37
     23 op sub :n :n 1
  
-    66 label *label8
-    67 set .MESSAGE :block
-    68 jump *label6 always
+    64 label *label8
+    65 set .MESSAGE :block
+    66 jump *label6 always
 -    * label *label7
-    69 label *label10
-    70 set .SWITCH :block
-    71 jump *label6 always
+    67 label *label10
+    68 set .SWITCH :block
+    69 jump *label6 always
 -    * label *label9
-    72 label *label12
-    73 set .MEMORY :block
-    74 set .START_INDEX 264
-    75 set .END_INDEX 511
-    76 set .SIZE 248
-    77 jump *label6 always
+    70 label *label12
+    71 set .MEMORY :block
+    72 set .START_INDEX 264
+    73 set .END_INDEX 511
+    74 set .SIZE 248
+    75 jump *label6 always
 -    * label *label11
-    78 label *label14
-    79 set .MEMORY :block
-    80 set .START_INDEX 40
-    81 set .END_INDEX 63
-    82 set .SIZE 24
-    83 jump *label6 always
+    76 label *label14
+    77 set .MEMORY :block
+    78 set .START_INDEX 40
+    79 set .END_INDEX 63
+    80 set .SIZE 24
+    81 jump *label6 always
 -    * label *label13
-    84 label *label16
-    85 set .CONTAINER :block
-    86 set .SENSOR @totalItems
+    82 label *label16
+    83 set .CONTAINER :block
+    84 set .SENSOR @totalItems
  
-    92 set .G1 255
-    93 set .B1 80
-    94 jump *label6 always
+    90 set .G1 255
+    91 set .B1 80
+    92 jump *label6 always
 -    * label *label15
-    95 label *label18
-    96 set .CONTAINER :block
-    97 set .SENSOR @totalPower
+    93 label *label18
+    94 set .CONTAINER :block
+    95 set .SENSOR @totalPower
  
-   103 set .G1 255
-   104 set .B1 80
-   105 jump *label6 always
+   101 set .G1 255
+   102 set .B1 80
+   103 jump *label6 always
 -    * label *label17
-   106 label *label20
-   107 set .CONTAINER :block
-   108 set .SENSOR @totalLiquids
+   104 label *label20
+   105 set .CONTAINER :block
+   106 set .SENSOR @totalLiquids
  
-   114 set .G1 192
-   115 set .B1 255
-   116 jump *label6 always
+   112 set .G1 192
+   113 set .B1 255
+   114 jump *label6 always
 -    * label *label19
-   117 label *label22
-   118 set .CONTAINER :block
-   119 set .SENSOR @powerNetStored
+   115 label *label22
+   116 set .CONTAINER :block
+   117 set .SENSOR @powerNetStored
  
-   124 set .R1 255
-   125 set .G1 255
-   126 set .B1 80
+   122 set .R1 255
+   123 set .G1 255
+   124 set .B1 80
 -    * label *label21
-   127 label *label39
-   128 label *label6
+   125 label *label39
+   126 label *label6
 -    * label *label4
-   129 jump *label37 greaterThan :n 0
-   130 label *label5
-   131 print "\nMessage: "
+   127 jump *label37 greaterThan :n 0
+   128 label *label5
+   129 print "\nMessage: "
  
-   147 printflush .MESSAGE
-   148 jump *label2 always
-   149 label *label24
+   145 printflush .MESSAGE
+   146 jump *label2 always
+   147 label *label24
 -    * label *label1
-   150 jump *label0 always
-   151 label *label2
-   152 write .START_INDEX .MEMORY 0
+   148 jump *label0 always
+   149 label *label2
+   150 write .START_INDEX .MEMORY 0
  
-   162 op min :index *tmp20 .END_INDEX
-   163 set :nextTick @tick
-   164 control enabled .SWITCH 0
+   160 op min :index *tmp20 .END_INDEX
+   161 set :nextTick @tick
+   162 control enabled .SWITCH 0
 -    * label *label25
-   165 sensor *tmp25 .SWITCH @enabled
-   166 jump *label27 notEqual *tmp25 0
-   167 label *label54
+   163 sensor *tmp25 .SWITCH @enabled
+   164 jump *label27 notEqual *tmp25 0
+   165 label *label53
  
-   173 set :prevTick @tick
-   174 op add :nextTick :prevTick TICKS
-   175 label *label28
+   171 set :prevTick @tick
+   172 op add :nextTick :prevTick TICKS
+   173 label *label28
 -    * label *label29
 -    * label *label30
-   176 jump *label32 greaterThanEq @tick :nextTick
-   177 label *label38
-   178 jump *label33 greaterThanEq @tick :prevTick
-   179 end
-   180 label *label33
+   174 jump *label32 greaterThanEq @tick :nextTick
+   175 label *label38
+   176 jump *label33 greaterThanEq @tick :prevTick
+   177 end
+   178 label *label33
 -    * label *label34
 -    * label *label31
-   181 jump *label38 lessThan @tick :nextTick
-   182 label *label32
-   183 sensor :amount .CONTAINER .SENSOR
+   179 jump *label38 lessThan @tick :nextTick
+   180 label *label32
+   181 sensor :amount .CONTAINER .SENSOR
  
-   189 jump *label35 lessThanEq :index .END_INDEX
-   190 set :index .START_INDEX
-   191 label *label35
+   187 jump *label35 lessThanEq :index .END_INDEX
+   188 set :index .START_INDEX
+   189 label *label35
 -    * label *label36
-   192 write :index .MEMORY 0
-   193 write :scaled .MEMORY :index
-   194 op sub *tmp49 :index .SIZE
+   190 write :index .MEMORY 0
+   191 write :scaled .MEMORY :index
+   192 op sub *tmp49 :index .SIZE
  
-   211 print *tmp51
-   212 print "\n"
-   213 printflush .MESSAGE
+   209 print *tmp51
+   210 print "\n"
+   211 printflush .MESSAGE
 -    * label *label26
-   214 sensor *tmp25 .SWITCH @enabled
-   215 jump *label54 equal *tmp25 0
-   216 label *label27
+   212 sensor *tmp25 .SWITCH @enabled
+   213 jump *label53 equal *tmp25 0
+   214 label *label27
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
@@ -846,71 +842,71 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
      2 set .MEMORY null
      3 set .SWITCH null
  
-   143 jump *label23 equal *tmp9 false
-   144 print "\nNo memory or container."
-   145 printflush .MESSAGE
+   141 jump *label23 equal *tmp9 false
+   142 print "\nNo memory or container."
+   143 printflush .MESSAGE
 -    * jump *label24 always
-+  146 jump *label0 always
-   147 label *label23
-   148 printflush .MESSAGE
-   149 jump *label2 always
++  144 jump *label0 always
+   145 label *label23
+   146 printflush .MESSAGE
+   147 jump *label2 always
  
-   164 set :nextTick @tick
-   165 control enabled .SWITCH 0
-   166 sensor *tmp25 .SWITCH @enabled
+   162 set :nextTick @tick
+   163 control enabled .SWITCH 0
+   164 sensor *tmp25 .SWITCH @enabled
 -    * jump *label27 notEqual *tmp25 0
-+  167 jump __start__ notEqual *tmp25 0
-   168 label *label54
-   169 set :startTime @time
-   170 set :prevTick :nextTick
++  165 jump __start__ notEqual *tmp25 0
+   166 label *label53
+   167 set :startTime @time
+   168 set :prevTick :nextTick
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   147 label *label23
-   148 printflush .MESSAGE
-   149 jump *label2 always
+   145 label *label23
+   146 printflush .MESSAGE
+   147 jump *label2 always
 -    * label *label24
 -    * jump *label0 always
-   150 label *label2
-   151 write .START_INDEX .MEMORY 0
-   152 write .END_INDEX .MEMORY 2
+   148 label *label2
+   149 write .START_INDEX .MEMORY 0
+   150 write .END_INDEX .MEMORY 2
  
-   212 printflush .MESSAGE
-   213 sensor *tmp25 .SWITCH @enabled
-   214 jump *label54 equal *tmp25 0
+   210 printflush .MESSAGE
+   211 sensor *tmp25 .SWITCH @enabled
+   212 jump *label53 equal *tmp25 0
 -    * label *label27
-   215 end
+   213 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
  
-   146 jump *label0 always
-   147 label *label23
-   148 printflush .MESSAGE
+   144 jump *label0 always
+   145 label *label23
+   146 printflush .MESSAGE
 -    * jump *label2 always
-   149 label *label2
-   150 write .START_INDEX .MEMORY 0
-   151 write .END_INDEX .MEMORY 2
+   147 label *label2
+   148 write .START_INDEX .MEMORY 0
+   149 write .END_INDEX .MEMORY 2
  
-   211 printflush .MESSAGE
-   212 sensor *tmp25 .SWITCH @enabled
-   213 jump *label54 equal *tmp25 0
+   209 printflush .MESSAGE
+   210 sensor *tmp25 .SWITCH @enabled
+   211 jump *label53 equal *tmp25 0
 -    * end
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-   146 jump *label0 always
-   147 label *label23
-   148 printflush .MESSAGE
+   144 jump *label0 always
+   145 label *label23
+   146 printflush .MESSAGE
 -    * label *label2
-   149 write .START_INDEX .MEMORY 0
-   150 write .END_INDEX .MEMORY 2
-   151 write .R0 .MEMORY 3
+   147 write .START_INDEX .MEMORY 0
+   148 write .END_INDEX .MEMORY 2
+   149 write .R0 .MEMORY 3
 
 Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
  
-   129 label *label6
-   130 jump *label37 greaterThan :n 0
-   131 label *label5
+   127 label *label6
+   128 jump *label37 greaterThan :n 0
+   129 label *label5
 -    * print "\nMessage: "
 -    * print .MESSAGE
 -    * print "\nSwitch: "
@@ -918,17 +914,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
 -    * print "\nMemory: "
 -    * print .MEMORY
 -    * print "\nContainer: "
-+  132 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nContainer: "
-+  133 format .MESSAGE
-+  134 format .SWITCH
-+  135 format .MEMORY
-   136 print .CONTAINER
-   137 op equal *tmp7 .CONTAINER null
-   138 op equal *tmp8 .MEMORY null
++  130 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nContainer: "
++  131 format .MESSAGE
++  132 format .SWITCH
++  133 format .MEMORY
+   134 print .CONTAINER
+   135 op equal *tmp7 .CONTAINER null
+   136 op equal *tmp8 .MEMORY null
  
-   187 write :scaled .MEMORY :index
-   188 op sub *tmp49 :index .SIZE
-   189 write :scaled .MEMORY *tmp49
+   185 write :scaled .MEMORY :index
+   186 op sub *tmp49 :index .SIZE
+   187 write :scaled .MEMORY *tmp49
 -    * print "Item/Liquid/Energy Level Meter\n"
 -    * print "StartIndex: "
 -    * print .START_INDEX
@@ -942,19 +938,19 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
 -    * print "Scaled: "
 -    * print :scaled
 -    * print "\n"
-+  190 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
-+  191 format .START_INDEX
-+  192 format :index
-+  193 format :amount
-+  194 format :scaled
-   195 op sub *tmp51 @time :startTime
++  188 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
++  189 format .START_INDEX
++  190 format :index
++  191 format :amount
++  192 format :scaled
+   193 op sub *tmp51 @time :startTime
 -    * print "Elapsed: "
 -    * print *tmp51
 -    * print "\n"
-+  196 format *tmp51
-   197 printflush .MESSAGE
-   198 sensor *tmp25 .SWITCH @enabled
-   199 jump *label54 equal *tmp25 0
++  194 format *tmp51
+   195 printflush .MESSAGE
+   196 sensor *tmp25 .SWITCH @enabled
+   197 jump *label53 equal *tmp25 0
 
 Final code before resolving virtual instructions:
 
@@ -1017,10 +1013,8 @@ jump *label16 equal *tmp52 93
 jump *label16 equal *tmp52 94
 jump *label39 always
 label *label52
-jump *label53 greaterThanEq *tmp52 139
 jump *label8 equal *tmp52 137
 jump *label10 equal *tmp52 138
-label *label53
 jump *label14 equal *tmp52 142
 jump *label12 equal *tmp52 143
 jump *label20 equal *tmp52 146
@@ -1119,7 +1113,7 @@ set :nextTick @tick
 control enabled .SWITCH 0
 sensor *tmp25 .SWITCH @enabled
 jump __start__ notEqual *tmp25 0
-label *label54
+label *label53
 set :startTime @time
 set :prevTick :nextTick
 op add :nextTick :nextTick TICKS
@@ -1157,4 +1151,4 @@ op sub *tmp51 @time :startTime
 format *tmp51
 printflush .MESSAGE
 sensor *tmp25 .SWITCH @enabled
-jump *label54 equal *tmp25 0
+jump *label53 equal *tmp25 0

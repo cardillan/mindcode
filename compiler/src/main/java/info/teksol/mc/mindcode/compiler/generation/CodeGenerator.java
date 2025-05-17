@@ -197,7 +197,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.clearContextType(program);
     }
 
-    private void generateVerifySignatureialization() {
+    private void generateVerifySignature() {
         List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isRemote() && f.isEntryPoint()).toList();
         if (!remoteFunctions.isEmpty()) {
             assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
@@ -301,7 +301,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
             mainBodyContext = assembler.getAstContext();
             mainBodyEndIndex = assembler.getInstructions().size();
             if (!program.isMainProgram()) {
-                generateVerifySignatureialization();
+                generateVerifySignature();
             }
         }
 

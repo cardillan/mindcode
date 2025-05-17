@@ -1195,7 +1195,7 @@ The above case expression is transformed to this:
 # Pay closer attention to sections of the program manipulating @counter
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
-        sensor *tmp4 *tmp2 @id
+    sensor *tmp4 *tmp2 @id
         jump label_8 greaterThanEq *tmp4 35
         jump label_21 equal *tmp4 29
         jump label_21 equal *tmp4 30

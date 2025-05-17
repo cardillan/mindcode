@@ -6,11 +6,11 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 public enum Condition implements LogicArgument {
     EQUAL           ( "equal",         "==",     true),
-    NOT_EQUAL       ( "notEqual",      "not",    false),
+    NOT_EQUAL       ( "notEqual",      "not",    true),
     LESS_THAN       ( "lessThan",      "<",      false),
-    LESS_THAN_EQ    ( "lessThanEq",    "<=",     true),
+    LESS_THAN_EQ    ( "lessThanEq",    "<=",     false),
     GREATER_THAN    ( "greaterThan",   ">",      false),
-    GREATER_THAN_EQ ( "greaterThanEq", ">=",     true),
+    GREATER_THAN_EQ ( "greaterThanEq", ">=",     false),
     STRICT_EQUAL    ( "strictEqual",   "===",    true),
     ALWAYS          ( "always",        "always", false);
 

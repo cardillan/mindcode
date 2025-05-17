@@ -26,7 +26,7 @@ Pass 1: speed optimization selection (cost limit 252):
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
     Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934
 
 Pass 1: speed optimization selection (cost limit 252):
   * Replicate loop condition at line 176:9                       cost     4, benefit      312.5, efficiency     78.125 (+4 instructions)
@@ -34,29 +34,29 @@ Pass 1: speed optimization selection (cost limit 252):
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
     Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934
 
 Pass 1: speed optimization selection (cost limit 248):
   * Replicate loop condition at line 184:13                      cost     5, benefit      156.3, efficiency     31.250 (+5 instructions)
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
     Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934
 
 Pass 1: speed optimization selection (cost limit 243):
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
   * Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500 (+1 instructions)
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934
 
 Pass 1: speed optimization selection (cost limit 242):
   * Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333 (+3 instructions)
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469
+    Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934
 
 Pass 1: speed optimization selection (cost limit 239):
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-  * Convert case at line 712:5 (segments: 1)                     cost     4, benefit       21.9, efficiency      5.469 (+4 instructions)
+  * Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934 (+4 instructions)
 
 Pass 1: speed optimization selection (cost limit 235):
   * Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167 (+3 instructions)
@@ -3371,142 +3371,143 @@ Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
 -    * jump *label88 notEqual .ITEM @blast-compound
 +  427 sensor *tmp376 .ITEM @id
 +  428 jump *label228 greaterThanEq *tmp376 16
-+  429 jump *label228 strictEqual *tmp376 null
-+  430 multijump *label229 *tmp376 0 (m:*label245)
-+  431 multilabel *label229 (m:*label245)
-+  432 jump *label93 always
-+  433 multilabel *label230 (m:*label245)
-+  434 jump *label97 always
-+  435 multilabel *label231 (m:*label245)
-+  436 jump *label99 always
-+  437 multilabel *label232 (m:*label245)
-+  438 jump *label95 always
-+  439 multilabel *label233 (m:*label245)
-+  440 jump *label107 always
-+  441 multilabel *label234 (m:*label245)
-+  442 jump *label91 always
-+  443 multilabel *label235 (m:*label245)
-+  444 jump *label119 always
-+  445 multilabel *label236 (m:*label245)
-+  446 jump *label117 always
-+  447 multilabel *label237 (m:*label245)
-+  448 jump *label109 always
-+  449 multilabel *label238 (m:*label245)
-+  450 jump *label111 always
-+  451 multilabel *label239 (m:*label245)
-+  452 jump *label103 always
-+  453 multilabel *label240 (m:*label245)
-+  454 jump *label101 always
-+  455 multilabel *label241 (m:*label245)
-+  456 jump *label115 always
-+  457 multilabel *label242 (m:*label245)
-+  458 jump *label113 always
-+  459 multilabel *label243 (m:*label245)
-+  460 jump *label89 always
-+  461 multilabel *label244 (m:*label245)
-+  462 jump *label105 always
-   463 label *label89
-   464 set *tmp166 "[]"
-   465 jump *label87 always
-   466 label *label88
++  429 multijump *label230 *tmp376 0 (m:*label246)
++  430 multilabel *label230 (m:*label246)
++  431 jump *label229 always
++  432 multilabel *label231 (m:*label246)
++  433 jump *label97 always
++  434 multilabel *label232 (m:*label246)
++  435 jump *label99 always
++  436 multilabel *label233 (m:*label246)
++  437 jump *label95 always
++  438 multilabel *label234 (m:*label246)
++  439 jump *label107 always
++  440 multilabel *label235 (m:*label246)
++  441 jump *label91 always
++  442 multilabel *label236 (m:*label246)
++  443 jump *label119 always
++  444 multilabel *label237 (m:*label246)
++  445 jump *label117 always
++  446 multilabel *label238 (m:*label246)
++  447 jump *label109 always
++  448 multilabel *label239 (m:*label246)
++  449 jump *label111 always
++  450 multilabel *label240 (m:*label246)
++  451 jump *label103 always
++  452 multilabel *label241 (m:*label246)
++  453 jump *label101 always
++  454 multilabel *label242 (m:*label246)
++  455 jump *label115 always
++  456 multilabel *label243 (m:*label246)
++  457 jump *label113 always
++  458 multilabel *label244 (m:*label246)
++  459 jump *label89 always
++  460 multilabel *label245 (m:*label246)
++  461 jump *label105 always
+   462 label *label89
+   463 set *tmp166 "[]"
+   464 jump *label87 always
+   465 label *label88
 -    * jump *label90 notEqual .ITEM @coal
-   467 label *label91
-   468 set *tmp166 "[]"
-   469 jump *label87 always
-   470 label *label90
+   466 label *label91
+   467 set *tmp166 "[]"
+   468 jump *label87 always
+   469 label *label90
 -    * jump *label92 notEqual .ITEM @copper
-   471 label *label93
-   472 set *tmp166 "[]"
-   473 jump *label87 always
-   474 label *label92
++  470 label *label229
++  471 jump *label228 strictEqual *tmp376 null
+   472 label *label93
+   473 set *tmp166 "[]"
+   474 jump *label87 always
+   475 label *label92
 -    * jump *label94 notEqual .ITEM @graphite
-   475 label *label95
-   476 set *tmp166 "[]"
-   477 jump *label87 always
-   478 label *label94
+   476 label *label95
+   477 set *tmp166 "[]"
+   478 jump *label87 always
+   479 label *label94
 -    * jump *label96 notEqual .ITEM @lead
-   479 label *label97
-   480 set *tmp166 "[]"
-   481 jump *label87 always
-   482 label *label96
+   480 label *label97
+   481 set *tmp166 "[]"
+   482 jump *label87 always
+   483 label *label96
 -    * jump *label98 notEqual .ITEM @metaglass
-   483 label *label99
-   484 set *tmp166 "[]"
-   485 jump *label87 always
-   486 label *label98
+   484 label *label99
+   485 set *tmp166 "[]"
+   486 jump *label87 always
+   487 label *label98
 -    * jump *label100 notEqual .ITEM @phase-fabric
-   487 label *label101
-   488 set *tmp166 "[]"
-   489 jump *label87 always
-   490 label *label100
+   488 label *label101
+   489 set *tmp166 "[]"
+   490 jump *label87 always
+   491 label *label100
 -    * jump *label102 notEqual .ITEM @plastanium
-   491 label *label103
-   492 set *tmp166 "[]"
-   493 jump *label87 always
-   494 label *label102
+   492 label *label103
+   493 set *tmp166 "[]"
+   494 jump *label87 always
+   495 label *label102
 -    * jump *label104 notEqual .ITEM @pyratite
-   495 label *label105
-   496 set *tmp166 "[]"
-   497 jump *label87 always
-   498 label *label104
+   496 label *label105
+   497 set *tmp166 "[]"
+   498 jump *label87 always
+   499 label *label104
 -    * jump *label106 notEqual .ITEM @sand
-   499 label *label107
-   500 set *tmp166 "[]"
-   501 jump *label87 always
-   502 label *label106
+   500 label *label107
+   501 set *tmp166 "[]"
+   502 jump *label87 always
+   503 label *label106
 -    * jump *label108 notEqual .ITEM @scrap
-   503 label *label109
-   504 set *tmp166 "[]"
-   505 jump *label87 always
-   506 label *label108
+   504 label *label109
+   505 set *tmp166 "[]"
+   506 jump *label87 always
+   507 label *label108
 -    * jump *label110 notEqual .ITEM @silicon
-   507 label *label111
-   508 set *tmp166 "[]"
-   509 jump *label87 always
-   510 label *label110
+   508 label *label111
+   509 set *tmp166 "[]"
+   510 jump *label87 always
+   511 label *label110
 -    * jump *label112 notEqual .ITEM @spore-pod
-   511 label *label113
-   512 set *tmp166 "[]"
-   513 jump *label87 always
-   514 label *label112
+   512 label *label113
+   513 set *tmp166 "[]"
+   514 jump *label87 always
+   515 label *label112
 -    * jump *label114 notEqual .ITEM @surge-alloy
-   515 label *label115
-   516 set *tmp166 "[]"
-   517 jump *label87 always
-   518 label *label114
+   516 label *label115
+   517 set *tmp166 "[]"
+   518 jump *label87 always
+   519 label *label114
 -    * jump *label116 notEqual .ITEM @thorium
-   519 label *label117
-   520 set *tmp166 "[]"
-   521 jump *label87 always
-   522 label *label116
+   520 label *label117
+   521 set *tmp166 "[]"
+   522 jump *label87 always
+   523 label *label116
 -    * jump *label118 notEqual .ITEM @titanium
-   523 label *label119
-   524 set *tmp166 "[]"
-   525 jump *label87 always
-   526 label *label118
-+  527 label *label228
-   528 set *tmp166 null
-   529 label *label87
-   530 label *label86
+   524 label *label119
+   525 set *tmp166 "[]"
+   526 jump *label87 always
+   527 label *label118
++  528 label *label228
+   529 set *tmp166 null
+   530 label *label87
+   531 label *label86
 
 Modifications by Replicate loop condition at line 700:5 (+3 instructions):
  
-   993 sensor *tmp371 switch2 @enabled
-   994 op or *tmp372 *tmp370 *tmp371
-   995 jump *label215 notEqual *tmp372 false
-+  996 label *label246
-   997 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
-   998 printflush message1
-   999 printflush message2
-  1000 label *label214
+   994 sensor *tmp371 switch2 @enabled
+   995 op or *tmp372 *tmp370 *tmp371
+   996 jump *label215 notEqual *tmp372 false
++  997 label *label247
+   998 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
+   999 printflush message1
+  1000 printflush message2
+  1001 label *label214
 -    * jump *label213 always
-+ 1001 sensor *tmp370 switch1 @enabled
-+ 1002 sensor *tmp371 switch2 @enabled
-+ 1003 op or *tmp372 *tmp370 *tmp371
-+ 1004 jump *label246 equal *tmp372 false
-  1005 label *label215
-  1006 label *label211
-  1007 label *label212
++ 1002 sensor *tmp370 switch1 @enabled
++ 1003 sensor *tmp371 switch2 @enabled
++ 1004 op or *tmp372 *tmp370 *tmp371
++ 1005 jump *label247 equal *tmp372 false
+  1006 label *label215
+  1007 label *label211
+  1008 label *label212
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-5 instructions):
  
@@ -3540,13 +3541,13 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    396 label *label74
    397 set .WAIT_LIMIT 30000
  
-   628 label *label123
-   629 set :wait_time 0
-   630 set :remote_wait_time 0
+   629 label *label123
+   630 set :wait_time 0
+   631 set :remote_wait_time 0
 -    * jump *label132 lessThan @tick .MESSAGE_TIMEOUT
-   631 label *label132
-   632 label *label133
-   633 label *label120
+   632 label *label132
+   633 label *label133
+   634 label *label120
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
@@ -3561,97 +3562,99 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
-   457 multilabel *label244 (m:*label245)
-   458 jump *label105 always
-   459 label *label89
+   456 multilabel *label245 (m:*label246)
+   457 jump *label105 always
+   458 label *label89
 -    * set *tmp166 "[]"
-+  460 set .ITEM_ICON "[]"
-   461 jump *label87 always
-   462 label *label88
-   463 label *label91
++  459 set .ITEM_ICON "[]"
+   460 jump *label87 always
+   461 label *label88
+   462 label *label91
 -    * set *tmp166 "[]"
-+  464 set .ITEM_ICON "[]"
-   465 jump *label87 always
-   466 label *label90
-   467 label *label93
++  463 set .ITEM_ICON "[]"
+   464 jump *label87 always
+   465 label *label90
+   466 label *label229
+   467 jump *label228 strictEqual *tmp376 null
+   468 label *label93
 -    * set *tmp166 "[]"
-+  468 set .ITEM_ICON "[]"
-   469 jump *label87 always
-   470 label *label92
-   471 label *label95
++  469 set .ITEM_ICON "[]"
+   470 jump *label87 always
+   471 label *label92
+   472 label *label95
 -    * set *tmp166 "[]"
-+  472 set .ITEM_ICON "[]"
-   473 jump *label87 always
-   474 label *label94
-   475 label *label97
++  473 set .ITEM_ICON "[]"
+   474 jump *label87 always
+   475 label *label94
+   476 label *label97
 -    * set *tmp166 "[]"
-+  476 set .ITEM_ICON "[]"
-   477 jump *label87 always
-   478 label *label96
-   479 label *label99
++  477 set .ITEM_ICON "[]"
+   478 jump *label87 always
+   479 label *label96
+   480 label *label99
 -    * set *tmp166 "[]"
-+  480 set .ITEM_ICON "[]"
-   481 jump *label87 always
-   482 label *label98
-   483 label *label101
++  481 set .ITEM_ICON "[]"
+   482 jump *label87 always
+   483 label *label98
+   484 label *label101
 -    * set *tmp166 "[]"
-+  484 set .ITEM_ICON "[]"
-   485 jump *label87 always
-   486 label *label100
-   487 label *label103
++  485 set .ITEM_ICON "[]"
+   486 jump *label87 always
+   487 label *label100
+   488 label *label103
 -    * set *tmp166 "[]"
-+  488 set .ITEM_ICON "[]"
-   489 jump *label87 always
-   490 label *label102
-   491 label *label105
++  489 set .ITEM_ICON "[]"
+   490 jump *label87 always
+   491 label *label102
+   492 label *label105
 -    * set *tmp166 "[]"
-+  492 set .ITEM_ICON "[]"
-   493 jump *label87 always
-   494 label *label104
-   495 label *label107
++  493 set .ITEM_ICON "[]"
+   494 jump *label87 always
+   495 label *label104
+   496 label *label107
 -    * set *tmp166 "[]"
-+  496 set .ITEM_ICON "[]"
-   497 jump *label87 always
-   498 label *label106
-   499 label *label109
++  497 set .ITEM_ICON "[]"
+   498 jump *label87 always
+   499 label *label106
+   500 label *label109
 -    * set *tmp166 "[]"
-+  500 set .ITEM_ICON "[]"
-   501 jump *label87 always
-   502 label *label108
-   503 label *label111
++  501 set .ITEM_ICON "[]"
+   502 jump *label87 always
+   503 label *label108
+   504 label *label111
 -    * set *tmp166 "[]"
-+  504 set .ITEM_ICON "[]"
-   505 jump *label87 always
-   506 label *label110
-   507 label *label113
++  505 set .ITEM_ICON "[]"
+   506 jump *label87 always
+   507 label *label110
+   508 label *label113
 -    * set *tmp166 "[]"
-+  508 set .ITEM_ICON "[]"
-   509 jump *label87 always
-   510 label *label112
-   511 label *label115
++  509 set .ITEM_ICON "[]"
+   510 jump *label87 always
+   511 label *label112
+   512 label *label115
 -    * set *tmp166 "[]"
-+  512 set .ITEM_ICON "[]"
-   513 jump *label87 always
-   514 label *label114
-   515 label *label117
++  513 set .ITEM_ICON "[]"
+   514 jump *label87 always
+   515 label *label114
+   516 label *label117
 -    * set *tmp166 "[]"
-+  516 set .ITEM_ICON "[]"
-   517 jump *label87 always
-   518 label *label116
-   519 label *label119
++  517 set .ITEM_ICON "[]"
+   518 jump *label87 always
+   519 label *label116
+   520 label *label119
 -    * set *tmp166 "[]"
-+  520 set .ITEM_ICON "[]"
-   521 jump *label87 always
-   522 label *label118
-   523 label *label228
++  521 set .ITEM_ICON "[]"
+   522 jump *label87 always
+   523 label *label118
+   524 label *label228
 -    * set *tmp166 null
-+  524 set .ITEM_ICON null
-   525 label *label87
-   526 label *label86
++  525 set .ITEM_ICON null
+   526 label *label87
+   527 label *label86
 -    * set .ITEM_ICON *tmp166
-   527 set .STATE_LIMIT 1
-   528 sensor :last_level .CONTAINER .ITEM
-   529 set :min_level 999999
+   528 set .STATE_LIMIT 1
+   529 sensor :last_level .CONTAINER .ITEM
+   530 set :min_level 999999
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1 instructions):
  
@@ -3957,15 +3960,17 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    378 label *label85
    379 set .LAST_ITEM .ITEM
  
-   417 label *label89
-   418 set .ITEM_ICON "[]"
-   419 jump *label87 always
+   416 label *label89
+   417 set .ITEM_ICON "[]"
+   418 jump *label87 always
 -    * label *label88
-   420 label *label91
-   421 set .ITEM_ICON "[]"
-   422 jump *label87 always
+   419 label *label91
+   420 set .ITEM_ICON "[]"
+   421 jump *label87 always
 -    * label *label90
-   423 label *label93
+   422 label *label229
+   423 jump *label228 strictEqual *tmp376 null
+-    * label *label93
    424 set .ITEM_ICON "[]"
    425 jump *label87 always
 -    * label *label92
@@ -4263,7 +4268,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    895 sensor *tmp370 switch1 @enabled
    896 sensor *tmp371 switch2 @enabled
    897 op or *tmp372 *tmp370 *tmp371
-   898 jump *label246 equal *tmp372 false
+   898 jump *label247 equal *tmp372 false
    899 label *label215
    900 label *label211
 -    * label *label212
@@ -5088,39 +5093,38 @@ set .LAST_ITEM .ITEM
 # "Function: def itemTypeToIcon(in itemType)"
 sensor *tmp376 .ITEM @id
 jump *label228 greaterThanEq *tmp376 16
-jump *label228 strictEqual *tmp376 null
-multijump *label229 *tmp376 0
-multilabel *label229
-jump *label93 always
+multijump *label230 *tmp376 0
 multilabel *label230
-jump *label97 always
+jump *label229 always
 multilabel *label231
-jump *label99 always
+jump *label97 always
 multilabel *label232
-jump *label95 always
+jump *label99 always
 multilabel *label233
-jump *label107 always
+jump *label95 always
 multilabel *label234
-jump *label91 always
+jump *label107 always
 multilabel *label235
-jump *label119 always
+jump *label91 always
 multilabel *label236
-jump *label117 always
+jump *label119 always
 multilabel *label237
-jump *label109 always
+jump *label117 always
 multilabel *label238
-jump *label111 always
+jump *label109 always
 multilabel *label239
-jump *label103 always
+jump *label111 always
 multilabel *label240
-jump *label101 always
+jump *label103 always
 multilabel *label241
-jump *label115 always
+jump *label101 always
 multilabel *label242
-jump *label113 always
+jump *label115 always
 multilabel *label243
-jump *label89 always
+jump *label113 always
 multilabel *label244
+jump *label89 always
+multilabel *label245
 jump *label105 always
 label *label89
 set .ITEM_ICON "[]"
@@ -5128,7 +5132,8 @@ jump *label87 always
 label *label91
 set .ITEM_ICON "[]"
 jump *label87 always
-label *label93
+label *label229
+jump *label228 strictEqual *tmp376 null
 set .ITEM_ICON "[]"
 jump *label87 always
 label *label95
@@ -5519,14 +5524,14 @@ sensor *tmp370 switch1 @enabled
 sensor *tmp371 switch2 @enabled
 op or *tmp372 *tmp370 *tmp371
 jump *label215 notEqual *tmp372 false
-label *label246
+label *label247
 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
 printflush message1
 printflush message2
 sensor *tmp370 switch1 @enabled
 sensor *tmp371 switch2 @enabled
 op or *tmp372 *tmp370 *tmp371
-jump *label246 equal *tmp372 false
+jump *label247 equal *tmp372 false
 label *label215
 label *label211
 control enabled switch1 false

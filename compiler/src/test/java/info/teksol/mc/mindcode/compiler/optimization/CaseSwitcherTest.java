@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.Segment;
+import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.Targets;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -9,8 +10,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
-import java.util.NavigableMap;
-import java.util.TreeMap;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -413,12 +412,10 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             print(case p
                                 when @copper,
                                      @metaglass,
-                                     @sand,
                                      @titanium,
                                      @scrap then "A";
                                 when @lead,
                                      @graphite,
-                                     @coal,
                                      @thorium,
                                      @silicon then "B";
                                 else "C";
@@ -427,28 +424,29 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                     createInstruction(SET, "p", "@coal"),
                     createInstruction(SENSOR, tmp(1), "p", "@id"),
                     createInstruction(JUMP, label(5), "greaterThanEq", tmp(1), "10"),
-                    createInstruction(JUMP, label(5), "strictEqual", tmp(1), "null"),
-                    createInstruction(MULTIJUMP, label(6), tmp(1), "0"),
-                    createInstruction(MULTILABEL, label(6)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTIJUMP, label(7), tmp(1), "0"),
                     createInstruction(MULTILABEL, label(7)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(JUMP, label(6), "always"),
                     createInstruction(MULTILABEL, label(8)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(JUMP, label(4), "always"),
                     createInstruction(MULTILABEL, label(9)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(10)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(JUMP, label(4), "always"),
                     createInstruction(MULTILABEL, label(11)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(JUMP, label(5), "always"),
                     createInstruction(MULTILABEL, label(12)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(JUMP, label(5), "always"),
                     createInstruction(MULTILABEL, label(13)),
-                    createInstruction(JUMP, label(4), "always"),
-                    createInstruction(MULTILABEL, label(14)),
                     createInstruction(JUMP, label(2), "always"),
-                    createInstruction(MULTILABEL, label(15)),
+                    createInstruction(MULTILABEL, label(14)),
                     createInstruction(JUMP, label(4), "always"),
+                    createInstruction(MULTILABEL, label(15)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(16)),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(JUMP, label(5), "strictEqual", tmp(1), "null"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(0), q("A")),
                     createInstruction(JUMP, label(0), "always"),
@@ -644,7 +642,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
 
         @Test
         void splitsTargetMap1() {
-            NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
+            Targets targets = new Targets();
             targets.put(1, l("a"));
             targets.put(2, l("a"));
             targets.put(5, l("b"));
@@ -667,7 +665,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
 
         @Test
         void splitsTargetMap2() {
-            NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
+            Targets targets = new Targets();
             targets.put(1, l("a"));
             targets.put(2, l("a"));
             targets.put(5, l("b"));
@@ -688,7 +686,7 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
 
         @Test
         void splitsTargetMap3() {
-            NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
+            Targets targets = new Targets();
             targets.put(1, l("a"));
             targets.put(2, l("a"));
             targets.put(3, l("a"));
