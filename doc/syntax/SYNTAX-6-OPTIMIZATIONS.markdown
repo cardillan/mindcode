@@ -1089,22 +1089,23 @@ Notes:
 
 * When evaluating execution speed, the optimizer computes and averages execution costs of each individual value present in a `when` clause. All of these values are deemed equally probable to occur, and values leading to an `else` branch are not considered at all. In an unoptimized `case` expression, values handled by the `else` branch take the longest time to handle, while in the optimized case expression, values completely outside the range of `when` values are executed faster than any other values. This is a side effect of the optimization.  
 * As a consequence of the previous point, if you put the more frequent values first in the case expression, and the value distribution is very skewed, converting the case expression to the jump table might actually worsen the average execution time. Mindcode has no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching optimization for your program.
-* Currently, there's no limit on the size of the jump table. For a case expression handling values 1 to 10 and then a value of 100, the jump table would have 100 entries. This affects computation of the optimization's benefit, and might make the optimization less favorable compared to other optimizations; however if available space permits it, such a jump table would be created.
  
-### Preconditions
+**Preconditions:**
 
 The following conditions must be met for a case expression to be processed by this optimization:
 
-* All values used in `when` clauses are effectively constant.
-* All values used in `when` clauses are integers.
-* Values used in `when` clauses are unique. 
-* Only direct comparisons, no ranges are used in the `when` clauses.
+* All values used in `when` clauses must be effectively constant.
+* All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)).
+* Values used in `when` clauses must be unique. 
+* Ranges must not be used in the `when` clauses.
 
-### Unsafe case optimization
+### Range check elimination
 
-When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable to determine this is the case, and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions that do not have an `else` branch. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
+When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable to determine this is the case, and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
 
-If you activate the `unsafe-case-optimization` directive, but not all input values are handled in your case expressions, the behavior of the generated code is undefined, when an unhandled input value is encountered.
+Putting an `else` branch into a case expression obviously means not all input values are handled, and doing so disables the unsafe optimization - the out-of-range checks will remain.  
+
+If you activate the `unsafe-case-optimization` directive, and an unhandled input value is encountered, the behavior of the generated code is undefined.
 
 ### Mindustry content conversion
 
@@ -1112,20 +1113,20 @@ When all `when` branches in the case expression contain built-in constants repre
 
 The following preconditions need to be met to apply content conversion:
 
-* All values in `when` branches must be of the same type (all items, all building types and so on), or a `null` value.
+* All values in `when` branches must be either `null`, or built-in variables referencing Mindustry content of the same type (items, building types and so on).
 * Values used in `when` clauses must be unique.
 * The logic id must be known by Mindcode for all `when` values. 
 * All logic ids must be stable, or `target-optimization` mode must be set to `specific`.
-* The optimization level must be set to advanced.
+* The optimization level must be set to `advanced`.
 
 > [!NOTE]
 > The out-of-range handling instructions are omitted when `unsafe-case-optimization` is set to `true` and there's no `else` branch. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g. item selected in a sorter), keep in mind the value obtained this way might be null.  
 
 #### Null values
 
-When Mindustry content conversion occurs, `null` values in `when` clauses are supported. When the `null` value is explicitly handled, the corresponding branch is executed for `null` input values. When the `when null` clause is missing, `null` input values are handled by the `else` branch (or skipped if there is no else branch).
+When Mindustry content conversion occurs, `null` values in `when` clauses are supported. When the `null` value is explicitly handled, the corresponding branch is executed for `null` input values. In case the `when null` clause is missing, `null` input values are handled by the `else` branch (or skipped altogether if there is no else branch).
 
-The `null` values are handled either in the `else` branch, or in the branch corresponding to the object with logic id equal to zero, so the execution cost of handling the `null` value is lower compared to arrangement where the input value is checked for nul before entering the entire `case` expression. If the `null` value is handled in the else branch, and jump table compression occurs, jumps to the `else` branch skip the `null` check, if it is known a `null` value cannot occur at that place. A separate branch for handling `null` values therefore produces the fastest possible code.
+The `null` values are checked for in the `else` branch, or in the branch corresponding to the object with logic id equal to zero, so the execution cost of handling the `null` value is lower compared to arrangement where the input value is checked for `null` before entering the entire `case` expression. If the `null` value is handled in the `else` branch, and jump table compression occurs, jumps to the `else` branch skip the `null` check, if it is known a `null` value cannot occur at that place. A separate branch for handling `null` values therefore produces the fastest possible code under all circumstances.
 
 ### Jump table compression
 
@@ -1136,7 +1137,7 @@ Typically, compressing the jump table produces smaller, but slightly slower code
 Jump table compression is particularly useful when using block types in case expressions, as, given large dispersion of block type ids, full jump tables tend to get quite large.
 
 > [!NOTE]
-> Jump table compression is not performed when `unsafe-case-optimization` is set to `true` and there's no `else` branch.
+> Jump table compression is not performed when range checks for the given case expression are eliminated.
 
 Notes:
 
@@ -1145,10 +1146,12 @@ Notes:
 
 ### Jump table padding
 
-When the jump table starts at zero, the generated code can be both smaller and faster due to these effects:
+When the jump table starts at the zero index, the generated code can be both smaller and faster due to these effects:
 
 * When the Mindustry content conversion is applied, the optimizer knows the logic ids cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
 * When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation handling the non-zero offset can be omitted.
+
+When symbolic labels are generated, the jump table padding may save up to two instructions, which is a significant speedup.
 
 The optimizer considers the possibility of padding the jump table to zero, and chooses it if it gives the best performance under the cost limit.
 
@@ -1156,17 +1159,20 @@ The optimizer considers the possibility of padding the jump table to zero, and c
 
 The example illustrates the following optimization aspects:
 
-* Case switching optimization in general,
-* Mindustry content conversion,
-* Discontinuous jump tables.
+* Case switching optimization in general
+* Mindustry content conversion
+* Handling of `null` values
+* Jump table compression
+* Jump table padding
 
 The instruction limit has been artificially lowered to ensure the optimizer will consider splitting the jump table. 
 
 ```Mindcode
 #set symbolic-labels = true;
-#set instruction-limit = 50;
+#set instruction-limit = 100;
 
 print(case getlink(0).@type
+    when null then "No block found";
     when @copper-wall, @copper-wall-large, @titanium-wall, @titanium-wall-large,
          @plastanium-wall, @plastanium-wall-large, @thorium-wall, @thorium-wall-large,
          @phase-wall, @phase-wall-large, @surge-wall, @surge-wall-large,
@@ -1187,31 +1193,69 @@ The above case expression is transformed to this:
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
     sensor *tmp4 *tmp2 @id
-        jump label_8 greaterThanEq *tmp4 35
-        jump label_21 equal *tmp4 29
-        jump label_21 equal *tmp4 30
-        jump label_21 lessThan *tmp4 17
-        jump label_19 always 0 0
-    label_8:
-        jump label_12 greaterThanEq *tmp4 206
-        jump label_19 equal *tmp4 203
-        jump label_19 equal *tmp4 204
-        jump label_21 always 0 0
-    label_12:
-        jump label_19 lessThan *tmp4 208
-        jump label_18 greaterThanEq *tmp4 234
-        jump label_19 equal *tmp4 220
-        jump label_19 equal *tmp4 221
-        jump label_19 equal *tmp4 225
-        jump label_21 always 0 0
-    label_18:
-        jump label_21 greaterThanEq *tmp4 235
-    label_19:
+        jump label_40 greaterThanEq *tmp4 35
+        op add @counter @counter *tmp4
+        jump label_56 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+    label_40:
+        jump label_44 greaterThanEq *tmp4 206
+        jump label_54 equal *tmp4 203
+        jump label_54 equal *tmp4 204
+        jump label_57 always 0 0
+    label_44:
+        jump label_54 lessThan *tmp4 208
+        jump label_50 greaterThanEq *tmp4 234
+        jump label_54 equal *tmp4 220
+        jump label_54 equal *tmp4 221
+        jump label_54 equal *tmp4 225
+        jump label_57 always 0 0
+    label_50:
+        jump label_54 lessThan *tmp4 235
+        jump label_57 always 0 0
+    label_52:
+        set *tmp0 "No block found"
+        jump label_58 always 0 0
+    label_54:
         set *tmp0 "Wall"
-        jump label_22 always 0 0
-label_21:
+        jump label_58 always 0 0
+label_56:
+    jump label_52 strictEqual *tmp4 null
+label_57:
     set *tmp0 "Not wall"
-    label_22:
+    label_58:
     print *tmp0
 ```
 

@@ -236,7 +236,7 @@ public class OptimizationCoordinator {
             if (action.cost() > effectiveLimit) continue;
 
             if (action.getGroup() == null) {
-                return candidate != null ? candidate : action;
+                return action;
             } else if (candidate == null || candidate.getGroup().equals(action.getGroup())) {
                 if (candidate == null || action.benefit() > candidate.benefit()) {
                     // The action in this group has lower efficiency, but greater benefit

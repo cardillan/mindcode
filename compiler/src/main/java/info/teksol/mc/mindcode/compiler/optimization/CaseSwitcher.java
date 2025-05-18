@@ -276,7 +276,7 @@ class CaseSwitcher extends BaseOptimizer {
                                 && getLabelInstruction(jump.getTarget()).getAstContext().parent() == context) {
                             variable = var;
                             LogicLabel target;
-                            if (jump.getCondition() == Condition.EQUAL) {
+                            if (jump.getCondition() == Condition.EQUAL || jump.getCondition() == Condition.STRICT_EQUAL) {
                                 target = jump.getTarget();
                             } else {
                                 AstContext condition = ix.getAstContext();
@@ -619,7 +619,7 @@ class CaseSwitcher extends BaseOptimizer {
                 // All default targets must go through all of the above, plus the less than jump, if any,
                 // plus jump to the majority branch
                 // LessThanJump gets skipped for segments other than first, or cases where it explicitly handles 0
-                int lessThanJump = segment != segments.getFirst() || logicConversion && segment.from == 0 ? 0 : 1;
+                int lessThanJump = segment.from != lastTo || logicConversion && segment.from == 0 ? 0 : 1;
                 steps += lessThanJump + 1;
                 activeSteps += defaultTargets * steps;
 
@@ -627,7 +627,7 @@ class CaseSwitcher extends BaseOptimizer {
             }
         }
 
-        private void generateMixedSegment(Segment segment, boolean firstSegment, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
+        private void generateMixedSegment(Segment segment, int lastTo, LogicLabel nextSegmentLabel, LogicLabel finalLabel) {
             assert newAstContext != null;
             assert caseVariable != null;
 
@@ -643,7 +643,7 @@ class CaseSwitcher extends BaseOptimizer {
                 }
             }
 
-            if (firstSegment && defaultTarget != finalLabel) {
+            if (segment.from != lastTo && defaultTarget != finalLabel) {
                 if (!logicConversion || segment.from != 0) {
                     // This is always first segment here, we may need to handle nulls
                     insertInstruction(createJump(newAstContext, targets.getNullOrElseTarget(), Condition.LESS_THAN, caseVariable, LogicNumber.create(segment.from)));
@@ -713,7 +713,9 @@ class CaseSwitcher extends BaseOptimizer {
 
             for (int i = 0; i < labels.size(); i++) {
                 insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
-                insertInstruction(createJumpUnconditional(newAstContext, targets.getOrDefault(segmentFrom + i, finalLabel)));
+                LogicLabel target = targets.getOrDefault(segmentFrom + i, finalLabel);
+                LogicLabel updatedTarget = segmentFrom + i == 0 && target == finalLabel ? targets.getNullOrElseTarget() : target;
+                insertInstruction(createJumpUnconditional(newAstContext, updatedTarget));
             }
         }
 
@@ -791,12 +793,11 @@ class CaseSwitcher extends BaseOptimizer {
             for (Segment segment : segments) {
                 debug("Optimizing segment " + segment + ", size: " + segment.size() + ", targets: " + targets.subMap(segment.from, segment.to).size());
 
-                boolean first = segment == segments.getFirst();
                 boolean last = segment == segments.getLast();
                 LogicLabel nextSegmentLabel = last ? finalLabel : instructionProcessor.nextLabel();
                 switch (segment.type) {
                     case SINGLE -> generateSingleSegment(segment, lastTo, nextSegmentLabel, finalLabel);
-                    case MIXED -> generateMixedSegment(segment, first, nextSegmentLabel, finalLabel);
+                    case MIXED -> generateMixedSegment(segment, lastTo, nextSegmentLabel, finalLabel);
                     case JUMP_TABLE -> generateJumpTable(segment, lastTo, nextSegmentLabel, finalLabel);
                 }
 

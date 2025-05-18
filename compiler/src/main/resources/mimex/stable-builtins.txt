@@ -1,4 +1,4 @@
-@air
+@graphite-press
 @multi-press
 @silicon-smelter
 @silicon-crucible

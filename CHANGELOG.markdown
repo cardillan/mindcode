@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed wrong `unsafe-case-switching` optimization for small jump tables ([#253](https://github.com/cardillan/mindcode/issues/253)).
 * Fixed wrong handling of side effects by the Case Switching optimization ([#254](https://github.com/cardillan/mindcode/issues/254)).
 * Fixed incorrect IDs produced by the `sensor ... @id` instruction ([#255](https://github.com/cardillan/mindcode/issues/255)).
+* Fixed incorrect block type obtained through the `lookup` instruction in compile-time evaluation and the processor emulator for zero logic ID.  
 
 ### Added
 
@@ -19,21 +20,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 #### Experimental
 
-* Added support for using `null` literals in the `case` expression. When used in `case` expressions involving Mindustry content, the `when null` branch is supported by the Case Switching optimization too.
+* Added support for using `null` literals in case expression. When used in case expressions involving Mindustry content, `null` values in the `when` clauses are supported by the Case Switching optimization too.
  
 ### Changed
 
 * **Breaking**: The system library was changed to accommodate new logic instructions:
   * The `sign` function in the `math` library was renamed to `signInexact`.
   * The `signExact` function in the `math` library was renamed to `sign`. This function corresponds to the Mindustry 8 instruction `op sign`, and when target 8 is selected, the instruction is used instead of the library implementation. 
-  * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to correspond to the `unpackcolor` in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
-  * Mindustry Logic functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
+  * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to match the `unpackcolor` instruction in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
+  * Mindustry Logic built-in functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
 * When splitting jump tables into multiple segments during jump table compression, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
-* Other improvements to the Case Switching optimization.
+* Other improvements to the Case Switching optimization: better optimization, more precise cost and benefit calculation.
 
 ### Miscellaneous
 
 * The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
+* Updated BE metadata to the last available BE build.
+* Added new metadata types, fixed zero logic IDs problem.
 
 ## 3.4.0 - 2025-05-11
 
@@ -47,7 +50,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * Added `setAlpha()` function which takes a packed color as an argument (including e.g. named color literals) and returns a packed color with updated alpha channel.
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
 * Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
-  * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unsafe-case-optimization) compiler directive.
+  * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#range-check-elimination) compiler directive.
   * Case expressions based on Mindustry content (e.g. items, block types and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
   * Large jump tables containing a lot of unused values may be [compressed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) to save space.
 

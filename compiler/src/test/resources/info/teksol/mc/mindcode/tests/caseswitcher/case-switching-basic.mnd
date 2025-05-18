@@ -1,4 +1,4 @@
-#set instruction-limit = 100;
+#set err-invalid-content = false;
 
 def isWall(block)
     case block
@@ -15,14 +15,13 @@ end;
 
 begin
     var hash = 0;
-    for var i in 0 ... 240 do
+    for var i in -1 ... 240 do
         var block = lookup(:block, i);
         if isWall(block) then
-            println(block);
-            hash = (hash * 31 + i) & 0xFFFFFFFF;
+            hash = (hash * 31 + i + 251) & 0xFFFFFFFF;
         end;
     end;
 
     print(hash);
-    assertEquals(2376794836, hash, "Test selected blocks");
+    assertEquals(2750008148, hash, "Test selected blocks");
 end;

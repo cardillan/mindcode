@@ -55,11 +55,11 @@ Pass 1: speed optimization selection (cost limit 242):
     Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934
 
 Pass 1: speed optimization selection (cost limit 239):
-    Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-  * Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934 (+4 instructions)
-
-Pass 1: speed optimization selection (cost limit 235):
   * Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167 (+3 instructions)
+  o Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934
+
+Pass 1: speed optimization selection (cost limit 236):
+  * Convert case at line 712:5 (segments: 1)                     cost     4, benefit       27.7, efficiency      6.934 (+4 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -3363,6 +3363,25 @@ Modifications by Replicate loop condition at line 203:1 (+3 instructions):
    218 jump *label47 notEqual :sorter_type @sorter
    219 set .SHOW_REMOTE_LEVEL true
 
+Modifications by Replicate loop condition at line 700:5 (+3 instructions):
+ 
+   972 sensor *tmp371 switch2 @enabled
+   973 op or *tmp372 *tmp370 *tmp371
+   974 jump *label215 notEqual *tmp372 false
++  975 label *label228
+   976 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
+   977 printflush message1
+   978 printflush message2
+   979 label *label214
+-    * jump *label213 always
++  980 sensor *tmp370 switch1 @enabled
++  981 sensor *tmp371 switch2 @enabled
++  982 op or *tmp372 *tmp370 *tmp371
++  983 jump *label228 equal *tmp372 false
+   984 label *label215
+   985 label *label211
+   986 label *label212
+
 Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
  
    424 label *label85
@@ -3370,39 +3389,39 @@ Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
    426 # "Function: def itemTypeToIcon(in itemType)"
 -    * jump *label88 notEqual .ITEM @blast-compound
 +  427 sensor *tmp376 .ITEM @id
-+  428 jump *label228 greaterThanEq *tmp376 16
-+  429 multijump *label230 *tmp376 0 (m:*label246)
-+  430 multilabel *label230 (m:*label246)
-+  431 jump *label229 always
-+  432 multilabel *label231 (m:*label246)
++  428 jump *label229 greaterThanEq *tmp376 16
++  429 multijump *label231 *tmp376 0 (m:*label247)
++  430 multilabel *label231 (m:*label247)
++  431 jump *label230 always
++  432 multilabel *label232 (m:*label247)
 +  433 jump *label97 always
-+  434 multilabel *label232 (m:*label246)
++  434 multilabel *label233 (m:*label247)
 +  435 jump *label99 always
-+  436 multilabel *label233 (m:*label246)
++  436 multilabel *label234 (m:*label247)
 +  437 jump *label95 always
-+  438 multilabel *label234 (m:*label246)
++  438 multilabel *label235 (m:*label247)
 +  439 jump *label107 always
-+  440 multilabel *label235 (m:*label246)
++  440 multilabel *label236 (m:*label247)
 +  441 jump *label91 always
-+  442 multilabel *label236 (m:*label246)
++  442 multilabel *label237 (m:*label247)
 +  443 jump *label119 always
-+  444 multilabel *label237 (m:*label246)
++  444 multilabel *label238 (m:*label247)
 +  445 jump *label117 always
-+  446 multilabel *label238 (m:*label246)
++  446 multilabel *label239 (m:*label247)
 +  447 jump *label109 always
-+  448 multilabel *label239 (m:*label246)
++  448 multilabel *label240 (m:*label247)
 +  449 jump *label111 always
-+  450 multilabel *label240 (m:*label246)
++  450 multilabel *label241 (m:*label247)
 +  451 jump *label103 always
-+  452 multilabel *label241 (m:*label246)
++  452 multilabel *label242 (m:*label247)
 +  453 jump *label101 always
-+  454 multilabel *label242 (m:*label246)
++  454 multilabel *label243 (m:*label247)
 +  455 jump *label115 always
-+  456 multilabel *label243 (m:*label246)
++  456 multilabel *label244 (m:*label247)
 +  457 jump *label113 always
-+  458 multilabel *label244 (m:*label246)
++  458 multilabel *label245 (m:*label247)
 +  459 jump *label89 always
-+  460 multilabel *label245 (m:*label246)
++  460 multilabel *label246 (m:*label247)
 +  461 jump *label105 always
    462 label *label89
    463 set *tmp166 "[]"
@@ -3414,8 +3433,8 @@ Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
    468 jump *label87 always
    469 label *label90
 -    * jump *label92 notEqual .ITEM @copper
-+  470 label *label229
-+  471 jump *label228 strictEqual *tmp376 null
++  470 label *label230
++  471 jump *label229 strictEqual *tmp376 null
    472 label *label93
    473 set *tmp166 "[]"
    474 jump *label87 always
@@ -3485,29 +3504,10 @@ Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
    525 set *tmp166 "[]"
    526 jump *label87 always
    527 label *label118
-+  528 label *label228
++  528 label *label229
    529 set *tmp166 null
    530 label *label87
    531 label *label86
-
-Modifications by Replicate loop condition at line 700:5 (+3 instructions):
- 
-   994 sensor *tmp371 switch2 @enabled
-   995 op or *tmp372 *tmp370 *tmp371
-   996 jump *label215 notEqual *tmp372 false
-+  997 label *label247
-   998 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
-   999 printflush message1
-  1000 printflush message2
-  1001 label *label214
--    * jump *label213 always
-+ 1002 sensor *tmp370 switch1 @enabled
-+ 1003 sensor *tmp371 switch2 @enabled
-+ 1004 op or *tmp372 *tmp370 *tmp371
-+ 1005 jump *label247 equal *tmp372 false
-  1006 label *label215
-  1007 label *label211
-  1008 label *label212
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-5 instructions):
  
@@ -3562,7 +3562,7 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
  
-   456 multilabel *label245 (m:*label246)
+   456 multilabel *label246 (m:*label247)
    457 jump *label105 always
    458 label *label89
 -    * set *tmp166 "[]"
@@ -3574,8 +3574,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 +  463 set .ITEM_ICON "[]"
    464 jump *label87 always
    465 label *label90
-   466 label *label229
-   467 jump *label228 strictEqual *tmp376 null
+   466 label *label230
+   467 jump *label229 strictEqual *tmp376 null
    468 label *label93
 -    * set *tmp166 "[]"
 +  469 set .ITEM_ICON "[]"
@@ -3646,7 +3646,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1
 +  521 set .ITEM_ICON "[]"
    522 jump *label87 always
    523 label *label118
-   524 label *label228
+   524 label *label229
 -    * set *tmp166 null
 +  525 set .ITEM_ICON null
    526 label *label87
@@ -3968,8 +3968,8 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    420 set .ITEM_ICON "[]"
    421 jump *label87 always
 -    * label *label90
-   422 label *label229
-   423 jump *label228 strictEqual *tmp376 null
+   422 label *label230
+   423 jump *label229 strictEqual *tmp376 null
 -    * label *label93
    424 set .ITEM_ICON "[]"
    425 jump *label87 always
@@ -4026,7 +4026,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    463 set .ITEM_ICON "[]"
    464 jump *label87 always
 -    * label *label118
-   465 label *label228
+   465 label *label229
    466 set .ITEM_ICON null
    467 label *label87
 -    * label *label86
@@ -4268,7 +4268,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    895 sensor *tmp370 switch1 @enabled
    896 sensor *tmp371 switch2 @enabled
    897 op or *tmp372 *tmp370 *tmp371
-   898 jump *label247 equal *tmp372 false
+   898 jump *label228 equal *tmp372 false
    899 label *label215
    900 label *label211
 -    * label *label212
@@ -5092,39 +5092,39 @@ label *label85
 set .LAST_ITEM .ITEM
 # "Function: def itemTypeToIcon(in itemType)"
 sensor *tmp376 .ITEM @id
-jump *label228 greaterThanEq *tmp376 16
-multijump *label230 *tmp376 0
-multilabel *label230
-jump *label229 always
+jump *label229 greaterThanEq *tmp376 16
+multijump *label231 *tmp376 0
 multilabel *label231
-jump *label97 always
+jump *label230 always
 multilabel *label232
-jump *label99 always
+jump *label97 always
 multilabel *label233
-jump *label95 always
+jump *label99 always
 multilabel *label234
-jump *label107 always
+jump *label95 always
 multilabel *label235
-jump *label91 always
+jump *label107 always
 multilabel *label236
-jump *label119 always
+jump *label91 always
 multilabel *label237
-jump *label117 always
+jump *label119 always
 multilabel *label238
-jump *label109 always
+jump *label117 always
 multilabel *label239
-jump *label111 always
+jump *label109 always
 multilabel *label240
-jump *label103 always
+jump *label111 always
 multilabel *label241
-jump *label101 always
+jump *label103 always
 multilabel *label242
-jump *label115 always
+jump *label101 always
 multilabel *label243
-jump *label113 always
+jump *label115 always
 multilabel *label244
-jump *label89 always
+jump *label113 always
 multilabel *label245
+jump *label89 always
+multilabel *label246
 jump *label105 always
 label *label89
 set .ITEM_ICON "[]"
@@ -5132,8 +5132,8 @@ jump *label87 always
 label *label91
 set .ITEM_ICON "[]"
 jump *label87 always
-label *label229
-jump *label228 strictEqual *tmp376 null
+label *label230
+jump *label229 strictEqual *tmp376 null
 set .ITEM_ICON "[]"
 jump *label87 always
 label *label95
@@ -5175,7 +5175,7 @@ jump *label87 always
 label *label119
 set .ITEM_ICON "[]"
 jump *label87 always
-label *label228
+label *label229
 set .ITEM_ICON null
 label *label87
 set .STATE_LIMIT 1
@@ -5524,14 +5524,14 @@ sensor *tmp370 switch1 @enabled
 sensor *tmp371 switch2 @enabled
 op or *tmp372 *tmp370 *tmp371
 jump *label215 notEqual *tmp372 false
-label *label247
+label *label228
 print "[salmon]Local or remote container became invalid.\nPlease fix and press any button to reinitialize."
 printflush message1
 printflush message2
 sensor *tmp370 switch1 @enabled
 sensor *tmp371 switch2 @enabled
 op or *tmp372 *tmp370 *tmp371
-jump *label247 equal *tmp372 false
+jump *label228 equal *tmp372 false
 label *label215
 label *label211
 control enabled switch1 false

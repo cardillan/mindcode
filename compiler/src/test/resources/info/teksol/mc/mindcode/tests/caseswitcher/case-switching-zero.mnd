@@ -1,0 +1,27 @@
+#set err-invalid-content = false;
+
+def isWall(block)
+    case block
+        when @graphite-press, @copper-wall, @copper-wall-large, @titanium-wall, @titanium-wall-large,
+             @plastanium-wall, @plastanium-wall-large, @thorium-wall, @thorium-wall-large,
+             @phase-wall, @phase-wall-large, @surge-wall, @surge-wall-large,
+             @scrap-wall, @scrap-wall-large, @scrap-wall-huge, @scrap-wall-gigantic,
+             @beryllium-wall, @beryllium-wall-large, @tungsten-wall, @tungsten-wall-large,
+             @reinforced-surge-wall, @reinforced-surge-wall-large, @carbide-wall, @carbide-wall-large
+        then true;
+        else false;
+    end;
+end;
+
+begin
+    var hash = 0;
+    for var i in -1 ... 240 do
+        var block = lookup(:block, i);
+        if isWall(block) then
+            hash = (hash * 31 + i + 251) & 0xFFFFFFFF;
+        end;
+    end;
+
+    print(hash);
+    assertEquals(1061505871, hash, "Test selected blocks");
+end;

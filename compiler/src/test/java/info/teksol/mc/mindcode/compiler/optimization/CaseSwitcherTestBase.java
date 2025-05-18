@@ -15,7 +15,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
-class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
+abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> {
 
     @Override
     protected Class<CaseSwitcher> getTestedClass() {
@@ -207,23 +207,31 @@ class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
                             """,
                     createInstruction(OP, "rand", tmp(0), "20"),
                     createInstruction(OP, "floor", ":value", tmp(0)),
-                    createInstruction(JUMP, label(12), "greaterThanEq", ":value", "5"),
+                    createInstruction(JUMP, label(11), "greaterThanEq", ":value", "11"),
                     createInstruction(JUMP, label(11), "lessThan", ":value", "0"),
-                    createInstruction(MULTIJUMP, label(13), ":value", "0"),
-                    createInstruction(MULTILABEL, label(13)),
+                    createInstruction(MULTIJUMP, label(12), ":value", "0"),
+                    createInstruction(MULTILABEL, label(12)),
                     createInstruction(JUMP, label(2), "always"),
-                    createInstruction(MULTILABEL, label(14)),
+                    createInstruction(MULTILABEL, label(13)),
                     createInstruction(JUMP, label(4), "always"),
+                    createInstruction(MULTILABEL, label(14)),
+                    createInstruction(JUMP, label(6), "always"),
                     createInstruction(MULTILABEL, label(15)),
                     createInstruction(JUMP, label(6), "always"),
                     createInstruction(MULTILABEL, label(16)),
                     createInstruction(JUMP, label(6), "always"),
                     createInstruction(MULTILABEL, label(17)),
-                    createInstruction(JUMP, label(6), "always"),
-                    createInstruction(LABEL, label(12)),
-                    createInstruction(JUMP, label(11), "equal", ":value", "9"),
-                    createInstruction(JUMP, label(10), "equal", ":value", "10"),
                     createInstruction(JUMP, label(8), "always"),
+                    createInstruction(MULTILABEL, label(18)),
+                    createInstruction(JUMP, label(8), "always"),
+                    createInstruction(MULTILABEL, label(19)),
+                    createInstruction(JUMP, label(8), "always"),
+                    createInstruction(MULTILABEL, label(20)),
+                    createInstruction(JUMP, label(8), "always"),
+                    createInstruction(MULTILABEL, label(21)),
+                    createInstruction(JUMP, label(11), "always"),
+                    createInstruction(MULTILABEL, label(22)),
+                    createInstruction(JUMP, label(10), "always"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(2), q("None")),
                     createInstruction(JUMP, label(0), "always"),
