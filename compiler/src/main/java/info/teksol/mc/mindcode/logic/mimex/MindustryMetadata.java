@@ -309,7 +309,6 @@ public class MindustryMetadata {
         private final List<String> lines;
         private final List<String> header;
         private final int logicIdIndex;
-        private boolean zeroLogicIdFound = false;
 
         protected abstract void parseHeader();
 
@@ -339,12 +338,7 @@ public class MindustryMetadata {
 
         protected int parseLogicId(String[] columns) {
             if (logicIdIndex < 0) return -1;
-            int logicId = Integer.parseInt(columns[logicIdIndex]);
-            if (logicId == 0) {
-                if (zeroLogicIdFound) return -1;
-                zeroLogicIdFound = true;
-            }
-            return logicId;
+            return Integer.parseInt(columns[logicIdIndex]);
         }
 
         protected int findColumn(String columnName) {
