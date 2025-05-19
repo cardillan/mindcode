@@ -1124,9 +1124,12 @@ The following preconditions need to be met to apply content conversion:
 
 #### Null values
 
+> [!NOTE]
+> When `case` expressions over integer values contain a `when null` branch, the Case Switching optimization is not applied to them, even though the null values are still correctly handled by the case expression. The following information only applies to case expressions over Mindustry contents objects.  
+
 When Mindustry content conversion occurs, `null` values in `when` clauses are supported. When the `null` value is explicitly handled, the corresponding branch is executed for `null` input values. In case the `when null` clause is missing, `null` input values are handled by the `else` branch (or skipped altogether if there is no else branch).
 
-The `null` values are checked for in the `else` branch, or in the branch corresponding to the object with logic id equal to zero, so the execution cost of handling the `null` value is lower compared to arrangement where the input value is checked for `null` before entering the entire `case` expression. If the `null` value is handled in the `else` branch, and jump table compression occurs, jumps to the `else` branch skip the `null` check, if it is known a `null` value cannot occur at that place. A separate branch for handling `null` values therefore produces the fastest possible code under all circumstances.
+Mindcode arranges to code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, `case` expressions checking for `null` in `when` branches may be more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
 
 ### Jump table compression
 
@@ -1136,24 +1139,22 @@ Typically, compressing the jump table produces smaller, but slightly slower code
 
 Jump table compression is particularly useful when using block types in case expressions, as, given large dispersion of block type ids, full jump tables tend to get quite large.
 
-> [!NOTE]
-> Jump table compression is not performed when range checks for the given case expression are eliminated.
-
 Notes:
 
-* When a compressed jump table is smaller, but slower than a full jump table, it will only be selected when there isn't enough instruction space for the full jump table.
+* Jump table compression is not performed when range checks for the given case expression are eliminated via the `unsafe-case-optimization` option.
+* When a compressed jump table is smaller, but slower than a full or less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
 * Compressing a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the smaller version will be selected by the optimizer over the faster version, even when there is plenty of instruction space.
 
 ### Jump table padding
 
-When the jump table starts at the zero index, the generated code can be both smaller and faster due to these effects:
+When the jump table starts at zero value, the generated code can be both smaller and faster due to these effects:
 
 * When the Mindustry content conversion is applied, the optimizer knows the logic ids cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
 * When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation handling the non-zero offset can be omitted.
 
 When symbolic labels are generated, the jump table padding may save up to two instructions, which is a significant speedup.
 
-The optimizer considers the possibility of padding the jump table to zero, and chooses it if it gives the best performance under the cost limit.
+The optimizer considers the possibility of padding the jump table to start at zero value, and chooses it if it gives the best performance under the cost limit.
 
 ### Example
 

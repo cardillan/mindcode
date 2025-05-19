@@ -528,7 +528,7 @@ var text = case number
 end;
 ```
 
-If the `when` clause contains an expression that evaluates to `null` or zero, strict comparison isn't used. 
+If the `when` clause contains an expression that evaluates to `null` or zero (as opposed to a `null` or zero literal), strict comparison isn't used. 
 
 ### Additional considerations
 

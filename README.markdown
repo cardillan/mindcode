@@ -19,7 +19,7 @@
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
 > [!NOTE]
-> To use new Mindustry Logic capabilities from the new [Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v147), use `#set target = 8;` in your code. [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality.
+> To use new Mindustry Logic capabilities from the new [Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v149), use `#set target = 8;` in your code. [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality.
 
 ## Mindcode Syntax
 
@@ -39,6 +39,8 @@ The most important recent changes to Mindcode include:
   * New string/character based instructions and character literals.
   * Support for named color literals: `%[red]`.
 * Language features
+  * Support for `null` values in the `case` expression.
+  * Improved optimization of `case` expressions, including `case` expression over block types, unit types, items or liquids.
   * Passing arguments (including arrays) to inline functions by reference.
   * Specific syntax for [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords).
   * Support for passing mlog keywords as arguments to inline functions.
@@ -48,7 +50,8 @@ The most important recent changes to Mindcode include:
   * Prefix/postfix increment/decrement operators: `i++`, `--j`.
 * Basic functionality
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
-  * Using Mindustry Logic metadata corresponding to the target selected for compilation.  
+  * Using Mindustry Logic metadata corresponding to the target selected for compilation.
+  * Profiling information for code executed using the built-in processor emulator.
 
 See [changelog](CHANGELOG.markdown) for a comprehensive list of changes.
 

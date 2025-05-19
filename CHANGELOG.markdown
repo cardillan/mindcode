@@ -28,16 +28,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The `sign` function in the `math` library was renamed to `signInexact`.
   * The `signExact` function in the `math` library was renamed to `sign`. This function corresponds to the Mindustry 8 instruction `op sign`, and when target 8 is selected, the instruction is used instead of the library implementation. 
   * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to match the `unpackcolor` instruction in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
-  * Mindustry Logic built-in functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
 * When splitting jump tables into multiple segments during jump table compression, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
-* Other improvements to the Case Switching optimization: better optimization, more precise cost and benefit calculation.
+* Other improvements to the Case Switching optimization: better optimization, more precise cost and benefit calculation, support for `null` values.
 
 ### Miscellaneous
 
+* Mindustry Logic built-in functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
 * List of supported keywords and built-in variables for instruction parameters are now provided by mimex-generated metadata.  
 * Added list of accepted built-in variables to the description of functions in the function reference.
 * The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
-* Updated BE metadata to the last available BE build.
+* Updated BE metadata to the latest available BE build.
 * Added new metadata types, fixed zero logic IDs problem.
 
 ## 3.4.0 - 2025-05-11

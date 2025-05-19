@@ -251,6 +251,20 @@ Figuring out the correct transformations isn't always easy. Issuing incorrect on
 * `rotateLeft(display)`: will inspect the display and apply the correct transformation for small/large ones.
 * `smallToLarge()`, `largeToSmall()`: will set up scaling so that output to a small display will be mapped completely to the large one or vice versa. Especially the `largeToSmall()` transformation results into a graphics which is still nicely readable on a smaller display.
 
+## New standard processor instructions
+
+### `unpackcolor`
+
+Reverses the `packcolor` instruction. Prior to version 8, the same operation may be performed by the `unpackcolor()` function from the `graphics` library.  
+
+### `op sign`
+
+Provides the signum of the argument (`-1`, `0` or `1` for a negative, zero or positive argument). Prior to version 8, the same operation may be performed by the `sign()` function from the `math` library.
+
+### `op round`
+
+Rounds the argument to the closest integer. Prior to version 8, the same operation may be performed by the `round()` function from the `math` library.
+
 ## New World processor instructions
 
 ### `weathersense`, `weatherset`
