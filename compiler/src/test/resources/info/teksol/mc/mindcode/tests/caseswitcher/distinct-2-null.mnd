@@ -1,0 +1,47 @@
+#set err-invalid-content = false;
+
+def identifyBlock(block)
+    case block
+        when @graphite-press then 0x00000002;
+        when @copper-wall then 0x00000004;
+        when @copper-wall-large then 0x00000008;
+        when @titanium-wall then 0x00000010;
+        when @titanium-wall-large then 0x00000020;
+        when @plastanium-wall then 0x00000040;
+        when @plastanium-wall-large then 0x00000080;
+        when @thorium-wall then 0x00000100;
+        when @thorium-wall-large then 0x00000200;
+        when @phase-wall then 0x00000400;
+        when @phase-wall-large then 0x00000800;
+        when @surge-wall then 0x00001000;
+        when @surge-wall-large then 0x00002000;
+        when @scrap-wall then 0x00004000;
+        when @scrap-wall-large then 0x00008000;
+        when @scrap-wall-huge then 0x00010000;
+        when @scrap-wall-gigantic then 0x00020000;
+        when @tungsten-wall then 0x00040000;
+        when @tungsten-wall-large then 0x00080000;
+        when @beryllium-wall then 0x00100000;
+        when @beryllium-wall-large then 0x00200000;
+        when @carbide-wall then 0x00400000;
+        when @carbide-wall-large then 0x00800000;
+        when @reinforced-surge-wall then 0x01000000;
+        when @reinforced-surge-wall-large then 0x02000000;
+        else 0;
+    end;
+end;
+
+begin
+    var total = 0;
+    for var i in -1 ... 240 do
+        var block = lookup(:block, i);
+        var bit = identifyBlock(block);
+        if total & bit then
+            total |= 0x800000000;
+        else
+            total |= bit;
+        end;
+    end;
+
+    assertEquals(0x03FFFFFE, total, "Test selected blocks");
+end;

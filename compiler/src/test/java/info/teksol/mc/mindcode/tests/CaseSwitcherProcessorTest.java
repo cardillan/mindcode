@@ -8,10 +8,10 @@ import java.io.IOException;
 
 @NullMarked
 @Order(5)
-public class CaseSwitcherTest extends CaseSwitcherTestBase {
+public class CaseSwitcherProcessorTest extends CaseSwitcherProcessorTestBase {
 
     @AfterAll
     static void done() throws IOException {
-        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, CaseSwitcherTest.class.getSimpleName());
+        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, CaseSwitcherProcessorTest.class.getSimpleName());
     }
 }

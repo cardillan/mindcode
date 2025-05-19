@@ -1,0 +1,1184 @@
+   121 instructions before optimizations.
+     1 instructions eliminated by Temp Variables Elimination.
+     1 instructions eliminated by Case Expression Optimization.
+     2 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Single Step Elimination (5 iterations).
+     3 instructions eliminated by Data Flow Optimization (6 iterations).
+     1 instructions eliminated by Loop Optimization (2 iterations).
+     1 loops improved by Loop Optimization.
+    29 instructions added by Case Switching (3 iterations).
+     1 case expressions converted to switched jumps Case Switching.
+    25 instructions eliminated by Jump Straightening (4 iterations).
+   116 instructions after optimizations.
+
+Pass 1: speed optimization selection (cost limit 112):
+  o Convert case at line 5:5 (segments: 6)                       cost    15, benefit      155.0, efficiency     10.333
+  * Convert case at line 5:5 (segments: 5)                       cost    29, benefit      209.0, efficiency      7.207 (+29 instructions)
+  ! Convert case at line 5:5 (segments: 1)                       cost   214, benefit      224.0, efficiency      1.047
+
+Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
+ 
+     5 set :block *tmp0
+     6 # "Function: def identifyBlock(in block)"
+     7 set :identifyBlock:block :block
+-    * set *tmp3 :identifyBlock:block
+-    * jump *label6 equal *tmp3 @graphite-press
++    8 jump *label6 equal :identifyBlock:block @graphite-press
+     9 jump *label5 always
+    10 label *label6
+    11 set *tmp2 0x00000002
+    12 jump *label4 always
+    13 label *label5
+-    * jump *label8 equal *tmp3 @copper-wall
++   14 jump *label8 equal :identifyBlock:block @copper-wall
+    15 jump *label7 always
+    16 label *label8
+    17 set *tmp2 0x00000004
+    18 jump *label4 always
+    19 label *label7
+-    * jump *label10 equal *tmp3 @copper-wall-large
++   20 jump *label10 equal :identifyBlock:block @copper-wall-large
+    21 jump *label9 always
+    22 label *label10
+    23 set *tmp2 0x00000008
+    24 jump *label4 always
+    25 label *label9
+-    * jump *label12 equal *tmp3 @titanium-wall
++   26 jump *label12 equal :identifyBlock:block @titanium-wall
+    27 jump *label11 always
+    28 label *label12
+    29 set *tmp2 0x00000010
+    30 jump *label4 always
+    31 label *label11
+-    * jump *label14 equal *tmp3 @titanium-wall-large
++   32 jump *label14 equal :identifyBlock:block @titanium-wall-large
+    33 jump *label13 always
+    34 label *label14
+    35 set *tmp2 0x00000020
+    36 jump *label4 always
+    37 label *label13
+-    * jump *label16 equal *tmp3 @plastanium-wall
++   38 jump *label16 equal :identifyBlock:block @plastanium-wall
+    39 jump *label15 always
+    40 label *label16
+    41 set *tmp2 0x00000040
+    42 jump *label4 always
+    43 label *label15
+-    * jump *label18 equal *tmp3 @plastanium-wall-large
++   44 jump *label18 equal :identifyBlock:block @plastanium-wall-large
+    45 jump *label17 always
+    46 label *label18
+    47 set *tmp2 0x00000080
+    48 jump *label4 always
+    49 label *label17
+-    * jump *label20 equal *tmp3 @thorium-wall
++   50 jump *label20 equal :identifyBlock:block @thorium-wall
+    51 jump *label19 always
+    52 label *label20
+    53 set *tmp2 0x00000100
+    54 jump *label4 always
+    55 label *label19
+-    * jump *label22 equal *tmp3 @thorium-wall-large
++   56 jump *label22 equal :identifyBlock:block @thorium-wall-large
+    57 jump *label21 always
+    58 label *label22
+    59 set *tmp2 0x00000200
+    60 jump *label4 always
+    61 label *label21
+-    * jump *label24 equal *tmp3 @phase-wall
++   62 jump *label24 equal :identifyBlock:block @phase-wall
+    63 jump *label23 always
+    64 label *label24
+    65 set *tmp2 0x00000400
+    66 jump *label4 always
+    67 label *label23
+-    * jump *label26 equal *tmp3 @phase-wall-large
++   68 jump *label26 equal :identifyBlock:block @phase-wall-large
+    69 jump *label25 always
+    70 label *label26
+    71 set *tmp2 0x00000800
+    72 jump *label4 always
+    73 label *label25
+-    * jump *label28 equal *tmp3 @surge-wall
++   74 jump *label28 equal :identifyBlock:block @surge-wall
+    75 jump *label27 always
+    76 label *label28
+    77 set *tmp2 0x00001000
+    78 jump *label4 always
+    79 label *label27
+-    * jump *label30 equal *tmp3 @surge-wall-large
++   80 jump *label30 equal :identifyBlock:block @surge-wall-large
+    81 jump *label29 always
+    82 label *label30
+    83 set *tmp2 0x00002000
+    84 jump *label4 always
+    85 label *label29
+-    * jump *label32 equal *tmp3 @scrap-wall
++   86 jump *label32 equal :identifyBlock:block @scrap-wall
+    87 jump *label31 always
+    88 label *label32
+    89 set *tmp2 0x00004000
+    90 jump *label4 always
+    91 label *label31
+-    * jump *label34 equal *tmp3 @scrap-wall-large
++   92 jump *label34 equal :identifyBlock:block @scrap-wall-large
+    93 jump *label33 always
+    94 label *label34
+    95 set *tmp2 0x00008000
+    96 jump *label4 always
+    97 label *label33
+-    * jump *label36 equal *tmp3 @scrap-wall-huge
++   98 jump *label36 equal :identifyBlock:block @scrap-wall-huge
+    99 jump *label35 always
+   100 label *label36
+   101 set *tmp2 0x00010000
+   102 jump *label4 always
+   103 label *label35
+-    * jump *label38 equal *tmp3 @scrap-wall-gigantic
++  104 jump *label38 equal :identifyBlock:block @scrap-wall-gigantic
+   105 jump *label37 always
+   106 label *label38
+   107 set *tmp2 0x00020000
+   108 jump *label4 always
+   109 label *label37
+-    * jump *label40 equal *tmp3 @tungsten-wall
++  110 jump *label40 equal :identifyBlock:block @tungsten-wall
+   111 jump *label39 always
+   112 label *label40
+   113 set *tmp2 0x00040000
+   114 jump *label4 always
+   115 label *label39
+-    * jump *label42 equal *tmp3 @tungsten-wall-large
++  116 jump *label42 equal :identifyBlock:block @tungsten-wall-large
+   117 jump *label41 always
+   118 label *label42
+   119 set *tmp2 0x00080000
+   120 jump *label4 always
+   121 label *label41
+-    * jump *label44 equal *tmp3 @beryllium-wall
++  122 jump *label44 equal :identifyBlock:block @beryllium-wall
+   123 jump *label43 always
+   124 label *label44
+   125 set *tmp2 0x00100000
+   126 jump *label4 always
+   127 label *label43
+-    * jump *label46 equal *tmp3 @beryllium-wall-large
++  128 jump *label46 equal :identifyBlock:block @beryllium-wall-large
+   129 jump *label45 always
+   130 label *label46
+   131 set *tmp2 0x00200000
+   132 jump *label4 always
+   133 label *label45
+-    * jump *label48 equal *tmp3 @carbide-wall
++  134 jump *label48 equal :identifyBlock:block @carbide-wall
+   135 jump *label47 always
+   136 label *label48
+   137 set *tmp2 0x00400000
+   138 jump *label4 always
+   139 label *label47
+-    * jump *label50 equal *tmp3 @carbide-wall-large
++  140 jump *label50 equal :identifyBlock:block @carbide-wall-large
+   141 jump *label49 always
+   142 label *label50
+   143 set *tmp2 0x00800000
+   144 jump *label4 always
+   145 label *label49
+-    * jump *label52 equal *tmp3 @reinforced-surge-wall
++  146 jump *label52 equal :identifyBlock:block @reinforced-surge-wall
+   147 jump *label51 always
+   148 label *label52
+   149 set *tmp2 0x01000000
+   150 jump *label4 always
+   151 label *label51
+-    * jump *label54 equal *tmp3 @reinforced-surge-wall-large
++  152 jump *label54 equal :identifyBlock:block @reinforced-surge-wall-large
+   153 jump *label53 always
+   154 label *label54
+   155 set *tmp2 0x02000000
+
+Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
+ 
+   163 op and *tmp4 :total :bit
+   164 jump *label55 equal *tmp4 false
+   165 op or :total :total 0x800000000
+-    * set *tmp5 :total
+   166 jump *label56 always
+   167 label *label55
+   168 op or :total :total :bit
+-    * set *tmp5 :total
+   169 label *label56
+   170 label *label1
+   171 op add :i :i 1
+
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
+ 
+     1 set :i -1
+     2 label *label0
+     3 jump *label2 greaterThanEq :i 240
+-    * lookup block *tmp0 :i
+-    * set :block *tmp0
++    4 lookup block :block :i
+     5 # "Function: def identifyBlock(in block)"
+     6 set :identifyBlock:block :block
+     7 jump *label6 equal :identifyBlock:block @graphite-press
+
+Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-25 instructions):
+ 
+     4 lookup block :block :i
+     5 # "Function: def identifyBlock(in block)"
+     6 set :identifyBlock:block :block
+-    * jump *label6 equal :identifyBlock:block @graphite-press
+-    * jump *label5 always
++    7 jump *label5 notEqual :identifyBlock:block @graphite-press
+     8 label *label6
+     9 set *tmp2 0x00000002
+    10 jump *label4 always
+    11 label *label5
+-    * jump *label8 equal :identifyBlock:block @copper-wall
+-    * jump *label7 always
++   12 jump *label7 notEqual :identifyBlock:block @copper-wall
+    13 label *label8
+    14 set *tmp2 0x00000004
+    15 jump *label4 always
+    16 label *label7
+-    * jump *label10 equal :identifyBlock:block @copper-wall-large
+-    * jump *label9 always
++   17 jump *label9 notEqual :identifyBlock:block @copper-wall-large
+    18 label *label10
+    19 set *tmp2 0x00000008
+    20 jump *label4 always
+    21 label *label9
+-    * jump *label12 equal :identifyBlock:block @titanium-wall
+-    * jump *label11 always
++   22 jump *label11 notEqual :identifyBlock:block @titanium-wall
+    23 label *label12
+    24 set *tmp2 0x00000010
+    25 jump *label4 always
+    26 label *label11
+-    * jump *label14 equal :identifyBlock:block @titanium-wall-large
+-    * jump *label13 always
++   27 jump *label13 notEqual :identifyBlock:block @titanium-wall-large
+    28 label *label14
+    29 set *tmp2 0x00000020
+    30 jump *label4 always
+    31 label *label13
+-    * jump *label16 equal :identifyBlock:block @plastanium-wall
+-    * jump *label15 always
++   32 jump *label15 notEqual :identifyBlock:block @plastanium-wall
+    33 label *label16
+    34 set *tmp2 0x00000040
+    35 jump *label4 always
+    36 label *label15
+-    * jump *label18 equal :identifyBlock:block @plastanium-wall-large
+-    * jump *label17 always
++   37 jump *label17 notEqual :identifyBlock:block @plastanium-wall-large
+    38 label *label18
+    39 set *tmp2 0x00000080
+    40 jump *label4 always
+    41 label *label17
+-    * jump *label20 equal :identifyBlock:block @thorium-wall
+-    * jump *label19 always
++   42 jump *label19 notEqual :identifyBlock:block @thorium-wall
+    43 label *label20
+    44 set *tmp2 0x00000100
+    45 jump *label4 always
+    46 label *label19
+-    * jump *label22 equal :identifyBlock:block @thorium-wall-large
+-    * jump *label21 always
++   47 jump *label21 notEqual :identifyBlock:block @thorium-wall-large
+    48 label *label22
+    49 set *tmp2 0x00000200
+    50 jump *label4 always
+    51 label *label21
+-    * jump *label24 equal :identifyBlock:block @phase-wall
+-    * jump *label23 always
++   52 jump *label23 notEqual :identifyBlock:block @phase-wall
+    53 label *label24
+    54 set *tmp2 0x00000400
+    55 jump *label4 always
+    56 label *label23
+-    * jump *label26 equal :identifyBlock:block @phase-wall-large
+-    * jump *label25 always
++   57 jump *label25 notEqual :identifyBlock:block @phase-wall-large
+    58 label *label26
+    59 set *tmp2 0x00000800
+    60 jump *label4 always
+    61 label *label25
+-    * jump *label28 equal :identifyBlock:block @surge-wall
+-    * jump *label27 always
++   62 jump *label27 notEqual :identifyBlock:block @surge-wall
+    63 label *label28
+    64 set *tmp2 0x00001000
+    65 jump *label4 always
+    66 label *label27
+-    * jump *label30 equal :identifyBlock:block @surge-wall-large
+-    * jump *label29 always
++   67 jump *label29 notEqual :identifyBlock:block @surge-wall-large
+    68 label *label30
+    69 set *tmp2 0x00002000
+    70 jump *label4 always
+    71 label *label29
+-    * jump *label32 equal :identifyBlock:block @scrap-wall
+-    * jump *label31 always
++   72 jump *label31 notEqual :identifyBlock:block @scrap-wall
+    73 label *label32
+    74 set *tmp2 0x00004000
+    75 jump *label4 always
+    76 label *label31
+-    * jump *label34 equal :identifyBlock:block @scrap-wall-large
+-    * jump *label33 always
++   77 jump *label33 notEqual :identifyBlock:block @scrap-wall-large
+    78 label *label34
+    79 set *tmp2 0x00008000
+    80 jump *label4 always
+    81 label *label33
+-    * jump *label36 equal :identifyBlock:block @scrap-wall-huge
+-    * jump *label35 always
++   82 jump *label35 notEqual :identifyBlock:block @scrap-wall-huge
+    83 label *label36
+    84 set *tmp2 0x00010000
+    85 jump *label4 always
+    86 label *label35
+-    * jump *label38 equal :identifyBlock:block @scrap-wall-gigantic
+-    * jump *label37 always
++   87 jump *label37 notEqual :identifyBlock:block @scrap-wall-gigantic
+    88 label *label38
+    89 set *tmp2 0x00020000
+    90 jump *label4 always
+    91 label *label37
+-    * jump *label40 equal :identifyBlock:block @tungsten-wall
+-    * jump *label39 always
++   92 jump *label39 notEqual :identifyBlock:block @tungsten-wall
+    93 label *label40
+    94 set *tmp2 0x00040000
+    95 jump *label4 always
+    96 label *label39
+-    * jump *label42 equal :identifyBlock:block @tungsten-wall-large
+-    * jump *label41 always
++   97 jump *label41 notEqual :identifyBlock:block @tungsten-wall-large
+    98 label *label42
+    99 set *tmp2 0x00080000
+   100 jump *label4 always
+   101 label *label41
+-    * jump *label44 equal :identifyBlock:block @beryllium-wall
+-    * jump *label43 always
++  102 jump *label43 notEqual :identifyBlock:block @beryllium-wall
+   103 label *label44
+   104 set *tmp2 0x00100000
+   105 jump *label4 always
+   106 label *label43
+-    * jump *label46 equal :identifyBlock:block @beryllium-wall-large
+-    * jump *label45 always
++  107 jump *label45 notEqual :identifyBlock:block @beryllium-wall-large
+   108 label *label46
+   109 set *tmp2 0x00200000
+   110 jump *label4 always
+   111 label *label45
+-    * jump *label48 equal :identifyBlock:block @carbide-wall
+-    * jump *label47 always
++  112 jump *label47 notEqual :identifyBlock:block @carbide-wall
+   113 label *label48
+   114 set *tmp2 0x00400000
+   115 jump *label4 always
+   116 label *label47
+-    * jump *label50 equal :identifyBlock:block @carbide-wall-large
+-    * jump *label49 always
++  117 jump *label49 notEqual :identifyBlock:block @carbide-wall-large
+   118 label *label50
+   119 set *tmp2 0x00800000
+   120 jump *label4 always
+   121 label *label49
+-    * jump *label52 equal :identifyBlock:block @reinforced-surge-wall
+-    * jump *label51 always
++  122 jump *label51 notEqual :identifyBlock:block @reinforced-surge-wall
+   123 label *label52
+   124 set *tmp2 0x01000000
+   125 jump *label4 always
+   126 label *label51
+-    * jump *label54 equal :identifyBlock:block @reinforced-surge-wall-large
+-    * jump *label53 always
++  127 jump *label53 notEqual :identifyBlock:block @reinforced-surge-wall-large
+   128 label *label54
+   129 set *tmp2 0x02000000
+   130 jump *label4 always
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
+ 
+     4 lookup block :block :i
+     5 # "Function: def identifyBlock(in block)"
+     6 set :identifyBlock:block :block
+-    * jump *label5 notEqual :identifyBlock:block @graphite-press
++    7 jump *label5 notEqual :block @graphite-press
+     8 label *label6
+     9 set *tmp2 0x00000002
+    10 jump *label4 always
+    11 label *label5
+-    * jump *label7 notEqual :identifyBlock:block @copper-wall
++   12 jump *label7 notEqual :block @copper-wall
+    13 label *label8
+    14 set *tmp2 0x00000004
+    15 jump *label4 always
+    16 label *label7
+-    * jump *label9 notEqual :identifyBlock:block @copper-wall-large
++   17 jump *label9 notEqual :block @copper-wall-large
+    18 label *label10
+    19 set *tmp2 0x00000008
+    20 jump *label4 always
+    21 label *label9
+-    * jump *label11 notEqual :identifyBlock:block @titanium-wall
++   22 jump *label11 notEqual :block @titanium-wall
+    23 label *label12
+    24 set *tmp2 0x00000010
+    25 jump *label4 always
+    26 label *label11
+-    * jump *label13 notEqual :identifyBlock:block @titanium-wall-large
++   27 jump *label13 notEqual :block @titanium-wall-large
+    28 label *label14
+    29 set *tmp2 0x00000020
+    30 jump *label4 always
+    31 label *label13
+-    * jump *label15 notEqual :identifyBlock:block @plastanium-wall
++   32 jump *label15 notEqual :block @plastanium-wall
+    33 label *label16
+    34 set *tmp2 0x00000040
+    35 jump *label4 always
+    36 label *label15
+-    * jump *label17 notEqual :identifyBlock:block @plastanium-wall-large
++   37 jump *label17 notEqual :block @plastanium-wall-large
+    38 label *label18
+    39 set *tmp2 0x00000080
+    40 jump *label4 always
+    41 label *label17
+-    * jump *label19 notEqual :identifyBlock:block @thorium-wall
++   42 jump *label19 notEqual :block @thorium-wall
+    43 label *label20
+    44 set *tmp2 0x00000100
+    45 jump *label4 always
+    46 label *label19
+-    * jump *label21 notEqual :identifyBlock:block @thorium-wall-large
++   47 jump *label21 notEqual :block @thorium-wall-large
+    48 label *label22
+    49 set *tmp2 0x00000200
+    50 jump *label4 always
+    51 label *label21
+-    * jump *label23 notEqual :identifyBlock:block @phase-wall
++   52 jump *label23 notEqual :block @phase-wall
+    53 label *label24
+    54 set *tmp2 0x00000400
+    55 jump *label4 always
+    56 label *label23
+-    * jump *label25 notEqual :identifyBlock:block @phase-wall-large
++   57 jump *label25 notEqual :block @phase-wall-large
+    58 label *label26
+    59 set *tmp2 0x00000800
+    60 jump *label4 always
+    61 label *label25
+-    * jump *label27 notEqual :identifyBlock:block @surge-wall
++   62 jump *label27 notEqual :block @surge-wall
+    63 label *label28
+    64 set *tmp2 0x00001000
+    65 jump *label4 always
+    66 label *label27
+-    * jump *label29 notEqual :identifyBlock:block @surge-wall-large
++   67 jump *label29 notEqual :block @surge-wall-large
+    68 label *label30
+    69 set *tmp2 0x00002000
+    70 jump *label4 always
+    71 label *label29
+-    * jump *label31 notEqual :identifyBlock:block @scrap-wall
++   72 jump *label31 notEqual :block @scrap-wall
+    73 label *label32
+    74 set *tmp2 0x00004000
+    75 jump *label4 always
+    76 label *label31
+-    * jump *label33 notEqual :identifyBlock:block @scrap-wall-large
++   77 jump *label33 notEqual :block @scrap-wall-large
+    78 label *label34
+    79 set *tmp2 0x00008000
+    80 jump *label4 always
+    81 label *label33
+-    * jump *label35 notEqual :identifyBlock:block @scrap-wall-huge
++   82 jump *label35 notEqual :block @scrap-wall-huge
+    83 label *label36
+    84 set *tmp2 0x00010000
+    85 jump *label4 always
+    86 label *label35
+-    * jump *label37 notEqual :identifyBlock:block @scrap-wall-gigantic
++   87 jump *label37 notEqual :block @scrap-wall-gigantic
+    88 label *label38
+    89 set *tmp2 0x00020000
+    90 jump *label4 always
+    91 label *label37
+-    * jump *label39 notEqual :identifyBlock:block @tungsten-wall
++   92 jump *label39 notEqual :block @tungsten-wall
+    93 label *label40
+    94 set *tmp2 0x00040000
+    95 jump *label4 always
+    96 label *label39
+-    * jump *label41 notEqual :identifyBlock:block @tungsten-wall-large
++   97 jump *label41 notEqual :block @tungsten-wall-large
+    98 label *label42
+    99 set *tmp2 0x00080000
+   100 jump *label4 always
+   101 label *label41
+-    * jump *label43 notEqual :identifyBlock:block @beryllium-wall
++  102 jump *label43 notEqual :block @beryllium-wall
+   103 label *label44
+   104 set *tmp2 0x00100000
+   105 jump *label4 always
+   106 label *label43
+-    * jump *label45 notEqual :identifyBlock:block @beryllium-wall-large
++  107 jump *label45 notEqual :block @beryllium-wall-large
+   108 label *label46
+   109 set *tmp2 0x00200000
+   110 jump *label4 always
+   111 label *label45
+-    * jump *label47 notEqual :identifyBlock:block @carbide-wall
++  112 jump *label47 notEqual :block @carbide-wall
+   113 label *label48
+   114 set *tmp2 0x00400000
+   115 jump *label4 always
+   116 label *label47
+-    * jump *label49 notEqual :identifyBlock:block @carbide-wall-large
++  117 jump *label49 notEqual :block @carbide-wall-large
+   118 label *label50
+   119 set *tmp2 0x00800000
+   120 jump *label4 always
+   121 label *label49
+-    * jump *label51 notEqual :identifyBlock:block @reinforced-surge-wall
++  122 jump *label51 notEqual :block @reinforced-surge-wall
+   123 label *label52
+   124 set *tmp2 0x01000000
+   125 jump *label4 always
+   126 label *label51
+-    * jump *label53 notEqual :identifyBlock:block @reinforced-surge-wall-large
++  127 jump *label53 notEqual :block @reinforced-surge-wall-large
+   128 label *label54
+   129 set *tmp2 0x02000000
+   130 jump *label4 always
+ 
+   133 label *label4
+   134 set *tmp1 *tmp2
+   135 label *label3
+-    * set :bit *tmp1
+-    * op and *tmp4 :total :bit
++  136 set :bit *tmp2
++  137 op and *tmp4 :total *tmp1
+   138 jump *label55 equal *tmp4 false
+   139 op or :total :total 0x800000000
+   140 jump *label56 always
+   141 label *label55
+-    * op or :total :total :bit
++  142 op or :total :total *tmp1
+   143 label *label56
+   144 label *label1
+   145 op add :i :i 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+ 
+     3 jump *label2 greaterThanEq :i 240
+     4 lookup block :block :i
+     5 # "Function: def identifyBlock(in block)"
+-    * set :identifyBlock:block :block
+     6 jump *label5 notEqual :block @graphite-press
+     7 label *label6
+     8 set *tmp2 0x00000002
+ 
+   132 label *label4
+   133 set *tmp1 *tmp2
+   134 label *label3
+-    * set :bit *tmp2
+-    * op and *tmp4 :total *tmp1
++  135 op and *tmp4 :total *tmp2
+   136 jump *label55 equal *tmp4 false
+   137 op or :total :total 0x800000000
+   138 jump *label56 always
+   139 label *label55
+-    * op or :total :total *tmp1
++  140 op or :total :total *tmp2
+   141 label *label56
+   142 label *label1
+   143 op add :i :i 1
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+ 
+   130 label *label53
+   131 set *tmp2 0
+   132 label *label4
+-    * set *tmp1 *tmp2
+   133 label *label3
+   134 op and *tmp4 :total *tmp2
+   135 jump *label55 equal *tmp4 false
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
+     0 set :total 0
+     1 set :i -1
+     2 label *label0
+-    * jump *label2 greaterThanEq :i 240
++    3 label *label57
+     4 lookup block :block :i
+     5 # "Function: def identifyBlock(in block)"
+     6 jump *label5 notEqual :block @graphite-press
+ 
+   140 label *label56
+   141 label *label1
+   142 op add :i :i 1
+-    * jump *label0 always
++  143 jump *label57 lessThan :i 240
+   144 label *label2
+   145 assertequals 0x03FFFFFE :total "Test selected blocks"
+   146 end
+
+Modifications by Convert case at line 5:5 (segments: 5) (+29 instructions):
+ 
+     3 label *label57
+     4 lookup block :block :i
+     5 # "Function: def identifyBlock(in block)"
+-    * jump *label5 notEqual :block @graphite-press
++    6 sensor *tmp6 :block @id
++    7 jump *label60 greaterThanEq *tmp6 35
++    8 multijump *label61 *tmp6 0 (m:*label96)
++    9 multilabel *label61 (m:*label96)
++   10 jump *label59 always
++   11 multilabel *label62 (m:*label96)
++   12 jump *label58 always
++   13 multilabel *label63 (m:*label96)
++   14 jump *label58 always
++   15 multilabel *label64 (m:*label96)
++   16 jump *label58 always
++   17 multilabel *label65 (m:*label96)
++   18 jump *label58 always
++   19 multilabel *label66 (m:*label96)
++   20 jump *label58 always
++   21 multilabel *label67 (m:*label96)
++   22 jump *label58 always
++   23 multilabel *label68 (m:*label96)
++   24 jump *label58 always
++   25 multilabel *label69 (m:*label96)
++   26 jump *label58 always
++   27 multilabel *label70 (m:*label96)
++   28 jump *label58 always
++   29 multilabel *label71 (m:*label96)
++   30 jump *label58 always
++   31 multilabel *label72 (m:*label96)
++   32 jump *label58 always
++   33 multilabel *label73 (m:*label96)
++   34 jump *label58 always
++   35 multilabel *label74 (m:*label96)
++   36 jump *label58 always
++   37 multilabel *label75 (m:*label96)
++   38 jump *label58 always
++   39 multilabel *label76 (m:*label96)
++   40 jump *label58 always
++   41 multilabel *label77 (m:*label96)
++   42 jump *label58 always
++   43 multilabel *label78 (m:*label96)
++   44 jump *label8 always
++   45 multilabel *label79 (m:*label96)
++   46 jump *label10 always
++   47 multilabel *label80 (m:*label96)
++   48 jump *label12 always
++   49 multilabel *label81 (m:*label96)
++   50 jump *label14 always
++   51 multilabel *label82 (m:*label96)
++   52 jump *label16 always
++   53 multilabel *label83 (m:*label96)
++   54 jump *label18 always
++   55 multilabel *label84 (m:*label96)
++   56 jump *label20 always
++   57 multilabel *label85 (m:*label96)
++   58 jump *label22 always
++   59 multilabel *label86 (m:*label96)
++   60 jump *label24 always
++   61 multilabel *label87 (m:*label96)
++   62 jump *label26 always
++   63 multilabel *label88 (m:*label96)
++   64 jump *label28 always
++   65 multilabel *label89 (m:*label96)
++   66 jump *label30 always
++   67 multilabel *label90 (m:*label96)
++   68 jump *label58 always
++   69 multilabel *label91 (m:*label96)
++   70 jump *label58 always
++   71 multilabel *label92 (m:*label96)
++   72 jump *label32 always
++   73 multilabel *label93 (m:*label96)
++   74 jump *label34 always
++   75 multilabel *label94 (m:*label96)
++   76 jump *label36 always
++   77 multilabel *label95 (m:*label96)
++   78 jump *label38 always
++   79 label *label60
++   80 jump *label97 greaterThanEq *tmp6 206
++   81 jump *label40 equal *tmp6 203
++   82 jump *label42 equal *tmp6 204
++   83 jump *label58 always
++   84 label *label97
++   85 jump *label98 greaterThanEq *tmp6 208
++   86 jump *label44 equal *tmp6 206
++   87 jump *label46 equal *tmp6 207
++   88 jump *label58 always
++   89 label *label98
++   90 jump *label99 greaterThanEq *tmp6 234
++   91 jump *label48 equal *tmp6 220
++   92 jump *label50 equal *tmp6 221
++   93 jump *label52 equal *tmp6 225
++   94 jump *label58 always
++   95 label *label99
++   96 jump *label54 lessThan *tmp6 235
++   97 jump *label58 always
++   98 label *label59
++   99 jump *label58 strictEqual *tmp6 null
+   100 label *label6
+   101 set *tmp2 0x00000002
+   102 jump *label4 always
+   103 label *label5
+-    * jump *label7 notEqual :block @copper-wall
+   104 label *label8
+   105 set *tmp2 0x00000004
+   106 jump *label4 always
+   107 label *label7
+-    * jump *label9 notEqual :block @copper-wall-large
+   108 label *label10
+   109 set *tmp2 0x00000008
+   110 jump *label4 always
+   111 label *label9
+-    * jump *label11 notEqual :block @titanium-wall
+   112 label *label12
+   113 set *tmp2 0x00000010
+   114 jump *label4 always
+   115 label *label11
+-    * jump *label13 notEqual :block @titanium-wall-large
+   116 label *label14
+   117 set *tmp2 0x00000020
+   118 jump *label4 always
+   119 label *label13
+-    * jump *label15 notEqual :block @plastanium-wall
+   120 label *label16
+   121 set *tmp2 0x00000040
+   122 jump *label4 always
+   123 label *label15
+-    * jump *label17 notEqual :block @plastanium-wall-large
+   124 label *label18
+   125 set *tmp2 0x00000080
+   126 jump *label4 always
+   127 label *label17
+-    * jump *label19 notEqual :block @thorium-wall
+   128 label *label20
+   129 set *tmp2 0x00000100
+   130 jump *label4 always
+   131 label *label19
+-    * jump *label21 notEqual :block @thorium-wall-large
+   132 label *label22
+   133 set *tmp2 0x00000200
+   134 jump *label4 always
+   135 label *label21
+-    * jump *label23 notEqual :block @phase-wall
+   136 label *label24
+   137 set *tmp2 0x00000400
+   138 jump *label4 always
+   139 label *label23
+-    * jump *label25 notEqual :block @phase-wall-large
+   140 label *label26
+   141 set *tmp2 0x00000800
+   142 jump *label4 always
+   143 label *label25
+-    * jump *label27 notEqual :block @surge-wall
+   144 label *label28
+   145 set *tmp2 0x00001000
+   146 jump *label4 always
+   147 label *label27
+-    * jump *label29 notEqual :block @surge-wall-large
+   148 label *label30
+   149 set *tmp2 0x00002000
+   150 jump *label4 always
+   151 label *label29
+-    * jump *label31 notEqual :block @scrap-wall
+   152 label *label32
+   153 set *tmp2 0x00004000
+   154 jump *label4 always
+   155 label *label31
+-    * jump *label33 notEqual :block @scrap-wall-large
+   156 label *label34
+   157 set *tmp2 0x00008000
+   158 jump *label4 always
+   159 label *label33
+-    * jump *label35 notEqual :block @scrap-wall-huge
+   160 label *label36
+   161 set *tmp2 0x00010000
+   162 jump *label4 always
+   163 label *label35
+-    * jump *label37 notEqual :block @scrap-wall-gigantic
+   164 label *label38
+   165 set *tmp2 0x00020000
+   166 jump *label4 always
+   167 label *label37
+-    * jump *label39 notEqual :block @tungsten-wall
+   168 label *label40
+   169 set *tmp2 0x00040000
+   170 jump *label4 always
+   171 label *label39
+-    * jump *label41 notEqual :block @tungsten-wall-large
+   172 label *label42
+   173 set *tmp2 0x00080000
+   174 jump *label4 always
+   175 label *label41
+-    * jump *label43 notEqual :block @beryllium-wall
+   176 label *label44
+   177 set *tmp2 0x00100000
+   178 jump *label4 always
+   179 label *label43
+-    * jump *label45 notEqual :block @beryllium-wall-large
+   180 label *label46
+   181 set *tmp2 0x00200000
+   182 jump *label4 always
+   183 label *label45
+-    * jump *label47 notEqual :block @carbide-wall
+   184 label *label48
+   185 set *tmp2 0x00400000
+   186 jump *label4 always
+   187 label *label47
+-    * jump *label49 notEqual :block @carbide-wall-large
+   188 label *label50
+   189 set *tmp2 0x00800000
+   190 jump *label4 always
+   191 label *label49
+-    * jump *label51 notEqual :block @reinforced-surge-wall
+   192 label *label52
+   193 set *tmp2 0x01000000
+   194 jump *label4 always
+   195 label *label51
+-    * jump *label53 notEqual :block @reinforced-surge-wall-large
+   196 label *label54
+   197 set *tmp2 0x02000000
+   198 jump *label4 always
+   199 label *label53
++  200 label *label58
+   201 set *tmp2 0
+   202 label *label4
+   203 label *label3
+
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+     0 set :total 0
+     1 set :i -1
+-    * label *label0
+     2 label *label57
+     3 lookup block :block :i
+     4 # "Function: def identifyBlock(in block)"
+ 
+    96 jump *label58 always
+    97 label *label59
+    98 jump *label58 strictEqual *tmp6 null
+-    * label *label6
+    99 set *tmp2 0x00000002
+   100 jump *label4 always
+-    * label *label5
+   101 label *label8
+   102 set *tmp2 0x00000004
+   103 jump *label4 always
+-    * label *label7
+   104 label *label10
+   105 set *tmp2 0x00000008
+   106 jump *label4 always
+-    * label *label9
+   107 label *label12
+   108 set *tmp2 0x00000010
+   109 jump *label4 always
+-    * label *label11
+   110 label *label14
+   111 set *tmp2 0x00000020
+   112 jump *label4 always
+-    * label *label13
+   113 label *label16
+   114 set *tmp2 0x00000040
+   115 jump *label4 always
+-    * label *label15
+   116 label *label18
+   117 set *tmp2 0x00000080
+   118 jump *label4 always
+-    * label *label17
+   119 label *label20
+   120 set *tmp2 0x00000100
+   121 jump *label4 always
+-    * label *label19
+   122 label *label22
+   123 set *tmp2 0x00000200
+   124 jump *label4 always
+-    * label *label21
+   125 label *label24
+   126 set *tmp2 0x00000400
+   127 jump *label4 always
+-    * label *label23
+   128 label *label26
+   129 set *tmp2 0x00000800
+   130 jump *label4 always
+-    * label *label25
+   131 label *label28
+   132 set *tmp2 0x00001000
+   133 jump *label4 always
+-    * label *label27
+   134 label *label30
+   135 set *tmp2 0x00002000
+   136 jump *label4 always
+-    * label *label29
+   137 label *label32
+   138 set *tmp2 0x00004000
+   139 jump *label4 always
+-    * label *label31
+   140 label *label34
+   141 set *tmp2 0x00008000
+   142 jump *label4 always
+-    * label *label33
+   143 label *label36
+   144 set *tmp2 0x00010000
+   145 jump *label4 always
+-    * label *label35
+   146 label *label38
+   147 set *tmp2 0x00020000
+   148 jump *label4 always
+-    * label *label37
+   149 label *label40
+   150 set *tmp2 0x00040000
+   151 jump *label4 always
+-    * label *label39
+   152 label *label42
+   153 set *tmp2 0x00080000
+   154 jump *label4 always
+-    * label *label41
+   155 label *label44
+   156 set *tmp2 0x00100000
+   157 jump *label4 always
+-    * label *label43
+   158 label *label46
+   159 set *tmp2 0x00200000
+   160 jump *label4 always
+-    * label *label45
+   161 label *label48
+   162 set *tmp2 0x00400000
+   163 jump *label4 always
+-    * label *label47
+   164 label *label50
+   165 set *tmp2 0x00800000
+   166 jump *label4 always
+-    * label *label49
+   167 label *label52
+   168 set *tmp2 0x01000000
+   169 jump *label4 always
+-    * label *label51
+   170 label *label54
+   171 set *tmp2 0x02000000
+   172 jump *label4 always
+-    * label *label53
+   173 label *label58
+   174 set *tmp2 0
+   175 label *label4
+-    * label *label3
+   176 op and *tmp4 :total *tmp2
+   177 jump *label55 equal *tmp4 false
+   178 op or :total :total 0x800000000
+ 
+   180 label *label55
+   181 op or :total :total *tmp2
+   182 label *label56
+-    * label *label1
+   183 op add :i :i 1
+   184 jump *label57 lessThan :i 240
+-    * label *label2
+   185 assertequals 0x03FFFFFE :total "Test selected blocks"
+   186 end
+
+Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   183 op add :i :i 1
+   184 jump *label57 lessThan :i 240
+   185 assertequals 0x03FFFFFE :total "Test selected blocks"
+-    * end
+
+Final code before resolving virtual instructions:
+
+set :total 0
+set :i -1
+label *label57
+lookup block :block :i
+# "Function: def identifyBlock(in block)"
+sensor *tmp6 :block @id
+jump *label60 greaterThanEq *tmp6 35
+multijump *label61 *tmp6 0
+multilabel *label61
+jump *label59 always
+multilabel *label62
+jump *label58 always
+multilabel *label63
+jump *label58 always
+multilabel *label64
+jump *label58 always
+multilabel *label65
+jump *label58 always
+multilabel *label66
+jump *label58 always
+multilabel *label67
+jump *label58 always
+multilabel *label68
+jump *label58 always
+multilabel *label69
+jump *label58 always
+multilabel *label70
+jump *label58 always
+multilabel *label71
+jump *label58 always
+multilabel *label72
+jump *label58 always
+multilabel *label73
+jump *label58 always
+multilabel *label74
+jump *label58 always
+multilabel *label75
+jump *label58 always
+multilabel *label76
+jump *label58 always
+multilabel *label77
+jump *label58 always
+multilabel *label78
+jump *label8 always
+multilabel *label79
+jump *label10 always
+multilabel *label80
+jump *label12 always
+multilabel *label81
+jump *label14 always
+multilabel *label82
+jump *label16 always
+multilabel *label83
+jump *label18 always
+multilabel *label84
+jump *label20 always
+multilabel *label85
+jump *label22 always
+multilabel *label86
+jump *label24 always
+multilabel *label87
+jump *label26 always
+multilabel *label88
+jump *label28 always
+multilabel *label89
+jump *label30 always
+multilabel *label90
+jump *label58 always
+multilabel *label91
+jump *label58 always
+multilabel *label92
+jump *label32 always
+multilabel *label93
+jump *label34 always
+multilabel *label94
+jump *label36 always
+multilabel *label95
+jump *label38 always
+label *label60
+jump *label97 greaterThanEq *tmp6 206
+jump *label40 equal *tmp6 203
+jump *label42 equal *tmp6 204
+jump *label58 always
+label *label97
+jump *label98 greaterThanEq *tmp6 208
+jump *label44 equal *tmp6 206
+jump *label46 equal *tmp6 207
+jump *label58 always
+label *label98
+jump *label99 greaterThanEq *tmp6 234
+jump *label48 equal *tmp6 220
+jump *label50 equal *tmp6 221
+jump *label52 equal *tmp6 225
+jump *label58 always
+label *label99
+jump *label54 lessThan *tmp6 235
+jump *label58 always
+label *label59
+jump *label58 strictEqual *tmp6 null
+set *tmp2 0x00000002
+jump *label4 always
+label *label8
+set *tmp2 0x00000004
+jump *label4 always
+label *label10
+set *tmp2 0x00000008
+jump *label4 always
+label *label12
+set *tmp2 0x00000010
+jump *label4 always
+label *label14
+set *tmp2 0x00000020
+jump *label4 always
+label *label16
+set *tmp2 0x00000040
+jump *label4 always
+label *label18
+set *tmp2 0x00000080
+jump *label4 always
+label *label20
+set *tmp2 0x00000100
+jump *label4 always
+label *label22
+set *tmp2 0x00000200
+jump *label4 always
+label *label24
+set *tmp2 0x00000400
+jump *label4 always
+label *label26
+set *tmp2 0x00000800
+jump *label4 always
+label *label28
+set *tmp2 0x00001000
+jump *label4 always
+label *label30
+set *tmp2 0x00002000
+jump *label4 always
+label *label32
+set *tmp2 0x00004000
+jump *label4 always
+label *label34
+set *tmp2 0x00008000
+jump *label4 always
+label *label36
+set *tmp2 0x00010000
+jump *label4 always
+label *label38
+set *tmp2 0x00020000
+jump *label4 always
+label *label40
+set *tmp2 0x00040000
+jump *label4 always
+label *label42
+set *tmp2 0x00080000
+jump *label4 always
+label *label44
+set *tmp2 0x00100000
+jump *label4 always
+label *label46
+set *tmp2 0x00200000
+jump *label4 always
+label *label48
+set *tmp2 0x00400000
+jump *label4 always
+label *label50
+set *tmp2 0x00800000
+jump *label4 always
+label *label52
+set *tmp2 0x01000000
+jump *label4 always
+label *label54
+set *tmp2 0x02000000
+jump *label4 always
+label *label58
+set *tmp2 0
+label *label4
+op and *tmp4 :total *tmp2
+jump *label55 equal *tmp4 false
+op or :total :total 0x800000000
+jump *label56 always
+label *label55
+op or :total :total *tmp2
+label *label56
+op add :i :i 1
+jump *label57 lessThan :i 240
+assertequals 0x03FFFFFE :total "Test selected blocks"

@@ -8,10 +8,10 @@ import java.io.IOException;
 
 @NullMarked
 @Order(5)
-public class CaseSwitcherSymbolicLabelsTest extends CaseSwitcherTestBase {
+public class CaseSwitcherSymbolicLabelsProcessorTest extends CaseSwitcherProcessorTestBase {
 
     @AfterAll
     static void done() throws IOException {
-        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, CaseSwitcherSymbolicLabelsTest.class.getSimpleName());
+        AbstractProcessorTest.done(SCRIPTS_DIRECTORY, CaseSwitcherSymbolicLabelsProcessorTest.class.getSimpleName());
     }
 }
