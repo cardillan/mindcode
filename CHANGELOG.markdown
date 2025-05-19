@@ -4,13 +4,14 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.5.0 - Unreleased
+## 3.5.0 - 2025-05-19
 
 ### Fixed
 
 * Fixed wrong `unsafe-case-switching` optimization for small jump tables ([#253](https://github.com/cardillan/mindcode/issues/253)).
 * Fixed wrong handling of side effects by the Case Switching optimization ([#254](https://github.com/cardillan/mindcode/issues/254)).
 * Fixed incorrect IDs produced by the `sensor ... @id` instruction ([#255](https://github.com/cardillan/mindcode/issues/255)).
+* Fixed unrecognized keywords for some instructions ([#256](https://github.com/cardillan/mindcode/issues/256)).
 * Fixed incorrect block type obtained through the `lookup` instruction in compile-time evaluation and the processor emulator for zero logic ID.  
 
 ### Added
@@ -24,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
  
 ### Changed
 
-* **Breaking**: The system library was changed to accommodate new logic instructions:
+* **Breaking**: The system library was changed to accommodate the new logic instructions:
   * The `sign` function in the `math` library was renamed to `signInexact`.
   * The `signExact` function in the `math` library was renamed to `sign`. This function corresponds to the Mindustry 8 instruction `op sign`, and when target 8 is selected, the instruction is used instead of the library implementation. 
   * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to match the `unpackcolor` instruction in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
