@@ -13,10 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition.W;
@@ -177,19 +174,28 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             w.print("<br/>");
             w.print(sample.note().replace('\'', '`'));
         } else {
-            sample.instruction().getTypedArguments().stream()
-                    .filter(arg -> arg.type().isKeyword())
-                    .forEach(arg -> {
-                        w.print("<br/>`");
-                        w.print(arg.argument().toMlog());
-                        w.print("` - one of `:");
-                        w.print(String.join("`, `:", processor.getParameterValues(arg.type())));
-                        w.print("`.");
-                    });
+            sample.instruction().getTypedArguments().forEach(arg -> printPossibleValues(processor, w, arg));
         }
         w.print("|`");
         w.print(LogicInstructionPrinter.toString(processor, sample.instruction()));
         w.println("`|");
+    }
+
+    private void printPossibleValues(InstructionProcessor processor, PrintWriter w, TypedArgument arg) {
+        Collection<String> values = arg.type().getVersionKeywords(processor.getProcessorVersion());
+        if (arg.type().isKeyword()) {
+            w.print("<br/>`");
+            w.print(arg.argument().toMlog());
+            w.print("` - one of `:");
+            w.print(String.join("`, `:", values));
+            w.print("`.");
+        } else if (!arg.type().isSelector() && !values.isEmpty()) {
+            w.print("<br/>`");
+            w.print(arg.argument().toMlog());
+            w.print("` - accepts `");
+            w.print(String.join("`, `", values));
+            w.print("`.");
+        }
     }
 
     private static String instructionName(Opcode opcode) {

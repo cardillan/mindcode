@@ -287,7 +287,7 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.SYNC,    glob("var"));
         add(list, V7,  MAX, W, FUNC, Opcode.GETFLAG, res("result"), in("flag"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETFLAG, in("flag"), in("value"));
-        add(list, V7,  MAX, W, PROP, Opcode.SETPROP, sensor("property"), block("object"), in("value"));
+        add(list, V7,  MAX, W, PROP, Opcode.SETPROP, settable("property"), block("object"), in("value"));
 
         add(list, V8A, MAX, W, FUNC, Opcode.PLAYSOUND, scope("true"),  sound("sound"), in("volume"), in("pitch"), unused("0"), in("x"), in("y"), bool("limit"));
         add(list, V8A, MAX, W, FUNC, Opcode.PLAYSOUND, scope("false"), sound("sound"), in("volume"), in("pitch"), in("pan"), unused("0"), unused("0"), bool("limit"));
@@ -398,6 +398,7 @@ public class MindustryOpcodeVariants {
     public static NamedParameter glob(String name) {
         return new NamedParameter(InstructionParameterType.GLOBAL, name);
     }
+
     public static NamedParameter group(String name) {
         return new NamedParameter(InstructionParameterType.GROUP, name);
     }
@@ -472,6 +473,10 @@ public class MindustryOpcodeVariants {
 
     public static NamedParameter sensor(String name) {
         return new NamedParameter(InstructionParameterType.SENSOR, name);
+    }
+
+    public static NamedParameter settable(String name) {
+        return new NamedParameter(InstructionParameterType.SETTABLE, name);
     }
 
     public static NamedParameter sound(String name) {

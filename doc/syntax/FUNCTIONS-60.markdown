@@ -133,7 +133,7 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = object.sensor(property)`|`sensor result object property`|
+|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@health`, `@maxHealth`, `@heat`, `@efficiency`, `@timescale`, `@rotation`, `@x`, `@y`, `@shootX`, `@shootY`, `@size`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@commanded`, `@name`, `@config`, `@payloadCount`, `@payloadType`, `@enabled`, `@configure`.|`sensor result object property`|
 
 ## Instruction `Operation`
 
@@ -177,7 +177,7 @@ Bind to the next unit of a type, and store it in @unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`unit = ubind(type)`|`ubind type`|
+|`unit = ubind(type)`<br/>`type` - accepts `@dagger`, `@mace`, `@fortress`, `@scepter`, `@reign`, `@nova`, `@pulsar`, `@quasar`, `@vela`, `@corvus`, `@crawler`, `@atrax`, `@spiroct`, `@arkyid`, `@toxopid`, `@flare`, `@horizon`, `@zenith`, `@antumbra`, `@eclipse`, `@mono`, `@poly`, `@mega`, `@quad`, `@oct`, `@risso`, `@minke`, `@bryde`, `@sei`, `@omura`, `@alpha`, `@beta`, `@gamma`, `@block`.|`ubind type`|
 
 ## Instruction `Unit Control`
 
@@ -196,7 +196,7 @@ Control the currently bound unit.
 |`target(x, y, shoot)`|`ucontrol target x y shoot 0 0`|
 |`targetp(unit, shoot)`|`ucontrol targetp unit shoot 0 0 0`|
 |`itemDrop(to, amount)`|`ucontrol itemDrop to amount 0 0 0`|
-|`itemTake(from, item, amount)`|`ucontrol itemTake from item amount 0 0`|
+|`itemTake(from, item, amount)`<br/>`item` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`.|`ucontrol itemTake from item amount 0 0`|
 |`payDrop()`|`ucontrol payDrop 0 0 0 0 0`|
 |`payTake(takeUnits)`|`ucontrol payTake takeUnits 0 0 0 0`|
 |`mine(x, y)`|`ucontrol mine x y 0 0 0`|
@@ -223,8 +223,8 @@ Locate a specific type of position/building anywhere on the map. Requires a boun
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`found = ulocate(:ore, oreType, out outx, out outy)`|`ulocate ore core true oreType outx outy found 0`|
-|`found = ulocate(:building, group, enemy, out outx, out outy, out building)`<br/>`group` - one of `:core`, `:storage`, `:generator`, `:turret`, `:factory`, `:repair`, `:battery`, `:reactor`, `:rally`, `:resupply`.|`ulocate building group enemy @copper outx outy found building`|
+|`found = ulocate(:ore, oreType, out outx, out outy)`<br/>`oreType` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`.|`ulocate ore core true oreType outx outy found 0`|
+|`found = ulocate(:building, group, enemy, out outx, out outy, out building)`<br/>`group` - one of `:core`, `:storage`, `:generator`, `:turret`, `:factory`, `:repair`, `:rally`, `:battery`, `:resupply`, `:reactor`.|`ulocate building group enemy @copper outx outy found building`|
 |`found = ulocate(:spawn, out outx, out outy, out building)`|`ulocate spawn core true @copper outx outy found building`|
 |`found = ulocate(:damaged, out outx, out outy, out building)`|`ulocate damaged core true @copper outx outy found building`|
 

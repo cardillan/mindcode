@@ -79,9 +79,7 @@ public class InstructionSamplesTest {
             if (arg.type() == InstructionParameterType.LABEL) {
                 combinations.add(List.of("0"));
             } else if (arg.type().isKeyword()) {
-                combinations.add(arg.type().getAllowedValues().stream()
-                        .filter(v -> v.versions.contains(processorVersion))
-                        .flatMap(v -> v.values.stream())
+                combinations.add(arg.type().getVersionKeywords(processorVersion).stream()
                         .sorted()
                         .toList());
             } else {

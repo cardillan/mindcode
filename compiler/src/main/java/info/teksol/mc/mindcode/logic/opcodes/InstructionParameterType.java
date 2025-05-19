@@ -1,20 +1,22 @@
 package info.teksol.mc.mindcode.logic.opcodes;
 
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
-import java.util.EnumSet;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
-
-import static info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion.*;
+import java.util.TreeSet;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 // TODO Fill in parameter names for all keywords/selectors. Change error message to include a parameter name.
 
 @NullMarked
 public enum InstructionParameterType {
     ///  Alignment for the DRAW PRINT instruction. 
-    ALIGNMENT       ("alignment", Flags.KEYWORD, "center", "top", "bottom", "left", "right",
-            "topLeft", "topRight", "bottomLeft", "bottomRight"),
+    ALIGNMENT       ("alignment", Flags.KEYWORD, MindustryMetadata::getAlignments),
 
     /// Mindcode's array - a ValueStore instance
     ARRAY           (Flags.SPECIAL),
@@ -50,12 +52,7 @@ public enum InstructionParameterType {
     GLOBAL          (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
 
     ///  A const parameter. Specifies group of buildings to locate. 
-    GROUP           ("blockGroup", Flags.KEYWORD,
-            allVersions(
-                    "core", "storage", "generator", "turret", "factory", "repair", "battery", "reactor"),
-            specificVersion(V6,
-                    "rally", "resupply")
-    ),
+    GROUP           ("blockGroup", Flags.KEYWORD, MindustryMetadata::getBlockFlags),
 
     ///  Non-specific input parameter. Accepts literals and variables 
     INPUT           (Flags.INPUT),
@@ -67,20 +64,17 @@ public enum InstructionParameterType {
     LABEL           (Flags.INPUT),
 
     ///  Layer in getBlock instruction. 
-    LAYER           ("layer", Flags.KEYWORD, "floor", "ore", "block", "building"),
+    LAYER           ("layer", Flags.KEYWORD, MindustryMetadata::getTileLayers),
 
     ///  Selector for the ULOCATE instruction. No Flags.FUNCTION! 
     LOCATE          ("locate", Flags.SELECTOR),
 
     /// A const parameter. Specifies lookup category. The entire instruction is only available in V7;
     /// the parameter keywords therefore aren't version specific.
-    LOOKUP          ("itemType", Flags.KEYWORD,
-            allVersions("block", "unit", "item", "liquid"),
-            specificVersions(V8A, MAX, "team")
-    ),
+    LOOKUP          ("itemType", Flags.KEYWORD, MindustryMetadata::getLookableContents),
 
     ///  Type of message in MESSAGE instruction 
-    MAKE_MARKER     ("markerType", Flags.KEYWORD, "shapeText", "point", "shape", "text", "line", "texture", "quad"),
+    MAKE_MARKER     ("markerType", Flags.KEYWORD, MindustryMetadata::getMarkerTypes),
 
     ///  Type of message in MESSAGE instruction 
     MESSAGE         (Flags.SELECTOR),
@@ -89,23 +83,16 @@ public enum InstructionParameterType {
     OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
 
     ///  Input parameter accepting ore type. 
-    ORE             ("oreType", Flags.INPUT,
-            allVersions(
-                    "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
-                    "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
-                    "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite"),
-            specificVersions(V7, MAX,
-                    "@beryllium", "@tungsten", "@oxide", "@carbide", "@fissile-matter", "@dormant-cyst")
-    ),
+    ORE             ("oreType", Flags.INPUT, MindustryMetadata::getItemNames),
 
     ///  Output parameter. Sets a value of a variable in parameter list. 
     OUTPUT          (Flags.OUTPUT),
 
     ///  A const parameter. Specifies properties of units searchable by radar. 
-    RADAR           ("category", Flags.KEYWORD, "any", "enemy", "ally", "player", "attacker", "flying", "boss", "ground"),
+    RADAR           ("category", Flags.KEYWORD, MindustryMetadata::getRadarTargets),
 
     ///  A const parameter. Specifies property to sort radar outputs by. 
-    RADAR_SORT      ("sortBy", Flags.KEYWORD, "distance", "health", "shield", "armor", "maxHealth"),
+    RADAR_SORT      ("sortBy", Flags.KEYWORD, MindustryMetadata::getRadarSorts),
 
     ///  Output parameter. Maps to the return value of a function. 
     RESULT          (Flags.OUTPUT),
@@ -117,77 +104,28 @@ public enum InstructionParameterType {
     SCOPE           (Flags.SELECTOR),
 
     ///  Input parameter accepting property id. 
-    SENSOR          ("property", Flags.INPUT,
-            allVersions(
-                    "@copper", "@lead", "@metaglass", "@graphite", "@sand", "@coal",
-                    "@titanium", "@thorium", "@scrap", "@silicon", "@plastanium", "@phase-fabric",
-                    "@surge-alloy", "@spore-pod", "@blast-compound", "@pyratite",
-                    "@water", "@slag", "@oil", "@cryofluid",
-                    "@totalItems", "@firstItem", "@totalLiquids", "@totalPower", "@itemCapacity", "@liquidCapacity",
-                    "@powerCapacity", "@powerNetStored", "@powerNetCapacity", "@powerNetIn", "@powerNetOut",
-                    "@ammo", "@ammoCapacity", "@health", "@maxHealth", "@heat", "@efficiency", "@timescale", "@rotation",
-                    "@x", "@y", "@shootX", "@shootY", "@size", "@dead", "@range", "@shooting", "@boosting",
-                    "@mineX", "@mineY", "@mining", "@team", "@type", "@flag", "@controlled", "@controller",
-                    "@name", "@payloadCount", "@payloadType", "@enabled", "@config"),
-            specificVersion(V6,
-                    "@commanded", "@configure"),
-            specificVersions(V7, MAX,
-                    "@beryllium", "@tungsten", "@oxide", "@carbide",
-                    "@neoplasm", "@arkycite", "@ozone", "@hydrogen", "@nitrogen", "@cyanogen",
-                    "@progress", "@speed", "@color"),
-            specificVersions(V7A, MAX,
-                    "@id"),
-            specificVersions(V8A, MAX,
-                    "@currentAmmoType", "@armor", "@velocityX", "@velocityY",
-                    "@cameraX", "@cameraY", "@cameraWidth", "@cameraHeight", "@solid")
-    ),
+    SENSOR          ("property", Flags.INPUT, MindustryMetadata::getLAccessNames),
 
-    ///  For the SET MARKER instruction 
+    ///  Input parameter accepting settable property id.
+    SETTABLE        ("property", Flags.INPUT, MindustryMetadata::getLAccessSettableNames),
+
+    ///  For the SET MARKER instruction
     SET_MARKER      (Flags.SELECTOR),
 
     ///  Settable layer in SETBLOCK instruction 
-    SETTABLE_LAYER  ("layer", Flags.SELECTOR, "floor", "ore", "block"),
+    SETTABLE_LAYER  ("layer", Flags.SELECTOR, MindustryMetadata::getTileLayersSettable),
 
     ///  Sound to play 
-    SOUND           ("sound", Flags.INPUT, "@sfx-artillery", "@sfx-bang", "@sfx-beam", "@sfx-bigshot", "@sfx-bioLoop",
-            "@sfx-blaster", "@sfx-bolt", "@sfx-boom", "@sfx-break", "@sfx-build", "@sfx-buttonClick", "@sfx-cannon", "@sfx-click",
-            "@sfx-combustion", "@sfx-conveyor", "@sfx-corexplode", "@sfx-cutter", "@sfx-door", "@sfx-drill", "@sfx-drillCharge",
-            "@sfx-drillImpact", "@sfx-dullExplosion", "@sfx-electricHum", "@sfx-explosion", "@sfx-explosionbig", "@sfx-extractLoop",
-            "@sfx-fire", "@sfx-flame", "@sfx-flame2", "@sfx-flux", "@sfx-glow", "@sfx-grinding", "@sfx-hum", "@sfx-largeCannon",
-            "@sfx-largeExplosion", "@sfx-laser", "@sfx-laserbeam", "@sfx-laserbig", "@sfx-laserblast", "@sfx-lasercharge",
-            "@sfx-lasercharge2", "@sfx-lasershoot", "@sfx-machine", "@sfx-malignShoot", "@sfx-mediumCannon", "@sfx-minebeam",
-            "@sfx-mineDeploy", "@sfx-missile", "@sfx-missileLarge", "@sfx-missileLaunch", "@sfx-missileSmall", "@sfx-missileTrail",
-            "@sfx-mud", "@sfx-noammo", "@sfx-pew", "@sfx-place", "@sfx-plantBreak", "@sfx-plasmaboom", "@sfx-plasmadrop", "@sfx-pulse",
-            "@sfx-pulseBlast", "@sfx-railgun", "@sfx-rain", "@sfx-release", "@sfx-respawn", "@sfx-respawning", "@sfx-rockBreak",
-            "@sfx-sap", "@sfx-shield", "@sfx-shockBlast", "@sfx-shoot", "@sfx-shootAlt", "@sfx-shootAltLong", "@sfx-shootBig",
-            "@sfx-shootSmite", "@sfx-shootSnap", "@sfx-shotgun", "@sfx-smelter", "@sfx-spark", "@sfx-spellLoop", "@sfx-splash",
-            "@sfx-spray", "@sfx-steam", "@sfx-swish", "@sfx-techloop", "@sfx-thruster", "@sfx-titanExplosion", "@sfx-torch",
-            "@sfx-tractorbeam", "@sfx-wave", "@sfx-wind", "@sfx-wind2", "@sfx-wind3", "@sfx-windhowl"),
+    SOUND           ("sound", Flags.INPUT, MindustryMetadata::getSoundNames),
 
     ///  Unit status in STATUS instruction. 
-    STATUS          ("status", Flags.KEYWORD, "burning", "freezing", "unmoving", "wet", "melting", "sapped", "electrified",
-            "spore-slowed", "tarred", "overdrive", "boss", "shocked", "blasted"),
+    STATUS          ("status", Flags.KEYWORD, MindustryMetadata::getStatusEffects),
 
     /// Expected type of value
-    TYPE            ("valueType", Flags.KEYWORD, "any", "notNull", "decimal", "integer", "multiple"),
+    TYPE            ("valueType", Flags.KEYWORD, m -> List.of("any", "notNull", "decimal", "integer", "multiple")),
 
     ///  Input parameter accepting unit type.
-    UNIT            ("unitType", Flags.INPUT,
-            allVersions(
-                    "@dagger", "@mace", "@fortress", "@scepter", "@reign",
-                    "@nova", "@pulsar", "@quasar", "@vela", "@corvus",
-                    "@crawler", "@atrax", "@spiroct", "@arkyid", "@toxopid",
-                    "@flare", "@horizon", "@zenith", "@antumbra", "@eclipse",
-                    "@mono", "@poly", "@mega", "@quad", "@oct",
-                    "@risso", "@minke", "@bryde", "@sei", "@omura",
-                    "@alpha", "@beta", "@gamma"),
-            specificVersions(V7, MAX,
-                    "@retusa", "@oxynoe", "@cyerce", "@aegires", "@navanax",
-                    "@stell", "@locus", "@precept", "@vanquish", "@conquer",
-                    "@merui", "@cleroi", "@anthicus", "@tecta", "@collaris",
-                    "@elude", "@avert", "@obviate", "@quell", "@disrupt",
-                    "@evoke", "@incite", "@emanate")
-    ),
+    UNIT            ("unitType", Flags.INPUT, MindustryMetadata::getUnitTypes),
 
     ///  Selector for the UCONTROL instruction. 
     UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION),
@@ -201,36 +139,30 @@ public enum InstructionParameterType {
     ///  An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. 
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
 
-    WEATHER         ("weather", Flags.INPUT, "@snowing", "@rain", "@sandstorm", "@sporestorm", "@fog", "@suspend-particles"),
+    WEATHER         ("weather", Flags.INPUT, MindustryMetadata::getWeathers),
 
     ;
 
     private final String typeName;
     private final int flags;
-    private final List<ParameterValues> allowedValues;
+    private final @Nullable Function<MindustryMetadata, Collection<String>> keywordsSupplier;
 
     InstructionParameterType(int flags) {
         this.typeName = name();
         this.flags = flags;
-        this.allowedValues = List.of();
+        this.keywordsSupplier = null;
     }
 
     InstructionParameterType(String typeName, int flags) {
         this.typeName = typeName;
         this.flags = flags;
-        this.allowedValues = List.of();
+        this.keywordsSupplier = null;
     }
 
-    InstructionParameterType(String typeName, int flags, String... keywords) {
+    InstructionParameterType(String typeName, int flags, Function<MindustryMetadata, Collection<String>> keywordsSupplier) {
         this.typeName = typeName;
         this.flags = flags;
-        this.allowedValues = List.of(allVersions(keywords));
-    }
-
-    InstructionParameterType(String typeName, int flags, ParameterValues... keywords) {
-        this.typeName = typeName;
-        this.flags = flags;
-        this.allowedValues = List.of(keywords);
+        this.keywordsSupplier = keywordsSupplier;
     }
 
     public String getTypeName() {
@@ -251,8 +183,6 @@ public enum InstructionParameterType {
     public boolean isInput() {
         return (flags & Flags.INPUT) != 0;
     }
-
-
 
     /// @return true if this parameter can write to a variable
     public boolean isOutput() {
@@ -284,29 +214,22 @@ public enum InstructionParameterType {
         return (flags & (Flags.INPUT | Flags.OUTPUT | Flags.UNUSED | Flags.SPECIAL)) == 0;
     }
 
-    public List<ParameterValues> getAllowedValues() {
-        return allowedValues;
+    public Collection<String> getVersionKeywords(ProcessorVersion version) {
+        if (keywordsSupplier == null) {
+            return List.of();
+        } else {
+            return keywordsSupplier.apply(MindustryMetadata.forVersion(version));
+        }
     }
 
-    private static ParameterValues allVersions(String... keywords) {
-        return new ParameterValues(Set.copyOf(EnumSet.allOf(ProcessorVersion.class)), List.of(keywords));
-    }
-
-    private static ParameterValues specificVersion(ProcessorVersion version, String... keywords) {
-        return new ParameterValues(Set.of(version), List.of(keywords));
-    }
-
-    private static ParameterValues specificVersions(ProcessorVersion minVersion, ProcessorVersion maxVersion, String... keywords) {
-        return new ParameterValues(ProcessorVersion.matching(minVersion, maxVersion), List.of(keywords));
-    }
-
-    public static class ParameterValues {
-        public final Set<ProcessorVersion> versions;
-        public final List<String> values;
-
-        private ParameterValues(Set<ProcessorVersion> versions, List<String> keywords) {
-            this.versions = versions;
-            this.values = keywords;
+    public Collection<String> getAllKeywords() {
+        if (keywordsSupplier == null) {
+            return List.of();
+        } else {
+            return Arrays.stream(ProcessorVersion.values())
+                    .map(this::getVersionKeywords)
+                    .flatMap(Collection::stream)
+                    .collect(Collectors.toCollection(TreeSet::new));
         }
     }
 

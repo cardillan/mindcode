@@ -34,6 +34,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Miscellaneous
 
+* List of supported keywords and built-in variables for instruction parameters are now provided by mimex-generated metadata.  
+* Added list of accepted built-in variables to the description of functions in the function reference.
 * The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
 * Updated BE metadata to the last available BE build.
 * Added new metadata types, fixed zero logic IDs problem.

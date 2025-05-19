@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.FunctionMapping;
 import info.teksol.mc.mindcode.logic.opcodes.MindustryOpcodeVariants;
+import info.teksol.mc.mindcode.logic.opcodes.NamedParameter;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.schemacode.grammar.SchemacodeLexer;
 import org.antlr.v4.runtime.Vocabulary;
@@ -18,6 +19,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -59,11 +61,15 @@ public class CreateIdeaSettingsTest {
                 .filter(o -> o.functionMapping() != FunctionMapping.NONE)
                 .flatMap(opcodeVariant -> opcodeVariant.namedParameters().stream())
                 .filter(p -> (p.type().isKeyword() || p.type().isSelector()) && !p.type().isFunctionName())
-                .flatMap(p -> p.type().getAllowedValues().isEmpty() ? Stream.of(p.name())
-                        : p.type().getAllowedValues().stream().flatMap(v -> v.values.stream()))
+                .flatMap(CreateIdeaSettingsTest::getAllParameterKeywords)
                 .sorted()
                 .distinct()
                 .toList();
+    }
+
+    private static Stream<String> getAllParameterKeywords(NamedParameter p) {
+        Collection<String> allKeywords = p.type().getAllKeywords();
+        return allKeywords.isEmpty() ? Stream.of(p.name()) : allKeywords.stream();
     }
 
     @Test

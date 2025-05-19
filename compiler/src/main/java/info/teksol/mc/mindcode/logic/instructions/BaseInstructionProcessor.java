@@ -516,10 +516,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                     .collect(Collectors.toCollection(LinkedHashSet::new));
         } else {
             // Select only compatible keywords and put them into a set
-            return type.getAllowedValues().stream()
-                    .filter(v -> v.versions.contains(processorVersion))
-                    .flatMap(v -> v.values.stream())
-                    .collect(Collectors.toCollection(LinkedHashSet::new));
+            return type.getVersionKeywords(processorVersion);
         }
     }
 

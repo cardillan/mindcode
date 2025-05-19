@@ -214,7 +214,7 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = object.sensor(property)`|`sensor result object property`|
+|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferUsage`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@id`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
 
 ## Instruction `Operation`
 
@@ -254,7 +254,7 @@ Look up an item/liquid/unit/block type by ID. Total counts of each type can be a
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = lookup(type, index)`<br/>`type` - one of `:block`, `:unit`, `:item`, `:liquid`, `:team`.|`lookup type result index`|
+|`result = lookup(type, index)`<br/>`type` - one of `:item`, `:block`, `:liquid`, `:unit`, `:team`.|`lookup type result index`|
 
 ## Instruction `Pack Color`
 
@@ -314,7 +314,7 @@ Bind to the next unit of a type, and store it in @unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`unit = ubind(type)`|`ubind type`|
+|`unit = ubind(type)`<br/>`type` - accepts `@dagger`, `@mace`, `@fortress`, `@scepter`, `@reign`, `@nova`, `@pulsar`, `@quasar`, `@vela`, `@corvus`, `@crawler`, `@atrax`, `@spiroct`, `@arkyid`, `@toxopid`, `@flare`, `@horizon`, `@zenith`, `@antumbra`, `@eclipse`, `@mono`, `@poly`, `@mega`, `@quad`, `@oct`, `@risso`, `@minke`, `@bryde`, `@sei`, `@omura`, `@retusa`, `@oxynoe`, `@cyerce`, `@aegires`, `@navanax`, `@alpha`, `@beta`, `@gamma`, `@stell`, `@locus`, `@precept`, `@vanquish`, `@conquer`, `@merui`, `@cleroi`, `@anthicus`, `@anthicus-missile`, `@tecta`, `@collaris`, `@elude`, `@avert`, `@obviate`, `@quell`, `@quell-missile`, `@disrupt`, `@disrupt-missile`, `@renale`, `@latum`, `@evoke`, `@incite`, `@emanate`, `@block`, `@manifold`, `@assembly-drone`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@turret-unit-build-tower`.|`ubind type`|
 
 ## Instruction `Unit Control`
 
@@ -334,7 +334,7 @@ Control the currently bound unit.
 |`target(x, y, shoot)`|`ucontrol target x y shoot 0 0`|
 |`targetp(unit, shoot)`|`ucontrol targetp unit shoot 0 0 0`|
 |`itemDrop(to, amount)`|`ucontrol itemDrop to amount 0 0 0`|
-|`itemTake(from, item, amount)`|`ucontrol itemTake from item amount 0 0`|
+|`itemTake(from, item, amount)`<br/>`item` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`, `@beryllium`, `@tungsten`, `@oxide`, `@carbide`, `@fissile-matter`, `@dormant-cyst`.|`ucontrol itemTake from item amount 0 0`|
 |`payDrop()`|`ucontrol payDrop 0 0 0 0 0`|
 |`payTake(takeUnits)`|`ucontrol payTake takeUnits 0 0 0 0`|
 |`payEnter()`|`ucontrol payEnter 0 0 0 0 0`|
@@ -363,8 +363,8 @@ Locate a specific type of position/building anywhere on the map. Requires a boun
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`found = ulocate(:ore, oreType, out outx, out outy)`|`ulocate ore core true oreType outx outy found 0`|
-|`building = ulocate(:building, group, enemy, out outx, out outy, out found)`<br/>`group` - one of `:core`, `:storage`, `:generator`, `:turret`, `:factory`, `:repair`, `:battery`, `:reactor`.|`ulocate building group enemy @copper outx outy found building`|
+|`found = ulocate(:ore, oreType, out outx, out outy)`<br/>`oreType` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`, `@beryllium`, `@tungsten`, `@oxide`, `@carbide`, `@fissile-matter`, `@dormant-cyst`.|`ulocate ore core true oreType outx outy found 0`|
+|`building = ulocate(:building, group, enemy, out outx, out outy, out found)`<br/>`group` - one of `:core`, `:storage`, `:generator`, `:turret`, `:factory`, `:repair`, `:battery`, `:reactor`, `:drill`, `:shield`.|`ulocate building group enemy @copper outx outy found building`|
 |`building = ulocate(:spawn, out outx, out outy, out found)`|`ulocate spawn core true @copper outx outy found building`|
 |`building = ulocate(:damaged, out outx, out outy, out found)`|`ulocate damaged core true @copper outx outy found building`|
 
@@ -393,7 +393,7 @@ Set tile data at any location.
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
 |`setblock(:floor, to, x, y)`|`setblock floor to x y 0 0`|
-|`setblock(:ore, to, x, y)`|`setblock ore to x y 0 0`|
+|`setblock(:ore, to, x, y)`<br/>`to` - accepts `@copper`, `@lead`, `@metaglass`, `@graphite`, `@sand`, `@coal`, `@titanium`, `@thorium`, `@scrap`, `@silicon`, `@plastanium`, `@phase-fabric`, `@surge-alloy`, `@spore-pod`, `@blast-compound`, `@pyratite`, `@beryllium`, `@tungsten`, `@oxide`, `@carbide`, `@fissile-matter`, `@dormant-cyst`.|`setblock ore to x y 0 0`|
 |`setblock(:block, to, x, y, team, rotation)`|`setblock block to x y team rotation`|
 
 ## Instruction `Spawn Unit`
@@ -404,7 +404,7 @@ Spawn unit at a location.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = spawn(unit, x, y, rotation, team)`|`spawn unit x y rotation team result`|
+|`result = spawn(unit, x, y, rotation, team)`<br/>`unit` - accepts `@dagger`, `@mace`, `@fortress`, `@scepter`, `@reign`, `@nova`, `@pulsar`, `@quasar`, `@vela`, `@corvus`, `@crawler`, `@atrax`, `@spiroct`, `@arkyid`, `@toxopid`, `@flare`, `@horizon`, `@zenith`, `@antumbra`, `@eclipse`, `@mono`, `@poly`, `@mega`, `@quad`, `@oct`, `@risso`, `@minke`, `@bryde`, `@sei`, `@omura`, `@retusa`, `@oxynoe`, `@cyerce`, `@aegires`, `@navanax`, `@alpha`, `@beta`, `@gamma`, `@stell`, `@locus`, `@precept`, `@vanquish`, `@conquer`, `@merui`, `@cleroi`, `@anthicus`, `@anthicus-missile`, `@tecta`, `@collaris`, `@elude`, `@avert`, `@obviate`, `@quell`, `@quell-missile`, `@disrupt`, `@disrupt-missile`, `@renale`, `@latum`, `@evoke`, `@incite`, `@emanate`, `@block`, `@manifold`, `@assembly-drone`, `@scathe-missile`, `@scathe-missile-phase`, `@scathe-missile-surge`, `@scathe-missile-surge-split`, `@turret-unit-build-tower`.|`spawn unit x y rotation team result`|
 
 ## Instruction `Apply Status`
 
@@ -414,8 +414,8 @@ Apply or clear a status effect from a unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`applyStatus(status, unit, duration)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:boss`, `:shocked`, `:blasted`.|`status false status unit duration`|
-|`clearStatus(status, unit)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:boss`, `:shocked`, `:blasted`.|`status true status unit 0`|
+|`applyStatus(status, unit, duration)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`.|`status false status unit duration`|
+|`clearStatus(status, unit)`<br/>`status` - one of `:burning`, `:freezing`, `:unmoving`, `:wet`, `:melting`, `:sapped`, `:electrified`, `:spore-slowed`, `:tarred`, `:overdrive`, `:overclock`, `:boss`, `:shocked`, `:blasted`.|`status true status unit 0`|
 
 ## Instruction `Weather Sense`
 
@@ -425,7 +425,7 @@ Check if a type of weather is active.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = weathersense(weather)`|`weathersense result weather`|
+|`result = weathersense(weather)`<br/>`weather` - accepts `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog`, `@suspend-particles`.|`weathersense result weather`|
 
 ## Instruction `Weather Set`
 
@@ -435,7 +435,7 @@ Set the current state of a type of weather.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`weatherset(weather, active)`|`weatherset weather active`|
+|`weatherset(weather, active)`<br/>`weather` - accepts `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog`, `@suspend-particles`.|`weatherset weather active`|
 
 ## Instruction `Spawn Wave`
 
@@ -621,7 +621,7 @@ Sets a property of a unit or building.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`object.setprop(property, value)`|`setprop property object value`|
+|`object.setprop(property, value)`<br/>`property` - accepts `@totalPower`, `@health`, `@shield`, `@armor`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@speed`, `@team`, `@flag`, `@payloadType`.|`setprop property object value`|
 
 ## Instruction `Play Sound`
 
@@ -631,8 +631,8 @@ Plays a sound. Volume and pan can be a global value, or calculated based on posi
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`playsound(:true, sound, volume, pitch, x, y, limit)`|`playsound true sound volume pitch 0 x y limit`|
-|`playsound(:false, sound, volume, pitch, pan, limit)`|`playsound false sound volume pitch pan 0 0 limit`|
+|`playsound(:true, sound, volume, pitch, x, y, limit)`<br/>`sound` - accepts `@sfx-artillery`, `@sfx-back`, `@sfx-bang`, `@sfx-beam`, `@sfx-bigshot`, `@sfx-bioLoop`, `@sfx-blaster`, `@sfx-bolt`, `@sfx-boom`, `@sfx-break`, `@sfx-build`, `@sfx-buttonClick`, `@sfx-cannon`, `@sfx-chatMessage`, `@sfx-click`, `@sfx-combustion`, `@sfx-conveyor`, `@sfx-corexplode`, `@sfx-cutter`, `@sfx-door`, `@sfx-drill`, `@sfx-drillCharge`, `@sfx-drillImpact`, `@sfx-dullExplosion`, `@sfx-electricHum`, `@sfx-explosion`, `@sfx-explosionbig`, `@sfx-extractLoop`, `@sfx-fire`, `@sfx-flame`, `@sfx-flame2`, `@sfx-flux`, `@sfx-glow`, `@sfx-grinding`, `@sfx-hum`, `@sfx-largeCannon`, `@sfx-largeExplosion`, `@sfx-laser`, `@sfx-laserbeam`, `@sfx-laserbig`, `@sfx-laserblast`, `@sfx-lasercharge`, `@sfx-lasercharge2`, `@sfx-lasershoot`, `@sfx-machine`, `@sfx-malignShoot`, `@sfx-mediumCannon`, `@sfx-message`, `@sfx-mineDeploy`, `@sfx-minebeam`, `@sfx-missile`, `@sfx-missileLarge`, `@sfx-missileLaunch`, `@sfx-missileSmall`, `@sfx-missileTrail`, `@sfx-mud`, `@sfx-noammo`, `@sfx-pew`, `@sfx-place`, `@sfx-plantBreak`, `@sfx-plasmaboom`, `@sfx-plasmadrop`, `@sfx-press`, `@sfx-pulse`, `@sfx-pulseBlast`, `@sfx-railgun`, `@sfx-rain`, `@sfx-release`, `@sfx-respawn`, `@sfx-respawning`, `@sfx-rockBreak`, `@sfx-sap`, `@sfx-shield`, `@sfx-shockBlast`, `@sfx-shoot`, `@sfx-shootAlt`, `@sfx-shootAltLong`, `@sfx-shootBig`, `@sfx-shootSmite`, `@sfx-shootSnap`, `@sfx-shotgun`, `@sfx-smelter`, `@sfx-spark`, `@sfx-spellLoop`, `@sfx-splash`, `@sfx-spray`, `@sfx-steam`, `@sfx-techloop`, `@sfx-thruster`, `@sfx-titanExplosion`, `@sfx-torch`, `@sfx-tractorbeam`, `@sfx-unlock`, `@sfx-wave`, `@sfx-wind`, `@sfx-wind2`, `@sfx-wind3`, `@sfx-windhowl`.|`playsound true sound volume pitch 0 x y limit`|
+|`playsound(:false, sound, volume, pitch, pan, limit)`<br/>`sound` - accepts `@sfx-artillery`, `@sfx-back`, `@sfx-bang`, `@sfx-beam`, `@sfx-bigshot`, `@sfx-bioLoop`, `@sfx-blaster`, `@sfx-bolt`, `@sfx-boom`, `@sfx-break`, `@sfx-build`, `@sfx-buttonClick`, `@sfx-cannon`, `@sfx-chatMessage`, `@sfx-click`, `@sfx-combustion`, `@sfx-conveyor`, `@sfx-corexplode`, `@sfx-cutter`, `@sfx-door`, `@sfx-drill`, `@sfx-drillCharge`, `@sfx-drillImpact`, `@sfx-dullExplosion`, `@sfx-electricHum`, `@sfx-explosion`, `@sfx-explosionbig`, `@sfx-extractLoop`, `@sfx-fire`, `@sfx-flame`, `@sfx-flame2`, `@sfx-flux`, `@sfx-glow`, `@sfx-grinding`, `@sfx-hum`, `@sfx-largeCannon`, `@sfx-largeExplosion`, `@sfx-laser`, `@sfx-laserbeam`, `@sfx-laserbig`, `@sfx-laserblast`, `@sfx-lasercharge`, `@sfx-lasercharge2`, `@sfx-lasershoot`, `@sfx-machine`, `@sfx-malignShoot`, `@sfx-mediumCannon`, `@sfx-message`, `@sfx-mineDeploy`, `@sfx-minebeam`, `@sfx-missile`, `@sfx-missileLarge`, `@sfx-missileLaunch`, `@sfx-missileSmall`, `@sfx-missileTrail`, `@sfx-mud`, `@sfx-noammo`, `@sfx-pew`, `@sfx-place`, `@sfx-plantBreak`, `@sfx-plasmaboom`, `@sfx-plasmadrop`, `@sfx-press`, `@sfx-pulse`, `@sfx-pulseBlast`, `@sfx-railgun`, `@sfx-rain`, `@sfx-release`, `@sfx-respawn`, `@sfx-respawning`, `@sfx-rockBreak`, `@sfx-sap`, `@sfx-shield`, `@sfx-shockBlast`, `@sfx-shoot`, `@sfx-shootAlt`, `@sfx-shootAltLong`, `@sfx-shootBig`, `@sfx-shootSmite`, `@sfx-shootSnap`, `@sfx-shotgun`, `@sfx-smelter`, `@sfx-spark`, `@sfx-spellLoop`, `@sfx-splash`, `@sfx-spray`, `@sfx-steam`, `@sfx-techloop`, `@sfx-thruster`, `@sfx-titanExplosion`, `@sfx-torch`, `@sfx-tractorbeam`, `@sfx-unlock`, `@sfx-wave`, `@sfx-wind`, `@sfx-wind2`, `@sfx-wind3`, `@sfx-windhowl`.|`playsound false sound volume pitch pan 0 0 limit`|
 
 ## Instruction `Set Marker`
 

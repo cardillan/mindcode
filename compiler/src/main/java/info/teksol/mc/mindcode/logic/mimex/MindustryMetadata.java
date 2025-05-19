@@ -12,6 +12,8 @@ import java.io.InputStreamReader;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -41,6 +43,7 @@ public class MindustryMetadata {
     private final AtomicReference<Map<String, UnitCommand>> unitCommandMap = new AtomicReference<>();
     private final AtomicReference<Map<String, LAccess>> lAccessMap = new AtomicReference<>();
     private final AtomicReference<Map<String, LVar>> lVarMap = new AtomicReference<>();
+    private final AtomicReference<Map<String, Weather>> weatherMap = new AtomicReference<>();
 
     private final AtomicReference<Map<Integer, BlockType>> blockIdMap = new AtomicReference<>();
     private final AtomicReference<Map<Integer, Item>> itemIdMap = new AtomicReference<>();
@@ -54,6 +57,19 @@ public class MindustryMetadata {
     private final AtomicReference<Map<Integer, Unit>> unitLogicIdMap = new AtomicReference<>();
 
     private final AtomicReference<Map<String, MindustryContent>> allConstants = new AtomicReference<>();
+
+    private final AtomicReference<Set<String>> alignments = new AtomicReference<>();
+    private final AtomicReference<Set<String>> blockFlags = new AtomicReference<>();
+    private final AtomicReference<Set<String>> tileLayers = new AtomicReference<>();
+    private final AtomicReference<Set<String>> lookableContents = new AtomicReference<>();
+    private final AtomicReference<Set<String>> markerTypes = new AtomicReference<>();
+    private final AtomicReference<Set<String>> radarTargets = new AtomicReference<>();
+    private final AtomicReference<Set<String>> radarSorts = new AtomicReference<>();
+    private final AtomicReference<Set<String>> lAccessNames = new AtomicReference<>();
+    private final AtomicReference<Set<String>> lAccessSettable = new AtomicReference<>();
+    private final AtomicReference<Set<String>> tileLayersSettable = new AtomicReference<>();
+    private final AtomicReference<Set<String>> soundNames = new AtomicReference<>();
+    private final AtomicReference<Set<String>> statusEffects = new AtomicReference<>();
 
     public static MindustryMetadata getLatest() {
         return forVersion(ProcessorVersion.MAX);
@@ -128,6 +144,10 @@ public class MindustryMetadata {
         return cacheInstance(lVarMap, () -> new LVarReader("mimex-vars.txt").createFromResource());
     }
 
+    Map<String, Weather> getWeatherMap() {
+        return cacheInstance(weatherMap, () -> new SimpleReader<>("mimex-weathers.txt", Weather::new).createFromResource());
+    }
+
     // ID to instance maps
 
     private <T extends MindustryContent> Map<Integer, T> createIdMap(Map<String, T> map) {
@@ -186,6 +206,73 @@ public class MindustryMetadata {
                         .flatMap(m -> m.values().stream())
                         .collect(Collectors.toMap(MindustryContent::name, t -> t,
                                 (a, b) -> a, HashMap::new)));
+    }
+
+    // Alignments
+    public Set<String> getAlignments() {
+        return cacheInstance(alignments, () -> new NamedReader("mimex-alignments.txt").createFromResource());
+    }
+
+    public Set<String> getBlockFlags() {
+        return cacheInstance(blockFlags, () -> new NamedReader("mimex-block-flags.txt",
+                "logic", "true"::equalsIgnoreCase).createFromResource());
+    }
+
+    public Set<String> getTileLayers() {
+        return cacheInstance(tileLayers, () -> new NamedReader("mimex-layers.txt").createFromResource());
+    }
+
+    public Set<String> getLookableContents() {
+        return cacheInstance(lookableContents, () -> new NamedReader("mimex-contents.txt",
+                "lookable", "true"::equalsIgnoreCase).createFromResource());
+    }
+
+    public Set<String> getMarkerTypes() {
+        return cacheInstance(markerTypes, () -> new NamedReader("mimex-markers.txt").createFromResource());
+    }
+
+    public Set<String> getRadarTargets() {
+        return cacheInstance(radarTargets, () -> new NamedReader("mimex-radar-targets.txt").createFromResource());
+    }
+
+    public Set<String> getRadarSorts() {
+        return cacheInstance(radarSorts, () -> new NamedReader("mimex-radar-sorts.txt").createFromResource());
+    }
+
+    public Set<String> getLAccessNames() {
+        return cacheInstance(lAccessNames, () -> getLAccessMap().values().stream()
+                .filter(LAccess::senseable)
+                .map(LAccess::name)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
+    }
+
+    public Set<String> getLAccessSettableNames() {
+        return cacheInstance(lAccessSettable, () -> getLAccessMap().values().stream()
+                .filter(LAccess::settable)
+                .map(LAccess::name)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
+    }
+
+    public Set<String> getTileLayersSettable() {
+        return cacheInstance(tileLayersSettable, () -> new NamedReader("mimex-layers.txt",
+                "settable", "true"::equalsIgnoreCase).createFromResource());
+    }
+
+    public Set<String> getSoundNames() {
+        return cacheInstance(soundNames, () -> new NamedReader("mimex-sounds.txt", s -> "@sfx-" + s).createFromResource());
+    }
+
+    public Set<String> getStatusEffects() {
+        return cacheInstance(statusEffects, () -> new NamedReader("mimex-status-effects.txt",
+                "hidden", "false"::equalsIgnoreCase).createFromResource());
+    }
+
+    public Set<String> getUnitTypes() {
+        return getUnitMap().keySet();
+    }
+
+    public Set<String> getWeathers() {
+        return getWeatherMap().keySet();
     }
     //</editor-fold>
 
@@ -249,6 +336,10 @@ public class MindustryMetadata {
     public @Nullable Item getItemById(int id) {
         return getItemIdMap().get(id);
     }
+
+    public Set<String> getItemNames() {
+        return getItemMap().keySet();
+    }
     //</editor-fold>
     
     //<editor-fold desc="Liquids">
@@ -304,31 +395,28 @@ public class MindustryMetadata {
     //</editor-fold>
 
     //<editor-fold desc="Metadata loading">
-    private abstract class AbstractReader<T extends NamedContent> {
-        private final String resourceName;
-        private final List<String> lines;
-        private final List<String> header;
-        private final int logicIdIndex;
+    private abstract class AbstractReader {
+        protected final String resourceName;
+        protected final List<String> lines;
+        protected final List<String> header;
 
         protected abstract void parseHeader();
 
-        protected abstract @Nullable T create(String[] columns);
-
-        protected List<T> createUnregistered() {
-            return List.of();
-        }
-
-        public AbstractReader(String resource) {
+        protected AbstractReader(String resource) {
             this.resourceName = "/mimex/" + processorVersion.mimexVersion + "/" + resource;
 
-            try (InputStream input = Objects.requireNonNull(BlockTypeReader.class.getResourceAsStream(resourceName))) {
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-                lines = reader.lines()
-                        .filter(l -> !l.startsWith("//") && !l.isBlank())
-                        .toList();
-                header = List.of(lines.getFirst().split(";"));
-                parseHeader();
-                logicIdIndex = header.indexOf("logicId");
+            try (InputStream input = MindustryMetadata.class.getResourceAsStream(resourceName)) {
+                if (input == null) {
+                    lines = List.of();
+                    header = List.of();
+                } else {
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                    lines = reader.lines()
+                            .filter(l -> !l.startsWith("//") && !l.isBlank())
+                            .toList();
+                    header = List.of(lines.getFirst().split(";"));
+                    parseHeader();
+                }
             } catch (IOException e) {
                 throw new RuntimeException("Cannot read resource " + resourceName, e);
             } catch (Exception e) {
@@ -336,17 +424,32 @@ public class MindustryMetadata {
             }
         }
 
-        protected int parseLogicId(String[] columns) {
-            if (logicIdIndex < 0) return -1;
-            return Integer.parseInt(columns[logicIdIndex]);
-        }
-
         protected int findColumn(String columnName) {
             int index = header.indexOf(columnName);
-            if (index < 0) {
+            if (index < 0 && !header.isEmpty()) {
                 throw new IllegalStateException("Cannot locate column " + columnName + " in " + lines.getFirst());
             }
             return index;
+        }
+    }
+
+    private abstract class AbstractContentReader<T extends NamedContent> extends  AbstractReader {
+        protected final int logicIdIndex;
+
+        protected abstract @Nullable T create(String[] columns);
+
+        protected List<T> createUnregistered() {
+            return List.of();
+        }
+
+        public AbstractContentReader(String resource) {
+            super(resource);
+            logicIdIndex = header.indexOf("logicId");
+        }
+
+        protected int parseLogicId(String[] columns) {
+            if (logicIdIndex < 0) return -1;
+            return Integer.parseInt(columns[logicIdIndex]);
         }
 
         public Map<String, T> createFromResource() {
@@ -367,7 +470,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class SimpleReader<T extends MindustryContent> extends AbstractReader<T> {
+    private class SimpleReader<T extends MindustryContent> extends AbstractContentReader<T> {
         private interface ItemConstructor<T extends MindustryContent> {
             T construct(String contentName, String name, int id, int logicId);
         }
@@ -396,7 +499,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class BlockTypeReader extends AbstractReader<BlockType> {
+    private class BlockTypeReader extends AbstractContentReader<BlockType> {
         private int name, id, visibility, implementation, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
 
         public BlockTypeReader(String resource) {
@@ -443,7 +546,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class NamedColorReader extends AbstractReader<NamedColor> {
+    private class NamedColorReader extends AbstractContentReader<NamedColor> {
         private int name, rgba;
 
         public NamedColorReader(String resource) {
@@ -464,7 +567,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class LAccessReader extends AbstractReader<LAccess> {
+    private class LAccessReader extends AbstractContentReader<LAccess> {
         private int name, senseable, controls, settable, parameters;
 
         public LAccessReader(String resource) {
@@ -492,7 +595,7 @@ public class MindustryMetadata {
         }
     }
 
-    private class LVarReader extends AbstractReader<LVar> {
+    private class LVarReader extends AbstractContentReader<LVar> {
         private int name, global, isobj, constant, numval;
 
         public LVarReader(String resource) {
@@ -530,6 +633,57 @@ public class MindustryMetadata {
                     Boolean.parseBoolean(columns[constant]),
                     Double.parseDouble(columns[numval]))
                     : null;
+        }
+    }
+
+    private class NamedReader extends AbstractReader {
+        private final int filterColumn;
+        private final Predicate<String> filter;
+        private final Function<String, String> decorator;
+        private int name;
+
+        public NamedReader(String resource) {
+            super(resource);
+            filterColumn = 0;
+            filter = s -> true;
+            decorator = s -> s;
+        }
+
+        public NamedReader(String resource, String filterColumn, Predicate<String> filter) {
+            super(resource);
+            this.filterColumn = header.indexOf(filterColumn);
+            this.filter = filter;
+            this.decorator = s -> s;
+            if (this.filterColumn < 0 && !header.isEmpty()) {
+                throw new IllegalArgumentException("Cannot find column " + filterColumn + " in " + lines.getFirst());
+            }
+        }
+
+        public NamedReader(String resource, Function<String, String> decorator) {
+            super(resource);
+            this.filterColumn = 0;
+            this.filter = s -> true;
+            this.decorator = decorator;
+        }
+
+        protected void parseHeader() {
+            name = findColumn("name");
+        }
+
+        protected boolean matches(String[] columns) {
+            return filter.test(columns[filterColumn]);
+        }
+
+        public Set<String> createFromResource() {
+            try {
+                return lines.stream().skip(1)
+                        .map(l -> l.split(";", -1))
+                        .filter(this::matches)
+                        .map(columns -> decorator.apply(columns[name]))
+                        .collect(Collectors.toCollection(LinkedHashSet::new));
+            } catch (Exception e) {
+                throw new RuntimeException("Error parsing file " + resourceName, e);
+            }
         }
     }
     //</editor-fold>

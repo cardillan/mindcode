@@ -19,6 +19,7 @@ public enum ContentType {
     UNIT_COMMAND,
     LACCESS,
     LVAR,
+    WEATHER,
     ;
 
     public final boolean hasLookup;
