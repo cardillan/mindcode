@@ -312,7 +312,7 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   12 read :decode64:src data :decode64:index
 +   13 op shl *tmp1 :decode64:bytes 6
 +   14 set :charToInt:ch :decode64:src
-+   15 setaddr :charToInt*retaddr *label31 (h:*label9)
++   15 setaddr :charToInt*retaddr *label31
 +   16 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
 +   17 label *label31
 +   18 op or :decode64:bytes *tmp1 :charToInt*retval
@@ -327,7 +327,7 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   27 read :decode64:src data :decode64:index
 +   28 op shl *tmp1 :decode64:bytes 6
 +   29 set :charToInt:ch :decode64:src
-+   30 setaddr :charToInt*retaddr *label34 (h:*label9)
++   30 setaddr :charToInt*retaddr *label34
 +   31 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
 +   32 label *label34
 +   33 op or :decode64:bytes *tmp1 :charToInt*retval
@@ -342,7 +342,7 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   42 read :decode64:src data :decode64:index
 +   43 op shl *tmp1 :decode64:bytes 6
 +   44 set :charToInt:ch :decode64:src
-+   45 setaddr :charToInt*retaddr *label37 (h:*label9)
++   45 setaddr :charToInt*retaddr *label37
 +   46 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
 +   47 label *label37
 +   48 op or :decode64:bytes *tmp1 :charToInt*retval
@@ -357,7 +357,7 @@ Modifications by Unroll loop at line 24:9 (+23 instructions):
 +   57 read :decode64:src data :decode64:index
 +   58 op shl *tmp1 :decode64:bytes 6
 +   59 set :charToInt:ch :decode64:src
-+   60 setaddr :charToInt*retaddr *label40 (h:*label9)
++   60 setaddr :charToInt*retaddr *label40
 +   61 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
 +   62 label *label40
 +   63 op or :decode64:bytes *tmp1 :charToInt*retval
@@ -382,7 +382,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * op shl *tmp1 :decode64:bytes 6
 +   13 op shl *tmp1 0 6
     14 set :charToInt:ch :decode64:src
-    15 setaddr :charToInt*retaddr *label31 (h:*label9)
+    15 setaddr :charToInt*retaddr *label31
     16 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
     17 label *label31
 -    * op or :decode64:bytes *tmp1 :charToInt*retval
@@ -450,7 +450,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-7
     10 read :decode64:src data :decode64:index
 -    * op shl *tmp1 0 6
     11 set :charToInt:ch :decode64:src
-    12 setaddr :charToInt*retaddr *label31 (h:*label9)
+    12 setaddr :charToInt*retaddr *label31
     13 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
  
     15 op or :decode64:bytes 0 :charToInt*retval
@@ -562,7 +562,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-    12 setaddr :charToInt*retaddr *label31 (h:*label9)
+    12 setaddr :charToInt*retaddr *label31
     13 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
     14 label *label31
 -    * op or :decode64:bytes 0 :charToInt*retval
@@ -579,7 +579,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
 -    * read :decode64:src data :decode64:index
 -    * set :charToInt:ch :decode64:src
 +   10 read :charToInt:ch data :decode64:index
-    11 setaddr :charToInt*retaddr *label31 (h:*label9)
+    11 setaddr :charToInt*retaddr *label31
     12 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
     13 label *label31
  
@@ -590,7 +590,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
 +   22 read :charToInt:ch data :decode64:index
     23 op shl *tmp1 :decode64:bytes 6
 -    * set :charToInt:ch :decode64:src
-    24 setaddr :charToInt*retaddr *label34 (h:*label9)
+    24 setaddr :charToInt*retaddr *label34
     25 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
     26 label *label34
  
@@ -601,7 +601,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
 +   35 read :charToInt:ch data :decode64:index
     36 op shl *tmp1 :decode64:bytes 6
 -    * set :charToInt:ch :decode64:src
-    37 setaddr :charToInt*retaddr *label37 (h:*label9)
+    37 setaddr :charToInt*retaddr *label37
     38 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
     39 label *label37
  
@@ -650,13 +650,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
     22 read :charToInt:ch data :decode64:index
 -    * op shl *tmp1 :decode64:bytes 6
 +   23 op shl *tmp1 :charToInt*retval 6
-    24 setaddr :charToInt*retaddr *label34 (h:*label9)
+    24 setaddr :charToInt*retaddr *label34
     25 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
     26 label *label34
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 3 (-1 instructions):
  
-    11 setaddr :charToInt*retaddr *label31 (h:*label9)
+    11 setaddr :charToInt*retaddr *label31
     12 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
     13 label *label31
 -    * set :decode64:bytes :charToInt*retval
@@ -861,7 +861,7 @@ Modifications by Final phase, Print Merging, iteration 1:
 -    * remark "from input data quartet"
 +    4 remark "Reading character number 0 from input data quartet"
      5 read :charToInt:ch data :decode64:index
-     6 setaddr :charToInt*retaddr *label31 (h:*label9)
+     6 setaddr :charToInt*retaddr *label31
      7 call *label0 *invalid :charToInt*retval (m:*label9) (h:*label9)
      8 label *label31
      9 op add :decode64:index :decode64:index 1
@@ -872,7 +872,7 @@ Modifications by Final phase, Print Merging, iteration 1:
 +   10 remark "Reading character number 1 from input data quartet"
     11 read :charToInt:ch data :decode64:index
     12 op shl *tmp1 :charToInt*retval 6
-    13 setaddr :charToInt*retaddr *label34 (h:*label9)
+    13 setaddr :charToInt*retaddr *label34
  
     15 label *label34
     16 op or :decode64:bytes *tmp1 :charToInt*retval
@@ -884,7 +884,7 @@ Modifications by Final phase, Print Merging, iteration 1:
 +   18 remark "Reading character number 2 from input data quartet"
     19 read :charToInt:ch data :decode64:index
     20 op shl *tmp1 :decode64:bytes 6
-    21 setaddr :charToInt*retaddr *label37 (h:*label9)
+    21 setaddr :charToInt*retaddr *label37
  
     23 label *label37
     24 op or :decode64:bytes *tmp1 :charToInt*retval

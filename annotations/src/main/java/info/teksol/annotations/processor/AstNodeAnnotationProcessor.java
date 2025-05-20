@@ -56,6 +56,9 @@ public class AstNodeAnnotationProcessor extends AbstractProcessor {
                 .flatMap(a -> roundEnv.getElementsAnnotatedWith(a).stream())
                 .filter(element -> element.getKind() == ElementKind.CLASS)
                 .map(TypeElement.class::cast)
+                // This is a horrible hack: we need subclasses processed before superclasses.
+                // By coincidence, sorting by name works
+                .sorted(Comparator.comparing(t -> t.getSimpleName().toString()))
                 .toList();
 
         Element basePackage = astNodeTypes.getFirst().getEnclosingElement();

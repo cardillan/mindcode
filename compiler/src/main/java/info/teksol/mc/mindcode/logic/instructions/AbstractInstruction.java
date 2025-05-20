@@ -143,6 +143,12 @@ public abstract class AbstractInstruction implements LogicInstruction {
     }
 
     @Override
+    public LogicInstruction resetInfo(InstructionInfo instructionInfo) {
+        info.remove(instructionInfo);
+        return this;
+    }
+
+    @Override
     public String toString() {
         return LogicInstructionPrinter.toStringSimple(this);
     }

@@ -138,14 +138,14 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsComplexLoop() {
         assertCompilesTo("""
-                            i = 0;
-                            while i < 6 do
-                                i += 2;
-                                print(i);
-                                i -= 1;
-                                print(i);
-                            end;
-                            """,
+                        i = 0;
+                        while i < 6 do
+                            i += 2;
+                            print(i);
+                            i -= 1;
+                            print(i);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("213243546576"))
         );
@@ -154,10 +154,10 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsCStyleLoop() {
         assertCompilesTo("""
-                            for i = 0; i < 10; i += 1 do
-                                print(i);
-                            end;
-                            """,
+                        for i = 0; i < 10; i += 1 do
+                            print(i);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("0123456789"))
         );
@@ -166,10 +166,10 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsDecreasingLoopExclusive() {
         assertCompilesTo("""
-                            for i = 9; i > 2; i -= 1 do
-                                print(i);
-                            end;
-                            """,
+                        for i = 9; i > 2; i -= 1 do
+                            print(i);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("9876543"))
         );
@@ -178,10 +178,10 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsDecreasingLoopInclusive() {
         assertCompilesTo("""
-                            for i = 9; i >= 0; i -= 1 do
-                                print(i);
-                            end;
-                            """,
+                        for i = 9; i >= 0; i -= 1 do
+                            print(i);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("9876543210"))
         );
@@ -190,12 +190,12 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsDoWhileLoop() {
         assertCompilesTo("""
-                            i = 0;
-                            do
-                                print(i);
-                                i += 1;
-                            while i < 10;
-                            """,
+                        i = 0;
+                        do
+                            print(i);
+                            i += 1;
+                        while i < 10;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("0123456789"))
         );
@@ -240,16 +240,16 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsListIterationLoopsWithModifications() {
         assertCompilesTo("""
-                            n = 0;
-                            for out i, out j in a, b, c, d, e, f do
-                                i = n += 1;
-                                j = 2 * n;
-                            end;
-
-                            for i in a, b, c, d, e, f do
-                                print(i);
-                            end;
-                            """,
+                        n = 0;
+                        for out i, out j in a, b, c, d, e, f do
+                            i = n += 1;
+                            j = 2 * n;
+                        end;
+                        
+                        for i in a, b, c, d, e, f do
+                            print(i);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("122436"))
         );
@@ -258,10 +258,10 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsListIterationLoopsWithThreeIterators() {
         assertCompilesTo("""
-                            for i, j, k in 1, 2, 3, 4, 5, 6, 7, 8, 9 do
-                                print(i, j, k);
-                            end;
-                            """,
+                        for i, j, k in 1, 2, 3, 4, 5, 6, 7, 8, 9 do
+                            print(i, j, k);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("123456789"))
         );
@@ -282,11 +282,11 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsListIterationLoopWithContinue() {
         assertCompilesTo("""
-                            for i in 1, 2, 3 do
-                                if i == 2 then continue; end;
-                                print(i);
-                            end;
-                            """,
+                        for i in 1, 2, 3 do
+                            if i == 2 then continue; end;
+                            print(i);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("13"))
         );
@@ -295,12 +295,12 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsLoopsWithBreak() {
         assertCompilesTo("""
-                            for i in 0 .. 10 do
-                                if i == 6 then break; end;
-                                print(i);
-                            end;
-                            print(".");
-                            """,
+                        for i in 0 .. 10 do
+                            if i == 6 then break; end;
+                            print(i);
+                        end;
+                        print(".");
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("012345."))
         );
@@ -309,12 +309,12 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsLoopsWithContinue() {
         assertCompilesTo("""
-                            for i in 0 .. 9 do
-                                if i % 2 then continue; end;
-                                print(i);
-                            end;
-                            print(".");
-                            """,
+                        for i in 0 .. 9 do
+                            if i % 2 then continue; end;
+                            print(i);
+                        end;
+                        print(".");
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("02468."))
         );
@@ -391,12 +391,12 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsNestedLoops() {
         assertCompilesTo("""
-                            for i in 1 .. 5 do
-                                for j in i .. 5 do
-                                    print(" ", 10 * i + j);
-                                end;
+                        for i in 1 .. 5 do
+                            for j in i .. 5 do
+                                print(" ", 10 * i + j);
                             end;
-                            """,
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q(" 11 12 13 14 15 22 23 24 25 33 34 35 44 45 55"))
         );
@@ -405,17 +405,17 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsNestedLoops2() {
         assertCompilesTo("""
-                            MainLoop:
-                            for i in 0 ... 10 do
-                                if i % 5 == 2 then
-                                    for j in 0 ... 10 do
-                                        print(j);
-                                        if j == i then continue MainLoop; end;
-                                    end;
+                        MainLoop:
+                        for i in 0 ... 10 do
+                            if i % 5 == 2 then
+                                for j in 0 ... 10 do
+                                    print(j);
+                                    if j == i then continue MainLoop; end;
                                 end;
                             end;
-                            print(".");
-                            """,
+                        end;
+                        print(".");
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("01201234567."))
         );
@@ -424,14 +424,15 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsRangeIterationLoop() {
         assertCompilesTo("""
-                            for i in 0 .. 9 do
-                                print(i);
-                            end;
-                            """,
+                        for i in 0 .. 9 do
+                            print(i);
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("0123456789"))
         );
     }
+
     @Test
     void unrollsSingleIterationLoop() {
         assertCompilesTo("""
@@ -496,14 +497,24 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsWhileLoop() {
         assertCompilesTo("""
-                            i = 0;
-                            while i < 10 do
-                                print(i);
-                                i += 1;
-                            end;
-                            """,
+                        i = 0;
+                        while i < 10 do
+                            print(i);
+                            i += 1;
+                        end;
+                        """,
                 excludeLabelInstructions(),
                 createInstruction(PRINT, q("0123456789"))
+        );
+    }
+
+    @Test
+    void unrollsLoopsWithHoistedFunctionCalls() {
+        assertCompiles("""
+                        noinline void foo(a) print(a); end;
+                        for i in 0 ... 3 do foo(i); end;
+                        for j in 0 ... 3 do foo(j); end;
+                        """
         );
     }
 }

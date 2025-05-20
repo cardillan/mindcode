@@ -401,7 +401,7 @@ class LoopUnroller extends BaseOptimizer {
                 LogicInstruction hoisted = hoistedMap.remove(instruction.getHoistId());
                 if (hoisted != null) {
                     removeInstruction(hoisted);
-                    LogicInstruction copy = hoisted.withContext(instruction.getAstContext());
+                    LogicInstruction copy = hoisted.withContext(instruction.getAstContext()).resetHoistId();
                     insertInstruction(iterator.previousIndex(), copy);
                 }
             }

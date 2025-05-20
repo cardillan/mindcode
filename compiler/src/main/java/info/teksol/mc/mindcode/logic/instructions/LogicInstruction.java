@@ -25,6 +25,8 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction setInfo(InstructionInfo instructionInfo, Object value);
 
+    LogicInstruction resetInfo(InstructionInfo instructionInfo);
+
     LogicInstruction copyInfo(LogicInstruction other);
 
     boolean belongsTo(@Nullable AstContext astContext);
@@ -87,8 +89,20 @@ public interface LogicInstruction extends MlogInstruction {
         return (LogicLabel) getInfo(InstructionInfo.HOIST_ID);
     }
 
+    default boolean isHoisted() {
+        return (boolean) getInfo(InstructionInfo.HOISTED);
+    }
+
+    default LogicInstruction setHoisted(boolean hoisted) {
+        return setInfo(InstructionInfo.HOISTED, hoisted);
+    }
+
     default LogicInstruction setHoistId(LogicLabel marker) {
         return setInfo(InstructionInfo.HOIST_ID, marker);
+    }
+
+    default LogicInstruction resetHoistId() {
+        return resetInfo(InstructionInfo.HOIST_ID).resetInfo(InstructionInfo.HOISTED);
     }
 
     /// Provides side effects of this instruction
@@ -98,13 +112,5 @@ public interface LogicInstruction extends MlogInstruction {
 
     default LogicInstruction setSideEffects(SideEffects sideEffects) {
         return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
-    }
-
-    default boolean isHoisted() {
-        return (boolean) getInfo(InstructionInfo.HOISTED);
-    }
-
-    default LogicInstruction setHoisted(boolean hoisted) {
-        return setInfo(InstructionInfo.HOISTED, hoisted);
     }
 }
