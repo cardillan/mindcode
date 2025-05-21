@@ -381,7 +381,7 @@ public class MindustryMetadata {
     //</editor-fold>
 
     //<editor-fold desc="Vars">
-    public boolean isBuiltInValid(String name) {
+    public boolean isValidBuiltIn(String name) {
         return getLVarMap().containsKey(name);
     }
 
@@ -463,7 +463,7 @@ public class MindustryMetadata {
                         t -> t, (a, b) -> a, LinkedHashMap::new));
                 createUnregistered().forEach(t -> result.putIfAbsent(t.name(), t));
 
-                return result;
+                return Collections.unmodifiableMap(result);
             } catch (Exception e) {
                 throw new RuntimeException("Error parsing file " + resourceName, e);
             }
@@ -676,11 +676,12 @@ public class MindustryMetadata {
 
         public Set<String> createFromResource() {
             try {
-                return lines.stream().skip(1)
+                Set<String> set = lines.stream().skip(1)
                         .map(l -> l.split(";", -1))
                         .filter(this::matches)
                         .map(columns -> decorator.apply(columns[name]))
                         .collect(Collectors.toCollection(LinkedHashSet::new));
+                return Collections.unmodifiableSet(set);
             } catch (Exception e) {
                 throw new RuntimeException("Error parsing file " + resourceName, e);
             }

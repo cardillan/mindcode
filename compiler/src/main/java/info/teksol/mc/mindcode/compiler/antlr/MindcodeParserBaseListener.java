@@ -989,6 +989,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstDirectiveDeclare(MindcodeParser.AstDirectiveDeclareContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstDirectiveDeclare(MindcodeParser.AstDirectiveDeclareContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterDirectiveValues(MindcodeParser.DirectiveValuesContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -1008,6 +1020,30 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstKeywordOrBuiltin(MindcodeParser.AstKeywordOrBuiltinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstKeywordOrBuiltin(MindcodeParser.AstKeywordOrBuiltinContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterAstKeywordOrBuiltinList(MindcodeParser.AstKeywordOrBuiltinListContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstKeywordOrBuiltinList(MindcodeParser.AstKeywordOrBuiltinListContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

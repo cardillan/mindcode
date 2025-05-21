@@ -4,165 +4,176 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.TreeSet;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+import static info.teksol.mc.mindcode.logic.opcodes.KeywordCategory.*;
 
 // TODO Fill in parameter names for all keywords/selectors. Change error message to include a parameter name.
 
 @NullMarked
 public enum InstructionParameterType {
-    ///  Alignment for the DRAW PRINT instruction. 
-    ALIGNMENT       ("alignment", Flags.KEYWORD, MindustryMetadata::getAlignments),
+    /// Alignment for the DRAW PRINT instruction. 
+    ALIGNMENT       ("alignment", Flags.KEYWORD, MindustryMetadata::getAlignments, alignment),
 
     /// Mindcode's array - a ValueStore instance
     ARRAY           (Flags.SPECIAL),
 
-    ///  Input parameter accepting blocks (buildings).
+    /// Input parameter accepting blocks (buildings).
     BLOCK           (Flags.INPUT),
 
-    ///  Selector for the CONTROL instruction. 
+    /// Selector for the CONTROL instruction. 
     BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION),
 
-    ///  A boolean parameter - expected as an input 
+    /// A boolean parameter - expected as an input 
     BOOL            (Flags.INPUT),
 
-    ///  True/false to set/clear status in STATUS instruction. 
+    /// True/false to set/clear status in STATUS instruction. 
     CLEAR           (Flags.SELECTOR | Flags.FUNCTION),
 
-    ///  Selector for the JUMP instruction. 
+    /// Selector for the JUMP instruction. 
     CONDITION       (Flags.SELECTOR),
 
-    ///  Type of cut scene in CUTSCENE instruction 
+    /// Type of cut scene in CUTSCENE instruction 
     CUTSCENE        (Flags.SELECTOR),
 
-    ///  Selector for the DRAW instruction. 
+    /// Selector for the DRAW instruction. 
     DRAW            (Flags.SELECTOR | Flags.FUNCTION),
 
-    ///  Type of visual effect 
+    /// Type of visual effect 
     EFFECT          (Flags.SELECTOR),
 
-    ///  Item to fetch in FETCH instruction 
+    /// Item to fetch in FETCH instruction 
     FETCH           (Flags.SELECTOR),
 
-    ///  An input parameter requiring a global variable - see the SYNC instruction. 
+    /// An input parameter requiring a global variable - see the SYNC instruction. 
     GLOBAL          (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
 
-    ///  A const parameter. Specifies group of buildings to locate. 
-    GROUP           ("blockGroup", Flags.KEYWORD, MindustryMetadata::getBlockFlags),
+    /// A const parameter. Specifies group of buildings to locate. 
+    GROUP           ("blockGroup", Flags.KEYWORD, MindustryMetadata::getBlockFlags, blockFlag),
 
-    ///  Non-specific input parameter. Accepts literals and variables 
+    /// Non-specific input parameter. Accepts literals and variables 
     INPUT           (Flags.INPUT),
 
-    ///  Non-specific input/output parameter for custom-made instructions. Accepts literals and variables 
+    /// Non-specific input/output parameter for custom-made instructions. Accepts literals and variables 
     INPUT_OUTPUT    (Flags.INPUT | Flags.OUTPUT),
 
-    ///  A label pseudo-parameter. 
+    /// A label pseudo-parameter. 
     LABEL           (Flags.INPUT),
 
-    ///  Layer in getBlock instruction. 
-    LAYER           ("layer", Flags.KEYWORD, MindustryMetadata::getTileLayers),
+    /// Layer in getBlock instruction. 
+    LAYER           ("layer", Flags.KEYWORD, MindustryMetadata::getTileLayers, tileLayer),
 
-    ///  Selector for the ULOCATE instruction. No Flags.FUNCTION! 
+    /// Selector for the ULOCATE instruction. No Flags.FUNCTION! 
     LOCATE          ("locate", Flags.SELECTOR),
 
-    /// A const parameter. Specifies lookup category. The entire instruction is only available in V7;
-    /// the parameter keywords therefore aren't version specific.
-    LOOKUP          ("itemType", Flags.KEYWORD, MindustryMetadata::getLookableContents),
+    /// Specifies lookup category.
+    LOOKUP          ("itemType", Flags.KEYWORD, MindustryMetadata::getLookableContents, contentType),
 
-    ///  Type of message in MESSAGE instruction 
-    MAKE_MARKER     ("markerType", Flags.KEYWORD, MindustryMetadata::getMarkerTypes),
+    /// Type of message in MESSAGE instruction 
+    MAKE_MARKER     ("markerType", Flags.KEYWORD, MindustryMetadata::getMarkerTypes, markerType),
 
-    ///  Type of message in MESSAGE instruction 
+    /// Type of message in MESSAGE instruction 
     MESSAGE         (Flags.SELECTOR),
 
-    ///  Selector for the OP instruction. 
+    /// Selector for the OP instruction. 
     OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
 
-    ///  Input parameter accepting ore type. 
+    /// Input parameter accepting ore type. 
     ORE             ("oreType", Flags.INPUT, MindustryMetadata::getItemNames),
 
-    ///  Output parameter. Sets a value of a variable in parameter list. 
+    /// Output parameter. Sets a value of a variable in parameter list. 
     OUTPUT          (Flags.OUTPUT),
 
-    ///  A const parameter. Specifies properties of units searchable by radar. 
-    RADAR           ("category", Flags.KEYWORD, MindustryMetadata::getRadarTargets),
+    /// A const parameter. Specifies properties of units searchable by radar. 
+    RADAR           ("category", Flags.KEYWORD, MindustryMetadata::getRadarTargets, radarTarget),
 
-    ///  A const parameter. Specifies property to sort radar outputs by. 
-    RADAR_SORT      ("sortBy", Flags.KEYWORD, MindustryMetadata::getRadarSorts),
+    /// A const parameter. Specifies property to sort radar outputs by. 
+    RADAR_SORT      ("sortBy", Flags.KEYWORD, MindustryMetadata::getRadarSorts, radarSort),
 
-    ///  Output parameter. Maps to the return value of a function. 
+    /// Output parameter. Maps to the return value of a function. 
     RESULT          (Flags.OUTPUT),
 
-    ///  Game rule in SETRULE instruction 
+    /// Game rule in SETRULE instruction 
     RULE            (Flags.SELECTOR),
 
-    ///  Scope for the playsound instruction: true=positional, false=global 
+    /// Scope for the playsound instruction: true=positional, false=global 
     SCOPE           (Flags.SELECTOR),
 
-    ///  Input parameter accepting property id. 
+    /// Input parameter accepting property id. 
     SENSOR          ("property", Flags.INPUT, MindustryMetadata::getLAccessNames),
 
-    ///  Input parameter accepting settable property id.
+    /// Input parameter accepting settable property id.
     SETTABLE        ("property", Flags.INPUT, MindustryMetadata::getLAccessSettableNames),
 
-    ///  For the SET MARKER instruction
+    /// For the SET MARKER instruction
     SET_MARKER      (Flags.SELECTOR),
 
-    ///  Settable layer in SETBLOCK instruction 
-    SETTABLE_LAYER  ("layer", Flags.SELECTOR, MindustryMetadata::getTileLayersSettable),
+    /// Settable layer in SETBLOCK instruction 
+    SETTABLE_LAYER  ("layer", Flags.SELECTOR, MindustryMetadata::getTileLayersSettable, settableTileLayer),
 
-    ///  Sound to play 
+    /// Sound to play 
     SOUND           ("sound", Flags.INPUT, MindustryMetadata::getSoundNames),
 
-    ///  Unit status in STATUS instruction. 
-    STATUS          ("status", Flags.KEYWORD, MindustryMetadata::getStatusEffects),
+    /// Unit status in STATUS instruction. 
+    STATUS          ("status", Flags.KEYWORD, MindustryMetadata::getStatusEffects, statusEffect),
 
     /// Expected type of value
     TYPE            ("valueType", Flags.KEYWORD, m -> List.of("any", "notNull", "decimal", "integer", "multiple")),
 
-    ///  Input parameter accepting unit type.
+    /// Input parameter accepting unit type.
     UNIT            ("unitType", Flags.INPUT, MindustryMetadata::getUnitTypes),
 
-    ///  Selector for the UCONTROL instruction. 
+    /// Selector for the UCONTROL instruction. 
     UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION),
 
-    ///  Non-specific parameter type for generic instructions 
+    /// Non-specific parameter type for generic instructions 
     UNSPECIFIED     (0),
 
-    ///  An unused input parameter. Ignored by given opcode variant. 
+    /// An unused input parameter. Ignored by given opcode variant. 
     UNUSED          (Flags.UNUSED),
 
-    ///  An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. 
+    /// An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. 
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
 
-    WEATHER         ("weather", Flags.INPUT, MindustryMetadata::getWeathers),
+    WEATHER         ("weather", Flags.INPUT, MindustryMetadata::getWeathers, weather),
 
     ;
 
     private final String typeName;
     private final int flags;
     private final @Nullable Function<MindustryMetadata, Collection<String>> keywordsSupplier;
+    private final @Nullable KeywordCategory keywordCategory;
 
     InstructionParameterType(int flags) {
         this.typeName = name();
         this.flags = flags;
         this.keywordsSupplier = null;
+        this.keywordCategory = null;
     }
 
     InstructionParameterType(String typeName, int flags) {
         this.typeName = typeName;
         this.flags = flags;
         this.keywordsSupplier = null;
+        this.keywordCategory = null;
     }
 
     InstructionParameterType(String typeName, int flags, Function<MindustryMetadata, Collection<String>> keywordsSupplier) {
         this.typeName = typeName;
         this.flags = flags;
         this.keywordsSupplier = keywordsSupplier;
+        this.keywordCategory = null;
+    }
+
+    InstructionParameterType(String typeName, int flags, Function<MindustryMetadata, Collection<String>> keywordsSupplier,
+            KeywordCategory keywordCategory) {
+        this.typeName = typeName;
+        this.flags = flags;
+        this.keywordsSupplier = keywordsSupplier;
+        this.keywordCategory = keywordCategory;
     }
 
     public String getTypeName() {
@@ -232,6 +243,15 @@ public enum InstructionParameterType {
                     .collect(Collectors.toCollection(TreeSet::new));
         }
     }
+
+    private static final Map<KeywordCategory, InstructionParameterType> categoryMap = Stream.of(values())
+            .filter(t -> t.keywordCategory != null)
+            .collect(Collectors.toMap(t -> t.keywordCategory, t -> t));
+
+    public static InstructionParameterType forCategory(KeywordCategory keywordCategory) {
+        return Objects.requireNonNull(categoryMap.get(keywordCategory));
+    }
+
 
     // Note: FUNCTION >> SELECTOR >> KEYWORD
 

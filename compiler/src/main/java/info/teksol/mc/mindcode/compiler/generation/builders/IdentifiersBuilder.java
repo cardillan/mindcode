@@ -53,7 +53,7 @@ public class IdentifiersBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitBuiltInIdentifier(AstBuiltInIdentifier node) {
-        if (!metadata.isBuiltInValid(node.getName())) {
+        if (!processor.isValidBuiltIn(node.getName())) {
             warn(node, WARN.BUILT_IN_VARIABLE_NOT_RECOGNIZED, node.getName());
         }
 

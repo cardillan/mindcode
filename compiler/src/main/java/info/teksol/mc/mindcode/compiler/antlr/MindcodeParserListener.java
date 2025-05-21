@@ -958,6 +958,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astDirectiveDeclare}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstDirectiveDeclare(MindcodeParser.AstDirectiveDeclareContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astDirectiveDeclare}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstDirectiveDeclare(MindcodeParser.AstDirectiveDeclareContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#directiveValues}.
 	 * @param ctx the parse tree
 	 */
@@ -977,6 +989,26 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#astKeywordOrBuiltin}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstKeywordOrBuiltin(MindcodeParser.AstKeywordOrBuiltinContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#astKeywordOrBuiltin}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstKeywordOrBuiltin(MindcodeParser.AstKeywordOrBuiltinContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#astKeywordOrBuiltinList}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstKeywordOrBuiltinList(MindcodeParser.AstKeywordOrBuiltinListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#astKeywordOrBuiltinList}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstKeywordOrBuiltinList(MindcodeParser.AstKeywordOrBuiltinListContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#allocations}.
 	 * @param ctx the parse tree

@@ -214,6 +214,25 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //</editor-fold>
 
     //<editor-fold desc="Rules: directives">
+    @Override
+    public AstMindcodeNode visitAstKeywordOrBuiltin(AstKeywordOrBuiltinContext ctx) {
+        if (ctx.KEYWORD() != null) return new AstKeyword(pos(ctx), ctx.KEYWORD().getText());
+        if (ctx.BUILTINIDENTIFIER() != null) return new AstBuiltInIdentifier(pos(ctx), ctx.BUILTINIDENTIFIER().getText());
+        throw new MindcodeInternalError("Unhandled or missing identifier");
+    }
+
+    @Override
+    public AstDirectiveDeclare visitAstDirectiveDeclare(AstDirectiveDeclareContext ctx) {
+        List<AstMindcodeNode> list = ctx.elements.astKeywordOrBuiltin().stream()
+                .map(this::visit)
+                .filter(Objects::nonNull)
+                .toList();
+
+        return new AstDirectiveDeclare(pos(ctx),
+                identifier(ctx.category),
+                list);
+    }
+
     private List<AstDirectiveValue> processDirectiveValues(MindcodeParser.DirectiveValuesContext ctx) {
         return ctx.astDirectiveValue().stream().map(this::visitAstDirectiveValue).toList();
     }

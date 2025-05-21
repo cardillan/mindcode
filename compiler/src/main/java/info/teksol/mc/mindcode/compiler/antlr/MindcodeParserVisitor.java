@@ -567,6 +567,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astDirectiveDeclare}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstDirectiveDeclare(MindcodeParser.AstDirectiveDeclareContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#directiveValues}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -578,6 +585,18 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAstDirectiveValue(MindcodeParser.AstDirectiveValueContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#astKeywordOrBuiltin}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstKeywordOrBuiltin(MindcodeParser.AstKeywordOrBuiltinContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#astKeywordOrBuiltinList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstKeywordOrBuiltinList(MindcodeParser.AstKeywordOrBuiltinListContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#allocations}.
 	 * @param ctx the parse tree

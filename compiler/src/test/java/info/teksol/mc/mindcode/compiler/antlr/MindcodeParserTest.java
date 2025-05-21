@@ -421,12 +421,23 @@ class MindcodeParserTest extends AbstractParserTest {
     @Nested
     class Directives {
         @Test
-        void parsesDirectives() {
+        void parsesSetDirectives() {
             assertParses("""
                     #set option;
                     #set option = value;
                     #set option = value,value;
                     #set option = 7;
+                    """);
+        }
+
+        @Test
+        void parsesDeclareDirectives() {
+            assertParses("""
+                    #declare category :keyword;
+                    #declare category :keyword1, :keyword2;
+                    #declare category @builtin;
+                    #declare category @builtin1, @builtin2;
+                    #declare category :keyword, @builtin;
                     """);
         }
     }

@@ -46,6 +46,10 @@ public class ERR {
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
+    public static final String DECLARE_BUILTIN_EXPECTED = "A custom built-in identifier is expected.";
+    public static final String DECLARE_KEYWORD_EXPECTED = "A custom keyword is expected.";
+    public static final String DECLARE_UNKNOWN_CATEGORY = "Unknown keyword category '%s'.";
+    public static final String DECLARE_UNSUPPORTED_CATEGORY = "Keyword category '%s' is not available in current language target.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
     public static final String DIRECTIVE_INVALID_VALUE_WITH_SUGGESTION = "Invalid value '%s' of compiler directive '%s'. Did you mean '%s'?";
     public static final String DIRECTIVE_INVALID_VALUE_WITH_VALUES = "Invalid value '%s' of compiler directive '%s'. Valid values are '%s' and '%s'.";

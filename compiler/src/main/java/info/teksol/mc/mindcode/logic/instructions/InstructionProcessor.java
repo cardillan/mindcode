@@ -47,6 +47,12 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     String nextFunctionPrefix(MindcodeFunction function);
     LogicVariable unusedVariable();
 
+    /// Adds a custom-defined builtin value.
+    void addBuiltin(String name);
+
+    /// Adds a custom keyword. Returns true if the category is valid for current target.
+    boolean addKeyword(KeywordCategory keywordCategory, String keyword);
+
     @Nullable List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
 
     Collection<String> getParameterValues(InstructionParameterType type);
@@ -140,6 +146,12 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// @param identifier identifier to check
     /// @return true if the identifier denotes a main variable
     boolean isGlobalName(String identifier);
+
+    /// Determines whether this identifier corresponds to a known built-in value.
+    ///
+    /// @param builtin name of the built-in variable including `@` prefix
+    /// @return true if the built-in variable is volatile.
+    boolean isValidBuiltIn(String builtin);
 
     /// Determines whether this identifier corresponds to a volatile built-in value.
     ///

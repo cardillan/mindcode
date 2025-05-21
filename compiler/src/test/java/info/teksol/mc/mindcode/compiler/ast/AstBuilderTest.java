@@ -935,6 +935,37 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                     )
             );
         }
+
+        @Test
+        void buildsDeclareDirective() {
+            assertBuildsTo("""
+                            #declare category @fluffy-bunny;
+                            """,
+                    List.of(
+                            new AstDirectiveDeclare(EMPTY,
+                                    id("category"),
+                                    List.of(new AstBuiltInIdentifier(EMPTY, "@fluffy-bunny"))
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsDeclareDirectiveTwoIdentifiers() {
+            assertBuildsTo("""
+                            #declare category :keyword1, :keyword2;
+                            """,
+                    List.of(
+                            new AstDirectiveDeclare(EMPTY,
+                                    id("category"),
+                                    List.of(
+                                            new AstKeyword(EMPTY, ":keyword1"),
+                                            new AstKeyword(EMPTY, ":keyword2")
+                                    )
+                            )
+                    )
+            );
+        }
     }
 
     @Nested

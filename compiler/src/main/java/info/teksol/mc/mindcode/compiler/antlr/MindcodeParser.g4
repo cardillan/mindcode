@@ -203,6 +203,7 @@ formattablePlaceholder
 
 directive
     : HASHSET option=astDirectiveValue (DIRECTIVEASSIGN value = directiveValues)?       # astDirectiveSet
+    | HASHDECLARE category=IDENTIFIER elements=astKeywordOrBuiltinList                  # astDirectiveDeclare
     ;
 
 directiveValues
@@ -211,6 +212,14 @@ directiveValues
 
 astDirectiveValue
     : DIRECTIVEVALUE
+    ;
+
+astKeywordOrBuiltin
+    : (KEYWORD | BUILTINIDENTIFIER)
+    ;
+
+astKeywordOrBuiltinList
+    : (astKeywordOrBuiltin COMMA)* astKeywordOrBuiltin
     ;
 
 // Allocations

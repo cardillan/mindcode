@@ -14,6 +14,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -28,6 +29,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         AstAllocationsVisitor<ValueStore>,
         AstConstantVisitor<ValueStore>,
         AstDirectiveSetVisitor<ValueStore>,
+        AstDirectiveDeclareVisitor<ValueStore>,
         AstDocCommentVisitor<ValueStore>,
         AstFunctionDeclarationVisitor<ValueStore>,
         AstModuleDeclarationVisitor<ValueStore>,
@@ -113,6 +115,37 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     @Override
     public ValueStore visitDirectiveSet(AstDirectiveSet node) {
         // Ignored - processed elsewhere
+        return LogicVoid.VOID;
+    }
+
+    @Override
+    public ValueStore visitDirectiveDeclare(AstDirectiveDeclare directive) {
+        String categoryName = directive.getCategory().getName();
+        KeywordCategory category = KeywordCategory.byName(categoryName);
+        if (category == null) {
+            error(directive.getCategory(), ERR.DECLARE_UNKNOWN_CATEGORY, categoryName);
+        } else if (category == KeywordCategory.builtin) {
+            for (AstMindcodeNode element : directive.getElements()) {
+                if (element instanceof AstBuiltInIdentifier builtIn) {
+                    processor.addBuiltin(builtIn.getName());
+                } else {
+                    error(element, ERR.DECLARE_BUILTIN_EXPECTED);
+                }
+            }
+        } else {
+            boolean reported = false;
+            for (AstMindcodeNode element : directive.getElements()) {
+                if (element instanceof AstKeyword keyword) {
+                    if (!processor.addKeyword(category, keyword.getKeyword()) && !reported) {
+                        error(directive.getCategory(), ERR.DECLARE_UNSUPPORTED_CATEGORY, categoryName);
+                        reported = true;
+                    }
+                } else {
+                    error(element, ERR.DECLARE_KEYWORD_EXPECTED);
+                }
+            }
+        }
+
         return LogicVoid.VOID;
     }
 
@@ -394,21 +427,22 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private int getDeclaredArraySize(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
-        if (specification.getArraySize() == null) return -1;
+        AstExpression arraySize = specification.getArraySize();
+        if (arraySize == null) return -1;
         int maxSize = modifiers.containsKey(Modifier.EXTERNAL) ? MAX_EXTERNAL_ARRAY_SIZE : MAX_INTERNAL_ARRAY_SIZE;
 
-        ValueStore size = processInLocalScope(() -> evaluate(specification.getArraySize()));
-        if (!(size instanceof LogicReadable number &&number.isNumericConstant())) {
-            error(specification.getArraySize(), ERR.ARRAY_MUTABLE_SIZE);
+        ValueStore size = processInLocalScope(() -> evaluate(arraySize));
+        if (!(size instanceof LogicReadable number && number.isNumericConstant())) {
+            error(arraySize, ERR.ARRAY_MUTABLE_SIZE);
         } else if (!number.isInteger()) {
-            error(specification.getArraySize(), ERR.ARRAY_NON_INTEGER_SIZE);
+            error(arraySize, ERR.ARRAY_NON_INTEGER_SIZE);
         } else {
             int value = number.getIntValue();
             if (value > 0 && value <= maxSize) {
                 return value;
             }
 
-            error(specification.getArraySize(), ERR.ARRAY_SIZE_OUTSIDE_RANGE, maxSize);
+            error(arraySize, ERR.ARRAY_SIZE_OUTSIDE_RANGE, maxSize);
         }
 
         // Error

@@ -11,6 +11,29 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
     @Nested
+    class BuiltinDeclarations {
+        @Test
+        void compilesBuiltinDeclaration() {
+            assertCompiles("#declare builtin @fluffy-bunny;");
+        }
+
+        @Test
+        void compilesCustomKeywordInFunctionCall() {
+            assertCompiles("""
+                    #declare builtin @fluffy-bunny;
+                    print(@fluffy-bunny);
+                    """);
+        }
+
+        @Test
+        void reportsWrongBuiltins() {
+            assertGeneratesMessage(
+                    "A custom built-in identifier is expected.",
+                    "#declare builtin :fluffyBunny;");
+        }
+    }
+
+    @Nested
     class ConstantDeclarations {
         @Test
         void compilesBinaryLiteralConstants() {
@@ -552,6 +575,36 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Multiple module declarations in one source file are not allowed.",
                     "module a; module b;");
+        }
+    }
+
+    @Nested
+    class KeywordDeclarations {
+        @Test
+        void compilesKeywordDeclaration() {
+            assertCompiles("#declare radarTarget :marine;");
+        }
+
+        @Test
+        void compilesCustomKeywordInFunctionCall() {
+            assertCompiles("""
+                    #declare alignment :slightlyOffCenter;
+                    drawPrint(0, 0, :slightlyOffCenter);
+                    """);
+        }
+
+        @Test
+        void reportsWrongKeywords() {
+            assertGeneratesMessage(
+                    "A custom keyword is expected.",
+                    "#declare radarTarget @marine;");
+        }
+
+        @Test
+        void reportsUnsupportedCategory() {
+            assertGeneratesMessage(
+                    "Keyword category 'alignment' is not available in current language target.",
+                    "#set target = 7; #declare alignment :random;");
         }
     }
 

@@ -180,6 +180,7 @@ CHAR                    : '\'' ~[\r\n'] '\''
                         ;
 
 // Directives
+HASHDECLARE             : '#declare';
 HASHSET                 : '#set' -> pushMode(InDirective) ;
 
 // Formattable literals

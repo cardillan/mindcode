@@ -45,6 +45,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private final Map<Opcode, Map<String, OpcodeVariant>> variantsByKeyword;
     private final Map<Opcode, Integer> opcodeKeywordPosition;
     private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
+    private final Set<String> additionalBuiltins = new HashSet<>();
     private final Map<String, AtomicInteger> functionPrefixCounter = new HashMap<>();
     private final Set<String> functionPrefixes = new HashSet<>();
     private int tmpIndex = 0;
@@ -438,6 +439,24 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         return Objects.requireNonNull(validArgumentValues.get(type));
     }
 
+    @Override
+    public void addBuiltin(String name) {
+        if (!name.startsWith("@")) {
+            throw new IllegalArgumentException("Built-in name must start with '@'");
+        }
+        additionalBuiltins.add(name);
+    }
+
+    @Override
+    public boolean addKeyword(KeywordCategory keywordCategory, String keyword) {
+        if (keyword.startsWith(":")) {
+            throw new IllegalArgumentException("Keyword must not start with ':'");
+        }
+        Collection<String> values = validArgumentValues.get(InstructionParameterType.forCategory(keywordCategory));
+        if (values != null) values.add(keyword);
+        return values != null;
+    }
+
     protected <T extends LogicInstruction> T validate(T instruction) {
         if (!instructionValidation) return instruction;
 
@@ -516,7 +535,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                     .collect(Collectors.toCollection(LinkedHashSet::new));
         } else {
             // Select only compatible keywords and put them into a set
-            return type.getVersionKeywords(processorVersion);
+            return new LinkedHashSet<>(type.getVersionKeywords(processorVersion));
         }
     }
 
@@ -539,6 +558,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         // If it doesn't start with one of those characters, it isn't an identifier
         return (ch == '_' || ch >= 'a' && ch <= 'z' || ch >= 'A' && ch <= 'Z')
                 && identifier.equals(identifier.toUpperCase());
+    }
+
+    @Override
+    public boolean isValidBuiltIn(String builtin) {
+        return getMetadata().isValidBuiltIn(builtin) || additionalBuiltins.contains(builtin);
     }
 
     private static final Set<String> VOLATILE_NAMES = Set.of("@counter", "@time", "@tick", "@second",
