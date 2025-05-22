@@ -12,16 +12,16 @@ import java.util.stream.Stream;
 @NullMarked
 public enum KeywordCategory {
     builtin,
+
     alignment,
-    blockFlag,
-    tileLayer,
-    contentType,
+    blockGroup,
+    lookupType,
     markerType,
-    radarTarget,
     radarSort,
+    radarTarget,
     settableTileLayer,
     statusEffect,
-    weather,
+    tileLayer,
     ;
 
     private static final Map<String, KeywordCategory> MAP = Stream.of(values())

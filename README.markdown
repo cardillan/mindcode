@@ -64,7 +64,7 @@ Mindcode is available at http://mindcode.herokuapp.com/. Write some Mindcode in 
 You can also use the **Compile and Run** button to execute the compiled code right away on an emulated processor. The output produced by `print` instructions in your code will be displayed. Very limited interaction with the Mindustry World is supported.
 
 > [!TIP]
-> Mindcode performs a variety of different optimizations. The mlog code it produces may bear little resemblance to the original source code at a first glance.
+> Mindcode performs a variety of different optimizations. The mlog code it produces may bear little resemblance to the source code at a first glance.
 
 ### Offline
 
@@ -80,7 +80,7 @@ The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), availabl
 
 If you don't know much about Mindustry Logic, you can read more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated Feb 2025)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated May 2025)
 
 You can also get help on these Discord servers:
 

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.6.0 - Unreleased
+
+### Added
+
+* Added support for declaring new keywords and built-in variables through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
+
 ## 3.5.2 - 2025-05-24
 
 ### Fixed
@@ -215,7 +221,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for passing mlog keywords and formattable string literals as arguments to inline functions.
 * Added support for creating constants out of mlog keywords.
 * Added known mlog keywords to the file type definitions of the [provided Intellij IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
-* Added new [`mlogText()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions) for direct encoding of mlog instructions.
+* Added new [`mlogText()` function](doc/syntax/SYNTAX-EXTENSIONS.markdown#defining-new-mlog-instructions) for direct encoding of mlog instructions.
 * Added support for descending iteration order to [Range Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) and [List Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#descending-iteration-order) ([#174](https://github.com/cardillan/mindcode/issues/174)).
 * The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables).
 * Added a new [Item Transport sample](http://mindcode.herokuapp.com/schematics?s=item-transport). The sample demonstrates the use of a simple remote call scheme for acquiring units.
@@ -482,7 +488,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added [output and input/output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters) of user defined functions.
 * Added [vararg (variable arity) functions](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions).
 * Added [function overloading](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
-* Added the possibility to specify custom instructions not known to Mindcode through the [`mlog()` function](doc/syntax/SYNTAX-5-OTHER.markdown#creating-custom-mlog-instructions).
+* Added the possibility to specify custom instructions not known to Mindcode through the [`mlog()` function](doc/syntax/SYNTAX-EXTENSIONS.markdown#defining-new-mlog-instructions).
 * Added the [`findLinkedBlocks` function](doc/syntax/SYSTEM-LIBRARY.markdown#findlinkedblocks) to the system library.
 
 ### Changed

@@ -9,8 +9,12 @@ This documentation covers the basics of Mindcode syntax:
 * [Expressions](SYNTAX-2-EXPRESSIONS.markdown)
 * [Control flow statements](SYNTAX-3-STATEMENTS.markdown)
 * [Functions](SYNTAX-4-FUNCTIONS.markdown)
-* [Advanced features](SYNTAX-5-OTHER.markdown)
+
+The more advanced Mindcode features are described here:
+
+* [Compiler directives](SYNTAX-5-OTHER.markdown)
 * [Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
+* [Extending Mindcode](SYNTAX-EXTENSIONS.markdown) 
 
 Function reference for individual [Mindcode targets](SYNTAX-5-OTHER.markdown#option-target):
 

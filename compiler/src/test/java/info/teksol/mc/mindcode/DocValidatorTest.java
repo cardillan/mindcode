@@ -67,7 +67,7 @@ public class DocValidatorTest {
 
             int closingIndex = CollectionUtils.indexOf(lines, index + 1, line -> line.trim().equals("```"));
             if (closingIndex < 0) {
-                assertions.add(() -> fail("Found unterminated ```Mindcode``` block in " + file.getName() + " at line " + (index + 1)));
+                assertions.add(() -> fail("Found nonterminated ```Mindcode block in " + file.getName() + " at line " + (index + 1)));
             }
 
             String source = String.join("\n", lines.subList(index + 1, closingIndex));

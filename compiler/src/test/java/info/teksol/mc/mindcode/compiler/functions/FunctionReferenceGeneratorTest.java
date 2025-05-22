@@ -44,7 +44,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             """;
 
     private static final String[] navigation = {
-            "Code optimization", "SYNTAX-6-OPTIMIZATIONS.markdown",
+            "Extending Mindcode", "SYNTAX-EXTENSIONS.markdown",
             "Function reference for Mindustry Logic 6.0", "FUNCTIONS-60.markdown",
             "Function reference for Mindustry Logic 7.0", "FUNCTIONS-70.markdown",
             "Function reference for Mindustry Logic 7.1", "FUNCTIONS-71.markdown",

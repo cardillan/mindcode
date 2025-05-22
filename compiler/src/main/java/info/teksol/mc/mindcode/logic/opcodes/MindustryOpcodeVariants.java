@@ -315,7 +315,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("uvi"),         in("id"), in("index"), in("x"), in("y"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("colori"),      in("id"), in("index"), in("color"));
 
-        add(list, V8A, MAX, W, FUNC, Opcode.MAKEMARKER, makemarker("marker"),    in("id"), in("x"), in("y"), bool("replace"));
+        add(list, V8A, MAX, W, FUNC, Opcode.MAKEMARKER, markertype("marker"),    in("id"), in("x"), in("y"), bool("replace"));
 
         add(list, V8A, MAX, W, FUNC, Opcode.LOCALEPRINT, in("property"));
 
@@ -427,8 +427,8 @@ public class MindustryOpcodeVariants {
         return new NamedParameter(InstructionParameterType.LOOKUP, name);
     }
 
-    public static NamedParameter makemarker(String name) {
-        return new NamedParameter(InstructionParameterType.MAKE_MARKER, name);
+    public static NamedParameter markertype(String name) {
+        return new NamedParameter(InstructionParameterType.MARKER_TYPE, name);
     }
 
     public static NamedParameter message(String name) {

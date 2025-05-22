@@ -1,7 +1,3 @@
-# Advanced features
-
-This document describes the more advanced features of Mindcode.
-
 # Compiler directives
 
 Mindcode allows you to alter some compiler options in the source code using special `#set` commands. The basic syntax is: 
@@ -416,7 +412,7 @@ printflush message1
 
 ## Option `unsafe-case-optimization`
 
-This option instructs the compiler to drop range checking when performing case expression optimization. For more information, see [Unsafe case optimization](SYNTAX-6-OPTIMIZATIONS.markdown#unsafe-case-optimization).
+This option instructs the compiler to drop range checking when performing case expression optimization. For more information, [Range check elimination](SYNTAX-6-OPTIMIZATIONS.markdown#range-check-elimination).
 
 ## Individual optimization options
 
@@ -456,137 +452,7 @@ This table doesn't track which optimizations provide some functionality on the `
 
 You normally shouldn't need to deactivate any optimization, but if there was a bug in some of the optimizers, deactivating it might allow you to use Mindcode until a fix is available.
 
-In particular, some optimizers expect to work on code that was already processed by different optimizations, so turning off some optimizations might render other optimizations ineffective. **This is not a bug.**  
-
-# Creating custom mlog instructions
-
-Mindcode provides a mechanism of encoding a custom instruction not known to Mindcode. Using custom instructions is useful in only a few cases:
-
-1. You want to use a nonstandard instructions provided by some Mindustry mod.
-2. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
-3. An instruction was not implemented correctly in Mindcode and a fix is not available.
-
-Custom instructions may interact with Mindustry World or provide information about Mindustry World. If an instruction alters the program flow (for example, if a new function call instruction was added to Mindustry Logic), it cannot be safely encoded using this mechanism.
-
-Custom instructions are created using one of these functions:
-
-* `mlog()`: creates a standard instruction. Mindcode assumes the instruction has some effect on the Mindustry world and will not remove the instruction during optimizations.  
-* `mlogSafe()`: creates an instruction which doesn't have an effect on the Mindustry world (for example, `set`, `packcolor` or `sensor` are such instructions). Mindcode may remove the instruction if the value(s) it produces are not used by the rest of the program.   
-* `mlogText()`: creates an instruction which manipulates the text buffer. Mindcode never removes the instruction, and furthermore handles it correctly during Print Merging optimizations.
-
-Each of these functions takes the following arguments:
-
-* The first argument to the function needs to be a string literal. This literal is the instruction code.
-* All other arguments must be either keywords, literals, or user variables.
-  * Keyword: the keyword is used as an instruction argument (without the Mindcode specific `:` prefix). No `in` or `out` modifiers may be used. 
-  * String literal: the text represented by the string literal is used as an instruction argument. If the `in` modifier is used, the string literal will be used as an argument including the enclosing double quotes.
-  * Numeric literal: all other literals must not be marked with either modifier. The primary use for numeric literals is to provide fill-in values (typically zeroes) for unused instruction parameters.
-  * User variable: the variable is used as an instruction argument. The argument must use the `in` and `out` modifier to inform Mindcode how the corresponding instruction argument behaves:
-    * `in`: the argument represents an input value - the instruction reads and uses the value of the variable.
-    * `out`: the argument represents an output value - the instruction produces a value and stores it in the variable.
-    * `in out`: the argument represents an input/output value - the instruction both reads and uses the input value, and then updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
-
-> [!TIP]
-> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` functions always use user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function - see the examples below. Furthermore, it is possible to use keywords as function arguments to inline functions.
-     
-For better understanding, the creation of custom instructions will be demonstrated on existing instructions. 
-
-## The `format` instruction
-
-The `format` instruction was introduced in Mindustry Logic 8. When compiling for Mindustry Logic 7, the instruction isn't available. We can create it using this code:
-
-```Mindcode
-#set target = 7;
-inline void format(value)
-    mlogText("format", in value);
-end;
-
-param a = 10;
-println("The value is: {0}");
-format(a * 20);
-printflush(message1);
-```
-
-Compiling this code produces the following output:
-
-```mlog
-set a 10
-print "The value is: {0}\n"
-op mul :format:value a 20
-format :format:value
-printflush message1
-```
-
-Considerations:
-
-* By using the `mlogText()` function, we're making sure the Print Merging optimization handles the instruction correctly.
-* The processor emulator doesn't recognize custom instructions and won't handle them. The output produced by running the above code using the processor emulator would therefore be incorrect.
-
-## The `draw print` instruction
-
-Mindustry 8 Logic adds new variants of the `draw` instruction, `print` being one of them. Under the Mindustry Logic 8 language target, this instruction is mapped to the `drawPrint()` function. We can create it explicitly through this:
-
-```Mindcode
-#set target = 7;
-inline void drawPrint(x, y, alignment)
-    mlogText("draw", "print", in x, in y, alignment, 0, 0, 0);
-end;
-
-drawPrint(0, 10, :center);
-drawPrint(0, 20, :bottomLeft);
-```
-
-Result:
-
-```mlog
-draw print 0 10 center 0 0 0
-draw print 0 20 bottomLeft 0 0 0
-```
-
-Considerations:
-
-* The `draw print` instruction manipulates the text buffer, so the `mlogText()` function is used.
-* The function expects a keyword as an argument. It is possible to create custom instructions expecting several keywords this way. However, Mindcode is unable to enforce that the keywords are passed as arguments at the right places at this moment.  
-
-## The `ucontrol getBlock` instruction
-
-The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction which doesn't modify the Mindustry World and therefore is safe. Had it not be known by Mindcode, it could be defined like this:
-
-```Mindcode
-// Using 'getBlock2' as a name to avoid clashing with the existing function name
-inline def getBlock2(x, y, out type, out floor)
-    mlogSafe("ucontrol", "getBlock", in x, in y, out type, out building, out floor);
-    return building;
-end;
-
-x = floor(rand(100));
-y = floor(rand(200));
-// These two instruction generate the same mlog code:
-building = getBlock(x, y, out type, out floor);
-print(building, type, floor);
-
-building = getBlock2(x, y, out type, out floor);
-print(building, type, floor);
-printflush(message1);
-```
-
-compiles to
-
-```mlog
-op rand *tmp0 100 0
-op floor :x *tmp0 0
-op rand *tmp2 200 0
-op floor :y *tmp2 0
-ucontrol getBlock :x :y :type :building :floor
-print :building
-print :type
-print :floor
-ucontrol getBlock :x :y :getBlock2:type :getBlock2:building :getBlock2:floor
-print :getBlock2:building
-print :getBlock2:type
-print :getBlock2:floor
-printflush message1
-```
+In particular, some optimizers expect to work on code that was already processed by different optimizations, so turning off some optimizations might render other optimizations ineffective. 
 
 ---
 

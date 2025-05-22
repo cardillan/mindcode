@@ -144,7 +144,7 @@ printflush message1
 
 ## Avoiding boolean operators in loop conditions
 
-If the condition is part of a loop, it might be possible to avoid the boolean expresion in it:
+If the condition is part of a loop, it might be possible to avoid the boolean expression in it:
 
 ```Mindcode
 // while x > 0 and x < 10 do

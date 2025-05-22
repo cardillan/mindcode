@@ -15,7 +15,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.KeywordCategory.*;
 
 @NullMarked
 public enum InstructionParameterType {
-    /// Alignment for the DRAW PRINT instruction. 
+    /// Alignment for the `draw print` instruction.
     ALIGNMENT       ("alignment", Flags.KEYWORD, MindustryMetadata::getAlignments, alignment),
 
     /// Mindcode's array - a ValueStore instance
@@ -24,35 +24,35 @@ public enum InstructionParameterType {
     /// Input parameter accepting blocks (buildings).
     BLOCK           (Flags.INPUT),
 
-    /// Selector for the CONTROL instruction. 
+    /// Selector for the `control` instruction.
     BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION),
 
     /// A boolean parameter - expected as an input 
     BOOL            (Flags.INPUT),
 
-    /// True/false to set/clear status in STATUS instruction. 
+    /// True/false to set/clear status in `status` instruction.
     CLEAR           (Flags.SELECTOR | Flags.FUNCTION),
 
-    /// Selector for the JUMP instruction. 
+    /// Selector for the `jump` instruction.
     CONDITION       (Flags.SELECTOR),
 
-    /// Type of cut scene in CUTSCENE instruction 
+    /// Type of cut scene in `cutscene` instruction
     CUTSCENE        (Flags.SELECTOR),
 
-    /// Selector for the DRAW instruction. 
+    /// Selector for the `draw` instruction.
     DRAW            (Flags.SELECTOR | Flags.FUNCTION),
 
     /// Type of visual effect 
     EFFECT          (Flags.SELECTOR),
 
-    /// Item to fetch in FETCH instruction 
+    /// Item to fetch in `fetch` instruction
     FETCH           (Flags.SELECTOR),
 
-    /// An input parameter requiring a global variable - see the SYNC instruction. 
+    /// An input parameter requiring a global variable - see the `sync` instruction.
     GLOBAL          (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
 
     /// A const parameter. Specifies group of buildings to locate. 
-    GROUP           ("blockGroup", Flags.KEYWORD, MindustryMetadata::getBlockFlags, blockFlag),
+    GROUP           ("blockGroup", Flags.KEYWORD, MindustryMetadata::getBlockFlags, blockGroup),
 
     /// Non-specific input parameter. Accepts literals and variables 
     INPUT           (Flags.INPUT),
@@ -63,22 +63,22 @@ public enum InstructionParameterType {
     /// A label pseudo-parameter. 
     LABEL           (Flags.INPUT),
 
-    /// Layer in getBlock instruction. 
+    /// Layer in the `getblock` instruction.
     LAYER           ("layer", Flags.KEYWORD, MindustryMetadata::getTileLayers, tileLayer),
 
-    /// Selector for the ULOCATE instruction. No Flags.FUNCTION! 
+    /// Selector for the `ulocate` instruction. No Flags.FUNCTION!
     LOCATE          ("locate", Flags.SELECTOR),
 
     /// Specifies lookup category.
-    LOOKUP          ("itemType", Flags.KEYWORD, MindustryMetadata::getLookableContents, contentType),
+    LOOKUP          ("itemType", Flags.KEYWORD, MindustryMetadata::getLookableContents, lookupType),
 
-    /// Type of message in MESSAGE instruction 
-    MAKE_MARKER     ("markerType", Flags.KEYWORD, MindustryMetadata::getMarkerTypes, markerType),
+    /// Type of marker in `makemarker` instruction
+    MARKER_TYPE     ("markerType", Flags.KEYWORD, MindustryMetadata::getMarkerTypes, markerType),
 
-    /// Type of message in MESSAGE instruction 
+    /// Type of message in `message` instruction
     MESSAGE         (Flags.SELECTOR),
 
-    /// Selector for the OP instruction. 
+    /// Selector for the `op` instruction.
     OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
 
     /// Input parameter accepting ore type. 
@@ -96,10 +96,10 @@ public enum InstructionParameterType {
     /// Output parameter. Maps to the return value of a function. 
     RESULT          (Flags.OUTPUT),
 
-    /// Game rule in SETRULE instruction 
+    /// Game rule in `setrule` instruction
     RULE            (Flags.SELECTOR),
 
-    /// Scope for the playsound instruction: true=positional, false=global 
+    /// Scope for the `playsound` instruction: true=positional, false=global
     SCOPE           (Flags.SELECTOR),
 
     /// Input parameter accepting property id. 
@@ -108,16 +108,16 @@ public enum InstructionParameterType {
     /// Input parameter accepting settable property id.
     SETTABLE        ("property", Flags.INPUT, MindustryMetadata::getLAccessSettableNames),
 
-    /// For the SET MARKER instruction
+    /// For the `setmarker` instruction
     SET_MARKER      (Flags.SELECTOR),
 
-    /// Settable layer in SETBLOCK instruction 
+    /// Settable layer in `setblock` instruction
     SETTABLE_LAYER  ("layer", Flags.SELECTOR, MindustryMetadata::getTileLayersSettable, settableTileLayer),
 
     /// Sound to play 
     SOUND           ("sound", Flags.INPUT, MindustryMetadata::getSoundNames),
 
-    /// Unit status in STATUS instruction. 
+    /// Unit status in `status` instruction.
     STATUS          ("status", Flags.KEYWORD, MindustryMetadata::getStatusEffects, statusEffect),
 
     /// Expected type of value
@@ -126,7 +126,7 @@ public enum InstructionParameterType {
     /// Input parameter accepting unit type.
     UNIT            ("unitType", Flags.INPUT, MindustryMetadata::getUnitTypes),
 
-    /// Selector for the UCONTROL instruction. 
+    /// Selector for the `ucontrol` instruction.
     UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION),
 
     /// Non-specific parameter type for generic instructions 
@@ -138,7 +138,7 @@ public enum InstructionParameterType {
     /// An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. 
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
 
-    WEATHER         ("weather", Flags.INPUT, MindustryMetadata::getWeathers, weather),
+    WEATHER         ("weather", Flags.INPUT, MindustryMetadata::getWeathers),
 
     ;
 
