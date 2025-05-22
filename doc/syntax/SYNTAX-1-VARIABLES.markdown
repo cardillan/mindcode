@@ -367,323 +367,17 @@ begin
 end;
 ```
 
-## Linked variables
-
-> [!NOTE]
-> Blocks linked to Mindustry processors are called _linked blocks_. Mindcode variables representing linked blocks are called _linked variables_. In relaxed syntax mode, these terms can be used interchangeably, as using a linked block name in the source code creates a linked variable with the same name. In strict syntax, the distinction between linked blocks and linked variables is important: linked variables are created for specific linked blocks through an explicit declaration. 
-
-Linked variables represent blocks directly linked to the processor. A guard code may be created for linked variables. Linked variables are declared using this syntax: 
-
-```
-[noinit] linked [var] <variable1> [= <linked block>] [, <variable2> [= <linked block>] ... ];
-```
-
-Linked variables must be declared in global scope and are therefore always global. When an initial value is not assigned to the variable, the variable identifier is the name of the linked block: `linked cell1;` declares a `cell1` variable representing the `cell1` block linked to the processor. When an initial value is assigned to the variable, the assigned value must be a name of the linked block, while the variable identifier will be used to represent the variable in the program: `linked up = switch1, down = switch2;`. This is useful to assign symbolic names to linked blocks.
-
-A warning is generated if the name of the linked block used in linked variable declaration is not recognized, however the linked variable is nevertheless is created. This way, it is possible to use linked blocks unrecognized by Mindcode (e.g. blocks from a mod).
-
-`linked` is a modifier, and the `var` keyword is optional when `linked` is used. Modifiers can be specified in any order. When declaring external variables, these additional modifiers can be used:
-
-* `noinit`: this modifier disables the generation of the guard code.
-
-Example:
-
-```Mindcode
-linked on = switch1, memory = cell1;    // These blocks are required
-noinit linked message1;                 // message1 is optional
-
-while on.@enabled do
-    memory[0]++;
-    print($"Current value: ${memory[0]}");
-    printflush(message1);
-end;
-```
-
-> [!IMPORTANT]
-> Linked variables (both implicit and explicit ones) reflect the changes made to linked blocks during the execution of the program. For example, if `switch1` is linked to the processor, but then is destroyed, the value of `switch1` turns to `null`. If the switch is then rebuilt by the user and linked to the processor under the same name, the linked variable will automatically reconnect to the new instance of the switch when it becomes available.
-> 
-> it is important to consider that in some cases the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may be of a different type (e.g. replacing sorter `sorter1` with inverted sorter will link the inverted sorter also under the name `sorter1`).  
-> 
-> When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as missing by querying the `@dead` property.
-
-### Guard code for linked variables
-
-When declaring a linked variable, Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
-
-```Mindcode
-/// A guard code: loops until message1 is not null
-linked output = message1;
-print("Here we are");
-printflush(output);
-stopProcessor();
-```
-
-compiles to
-
-```mlog
-# A guard code: loops until message1 is not null
-jump 0 equal message1 null
-print "Here we are"
-printflush message1
-stop
-```
-
-Additionally, guard code is generated for undeclared linked blocks used in the `allocate` declaration (e.g. `allocate heap in bank1;` will generate guard code for `bank1`). To disable guard code generation in this case, explicitly declare the variable using `noinit` keyword:
-
-```Mindcode
-noinit linked bank1;
-allocate heap in bank1;
-```
-
-Guard code is not generated for linked variables that were not explicitly declared, for linked variables declared with the `noinit` modifier, and when guard code generation is disabled by the `#set link-guards = false;` compiler directive or the `--link-guards false` command-line argument.
-
-Undeclared linked blocks used as parameter values (e.g. `param memory = bank1;`) also do not generate guard code.
-
-## Heap
-
-Heap provides default storage for external variables, and needs to be declared before an external variable without explicit storage specification is declared or implicitly created. Heap is declared using this syntax:
-
-```
-allocate heap in <memory>[<range>];
-```
-
-for example:
-
-```Mindcode
-allocate heap in cell4[50 ... 64];
-```
-
-> [!NOTE]
-> The range specification is optional. When no range is specified and the memory block is resolved to a memory bank (i.e. its name starts with 'bank'), range `0 ... 512` is assumed. Otherwise, range `0 ... 64` is assumed.
-
-This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 for external variables (note the exclusive range). If you create more external variables than you have allocated space for, a compilation error will occur. In that case, allocate more space for the heap in the cell, or possibly switch to a
-memory bank to obtain even more space.
-
-A linked block or variable, a constant, a parameter or a global variable can be used as a memory in the heap declaration. This way (by using a global variable) it is even possible to choose a memory block for heap dynamically. It is up to the user to ensure that:
-
-1. The linked block or variable was initialized before external variables are accessed for read or write.
-2. The value of a global variable used to hold the memory doesn't change once initialized. 
-
-The first requirement may be satisfied by using a linked block with a guard code as the initial value of the variable. In more complex cases, assigning a value to the variable via function call might be necessary. 
-
-## External variables
-
-External variables represent cells in a memory block. When created implicitly or declared without storage specification, external variables are assigned storage from the heap, which needs to be allocated first. The cells are assigned to variables in the order in which the variables appear in the source code, and don't subsequently change (explicit declaration of all external variables is the easiest way to specify fixed allocation order of external variables). External variables are declared using this syntax:
-
-```
-[noinit] [cached] external [memory [index|range]] [var] <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
-```
-
-External variables must be declared in global scope and are therefore always global. Declared external variables can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
-
-When an initial value is provided, it is assigned to the variable and written to the memory cell at the moment of the declaration.
-
-`external` is a modifier, and the `var` keyword is optional when `external` is used. Modifiers can be specified in any order. When declaring external variables, these additional modifiers can be used:
-
-* `cached`: the value of the variable is read from the external memory just once at the variable creation and is kept in a processor variable (or, if an initial value was specified in the declaration, the initial value is written to the memory and the variable). Variable reads are served using the processor variable. Writes update the processor variable and also write the new value to the memory.
-* `noinit`: this modifier is only meaningful with the `cached` modifier. When used, the initial value of the variable is not read from the memory slot at all, the variable only allows to write new values to the memory slot. This modifier cannot be used if the variable is assigned an initial value.
-
-Cached variables are useful in situations where you want to store latest values in a memory to be reused when the processor is reset. Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors. In both cases, you can read from the variables without any performance penalty, but all writes are automatically propagated to the external memory.
-
-A _storage specification_ can be included after the `external` keyword. The storage clause consist of the name of the memory block (e.g. `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the external keyword are allocated in given memory block, starting at the given index/range. If more space than provided by given range is required for variables, an error is reported.
-
-When no storage clause is specified, the external variable is placed in the heap.
-
-> [!IMPORTANT]
-> Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory. 
-
-Examples:
-
-```Mindcode
-allocate heap in cell4[32 ... 64];
-
-// Implicitly created varaibles
-$dx = 1; 
-$dy = 1;
-
-// Explicity declared varaibles
-cached external a, b = 90;        
-noinit cached external c;
-c = a + b;
-print(c);
-```
-
-The above will compile to:
-
-```mlog
-jump 0 equal cell4 null
-write 1 cell4 32
-write 1 cell4 33
-read .a cell4 34
-write 90 cell4 35
-op add .c .a 90
-write .c cell4 36
-print .c
-```
-
-## External arrays
-
-It is possible to allocate an array of a fixed length from the heap or another storage. An external array consists of a fixed number of elements. Individual array elements are governed by the same rules as external variables. External arrays are declared using this syntax:
-
-```
-external [memory [index|range]] [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
-```
-
-> [!TIP]
-> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g. `external var x[10];`.
-
-`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array:
-
-```Mindcode
-allocate heap in cell1[32 .. 64];
-external $array[3] = (10, 20, 30);
-external bank1[10] d = 10;
-```
-
-compiles into
-
-```mlog
-jump 0 equal cell1 null
-write 10 cell1 32
-write 20 cell1 33
-write 30 cell1 34
-jump 4 equal bank1 null
-write 10 bank1 10
-```
-
-External arrays must be declared in global scope and are therefore always global. Declared external arrays can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
-
-When initial values are provided, they are written to corresponding memory slots at the moment of the declaration.
-
-`external` is a modifier, and the `var` keyword is optional when `external` is used. When declaring external arrays, the `noinit` and `cached` modifiers cannot be used.
-
-A _storage specification_ can be included after the `external` keyword, as described above.
-
-## Internal arrays
-
-[Internal arrays](#internal-arrays) are declared using this syntax:
-
-```
-[var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
-```
-
-> [!TIP]
-> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g. `var x[10];`.
-
-`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array. The initial values are assigned directly to array element variables:
-
-```Mindcode
-var array[3] = (rand(10), rand(20), rand(30));
-print(array);
-```
-
-compiles into
-
-```mlog
-op rand .array*0 10 0
-op rand .array*1 20 0
-op rand .array*2 30 0
-print .array*0
-print .array*1
-print .array*2
-```
-
-Internal arrays must be declared in global scope and are therefore always global.
-
-## Remote variables and arrays
-
-Remote variables must be declared in remote modules. For more details, see [remote variables and arrays](REMOTE-CALLS.markdown#remote-variables).
-
-## Program parameters
-
-Program parameters are processor variables that have a value assigned to them at declaration which, after the initial assignment, remains constant for the entire execution of the program. Assignments to program parameters, apart from the initialization in the declaration, aren't allowed.
-
-The initial value assigned to the parameter is compiled to a single `set` instruction. The assigned value may be changed in the compiled code - there is always exactly one `set` instruction assigning a value to the program parameter - and such a change has the same effect on the program as if the code was actually compiled with the new parameter value. In other words, program parameters allow users of your program to change some basic parameters (such as unit types, linked blocks or various numeric limits) without having to recompile the entire program, and potentially without having access to your original source code and/or Mindcode compiler.
-
-> [!IMPORTANT]
-> Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled code is constant. When modifying the compiled code to assign a non-constant value (for example `@links` or `@time`) to a program parameter, the behavior of the resulting code is generally undefined.
-
-Names of the mlog variables representing the program parameters are always the same as the names used in the source code. For this reason, Mindcode disallows using potential [linked block names](#linked-blocks) as identifiers for parameters (i.e. you can't create a parameter named `switch1`). 
-
-Program parameters cannot be created implicitly and always need to be declared using this syntax:
-
-```
-param <parameter> = <initial value>;
-```
-
-Program parameters must be declared in global scope and are therefore always global. The following values can be assigned to a program parameters:
-
-* literals of any kind except formattable string literals,
-* constants and constant expressions,
-* linked variables,
-* linked blocks,
-* built-in variables, except built-in variables known not to be constant.
-
-If a numeric value is assigned to a parameter, and it isn't possible to [encode the value into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
-
-> [!TIP]
-> Even in strict syntax mode, linked blocks can be assigned to a program parameter without prior declaration. In this case, no guard code for these linked blocks is generated.
-
-> [!NOTE]
-> Using a linked variable with guard code as a value for program parameter is discouraged. The purpose of the program parameter is to allow making changes to the compiled code, however a change just to the program parameter's value would not mean the guard code would protect the new block.
-
-Example (the optimization is turned off to prevent removing unused parameters):
-
-```Mindcode
-#set optimization = none;
-param unitType = @flare;
-param target = vault1;
-param maxUnits = 10;
-param diff = sin(45); 
-param userName = "Pete"; 
-```
-
-This code, when compiled, produces the following instructions:
-
-```mlog
-set unitType @flare
-set target vault1
-set maxUnits 10
-set diff 0.7071067811865475
-set userName "Pete"
-end
-```
-
- It is apparent that values assigned through these instructions can be easily changed in the compiled code.
-
-> [!TIP]
-> It is a good idea to _sanitize_ the values of program parameters, to make sure that changes to the parameters in the compiled code do not break the program.
-
-For example, let's say that a parameter is created to specify the percentage of container capacity usage at which some action should happen. Constraining the parameter to a range of `0 .. 100` ensures parameter values outside this range do not break the code:
-
-```Mindcode
-param CUTOFF_PCT = 50;
-var cutoffPct = max(min(CUTOFF_PCT, 100), 0);
-print(cutoffPct);
-```
-
-produces the following code:
-
-```mlog
-set CUTOFF_PCT 50
-op min *tmp0 CUTOFF_PCT 100
-op max .cutoffPct *tmp0 0
-print .cutoffPct
-```
-
-Additional benefit is that, upon closer inspection, the expected range of the parameter value becomes apparent from the compiled code itself. 
-
 ## Constants
 
-Constants serve as symbolic names for important values. Mindcode doesn't store constant values in processor variables, but places the value of the constant directly into the compiled code when the constant is used. Storing a value in a constant allows to easily change the value at a single place in the source code. Unlike program parameters, changes to constants aren't possible in the compiled code. 
+Constants are unmodifiable variables which can hold values evaluated at compile time. Mindcode doesn't store constant values in processor variables, but places the value of the constant directly into the compiled code when the constant is used. Storing a value in a constant allows to easily change the value at a single place in the source code. Unlike program parameters, changes to constants aren't possible in the compiled code.
 
 Constants are declared using this syntax:
 
 ```
-const <constant> = <value>;
+const [var] <constant> = <value>;
 ```
 
-Constants must be declared in global scope and are therefore always global.  The following types of values can be assigned to constants:
+`const` is a modifier, and the `var` keyword is optional when `const` is used. Constants must be declared in global scope and are therefore always global. The following types of values can be assigned to constants:
 
 * literals of any kind (including formattable string literals),
 * other constants and constant expressions,
@@ -708,7 +402,7 @@ Compile-time evaluation uses the same rules as Mindustry Logic, i.e. `const ERRO
 
 If a numeric value is assigned to a constant, and it isn't possible to [encode the value into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
 
-Among other uses, constants can be used to optionally exclude sections of code while compiling: 
+Among other uses, constants can be used to optionally exclude sections of code while compiling:
 
 ```Mindcode
 const DEBUG = false;
@@ -1348,6 +1042,329 @@ The list of all existing icons is quite huge:
 
 </details>
 
+## Linked variables
+
+> [!NOTE]
+> Blocks linked to Mindustry processors are called _linked blocks_. Mindcode variables representing linked blocks are called _linked variables_. In relaxed syntax mode, these terms can be used interchangeably, as using a linked block name in the source code creates a linked variable with the same name. In strict syntax, the distinction between linked blocks and linked variables is important: linked variables are created for specific linked blocks through an explicit declaration. 
+
+Linked variables represent blocks directly linked to the processor. A guard code may be created for linked variables. Linked variables are declared using this syntax: 
+
+```
+[noinit] linked [var] <variable1> [= <linked block>] [, <variable2> [= <linked block>] ... ];
+```
+
+Linked variables must be declared in global scope and are therefore always global. When an initial value is not assigned to the variable, the variable identifier is the name of the linked block: `linked cell1;` declares a `cell1` variable representing the `cell1` block linked to the processor. When an initial value is assigned to the variable, the assigned value must be a name of the linked block, while the variable identifier will be used to represent the variable in the program: `linked up = switch1, down = switch2;`. This is useful to assign symbolic names to linked blocks.
+
+A warning is generated if the name of the linked block used in linked variable declaration is not recognized, however the linked variable is nevertheless is created. This way, it is possible to use linked blocks unrecognized by Mindcode (e.g. blocks from a mod).
+
+`linked` is a modifier, and the `var` keyword is optional when `linked` is used. Modifiers can be specified in any order. When declaring external variables, these additional modifiers can be used:
+
+* `noinit`: this modifier disables the generation of the guard code.
+
+Example:
+
+```Mindcode
+linked on = switch1, memory = cell1;    // These blocks are required
+noinit linked message1;                 // message1 is optional
+
+while on.@enabled do
+    memory[0]++;
+    print($"Current value: ${memory[0]}");
+    printflush(message1);
+end;
+```
+
+> [!IMPORTANT]
+> Linked variables (both implicit and explicit ones) reflect the changes made to linked blocks during the execution of the program. For example, if `switch1` is linked to the processor, but then is destroyed, the value of `switch1` turns to `null`. If the switch is then rebuilt by the user and linked to the processor under the same name, the linked variable will automatically reconnect to the new instance of the switch when it becomes available.
+> 
+> it is important to consider that in some cases the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may be of a different type (e.g. replacing sorter `sorter1` with inverted sorter will link the inverted sorter also under the name `sorter1`).  
+> 
+> When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as missing by querying the `@dead` property.
+
+### Guard code for linked variables
+
+When declaring a linked variable, Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
+
+```Mindcode
+/// A guard code: loops until message1 is not null
+linked output = message1;
+print("Here we are");
+printflush(output);
+stopProcessor();
+```
+
+compiles to
+
+```mlog
+# A guard code: loops until message1 is not null
+jump 0 equal message1 null
+print "Here we are"
+printflush message1
+stop
+```
+
+Additionally, guard code is generated for undeclared linked blocks used in the `allocate` declaration (e.g. `allocate heap in bank1;` will generate guard code for `bank1`). To disable guard code generation in this case, explicitly declare the variable using `noinit` keyword:
+
+```Mindcode
+noinit linked bank1;
+allocate heap in bank1;
+```
+
+Guard code is not generated for linked variables that were not explicitly declared, for linked variables declared with the `noinit` modifier, and when guard code generation is disabled by the `#set link-guards = false;` compiler directive or the `--link-guards false` command-line argument.
+
+Undeclared linked blocks used as parameter values (e.g. `param memory = bank1;`) also do not generate guard code.
+
+## Heap
+
+Heap provides default storage for external variables, and needs to be declared before an external variable without explicit storage specification is declared or implicitly created. Heap is declared using this syntax:
+
+```
+allocate heap in <memory>[<range>];
+```
+
+for example:
+
+```Mindcode
+allocate heap in cell4[50 ... 64];
+```
+
+> [!NOTE]
+> The range specification is optional. When no range is specified and the memory block is resolved to a memory bank (i.e. its name starts with 'bank'), range `0 ... 512` is assumed. Otherwise, range `0 ... 64` is assumed.
+
+This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 for external variables (note the exclusive range). If you create more external variables than you have allocated space for, a compilation error will occur. In that case, allocate more space for the heap in the cell, or possibly switch to a
+memory bank to obtain even more space.
+
+A linked block or variable, a constant, a parameter or a global variable can be used as a memory in the heap declaration. This way (by using a global variable) it is even possible to choose a memory block for heap dynamically. It is up to the user to ensure that:
+
+1. The linked block or variable was initialized before external variables are accessed for read or write.
+2. The value of a global variable used to hold the memory doesn't change once initialized. 
+
+The first requirement may be satisfied by using a linked block with a guard code as the initial value of the variable. In more complex cases, assigning a value to the variable via function call might be necessary. 
+
+## External variables
+
+External variables represent cells in a memory block. When created implicitly or declared without storage specification, external variables are assigned storage from the heap, which needs to be allocated first. The cells are assigned to variables in the order in which the variables appear in the source code, and don't subsequently change (explicit declaration of all external variables is the easiest way to specify fixed allocation order of external variables). External variables are declared using this syntax:
+
+```
+[noinit] [cached] external [memory [index|range]] [var] <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
+```
+
+External variables must be declared in global scope and are therefore always global. Declared external variables can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
+
+When an initial value is provided, it is assigned to the variable and written to the memory cell at the moment of the declaration.
+
+`external` is a modifier, and the `var` keyword is optional when `external` is used. Modifiers can be specified in any order. When declaring external variables, these additional modifiers can be used:
+
+* `cached`: the value of the variable is read from the external memory just once at the variable creation and is kept in a processor variable (or, if an initial value was specified in the declaration, the initial value is written to the memory and the variable). Variable reads are served using the processor variable. Writes update the processor variable and also write the new value to the memory.
+* `noinit`: this modifier is only meaningful with the `cached` modifier. When used, the initial value of the variable is not read from the memory slot at all, the variable only allows to write new values to the memory slot. This modifier cannot be used if the variable is assigned an initial value.
+
+Cached variables are useful in situations where you want to store latest values in a memory to be reused when the processor is reset. Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors. In both cases, you can read from the variables without any performance penalty, but all writes are automatically propagated to the external memory.
+
+A _storage specification_ can be included after the `external` keyword. The storage clause consist of the name of the memory block (e.g. `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the external keyword are allocated in given memory block, starting at the given index/range. If more space than provided by given range is required for variables, an error is reported.
+
+When no storage clause is specified, the external variable is placed in the heap.
+
+> [!IMPORTANT]
+> Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory. 
+
+Examples:
+
+```Mindcode
+allocate heap in cell4[32 ... 64];
+
+// Implicitly created varaibles
+$dx = 1; 
+$dy = 1;
+
+// Explicity declared varaibles
+cached external a, b = 90;        
+noinit cached external c;
+c = a + b;
+print(c);
+```
+
+The above will compile to:
+
+```mlog
+jump 0 equal cell4 null
+write 1 cell4 32
+write 1 cell4 33
+read .a cell4 34
+write 90 cell4 35
+op add .c .a 90
+write .c cell4 36
+print .c
+```
+
+## External arrays
+
+It is possible to allocate an array of a fixed length from the heap or another storage. An external array consists of a fixed number of elements. Individual array elements are governed by the same rules as external variables. External arrays are declared using this syntax:
+
+```
+external [memory [index|range]] [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
+```
+
+> [!TIP]
+> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g. `external var x[10];`.
+
+`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array:
+
+```Mindcode
+allocate heap in cell1[32 .. 64];
+external $array[3] = (10, 20, 30);
+external bank1[10] d = 10;
+```
+
+compiles into
+
+```mlog
+jump 0 equal cell1 null
+write 10 cell1 32
+write 20 cell1 33
+write 30 cell1 34
+jump 4 equal bank1 null
+write 10 bank1 10
+```
+
+External arrays must be declared in global scope and are therefore always global. Declared external arrays can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
+
+When initial values are provided, they are written to corresponding memory slots at the moment of the declaration.
+
+`external` is a modifier, and the `var` keyword is optional when `external` is used. When declaring external arrays, the `noinit` and `cached` modifiers cannot be used.
+
+A _storage specification_ can be included after the `external` keyword, as described above.
+
+## Internal arrays
+
+[Internal arrays](#internal-arrays) are declared using this syntax:
+
+```
+[const] [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
+```
+
+> [!TIP]
+> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g. `var x[10];`.
+
+`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e. the number of elements in the array. When initial values for the array are specified, their number must equal to the size of the array. The initial values are assigned directly to array element variables:
+
+When declaring arrays, these additional modifiers can be used:
+
+* `const`: declares a constant array. A constant array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for constant array elements, the constant values are used instead.
+
+```Mindcode
+var array[3] = (rand(4), rand(4), rand(4));
+const colors[] = ("[red]", "[green]", "[blue]", "[crimson]");
+print(colors[floor(array[0])]);
+print(array);
+```
+
+compiles into
+
+```mlog
+op rand *tmp0 4 0
+op rand *tmp1 4 0
+op rand *tmp2 4 0
+op floor *tmp4 *tmp0 0
+op mul *tmp7 *tmp4 2
+op add @counter *tmp7 6
+set *tmp6 "[red]"
+jump 13 always 0 0
+set *tmp6 "[green]"
+jump 13 always 0 0
+set *tmp6 "[blue]"
+jump 13 always 0 0
+set *tmp6 "[crimson]"
+print *tmp6
+print *tmp0
+print *tmp1
+print *tmp2
+```
+
+Internal arrays must be declared in global scope and are therefore always global.
+
+## Remote variables and arrays
+
+Remote variables must be declared in remote modules. For more details, see [remote variables and arrays](REMOTE-CALLS.markdown#remote-variables).
+
+## Program parameters
+
+Program parameters are processor variables that have a value assigned to them at declaration which, after the initial assignment, remains constant for the entire execution of the program. Assignments to program parameters, apart from the initialization in the declaration, aren't allowed.
+
+The initial value assigned to the parameter is compiled to a single `set` instruction. The assigned value may be changed in the compiled code - there is always exactly one `set` instruction assigning a value to the program parameter - and such a change has the same effect on the program as if the code was actually compiled with the new parameter value. In other words, program parameters allow users of your program to change some basic parameters (such as unit types, linked blocks or various numeric limits) without having to recompile the entire program, and potentially without having access to your original source code and/or Mindcode compiler.
+
+> [!IMPORTANT]
+> Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled code is constant. When modifying the compiled code to assign a non-constant value (for example `@links` or `@time`) to a program parameter, the behavior of the resulting code is generally undefined.
+
+Names of the mlog variables representing the program parameters are always the same as the names used in the source code. For this reason, Mindcode disallows using potential [linked block names](#linked-blocks) as identifiers for parameters (i.e. you can't create a parameter named `switch1`). 
+
+Program parameters cannot be created implicitly and always need to be declared using this syntax:
+
+```
+param <parameter> = <initial value>;
+```
+
+Program parameters must be declared in global scope and are therefore always global. The following values can be assigned to a program parameters:
+
+* literals of any kind except formattable string literals,
+* constants and constant expressions,
+* linked variables,
+* linked blocks,
+* built-in variables, except built-in variables known not to be constant.
+
+If a numeric value is assigned to a parameter, and it isn't possible to [encode the value into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
+
+> [!TIP]
+> Even in strict syntax mode, linked blocks can be assigned to a program parameter without prior declaration. In this case, no guard code for these linked blocks is generated.
+
+> [!NOTE]
+> Using a linked variable with guard code as a value for program parameter is discouraged. The purpose of the program parameter is to allow making changes to the compiled code, however a change just to the program parameter's value would not mean the guard code would protect the new block.
+
+Example (the optimization is turned off to prevent removing unused parameters):
+
+```Mindcode
+#set optimization = none;
+param unitType = @flare;
+param target = vault1;
+param maxUnits = 10;
+param diff = sin(45); 
+param userName = "Pete"; 
+```
+
+This code, when compiled, produces the following instructions:
+
+```mlog
+set unitType @flare
+set target vault1
+set maxUnits 10
+set diff 0.7071067811865475
+set userName "Pete"
+end
+```
+
+ It is apparent that values assigned through these instructions can be easily changed in the compiled code.
+
+> [!TIP]
+> It is a good idea to _sanitize_ the values of program parameters, to make sure that changes to the parameters in the compiled code do not break the program.
+
+For example, let's say that a parameter is created to specify the percentage of container capacity usage at which some action should happen. Constraining the parameter to a range of `0 .. 100` ensures parameter values outside this range do not break the code:
+
+```Mindcode
+param CUTOFF_PCT = 50;
+var cutoffPct = max(min(CUTOFF_PCT, 100), 0);
+print(cutoffPct);
+```
+
+produces the following code:
+
+```mlog
+set CUTOFF_PCT 50
+op min *tmp0 CUTOFF_PCT 100
+op max .cutoffPct *tmp0 0
+print .cutoffPct
+```
+
+Additional benefit is that, upon closer inspection, the expected range of the parameter value becomes apparent from the compiled code itself. 
+
 ## Built-in variables
 
 [Mindustry built-in variables](#mindustry-logic-built-in-variables) are available in Mindcode directly by their name, including the `@` prefix (e.g. `var n = @links;`). A declaration is never required to use them.
@@ -1389,7 +1406,7 @@ Function parameters are valid within the scope of the entire function, and are a
 
 # Dynamic linking to blocks
 
-Mindustry Logic provides functions which allow you to access linked blocks, or even blocks not linked to the processor, dynamically through the [`getlink()`](FUNCTIONS-80.markdown#instruction-getlink), [`ulocate()`](FUNCTIONS-80.markdown#instruction-ulocate) and other functions.
+Mindustry Logic provides functions which allow you to access linked blocks, or even blocks not linked to the processor, dynamically through the [`getlink()`](FUNCTIONS-80.markdown#instruction-get-link), [`ulocate()`](FUNCTIONS-80.markdown#instruction-unit-locate) and other functions.
 
 These functions return a reference to a block. This reference can be stored in a regular variable, which can then be used to perform operations on the block in the same way as linked variables:
 

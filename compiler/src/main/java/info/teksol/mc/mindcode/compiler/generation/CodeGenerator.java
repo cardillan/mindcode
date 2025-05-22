@@ -292,7 +292,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         if (node.getScope() == AstNodeScope.LOCAL) nested++;
         if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = true;
-        if (node instanceof AstConstant || node instanceof AstParameter) requireMlogConstant = true;
+        if (node instanceof AstParameter || node instanceof AstVariablesDeclaration var && var.isConstantDeclaration()) requireMlogConstant = true;
         assembler.enterAstNode(node);
         variables.enterAstNode();
         ValueStore result = nodeVisitor.visit(evaluator.evaluate(node, isLocalContext(), requireMlogConstant));
@@ -307,7 +307,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         variables.exitAstNode();
         assembler.exitAstNode(node);
-        if (node instanceof AstConstant || node instanceof AstParameter) requireMlogConstant = false;
+        if (node instanceof AstParameter || node instanceof AstVariablesDeclaration var && var.isConstantDeclaration()) requireMlogConstant = false;
         if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = false;
         if (node.getScope() == AstNodeScope.LOCAL) nested--;
 

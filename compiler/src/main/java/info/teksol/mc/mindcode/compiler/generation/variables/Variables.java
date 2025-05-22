@@ -158,11 +158,11 @@ public class Variables extends AbstractMessageEmitter {
 
     /// Registers a constant. Reports possible name clashes.
     ///
-    /// @param constant constant declaration to process
-    /// @param value compile-time value associated with the constant
-    public void createConstant(AstConstant constant, ValueStore value) {
-        verifyGlobalDeclaration(constant, constant.getName());
-        putVariableIfAbsent(constant.getConstantName(), value);
+    /// @param specification constant declaration to process
+    /// @param value compile-time value associated with the specification
+    public void createConstant(AstVariableSpecification specification, ValueStore value) {
+        verifyGlobalDeclaration(specification, specification.getIdentifier());
+        putVariableIfAbsent(specification.getName(), value);
     }
 
     /// Registers a parameter. Reports possible name clashes.
@@ -221,11 +221,13 @@ public class Variables extends AbstractMessageEmitter {
     /// @param variable variable specification
     /// @return ValueStore instance representing the created variable
     public ArrayStore createArray(AstIdentifier identifier, int size, Map<Modifier, @Nullable Object> modifiers,
-            @Nullable LogicVariable processor) {
+            List<ValueStore> initialValues, @Nullable LogicVariable processor) {
         ArrayStore result;
 
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             result = InternalArray.createInvalid(identifier, size);
+        } else if (modifiers.containsKey(Modifier.CONST)) {
+            result = InternalArray.createConst(identifier, size, initialValues);
         } else if (modifiers.containsKey(Modifier.EXTERNAL)) {
             result = getHeapTracker(modifiers).createArray(identifier, size);
         } else {

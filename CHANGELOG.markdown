@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added support for declaring new keywords and built-in variables through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
+* Added support for constant arrays. Elements of a constant array aren't stored in processor variables, but are used directly in the generated mlog program.  
 
 ## 3.5.2 - 2025-05-24
 

@@ -84,7 +84,7 @@ public class DocGeneratorTest {
 
         @Nullable String libraryName;
         List<AstFunctionDeclaration> functions = new ArrayList<>();
-        List<AstConstant> constants = new ArrayList<>();
+        List<AstVariablesDeclaration> constants = new ArrayList<>();
         List<AstParameter> parameters = new ArrayList<>();
         @Nullable AstFunctionDeclaration declaration;
 
@@ -115,7 +115,11 @@ public class DocGeneratorTest {
             if (!constants.isEmpty()) {
                 writer.println();
                 writer.println("## Constants");
-                constants.stream().filter(constant -> !constant.getConstantName().startsWith("_")).forEach(this::processConstant);
+                constants.forEach(
+                        declaration -> declaration.getVariables().stream()
+                                .filter(specification -> !specification.getName().startsWith("_"))
+                                .forEach(specification -> processConstant(declaration, specification))
+                );
             }
 
             if (!functions.isEmpty()) {
@@ -138,8 +142,8 @@ public class DocGeneratorTest {
         private void processNode(AstMindcodeNode node) {
             switch (node) {
                 case AstParameter n -> parameters.add(n);
-                case AstConstant n -> constants.add(n);
                 case AstFunctionDeclaration n -> functions.add(n);
+                case AstVariablesDeclaration n when n.isConstantDeclaration() -> constants.add(n);
                 default -> {
                 }
             }
@@ -170,20 +174,20 @@ public class DocGeneratorTest {
             }
         }
 
-        private void processConstant(AstConstant constant) {
+        private void processConstant(AstVariablesDeclaration declaration, AstVariableSpecification specification) {
             writer.println();
-            writer.println("### " + constant.getConstantName());
+            writer.println("### " + specification.getName());
             writer.println();
 
             writer.print("**Definition:** `const ");
-            writer.print(constant.getConstantName());
+            writer.print(specification.getName());
             writer.print(" = ");
-            printValue(constant.getValue());
+            printValue(specification.getExpressions().getFirst());
             writer.println(";`");
 
-            if (constant.getDocComment() != null) {
+            if (declaration.getDocComment() != null) {
                 writer.println();
-                writeDocComment(constant.getDocComment().getComment());
+                writeDocComment(declaration.getDocComment().getComment());
             }
         }
 

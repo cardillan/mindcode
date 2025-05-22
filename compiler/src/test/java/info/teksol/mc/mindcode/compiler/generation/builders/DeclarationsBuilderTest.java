@@ -554,6 +554,21 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void refuseNonConstantElementOfConstantArray() {
+            assertGeneratesMessage(
+                    "Value assigned to a constant array element is not a constant expression.",
+                    "const a[] = (b);");
+        }
+
+
+        @Test
+        void refuseUninitializedConstantArray() {
+            assertGeneratesMessage(
+                    "Constant array must be initialized.",
+                    "const a[10];");
+        }
+
+        @Test
         void refusesCachedArray() {
             assertGeneratesMessages(expectedMessages()
                             .add("Arrays cannot be declared 'cached'.")

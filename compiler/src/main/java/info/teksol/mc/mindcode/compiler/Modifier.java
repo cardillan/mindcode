@@ -8,6 +8,7 @@ import java.util.*;
 
 @NullMarked
 public enum Modifier {
+    CONST           (MindcodeLexer.CONST),
     CACHED          (MindcodeLexer.CACHED),
     EXTERNAL        (MindcodeLexer.EXTERNAL),
     LINKED          (MindcodeLexer.LINKED),
@@ -46,6 +47,7 @@ public enum Modifier {
 
     private static Map<Modifier, Set<Modifier>> compatibilityMap() {
         Map<Modifier, Set<Modifier>> map = new HashMap<>();
+        map.put(CONST, Set.of());
         map.put(CACHED, Set.of(EXTERNAL, NOINIT));
         map.put(EXTERNAL, Set.of(CACHED, NOINIT));
         map.put(LINKED, Set.of(NOINIT));

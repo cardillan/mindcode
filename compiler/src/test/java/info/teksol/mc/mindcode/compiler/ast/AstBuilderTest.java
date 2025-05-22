@@ -698,8 +698,14 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             allocate heap in cell1[MIN .. MAX];
                             """,
                     List.of(
-                            new AstConstant(EMPTY, null, id("MIN"), new AstLiteralDecimal(EMPTY, "10")),
-                            new AstConstant(EMPTY, null, id("MAX"), new AstLiteralDecimal(EMPTY, "20")),
+                            new AstVariablesDeclaration(EMPTY, null,
+                                    List.of(new AstVariableModifier(EMPTY, Modifier.CONST, null)),
+                                    List.of(new AstVariableSpecification(EMPTY, id("MIN"), new AstLiteralDecimal(EMPTY, "10")))
+                            ),
+                            new AstVariablesDeclaration(EMPTY, null,
+                                    List.of(new AstVariableModifier(EMPTY, Modifier.CONST, null)),
+                                    List.of(new AstVariableSpecification(EMPTY, id("MAX"), new AstLiteralDecimal(EMPTY, "20")))
+                            ),
                             new AstAllocations(EMPTY,
                                     List.of(
                                             new AstAllocation(EMPTY,
@@ -721,10 +727,11 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             const /** Comment3 */ MIN = 10;
                             """,
                     List.of(
-                            new AstConstant(EMPTY,
+                            new AstVariablesDeclaration(EMPTY,
                                     new AstDocComment(EMPTY, "/** Comment2 */"),
-                                    id("MIN"),
-                                    new AstLiteralDecimal(EMPTY, "10")
+                                    List.of(new AstVariableModifier(EMPTY, Modifier.CONST, null)),
+                                    List.of(new AstVariableSpecification(EMPTY, id("MIN"), new AstLiteralDecimal(EMPTY, "10"))
+                                    )
                             )
                     )
             );
@@ -741,7 +748,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             declaration,
                             List.of(
                                     declaration,
-                                    new AstVariablesDeclaration(EMPTY,
+                                    new AstVariablesDeclaration(EMPTY, null,
                                             List.of(),
                                             List.of(
                                                     new AstVariableSpecification(EMPTY, a, l1)
@@ -782,7 +789,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             declaration,
                             List.of(
                                     declaration,
-                                    new AstVariablesDeclaration(EMPTY,
+                                    new AstVariablesDeclaration(EMPTY, null,
                                             List.of(
                                                     new AstVariableModifier(EMPTY, Modifier.REMOTE, null)
                                             ),
@@ -802,7 +809,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             var a, b = 1;
                             """,
                     List.of(
-                            new AstVariablesDeclaration(EMPTY,
+                            new AstVariablesDeclaration(EMPTY, null,
                                     List.of(),
                                     List.of(
                                             new AstVariableSpecification(EMPTY, a, null),
@@ -819,7 +826,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             linked cell1, cell2;
                             """,
                     List.of(
-                            new AstVariablesDeclaration(EMPTY,
+                            new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.LINKED, null)),
                                     List.of(
                                             new AstVariableSpecification(EMPTY, id("cell1"), null),
@@ -837,13 +844,13 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             external cached b = 1;
                             """,
                     List.of(
-                            new AstVariablesDeclaration(EMPTY,
+                            new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL, null)),
                                     List.of(
                                             new AstVariableSpecification(EMPTY, ext("a"), l0)
                                     )
                             ),
-                            new AstVariablesDeclaration(EMPTY,
+                            new AstVariablesDeclaration(EMPTY, null,
                                     List.of(
                                             new AstVariableModifier(EMPTY, Modifier.EXTERNAL, null),
                                             new AstVariableModifier(EMPTY, Modifier.CACHED, null)
@@ -865,17 +872,17 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             external cell1[0 ... 1] $c = 0;
                             """,
                     List.of(
-                            new AstVariablesDeclaration(EMPTY,
+                            new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL,
                                             new AstExternalParameters(EMPTY, memory, null, null))),
                                     List.of(new AstVariableSpecification(EMPTY, ext("a"), l0))
                             ),
-                            new AstVariablesDeclaration(EMPTY,
+                            new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL,
                                             new AstExternalParameters(EMPTY, memory, null, number(1)))),
                                     List.of(new AstVariableSpecification(EMPTY, ext("b"), l0))
                             ),
-                            new AstVariablesDeclaration(EMPTY,
+                            new AstVariablesDeclaration(EMPTY, null,
                                     List.of(new AstVariableModifier(EMPTY, Modifier.EXTERNAL,
                                             new AstExternalParameters(EMPTY, memory,
                                                     new AstRange(EMPTY, l0, l1, true), null))),
@@ -1822,7 +1829,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             new AstIteratedForLoopStatement(EMPTY,
                                     null,
                                     List.of(
-                                            new AstVariablesDeclaration(EMPTY,
+                                            new AstVariablesDeclaration(EMPTY, null,
                                                     List.of(),
                                                     List.of(
                                                             new AstVariableSpecification(EMPTY, a, number(0)),

@@ -119,6 +119,14 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                     "var a[10]; --a;"
             );
         }
+
+        @Test
+        void refusesAssignmentsToConstantArrayElement() {
+            assertGeneratesMessage(
+                    "Assignment to an element of a constant array not allowed.",
+                    "const a[] = (1); a[0]++;"
+            );
+        }
     }
 
     @Nested

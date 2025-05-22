@@ -42,7 +42,6 @@ statement
     | MODULE name = IDENTIFIER                                                          # astModuleDeclaration
     | ENHANCEDCOMMENT formattableContents*                                              # astEnhancedComment
     | ALLOCATE allocations                                                              # astAllocations
-    | CONST name = IDENTIFIER ASSIGN value = expression                                 # astConstant
     | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
     | REQUIRE file = STRING (REMOTE processors = identifierList)?                       # astRequireFile
     | REQUIRE library = IDENTIFIER (REMOTE processors = identifierList)?                # astRequireLibrary
@@ -80,7 +79,8 @@ variableDeclaration
     ;
 
 declModifier
-    : modifier = CACHED
+    : modifier = CONST
+    | modifier = CACHED
     | modifier = EXTERNAL (memory = IDENTIFIER)?
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET index = expression RBRACKET
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET

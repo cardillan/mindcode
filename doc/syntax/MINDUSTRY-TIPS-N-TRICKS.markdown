@@ -171,7 +171,7 @@ I'm laying out just the basic pointers here, you'll need to combine the techniqu
 
 ### Binding units
 
-Unit needs to be bound to the processor to be controlled through it, using the `ubind` instruction (and a corresponding `ubind()` function). Only one unit can be bound at a time. All [commands controlling the unit](FUNCTIONS-80.markdown#instruction-ucontrol) are then sent to the bound unit.
+Unit needs to be bound to the processor to be controlled through it, using the `ubind` instruction (and a corresponding `ubind()` function). Only one unit can be bound at a time. All [commands controlling the unit](FUNCTIONS-80.markdown#instruction-unit-control) are then sent to the bound unit.
 
 You need to specify a unit type when binding a unit (e.g. `ubind(@poly)`). If there is at least one unit of the requested type, it is bound to your processor, and it is stored in a built-in variable named `@unit`. (The `ubind()` function also returns this value for convenience.) If no unit of the requested type exists, no unit is bound and `@unit` contains `null`. When you call `ubind()` again with the same unit type, a next available unit is returned. Once you've gone through all existing units, the first one is bound again.
 
@@ -285,7 +285,7 @@ end;
 
 Unit can become lost if a player or another rogue processor takes over it, so it is definitely useful to guard yourself against this possibility.
 
-Unit becomes controlled by the processor when it is issued a command. Most [ucontrol instructions](FUNCTIONS-80.markdown#instruction-ucontrol) will do so. Notably, setting a flag marks the unit as controlled while querying the flag or other properties of the unit won't.
+Unit becomes controlled by the processor when it is issued a command. Most [ucontrol instructions](FUNCTIONS-80.markdown#instruction-unit-control) will do so. Notably, setting a flag marks the unit as controlled while querying the flag or other properties of the unit won't.
 
 If a unit is not issued commands from a processor for some time, it becomes free again and both `@controlled` and `@controller` properties are cleared. My tests show it takes about 10 seconds:
 

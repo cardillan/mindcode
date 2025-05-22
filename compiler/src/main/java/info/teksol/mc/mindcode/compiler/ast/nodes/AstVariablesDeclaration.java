@@ -2,8 +2,10 @@ package info.teksol.mc.mindcode.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -13,9 +15,9 @@ public class AstVariablesDeclaration extends AstExpression {
     private final List<AstVariableModifier> modifiers;
     private final List<AstVariableSpecification> variables;
 
-    public AstVariablesDeclaration(SourcePosition sourcePosition, List<AstVariableModifier> modifiers,
-            List<AstVariableSpecification> variables) {
-        super(sourcePosition, children(modifiers, variables));
+    public AstVariablesDeclaration(SourcePosition sourcePosition, @Nullable AstDocComment docComment,
+            List<AstVariableModifier> modifiers, List<AstVariableSpecification> variables) {
+        super(sourcePosition, children(modifiers, variables), docComment);
         this.modifiers = modifiers;
         this.variables = variables;
     }
@@ -36,6 +38,10 @@ public class AstVariablesDeclaration extends AstExpression {
 
     public List<AstVariableSpecification> getVariables() {
         return variables;
+    }
+
+    public boolean isConstantDeclaration() {
+        return modifiers.stream().anyMatch(m -> m.getModifier() == Modifier.CONST);
     }
 
     @Override

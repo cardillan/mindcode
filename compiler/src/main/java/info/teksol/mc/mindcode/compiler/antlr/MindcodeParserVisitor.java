@@ -77,13 +77,6 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstAllocations(MindcodeParser.AstAllocationsContext ctx);
 	/**
-	 * Visit a parse tree produced by the {@code astConstant}
-	 * labeled alternative in {@link MindcodeParser#statement}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitAstConstant(MindcodeParser.AstConstantContext ctx);
-	/**
 	 * Visit a parse tree produced by the {@code astParameter}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree

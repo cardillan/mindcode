@@ -25,6 +25,9 @@ public class ERR {
     public static final String ARGUMENT_WRITE_TO_INPUT = "Parameter '%s' is output and 'out' modifier was not used.";
     public static final String ARRAY_ASSIGNMENT_SIZE_MISMATCH = "The arrays in the array expression have different sizes: %s[%d] versus %s[%d].";
     public static final String ARRAY_CACHED = "Arrays cannot be declared 'cached'.";
+    public static final String ARRAY_CANNOT_ASSIGN_TO_CONST_ARRAY = "Assignment to an element of a constant array not allowed.";
+    public static final String ARRAY_CONST_NOT_CONSTANT = "Value assigned to a constant array element is not a constant expression.";
+    public static final String ARRAY_CONST_NOT_INITIALIZED = "Constant array must be initialized.";
     public static final String ARRAY_EXPRESSION_NOT_MEMORY = "'%s' is not an external memory.";
     public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
     public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "Array index out of bounds (0 .. %d)";

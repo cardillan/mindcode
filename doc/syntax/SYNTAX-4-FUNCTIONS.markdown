@@ -120,7 +120,7 @@ There is a special case for `control` instruction setting a single value on a li
 
 The `block` in the examples can be a regular variable or a linked variable.
 
-Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS-70.markdown#instruction-setprop) instruction.
+Currently, the property access syntax cannot be used with the new [`setprop`](FUNCTIONS-70.markdown#instruction-set-prop) instruction.
 
 ## Alternative `sensor` syntax
 

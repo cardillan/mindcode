@@ -37,6 +37,10 @@ public class AstVariableSpecification extends AstFragment {
         return identifier;
     }
 
+    public String getName() {
+        return identifier.getName();
+    }
+
     public boolean isArray() {
         return array;
     }

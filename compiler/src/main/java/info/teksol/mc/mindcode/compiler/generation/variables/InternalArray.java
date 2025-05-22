@@ -56,6 +56,11 @@ public class InternalArray extends AbstractArrayStore {
         }
     }
 
+    public static InternalArray createConst(AstIdentifier identifier, int size, List<ValueStore> elements) {
+        List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
+        return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), wrappedElements, false);
+    }
+
     public static InternalArray createInvalid(AstIdentifier identifier, int size) {
         return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.of(size)
                 .mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), false);
@@ -163,6 +168,68 @@ public class InternalArray extends AbstractArrayStore {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
             creator.createWriteArr(transferVariable, logicArray, index, INTERNAL_REGULAR);
+        }
+    }
+
+    private static ValueStore constantWrap(ValueStore valueStore) {
+        return new ConstantArrayElement(valueStore);
+    }
+
+    public static class ConstantArrayElement implements ValueStore {
+        private final ValueStore valueStore;
+
+        public ConstantArrayElement(ValueStore valueStore) {
+            this.valueStore = valueStore;
+        }
+
+        @Override
+        public ValueStore unwrap() {
+            return valueStore.unwrap();
+        }
+
+        @Override
+        public boolean isComplex() {
+            return valueStore.isComplex();
+        }
+
+        @Override
+        public boolean isLvalue() {
+            return false;
+        }
+
+        @Override
+        public LogicValue getValue(ContextfulInstructionCreator creator) {
+            return valueStore.getValue(creator);
+        }
+
+        @Override
+        public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
+            valueStore.readValue(creator, target);
+        }
+
+        @Override
+        public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
+        }
+
+        @Override
+        public SourcePosition sourcePosition() {
+            return valueStore.sourcePosition();
+        }
+
+        @Override
+        public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
+        }
+
+        @Override
+        public LogicValue getWriteVariable(ContextfulInstructionCreator creator) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
+        }
+
+        @Override
+        public void storeValue(ContextfulInstructionCreator creator) {
+            throw new MindcodeInternalError("Writes to constant array element are not supported");
         }
     }
 }

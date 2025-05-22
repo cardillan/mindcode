@@ -8,11 +8,8 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
-import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray.InternalArrayElement;
-import info.teksol.mc.mindcode.compiler.generation.variables.StructuredValueStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -240,6 +237,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
             } else {
                 switch (target) {
                     case LogicVariable v -> reportVariableError(targetNode, v);
+                    case InternalArray.ConstantArrayElement e -> error(targetNode, ERR.ARRAY_CANNOT_ASSIGN_TO_CONST_ARRAY);
                     case LogicLiteral l -> error(targetNode, ERR.LVALUE_VARIABLE_EXPECTED);
                     default -> error(targetNode, ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
                 }

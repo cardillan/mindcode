@@ -344,7 +344,7 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesInvalidConstIdentifiers2() {
-            assertGeneratesMessageRegex(1, 9, "Parse error: .*",
+            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
                     "const a + b = 10;");
         }
 
@@ -361,8 +361,7 @@ class MindcodeParserTest extends AbstractParserTest {
         void refusesInvalidConstIdentifiers4() {
             assertGeneratesMessages(
                     expectedMessages()
-                            .addRegex(1, 7, "Parse error: .*")
-                            .addRegex(1, 9, "Parse error: .*"),
+                            .addRegex(1, 7, "Parse error: .*"),
                     "const [a] = 10;");
         }
 

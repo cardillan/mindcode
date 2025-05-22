@@ -27,7 +27,6 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 public class DeclarationsBuilder extends AbstractBuilder implements
         AstAllocationVisitor<ValueStore>,
         AstAllocationsVisitor<ValueStore>,
-        AstConstantVisitor<ValueStore>,
         AstDirectiveSetVisitor<ValueStore>,
         AstDirectiveDeclareVisitor<ValueStore>,
         AstDocCommentVisitor<ValueStore>,
@@ -96,19 +95,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             default -> throw new MindcodeInternalError("Unknown allocation type: " + node.getType());
         }
 
-        return LogicVoid.VOID;
-    }
-
-    @Override
-    public ValueStore visitConstant(AstConstant node) {
-        ValueStore valueStore = evaluate(node.getValue());
-        if (valueStore instanceof LogicValue value && isNonvolatileConstant(value) || valueStore instanceof FormattableContent
-            || valueStore instanceof LogicKeyword) {
-            variables.createConstant(node, valueStore);
-        } else {
-            error(node.getValue(), ERR.EXPRESSION_NOT_CONSTANT_CONST, node.getConstantName());
-            variables.createConstant(node, LogicNull.NULL);
-        }
         return LogicVoid.VOID;
     }
 
@@ -402,19 +388,32 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         int declaredSize = getArraySize(modifiers, specification, reportArrayErrors);
         int initialSize = specification.getExpressions().size();
 
-        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers, processor);
+        List<ValueStore> initialValues = specification.getExpressions().stream()
+                .map(node -> processInLocalScope(() -> evaluate(node)))
+                .toList();
 
-        for (int i = 0; i < initialSize; i++) {
-            AstExpression initExpression = specification.getExpressions().get(i);
-            ValueStore initValue = processInLocalScope(() -> evaluate(initExpression));
-            array.getElements().get(i).setValue(assembler, initValue.getValue(assembler));
+        if (modifiers.containsKey(Modifier.CONST)) {
+            if (initialValues.isEmpty()) {
+                error(specification, ERR.ARRAY_CONST_NOT_INITIALIZED);
+            }
+
+            initialValues.stream().filter(v -> !(v instanceof LogicValue value && isNonvolatileConstant(value)))
+                    .forEach(v -> error(v, ERR.ARRAY_CONST_NOT_CONSTANT));
         }
 
-        if (modifiers.containsKey(Modifier.REMOTE) && processor == null) {
-            array.getElements().stream()
-                    .filter(LogicVariable.class::isInstance)
-                    .map(LogicVariable.class::cast)
-                    .forEach(context::addRemoteVariable);
+        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers, initialValues, processor);
+
+        if (!modifiers.containsKey(Modifier.CONST)) {
+            for (int i = 0; i < initialSize; i++) {
+                array.getElements().get(i).setValue(assembler, initialValues.get(i).getValue(assembler));
+            }
+
+            if (modifiers.containsKey(Modifier.REMOTE) && processor == null) {
+                array.getElements().stream()
+                        .filter(LogicVariable.class::isInstance)
+                        .map(LogicVariable.class::cast)
+                        .forEach(context::addRemoteVariable);
+            }
         }
     }
 
@@ -450,7 +449,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private void processVariable(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
-        ValueStore variable = createVariable(modifiers, specification);
+        ValueStore variable = modifiers.containsKey(Modifier.CONST) ? LogicVoid.VOID : createVariable(modifiers, specification);
 
         if (modifiers.containsKey(Modifier.LINKED)) {
             // Linked variables are initialized at creation
@@ -476,13 +475,26 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALIZED);
             }
 
+            AstExpression expression = specification.getExpressions().getFirst();
+
             // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
             // resolved in the scope containing the node. However, the expression needs to be evaluated
             // in local scope, as all executable code must be placed there.
-            ValueStore value = processInLocalScope(() -> evaluate(specification.getExpressions().getFirst()));
-            // Produces warning when the variable is a linked block
-            ValueStore target = resolveLValue(specification.getIdentifier(), variable);
-            target.setValue(assembler, value.getValue(assembler));
+            ValueStore valueStore = processInLocalScope(() -> evaluate(expression));
+
+            if (modifiers.containsKey(Modifier.CONST)) {
+                if (valueStore instanceof LogicValue value && isNonvolatileConstant(value) || valueStore instanceof FormattableContent
+                        || valueStore instanceof LogicKeyword) {
+                    variables.createConstant(specification, valueStore);
+                } else {
+                    error(expression, ERR.EXPRESSION_NOT_CONSTANT_CONST, specification.getName());
+                    variables.createConstant(specification, LogicNull.NULL);
+                }
+            } else {
+                // Produces warning when the variable is a linked block
+                ValueStore target = resolveLValue(specification.getIdentifier(), variable);
+                target.setValue(assembler, valueStore.getValue(assembler));
+            }
         }
     }
 
@@ -492,7 +504,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         } else if (modifiers.containsKey(Modifier.LINKED)) {
             return createLinkedVariable(modifiers, specification);
         } else if (modifiers.isEmpty() || modifiers.containsKey(Modifier.NOINIT)
-                   || modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE)) {
+                || modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE)) {
             // Local variables need to be created within the parent node, as the current node is the
             // AstVariablesDeclaration node. If the variable was created within the current node, it
             // would fall out of scope when AstVariablesDeclaration node processing finishes.
@@ -589,8 +601,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     private Allocation resolveExternalStorage(ExternalStorage externalStorage) {
         LogicVariable memory = resolveMemory(externalStorage);
         int defaultEndValue = memory.getType() == BLOCK
-                              && processor.isBlockName(memory.getName())
-                              && memory.getName().startsWith("bank") ? 511 : 63;
+                && processor.isBlockName(memory.getName())
+                && memory.getName().startsWith("bank") ? 511 : 63;
         int startHeapIndex = getIndex(externalStorage, true, 0);
         int endHeapIndex = getIndex(externalStorage, false, defaultEndValue) + 1;
 

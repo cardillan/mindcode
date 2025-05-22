@@ -298,14 +298,6 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
-    public AstConstant visitAstConstant(MindcodeParser.AstConstantContext ctx) {
-        return new AstConstant(pos(ctx),
-                findDocComment(ctx.getStart()),
-                identifier(ctx.name),
-                visitAstExpression(ctx.value));
-    }
-
-    @Override
     public AstModuleDeclaration visitAstModuleDeclaration(AstModuleDeclarationContext ctx) {
         AstModuleDeclaration declaration = new AstModuleDeclaration(pos(ctx), identifier(ctx.name));
         if (moduleDeclaration != null) {
@@ -376,7 +368,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         List<AstVariableModifier> modifiers = ctx.declModifier().stream().map(this::createVariableModifier).toList();
         List<AstVariableSpecification> variables = ctx.variables.variableSpecification().stream()
                 .map(this::createVariableSpecification).toList();
-        return new AstVariablesDeclaration(pos(ctx), modifiers, variables);
+        return new AstVariablesDeclaration(pos(ctx), findDocComment(ctx.getStart()), modifiers, variables);
     }
 
     //</editor-fold>

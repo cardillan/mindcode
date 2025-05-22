@@ -105,7 +105,7 @@ Code developed and compiled using previous Mindcode versions should compile just
 Version 7 Logic:
 * `ucontrol pathfind` (mapped to the `pathfind()` function)
 * `rally` and `resupply` can no longer be used as a `group` argument in `ulocate` instruction (mapped to the 
-[`ulocate(...)`](../syntax/FUNCTIONS-71.markdown#instruction-ulocate) function).
+[`ulocate(...)`](../syntax/FUNCTIONS-71.markdown#instruction-unit-locate) function).
 
 If you want to continue developing for Mindustry Logic V6, the best way now is to use the command line compiler.
 Support for the web app will hopefully be added shortly.
