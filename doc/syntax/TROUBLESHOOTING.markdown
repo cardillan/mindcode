@@ -44,7 +44,7 @@ Mindcode provides two tools for making debugging the compiled code a bit easier.
 
 ### Running the compiled code in an emulator
 
-Both the web app and the command line tool allow the compiled code [to be run on an emulated processor](TOOLS-CMDLINE.markdown#running-the-compiled-code). While the emulator supports almost no interaction with the Mindustry World (the sole exception at this time is access to memory cells and memory banks), it can still be used to debug code that doesn't access the outside world (e.g. by commenting out the offending statements in the source code).
+Both the web app and the command line tool allow the compiled code [to be run on an emulated processor](TOOLS-CMDLINE.markdown#running-the-compiled-code). While the emulator supports almost no interaction with the Mindustry World (the sole exception at this time is access to memory cells and memory banks), it can still be used to debug code that doesn't access the outside world (e.g., by commenting out the offending statements in the source code).
 
 An expansion of this feature is planned, where a static mindustry World would be simulated to some extent for the running code to interact with.
 

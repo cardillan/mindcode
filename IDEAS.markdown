@@ -30,7 +30,7 @@ Mindcode currently undergoes significant changes to the syntax, which are being 
 #set local compiler-option = value, compiler-option = value, ...;
 ```
 
-Compiles the next statement/expression applying certain compiler options (e.g. `goal`) to it. Some compiler options
+Compiles the next statement/expression applying certain compiler options (e.g., `goal`) to it. Some compiler options
 (`target`, `optimization`) will remain global and won't be available in `#set local`. The intended purpose is to 
 provide means to compile different parts of code for size or speed.
 
@@ -106,7 +106,7 @@ Stack stored in processor variables, similar to internal arrays.
 * Short-circuiting will be done by the compiler. Optimizers will look for opportunities to avoid short-circuiting
   for smaller or faster code.
 * Short-circuiting will never be removed for:
-  * Instructions which affect the world, (e.g. `print`, `draw`, `ucontrol`  etc. - it is necessary to keep track of
+  * Instructions which affect the world, (e.g., `print`, `draw`, `ucontrol`  etc. - it is necessary to keep track of
     which opcodes do affect the world.)
   * Useful (as determined by data flow analysis) assignments to variables.
 
@@ -155,7 +155,7 @@ Stack stored in processor variables, similar to internal arrays.
   * Specific built-in ones (already done).
   * All sensed properties (already done - the entire `sensor` instruction is deemed volatile).
   * New compiler directive will allow to declare memory model for a memory block, a linked block, a built-in variable
-    or a global variable (because of the `sync` instruction), e.g. `#declare variable [volatile | aliased | restriced]`.
+    or a global variable (because of the `sync` instruction), e.g., `#declare variable [volatile | aliased | restriced]`.
 
 ### Data Flow Optimization
 
@@ -195,7 +195,7 @@ Stack stored in processor variables, similar to internal arrays.
 #### Inferring invariants of variables
 
 * Constraints on variable values inferred from instruction producing the value
-  * e.g. `op max result input 10` limits the value of `result` to `10`
+  * e.g., `op max result input 10` limits the value of `result` to `10`
 * Constraints on variable values inferred from conditions
   *  "non-null", "non-negative", "less than x", "equal to"
 * Constraints on relationships between variables
@@ -277,7 +277,7 @@ The `op min` instructions perhaps might be avoided under some circumstances.
 * Jump-to-middle loop unrolling
   * Using a jump table.
   * Loops with fixed end condition
-  * Loops with fixed start that can run backwards (e.g. `for i in 0 .. n cell1[i] = 0 end` - jump to position
+  * Loops with fixed start that can run backwards (e.g., `for i in 0 .. n cell1[i] = 0 end` - jump to position
     corresponding to `n` and proceed to `0`).
     * Need a limit on highest possible value of `n`
 * Loop unswitching (if in loop --> loops in if)
@@ -310,7 +310,7 @@ Typed variables, parameters and function return values.
 * Typed variables would have to be declared and could exist alongside untyped ones.
 * Compiler directive could be created to require all variables to be declared and typed.
 * Problems:
-  * Types of some expressions might not be possible to determine statically, e.g. the type of `block.sensor(property)`
+  * Types of some expressions might not be possible to determine statically, e.g., the type of `block.sensor(property)`
     value depends on the property being sensed.
 
 ## Records/structures
@@ -329,7 +329,7 @@ Typed variables, parameters and function return values.
 * Automatically generate names for unnamed processor links
 * Schematic Analyzer, a tool to identify potential errors in schematics:
   * blocks not connected to power nodes
-  * the power grid having more than one segment (i.e. not fully connected)
+  * the power grid having more than one segment (i.e., not fully connected)
   * distribution blocks prone to clogging
   * liquid containers being fed more than one kind of liquid
   * determine item flow and unbalanced factory production/consumption ratios
@@ -342,7 +342,7 @@ Typed variables, parameters and function return values.
   * already existing blocks (typically blocks 2x2 or bigger placed in previous row/column) are skipped
 * Automatically add tags based on categories or types of contained blocks
   * Allow loading configuration/tag mapping for categories from file so that it can be shared among schematics 
-* Make decompiler assign labels to all blocks and use the labels for all block references (e.g. in bridge or power 
+* Make decompiler assign labels to all blocks and use the labels for all block references (e.g., in bridge or power 
   node connections).
 * Support for schematics reuse by:
   * placing schematic into schematic
@@ -395,7 +395,7 @@ Possibly in boolean expressions in general, although in those the utility is dou
 There are no plans to do any of these. We keep them around just in case.
 
 * Loop unrolling: generate new names for temporary variables inside the loop. Probably not needed at the moment.
-* Ruby-like parallel assignments, e.g. `a, b, c = 1, 2, 3` or even `a, b = b, a`.
+* Ruby-like parallel assignments, e.g., `a, b, c = 1, 2, 3` or even `a, b = b, a`.
 
 # Refused
 
@@ -406,7 +406,7 @@ There are no plans to do any of these. We keep them around just in case.
     similar.
   * Con: recursive calls are costlier (callrec + return have 6 instructions in total, while call + push + pop + goto 
     have 8).
-  * In case of recursive-heavy algorithms (e.g. quicksort) the penalty is substantial. Recursive functions are 
+  * In case of recursive-heavy algorithms (e.g., quicksort) the penalty is substantial. Recursive functions are 
     generally not very useful, and if someone is compelled to use them anyway, let's make them as efficient as 
     possible. 
 * Make EOL an expression separator in addition to a semicolon and make expression separator compulsory.

@@ -1,6 +1,6 @@
 # Control flow statements
 
-Control flow statements are statements that alter the flow of code. They either branch, i.e. execute one of several possible alternatives, or they loop, i.e. repeat part of the code one or more times.
+Control flow statements are statements that alter the flow of code. They either branch, i.e., execute one of several possible alternatives, or they loop, i.e., repeat part of the code one or more times.
 
 # Loops
 
@@ -113,9 +113,9 @@ print(u);
 printflush(message1);
 ```
 
-Tries to bind a mono, poly or mega, in this order, ending the loop when successfully binding one.
+Tries to bind a mono, poly, or mega, in this order, ending the loop when successfully binding one.
 
-The list of values is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic itself doesn't support dynamic arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated at the beginning of the iteration utilizing the expression. This loop
+The list of values is fixed—it cannot be stored in a variable, for example, as Mindustry Logic itself doesn't support dynamic arrays or collections. It is possible to specify an expression in the list of values, though, and each expression is evaluated at the beginning of the iteration that uses it. This loop
 
 ```Mindcode
 var n = 0;
@@ -143,9 +143,9 @@ end;
 printflush(message1);
 ```
 
-This code will print out  "mono: 5", "poly: 4" and "mega: 2" on separate lines.
+This code will print out `mono: 5`, `poly: 4` and `mega: 2` on separate lines.
 
-The values in the list aren't organized into tuples. You can put them on separate lines, as shown in the example, to keep them organized. The number of values in the list must be a multiple of the number of loop control variables.
+The values in the list aren't organized into tuples. You can put them on separate lines, as shown in the example, to keep them organized. The list length must be divisible by the number of loop control variables.
 
 If you use expressions based on the values of the loop control variables in the list, the results are generally undefined. Example:
 
@@ -157,7 +157,7 @@ for a, b in b, a do
 end;
 ```
 
-This code prints out "22" and not "21", as might be expected.
+This code prints out `22` and not `21`, as might be expected.
 
 ### Arrays
 
@@ -186,7 +186,7 @@ end;
 ```
 
 > [!TIP]
-> It is generally more efficient to use list iteration loop rather than other forms of loops (e.g. range iteration loop combined with index access) for internal arrays. For external arrays, index access is about as effective as list iteration loop, but produces smaller code.
+> It is generally more efficient to use list iteration loop rather than other forms of loops (e.g., range iteration loop combined with index access) for internal arrays. For external arrays, index access is about as effective as list iteration loop, but produces smaller code.
 > 
 > When loop unrolling optimization is applied, the resulting code is identical regardless of the type of loop used.  
 
@@ -222,7 +222,7 @@ print(a, b, c, d);
 
 This code swaps values of `a` and `c` with `b` and `d`, producing "2143" on output.
 
-It is also possible to use list iteration loop to initialize variables:
+It is also possible to use a list iteration loop to initialize variables:
 
 ```Mindcode
 var index = 0;
@@ -233,9 +233,9 @@ end;
 print(a, b, c, d);
 ```
 
-This code initializes values `a`, `b`, `c` and `d` to `1`, `2`, `3` and `4` respectively. No warning about these variables not being initialized is made, because their initial values aren't used inside the loop body.
+This code initializes values `a`, `b`, `c` and `d` to `1`, `2`, `3` and `4` respectively. No warning about these variables not being initialized is made because their initial values aren't used inside the loop body.
 
-If some of the elements in the list cannot be modified, it is an error if it is assigned to an `out` loop control variable:
+If some elements in the list cannot be modified, it is an error if it is assigned to an `out` loop control variable:
 
 ```
 // Error - 'c + 1' is not a variable
@@ -246,7 +246,7 @@ end;
 
 ### Parallel iteration
 
-It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. The only requirement is that all iterator group must be provided with data for the same number of iterations. 
+It is possible to specify multiple iterators and their values in the loop. In each iteration, all iterators are assigned values from their respective lists. Iterators/values groups are separated using a semicolon. Iterators in each group may be declared `out`, and each group can have different number of iterators. The only requirement is that all iterator groups must be provided with data for the same number of iterations. 
 
 ```Mindcode
 var a[20], b[10];
@@ -319,7 +319,7 @@ for var i in 1, 2, 3, 4 descending do
 end;
 ```
 
-In case of parallel iterations, each group of iterators can be processed in ascending or descending order separately:
+In the case of parallel iterations, each group of iterators can be processed in ascending or descending order separately:
 
 ```Mindcode
 var a[10], b[10];
@@ -428,7 +428,7 @@ Similarly, `continue MainLoop;` skips the rest of the current iteration of both 
 
 # Conditionals
 
-Mindcode offers 3 types of conditionals: if/else expressions, the ternary operator and case/when expressions. Ternary operator was described in the [previous chapter](SYNTAX-2-EXPRESSIONS.markdown#ternary-operator).
+Mindcode offers three types of conditionals: if/else expressions, the ternary operator, and case/when expressions. Ternary operator was described in the [previous chapter](SYNTAX-2-EXPRESSIONS.markdown#ternary-operator).
 
 ## If/Else Expressions
 
@@ -487,7 +487,7 @@ var status = case num_enemies
 end;
 ```
 
-Multiple comma-separated expressions can be listed after each `when` keyword. It is also possible to use range expressions, and even mix them with normal expression like this:
+Multiple comma-separated expressions can be listed after each `when` keyword. It is also possible to use range expressions and even mix them with normal expression like this:
 
 ```Mindcode
 var text = case number
@@ -513,7 +513,7 @@ case sorter1.config
 end; 
 ```
 
-If both zero literal and a `null` literal are present in your `when` values, both zero and `null` are matched using strict comparison:
+If both a zero literal and a `null` literal are present in your `when` values, both `0` and `null` are matched using strict comparison:
 
 ```Mindcode
 var text = case number

@@ -53,7 +53,7 @@ draw print 30 40 baselineBottom 0 0 0
 
 ## Declaring new built-in variables
 
-While Mindcode doesn't limit where and how are built-in variables used, it emits a warning when it encounters an unknown built-in variable, to help identify typos and mistakes. If a built-in variable unknown to Mindcode is actually valid (e.g. provided by a mod), it is possible to declare such a built-in variable as valid, which suppresses the warning. To declare a built-in variable, use the `#declare` command with a `builtin` category. No warning is then emitted when using the built-in:
+While Mindcode doesn't limit where and how are built-in variables used, it emits a warning when it encounters an unknown built-in variable, to help identify typos and mistakes. If a built-in variable unknown to Mindcode is actually valid (e.g., provided by a mod), it is possible to declare such a built-in variable as valid, which suppresses the warning. To declare a built-in variable, use the `#declare` command with a `builtin` category. No warning is then emitted when using the built-in:
 
 ```Mindcode
 // Say we have a mod that creates a new `@dark-matter` item:
@@ -95,7 +95,7 @@ Each of these functions takes the following arguments:
     * `in out`: the argument represents an input/output value - the instruction both reads and uses the input value, and then updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
 
 > [!TIP]
-> Keywords can be encoded either using the Mindcode keyword syntax (e.g. `:keyword`), or as a string literal (`"keyword"`). Only if the keyword contains characters unsupported by Mindcode syntax, it can only be encoded as a string literal (e.g. `"unsupported:keyword"`). This is the only way to encode such a keyword to mlog.  
+> Keywords can be encoded either using the Mindcode keyword syntax (e.g., `:keyword`), or as a string literal (`"keyword"`). Only if the keyword contains characters unsupported by Mindcode syntax, it can only be encoded as a string literal (e.g., `"unsupported:keyword"`). This is the only way to encode such a keyword to mlog.  
 
 > [!TIP]
 > Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` functions always use user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function - see the examples below. Furthermore, it is possible to use keywords as function arguments to inline functions.

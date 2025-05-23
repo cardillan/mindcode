@@ -28,18 +28,18 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
 
     private static final String PREAMBLE = """
             This document contains function reference for all built-in Mindcode functions. Functions are grouped by the
-            instruction they encapsulate, so that functions with similar logic are listed together. The Mindcode source
+            instruction they encapsulate so that functions with similar logic are listed together. The Mindcode source
             listed in the **Function call** column is compiled to the instruction in the **Generated instruction**
             column.
             
-            In some cases, a single instruction can be generated in more than one way (e.g. the `radar` instruction,
+            In some cases, a single instruction can be generated in more than one way (e.g., the `radar` instruction,
             which can be written as a `turret.radar` function, or as a `radar` function which takes `turret` as a parameter).
             Both ways are identical. Additionally, some functions have output parameters, which are marked by the 'out' modifier.
             Output parameters are optional, and you may omit them if you don't need the value they return. Mindcode allows
-            you to omit all optional argument, but in this case the entire instruction will be considered useless
+            you to omit all optional arguments, but in this case the entire instruction will be considered useless
             and may be removed by the optimizer.
             
-            Instruction names in this documentation are present as they appear in Mindustry user interface. Examples of
+            Instruction names in this documentation are present as they appear in the Mindustry user interface. Examples of
             generated code use mlog opcodes.
             """;
 
@@ -202,7 +202,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
         String s = opcode.getName();
         StringBuilder result = new StringBuilder(s.length() + 3);
 
-        for(int i = 0; i < s.length(); ++i) {
+        for (int i = 0; i < s.length(); ++i) {
             char c = s.charAt(i);
             if (i > 0 && Character.isUpperCase(c)) {
                 result.append(' ');

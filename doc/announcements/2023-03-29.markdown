@@ -29,11 +29,11 @@ Mindcode no longer allows assigning values to variables whose names might collid
 
 When a building is linked to the processor in-game, an identifier consisting of a short name of the building and a numeric index is created in the processor.
 These identifiers represent external blocks and can be used accordingly by the program, but their values cannot be overwritten.
-Assignments to variables whose name is identical to the name of existing linked blocks are ignored by the processor.
+The processor ignores assignments to variables whose name is identical to the name of an existing linked block.
 Code assigning values to such variables might or might not work depending on which buildings are linked to the processor.
-To prevent possibility of errors of this kind, any assignment to a variable whose name might represent a linked building causes compilation error.
+To prevent the possibility of such errors, any assignment to a variable whose name might represent a linked building causes compilation error.
 
-## Changes to scope of function parameters/variables
+## Changes to the scope of function parameters/variables
 
 The scope of parameters and variables in custom functions is now local to the function.
 The only exceptions are uppercase identifiers (such as `VARIABLE`),
@@ -46,12 +46,12 @@ Functions which relied on lowercase and mixed-case variables having a global sco
 Operator precedence was changed to be more in line with usual implementations in other languages (specifically, Ruby).
 Most notably, bitwise AND (`&`) didn't take precedence over bitwise OR (`|`)/XOR (`^`),
 and none of these operators took precedence over comparison operators.
-Order of evaluation of some expressions might therefore change, producing different results.
+The evaluation order of some expressions might, therefore, change, producing different results.
 
 ## Stack allocation
 
 Stack allocation must be placed before the first control statement in a program
-(control statement are loops, ifs, function definitions/calls etc., generally any statement that can change the program flow).
+(control statements are loops, ifs, function definitions/calls etc., generally any statement that can change the program flow).
 Earlier, the following code would be valid:
 
 ```
@@ -68,8 +68,8 @@ end
 print(foo(4))
 ```
 
-Currently, Mindcode won't compile this program -- it is necessary to move the stack allocation in front of the for loop.
-Simple assignments to variables are allowed, for example the following code is valid:
+Currently, Mindcode won't compile this program—it is necessary to move the stack allocation in front of the for loop.
+Simple assignments to variables are allowed — for example, the following code is valid:
 
 ```
 memory = cell1
@@ -85,7 +85,7 @@ print(foo(4))
 ## Stricter argument checking
 
 Arguments passed to function calls which represent Mindustry Logic keyword (such as `enemy`, `boss` or `any` passed to `radar` function)
-are checked against a list of valid keywords for given argument and invalid keywords are rejected.
+are checked against a list of valid keywords for given argument, and invalid keywords are rejected.
 In previous versions such function calls would be compiled to instructions,
 although resulting instructions would be converted to an `Invalid` instruction when pasted to Mindustry Logic processor.
 
@@ -93,9 +93,9 @@ although resulting instructions would be converted to an `Invalid` instruction w
 
 ## Mindustry Logic Version 7 support
 
-Mindustry Logic version 7 (as of release 142) is now fully supported, including World Processor instruction set.
+Mindustry Logic version 7 (as of release 142) is now fully supported, including the World Processor instruction set.
 
-The web app compiler targets Version 7 with World Processor instruction set. The command-line compiler can set the target 
+The web app compiler targets Version 7 with the World Processor instruction set. The command-line compiler can set the target 
 platform to Version 6, Version 7 and Version 7 + World Processor.
 
 Check out [Function reference for Mindustry Logic 7.1](../syntax/FUNCTIONS-71.markdown) for a list of all supported functions in Version 7.
@@ -116,10 +116,10 @@ For a more comprehensive description of current custom function support, see [Cu
 
 ### Stack usage and stack allocation
 
-Only recursive custom functions now require stack allocation. Non-recursive functions are compiled without a stack,
+Only recursive custom functions now require stack allocation. Non-recursive functions are compiled without a stack 
 and can handle all types of variables as arguments (unlike recursive functions, which can only handle numeric parameters and variables).
 
-When no range is given in `allocate stack` clause (e.g. `allocate stack in bank1`), the memory is inspected at runtime
+When no range is given in `allocate stack` clause (e.g., `allocate stack in bank1`), the memory is inspected at runtime
 and the entire capacity of given memory block is used as a stack.
 
 ### Inline functions
@@ -131,12 +131,12 @@ only once in the entire program.
 ### Return statement
 
 New `return` statement may be used to return from the function to caller. In this case, the return value is specified
-by the expression following the return statement, e.g. `return result`. When `return` is used without specifying a value,
+by the expression following the return statement, e.g., `return result`. When `return` is used without specifying a value,
 the return value is `null`.
 
 ### Variable and parameters scope
 
-Parameters and variables in custom functions are local to the function, except when the variable name is in uppercase (e.g. `VARIABLE`),
+Parameters and variables in custom functions are local to the function, except when the variable name is in uppercase (e.g., `VARIABLE`),
 in which case the variable is shared between all custom functions and the main program body.
 
 ### Parameterless function declaration
@@ -184,7 +184,7 @@ case value
 end
 ```
 
-The ranges can be expressed using variables and expression, not just numeric literals.
+The ranges can be expressed using variables and expressions, not just numeric literals.
 
 ### Break and continue statements
 
@@ -202,7 +202,7 @@ end
 
 ### Using labels with break and continue
 
-An unlabeled break statement exits the innermost for or while statement, however a labeled break can exit from an outer statement.
+An unlabeled break statement exits the innermost for or while statement; however, a labeled break can exit from an outer statement.
 It is necessary to mark the outer statement with a label, and then use the `break <label>` syntax, as shown here:
 
 ```
@@ -245,12 +245,12 @@ print(u)
 printflush(message1)
 ```
 
-The list is fixed -- it cannot be stored in a variable, for example, as Mindustry Logic doesn't support arrays or collections.
-The list can contain not only literals, but variables and expressions as well.
+The list is fixed—it cannot be stored in a variable, for example, as Mindustry Logic doesn't support arrays or collections.
+The list can contain not only literals but variables and expressions as well.
 
 ### Do-while loop
 
-A new loop similar to while loop, except the condition is placed at the end of the loop.
+A new loop similar to a while loop, except the condition is placed at the end of the loop.
 Do-while loops therefore always execute at least once:
 
 ```
@@ -324,14 +324,14 @@ Available optimizers are:
   e: eliminates instructions made unreachable by optimizations or false conditions
   k: optimizes variable storage on stack
 
-Use '-' to negate selection, e.g. -o-n uses all optimization except CONDITIONAL_JUMPS_NORMALIZATION.
+Use '-' to negate selection, e.g., -o-n uses all optimization except CONDITIONAL_JUMPS_NORMALIZATION.
 ```
 
-At this moment, web app compiler doesn't offer these options.
+At this moment, the web app compiler doesn't offer these options.
 
 # Code generation enhancements
 
-Code optimization was overhauled and currently the compiler produces quite optimized code.
+Code optimization was overhauled, and currently the compiler produces quite optimized code.
 There's still space for various improvements, but most of the obvious opportunities for optimizations are handled in this release.
 
 # Bug fixes

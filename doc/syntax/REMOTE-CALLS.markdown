@@ -43,7 +43,7 @@ When making remote calls, the main processor sets the `@counter` in the remote p
 
 ### Initialization code
 
-If the module contains any code outside functions (i.e. a main code block), this code is executed as part of the initialization of the remote processor. At the very end of this custom initialization code, the `*signature` variable is set to the module signature.
+If the module contains any code outside functions (i.e., a main code block), this code is executed as part of the initialization of the remote processor. At the very end of this custom initialization code, the `*signature` variable is set to the module signature.
 
 Only when the initialization code completes and the signature is set, the processor is ready to accept remote calls. Main processor's initialization waits for all remote processor initializations to complete, so it is crucial for the initialization code to be fast. If the initialization code contains an endless loop, the main processor execution will be blocked forever.
 
@@ -161,7 +161,7 @@ require "library.mnd" remote processor1;
 > [!NOTE]
 > A module containing remote functions can be also imported locally, through plain `require`. In this case, the remote variables are accessible locally, and the remote functions cannot be called.
 
-The required file (in this example stored in `library.mnd` file) must be a module, and the compiled code of this module must be stored in processor `processor1`. The processor can be specified using a linked block name, a parameter, or a variable. The variable needs to be initialized, e.g. by a function.
+The required file (in this example stored in `library.mnd` file) must be a module, and the compiled code of this module must be stored in processor `processor1`. The processor can be specified using a linked block name, a parameter, or a variable. The variable needs to be initialized, e.g., by a function.
 
 Modules imported remotely aren't compiled into the code, but remote variables and functions declared in them are available to the main processor.
 
@@ -267,7 +267,7 @@ product = await(foo);
 sum = foo.z;
 ```
 
-This call functions waits for `foo` completion, and then returns its return value. Other output parameters are available under their fully qualified names, e.g. `foo.z`. The output parameters may be queried as soon as `finished()` returned true. Calling `await()` is not necessary before starting another remote call on the same processor.
+This call functions waits for `foo` completion, and then returns its return value. Other output parameters are available under their fully qualified names, e.g., `foo.z`. The output parameters may be queried as soon as `finished()` returned true. Calling `await()` is not necessary before starting another remote call on the same processor.
 
 For multiple instances of the remote module, a processor needs to be specified as usual:
 

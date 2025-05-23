@@ -12,7 +12,7 @@ public enum Opcode {
     // INPUT & OUTPUT
     READ            ("read",            "Read", "Read a variable identified by a name from a linked processor."),
     WRITE           ("write",           "Write", "Write a number to a variable identified by a name in a linked processor."),
-    DRAW            ("draw",            "Draw", "Add an operation to the drawing buffer. Does not display anything until drawflush is used."),
+    DRAW            ("draw",            "Draw", "Add an operation to the drawing buffer. Does not display anything until `drawflush` is used."),
     PRINT           ("print",           "Print", "Add text to the print buffer. Does not display anything until printflush is used."),
     PRINTCHAR       ("printchar",       "PrintChar", "Add a UTF-16 character or content icon to the print buffer.\nDoes not display anything until Print Flush is used."),
     FORMAT          ("format",          "Format", "Replace next placeholder in text buffer with a value. Does not do anything if placeholder pattern is invalid."
@@ -28,7 +28,7 @@ public enum Opcode {
 
     // OPERATIONS
     SET             ("set",             "Set", "Set a variable."),
-    OP              ("op",              "Operation", "Perform an operation on 1-2 variables."),
+    OP              ("op",              "Operation", "Perform an operation on one or two variables."),
     LOOKUP          ("lookup",          "Lookup", "Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount."),
     PACKCOLOR       ("packcolor",       "PackColor", "Pack [0, 1] RGBA components into a single number for drawing or rule-setting."),
     UNPACKCOLOR     ("unpackcolor",     "UnpackColor", "Unpack RGBA components from a color that was packed using Pack Color."),
@@ -40,7 +40,7 @@ public enum Opcode {
     JUMP            ("jump",            "Jump", "Conditionally jump to another statement."),
 
     // UNIT CONTROL
-    UBIND           ("ubind",           "UnitBind", "Bind to the next unit of a type, and store it in @unit."),
+    UBIND           ("ubind",           "UnitBind", "Bind to the next unit of a type and store it in @unit."),
     UCONTROL        ("ucontrol",        "UnitControl", "Control the currently bound unit."),
     URADAR          ("uradar",          "UnitRadar", "Locate units around the currently bound unit."),
     ULOCATE         ("ulocate",         "UnitLocate", "Locate a specific type of position/building anywhere on the map. Requires a bound unit."),

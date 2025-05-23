@@ -14,7 +14,7 @@ System libraries contain functions and sometimes constants that can be used by a
 * `graphics`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
 * `printing`: functions for outputting formatted numbers. Some functions require the Mindustry Logic 8 instruction set.
 * `blocks`: block-related functions (just the `findLinkedBlocks` function at this moment).
-* `units`: functions for searching and binding available units of required type.
+* `units`: functions for searching and binding available units of a required type.
 * `math`: mathematical functions.
 
 ## Compiled function sizes
@@ -25,7 +25,7 @@ As Mindustry Logic limits the program size to 1,000 instructions, the compiled s
 - all output values provided by the function are used,
 - the optimization level is set to `advanced`.
 
-If a function just returns its input parameter as the return value and does nothing else, it doesn't produce any instruction - it's size is zero. The system libraries sometimes use these functions for consistency, for example as a special case for a vararg function.  
+If a function just returns its input parameter as the return value and does nothing else, it doesn't produce any instruction—its size is zero. The system libraries sometimes use these functions for consistency, for example, as a special case for a vararg function.  
 
 The following types of function calls are measured:
 
@@ -34,7 +34,7 @@ The following types of function calls are measured:
 - **Function call**: the number of instructions used to call the function from another place of the program. Not shown for functions that are declared `inline`.
 - Vararg functions can only be declared `inline`. For these functions, the size of the function depends heavily on the number of arguments passed in. Therefore, for vararg functions a few examples of function calls and their corresponding sizes are included with each function.
 
-There are several factors which might cause the size of a function used in an actual program to differ from the measurement above:
+There are several factors that might cause the size of a function used in an actual program to differ from the measurement above:
 
 - Optimizations might remove instructions setting up input parameters or receiving output values from the function.
 - When constant values are used as input parameters in inlined functions, optimizations might make the resulting code significantly smaller, as constants in expressions can sometimes be optimized away. 

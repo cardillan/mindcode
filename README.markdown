@@ -14,7 +14,7 @@
 </div>
 <br>
 
-**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote function calls, system library etc. Mindcode generates fairly well optimized mlog code, utilizing available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
+**Mindcode** is a high-level programming language for [Mindustry Logic](https://github.com/Anuken/Mindustry). Many language features are provided, including variable declaration, arrays (including `@counter` arrays), conditional statements and loops, functions, modules, remote function calls, system library etc. Mindcode generates fairly well optimized mlog code, using available instruction space to make the resulting code faster. It comes with a [web app](http://mindcode.herokuapp.com/) and a [command-line compiler](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#setting-up-the-command-line-compiler), provides means for integration both with various IDEs and Mindustry itself.
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
@@ -36,7 +36,7 @@ The most important recent changes to Mindcode include:
 * Mindustry Logic 8
   * Complete support for [the latest Mindustry 8 pre-release](/doc/syntax/MINDUSTRY-8.markdown).
   * Full support for [remote functions and variables](doc/syntax/REMOTE-CALLS.markdown).
-  * New string/character based instructions and character literals.
+  * New string/character-based instructions and character literals.
   * Support for named color literals: `%[red]`.
 * Language features
   * Support for `null` values in the `case` expression.
@@ -72,13 +72,13 @@ Alternatively, you can download the command-line compiler and use Mindcode [from
 
 ### Support mods
 
-Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into selected processor in Mindustry World directly, avoiding the use of the clipboard.
+Mindcode can interface with the [Mlog Watcher mod](/doc/syntax/TOOLS-MLOG-WATCHER.markdown) to inject the compiled code into the selected processor in Mindustry World directly, avoiding the use of the clipboard.
 
 The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), available for Mindustry 7/8, allows efficient [array-bounds checking](/doc/syntax/SYNTAX-5-OTHER.markdown#option-boundary-checks) for both internal and external arrays, making this kind of bugs easier to detect. 
 
 ## Mindustry Logic References
 
-If you don't know much about Mindustry Logic, you can read more information about it here:
+To learn more about Mindustry Logic, you can find more information about it here:
 
 * Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated May 2025)
 

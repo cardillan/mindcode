@@ -7,10 +7,10 @@ Mindcode allows you to call existing functions or create new ones. Functions are
 There are several kinds of parameters a function can have:
 
 1. _Input parameter_: serve to pass an argument to the function by the caller.
-2. _Output parameter_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output argument are specified, they need to correspond to a global, main or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized - they're initialized by the function call.  
-3. _Input/output parameter_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
-4. _Reference parameters_: instead of argument value, a reference to the argument is passed into the function. Reference parameters are declared using the `ref` modifier, and must not use either `in` or `out` modifier at the same time. Arguments passed to the reference parameters also need to be marked with the `ref` keyword. Only functions declared inline may have reference parameters, and only a variable may be passed . It is possible to pass an array (internal, external or remote) of any length as a reference and access its elements by index from within the function.     
-5. _Keyword parameter_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined mlog keywords as an argument. For example the `uradar` functions requires one of the following keywords for each of its first three arguments: `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`. The colon is stripped from keywords when converting them to mlog. It is not possible to store one of these values in a variable and pass the variable instead. Passing a value different to one of the supported values for given function argument causes an error.
+2. _Output parameter_: serve to return an output value from the function to the caller, in addition to a value possibly returned by the function itself. Arguments corresponding to output parameters are optional when calling a function. When output arguments are specified, they need to correspond to a global, main, or local variable, and need to be marked with an `out` modifier to express the intention to receive the output value from the function. Variables passed as arguments to output parameters need not be initialized, as they're initialized by the function call.  
+3. _Input/output parameter_: serve both to pass a value into the function and to retrieve the value back. Input/output parameters aren't optional. It is possible to use an `in` modifier when passing an argument to input/output parameter, meaning the caller isn't interested in the output value of the argument, or an `out` modifier to also receive the output value from the function. When using the `in` modifier, any expression may be provided, but for the `out` modifier, a global, main, or local variable needs to be used. Variables passed as arguments to input/output parameters should be initialized. Using `in out` modifiers is identical to using just the `out` modifier, as it is not possible to opt out from passing the input value to the function.
+4. _Reference parameters_: instead of an argument value, a reference to the argument is passed into the function. Reference parameters are declared using the `ref` modifier, and must not use either `in` or `out` modifier at the same time. Arguments passed to the reference parameters also need to be marked with the `ref` keyword. Only functions declared inline may have reference parameters, and only a variable may be passed. It is possible to pass an array (internal, external, or remote) of any length as a reference and access its elements by index from within the function.     
+5. _Keyword parameter_: these parameters are specific to functions corresponding to Mindustry Logic instructions. They require one of the predefined mlog keywords as an argument. For example, the `uradar` functions requires one of the following keywords for each of its first three arguments: `:any`, `:enemy`, `:ally`, `:player`, `:attacker`, `:flying`, `:boss`, `:ground`. The colon is stripped from keywords when converting them to mlog. It is not possible to store one of these values in a variable and pass the variable instead. Passing a value different to one of the supported values for given function argument causes an error.
 
 Examples of function definitions and function calls:
 
@@ -70,7 +70,7 @@ It is possible to pass mlog keywords and formattable string literals as argument
 
 # Mindustry Logic functions
 
-Interactions with the Mindustry world take place through functions mapped to Mindustry Logic instructions. Some functions return a value representing the most significant output of the instruction. Additional output values are provided through output function parameters. Many of the instruction do not have any output value.
+Interactions with the Mindustry world take place through functions mapped to Mindustry Logic instructions. Some functions return a value representing the most significant output of the instruction. Additional output values are provided through output function parameters. Many of the instructions do not have any output value.
 
 There are no instructions having an input/output parameter, except the `sync` instruction.
 
@@ -106,7 +106,7 @@ There are a few issues with these rules:
 
 ## Methods
 
-Some instructions perform an operation on an object (a linked block), which is passed as an argument to one of instruction parameters. In these cases, the instruction can be mapped to a method called on the given block, e.g. `block.shoot(x, y, doShoot);` translates to `control shoot :block :x :y :doShoot 0`.
+Some instructions perform an operation on an object (a linked block), which is passed as an argument to one of the instruction parameters. In these cases, the instruction can be mapped to a method called on the given block, e.g., `block.shoot(x, y, doShoot);` translates to `control shoot :block :x :y :doShoot 0`.
 
 In some cases, the instruction can be invoked either as a function or as a method (`printflush(message1)` or `message1.printflush()`). All existing mappings are shown in the function reference above.
 
@@ -147,9 +147,9 @@ Unlike the Mindustry `op min`/`op max` operations, the `min()` and `max()` funct
 
 ## The `message()` function
 
-The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success`, which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (this is for backwards compatibility with earlier Mindustry versions).
+The `message()` function corresponds to the `message` World Processor instruction. In Mindustry Logic 8, this instruction has an output parameter `success`, which receives an indication of whether the function succeeded. It is possible to pass in a special Mindustry identifier `@wait` as an argument to this parameter, in which case the function waits until it can successfully complete, and no output value is provided (to ensure backwards compatibility with earlier Mindustry versions).
 
-Mindcode therefore allows to pass in the `@wait` built-in value as an argument to this function, even though the parameter is an output one. When the `@wait` value is used as an argument, an `out` modifier must not be used.
+Mindcode therefore allows passing in the `@wait` built-in value as an argument to this function, even though the parameter is an output one. When the `@wait` value is used as an argument, an `out` modifier must not be used.
 
 ## The `print()` function
 
@@ -157,7 +157,7 @@ The print function, which corresponds to the `print` instruction, is described i
 
 ## The `sync()` function
 
-A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter - a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#variable-scope) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function should be declared `volatile`, as the value of the variable may apparently change by an external operation.
+A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter—a variable to be synchronized across the network (namely, from the server to all clients). A [global variable](SYNTAX-1-VARIABLES.markdown#variable-scope) must be passed as an argument to this function, otherwise a compilation error occurs. Furthermore, a variable used as an argument to the `sync()` function should be declared `volatile`, as the value of the variable may apparently change by an external operation.
 
 ```Mindcode
 volatile var synced;
@@ -191,22 +191,22 @@ There are several functions that can be used to send output to the text buffer, 
 
 ### Plain text output
 
-Printing text, variables and expressions just as they are is possible using the `print()` and `println()` functions. These functions take any number of arguments and generate a `print` instruction for each of them. The `println()` function outputs one additional `print` instruction containing just the `"\n"` string, creating a new line in the text to be printed.
+Printing text, variables, and expressions just as they are is possible using the `print()` and `println()` functions. These functions take any number of arguments and generate a `print` instruction for each of them. The `println()` function outputs one additional `print` instruction containing just the `"\n"` string, creating a new line in the text to be printed.
 
-The value returned by functions performing plain text output corresponds to the value of the last argument in the argument list. If there were no arguments in the list (e.g. `println()`), the returned value is `null`.  
+The value returned by functions performing plain text output corresponds to the value of the last argument in the argument list. If there were no arguments in the list (e.g., `println()`), the returned value is `null`.  
 
 ### Compile-time formatting
 
 If the first argument passed to the `print()` or `println()` function is a [formattable string literal](SYNTAX.markdown#formattable-string-literals), the functions perform compile-time formatting. All `$` characters inside the formattable string literal are replaced with variables and expressions like this:
 
-* If the `$` character is followed by a variable name, the variable is printed (external variables with the `$` prefix, e.g. `$X`, aren't supported).
+* If the `$` character is followed by a variable name, the variable is printed (external variables with the `$` prefix, e.g., `$X`, aren't supported).
 * If the `$` character is not followed by a variable name, next argument from the argument list is printed.
 * To separate the variable name from the rest of the text, enclose the name in curly braces: `${name}`. This is not necessary if the next character cannot be part of a variable name. `${}` can be used to place an argument from the argument list immediately followed by some text.
 * It is possible to put expressions, including, for example, function calls, in curly braces: `${sum / count}`.
 * The `\` character can be used to escape the `\` and `$` characters:
   * `print($"a\$b");` outputs `a$b`,
   * `print($"a\\$b");` outputs `a\` followed by the value of `b`.
-* The `\n` sequence is translated to a newline as usual, while no other characters utilize the escape character:  
+* The `\n` sequence is translated to a newline as usual, while no other characters use the escape character:  
   * `print($"a\nb");` outputs `a\nb` (`\n` in the text creates a newline when output),
   * `print($"a\b\\c");` outputs `a\b\c`: the first `\` is kept as is, while the second one is used to escape the third one. 
 
@@ -220,7 +220,7 @@ If the first argument passed to the `print()` or `println()` function is a [form
 
 The `println()` function works the same, but outputs an additional newline character to the text buffer.  
 
-The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide means to do it at runtime).
+The function was inspired by string interpolation in Ruby, but there is an important difference: the first argument to the printing function must be a formattable string literal or a constant string expression, as the formatting takes place at compile time (Mindustry Logic doesn't provide the means to do it at runtime).
 
 ```Mindcode
 var x = 3;
@@ -266,13 +266,13 @@ begin
 end;
 ```
 
-When compiled in strict syntax, the above code produces error "Variable 'y' is not defined.". The error is located in the definition of the constant `format`, which makes identifying the cause of the error difficult. Use formattable string literal constants with caution. 
+When compiled in strict syntax, the above code produces the error "Variable 'y' is not defined." The error is located in the definition of the constant `format`, which makes identifying the cause of the error difficult. Use formattable string literal constants with caution. 
 
 ### Run-time formatting
 
 Since version 8, Mindustry Logic supports run-time text formatting. This is done by putting placeholders `{0}` to `{9}` into the text buffer, which can be later replaced with an actual value using the `format` instruction. As the placeholders can be put into the text buffer using `print` instruction, it is possible to store and pass around the formatting string in a variable and thus separate the formatting template from actual values being output.
 
-Run-time formatting can be accomplished by the `printf()` function. This function takes several arguments (typically at least two). The first argument is the format string, which may be a text constant, or a string variable, and is passed into a `print` instruction. All the remaining arguments are passed into `format` instructions. Therefore, `printf(fmt, a, b, c)` gets translated to
+Run-time formatting can be done by the `printf()` function. This function takes several arguments (typically at least two). The first argument is the format string, which may be a text constant, or a string variable, and is passed into a `print` instruction. All the remaining arguments are passed into `format` instructions. Therefore, `printf(fmt, a, b, c)` gets translated to
 
 ```
 print fmt
@@ -281,15 +281,15 @@ format b
 format c
 ```  
 
-The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of such placeholder is then replaced by the value supplied to the `format` instruction. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. This opens up a possibility for building outputs incrementally.
+The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of such a placeholder is then replaced by the value supplied to the `format` instruction. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. This opens up the possibility for building outputs incrementally.
 
-Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2)` function call is therefore just a shorthand for `print(fmt); format(value1, value2);`.
+Apart from the `printf()`, Mindcode supports a new `format()` function, which just outputs the `format` instruction for each of its arguments. The `printf(fmt, value1, value2)` function call is therefore just shorthand for `print(fmt); format(value1, value2);`.
 
 > [!TIP]
 > Since the `format` instruction allows to decouple the formatting template from the values being applied to the template, Mindcode is unable to apply the print merging optimizations to the `format` instruction, even when their arguments get resolved to constant values during optimizations. Use compile-time formatting instead of run-time formatting whenever possible for more efficient code.      
 
 > [!TIP]
-> Print merging optimizations can utilize the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the code itself. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
+> Print merging optimizations can use the `format` instruction for more effective optimizations. To make sure the optimizations do not interfere with the `format` instructions placed into the code by the user, the optimizer only uses the `{0}` placeholder for its own formatting. This leaves the remaining nine placeholders, `{1}` to `{9}`, for use in the code itself. If you do use the `{0}` placeholder in your own code, the more efficient optimization using the `format` instruction will be disabled.
 
 > [!NOTE]
 > The `printf()` function is only supported in Mindustry Logic 8.
@@ -300,9 +300,9 @@ Apart from the `printf()`, Mindcode supports a new `format()` function, which ju
 
 The `remark()` function has the same syntax as the `print()` function and supports both the plain text output and compile-time formatting modes just like the `print()` function does. It also produces `print` instructions, but the way these instructions are generated into the code can be controlled using the [`remarks` option](SYNTAX-5-OTHER.markdown#option-remarks):
 
-* `none`: remarks are suppressed in the compiled code - they do not appear there at all.
+* `none`: remarks are suppressed in the compiled code—they do not appear there at all.
 * `comments`: remarks are output as mlog comments into the compiled code. Expressions in remarks are output as separate comments with the mlog name of the variable holding the value of the expression.
-* `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statement themselves aren't executed. This is the default value.
+* `passive`: remarks are included in the compiled code, but a jump is generated in front each block of continuous remarks, so that the print statements themselves aren't executed. This is the default value.
 * `active`: remarks are included in the compiled code and are executed, producing actual output to the text buffer.
 
 Example:
@@ -363,7 +363,7 @@ write 4 cell1 2
 write 9 cell1 3
 ```
 
-As you can see, remarks produced by two different `remark()` function calls are not merged together.
+As you can see, remarks produced by two different `remark()` function calls are not merged.
 
 If a region of code is unreachable and is optimized away, the remarks are also stripped:
 
@@ -388,7 +388,7 @@ print "Compiled for RELEASE"
 print "Hello"
 ```
 
-In strict syntax mode, remarks can oly be used inside code blocks.
+In strict syntax mode, remarks can only be used inside code blocks.
 
 ### Enhanced comments
 
@@ -446,9 +446,9 @@ print *tmp0
 
 ## The `ascii()` function
 
-The `ascii()` function takes a string constant as an argument, and returns the ASCII value of the first character of its argument.
+The `ascii()` function takes a string constant as an argument, and returns the ASCII value of its first character.
 
-The function allows obtaining ASCII values from built-in string constants (icons) and using them with `printchar()`. Since the ASCII values are numbers, they can be stored in external variables:
+The function allows converting built-in string constants (most importantly, icons) to their ASCII values and using them with `printchar()`. Since the ASCII values are numbers, they can be stored in external variables:
 
 ```Mindcode
 #set target = 8;
@@ -467,7 +467,7 @@ printchar *tmp0
 
 ## The `char()` function
 
-The `char()` function returns the ASCII value of a character at a given position in a string. The operation is supported by the `read` instruction in Mindustry Logic since version 8, therefore both the string and the position may be stored in a variable. Because  of this, the `char()` function is only supported in Mindustry Logic 8.
+The `char()` function returns the ASCII value of a character at a given position in a string. The operation is supported by the `read` instruction in Mindustry Logic since version 8, therefore, both the string and the position may be stored in a variable. Because of this, the `char()` function is only supported in Mindustry Logic 8.
 
 The values obtained from this function may be used with `printchar()`:
 
@@ -535,7 +535,7 @@ The built-in functions `async()`, `finished()` and `await()` serve to
 
 # System library functions
 
-The system function discussed so far are supported directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY.markdown).
+The system functions discussed so far are provided directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY.markdown).
 
 # User-defined functions
 
@@ -592,7 +592,7 @@ end;
 print(foo(10));       // Prints "null"
 ```
 
-As has been described above, function parameters in user function can be input, output or input/output. Use the `in` and `out` modifiers to properly mark the function parameters:
+As has been described above, function parameters in a user function can be input, output or input/output. Use the `in` and `out` modifiers to properly mark the function parameters:
 
 ```Mindcode
 def function(in x, out y, in out z)
@@ -600,7 +600,7 @@ def function(in x, out y, in out z)
 end; 
 ```
 
-The `in` modifier to mark input parameters is optional - function parameters are input by default. 
+The `in` modifier to mark input parameters is optional—function parameters are input by default. 
 
 ## Function parameters and local variables
 
@@ -639,7 +639,7 @@ end;
 
 ## Inline functions
 
-Normal function are compiled once and called from other places in the program. Inline functions are compiled into every place they're called from, so there can be several copies of them in the compiled code. This leads to shorter code per call and faster execution. To create an inline function, use `inline` keyword:
+Normal functions are compiled once and called from other places in the program. Inline functions are compiled into every place they're called from, so there can be several copies of them in the compiled code. This leads to shorter code per call and faster execution. To create an inline function, use `inline` keyword:
 
 ```Mindcode
 inline void printtext(name, value, min, max)
@@ -691,7 +691,7 @@ println(fib(8)); // 21
 // and so on...
 ```
 
-Declaring a recursive function inline leads to compilation error.
+Declaring a recursive function inline leads to a compilation error.
 
 Mindcode detects the presence of recursive functions and only requires the stack when at least one is found in the program. A significant limitation is imposed on recursive functions: parameters and local variables may end up being stored on the stack. As the stack itself is stored in a memory bank or memory cell, any non-numeric value of these variables will get lost.
 
@@ -706,7 +706,7 @@ allocate stack in bank1[256...512];
 ```
 
 > [!NOTE]
-> When no range is given (e.g. `allocate stack in cell1`), full range of the given memory block is assumed.
+> When no range is given (e.g., `allocate stack in cell1`), full range of the given memory block is assumed.
 
 When a function is not recursive, it won't store anything on a stack, even when it is called from or it itself calls a recursive function. If your code contains a recursive function, it won't compile unless the stack is allocated. Therefore, if your code compiles without the `allocate stack` statement, you don't need to worry about your functions not supporting non-numeric variables or parameters.
 
@@ -714,7 +714,7 @@ When a function is not recursive, it won't store anything on a stack, even when 
 
 Vararg functions are also called "variable arity" functions. These functions can take a variable number of arguments.
 
-In Mindcode, only functions declared `inline` may use vararg parameter. The vararg parameter must be always the last one, and is declared by appending `...` after the parameter name. The vararg argument may be used in a list iteration loop within the function, or may be passed to another function.
+In Mindcode, only functions declared `inline` may use vararg parameter. The vararg parameter must always be the last one, and is declared by appending `...` after the parameter name. The vararg argument may be used in a list iteration loop within the function or may be passed to another function.
 
 ```Mindcode
 inline void foo(values...)
@@ -771,7 +771,7 @@ foo(1, 2);                  // Also no error, the third argument to bar is optio
 > [!NOTE]
 > The errors produced when passing the vararg parameter to another function are reported at the call of the inner function, not at the call of the vararg function, and may therefore be a bit misleading. Use with caution. 
 
-The vararg parameter may be mixed with ordinary variables or expressions, and used more than once, even in the same list iteration or function call:
+The vararg parameter may be mixed with ordinary variables or expressions and used more than once, even in the same list iteration or function call:
 
 ```Mindcode
 inline void foo(arg...)
@@ -822,20 +822,20 @@ foo(1, 1);  // Calls foo(x, y)
 
 To match a function call with function declaration, the number and types (input, output or input/output) of function call arguments must match the number and types of function parameters. Optional and vararg arguments are taken into account when evaluating the match.
 
-When two or more function declarations could be matched by the same function call, the functions conflicts with each other. Declaring conflicting functions results in an error. A function with output parameters takes variable number of arguments and therefore may conflict with a function having a different number of parameters:
+When two or more function declarations could be matched by the same function call, the functions conflict with each other. Declaring conflicting functions results in an error. A function with output parameters takes a variable number of arguments and therefore may conflict with a function having a different number of parameters:
 
 * `void foo(a, b)`: takes two arguments.
 * `void foo(x, y, out z)`: conflict - may also take two arguments when `z` is omitted.
 
 * `void bar(x)`: `x` is an input parameter
 * `void bar(out y)`: `y` is an output parameter, therefore the function is different from `bar(x)`.
-* `void bar(in out z)`: `z` is an input/output parameter, therefore the function clashes with both `bar(x)` and `bar(out y)`.
+* `void bar(in out z)`: `z` is an input/output parameter, therefore, the function clashes with both `bar(x)` and `bar(out y)`.
 
-A vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling specific number of arguments will be used when possible.  
+A vararg function doesn't conflict with a non-vararg function. When a function call matches both a vararg function and a non-vararg function, the non-vararg function will be called. It is therefore possible to declare functions handling a specific number of arguments, plus a vararg function handling the generic case. The non-vararg functions handling a specific number of arguments will be used when possible.  
 
 Mindcode will report all conflicts of function declarations as errors, even if there aren't any ambiguous function calls.
 
-A user defined function may have the same name as a Mindustry Logic function. User defined functions override Mindustry Logic functions of the same name. When a function call matches the user defined function, the user defined function will be called instead of Mindustry Logic function:
+A user-defined function may have the same name as a Mindustry Logic function. User-defined functions override Mindustry Logic functions of the same name. When a function call matches the user-defined function, the user-defined function will be called instead of Mindustry Logic function:
 
 ```Mindcode
 inline def ulocate(ore, oreType)
@@ -846,7 +846,7 @@ found = ulocate(:ore, @copper);                   // Calls the user-defined func
 found = ulocate(:ore, @copper, out x, out y);    // Calls the Mindustry Logic function
 ```
 
-If, however, the user defined ulocate function was defined with output variables as well, both calls would call the user-defined function:
+If, however, the user-defined ulocate function was defined with output variables as well, both calls would call the user-defined function:
 
 ```Mindcode
 inline def ulocate(ore, oreType, out x, out y)

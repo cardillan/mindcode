@@ -9,7 +9,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added support for declaring new keywords and built-in variables through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
-* Added support for constant arrays. Elements of a constant array aren't stored in processor variables, but are used directly in the generated mlog program.  
+* Added support for constant arrays. Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.  
+
+### Miscellaneous
+
+* Added an explanatory message to the web app when an internal error is encountered.
 
 ## 3.5.2 - 2025-05-24
 
@@ -21,7 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed internal error compiling loops containing a function call ([#258](https://github.com/cardillan/mindcode/issues/258)).
+* Fixed an internal error compiling loops containing a function call ([#258](https://github.com/cardillan/mindcode/issues/258)).
 
 ## 3.5.0 - 2025-05-19
 
@@ -48,14 +52,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The `sign` function in the `math` library was renamed to `signInexact`.
   * The `signExact` function in the `math` library was renamed to `sign`. This function corresponds to the Mindustry 8 instruction `op sign`, and when target 8 is selected, the instruction is used instead of the library implementation. 
   * The order of parameters of the `unpackcolor` function in the `graphics` library was changed to match the `unpackcolor` instruction in Mindustry 8. When target 8 is selected, the instruction is used instead of the library implementation.
-* When splitting jump tables into multiple segments during jump table compression, the instruction jumping to the next segment is always placed first, to make the overall execution of the optimized case expression faster.
+* When splitting jump tables into multiple segments during jump table compression, the instruction jumping to the next segment is always placed first to make the overall execution of the optimized case expression faster.
 * Other improvements to the Case Switching optimization: better optimization, more precise cost and benefit calculation, support for `null` values.
 
 ### Miscellaneous
 
-* Mindustry Logic built-in functions take precedence over functions defined in system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in current target.
-* List of supported keywords and built-in variables for instruction parameters are now provided by mimex-generated metadata.  
-* Added list of accepted built-in variables to the description of functions in the function reference.
+* Mindustry Logic built-in functions take precedence over functions defined in the system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in the current target.
+* A list of supported keywords and built-in variables for instruction parameters are now provided by mimex-generated metadata.  
+* Added a list of accepted built-in variables to the description of functions in the function reference.
 * The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
 * Updated BE metadata to the latest available BE build.
 * Added new metadata types, fixed zero logic IDs problem.
@@ -69,11 +73,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added new functions to the [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):
-  * Added `setAlpha()` function which takes a packed color as an argument (including e.g. named color literals) and returns a packed color with updated alpha channel.
+  * Added `setAlpha()` function which takes a packed color as an argument (including e.g., named color literals) and returns a packed color with an updated alpha channel.
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
 * Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
   * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#range-check-elimination) compiler directive.
-  * Case expressions based on Mindustry content (e.g. items, block types and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
+  * Case expressions based on Mindustry content (e.g., items, block types and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
   * Large jump tables containing a lot of unused values may be [compressed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) to save space.
 
 #### Experimental features
@@ -94,27 +98,27 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Miscellaneous
 
 * Added an instruction index to the function reference. 
-* Added list of possible keywords to the description of functions in the function reference.
+* Added a list of possible keywords to the description of functions in the function reference.
 * Added references to the relevant portion of Yruei's documentation to function reference.
 
 ## 3.3.3 - 2025-04-26
 
 ### Fixed
 
-* Fixed internal error when compiling unused functions ([#247](https://github.com/cardillan/mindcode/issues/247)).
-* Fixed whitelabel error in the web application when an internal compilation error occurs. The error is reported as a standard error message instead.
+* Fixed an internal error when compiling unused functions ([#247](https://github.com/cardillan/mindcode/issues/247)).
+* Fixed a whitelabel error in the web application when an internal compilation error occurs. The error is reported as a standard error message instead.
 
 ## 3.3.2 - 2025-04-26
 
 ### Added
 
 * Support for dark mode in the web application (courtesy of 3bd). Light/dark mode follows the browser preference.
-* Support for named color literals (e.g. `%[red]`) in target 8.
+* Support for named color literals (e.g., `%[red]`) in target 8.
 
 ### Changed
 
-* Hexadecimal and binary literals can be specified as 64-bit unsigned numbers (e.g. `0xFFFFFFFFFFFFFFFF` represents `-1`). These literals are encoded to mlog as is when possible. If the literal wouldn't be properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
-* Negative hexadecimal and binary literals are encoded to mlog as is (with possible conversion to lower case). If the literal wouldn't be properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
+* Hexadecimal and binary literals can be specified as 64-bit unsigned numbers (e.g., `0xFFFFFFFFFFFFFFFF` represents `-1`). These literals are encoded to mlog as is when possible. If the literal cannot properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
+* Negative hexadecimal and binary literals are encoded to mlog as is (with possible conversion to lower case). If the literal cannot be properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
 
 ### Miscellaneous
 
@@ -125,7 +129,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the logic id translation from blocks to ids and back not handling all types of blocks ([#246](https://github.com/cardillan/mindcode/issues/246)).  
-* Fixed small bug in jump tables generation for unused arrays.
+* Fixed a small bug in jump tables generation for unused arrays.
 
 ### Added
 
@@ -145,20 +149,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed some command-line options not having an effect in the command-line tool ([#231](https://github.com/cardillan/mindcode/issues/231)).
-* Fixed wrong handling or hoisted set instruction setting up return address in subsequent loop unrolling ([#234](https://github.com/cardillan/mindcode/issues/234)).
+* Fixed wrong handling or hoisted set instruction setting up the return address in later loop unrolling ([#234](https://github.com/cardillan/mindcode/issues/234)).
 * Fixed optimizations removing the `spawn` instruction when the output value was not used ([#236](https://github.com/cardillan/mindcode/issues/236)).
 * Fixed Jump Optimization not performing the optimization in unrolled loops.
-* Fixed error in compile-time evaluation of an expression involving a character literal ([#240](https://github.com/cardillan/mindcode/issues/240)).
+* Fixed an error in compile-time evaluation of an expression involving a character literal ([#240](https://github.com/cardillan/mindcode/issues/240)).
 * Fixed incorrect compile-time evaluation of some logic IDs ([#242](https://github.com/cardillan/mindcode/issues/242)).
 * Fixed possible incorrect handling of arguments passed to the `print()` and other output functions ([#243](https://github.com/cardillan/mindcode/issues/243)).
 
 ### Added
 
 * **Breaking:** new `ref` keyword was added to the language. Code that uses this keyword as a function or variable name will not compile and the variable or function will have to be renamed.
-* Added the [`char()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-char-function). The function returns the ASCII value of a character at given index from a string value using the `read` instruction, as supported in latest BE version.
+* Added the [`char()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-char-function). The function returns the ASCII value of a character at given index from a string value using the `read` instruction, as supported in the latest BE version.
 * Added support for invoking properties and the `sensor` functions on string values to support latest BE Enhancement of sensing string lengths using `@size`. 
 * Added the [`strlen()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-strlen-function) returning the length of a string determined at runtime.
-* Added support for compile-time evaluation of the `length()` function, allowing to specify offsets relative to the end of the array in subarrays (e.g. `array[0 ... length(array) - 1]`).
+* Added support for compile-time evaluation of the `length()` function, allowing to specify offsets relative to the end of the array in subarrays (e.g., `array[0 ... length(array) - 1]`).
 * Added compile-time evaluation of either stable, or all built-in numerical variables (such as `@pi` or `@unitCount`).
 * Added a new remarks mode, `comments`, to compile remarks as mlog comments (`# comment`).
 * Added support for generating runtime boundary checks for explicitly declared external arrays.
@@ -262,7 +266,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for [internal and external arrays/subarrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#arrays) (closes [#213](https://github.com/cardillan/mindcode/issues/213)).
 * Added parallel iteration through arrays/lists in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops).   
 * Added support for the new `printchar` instruction in compiler, optimizer and processor emulator.
-* Added [character literals](doc/syntax/SYNTAX.markdown#character-literals) (e.g. `'A'`). The value of the literal is the ASCII value of the character in quotes.
+* Added [character literals](doc/syntax/SYNTAX.markdown#character-literals) (e.g., `'A'`). The value of the literal is the ASCII value of the character in quotes.
 * Added the [`ascii()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-ascii-function). The function returns the ASCII value of the first character of a string literal or constant.
 * Added the possibility to specify storage different from the heap when declaring external variables.  
 
@@ -279,23 +283,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed functions called using varargs potentially not recognized as used ([#203](https://github.com/cardillan/mindcode/issues/203)).
-* Fixed incorrect implementation of the strict equality operator ([#206](https://github.com/cardillan/mindcode/issues/206)).
-* Fixed wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
+* Fixed functions called using varargs potentially not being recognized as used ([#203](https://github.com/cardillan/mindcode/issues/203)).
+* Fixed an incorrect implementation of the strict equality operator ([#206](https://github.com/cardillan/mindcode/issues/206)).
+* Fixed a wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
 * Fixed compiler errors when placing enhanced comments into loops.
 * Fixed wrong compile-time and emulator evaluation of `asin`, `acos` and `atan` functions ([#209](https://github.com/cardillan/mindcode/issues/209)).
 * Fixed compile-time evaluation potentially processing functions not available in current target. The only affected target was 6, where non-existent functions `asin`, `acos`, `atan` and `packcolor` could be compile-time evaluated instead of reported as non-existent.  
 
 ### Added
 
-* Added support for encoding results of compile-time expressions as color literals.
+* Added support for encoding the results of compile-time expressions as color literals.
 * Added capability to automatically add a `printflush message1` instruction at the end of the main program body if missing from program.
 * Added the `auto-printflush` compiler directive and `--auto-printflush` command-line option to control the addition of the `printflush message1` instruction.
 * Added explanatory messages to the web app when compiling the source yields an empty program. 
 
 ### Changed
 
-* More precise calculations of optimization benefits in loop unrolling and call inlining.
+* More precise calculations of the optimization benefits in loop unrolling and call inlining.
 * The `sensor` instruction is considered deterministic if a deterministic property of a non-volatile value, which is not a linked variable, is being queried.
 * When clicking on an error or warning in the web application, the entire portion of the source code causing the error or warning is selected.
 * Most advanced optimizations were moved to the `basic` level. Only optimizations that might be incorrect in some contexts (such as optimizations replacing computed IDs of Mindustry items with IDs known to the compiler) are left on the advanced level. 
@@ -312,24 +316,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed errors when compiling empty bodies of functions and statements ([#99](https://github.com/cardillan/mindcode/issues/99)).
 * Fixed errors when compiling unary plus and minus operators ([#175](https://github.com/cardillan/mindcode/issues/175)).
-* Fixed execution errors not being displayed in the web application  ([#185](https://github.com/cardillan/mindcode/issues/185)).
+* Fixed execution errors not being displayed in the web application ([#185](https://github.com/cardillan/mindcode/issues/185)).
 * `printflush()` and `drawflush()` didn't compile when called as methods on blocks ([#190](https://github.com/cardillan/mindcode/issues/190)).
-* Fixed Single Step Elimination mistakenly removing some conditional jump ([#199](https://github.com/cardillan/mindcode/issues/199)).
+* Fixed Single Step Elimination mistakenly removing some conditional jumps ([#199](https://github.com/cardillan/mindcode/issues/199)).
 * Fixed inaccurate precision loss handling ([#202](https://github.com/cardillan/mindcode/issues/202)).
-* Fixed Data Flow Optimization crashing on return statement containing conditional expressions ([#205](https://github.com/cardillan/mindcode/issues/205)).
+* Fixed Data Flow Optimization crashing on a return statement containing conditional expressions ([#205](https://github.com/cardillan/mindcode/issues/205)).
 * Fixed the Web Application not working inside the Docker container.
 
 ### Added
 
-* Added support for embedding expression in formattable String literals (e.g. `println($"Items: ${localItems + computeRemoteItems()}.")`).
-* Added support for color literals in the form of `%rrggbb` or `%rrggbbaa`, e.g. `%ff0000` is bright red.
+* Added support for embedding expression in formattable String literals (e.g., `println($"Items: ${localItems + computeRemoteItems()}.")`).
+* Added support for color literals in the form of `%rrggbb` or `%rrggbbaa`, e.g., `%ff0000` is bright red.
   * The `packcolor()` function taking constant arguments is evaluated at compile time or during optimization.
   * Processor emulator supports color literals.
-* Added increment/decrement operators (`++` and `--`) in both prefix and postfix form (e.g. `i++`, `--total`).
+* Added increment/decrement operators (`++` and `--`) in both prefix and postfix form (e.g., `i++`, `--total`).
 * Added support for code blocks (delimited by `begin` and `end`).
-* Added mechanism for invoking properties on expressions ([#92](https://github.com/cardillan/mindcode/issues/92)).
-* Added support for using external variables and properties wherever "normal" variables can be used (e.g. as output arguments to function calls).
-* Added ability to report errors and warnings in unused functions.
+* Added a mechanism for invoking properties on expressions ([#92](https://github.com/cardillan/mindcode/issues/92)).
+* Added support for using external variables and properties wherever "normal" variables can be used (e.g., as output arguments to function calls).
+* Added an ability to report errors and warnings in unused functions.
 * Added several new library functions
   * [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):
     * Added `drawflush()` function which empties the draw buffer
@@ -351,11 +355,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* **Breaking:** new keywords were added to the language: `begin`, `cached`, `external`, `linked`, `noinit`, `var` and `volatile`. Code that uses any of these keywords  as a function or variable name will not compile and the variable or function will have to be renamed.
-* **Breaking:** statements and declaration no longer provide any value and using them where an expression providing a value is expected causes compilation errors. In the past even statements and declarations were considered expressions, albeit they always evaluated to `null`.
+* **Breaking:** new keywords were added to the language: `begin`, `cached`, `external`, `linked`, `noinit`, `var` and `volatile`. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
+* **Breaking:** statements and declaration no longer provide any value, and using them where an expression providing a value is expected causes compilation errors. In the past even statements and declarations were considered expressions, albeit they always evaluated to `null`.
 * Removed `sensor` from the list of keywords.
 * The `loop` keyword in `do loop while` loops is optional. The keyword will be deprecated and eventually dropped.
-* Special types of variables (external variables and properties) can be used in the same way as normal variables, e.g. as function output arguments.
+* Special types of variables (external variables and properties) can be used in the same way as normal variables, e.g., as function output arguments.
 * When enhanced comments are used on a line which contains a beginning of a new statement or expression, the output generated by the enhanced comment precedes the first such statement/expression ([#185](https://github.com/cardillan/mindcode/issues/185)).
 * Better reporting of errors and warnings produced during compilation.
 * Changed the mechanism of mlog variable names generation.
@@ -501,7 +505,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Deprecated
 
-* Deprecated the syntax of properties omitting the `@` prefix for Mindustry built-in variables (e.g. `vault1.coal` instead of `vault1.@coal`).
+* Deprecated the syntax of properties omitting the `@` prefix for Mindustry built-in variables (e.g., `vault1.coal` instead of `vault1.@coal`).
 * Deprecated the syntax of Mindustry Logic function calls not requiring the `out` modifier when passing in an output argument.
 
 ### Miscellaneous
@@ -604,7 +608,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added secondary set of icons representing constants with dashes in identifiers replaced by underscores (e.g. `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will be desupported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)
+* Added secondary set of icons representing constants with dashes in identifiers replaced by underscores (e.g., `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will be desupported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)
 * Added support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be used instead. Support for program parametrization through global variables will be removed in a future release.     
 * Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by the [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) optimization. The keyword can only be used when declaring a function.
 * Added support for block comments, delimited by `/*` and `*/`. These comments can span multiple lines. 
@@ -1036,7 +1040,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
   * The optimizer is aware when a variable value is preserved on stack and can reuse the variable state when 
     optimizing code following a recursive function call.
   * Streamlining expressions when passing value derived from the current value of the function argument to the 
-    recursive call (e.g. calling `foo(n - 1)` in function `foo(n)`).
+    recursive call (e.g., calling `foo(n - 1)` in function `foo(n)`).
 
 ### Fixed
 
@@ -1070,7 +1074,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 * Removed _Function call optimization_. This optimization was completely superseded by the
   [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization), which handles all 
   cases previously optimized by Function call optimization, and is able to identify more opportunities for 
-  optimization. The old optimization was removed because it became incompatible (i.e. produced wrong results) 
+  optimization. The old optimization was removed because it became incompatible (i.e., produced wrong results) 
   with the code produced by Data Flow Optimization.
 
 ### Deprecated
@@ -1165,7 +1169,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added language target `7A`, i.e. Mindcode Logic version 7, revision A. Uses the same instruction set as `7`, except  
+* Added language target `7A`, i.e., Mindcode Logic version 7, revision A. Uses the same instruction set as `7`, except  
   the `getBlock` and `ulocate` functions returning the located block/building.
   See [`getBlock`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-control),
   [`ulocate`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-locate). Target `7` is still default both in webapp 
@@ -1256,7 +1260,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Changed
 
 * Enhanced [print merging optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) to merge non-string 
-  literals (e.g. numeric constants) on aggressive optimization level. 
+  literals (e.g., numeric constants) on aggressive optimization level. 
 * Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside valid 
   range (signed 64-bit integer; note that [Mindustry Logic variables](doc/syntax/SYNTAX-1-VARIABLES.markdown) cannot 
   represent full range of possible values without loss of precision).   
@@ -1292,10 +1296,10 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Added
 
 * Added support for using [binary numeric literals](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic) 
-  (e.g. `0b00101`) in Mindcode source.
+  (e.g., `0b00101`) in Mindcode source.
 * Added support for using
   [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic) 
-  in Mindcode source. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g. `1.5e-5`)
+  in Mindcode source. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g., `1.5e-5`)
   are converted to mlog-compatible representation (in this case, `15e-6`).
 * Added [simple expression optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
   Current implementation replaces `mul` by a constant or an `idiv`/`div` followed by a `floor`

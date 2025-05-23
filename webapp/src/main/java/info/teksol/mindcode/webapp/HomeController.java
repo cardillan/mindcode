@@ -39,8 +39,8 @@ public class HomeController {
 
     @PostMapping("/compile")
     public String postCompile(@RequestParam(required = false) String id,
-                              @RequestParam String source,
-                              @RequestParam(required = false) String optimizationLevel) {
+            @RequestParam String source,
+            @RequestParam(required = false) String optimizationLevel) {
         Source sourceDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -57,8 +57,8 @@ public class HomeController {
 
     @PostMapping("/compileandrun")
     public String postCompileAndRun(@RequestParam(required = false) String id,
-                              @RequestParam String source,
-                              @RequestParam(required = false) String optimizationLevel) {
+            @RequestParam String source,
+            @RequestParam(required = false) String optimizationLevel) {
         Source sourceDto;
         if (id != null && id.matches("\\A[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}\\z")) {
             final Optional<Source> dto = sourceRepository.findById(UUID.fromString(id));
@@ -75,10 +75,10 @@ public class HomeController {
 
     @GetMapping
     public ModelAndView getHomePage(
-        @RequestParam(name = "s", defaultValue = "") String id,
-        @RequestParam(name = "mindcode", defaultValue = "") String src,
-        @RequestParam(name = "optimizationLevel", defaultValue = "EXPERIMENTAL") String optimizationLevel,
-        @RequestParam(name = "run", defaultValue = "false") String compileAndRun
+            @RequestParam(name = "s", defaultValue = "") String id,
+            @RequestParam(name = "mindcode", defaultValue = "") String src,
+            @RequestParam(name = "optimizationLevel", defaultValue = "EXPERIMENTAL") String optimizationLevel,
+            @RequestParam(name = "run", defaultValue = "false") String compileAndRun
     ) {
         OptimizationLevel level = OptimizationLevel.byName(optimizationLevel, OptimizationLevel.EXPERIMENTAL);
         boolean run = "true".equals(compileAndRun);
@@ -143,7 +143,19 @@ public class HomeController {
     }
 
     private String getCompilerCode(String sourceCode, MindcodeCompiler compiler) {
-        if (sourceCode.isBlank() || compiler.hasErrors()) {
+        if (compiler.isInternalError()) {
+            return """
+                    Oh no! Mindcode crashed.
+                    
+                    Please report the error, either by creating an issue on GitHub,
+                    or in one of the Discord servers - I monitor Mindustry, Mindustry Logic,
+                    and, of course, Mindcode.
+                    
+                    It is quite possible that a workaround will be found for this problem,
+                    in which case you'll be able to continue developing your program
+                    even before a fix is available.
+                    """;
+        } else if (sourceCode.isBlank() || compiler.hasErrors()) {
             return "";
         } else if (isEmpty(compiler.getUnoptimized())) {
             if (compiler.getCallGraph().getFunctions().stream().filter(f -> !f.getDeclaration().sourcePosition().isLibrary()).count() > 1) {
@@ -166,22 +178,22 @@ public class HomeController {
             }
         } else if (isEmpty(compiler.getInstructions())) {
             return """
-                        Whoa! Your program generated some code,
-                        but it was all removed by the optimizer.
-                        
-                        Mindcode removes all unused parts of the program,
-                        and those statements that to not have an effect
-                        on the Mindustry world.
-                        
-                        If your program computes some values, just add
-                        a print() function to output the results of your
-                        computations. For example:
-                        
-                        a = 1;
-                        b = 2;
-                        c = a * a + b * b;
-                        println(c);    // <-- prints the result of the computation
-                        """;
+                    Whoa! Your program generated some code,
+                    but it was all removed by the optimizer.
+                    
+                    Mindcode removes all unused parts of the program,
+                    and those statements that to not have an effect
+                    on the Mindustry world.
+                    
+                    If your program computes some values, just add
+                    a print() function to output the results of your
+                    computations. For example:
+                    
+                    a = 3;
+                    b = 4;
+                    c = a * a + b * b;
+                    println(c);    // <-- prints the result of the computation
+                    """;
         } else {
             return compiler.getOutput();
         }

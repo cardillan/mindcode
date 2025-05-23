@@ -61,7 +61,7 @@ format b
 format c
 ```
 
-The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally isn't possible to optimize the `format` instructions, even if their parameters get resolved to a constant value (this would mean manipulating the placeholders in instructions that produced the text buffer, which is not universally possible with statical analysis). The existing compile time formatting (e.g. `println($"Position: $x, $y");`) will optimize to better code better if some or all of the parameters resolve down to constant values.
+The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally isn't possible to optimize the `format` instructions, even if their parameters get resolved to a constant value (this would mean manipulating the placeholders in instructions that produced the text buffer, which is not universally possible with statical analysis). The existing compile time formatting (e.g., `println($"Position: $x, $y");`) will optimize to better code better if some or all of the parameters resolve down to constant values.
 
 Apart from the `printf()`, Mindcode supports new `format()` function, which just outputs the `format` instruction for each of its arguments.
 

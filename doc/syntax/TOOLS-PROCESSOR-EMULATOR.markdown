@@ -23,10 +23,10 @@ All operations that do not interact with the Mindustry World are supported. Oper
   * When the contents of the text buffer encountered at the `printflush` instruction is the same as the content encountered at the previous `printflush` instruction, the text isn't written to the text buffer again, just the number of the text block repetitions is printed. 
   * `draw print` instruction is handled like the `printflush` instructions: the text consumed by the `draw print` instruction isn't removed from the text buffer and is included in the program output.
 * The `getlink` instruction can be used to access linked blocks specified above. The `@links` variable is set to the total number of linked blocks.
-* The `read` and `write` instructions can be used with the linked memory cells and memory blocks obtained either through the linked variable (e.g. `cell1`), or through the `getlink` instruction.  
+* The `read` and `write` instructions can be used with the linked memory cells and memory blocks obtained either through the linked variable (e.g., `cell1`), or through the `getlink` instruction.  
 * The `sensor` instruction is supported for a very limited number of properties:
-  * `type`: returns the type of the object (e.g. `@memory-cell`)
-  * `id`: returns the id of the object if it exists (e.g. `1` for `@lead`)
+  * `type`: returns the type of the object (e.g., `@memory-cell`)
+  * `id`: returns the id of the object if it exists (e.g., `1` for `@lead`)
   * Accessing other properties isn't supported. 
 * The `wait` instruction isn't supported, specifically, it doesn't pause the execution of the program. 
 * All other instructions that do not set an output variable are silently ignored. For example, the `ucontrol move` instruction executes, but does nothing (there's no unit to send the command to in the emulated world).

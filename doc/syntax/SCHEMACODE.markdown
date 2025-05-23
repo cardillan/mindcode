@@ -21,7 +21,7 @@ going on with this documentation.
 
 # Whitespace and comments
 
-All tokes in Schemacode are separated by whitespace. End of line characters have no special meaning (except in text 
+All tokes in Schemacode are separated by whitespace. End-of-line characters have no special meaning (except in text 
 blocks, where they're preserved). There's no character (such as `;`) separating commands in Schemacode.
 
 Schemacode supports line comments using the `//` characters: everything after `//` is ignored.
@@ -475,7 +475,7 @@ end
 Blocks in the schematic must not overlap. Overlapping blocks are detected and cause compilation error.
 
 Blocks larger than 1x1 are placed into the schematic in such a way that their lower-left corner is at the given 
-coordinates. This makes it quite natural to design schematic starting in the lower left corner, i.e. from coordinates
+coordinates. This makes it quite natural to design schematic starting in the lower left corner, i.e., from coordinates
 (0, 0), and building right and up (or up and right). 
 
 Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
@@ -493,9 +493,9 @@ specified using this syntax:
 facing <orientation>
 ```
 
-e.g. `@conveyor at (2, 4) facing west`.
+e.g., `@conveyor at (2, 4) facing west`.
 
-The cardinal directions are related to the coordinate system of the schematic, i.e. conveyor facing east is moving 
+The cardinal directions are related to the coordinate system of the schematic, i.e., conveyor facing east is moving 
 items from left to right.
 
 ## Block configuration
@@ -507,8 +507,8 @@ text for messages or links and code for processors. Schemacode supports the foll
   block).
 * [Boolean](#boolean-configuration): on/off or open/close, for switches and doors.
 * [Color](#color-configuration): color of the illuminator block.
-* [Single connection](#connection-configuration): connection to another block (e.g. a bridge or a mass driver).
-* [Multiple connections](#connection-configuration): connections to several different blocks (e.g. for power nodes).
+* [Single connection](#connection-configuration): connection to another block (e.g., a bridge or a mass driver).
+* [Multiple connections](#connection-configuration): connections to several different blocks (e.g., for power nodes).
 * [Item](#item-configuration): item type selected in a sorter, unloader or similar block.
 * [Liquid](#liquid-configuration): liquid type selected in a liquid source (a sandbox-only block).
 * [Unit](#unit-configuration): unit type selected in a unit factory or payload source.
@@ -551,7 +551,7 @@ The following block types can have boolean configuration specified:
 Color configuration is specified as `color rgba(<red>, <green>, <blue>, <alpha>)`, where `<red>`, `<green>` and 
 `<blue>` are the value if individual color components, while `<alpha>` is the value of the alpha channel. all these 
 values must be given as a number between `0` and `255`, inclusive. Alpha specifies the opacity, `0` is not opaque at 
-all (i.e. fully transparent), `255` is fully opaque. The exact handling of the alpha channel is done by the 
+all (i.e., fully transparent), `255` is fully opaque. The exact handling of the alpha channel is done by the 
 illuminator block, generally speaking higher values of alpha make the illuminator lightning more prominent.
 
 This example specifies an illuminator block emitting intense green color: 
@@ -618,7 +618,7 @@ Both normal and phase bridge connections must conform to the following criteria,
 
 * At most one connection is allowed.
 * The connection must not lead to the same block (no connection to itself).
-* The connections must lead to a block of the same type; it is not possible to connect e.g. a `@bridge-conveyor` to 
+* The connections must lead to a block of the same type; it is not possible to connect e.g., a `@bridge-conveyor` to 
   a `@phase-conveyor`.
 * No circular connections: if a block is connected to another block, the other block must not be connected to the 
   original block.
@@ -634,7 +634,7 @@ Mass driver connections must conform to the following criteria, otherwise a comp
 
 * At most one connection is allowed.
 * The connection must not lead to the same block (no connection to itself).
-* The connections must lead to a block of the same type; it is not possible to connect e.g. a `@payload-mass-driver` to
+* The connections must lead to a block of the same type; it is not possible to connect e.g., a `@payload-mass-driver` to
   a `@large-payload-mass-driver`.
 * The connection distance must not exceed the mass driver range.
 
@@ -926,7 +926,7 @@ end
 
 Link names must meet the following conditions:
 
-* A link name must correspond to the last part of the block type name (e.g. `drill` for `@laser-drill`, `cell` for 
+* A link name must correspond to the last part of the block type name (e.g., `drill` for `@laser-drill`, `cell` for 
   `@memory-cell` and so on; if the last part is `large`, the next-to-last is used as in `node` for 
   `@power-node-large`), followed by a number.
 * Link names must be unique, no two linked blocks can share a link name in a single processor.

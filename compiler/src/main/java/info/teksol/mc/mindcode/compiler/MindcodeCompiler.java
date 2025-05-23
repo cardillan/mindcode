@@ -114,6 +114,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     // Message logger
     private final ListMessageLogger messageLogger;
+    private boolean internalError;
 
     public MindcodeCompiler(MessageConsumer messageConsumer, CompilerProfile profile, InputFiles inputFiles) {
         this(CompilationPhase.ALL, messageConsumer, profile, inputFiles);
@@ -145,6 +146,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         try {
             compile();
         } catch (Exception e) {
+            internalError = true;
             error(ERR.INTERNAL_ERROR);
         }
     }
@@ -475,6 +477,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     public Processor getEmulator() {
         return Objects.requireNonNull(emulator);
+    }
+
+    public boolean isInternalError() {
+        return internalError;
     }
 
     // Context implementations
