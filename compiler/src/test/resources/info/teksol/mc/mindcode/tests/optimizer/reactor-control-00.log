@@ -4,24 +4,23 @@
     85 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (6 iterations).
     25 instructions eliminated by Jump Optimization (6 iterations).
-    32 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+    31 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
      1 instructions eliminated by Expression Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (2 passes, 4 iterations).
      6 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
-    76 instructions added by Case Switching (5 iterations).
+    58 instructions added by Case Switching (5 iterations).
      1 case expressions converted to switched jumps Case Switching.
-    11 instructions eliminated by Jump Straightening (6 iterations).
+    12 instructions eliminated by Jump Straightening (2 passes, 6 iterations).
     11 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     39 instructions eliminated by Print Merging.
-   444 instructions after optimizations.
+   426 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 587):
-  o Convert case at line 419:9 (segments: 4)                     cost     3, benefit      625.0, efficiency    208.333
-  o Convert case at line 419:9 (segments: 3, zero extension)     cost    45, benefit      750.0, efficiency     16.667
-  * Convert case at line 419:9 (segments: 1, zero extension)     cost    76, benefit      937.5, efficiency     12.336 (+75 instructions)
+  o Convert case at line 419:9 (segments: 3)                     cost     1, benefit      875.0, efficiency    875.000
+  * Convert case at line 419:9 (segments: 2, zero extension)     cost    58, benefit     1000.0, efficiency     17.241 (+57 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-4 instructions):
  
@@ -1791,194 +1790,157 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    302 op add *tmp121 .REACTORS_ON *tmp119
    303 op min .REACTORS_ON *tmp121 :reactors
 
-Modifications by Convert case at line 419:9 (segments: 1, zero extension) (+76 instructions):
+Modifications by Convert case at line 419:9 (segments: 2, zero extension) (+58 instructions):
  
    464 label *label121
    465 getlink :block :n
    466 sensor *tmp204 :block @type
 -    * jump *label107 notEqual *tmp204 @impact-reactor
 +  467 sensor *tmp225 *tmp204 @id
-+  468 jump *label122 greaterThanEq *tmp225 83
-+  469 multijump *label123 *tmp225 0 (m:*label206)
-+  470 multilabel *label123 (m:*label206)
++  468 jump *label123 greaterThanEq *tmp225 63
++  469 multijump *label124 *tmp225 0 (m:*label187)
++  470 multilabel *label124 (m:*label187)
 +  471 jump *label122 always
-+  472 multilabel *label124 (m:*label206)
++  472 multilabel *label125 (m:*label187)
 +  473 jump *label122 always
-+  474 multilabel *label125 (m:*label206)
++  474 multilabel *label126 (m:*label187)
 +  475 jump *label122 always
-+  476 multilabel *label126 (m:*label206)
++  476 multilabel *label127 (m:*label187)
 +  477 jump *label122 always
-+  478 multilabel *label127 (m:*label206)
++  478 multilabel *label128 (m:*label187)
 +  479 jump *label122 always
-+  480 multilabel *label128 (m:*label206)
++  480 multilabel *label129 (m:*label187)
 +  481 jump *label122 always
-+  482 multilabel *label129 (m:*label206)
++  482 multilabel *label130 (m:*label187)
 +  483 jump *label122 always
-+  484 multilabel *label130 (m:*label206)
++  484 multilabel *label131 (m:*label187)
 +  485 jump *label122 always
-+  486 multilabel *label131 (m:*label206)
++  486 multilabel *label132 (m:*label187)
 +  487 jump *label122 always
-+  488 multilabel *label132 (m:*label206)
++  488 multilabel *label133 (m:*label187)
 +  489 jump *label122 always
-+  490 multilabel *label133 (m:*label206)
++  490 multilabel *label134 (m:*label187)
 +  491 jump *label122 always
-+  492 multilabel *label134 (m:*label206)
++  492 multilabel *label135 (m:*label187)
 +  493 jump *label122 always
-+  494 multilabel *label135 (m:*label206)
++  494 multilabel *label136 (m:*label187)
 +  495 jump *label122 always
-+  496 multilabel *label136 (m:*label206)
++  496 multilabel *label137 (m:*label187)
 +  497 jump *label122 always
-+  498 multilabel *label137 (m:*label206)
++  498 multilabel *label138 (m:*label187)
 +  499 jump *label122 always
-+  500 multilabel *label138 (m:*label206)
++  500 multilabel *label139 (m:*label187)
 +  501 jump *label122 always
-+  502 multilabel *label139 (m:*label206)
++  502 multilabel *label140 (m:*label187)
 +  503 jump *label122 always
-+  504 multilabel *label140 (m:*label206)
++  504 multilabel *label141 (m:*label187)
 +  505 jump *label122 always
-+  506 multilabel *label141 (m:*label206)
++  506 multilabel *label142 (m:*label187)
 +  507 jump *label122 always
-+  508 multilabel *label142 (m:*label206)
++  508 multilabel *label143 (m:*label187)
 +  509 jump *label122 always
-+  510 multilabel *label143 (m:*label206)
++  510 multilabel *label144 (m:*label187)
 +  511 jump *label122 always
-+  512 multilabel *label144 (m:*label206)
++  512 multilabel *label145 (m:*label187)
 +  513 jump *label122 always
-+  514 multilabel *label145 (m:*label206)
++  514 multilabel *label146 (m:*label187)
 +  515 jump *label122 always
-+  516 multilabel *label146 (m:*label206)
++  516 multilabel *label147 (m:*label187)
 +  517 jump *label122 always
-+  518 multilabel *label147 (m:*label206)
++  518 multilabel *label148 (m:*label187)
 +  519 jump *label122 always
-+  520 multilabel *label148 (m:*label206)
++  520 multilabel *label149 (m:*label187)
 +  521 jump *label122 always
-+  522 multilabel *label149 (m:*label206)
++  522 multilabel *label150 (m:*label187)
 +  523 jump *label122 always
-+  524 multilabel *label150 (m:*label206)
++  524 multilabel *label151 (m:*label187)
 +  525 jump *label122 always
-+  526 multilabel *label151 (m:*label206)
++  526 multilabel *label152 (m:*label187)
 +  527 jump *label122 always
-+  528 multilabel *label152 (m:*label206)
++  528 multilabel *label153 (m:*label187)
 +  529 jump *label122 always
-+  530 multilabel *label153 (m:*label206)
++  530 multilabel *label154 (m:*label187)
 +  531 jump *label122 always
-+  532 multilabel *label154 (m:*label206)
++  532 multilabel *label155 (m:*label187)
 +  533 jump *label122 always
-+  534 multilabel *label155 (m:*label206)
++  534 multilabel *label156 (m:*label187)
 +  535 jump *label122 always
-+  536 multilabel *label156 (m:*label206)
++  536 multilabel *label157 (m:*label187)
 +  537 jump *label122 always
-+  538 multilabel *label157 (m:*label206)
++  538 multilabel *label158 (m:*label187)
 +  539 jump *label122 always
-+  540 multilabel *label158 (m:*label206)
++  540 multilabel *label159 (m:*label187)
 +  541 jump *label122 always
-+  542 multilabel *label159 (m:*label206)
++  542 multilabel *label160 (m:*label187)
 +  543 jump *label122 always
-+  544 multilabel *label160 (m:*label206)
++  544 multilabel *label161 (m:*label187)
 +  545 jump *label112 always
-+  546 multilabel *label161 (m:*label206)
++  546 multilabel *label162 (m:*label187)
 +  547 jump *label112 always
-+  548 multilabel *label162 (m:*label206)
++  548 multilabel *label163 (m:*label187)
 +  549 jump *label122 always
-+  550 multilabel *label163 (m:*label206)
++  550 multilabel *label164 (m:*label187)
 +  551 jump *label122 always
-+  552 multilabel *label164 (m:*label206)
++  552 multilabel *label165 (m:*label187)
 +  553 jump *label114 always
-+  554 multilabel *label165 (m:*label206)
++  554 multilabel *label166 (m:*label187)
 +  555 jump *label114 always
-+  556 multilabel *label166 (m:*label206)
++  556 multilabel *label167 (m:*label187)
 +  557 jump *label114 always
-+  558 multilabel *label167 (m:*label206)
++  558 multilabel *label168 (m:*label187)
 +  559 jump *label114 always
-+  560 multilabel *label168 (m:*label206)
++  560 multilabel *label169 (m:*label187)
 +  561 jump *label122 always
-+  562 multilabel *label169 (m:*label206)
++  562 multilabel *label170 (m:*label187)
 +  563 jump *label122 always
-+  564 multilabel *label170 (m:*label206)
++  564 multilabel *label171 (m:*label187)
 +  565 jump *label122 always
-+  566 multilabel *label171 (m:*label206)
++  566 multilabel *label172 (m:*label187)
 +  567 jump *label122 always
-+  568 multilabel *label172 (m:*label206)
++  568 multilabel *label173 (m:*label187)
 +  569 jump *label122 always
-+  570 multilabel *label173 (m:*label206)
++  570 multilabel *label174 (m:*label187)
 +  571 jump *label122 always
-+  572 multilabel *label174 (m:*label206)
++  572 multilabel *label175 (m:*label187)
 +  573 jump *label122 always
-+  574 multilabel *label175 (m:*label206)
++  574 multilabel *label176 (m:*label187)
 +  575 jump *label122 always
-+  576 multilabel *label176 (m:*label206)
++  576 multilabel *label177 (m:*label187)
 +  577 jump *label122 always
-+  578 multilabel *label177 (m:*label206)
++  578 multilabel *label178 (m:*label187)
 +  579 jump *label122 always
-+  580 multilabel *label178 (m:*label206)
++  580 multilabel *label179 (m:*label187)
 +  581 jump *label122 always
-+  582 multilabel *label179 (m:*label206)
++  582 multilabel *label180 (m:*label187)
 +  583 jump *label122 always
-+  584 multilabel *label180 (m:*label206)
++  584 multilabel *label181 (m:*label187)
 +  585 jump *label122 always
-+  586 multilabel *label181 (m:*label206)
++  586 multilabel *label182 (m:*label187)
 +  587 jump *label122 always
-+  588 multilabel *label182 (m:*label206)
++  588 multilabel *label183 (m:*label187)
 +  589 jump *label122 always
-+  590 multilabel *label183 (m:*label206)
++  590 multilabel *label184 (m:*label187)
 +  591 jump *label114 always
-+  592 multilabel *label184 (m:*label206)
++  592 multilabel *label185 (m:*label187)
 +  593 jump *label114 always
-+  594 multilabel *label185 (m:*label206)
++  594 multilabel *label186 (m:*label187)
 +  595 jump *label114 always
-+  596 multilabel *label186 (m:*label206)
-+  597 jump *label122 always
-+  598 multilabel *label187 (m:*label206)
-+  599 jump *label122 always
-+  600 multilabel *label188 (m:*label206)
-+  601 jump *label122 always
-+  602 multilabel *label189 (m:*label206)
-+  603 jump *label122 always
-+  604 multilabel *label190 (m:*label206)
-+  605 jump *label122 always
-+  606 multilabel *label191 (m:*label206)
-+  607 jump *label122 always
-+  608 multilabel *label192 (m:*label206)
-+  609 jump *label122 always
-+  610 multilabel *label193 (m:*label206)
-+  611 jump *label122 always
-+  612 multilabel *label194 (m:*label206)
-+  613 jump *label122 always
-+  614 multilabel *label195 (m:*label206)
-+  615 jump *label122 always
-+  616 multilabel *label196 (m:*label206)
-+  617 jump *label122 always
-+  618 multilabel *label197 (m:*label206)
-+  619 jump *label122 always
-+  620 multilabel *label198 (m:*label206)
-+  621 jump *label122 always
-+  622 multilabel *label199 (m:*label206)
-+  623 jump *label122 always
-+  624 multilabel *label200 (m:*label206)
-+  625 jump *label122 always
-+  626 multilabel *label201 (m:*label206)
-+  627 jump *label122 always
-+  628 multilabel *label202 (m:*label206)
-+  629 jump *label122 always
-+  630 multilabel *label203 (m:*label206)
-+  631 jump *label122 always
-+  632 multilabel *label204 (m:*label206)
-+  633 jump *label122 always
-+  634 multilabel *label205 (m:*label206)
-+  635 jump *label108 always
-   636 label *label108
-   637 op add :reactors :reactors 1
-   638 op lessThanEq :enabled :reactors .REACTORS_ON
++  596 label *label123
++  597 jump *label108 equal *tmp225 82
++  598 jump *label122 always
+   599 label *label108
+   600 op add :reactors :reactors 1
+   601 op lessThanEq :enabled :reactors .REACTORS_ON
  
-   644 label *label110
-   645 jump *label106 always
-   646 label *label107
+   607 label *label110
+   608 jump *label106 always
+   609 label *label107
 -    * jump *label112 equal *tmp204 @overdrive-projector
 -    * jump *label111 notEqual *tmp204 @overdrive-dome
-   647 label *label112
-   648 control enabled :block .OVERDRIVE
-   649 jump *label106 always
-   650 label *label111
+   610 label *label112
+   611 control enabled :block .OVERDRIVE
+   612 jump *label106 always
+   613 label *label111
 -    * jump *label114 equal *tmp204 @conduit
 -    * jump *label114 equal *tmp204 @pulse-conduit
 -    * jump *label114 equal *tmp204 @plated-conduit
@@ -1986,13 +1948,13 @@ Modifications by Convert case at line 419:9 (segments: 1, zero extension) (+76 i
 -    * jump *label114 equal *tmp204 @titanium-conveyor
 -    * jump *label114 equal *tmp204 @plastanium-conveyor
 -    * jump *label113 notEqual *tmp204 @armored-conveyor
-   651 label *label114
-   652 control enabled :block :startup
-   653 label *label113
-+  654 label *label122
-   655 label *label106
-   656 label *label104
-   657 op add :n :n 1
+   614 label *label114
+   615 control enabled :block :startup
+   616 label *label113
++  617 label *label122
+   618 label *label106
+   619 label *label104
+   620 op add :n :n 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -2013,7 +1975,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    464 getlink :block :n
    465 sensor *tmp204 :block @type
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Jump Straightening, pass 2, iteration 1 (-1 instructions):
+ 
+   593 multilabel *label186 (m:*label187)
+   594 jump *label114 always
+   595 label *label123
+-    * jump *label108 equal *tmp225 82
+-    * jump *label122 always
++  596 jump *label122 notEqual *tmp225 82
+   597 label *label108
+   598 op add :reactors :reactors 1
+   599 op lessThanEq :enabled :reactors .REACTORS_ON
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
  
     57 set .REASON "Reason unknown -- out of power?"
     58 jump *label15 notEqual .MODE 0
@@ -2030,14 +2004,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    298 label *label70
    299 op add *tmp121 .REACTORS_ON *tmp119
    300 op min .REACTORS_ON *tmp121 :reactors
- 
-   629 multilabel *label204 (m:*label206)
-   630 jump *label122 always
-   631 multilabel *label205 (m:*label206)
--    * jump *label108 always
-   632 label *label108
-   633 op add :reactors :reactors 1
-   634 op lessThanEq :enabled :reactors .REACTORS_ON
 
 Modifications by Iterated phase, If Expression Optimization, pass 2, iteration 1:
  
@@ -2301,49 +2267,49 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    423 label *label121
    424 getlink :block :n
  
-   591 multilabel *label204 (m:*label206)
-   592 jump *label122 always
-   593 multilabel *label205 (m:*label206)
+   554 jump *label114 always
+   555 label *label123
+   556 jump *label122 notEqual *tmp225 82
 -    * label *label108
-   594 op add :reactors :reactors 1
-   595 op lessThanEq :enabled :reactors .REACTORS_ON
-   596 control enabled :block :enabled
+   557 op add :reactors :reactors 1
+   558 op lessThanEq :enabled :reactors .REACTORS_ON
+   559 control enabled :block :enabled
  
-   598 sensor *tmp210 :block @timescale
-   599 op add :boosts :boosts *tmp210
-   600 label *label109
+   561 sensor *tmp210 :block @timescale
+   562 op add :boosts :boosts *tmp210
+   563 label *label109
 -    * label *label110
-   601 jump *label106 always
+   564 jump *label106 always
 -    * label *label107
-   602 label *label112
-   603 control enabled :block .OVERDRIVE
-   604 jump *label106 always
+   565 label *label112
+   566 control enabled :block .OVERDRIVE
+   567 jump *label106 always
 -    * label *label111
-   605 label *label114
-   606 control enabled :block :startup
+   568 label *label114
+   569 control enabled :block :startup
 -    * label *label113
-   607 label *label122
-   608 label *label106
+   570 label *label122
+   571 label *label106
 -    * label *label104
-   609 op add :n :n 1
-   610 jump *label121 lessThan :n @links
-   611 label *label105
+   572 op add :n :n 1
+   573 jump *label121 lessThan :n @links
+   574 label *label105
  
-   618 read *tmp221 cell2 4
-   619 op add :boosts :boosts *tmp221
-   620 label *label115
+   581 read *tmp221 cell2 4
+   582 op add :boosts :boosts *tmp221
+   583 label *label115
 -    * label *label116
-   621 op min .REACTORS_ON .REACTORS_ON :reactors
-   622 jump *label117 notEqual cell1 null
-   623 set .STARTUPS 0
+   584 op min .REACTORS_ON .REACTORS_ON :reactors
+   585 jump *label117 notEqual cell1 null
+   586 set .STARTUPS 0
  
-   637 write .RESETS cell1 9
-   638 write .COMMITS cell1 10
-   639 label *label118
+   600 write .RESETS cell1 9
+   601 write .COMMITS cell1 10
+   602 label *label118
 -    * label *label17
-   640 jump *label16 always
+   603 jump *label16 always
 -    * label *label18
-   641 end
+   604 end
 
 Modifications by Jumps phase, Jump Threading, pass 5, iteration 1:
  
@@ -2420,23 +2386,23 @@ Modifications by Jumps phase, Jump Threading, pass 5, iteration 1:
    373 op add .COMMITS .COMMITS 1
    374 set .CAN_COMMIT false
  
-   594 op add :reactors :reactors 1
-   595 op lessThanEq :enabled :reactors .REACTORS_ON
-   596 control enabled :block :enabled
+   557 op add :reactors :reactors 1
+   558 op lessThanEq :enabled :reactors .REACTORS_ON
+   559 control enabled :block :enabled
 -    * jump *label109 equal :enabled false
-+  597 jump *label106 equal :enabled false
-   598 sensor *tmp210 :block @timescale
-   599 op add :boosts :boosts *tmp210
-   600 label *label109
++  560 jump *label106 equal :enabled false
+   561 sensor *tmp210 :block @timescale
+   562 op add :boosts :boosts *tmp210
+   563 label *label109
  
-   623 set .STARTUPS 0
-   624 set .RESETS 0
-   625 set .COMMITS 0
+   586 set .STARTUPS 0
+   587 set .RESETS 0
+   588 set .COMMITS 0
 -    * jump *label118 always
-+  626 jump *label16 always
-   627 label *label117
-   628 write .MODE cell1 0
-   629 write .OUTPUT_1 cell1 1
++  589 jump *label16 always
+   590 label *label117
+   591 write .MODE cell1 0
+   592 write .OUTPUT_1 cell1 1
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 (-1 instructions):
  
@@ -2491,19 +2457,19 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 
    370 label *label79
    371 sensor *tmp187 switch2 @enabled
  
-   588 jump *label106 equal :enabled false
-   589 sensor *tmp210 :block @timescale
-   590 op add :boosts :boosts *tmp210
+   551 jump *label106 equal :enabled false
+   552 sensor *tmp210 :block @timescale
+   553 op add :boosts :boosts *tmp210
 -    * label *label109
-   591 jump *label106 always
-   592 label *label112
-   593 control enabled :block .OVERDRIVE
+   554 jump *label106 always
+   555 label *label112
+   556 control enabled :block .OVERDRIVE
  
-   626 write .STARTUPS cell1 8
-   627 write .RESETS cell1 9
-   628 write .COMMITS cell1 10
+   589 write .STARTUPS cell1 8
+   590 write .RESETS cell1 9
+   591 write .COMMITS cell1 10
 -    * label *label118
-   629 jump *label16 always
+   592 jump *label16 always
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-39 instructions):
@@ -3043,10 +3009,8 @@ label *label121
 getlink :block :n
 sensor *tmp204 :block @type
 sensor *tmp225 *tmp204 @id
-jump *label122 greaterThanEq *tmp225 83
-multijump *label123 *tmp225 0
-multilabel *label123
-jump *label122 always
+jump *label123 greaterThanEq *tmp225 63
+multijump *label124 *tmp225 0
 multilabel *label124
 jump *label122 always
 multilabel *label125
@@ -3120,15 +3084,15 @@ jump *label122 always
 multilabel *label159
 jump *label122 always
 multilabel *label160
-jump *label112 always
+jump *label122 always
 multilabel *label161
 jump *label112 always
 multilabel *label162
-jump *label122 always
+jump *label112 always
 multilabel *label163
 jump *label122 always
 multilabel *label164
-jump *label114 always
+jump *label122 always
 multilabel *label165
 jump *label114 always
 multilabel *label166
@@ -3136,7 +3100,7 @@ jump *label114 always
 multilabel *label167
 jump *label114 always
 multilabel *label168
-jump *label122 always
+jump *label114 always
 multilabel *label169
 jump *label122 always
 multilabel *label170
@@ -3166,50 +3130,15 @@ jump *label122 always
 multilabel *label182
 jump *label122 always
 multilabel *label183
-jump *label114 always
+jump *label122 always
 multilabel *label184
 jump *label114 always
 multilabel *label185
 jump *label114 always
 multilabel *label186
-jump *label122 always
-multilabel *label187
-jump *label122 always
-multilabel *label188
-jump *label122 always
-multilabel *label189
-jump *label122 always
-multilabel *label190
-jump *label122 always
-multilabel *label191
-jump *label122 always
-multilabel *label192
-jump *label122 always
-multilabel *label193
-jump *label122 always
-multilabel *label194
-jump *label122 always
-multilabel *label195
-jump *label122 always
-multilabel *label196
-jump *label122 always
-multilabel *label197
-jump *label122 always
-multilabel *label198
-jump *label122 always
-multilabel *label199
-jump *label122 always
-multilabel *label200
-jump *label122 always
-multilabel *label201
-jump *label122 always
-multilabel *label202
-jump *label122 always
-multilabel *label203
-jump *label122 always
-multilabel *label204
-jump *label122 always
-multilabel *label205
+jump *label114 always
+label *label123
+jump *label122 notEqual *tmp225 82
 op add :reactors :reactors 1
 op lessThanEq :enabled :reactors .REACTORS_ON
 control enabled :block :enabled

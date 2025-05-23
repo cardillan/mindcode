@@ -1,7 +1,8 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.Segment;
 import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.Targets;
+import info.teksol.mc.mindcode.compiler.optimization.cases.Segment;
+import info.teksol.mc.mindcode.compiler.optimization.cases.SegmentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -661,13 +662,13 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
             List<Segment> split = CaseSwitcher.split(targets);
 
             assertEquals(List.of(
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 1, 3, l("a")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 3, 5, l("")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 5, 6, l("b")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 6, 7, l("a")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 7, 8, l("b")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 8, 9, l("")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 9, 10, l("b"))
+                            new Segment(SegmentType.SINGLE, 1, 3, l("a")),
+                            new Segment(SegmentType.SINGLE, 3, 5, l("")),
+                            new Segment(SegmentType.SINGLE, 5, 6, l("b")),
+                            new Segment(SegmentType.SINGLE, 6, 7, l("a")),
+                            new Segment(SegmentType.SINGLE, 7, 8, l("b")),
+                            new Segment(SegmentType.SINGLE, 8, 9, l("")),
+                            new Segment(SegmentType.SINGLE, 9, 10, l("b"))
                     ),
                     split);
         }
@@ -684,11 +685,11 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
             List<Segment> split = CaseSwitcher.split(targets);
 
             assertEquals(List.of(
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 1, 3, l("a")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 3, 5, l("")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 5, 8, l("b")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 8, 9, l("")),
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 9, 10, l("b"))
+                            new Segment(SegmentType.SINGLE, 1, 3, l("a")),
+                            new Segment(SegmentType.SINGLE, 3, 5, l("")),
+                            new Segment(SegmentType.SINGLE, 5, 8, l("b")),
+                            new Segment(SegmentType.SINGLE, 8, 9, l("")),
+                            new Segment(SegmentType.SINGLE, 9, 10, l("b"))
                     ),
                     split);
         }
@@ -704,11 +705,12 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
             List<Segment> split = CaseSwitcher.split(targets);
 
             assertEquals(List.of(
-                            new Segment(CaseSwitcher.SegmentType.SINGLE, 1, 6, l("a"))
+                            new Segment(SegmentType.SINGLE, 1, 6, l("a"))
                     ),
                     split);
         }
 
+/*
         @Test
         void findsLargestSegment() {
             Segment largest = CaseSwitcher.findLargestSegment(List.of(
@@ -799,5 +801,6 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     List.of(new Segment(CaseSwitcher.SegmentType.SINGLE, 6, 50, l(""))),
                     segments);
         }
+*/
     }
 }

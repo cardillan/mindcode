@@ -1194,67 +1194,66 @@ The above case expression is transformed to this:
     sensor *tmp4 *tmp2 @id
         jump label_40 greaterThanEq *tmp4 35
         op add @counter @counter *tmp4
+        jump label_55 always 0 0
         jump label_56 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_57 always 0 0
-        jump label_57 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
-        jump label_54 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_56 always 0 0
+        jump label_56 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
+        jump label_53 always 0 0
     label_40:
-        jump label_44 greaterThanEq *tmp4 206
-        jump label_54 equal *tmp4 203
-        jump label_54 equal *tmp4 204
-        jump label_57 always 0 0
+        jump label_44 greaterThanEq *tmp4 208
+        jump label_56 equal *tmp4 205
+        jump label_55 lessThan *tmp4 203
+        jump label_53 always 0 0
     label_44:
-        jump label_54 lessThan *tmp4 208
-        jump label_50 greaterThanEq *tmp4 234
-        jump label_54 equal *tmp4 220
-        jump label_54 equal *tmp4 221
-        jump label_54 equal *tmp4 225
-        jump label_57 always 0 0
-    label_50:
-        jump label_54 lessThan *tmp4 235
-        jump label_57 always 0 0
-    label_52:
+        jump label_48 greaterThanEq *tmp4 222
+        jump label_53 equal *tmp4 220
+        jump label_53 equal *tmp4 221
+        jump label_56 always 0 0
+    label_48:
+        jump label_53 equal *tmp4 225
+        jump label_53 equal *tmp4 234
+        jump label_56 always 0 0
+    label_51:
         set *tmp0 "No block found"
-        jump label_58 always 0 0
-    label_54:
+        jump label_57 always 0 0
+    label_53:
         set *tmp0 "Wall"
-        jump label_58 always 0 0
+        jump label_57 always 0 0
+label_55:
+    jump label_51 strictEqual *tmp4 null
 label_56:
-    jump label_52 strictEqual *tmp4 null
-label_57:
     set *tmp0 "Not wall"
-    label_58:
+    label_57:
     print *tmp0
 ```
 
