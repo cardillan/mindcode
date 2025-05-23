@@ -82,7 +82,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 #### Experimental features
 
-* Added [module signatures](doc/syntax/REMOTE-CALLS.markdown#module-signatures) to the remote call mechanism prevent binding to an incompatible remote module.
+* Added [module signatures](doc/syntax/REMOTE-CALLS.markdown#module-signatures) to the remote call mechanism to prevent binding to an incompatible remote module.
 * Added support for [using the same module in multiple remote processors](doc/syntax/REMOTE-CALLS.markdown#multiple-instantiations-of-a-remote-module).
 * Added an optional output parameter to the [`finished()` function](doc/syntax/REMOTE-CALLS.markdown#asynchronous-remote-calls), which receives the resulting value of the remote function call if it is already finished.  
 
@@ -117,7 +117,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* Hexadecimal and binary literals can be specified as 64-bit unsigned numbers (e.g., `0xFFFFFFFFFFFFFFFF` represents `-1`). These literals are encoded to mlog as is when possible. If the literal cannot properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
+* Hexadecimal and binary literals can be specified as 64-bit unsigned numbers (e.g., `0xFFFFFFFFFFFFFFFF` represents `-1`). These literals are encoded to mlog as is when possible. If the literal cannot be properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
 * Negative hexadecimal and binary literals are encoded to mlog as is (with possible conversion to lower case). If the literal cannot be properly parsed by the target Mindustry version, it is encoded as a signed decimal literal.
 
 ### Miscellaneous
@@ -158,7 +158,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* **Breaking:** new `ref` keyword was added to the language. Code that uses this keyword as a function or variable name will not compile and the variable or function will have to be renamed.
+* **Breaking:** new `ref` keyword was added to the language. Code that uses this keyword as a function or variable name will not compile, and the variable or function will have to be renamed.
 * Added the [`char()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-char-function). The function returns the ASCII value of a character at given index from a string value using the `read` instruction, as supported in the latest BE version.
 * Added support for invoking properties and the `sensor` functions on string values to support latest BE Enhancement of sensing string lengths using `@size`. 
 * Added the [`strlen()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-strlen-function) returning the length of a string determined at runtime.
@@ -188,8 +188,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * **Breaking**: underscores in multi-word command-line options were changed to hyphens.
 * The metadata used by Mindcode compiler and processor emulator now correspond to the compilation target. Schemacode still uses the latest version of the metadata for both building and decompiling schematics.
-* Compile-time evaluation cache is cleared when exiting function context. This forces primarily the `length()` function to be reevaluated in each call to an inline function, as its value depends on the actual arguments passed to the function. 
-* Improved optimization of jumps by making multiple passes over jumps-related optimizers, up to the optimization passes limit.
+* Compile-time evaluation cache is cleared when exiting a function context. This forces primarily the `length()` function to be reevaluated in each call to an inline function, as its value depends on the actual arguments passed to the function. 
+* Improved optimization of jumps by making multiple passes over jump-related optimizers, up to the optimization passes limit.
 * Volatile built-in variables used an upper or lower bound in a ranged for-loop statement are used directly in the condition, without storing them in a temporary variable.
 * Stripped unnecessary `.0` distinctions from local variable prefix.
 * The `noinit` modifier is no longer disallowed for local variables.
@@ -200,7 +200,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed errors when trying to invoke properties on internal array elements ([#228](https://github.com/cardillan/mindcode/issues/228)).
-* Fixed wrong optimization of list iteration loops ([#229](https://github.com/cardillan/mindcode/issues/229)).
+* Fixed a wrong optimization of list iteration loops ([#229](https://github.com/cardillan/mindcode/issues/229)).
 * Fixed incorrect optimization of `if` expressions ([#230](https://github.com/cardillan/mindcode/issues/230)).
  
 ### Added
@@ -210,14 +210,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * Enhanced Temporary Variables Elimination to remove superfluous temporary variables generated by the compiler for volatile variables.
-* Updated Dead Code Elimination to not remove dead writes to volatile variables.
+* Updated Dead Code Elimination so that it does not remove dead writes to volatile variables.
 
 ## 3.2.0 - 2025-03-16
 
 ### Fixed
 
 * Fixed the _Start with a new schematic_ button causing HTTP 404.
-* Fixed the schematics decompiler incorrectly processing factories with no unit plan selected.
+* Fixed the Schematic Decompiler incorrectly processing factories with no unit plan selected.
 * Fixed wrong values of `@blockCount`, `@unitCount`, `@itemCount` and `@liquidCount` variables in processor emulator (currently assigned values correspond to Mindustry Logic 8 regardless of the compiler target). 
 
 ### Added
@@ -225,7 +225,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords) as a preferred way to specify mlog keywords to Mindustry Logic functions ([#215](https://github.com/cardillan/mindcode/issues/215)).
 * Added support for passing mlog keywords and formattable string literals as arguments to inline functions.
 * Added support for creating constants out of mlog keywords.
-* Added known mlog keywords to the file type definitions of the [provided Intellij IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
+* Added known mlog keywords to the file type definitions of the [provided IntelliJ IDEA IDE settings](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea). 
 * Added new [`mlogText()` function](doc/syntax/SYNTAX-EXTENSIONS.markdown#defining-new-mlog-instructions) for direct encoding of mlog instructions.
 * Added support for descending iteration order to [Range Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) and [List Iteration Loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#descending-iteration-order) ([#174](https://github.com/cardillan/mindcode/issues/174)).
 * The description of the _storage clause_ added in Mindcode 3.1 was added to the [documentation](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables).
@@ -237,9 +237,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* **Breaking:** new keywords were added to the language: `descending`, `module` and `remote`. Code that uses any of these keywords  as a function or variable name will not compile and the variable or function will have to be renamed.
+* **Breaking:** new keywords were added to the language: `descending`, `module` and `remote`. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
 * All reads from and writes to variables declared `volatile` are preserved now. Volatile variables can be accessed from a remote processor safely.
-* Prefixes for local variables are created from function name by default. Use [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes.
+* Prefixes for local variables are created from the function name by default. Use [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes.
 * Changed the `sort-variables` option to use `draw triangle` instructions to create variables in a defined order.
 
 ### Deprecated
@@ -251,7 +251,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed web app page not loading ([#227](https://github.com/cardillan/mindcode/issues/227)).
+* Fixed the web app page not loading ([#227](https://github.com/cardillan/mindcode/issues/227)).
 
 ## 3.1.0 - 2025-02-20
 
@@ -259,7 +259,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed some syntax errors reported at wrong places ([#214](https://github.com/cardillan/mindcode/issues/214)).
 * Fixed wrong block/unit logic IDs ([#224](https://github.com/cardillan/mindcode/issues/224)).
-* Fixed error decompiling schematics with Air Factory ([#225](https://github.com/cardillan/mindcode/issues/225)).
+* Fixed an error decompiling schematics with Air Factory ([#225](https://github.com/cardillan/mindcode/issues/225)).
 
 ### Added
 
@@ -288,12 +288,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed a wrong reference counting for inline functions ([#207](https://github.com/cardillan/mindcode/issues/207)).
 * Fixed compiler errors when placing enhanced comments into loops.
 * Fixed wrong compile-time and emulator evaluation of `asin`, `acos` and `atan` functions ([#209](https://github.com/cardillan/mindcode/issues/209)).
-* Fixed compile-time evaluation potentially processing functions not available in current target. The only affected target was 6, where non-existent functions `asin`, `acos`, `atan` and `packcolor` could be compile-time evaluated instead of reported as non-existent.  
+* Fixed compile-time evaluation potentially processing functions not available in the current target. The only affected target was 6, where non-existent functions `asin`, `acos`, `atan` and `packcolor` could be compile-time evaluated instead of reported as non-existent.  
 
 ### Added
 
 * Added support for encoding the results of compile-time expressions as color literals.
-* Added capability to automatically add a `printflush message1` instruction at the end of the main program body if missing from program.
+* Added functionality to automatically add a `printflush message1` instruction at the end of the main program body if missing from program.
 * Added the `auto-printflush` compiler directive and `--auto-printflush` command-line option to control the addition of the `printflush message1` instruction.
 * Added explanatory messages to the web app when compiling the source yields an empty program. 
 
@@ -384,7 +384,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed wrong compile-time evaluation of trigonometric functions (radians were assumed instead of degrees used by Mindustry - [#192](https://github.com/cardillan/mindcode/issues/192)).
+* Fixed a wrong compile-time evaluation of trigonometric functions (radians were assumed instead of degrees used by Mindustry - [#192](https://github.com/cardillan/mindcode/issues/192)).
 * Fixed the documentation stating that `do` in loops is optional ([#191](https://github.com/cardillan/mindcode/issues/191)).
 * Fixed decompiler output missing the `#set target` directive ([#188](https://github.com/cardillan/mindcode/issues/188)).
 
@@ -407,20 +407,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed wrong Jump Threading optimization in out-of-line functions ([#177](https://github.com/cardillan/mindcode/issues/177)).
+* Fixed a wrong Jump Threading optimization in out-of-line functions ([#177](https://github.com/cardillan/mindcode/issues/177)).
 * Fixed bugs in the Data Flow Optimization:
   * The virtual `setaddr` instruction, unused due to the corresponding jump being unreachable, wouldn't be removed from code. This caused errors referencing a non-existent label.
   * Data Flow Optimization would sometimes corrupt the expected code structure when removing unneeded instructions, causing bugs or runtime errors during subsequent optimizations. 
   * The entry condition to a loop might be incorrectly evaluated, leading to wrong optimizations of some loops.
-  * A variable read in an unreachable part of code might be reported as uninitialized. This might lead to compilation error for compiler-generated uninitialized variables.
+  * A variable read in an unreachable part of code might be reported as uninitialized. This might lead to a compilation error for compiler-generated uninitialized variables.
 * Fixed the If Expression Optimization mistakenly propagating a jump into the bodies of the if/else statement, causing errors during subsequent optimizations.
 * Fixed the Single Step Elimination occasionally crashing when removing a superfluous jump.
-* Fixed the Loop Unrolling Optimization possibly unrolling incorrect number of iterations on loops with no exit condition.
+* Fixed the Loop Unrolling Optimization possibly unrolling an incorrect number of iterations on loops with no exit condition.
 * Fixed a bug in the implementation of the `median(x...)` function in the `math` system library.
   
 ### Added
 
-* Added separate [Testing Framework](doc/syntax/TOOLS-TESTING-TOOL.markdown) command-line tool. The tool allows compiling and running Mindcode source files under various optimization settings, helping to detect bugs in Mindcode.  
+* Added a separate [Testing Framework](doc/syntax/TOOLS-TESTING-TOOL.markdown) command-line tool. The tool allows compiling and running Mindcode source files under various optimization settings, helping to detect bugs in Mindcode.  
 
 #### Experimental features
 
@@ -431,8 +431,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking:** changed the default language target from ML7 to ML7A. The following functions are affected:
   * `getBlock`: previously, the building at given coordinates was returned through an output parameter. In ML7A, the building is returned through function return value. See [`getBlock()`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-control).
   * `ulocate`: previously, the function returned a boolean value (`true` when the building was found, `false` otherwise). In ML7A, the function returns a building (if found), and the `found` flag is returned through an output parameter. See [`getBlock()`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-locate).
-* Changed automatic generation of Intellij IDEA settings files to only modify the zip files when the contents of the contained files changes.
-* Changed Loop Unrolling Optimization to handle more cases of loop control variable modification on advanced level.
+* Changed automatic generation of IntelliJ IDEA settings files to only modify the zip files when the content of the contained files changes.
+* Changed Loop Unrolling Optimization to handle more cases of loop control variable modification run on the `advanced` level.
 
 ## 2.6.0 - 2024-11-15
 
@@ -442,19 +442,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed the `findLinkedBlocks` library function not to produce a warning about uninitialized variables.
 * Fixed the mlog decompiler crashing on `jump` instructions targeting instructions outside valid range.
-* Fixed unhandled error when decompiling invalid code from mlog by the web application.
+* Fixed an unhandled error when decompiling invalid code from mlog by the web application.
 * Fixed `or` operator being evaluated the same as `||` instead of `|` by the processor emulator.
 
 ### Added
 
 * Added warnings for unrecognized built-in variables. An unrecognized built-in variable might be invalid or mistyped.
 * Added the built-in math constants `@pi`, `@e`, `@degToRad` and `@radToDeg` to the processor emulator.
-* Added automatic generation of [Intellij IDEA settings files](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea) to keep them up-to-date with the language definition.
+* Added automatic generation of [IntelliJ IDEA settings files](doc/syntax/TOOLS-IDE-INTEGRATION.markdown#intellij-idea) to keep them up to date with the language definition.
 
 #### Experimental features
 
 * Added a new `require` keyword for adding a system library or another external file (for command-line compilers) to the compiled code.
-* Added information about the compiled code size of individual functions to the  [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#compiled-function-sizes).
+* Added information about the compiled code size of individual functions to the [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#compiled-function-sizes).
 * Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library) (`printExactFast` and `printExactSlow`).
 * Added new functions to the [`math` system library](doc/syntax/SYSTEM-LIBRARY.markdown#math-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `nullToZero`, `sum`, `avg`, `median`).
 * Added configurable [execution flags](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) governing the behavior of the processor emulator.
@@ -474,11 +474,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed incorrectly processed case expression passed into functions ([#107](https://github.com/cardillan/mindcode/issues/107)).
+* Fixed an incorrectly processed case expression passed into functions ([#107](https://github.com/cardillan/mindcode/issues/107)).
 * Fixed arguments incorrectly passed to recursive calls ([#169](https://github.com/cardillan/mindcode/issues/169)).
 * Fixed output function parameters incorrectly accepting expressions as arguments ([#170](https://github.com/cardillan/mindcode/issues/170)).
-* Fixed error when allocating a stack using the ML8A target  ([#171](https://github.com/cardillan/mindcode/issues/171)).
-* Fixed optimization not recognizing all interactions with Mindustry World  ([#172](https://github.com/cardillan/mindcode/issues/172)).
+* Fixed an error when allocating a stack using the ML8A target ([#171](https://github.com/cardillan/mindcode/issues/171)).
+* Fixed optimization not recognizing all interactions with Mindustry World ([#172](https://github.com/cardillan/mindcode/issues/172)).
 * Fixed wrong optimization of List iteration loops with output iterator variables ([#173](https://github.com/cardillan/mindcode/issues/173)).
 
 ### Added
@@ -490,7 +490,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 #### Experimental features
 
-* Added [output and input/output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters) of user defined functions.
+* Added [output and input/output parameters](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters) of user-defined functions.
 * Added [vararg (variable arity) functions](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions).
 * Added [function overloading](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
 * Added the possibility to specify custom instructions not known to Mindcode through the [`mlog()` function](doc/syntax/SYNTAX-EXTENSIONS.markdown#defining-new-mlog-instructions).
@@ -517,7 +517,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed Copy to clipboard button not working ([#168](https://github.com/cardillan/mindcode/issues/168)).
-* Fixed unhandled error when decoding a malformed Schematic file string by the web application.
+* Fixed an unhandled error when decoding a malformed Schematic file string by the web application.
 * Fixed Schemacode samples to not use deprecated syntax.
 
 ### Added
@@ -528,7 +528,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed wrong compilation order of appended files ([#155](https://github.com/cardillan/mindcode/issues/155)).
+* Fixed a wrong compilation order of appended files ([#155](https://github.com/cardillan/mindcode/issues/155)).
 * Fixed inadequate reporting of syntax error ([#156](https://github.com/cardillan/mindcode/issues/156)).
 * Fixed wrong handling of comparison operators by Data Flow Optimization ([#158](https://github.com/cardillan/mindcode/issues/158)).
 * Fixed wrong parsing of formattable string literals.
@@ -539,7 +539,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking:** Added support for syntax variants (`strict` and `relaxed`) to Mindcode. The Strict syntax is the default now; to be able to compile existing Mindcode the Relaxed syntax needs to be activated using the `#relaxed;` directive.
 * Added support for the [Mlog Watcher](doc/syntax/TOOLS-MLOG-WATCHER.markdown) Mindustry mod integration to both the web app and the command-line tool. This mod allows the compiled code to be automatically injected into a selected processor in a running Mindustry game.
 * Added variable name validation: when inserting mlog into Mindustry processor, variables named `configure` are silently renamed to `config`. For this reason, using `configure` as a name for any variable in Mindcode causes an error. 
-* Added navigable compiler error messages to the web app. Clicking on a message with known position in the source code selects the corresponding position in the editor.
+* Added navigable compiler error messages to the web app. Clicking on a message with a known position in the source code selects the corresponding position in the editor.
 * Added support for outputting the error messages by the command line tool in a format which allows IDEs to parse the position and navigate to the error location in the source code.
 * Added a variety of new optimizations to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). 
   * `op` instruction: many new optimizations when one of the two operands is known.
@@ -554,7 +554,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 #### Experimental features
  
-* Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in a [separate documentation](doc/syntax/MINDUSTRY-8.markdown).
+* Added support for Mindustry Logic from upcoming version 8. The features supported correspond to the current implementation in Mindustry and might therefore still change. All new features are described in [separate documentation](doc/syntax/MINDUSTRY-8.markdown).
 * Added a [system library](doc/syntax/SYSTEM-LIBRARY.markdown), automatically included when the language target is `8A` or later. 
 * Added support to the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#instruction-propagation) to propagate values in `if` expressions not just into the `set` instruction, but into any instruction taking an input parameter. Available on  the `experimental` optimization level.
 
@@ -565,7 +565,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Changed the `min()` and `max()` functions to accept more than just two arguments.
 * Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
-* Changed - yet again - the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
+* Changed—yet again—the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction, which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
 * Changed the text buffer handling in the processor emulator to recognize identical outputs produced by consecutive `printflush` operations and avoid creating duplicate outputs.
 * When a compiler-generated variable is evaluated as uninitialized (this situation indicates a bug in some of the optimizers), an internal error is thrown.
 
@@ -608,7 +608,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added secondary set of icons representing constants with dashes in identifiers replaced by underscores (e.g., `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will be desupported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)
+* Added a secondary set of icons representing constants with dashes in identifiers replaced by underscores (e.g., `ITEM_COAL` instead of `ITEM-COAL`). Kebab-case identifiers (with dashes) are deprecated in Mindcode and will be desupported in a future release. (In Schemacode, there are currently no plans to remove support for kebab-case identifiers.)
 * Added support for declaring [program parameters](doc/syntax/SYNTAX-1-VARIABLES.markdown#program-parameters) using a new `param` keyword. Using global variables for program parametrization is deprecated, program parameters should be used instead. Support for program parametrization through global variables will be removed in a future release.     
 * Added a new `noinline` keyword, which will prevent a function from being inlined even when called just once, and by the [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) optimization. The keyword can only be used when declaring a function.
 * Added support for block comments, delimited by `/*` and `*/`. These comments can span multiple lines. 
@@ -620,21 +620,21 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 * Added support for multiple loop variables in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops). Each iteration processes as many elements from the list as there are loop variables.
 * Added an `out` keyword to be used with loop control variables in list iteration loop, allowing [list elements to be modified](doc/syntax/SYNTAX-3-STATEMENTS.markdown#modifications-of-variables-in-the-list).
-* Added a new GUI option to choose optimization level in the web app when compiling Mindcode or building Schemacode.
-* Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app, or written to the log when using the command line tool.
+* Added a new GUI option to choose an optimization level in the web app when compiling Mindcode or building Schemacode.
+* Added a capability to run the compiled code on an emulated processor, by using a `Compile and Run` button in the web app, or the [`--run` command line option](doc/syntax/TOOLS-CMDLINE.markdown#running-the-compiled-code). The output is shown in a separate control in the web app or written to the log when using the command line tool.
 * Added a capability to the command line tool to compile several source files at once using the [`--append` command line argument](doc/syntax/TOOLS-CMDLINE.markdown#additional-input-files).
-* Added new optimization level, `experimental`. On this setting, the [Data Flow optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing to perform more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.  
+* Added new optimization level, `experimental`. On this setting, the [Data Flow optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) doesn't assume the assignments to global variables might be changed by editing the compiled code, allowing performing more optimizations on them. Program parameters must be used instead of global variables for program parametrization if this optimization level is used.  
 * Added [formattable string literals](doc/syntax/SYNTAX.markdown#formattable-string-literals), which allow formatting outputs of the `print` and `println` functions the same way as `printf` does. 
 * Added [enhanced comments](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#enhanced-comments), an alternative way to enter remarks.
 * Added new [`sort-variables` compiler directive](doc/syntax/SYNTAX-5-OTHER.markdown#option-sort-variables) which ensures that user variables will be accessed in a well-defined order, to make inspecting the variables in the Mindustry processors **Vars** screen easier.
-* Added generation of signature at the end of the compiled code. The signature is a `print` instruction (which is not executed) with the text `Compiled by Mindcode - github.com/cardillan/mindcode`. The signature is not added should the instruction limit be exceeded, or when the program doesn't naturally end in an unconditional jump. Adding the signature can be disabled in the command line tool by the `--no-signature` command line argument.  
+* Added generation of signature at the end of the compiled code. The signature is a `print` instruction (which is not executed) with the text `Compiled by Mindcode - github.com/cardillan/mindcode`. The signature is not added should the instruction limit be exceeded or when the program doesn't naturally end in an unconditional jump. Adding the signature can be disabled in the command line tool by the `--no-signature` command line argument.  
 
 ### Changed
 
 * Changed the names of [optimization levels](doc/syntax/SYNTAX-5-OTHER.markdown#option-optimization) from `off` and `aggressive` to `none` and `advanced`. The former names are still supported in the `#set` compiler directive, but not in the command-line options. 
-* Changed the [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization to analyze functions modifying variables inside loop instead of blanket assumption that all global variables may be changed by a function.
+* Changed the [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization to analyze functions modifying variables inside loop instead of a blanket assumption that all global variables may be changed by a function.
 * Changes to the web app
-    * A button was added do the web app to copy the output code to the clipboard with a single click.
+    * A button was added to the web app to copy the output code to the clipboard with a single click.
     * It is now possible to select the optimization level directly in the web app user interface. The default optimization level is now `basic` for Mindcode compiler and `advanced` for Schemacode builder.
 * Changed the syntax to allow an optional `do` keyword in all `for` and `while` loops, and optional `then` keyword in `if` and `elsif` statements.
 * Changed the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to remove the `end` instruction at the very end of the program on `advanced` optimization level.
@@ -642,7 +642,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Miscellaneous
 
-* From this version (`2.2.0`) on, Mindcode will use semantic versioning (major version will be increased for significant changes to the syntax). The command-line tool now reports the version when passed in `-v` or `--version` as a parameter.  
+* From this version (`2.2.0`) on, Mindcode will use semantic versioning (the major version will be increased for significant changes to the syntax). The command-line tool now reports the version when passed in `-v` or `--version` as a parameter.  
 * Replaced pattern matching in switch cases (JDK17 preview feature) with `if` and other constructs to remove the dependency on the `--enable-preview` switch.
 * Updated existing Mindcode and Schemacode samples further to adapt for upcoming changes in syntax (optional keywords were added). Some samples were reworked.
 
@@ -650,7 +650,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed slightly wrong (too low) cost estimation in the [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization.
+* Fixed a slightly wrong (too low) cost estimation in the [Case Switching](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) optimization.
 
 ### Added
 
@@ -666,8 +666,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Miscellaneous
 
-* Some of the Mindcode samples used during unit tests were updated to use semicolons in anticipation to planned 
-  Mindcode changes.  
+* Some of the Mindcode samples used during unit tests were updated to use semicolons in anticipation of planned Mindcode changes.  
 
 ## 2024-09-10
 
@@ -684,7 +683,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 * Added support for specifying processor code (both Mindcode and mlog) as a concatenation of multiple code snippets
   from various sources (string literal, string constant, or external file). 
-* Added new Mandelbrot Generator schematic example.
+* Added a new Mandelbrot Generator schematic example.
 
 ### Miscellaneous
 
@@ -725,7 +724,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Miscellaneous
 
-* Schemacode compiler and decompiler now uses [mimex](https://github.com/cardillan/mimex)-generated metadata for 
+* Schemacode compiler and decompiler now use [mimex](https://github.com/cardillan/mimex)-generated metadata for 
   lists of items, liquids, and unit commands. All Mindcode object definitions are now loaded from extracted metadata 
   and not from separate definitions, in Mindcode as well as in Schemacode.
 * The documentation of [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization now uses 
@@ -782,9 +781,9 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ## 2024-01-19
 
 > [!NOTE]
-> Mindustry 7.0 build 146 added - among other improvements - the `id` property that provides an id of given 
-> block, unit, item or liquid (basically an inverse of the `lookup` operation). Since Mindcode has a generic support 
-> for properties and built-in constants, this property can be used right away, no explicit support from Mindcode is 
+> Mindustry 7.0 build 146 added—among other improvements - the `id` property that provides an id of given 
+> block, unit, item or liquid (basically the inverse of the `lookup` operation). Since Mindcode has a generic support 
+> for properties and built-in constants, this property can be used right away; no explicit support from Mindcode is 
 > needed. For example: 
 >
 > ```
@@ -820,9 +819,9 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Changed
 
-* Mindcode compiler now utilizes metadata extracted by [mimex](https://github.com/cardillan/mimex) to obtain - and
-  keep current - a list of possible block names.
-* Function Inlining optimizer now replaces function return variable with the receiving variable when inlining a 
+* Mindcode compiler now uses metadata extracted by [mimex](https://github.com/cardillan/mimex) to obtain
+  a list of possible block names.
+* Function Inlining optimizer now replaces the function return variable with the receiving variable when inlining a 
   function call. The protection granted to function return variables is not necessary after inlining the call, and 
   this replacement allows the receiving variable to be handled by further optimization.
 
@@ -836,7 +835,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed a bug in code duplication routine that sometimes prevented [Unreachable Code
+* Fixed a bug in the code duplication routine that sometimes prevented [Unreachable Code
   Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination) from removing unreachable portions 
   of optimized case statements and inlined functions. The bug sometimes caused runtime exceptions when optimizing 
   for speed, usually under tight instruction space restrictions only.
@@ -844,7 +843,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Changed
 
-* Changed weight computation of user defined functions. Weight of a function is computed as a total weight of all 
+* Changed weight computation of user-defined functions. Weight of a function is computed as a total weight of all 
   its `CALL`, resp. `CALLREC` instructions.
 
 ## 2023-07-15
@@ -860,7 +859,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed wrong cost estimation in [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling). The cost 
+* Fixed a wrong cost estimation in [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling). The cost 
   estimates were too high, potentially preventing some eligible loops from being unrolled.
 * Fixed compiler not recognizing integer values in compiler option directives (`#set`).
 
@@ -871,7 +870,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
   function calls and list iteration loops.
 * Changed [Single Step Elimination](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) to also remove two 
   consecutive jumps that are identical. Such sequences were sometimes produced as a result of other optimizations.
-* Changed [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) to use single 
+* Changed [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) to use a single 
   instruction iterator instance instead of making an instruction list from each AstContext being processed. 
   Significantly speeds up processing.
 * Additional optimizers converted to adding no-op instruction instead of removing them; updated other optimizers 
@@ -881,14 +880,14 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed bug in [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) that caused runtime 
+* Fixed a bug in [Function Inlining](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining) that caused runtime 
   exception in some circumstances.
-* Fixed bug in [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) that may have 
+* Fixed a bug in [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) that may have 
   removed instructions that were actually used by the program.
 
 ### Changed
 
-* Changed Data Flow Optimization to perform fewer iterations in certain situations. The reduction is substantial (up 
+* Changed Data Flow Optimization to perform fewer iterations in certain situations. The reduction is significant (up 
   to fivefold in tested scenarios) and translates into faster compilation times in these scenarios. 
 * Changed optimizers that need to be compatible with AST context structure to replace instructions with a no-op 
   instead of removing them, preserving the AST context structure. Prevents potential bugs in optimizers relying on 
@@ -905,10 +904,10 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Fixed
 
-* Fixed incorrect weight computation of user defined functions. Currently, weight is based on a number of times a 
-  function is called in the program. This is still not quite correct, though - the weight should be computed by 
+* Fixed incorrect weight computation of user-defined functions. Currently, weight is based on the number of times a 
+  function is called in the program. This is still not quite correct, though—the weight should be computed by 
   tracking call hierarchy and weights of contexts containing the calls.
-* Fixed incorrect weight computation of list-iteration loops. The weight was set to the actual number of loops, 
+* Fixed incorrect weight computation of list-iteration loops. The weight was set to the actual number of loops  
   instead of the unified loop weight. 
 
 ### Changed
@@ -918,7 +917,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 ### Miscellaneous
 
-* Eliminated `STORED_RETVAL` variable type. Values returned from user defined function calls are now assigned to
+* Eliminated `STORED_RETVAL` variable type. Values returned from user-defined function calls are now assigned to
   standard temporary variables, as their usage is correctly tracked by Data Flow Optimizer and no longer requires 
   special handling. 
   
@@ -939,7 +938,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
   or recursive function that might call the
   [`end()` function](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#handling-of-uninitialized-variables). Hopefully all 
   possible means of calling the `end()` function are finally covered.
-* Changed the printout of final list of unresolved instruction (activated by the `-u` command line option) to omit 
+* Changed the printout of the unresolved instruction (activated by the `-u` command line option) to omit 
   inactive labels.
 
 ## 2023-07-06
@@ -966,10 +965,10 @@ Experimental features may contain bugs, break existing code or produce suboptima
   variables](doc/syntax/SYNTAX-1-VARIABLES.markdown#variable-scope) even on `basic` level. Only final assignments to 
   main variables are preserved on `basic` level, other assignments can be optimized away. This change allows the Loop 
   Unrolling optimization to be functional even on `basic` optimization level.
-* Changed condition duplication by Loop Optimization to employ the general
+* Changed condition duplication by Loop Optimization to use the general
   [optimization for speed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-for-speed) mechanism.   
 * Changed various optimizations for minor improvements:
-  * Number of times the Data Flow Optimization has to process loops was reduced.
+  * The number of times the Data Flow Optimization has to process loops was reduced.
   * Jumps Normalization now recognizes always true/always false conditional jumps based on known variable 
     values.
   * Improved handling of complex conditions in Loop Optimization.
@@ -1037,14 +1036,14 @@ Experimental features may contain bugs, break existing code or produce suboptima
   [Stack Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization).
 * Added specific optimization for recursive function calls to the
   [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization):
-  * The optimizer is aware when a variable value is preserved on stack and can reuse the variable state when 
+  * The optimizer is aware when a variable value is preserved on the stack and can reuse the variable state when 
     optimizing code following a recursive function call.
   * Streamlining expressions when passing value derived from the current value of the function argument to the 
     recursive call (e.g., calling `foo(n - 1)` in function `foo(n)`).
 
 ### Fixed
 
-* Fixed Data Flow Optimization crashing when source code contained unused user defined functions
+* Fixed Data Flow Optimization crashing when source code contained unused user-defined functions
   ([#97](https://github.com/cardillan/mindcode/issues/97)).
 * Fixed misspelled name of the `case-expression-optimizer` command-line and compiler directive option (was 
   `ease-expression-optimizer` before).
@@ -1059,7 +1058,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 * Added processor unit tests based on Project Euler problem solutions.
 * Added statistics generation for processor unit test (captures size of the compiled program, number of steps to 
   reach the solution, and code coverage in terms of mlog instructions). These should document improvements in 
-  quality of the generated code. 
+  the quality of the generated code. 
 
 ## 2023-06-16
 
@@ -1090,20 +1089,20 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ### Added
 
 * Added [Data Flow Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization). This optimization could 
-  remove user defined variables from compiled code - see the documentation for details. 
+  remove user defined variables from compiled code—see the documentation for details. 
 
 ### Fixed
 
 * Fixed some syntax errors in source programs not being properly reported. Some syntax errors were ignored, others 
   might have caused unhandled exceptions in the web or command line application. When a syntax error occurs, 
   partially generated code is no longer displayed in the web application.      
-* Fixed compiler not producing any code when optimizations were switched off.
+* Fixed the compiler not producing any code when optimizations were switched off.
 
 ## 2023-06-08
 
 ### Fixed
 
-* Fixed incorrect creation of schematics containing bridges. Configuration for bridges and other blocks that connect 
+* Fixed an incorrect creation of schematics containing bridges. Configuration for bridges and other blocks that connect 
   to a single other block was mistakenly written as an array of connections into a `.msch` file, which are ignored 
   by Mindustry.   
 
@@ -1125,12 +1124,12 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Fixed
 
-* Fixed the [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) not having upper 
+* Fixed the [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) not having the upper 
   boundary fixed under some conditions. The feature announced in release [2023-05-03](#2023-05-03) wasn't fully 
   implemented until now.
 * Fixed bugs in the [stack optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#stack-optimization). In some cases, 
   `push`/`pop` instructions were mistakenly removed, in other cases unnecessary `push`/`pop` instructions were left
-  in the code. Current implementation utilizes AST structure metadata to identify and protect variables used in 
+  in the code. Current implementation uses AST structure metadata to identify and protect variables used in 
   loops.   
   
 ### Miscellaneous
@@ -1141,10 +1140,10 @@ Note: the bug fixed in this release only affects the command line tool. The web 
     structure. Optimizations based on these metadata should be easier to write and understand, once necessary 
     support tooling is in place.
   * It is necessary to update the AST context structure after each optimization iteration. These updates aren't done 
-    of the fly -- optimizers must understand that the changes they make to the program in a single iteration aren't 
-    reflected to the AST context structure.
+    of the fly—optimizers must understand that the changes they make to the program in a single iteration aren't 
+    reflected in the AST context structure.
   * Optimizers need to be careful to create newly generated instructions using the right (already existing) AST 
-    context, otherwise subsequent AST context-based optimizers can misunderstand the code structure. There are means
+    context, otherwise the following AST context-based optimizers can misunderstand the code structure. There are means
     to duplicate existing code while deep-copying the context structure.
   * Instructions can be linked to source code. At this moment it can be only displayed using the `-f source` command 
     line argument, hopefully in the future a better error reporting will be built using these metadata.   
@@ -1153,7 +1152,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Added
 
-* Added option for [code generation goal](doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). Allows to specify whether 
+* Added option for [code generation goal](doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). Allows specifying whether 
   to aim for a smaller code or a faster code.
 * Added basic [loop optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization).
 
@@ -1174,9 +1173,9 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   See [`getBlock`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-control),
   [`ulocate`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-locate). Target `7` is still default both in webapp 
   and in the command line tool, so the change doesn't break existing code.
-* Added support for the reintroduced `ucontrol pathfind` instruction. When issued, navigates current unit to given 
+* Added support for the reintroduced `ucontrol pathfind` instruction. When issued, navigates the current unit to a given 
   location using AI to avoid obstacles. See [`ucontrol`](doc/syntax/FUNCTIONS-71.markdown#instruction-unit-control). 
-* Added command line options for [Schematics Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schematic-action-help)
+* Added command line options for [Schematic Decompiler](doc/syntax/TOOLS-CMDLINE.markdown#decompile-schematic-action-help)
   to specify order in which blocks are written to the schematic definition file and when to generate the `facing` 
   directive.
 * Added support for [color configuration](doc/syntax/SCHEMACODE.markdown#color-configuration) and 
@@ -1195,7 +1194,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ### Fixed
 
-* Fixed handling of block label reuse in schemacode. Reusing the same label for multiple blocks now causes an error.
+* Fixed the handling of block label reuse in schemacode. Reusing the same label for multiple blocks now causes an error.
 * Fixed [#93: Mindcode compiled wrong when using semicolons](https://github.com/cardillan/mindcode/issues/93).
 
 ## 2023-05-13
@@ -1203,8 +1202,8 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Added
 
 * Added Schematics Builder tool with a new [Schemacode language](doc/syntax/SCHEMACODE.markdown).
-* Added new [command-line interface](doc/syntax/TOOLS-CMDLINE.markdown) for the Mindcode Compiler, Schematics 
-  Builder, and Schematics Decompiler.
+* Added a new [command-line interface](doc/syntax/TOOLS-CMDLINE.markdown) for the Mindcode Compiler, Schematic 
+  Builder, and Schematic Decompiler.
 * Added [Schematics Builder](http://mindcode.herokuapp.com/schematics) and
   [Schematics Decompiler](http://mindcode.herokuapp.com/decompiler) interface to the web application. 
 
@@ -1227,7 +1226,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
   this moment, only block types for Schematics Builder are extracted, but more metadata will follow.
 * Created [Schematics Refresher](https://github.com/cardillan/SchematicsRefresher), another Mindustry mod. The mod
   refreshes schematics stored in the `/schematics` subdirectory whenever the game loads or the Refresh button in the 
-  Schematics screen is used. The mod allows to refresh schematics after they were rebuilt by Schematics Builder. 
+  Schematics screen is used. The mod allows refreshing schematics after they were rebuilt by Schematics Builder. 
 
 ## 2023-05-03
 
@@ -1236,13 +1235,13 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 * Added support for using [Mindustry built-in icons](doc/syntax/SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons) in 
   `print` functions.
 * Added support for compile-time [string concatenation](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#string-concatenation). 
-  Allows - among other things - to embed icons into string constants at compile time, such as
+  Allows—among other things—to embed icons into string constants at compile time, such as
   `const HEADER = "Using unit: " + UNIT-MEGA`    
 
 ### Changed
 
 * **Breaking:** changed [range iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#range-iteration-loops) to 
-  evaluate upper boundary only once, before entering the loop for the first time. Previous version evaluated 
+  evaluate the upper boundary only once, before entering the loop for the first time. Previous version evaluated 
   the upper bound at each iteration, and reflected possible changes in the upper bound. The documentation was 
   expanded to specify the evaluation of the upper bound. Use a while loop or a C-style loop if you want to fully 
   evaluate the loop condition at each iteration.
@@ -1261,9 +1260,9 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Enhanced [print merging optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) to merge non-string 
   literals (e.g., numeric constants) on aggressive optimization level. 
-* Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside valid 
+* Changed handling of hexadecimal and boolean literals to include range checks and refuse literals outside the valid 
   range (signed 64-bit integer; note that [Mindustry Logic variables](doc/syntax/SYNTAX-1-VARIABLES.markdown) cannot 
-  represent full range of possible values without loss of precision).   
+  represent the full range of possible values without loss of precision).   
 
 ### Miscellaneous
 
@@ -1296,10 +1295,10 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Added
 
 * Added support for using [binary numeric literals](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic) 
-  (e.g., `0b00101`) in Mindcode source.
+  (e.g., `0b00101`) in a Mindcode source code.
 * Added support for using
   [scientific notation in numeric literals](doc/syntax/SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic) 
-  in Mindcode source. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g., `1.5e-5`)
+  in a Mindcode source code. Literals compatible with mlog are kept unchanged, literals unrecognized by mlog (e.g., `1.5e-5`)
   are converted to mlog-compatible representation (in this case, `15e-6`).
 * Added [simple expression optimizer](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization).
   Current implementation replaces `mul` by a constant or an `idiv`/`div` followed by a `floor`
@@ -1358,7 +1357,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 ## Earlier releases
 
-Full changelog wasn't kept for earlier releases. What we know is documented separately here (click the date for fuller description): 
+The full changelog wasn't kept for earlier releases. What we know is documented separately here (click the date for fuller description): 
 
 ### [2023-03-29](/doc/announcements/2023-03-29.markdown)
 
@@ -1375,7 +1374,7 @@ Full changelog wasn't kept for earlier releases. What we know is documented sepa
  
 ### [2021-03-27](/doc/announcements/2021-03-27.markdown)
 
-* User defined functions
+* User-defined functions
 * More examples
 * ...
  

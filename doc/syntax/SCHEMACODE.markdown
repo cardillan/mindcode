@@ -1,11 +1,11 @@
 # Schemacode
 
-Schemacode is a specialized definition language designed to describe structure of Mindustry Schematics. Schemacode 
+Schemacode is a specialized definition language designed to describe the structure of Mindustry Schematics. Schemacode 
 definitions can be compiled into Mindustry schematic, either as a binary `.msch` file, or as a text.
 
 While simple schematics can be easily created in Schemacode from scratch, a better method for creating more 
 complicated designs is to build the schematic in Mindustry, export it to a `.msch` file or copy it to the clipboard 
-as a text and obtain a valid Schemacode representation by decompiling. To decompile a `.msch` file, the 
+as a text and get a valid Schemacode representation by decompiling. To decompile a `.msch` file, the 
 [command line tool](TOOLS-CMDLINE.markdown) has to be used; decompiling a text representation obtained via clipboard is 
 possible through the [web application](http://mindcode.herokuapp.com/decompiler).
 
@@ -13,8 +13,8 @@ Schemacode supports almost all existing features of Mindustry schematics. Specif
 Serpulo technology are fully supported. Features specific to Erekir (such as canvas pictures) are unavailable.
 
 Most importantly, logic processors can be fully configured using Schemacode. When specifying the code to be embedded 
-in a given processor, it is possible to use either the native mlog language, or Mindcode. The source code (both mlog 
-and Mindcode) can also be injected into the schematic from external file when building it using the command line tool.
+in a given processor, it is possible to use either the native mlog language or Mindcode. The source code (both mlog 
+and Mindcode) can also be injected into the schematic from an external file when building it using the command line tool.
 
 It might be useful to have a look at existing Schemacode samples at http://mindcode.herokuapp.com/schematics before 
 going on with this documentation.
@@ -80,12 +80,12 @@ schematic
 end
 ```
 
-where definition is either an attribute definition, or a block definition, in any order. By convention the attribute 
+where definition is either an attribute definition or a block definition, in any order. By convention, the attribute 
 definitions should come first. 
 
 # Attribute definition
 
-Defines various attributes of the schematic. The syntax of attribute definition is:
+Defines various attributes of the schematic. The syntax of the attribute definition is:
 
 ```
 attribute = value
@@ -96,20 +96,20 @@ The following attributes are recognized:
 * `name`: specifies the name of the schematic. The value of the attribute is String (a string text value, a string 
   literal, or a text block). Can be specified at most once.
 * `description`: specifies the description of the schematic. The value of the attribute is String (a string text 
-  value, a string literal, or a text block). In case of text block, single newline characters are removed; an empty
+  value, a string literal, or a text block). In the case of text block, single newline characters are removed; an empty
   line must be used to define a line break. Can be specified at most once.
 * `dimensions`: specifies the dimensions of the schematic, given as `(width, height)`, where `width` and `height` 
   are positive numbers. Can be specified at most once. When not specified, the dimensions are calculated from 
   schematic definition. Must not be smaller than calculated dimensions when specified. (In the future, specifying 
   dimensions different from calculated ones might serve some specific purpose.)  
-* `tag`: assigns a tag to the schematic. The tag can be either a String value, or a predefined icon (see
+* `tag`: assigns a tag to the schematic. The tag can be either a String value or a predefined icon (see
   [Icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons)). `tag` attribute can be specified more than once; all 
   specified tags are attached to the schematic.  
 
 # Block definition
 
 Block definition specifies the type and configuration of a block placed at certain coordinates within the schematic. 
-The syntax of block definition is:
+The syntax of the block definition is:
 
 ```
 [labels] <block-type> at <block-position> [facing <direction>] [configuration]
@@ -129,13 +129,13 @@ Labels are useful for creating references to labeled blocks.
 
 ## Block type
 
-To specify a block type, Mindustry built-in block type must be specified, including the `@` sign at the beginning,
+To specify a block type, a Mindustry built-in block type must be specified, including the `@` sign at the beginning,
 for example `@switch`, `@micro-processor` or `@battery-large`. Only built-in block types are supported at this 
 moment, blocks added by mods cannot be used.
 
 All supported block types are listed below.
 
-<details><summary>Show full list of block in the Turret category.</summary>
+<details><summary>Show a full list of block in the Turret category.</summary>
 
 * `@duo`
 * `@scatter`
@@ -168,7 +168,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Production category.</summary>
+<details><summary>Show a full list of block in the Production category.</summary>
 
 * `@mechanical-drill`
 * `@pneumatic-drill`
@@ -186,7 +186,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Distribution category.</summary>
+<details><summary>Show a full list of block in the Distribution category.</summary>
 
 * `@conveyor`
 * `@titanium-conveyor`
@@ -218,7 +218,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Liquids category.</summary>
+<details><summary>Show a full list of block in the Liquids category.</summary>
 
 * `@mechanical-pump`
 * `@rotary-pump`
@@ -244,7 +244,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Power category.</summary>
+<details><summary>Show a full list of block in the Power category.</summary>
 
 * `@power-node`
 * `@power-node-large`
@@ -274,7 +274,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Defense category.</summary>
+<details><summary>Show a full list of block in the Defense category.</summary>
 
 * `@copper-wall`
 * `@copper-wall-large`
@@ -308,7 +308,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Crafting category.</summary>
+<details><summary>Show a full list of block in the Crafting category.</summary>
 
 * `@graphite-press`
 * `@multi-press`
@@ -346,7 +346,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Units category.</summary>
+<details><summary>Show a full list of block in the Units category.</summary>
 
 * `@ground-factory`
 * `@air-factory`
@@ -386,7 +386,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Effect category.</summary>
+<details><summary>Show a full list of block in the Effect category.</summary>
 
 * `@mender`
 * `@mend-projector`
@@ -416,7 +416,7 @@ All supported block types are listed below.
 
 </details>
 
-<details><summary>Show full list of block in the Logic category.</summary>
+<details><summary>Show a full list of block in the Logic category.</summary>
 
 * `@message`
 * `@switch`
@@ -437,8 +437,8 @@ All supported block types are listed below.
 
 ## Block position
 
-Block position can be specified as relative or absolute. The first block defined by the schematic must use absolute 
-position, but all subsequent blocks can use absolute or relative positions. Relative position always relates to the 
+Block position can be specified as relative or absolute. The first block defined by the schematic must use an absolute 
+position, but all following blocks can use absolute or relative positions. Relative position always relates to the 
 previous block, as defined by the schematic.
 
 Block position can be specified using this syntax: 
@@ -459,7 +459,7 @@ label {+-} (x, y)
 
 In this case, the position is specified as an offset against the position of a block labeled as `label`.
 
-All three ways of specifying block position can be seen in this example:
+All three ways of specifying a block position can be seen in this example:
 
 ```
 schematic
@@ -481,11 +481,11 @@ coordinates. This makes it quite natural to design schematic starting in the low
 Block position may also be negative (see [Origin and dimensions calculation](#origin-and-dimensions-calculation)).
 
 Correctly positioning blocks, especially blocks larger than 1x1, can be a bit tricky. For more complex layouts, it is 
-easier to create the schematic in Mindustry, decompile to Schemacode definition and modify the resulting file.   
+easier to create the schematic in Mindustry, decompile to Schemacode definition, and modify the resulting file.   
 
 ## Block orientation
 
-Each block in schematic has an orientation, although specific orientation affects only some types of blocks (such as 
+Each block in the schematic has an orientation, although specific orientation affects only some types of blocks (such as 
 conveyors or unit factories). Orientation can take four values - `east`, `west`, `north` or `south` - and is 
 specified using this syntax:
 
@@ -501,7 +501,7 @@ items from left to right.
 ## Block configuration
 
 Some blocks are stored with specific configurations: connection for bridges or power nodes, item type for unloaders,
-text for messages or links and code for processors. Schemacode supports the following types of configuration:
+text for messages or links, and code for processors. Schemacode supports the following types of configuration:
 
 * [Block type](#block-type-configuration): block type selected in a constructor or a payload source (a sandbox-only 
   block).
@@ -509,14 +509,14 @@ text for messages or links and code for processors. Schemacode supports the foll
 * [Color](#color-configuration): color of the illuminator block.
 * [Single connection](#connection-configuration): connection to another block (e.g., a bridge or a mass driver).
 * [Multiple connections](#connection-configuration): connections to several different blocks (e.g., for power nodes).
-* [Item](#item-configuration): item type selected in a sorter, unloader or similar block.
+* [Item](#item-configuration): item type selected in a sorter, unloader, or similar block.
 * [Liquid](#liquid-configuration): liquid type selected in a liquid source (a sandbox-only block).
 * [Unit](#unit-configuration): unit type selected in a unit factory or payload source.
 * [Unit command](#unit-command-configuration): unit command selected in a reconstructor.
 * [Text](#text-configuration): text contents for message blocks.
 * [Processor](#processor-configuration): links and code for logic processors.
-* Virtual: a specific configuration marking blocks that aren't part of the schematic, but can be used as link 
-  targets. The keyword is accepted by Schematics Builder, but has no meaning at the moment.  
+* Virtual: a specific configuration marking blocks that aren't part of the schematic but can be used as link 
+  targets. The keyword is accepted by Schematic Builder but has no meaning at the moment.  
 
 ## Block type configuration
 
@@ -549,10 +549,10 @@ The following block types can have boolean configuration specified:
 ## Color configuration
 
 Color configuration is specified as `color rgba(<red>, <green>, <blue>, <alpha>)`, where `<red>`, `<green>` and 
-`<blue>` are the value if individual color components, while `<alpha>` is the value of the alpha channel. all these 
+`<blue>` are the value if individual color components, while `<alpha>` is the value of the alpha channel. All these 
 values must be given as a number between `0` and `255`, inclusive. Alpha specifies the opacity, `0` is not opaque at 
 all (i.e., fully transparent), `255` is fully opaque. The exact handling of the alpha channel is done by the 
-illuminator block, generally speaking higher values of alpha make the illuminator lightning more prominent.
+illuminator block; generally speaking, higher values of alpha make the illuminator lightning more prominent.
 
 This example specifies an illuminator block emitting intense green color: 
 
@@ -566,7 +566,7 @@ The following block types can have color configuration specified:
 
 ## Connection configuration
 
-Connection configuration is specified as `connected to` followed by a comma separated list of absolute or relative 
+Connection configuration is specified as `connected to` followed by a comma-separated list of absolute or relative 
 positions; relative positions are related to the block being configured. It is also possible to specify a block label:
 
 ```
@@ -603,7 +603,7 @@ The following block types can be connected to at most one block:
 * `@phase-conduit`
 * `@phase-conveyor`
 
-The following block types can be connected to several blocks (number of available connections depends on the block 
+The following block types can be connected to several blocks (the number of available connections depends on the block 
 type):
 
 * `@power-node`
@@ -625,7 +625,7 @@ Both normal and phase bridge connections must conform to the following criteria,
 * The connection must be either vertical or horizontal; diagonal connections of any kind are disallowed.
 * The connection distance must not exceed the bridge range.
 
-Connections to empty positions are allowed and no warnings are generated. When the schematic is build in a Mindustry 
+Connections to empty positions are allowed, and no warnings are generated. When the schematic is built in a Mindustry 
 world and later a bridge of the same type is placed at the target position, the bridge is automatically connected.
 
 ### Connecting mass drivers
@@ -638,7 +638,7 @@ Mass driver connections must conform to the following criteria, otherwise a comp
   a `@large-payload-mass-driver`.
 * The connection distance must not exceed the mass driver range.
 
-Connections to empty positions are allowed and no warnings are generated.
+Connections to empty positions are allowed, and no warnings are generated.
 
 ### Connecting power nodes
 
@@ -650,10 +650,10 @@ Power node connections must conform to the following criteria, otherwise a compi
 * The connection must not lead to the same block (no connection to itself).
 * The connection must connect to a block which produces or consumes power, or to another power node. (Note: a diode 
   isn't such a block, power node cannot connect to a diode.)
-* The connection distance must not exceed the power node range. When linking two power nodes, larger of the two 
+* The connection distance must not exceed the power node range. When linking two power nodes, the larger of the two 
   power node ranges is used.
-* Number of connections (including incoming connections from other power nodes) must not exceed the maximum number 
-  of connections for given type of power node.
+* The number of connections (including incoming connections from other power nodes) must not exceed the maximum number 
+  of connections for a given type of power node.
 
 When the following situations are detected, a warning is produced and the connection is ignored:
 
@@ -746,7 +746,7 @@ The applicability of a command depends on the type of unit processed by the reco
 ## Text configuration
 
 Text configuration assigns a text content to blocks. It is specified as `text` followed by a string literal,
-text block literal or string value identifier:
+text block literal, or string value identifier:
 
 ```
 schematic
@@ -812,7 +812,7 @@ part of a block label (the `?` matching a single character is **not** supported)
     end
 ```
 
-This definition matches all labelled blocks, which will be linked to the processor using their labels as link names.
+This definition matches all labeled blocks, which will be linked to the processor using their labels as link names.
 This is the easiest way that can be used when every linked block is assigned the correct label:
 
 ```
@@ -826,9 +826,9 @@ schematic
 end
 ```
 
-The  switch and message blocks are linked to the processor as `switch1` and `message1`, respectively. 
+The switch and message blocks are linked to the processor as `switch1` and `message1`, respectively. 
 
-A more complicated way uses prefixes to group block labels. It allows to link blocks to more than one processor 
+A more complicated way uses prefixes to group block labels. It allows linking blocks to more than one processor 
 using pattern matching:
 
 ```
@@ -854,7 +854,7 @@ message block is linked to separate processor as `message1`.
 
 #### Linking by name
 
-Named links allow to link blocks to the processor directly using the block labels. It is possible to specify a link 
+Named links allow linking blocks to the processor directly using the block labels. It is possible to specify a link 
 name for the label; if it isn't specified, the label is used as a link name. Any prefix is stripped away again:
 
 ```
@@ -876,7 +876,7 @@ end
 #### Linking by position
 
 Finally, it is possible to specify linked blocks by their positions. In this case, a name must be assigned explicitly 
-(Schematics Builder doesn't generate link names automatically yet):
+(Schematic Builder doesn't generate link names automatically yet):
 
 ```
 schematic
@@ -896,7 +896,7 @@ end
 Relative coordinates evaluate against the processor block.
 
 Pay attention to the `message4` block: its coordinates are (2, 0), which is inside the schematic, but there's no 
-block at these coordinates. The link is created nevertheless, and when the schematic is built in Mindustry world, any 
+block at these coordinates. The link is created, nevertheless, and when the schematic is built in the Mindustry world, any 
 block placed subsequently on the tile corresponding to the position (2, 0) in the schematic will be automatically 
 linked to the processor. If it is a message, it will be linked as `message4`.
 
@@ -935,7 +935,7 @@ Link names must meet the following conditions:
 
 ### Processor code
 
-It is possible to specify either an mlog code, or a Mindcode for the processor. To specify an mlog code, use
+It is possible to specify either an mlog code or a Mindcode for the processor. To specify an mlog code, use
 
 ```
 mlog = <code>
@@ -958,7 +958,7 @@ one of these ways:
 * as a string value identifier,
 * as a reference to an external file.
 
-A string literal is only useful for very small snippets of code:
+A string literal is only useful for small snippets of code:
 
 ```
 schematic
@@ -971,7 +971,7 @@ schematic
 end
 ```
 
-A text block allows to include line breaks in the code definition:
+A text block allows including line breaks in the code definition:
 
 ```
 schematic
@@ -988,7 +988,7 @@ schematic
 end
 ```
 
-A string value identifier allows to move the code away from the processor definition for better organization:
+A string value identifier allows moving the code away from the processor definition for better organization:
 
 ```
 schematic
@@ -1054,7 +1054,7 @@ specifically constant folding and constant propagation.
 
 # Origin and dimensions calculation
 
-Schematics Builder automatically calculates schematic boundaries. If the lower-left corner of the compiled schematic
+Schematic Builder automatically calculates schematic boundaries. If the lower-left corner of the compiled schematic
 isn't positioned at (0, 0), all block and connection positions of the schematic are shifted to compensate for the 
 non-zero origin. Note that the adjusted position (0, 0) can be still left empty:
 

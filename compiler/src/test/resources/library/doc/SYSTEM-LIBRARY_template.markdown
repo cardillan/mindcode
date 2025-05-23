@@ -19,7 +19,7 @@ System libraries contain functions and sometimes constants that can be used by a
 
 ## Compiled function sizes
 
-As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may be very important. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
+As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may present an important consideration. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
 
 - all input arguments are variables,
 - all output values provided by the function are used,

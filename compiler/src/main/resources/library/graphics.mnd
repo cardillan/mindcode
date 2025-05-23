@@ -44,7 +44,7 @@ void unpackcolor(out r, out g, out b, out a, in packedColor)
 end;
 
 /**
- * Allows to redefine the alpha channel of an existing color. When used with constant value of alpha and a built-in
+ * Allows redefining the alpha channel of an existing color. When used with constant value of alpha and a built-in
  * color literal (e.g. `@colorSalmon`), the value will be compile-time evaluated. When a named color literal is used
  * (e.g. `%[salmon]`), compile time evaluation is not possible.
  *

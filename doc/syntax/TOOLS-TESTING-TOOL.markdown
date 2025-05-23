@@ -4,7 +4,7 @@
 
 Mindcode comes with a set of optimizers and other settings that can be independently set, leading to more than half a billion of possible configurations that can be used to compile the code. Only a handful of typical configurations are tested each time Mindcode is built, leaving all other possible configurations untested.
 
-While typically just a handful of possible configurations, which get tested during each build, are used, sometimes a particular optimization is not feasible, causing a relatively rare code structure being fed into subsequent optimizations. This may uncover additional bugs.
+While typically just a handful of possible configurations, which get tested during each build, are used, sometimes a particular optimization is not available, causing a relatively rare code structure being fed into subsequent optimizations. This may uncover additional bugs.
 
 It therefore makes a lot of sense to test non-typical configurations. Furthermore, the _intention_ is for every possible compiler/optimizer configuration to be correctly handled by Mindcode. To help achieve this goal, a separate testing tool is provided.
 
@@ -16,7 +16,7 @@ It therefore makes a lot of sense to test non-typical configurations. Furthermor
 The testing tool can be set up in the following way:
 
 1. Download and install [Eclipse Temurin version 17](https://adoptium.net/temurin/releases/?version=17).
-2. Download `mindcode-exttest.jar` from the [releases page](https://github.com/cardillan/mindcode/releases) and place it in a directory on your computer.
+2. Download `mindcode-exttest.jar` from the [Releases page](https://github.com/cardillan/mindcode/releases) and place it in a directory on your computer.
 3. To run the testing tool, use `java.exe -jar mindcode-exttest.jar`. Provide full paths to the `java.exe` file from the Eclipse Temurin installation created in the first step, and to the `mindcode.jar` file downloaded in the second step. The testing tool takes no arguments:
 
 ```
@@ -33,21 +33,21 @@ Configuration for the testing tool must be stored in a `settings.yaml` file in t
 # Number of tests to run in parallel
 threads: 24
 
-# Name of the section containing list of tests to execute
+# A name of the section containing the list of tests to execute
 # Several sections can be present in the config file, the active one is selected here
 #test-suite: single-source
 test-suite: all-sources
 
 # Where to put all the output files
 # When not set, test-specific output files will be generated in the directory containing the source file
-# Global output files (result.txt) will be generated in current directory.
+# Global output files (result.txt) will be generated in the current directory.
 output-path: .
 
 # 'true' to run all possible configurations for all tests, 'false' to run the given number of samples
 # (full tests would typically take many hours to complete)
 full-tests: false
 
-# Number of samples configured to run per test will be multiplied by this number
+# This number will multiply the number of samples configured to run per test
 # Allows to create a basic configuration that runs reasonably fast
 # and just increase the multiplier for longer, more comprehensive tests
 sample-multiplier: 1
@@ -60,7 +60,7 @@ defaults:
   # Number of test cases to execute
   samples: 500
 
-  # When number of failures encountered while executing a test exceeds the given value, the test is stopped
+  # When the number of failures encountered while executing a test exceeds the given value, the test is stopped
   # Prevents creation of indiscriminately large output files when too may tests fail
   failure-limit: 500
 
@@ -95,8 +95,8 @@ defaults:
 
 # LIST OF SOURCES
 
-# A single file to test
-# Unspecified settings are inherited from default
+# A single file to test.
+# Unspecified settings are inherited from default.
 single-source:
   - source: sum-of-primes.mnd
     samples: 20000
@@ -130,9 +130,9 @@ A slightly more complex configuration is available [in the repository](https://g
 
 ### Preparing a code for testing
 
-A code to be tested by the testing tool must be stored in a standalone file. The test may consist of compiling and optimizing the code with different settings, or of compiling, optimizing and running it. In both cases, a test will fail when the code doesn't compile or when the compiler or optimizer produces any warnings; therefore it is crucial that no warnings are present when the code is compiled with typical settings (e.g., advanced optimization level for all optimizers).
+A code to be tested by the testing tool must be stored in a standalone file. The test may consist of compiling and optimizing the code with different settings, or of compiling, optimizing and running it. In both cases, a test will fail when the code doesn't compile or when the compiler or optimizer produces any warnings; therefore, it is crucial that no warnings are present when the code is compiled with typical settings (e.g., advanced optimization level for all optimizers).
 
-When the code is compiled, but not run, only bugs that result in additional warnings or compilation crashes will be detected. While a lot of bugs in the past did result in an unexpected warning or compilation failure, obviously there might be bugs that result in faulty code with no additional errors or warnings present. These bugs can be caught by running the code and comparing the produced output to the expected value(s). These checks are achieved through the use of `assertEquals` and `assertPrints` functions (see [unit testing](#unit-testing-support)). On top of that, it is also expected that the execution won't fail on any of the [irregular situations](TOOLS-PROCESSOR-EMULATOR.markdown#irregular-situation-handling). A test can be configured to ignore a particular irregular execution by clearing corresponding [execution flag(s)](TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) through the `#set` directives. 
+When the code is compiled but not run, only bugs that result in additional warnings or compilation crashes will be detected. While a lot of bugs in the past did result in an unexpected warning or compilation failure, obviously there might be bugs that result in faulty code with no additional errors or warnings present. These bugs can be caught by running the code and comparing the produced output to the expected value(s). These checks are achieved through the use of `assertEquals` and `assertPrints` functions (see [unit testing](#unit-testing-support)). On top of that, it is also expected that the execution won't fail in any of the [irregular situations](TOOLS-PROCESSOR-EMULATOR.markdown#irregular-situation-handling). A test can be configured to ignore a particular irregular execution by clearing corresponding [execution flag(s)](TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) through the `#set` directives. 
 
 The code to be tested should conform to these requirements:
 
@@ -150,7 +150,7 @@ When a test produces a failure, it is recorded in the results file for current t
 
 ## Unit testing support
 
-Mindcode currently provides a limited support for [unit testing](https://en.wikipedia.org/wiki/Unit_testing), in the language itself and in the processor emulator. Unit testing code is not meant to be run in Mindustry Logic processors.
+Mindcode currently provides limited support for [unit testing](https://en.wikipedia.org/wiki/Unit_testing), in the language itself and in the processor emulator. Unit testing code is not meant to be run in Mindustry Logic processors.
 
 The Mindcode compiler supports two functions which generate _assertions_. Assertions are evaluated at runtime by the processor emulator, and the result of the evaluation is reported. Failed assertions are reported as errors.
 

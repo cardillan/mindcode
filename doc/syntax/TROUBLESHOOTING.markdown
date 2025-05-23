@@ -27,10 +27,10 @@ When Mindcode encounters an input which disallows further analysis, it may repor
 ### Missing `end` keyword
 
 A particularly challenging error is a missing `end` keyword. As it is not possible to uniquely match `end` keywords with corresponding opening statements (such as `while`, `for` or `if` statements), Mindcode will typically report the missing `end` keyword at the end of the file. In most cases, the true cause of the error is buried somewhere deep down in a structure of several nested statements.
-- The best way to prevent these errors from happening is to meticulously indent code inside control structures. This should make the error more apparent while editing the code.
+- The best way to prevent these errors from happening is to meticulously indent code inside control structures. This should make the error more noticeable while editing the code.
 - Mindcode currently doesn't have a good one-line conditional statement. When putting the entire if statement on one line, the `end` keyword still needs to be there (as in `if condition then statement; end;`), but is easily left out. Pay particular attention to not forget the `end` keyword in these cases.
-- Having a large program with many levels of nested statements makes spotting the missing `end` particularly challenging, In this situation, comment out some of the inner structures. Once you establish the outer structure(s) are compiling well, you may start returning the inner ones one by one until the source of the error becomes apparent.
-- Try to extract as much code into functions as possible, utilizing additional output parameters when needed. Mindcode is pretty good at optimizing functions and in most cases the functions will be inlined and optimized just as well as if the code was nested.
+- Having a large program with many levels of nested statements makes spotting the missing `end` particularly challenging, In this situation, comment out some of the inner structures. Once you establish the outer structure(s) are compiling well, you may start returning the inner ones one by one until the source of the error becomes clear.
+- Try to extract as much code into functions as possible, using additional output parameters when needed. Mindcode is pretty good at optimizing functions, and in most cases the functions will be inlined and optimized just as well as if the code was nested.
 
 ### Ask for help
 
@@ -48,13 +48,13 @@ Both the web app and the command line tool allow the compiled code [to be run on
 
 An expansion of this feature is planned, where a static mindustry World would be simulated to some extent for the running code to interact with.
 
-The main advantage is that the entire output of the program can be displayed and inspected. [Remarks in active mode](SYNTAX-5-OTHER.markdown#option-remarks) can be used to activate additional output just for the purpose of the debugging. Also, the output is available right after compiling the code, without having to go to Mindustry to insert the code into a processor and inspect the output in a properly linked message block. The total size of the produced text can be up to 10,000 characters, as opposed to the 400-character limit of the message block.
+The main advantage is that the entire output of the program can be displayed and inspected. [Remarks in active mode](SYNTAX-5-OTHER.markdown#option-remarks) can be used to activate additional output just for debugging. Also, the output is available right after compiling the code, without having to go to Mindustry to insert the code into a processor and inspect the output in a properly linked message block. The total size of the produced text can be up to 10,000 characters, as opposed to the 400-character limit of the message block.
 
 For even more detailed insight into the execution of the program, the state of variables at certain points - or even at every executed instruction - can be inspected using the techniques described [here](TOOLS-PROCESSOR-EMULATOR.markdown#inspecting-program-state).
 
-### Inspecting the variables in real Mindustry processor
+### Inspecting the variables in a real Mindustry processor
 
-The other option to debug a Mindcode program is to examine its behavior in actual Mindustry World. Mindustry provides a way to inspect the program's variables in the **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in sufficiently large programs.
+The other option to debug a Mindcode program is to examine its behavior in actual Mindustry World. Mindustry provides a way to inspect the program's variables in the **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in large enough programs.
 
 It is possible to use the [`sort-variables`](SYNTAX-5-OTHER.markdown#option-sort-variables) compiler directive, or the `--sort-variables` command-line option, to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `packcolor` instruction is used, which can read - and therefore create - up to four variables per instruction, without any side effects. The result is not stored anywhere so that the variable-ordering code block doesn't change values of any variables, and therefore the behavior of the program remains unaltered, except for an unavoidable difference in total runtime of the program.)
 

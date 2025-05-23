@@ -1,6 +1,6 @@
 # Remote functions and variables
 
-Mindcode supports accessing variables (including arrays) in linked processors and calling Mindcode functions in them. This functionality uses the Mindustry Logic 8 capability to read and write variables to/from other processors, including `@counter`, by name.
+Mindcode supports accessing variables (including arrays) in linked processors and calling Mindcode functions in them. This functionality uses the Mindustry Logic 8 ability to read and write variables to/from other processors, including `@counter`, by name.
 
 Calling functions stored in other processors is a feature which brings two main benefits to Mindcode:
 
@@ -9,21 +9,21 @@ Calling functions stored in other processors is a feature which brings two main 
 
 ## Architecture
 
-The processor which accesses other processor's variables or functions is called _main processor_. The processor which contains these variables and functions is called _remote processor_. A main processor can use multiple remote processors, but each remote processor can be used by at most one main processor. Furthermore, a remote processor can act as a main processor towards another remote processor. Processors can therefore be arranged into an oriented graph - a tree (in the sense of graph theory, the root is the main processor, which starts and controls the execution over the entire processor tree).
+The processor which accesses another processor's variables or functions is called _main processor_. The processor which contains these variables and functions is called _remote processor_. A main processor can use multiple remote processors, but each remote processor can be used by at most one main processor. Furthermore, a remote processor can act as a main processor towards another remote processor. Processors can therefore be arranged into an oriented graph—a tree (in the sense of graph theory, the root is the main processor, which starts and controls the execution over the entire processor tree).
 
 The execution of the entire distributed program starts with the topmost main processor (there's always just one), while the other remote processors wait until a remote call is initiated from their respective main processor. Both the main processor and the remote processors wait until their respective remote processors are initialized.
 
-To successfully run a distributed program in Mindustry World, all necessary processors with their code need to be built. The easiest way to do so is to create a schematics (using [Schemacode](SCHEMACODE.markdown)) containing all the processors, properly linked, and their code.
+To successfully run a distributed program in Mindustry World, all necessary processors with their code need to be built. The easiest way to do so is to create a schematic (using [Schemacode](SCHEMACODE.markdown)) containing all the processors, properly linked, and their code.
 
 Code for each processor in a distributed system is compiled separately from a standalone source code. When using the command-line compiler, each source code would typically be stored in a separate file. It is also possible to include all processors and their code in a single Schematic Definition File, which can be compiled by both the web application and the command-line processor.
 
 ## Module signatures
 
-During compilation, a CRC64 value, based on all remote function declarations, is computed for each module. Function name, call type, return type, parameter names, types and modifiers are included in the calculation. Additionally, the version number of the remote call protocol used by the compiler is appended to the text representation of the CRC64 value.
+During compilation, a CRC64 value, based on all remote function declarations, is computed for each module. Function name, call type, return type, parameter names, types, and modifiers are included in the calculation. Additionally, the version number of the remote call protocol used by the compiler is appended to the text representation of the CRC64 value.
 
 A remote processor is successfully initialized only when the signature stored in the remote processor matches the signature expected by its main processor. This ensures that the remote code won't be called if it is not compatible with the main processor. If any remote method's signature is altered, or remote methods are added or removed from the module, the signature changes, and the code in the processor that binds to the remote processor needs to be recompiled too. Similarly, if a new compiler using a different remote call protocol is used to recompile some processor's code, all processors related to the altered one through the remote call mechanism need to be recompiled too.
 
-Remote variables are not included in module signatures. If a variable that was used by the main processor gets removed from the remote module, and the remote processor's code is updated with the new code, access to the remote variable from the main processor will be broken (writes to the removed variable will be ignored, while reads from the removed variable will always return `null`).    
+Remote variables are not included in module signatures. If a variable used by the main processor gets removed from the remote module, and the remote processor's code is updated with the new code, access to the remote variable from the main processor will be broken (writes to the removed variable will be ignored, while reads from the removed variable will always return `null`).    
 
 ## Remote processors code
 
@@ -37,7 +37,7 @@ When compiling a module, the compiler generates a dispatch table and an initiali
 
 ### Dispatch table
 
-A dispatch table is a jump table which contains a jumps to each remote function. All remote functions are sorted by name and assigned indexes starting at 1. An instruction at the given index of the dispatch table contains a jump to the start of the actual function (index 0 is reserved for a jump to the initialization code). Since any change affecting the order of functions would alter the module signature, matching module signature ensures the dispatch table contains the function entry points at expected indexes.
+A dispatch table is a jump table that contains a jump to each remote function. All remote functions are sorted by name and assigned indexes starting at 1. An instruction at the given index of the dispatch table contains a jump to the start of the actual function (index 0 is reserved for a jump to the initialization code). Since any change affecting the order of functions would alter the module signature, matching module signature ensures the dispatch table contains the function entry points at expected indexes.
 
 When making remote calls, the main processor sets the `@counter` in the remote processor to the remote function index. This allows the code in the remote processor to be recompiled without having to reinitialize (restart) the main processor. However, recompiling the remote processor may terminate pending remote calls and cause the main processor to never receive the results of the remote calls.
 
@@ -45,7 +45,7 @@ When making remote calls, the main processor sets the `@counter` in the remote p
 
 If the module contains any code outside functions (i.e., a main code block), this code is executed as part of the initialization of the remote processor. At the very end of this custom initialization code, the `*signature` variable is set to the module signature.
 
-Only when the initialization code completes and the signature is set, the processor is ready to accept remote calls. Main processor's initialization waits for all remote processor initializations to complete, so it is crucial for the initialization code to be fast. If the initialization code contains an endless loop, the main processor execution will be blocked forever.
+Only when the initialization code completes and the signature is set, the processor is ready to accept remote calls. The main processor's initialization waits for all remote processor initializations to complete, so it is crucial for the initialization code to be fast. If the initialization code contains an endless loop, the main processor execution will be blocked forever.
 
 ### Remote variables
 
@@ -58,7 +58,7 @@ It is possible to declare a remote variable or array in a module using the `remo
 
 Remote variables must be declared in global scope and are therefore always global. When an initial value is provided, it is assigned to the variable at the moment of the declaration. Any expression can be used as the initial value, including function calls.
 
-When declaring remote variables these additional modifiers can be used:
+When declaring remote variables, these additional modifiers can be used:
 
 * `noinit`: this modifier suppresses the "uninitialized variable" warning for the declared variable. This modifier cannot be used if the variable is assigned an initial value.
 * `volatile`: remote variables are volatile by default, because they may be read or written by other processors. It is possible to specify the `volatile` modifier explicitly for better clarity.
@@ -91,7 +91,7 @@ remote def foo(x, y, out z)
 end;
 ```
 
-Function parameters may be input or output (as usual). A remote function is never inlined and can be declared neither `inline` nor `noinline`. Varags and `ref` parameters aren't supported. Remote function cannot be overloaded, although it is possible to overload a remote function with non-remote ones. Remote functions must not be called from the module which declares them, meaning they also can't be recursive. It is possible to call a recursive function from within a remote function, though.
+Function parameters may be input or output (as usual). A remote function is never inlined and can be declared neither `inline` nor `noinline`. Varags and `ref` parameters aren't supported. Remote functions cannot be overloaded, although it is possible to overload a remote function with non-remote ones. Remote functions must not be called from the module which declares them, meaning they also can't be recursive. It is possible to call a recursive function from within a remote function, though.
 
 All remote functions are active entry points for the compiler and thus are always included in the compiled code.
 
@@ -167,7 +167,7 @@ Modules imported remotely aren't compiled into the code, but remote variables an
 
 When at least one remote function is called from a processor, guard code for the processor is generated. The guard code waits for the processor to be created and its `*signature` variable initialized. If the signature found in the remote processor doesn't match the expected signature, the main processor remains stuck at the initialization.
 
-A module which is being requested for remote access may appear in only one `require` clause. Using it in two clauses, even if one of them is in a different module, or is required locally, causes a compilation error.
+A module which is being requested for remote access may appear in only one `require` clause. Using it in two clauses, even if one of them is in a different module or is required locally, causes a compilation error.
 
 ### Multiple instantiations of a remote module
 
@@ -192,7 +192,7 @@ When a module is instantiated multiple times, its functions need to be called as
 
 All variables declared `remote` in remotely requested modules are accessible in the main processor. It's not required to declare the variable in the main processor again.
 
-An array declared `remote` in remotely imported modules is accessible in the main processor. The array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random access, jump tables are generated in the main processor code, meaning that random access to remote arrays has he same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
+An array declared `remote` in remotely imported modules is accessible in the main processor. The array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random access, jump tables are generated in the main processor code, meaning that random access to remote arrays has the same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
 
 When a remote module is instantiated multiple times, remote variables can be accessed as properties on bound processors, for example:
 
@@ -217,11 +217,11 @@ For multiple instances of the remote module, a processor needs to be specified:
 product = processor3.foo(10, 20, out sum);
 ```
 
-Execution of the code is paused until the remote function completes and returns. The effect of calling a remote function is the same as calling local function: function return value and output variables are set up as usual.
+Execution of the code is paused until the remote function completes and returns. The effect of calling a remote function is the same as calling a local function: function return value and output variables are set up as usual.
 
 ### Asynchronous remote calls
 
-When a remote function is called asynchronously, the main processor continues to execute code while the remote function computes. It is possible to determine whether the remote function has completed, and/or wait for its completion and receive return values. Multiple asynchronous remote calls may be active at the same time, provided each of them is executed on a different remote processor.
+When a remote function is called asynchronously, the main processor continues to execute code while the remote function computes. It is possible to determine whether the remote function has completed and/or wait for its completion and receive return values. Multiple asynchronous remote calls may be active at the same time, provided each of them is executed on a different remote processor.
 
 Asynchronous calls are started using the built-in `async()` function:
 
@@ -280,7 +280,7 @@ product = await(processor1.foo);
 A processor containing the remote code can also be located dynamically. In this case, the `remote` clause in the `require` directive contains a variable, not a linked block reference.
 
 > [!NOTE]
-> Variable which holds the reference to a dynamically bound processor needs to be global. The best way to ensure this is to declare the variable before the `require` clause, which works in both strict and relaxed syntax modes. it is possible to use an implicitly declared global variable in relaxed syntax mode, in which case the variable needs to be named in upper case. The recommended solution is to explicitly declare the variable regardless of the syntax mode.   
+> Variable which holds the reference to a dynamically bound processor needs to be global. The best way to ensure this is to declare the variable before the `require` clause, which works in both strict and relaxed syntax modes. It is possible to use an implicitly declared global variable in relaxed syntax mode, in which case the variable needs to be named in upper case. The recommended solution is to explicitly declare the variable regardless of the syntax mode.   
 
 ```
 var proc;
@@ -290,7 +290,7 @@ require "remote.mnd" remote proc;
 `proc` is the variable which provides access to the remote module.
 
 > [!NOTE]
-> When dynamic binding is used, remote functions and variables needs to be referenced using the processor variable. 
+> When dynamic binding is used, remote functions and variables need to be referenced using the processor variable. 
 
 The compiler doesn't automatically generate code to verify the module signature for dynamically bound processors. It is possible to verify the signature using a `verifySignature()` built-in function. This function takes a processor as an argument, and returns `true` if the processor contains the expected module code.  
 
@@ -306,12 +306,12 @@ end;
 Using `verifySignature` ensures it is safe to call a remote function in the given processor. When `verifySignature` returns `false`, it may mean ony of these things:
 
 * the block being inspected is not a processor,
-* the processor doesn't contain code corresponding to the remote module, or the code is not compatible with expected version (module signatures differ),
+* the processor doesn't contain code corresponding to the remote module, or the code is not compatible with an expected version (module signatures differ),
 * the processor contains the correct remote module code, but the initialization hasn't completed yet. 
 
-It is possible to use several variables in the `remote` clause, in which case the remote module can be accessed though any of them. Mindcode doesn't make any assumptions about the identity of these processors (particularly, whether they point to the same processor or not).
+It is possible to use several variables in the `remote` clause, in which case the remote module can be accessed though any of them. Mindcode doesn't make any assumptions about the identity of these processors (particularly whether they point to the same processor or not).
 
-Processor references can also be stored in an array. However, individual array elements cannot be directly used to access the remote module. instead, the reference needs to be stored to a bound processor variable first:
+Processor references can also be stored in an array. However, individual array elements cannot be directly used to access the remote module. Instead, the reference needs to be stored to a bound processor variable first:
 
 ```
 var p1, p2;
@@ -348,25 +348,25 @@ This chapter briefly describes how synchronous and asynchronous calls are implem
 * `:functionName*finished` is set to `false` in the remote processor.
 * `@counter` in the remote processor is set to the function dispatch index.
 * Waiting for call completion:
-  * instruction `wait 1e-15` is executed. This skips the rest of the tick, while transferring unspent instruction execution quota to the next tick(s).
+  * instruction `wait 1e-15` is executed. This skips the rest of the tick while transferring the unspent instruction execution quota to the next tick(s).
   * loop while `:functionName*finished` in the remote processor equals `false`
-* The function return value, if any, and values of output parameters, are copied from the remote processor to the main processor.
+* The function return-value, if any, and values of its output parameters, are copied from the remote processor to the main processor.
 
-### Local side - asynchronous call
+### Local side—asynchronous call
 
 * The function parameters are set up in the remote processor.
 * `:functionName*finished` is set to `false` in the remote processor.
 * `@counter` in the remote processor is set to the function dispatch index.
 * The code execution continues in the main processor.
 
-Monitoring the call, waiting for completion and retrieving output values must be implemented by the programmer using the `await()` and/or `finished()` functions.
+Monitoring the call, waiting for completion, and retrieving output values must be implemented by the programmer using the `await()` and/or `finished()` functions.
 
 ### Remote side
 
 The call mechanism on the remote side is the same for both synchronous and asynchronous calls.
 
-* Waiting for the remote call is implemented using the `wait 1e12` instruction. This wait is over 30 thousands years long, so it never completes. The wait also transfers unspent instruction execution quota to the next tick(s).
-* Remote call is initiated by the main processor remotely setting `@counter` to the function entry point in the dispatch table. The function starts executing immediately, as all parameters have been set by the caller.
+* Waiting for the remote call is implemented using the `wait 1e12` instruction. This wait is over 30 thousand years long, so it never completes. The wait also transfers unspent instruction execution quota to the next tick(s).
+* Remote call is initiated by the main processor remotely setting `@counter` to the function entry point in the dispatch table. The function starts executing immediately, as the caller sets up all input parameters.
 * Upon completion, the function performs these operations:
     * `:functionName*finished` is set to `true`.
     * The waiting phase is reentered.
@@ -381,22 +381,22 @@ It is also possible to start an asynchronous remote call and use remote variable
 
 ## Performance of remote calls
 
-Instructions in Mindustry Logic processors aren't really executed in parallel. Instead, in each tick all processors are visited sequentially and a number of instructions corresponding to given processor's _instructions per tick_ rate is executed. This means that when a synchronous remote call is made, even if the call returned immediately, the call will always take at least a full tick. Performing many short calls to remote functions might therefore very detrimental to the performance of your program.
+Instructions in Mindustry Logic processors aren't really executed in parallel. Instead, in each tick all processors are visited sequentially, and a number of instructions corresponding to the given processor's _instructions per tick_ rate are executed. This means that when a synchronous remote call is made, even if the call returned immediately, the call will always take at least a full tick. Performing many short calls to remote functions might, therefore, be very detrimental to the performance of your program.
 
 > [!IMPORTANT]
-> The faster the processor, the more instructions get executed in a single tick, and the bigger the impact from the delay of a remote call. Unboosted micro-processor executes 2 instructions per tick, and the overhead of even short remote calls is almost negligible (at most one instruction execution will be lost on each call). Fully boosted hyper-processor executes 62.5 instructions per seconds, and frequent short remote calls could reduce the effectivity of the hyper-processor by 90% or more. World processors with instruction rates at several hundred IPTs could be affected even more.
+> The faster the processor, the more instructions get executed in a single tick, and the bigger the impact from the delay of a remote call. Unboosted micro-processor executes two instructions per tick, and the overhead of even short remote calls is almost negligible (at most one instruction execution will be lost on each call). Fully boosted hyper-processor executes 62.5 instructions per seconds, and frequent short remote calls could reduce the effectivity of the hyper-processor by 90% or more. World processors with instruction rates at several hundred IPTs could be affected even more.
 >
-> Additional factor is the frame rate: processor updates aren't actually driven by ticks, but by frame updates. A frame rate higher than 60 FPS means there are fewer instructions wasted per remote call, while lower frame rates mean more instructions wasted. Even code which performs well when the game runs at 60 FPS might develop performance problems when the frame rate drops.
+> An additional factor is the frame rate: processor updates aren't driven by ticks but by frame updates. A frame rate higher than 60 FPS means there are fewer instructions wasted per remote call, while lower frame rates mean more instructions wasted. Even code which performs well when the game runs at 60 FPS might develop performance problems when the frame rate drops.
 
 ### Managing the execution quota
 
-Code generated by Mindcode utilizes the `wait` instruction when waiting for a remote procedure call to finish, and when the remote module waits for another call to serve. The `wait` instruction terminates the processor's execution in the current frame, saving up unspent execution quota. Up to four ticks of unspent instructions can be accumulated this way. When normal execution resumes, the unspent quota is spread over several ticks to provide a boost to the processor execution (a half of the remaining unspent execution quota is used up in each subsequent tick which doesn't contain a `wait` or another yielding instruction - the others are `stop` and `message`).
+Code generated by Mindcode uses the `wait` instruction when waiting for a remote procedure call to finish, and when the remote module waits for another call to serve. The `wait` instruction terminates the processor's execution in the current frame, saving up unspent execution quota. Up to four ticks of unspent instructions can be accumulated this way. When normal execution resumes, the unspent quota is spread over several ticks to provide a boost to the processor execution (a half of the remaining unspent execution quota is used up in each following tick that doesn't contain a `wait` or another yielding instruction - the others are `stop` and `message`).
 
-When the interval between remote calls is longer than a single tick, and the duration of the remote calls is also longer than a single tick, synchronous remote calls might even provide execution boosts, leading to faster execution than running an equivalent code on a single processor. Getting the timing just right to consistently utilize this effect can be very tricky, though.
+When the interval between remote calls is longer than a single tick, and the duration of the remote calls is also longer than a single tick, synchronous remote calls might even provide execution boosts. This could lead to faster execution than running an equivalent code on a single processor. Getting the timing just right to consistently use this effect can be very tricky, though.
 
-Code in a remote processors accrues execution quota when waiting for a remote call. Code in a main processor accrues execution quota when waiting for the return from a remote call during synchronous calls and when using the `await()` function on asynchronous calls.
+Code in a remote processor accrues execution quota when waiting for a remote call. Code in a main processor accrues execution quota when waiting for the return from a remote call during synchronous calls and when using the `await()` function on asynchronous calls.
 
-Note: the execution quota only accrues when `wait` instruction are being executed. If there is a background process defined, no execution quota accrues while it is being run (unless the background process itself contains some `wait` instructions).
+Note: the execution quota only increases when `wait` instruction are being executed. If there is a background process defined, no execution quota accrues while it is being run (unless the background process itself contains some `wait` instructions).
 
 # Arbitrary remote variable access
 

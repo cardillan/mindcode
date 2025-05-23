@@ -19,7 +19,7 @@ System libraries contain functions and sometimes constants that can be used by a
 
 ## Compiled function sizes
 
-As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may be very important. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
+As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may present an important consideration. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
 
 - all input arguments are variables,
 - all output values provided by the function are used,
@@ -48,8 +48,8 @@ There are several factors that might cause the size of a function used in an act
 
 To use the Arrays library, use the `require arrays;` statement.
 
-Functions in this library are designed for loop unrolling for best performance.
-When instruction space doesn't allow loop unrolling, a random array access is used,
+Functions in this library are designed for loop unrolling for the best performance.
+When instruction space doesn't allow loop unrolling, random array access is used,
 possibly leading to general (un-inlined) array jump tables being generated for space conservation.
 
 ## Functions
@@ -64,7 +64,7 @@ possibly leading to general (un-inlined) array jump tables being generated for s
 | Ten elements in the array      |                  10 |                 34 |
 | Twenty elements in the array   |                  20 |                 64 |
 
-Fills the array with given value.
+Fills the array with a given value.
 
 
 ### reverse
@@ -123,14 +123,14 @@ To use the Blocks library, use the `require blocks;` statement.
 | Linking four blocks            |                  40 |                 40 |
 | Linking six blocks             |                  53 |                 53 |
 
-Searches blocks linked to the processor for blocks of requested types, and assigns them to given variables if found.
+Searches blocks linked to the processor for blocks of requested types and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.
 
-This function is useful to dynamically locate blocks of given types, instead of using the predefined link name.
+This function is useful to dynamically locate blocks of given types instead of using the predefined link name.
 By locating the blocks dynamically, it is not necessary to link a block to the processor under a particular name,
 such as `message1` or `switch1`. The function cannot handle situations when two blocks of the same type are needed
-(e.g. two switches), but can handle situations where a single variable can accept multiple block types
-(e.g. either memory cell or memory bank).
+(e.g., two switches), but can handle situations where a single variable can accept multiple block types
+(e.g., either memory cell or memory bank).
 
 Function outputs status information while it is running to the block passed in the `message` parameter.
 When a `@message` block is among the required types and is found, it is used instead of the `message` parameter.
@@ -139,11 +139,11 @@ When a `@message` block is among the required types and is found, it is used ins
 
 - `title`: title to be used as part of the status information.
 - `message`: initial block to use to output status information. Typically `message1`.
-- `linkMap`: definition of the required blocks. Each blocks needs four variables:
+- `linkMap`: definition of the required blocks. Each block needs four variables:
   - `requested`: type of the requested block, e.g. `@switch`.
   - `name`: name of the block to use as part of the status information.
   - `out variable`: variable to receive the block
-  - `required`: if `true`, the function will wait until a block of given type is linked to the processor. If `false`, the function doesn't wait.
+  - `required`: if `true`, the function will wait until a block of a given type is linked to the processor. If `false`, the function doesn't wait.
 
 Example of a call to this function:
 
@@ -227,7 +227,7 @@ all four color channels.
 | Function body                  |                   5 |                  5 |
 | Function call                  |                   5 |                  5 |
 
-Allows to redefine the alpha channel of an existing color. When used with constant value of alpha and a built-in
+Allows redefining the alpha channel of an existing color. When used with constant value of alpha and a built-in
 color literal (e.g. `@colorSalmon`), the value will be compile-time evaluated. When a named color literal is used
 (e.g. `%[salmon]`), compile time evaluation is not possible.
 
@@ -584,7 +584,7 @@ Returns `true` if the two values differ by less than `precision`.
 > [!NOTE]
 > The non-strict equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`,
 > consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function
-> allows to compare values using different precision.
+> allows comparing values using different precision.
 
 ### nullToZero
 
@@ -594,7 +594,7 @@ Returns `true` if the two values differ by less than `precision`.
 |--------------------------------|--------------------:|-------------------:|
 | Inlined function               |                   1 |                  1 |
 
-Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
+Converts the value of `x` to zero if it was `null`. Uses a single instruction for the conversion,
 and makes sure it won't be removed by the optimizer.
 
 ### boolean
@@ -618,7 +618,7 @@ if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
 
 Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
 (`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
-Uses single instruction for the conversion, and makes sure it won't be removed by the optimizer.
+Uses a single instruction for the conversion and makes sure it won't be removed by the optimizer.
 
 ### sum
 
@@ -688,8 +688,8 @@ Perform linear interpolation between two values.
 
 - `from`: first value
 - `to`: second value
-- `ratio`: value in the range of 0 .. 1, 0 corresponds to `from`, 1 corresponds to `to`, fractional value
-           corresponds to a point in between (2/3 to a point two-thirds of the way from `from` to `to`).
+- `ratio`: value in the range of `0 .. 1`, `0` corresponds to `from`, `1` corresponds to `to`, fractional value
+           corresponds to a point in between (`2/3` to a point two-thirds of the way from `from` to `to`).
 
 ### median
 
@@ -719,7 +719,7 @@ Returns the median of two values.
 |--------------------------------|--------------------:|-------------------:|
 | Inlined function               |                   5 |                  5 |
 
-Returns the median of three values .
+Returns the median of three values.
 
 ### median
 
@@ -731,7 +731,7 @@ Returns the median of three values .
 | Function body                  |                  17 |                 17 |
 | Function call                  |                   7 |                  7 |
 
-Returns the median of four values .
+Returns the median of four values.
 
 ### median
 
@@ -756,7 +756,7 @@ Returns the median of five values.
 | Twenty arguments in total      |                 183 |                148 |
 
 Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
-and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
+and is fairly slow as it doesn't modify the input array.
 
 
 # Printing library
@@ -801,8 +801,8 @@ Prints all arguments passed to it, each on a new line.
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
-Formats the number passed in as a parameter into the text buffer, using comma as thousands separator.
-Fractional part of the number to be printed is ignored.
+Formats the number passed in as a parameter into the text buffer, using commas as thousand separators.
+The fractional part of the number to be printed is ignored.
 
 To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
 The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -811,7 +811,7 @@ at the place of the lowest formatting placeholder.
 Nulls are printed as 0.
 
 > [!TIP]
-> While the functions is optimized for performance, formatting numbers is many times slower than just printing
+> While the function is optimized for performance, formatting numbers is many times slower than just printing
 > them using the `print()` function.
 
 ### printNumber
@@ -826,8 +826,8 @@ Nulls are printed as 0.
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
-Prints the number passed in as a parameter into the text buffer, using comma as thousands separator.
-Fractional part of the number to be printed is ignored.
+Prints the number passed in as a parameter into the text buffer, using commas as thousand separators.
+The fractional part of the number to be printed is ignored.
 
 To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
 The number will be printed at the end of the print buffer.
@@ -835,7 +835,7 @@ The number will be printed at the end of the print buffer.
 Nulls are printed as 0.
 
 > [!TIP]
-> While the functions is optimized for performance, formatting numbers is many times slower than just printing
+> While the function is optimized for performance, formatting numbers is many times slower than just printing
 > them using the `print()` function.
 
 See also [`formatNumber`](#formatnumber)
@@ -852,8 +852,8 @@ See also [`formatNumber`](#formatnumber)
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
-Formats the number passed in as a parameter into the text buffer in binary base, using given number of digits.
-Fractional part of the number to be printed is ignored.
+Formats the number passed in as a parameter into the text buffer in binary base, outputting at least the given
+number of binary digits. The fractional part of the number to be printed is ignored.
 
 To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
 The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -878,8 +878,8 @@ Nulls are printed as zero values.
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
-Prints the number passed in as a parameter into the text buffer in binary base, using given number of digits.
-Fractional part of the number to be printed is ignored.
+Prints the number passed in as a parameter into the text buffer in binary base, outputting at least the given
+number of binary digits. The fractional part of the number to be printed is ignored.
 
 To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
 The number will be printed at the end of the print buffer.
@@ -905,8 +905,8 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
-Formats the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
-Fractional part of the number to be printed is ignored.
+Formats the number passed in as a parameter into the text buffer in hexadecimal base, outputting at least the given
+number of hexadecimal digits. The fractional part of the number to be printed is ignored.
 
 To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
 The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -931,8 +931,8 @@ Nulls are printed as zero values.
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
-Prints the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
-Fractional part of the number to be printed is ignored.
+Prints the number passed in as a parameter into the text buffer in hexadecimal base, outputting at least the given
+number of hexadecimal digits. The fractional part of the number to be printed is ignored.
 
 To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
 The number will be printed at the end of the print buffer.
@@ -961,7 +961,7 @@ The function is primarily useful for debugging purposes to determine the actual 
 This variant of the function is optimized to produce faster, larger code.
 
 **Note:** When printing the exact representation of numbers that are close to integer value, the Mindustry Logic
-`print` instruction cannot be used, as it would print the rounded value. In such case a custom printing routine
+`print` instruction cannot be used, as it would print the rounded value. In such a case a custom printing routine
 is used, which can take around 50 steps to output the entire number.
 
 > [!TIP]
@@ -1009,15 +1009,15 @@ To use the Units library, use the `require units;`
 | Function body                  |                  17 |                 17 |
 | Function call                  |                   5 |                  5 |
 
-Finds and binds a free unit of given type. When such a unit is found, it is flagged by the given initial flag.
-If no free unit of given type can be found (either because none exists, or because all existing units are occupied),
-returns immediately.
+Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
+If no free unit of the given type can be found (either because none exists or because all existing units are occupied),
+the function returns immediately.
 
 **Inputs and outputs:**
 
 - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to he freshly bound unit.
-- Returns the freshly bound unit, or `null` if no free unit of given type exists.
+- `initial_flag`: initial flag to set to the freshly bound unit.
+- Returns the freshly bound unit, or `null` if no free unit of the given type exists.
 
 The function doesn't use units that are controlled by a player or a different processor.
 
@@ -1031,16 +1031,16 @@ The function doesn't use units that are controlled by a player or a different pr
 | Function body                  |                  32 |                 32 |
 | Function call                  |                   7 |                  7 |
 
-Searches for and binds a free unit of given type closest to the coordinates on the map given.
-If no free unit of given type can be found (either because none exists, or because all existing units
-are occupied), returns immediately.
+Searches for and binds a free unit of the given type closest to the coordinates on the map given.
+If no free unit of the given type can be found (either because none exists or because all existing units
+are occupied), the function returns immediately.
 
 **Inputs and outputs:**
 
 - `x`, `y`: position of the map to compute unit distance relative to
 - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to he freshly bound unit.
-- Returns the freshly bound unit closest to given coordinates, or `null` if no free unit of given type exists.
+- `initial_flag`: initial flag to set to the freshly bound unit.
+- Returns the freshly bound unit closest to given coordinates, or `null` if no free unit of the given type exists.
 
 The function doesn't use units that are controlled by a player or a different processor.
 
@@ -1060,7 +1060,7 @@ The function doesn't return until a free unit of the given type can be found.
 **Inputs and outputs:**
 
 - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to he freshly bound unit.
+- `initial_flag`: initial flag to set to the freshly bound unit.
 - Returns the freshly bound unit.
 
 The function doesn't use units that are controlled by a player or a different processor.
@@ -1077,17 +1077,17 @@ The function doesn't use units that are controlled by a player or a different pr
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
 The function doesn't return until a free unit of the given type can be found. The function prints status
-information about the search onto a message block - one of two messages:
+information about the search onto a message block—one of two messages:
 
-- `No unit of type <unit type> found.` when no unit of given type exists,
-- `Looking for a free <unit type>...` when units of given type exist, but none is free to use.
+- `No unit of type <unit type> found.` when no unit of the given type exists,
+- `Looking for a free <unit type>...` when units of the given type exist, but none is free to use.
 
 **Inputs and outputs:**
 
 - `message`: message block to receive status information about the search.
-- `preface`: additional text to output before the status message, e.g. description of the processor.
+- `preface`: additional text to output before the status message, e.g., description of the processor.
 - `unit_type`: type of the unit: `@flare`, `@mono`, `@poly` etc. Can be a variable.
-- `initial_flag`: initial flag to set to he freshly bound unit.
+- `initial_flag`: initial flag to set to the freshly bound unit.
 - Returns the freshly bound unit.
 
 The function doesn't use units that are controlled by a player or a different processor.

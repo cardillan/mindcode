@@ -67,7 +67,7 @@ printflush(message1);
 
 to print colored texts in the colors indicated in the example.
 
-<details><summary>Show full list of predefined color names.</summary>
+<details><summary>Show a full list of predefined color names.</summary>
 
 ```
 clear
@@ -145,7 +145,7 @@ Supported Mindustry icons are available through built-in String constants contai
 
 ## Printing values
 
-When printing numbers, Mindustry prints the full representation of a number. It might be sometimes cumbersome, as fractions can produce a lot of digits. To avoid this, use the `floor` or `ceil` function:
+When printing numbers, Mindustry prints the full representation of a number. It might sometimes be cumbersome, as fractions can produce a lot of digits. To avoid this, use the `floor`, `ceil`, or (in Mindustry 8) the `round` function:
 
 ```Mindcode
 start_time = @time;
@@ -154,7 +154,7 @@ duration = @time - start_time;
 println($"Elapsed: ${floor(duration)} ms");
 ```
 
-When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead. The same formatting is used to display value of a variable in the _Vars_ dialog in Mindustry UI. It is necessary to be aware that a number which was printed as `0` doesn't necessarily equal to zero.
+When a number you're printing is smaller than `0.00001` (in absolute value), Mindustry will print zero (`0`) instead. The same formatting is used to display the value of a variable in the _Vars_ dialog in Mindustry UI. It is necessary to be aware that a number which was printed as `0` doesn't necessarily equal to zero.
 
 Mindcode provides the `printExactFast` and `printExactSlow` functions in the `printing` library, which can be used to output the exact numerical values of variables to the text buffer. However, these functions require Mindustry Logic 8 to compile.
 
@@ -165,7 +165,7 @@ Mindcode provides the `printExactFast` and `printExactSlow` functions in the `pr
 > 
 > The unit functions in the system library are based on the principles described here. 
 
-Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately apparent what needs to be done or what went wrong with your code, if it doesn't work as expected.
+Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately noticeable what needs to be done or what went wrong with your code if it doesn't work as expected.
 
 I'm laying out just the basic pointers here, you'll need to combine the techniques mentioned in your own way to create a truly robust solution. 
 
@@ -175,7 +175,7 @@ Unit needs to be bound to the processor to be controlled through it, using the `
 
 You need to specify a unit type when binding a unit (e.g., `ubind(@poly)`). If there is at least one unit of the requested type, it is bound to your processor, and it is stored in a built-in variable named `@unit`. (The `ubind()` function also returns this value for convenience.) If no unit of the requested type exists, no unit is bound and `@unit` contains `null`. When you call `ubind()` again with the same unit type, a next available unit is returned. Once you've gone through all existing units, the first one is bound again.
 
-The `@unit` variable is special, as it always contain the unit currently bound to the processor. You can store this value in another variable. One possible reason to do that is that you can use such variable to determine you've already encountered all existing units:
+The `@unit` variable is special, as it always contains the unit currently bound to the processor. You can store this value in another variable. One possible reason to do that is that you can use such a variable to determine you've already encountered all existing units:
 
 ```Mindcode
 var count;
@@ -196,7 +196,7 @@ printflush(message1);
 This code counts the current number of active polys by binding all of them; as soon as the first one is encountered again, we know we've seen them all. There is a slight problem with this code: if the unit stored in `firstUnit` is destroyed, it will never be bound again, and we'll end up in an infinite loop. More on detecting destroyed units 
 later.
 
-There's one additional, very important thing you can do with a unit stored in a variable: it can be used to bind that unit again. For example:
+There's one additional, crucial thing you can do with a unit stored in a variable: it can be used to bind that unit again. For example:
 
 ```Mindcode
 var poly = ubind(@poly);     // We just assume the units exist
@@ -220,7 +220,7 @@ end;
 
 ### Flagging units
 
-Each unit has a flag, which can hold a numeric value (integer or decimal values). Initially, each unit has a zero flag. A lot of code that can be seen on the internet uses flags to mark units that are in use, so that other processors know to avoid them. Typical code might look like this:
+Each unit has a flag, which can hold a numeric value (integer or decimal values). Initially, each unit has a zero flag. A lot of code that can be seen on the internet uses flags to mark units that are in use so that other processors know to avoid them. Typical code might look like this:
 
 ```Mindcode
 def findFreeUnit(unitType, markFlag)
@@ -243,12 +243,12 @@ Later on, you might loop through all units and use the particular value of the f
 
 There are two downsides to this arrangement:
 
-* If a processor for some reason stops controlling the unit without clearing its flag, all other processors will consider that unit used and won't reuse it, potentially leading to shortage of available units.
-* The flag actually allows you to store various information about unit state, for example which particular task was it assigned to. It is possible to encode the flag and the state into one numeric value, although it requires more computations and makes the code at least a bit slower.
+* If a processor for some reason stops controlling the unit without clearing its flag, all other processors will consider that unit used and won't reuse it, potentially leading to a shortage of available units.
+* The flag actually allows you to store various information about the unit state, for example, which particular task it was assigned to. It is possible to encode the flag and the state into one numeric value, although it requires more computations and makes the code at least a bit slower.
   
 ### Unit controllers
 
-The alternative to using flags is querying the unit to see whether it is free or actively controlled. When a unit is free, the `@unit.@controlled` property returns `0`. When the value is nonzero, the unit is controlled, either by a processor, or directly by a player, or by being part of the units commanded indirectly by player (different values are assigned to each of these possibilities).
+The alternative to using flags is querying the unit to see whether it is free or actively controlled. When a unit is free, the `@unit.@controlled` property returns `0`. When the value is nonzero, the unit is controlled, either by a processor, or directly by a player, or by being part of the units commanded indirectly by the player (different values are assigned to each of these possibilities).
 
 A wee bit enhanced `findFreeUnit()` function using the `@controlled` property might look like this:
 
@@ -272,7 +272,7 @@ end;
 
 
 
-We're still flagging the unit. First of all, it assigns the initial state to it right off the bat, and secondly, it will signal to other processors that might use flags to recognize free units that this one is busy.
+We're still flagging the unit. Firstly, it assigns the initial state to it right off the bat, and secondly, it will signal to other processors that might use flags to recognize free units that this one is busy.
 
 The other property is `@unit.@controller`. This returns the processor that is actively controlling the unit, or `null` if no processor controls that unit. Use this property to detect that your unit was lost:
 
@@ -283,7 +283,7 @@ if @unit.@controller != @this then
 end;
 ```
 
-Unit can become lost if a player or another rogue processor takes over it, so it is definitely useful to guard yourself against this possibility.
+Unit can become lost if a player or another rogue processor takes it over, so it is definitely useful to guard yourself against this possibility.
 
 Unit becomes controlled by the processor when it is issued a command. Most [ucontrol instructions](FUNCTIONS-80.markdown#instruction-unit-control) will do so. Notably, setting a flag marks the unit as controlled while querying the flag or other properties of the unit won't.
 
@@ -314,13 +314,13 @@ end;
 
 ### Discarding unwanted items
 
-Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that are no longer needed. The simple, but not-so-obvious way of doing so, is to drop the item into the air:
+Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that are no longer needed. The simple, but not-so-obvious way of doing so is to drop the item into the air:
 
 ```Mindcode
 itemDrop(@air, @unit.@totalItems);
 ```
 
-In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still suggest specifying the correct amount, just in case something changes in the future.     
+In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still suggest specifying the correct amount, just in case something will change in the future.     
 
 ## Using Buildings
 
@@ -328,7 +328,7 @@ Mindustry allows your processors to control and receive information from any all
 
 ### Locating the core
 
-One of the first thing you'll probably want to do is to locate your core, as it is the most important building in the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, just issue this command:
+One of the first things you'll probably want to do is to locate your core, as it is the most important building in the game. Doing so without a processor placed next to the core requires a unit. As soon as you bind a unit, issue this command:
 
 ```Mindcode
 found = ulocate(:building, :core, false, out core_x, out core_y, out core);
@@ -338,7 +338,7 @@ Let's look at each argument here:
 
 * `found` is a variable that will receive the result of the operation, `true` if the code was found, `false` if it wasn't.  If you don't need it, use just `ulocate(:building, :core, false, out core_x, out core_y, out core)`.
 * `ulocate` is the name of the function we're calling.
-* `building` and `core` are constant values that specify what are we looking for, They must be specified exactly like this, you cannot, for example, store them in variable (e.g., `type = core; ulocate(building, type, false, out core_x, out core_y, out core)` won't work).
+* `building` and `core` are constant values that specify what we are looking for. They must be specified exactly like this; you cannot, for example, store them in variable (e.g., `type = core; ulocate(building, type, false, out core_x, out core_y, out core)` won't work).
 * `false` specifies we're looking for our own core. Put `true` if you want to locate enemy one.
 * `core_x` and `core_y` are variables that will receive the position of the core on the map. Since they receive a value produced by the instruction, they are "output" arguments and need to be marked with the `out` keyword. Use them to send your units there. If you don't need them, you can omit them.
 * `core`, again an output argument, receives the building itself, and it can be used to query its state:
@@ -350,11 +350,11 @@ println("Silicon status: ", core.@silicon);
 printflush(message1);
 ```
 
-will tell you how bad your silicone situation is.
+which will tell you how bad your silicone situation is.
 
 ### Obtaining buildings
 
-You can obtain building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! `getBlock` retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
+You can collect building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! `getBlock` retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
 
 ```Mindcode
 building = getBlock(x, y, out type, out floor);
@@ -369,7 +369,7 @@ Let's look at each argument here:
 
 If you don't need some arguments, just omit them: `getBlock(x, y, , out floor)`. If a unit is out of range, or if the block doesn’t exist, all return values are `null`.
 
-In the example code below the flare finds the nearest enemy turret and approaches it. If the unit is within range of the turret, checks the building variable. If it's `null`, turret has been destroyed, if not, it's still exists. If `ulocate` return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
+In the example code below, the flare finds the nearest enemy turret and approaches it. If the unit is within range of the turret, checks the building variable. If it's `null`, turret has been destroyed, if not, it still exists. If `ulocate` return 0, no enemy turret was found. Another example [here](http://mindcode.herokuapp.com/?s=upgrade-conveyors).
 
 ```Mindcode
 // This example adheres to the strict syntax:

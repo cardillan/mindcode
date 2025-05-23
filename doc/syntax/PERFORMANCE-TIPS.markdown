@@ -1,10 +1,10 @@
 # Performance tips
 
-This document contains some tips for writing better performing code in Mindcode.
+This document contains some tips for writing better-performing code in Mindcode.
 
 # Vector length calculation
 
-Mindustry Logic provides an instruction which directly computes length of a vector. The standard formula for vector length is
+Mindustry Logic provides an instruction which directly computes the length of a vector. The standard formula for vector length is
 
 ```Mindcode
 length = sqrt(x * x + y * y);
@@ -39,7 +39,7 @@ Note: an optimization which would replace the sequence of the four instructions 
 
 # Conditions
 
-At this moment, Mindcode produces suboptimal code for conditions employing boolean operators. For example, this code
+At this moment, Mindcode produces suboptimal code for conditions using boolean operators. For example, this code
 
 ```Mindcode
 if x > 0 and x < 10 then
@@ -100,7 +100,7 @@ print "yes"
 printflush message1
 ```
 
-For the next version of Mindcode, an update to significantly improve conditions is planned. It is advised not to rewrite your code if the suboptimal performance is not causing you problems, and wait for improvements in Mindcode. In cases when the code generated for the usual conditions is unacceptable,  the following tricks can be used:
+For the next version of Mindcode, an update to significantly improve conditions is planned. It is advised not to rewrite your code if the suboptimal performance is not causing you problems and wait for improvements in Mindcode. In cases when the code generated for the usual conditions is unacceptable, the following tricks can be used:
 
 ## Using nested `if` conditions
 
@@ -169,7 +169,7 @@ printflush message1
 
 # Loop unrolling
 
-One of Mindcode's strongest optimizations tools is loop unrolling. When a loop is unrolled, instructions manipulating the loop control variable are eliminated, as well as jumps, potentially saving a lot of execution time. For a loop to be unrolled, the following conditions must be met:
+One of Mindcode's strongest optimization tools is loop unrolling. When a loop is unrolled, instructions manipulating the loop control variable are eliminated, as well as jumps, potentially saving a lot of execution time. For a loop to be unrolled, the following conditions must be met:
 
 * Mindcode must be able to determine the number of iterations.
 * Only one loop control variable is used.
@@ -177,7 +177,7 @@ One of Mindcode's strongest optimizations tools is loop unrolling. When a loop i
 
 Furthermore, Mindcode is able to unroll more complex loops on [advanced optimization level](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling-preconditions).
 
-## Determining number of iterations
+## Determining the number of iterations
 
 Mindcode determines the number of iterations by analyzing the loop condition. It doesn't take `break` statements into account. The following loop won't get unrolled, even though the maximal number of iterations it apparent:
 
@@ -212,7 +212,7 @@ for var i = 0, j = SIZE - 1; i < j; i++, j-- do
 end;
 ```
 
-This code can't be unrolled, because there are two control variables. A better approach is to use just one loop control variable and derive the other variable from it:
+This code can't be unrolled because there are two control variables. A better approach is to use just one loop control variable and derive the other variable from it:
 
 ```Mindcode
 const SIZE = 10;
@@ -228,7 +228,7 @@ Since `j` isn't used in the loop condition, the loop can be unrolled.
 
 ## Using simple updates of control variables
 
-On `advanced` level, loop unrolling is capable to unroll almost any deterministic loop, assuming the updates to the control variable are "simple", meaning they do not depend on any other variable than the loop control variable. More complex expressions might need to be rewritten to multiple simple updates. This loop cannot be unrolled:
+On `advanced` level, loop unrolling is capable to unroll almost any deterministic loop, assuming the updates to the control variable are "simple," meaning they do not depend on any other variable than the loop control variable. More complex expressions might need to be rewritten to multiple simple updates. This loop cannot be unrolled:
 
 ```Mindcode
 i = 0;
@@ -255,7 +255,7 @@ print "1\n3\n7\n15\n31\n63\n127\n255\n511\n1023\n"
 
 # Arrays in loops
 
-Mindcode offers two mechanisms to iterate over arrays: list iteration loops, and loops accessing array elements using loop control variable as an index. Oftentimes, it is possible to express the same algorithm using either of these two approaches, but they may offer different performance in Mindcode due to various factors.
+Mindcode offers two mechanisms to iterate over arrays: list iteration loops, and loops accessing array elements using the loop control variable as an index. Oftentimes, it is possible to express the same algorithm using either of these two approaches, but they may offer different performance in Mindcode due to various factors.
 
 ## Arrays in unrolled loops
 
@@ -317,9 +317,9 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 
-When the loop cannot get unrolled for some reason, list iteration loops are generally faster than loops using index-based array access. When more than a single variable is used, or when the array is modified by the loop, list iteration loops provide much better performance than index-based loops. Index-based access may be preferable when the arrays are very large, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving considerable amount of space.  
+When the loop cannot get unrolled for some reason, list iteration loops are generally faster than loops using index-based array access. When more than a single variable is used, or when the array is modified by the loop, list iteration loops provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of space.  
 
-Example if a simple array access:
+Example of simple array access:
 
 ```Mindcode
 #set symbolic-labels = true;
@@ -477,9 +477,9 @@ produces
     print .a*3
 ```
 
-The reason is that in list iteration loop, all array accesses are performed using direct access to elements, while in index-based access, each array element is accessed separately using a jump table.
+The reason is that in the list iteration loop, all array accesses are performed using direct access to elements, while in index-based access, each array element is accessed separately using a jump table.
 
-Optimizations aimed at merging multiple array accesses together are planned, but aren't yet available.
+Optimizations aimed at merging multiple array accesses are planned but aren't yet available.
 
 > [!NOTE]
 > Many different array access patterns can be encoded using parallel list-iteration syntax, subarrays and/or the `descending` keyword. If your algorithm accesses the arrays linearly, there's probably a way to encode it using list-iteration loops.

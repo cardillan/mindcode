@@ -3,14 +3,14 @@
 //
 //* To use the Arrays library, use the `require arrays;` statement.
 //*
-//* Functions in this library are designed for loop unrolling for best performance.
-//* When instruction space doesn't allow loop unrolling, a random array access is used,
+//* Functions in this library are designed for loop unrolling for the best performance.
+//* When instruction space doesn't allow loop unrolling, random array access is used,
 //* possibly leading to general (un-inlined) array jump tables being generated for space conservation.
 
 module arrays;
 
 /**
- * Fills the array with given value.
+ * Fills the array with a given value.
  *
  * @footprint2  Five elements in the array:      var a[5]; fill(ref a, prm_value); print(a);
  * @footprint2  Ten elements in the array:       var a[10]; fill(ref a, prm_value); print(a);

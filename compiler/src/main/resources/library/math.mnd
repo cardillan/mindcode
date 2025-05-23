@@ -71,14 +71,14 @@ end;
  * > [!NOTE]
  * > The non-strict equality operators in Mindustry (and, by extension, Mindcode), i.e. `==`, `!=`,
  * > consider numeric values equal when they differ by less than `0.000001`. The `isEqual` function
- * > allows to compare values using different precision.
+ * > allows comparing values using different precision.
  */
 inline def isEqual(a, b, precision)
     abs(a - b) < precision;
 end;
 
 /**
- * Converts the value of `x` to zero if it was `null`. Uses single instruction for the conversion,
+ * Converts the value of `x` to zero if it was `null`. Uses a single instruction for the conversion,
  * and makes sure it won't be removed by the optimizer.
  */
 inline def nullToZero(x)
@@ -98,7 +98,7 @@ end;
 /**
  * Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
  * (`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
- * Uses single instruction for the conversion, and makes sure it won't be removed by the optimizer.
+ * Uses a single instruction for the conversion and makes sure it won't be removed by the optimizer.
  */
 inline def integer(x)
     var result;
@@ -142,8 +142,8 @@ end;
  *
  * - `from`: first value
  * - `to`: second value
- * - `ratio`: value in the range of 0 .. 1, 0 corresponds to `from`, 1 corresponds to `to`, fractional value
- *            corresponds to a point in between (2/3 to a point two-thirds of the way from `from` to `to`).
+ * - `ratio`: value in the range of `0 .. 1`, `0` corresponds to `from`, `1` corresponds to `to`, fractional value
+ *            corresponds to a point in between (`2/3` to a point two-thirds of the way from `from` to `to`).
  */
 inline def lerp(from, to, ratio)
     (1 - ratio) * from + ratio * to;
@@ -159,12 +159,12 @@ inline def median(x1, x2)
     (x1 + x2) / 2;
 end;
 
-/** Returns the median of three values . */
+/** Returns the median of three values. */
 inline def median(x1, x2, x3)
     min(max(x1, x2), max(x1, x3), max(x2, x3));
 end;
 
-/** Returns the median of four values . */
+/** Returns the median of four values. */
 def median(x1, x2, x3, x4)
     var y2 = max(x1, x2);
     var y3 = min(x3, x4);
@@ -206,7 +206,7 @@ end;
 
 /**
  * Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
- * and is fairly slow, because Mindcode doesn't support internal memory arrays yet.
+ * and is fairly slow as it doesn't modify the input array.
  *
  * @footprint Ten arguments in total:        *10
  * @footprint Fifteen arguments in total:    *15

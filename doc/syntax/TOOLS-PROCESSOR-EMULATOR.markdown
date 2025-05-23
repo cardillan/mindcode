@@ -1,6 +1,6 @@
 # Processor emulator
 
-Mindcode has a built-in processor emulator which allows to run the compiled code in a simulated environment. This emulator is available both to the web application and to the command-line tool. The emulated processor is much faster than Mindustry Logic processors; the speed of instruction executions is only limited by the speed of the computer.
+Mindcode has a built-in processor emulator which allows running the compiled code in a simulated environment. This emulator is available both to the web application and to the command-line tool. The emulated processor is much faster than Mindustry Logic processors; the speed of instruction executions is only limited by the speed of the computer.
 
 ## Linked blocks
 
@@ -17,7 +17,7 @@ At the beginning of the executions all the memory cells and memory banks are emp
 
 All operations that do not interact with the Mindustry World are supported. Operations which do interact with the Mindustry World are handled as described here:
 
-* Printing to the text buffer is fully supported and the text produced by the program is displayed when the execution ends.
+* Printing to the text buffer is fully supported, and the text produced by the program is displayed when the execution ends.
   * The size of the text buffer is limited to 10,000 characters.
   * The `format` instruction is fully supported. Only text produced since the last `printflush` instructions is available for formatting.  
   * When the contents of the text buffer encountered at the `printflush` instruction is the same as the content encountered at the previous `printflush` instruction, the text isn't written to the text buffer again, just the number of the text block repetitions is printed. 
@@ -28,7 +28,7 @@ All operations that do not interact with the Mindustry World are supported. Oper
   * `type`: returns the type of the object (e.g., `@memory-cell`)
   * `id`: returns the id of the object if it exists (e.g., `1` for `@lead`)
   * Accessing other properties isn't supported. 
-* The `wait` instruction isn't supported, specifically, it doesn't pause the execution of the program. 
+* The `wait` instruction isn't supported; specifically, it doesn't pause the execution of the program. 
 * All other instructions that do not set an output variable are silently ignored. For example, the `ucontrol move` instruction executes, but does nothing (there's no unit to send the command to in the emulated world).
 * Instructions which do set an output variable, such as `ulocate`, are not supported and, unless specifically configured, stop the execution of the program. Since the Mindustry World isn't simulated, it is not possible to set the values of output variables to some sensible value. 
 
@@ -36,7 +36,7 @@ All operations that do not interact with the Mindustry World are supported. Oper
 
 Except the `stop` instruction, Mindustry processors never stop executing a program. Upon encountering an instruction which cannot be executed, the instruction simply isn't executed. For example, when the `read` instruction tries to read from memory which doesn't exist, it skips the execution without changing the variable which would receive the value read from the memory.
 
-While mlog programs, and to a certain extent Mindcode programs, can sometimes put this mechanism to good use, in most cases such situations indicate a bug in the program. The processor emulator therefore, by default, stops when encountering an irregularity. It is, however, possible to set up the emulated processor to ignore the error and continue executing the program, just like the Mindustry processor would. This configuration is done through _execution flags_.       
+While mlog programs, and to a certain extent Mindcode programs, can sometimes put this mechanism to good use, in most cases such situations indicate a bug in the program. The processor emulator, therefore, by default, stops when encountering an irregularity. It is, however, possible to set up the emulated processor to ignore the error and continue executing the program, just like the Mindustry processor would. This configuration is done through _execution flags_.       
 
 ## Execution flags
 
@@ -72,7 +72,7 @@ The `err-uninitialized-var` and `err-text-buffer-overflow` flags are `false` by 
 
 The processor emulator provides two ways to inspect the internal state of the program.
 
-Firstly, the contents of all variables is written to the message log when the `stop` instruction is encountered. Therefore, it is possible to use the `stopProcessor()` function to output the values of all variables at some point in the program. To let the program continue after that, and possibly output the variable values using the `stopProcessor()` function repeatedly, the `stop-on-stop-instruction` flag must be set to false.
+Firstly, the content of all variables is written to the message log when the `stop` instruction is encountered. Therefore, it is possible to use the `stopProcessor()` function to output the values of all variables at some point in the program. To let the program continue after that, and possibly output the variable values using the `stopProcessor()` function repeatedly, the `stop-on-stop-instruction` flag must be set to false.
 
 Example of the variable dump:
 
@@ -96,7 +96,7 @@ stop instruction encountered, dumping variable values:
 :number: 1.00000008976
 ```
 
-Secondly, when the `trace-execution` flag is set, the instruction to be executed, followed by the values of all input variables, is printed to the message log at each step. The value of output variables is also printed after the instruction is executed. The size of the output produced by this mechanism can be quite sizeable, but it can be used to inspect the program flow in detail.
+Secondly, when the `trace-execution` flag is set, the instruction to be executed, followed by the values of all input variables, is printed to the message log at each step. The value of output variables is also printed after the instruction is executed. The size of the output produced by this mechanism can be quite sizable, but it can be used to inspect the program flow in detail.
 
 Example of the execution trace:
 

@@ -28,8 +28,8 @@ end;
 /**
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
- * Formats the number passed in as a parameter into the text buffer, using comma as thousands separator.
- * Fractional part of the number to be printed is ignored.
+ * Formats the number passed in as a parameter into the text buffer, using commas as thousand separators.
+ * The fractional part of the number to be printed is ignored.
  *
  * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
  * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -38,7 +38,7 @@ end;
  * Nulls are printed as 0.
  *
  * > [!TIP]
- * > While the functions is optimized for performance, formatting numbers is many times slower than just printing
+ * > While the function is optimized for performance, formatting numbers is many times slower than just printing
  * > them using the `print()` function.
  */
 void formatNumber(number)
@@ -61,8 +61,8 @@ end;
 /**
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
- * Prints the number passed in as a parameter into the text buffer, using comma as thousands separator.
- * Fractional part of the number to be printed is ignored.
+ * Prints the number passed in as a parameter into the text buffer, using commas as thousand separators.
+ * The fractional part of the number to be printed is ignored.
  *
  * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
  * The number will be printed at the end of the print buffer.
@@ -70,7 +70,7 @@ end;
  * Nulls are printed as 0.
  *
  * > [!TIP]
- * > While the functions is optimized for performance, formatting numbers is many times slower than just printing
+ * > While the function is optimized for performance, formatting numbers is many times slower than just printing
  * > them using the `print()` function.
  *
  * See also [`formatNumber`](#formatnumber)
@@ -83,8 +83,8 @@ end;
 /**
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
- * Formats the number passed in as a parameter into the text buffer in binary base, using given number of digits.
- * Fractional part of the number to be printed is ignored.
+ * Formats the number passed in as a parameter into the text buffer in binary base, outputting at least the given
+ * number of binary digits. The fractional part of the number to be printed is ignored.
  *
  * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
  * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -117,8 +117,8 @@ end;
 /**
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
- * Prints the number passed in as a parameter into the text buffer in binary base, using given number of digits.
- * Fractional part of the number to be printed is ignored.
+ * Prints the number passed in as a parameter into the text buffer in binary base, outputting at least the given
+ * number of binary digits. The fractional part of the number to be printed is ignored.
  *
  * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
  * The number will be printed at the end of the print buffer.
@@ -140,8 +140,8 @@ end;
 /**
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
- * Formats the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
- * Fractional part of the number to be printed is ignored.
+ * Formats the number passed in as a parameter into the text buffer in hexadecimal base, outputting at least the given
+ * number of hexadecimal digits. The fractional part of the number to be printed is ignored.
  *
  * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
  * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -183,8 +183,8 @@ end;
 /**
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
- * Prints the number passed in as a parameter into the text buffer in hexadecimal base, using given number of digits.
- * Fractional part of the number to be printed is ignored.
+ * Prints the number passed in as a parameter into the text buffer in hexadecimal base, outputting at least the given
+ * number of hexadecimal digits. The fractional part of the number to be printed is ignored.
  *
  * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
  * The number will be printed at the end of the print buffer.
@@ -210,7 +210,7 @@ end;
  * This variant of the function is optimized to produce faster, larger code.
  *
  * **Note:** When printing the exact representation of numbers that are close to integer value, the Mindustry Logic
- * `print` instruction cannot be used, as it would print the rounded value. In such case a custom printing routine
+ * `print` instruction cannot be used, as it would print the rounded value. In such a case a custom printing routine
  * is used, which can take around 50 steps to output the entire number.
  *
  * > [!TIP]
