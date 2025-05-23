@@ -8,7 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for declaring new keywords and built-in variables through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
+* Added support for declaring new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
 * Added support for constant arrays. Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.  
 
 ### Miscellaneous
@@ -77,7 +77,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
 * Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
   * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#range-check-elimination) compiler directive.
-  * Case expressions based on Mindustry content (e.g., items, block types and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
+  * Case expressions based on Mindustry content (e.g., items, block types, and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
   * Large jump tables containing a lot of unused values may be [compressed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) to save space.
 
 #### Experimental features
@@ -265,7 +265,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added support for [internal and external arrays/subarrays](doc/syntax/SYNTAX-1-VARIABLES.markdown#arrays) (closes [#213](https://github.com/cardillan/mindcode/issues/213)).
 * Added parallel iteration through arrays/lists in [list iteration loops](doc/syntax/SYNTAX-3-STATEMENTS.markdown#list-iteration-loops).   
-* Added support for the new `printchar` instruction in compiler, optimizer and processor emulator.
+* Added support for the new `printchar` instruction in compiler, optimizer, and processor emulator.
 * Added [character literals](doc/syntax/SYNTAX.markdown#character-literals) (e.g., `'A'`). The value of the literal is the ASCII value of the character in quotes.
 * Added the [`ascii()` function](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-ascii-function). The function returns the ASCII value of the first character of a string literal or constant.
 * Added the possibility to specify storage different from the heap when declaring external variables.  
@@ -543,7 +543,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for outputting the error messages by the command line tool in a format which allows IDEs to parse the position and navigate to the error location in the source code.
 * Added a variety of new optimizations to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). 
   * `op` instruction: many new optimizations when one of the two operands is known.
-  * `lookup` instruction: when possible, the instruction is replaced by a `set` instruction setting the item, liquid, building or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
+  * `lookup` instruction: when possible, the instruction is replaced by a `set` instruction setting the item, liquid, building, or unit directly to the target variable, allowing further optimizations to take place. Effective on `aggresive` optimization level.
 * Added warning messages when deprecated features are detected in the source code. 
 * Added support for creating constants from formattable string literals.
 * Added full support for the `sync()` function: a variable passed as an argument to this function becomes automatically volatile.
@@ -683,7 +683,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ### Added
 
 * Added support for specifying processor code (both Mindcode and mlog) as a concatenation of multiple code snippets
-  from various sources (string literal, string constant or external file). 
+  from various sources (string literal, string constant, or external file). 
 * Added new Mandelbrot Generator schematic example.
 
 ### Miscellaneous
@@ -726,7 +726,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 ### Miscellaneous
 
 * Schemacode compiler and decompiler now uses [mimex](https://github.com/cardillan/mimex)-generated metadata for 
-  lists of items, liquids and unit commands. All Mindcode object definitions are now loaded from extracted metadata 
+  lists of items, liquids, and unit commands. All Mindcode object definitions are now loaded from extracted metadata 
   and not from separate definitions, in Mindcode as well as in Schemacode.
 * The documentation of [Loop Hoisting](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-hoisting) optimization now uses 
   diff-style mlog code listings to demonstrate the effects of optimizations on emitted code. The goal is to 
@@ -772,7 +772,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
   [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization): 
   * Replacing `@this.x` and `@this.y` expressions by the `@thisx`/`@thisy` built-in constants.
   * Replacing `@constant.id` expressions by an integer value of the ID assigned to the `@constant`, assuming it is 
-    a known item, liquid, block type or unit type. This optimization is only active on `aggresive` optimization level. 
+    a known item, liquid, block type, or unit type. This optimization is only active on `aggresive` optimization level. 
     For example, `id = @graphite.id` gets compiled down to `set id 3`, allowing further optimizations on the 
     constant value (`3`) to take place. 
   * Replacing multiplication by literal zero by an instruction setting the target variable to a zero directly, and 
@@ -1204,7 +1204,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 
 * Added Schematics Builder tool with a new [Schemacode language](doc/syntax/SCHEMACODE.markdown).
 * Added new [command-line interface](doc/syntax/TOOLS-CMDLINE.markdown) for the Mindcode Compiler, Schematics 
-  Builder and Schematics Decompiler.
+  Builder, and Schematics Decompiler.
 * Added [Schematics Builder](http://mindcode.herokuapp.com/schematics) and
   [Schematics Decompiler](http://mindcode.herokuapp.com/decompiler) interface to the web application. 
 

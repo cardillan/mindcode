@@ -4482,6 +4482,7 @@ public class MindcodeParser extends Parser {
 	public static class AstKeywordOrBuiltinContext extends ParserRuleContext {
 		public TerminalNode KEYWORD() { return getToken(MindcodeParser.KEYWORD, 0); }
 		public TerminalNode BUILTINIDENTIFIER() { return getToken(MindcodeParser.BUILTINIDENTIFIER, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(MindcodeParser.IDENTIFIER, 0); }
 		public AstKeywordOrBuiltinContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -4510,7 +4511,7 @@ public class MindcodeParser extends Parser {
 			{
 			setState(516);
 			_la = _input.LA(1);
-			if ( !(_la==BUILTINIDENTIFIER || _la==KEYWORD) ) {
+			if ( !(((((_la - 101)) & ~0x3f) == 0 && ((1L << (_la - 101)) & 13L) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -6132,7 +6133,7 @@ public class MindcodeParser extends Parser {
 		"\u0016\u0016\u001b\u001b  \u0002\u0000\t\t\'\'\u0001\u0000ef\u0002\u0000"+
 		"\u0011\u0011%%\u0002\u0000CCFF\u0005\u00004488;;GGJJ\u0002\u0000DEHI\u0002"+
 		"\u0000GGJJ\u0001\u0000=>\u0001\u000056\u0001\u0000,/\u0002\u0000++02\u0002"+
-		"\u000077::\u0002\u000099<<\u0001\u0000LZ\u0001\u0000gh\u0002\u0000\u0013"+
+		"\u000077::\u0002\u000099<<\u0001\u0000LZ\u0002\u0000eegh\u0002\u0000\u0013"+
 		"\u0013##\u0331\u0000O\u0001\u0000\u0000\u0000\u0002W\u0001\u0000\u0000"+
 		"\u0000\u0004`\u0001\u0000\u0000\u0000\u0006i\u0001\u0000\u0000\u0000\b"+
 		"\u00f6\u0001\u0000\u0000\u0000\n\u00fa\u0001\u0000\u0000\u0000\f\u010c"+

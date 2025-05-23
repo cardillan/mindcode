@@ -51,6 +51,7 @@ public class ERR {
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
     public static final String DECLARE_BUILTIN_EXPECTED = "A custom built-in identifier is expected.";
     public static final String DECLARE_KEYWORD_EXPECTED = "A custom keyword is expected.";
+    public static final String DECLARE_BLOCK_NAME_EXPECTED = "A custom block name is expected.";
     public static final String DECLARE_UNKNOWN_CATEGORY = "Unknown keyword category '%s'.";
     public static final String DECLARE_UNSUPPORTED_CATEGORY = "Keyword category '%s' is not available in current language target.";
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";

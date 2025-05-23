@@ -218,6 +218,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstMindcodeNode visitAstKeywordOrBuiltin(AstKeywordOrBuiltinContext ctx) {
         if (ctx.KEYWORD() != null) return new AstKeyword(pos(ctx), ctx.KEYWORD().getText());
         if (ctx.BUILTINIDENTIFIER() != null) return new AstBuiltInIdentifier(pos(ctx), ctx.BUILTINIDENTIFIER().getText());
+        if (ctx.IDENTIFIER() != null) return new AstIdentifier(pos(ctx), ctx.IDENTIFIER().getText());
         throw new MindcodeInternalError("Unhandled or missing identifier");
     }
 

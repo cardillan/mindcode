@@ -546,10 +546,17 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     @Override
     public boolean isBlockName(String identifier) {
         if (blockNames == null) {
-            blockNames = BlockType.getBaseLinkNames(getMetadata());
+            blockNames = new HashSet<>(BlockType.getBaseLinkNames(getMetadata()));
         }
         Matcher matcher = BLOCK_NAME_PATTERN.matcher(identifier);
         return matcher.find() && blockNames.contains(matcher.group(1));
+    }
+
+    public void addBlockName(String identifier) {
+        if (blockNames == null) {
+            blockNames = new HashSet<>(BlockType.getBaseLinkNames(getMetadata()));
+        }
+        blockNames.add(identifier);
     }
 
     @Override

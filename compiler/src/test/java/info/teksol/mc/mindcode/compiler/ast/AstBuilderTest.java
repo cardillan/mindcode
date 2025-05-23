@@ -958,7 +958,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void buildsDeclareDirectiveTwoIdentifiers() {
+        void buildsDeclareDirectiveTwoKeywords() {
             assertBuildsTo("""
                             #declare category :keyword1, :keyword2;
                             """,
@@ -968,6 +968,23 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     List.of(
                                             new AstKeyword(EMPTY, ":keyword1"),
                                             new AstKeyword(EMPTY, ":keyword2")
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsDeclareDirectiveTwoIdentifiers() {
+            assertBuildsTo("""
+                            #declare category identifier1, identifier2;
+                            """,
+                    List.of(
+                            new AstDirectiveDeclare(EMPTY,
+                                    id("category"),
+                                    List.of(
+                                            new AstIdentifier(EMPTY, "identifier1"),
+                                            new AstIdentifier(EMPTY, "identifier2")
                                     )
                             )
                     )

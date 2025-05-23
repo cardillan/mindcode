@@ -47,6 +47,9 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     String nextFunctionPrefix(MindcodeFunction function);
     LogicVariable unusedVariable();
 
+    /// Adds a custom-defined block name value.
+    void addBlockName(String identifier);
+
     /// Adds a custom-defined builtin value.
     void addBuiltin(String name);
 

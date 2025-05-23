@@ -436,7 +436,9 @@ class MindcodeParserTest extends AbstractParserTest {
                     #declare category :keyword1, :keyword2;
                     #declare category @builtin;
                     #declare category @builtin1, @builtin2;
-                    #declare category :keyword, @builtin;
+                    #declare category identifier;
+                    #declare category identifier1, identifier2;
+                    #declare category :keyword, @builtin, identifier;
                     """);
         }
     }

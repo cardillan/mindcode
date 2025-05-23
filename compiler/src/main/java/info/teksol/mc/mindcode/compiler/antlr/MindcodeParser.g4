@@ -215,7 +215,7 @@ astDirectiveValue
     ;
 
 astKeywordOrBuiltin
-    : (KEYWORD | BUILTINIDENTIFIER)
+    : (KEYWORD | BUILTINIDENTIFIER | IDENTIFIER)
     ;
 
 astKeywordOrBuiltinList

@@ -18,7 +18,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void compilesCustomKeywordInFunctionCall() {
+        void compilesCustomBuiltin() {
             assertCompiles("""
                     #declare builtin @fluffy-bunny;
                     print(@fluffy-bunny);
@@ -26,10 +26,69 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesCustomKeywordInFunctionCall() {
+            assertCompiles("""
+                    #declare alignment :slightlyOffCenter;
+                    drawPrint(0, 0, :slightlyOffCenter);
+                    """);
+        }
+
+
+        @Test
+        void compilesCustomLinkedBLockName() {
+            assertCompiles("""
+                    #declare linkedBlock station;
+                    linked station1;
+                    """);
+        }
+
+        @Test
+        void reportsUnknownBuiltins() {
+            assertGeneratesMessage(
+                    "Built-in variable '@fluffy-bunny' not recognized.",
+                    "print(@fluffy-bunny);");
+        }
+
+        @Test
+        void reportsUnknownKeywords() {
+            assertGeneratesMessageRegex(
+                    "Invalid value 'slightlyOffCenter' for keyword parameter: allowed values are.*",
+                    "drawPrint(0, 0, :slightlyOffCenter);");
+        }
+
+        @Test
+        void reportsUnknownBlockNames() {
+            assertGeneratesMessage(
+                    "Linked variable name 'station1' doesn't correspond to any known linked block name.",
+                    "linked station1;");
+        }
+
+        @Test
         void reportsWrongBuiltins() {
             assertGeneratesMessage(
                     "A custom built-in identifier is expected.",
-                    "#declare builtin :fluffyBunny;");
+                    "#declare builtin fluffyBunny;");
+        }
+
+        @Test
+        void reportsWrongKeywords() {
+            assertGeneratesMessage(
+                    "A custom keyword is expected.",
+                    "#declare alignment @fluffy-bunny;");
+        }
+
+        @Test
+        void reportsWrongIdentifier() {
+            assertGeneratesMessage(
+                    "A custom block name is expected.",
+                    "#declare linkedBlock @fluffy-bunny;");
+        }
+
+        @Test
+        void reportsWrongCategory() {
+            assertGeneratesMessage(
+                    "Unknown keyword category 'fluffyBunny'.",
+                    "#declare fluffyBunny @humpty-dumpty;");
         }
     }
 

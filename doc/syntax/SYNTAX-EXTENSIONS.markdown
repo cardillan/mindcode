@@ -1,22 +1,23 @@
 # Extending Mindcode
 
-In addition to supporting all mlog features available in the Mindustry version selected by the [language target](SYNTAX-5-OTHER.markdown#option-target), Mindcode also provides way to encode mlog instructions which are not part of the Mindcode standard. This may come in handy in these situations:
+In addition to supporting all mlog features available in the Mindustry version selected by the [language target](SYNTAX-5-OTHER.markdown#option-target), Mindcode also provides a way to encode mlog instructions which are not part of the Mindcode standard. This may come in handy in these situations:
 
-1. You want to use nonstandard instructions, keywords or variables provided by a Mindustry mod or an alternate client.
-2. A new version of Mindustry (either an official release, or a bleeding edge version) creates new instructions not known to Mindcode.
+1. You want to use nonstandard instructions, keywords, blocks, or built-in variables provided by a Mindustry mod or an alternate client.
+2. A new version of Mindustry (either an official release or a bleeding-edge version) creates new instructions not known to Mindcode.
 3. An instruction was not implemented correctly in Mindcode and a fix is not yet available.
 
 Mindcode provides these options to extend its basic syntax:
 
 * declaring new mlog keywords (function keywords),
 * declaring new builtin variables,
+* declaring new linked block names,
 * defining new mlog instructions.
 
 ## Declaring new mlog keywords
 
-[Mlog keywords](SYNTAX.markdown#mlog-keywords) are used as arguments in some mlog instructions. The instructions only accept a limited set of keywords, and those keywords cannot be stored in variables, they need to be used explicitly with the instruction. Using a keyword not defined for the given instruction argument by mlog standard is not supported and leads to compilation errors.
+[Mlog keywords](SYNTAX.markdown#mlog-keywords) are used as arguments in some mlog instructions. The instructions only accept a limited set of keywords, and those keywords cannot be stored in variables; they need to be used explicitly with the instruction. Using a keyword not defined for the given instruction argument by mlog standard is not supported and leads to compilation errors.
 
-While mods probably cannot specify a new keyword, a custom Mindustry client could. In this csase, it is possible to declare the new keyword. A category into which the new keyword belongs must be specified. This category informs Mindcode which instruction/parameter accepts the new keyword. These keyword categories are supported:
+While mods probably cannot specify a new keyword, a custom Mindustry client could. In this case, it is possible to declare the new keyword. A category into which the new keyword belongs must be specified. The category tells Mindcode which instruction/parameter accepts the new keyword. These keyword categories are supported:
 
 | Category          | Meaning                                                           |
 |-------------------|-------------------------------------------------------------------|
@@ -36,7 +37,7 @@ Keywords are declared using `#declare` statement:
 #declare <category> keyword [, keyword ... ];
 ```
 
-Example: if the `draw print` instruction was extended to accept an additional alignments, the new keywords could be declared like this:
+Example: if the `draw print` instruction was extended to accept additional alignments, the new keywords could be declared like this:
 
 ```Mindcode
 #set target = 8;
@@ -53,7 +54,7 @@ draw print 30 40 baselineBottom 0 0 0
 
 ## Declaring new built-in variables
 
-While Mindcode doesn't limit where and how are built-in variables used, it emits a warning when it encounters an unknown built-in variable, to help identify typos and mistakes. If a built-in variable unknown to Mindcode is actually valid (e.g., provided by a mod), it is possible to declare such a built-in variable as valid, which suppresses the warning. To declare a built-in variable, use the `#declare` command with a `builtin` category. No warning is then emitted when using the built-in:
+While Mindcode doesn't limit where and how built-in variables are used, it emits a warning when it encounters an unknown built-in variable to help identify typos and mistakes. If a built-in variable unknown to Mindcode is actually valid (e.g., provided by a mod), it is possible to declare such a built-in variable as valid, which suppresses the warning. To declare a built-in variable, use the `#declare` command with a `builtin` category. No warning is then emitted when using the built-in:
 
 ```Mindcode
 // Say we have a mod that creates a new `@dark-matter` item:
@@ -67,6 +68,23 @@ sorter1.config = @dark-matter;
 control config sorter1 @dark-matter 0 0 0
 ```
 
+## Declaring new linked block names
+
+Mindcode handles identifiers that may represent a linked block specifically. When a mod adds a new type of block, it would need to be explicitly declared at all times, and even then warnings about unknown block names are generated. It is again possible to declare new block names, which instructs Mindcode to handle them identically to known block names. To declare a new block name, use the `#declare` command with a `linkedBlock` category:
+
+```Mindcode
+// Say we have a mod that creates a new `organic-fridge` block.
+// Such a block would be linked under a `fridge1` or a similar name
+#declare linkedBlock fridge;
+
+// We can now use `fridge1` as a linked block:
+fridge1.enabled = false;
+```
+
+```mlog
+control enabled fridge1 false 0 0 0
+```
+
 ## Defining new mlog instructions
 
 Mindcode provides a mechanism of encoding entire instructions not known to Mindcode. Custom instructions may interact with Mindustry World or provide information about Mindustry World.
@@ -77,8 +95,8 @@ Mindcode provides a mechanism of encoding entire instructions not known to Mindc
 Custom instructions are created using one of these functions:
 
 * `mlog()`: creates a standard instruction. Mindcode assumes the instruction has some effect on the Mindustry world and will not remove the instruction during optimizations.  
-* `mlogSafe()`: creates an instruction which doesn't have an effect on the Mindustry world (for example, `set`, `packcolor` or `sensor` are such instructions). Mindcode may remove the instruction if the value(s) it produces are not used by the rest of the program.   
-* `mlogText()`: creates an instruction which manipulates the text buffer. Mindcode never removes the instruction, and furthermore handles it correctly during Print Merging optimizations.
+* `mlogSafe()`: creates an instruction which doesn't affect the Mindustry world (for example, `set`, `packcolor` or `sensor` are such instructions). Mindcode may remove the instruction if the value or values it produces are not used by the rest of the program.   
+* `mlogText()`: creates an instruction which manipulates the text buffer. Mindcode never removes the instruction, and furthermore, handles it correctly during Print Merging optimizations.
 
 Each of these functions takes the following arguments:
 
@@ -90,15 +108,15 @@ Each of these functions takes the following arguments:
     * When the `in` modifier is used, the string literal will be used as an argument including the enclosing double quotes.
   * Numeric literal: all other literals must not be marked with either modifier. The primary use for numeric literals is to provide fill-in values (typically zeroes) for unused instruction parameters.
   * User variable: the variable is used as an instruction argument. The argument must use the `in` and/or `out` modifier to inform Mindcode how the corresponding instruction argument behaves:
-    * `in`: the argument represents an input value - the instruction reads and uses the value of the variable.
-    * `out`: the argument represents an output value - the instruction produces a value and stores it in the variable.
-    * `in out`: the argument represents an input/output value - the instruction both reads and uses the input value, and then updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
+    * `in`: the argument represents an input value—the instruction reads and uses the value of the variable.
+    * `out`: the argument represents an output value—the instruction produces a value and stores it in the variable.
+    * `in out`: the argument represents an input/output value—the instruction both reads and uses the input value, and then updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
 
 > [!TIP]
 > Keywords can be encoded either using the Mindcode keyword syntax (e.g., `:keyword`), or as a string literal (`"keyword"`). Only if the keyword contains characters unsupported by Mindcode syntax, it can only be encoded as a string literal (e.g., `"unsupported:keyword"`). This is the only way to encode such a keyword to mlog.  
 
 > [!TIP]
-> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom generated instruction. This way, the requirement that the `mlog()` functions always use user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function - see the examples below. Furthermore, it is possible to use keywords as function arguments to inline functions.
+> Although not strictly required, it is recommended to create an inline function with proper input/output parameters for each custom-generated instruction. This way, the requirement that the `mlog()` functions always use user variables as arguments can be easily met, while allowing to use expressions for input parameters in the call to the enclosing function—see the examples below. Furthermore, it is possible to use keywords as function arguments to inline functions.
  
 For better understanding, the creation of custom instructions will be demonstrated on existing instructions. 
 
@@ -161,7 +179,7 @@ Considerations:
 
 ### The `ucontrol getBlock` instruction
 
-The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction which doesn't modify the Mindustry World and therefore is safe. Had it not be known by Mindcode, it could be defined like this:
+The `ucontrol getBlock` instruction is an example of instruction which has output parameters. Also, we know it is an instruction that doesn't modify the Mindustry World and therefore is safe. Had it not been known by Mindcode, it could be defined like this:
 
 ```Mindcode
 // Using 'getBlock2' as a name to avoid clashing with the existing function name

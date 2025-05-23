@@ -110,6 +110,14 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         KeywordCategory category = KeywordCategory.byName(categoryName);
         if (category == null) {
             error(directive.getCategory(), ERR.DECLARE_UNKNOWN_CATEGORY, categoryName);
+        } else if (category == KeywordCategory.linkedBlock) {
+            for (AstMindcodeNode element : directive.getElements()) {
+                if (element instanceof AstIdentifier identifier) {
+                    processor.addBlockName(identifier.getName());
+                } else {
+                    error(element, ERR.DECLARE_BLOCK_NAME_EXPECTED);
+                }
+            }
         } else if (category == KeywordCategory.builtin) {
             for (AstMindcodeNode element : directive.getElements()) {
                 if (element instanceof AstBuiltInIdentifier builtIn) {
