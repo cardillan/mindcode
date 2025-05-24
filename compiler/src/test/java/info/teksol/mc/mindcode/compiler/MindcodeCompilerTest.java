@@ -194,4 +194,28 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
                 def c(z) print(z); end;
                 """);
     }
+
+    @Test
+    public void compilesFunctionsWithoutParametersNoCrash() {
+        assertGeneratesMessages(
+                expectedMessages()
+                        .addRegex("Function '.*': wrong number of arguments.*").ignored()
+                        .addRegex("Not enough arguments to the '.*' function.*").ignored(),
+                """
+                        cutscene();
+                        effect();
+                        explosion();
+                        fetch();
+                        format();
+                        message();
+                        playsound();
+                        printchar();
+                        setblock();
+                        setmarker();
+                        setrule();
+                        sync();
+                        ulocate();
+                        ubind();
+                        """);
+    }
 }

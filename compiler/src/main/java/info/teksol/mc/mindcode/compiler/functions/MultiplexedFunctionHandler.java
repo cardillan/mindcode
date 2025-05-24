@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
@@ -29,6 +30,11 @@ class MultiplexedFunctionHandler extends AbstractHandler implements FunctionHand
 
     @Override
     public ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
+        if (arguments.isEmpty()) {
+            error(call, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS, call.getFunctionName(), 1, 0);
+            return LogicNull.NULL;
+        }
+
         String keyword = validateKeyword(namedParameter, arguments.getFirst(), false).getKeyword();
         if (keyword.isEmpty()) {
             // Keyword was not recognized and the error has already been reported

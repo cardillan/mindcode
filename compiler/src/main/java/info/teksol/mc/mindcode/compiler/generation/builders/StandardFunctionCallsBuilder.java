@@ -52,7 +52,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             // There are user functions exactly matching the call. Process them.
             return processMatchedCalls(call, arguments, target, exactMatches, async);
         } else {
-            // No exact non-library match. Try built-in function, and if it fails, evaluate possible loose matches
+            // No exact non-library match. Try a built-in function, and if it fails, evaluate possible loose matches
             if (call.getArguments().stream().noneMatch(AstFunctionArgument::isReference)) {
                 ValueStore result = target == null
                         ? functionMapper.handleFunction(call, arguments)

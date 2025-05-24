@@ -230,7 +230,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         LogicValue result = hasResult ? functionMapper.processor.nextTemp() : LogicVoid.VOID;
         CodeAssembler assembler = assembler();
 
-        // List of instruction arguments, must accommodate LogicKeywords
+        // List of instruction arguments; must accommodate LogicKeywords
         List<LogicArgument> ixArgs = new ArrayList<>();
         List<FunctionArgument> outputs = new ArrayList<>();
         int argIndex = 0;
@@ -238,7 +238,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         for (NamedParameter p : opcodeVariant.namedParameters()) {
             // Function call was validated, meaning all mandatory parameters have corresponding arguments
 
-            if (p.type().isGlobal() && !isGlobalVariable(arguments.get(argIndex))) {
+            if (p.type().isGlobal() && argIndex < arguments.size() && !isGlobalVariable(arguments.get(argIndex))) {
                 error(arguments.get(argIndex).sourcePosition(), ERR.ARGUMENT_GLOBAL_VARIABLE_REQUIRED, name);
                 ixArgs.add(LogicVariable.INVALID);
             } else if (p.type() == InstructionParameterType.RESULT) {

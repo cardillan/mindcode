@@ -198,6 +198,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
                 if (processorVersion.ordinal() >= ProcessorVersion.V8A.ordinal()) {
                     return new MessageFunctionHandler(this, opcode.toString(), opcodeVariant);
                 }
+                break;
         }
 
         List<NamedParameter> arguments = opcodeVariant.namedParameters();
@@ -214,14 +215,14 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
             throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
         }
 
-        // Number of function parameters: selectors and results are not in parameter list
+        // Number of function parameters: selectors and results are not in the parameter list
         int numArgs = arguments.size() - results - (selector == null ? 0 : 1) - unused;
 
         // Optional parameters are output arguments at the end of the argument list
         int optional = 0;
         for (int i = arguments.size() - 1; i >= 0; i--) {
             InstructionParameterType type = arguments.get(i).type();
-            if (!type.isOutput() && !type.isUnused()) {
+            if (type.isInput() || !type.isOutput() && !type.isUnused()) {
                 break;
             }
             // Result and unused do not count, as they're not in the parameter list.

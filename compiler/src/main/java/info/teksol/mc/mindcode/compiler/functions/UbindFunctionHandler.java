@@ -20,10 +20,11 @@ class UbindFunctionHandler extends AbstractHandler implements FunctionHandler {
 
     @Override
     public ValueStore handleFunction(AstFunctionCall call, List<FunctionArgument> arguments) {
-        validateArguments(call, arguments);
-        assembler().createInstruction(Opcode.UBIND, validateInput(
-                        opcodeVariant.namedParameters().getFirst(),
-                        arguments.getFirst()).getValue(assembler()));
+        if (validateArguments(call, arguments)) {
+            assembler().createInstruction(Opcode.UBIND, validateInput(
+                    opcodeVariant.namedParameters().getFirst(),
+                    arguments.getFirst()).getValue(assembler()));
+        }
         return LogicBuiltIn.UNIT;
     }
 
