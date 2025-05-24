@@ -128,13 +128,10 @@ class CaseSwitcher extends BaseOptimizer {
         result.removeIf(segment -> segment.type() == SegmentType.SINGLE && segment.majorityLabel() == LogicLabel.EMPTY);
         result.sort(null);
 
-        if (DEBUG) {
-            //System.out.println("Singular segments: \n" + singularSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
-            System.out.println("Merged segments: \n" + mergedSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
-            System.out.println("Result: \n" + result.stream().map(Object::toString).collect(Collectors.joining("\n")));
-            System.out.println();
-            System.out.println();
-        }
+        //dbg("Singular segments: \n" + singularSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
+        dbg("Merged segments: \n" + mergedSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
+        dbg("Result: \n" + result.stream().map(Object::toString).collect(Collectors.joining("\n")));
+        dbg("\n");
 
         return result;
     }
@@ -239,9 +236,7 @@ class CaseSwitcher extends BaseOptimizer {
 
         if (zeroTarget != null) targets.put(0, zeroTarget);
 
-        if (DEBUG) {
-            System.out.println("Singular segments: \n" + segments.stream().map(Object::toString).collect(Collectors.joining("\n")));
-        }
+        dbg("Singular segments: \n" + segments.stream().map(Object::toString).collect(Collectors.joining("\n")));
 
         List<ConvertCaseExpressionAction> actions = new ArrayList<>();
         ConvertCaseExpressionAction action = createOptimizationActions(actions, costLimit, context, removed, variable, targets,
@@ -293,6 +288,10 @@ class CaseSwitcher extends BaseOptimizer {
         return action;
     }
 
+    private static void dbg(Object message) {
+        if (DEBUG) System.out.println(message);
+    }
+
     private class ConvertCaseExpressionAction implements OptimizationAction {
         private final AstContext astContext;
         private final int group = groupCount;
@@ -317,7 +316,7 @@ class CaseSwitcher extends BaseOptimizer {
             this.logicConversion = contentType != ContentType.UNKNOWN;
             this.removeRangeCheck = removeRangeCheck;
             this.padToZero = padToZero;
-            debug("\n\n *** " + this + " *** \n");
+            dbg("\n\n *** " + this + " *** \n");
             if (removeRangeCheck) {
                 computeCostAndBenefitNoRangeCheck(removed);
             } else {
@@ -348,10 +347,6 @@ class CaseSwitcher extends BaseOptimizer {
         @Override
         public @Nullable String getGroup() {
             return "CaseSwitcher" + group;
-        }
-
-        private void debug(Object message) {
-            if (DEBUG) System.out.println(message);
         }
 
         @Override
@@ -389,8 +384,8 @@ class CaseSwitcher extends BaseOptimizer {
             cost = contentCost - removed;
             executionSteps = contentCost;
 
-            debug(this);
-            debug("Case expression initialization: instructions: " + contentCost
+            dbg(this);
+            dbg("Case expression initialization: instructions: " + contentCost
                     + ", average steps: " + contentCost + ", total steps: " + contentCost * targets.size());
 
             int lastTo = Integer.MIN_VALUE;
@@ -402,16 +397,16 @@ class CaseSwitcher extends BaseOptimizer {
             // Account for null handling: an instruction per zero value
             if (logicConversion && targets.hasZeroKey()) {
                 double nullHandling = 1.0 / targets.size();
-                debug("Null handling: instructions: " + 1 + ", average steps: " + nullHandling + ", total steps: " + 1);
+                dbg("Null handling: instructions: " + 1 + ", average steps: " + nullHandling + ", total steps: " + 1);
                 executionSteps += nullHandling;
                 cost++;
             }
 
             double originalSteps = (removed + 1) / 2.0;
-            debug("Original steps: " + originalSteps + ", new steps: " + executionSteps);
-            debug("Original size: " + removed + ", new size: " + (cost + removed) + ", cost: " + cost);
-            if (zeroPadded) debug("*** ZERO PADDED ***");
-            debug("");
+            dbg("Original steps: " + originalSteps + ", new steps: " + executionSteps);
+            dbg("Original size: " + removed + ", new size: " + (cost + removed) + ", cost: " + cost);
+            if (zeroPadded) dbg("*** ZERO PADDED ***");
+            dbg("");
             benefit = (originalSteps - executionSteps) * astContext.totalWeight();
         }
 
@@ -435,7 +430,7 @@ class CaseSwitcher extends BaseOptimizer {
             };
 
             double additionalSteps = (segmentStats.steps + remainingSteps) / allTargets;
-            debug("Segment " + segment.from() + " to " + segment.to() + ": " + segment.type() + ", instructions: " + segmentStats.size
+            dbg("Segment " + segment.from() + " to " + segment.to() + ": " + segment.type() + ", instructions: " + segmentStats.size
                     + ", average steps: " + additionalSteps + ", total steps: " + additionalSteps * allTargets);
 
             cost += segmentStats.size;
@@ -465,19 +460,19 @@ class CaseSwitcher extends BaseOptimizer {
 
             if (segment.from() == lastTo || segment.size() == 1) {
                 if (segment.from() == lastTo) {
-                    // This segment immediately follows last one
+                    // This segment immediately follows the last one
                     // We know values smaller than segment.to() cannot appear here
 
                     // All values in this segment lead to target (regardless of size)
-                    // We jump to target if value is smaller than segment.to()
+                    // We jump to target if the value is smaller than segment.to()
                     insertInstruction(createJump(newAstContext, target, Condition.LESS_THAN, caseVariable, LogicNumber.create(segment.to())));
                 } else {
                     // segment.size() == 1
-                    // This segment matches just the value of segment.from(). Null/zero are distinguished in zero branch.
+                    // This segment matches just the value of segment.from(). Null/zero are distinguished in the zero branch.
                     insertInstruction(createJump(newAstContext, target, Condition.EQUAL, caseVariable, LogicNumber.create(segment.from())));
                 }
 
-                // For last segment jump to else branch, otherwise fallthrough to the next segment
+                // When in the last segment, jump to the else branch, otherwise fallthrough to the next segment
                 if (nextSegmentLabel == finalLabel) {
                     insertInstruction(createJumpUnconditional(newAstContext, finalLabel));
                 }
@@ -707,7 +702,7 @@ class CaseSwitcher extends BaseOptimizer {
 
             int lastTo = Integer.MIN_VALUE;
             for (Segment segment : segments) {
-                debug("Optimizing segment " + segment + ", size: " + segment.size() + ", targets: " + targets.subMap(segment.from(), segment.to()).size());
+                dbg("Optimizing segment " + segment + ", size: " + segment.size() + ", targets: " + targets.subMap(segment.from(), segment.to()).size());
 
                 boolean last = segment == segments.getLast();
                 LogicLabel nextSegmentLabel = last ? finalLabel : instructionProcessor.nextLabel();

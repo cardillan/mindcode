@@ -91,5 +91,5 @@ draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
 jump 93 always 0 0
 stop
-draw scale 2.2 2.2 0 0 0 0
-draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
+draw scale 2.225 2.225 0 0 0 0
+draw scale 0.47954545454545455 0.47954545454545455 0 0 0 0

@@ -225,7 +225,7 @@ end;
   * over the entire area of a large display.
   */
 inline void scaleSmallToLarge()
-    scale(DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL, DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL);
+    scaleDisplay(DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL, DISPLAY_SIZE_LARGE / DISPLAY_SIZE_SMALL);
 end;
 
 /**
@@ -233,5 +233,16 @@ end;
   * over the entire area of a small display.
   */
 inline void scaleLargeToSmall()
-    scale(DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE, DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE);
+    scaleDisplay(DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE, DISPLAY_SIZE_SMALL / DISPLAY_SIZE_LARGE);
+end;
+
+/**
+  * Applies scaling to the graphic output, trying to minimize rounding error caused by Mindustry Logic
+  * storing the scale parameters with a precision of 10 bits, and a scale of 0.05.
+  *
+  * Both `x` and `y` are increased by `1 / 40` (`0.025`), to compensate for the processor truncating the
+  * value of either parameter after dividing it by `1 / 20` (`0.05`).
+  */
+inline void scaleDisplay(x, y)
+    scale(x + 1 / 40, y + 1 / 40);
 end;

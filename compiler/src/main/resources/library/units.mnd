@@ -6,6 +6,15 @@
 module units;
 
 /**
+ * Determines whether the current unit is within a given radius from a given point.
+ * Unlike the built-in `within()` function, this function doesn't get the control of the unit to make the test
+ * but is slower. If you already control the current unit, use `within()` instead.
+ */
+def noControlWithin(x, y, radius)
+    len(x - @unit.@x, y - @unit.@y) < radius;
+end;
+
+/**
  * Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
  * If no free unit of the given type can be found (either because none exists or because all existing units are occupied),
  * the function returns immediately.

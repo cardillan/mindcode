@@ -9,7 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added support for declaring new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
-* Added support for constant arrays. Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.  
+* Added support for constant arrays. Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.
+* Added the `scaleDisplay` function to the `graphics` system library. The function compensates for rounding errors in Mindustry Logic `draw scale` instruction. 
+* Added the `noControlWithin` function to the `units` system library. The function determines whether the current unit lies within a given radius without taking control of the unit.
+
+### Changed
+
+* Updated the `scaleSmallToLarge` and `scaleLargeToSmall` to compensate for rounding errors in Mindustry Logic `draw scale` instruction.
 
 ### Miscellaneous
 

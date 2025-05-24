@@ -5,12 +5,12 @@ jump 3 equal display4 null
 jump 4 equal display5 null
 set :displaySize:display display1
 set :displaySize*retaddr 8
-jump 147 always 0 0
+jump 155 always 0 0
 set *tmp0 :displaySize*retval
 assertequals 176 *tmp0 "large display size"
 set :displaySize:display display5
 set :displaySize*retaddr 13
-jump 147 always 0 0
+jump 155 always 0 0
 set *tmp1 :displaySize*retval
 assertequals 80 *tmp1 "small display size"
 set :x %336699cc
@@ -142,22 +142,30 @@ set *tmp23 null
 jump 144 always 0 0
 stop
 set *tmp23 null
-draw scale 2.2 2.2 0 0 0 0
-draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
+set :scaleDisplay:x 2.2
+set :scaleDisplay:y 2.2
+op add *tmp26 :scaleDisplay:x 0.025
+op add *tmp27 :scaleDisplay:y 0.025
+draw scale *tmp26 *tmp27 0 0 0 0
+set :scaleDisplay.1:x 0.45454545454545453
+set :scaleDisplay.1:y 0.45454545454545453
+op add *tmp28 :scaleDisplay.1:x 0.025
+op add *tmp29 :scaleDisplay.1:y 0.025
+draw scale *tmp28 *tmp29 0 0 0 0
 end
-sensor *tmp26 :displaySize:display @type
-set :displaySize:type *tmp26
-op equal *tmp27 :displaySize:type @logic-display
-jump 153 equal *tmp27 false
-set *tmp28 80
-jump 159 always 0 0
-op equal *tmp29 :displaySize:type @large-logic-display
-jump 157 equal *tmp29 false
-set *tmp30 176
-jump 158 always 0 0
-set *tmp30 null
-set *tmp28 *tmp30
-set :displaySize*retval *tmp28
+sensor *tmp30 :displaySize:display @type
+set :displaySize:type *tmp30
+op equal *tmp31 :displaySize:type @logic-display
+jump 161 equal *tmp31 false
+set *tmp32 80
+jump 167 always 0 0
+op equal *tmp33 :displaySize:type @large-logic-display
+jump 165 equal *tmp33 false
+set *tmp34 176
+jump 166 always 0 0
+set *tmp34 null
+set *tmp32 *tmp34
+set :displaySize*retval *tmp32
 set @counter :displaySize*retaddr
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

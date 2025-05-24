@@ -5,10 +5,12 @@ begin
     var initial_flag = null;
     var message = null;
     var preface = null;
+    var radius = null;
     var unit_type = null;
     var x = null;
     var y = null;
 
+    println(noControlWithin(x, y, radius));
     println(findFreeUnit(unit_type, initial_flag));
     println(findClosestUnit(x, y, unit_type, initial_flag));
     println(waitForFreeUnit(unit_type, initial_flag));

@@ -4,214 +4,228 @@ Final code before resolving virtual instructions:
     0:  set :initial_flag null
     1:  set :message null
     2:  set :preface null
-    3:  set :unit_type null
-    4:  set :x null
-    5:  set :y null
-    6:  set :findFreeUnit:unit_type :unit_type
-    7:  set :findFreeUnit:initial_flag :initial_flag
-    8:  ubind :findFreeUnit:unit_type
-    9:  op equal *tmp1 @unit null
-   10:  jump *label1 equal *tmp1 false
-   11:  set *tmp0 null
-   12:  jump *label0 always 0 0
-   13:  set *tmp2 null
-   14:  jump *label2 always 0 0
-        label *label1
-   15:  set *tmp2 null
-        label *label2
-   16:  set :findFreeUnit:first_unit @unit
-        label *label3
-   17:  sensor *tmp3 @unit @controlled
-   18:  op equal *tmp4 *tmp3 0
-   19:  jump *label6 equal *tmp4 false
-   20:  ucontrol flag :findFreeUnit:initial_flag 0 0 0 0
-   21:  set *tmp0 @unit
-   22:  jump *label0 always 0 0
-   23:  set *tmp5 null
-   24:  jump *label7 always 0 0
-        label *label6
-   25:  sensor *tmp6 :findFreeUnit:first_unit @dead
-   26:  op equal *tmp7 *tmp6 1
-   27:  jump *label8 equal *tmp7 false
-   28:  set *tmp9 @unit
-   29:  set :findFreeUnit:first_unit *tmp9
-   30:  set *tmp8 :findFreeUnit:first_unit
-   31:  jump *label9 always 0 0
-        label *label8
-   32:  set *tmp8 null
-        label *label9
-   33:  set *tmp5 *tmp8
-        label *label7
-   34:  ubind :findFreeUnit:unit_type
-        label *label4
-   35:  op notEqual *tmp10 :findFreeUnit:first_unit @unit
-   36:  jump *label3 notEqual *tmp10 false
-        label *label5
-   37:  set *tmp0 null
-   38:  jump *label0 always 0 0
-   39:  set *tmp0 null
+    3:  set :radius null
+    4:  set :unit_type null
+    5:  set :x null
+    6:  set :y null
+    7:  set :noControlWithin:x :x
+    8:  set :noControlWithin:y :y
+    9:  set :noControlWithin:radius :radius
+   10:  sensor *tmp1 @unit @x
+   11:  op sub *tmp2 :noControlWithin:x *tmp1
+   12:  sensor *tmp3 @unit @y
+   13:  op sub *tmp4 :noControlWithin:y *tmp3
+   14:  op len *tmp5 *tmp2 *tmp4
+   15:  op lessThan *tmp6 *tmp5 :noControlWithin:radius
+   16:  set *tmp0 *tmp6
         label *label0
-   40:  print *tmp0
-   41:  print "\n"
-   42:  set :findClosestUnit:x :x
-   43:  set :findClosestUnit:y :y
-   44:  set :findClosestUnit:unit_type :unit_type
-   45:  set :findClosestUnit:initial_flag :initial_flag
-        label *label11
-   46:  jump *label13 equal true false
-   47:  ubind :findClosestUnit:unit_type
-   48:  op equal *tmp12 @unit null
-   49:  jump *label14 equal *tmp12 false
-   50:  set *tmp11 null
-   51:  jump *label10 always 0 0
-   52:  set *tmp13 null
-   53:  jump *label15 always 0 0
-        label *label14
-   54:  set *tmp13 null
-        label *label15
-   55:  set :findClosestUnit:first_unit @unit
-   56:  set :findClosestUnit:best_unit null
-   57:  set :findClosestUnit:best_distance 10000000000
-        label *label16
-   58:  sensor *tmp14 @unit @controlled
-   59:  op equal *tmp15 *tmp14 0
-   60:  jump *label19 equal *tmp15 false
-   61:  sensor *tmp17 @unit @x
-   62:  op sub *tmp18 *tmp17 :findClosestUnit:x
-   63:  sensor *tmp19 @unit @y
-   64:  op sub *tmp20 *tmp19 :findClosestUnit:y
-   65:  op len *tmp21 *tmp18 *tmp20
-   66:  set :findClosestUnit:distance *tmp21
-   67:  op lessThan *tmp22 :findClosestUnit:distance :findClosestUnit:best_distance
-   68:  jump *label21 equal *tmp22 false
-   69:  set :findClosestUnit:best_distance :findClosestUnit:distance
-   70:  set *tmp24 @unit
-   71:  set :findClosestUnit:best_unit *tmp24
-   72:  set *tmp23 :findClosestUnit:best_unit
-   73:  jump *label22 always 0 0
-        label *label21
-   74:  set *tmp23 null
-        label *label22
-   75:  set *tmp16 *tmp23
-   76:  jump *label20 always 0 0
-        label *label19
-   77:  sensor *tmp25 :findClosestUnit:first_unit @dead
-   78:  op equal *tmp26 *tmp25 1
-   79:  jump *label23 equal *tmp26 false
-   80:  set *tmp28 @unit
-   81:  set :findClosestUnit:first_unit *tmp28
-   82:  set *tmp27 :findClosestUnit:first_unit
-   83:  jump *label24 always 0 0
-        label *label23
-   84:  set *tmp27 null
-        label *label24
-   85:  set *tmp16 *tmp27
-        label *label20
-   86:  ubind :findClosestUnit:unit_type
-        label *label17
-   87:  op notEqual *tmp29 :findClosestUnit:first_unit @unit
-   88:  jump *label16 notEqual *tmp29 false
-        label *label18
-   89:  op equal *tmp30 :findClosestUnit:best_unit null
-   90:  jump *label25 equal *tmp30 false
-   91:  set *tmp11 null
-   92:  jump *label10 always 0 0
-   93:  set *tmp31 null
-   94:  jump *label26 always 0 0
-        label *label25
-   95:  set *tmp31 null
-        label *label26
-   96:  sensor *tmp32 :findClosestUnit:best_unit @controlled
-   97:  op equal *tmp33 *tmp32 0
-   98:  jump *label27 equal *tmp33 false
-   99:  ubind :findClosestUnit:best_unit
-  100:  ucontrol flag :findClosestUnit:initial_flag 0 0 0 0
-  101:  set *tmp11 :findClosestUnit:best_unit
-  102:  jump *label10 always 0 0
-  103:  set *tmp34 null
-  104:  jump *label28 always 0 0
-        label *label27
-  105:  set *tmp34 null
-        label *label28
-        label *label12
-  106:  jump *label11 always 0 0
-        label *label13
-  107:  set *tmp11 null
+   17:  print *tmp0
+   18:  print "\n"
+   19:  set :findFreeUnit:unit_type :unit_type
+   20:  set :findFreeUnit:initial_flag :initial_flag
+   21:  ubind :findFreeUnit:unit_type
+   22:  op equal *tmp8 @unit null
+   23:  jump *label2 equal *tmp8 false
+   24:  set *tmp7 null
+   25:  jump *label1 always 0 0
+   26:  set *tmp9 null
+   27:  jump *label3 always 0 0
+        label *label2
+   28:  set *tmp9 null
+        label *label3
+   29:  set :findFreeUnit:first_unit @unit
+        label *label4
+   30:  sensor *tmp10 @unit @controlled
+   31:  op equal *tmp11 *tmp10 0
+   32:  jump *label7 equal *tmp11 false
+   33:  ucontrol flag :findFreeUnit:initial_flag 0 0 0 0
+   34:  set *tmp7 @unit
+   35:  jump *label1 always 0 0
+   36:  set *tmp12 null
+   37:  jump *label8 always 0 0
+        label *label7
+   38:  sensor *tmp13 :findFreeUnit:first_unit @dead
+   39:  op equal *tmp14 *tmp13 1
+   40:  jump *label9 equal *tmp14 false
+   41:  set *tmp16 @unit
+   42:  set :findFreeUnit:first_unit *tmp16
+   43:  set *tmp15 :findFreeUnit:first_unit
+   44:  jump *label10 always 0 0
+        label *label9
+   45:  set *tmp15 null
         label *label10
-  108:  print *tmp11
-  109:  print "\n"
-  110:  set :waitForFreeUnit:unit_type :unit_type
-  111:  set :waitForFreeUnit:initial_flag :initial_flag
-        label *label30
-  112:  jump *label32 equal true false
-  113:  ubind :waitForFreeUnit:unit_type
-  114:  op notEqual *tmp36 @unit null
-  115:  jump *label33 equal *tmp36 false
-  116:  sensor *tmp38 @unit @controlled
-  117:  op equal *tmp39 *tmp38 0
-  118:  jump *label35 equal *tmp39 false
-  119:  ucontrol flag :waitForFreeUnit:initial_flag 0 0 0 0
-  120:  set *tmp35 @unit
-  121:  jump *label29 always 0 0
-  122:  set *tmp40 null
-  123:  jump *label36 always 0 0
-        label *label35
-  124:  set *tmp40 null
-        label *label36
-  125:  set *tmp37 *tmp40
-  126:  jump *label34 always 0 0
-        label *label33
-  127:  set *tmp37 null
-        label *label34
-        label *label31
-  128:  jump *label30 always 0 0
-        label *label32
-  129:  set *tmp35 null
+   46:  set *tmp12 *tmp15
+        label *label8
+   47:  ubind :findFreeUnit:unit_type
+        label *label5
+   48:  op notEqual *tmp17 :findFreeUnit:first_unit @unit
+   49:  jump *label4 notEqual *tmp17 false
+        label *label6
+   50:  set *tmp7 null
+   51:  jump *label1 always 0 0
+   52:  set *tmp7 null
+        label *label1
+   53:  print *tmp7
+   54:  print "\n"
+   55:  set :findClosestUnit:x :x
+   56:  set :findClosestUnit:y :y
+   57:  set :findClosestUnit:unit_type :unit_type
+   58:  set :findClosestUnit:initial_flag :initial_flag
+        label *label12
+   59:  jump *label14 equal true false
+   60:  ubind :findClosestUnit:unit_type
+   61:  op equal *tmp19 @unit null
+   62:  jump *label15 equal *tmp19 false
+   63:  set *tmp18 null
+   64:  jump *label11 always 0 0
+   65:  set *tmp20 null
+   66:  jump *label16 always 0 0
+        label *label15
+   67:  set *tmp20 null
+        label *label16
+   68:  set :findClosestUnit:first_unit @unit
+   69:  set :findClosestUnit:best_unit null
+   70:  set :findClosestUnit:best_distance 10000000000
+        label *label17
+   71:  sensor *tmp21 @unit @controlled
+   72:  op equal *tmp22 *tmp21 0
+   73:  jump *label20 equal *tmp22 false
+   74:  sensor *tmp24 @unit @x
+   75:  op sub *tmp25 *tmp24 :findClosestUnit:x
+   76:  sensor *tmp26 @unit @y
+   77:  op sub *tmp27 *tmp26 :findClosestUnit:y
+   78:  op len *tmp28 *tmp25 *tmp27
+   79:  set :findClosestUnit:distance *tmp28
+   80:  op lessThan *tmp29 :findClosestUnit:distance :findClosestUnit:best_distance
+   81:  jump *label22 equal *tmp29 false
+   82:  set :findClosestUnit:best_distance :findClosestUnit:distance
+   83:  set *tmp31 @unit
+   84:  set :findClosestUnit:best_unit *tmp31
+   85:  set *tmp30 :findClosestUnit:best_unit
+   86:  jump *label23 always 0 0
+        label *label22
+   87:  set *tmp30 null
+        label *label23
+   88:  set *tmp23 *tmp30
+   89:  jump *label21 always 0 0
+        label *label20
+   90:  sensor *tmp32 :findClosestUnit:first_unit @dead
+   91:  op equal *tmp33 *tmp32 1
+   92:  jump *label24 equal *tmp33 false
+   93:  set *tmp35 @unit
+   94:  set :findClosestUnit:first_unit *tmp35
+   95:  set *tmp34 :findClosestUnit:first_unit
+   96:  jump *label25 always 0 0
+        label *label24
+   97:  set *tmp34 null
+        label *label25
+   98:  set *tmp23 *tmp34
+        label *label21
+   99:  ubind :findClosestUnit:unit_type
+        label *label18
+  100:  op notEqual *tmp36 :findClosestUnit:first_unit @unit
+  101:  jump *label17 notEqual *tmp36 false
+        label *label19
+  102:  op equal *tmp37 :findClosestUnit:best_unit null
+  103:  jump *label26 equal *tmp37 false
+  104:  set *tmp18 null
+  105:  jump *label11 always 0 0
+  106:  set *tmp38 null
+  107:  jump *label27 always 0 0
+        label *label26
+  108:  set *tmp38 null
+        label *label27
+  109:  sensor *tmp39 :findClosestUnit:best_unit @controlled
+  110:  op equal *tmp40 *tmp39 0
+  111:  jump *label28 equal *tmp40 false
+  112:  ubind :findClosestUnit:best_unit
+  113:  ucontrol flag :findClosestUnit:initial_flag 0 0 0 0
+  114:  set *tmp18 :findClosestUnit:best_unit
+  115:  jump *label11 always 0 0
+  116:  set *tmp41 null
+  117:  jump *label29 always 0 0
+        label *label28
+  118:  set *tmp41 null
         label *label29
-  130:  print *tmp35
-  131:  print "\n"
-  132:  set :waitForFreeUnit.1:message :message
-  133:  set :waitForFreeUnit.1:preface :preface
-  134:  set :waitForFreeUnit.1:unit_type :unit_type
-  135:  set :waitForFreeUnit.1:initial_flag :initial_flag
-        label *label38
-  136:  jump *label40 equal true false
-  137:  ubind :waitForFreeUnit.1:unit_type
-  138:  op equal *tmp42 @unit null
-  139:  jump *label41 equal *tmp42 false
-  140:  print :waitForFreeUnit.1:preface
-  141:  print "No unit of type "
-  142:  print :waitForFreeUnit.1:unit_type
-  143:  print " "
-  144:  print "found."
-  145:  printflush :waitForFreeUnit.1:message
-  146:  set *tmp43 null
-  147:  jump *label42 always 0 0
-        label *label41
-  148:  sensor *tmp44 @unit @controlled
-  149:  op notEqual *tmp45 *tmp44 0
-  150:  jump *label43 equal *tmp45 false
-  151:  print :waitForFreeUnit.1:preface
-  152:  print "Looking for a free "
-  153:  print :waitForFreeUnit.1:unit_type
-  154:  print "."
-  155:  print ".."
-  156:  printflush :waitForFreeUnit.1:message
-  157:  set *tmp46 null
-  158:  jump *label44 always 0 0
-        label *label43
-  159:  ucontrol flag :waitForFreeUnit.1:initial_flag 0 0 0 0
-  160:  set *tmp41 @unit
-  161:  jump *label37 always 0 0
-  162:  set *tmp46 null
-        label *label44
-  163:  set *tmp43 *tmp46
-        label *label42
-        label *label39
-  164:  jump *label38 always 0 0
-        label *label40
-  165:  set *tmp41 null
+        label *label13
+  119:  jump *label12 always 0 0
+        label *label14
+  120:  set *tmp18 null
+        label *label11
+  121:  print *tmp18
+  122:  print "\n"
+  123:  set :waitForFreeUnit:unit_type :unit_type
+  124:  set :waitForFreeUnit:initial_flag :initial_flag
+        label *label31
+  125:  jump *label33 equal true false
+  126:  ubind :waitForFreeUnit:unit_type
+  127:  op notEqual *tmp43 @unit null
+  128:  jump *label34 equal *tmp43 false
+  129:  sensor *tmp45 @unit @controlled
+  130:  op equal *tmp46 *tmp45 0
+  131:  jump *label36 equal *tmp46 false
+  132:  ucontrol flag :waitForFreeUnit:initial_flag 0 0 0 0
+  133:  set *tmp42 @unit
+  134:  jump *label30 always 0 0
+  135:  set *tmp47 null
+  136:  jump *label37 always 0 0
+        label *label36
+  137:  set *tmp47 null
         label *label37
-  166:  print *tmp41
-  167:  print "\n"
-  168:  end
+  138:  set *tmp44 *tmp47
+  139:  jump *label35 always 0 0
+        label *label34
+  140:  set *tmp44 null
+        label *label35
+        label *label32
+  141:  jump *label31 always 0 0
+        label *label33
+  142:  set *tmp42 null
+        label *label30
+  143:  print *tmp42
+  144:  print "\n"
+  145:  set :waitForFreeUnit.1:message :message
+  146:  set :waitForFreeUnit.1:preface :preface
+  147:  set :waitForFreeUnit.1:unit_type :unit_type
+  148:  set :waitForFreeUnit.1:initial_flag :initial_flag
+        label *label39
+  149:  jump *label41 equal true false
+  150:  ubind :waitForFreeUnit.1:unit_type
+  151:  op equal *tmp49 @unit null
+  152:  jump *label42 equal *tmp49 false
+  153:  print :waitForFreeUnit.1:preface
+  154:  print "No unit of type "
+  155:  print :waitForFreeUnit.1:unit_type
+  156:  print " "
+  157:  print "found."
+  158:  printflush :waitForFreeUnit.1:message
+  159:  set *tmp50 null
+  160:  jump *label43 always 0 0
+        label *label42
+  161:  sensor *tmp51 @unit @controlled
+  162:  op notEqual *tmp52 *tmp51 0
+  163:  jump *label44 equal *tmp52 false
+  164:  print :waitForFreeUnit.1:preface
+  165:  print "Looking for a free "
+  166:  print :waitForFreeUnit.1:unit_type
+  167:  print "."
+  168:  print ".."
+  169:  printflush :waitForFreeUnit.1:message
+  170:  set *tmp53 null
+  171:  jump *label45 always 0 0
+        label *label44
+  172:  ucontrol flag :waitForFreeUnit.1:initial_flag 0 0 0 0
+  173:  set *tmp48 @unit
+  174:  jump *label38 always 0 0
+  175:  set *tmp53 null
+        label *label45
+  176:  set *tmp50 *tmp53
+        label *label43
+        label *label40
+  177:  jump *label39 always 0 0
+        label *label41
+  178:  set *tmp48 null
+        label *label38
+  179:  print *tmp48
+  180:  print "\n"
+  181:  end

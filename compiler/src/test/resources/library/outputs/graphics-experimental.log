@@ -1,11 +1,11 @@
-   162 instructions before optimizations.
+   170 instructions before optimizations.
      8 instructions eliminated by Temp Variables Elimination.
      5 instructions eliminated by Case Expression Optimization.
     15 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Jump Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-    22 instructions eliminated by Data Flow Optimization (2 passes, 10 iterations).
+    30 instructions eliminated by Data Flow Optimization (2 passes, 10 iterations).
      1 instructions added by Function Inlining (4 iterations).
      2 function calls inlined by Function Inlining.
     10 instructions eliminated by Jump Straightening (5 iterations).
@@ -30,21 +30,21 @@ Final code before resolving virtual instructions:
     4:  jump *label7 equal display5 null
     5:  sensor :displaySize:type display1 @type
     6:  set :displaySize*retval 80
-    7:  jump *label71 equal :displaySize:type @logic-display
+    7:  jump *label73 equal :displaySize:type @logic-display
     8:  set :displaySize*retval null
-    9:  jump *label70 notEqual :displaySize:type @large-logic-display
+    9:  jump *label72 notEqual :displaySize:type @large-logic-display
    10:  set :displaySize*retval 176
-        label *label70
-        label *label71
+        label *label72
+        label *label73
    11:  assertequals 176 :displaySize*retval "large display size"
    12:  sensor :displaySize:type display5 @type
    13:  set :displaySize*retval 80
-   14:  jump *label76 equal :displaySize:type @logic-display
+   14:  jump *label78 equal :displaySize:type @logic-display
    15:  set :displaySize*retval null
-   16:  jump *label75 notEqual :displaySize:type @large-logic-display
+   16:  jump *label77 notEqual :displaySize:type @large-logic-display
    17:  set :displaySize*retval 176
-        label *label75
-        label *label76
+        label *label77
+        label *label78
    18:  assertequals 80 :displaySize*retval "small display size"
    19:  assertequals 0.2 0.2 "red channel"
    20:  assertequals 0.4 0.4 "green channel"
@@ -135,5 +135,5 @@ Final code before resolving virtual instructions:
         label *label58
    92:  stop
         label *label54
-   93:  draw scale 2.2 2.2 0 0 0 0
-   94:  draw scale 0.45454545454545453 0.45454545454545453 0 0 0 0
+   93:  draw scale 2.225 2.225 0 0 0 0
+   94:  draw scale 0.47954545454545455 0.47954545454545455 0 0 0 0

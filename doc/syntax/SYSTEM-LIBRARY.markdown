@@ -467,6 +467,20 @@ over the entire area of a large display.
 Scales the graphics output so that an output that targets a large display gets displayed
 over the entire area of a small display.
 
+### scaleDisplay
+
+**Definition:** `inline void scaleDisplay(x, y)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   3 |                  3 |
+
+Applies scaling to the graphic output, trying to minimize rounding error caused by Mindustry Logic
+storing the scale parameters with a precision of 10 bits, and a scale of 0.05.
+
+Both `x` and `y` are increased by `1 / 40` (`0.025`), to compensate for the processor truncating the
+value of either parameter after dividing it by `1 / 20` (`0.05`).
+
 # Math library
 
 To use the Math library, use the `require math;` statement.
@@ -998,6 +1012,20 @@ See also [`printExactFast`](#printexactfast)
 To use the Units library, use the `require units;`
 
 ## Functions
+
+### noControlWithin
+
+**Definition:** `def noControlWithin(x, y, radius)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   6 |                  6 |
+| Function body                  |                   7 |                  7 |
+| Function call                  |                   6 |                  6 |
+
+Determines whether the current unit is within a given radius from a given point.
+Unlike the built-in `within()` function, this function doesn't get the control of the unit to make the test
+but is slower. If you already control the current unit, use `within()` instead.
 
 ### findFreeUnit
 
