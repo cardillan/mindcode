@@ -26,7 +26,11 @@ inline def distance(x1, y1, x2, y2)
     len(x2 - x1, y2 - y1);
 end;
 
-/** Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`. */
+/**
+ * Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`.
+ *
+ * **Note:** When compiling for Mindustry 8, the mlog `round` function is used instead of this one.
+ */
 inline def round(x)
     floor(x + 0.5);
 end;
@@ -130,9 +134,22 @@ inline def avg(x1, x2, x...)
     sum / (2 + length(x));
 end;
 
-/** Returns the logarithm of the number in base 2 */
+/**
+ * Returns the logarithm of the number in the given base.
+ *
+ * **Note:** When compiling for Mindustry 8, the mlog `logn` function is used instead of this one.
+ */
+inline def logn(number, base)
+    log(number) / log(base);
+end;
+
+/**
+ * Returns the logarithm of the number in base 2.
+ *
+ * **Note:** When compiling for Mindustry 8, the logarithm is computed using the mlog `logn` function.
+ */
 inline def log2(number)
-    log(number) / log(2);
+    logn(number, 2);
 end;
 
 /**

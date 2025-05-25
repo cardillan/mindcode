@@ -124,6 +124,7 @@ public class ExpressionEvaluator {
         map.put(Operation.ABS,              (r, a, b) -> r.setDoubleValue(Math.abs(a.getDoubleValue())));
         map.put(Operation.SIGN,             (r, a, b) -> r.setDoubleValue(Math.signum(a.getDoubleValue())));
         map.put(Operation.LOG,              (r, a, b) -> r.setDoubleValue(Math.log(a.getDoubleValue())));
+        map.put(Operation.LOGN,             (r, a, b) -> r.setDoubleValue(Math.log(a.getDoubleValue() / Math.log(b.getDoubleValue()))));
         map.put(Operation.LOG10,            (r, a, b) -> r.setDoubleValue(Math.log10(a.getDoubleValue())));
         map.put(Operation.FLOOR,            (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue())));
         map.put(Operation.CEIL,             (r, a, b) -> r.setDoubleValue(Math.ceil(a.getDoubleValue())));

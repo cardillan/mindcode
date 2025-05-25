@@ -8,6 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* Added support for the new `op logn` Mindustry BE instruction to the compiler and processor emulator.
+* Added the `logn()` function to the `math`system library. This function corresponds to the Mindustry 8 instruction `op logn`, and when target 8 is selected, the instruction is used instead of the library implementation.
 * Added support for declaring new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
 * Added support for constant arrays. Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.
 * Added the `scaleDisplay` function to the `graphics` system library. The function compensates for rounding errors in Mindustry Logic `draw scale` instruction. 
@@ -15,7 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* Updated the `scaleSmallToLarge` and `scaleLargeToSmall` to compensate for rounding errors in Mindustry Logic `draw scale` instruction.
+* Updated the `scaleSmallToLarge()` and `scaleLargeToSmall()` functions to compensate for rounding errors in Mindustry Logic `draw scale` instruction.
+* Updated the `log2()` function to use `op logn` when possible.
 
 ### Miscellaneous
 

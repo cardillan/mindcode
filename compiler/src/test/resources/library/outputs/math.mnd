@@ -36,6 +36,8 @@ assertEquals(1, sum(1), "sum(1)");
 assertEquals(10, sum(1,2,3,4), "sum(1,2,3,4)");
 assertEquals(1, avg(1), "avg(1)");
 assertEquals(2.5, avg(1,2,3,4), "avg(1,2,3,4)");
+assertEquals(2, logn(25, 5), "logn(25, 5)");
+assertEquals(4, logn(10000, 10), "logn(10000, 10)");
 assertEquals(4, log2(16), "log2(16)");
 assertEquals(30, log2(1 << 30), "log2(1 << 30)");
 assertEquals(1, lerp(1, 10, 0), "lerp(1, 10, 0)");

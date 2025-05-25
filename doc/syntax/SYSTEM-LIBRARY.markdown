@@ -530,6 +530,8 @@ Uses the `len` instruction for efficient hypotenuse calculation.
 
 Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`.
 
+**Note:** When compiling for Mindustry 8, the mlog `round` function is used instead of this one.
+
 ### frac
 
 **Definition:** `inline def frac(x)`
@@ -678,6 +680,18 @@ Returns `x`. The function is a fallback case for the generic `avg` function taki
 
 Returns the average of all given arguments.
 
+### logn
+
+**Definition:** `inline def logn(number, base)`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                   3 |                  3 |
+
+Returns the logarithm of the number in the given base.
+
+**Note:** When compiling for Mindustry 8, the mlog `logn` function is used instead of this one.
+
 ### log2
 
 **Definition:** `inline def log2(number)`
@@ -686,7 +700,9 @@ Returns the average of all given arguments.
 |--------------------------------|--------------------:|-------------------:|
 | Inlined function               |                   2 |                  2 |
 
-Returns the logarithm of the number in base 2
+Returns the logarithm of the number in base 2.
+
+**Note:** When compiling for Mindustry 8, the logarithm is computed using the mlog `logn` function.
 
 ### lerp
 

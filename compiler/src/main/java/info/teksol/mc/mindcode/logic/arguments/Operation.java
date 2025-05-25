@@ -53,6 +53,7 @@ public enum Operation implements LogicArgument {
     ABS             (1, true,  "abs"),
     SIGN            (1, true,  "sign"),
     LOG             (1, true,  "log"),
+    LOGN            (1, true,  "logn"),
     LOG10           (1, true,  "log10"),
     FLOOR           (1, true,  "floor"),
     CEIL            (1, true,  "ceil"),
