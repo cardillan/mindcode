@@ -12,12 +12,16 @@
     63 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 58):
-  o Convert case at line 5:5 (segments: 5)                       cost     0, benefit      188.5, efficiency   Infinity
-  o Convert case at line 5:5 (segments: 5)                       cost    20, benefit      221.5, efficiency     11.075
-  * Convert case at line 5:5 (segments: 4)                       cost    23, benefit      226.5, efficiency      9.848 (+24 instructions)
-  ! Convert case at line 5:5 (segments: 4)                       cost   191, benefit      232.5, efficiency      1.217
-  ! Convert case at line 5:5 (segments: 3)                       cost   193, benefit      234.5, efficiency      1.215
-  ! Convert case at line 5:5 (segments: 2)                       cost   203, benefit      237.5, efficiency      1.170
+  o Convert case at line 5:5 (segments: 5)                       cost     0, benefit      466.6, efficiency   Infinity
+  o Convert case at line 5:5 (segments: 5)                       cost    21, benefit      470.1, efficiency     22.386
+  o Convert case at line 5:5 (segments: 3)                       cost    22, benefit      485.1, efficiency     22.050
+  * Convert case at line 5:5 (segments: 4)                       cost    24, benefit      491.3, efficiency     20.473 (+24 instructions)
+  ! Convert case at line 5:5 (segments: 3)                       cost   189, benefit      501.6, efficiency      2.654
+  ! Convert case at line 5:5 (segments: 4)                       cost   191, benefit      507.9, efficiency      2.659
+  ! Convert case at line 5:5 (segments: 3)                       cost   193, benefit      513.3, efficiency      2.659
+  ! Convert case at line 5:5 (segments: 2)                       cost   203, benefit      517.7, efficiency      2.550
+  ! Convert case at line 5:5 (segments: 2)                       cost   206, benefit      521.2, efficiency      2.530
+  ! Convert case at line 5:5 (segments: 1)                       cost   213, benefit      525.9, efficiency      2.469
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -355,12 +359,12 @@ Modifications by Convert case at line 5:5 (segments: 4) (+24 instructions):
 +   82 jump *label10 lessThan *tmp9 203
 +   83 jump *label6 always
 +   84 label *label49
-+   85 jump *label50 greaterThanEq *tmp9 222
++   85 jump *label50 greaterThanEq *tmp9 226
 +   86 jump *label6 equal *tmp9 220
 +   87 jump *label6 equal *tmp9 221
-+   88 jump *label10 always
-+   89 label *label50
-+   90 jump *label6 equal *tmp9 225
++   88 jump *label6 equal *tmp9 225
++   89 jump *label10 always
++   90 label *label50
 +   91 jump *label6 equal *tmp9 234
 +   92 jump *label10 always
 +   93 label *label11
@@ -386,9 +390,9 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
 
 Modifications by Iterated phase, Jump Straightening, pass 3, iteration 1 (-1 instructions):
  
-    88 jump *label10 always
-    89 label *label50
-    90 jump *label6 equal *tmp9 225
+    88 jump *label6 equal *tmp9 225
+    89 jump *label10 always
+    90 label *label50
 -    * jump *label6 equal *tmp9 234
 -    * jump *label10 always
 +   91 jump *label10 notEqual *tmp9 234
@@ -520,12 +524,12 @@ jump *label10 equal *tmp9 205
 jump *label10 lessThan *tmp9 203
 jump *label6 always
 label *label49
-jump *label50 greaterThanEq *tmp9 222
+jump *label50 greaterThanEq *tmp9 226
 jump *label6 equal *tmp9 220
 jump *label6 equal *tmp9 221
+jump *label6 equal *tmp9 225
 jump *label10 always
 label *label50
-jump *label6 equal *tmp9 225
 jump *label10 notEqual *tmp9 234
 label *label11
 label *label6

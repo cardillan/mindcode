@@ -66,4 +66,9 @@ public abstract class AbstractMessageEmitter implements MessageEmitter {
     public void debug(String message) {
         addMessage(ToolMessage.debug(message));
     }
+
+    @Override
+    public void debug(@PrintFormat String format, Object... args) {
+        addMessage(ToolMessage.debug(format, args));
+    }
 }

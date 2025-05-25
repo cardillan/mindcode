@@ -84,6 +84,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
 
     protected OptimizationCoordinator createMindcodeOptimizer(MessageConsumer messageConsumer) {
         return new OptimizationCoordinator(ip, profile, messageConsumer,
+                new TestOptimizerContext(messageConsumer),
                 new LogicInstructionArrayExpander(), false);
     }
 

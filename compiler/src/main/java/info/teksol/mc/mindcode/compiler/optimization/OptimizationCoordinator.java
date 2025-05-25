@@ -6,6 +6,7 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
+import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionArrayExpander;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -32,6 +33,7 @@ public class OptimizationCoordinator {
     private final List<LogicInstruction> program = new ArrayList<>();
     private final InstructionProcessor instructionProcessor;
     private final MessageConsumer messageConsumer;
+    private final OptimizerContext optimizerContext;
     private final LogicInstructionArrayExpander arrayExpander;
     private final boolean remoteLibrary;
     private final CompilerProfile profile;
@@ -39,9 +41,11 @@ public class OptimizationCoordinator {
     private @Nullable OptimizationContext optimizationContext;
 
     public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
-            MessageConsumer messageConsumer, LogicInstructionArrayExpander arrayExpander, boolean remoteLibrary) {
+            MessageConsumer messageConsumer, OptimizerContext optimizerContext, LogicInstructionArrayExpander arrayExpander,
+            boolean remoteLibrary) {
         this.instructionProcessor = instructionProcessor;
         this.messageConsumer = messageConsumer;
+        this.optimizerContext = optimizerContext;
         this.profile = profile;
         this.arrayExpander = arrayExpander;
         this.remoteLibrary = remoteLibrary;
@@ -83,7 +87,7 @@ public class OptimizationCoordinator {
 
         try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
             optimizationContext = new OptimizationContext(traceFile, messageConsumer, profile, instructionProcessor,
-                    program, callGraph, rootAstContext, remoteLibrary);
+                    optimizerContext, program, callGraph, rootAstContext, remoteLibrary);
 
             int count = codeSize();
             messageConsumer.accept(OptimizerMessage.info("%6d instructions before optimizations.", count));
@@ -239,7 +243,7 @@ public class OptimizationCoordinator {
                 return action;
             } else if (candidate == null || candidate.getGroup().equals(action.getGroup())) {
                 if (candidate == null || action.benefit() > candidate.benefit()) {
-                    // The action in this group has lower efficiency, but greater benefit
+                    // The action in this group has a lower efficiency but greater benefit
                     candidate = action;
                 }
             }

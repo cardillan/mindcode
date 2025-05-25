@@ -28,4 +28,6 @@ public interface MessageEmitter {
     void timing(@PrintFormat String format, Object... args);
 
     void debug(String message);
+
+    void debug(@PrintFormat String format, Object... args);
 }

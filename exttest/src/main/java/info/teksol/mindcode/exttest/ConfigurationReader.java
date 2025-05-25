@@ -5,6 +5,8 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.GenerationGoal;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,12 +18,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@NullMarked
 public class ConfigurationReader {
 
     private static final Map<String, YamlMapping> cache = new HashMap<>();
-    private static YamlMapping settings;
+    private static @Nullable YamlMapping settings;
 
-    public static Configuration loadConfiguration(String settingsFileName) {
+    public static @Nullable Configuration loadConfiguration(String settingsFileName) {
         try {
             settings = Yaml.createYamlInput(new File(settingsFileName)).readYamlMapping();
 
@@ -54,6 +57,7 @@ public class ConfigurationReader {
     }
 
     private static YamlMapping loadDefaults(String section) {
+        assert settings != null;
         return cache.computeIfAbsent(section, settings::yamlMapping);
     }
 
@@ -73,8 +77,10 @@ public class ConfigurationReader {
 
         Map<Optimization, List<OptimizationLevel>> optimizationLevels = getOptimizationLevels(mapping, defaults);
         List<GenerationGoal> generationGoals = getGenerationGoals(mapping, defaults);
+        List<Boolean> symbolicLabels = getSymbolicLabels(mapping, defaults);
         int sampleCount = integer(mapping, defaults, "samples");
         int failureLimit = integer(mapping, defaults, "failure-limit");
+        int caseSwitching = integer(mapping, defaults, "case-configurations");
         boolean run = bool(mapping, defaults, "run");
 
         configuration.addTestConfiguration(
@@ -82,8 +88,10 @@ public class ConfigurationReader {
                 inputFiles,
                 optimizationLevels,
                 generationGoals,
+                symbolicLabels,
                 sampleCount,
                 failureLimit,
+                caseSwitching,
                 run);
     }
 
@@ -129,6 +137,20 @@ public class ConfigurationReader {
         }
     }
 
+    private static List<Boolean> getSymbolicLabels(YamlMapping mapping, YamlMapping defaults) {
+        YamlSequence values = sequence(mapping, defaults, "symbolic-labels");
+        if (values == null) {
+            return List.of(Boolean.FALSE);
+        } else {
+            return values.values().stream()
+                    .map(YamlNode::asScalar)
+                    .map(Scalar::value)
+                    .map(String::trim)
+                    .map(Boolean::parseBoolean)
+                    .toList();
+        }
+    }
+
     private static GenerationGoal parseGoal(String settings, String goal) throws ParseSettingException {
         GenerationGoal generationGoal = GenerationGoal.byName(goal);
         if (generationGoal == null) {
@@ -137,12 +159,12 @@ public class ConfigurationReader {
         return generationGoal;
     }
 
-    private static YamlNode node(YamlMapping mapping, YamlMapping defaults, String setting) {
+    private static @Nullable YamlNode node(YamlMapping mapping, YamlMapping defaults, String setting) {
         YamlNode node = mapping.value(setting);
         return node != null ? node : defaults.value(setting);
     }
 
-    private static YamlSequence sequence(YamlMapping mapping, YamlMapping defaults, String setting) {
+    private static @Nullable YamlSequence sequence(YamlMapping mapping, YamlMapping defaults, String setting) {
         YamlNode node = node(mapping, defaults, setting);
         return node != null ? node.asSequence() : null;
     }
@@ -189,7 +211,7 @@ public class ConfigurationReader {
         }
     }
 
-    private static boolean parseBoolean(String setting, String value) {
+    private static boolean parseBoolean(String setting, @Nullable String value) {
         if (value == null) {
             return false;
         } else if (value.equalsIgnoreCase("true")) {

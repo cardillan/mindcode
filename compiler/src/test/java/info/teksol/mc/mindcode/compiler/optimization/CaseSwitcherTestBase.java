@@ -1,9 +1,5 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
-import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.Targets;
-import info.teksol.mc.mindcode.compiler.optimization.cases.Segment;
-import info.teksol.mc.mindcode.compiler.optimization.cases.SegmentType;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
 import org.jspecify.annotations.NullMarked;
@@ -13,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @NullMarked
 abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> {
@@ -644,6 +639,7 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
         }
     }
 
+/*
     @Nested
     class UtilityTests {
         private LogicLabel l(String name) {
@@ -710,7 +706,6 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     split);
         }
 
-/*
         @Test
         void findsLargestSegment() {
             Segment largest = CaseSwitcher.findLargestSegment(List.of(
@@ -801,6 +796,6 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     List.of(new Segment(CaseSwitcher.SegmentType.SINGLE, 6, 50, l(""))),
                     segments);
         }
-*/
     }
+*/
 }

@@ -23,6 +23,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Miscellaneous
 
 * Added an explanatory message to the web app when an internal error is encountered.
+* Added a case switching optimization-specific test suite to the Extended Testing framework. The tests serve to verify the size and execution costs calculations for the Case Switching optimization are correct.
 
 ## 3.5.2 - 2025-05-24
 
@@ -1336,7 +1337,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 * Added limited support for [compile-time constant expression evaluation](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#constant-expressions).
 * Added support for [constant declaration](doc/syntax/SYNTAX-1-VARIABLES.markdown#constants) (`const foo = 1 / 3`).
   The value assigned must be a compile-time constant expression.
-* Added [compiler directives](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown) (`#set`): optimization and target instruction set 
+* Added [compiler directives](doc/syntax/SYNTAX-5-OTHER.markdown) (`#set`): optimization and target instruction set 
   can be now set from the web app compiler.
 * Support for the new [`setprop` world processor instruction](doc/syntax/FUNCTIONS-70.markdown#instruction-set-prop)
   available in Mindustry v143.  

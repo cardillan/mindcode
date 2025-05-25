@@ -3,21 +3,22 @@
 # Number of tests to run in parallel
 threads: 24
 
-# Name of the section containing list of tests to execute
+# The name of the section containing the list of tests to execute
 # Several sections can be present in the config file, the active one is selected here
+test-suite: case-switching
 #test-suite: single-source
-test-suite: all-sources
+#test-suite: all-sources
 
 # Where to put all the output files
 # When not set, test-specific output files will be generated in the directory containing the source file
-# Global output files (result.txt) will be generated in current directory.
+# Global output files (result.txt) will be generated in the current directory.
 output-path: .
 
 # 'true' to run all possible configurations for all tests, 'false' to run the given number of samples
 # (full tests would typically take many hours to complete)
-full-tests: false
+full-tests: true
 
-# Number of samples configured to run per test will be multiplied by this number
+# The number of samples configured to run per test will be multiplied by this number
 # Allows to create a basic configuration that runs reasonably fast
 # and just increase the multiplier for longer, more comprehensive tests
 sample-multiplier: 1
@@ -30,7 +31,7 @@ defaults:
   # Number of test cases to execute
   samples: 500
 
-  # When number of failures encountered while executing a test exceeds the given value, the test is stopped
+  # When the number of failures encountered while executing a test exceeds the given value, the test is stopped
   # Prevents creation of indiscriminately large output files when too may tests fail
   failure-limit: 500
 
@@ -39,6 +40,12 @@ defaults:
 
   # List of goal settings to use
   goal: [ speed, size ]
+
+  # List of symbolic labels settings to use
+  symbolic-labels: [ false, true ]
+
+  # Number of case configurations to test. Nonzero for case-switching-specific testing.
+  case-configurations: 0
 
   # List of optimization levels for each given optimization
   array-optimization: [ none, basic ]
@@ -69,7 +76,7 @@ run-test:
   # Number of test cases to execute
   samples: 500
 
-  # When number of failures encountered while executing a test exceeds the given value, the test is stopped
+  # When the number of failures encountered while executing a test exceeds the given value, the test is stopped
   # Prevents creation of indiscriminately large output files when too may tests fail
   failure-limit: 500
 
@@ -78,6 +85,12 @@ run-test:
 
   # List of goal settings to use
   goal: [ speed, size ]
+
+  # List of symbolic labels settings to use
+  symbolic-labels: [ false, true ]
+
+  # Number of case configurations to test. Nonzero for case-switching-specific testing.
+  case-configurations: 0
 
   # List of optimization levels for each given optimization
   data-flow-optimization: [ none, basic ]
@@ -96,8 +109,8 @@ run-test:
   single-step-elimination: [ none, basic ]
   temp-variables-elimination: [ none, basic ]
   unreachable-code-elimination: [ none, basic ]
-  # There are no case expressions or print statements in the test file
-  # By excluding these optimizations, the total number of cases gets significantly reduced
+  # There are no case expressions or print statements in the test file.
+  # By excluding these optimizations, the total number of cases gets significantly reduced.
   # The optimizations themselves may run a very little bit faster as well.
   case-expression-optimization: [ none ]
   case-switching: [ none ]
@@ -107,7 +120,7 @@ run-test:
 
 # LIST OF SOURCES
 
-# A single file to test
+# A single file to be tested
 # Unspecified settings are inherited from default
 single-source:
   - source: recursion.mnd
@@ -146,70 +159,150 @@ all-sources:
     samples: 2000
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-04.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-04.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-18.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-18.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-26.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-26.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-28.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-28.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-31.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-31.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-31b.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-31b.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-45.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-45.mnd"
     samples: 500
     defaults: run-test
 
-  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-97.mnd"
+  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-97.mnd"
     samples: 500
     defaults: run-test
 
   - source: impact-reactor-logic.mnd
     samples: 125
 
-  - source: "C:\Home\golem\benchmarks\breakout.mnd"
+  - source: "C:\\Home\\golem\\benchmarks\\breakout.mnd"
     samples: 1200
 
-  - source: "C:\Home\golem\schematics\detector.mnd"
+  - source: "C:\\Home\\golem\\schematics\\detector.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\factory-monitor.mnd"
+  - source: "C:\\Home\\golem-old\\mindcode\\factory-monitor.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\factory-monitor-silicon.mnd"
+  - source: "C:\\Home\\golem-old\\mindcode\\factory-monitor-silicon.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\factory-monitor-surge-alloy.mnd"
+  - source: "C:\\Home\\golem-old\\mindcode\\factory-monitor-surge-alloy.mnd"
     samples: 100
 
-  - source: "C:\Home\golem\power-plant\power-plant-battery-level.mnd"
+  - source: "C:\\Home\\golem\\power-plant\\power-plant-battery-level.mnd"
     samples: 100
 
-  - source: "C:\Home\golem\power-plant\power-plant-reactor-control.mnd"
+  - source: "C:\\Home\\golem\\power-plant\\power-plant-reactor-control.mnd"
     samples: 100
 
-  - source: "C:\Home\golem\overdrive\overdrive-dome.mnd"
+  - source: "C:\\Home\\golem\\overdrive\\overdrive-dome.mnd"
     samples: 100
 
-  - source: "C:\Home\golem-old\mindcode\instant-overdrive-projector.mnd"
+  - source: "C:\\Home\\golem-old\\mindcode\\instant-overdrive-projector.mnd"
     samples: 100
 
-#  - source: "C:\Home\golem\mandelbrot\mandelbrot-compute.mnd"
+#  - source: "C:\\Home\\golem\\mandelbrot\\mandelbrot-compute.mnd"
 #    samples: 250
 #
-#  - source: "C:\Home\golem\unit-transport\unit-transport.mnd"
+#  - source: "C:\\Home\\golem\\unit-transport\\unit-transport.mnd"
 #    samples: 80
+
+
+
+case-switching-defaults:
+  # Number of test cases to execute
+  samples: 500
+
+  # When the number of failures encountered while executing a test exceeds the given value, the test is stopped
+  # Prevents creation of indiscriminately large output files when too may tests fail
+  failure-limit: 500
+
+  # 'true' to compile, optimize and run the code, 'false' to just compile and optimize.
+  run: true
+
+  # List of goal settings to use
+  goal: [ speed ]
+
+  # List of symbolic labels settings to use
+  symbolic-labels: [ false, true ]
+
+  # Number of case configurations to test. Nonzero for case-switching-specific testing.
+  case-configurations: 100
+
+  # List of optimization levels for each given optimization
+  data-flow-optimization: [ experimental ]
+  dead-code-elimination: [ experimental ]
+  expression-optimization: [ experimental ]
+  function-inlining: [ experimental ]
+  if-expression-optimization: [ experimental ]
+  jump-normalization: [ experimental ]
+  jump-optimization: [ experimental ]
+  loop-hoisting: [ experimental ]
+  loop-optimization: [ experimental ]
+  loop-unrolling: [ experimental ]
+  return-optimization: [ experimental ]
+  temp-variables-elimination: [ experimental ]
+  unreachable-code-elimination: [ experimental ]
+  case-expression-optimization: [ experimental ]
+  case-switching: [ experimental ]
+  print-merging: [ none ]
+  stack-optimization: [ none ]
+  # These would collide with execution steps counting
+  single-step-elimination: [ none ]
+  jump-straightening: [ none ]
+  jump-threading: [ none ]
+
+# A single file to be tested
+# Unspecified settings are inherited from default
+case-switching:
+  - source: case-homogenous-none.mnd
+    defaults: case-switching-defaults
+    case-configurations: 647
+
+  - source: case-homogenous-null.mnd
+    defaults: case-switching-defaults
+    case-configurations: 647
+
+  - source: case-homogenous-zero.mnd
+    defaults: case-switching-defaults
+    case-configurations: 1215
+
+  - source: case-homogenous-both.mnd
+    defaults: case-switching-defaults
+    case-configurations: 1215
+    
+  - source: case-distinct-none.mnd
+    defaults: case-switching-defaults
+    case-configurations: 49
+
+  - source: case-distinct-null.mnd
+    defaults: case-switching-defaults
+    case-configurations: 49
+
+  - source: case-distinct-zero.mnd
+    defaults: case-switching-defaults
+    case-configurations: 228
+
+  - source: case-distinct-both.mnd
+    defaults: case-switching-defaults
+    case-configurations: 228

@@ -1,0 +1,40 @@
+#set target-optimization = specific;
+#set err-invalid-content = false;
+#set single-step-elimination = none;
+#set jump-straightening = none;
+#set jump-threading = none;
+
+def identifyBlock(block)
+    case block
+        when @graphite-press then "1";
+        when @copper-wall then "2";
+        when @copper-wall-large then "3";
+        when @titanium-wall then "4";
+        when @titanium-wall-large then "5";
+        when @plastanium-wall then "6";
+        when @plastanium-wall-large then "7";
+        when @thorium-wall then "8";
+        when @thorium-wall-large then "9";
+        when @phase-wall then "A";
+        when @phase-wall-large then "B";
+        when @surge-wall then "C";
+        when @surge-wall-large then "D";
+        when @scrap-wall then "E";
+        when @scrap-wall-large then "F";
+        when @scrap-wall-huge then "G";
+        when @scrap-wall-gigantic then "H";
+        when @tungsten-wall then "I";
+        when @tungsten-wall-large then "J";
+        when @beryllium-wall then "K";
+        when @beryllium-wall-large then "L";
+        when @carbide-wall then "M";
+        when @carbide-wall-large then "N";
+        when @reinforced-surge-wall then "O";
+        when @reinforced-surge-wall-large then "P";
+        else "0";
+    end;
+end;
+
+for i in 0 ... @blockCount do
+    print(identifyBlock(lookup(:block, i)));
+end;

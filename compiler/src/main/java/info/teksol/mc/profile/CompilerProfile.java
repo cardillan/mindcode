@@ -13,7 +13,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /// Represents the configuration profile for a compiler/schematics builder/processor emulator, encapsulating various
-/// parameters and settings that influence code compilation, schematics construction and code execution
+/// parameters and settings that influence code compilation, schematic construction, and code execution
 /// on the emulated processor.
 ///
 /// Some default values and limits differ between the command-line tool and the web application.
@@ -78,6 +78,10 @@ public class CompilerProfile {
     // Schematics Builder
     private List<String> additionalTags = List.of();
     private SourcePositionTranslator positionTranslator = p -> p;
+    
+    // Flags for debugging/testing purposes
+    private boolean debugOutput = false;
+    private int caseConfiguration = 0;
 
     /// Constructs a new instance of the CompilerProfile class.
     ///
@@ -129,6 +133,8 @@ public class CompilerProfile {
         OptimizationLevel[] levels = OptimizationLevel.values();
         int len = levels.length;
         long value = Long.parseLong(encoded);
+        setSymbolicLabels(value % 2 == 1);
+        value /= 2;
         setGoal(goals[(int) (value % goals.length)]);
         value /= goals.length;
         for (int i = Optimization.LIST.size() - 1; i >= 0; i--) {
@@ -145,6 +151,7 @@ public class CompilerProfile {
             value = value * len + getOptimizationLevel(optimization).ordinal();
         }
         value = value * GenerationGoal.values().length + getGoal().ordinal();
+        value = value * 2 + (isSymbolicLabels() ? 1 : 0);
         return Long.toString(value);
     }
 
@@ -166,6 +173,15 @@ public class CompilerProfile {
         return this;
     }
 
+    public int getCaseConfiguration() {
+        return caseConfiguration;
+    }
+
+    public CompilerProfile setCaseConfiguration(int caseConfiguration) {
+        this.caseConfiguration = caseConfiguration;
+        return this;
+    }
+
     public int getDebugLevel() {
         return debugLevel;
     }
@@ -181,6 +197,15 @@ public class CompilerProfile {
 
     public CompilerProfile setExecutionFlags(ExecutionFlag... flags) {
         executionFlags.addAll(Arrays.asList(flags));
+        return this;
+    }
+
+    public boolean isDebugOutput() {
+        return debugOutput;
+    }
+
+    public CompilerProfile setDebugOutput(boolean debugOutput) {
+        this.debugOutput = debugOutput;
         return this;
     }
 

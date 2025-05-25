@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.util.StringUtils;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.PrintWriter;
 import java.lang.management.GarbageCollectorMXBean;
@@ -15,6 +16,7 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
+@NullMarked
 public class BasicTestProgress extends AbstractTestProgress {
     private final Map<Optimization, Map<OptimizationLevel, AtomicInteger>> statistics = new EnumMap<>(Optimization.class);
     private final Map<GenerationGoal, AtomicInteger> goalStatistics = new EnumMap<>(GenerationGoal.class);
@@ -112,8 +114,8 @@ public class BasicTestProgress extends AbstractTestProgress {
         }
 
         printf(writer, "%n");
-        printf(writer, "Finished.%n");
-        printf(writer, "Total tests: %,d, total failures: %,d (rate %.2f%%), speed: %.2f tests/sec, total time: %s, GC runs: %,d, GC time: %s%n",
+        printf(writer, errors > 0 ? "Failures encountered!%n" : "Finished.%n");
+        printf(writer, "    Total tests: %,d, total failures: %,d (rate %.2f%%), speed: %.2f tests/sec, total time: %s, GC runs: %,d, GC time: %s%n",
                 count, errors, 100d * errors / count, totalRate, formatTime((long) (elapsed / 1_000_000_000d)), gcRuns, formatTime(gcTime / 1000));
     }
 

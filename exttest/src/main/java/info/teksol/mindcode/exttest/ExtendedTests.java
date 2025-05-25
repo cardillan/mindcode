@@ -1,22 +1,24 @@
 package info.teksol.mindcode.exttest;
 
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import info.teksol.mindcode.exttest.Configuration.SingleTestConfiguration;
 import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorScreening;
-import info.teksol.mindcode.exttest.cases.TestCaseExecutor;
 import info.teksol.mindcode.exttest.forkjoin.ForkJoinFramework;
 import info.teksol.mindcode.exttest.threadpool.ThreadPoolFramework;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+@NullMarked
 public class ExtendedTests {
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         if (OptimizationCoordinator.isDebugOn()) {
             System.err.println("Error: debug active.");
             return;
@@ -52,7 +54,6 @@ public class ExtendedTests {
                 master.flush();
 
                 TestProgress progress = new BasicTestProgress(testConfiguration);
-                TestCaseExecutor testCaseExecutor = new TestCaseExecutor(progress);
 
                 try (PrintWriter writer = new PrintWriter(testConfiguration.getResultPath().toFile())) {
                     ExecutionFramework executionFramework = new ForkJoinFramework(testConfiguration, progress);
@@ -71,7 +72,7 @@ public class ExtendedTests {
 
             printf(master, "%n%n");
             if (failedSources.isEmpty()) {
-                printf(master, "All test succeeded.%n");
+                printf(master, "All tests succeeded.%n");
             } else {
                 printf(master, "%d out of %d test runs failed.%n", failedSources.size(), testConfigurations.size());
                 printf(master, "Failed source files:%n");
@@ -84,7 +85,7 @@ public class ExtendedTests {
         }
     }
 
-    private static void printf(PrintWriter master, @PrintFormat String format, Object... args) {
+    private static void printf(@Nullable PrintWriter master, @PrintFormat String format, Object... args) {
         System.out.printf(format, args);
         if (master != null) {
             master.printf(format, args);
@@ -97,7 +98,6 @@ public class ExtendedTests {
         System.out.printf("Running %d screening tests:%n", testCaseCreator.getTotalCases());
 
         TestProgress progress = new ScreeningTestProgress(configuration);
-        TestCaseExecutor testCaseExecutor = new TestCaseExecutor(progress);
 
         ExecutionFramework executionFramework = new ThreadPoolFramework(configuration, testCaseCreator, progress);
         executionFramework.process(writer);

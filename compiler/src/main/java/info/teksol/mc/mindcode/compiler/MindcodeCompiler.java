@@ -26,6 +26,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.CallGraphCreatorContext;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.generation.*;
+import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariablesContext;
 import info.teksol.mc.mindcode.compiler.optimization.DebugPrinter;
@@ -61,7 +62,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
-        CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext, VariablesContext {
+        CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext, VariablesContext, OptimizerContext {
 
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
 
@@ -115,6 +116,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     // Message logger
     private final ListMessageLogger messageLogger;
     private boolean internalError;
+
+    // Diagnostic data
+    private final Map<Class<?>, List<Object>> diagnosticData = new HashMap<>();
 
     public MindcodeCompiler(MessageConsumer messageConsumer, CompilerProfile profile, InputFiles inputFiles) {
         this(CompilationPhase.ALL, messageConsumer, profile, inputFiles);
@@ -275,8 +279,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         if (profile.optimizationsActive() && instructions.size() > 1) {
             final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
                     ? debugPrinterProvider.apply(profile.getDebugLevel()) : new NullDebugPrinter();
-            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer, arrayExpander,
-                    !astProgram.isMainProgram());
+            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer,
+                    this, arrayExpander, !astProgram.isMainProgram());
             optimizer.setDebugPrinter(debugPrinter);
             instructions = optimizer.optimize(callGraph, instructions, rootAstContext);
             debugPrinter.print(this::debug);
@@ -558,8 +562,18 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return Objects.requireNonNull(variables);
     }
 
+    @Override
     public void addRemoteVariable(LogicVariable variable) {
         remoteVariables.add(variable);
+    }
+
+    public void addDiagnosticData(Object data) {
+        diagnosticData.computeIfAbsent(data.getClass(), k -> new ArrayList<>()).add(data);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getDiagnosticData(Class<T> type) {
+        return (List<T>) diagnosticData.getOrDefault(type, List.of());
     }
 
     private record ModulePlacement(InputFile inputFile, SortedSet<AstIdentifier> remoteProcessors) {

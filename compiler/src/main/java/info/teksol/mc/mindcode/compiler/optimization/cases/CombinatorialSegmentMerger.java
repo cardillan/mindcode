@@ -4,18 +4,36 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 
 import java.util.*;
 
-public class CombinatorialSegmentMerger implements SegmentMerger {
-    private static final int MAX_SEGMENTS = 6;
-    private static final int SEARCH_DECREASE = 1;
+public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
+    private static final int MAX_SEGMENTS = 20;
+    private static final int ITERATION_DECREASE = 0;
+
+    private final List<Segment> singularSegments;
+    private int configurationCount = 0;
+
+    public CombinatorialSegmentMerger(Targets targets, boolean logicConversion) {
+        singularSegments = split(targets, logicConversion);
+    }
 
     @Override
-    public Set<MergedSegments> createMergeConfigurations(List<Segment> segments) {
-        Set<MergedSegments> configurations = new LinkedHashSet<>();
-        createMergeConfigurations(configurations, segments, List.of(), MAX_SEGMENTS);
+    public List<Segment> getSingularSegments() {
+        return singularSegments;
+    }
+
+    public int getConfigurationCount() {
+        return configurationCount;
+    }
+
+    @Override
+    public Set<SegmentConfiguration> createMergeConfigurations() {
+        Set<SegmentConfiguration> configurations = new LinkedHashSet<>();
+        configurations.add(new SegmentConfiguration(singularSegments, List.of()));
+        configurationCount++;
+        createMergeConfigurations(configurations, singularSegments, List.of(), MAX_SEGMENTS);
         return configurations;
     }
 
-    void createMergeConfigurations(Collection<MergedSegments> configurations, List<Segment> singleSegments,
+    void createMergeConfigurations(Collection<SegmentConfiguration> configurations, List<Segment> singleSegments,
             List<Segment> mergedSegments, int maxConfigurations) {
         int count = 0;
 
@@ -23,11 +41,12 @@ public class CombinatorialSegmentMerger implements SegmentMerger {
             List<Segment> singleSegments0 = singleSegments.stream().filter(s -> !largestSegment.contains(s)).toList();
             List<Segment> mergedSegments0 = new ArrayList<>(mergedSegments);
             mergedSegments0.add(largestSegment);
-            configurations.add(new MergedSegments(mergedSegments0));
+            configurations.add(new SegmentConfiguration(singularSegments, mergedSegments0));
+            configurationCount++;
 
             if (!singleSegments0.isEmpty()) {
                 createMergeConfigurations(configurations, singleSegments0, mergedSegments0,
-                        Math.max(1, maxConfigurations - SEARCH_DECREASE));
+                        Math.max(1, maxConfigurations - ITERATION_DECREASE));
             }
 
             if (++count >= maxConfigurations) break;

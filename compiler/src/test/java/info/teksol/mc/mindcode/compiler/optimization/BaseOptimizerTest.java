@@ -42,10 +42,10 @@ class BaseOptimizerTest extends AbstractTestBase {
             ix2 = ip.createInstruction(testContext, Opcode.SET, c, P0),
             ix3 = ip.createInstruction(testContext, Opcode.SET, d, P0);
 
-    private final List<LogicInstruction> instructions = new ArrayList<>(List.of(ix0, ix1, ix2));
+    private final List<LogicInstruction> program = new ArrayList<>(List.of(ix0, ix1, ix2));
     private final OptimizationContext oc = new OptimizationContext(TraceFile.NULL_TRACE, m -> {},
-            profile, ip, instructions, CallGraph.createEmpty(),
-            AstContext.createRootNode(profile), false);
+            profile, ip, new TestOptimizerContext(m -> {}),
+            program, CallGraph.createEmpty(), AstContext.createRootNode(profile), false);
     private final DummyOptimizer test = new DummyOptimizer(oc);
 
     @Test
@@ -100,7 +100,7 @@ class BaseOptimizerTest extends AbstractTestBase {
 
     @Test
     void handlesInstructionStream() {
-        assertEquals(instructions,test.instructionStream().toList());
+        assertEquals(program,test.instructionStream().toList());
     }
 
     @Test
@@ -211,7 +211,7 @@ class BaseOptimizerTest extends AbstractTestBase {
     @Test
     void handlesInsertInstruction() {
         test.insertInstruction(1, ix3);
-        assertEquals(List.of(ix0, ix3, ix1, ix2), instructions);
+        assertEquals(List.of(ix0, ix3, ix1, ix2), program);
     }
 
     @Test
@@ -224,13 +224,13 @@ class BaseOptimizerTest extends AbstractTestBase {
         LogicList list = test.contextInstructions(mockAstContext).duplicate();
         test.insertInstructions(1, list);
         LabelInstruction duplicatedLabel = test.createLabel(mockAstContext, LogicLabel.symbolic("*label0"));
-        assertEquals(List.of(ix0, ix0, duplicatedLabel, ix2, ix1, ix2), instructions);
+        assertEquals(List.of(ix0, ix0, duplicatedLabel, ix2, ix1, ix2), program);
     }
 
     @Test
     void handlesReplaceInstruction() {
         test.replaceInstruction(ix1, ix3);
-        assertEquals(List.of(ix0, ix3, ix2), instructions);
+        assertEquals(List.of(ix0, ix3, ix2), program);
     }
 
     @Test
@@ -246,13 +246,13 @@ class BaseOptimizerTest extends AbstractTestBase {
     @Test
     void handlesRemoveInstruction() {
         test.removeInstruction(1);
-        assertEquals(List.of(ix0, ix2), instructions);
+        assertEquals(List.of(ix0, ix2), program);
     }
 
     @Test
     void handlesRemovePrevious() {
         test.removePrevious(ix2);
-        assertEquals(List.of(ix0, ix2), instructions);
+        assertEquals(List.of(ix0, ix2), program);
     }
 
     @Test
@@ -268,7 +268,7 @@ class BaseOptimizerTest extends AbstractTestBase {
     @Test
     void handlesRemoveFollowing() {
         test.removeFollowing(ix0);
-        assertEquals(List.of(ix0, ix2), instructions);
+        assertEquals(List.of(ix0, ix2), program);
     }
 
     @Test
@@ -284,7 +284,7 @@ class BaseOptimizerTest extends AbstractTestBase {
     @Test
     void handlesRemoveMatchingInstructions() {
         test.removeMatchingInstructions(LabelInstruction.class::isInstance);
-        assertEquals(List.of(ix0, ix2), instructions);
+        assertEquals(List.of(ix0, ix2), program);
     }
 
     @Test

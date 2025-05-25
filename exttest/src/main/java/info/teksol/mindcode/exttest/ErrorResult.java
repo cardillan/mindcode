@@ -2,9 +2,12 @@ package info.teksol.mindcode.exttest;
 
 import info.teksol.mc.emulator.processor.ExecutionException;
 import info.teksol.mc.profile.CompilerProfile;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+@NullMarked
 public record ErrorResult(String testCaseId, CompilerProfile profile, String unexpectedMessages,
-                          ExecutionException executionException, String failedTests) {
+                          @Nullable ExecutionException executionException, String failedTests) {
 
     @Override
     public String toString() {

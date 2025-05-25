@@ -56,7 +56,7 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
         int i = fileName.indexOf("-");
         return switch(fileName.substring(0, i)) {
             case "distinct" -> IntStream.of(0, 110, 200, 500);
-            case "homogenous" -> IntStream.of(0, 50, 100, 500);
+            case "homogenous" -> IntStream.of(0, 60, 100, 500);
             default -> throw new IllegalArgumentException("Unknown test name: " + fileName);
         };
     }

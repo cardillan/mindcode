@@ -1,10 +1,13 @@
 package info.teksol.mindcode.exttest;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.io.PrintWriter;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
+@NullMarked
 public abstract class AbstractTestProgress implements TestProgress {
     protected final AtomicInteger nextTestRun = new AtomicInteger(0);
     protected final AtomicInteger finishedCount = new AtomicInteger(0);

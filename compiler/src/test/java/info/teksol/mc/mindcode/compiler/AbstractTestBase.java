@@ -3,12 +3,15 @@ package info.teksol.mc.mindcode.compiler;
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.emulator.processor.Processor;
+import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ExpectedMessages;
+import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
+import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.CustomInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -164,6 +167,21 @@ public abstract class AbstractTestBase {
 
     protected static String q(String str) {
         return '"' + str + '"';
+    }
+
+    protected static class TestOptimizerContext extends AbstractMessageEmitter implements OptimizerContext {
+        public TestOptimizerContext(MessageConsumer messageConsumer) {
+            super(messageConsumer);
+        }
+
+        @Override
+        public <T> List<T> getDiagnosticData(Class<T> type) {
+            return List.of();
+        }
+
+        @Override
+        public void addDiagnosticData(Object data) {
+        }
     }
 
     // Common constants for creating instructions

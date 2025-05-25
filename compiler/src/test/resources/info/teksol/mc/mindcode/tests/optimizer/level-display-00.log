@@ -2,17 +2,23 @@
     19 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
      8 instructions eliminated by Dead Code Elimination (4 iterations).
-     4 instructions eliminated by Jump Optimization (4 iterations).
-     3 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     6 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     2 instructions added by Loop Optimization (2 iterations).
+     4 instructions eliminated by Jump Optimization (5 iterations).
+     4 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+     6 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
+     2 instructions added by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
-     5 instructions eliminated by Jump Straightening (4 iterations).
+     8 instructions added by Case Switching (5 iterations).
+     1 case expressions converted to switched jumps Case Switching.
+     5 instructions eliminated by Jump Straightening (5 iterations).
      5 instructions eliminated by Print Merging.
-    87 instructions after optimizations.
+    94 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 902):
   * Replicate loop condition at line 56:1                        cost     1, benefit       25.0, efficiency     25.000 (-5 instructions)
+  o Convert case at line 22:9 (segments: 1)                      cost     8, benefit     1456.7, efficiency    182.091
+
+Pass 1: speed optimization selection (cost limit 907):
+  * Convert case at line 22:9 (segments: 1)                      cost     8, benefit     1456.7, efficiency    182.091 (+8 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -458,7 +464,73 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
     63 label *label2
     64 read .CURRENT_INDEX .MEMORY 1
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+Modifications by Convert case at line 22:9 (segments: 1) (+8 instructions):
+ 
+    14 print "\nFound: "
+    15 print :block
+    16 sensor *tmp8 :block @type
+-    * jump *label7 notEqual *tmp8 @large-logic-display
++   17 sensor *tmp38 *tmp8 @id
++   18 jump *label33 greaterThanEq *tmp38 146
++   19 jump *label33 lessThan *tmp38 137
++   20 multijump *label34 *tmp38 137 (m:*label43)
++   21 multilabel *label34 (m:*label43)
++   22 jump *label10 always
++   23 multilabel *label35 (m:*label43)
++   24 jump *label12 always
++   25 multilabel *label36 (m:*label43)
++   26 jump *label33 always
++   27 multilabel *label37 (m:*label43)
++   28 jump *label33 always
++   29 multilabel *label38 (m:*label43)
++   30 jump *label33 always
++   31 multilabel *label39 (m:*label43)
++   32 jump *label16 always
++   33 multilabel *label40 (m:*label43)
++   34 jump *label14 always
++   35 multilabel *label41 (m:*label43)
++   36 jump *label33 always
++   37 multilabel *label42 (m:*label43)
++   38 jump *label8 always
+    39 label *label8
+    40 set .DISPLAY :block
+    41 jump *label6 always
+    42 label *label7
+-    * jump *label9 notEqual *tmp8 @message
+    43 label *label10
+    44 set .MESSAGE :block
+    45 jump *label6 always
+    46 label *label9
+-    * jump *label11 notEqual *tmp8 @switch
+    47 label *label12
+    48 set .SWITCH :block
+    49 jump *label6 always
+    50 label *label11
+-    * jump *label13 notEqual *tmp8 @memory-bank
+    51 label *label14
+    52 set .MEMORY :block
+    53 jump *label6 always
+    54 label *label13
+-    * jump *label15 notEqual *tmp8 @memory-cell
+    55 label *label16
+    56 set .MEMORY :block
+    57 label *label15
++   58 label *label33
+    59 label *label6
+    60 label *label4
+    61 jump *label29 greaterThan :n 0
+
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
+ 
+    35 multilabel *label41 (m:*label43)
+    36 jump *label33 always
+    37 multilabel *label42 (m:*label43)
+-    * jump *label8 always
+    38 label *label8
+    39 set .DISPLAY :block
+    40 jump *label6 always
+
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
      2 set .MEMORY null
      3 set .SWITCH null
@@ -472,107 +544,104 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      9 label *label29
     10 op sub :n :n 1
  
-    13 print :block
-    14 sensor *tmp8 :block @type
-    15 jump *label7 notEqual *tmp8 @large-logic-display
+    33 multilabel *label41 (m:*label43)
+    34 jump *label33 always
+    35 multilabel *label42 (m:*label43)
 -    * label *label8
-    16 set .DISPLAY :block
-    17 jump *label6 always
-    18 label *label7
-    19 jump *label9 notEqual *tmp8 @message
--    * label *label10
-    20 set .MESSAGE :block
-    21 jump *label6 always
-    22 label *label9
-    23 jump *label11 notEqual *tmp8 @switch
--    * label *label12
-    24 set .SWITCH :block
-    25 jump *label6 always
-    26 label *label11
-    27 jump *label13 notEqual *tmp8 @memory-bank
--    * label *label14
-    28 set .MEMORY :block
-    29 jump *label6 always
-    30 label *label13
-    31 jump *label15 notEqual *tmp8 @memory-cell
--    * label *label16
-    32 set .MEMORY :block
-    33 label *label15
-    34 label *label6
+    36 set .DISPLAY :block
+    37 jump *label6 always
+-    * label *label7
+    38 label *label10
+    39 set .MESSAGE :block
+    40 jump *label6 always
+-    * label *label9
+    41 label *label12
+    42 set .SWITCH :block
+    43 jump *label6 always
+-    * label *label11
+    44 label *label14
+    45 set .MEMORY :block
+    46 jump *label6 always
+-    * label *label13
+    47 label *label16
+    48 set .MEMORY :block
+-    * label *label15
+    49 label *label33
+    50 label *label6
 -    * label *label4
-    35 jump *label29 greaterThan :n 0
-    36 label *label5
-    37 print "\nMessage: "
+    51 jump *label29 greaterThan :n 0
+    52 label *label5
+    53 print "\nMessage: "
  
-    48 jump *label17 equal *tmp12 false
-    49 print "\nNo memory or display."
-    50 label *label17
+    64 jump *label17 equal *tmp12 false
+    65 print "\nNo memory or display."
+    66 label *label17
 -    * label *label18
-    51 printflush .MESSAGE
+    67 printflush .MESSAGE
 -    * label *label1
-    52 jump *label28 notEqual *tmp12 false
+    68 jump *label28 notEqual *tmp12 false
 -    * label *label2
-    53 read .CURRENT_INDEX .MEMORY 1
-    54 read .R0 .MEMORY 3
-    55 read .G0 .MEMORY 4
+    69 read .CURRENT_INDEX .MEMORY 1
+    70 read .R0 .MEMORY 3
+    71 read .G0 .MEMORY 4
  
-    58 read .G1 .MEMORY 7
-    59 read .B1 .MEMORY 8
-    60 draw stroke 1
+    74 read .G1 .MEMORY 7
+    75 read .B1 .MEMORY 8
+    76 draw stroke 1
 -    * label *label19
-    61 sensor *tmp21 .SWITCH @enabled
-    62 jump *label21 notEqual *tmp21 0
-    63 label *label32
+    77 sensor *tmp21 .SWITCH @enabled
+    78 jump *label21 notEqual *tmp21 0
+    79 label *label32
  
-    74 print :last
-    75 draw color .R1 .G1 .B1 255
-    76 set :x 159
+    90 print :last
+    91 draw color .R1 .G1 .B1 255
+    92 set :x 159
 -    * label *label22
-    77 label *label30
-    78 op sub :head :head 1
-    79 read :value .MEMORY :head
+    93 label *label30
+    94 op sub :head :head 1
+    95 read :value .MEMORY :head
  
-    81 draw line :x :last :x1 :value
-    82 set :x :x1
-    83 set :last :value
+    97 draw line :x :last :x1 :value
+    98 set :x :x1
+    99 set :last :value
 -    * label *label23
-    84 jump *label30 greaterThan :x1 10
+   100 jump *label30 greaterThan :x1 10
 -    * label *label24
-    85 draw color 255 255 255 255
-    86 draw lineRect 10 10 156 156
-    87 op sub *tmp32 @time :start
+   101 draw color 255 255 255 255
+   102 draw lineRect 10 10 156 156
+   103 op sub *tmp32 @time :start
  
-    91 op ceil *tmp34 *tmp33
-    92 op mul :wait FREQ *tmp34
-    93 set :loops 0
+   107 op ceil *tmp34 *tmp33
+   108 op mul :wait FREQ *tmp34
+   109 set :loops 0
 -    * label *label25
-    94 jump *label27 greaterThanEq @time :wait
-    95 label *label31
-    96 op add :loops :loops 1
+   110 jump *label27 greaterThanEq @time :wait
+   111 label *label31
+   112 op add :loops :loops 1
 -    * label *label26
-    97 jump *label31 lessThan @time :wait
-    98 label *label27
-    99 drawflush .DISPLAY
-   100 print "\nWait loops: "
-   101 print :loops
-   102 printflush .MESSAGE
+   113 jump *label31 lessThan @time :wait
+   114 label *label27
+   115 drawflush .DISPLAY
+   116 print "\nWait loops: "
+   117 print :loops
+   118 printflush .MESSAGE
 -    * label *label20
-   103 sensor *tmp21 .SWITCH @enabled
-   104 jump *label32 equal *tmp21 0
-   105 label *label21
+   119 sensor *tmp21 .SWITCH @enabled
+   120 jump *label32 equal *tmp21 0
+   121 label *label21
 
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   104 jump *label32 equal *tmp21 0
-   105 label *label21
-   106 control enabled switch1 0
+   120 jump *label32 equal *tmp21 0
+   121 label *label21
+   122 control enabled switch1 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
  
-    34 label *label6
-    35 jump *label29 greaterThan :n 0
-    36 label *label5
+    50 label *label6
+    51 jump *label29 greaterThan :n 0
+    52 label *label5
 -    * print "\nMessage: "
 -    * print .MESSAGE
 -    * print "\nSwitch: "
@@ -580,31 +649,31 @@ Modifications by Final phase, Print Merging, iteration 1 (-5 instructions):
 -    * print "\nMemory: "
 -    * print .MEMORY
 -    * print "\nDisplay: "
-+   37 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: "
-+   38 format .MESSAGE
-+   39 format .SWITCH
-+   40 format .MEMORY
-    41 print .DISPLAY
-    42 op equal *tmp10 .MEMORY null
-    43 op equal *tmp11 .DISPLAY null
++   53 print "\nMessage: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: "
++   54 format .MESSAGE
++   55 format .SWITCH
++   56 format .MEMORY
+    57 print .DISPLAY
+    58 op equal *tmp10 .MEMORY null
+    59 op equal *tmp11 .DISPLAY null
  
-    59 jump *label21 notEqual *tmp21 0
-    60 label *label32
-    61 set :start @time
+    75 jump *label21 notEqual *tmp21 0
+    76 label *label32
+    77 set :start @time
 -    * print "Item/Liquid/Energy Level Display"
-+   62 print "Item/Liquid/Energy Level Display\nIndex: {0}\nValue: "
-    63 draw clear 0 0 80
-    64 draw color .R0 .G0 .B0 255
-    65 draw rect 10 10 156 156
-    66 read :head .MEMORY .CURRENT_INDEX
-    67 read :last .MEMORY :head
++   78 print "Item/Liquid/Energy Level Display\nIndex: {0}\nValue: "
+    79 draw clear 0 0 80
+    80 draw color .R0 .G0 .B0 255
+    81 draw rect 10 10 156 156
+    82 read :head .MEMORY .CURRENT_INDEX
+    83 read :last .MEMORY :head
 -    * print "\nIndex: "
 -    * print :head
 -    * print "\nValue: "
-+   68 format :head
-    69 print :last
-    70 draw color .R1 .G1 .B1 255
-    71 set :x 159
++   84 format :head
+    85 print :last
+    86 draw color .R1 .G1 .B1 255
+    87 set :x 159
 
 Final code before resolving virtual instructions:
 
@@ -623,25 +692,41 @@ getlink :block :n
 print "\nFound: "
 print :block
 sensor *tmp8 :block @type
-jump *label7 notEqual *tmp8 @large-logic-display
+sensor *tmp38 *tmp8 @id
+jump *label33 greaterThanEq *tmp38 146
+jump *label33 lessThan *tmp38 137
+multijump *label34 *tmp38 137
+multilabel *label34
+jump *label10 always
+multilabel *label35
+jump *label12 always
+multilabel *label36
+jump *label33 always
+multilabel *label37
+jump *label33 always
+multilabel *label38
+jump *label33 always
+multilabel *label39
+jump *label16 always
+multilabel *label40
+jump *label14 always
+multilabel *label41
+jump *label33 always
+multilabel *label42
 set .DISPLAY :block
 jump *label6 always
-label *label7
-jump *label9 notEqual *tmp8 @message
+label *label10
 set .MESSAGE :block
 jump *label6 always
-label *label9
-jump *label11 notEqual *tmp8 @switch
+label *label12
 set .SWITCH :block
 jump *label6 always
-label *label11
-jump *label13 notEqual *tmp8 @memory-bank
+label *label14
 set .MEMORY :block
 jump *label6 always
-label *label13
-jump *label15 notEqual *tmp8 @memory-cell
+label *label16
 set .MEMORY :block
-label *label15
+label *label33
 label *label6
 jump *label29 greaterThan :n 0
 label *label5

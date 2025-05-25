@@ -22,6 +22,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     protected final OptimizationContext optimizationContext;
     protected final InstructionProcessor instructionProcessor;
     protected final MindustryMetadata metadata;
+    protected final boolean debugOutput;
     protected OptimizationLevel level = OptimizationLevel.EXPERIMENTAL;
     protected GenerationGoal goal = GenerationGoal.SIZE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
@@ -32,6 +33,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         this.optimizationContext = optimizationContext;
         this.instructionProcessor = optimizationContext.getInstructionProcessor();
         this.metadata = instructionProcessor.getMetadata();
+        this.debugOutput = getProfile().isDebugOutput();
     }
 
     @Override
@@ -66,6 +68,21 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     @Override
     public void setDebugPrinter(DebugPrinter debugPrinter) {
         this.debugPrinter = debugPrinter;
+    }
+
+    protected void debugOutput(Object message) {
+        if (isDebugOutput()) System.out.println(message);
+    }
+
+    protected void debugOutput(@PrintFormat String format, Object... args) {
+        if (isDebugOutput()) {
+            System.out.printf(format, args);
+            System.out.println();
+        }
+    }
+
+    protected boolean isDebugOutput() {
+        return debugOutput;
     }
 
     protected boolean advanced() {

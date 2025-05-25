@@ -1,7 +1,10 @@
 package info.teksol.mindcode.exttest;
 
+import org.jspecify.annotations.NullMarked;
+
 import java.io.PrintWriter;
 
+@NullMarked
 public interface TestProgress {
 
     boolean finished();

@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -39,6 +40,7 @@ class OptimizationContext {
     private final MessageConsumer messageConsumer;
     private final OptimizerExpressionEvaluator expressionEvaluator;
     private final InstructionProcessor instructionProcessor;
+    private final OptimizerContext optimizerContext;
     private final List<LogicInstruction> program;
     private final CallGraph callGraph;
     private final AstContext rootContext;
@@ -76,12 +78,13 @@ class OptimizationContext {
     private boolean updated;
 
     OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile profile,
-            InstructionProcessor instructionProcessor, List<LogicInstruction> program, CallGraph callGraph,
-            AstContext rootAstContext, boolean remoteLibrary) {
+            InstructionProcessor instructionProcessor, OptimizerContext optimizerContext, List<LogicInstruction> program,
+            CallGraph callGraph, AstContext rootAstContext, boolean remoteLibrary) {
         this.traceFile = traceFile;
         this.messageConsumer = messageConsumer;
         this.profile = profile;
         this.instructionProcessor = instructionProcessor;
+        this.optimizerContext = optimizerContext;
         this.program = program;
         this.callGraph = callGraph;
         this.rootContext = rootAstContext;
@@ -116,6 +119,10 @@ class OptimizationContext {
 
     InstructionProcessor getInstructionProcessor() {
         return instructionProcessor;
+    }
+
+    public void addDiagnosticData(Object data) {
+        optimizerContext.addDiagnosticData(data);
     }
 
     List<LogicInstruction> getProgram() {

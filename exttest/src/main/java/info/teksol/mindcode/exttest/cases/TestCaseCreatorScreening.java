@@ -1,14 +1,15 @@
 package info.teksol.mindcode.exttest.cases;
 
-import info.teksol.mc.common.InputFile;
 import info.teksol.mc.common.InputFiles;
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.exttest.Configuration.SingleTestConfiguration;
+import info.teksol.mindcode.exttest.TestConfiguration;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 
-public class TestCaseCreatorScreening implements TestCaseCreator {
+@NullMarked
+public class TestCaseCreatorScreening extends BaseTestCaseCreator {
     private final List<SingleTestConfiguration> configurations;
 
     public TestCaseCreatorScreening(List<SingleTestConfiguration> configurations) {
@@ -26,17 +27,19 @@ public class TestCaseCreatorScreening implements TestCaseCreator {
     }
 
     @Override
-    public MindcodeCompiler createCaseCompiler(int testRunNumber) {
-        InputFiles inputFiles = configurations.get(testRunNumber).getInputFiles();
-        CompilerProfile profile = configurations.get(testRunNumber).createCompilerProfile(0);
-        return new MindcodeCompiler(message -> {}, profile, inputFiles);
+    protected TestConfiguration getConfiguration(int testRunNumber) {
+        return configurations.get(testRunNumber);
     }
 
     @Override
-    public InputFile getInputFile(int testRunNumber) {
-        return configurations.get(testRunNumber).getInputFiles().getMainInputFile();
+    protected InputFiles getInputFiles(int testRunNumber) {
+        return configurations.get(testRunNumber).getInputFiles();
     }
 
+    @Override
+    protected CompilerProfile getCompilerProfile(int testRunNumber) {
+        return configurations.get(testRunNumber).createCompilerProfile(0);
+    }
 
     @Override
     public String getTestCaseId(int testRunNumber) {

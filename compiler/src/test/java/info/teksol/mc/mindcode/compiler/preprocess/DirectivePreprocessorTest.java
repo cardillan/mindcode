@@ -85,6 +85,22 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveCaseConfiguration() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setCaseConfiguration(0);
+        processDirective(profile, "case-configuration", "147");
+        assertEquals(147, profile.getCaseConfiguration());
+    }
+
+    @Test
+    void processesDirectiveDebugOutput() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setDebugOutput(false);
+        processDirective(profile, "debug-output", "true");
+        assertTrue(profile.isDebugOutput());
+    }
+
+    @Test
     void processesDirectiveInstructionLimit() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setInstructionLimit(1);

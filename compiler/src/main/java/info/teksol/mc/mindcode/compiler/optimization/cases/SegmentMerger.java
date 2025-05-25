@@ -8,5 +8,9 @@ public interface SegmentMerger {
     int MAX_EXCEPTIONS_WHEN = 2;
     int MAX_EXCEPTIONS_ELSE = 3;
 
-    Set<MergedSegments> createMergeConfigurations(List<Segment> segments);
+    List<Segment> getSingularSegments();
+
+    Set<SegmentConfiguration> createMergeConfigurations();
+
+    int getConfigurationCount();
 }

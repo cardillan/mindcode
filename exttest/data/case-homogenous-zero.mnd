@@ -1,0 +1,23 @@
+#set target-optimization = specific;
+#set err-invalid-content = false;
+#set single-step-elimination = none;
+#set jump-straightening = none;
+#set jump-threading = none;
+
+def isWall(block)
+    case block
+        when @graphite-press,
+             @copper-wall, @copper-wall-large, @titanium-wall, @titanium-wall-large,
+             @plastanium-wall, @plastanium-wall-large, @thorium-wall, @thorium-wall-large,
+             @phase-wall, @phase-wall-large, @surge-wall, @surge-wall-large,
+             @scrap-wall, @scrap-wall-large, @scrap-wall-huge, @scrap-wall-gigantic,
+             @beryllium-wall, @beryllium-wall-large, @tungsten-wall, @tungsten-wall-large,
+             @reinforced-surge-wall, @reinforced-surge-wall-large, @carbide-wall, @carbide-wall-large
+        then true;
+        else false;
+    end;
+end;
+
+for i in 0 ... @blockCount do
+    print(isWall(lookup(:block, i)));
+end;

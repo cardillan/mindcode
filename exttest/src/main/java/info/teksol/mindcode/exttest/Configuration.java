@@ -8,11 +8,13 @@ import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorFull;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorSampled;
+import org.jspecify.annotations.NullMarked;
 
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 public record Configuration(
         int threads,
         String outputPath,
@@ -20,13 +22,21 @@ public record Configuration(
         int sampleMultiplier,
         List<SingleTestConfiguration> configurations) {
 
+    public Configuration {
+        if (threads < 1) {
+            throw new IllegalArgumentException("threads must be at least 1");
+        }
+    }
+
     public void addTestConfiguration(
             String sourceFileName,
             InputFiles inputFiles,
             Map<Optimization, List<OptimizationLevel>> optimizationLevels,
             List<GenerationGoal> generationGoals,
+            List<Boolean> symbolicLabels,
             int sampleCount,
             int failureLimit,
+            int caseSwitching,
             boolean run) {
 
         configurations.add(new SingleTestConfiguration(
@@ -34,8 +44,10 @@ public record Configuration(
                 inputFiles,
                 optimizationLevels,
                 generationGoals,
+                symbolicLabels,
                 sampleCount * sampleMultiplier,
                 failureLimit,
+                caseSwitching,
                 run));
     }
 
@@ -49,9 +61,11 @@ public record Configuration(
         private final Path resultPath;
         private final Map<Optimization, List<OptimizationLevel>> optimizationLevels;
         private final List<GenerationGoal> generationGoals;
+        private final List<Boolean> symbolicLabels;
         private final int sampleCount;
         private final int totalCases;
         private final int failureLimit;
+        private final int caseSwitching;
         private final boolean run;
 
         private final TestCaseCreator testCaseCreator;
@@ -61,19 +75,26 @@ public record Configuration(
                 InputFiles inputFiles,
                 Map<Optimization, List<OptimizationLevel>> optimizationLevels,
                 List<GenerationGoal> generationGoals,
+                List<Boolean> symbolicLabels,
                 int sampleCount,
                 int failureLimit,
+                int caseSwitching,
                 boolean run) {
             this.sourceFileName = sourceFileName;
             this.inputFiles = inputFiles;
             this.optimizationLevels = optimizationLevels;
             this.generationGoals = generationGoals;
+            this.symbolicLabels = symbolicLabels;
             this.sampleCount = sampleCount;
             this.failureLimit = failureLimit;
+            this.caseSwitching = caseSwitching;
             this.run = run;
 
-            this.totalCases = optimizationLevels.values().stream().mapToInt(List::size)
-                                      .reduce(1, Configuration::product) * generationGoals.size();
+            this.totalCases = optimizationLevels.values().stream()
+                    .mapToInt(List::size).reduce(1, Configuration::product)
+                    * generationGoals.size()
+                    * symbolicLabels.size()
+                    * (caseSwitching + 1);
 
             this.testCaseCreator = fullTests || sampleCount >= totalCases
                     ? new TestCaseCreatorFull(this)
@@ -96,6 +117,10 @@ public record Configuration(
 
         public String getSourceFileName() {
             return sourceFileName;
+        }
+
+        public int getCaseSwitching() {
+            return caseSwitching;
         }
 
         public boolean isRun() {
@@ -137,8 +162,17 @@ public record Configuration(
         }
 
         @Override
+        public List<Boolean> getSymbolicLabels() {
+            return symbolicLabels;
+        }
+
+        @Override
         public TestCaseCreator getTestCaseCreator() {
             return testCaseCreator;
+        }
+
+        public boolean isCaseSwitchingTest() {
+            return caseSwitching > 0;
         }
 
         @Override
@@ -151,8 +185,18 @@ public record Configuration(
             // Goal first
             int goal = testCase % generationGoals.size();
             profile.setGoal(generationGoals.get(goal));
-
             int remainder = testCase / generationGoals.size();
+
+            // Symbolic labels second
+            int labels = remainder % symbolicLabels.size();
+            profile.setSymbolicLabels(symbolicLabels.get(labels));
+            remainder /= symbolicLabels.size();
+
+            // Case switching third
+            int caseConfiguration = remainder % (caseSwitching + 1);
+            profile.setCaseConfiguration(caseConfiguration);
+            remainder /= (caseSwitching + 1);
+
             for (Optimization optimization : Optimization.LIST) {
                 List<OptimizationLevel> levels = optimizationLevels.get(optimization);
                 int index = remainder % levels.size();

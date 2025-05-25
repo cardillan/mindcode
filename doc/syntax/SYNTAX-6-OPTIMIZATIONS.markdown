@@ -1168,7 +1168,7 @@ The instruction limit has been artificially lowered to ensure the optimizer will
 
 ```Mindcode
 #set symbolic-labels = true;
-#set instruction-limit = 100;
+#set instruction-limit = 70;
 
 print(case getlink(0).@type
     when null then "No block found";
@@ -1232,15 +1232,15 @@ The above case expression is transformed to this:
     label_40:
         jump label_44 greaterThanEq *tmp4 208
         jump label_56 equal *tmp4 205
-        jump label_55 lessThan *tmp4 203
+        jump label_56 lessThan *tmp4 203
         jump label_53 always 0 0
     label_44:
-        jump label_48 greaterThanEq *tmp4 222
+        jump label_49 greaterThanEq *tmp4 226
         jump label_53 equal *tmp4 220
         jump label_53 equal *tmp4 221
-        jump label_56 always 0 0
-    label_48:
         jump label_53 equal *tmp4 225
+        jump label_56 always 0 0
+    label_49:
         jump label_53 equal *tmp4 234
         jump label_56 always 0 0
     label_51:

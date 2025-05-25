@@ -7,18 +7,37 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
-public class LinearSegmentMerger implements SegmentMerger {
+public class LinearSegmentMerger extends AbstractSegmentMerger {
+    private final List<Segment> singularSegments;
+    private int configurationCount = 0;
+
+    public LinearSegmentMerger(Targets targets, boolean logicConversion) {
+        singularSegments = split(targets, logicConversion);
+    }
 
     @Override
-    public Set<MergedSegments> createMergeConfigurations(List<Segment> segments) {
-        List<Segment> merged = mergeSegments(segments);
+    public int getConfigurationCount() {
+        return configurationCount;
+    }
 
-        Set<MergedSegments> result = new LinkedHashSet<>();
+    @Override
+    public List<Segment> getSingularSegments() {
+        return singularSegments;
+    }
+
+    @Override
+    public Set<SegmentConfiguration> createMergeConfigurations() {
+        List<Segment> merged = mergeSegments(singularSegments);
+
+        Set<SegmentConfiguration> configurations = new LinkedHashSet<>();
+        configurations.add(new SegmentConfiguration(singularSegments, List.of()));
+        configurationCount++;
         for (int i = 1; i <= merged.size(); i++) {
-            result.add(new MergedSegments(merged.subList(0, i)));
+            configurations.add(new SegmentConfiguration(singularSegments, merged.subList(0, i)));
+            configurationCount++;
         }
 
-        return result;
+        return configurations;
     }
 
     // Rules for merging segments:
