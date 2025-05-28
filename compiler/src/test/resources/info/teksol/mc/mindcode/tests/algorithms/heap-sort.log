@@ -1,4 +1,4 @@
-   100 instructions before optimizations.
+    99 instructions before optimizations.
     21 instructions eliminated by Temp Variables Elimination.
     10 instructions eliminated by Dead Code Elimination (5 iterations).
      7 instructions eliminated by Jump Optimization (5 iterations).
@@ -9,76 +9,76 @@
      5 loops improved by Loop Optimization.
      2 instructions updated by JumpThreading.
      2 instructions eliminated by Unreachable Code Elimination (2 iterations).
-    54 instructions after optimizations.
+    53 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 943):
+Pass 1: speed optimization selection (cost limit 944):
   * Replicate loop condition at line 31:5                        cost     2, benefit      625.0, efficiency    312.500 (+2 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-8 instructions):
  
-    25 set *tmp12 :up:parent
-    26 write :up:iv ARRAY *tmp12
-    27 set :up:index :up:parent
+    23 set *tmp12 :up:parent
+    24 write :up:iv ARRAY *tmp12
+    25 set :up:index :up:parent
 -    * set *tmp9 :up:index
-    28 jump *label9 always
-    29 label *label8
-    30 jump *label7 always
+    26 jump *label8 always
+    27 label *label7
+    28 jump *label6 always
 -    * set *tmp9 null
-    31 label *label9
+    29 label *label8
+    30 label *label5
+    31 jump *label4 always
     32 label *label6
-    33 jump *label5 always
-    34 label *label7
 -    * set *tmp0 null
-    35 label *label4
-    36 label *label2
-    37 op add :i :i 1
+    33 label *label3
+    34 label *label1
+    35 op add :i :i 1
  
+    75 label *label18
+    76 set *tmp34 null
     77 label *label19
-    78 set *tmp34 null
-    79 label *label20
 -    * set *tmp29 *tmp34
-    80 jump *label18 always
-    81 label *label17
+    78 jump *label17 always
+    79 label *label16
 -    * set *tmp29 null
-    82 label *label18
-    83 set *tmp37 :down:parent
-    84 read *tmp38 ARRAY *tmp37
+    80 label *label17
+    81 set *tmp37 :down:parent
+    82 read *tmp38 ARRAY *tmp37
  
-    90 set *tmp43 :down:child
-    91 write :down:pv ARRAY *tmp43
-    92 set :down:parent :down:child
+    88 set *tmp43 :down:child
+    89 write :down:pv ARRAY *tmp43
+    90 set :down:parent :down:child
 -    * set *tmp40 :down:parent
-    93 jump *label22 always
-    94 label *label21
-    95 jump *label16 always
+    91 jump *label21 always
+    92 label *label20
+    93 jump *label15 always
 -    * set *tmp40 null
-    96 label *label22
+    94 label *label21
+    95 label *label14
+    96 jump *label13 always
     97 label *label15
-    98 jump *label14 always
-    99 label *label16
 -    * set *tmp22 null
-   100 label *label13
-   101 label *label11
-   102 jump *label10 always
+    98 label *label12
+    99 label *label10
+   100 jump *label9 always
 
 Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
-    72 set *tmp35 :down:child
-    73 read *tmp36 ARRAY *tmp35
-    74 set :down:cv *tmp36
+    70 set *tmp35 :down:child
+    71 read *tmp36 ARRAY *tmp35
+    72 set :down:cv *tmp36
 -    * set *tmp34 :down:cv
-    75 jump *label20 always
-    76 label *label19
+    73 jump *label19 always
+    74 label *label18
 -    * set *tmp34 null
-    77 label *label20
-    78 jump *label18 always
-    79 label *label17
+    75 label *label19
+    76 jump *label17 always
+    77 label *label16
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-21 instructions):
  
-    10 op greaterThan *tmp1 :up:index 0
-    11 jump *label7 equal *tmp1 false
-    12 op sub *tmp2 :up:index 1
+     8 op greaterThan *tmp1 :up:index 0
+     9 jump *label6 equal *tmp1 false
+    10 op sub *tmp2 :up:index 1
 -    * op idiv *tmp3 *tmp2 2
 -    * set :up:parent *tmp3
 -    * set *tmp4 :up:index
@@ -87,537 +87,535 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-21 ins
 -    * set *tmp6 :up:parent
 -    * read *tmp7 ARRAY *tmp6
 -    * set :up:pv *tmp7
-+   13 op idiv :up:parent *tmp2 2
-+   14 read :up:iv ARRAY :up:index
-+   15 read :up:pv ARRAY :up:parent
-    16 op lessThan *tmp8 :up:pv :up:iv
-    17 jump *label8 equal *tmp8 false
++   11 op idiv :up:parent *tmp2 2
++   12 read :up:iv ARRAY :up:index
++   13 read :up:pv ARRAY :up:parent
+    14 op lessThan *tmp8 :up:pv :up:iv
+    15 jump *label7 equal *tmp8 false
 -    * set *tmp10 :up:index
 -    * write :up:pv ARRAY *tmp10
 -    * set *tmp12 :up:parent
 -    * write :up:iv ARRAY *tmp12
-+   18 write :up:pv ARRAY :up:index
-+   19 write :up:iv ARRAY :up:parent
-    20 set :up:index :up:parent
-    21 jump *label9 always
-    22 label *label8
++   16 write :up:pv ARRAY :up:index
++   17 write :up:iv ARRAY :up:parent
+    18 set :up:index :up:parent
+    19 jump *label8 always
+    20 label *label7
  
-    30 op add :i :i 1
-    31 jump *label1 always
-    32 label *label3
+    28 op add :i :i 1
+    29 jump *label0 always
+    30 label *label2
 -    * op sub *tmp14 SIZE 1
 -    * set :index *tmp14
-+   33 op sub :index SIZE 1
-    34 label *label10
-    35 op greaterThan *tmp15 :index 0
-    36 jump *label12 equal *tmp15 false
++   31 op sub :index SIZE 1
+    32 label *label9
+    33 op greaterThan *tmp15 :index 0
+    34 jump *label11 equal *tmp15 false
 -    * read *tmp16 ARRAY 0
 -    * set :x *tmp16
 -    * set *tmp18 :index
 -    * read *tmp19 ARRAY *tmp18
-+   37 read :x ARRAY 0
-+   38 read *tmp19 ARRAY :index
-    39 write *tmp19 ARRAY 0
++   35 read :x ARRAY 0
++   36 read *tmp19 ARRAY :index
+    37 write *tmp19 ARRAY 0
 -    * set *tmp20 :index
 -    * write :x ARRAY *tmp20
-+   40 write :x ARRAY :index
-    41 op sub :index :index 1
-    42 set :down:index :index
-    43 set :down:parent 0
-    44 label *label14
-    45 op mul *tmp23 :down:parent 2
++   38 write :x ARRAY :index
+    39 op sub :index :index 1
+    40 set :down:index :index
+    41 set :down:parent 0
+    42 label *label13
+    43 op mul *tmp23 :down:parent 2
 -    * op add *tmp24 *tmp23 1
 -    * set :down:child *tmp24
-+   46 op add :down:child *tmp23 1
-    47 op lessThanEq *tmp25 :down:child :down:index
-    48 jump *label16 equal *tmp25 false
++   44 op add :down:child *tmp23 1
+    45 op lessThanEq *tmp25 :down:child :down:index
+    46 jump *label15 equal *tmp25 false
 -    * set *tmp26 :down:child
 -    * read *tmp27 ARRAY *tmp26
 -    * set :down:cv *tmp27
-+   49 read :down:cv ARRAY :down:child
-    50 op lessThan *tmp28 :down:child :down:index
-    51 jump *label17 equal *tmp28 false
-    52 op add *tmp30 :down:child 1
++   47 read :down:cv ARRAY :down:child
+    48 op lessThan *tmp28 :down:child :down:index
+    49 jump *label16 equal *tmp28 false
+    50 op add *tmp30 :down:child 1
 -    * set *tmp31 *tmp30
 -    * read *tmp32 ARRAY *tmp31
-+   53 read *tmp32 ARRAY *tmp30
-    54 op lessThan *tmp33 :down:cv *tmp32
-    55 jump *label19 equal *tmp33 false
-    56 op add :down:child :down:child 1
++   51 read *tmp32 ARRAY *tmp30
+    52 op lessThan *tmp33 :down:cv *tmp32
+    53 jump *label18 equal *tmp33 false
+    54 op add :down:child :down:child 1
 -    * set *tmp35 :down:child
 -    * read *tmp36 ARRAY *tmp35
 -    * set :down:cv *tmp36
-+   57 read :down:cv ARRAY :down:child
-    58 jump *label20 always
-    59 label *label19
-    60 label *label20
-    61 jump *label18 always
-    62 label *label17
-    63 label *label18
++   55 read :down:cv ARRAY :down:child
+    56 jump *label19 always
+    57 label *label18
+    58 label *label19
+    59 jump *label17 always
+    60 label *label16
+    61 label *label17
 -    * set *tmp37 :down:parent
 -    * read *tmp38 ARRAY *tmp37
 -    * set :down:pv *tmp38
-+   64 read :down:pv ARRAY :down:parent
-    65 op lessThan *tmp39 :down:pv :down:cv
-    66 jump *label21 equal *tmp39 false
++   62 read :down:pv ARRAY :down:parent
+    63 op lessThan *tmp39 :down:pv :down:cv
+    64 jump *label20 equal *tmp39 false
 -    * set *tmp41 :down:parent
 -    * write :down:cv ARRAY *tmp41
 -    * set *tmp43 :down:child
 -    * write :down:pv ARRAY *tmp43
-+   67 write :down:cv ARRAY :down:parent
-+   68 write :down:pv ARRAY :down:child
-    69 set :down:parent :down:child
-    70 jump *label22 always
-    71 label *label21
++   65 write :down:cv ARRAY :down:parent
++   66 write :down:pv ARRAY :down:child
+    67 set :down:parent :down:child
+    68 jump *label21 always
+    69 label *label20
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-7 instructions):
  
-     7 jump *label3 greaterThanEq :i SIZE
-     8 set :up:index :i
-     9 label *label5
+     5 jump *label2 greaterThanEq :i SIZE
+     6 set :up:index :i
+     7 label *label4
 -    * op greaterThan *tmp1 :up:index 0
--    * jump *label7 equal *tmp1 false
-+   10 jump *label7 lessThanEq :up:index 0
-    11 op sub *tmp2 :up:index 1
-    12 op idiv :up:parent *tmp2 2
-    13 read :up:iv ARRAY :up:index
-    14 read :up:pv ARRAY :up:parent
+-    * jump *label6 equal *tmp1 false
++    8 jump *label6 lessThanEq :up:index 0
+     9 op sub *tmp2 :up:index 1
+    10 op idiv :up:parent *tmp2 2
+    11 read :up:iv ARRAY :up:index
+    12 read :up:pv ARRAY :up:parent
 -    * op lessThan *tmp8 :up:pv :up:iv
--    * jump *label8 equal *tmp8 false
-+   15 jump *label8 greaterThanEq :up:pv :up:iv
-    16 write :up:pv ARRAY :up:index
-    17 write :up:iv ARRAY :up:parent
-    18 set :up:index :up:parent
+-    * jump *label7 equal *tmp8 false
++   13 jump *label7 greaterThanEq :up:pv :up:iv
+    14 write :up:pv ARRAY :up:index
+    15 write :up:iv ARRAY :up:parent
+    16 set :up:index :up:parent
  
-    30 label *label3
-    31 op sub :index SIZE 1
-    32 label *label10
+    28 label *label2
+    29 op sub :index SIZE 1
+    30 label *label9
 -    * op greaterThan *tmp15 :index 0
--    * jump *label12 equal *tmp15 false
-+   33 jump *label12 lessThanEq :index 0
-    34 read :x ARRAY 0
-    35 read *tmp19 ARRAY :index
-    36 write *tmp19 ARRAY 0
+-    * jump *label11 equal *tmp15 false
++   31 jump *label11 lessThanEq :index 0
+    32 read :x ARRAY 0
+    33 read *tmp19 ARRAY :index
+    34 write *tmp19 ARRAY 0
  
-    41 label *label14
-    42 op mul *tmp23 :down:parent 2
-    43 op add :down:child *tmp23 1
+    39 label *label13
+    40 op mul *tmp23 :down:parent 2
+    41 op add :down:child *tmp23 1
 -    * op lessThanEq *tmp25 :down:child :down:index
--    * jump *label16 equal *tmp25 false
-+   44 jump *label16 greaterThan :down:child :down:index
-    45 read :down:cv ARRAY :down:child
+-    * jump *label15 equal *tmp25 false
++   42 jump *label15 greaterThan :down:child :down:index
+    43 read :down:cv ARRAY :down:child
 -    * op lessThan *tmp28 :down:child :down:index
--    * jump *label17 equal *tmp28 false
-+   46 jump *label17 greaterThanEq :down:child :down:index
-    47 op add *tmp30 :down:child 1
-    48 read *tmp32 ARRAY *tmp30
+-    * jump *label16 equal *tmp28 false
++   44 jump *label16 greaterThanEq :down:child :down:index
+    45 op add *tmp30 :down:child 1
+    46 read *tmp32 ARRAY *tmp30
 -    * op lessThan *tmp33 :down:cv *tmp32
--    * jump *label19 equal *tmp33 false
-+   49 jump *label19 greaterThanEq :down:cv *tmp32
-    50 op add :down:child :down:child 1
-    51 read :down:cv ARRAY :down:child
-    52 jump *label20 always
+-    * jump *label18 equal *tmp33 false
++   47 jump *label18 greaterThanEq :down:cv *tmp32
+    48 op add :down:child :down:child 1
+    49 read :down:cv ARRAY :down:child
+    50 jump *label19 always
  
-    56 label *label17
-    57 label *label18
-    58 read :down:pv ARRAY :down:parent
+    54 label *label16
+    55 label *label17
+    56 read :down:pv ARRAY :down:parent
 -    * op lessThan *tmp39 :down:pv :down:cv
--    * jump *label21 equal *tmp39 false
-+   59 jump *label21 greaterThanEq :down:pv :down:cv
-    60 write :down:cv ARRAY :down:parent
-    61 write :down:pv ARRAY :down:child
-    62 set :down:parent :down:child
+-    * jump *label20 equal *tmp39 false
++   57 jump *label20 greaterThanEq :down:pv :down:cv
+    58 write :down:cv ARRAY :down:parent
+    59 write :down:pv ARRAY :down:child
+    60 set :down:parent :down:child
 
 Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-2 instructions):
  
-    49 jump *label19 greaterThanEq :down:cv *tmp32
-    50 op add :down:child :down:child 1
-    51 read :down:cv ARRAY :down:child
--    * jump *label20 always
-    52 label *label19
-    53 label *label20
--    * jump *label18 always
-    54 label *label17
-    55 label *label18
-    56 read :down:pv ARRAY :down:parent
+    47 jump *label18 greaterThanEq :down:cv *tmp32
+    48 op add :down:child :down:child 1
+    49 read :down:cv ARRAY :down:child
+-    * jump *label19 always
+    50 label *label18
+    51 label *label19
+-    * jump *label17 always
+    52 label *label16
+    53 label *label17
+    54 read :down:pv ARRAY :down:parent
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    41 label *label14
-    42 op mul *tmp23 :down:parent 2
-    43 op add :down:child *tmp23 1
--    * jump *label16 greaterThan :down:child :down:index
-+   44 jump *label16 greaterThan :down:child :index
-    45 read :down:cv ARRAY :down:child
--    * jump *label17 greaterThanEq :down:child :down:index
-+   46 jump *label17 greaterThanEq :down:child :index
-    47 op add *tmp30 :down:child 1
-    48 read *tmp32 ARRAY *tmp30
-    49 jump *label19 greaterThanEq :down:cv *tmp32
+    39 label *label13
+    40 op mul *tmp23 :down:parent 2
+    41 op add :down:child *tmp23 1
+-    * jump *label15 greaterThan :down:child :down:index
++   42 jump *label15 greaterThan :down:child :index
+    43 read :down:cv ARRAY :down:child
+-    * jump *label16 greaterThanEq :down:child :down:index
++   44 jump *label16 greaterThanEq :down:child :index
+    45 op add *tmp30 :down:child 1
+    46 read *tmp32 ARRAY *tmp30
+    47 jump *label18 greaterThanEq :down:cv *tmp32
 -    * op add :down:child :down:child 1
-+   50 op add :down:child *tmp23 2
-    51 read :down:cv ARRAY :down:child
-    52 label *label19
-    53 label *label20
++   48 op add :down:child *tmp23 2
+    49 read :down:cv ARRAY :down:child
+    50 label *label18
+    51 label *label19
  
-    74 jump *label25 greaterThanEq :i SIZE
-    75 set *tmp45 :i
-    76 set *tmp47 :i
+    72 jump *label24 greaterThanEq :i SIZE
+    73 set *tmp45 :i
+    74 set *tmp47 :i
 -    * read *tmp46 FINAL *tmp45
 -    * read *tmp48 ARRAY *tmp47
-+   77 read *tmp46 FINAL :i
-+   78 read *tmp48 ARRAY :i
-    79 assertequals *tmp46 *tmp48 "unexpected value"
-    80 label *label24
-    81 op add :i :i 1
++   75 read *tmp46 FINAL :i
++   76 read *tmp48 ARRAY :i
+    77 assertequals *tmp46 *tmp48 "unexpected value"
+    78 label *label23
+    79 op add :i :i 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
-    36 write *tmp19 ARRAY 0
-    37 write :x ARRAY :index
-    38 op sub :index :index 1
+    34 write *tmp19 ARRAY 0
+    35 write :x ARRAY :index
+    36 op sub :index :index 1
 -    * set :down:index :index
-    39 set :down:parent 0
-    40 label *label14
-    41 op mul *tmp23 :down:parent 2
+    37 set :down:parent 0
+    38 label *label13
+    39 op mul *tmp23 :down:parent 2
  
-    71 set :i 0
-    72 label *label23
-    73 jump *label25 greaterThanEq :i SIZE
+    69 set :i 0
+    70 label *label22
+    71 jump *label24 greaterThanEq :i SIZE
 -    * set *tmp45 :i
 -    * set *tmp47 :i
-    74 read *tmp46 FINAL :i
-    75 read *tmp48 ARRAY :i
-    76 assertequals *tmp46 *tmp48 "unexpected value"
+    72 read *tmp46 FINAL :i
+    73 read *tmp48 ARRAY :i
+    74 assertequals *tmp46 *tmp48 "unexpected value"
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
  
-     5 set :i 1
-     6 label *label1
-     7 jump *label3 greaterThanEq :i SIZE
-+    8 label *label30
-     9 set :up:index :i
-    10 label *label5
-    11 jump *label7 lessThanEq :up:index 0
-+   12 label *label31
-    13 op sub *tmp2 :up:index 1
-    14 op idiv :up:parent *tmp2 2
-    15 read :up:iv ARRAY :up:index
+     3 set :i 1
+     4 label *label0
+     5 jump *label2 greaterThanEq :i SIZE
++    6 label *label29
+     7 set :up:index :i
+     8 label *label4
+     9 jump *label6 lessThanEq :up:index 0
++   10 label *label30
+    11 op sub *tmp2 :up:index 1
+    12 op idiv :up:parent *tmp2 2
+    13 read :up:iv ARRAY :up:index
  
-    23 jump *label7 always
-    24 label *label9
+    21 jump *label6 always
+    22 label *label8
+    23 label *label5
+-    * jump *label4 always
++   24 jump *label30 greaterThan :up:index 0
     25 label *label6
--    * jump *label5 always
-+   26 jump *label31 greaterThan :up:index 0
-    27 label *label7
-    28 label *label4
-    29 label *label2
-    30 op add :i :i 1
--    * jump *label1 always
-+   31 jump *label30 lessThan :i SIZE
-    32 label *label3
-    33 op sub :index SIZE 1
-    34 label *label10
-    35 jump *label12 lessThanEq :index 0
-+   36 label *label32
-    37 read :x ARRAY 0
-    38 read *tmp19 ARRAY :index
-    39 write *tmp19 ARRAY 0
+    26 label *label3
+    27 label *label1
+    28 op add :i :i 1
+-    * jump *label0 always
++   29 jump *label29 lessThan :i SIZE
+    30 label *label2
+    31 op sub :index SIZE 1
+    32 label *label9
+    33 jump *label11 lessThanEq :index 0
++   34 label *label31
+    35 read :x ARRAY 0
+    36 read *tmp19 ARRAY :index
+    37 write *tmp19 ARRAY 0
  
-    69 label *label16
-    70 label *label13
+    67 label *label15
+    68 label *label12
+    69 label *label10
+-    * jump *label9 always
++   70 jump *label31 greaterThan :index 0
     71 label *label11
--    * jump *label10 always
-+   72 jump *label32 greaterThan :index 0
-    73 label *label12
-    74 set :i 0
-    75 label *label23
-    76 jump *label25 greaterThanEq :i SIZE
-+   77 label *label33
-    78 read *tmp46 FINAL :i
-    79 read *tmp48 ARRAY :i
-    80 assertequals *tmp46 *tmp48 "unexpected value"
-    81 label *label24
-    82 op add :i :i 1
--    * jump *label23 always
-+   83 jump *label33 lessThan :i SIZE
-    84 label *label25
-    85 stop
-    86 end
+    72 set :i 0
+    73 label *label22
+    74 jump *label24 greaterThanEq :i SIZE
++   75 label *label32
+    76 read *tmp46 FINAL :i
+    77 read *tmp48 ARRAY :i
+    78 assertequals *tmp46 *tmp48 "unexpected value"
+    79 label *label23
+    80 op add :i :i 1
+-    * jump *label22 always
++   81 jump *label32 lessThan :i SIZE
+    82 label *label24
+    83 stop
+    84 end
 
 Modifications by Replicate loop condition at line 31:5 (+2 instructions):
  
-    44 op mul *tmp23 :down:parent 2
-    45 op add :down:child *tmp23 1
-    46 jump *label16 greaterThan :down:child :index
-+   47 label *label34
-    48 read :down:cv ARRAY :down:child
-    49 jump *label17 greaterThanEq :down:child :index
-    50 op add *tmp30 :down:child 1
+    42 op mul *tmp23 :down:parent 2
+    43 op add :down:child *tmp23 1
+    44 jump *label15 greaterThan :down:child :index
++   45 label *label33
+    46 read :down:cv ARRAY :down:child
+    47 jump *label16 greaterThanEq :down:child :index
+    48 op add *tmp30 :down:child 1
  
-    66 jump *label16 always
-    67 label *label22
-    68 label *label15
--    * jump *label14 always
-+   69 op mul *tmp23 :down:parent 2
-+   70 op add :down:child *tmp23 1
-+   71 jump *label34 lessThanEq :down:child :index
-    72 label *label16
-    73 label *label13
-    74 label *label11
+    64 jump *label15 always
+    65 label *label21
+    66 label *label14
+-    * jump *label13 always
++   67 op mul *tmp23 :down:parent 2
++   68 op add :down:child *tmp23 1
++   69 jump *label33 lessThanEq :down:child :index
+    70 label *label15
+    71 label *label12
+    72 label *label10
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-     4 set FINAL bank3
-     5 set :i 1
-     6 label *label1
--    * jump *label3 greaterThanEq :i SIZE
-+    7 jump *label3 greaterThanEq 1 SIZE
-     8 label *label30
-     9 set :up:index :i
-    10 label *label5
--    * jump *label7 lessThanEq :up:index 0
-+   11 jump *label7 lessThanEq :i 0
-    12 label *label31
-    13 op sub *tmp2 :up:index 1
-    14 op idiv :up:parent *tmp2 2
+     2 set FINAL bank3
+     3 set :i 1
+     4 label *label0
+-    * jump *label2 greaterThanEq :i SIZE
++    5 jump *label2 greaterThanEq 1 SIZE
+     6 label *label29
+     7 set :up:index :i
+     8 label *label4
+-    * jump *label6 lessThanEq :up:index 0
++    9 jump *label6 lessThanEq :i 0
+    10 label *label30
+    11 op sub *tmp2 :up:index 1
+    12 op idiv :up:parent *tmp2 2
  
-    23 jump *label7 always
-    24 label *label9
+    21 jump *label6 always
+    22 label *label8
+    23 label *label5
+-    * jump *label30 greaterThan :up:index 0
++   24 jump *label30 greaterThan :up:parent 0
     25 label *label6
--    * jump *label31 greaterThan :up:index 0
-+   26 jump *label31 greaterThan :up:parent 0
-    27 label *label7
-    28 label *label4
-    29 label *label2
+    26 label *label3
+    27 label *label1
  
-    41 op sub :index :index 1
-    42 set :down:parent 0
-    43 label *label14
+    39 op sub :index :index 1
+    40 set :down:parent 0
+    41 label *label13
 -    * op mul *tmp23 :down:parent 2
 -    * op add :down:child *tmp23 1
--    * jump *label16 greaterThan :down:child :index
-+   44 op mul *tmp23 0 2
-+   45 op add :down:child 0 1
-+   46 jump *label16 greaterThan 1 :index
-    47 label *label34
-    48 read :down:cv ARRAY :down:child
-    49 jump *label17 greaterThanEq :down:child :index
+-    * jump *label15 greaterThan :down:child :index
++   42 op mul *tmp23 0 2
++   43 op add :down:child 0 1
++   44 jump *label15 greaterThan 1 :index
+    45 label *label33
+    46 read :down:cv ARRAY :down:child
+    47 jump *label16 greaterThanEq :down:child :index
  
-    66 jump *label16 always
-    67 label *label22
-    68 label *label15
+    64 jump *label15 always
+    65 label *label21
+    66 label *label14
 -    * op mul *tmp23 :down:parent 2
-+   69 op mul *tmp23 :down:child 2
-    70 op add :down:child *tmp23 1
-    71 jump *label34 lessThanEq :down:child :index
-    72 label *label16
++   67 op mul *tmp23 :down:child 2
+    68 op add :down:child *tmp23 1
+    69 jump *label33 lessThanEq :down:child :index
+    70 label *label15
  
-    76 label *label12
-    77 set :i 0
-    78 label *label23
--    * jump *label25 greaterThanEq :i SIZE
-+   79 jump *label25 greaterThanEq 0 SIZE
-    80 label *label33
-    81 read *tmp46 FINAL :i
-    82 read *tmp48 ARRAY :i
+    74 label *label11
+    75 set :i 0
+    76 label *label22
+-    * jump *label24 greaterThanEq :i SIZE
++   77 jump *label24 greaterThanEq 0 SIZE
+    78 label *label32
+    79 read *tmp46 FINAL :i
+    80 read *tmp48 ARRAY :i
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-    41 op sub :index :index 1
-    42 set :down:parent 0
-    43 label *label14
+    39 op sub :index :index 1
+    40 set :down:parent 0
+    41 label *label13
 -    * op mul *tmp23 0 2
 -    * op add :down:child 0 1
-+   44 set *tmp23 0
-+   45 set :down:child 1
-    46 jump *label16 greaterThan 1 :index
-    47 label *label34
-    48 read :down:cv ARRAY :down:child
++   42 set *tmp23 0
++   43 set :down:child 1
+    44 jump *label15 greaterThan 1 :index
+    45 label *label33
+    46 read :down:cv ARRAY :down:child
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-     3 set ARRAY bank2
-     4 set FINAL bank3
-     5 set :i 1
--    * label *label1
-     6 jump *label3 greaterThanEq 1 SIZE
-     7 label *label30
-     8 set :up:index :i
--    * label *label5
-     9 jump *label7 lessThanEq :i 0
-    10 label *label31
-    11 op sub *tmp2 :up:index 1
- 
-    20 label *label8
-    21 jump *label7 always
-    22 label *label9
--    * label *label6
-    23 jump *label31 greaterThan :up:parent 0
-    24 label *label7
+     1 set ARRAY bank2
+     2 set FINAL bank3
+     3 set :i 1
+-    * label *label0
+     4 jump *label2 greaterThanEq 1 SIZE
+     5 label *label29
+     6 set :up:index :i
 -    * label *label4
--    * label *label2
-    25 op add :i :i 1
-    26 jump *label30 lessThan :i SIZE
-    27 label *label3
-    28 op sub :index SIZE 1
--    * label *label10
-    29 jump *label12 lessThanEq :index 0
-    30 label *label32
-    31 read :x ARRAY 0
+     7 jump *label6 lessThanEq :i 0
+     8 label *label30
+     9 op sub *tmp2 :up:index 1
  
-    34 write :x ARRAY :index
-    35 op sub :index :index 1
-    36 set :down:parent 0
--    * label *label14
-    37 set *tmp23 0
-    38 set :down:child 1
-    39 jump *label16 greaterThan 1 :index
+    18 label *label7
+    19 jump *label6 always
+    20 label *label8
+-    * label *label5
+    21 jump *label30 greaterThan :up:parent 0
+    22 label *label6
+-    * label *label3
+-    * label *label1
+    23 op add :i :i 1
+    24 jump *label29 lessThan :i SIZE
+    25 label *label2
+    26 op sub :index SIZE 1
+-    * label *label9
+    27 jump *label11 lessThanEq :index 0
+    28 label *label31
+    29 read :x ARRAY 0
  
-    46 op add :down:child *tmp23 2
-    47 read :down:cv ARRAY :down:child
-    48 label *label19
--    * label *label20
-    49 label *label17
--    * label *label18
-    50 read :down:pv ARRAY :down:parent
-    51 jump *label21 greaterThanEq :down:pv :down:cv
-    52 write :down:cv ARRAY :down:parent
- 
-    56 label *label21
-    57 jump *label16 always
-    58 label *label22
--    * label *label15
-    59 op mul *tmp23 :down:child 2
-    60 op add :down:child *tmp23 1
-    61 jump *label34 lessThanEq :down:child :index
-    62 label *label16
+    32 write :x ARRAY :index
+    33 op sub :index :index 1
+    34 set :down:parent 0
 -    * label *label13
--    * label *label11
-    63 jump *label32 greaterThan :index 0
-    64 label *label12
-    65 set :i 0
+    35 set *tmp23 0
+    36 set :down:child 1
+    37 jump *label15 greaterThan 1 :index
+ 
+    44 op add :down:child *tmp23 2
+    45 read :down:cv ARRAY :down:child
+    46 label *label18
+-    * label *label19
+    47 label *label16
+-    * label *label17
+    48 read :down:pv ARRAY :down:parent
+    49 jump *label20 greaterThanEq :down:pv :down:cv
+    50 write :down:cv ARRAY :down:parent
+ 
+    54 label *label20
+    55 jump *label15 always
+    56 label *label21
+-    * label *label14
+    57 op mul *tmp23 :down:child 2
+    58 op add :down:child *tmp23 1
+    59 jump *label33 lessThanEq :down:child :index
+    60 label *label15
+-    * label *label12
+-    * label *label10
+    61 jump *label31 greaterThan :index 0
+    62 label *label11
+    63 set :i 0
+-    * label *label22
+    64 jump *label24 greaterThanEq 0 SIZE
+    65 label *label32
+    66 read *tmp46 FINAL :i
+    67 read *tmp48 ARRAY :i
+    68 assertequals *tmp46 *tmp48 "unexpected value"
 -    * label *label23
-    66 jump *label25 greaterThanEq 0 SIZE
-    67 label *label33
-    68 read *tmp46 FINAL :i
-    69 read *tmp48 ARRAY :i
-    70 assertequals *tmp46 *tmp48 "unexpected value"
--    * label *label24
-    71 op add :i :i 1
-    72 jump *label33 lessThan :i SIZE
-    73 label *label25
+    69 op add :i :i 1
+    70 jump *label32 lessThan :i SIZE
+    71 label *label24
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
-    12 op idiv :up:parent *tmp2 2
-    13 read :up:iv ARRAY :up:index
-    14 read :up:pv ARRAY :up:parent
--    * jump *label8 greaterThanEq :up:pv :up:iv
-+   15 jump *label7 greaterThanEq :up:pv :up:iv
-    16 write :up:pv ARRAY :up:index
-    17 write :up:iv ARRAY :up:parent
-    18 set :up:index :up:parent
+    10 op idiv :up:parent *tmp2 2
+    11 read :up:iv ARRAY :up:index
+    12 read :up:pv ARRAY :up:parent
+-    * jump *label7 greaterThanEq :up:pv :up:iv
++   13 jump *label6 greaterThanEq :up:pv :up:iv
+    14 write :up:pv ARRAY :up:index
+    15 write :up:iv ARRAY :up:parent
+    16 set :up:index :up:parent
  
-    48 label *label19
-    49 label *label17
-    50 read :down:pv ARRAY :down:parent
--    * jump *label21 greaterThanEq :down:pv :down:cv
-+   51 jump *label16 greaterThanEq :down:pv :down:cv
-    52 write :down:cv ARRAY :down:parent
-    53 write :down:pv ARRAY :down:child
-    54 set :down:parent :down:child
+    46 label *label18
+    47 label *label16
+    48 read :down:pv ARRAY :down:parent
+-    * jump *label20 greaterThanEq :down:pv :down:cv
++   49 jump *label15 greaterThanEq :down:pv :down:cv
+    50 write :down:cv ARRAY :down:parent
+    51 write :down:pv ARRAY :down:child
+    52 set :down:parent :down:child
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-2 instructions):
  
-    17 write :up:iv ARRAY :up:parent
-    18 set :up:index :up:parent
-    19 jump *label9 always
--    * label *label8
--    * jump *label7 always
-    20 label *label9
-    21 jump *label31 greaterThan :up:parent 0
-    22 label *label7
+    15 write :up:iv ARRAY :up:parent
+    16 set :up:index :up:parent
+    17 jump *label8 always
+-    * label *label7
+-    * jump *label6 always
+    18 label *label8
+    19 jump *label30 greaterThan :up:parent 0
+    20 label *label6
  
-    51 write :down:pv ARRAY :down:child
-    52 set :down:parent :down:child
-    53 jump *label22 always
--    * label *label21
--    * jump *label16 always
-    54 label *label22
-    55 op mul *tmp23 :down:child 2
-    56 op add :down:child *tmp23 1
+    49 write :down:pv ARRAY :down:child
+    50 set :down:parent :down:child
+    51 jump *label21 always
+-    * label *label20
+-    * jump *label15 always
+    52 label *label21
+    53 op mul *tmp23 :down:child 2
+    54 op add :down:child *tmp23 1
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-3 instructions):
  
-    16 write :up:pv ARRAY :up:index
-    17 write :up:iv ARRAY :up:parent
-    18 set :up:index :up:parent
--    * jump *label9 always
-    19 label *label9
-    20 jump *label31 greaterThan :up:parent 0
-    21 label *label7
+    14 write :up:pv ARRAY :up:index
+    15 write :up:iv ARRAY :up:parent
+    16 set :up:index :up:parent
+-    * jump *label8 always
+    17 label *label8
+    18 jump *label30 greaterThan :up:parent 0
+    19 label *label6
  
-    49 write :down:cv ARRAY :down:parent
-    50 write :down:pv ARRAY :down:child
-    51 set :down:parent :down:child
--    * jump *label22 always
-    52 label *label22
-    53 op mul *tmp23 :down:child 2
-    54 op add :down:child *tmp23 1
+    47 write :down:cv ARRAY :down:parent
+    48 write :down:pv ARRAY :down:child
+    49 set :down:parent :down:child
+-    * jump *label21 always
+    50 label *label21
+    51 op mul *tmp23 :down:child 2
+    52 op add :down:child *tmp23 1
  
-    66 jump *label33 lessThan :i SIZE
-    67 label *label25
-    68 stop
+    64 jump *label32 lessThan :i SIZE
+    65 label *label24
+    66 stop
 -    * end
 
 Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
  
-    16 write :up:pv ARRAY :up:index
-    17 write :up:iv ARRAY :up:parent
-    18 set :up:index :up:parent
--    * label *label9
-    19 jump *label31 greaterThan :up:parent 0
-    20 label *label7
-    21 op add :i :i 1
+    14 write :up:pv ARRAY :up:index
+    15 write :up:iv ARRAY :up:parent
+    16 set :up:index :up:parent
+-    * label *label8
+    17 jump *label30 greaterThan :up:parent 0
+    18 label *label6
+    19 op add :i :i 1
  
-    48 write :down:cv ARRAY :down:parent
-    49 write :down:pv ARRAY :down:child
-    50 set :down:parent :down:child
--    * label *label22
-    51 op mul *tmp23 :down:child 2
-    52 op add :down:child *tmp23 1
-    53 jump *label34 lessThanEq :down:child :index
+    46 write :down:cv ARRAY :down:parent
+    47 write :down:pv ARRAY :down:child
+    48 set :down:parent :down:child
+-    * label *label21
+    49 op mul *tmp23 :down:child 2
+    50 op add :down:child *tmp23 1
+    51 jump *label33 lessThanEq :down:child :index
 
 Final code before resolving virtual instructions:
 
 set SIZE 512
-label *label0
-jump *label0 equal bank1 null
 set ARRAY bank2
 set FINAL bank3
 set :i 1
-jump *label3 greaterThanEq 1 SIZE
-label *label30
+jump *label2 greaterThanEq 1 SIZE
+label *label29
 set :up:index :i
-jump *label7 lessThanEq :i 0
-label *label31
+jump *label6 lessThanEq :i 0
+label *label30
 op sub *tmp2 :up:index 1
 op idiv :up:parent *tmp2 2
 read :up:iv ARRAY :up:index
 read :up:pv ARRAY :up:parent
-jump *label7 greaterThanEq :up:pv :up:iv
+jump *label6 greaterThanEq :up:pv :up:iv
 write :up:pv ARRAY :up:index
 write :up:iv ARRAY :up:parent
 set :up:index :up:parent
-jump *label31 greaterThan :up:parent 0
-label *label7
+jump *label30 greaterThan :up:parent 0
+label *label6
 op add :i :i 1
-jump *label30 lessThan :i SIZE
-label *label3
+jump *label29 lessThan :i SIZE
+label *label2
 op sub :index SIZE 1
-jump *label12 lessThanEq :index 0
-label *label32
+jump *label11 lessThanEq :index 0
+label *label31
 read :x ARRAY 0
 read *tmp19 ARRAY :index
 write *tmp19 ARRAY 0
@@ -626,35 +624,35 @@ op sub :index :index 1
 set :down:parent 0
 set *tmp23 0
 set :down:child 1
-jump *label16 greaterThan 1 :index
-label *label34
+jump *label15 greaterThan 1 :index
+label *label33
 read :down:cv ARRAY :down:child
-jump *label17 greaterThanEq :down:child :index
+jump *label16 greaterThanEq :down:child :index
 op add *tmp30 :down:child 1
 read *tmp32 ARRAY *tmp30
-jump *label19 greaterThanEq :down:cv *tmp32
+jump *label18 greaterThanEq :down:cv *tmp32
 op add :down:child *tmp23 2
 read :down:cv ARRAY :down:child
-label *label19
-label *label17
+label *label18
+label *label16
 read :down:pv ARRAY :down:parent
-jump *label16 greaterThanEq :down:pv :down:cv
+jump *label15 greaterThanEq :down:pv :down:cv
 write :down:cv ARRAY :down:parent
 write :down:pv ARRAY :down:child
 set :down:parent :down:child
 op mul *tmp23 :down:child 2
 op add :down:child *tmp23 1
-jump *label34 lessThanEq :down:child :index
-label *label16
-jump *label32 greaterThan :index 0
-label *label12
+jump *label33 lessThanEq :down:child :index
+label *label15
+jump *label31 greaterThan :index 0
+label *label11
 set :i 0
-jump *label25 greaterThanEq 0 SIZE
-label *label33
+jump *label24 greaterThanEq 0 SIZE
+label *label32
 read *tmp46 FINAL :i
 read *tmp48 ARRAY :i
 assertequals *tmp46 *tmp48 "unexpected value"
 op add :i :i 1
-jump *label33 lessThan :i SIZE
-label *label25
+jump *label32 lessThan :i SIZE
+label *label24
 stop

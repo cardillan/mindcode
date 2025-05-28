@@ -327,21 +327,6 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
-        class LinkGuardsArgumentTest {
-            @Test
-            public void longArgumentTrue() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--link-guards true");
-                assertTrue(profile.isLinkedBlockGuards());
-            }
-
-            @Test
-            public void longArgumentFalse() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--link-guards false");
-                assertFalse(profile.isLinkedBlockGuards());
-            }
-        }
-
-        @Nested
         class NoSignatureArgumentTest {
             @Test
             public void longArgumentPresent() throws ArgumentParserException {

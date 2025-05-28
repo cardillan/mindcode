@@ -21,7 +21,6 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
     private String createCode(RuntimeChecks checks, boolean external) {
         return """
                 #set boundary-checks = %s;
-                #set link-guards = false;
                 #set array-optimization = none;
                 allocate heap in cell1;
                 param LIMIT = 3;
@@ -234,14 +233,14 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
                     createInstruction(JUMP, "12", "lessThan", tmp(5), "0"),
                     createInstruction(JUMP, "14", "lessThanEq", tmp(5), "4"),
-                    createInstruction(PRINT, q("position 10:12: index out of bounds (0 to 2)")),
+                    createInstruction(PRINT, q("position 9:12: index out of bounds (0 to 2)")),
                     createInstruction(STOP),
                     createInstruction(OP, "add", "@counter", "28", tmp(5)),
                     createInstruction(SET, ".a*w", ".a*r"),
                     createInstruction(OP, "mul", tmp(6), ":i", "2"),
                     createInstruction(JUMP, "19", "lessThan", tmp(6), "0"),
                     createInstruction(JUMP, "21", "lessThanEq", tmp(6), "4"),
-                    createInstruction(PRINT, q("position 10:5: index out of bounds (0 to 2)")),
+                    createInstruction(PRINT, q("position 9:5: index out of bounds (0 to 2)")),
                     createInstruction(STOP),
                     createInstruction(OP, "add", "@counter", "34", tmp(6)),
                     createInstruction(OP, "add", ":i", ":i", "1"),
@@ -397,12 +396,12 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "sub", tmp(6), ":i", "1"),
                     createInstruction(JUMP, "9", "lessThan", tmp(6), "0"),
                     createInstruction(JUMP, "11", "lessThanEq", tmp(6), "2"),
-                    createInstruction(PRINT, q("position 10:5: index out of bounds (0 to 2)")),
+                    createInstruction(PRINT, q("position 9:5: index out of bounds (0 to 2)")),
                     createInstruction(STOP),
                     createInstruction(READ, tmp(7), "cell1", tmp(6)),
                     createInstruction(JUMP, "14", "lessThan", ":i", "0"),
                     createInstruction(JUMP, "16", "lessThanEq", ":i", "2"),
-                    createInstruction(PRINT, q("position 10:5: index out of bounds (0 to 2)")),
+                    createInstruction(PRINT, q("position 9:5: index out of bounds (0 to 2)")),
                     createInstruction(STOP),
                     createInstruction(WRITE, tmp(7), "cell1", ":i"),
                     createInstruction(OP, "add", ":i", ":i", "1"),
@@ -411,8 +410,8 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, tmp(0)),
                     createInstruction(READ, tmp(1), "cell1", "1"),
                     createInstruction(PRINT, tmp(1)),
-                    createInstruction(READ, tmp(2), "cell1", "2"),
-                    createInstruction(PRINT, tmp(2))
+                    createInstruction(READ, tmp(8), "cell1", "2"),
+                    createInstruction(PRINT, tmp(8))
             );
         }
     }

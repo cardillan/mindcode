@@ -150,13 +150,11 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         value = $setting == 1 ? $low : $high;
                         print(value);
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
                 createInstruction(READ, ":value", "cell1", "2"),
-                createInstruction(READ, var(0), "cell1", "0"),
-                createInstruction(JUMP, var(1002), "notEqual", var(0), "1"),
+                createInstruction(READ, tmp(0), "cell1", "0"),
+                createInstruction(JUMP, label(1), "notEqual", tmp(0), "1"),
                 createInstruction(READ, ":value", "cell1", "1"),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(LABEL, label(1)),
                 createInstruction(PRINT, ":value")
         );
     }

@@ -151,13 +151,6 @@ abstract class ActionHandler {
                 .type(Arguments.booleanType("short", "long"));
 
         createArgument(container, defaults,
-                CompilerProfile::isLinkedBlockGuards,
-                (profile, arguments, name) -> profile.setLinkedBlockGuards(arguments.getBoolean(name)),
-                "--link-guards")
-                .help("generate code to ensure each declared linked block is linked to the processor at the declaration")
-                .type(Arguments.booleanType());
-
-        createArgument(container, defaults,
                 CompilerProfile::isSignature,
                 (profile, arguments, name) -> profile.setSignature(arguments.getBoolean(name)),
                 "--no-signature")

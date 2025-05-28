@@ -239,7 +239,6 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());
         assertEquals(expected.getGoal(), actual.getGoal());
         assertEquals(expected.getInstructionLimit(), actual.getInstructionLimit());
-        assertEquals(expected.isLinkedBlockGuards(), actual.isLinkedBlockGuards());
         assertEquals(expected.getOptimizationLevels(), actual.getOptimizationLevels());
         assertEquals(expected.getOptimizationPasses(), actual.getOptimizationPasses());
         assertEquals(expected.getParseTreeLevel(), actual.getParseTreeLevel());
@@ -255,5 +254,7 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         assertEquals(expected.getStepLimit(), actual.getStepLimit());
 
         assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
+
+        assertEquals(expected, actual);
     }
 }

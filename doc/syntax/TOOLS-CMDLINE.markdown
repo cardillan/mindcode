@@ -96,7 +96,7 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-g {size,speed,auto}] [-e {1..1000}] [-r {none,comments,passive,active}]
                 [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
-                [--link-guards {true,false}] [--no-signature] [--printflush {true,false}]
+                [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [--run] [--run-steps {1..1000000000}] [--output-profiling] [--trace-execution {true,false}]
                 [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
@@ -179,9 +179,6 @@ compiler options:
   --function-prefix {short,long}
                          specifies the how the function prefix of  local  variables  is generated (either a short common
                          prefix for all functions, or a potentially long prefix derived from function name)
-  --link-guards {true,false}
-                         generate code to  ensure  each  declared  linked  block  is  linked  to  the  processor  at the
-                         declaration
   --no-signature         prevents appending a signature "Compiled  by  Mindcode  - github.com/cardillan/mindcode" at the
                          end of the final code
   --printflush {true,false}
@@ -337,7 +334,7 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,u
                 [-g {size,speed,auto}] [-e {1..1000}] [-r {none,comments,passive,active}]
                 [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
-                [--link-guards {true,false}] [--no-signature] [--printflush {true,false}]
+                [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [--optimization LEVEL] [-O {0..3}] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
@@ -398,9 +395,6 @@ compiler options:
   --function-prefix {short,long}
                          specifies the how the function prefix of  local  variables  is generated (either a short common
                          prefix for all functions, or a potentially long prefix derived from function name)
-  --link-guards {true,false}
-                         generate code to  ensure  each  declared  linked  block  is  linked  to  the  processor  at the
-                         declaration
   --no-signature         prevents appending a signature "Compiled  by  Mindcode  - github.com/cardillan/mindcode" at the
                          end of the final code
   --printflush {true,false}

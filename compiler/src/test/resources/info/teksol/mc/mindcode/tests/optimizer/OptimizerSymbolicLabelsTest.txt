@@ -16,7 +16,7 @@ level-meter-00.mnd:                               291   C7BCD2A84C470E15   19C80
 map-setup-00.mnd:                                 920   2ED5156B5A7A7B31   FD299B56B976D76D
 mass-driver-monitor-00.mnd:                       191   6E6F762403154535   4683A784C1FDA0DF
 mass-driver-monitor-surge-alloy-00.mnd:            93   84BE8CA14CE3386F   598BB385E6B68A91
-reactor-control-00.mnd:                           446   0B5F71D4A736D2F1   D9B9C659F5D65EA7
+reactor-control-00.mnd:                           445   0B5F71D4A736D2F1   4102876C61AC9297
 reactor-control-battery-level-00.mnd:             578   BEBDD58A4C35FD11   13B7195589C27A67
 regulator-00.mnd:                                 215   F49BECB5341151DD   B27E21F07A5BCDDC
 remote-vault-00.mnd:                               68   9EA444978E177496   6F061D3572082F7D

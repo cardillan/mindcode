@@ -45,6 +45,7 @@ ELSIF                   : 'elsif' ;
 END                     : 'end' ;
 EXTERNAL                : 'external' ;
 FALSE                   : 'false' ;
+GUARDED                 : 'guarded' ;
 FOR                     : 'for' ;
 HEAP                    : 'heap' ;
 IF                      : 'if' ;

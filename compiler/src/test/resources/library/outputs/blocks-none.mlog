@@ -1,46 +1,45 @@
-jump 0 equal message1 null
 set :findLinkedBlocks:title "Example program.\nTrying to locate linked blocks"
 set :findLinkedBlocks:message message1
 set :findLinkedBlocks:requested @large-logic-display
 set :findLinkedBlocks:name "Display"
 set :findLinkedBlocks:variable :display
 set :findLinkedBlocks:required true
-set *tmp0 9
-jump 36 always 0 0
+set *tmp0 8
+jump 35 always 0 0
 set :display :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @message
 set :findLinkedBlocks:name "Message"
 set :findLinkedBlocks:variable :message
 set :findLinkedBlocks:required false
-set *tmp0 16
-jump 36 always 0 0
+set *tmp0 15
+jump 35 always 0 0
 set :message :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @switch
 set :findLinkedBlocks:name "Switch"
 set :findLinkedBlocks:variable :switch
 set :findLinkedBlocks:required false
-set *tmp0 23
-jump 36 always 0 0
+set *tmp0 22
+jump 35 always 0 0
 set :switch :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @memory-bank
 set :findLinkedBlocks:name "Memory"
 set :findLinkedBlocks:variable :memory
 set :findLinkedBlocks:required true
-set *tmp0 30
-jump 36 always 0 0
+set *tmp0 29
+jump 35 always 0 0
 set :memory :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @memory-cell
 set :findLinkedBlocks:name "Memory"
 set :findLinkedBlocks:variable :memory
 set :findLinkedBlocks:required true
-set *tmp0 38
+set *tmp0 37
 set :findLinkedBlocks:variable null
 set @counter *tmp0
 set :memory :findLinkedBlocks:variable
 print :findLinkedBlocks:title
 set :findLinkedBlocks:n @links
 op greaterThan *tmp1 :findLinkedBlocks:n 0
-jump 98 equal *tmp1 false
+jump 97 equal *tmp1 false
 op sub :findLinkedBlocks:n :findLinkedBlocks:n 1
 getlink *tmp2 :findLinkedBlocks:n
 set :findLinkedBlocks:block *tmp2
@@ -52,99 +51,99 @@ set :findLinkedBlocks:requested @large-logic-display
 set :findLinkedBlocks:name "Display"
 set :findLinkedBlocks:variable :display
 set :findLinkedBlocks:required true
-set *tmp4 56
-jump 83 always 0 0
+set *tmp4 55
+jump 82 always 0 0
 set :display :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @message
 set :findLinkedBlocks:name "Message"
 set :findLinkedBlocks:variable :message
 set :findLinkedBlocks:required false
-set *tmp4 63
-jump 83 always 0 0
+set *tmp4 62
+jump 82 always 0 0
 set :message :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @switch
 set :findLinkedBlocks:name "Switch"
 set :findLinkedBlocks:variable :switch
 set :findLinkedBlocks:required false
-set *tmp4 70
-jump 83 always 0 0
+set *tmp4 69
+jump 82 always 0 0
 set :switch :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @memory-bank
 set :findLinkedBlocks:name "Memory"
 set :findLinkedBlocks:variable :memory
 set :findLinkedBlocks:required true
-set *tmp4 77
-jump 83 always 0 0
+set *tmp4 76
+jump 82 always 0 0
 set :memory :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @memory-cell
 set :findLinkedBlocks:name "Memory"
 set :findLinkedBlocks:variable :memory
 set :findLinkedBlocks:required true
-set *tmp4 96
+set *tmp4 95
 op equal *tmp5 :findLinkedBlocks:requested :findLinkedBlocks:type
-jump 94 equal *tmp5 false
+jump 93 equal *tmp5 false
 set :findLinkedBlocks:variable :findLinkedBlocks:block
 op equal *tmp7 :findLinkedBlocks:requested @message
-jump 91 equal *tmp7 false
+jump 90 equal *tmp7 false
 set :findLinkedBlocks:message :findLinkedBlocks:block
 set *tmp8 :findLinkedBlocks:message
-jump 92 always 0 0
+jump 91 always 0 0
 set *tmp8 null
 set *tmp6 *tmp8
-jump 95 always 0 0
+jump 94 always 0 0
 set *tmp6 null
 set @counter *tmp4
 set :memory :findLinkedBlocks:variable
-jump 41 always 0 0
+jump 40 always 0 0
 set :findLinkedBlocks:foundAll 1
 set :findLinkedBlocks:requested @large-logic-display
 set :findLinkedBlocks:name "Display"
 set :findLinkedBlocks:variable :display
 set :findLinkedBlocks:required true
-set *tmp9 105
-jump 132 always 0 0
+set *tmp9 104
+jump 131 always 0 0
 set :display :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @message
 set :findLinkedBlocks:name "Message"
 set :findLinkedBlocks:variable :message
 set :findLinkedBlocks:required false
-set *tmp9 112
-jump 132 always 0 0
+set *tmp9 111
+jump 131 always 0 0
 set :message :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @switch
 set :findLinkedBlocks:name "Switch"
 set :findLinkedBlocks:variable :switch
 set :findLinkedBlocks:required false
-set *tmp9 119
-jump 132 always 0 0
+set *tmp9 118
+jump 131 always 0 0
 set :switch :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @memory-bank
 set :findLinkedBlocks:name "Memory"
 set :findLinkedBlocks:variable :memory
 set :findLinkedBlocks:required true
-set *tmp9 126
-jump 132 always 0 0
+set *tmp9 125
+jump 131 always 0 0
 set :memory :findLinkedBlocks:variable
 set :findLinkedBlocks:requested @memory-cell
 set :findLinkedBlocks:name "Memory"
 set :findLinkedBlocks:variable :memory
 set :findLinkedBlocks:required true
-set *tmp9 143
+set *tmp9 142
 print "\n"
 print :findLinkedBlocks:name
 print ":"
 print " "
 print :findLinkedBlocks:variable
-jump 141 equal :findLinkedBlocks:required false
+jump 140 equal :findLinkedBlocks:required false
 op and :findLinkedBlocks:foundAll :findLinkedBlocks:foundAll :findLinkedBlocks:variable
 set *tmp10 :findLinkedBlocks:foundAll
-jump 142 always 0 0
+jump 141 always 0 0
 set *tmp10 null
 set @counter *tmp9
 set :memory :findLinkedBlocks:variable
 printflush :findLinkedBlocks:message
 op equal *tmp11 :findLinkedBlocks:foundAll false
-jump 3 notEqual *tmp11 false
+jump 2 notEqual *tmp11 false
 assertequals :message message1 "Located message1 block"
 end
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

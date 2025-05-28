@@ -63,15 +63,6 @@ It is also possible to decrease the instruction limit if you wish so. The valid 
 > [!IMPORTANT]
 > Setting the limit to a very high value can have a severe impact on the performance of the compiler. High values of the instruction limit might cause the code compilation to take minutes or even hours to complete.
 
-## Option `link-guards`
-
-Use the `link-guards` option to specify whether Mindcode should generate _guard code_ for linked variables. Possible values are:
-
-* `false`: Mindcode doesn't generate guard code.
-* `true` (the default value): Mindcode generates guard code for all linked variables except.
-
-For more details on guard code and rules for generating it, see [Guard code for linked variables](SYNTAX-1-VARIABLES.markdown#guard-code-for-linked-variables).
-
 ## Option `mlog-indent`
 
 Allows setting the length of an indenting prefix (the number of spaces) applied to the generated mlog code. Allowed values are `0` to `8`, where `0` disables the indenting entirely. The indenting level is derived from the nesting level of the corresponding source-code construct. 

@@ -56,21 +56,19 @@ class RangedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(SET, tmp(1), ":a"),
                     createInstruction(OP, "sub", tmp(0), ":b", "1"),
                     createInstruction(WRITE, tmp(0), "bank1", "0"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(READ, tmp(0), "bank1", "0"),
-                    createInstruction(JUMP, label(3), "lessThan", tmp(0), tmp(1)),
+                    createInstruction(JUMP, label(2), "lessThan", tmp(0), tmp(1)),
                     createInstruction(OP, "add", ":j", ":j", ":i"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(READ, tmp(0), "bank1", "0"),
                     createInstruction(OP, "sub", tmp(0), tmp(0), "1"),
                     createInstruction(WRITE, tmp(0), "bank1", "0"),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -166,20 +164,18 @@ class RangedForLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
-                    createInstruction(SET, var(0), ":b"),
+                    createInstruction(SET, tmp(1), ":b"),
                     createInstruction(WRITE, ":a", "bank1", "0"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(READ, var(1), "bank1", "0"),
-                    createInstruction(JUMP, var(1003), "greaterThanEq", var(1), var(0)),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(READ, tmp(0), "bank1", "0"),
+                    createInstruction(JUMP, label(2), "greaterThanEq", tmp(0), tmp(1)),
                     createInstruction(OP, "add", ":j", ":j", ":i"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(READ, var(1), "bank1", "0"),
-                    createInstruction(OP, "add", var(1), var(1), "1"),
-                    createInstruction(WRITE, var(1), "bank1", "0"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(READ, tmp(0), "bank1", "0"),
+                    createInstruction(OP, "add", tmp(0), tmp(0), "1"),
+                    createInstruction(WRITE, tmp(0), "bank1", "0"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2))
             );
         }
 

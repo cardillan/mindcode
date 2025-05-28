@@ -32,6 +32,7 @@ public class ERR {
     public static final String ARRAY_FORBIDDEN = "Invalid array reference.";
     public static final String ARRAY_INDEX_OUT_OF_BOUNDS = "Array index out of bounds (0 .. %d)";
     public static final String ARRAY_INVALID = "'%s' is not an array.'";
+    public static final String ARRAY_GUARDED = "Arrays cannot be declared 'guarded'.";
     public static final String ARRAY_LINKED = "Arrays cannot be declared 'linked'.";
     public static final String ARRAY_LOCAL = "Arrays must be declared in the global scope.";
     public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";

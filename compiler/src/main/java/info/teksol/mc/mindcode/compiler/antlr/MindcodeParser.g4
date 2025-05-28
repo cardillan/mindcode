@@ -84,6 +84,7 @@ declModifier
     | modifier = EXTERNAL (memory = IDENTIFIER)?
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET index = expression RBRACKET
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
+    | modifier = GUARDED
     | modifier = LINKED
     | modifier = NOINIT
     | modifier = REMOTE

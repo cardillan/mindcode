@@ -84,6 +84,7 @@ class UnreachableCodeEliminatorTest extends AbstractOptimizerTest<UnreachableCod
                         .add("Variable 'testb.n' is not used.")
                         .add("Variable 'testc.n' is not used."),
                 """
+                        guarded bank1;
                         allocate stack in cell1[0 .. 63];
                         def testb(n)
                             print("Middle");

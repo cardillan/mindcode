@@ -245,7 +245,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         List<LogicVariable> processors = node.getProcessors().stream().map(this::evaluateProcessor).toList();
 
-        // If there's exactly one remote processor, import functions and variables to local namespace
+        // If there's exactly one remote processor, import functions and variables to the local namespace
         if (processors.size() == 1 && processors.getFirst().getType() == BLOCK) {
             createRemoteVariables(module, processors.getFirst(), true, null);
             reportRemoteErrors = false;
@@ -282,7 +282,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             StructuredValueStore processorStructure = new StructuredValueStore(identifier.sourcePosition(), identifier.getName(), members);
             variables.registerStructuredVariable(identifier, processorStructure);
 
-            // Generate guard code for processor
+            // Generate guard code for the processor
             if (processor.getType() == BLOCK) {
                 LogicString initializedName = LogicVariable.REMOTE_SIGNATURE.getMlogString();
                 LogicVariable tmp = assembler.unprotectedTemp();
@@ -365,7 +365,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     private void verifyLocalContextModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
             case EXTERNAL -> error(element, ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
-            case LINKED -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
+            case GUARDED, LINKED -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
             case REMOTE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_REMOTE);
             case VOLATILE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
         }
@@ -428,6 +428,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     private void verifyArrayModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
             case CACHED -> error(element, ERR.ARRAY_CACHED);
+            case GUARDED -> error(element, ERR.ARRAY_GUARDED);
             case LINKED -> error(element, ERR.ARRAY_LINKED);
             case NOINIT -> error(element, ERR.ARRAY_NOINIT);
         }
@@ -459,7 +460,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     private void processVariable(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
         ValueStore variable = modifiers.containsKey(Modifier.CONST) ? LogicVoid.VOID : createVariable(modifiers, specification);
 
-        if (modifiers.containsKey(Modifier.LINKED)) {
+        if (modifiers.containsKey(Modifier.GUARDED) || modifiers.containsKey(Modifier.LINKED)) {
             // Linked variables are initialized at creation
             return;
         }
@@ -470,7 +471,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             }
 
             if (!modifiers.containsKey(Modifier.NOINIT)) {
-                // Initializes external cached variables by reading the value from memory block
+                // Initializes external cached variables by reading the value from the memory block
                 variable.initialize(assembler);
             }
         } else {
@@ -487,7 +488,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
             // AstVariableDeclaration node doesn't enter the local scope, so that the identifier can be
             // resolved in the scope containing the node. However, the expression needs to be evaluated
-            // in local scope, as all executable code must be placed there.
+            // in the local scope, as all executable code must be placed there.
             ValueStore valueStore = processInLocalScope(() -> evaluate(expression));
 
             if (modifiers.containsKey(Modifier.CONST)) {
@@ -499,7 +500,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     variables.createConstant(specification, LogicNull.NULL);
                 }
             } else {
-                // Produces warning when the variable is a linked block
+                // Produces a warning when the variable is a linked block
                 ValueStore target = resolveLValue(specification.getIdentifier(), variable);
                 target.setValue(assembler, valueStore.getValue(assembler));
             }
@@ -509,7 +510,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     private ValueStore createVariable(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
         if (modifiers.containsKey(Modifier.EXTERNAL) || modifiers.containsKey(Modifier.CACHED)) {
             return variables.createExternalVariable(specification.getIdentifier(), modifiers);
-        } else if (modifiers.containsKey(Modifier.LINKED)) {
+        } else if (modifiers.containsKey(Modifier.GUARDED) || modifiers.containsKey(Modifier.LINKED)) {
             return createLinkedVariable(modifiers, specification);
         } else if (modifiers.isEmpty() || modifiers.containsKey(Modifier.NOINIT)
                 || modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE)) {
@@ -539,7 +540,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             throw new MindcodeInternalError("Unexpected number of expressions: " + specification.getExpressions().size());
         }
 
-        generateLinkGuard(variable, modifiers.containsKey(Modifier.NOINIT));
+        generateLinkGuard(variable, modifiers.containsKey(Modifier.GUARDED));
         return variable;
     }
 
@@ -585,8 +586,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 .orElse(node);
     }
 
-    private void generateLinkGuard(LogicVariable variable, boolean noinit) {
-        if (variable.getType() == BLOCK && profile.isLinkedBlockGuards() && guardedBlockNames.add(variable.toMlog()) && !noinit) {
+    private void generateLinkGuard(LogicVariable variable, boolean guarded) {
+        if (variable.getType() == BLOCK && guardedBlockNames.add(variable.toMlog()) && guarded) {
             LogicLabel label = assembler.nextLabel();
             assembler.createLabel(label);
             assembler.createJump(label, Condition.EQUAL, variable, LogicNull.NULL);

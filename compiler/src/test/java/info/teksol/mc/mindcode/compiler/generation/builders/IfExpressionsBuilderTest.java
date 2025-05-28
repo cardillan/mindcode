@@ -122,22 +122,20 @@ class IfExpressionsBuilderTest extends AbstractCodeGeneratorTest {
                                 $B = x;
                             end;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
-                    createInstruction(READ, var(0), "bank1", "0"),
-                    createInstruction(READ, var(1), "bank1", "1"),
-                    createInstruction(OP, "greaterThan", var(2), var(0), var(1)),
-                    createInstruction(JUMP, var(1001), "equal", var(2), "false"),
-                    createInstruction(READ, var(0), "bank1", "0"),
-                    createInstruction(SET, ":x", var(0)),
-                    createInstruction(READ, var(1), "bank1", "1"),
-                    createInstruction(WRITE, var(1), "bank1", "0"),
+                    createInstruction(READ, tmp(0), "bank1", "0"),
+                    createInstruction(READ, tmp(1), "bank1", "1"),
+                    createInstruction(OP, "greaterThan", tmp(2), tmp(0), tmp(1)),
+                    createInstruction(JUMP, label(0), "equal", tmp(2), "false"),
+                    createInstruction(READ, tmp(0), "bank1", "0"),
+                    createInstruction(SET, ":x", tmp(0)),
+                    createInstruction(READ, tmp(1), "bank1", "1"),
+                    createInstruction(WRITE, tmp(1), "bank1", "0"),
                     createInstruction(WRITE, ":x", "bank1", "1"),
-                    createInstruction(SET, var(3), ":x"),
-                    createInstruction(JUMP, var(1002), "always"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, var(3), "null"),
-                    createInstruction(LABEL, var(1002))
+                    createInstruction(SET, tmp(3), ":x"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, tmp(3), "null"),
+                    createInstruction(LABEL, label(1))
             );
         }
 

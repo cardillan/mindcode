@@ -27,6 +27,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
     @Test
     void removesUnusedParameter() {
         assertCompilesTo("""
+                        guarded bank1;
                         allocate stack in bank1[0...512];
                         def foo(x)
                             foo(x - 1);
@@ -63,12 +64,10 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                         end;
                         print(foo(5));
                         """,
-                createInstruction(LABEL, label(1)),
-                createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                 createInstruction(SET, "*sp", "0"),
                 createInstruction(SET, ":foo:x", "5"),
-                createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
-                createInstruction(LABEL, label(2)),
+                createInstruction(CALLREC, "bank1", label(0), label(1), ":foo*retval"),
+                createInstruction(LABEL, label(1)),
                 createInstruction(SET, tmp(0), ":foo*retval"),
                 createInstruction(PRINT, tmp(0)),
                 createInstruction(END),
@@ -76,8 +75,8 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                 createInstruction(OP, "sub", tmp(1), ":foo:x", "1"),
                 createInstruction(PUSH, "bank1", ":foo:x"),
                 createInstruction(SET, ":foo:x", tmp(1)),
-                createInstruction(CALLREC, "bank1", label(0), label(4), ":foo*retval"),
-                createInstruction(LABEL, label(4)),
+                createInstruction(CALLREC, "bank1", label(0), label(3), ":foo*retval"),
+                createInstruction(LABEL, label(3)),
                 createInstruction(POP, "bank1", ":foo:x"),
                 createInstruction(SET, ":foo*retval", ":foo:x"),
                 createInstruction(RETURNREC, "bank1")
@@ -101,26 +100,24 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                         end;
                         foo(5);
                         """,
-                createInstruction(LABEL, label(1)),
-                createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                 createInstruction(SET, "*sp", "0"),
                 createInstruction(SET, ":foo:x", "5"),
-                createInstruction(CALLREC, "bank1", label(0), label(2), ":foo*retval"),
-                createInstruction(LABEL, label(2)),
+                createInstruction(CALLREC, "bank1", label(0), label(1), ":foo*retval"),
+                createInstruction(LABEL, label(1)),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
                 createInstruction(SET, ":foo:z", ":foo:x"),
                 createInstruction(PRINT, ":foo:z"),
-                createInstruction(LABEL, label(4)),
-                createInstruction(JUMP, label(6), "equal", "true", "false"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(JUMP, label(5), "equal", "true", "false"),
                 createInstruction(SET, ":foo:y", ":foo:x"),
                 createInstruction(PRINT, ":foo:y"),
                 createInstruction(PUSH, "bank1", ":foo:y"),
-                createInstruction(CALLREC, "bank1", label(0), label(7), ":foo*retval"),
-                createInstruction(LABEL, label(7)),
-                createInstruction(POP, "bank1", ":foo:y"),
-                createInstruction(JUMP, label(4), "always"),
+                createInstruction(CALLREC, "bank1", label(0), label(6), ":foo*retval"),
                 createInstruction(LABEL, label(6)),
+                createInstruction(POP, "bank1", ":foo:y"),
+                createInstruction(JUMP, label(3), "always"),
+                createInstruction(LABEL, label(5)),
                 createInstruction(RETURNREC, "bank1")
         );
     }
@@ -128,6 +125,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
     @Test
     void removesVariablesNotInLoop() {
         assertCompilesTo("""
+                        guarded bank1;
                         allocate stack in bank1[0...512];
                         def foo(x)
                             while true do
@@ -174,6 +172,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
     void removesUnreadVariables() {
         // For the first call, y isn't read in the loop, but is read after the loop
         assertCompilesTo("""
+                        guarded bank1;
                         allocate stack in bank1[0...512];
                         def foo(x)
                             y = x;
@@ -214,6 +213,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
     void removesUnmodifiedVariables() {
         // For the first call, y isn't read in the loop, but is read after the loop
         assertCompilesTo("""
+                        guarded bank1;
                         allocate stack in bank1[0...512];
                         def foo(m, n)
                             for i in 1 .. n do
@@ -281,45 +281,43 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
                         
                         quicksort(0, SIZE - 1);
                         """,
-                createInstruction(LABEL, label(1)),
-                createInstruction(JUMP, label(1), "equal", "bank1", "null"),
                 createInstruction(SET, "*sp", "0"),
                 createInstruction(OP, "sub", tmp(0), ".SIZE", "1"),
-                createInstruction(SET, ":quicksort.0:left", "0"),
-                createInstruction(SET, ":quicksort.0:right", tmp(0)),
-                createInstruction(CALLREC, "bank1", label(0), label(2), ":quicksort*retval"),
-                createInstruction(LABEL, label(2)),
+                createInstruction(SET, ":quicksort:left", "0"),
+                createInstruction(SET, ":quicksort:right", tmp(0)),
+                createInstruction(CALLREC, "bank1", label(0), label(1), ":quicksort*retval"),
+                createInstruction(LABEL, label(1)),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
-                createInstruction(OP, "greaterThan", tmp(2), ":quicksort.0:right", ":quicksort.0:left"),
-                createInstruction(JUMP, label(4), "equal", tmp(2), "false"),
-                createInstruction(OP, "sub", tmp(4), ":quicksort.0:right", ":quicksort.0:left"),
+                createInstruction(OP, "greaterThan", tmp(2), ":quicksort:right", ":quicksort:left"),
+                createInstruction(JUMP, label(3), "equal", tmp(2), "false"),
+                createInstruction(OP, "sub", tmp(4), ":quicksort:right", ":quicksort:left"),
                 createInstruction(OP, "add", tmp(5), tmp(4), "1"),
                 createInstruction(OP, "rand", tmp(6), tmp(5)),
                 createInstruction(OP, "floor", tmp(7), tmp(6)),
-                createInstruction(OP, "add", tmp(8), ":quicksort.0:left", tmp(7)),
-                createInstruction(SET, ":quicksort.0:pivot_index", tmp(8)),
-                createInstruction(SET, ":partition.0:pivot_index", ":quicksort.0:pivot_index"),
-                createInstruction(SET, tmp(9), ":partition.0:pivot_index"),
-                createInstruction(SET, ":quicksort.0:new_pivot_index", tmp(9)),
-                createInstruction(OP, "sub", tmp(10), ":quicksort.0:new_pivot_index", "1"),
-                createInstruction(PUSH, "bank1", ":quicksort.0:right"),
-                createInstruction(PUSH, "bank1", ":quicksort.0:new_pivot_index"),
-                createInstruction(SET, ":quicksort.0:right", tmp(10)),
+                createInstruction(OP, "add", tmp(8), ":quicksort:left", tmp(7)),
+                createInstruction(SET, ":quicksort:pivot_index", tmp(8)),
+                createInstruction(SET, ":partition:pivot_index", ":quicksort:pivot_index"),
+                createInstruction(SET, tmp(9), ":partition:pivot_index"),
+                createInstruction(SET, ":quicksort:new_pivot_index", tmp(9)),
+                createInstruction(OP, "sub", tmp(10), ":quicksort:new_pivot_index", "1"),
+                createInstruction(PUSH, "bank1", ":quicksort:right"),
+                createInstruction(PUSH, "bank1", ":quicksort:new_pivot_index"),
+                createInstruction(SET, ":quicksort:right", tmp(10)),
+                createInstruction(CALLREC, "bank1", label(0), label(6), ":quicksort*retval"),
+                createInstruction(LABEL, label(6)),
+                createInstruction(POP, "bank1", ":quicksort:new_pivot_index"),
+                createInstruction(POP, "bank1", ":quicksort:right"),
+                createInstruction(OP, "add", tmp(12), ":quicksort:new_pivot_index", "1"),
+                createInstruction(SET, ":quicksort:left", tmp(12)),
                 createInstruction(CALLREC, "bank1", label(0), label(7), ":quicksort*retval"),
                 createInstruction(LABEL, label(7)),
-                createInstruction(POP, "bank1", ":quicksort.0:new_pivot_index"),
-                createInstruction(POP, "bank1", ":quicksort.0:right"),
-                createInstruction(OP, "add", tmp(12), ":quicksort.0:new_pivot_index", "1"),
-                createInstruction(SET, ":quicksort.0:left", tmp(12)),
-                createInstruction(CALLREC, "bank1", label(0), label(8), ":quicksort*retval"),
-                createInstruction(LABEL, label(8)),
                 createInstruction(SET, tmp(13), ":quicksort*retval"),
                 createInstruction(SET, tmp(3), tmp(13)),
-                createInstruction(JUMP, label(5), "always"),
-                createInstruction(LABEL, label(4)),
+                createInstruction(JUMP, label(4), "always"),
+                createInstruction(LABEL, label(3)),
                 createInstruction(SET, tmp(3), "null"),
-                createInstruction(LABEL, label(5)),
+                createInstruction(LABEL, label(4)),
                 createInstruction(SET, ":quicksort*retval", tmp(3)),
                 createInstruction(RETURNREC, "bank1")
         );

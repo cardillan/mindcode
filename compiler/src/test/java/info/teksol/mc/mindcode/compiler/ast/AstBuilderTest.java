@@ -821,6 +821,26 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         }
 
         @Test
+        void buildsGuardedVariables() {
+            assertBuildsTo("""
+                            guarded linked cell1, cell2;
+                            """,
+                    List.of(
+                            new AstVariablesDeclaration(EMPTY, null,
+                                    List.of(
+                                            new AstVariableModifier(EMPTY, Modifier.GUARDED, null),
+                                            new AstVariableModifier(EMPTY, Modifier.LINKED, null)
+                                    ),
+                                    List.of(
+                                            new AstVariableSpecification(EMPTY, id("cell1"), null),
+                                            new AstVariableSpecification(EMPTY, id("cell2"), null)
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
         void buildsLinkedVariables() {
             assertBuildsTo("""
                             linked cell1, cell2;

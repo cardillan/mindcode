@@ -149,27 +149,25 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 j += i;
                             end;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(READ, tmp(1), "bank1", "0"),
                     createInstruction(SET, ":i", tmp(1)),
-                    createInstruction(SETADDR, tmp(0), label(4)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
                     createInstruction(READ, tmp(2), "bank1", "1"),
                     createInstruction(SET, ":i", tmp(2)),
-                    createInstruction(SETADDR, tmp(0), label(5)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
                     createInstruction(READ, tmp(3), "bank1", "2"),
                     createInstruction(SET, ":i", tmp(3)),
-                    createInstruction(SETADDR, tmp(0), label(6)),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(SETADDR, tmp(0), label(5)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", ":j", ":j", ":i"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(MULTIJUMP, tmp(0), "0", "0"),
-                    createInstruction(MULTILABEL, label(6)),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -181,31 +179,29 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 n = j + i;
                             end;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(READ, tmp(1), "bank1", "0"),
                     createInstruction(OP, "add", tmp(2), tmp(1), "10"),
                     createInstruction(SET, ":i", tmp(2)),
                     createInstruction(READ, tmp(3), "bank1", "1"),
                     createInstruction(OP, "add", tmp(4), tmp(3), "20"),
                     createInstruction(SET, ":j", tmp(4)),
-                    createInstruction(SETADDR, tmp(0), label(4)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
                     createInstruction(READ, tmp(5), "bank1", "2"),
                     createInstruction(OP, "add", tmp(6), tmp(5), "30"),
                     createInstruction(SET, ":i", tmp(6)),
                     createInstruction(READ, tmp(7), "bank1", "3"),
                     createInstruction(OP, "add", tmp(8), tmp(7), "40"),
                     createInstruction(SET, ":j", tmp(8)),
-                    createInstruction(SETADDR, tmp(0), label(5)),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", tmp(9), ":j", ":i"),
                     createInstruction(SET, ":n", tmp(9)),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(MULTIJUMP, tmp(0), "0", "0"),
-                    createInstruction(MULTILABEL, label(5)),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -217,25 +213,23 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 $B = $A;
                             end;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(WRITE, "1", "bank1", "0"),
-                    createInstruction(SETADDR, tmp(0), label(4)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
                     createInstruction(WRITE, "2", "bank1", "0"),
-                    createInstruction(SETADDR, tmp(0), label(5)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
                     createInstruction(WRITE, "3", "bank1", "0"),
-                    createInstruction(SETADDR, tmp(0), label(6)),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(SETADDR, tmp(0), label(5)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(READ, tmp(1), "bank1", "0"),
                     createInstruction(WRITE, tmp(1), "bank1", "1"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(MULTIJUMP, tmp(0), "0", "0"),
-                    createInstruction(MULTILABEL, label(6)),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(LABEL, label(2))
             );
         }
     }
@@ -309,30 +303,28 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 ++i;
                             end;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(READ, tmp(1), "bank1", "0"),
                     createInstruction(SET, ":i", tmp(1)),
-                    createInstruction(SETADDR, tmp(0), label(4)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
                     createInstruction(WRITE, ":i", "bank1", "0"),
                     createInstruction(READ, tmp(2), "bank1", "1"),
                     createInstruction(SET, ":i", tmp(2)),
-                    createInstruction(SETADDR, tmp(0), label(5)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
                     createInstruction(WRITE, ":i", "bank1", "1"),
                     createInstruction(READ, tmp(3), "bank1", "2"),
                     createInstruction(SET, ":i", tmp(3)),
-                    createInstruction(SETADDR, tmp(0), label(6)),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(SETADDR, tmp(0), label(5)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", ":i", ":i", "1"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(MULTIJUMP, tmp(0), "0", "0"),
-                    createInstruction(MULTILABEL, label(6)),
+                    createInstruction(MULTILABEL, label(5)),
                     createInstruction(WRITE, ":i", "bank1", "2"),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(LABEL, label(2))
             );
         }
 
@@ -412,30 +404,28 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                                 $A = 10;
                             end;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(WRITE, ":a", "bank1", "0"),
-                    createInstruction(SETADDR, tmp(0), label(4)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SETADDR, tmp(0), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
                     createInstruction(READ, tmp(1), "bank1", "0"),
                     createInstruction(SET, ":a", tmp(1)),
                     createInstruction(WRITE, ":b", "bank1", "0"),
-                    createInstruction(SETADDR, tmp(0), label(5)),
-                    createInstruction(JUMP, label(1), "always"),
-                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(SETADDR, tmp(0), label(4)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
                     createInstruction(READ, tmp(1), "bank1", "0"),
                     createInstruction(SET, ":b", tmp(1)),
                     createInstruction(WRITE, ":c", "bank1", "0"),
-                    createInstruction(SETADDR, tmp(0), label(6)),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(SETADDR, tmp(0), label(5)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(WRITE, "10", "bank1", "0"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(MULTIJUMP, tmp(0), "0", "0"),
-                    createInstruction(MULTILABEL, label(6)),
+                    createInstruction(MULTILABEL, label(5)),
                     createInstruction(READ, tmp(1), "bank1", "0"),
                     createInstruction(SET, ":c", tmp(1)),
-                    createInstruction(LABEL, label(3))
+                    createInstruction(LABEL, label(2))
             );
         }
     }
@@ -585,22 +575,20 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
                             external a[10];
                             for i in a[5 .. 6] do print(i); end;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(READ, var(5), "cell1", "5"),
-                    createInstruction(SET, ":i", var(5)),
-                    createInstruction(SETADDR, var(10), var(1004)),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(MULTILABEL, var(1004)),
-                    createInstruction(READ, var(6), "cell1", "6"),
-                    createInstruction(SET, ":i", var(6)),
-                    createInstruction(SETADDR, var(10), var(1005)),
-                    createInstruction(LABEL, var(1001)),
+                    createInstruction(READ, tmp(5), "cell1", "5"),
+                    createInstruction(SET, ":i", tmp(5)),
+                    createInstruction(SETADDR, tmp(10), label(3)),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(READ, tmp(6), "cell1", "6"),
+                    createInstruction(SET, ":i", tmp(6)),
+                    createInstruction(SETADDR, tmp(10), label(4)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, ":i"),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(MULTIJUMP, var(10), "0", "0"),
-                    createInstruction(MULTILABEL, var(1005)),
-                    createInstruction(LABEL, var(1003))
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(10), "0", "0"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(LABEL, label(2))
 
             );
         }

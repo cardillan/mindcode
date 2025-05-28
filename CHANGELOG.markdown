@@ -8,6 +8,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* **Breaking:** added new `guarded` keyword. The keyword is a variable declaration modifier that ensures the generation of the guard code for linked variables.
 * Added support for the new `op logn` Mindustry BE instruction to the compiler and processor emulator.
 * Added the `logn()` function to the `math`system library. This function corresponds to the Mindustry 8 instruction `op logn`, and when target 8 is selected, the instruction is used instead of the library implementation.
 * Added support for declaring new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
@@ -19,7 +20,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Updated the `scaleSmallToLarge()` and `scaleLargeToSmall()` functions to compensate for rounding errors in Mindustry Logic `draw scale` instruction.
 * Updated the `log2()` function to use `op logn` when possible.
-* Changed all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).  
+* Changed all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).
+* The `noinit` keyword has no effect in `linked` variable declarations. Guard code is not generated unless the `guarded` modifier is used to explicitly request it.
 
 ### Miscellaneous
 

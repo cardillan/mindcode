@@ -1050,7 +1050,7 @@ The list of all existing icons is quite huge:
 Linked variables represent blocks directly linked to the processor. A guard code may be created for linked variables. Linked variables are declared using this syntax: 
 
 ```
-[noinit] linked [var] <variable1> [= <linked block>] [, <variable2> [= <linked block>] ... ];
+[guarded] linked [var] <variable1> [= <linked block>] [, <variable2> [= <linked block>] ... ];
 ```
 
 Linked variables must be declared in global scope and are therefore always global. When an initial value is not assigned to the variable, the variable identifier is the name of the linked block: `linked cell1;` declares a `cell1` variable representing the `cell1` block linked to the processor. When an initial value is assigned to the variable, the assigned value must be a name of the linked block, while the variable identifier will be used to represent the variable in the program: `linked up = switch1, down = switch2;`. This is useful to assign symbolic names to linked blocks.
@@ -1059,13 +1059,13 @@ A warning is generated if the name of the linked block used in the linked variab
 
 `linked` is a modifier, and the `var` keyword is optional when `linked` is used. Modifiers can be specified in any order. When declaring external variables, these additional modifiers can be used:
 
-* `noinit`: this modifier disables the generation of the guard code.
+* `guarded`: this modifier ensures the generation of the guard code. When the `guarded` modifier is used, the `linked` modifier can be omitted.
 
 Example:
 
 ```Mindcode
-linked on = switch1, memory = cell1;    // These blocks are required
-noinit linked message1;                 // message1 is optional
+guarded on = switch1, memory = cell1;   // These blocks are required
+linked message1;                        // message1 is optional
 
 while on.@enabled do
     memory[0]++;
@@ -1077,17 +1077,17 @@ end;
 > [!IMPORTANT]
 > Linked variables (both implicit and explicit ones) reflect the changes made to linked blocks during the execution of the program. For example, if `switch1` is linked to the processor, but then is destroyed, the value of `switch1` turns to `null`. If the switch is then rebuilt by the user and linked to the processor under the same name, the linked variable will automatically reconnect to the new instance of the switch when it becomes available.
 > 
-> it is important to consider that in some cases the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may be of a different type (e.g., replacing sorter `sorter1` with inverted sorter will link the inverted sorter also under the name `sorter1`).  
+> It is important to consider that in some cases the new block linked to the processor under the same name as a previously linked and subsequently destroyed block may be of a different type (e.g., replacing sorter `sorter1` with inverted sorter will link the inverted sorter also under the name `sorter1`).  
 > 
 > When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as missing by querying the `@dead` property.
 
 ### Guard code for linked variables
 
-When declaring a linked variable, Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
+When declaring a linked variable usign the `guarded` modifier, Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
 
 ```Mindcode
 /// A guard code: loops until message1 is not null
-linked output = message1;
+guarded output = message1;
 print("Here we are");
 printflush(output);
 stopProcessor();
@@ -1102,17 +1102,6 @@ print "Here we are"
 printflush message1
 stop
 ```
-
-Additionally, guard code is generated for undeclared linked blocks used in the `allocate` declaration (e.g., `allocate heap in bank1;` will generate guard code for `bank1`). To disable guard code generation in this case, explicitly declare the variable using `noinit` keyword:
-
-```Mindcode
-noinit linked bank1;
-allocate heap in bank1;
-```
-
-Guard code is not generated for linked variables that were not explicitly declared, for linked variables declared with the `noinit` modifier, and when guard code generation is disabled by the `#set link-guards = false;` compiler directive or the `--link-guards false` command-line argument.
-
-Undeclared linked blocks used as parameter values (e.g., `param memory = bank1;`) also do not generate guard code.
 
 ## Heap
 
@@ -1138,7 +1127,7 @@ A linked block or variable, a constant, a parameter or a global variable can be 
 1. The linked block or variable was initialized before external variables are accessed for read or write.
 2. The value of a global variable used to hold the memory doesn't change once initialized. 
 
-The first requirement may be satisfied by using a linked block with a guard code as the initial value of the variable. In more complex cases, assigning a value to the variable via function call might be necessary. 
+The first requirement may be satisfied by using a guarded linked block as the initial value of the variable. In more complex cases, assigning a value to the variable via function call might be necessary. 
 
 ## External variables
 
@@ -1185,7 +1174,6 @@ print(c);
 The above will compile to:
 
 ```mlog
-jump 0 equal cell4 null
 write 1 cell4 32
 write 1 cell4 33
 read .a cell4 34
@@ -1217,11 +1205,9 @@ external bank1[10] d = 10;
 compiles into
 
 ```mlog
-jump 0 equal cell1 null
 write 10 cell1 32
 write 20 cell1 33
 write 30 cell1 34
-jump 4 equal bank1 null
 write 10 bank1 10
 ```
 
@@ -1313,10 +1299,10 @@ Program parameters must be declared in global scope and are therefore always glo
 If a numeric value is assigned to a parameter, and it isn't possible to [encode the value into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), a compilation error occurs.
 
 > [!TIP]
-> Even in strict syntax mode, linked blocks can be assigned to a program parameter without prior declaration. In this case, no guard code for these linked blocks is generated.
+> Even in strict syntax mode, linked blocks can be assigned to a program parameter without prior declaration.
 
 > [!NOTE]
-> Using a linked variable with guard code as a value for a program parameter is discouraged. The purpose of the program parameter is to allow making changes to the compiled code, however a change just to the program parameter's value would not mean the guard code would protect the new block.
+> Using a guarded linked variable as a value for a program parameter is discouraged. The purpose of the program parameter is to allow making changes to the compiled code, however a change just to the program parameter's value would not mean the guard code would protect the new block.
 
 Example (the optimization is turned off to prevent removing unused parameters):
 

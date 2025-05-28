@@ -51,7 +51,6 @@ public class CompilerProfile {
     private FinalCodeOutput finalCodeOutput = FinalCodeOutput.NONE;
     private GenerationGoal goal = GenerationGoal.AUTO;
     private int instructionLimit = 1000;
-    private boolean linkedBlockGuards = true;
     private int mlogIndent = -1;
     private int optimizationPasses;
     private int parseTreeLevel = 0;
@@ -251,15 +250,6 @@ public class CompilerProfile {
 
     public CompilerProfile setLibraryPrecedence(boolean libraryPrecedence) {
         this.libraryPrecedence = libraryPrecedence;
-        return this;
-    }
-
-    public boolean isLinkedBlockGuards() {
-        return linkedBlockGuards;
-    }
-
-    public CompilerProfile setLinkedBlockGuards(boolean linkedBlockGuards) {
-        this.linkedBlockGuards = linkedBlockGuards;
         return this;
     }
 
@@ -523,7 +513,6 @@ public class CompilerProfile {
                && optimizationPasses == profile.optimizationPasses
                && symbolicLabels == profile.symbolicLabels
                && shortFunctionPrefix == profile.shortFunctionPrefix
-               && linkedBlockGuards == profile.linkedBlockGuards
                && shortCircuitEval == profile.shortCircuitEval
                && autoPrintflush == profile.autoPrintflush
                && parseTreeLevel == profile.parseTreeLevel
@@ -558,7 +547,6 @@ public class CompilerProfile {
         result = 31 * result + syntacticMode.hashCode();
         result = 31 * result + Boolean.hashCode(symbolicLabels);
         result = 31 * result + Boolean.hashCode(shortFunctionPrefix);
-        result = 31 * result + Boolean.hashCode(linkedBlockGuards);
         result = 31 * result + goal.hashCode();
         result = 31 * result + boundaryChecks.hashCode();
         result = 31 * result + remarks.hashCode();

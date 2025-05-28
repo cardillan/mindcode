@@ -1,16 +1,11 @@
-jump 0 equal display1 null
-jump 1 equal display2 null
-jump 2 equal display3 null
-jump 3 equal display4 null
-jump 4 equal display5 null
 set :displaySize:display display1
-set :displaySize*retaddr 8
-jump 155 always 0 0
+set :displaySize*retaddr 3
+jump 150 always 0 0
 set *tmp0 :displaySize*retval
 assertequals 176 *tmp0 "large display size"
 set :displaySize:display display5
-set :displaySize*retaddr 13
-jump 155 always 0 0
+set :displaySize*retaddr 8
+jump 150 always 0 0
 set *tmp1 :displaySize*retval
 assertequals 80 *tmp1 "small display size"
 set :x %336699cc
@@ -60,86 +55,86 @@ draw translate -176 0 0 0 0 0
 set :rotateLeft:display display1
 sensor *tmp12 :rotateLeft:display @type
 set *tmp13 *tmp12
-jump 64 equal *tmp13 @logic-display
-jump 68 always 0 0
+jump 59 equal *tmp13 @logic-display
+jump 63 always 0 0
 draw rotate 0 0 90 0 0 0
 draw translate 0 -80 0 0 0 0
 set *tmp11 null
-jump 76 always 0 0
-jump 70 equal *tmp13 @large-logic-display
-jump 74 always 0 0
+jump 71 always 0 0
+jump 65 equal *tmp13 @large-logic-display
+jump 69 always 0 0
 draw rotate 0 0 90 0 0 0
 draw translate 0 -176 0 0 0 0
 set *tmp11 null
-jump 76 always 0 0
+jump 71 always 0 0
 stop
 set *tmp11 null
 set :rotateRight:display display2
 sensor *tmp15 :rotateRight:display @type
 set *tmp16 *tmp15
-jump 81 equal *tmp16 @logic-display
-jump 85 always 0 0
+jump 76 equal *tmp16 @logic-display
+jump 80 always 0 0
 draw rotate 0 0 270 0 0 0
 draw translate -80 0 0 0 0 0
 set *tmp14 null
-jump 93 always 0 0
-jump 87 equal *tmp16 @large-logic-display
-jump 91 always 0 0
+jump 88 always 0 0
+jump 82 equal *tmp16 @large-logic-display
+jump 86 always 0 0
 draw rotate 0 0 270 0 0 0
 draw translate -176 0 0 0 0 0
 set *tmp14 null
-jump 93 always 0 0
+jump 88 always 0 0
 stop
 set *tmp14 null
 set :upsideDown:display display3
 sensor *tmp18 :upsideDown:display @type
 set *tmp19 *tmp18
-jump 98 equal *tmp19 @logic-display
-jump 102 always 0 0
+jump 93 equal *tmp19 @logic-display
+jump 97 always 0 0
 draw rotate 0 0 180 0 0 0
 draw translate -80 -80 0 0 0 0
 set *tmp17 null
-jump 110 always 0 0
-jump 104 equal *tmp19 @large-logic-display
-jump 108 always 0 0
+jump 105 always 0 0
+jump 99 equal *tmp19 @large-logic-display
+jump 103 always 0 0
 draw rotate 0 0 180 0 0 0
 draw translate -176 -176 0 0 0 0
 set *tmp17 null
-jump 110 always 0 0
+jump 105 always 0 0
 stop
 set *tmp17 null
 set :flipVertical:display display4
 sensor *tmp21 :flipVertical:display @type
 set *tmp22 *tmp21
-jump 115 equal *tmp22 @logic-display
-jump 119 always 0 0
+jump 110 equal *tmp22 @logic-display
+jump 114 always 0 0
 draw scale 1 -1 0 0 0 0
 draw translate 0 -80 0 0 0 0
 set *tmp20 null
-jump 127 always 0 0
-jump 121 equal *tmp22 @large-logic-display
-jump 125 always 0 0
+jump 122 always 0 0
+jump 116 equal *tmp22 @large-logic-display
+jump 120 always 0 0
 draw scale 1 -1 0 0 0 0
 draw translate 0 -176 0 0 0 0
 set *tmp20 null
-jump 127 always 0 0
+jump 122 always 0 0
 stop
 set *tmp20 null
 set :flipHorizontal:display display5
 sensor *tmp24 :flipHorizontal:display @type
 set *tmp25 *tmp24
-jump 132 equal *tmp25 @logic-display
-jump 136 always 0 0
+jump 127 equal *tmp25 @logic-display
+jump 131 always 0 0
 draw scale -1 1 0 0 0 0
 draw translate -80 0 0 0 0 0
 set *tmp23 null
-jump 144 always 0 0
-jump 138 equal *tmp25 @large-logic-display
-jump 142 always 0 0
+jump 139 always 0 0
+jump 133 equal *tmp25 @large-logic-display
+jump 137 always 0 0
 draw scale -1 1 0 0 0 0
 draw translate -176 0 0 0 0 0
 set *tmp23 null
-jump 144 always 0 0
+jump 139 always 0 0
 stop
 set *tmp23 null
 set :scaleDisplay:x 2.2
@@ -156,13 +151,13 @@ end
 sensor *tmp30 :displaySize:display @type
 set :displaySize:type *tmp30
 op equal *tmp31 :displaySize:type @logic-display
-jump 161 equal *tmp31 false
+jump 156 equal *tmp31 false
 set *tmp32 80
-jump 167 always 0 0
+jump 162 always 0 0
 op equal *tmp33 :displaySize:type @large-logic-display
-jump 165 equal *tmp33 false
+jump 160 equal *tmp33 false
 set *tmp34 176
-jump 166 always 0 0
+jump 161 always 0 0
 set *tmp34 null
 set *tmp32 *tmp34
 set :displaySize*retval *tmp32

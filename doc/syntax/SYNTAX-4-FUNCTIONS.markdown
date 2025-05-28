@@ -459,7 +459,6 @@ printchar(a);
 compiles to 
 
 ```mlog
-jump 0 equal cell1 null
 write 63539 cell1 0
 read *tmp0 cell1 0
 printchar *tmp0
@@ -495,17 +494,16 @@ compiles to
 
 ```mlog
 set data "Dbftbs!djqifs"
-jump 1 equal message1 null
 set :index 0
 read :ch data :index
-jump 8 notEqual :ch null
+jump 7 notEqual :ch null
 printflush message1
 set :index 0
-jump 3 always 0 0
+jump 2 always 0 0
 op sub *tmp3 :ch 1
 printchar *tmp3
 op add :index :index 1
-jump 3 always 0 0
+jump 2 always 0 0
 ```
 
 ## The `strlen()` function

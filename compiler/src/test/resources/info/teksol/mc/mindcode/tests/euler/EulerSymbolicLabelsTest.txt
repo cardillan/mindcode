@@ -3,7 +3,7 @@ project-euler-04.mnd:                              22    42899     100.0%   485A
 project-euler-18.mnd:                             837      837     100.0%   9CD1F51670FF2A5D   9F97BCFC04FBCE4E
 project-euler-26.mnd:                             520     4923      68.6%   6C7318A31C223AA5   66420C43D3EC2654
 project-euler-28.mnd:                              13    11006     100.0%   5C943F9BE29F7DE5   774E5F03732D2B4B
-project-euler-31.mnd:                              62    11311      98.3%   47A4CC119289380D   6E3E20A35A4CC1ED
-project-euler-31b.mnd:                            461     8245     100.0%   08C1247BD928B046   4DF6D7B320F12183
+project-euler-31.mnd:                              61    11310      98.3%   47A4CC119289380D   A442CF9724913135
+project-euler-31b.mnd:                            460     8244     100.0%   08C1247BD928B046   9DAB6A6314632321
 project-euler-45.mnd:                              14   265002     100.0%   75B12E5E9F981D9A   AFFF8287A3D19F62
 project-euler-97.mnd:                              11    11579     100.0%   0ED039F2AEA675BF   BDA161907D4918B5

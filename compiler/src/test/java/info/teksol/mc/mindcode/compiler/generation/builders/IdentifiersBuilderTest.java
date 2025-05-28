@@ -42,10 +42,8 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external a[10], b[10];
                             a[1] = b[2];
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(READ, var(12), "cell1", "12"),
-                    createInstruction(WRITE, var(12), "cell1", "1")
+                    createInstruction(READ, tmp(12), "cell1", "12"),
+                    createInstruction(WRITE, tmp(12), "cell1", "1")
             );
         }
 
@@ -56,8 +54,6 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external a[10], b[10];
                             a[x] = b[y];
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(20), ":x"),
                     createInstruction(OP, "add", tmp(22), ":y", "10"),
                     createInstruction(READARR, tmp(23), ".b[]", tmp(22)),
@@ -72,8 +68,6 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external a[10];
                             a[a[x]] = a[x];
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(10), ":x"),
                     createInstruction(READARR, tmp(11), ".a[]", tmp(10)),
                     createInstruction(SET, tmp(12), tmp(11)),
@@ -90,8 +84,6 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external x[10];
                             x[a] += x[b] += x[c];
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(10), ":a"),
                     createInstruction(SET, tmp(12), ":b"),
                     createInstruction(SET, tmp(14), ":c"),
@@ -112,8 +104,6 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external x[10];
                             a = x[b] = @time;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(10), ":b"),
                     createInstruction(SET, tmp(12), "@time"),
                     createInstruction(WRITEARR, tmp(12), ".x[]", tmp(10)),
@@ -129,8 +119,6 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             external x[10];
                             ulocate(:ore, x[a], out x[b], out x[c]);
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(10), ":a"),
                     createInstruction(SET, tmp(12), ":b"),
                     createInstruction(SET, tmp(15), ":c"),
@@ -149,22 +137,20 @@ class IdentifiersBuilderTest extends AbstractCodeGeneratorTest {
                             noinline def foo(in out x) x++; end;
                             foo(out x[a]);
                             """,
-                    createInstruction(LABEL, label(1)),
-                    createInstruction(JUMP, label(1), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(10), ":a"),
                     createInstruction(READARR, tmp(11), ".x[]", tmp(10)),
                     createInstruction(SET, tmp(12), tmp(11)),
                     createInstruction(SET, ":foo:x", tmp(12)),
-                    createInstruction(SETADDR, ":foo*retaddr", label(2)),
+                    createInstruction(SETADDR, ":foo*retaddr", label(1)),
                     createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
-                    createInstruction(LABEL, label(2)),
+                    createInstruction(LABEL, label(1)),
                     createInstruction(WRITEARR, ":foo:x", ".x[]", tmp(10)),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
                     createInstruction(SET, tmp(13), ":foo:x"),
                     createInstruction(OP, "add", ":foo:x", ":foo:x", "1"),
                     createInstruction(SET, ":foo*retval", tmp(13)),
-                    createInstruction(LABEL, label(3)),
+                    createInstruction(LABEL, label(2)),
                     createInstruction(RETURN, ":foo*retaddr")
             );
         }

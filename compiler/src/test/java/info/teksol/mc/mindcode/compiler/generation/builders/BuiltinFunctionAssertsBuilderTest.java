@@ -16,11 +16,9 @@ class BuiltinFunctionAssertsBuilderTest extends AbstractCodeGeneratorTest {
                         $A = 10;
                         assertEquals(10, $A, "value from memory");
                         """,
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
                 createInstruction(WRITE, "10", "bank1", "0"),
-                createInstruction(READ, var(0), "bank1", "0"),
-                createInstruction(ASSERT_EQUALS, "10", var(0), q("value from memory"))
+                createInstruction(READ, tmp(0), "bank1", "0"),
+                createInstruction(ASSERT_EQUALS, "10", tmp(0), q("value from memory"))
         );
     }
 

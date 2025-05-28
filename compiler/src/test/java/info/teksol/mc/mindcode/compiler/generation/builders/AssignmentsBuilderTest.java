@@ -33,8 +33,6 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             var b[3];
                             a = b;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
                     createInstruction(WRITE, ".b*0", "bank1", "0"),
                     createInstruction(WRITE, ".b*1", "bank1", "1"),
                     createInstruction(WRITE, ".b*2", "bank1", "2")
@@ -49,8 +47,6 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             external b[3];
                             a = b;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(READ, tmp(0), "bank1", "0"),
                     createInstruction(SET, ".a*0", tmp(0)),
                     createInstruction(READ, tmp(1), "bank1", "1"),
@@ -67,17 +63,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             external a[3], b[3], c[3];
                             b = c;
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "bank1", "null"),
                     createInstruction(SET, tmp(9), "0"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", tmp(10), tmp(9), "3"),
                     createInstruction(OP, "add", tmp(12), tmp(9), "6"),
                     createInstruction(READARR, tmp(13), ".c[]", tmp(12)),
                     createInstruction(WRITEARR, tmp(13), ".b[]", tmp(10)),
                     createInstruction(OP, "add", tmp(9), tmp(9), "1"),
-                    createInstruction(JUMP, label(1), "lessThan", tmp(9), "3"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(0), "lessThan", tmp(9), "3"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -209,12 +203,10 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             allocate heap in bank1;
                             $A += $B;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
-                    createInstruction(READ, var(1), "bank1", "1"),
-                    createInstruction(READ, var(0), "bank1", "0"),
-                    createInstruction(OP, "add", var(2), var(0), var(1)),
-                    createInstruction(WRITE, var(2), "bank1", "0")
+                    createInstruction(READ, tmp(1), "bank1", "1"),
+                    createInstruction(READ, tmp(0), "bank1", "0"),
+                    createInstruction(OP, "add", tmp(2), tmp(0), tmp(1)),
+                    createInstruction(WRITE, tmp(2), "bank1", "0")
             );
         }
     }
@@ -269,17 +261,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             allocate heap in bank1;
                             $A = $B++ * --$C;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
-                    createInstruction(READ, var(1), "bank1", "1"),
-                    createInstruction(SET, var(2), var(1)),
-                    createInstruction(OP, "add", var(1), var(1), "1"),
-                    createInstruction(WRITE, var(1), "bank1", "1"),
-                    createInstruction(READ, var(3), "bank1", "2"),
-                    createInstruction(OP, "sub", var(4), var(3), "1"),
-                    createInstruction(WRITE, var(4), "bank1", "2"),
-                    createInstruction(OP, "mul", var(5), var(2), var(4)),
-                    createInstruction(WRITE, var(5), "bank1", "0")
+                    createInstruction(READ, tmp(1), "bank1", "1"),
+                    createInstruction(SET, tmp(2), tmp(1)),
+                    createInstruction(OP, "add", tmp(1), tmp(1), "1"),
+                    createInstruction(WRITE, tmp(1), "bank1", "1"),
+                    createInstruction(READ, tmp(3), "bank1", "2"),
+                    createInstruction(OP, "sub", tmp(4), tmp(3), "1"),
+                    createInstruction(WRITE, tmp(4), "bank1", "2"),
+                    createInstruction(OP, "mul", tmp(5), tmp(2), tmp(4)),
+                    createInstruction(WRITE, tmp(5), "bank1", "0")
             );
         }
 
@@ -520,17 +510,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             external a[3];
                             a[0 .. 1] = a[1 .. 2];
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(3), "0"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(SET, tmp(4), tmp(3)),
                     createInstruction(OP, "add", tmp(6), tmp(3), "1"),
                     createInstruction(READARR, tmp(7), ".a[]", tmp(6)),
                     createInstruction(WRITEARR, tmp(7), ".a[]", tmp(4)),
                     createInstruction(OP, "add", tmp(3), tmp(3), "1"),
-                    createInstruction(JUMP, label(1), "lessThan", tmp(3), "2"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(0), "lessThan", tmp(3), "2"),
+                    createInstruction(LABEL, label(1))
             );
         }
 
@@ -541,17 +529,15 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             external a[3];
                             a[1 .. 2] = a[0 .. 1];
                             """,
-                    createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "equal", "cell1", "null"),
                     createInstruction(SET, tmp(3), "1"),
-                    createInstruction(LABEL, label(1)),
+                    createInstruction(LABEL, label(0)),
                     createInstruction(OP, "add", tmp(4), tmp(3), "1"),
                     createInstruction(SET, tmp(6), tmp(3)),
                     createInstruction(READARR, tmp(7), ".a[]", tmp(6)),
                     createInstruction(WRITEARR, tmp(7), ".a[]", tmp(4)),
                     createInstruction(OP, "sub", tmp(3), tmp(3), "1"),
-                    createInstruction(JUMP, label(1), "greaterThanEq", tmp(3), "0"),
-                    createInstruction(LABEL, label(2))
+                    createInstruction(JUMP, label(0), "greaterThanEq", tmp(3), "0"),
+                    createInstruction(LABEL, label(1))
             );
         }
 

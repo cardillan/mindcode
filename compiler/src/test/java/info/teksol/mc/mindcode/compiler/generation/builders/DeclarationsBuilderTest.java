@@ -263,10 +263,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesInitializedArrayDeclarations() {
             assertCompilesTo("""
                             allocate heap in cell1;
-                            external a[] = (1, 2, 3);
+                            external a[3] = (1, 2, 3);
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
                     createInstruction(WRITE, "3", "cell1", "2")
@@ -279,8 +277,6 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             allocate heap in cell1;
                             external a[] = (1, 2, 3);
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
                     createInstruction(WRITE, "3", "cell1", "2")
@@ -292,8 +288,6 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             external cell1 a[] = (1, 2, 3);
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
                     createInstruction(WRITE, "3", "cell1", "2")
@@ -395,10 +389,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             allocate heap in bank1;
                             $A = $B;
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "bank1", "null"),
-                    createInstruction(READ, var(1), "bank1", "1"),
-                    createInstruction(WRITE, var(1), "bank1", "0")
+                    createInstruction(READ, tmp(1), "bank1", "1"),
+                    createInstruction(WRITE, tmp(1), "bank1", "0")
             );
         }
 
@@ -798,12 +790,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             external b = a;
                             print(b);
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(READ, var(0), "cell1", "0"),
-                    createInstruction(WRITE, var(0), "cell1", "1"),
-                    createInstruction(READ, var(1), "cell1", "1"),
-                    createInstruction(PRINT, var(1))
+                    createInstruction(READ, tmp(0), "cell1", "0"),
+                    createInstruction(WRITE, tmp(0), "cell1", "1"),
+                    createInstruction(READ, tmp(2), "cell1", "1"),
+                    createInstruction(PRINT, tmp(2))
             );
         }
 
@@ -815,19 +805,17 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             external cell1[1] b = a;
                             print(b);
                             """,
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(JUMP, var(1000), "equal", "cell1", "null"),
-                    createInstruction(READ, var(0), "cell1", "0"),
-                    createInstruction(WRITE, var(0), "cell1", "1"),
-                    createInstruction(READ, var(1), "cell1", "1"),
-                    createInstruction(PRINT, var(1))
+                    createInstruction(READ, tmp(0), "cell1", "0"),
+                    createInstruction(WRITE, tmp(0), "cell1", "1"),
+                    createInstruction(READ, tmp(2), "cell1", "1"),
+                    createInstruction(PRINT, tmp(2))
             );
         }
 
         @Test
-        void compilesLinkedVariables() {
+        void compilesGuardedVariables() {
             assertCompilesTo("""
-                            linked switch1, message1;
+                            guarded switch1, message1;
                             printflush(message1);
                             """,
                     createInstruction(LABEL, var(1000)),

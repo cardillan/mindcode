@@ -556,6 +556,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesNestedFunctionCallsRecursive() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1[0...512];
                             def a(n) a(n + 1); end;
                             print(a(a(a(4))));
@@ -711,6 +712,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesUserFunctionCallWithExternalVariables() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate heap in bank1;
                             
                             void foo(out x)
@@ -730,6 +732,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesNoinlineUserFunctionCallWithExternalVariables() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate heap in bank1;
                             
                             noinline void foo(out x)
@@ -821,6 +824,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesRecursiveOutParameters() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1;
                             def foo(out n)
                                 n = 4;
@@ -898,6 +902,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesUserFunctionCallWithExternalVariables() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate heap in bank1;
                             
                             void foo(in out x)
@@ -920,6 +925,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesNoinlineUserFunctionCallWithExternalVariables() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate heap in bank1;
                             
                             noinline void foo(in out x)
@@ -1010,6 +1016,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesIndirectRecursion() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1[0...512];
                             def bar(n) 1 - foo(n); end;
                             def foo(n) 1 + bar(n); end;
@@ -1111,6 +1118,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void handlesRecursiveReturn() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1[0...512];
                             def gdc(a,b)
                                 if b == 0 then
@@ -1344,6 +1352,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesReturnFromRecursiveFunction() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1;
                             
                             def foo(x)
@@ -1442,6 +1451,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesOutputExternalVariables() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate heap in bank1;
                             $building = getBlock(20, 30, out $type, out $floor);
                             """,
@@ -2287,6 +2297,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesRecursiveUnusedOutParameters() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1;
                             noinline def foo(out n, out m)
                                 n = 10;
@@ -2404,6 +2415,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesRecursiveUnusedInOutParameters() {
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1;
                             def foo(in out n, in out m)
                                 print(m, n);
@@ -2604,6 +2616,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesRecursiveVoidFunction() {
             // Note: the function doesn't set a function return variable
             assertCompilesTo("""
+                            guarded bank1;
                             allocate stack in bank1;
                             void foo()
                                 foo();
