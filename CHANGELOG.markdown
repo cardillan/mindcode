@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Updated the `scaleSmallToLarge()` and `scaleLargeToSmall()` functions to compensate for rounding errors in Mindustry Logic `draw scale` instruction.
 * Updated the `log2()` function to use `op logn` when possible.
+* Changed all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).  
 
 ### Miscellaneous
 
@@ -347,7 +348,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added several new library functions
   * [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):
     * Added `drawflush()` function which empties the draw buffer
-    * Added `unpackcolor()` function which decomposes a packed color into individual r/g/b/a components.
+    * Added `unpackcolor()` function which decomposes a packed color into individual `r`/`g`/`b`/`a` components.
   * [`printing` library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library):
     * Added `printflush()` function which empties the text buffer
     * Added functions for outputting numbers in binary and hexadecimal base: `formatBinaryNumber()`, `printBinaryNumber()`, `formatHexNumber()`, `printHexNumber()`.
@@ -388,7 +389,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed If Expression optimization wrongly applying forward assignment to some instructions. This particular optimization was also moved to the `advanced` optimization level. ([#193](https://github.com/cardillan/mindcode/issues/193)).
+* Fixed the If Expression optimization wrongly applying forward assignment to some instructions. This particular optimization was also moved to the `advanced` optimization level. ([#193](https://github.com/cardillan/mindcode/issues/193)).
 
 ## 2.7.2 - 2024-12-27
 
@@ -871,7 +872,7 @@ Experimental features may contain bugs, break existing code or produce suboptima
 
 * Fixed a wrong cost estimation in [Loop Unrolling](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling). The cost 
   estimates were too high, potentially preventing some eligible loops from being unrolled.
-* Fixed compiler not recognizing integer values in compiler option directives (`#set`).
+* Fixed the compiler not recognizing integer values in compiler option directives (`#set`).
 
 ### Changed
 

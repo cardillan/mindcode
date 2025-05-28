@@ -42,7 +42,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         variables = context.variables();
     }
 
-    /// Purges all nodes in and their children from cache. If these nodes get evaluated again, they
+    /// Purges all nodes in and their children from the cache. If these nodes get evaluated again, they
     /// will be resolved from a fresh start. Prevents the compile-time evaluator remembering values
     /// based on constant definitions that might not be valid in a new context.
     public void purgeFromCache(List<? extends AstMindcodeNode> nodes) {
@@ -51,7 +51,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     }
 
     /// If the node can be compile-time evaluated, returns the evaluation, otherwise returns the node itself.
-    /// The evaluation can be partial, for example when the AstIfExpression node has a constant condition,
+    /// The evaluation can be partial, for example, when the AstIfExpression node has a constant condition,
     /// it can return just the true/false branch (depending on the compile-time value of the condition)
     /// even if those branches aren't constant themselves.
     ///
@@ -60,11 +60,11 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     /// @param node node to evaluate
     /// @param local `true` if the node is being evaluated in a local context
     /// @param requireMlogConstant  `true` if the evaluation is being required for an mlog constant. The value is not
-    ///         unwrapped, so that proper error message can be generated if the value cannot be represented in mlog
+    ///         unwrapped, so that a proper error message can be generated if the value cannot be represented in mlog
     /// @return compile-time evaluation of the node
     public AstMindcodeNode evaluate(AstMindcodeNode node, boolean local, boolean requireMlogConstant) {
         if (node instanceof AstIdentifier || node instanceof AstBuiltInIdentifier) {
-            // Identifiers aren't evaluated to prevent a possible loss precision warning generated when using imprecise constants.
+            // Identifiers aren't evaluated to prevent a possible loss of precision warning generated when using imprecise constants.
             // Logic builtins aren't evaluated to prevent their conversion to a numeric literal
             return node;
         }
@@ -137,8 +137,16 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 ExpressionValue left = ExpressionValue.create(profile, processor, evaluateNode(node.getLeft(), local));
                 ExpressionValue right = ExpressionValue.create(profile, processor, evaluateNode(node.getRight(), local));
                 if (left.isString() || right.isString()) {
-                    // Only addition of a string and a non-null value is supported
-                    if (operation == Operation.ADD && !left.isNull() && !right.isNull()) {
+                    if (operation.isCondition()) {
+                        // Only the addition of a string and a non-null value is supported
+                        if (left.isString() && right.isString()) {
+                            Result result = new Result();
+                            eval.execute(result, left, right);
+                            return result.toAstMindcodeNode(node);
+                        } else {
+                            return node;
+                        }
+                    } else if (operation == Operation.ADD && !left.isNull() && !right.isNull()) {
                         return new AstLiteralString(node.sourcePosition(), left.print() + right.print());
                     } else {
                         error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
@@ -195,13 +203,13 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     }
 
     private AstMindcodeNode evaluateIfExpression(AstIfExpression node, boolean local) {
-        // AstIfExpression may have multiple if branches and an else branch
-        // We're going through all if branches and evaluate their conditions:
-        // - true: the body of the if branch is selected,
-        // - false: the next if branch is evaluated,
+        // AstIfExpression may have multiple `if` branches and an else branch
+        // We're going through all `if` branches and evaluate their conditions:
+        // - true: the body of the `if` branch is selected,
+        // - false: the next `if` branch is evaluated,
         // - indeterminate: the expression can't be completely evaluated, but we know that
-        //   none of the previous if branches gets executed and strip them away.
-        // When all if branches' conditions evaluate to false, the else branch is selected.
+        //   none of the previous `if` branches gets executed and strip them away.
+        // When all `if` branches' conditions evaluate to false, the else branch is selected.
         int size = node.getIfBranches().size();
         for (int i = 0; i < size; i++) {
             AstIfBranch branch = node.getIfBranches().get(i);
@@ -220,8 +228,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                         node.getIfBranches().subList(i, size), node.getElseBranch());
             }
         }
-        // All if branch conditions evaluated to false
-        // The result is the else branch
+        // All `if` branch conditions evaluated to false: the result is the else branch.
         return evaluateBody(node.getElseBranch(), local);
     }
 
@@ -248,7 +255,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         if (eval != null && numArgs == node.getArguments().size()) {
             List<AstLiteral> evaluated = evaluateArguments(node, local);
             if (evaluated.size() == numArgs) {
-                // All parameters are constant
+                // All parameters are constants
                 // left and right are the same argument for unary functions
                 ExpressionValue left = ExpressionValue.create(profile, processor, evaluated.getFirst());
                 ExpressionValue right = ExpressionValue.create(profile, processor, evaluated.getLast());
