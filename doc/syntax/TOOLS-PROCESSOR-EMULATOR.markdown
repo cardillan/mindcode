@@ -26,7 +26,7 @@ All operations that do not interact with the Mindustry World are supported. Oper
 * The `read` and `write` instructions can be used with the linked memory cells and memory blocks obtained either through the linked variable (e.g., `cell1`), or through the `getlink` instruction.  
 * The `sensor` instruction is supported for a very limited number of properties:
   * `type`: returns the type of the object (e.g., `@memory-cell`)
-  * `id`: returns the id of the object if it exists (e.g., `1` for `@lead`)
+  * `id`: returns the ID of the object if it exists (e.g., `1` for `@lead`)
   * Accessing other properties isn't supported. 
 * The `wait` instruction isn't supported; specifically, it doesn't pause the execution of the program. 
 * All other instructions that do not set an output variable are silently ignored. For example, the `ucontrol move` instruction executes, but does nothing (there's no unit to send the command to in the emulated world).

@@ -35,6 +35,12 @@ Possible values for the `boundary-checks` directive are:
 * `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes three instructions.
 * `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes four instructions.
 
+## Option `case-optimization-strength`
+
+This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). When performing the optimization, the optimizer extracts segments from the jump table, orders them by size and chooses a number of the largest ones corresponding to the specified value of the `case-optimization-strength` option. For each such segment, the process is repeated recursively on the remaining parts of the jump table, decreasing the number of selected segments by one for each level of recursion.
+
+The default value of this option is `4` for the web application, and `8` for the command-line tool. The maximal possible value is `6` for the web application, and `256` for the command-line tool. Values larger than `8` only bring additional benefits for case expressions with a very complex structure.
+
 ## Option `function-prefix`
 
 Specifies which function prefix is used to generate mlog names of local variables. Possible values are:
@@ -83,10 +89,33 @@ Possible values for this option are:
 
 * `none`: deactivates all optimizations.
 * `basic`: performs most optimizations, except those that depend on certain assumptions about the program or Mindustry Logic.
-* `advanced`: performs additional optimizations based upon some assumptions about Mindustry Logic (e.g., that numerical id produced by a lookup instruction for Mindustry content elements is stable) or the source code (e.g., that it doesn't depend on expressions converting null values to non-null ones).
+* `advanced`: performs additional optimizations based upon some assumptions about Mindustry Logic (e.g., that numerical ID produced by a lookup instruction for Mindustry content elements is stable) or the source code (e.g., that it doesn't depend on expressions converting null values to non-null ones).
 * `experimental`: perform optimizations that are currently in the experimental phase.
 
 The default optimization level is `advanced`.
+
+## Option `output-profiling`
+
+Setting this option to `true` activates outputting the profiling information (the number of times each instruction was executed) to the log file. The profiling information is output only when the code has actually been executed.
+
+Example of the produced output:
+
+```
+Code profiling result:
+
+     1: set :n 0
+     1: jump 0 greaterThanEq 0 @links
+    36: getlink :reactor :n
+    36: sensor *tmp1 :reactor @type
+    36: jump 10 notEqual *tmp1 @thorium-reactor
+     0: sensor *tmp6 :reactor @cryofluid
+     0: sensor *tmp7 :reactor @liquidCapacity
+     0: op mul *tmp8 0.25 *tmp7
+     0: op greaterThanEq *tmp9 *tmp6 *tmp8
+     0: control enabled :reactor *tmp9 0 0 0
+    36: op add :n :n 1
+    36: jump 2 lessThan :n @links
+```
 
 ## Option `passes`
 
@@ -115,6 +144,30 @@ Passive remarks can be used for putting instructions or comments in the compiled
 
 Active remarks can be used to easily add debugging output to a program that can be deactivated using a compiler option (potentially through a command line switch without modifying the source code).
 
+## Option `sort-variables`
+
+The **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in large enough programs.
+
+This option can be used to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special non-executable block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `draw triangle` instruction is used, which can create up to six variables per instruction. Since the entire segment of `draw triangle` instruction is skipped, the behavior of the program remains unaltered, except for possible difference in timing.)
+
+The value assigned to the sort-variables directive is a list of variable categories:
+
+* `linked`: variables representing [linked blocks](SYNTAX-1-VARIABLES.markdown#linked-blocks),
+* `params`: variables representing [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters),
+* `globals`: [global variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
+* `main`: [main variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
+* `locals`: [local variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
+* `all`: user variables, which aren't matched by any other specified category,
+* `none`: no variables at all. Can be used as a `#set sort-variables=none;`, ensuring that no variable ordering will be performed.
+
+It is possible to use the directive without specifying any value at all (`#set sort-variables;`). In this case, the categories will be processed in the order above.
+
+When processing the directive, the categories are processed in the given order, with all variables in a category sorted alphabetically. This defines the resulting order of variables.
+
+Note on the `linked` category: when a block is linked into the processor, a variable of that name is removed from the variable list. By putting the `linked` variables first, it is easier to see which linked blocks used by the program are not linked under their proper names.
+
+The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.
+
 ## Option `symbolic-labels`
 
 Activates/deactivates generating symbolic labels for jump instruction targets. Possible values are:
@@ -136,7 +189,7 @@ The following features are affected when activating symbolic labels:
 * Regular internal array element access (inlined array access is not affected):
   * the size of a jump table and execution time of array access are increased by one,
   * instructions setting up a function return address cannot be hoisted.
-* Optimized case expressions: the size and execution time of an optimized case expression may increase by one.
+* Optimized case expressions: the size and execution time of an optimized case expression may increase.
 
 Example of a program compiled with mlog comments and symbolic labels:
 
@@ -283,30 +336,6 @@ label_3:
         jump label_3 always 0 0
 ```
 
-## Option `sort-variables`
-
-The **Vars** screen of the Mindustry processor shows all variables and their values, but the variables are displayed in the order in which they were created. This typically results in a very chaotic order of variables, where variables defined by the user are mixed with temporary variables, making it quite difficult to find a specific variable in large enough programs.
-
-This option can be used to make variables be displayed in a Mindustry processor in a well-defined order. Mindcode compiler ensures that by prepending a special non-executable block at the beginning of the program which creates user-defined variables in a specific order without altering their value. (The `draw triangle` instruction is used, which can create up to six variables per instruction. Since the entire segment of `draw triangle` instruction is skipped, the behavior of the program remains unaltered, except for possible difference in timing.)
-
-The value assigned to the sort-variables directive is a list of variable categories:
-
-* `linked`: variables representing [linked blocks](SYNTAX-1-VARIABLES.markdown#linked-blocks),
-* `params`: variables representing [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters),
-* `globals`: [global variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
-* `main`: [main variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
-* `locals`: [local variables](SYNTAX-1-VARIABLES.markdown#variable-scope),
-* `all`: user variables, which aren't matched by any other specified category,
-* `none`: no variables at all. Can be used as a `#set sort-variables=none;`, ensuring that no variable ordering will be performed.
-
-It is possible to use the directive without specifying any value at all (`#set sort-variables;`). In this case, the categories will be processed in the order above.
-
-When processing the directive, the categories are processed in the given order, with all variables in a category sorted alphabetically. This defines the resulting order of variables.
-
-Note on the `linked` category: when a block is linked into the processor, a variable of that name is removed from the variable list. By putting the `linked` variables first, it is easier to see which linked blocks used by the program are not linked under their proper names.
-
-The number of variables being sorted is limited by the [instruction limit](#option-instruction-limit). Should the resulting program size exceed the instruction limit, some or all variables will remain unordered.
-
 ## Option `syntax`
 
 Chooses the [syntax mode](SYNTAX.markdown#syntax-modes) to be used for compilation. Possible values are:
@@ -353,7 +382,7 @@ Chooses how Mindcode takes into account the [`target` option](#option-target). P
 * `compatible` (the default value): the code is supposed to be run in a Mindustry version specified by the `target` option, or any later version. 
 * `specific`: the code is only expected to be run in a Mindustry version specified by the `target` option, not in any other version.
 
-The difference lies in the handling of unstable [built-in variables](SYNTAX-1-VARIABLES.markdown#built-in-variables) and logic ids. Numerical built-in variables and logic IDs are considered stable if their value is the same in all known versions of Mindustry Logic in which they appear, and if they weren't removed in a later known Mindustry version.   
+The difference lies in the handling of unstable [built-in variables](SYNTAX-1-VARIABLES.markdown#built-in-variables) and logic IDs. Numerical built-in variables and logic IDs are considered stable if their value is the same in all known versions of Mindustry Logic in which they appear, and if they weren't removed in a later known Mindustry version.   
 
 In the `compatible` setting only the stable the built-in and logic ID values are evaluated at compile time. It is expected these values won't change in a future release. For all other values, the compiled code corresponds to the _meaning_ of all logic built-ins. For example, in the following code 
 

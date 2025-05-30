@@ -37,6 +37,11 @@ public class CompilerProfile {
     public static final int MAX_PASSES_CMDLINE = 1000;
     public static final int MAX_PASSES_WEBAPP = 25;
 
+    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 8;
+    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 4;
+    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 256;
+    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 6;
+
     private final boolean webApplication;
 
     // Settable options
@@ -53,6 +58,7 @@ public class CompilerProfile {
     private int instructionLimit = 1000;
     private int mlogIndent = -1;
     private int optimizationPasses;
+    private int caseOptimizationStrength;
     private int parseTreeLevel = 0;
     private boolean printStackTrace = false;
     private boolean outputProfiling = false;
@@ -91,6 +97,7 @@ public class CompilerProfile {
     public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
         this.optimizationPasses = webApplication ? DEFAULT_PASSES_WEBAPP : DEFAULT_PASSES_CMDLINE;
+        this.caseOptimizationStrength = webApplication ? DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP : DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE;
         this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
         this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
     }
@@ -113,6 +120,10 @@ public class CompilerProfile {
 
     public int getMaxPasses() {
         return webApplication ? MAX_PASSES_WEBAPP : MAX_PASSES_CMDLINE;
+    }
+
+    public int getMaxCaseOptimizationStrength() {
+        return webApplication ? MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP : MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE;
     }
 
     public int getMaxInstructionLimit() {
@@ -178,6 +189,15 @@ public class CompilerProfile {
 
     public CompilerProfile setCaseConfiguration(int caseConfiguration) {
         this.caseConfiguration = caseConfiguration;
+        return this;
+    }
+
+    public int getCaseOptimizationStrength() {
+        return caseOptimizationStrength;
+    }
+
+    public CompilerProfile setCaseOptimizationStrength(int caseOptimizationStrength) {
+        this.caseOptimizationStrength = Math.min(Math.max(caseOptimizationStrength, 1), getMaxCaseOptimizationStrength());
         return this;
     }
 

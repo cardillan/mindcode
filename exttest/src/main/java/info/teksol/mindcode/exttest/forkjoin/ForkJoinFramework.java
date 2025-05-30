@@ -27,7 +27,7 @@ public class ForkJoinFramework implements ExecutionFramework {
         try {
             TestCaseCreator caseCreator = configuration.getTestCaseCreator();
             task = forkJoinPool.submit(new ForkJoinTestRunner(progress, caseCreator,
-                    0, caseCreator.getTotalCases() - 1));
+                    0, caseCreator.getSampleCount() - 1));
             Thread.sleep(5_000);
 
             while (!progress.finished()) {

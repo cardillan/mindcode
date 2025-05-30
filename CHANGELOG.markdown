@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Updated the `log2()` function to use `op logn` when possible.
 * Changed all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).
 * The `noinit` keyword has no effect in `linked` variable declarations. Guard code is not generated unless the `guarded` modifier is used to explicitly request it.
+* Changed the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) to generate many different ways to compress a jump table, selecting the most efficient one for given constraints. 
 
 ### Miscellaneous
 
@@ -90,7 +91,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
 * Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
   * Range checking of the input values may be suppressed using [`unsafe-case-optimization`](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#range-check-elimination) compiler directive.
-  * Case expressions based on Mindustry content (e.g., items, block types, and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic ids and building jump tables using these numerical values.
+  * Case expressions based on Mindustry content (e.g., items, block types, and so on) [can be optimized](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#mindustry-content-conversion) by converting the values to logic IDs and building jump tables using these numerical values.
   * Large jump tables containing a lot of unused values may be [compressed](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) to save space.
 
 #### Experimental features
@@ -141,7 +142,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed the logic id translation from blocks to ids and back not handling all types of blocks ([#246](https://github.com/cardillan/mindcode/issues/246)).  
+* Fixed the logic ID translation from blocks to IDs and back not handling all types of blocks ([#246](https://github.com/cardillan/mindcode/issues/246)).  
 * Fixed a small bug in jump tables generation for unused arrays.
 
 ### Added

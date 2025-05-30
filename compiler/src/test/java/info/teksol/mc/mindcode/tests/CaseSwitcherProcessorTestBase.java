@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.tests;
 
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -24,6 +25,11 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;
+    }
+
+    @Override
+    protected CompilerProfile createCompilerProfile() {
+        return super.createCompilerProfile().setCaseOptimizationStrength(256);
     }
 
     void executeCaseSwitchingTest(String fileName, int codeSize) throws IOException {

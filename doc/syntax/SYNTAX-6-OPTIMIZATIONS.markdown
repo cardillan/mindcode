@@ -131,7 +131,7 @@ Some mlog operations are produced by different Mindcode operators. When the opti
 If the optimization level is `advanced`, the following additional expressions are handled:
 
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
-* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block or unit with given id and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block or unit literal.
+* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block or unit with given ID and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block or unit literal.
 
 Some Mindustry objects may have different logic IDs in different Mindustry versions. For these objects, the above optimizations only happen when the [`target-optimization` option](SYNTAX-5-OTHER.markdown#option-target-optimization) is set to `specific`:
 
@@ -1101,24 +1101,24 @@ The following conditions must be met for a case expression to be processed by th
 
 When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
 
-Putting an `else` branch into a case expression obviously means not all input values are handled, and doing so disables the unsafe optimization—the out-of-range checks will remain.  
+Putting an `else` branch into a case expression obviously means not all input values are handled, and doing so disables the unsafe optimization (the out-of-range checks will remain).
 
 If you activate the `unsafe-case-optimization` directive, and an unhandled input value is encountered, the behavior of the generated code is undefined.
 
 ### Mindustry content conversion
 
-When all `when` branches in the case expression contain built-in constants representing Mindustry content of the same type (items, liquids, unit types or block types) and the optimization level is set to `advanced`, the case switcher converts these built-in constants to logic IDs, adds an instruction to convert the input value to a logic id (using the `sensor` instruction with the `@id` property) and attempts to build a jump table over the resulting numeric values.
+When all `when` branches in the case expression contain built-in constants representing Mindustry content of the same type (items, liquids, unit types or block types) and the optimization level is set to `advanced`, the case switcher converts these built-in constants to logic IDs, adds an instruction to convert the input value to a logic ID (using the `sensor` instruction with the `@id` property) and attempts to build a jump table over the resulting numeric values.
 
 The following preconditions need to be met to apply content conversion:
 
 * All values in `when` branches must be either `null`, or built-in variables referencing Mindustry content of the same type (items, building types and so on).
 * Values used in `when` clauses must be unique.
-* The logic id must be known to Mindcode for all `when` values. 
-* All logic ids must be stable, or `target-optimization` mode must be set to `specific`.
+* The logic ID must be known to Mindcode for all `when` values. 
+* All logic IDs must be stable, or `target-optimization` mode must be set to `specific`.
 * The optimization level must be set to `advanced`.
 
 > [!NOTE]
-> The out-of-range handling instructions are omitted when `unsafe-case-optimization` is set to `true` and there's no `else` branch. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g., item selected in a sorter), keep in mind the value obtained this way might be null.  
+> The out-of-range handling instructions are omitted when `unsafe-case-optimization` is set to `true` and there's no `else` branch. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g., item selected in a sorter), keep in mind the value obtained this way might be `null`.  
 
 #### Null values
 
@@ -1131,23 +1131,25 @@ Mindcode arranges to code to only perform checks distinguishing between `null` a
 
 ### Jump table compression
 
-Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions, allowing significant space savings, leading to jump table compression. The more diverse segments are encoded as separate, smaller jump tables. The optimizer considers several such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well.
+Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. The more diverse segments are encoded as separate, smaller jump tables. The optimizer considers several such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well.
+
+The total number of possible jump table segments arrangements can be quite large. The optimizer generates a number of these arrangements and selects the best one from this set. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The `case-optimization-strength` compiler directive can be used to control the number of considered arrangements.
 
 Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both significantly smaller and faster than the unoptimized `case` expression.   
 
-Jump table compression is particularly useful when using block types in case expressions, as, given the large dispersion of block type ids, full jump tables tend to get quite large.
+Jump table compression is particularly useful when using block types in case expressions, as, given the large dispersion of block type IDs, full jump tables tend to get quite large.
 
 Notes:
 
 * Jump table compression is not performed when range checks for the given case expression are eliminated via the `unsafe-case-optimization` option.
-* When a compressed jump table is smaller, but slower than a full or less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
+* When a compressed jump table is smaller, but slower than a full, or a less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
 * Compressing a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the optimizer will select the smaller version over the faster version, even when there is plenty of instruction space.
 
 ### Jump table padding
 
 When the jump table starts at zero value, the generated code can be both smaller and faster due to these effects:
 
-* When the Mindustry content conversion is applied, the optimizer knows the logic ids cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
+* When the Mindustry content conversion is applied, the optimizer knows the logic IDs cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
 * When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation handling the non-zero offset can be omitted.
 
 When symbolic labels are generated, the jump table padding may save up to two instructions, which is a significant speedup.
@@ -1520,4 +1522,4 @@ The benefit of an optimization is then computed as the total weight of instructi
 
 ---
 
-[« Previous: Advanced features](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Extending Mindcode »](SYNTAX-EXTENSIONS.markdown)
+[« Previous: Compiler directives](SYNTAX-5-OTHER.markdown) &nbsp; | &nbsp; [Up: Contents](SYNTAX.markdown) &nbsp; | &nbsp; [Next: Extending Mindcode »](SYNTAX-EXTENSIONS.markdown)

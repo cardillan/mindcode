@@ -646,7 +646,7 @@ Modifications by Convert case at line 5:5 (segments: 6) (+14 instructions):
      4 lookup block :block :i
 -    * jump *label5 notEqual :block @graphite-press
 +    5 sensor *tmp6 :block @id
-+    6 jump *label59 equal *tmp6 0
++    6 jump *label59 lessThan *tmp6 1
 +    7 label *label60
 +    8 jump *label61 greaterThanEq *tmp6 35
 +    9 jump *label58 lessThan *tmp6 17
@@ -844,7 +844,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      2 label *label57
      3 lookup block :block :i
      4 sensor *tmp6 :block @id
-     5 jump *label59 equal *tmp6 0
+     5 jump *label59 lessThan *tmp6 1
 -    * label *label60
      6 jump *label61 greaterThanEq *tmp6 35
      7 jump *label58 lessThan *tmp6 17
@@ -985,7 +985,7 @@ set :i -1
 label *label57
 lookup block :block :i
 sensor *tmp6 :block @id
-jump *label59 equal *tmp6 0
+jump *label59 lessThan *tmp6 1
 jump *label61 greaterThanEq *tmp6 35
 jump *label58 lessThan *tmp6 17
 multijump *label62 *tmp6 17

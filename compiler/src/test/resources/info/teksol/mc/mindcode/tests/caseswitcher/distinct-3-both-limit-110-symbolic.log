@@ -659,7 +659,7 @@ Modifications by Convert case at line 5:5 (segments: 6) (+13 instructions):
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
 +    6 sensor *tmp6 :block @id
-+    7 jump *label61 equal *tmp6 0
++    7 jump *label61 lessThan *tmp6 1
 +    8 label *label62
 +    9 jump *label63 greaterThanEq *tmp6 35
 +   10 jump *label60 lessThan *tmp6 17
@@ -863,7 +863,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      3 lookup block :block :i
      4 # "Function: def identifyBlock(in block)"
      5 sensor *tmp6 :block @id
-     6 jump *label61 equal *tmp6 0
+     6 jump *label61 lessThan *tmp6 1
 -    * label *label62
      7 jump *label63 greaterThanEq *tmp6 35
      8 jump *label60 lessThan *tmp6 17
@@ -1008,7 +1008,7 @@ label *label59
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
 sensor *tmp6 :block @id
-jump *label61 equal *tmp6 0
+jump *label61 lessThan *tmp6 1
 jump *label63 greaterThanEq *tmp6 35
 jump *label60 lessThan *tmp6 17
 multijump *label64 *tmp6 17

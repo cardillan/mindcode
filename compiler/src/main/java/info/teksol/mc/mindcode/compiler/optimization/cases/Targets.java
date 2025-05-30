@@ -19,6 +19,10 @@ public class Targets {
         return nullTarget != null;
     }
 
+    public boolean hasNullOrZeroKey() {
+        return nullTarget != null || targets.containsKey(0);
+    }
+
     public @Nullable LogicLabel get(Integer key) {
         return targets.get(key);
     }

@@ -17,12 +17,12 @@ Mindcode currently undergoes significant changes to the syntax, which are being 
 * Optimization speedups
   * DataFlowOptimizer: cache VariableState instances at the entry and exit points end of each context. If the
     inbound instance is equal to the cached one, use the cached outbound instance and avoid new processing.
-  * Only recreate OptimizationActions of the action whose context(s) are affected by previous optimizations.
+  * Only recreate OptimizationActions instances of the actions whose context(s) are affected by previous optimizations.
 
 ### Improving error/warning messages
 
 * Warn when the generated code goes over 1000 Mindustry instructions.
-* Warn when potentially non-numeric value is being pushed on the stack.
+* Warn when a potentially non-numeric value is being pushed on the stack.
 
 ### #set local compiler directive/statement
 
@@ -96,7 +96,7 @@ Stack stored in processor variables, similar to internal arrays.
 ## Code generation improvements
 
 * `math-model` compiler option: `strict` or `relaxed`. Under the `strict` model, the following will apply:
-  * Restoring variable value by inverting the operation performed on it will be disallowed.
+  * Restoring a variable value by inverting the operation performed on it will be disallowed.
   * Assumptions such as `x < x + 1` for a general value of `x` won't be made (for large values of `x`, this might not be computationally true: `x = 10 ** 20; y = x + 1; print(x == y)` gives `1`).
 
 ### Short-circuit boolean evaluation
@@ -235,40 +235,7 @@ Stack stored in processor variables, similar to internal arrays.
 * Only perform the optimization when the input value is a known integer
 * Support ranges in when branches
 * Omit range checking where possible (requires invariant inferring)
-* Cases with sparse sets of when branches: convert the largest segment from case values with a density
-  higher than 0.5, leave other values to conditional jumps
 * On `advanced` level, convert switches that have overlapping values.
-
-#### Case switching over built-in constants
-
-Process case expressions based on item/liquid/unit/block etc. Applies when all when branches contain a built-in 
-constant of the same type. Example:
-
-```
-case itemType
-  when @coal then A
-  when @lead then B
-  when @graphite then C
-  ...
-end 
-```
-
-would compile into
-
-```
-sensor offset itemType @id
-op min offset offset maximal_used_id + 1
-op add @counter <start_of_jump_table - minimal_when_value - 1> offset
-start_of_jump_table:
-jump <branch for id 0>
-jump <branch for id 1>
-...
-jump <else branch>
-branch for id 0:
-<jump to else branch if itemType !=== constant_with_id_0> 
-```
-
-The `op min` instructions perhaps might be avoided under some circumstances.
 
 ### Loop unrolling
 
@@ -362,11 +329,6 @@ Things that would be cool, that might be doable in some way given existing const
 doing them isn't clear yet.
 
 * [Parallel comparison](#parallel-comparison)
-* Should case expressions use strict comparison (===)? NO.
-* Function libraries. Now that inline and stackless functions are really useful, libraries might make sense.
-* Multiprocessing support - some kind of library or framework (probably) that could be used to
-  provide high-level support for inter-processor communication using either memory cells/banks,
-  or even unit flags. Schemacode would be used to produce a schematic with several processors.
 
 ## Parallel comparison
 

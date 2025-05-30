@@ -4,7 +4,7 @@
    124 instructions eliminated by Dead Code Elimination (6 iterations).
      3 instructions eliminated by Jump Normalization (6 iterations).
     60 instructions eliminated by Jump Optimization (6 iterations).
-    52 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
+    53 instructions eliminated by Single Step Elimination (4 passes, 10 iterations).
      2 instructions eliminated by Expression Optimization (3 passes, 4 iterations).
      5 instructions eliminated by If Expression Optimization (2 passes, 4 iterations).
     26 instructions eliminated by Data Flow Optimization (6 passes, 24 iterations).
@@ -13,7 +13,7 @@
     13 loops improved by Loop Optimization.
      6 instructions added by Case Switching (12 iterations).
      2 case expressions converted to switched jumps Case Switching.
-    22 instructions eliminated by Jump Straightening (3 passes, 6 iterations).
+    21 instructions eliminated by Jump Straightening (2 passes, 6 iterations).
      8 instructions updated by JumpThreading.
      6 instructions eliminated by Unreachable Code Elimination (2 iterations).
     71 instructions eliminated by Print Merging.
@@ -26,7 +26,7 @@ Pass 1: speed optimization selection (cost limit 252):
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
     Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit 5162220250.0, efficiency 2581110125.000
+    Convert case at line 134:9 (segments: 1)                     cost     2, benefit      161.1, efficiency     80.529
     Convert case at line 712:5 (segments: 1)                     cost     4, benefit       39.7, efficiency      9.922
 
 Pass 1: speed optimization selection (cost limit 252):
@@ -35,7 +35,7 @@ Pass 1: speed optimization selection (cost limit 252):
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
     Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit 5162220250.0, efficiency 2581110125.000
+  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit      161.1, efficiency     80.529
     Convert case at line 712:5 (segments: 1)                     cost     4, benefit       39.7, efficiency      9.922
 
 Pass 1: speed optimization selection (cost limit 248):
@@ -43,29 +43,29 @@ Pass 1: speed optimization selection (cost limit 248):
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
     Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit 5162220250.0, efficiency 2581110125.000
+  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit      161.1, efficiency     80.529
     Convert case at line 712:5 (segments: 1)                     cost     4, benefit       39.7, efficiency      9.922
 
 Pass 1: speed optimization selection (cost limit 243):
     Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333
   * Replicate loop condition at line 692:1                       cost     2, benefit       25.0, efficiency     12.500 (+1 instructions)
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit 5162220250.0, efficiency 2581110125.000
+  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit      161.1, efficiency     80.529
     Convert case at line 712:5 (segments: 1)                     cost     4, benefit       39.7, efficiency      9.922
 
 Pass 1: speed optimization selection (cost limit 242):
   * Replicate loop condition at line 203:1                       cost     3, benefit       25.0, efficiency      8.333 (+3 instructions)
     Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167
-  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit 5162220250.0, efficiency 2581110125.000
+  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit      161.1, efficiency     80.529
   o Convert case at line 712:5 (segments: 1)                     cost     4, benefit       39.7, efficiency      9.922
 
 Pass 1: speed optimization selection (cost limit 239):
   * Replicate loop condition at line 700:5                       cost     3, benefit       12.5, efficiency      4.167 (+3 instructions)
-  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit 5162220250.0, efficiency 2581110125.000
+  o Convert case at line 134:9 (segments: 1)                     cost     2, benefit      161.1, efficiency     80.529
   o Convert case at line 712:5 (segments: 1)                     cost     4, benefit       39.7, efficiency      9.922
 
 Pass 1: speed optimization selection (cost limit 236):
-  * Convert case at line 134:9 (segments: 1)                     cost     2, benefit 5162220250.0, efficiency 2581110125.000 (+2 instructions)
+  * Convert case at line 134:9 (segments: 1)                     cost     2, benefit      161.1, efficiency     80.529 (+2 instructions)
   o Convert case at line 712:5 (segments: 1)                     cost     4, benefit       39.7, efficiency      9.922
 
 Pass 1: speed optimization selection (cost limit 234):
@@ -3401,8 +3401,8 @@ Modifications by Convert case at line 134:9 (segments: 1) (+2 instructions):
 -    * jump *label15 notEqual *tmp29 @container
 +   75 sensor *tmp376 *tmp29 @id
 +   76 jump *label229 greaterThanEq *tmp376 95
-+   77 jump *label16 greaterThanEq *tmp376 93
-+   78 jump *label229 always
++   77 jump *label229 lessThan *tmp376 93
++   78 jump *label16 always
     79 label *label16
     80 set .DROP_TARGET .CONTAINER
     81 set .CONTAINER :block
@@ -3540,19 +3540,15 @@ Modifications by Convert case at line 712:5 (segments: 1) (+4 instructions):
    532 label *label87
    533 label *label86
 
-Modifications by Iterated phase, Jump Straightening, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-6 instructions):
  
-    74 sensor *tmp29 :block @type
     75 sensor *tmp376 *tmp29 @id
     76 jump *label229 greaterThanEq *tmp376 95
--    * jump *label16 greaterThanEq *tmp376 93
--    * jump *label229 always
-+   77 jump *label229 lessThan *tmp376 93
+    77 jump *label229 lessThan *tmp376 93
+-    * jump *label16 always
     78 label *label16
     79 set .DROP_TARGET .CONTAINER
     80 set .CONTAINER :block
-
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-5 instructions):
  
    238 set .DIRECTION " from vault #"
    239 jump *label50 notEqual LINK_ID 0

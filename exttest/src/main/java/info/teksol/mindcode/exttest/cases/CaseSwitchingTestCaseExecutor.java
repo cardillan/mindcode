@@ -32,7 +32,9 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
     public void runTest(TestProgress progress) {
         MindcodeCompiler compiler = compilerSupplier.get();
         try {
-            compiler.compilerProfile().setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE);
+            compiler.compilerProfile()
+                    .setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE)
+                    .setCaseOptimizationStrength(256);
             if (!compile(compiler, progress)) return;
             int originalSteps = compiler.getEmulator().getSteps();
             int originalSize = compiler.getInstructions().size();
@@ -40,6 +42,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
 
             // Second round
             compiler = compilerSupplier.get();
+            compiler.compilerProfile().setCaseOptimizationStrength(256);
             if (!compile(compiler, progress)) return;
             int newSteps = compiler.getEmulator().getSteps();
             int newSize = compiler.getInstructions().size();

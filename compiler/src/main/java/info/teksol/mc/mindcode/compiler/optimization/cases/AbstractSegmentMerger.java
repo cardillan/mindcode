@@ -8,7 +8,7 @@ import java.util.Map;
 
 public abstract class AbstractSegmentMerger implements SegmentMerger {
 
-    static List<Segment> split(Targets targets, boolean logicConversion) {
+    static List<Partition> splitToPartitions(Targets targets, boolean logicConversion) {
         LogicLabel zeroTarget = targets.get(0);
         if (logicConversion && zeroTarget != null) {
             // We need to handle zero separately because of possible null
@@ -16,7 +16,7 @@ public abstract class AbstractSegmentMerger implements SegmentMerger {
             targets.put(0, LogicLabel.INVALID);
         }
 
-        List<Segment> segments = new ArrayList<>();
+        List<Partition> partitions = new ArrayList<>();
 
         LogicLabel label = targets.firstEntry().getValue();
         int start = targets.firstKey();
@@ -28,12 +28,12 @@ public abstract class AbstractSegmentMerger implements SegmentMerger {
 
             if (key - last > 1) {
                 // There's a gap, create a segment representing it.
-                segments.add(new Segment(SegmentType.SINGLE, start, last + 1, label));
-                segments.add(new Segment(SegmentType.SINGLE, last + 1, key, LogicLabel.EMPTY));
+                partitions.add(new Partition(start, last + 1, label));
+                partitions.add(new Partition(last + 1, key, LogicLabel.EMPTY));
                 label = entry.getValue();
                 start = key;
             } else if (!label.equals(entry.getValue())) {
-                segments.add(new Segment(SegmentType.SINGLE, start, key, label));
+                partitions.add(new Partition(start, key, label));
                 label = entry.getValue();
                 start = key;
             }
@@ -41,10 +41,10 @@ public abstract class AbstractSegmentMerger implements SegmentMerger {
             last = key;
         }
 
-        segments.add(new Segment(SegmentType.SINGLE, start, last + 1, label));
+        partitions.add(new Partition(start, last + 1, label));
 
         if (zeroTarget != null) targets.put(0, zeroTarget);
 
-        return List.copyOf(segments);
+        return List.copyOf(partitions);
     }
 }

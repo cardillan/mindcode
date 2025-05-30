@@ -644,7 +644,7 @@ Modifications by Convert case at line 5:5 (segments: 6) (+15 instructions):
      5 # "Function: def identifyBlock(in block)"
 -    * jump *label5 notEqual :block @graphite-press
 +    6 sensor *tmp6 :block @id
-+    7 jump *label59 equal *tmp6 0
++    7 jump *label59 lessThan *tmp6 1
 +    8 label *label60
 +    9 jump *label61 greaterThanEq *tmp6 35
 +   10 jump *label58 lessThan *tmp6 17
@@ -843,7 +843,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      3 lookup block :block :i
      4 # "Function: def identifyBlock(in block)"
      5 sensor *tmp6 :block @id
-     6 jump *label59 equal *tmp6 0
+     6 jump *label59 lessThan *tmp6 1
 -    * label *label60
      7 jump *label61 greaterThanEq *tmp6 35
      8 jump *label58 lessThan *tmp6 17
@@ -985,7 +985,7 @@ label *label57
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
 sensor *tmp6 :block @id
-jump *label59 equal *tmp6 0
+jump *label59 lessThan *tmp6 1
 jump *label61 greaterThanEq *tmp6 35
 jump *label58 lessThan *tmp6 17
 multijump *label62 *tmp6 17

@@ -8,11 +8,11 @@ distinct-1-zero (limit  110):                     101     3159      98.0%   A344
 distinct-1-zero (limit  200):                     138     3136      98.5%   B9B968643F246C92   CB7CBBD1E924FECD
 distinct-1-zero (limit  500):                     301     2671      99.3%   7BBB9EEFB18036C9   6D4DB6E88DEC2EC2
 distinct-2-null (limit    0):                      87     7440      97.7%   2DE9BE08CD15CD39   808CCFAEAB9F9B9C
-distinct-2-null (limit  110):                     102     3380      98.0%   037A86F2A5C51C22   DBB0D9DC7B5A9205
+distinct-2-null (limit  110):                     102     3380      98.0%   037A86F2A5C51C22   A401F8EB229F71FB
 distinct-2-null (limit  200):                     138     3136      98.5%   C56B2BA4D6B8198C   FB6B9B05EE8338F4
 distinct-2-null (limit  500):                     301     2671      99.3%   7C12D5E4B5446E0C   6B7D72C8E88D967D
 distinct-3-both (limit    0):                      91     7897      97.8%   4365AD38A4619A34   0D8379A4DBFB0475
-distinct-3-both (limit  110):                     104     3381      98.0%   0E543CA3D9F806E1   C86B40A8FADAE61C
+distinct-3-both (limit  110):                     104     3381      98.0%   0E543CA3D9F806E1   EE7D306CBB2B83B6
 distinct-3-both (limit  200):                     140     3137      98.5%   5F5AAE68DF703669   D889F327F24E2ED5
 distinct-3-both (limit  500):                     303     2672      99.3%   1715579EB4DD792B   BF884C6239A6844B
 homogenous-0-none (limit    0):                    39     6837     100.0%   3FC8417DE80F3E48   9675A3D4F2520BB9

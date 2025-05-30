@@ -5,9 +5,9 @@ threads: 24
 
 # The name of the section containing the list of tests to execute
 # Several sections can be present in the config file, the active one is selected here
-test-suite: case-switching
 #test-suite: single-source
-#test-suite: all-sources
+#test-suite: case-switching
+test-suite: all-sources
 
 # Where to put all the output files
 # When not set, test-specific output files will be generated in the directory containing the source file
@@ -16,7 +16,7 @@ output-path: .
 
 # 'true' to run all possible configurations for all tests, 'false' to run the given number of samples
 # (full tests would typically take many hours to complete)
-full-tests: true
+full-tests: false
 
 # The number of samples configured to run per test will be multiplied by this number
 # Allows to create a basic configuration that runs reasonably fast
@@ -117,118 +117,6 @@ run-test:
   print-merging: [ none ]
   stack-optimization: [ none ]
 
-
-# LIST OF SOURCES
-
-# A single file to be tested
-# Unspecified settings are inherited from default
-single-source:
-  - source: recursion.mnd
-    defaults: run-test
-    samples: 1200000
-
-
-# List of all files to test
-all-sources:
-  - source: math.mnd
-    samples: 200
-    # Different default configuration
-    defaults: run-test
-
-  - source: printing.mnd
-    samples: 400
-    # Different default configuration
-    defaults: run-test
-    # Overriding settings from the default configuration
-    print-merging: [ none, basic, advanced ]
-
-  - source: quick-sort.mnd
-    samples: 5000
-    defaults: run-test
-    stack-optimization: [ none, basic ]
-
-  - source: heap-sort.mnd
-    samples: 5000
-    defaults: run-test
-
-  - source: bubble-sort.mnd
-    samples: 2000
-    defaults: run-test
-
-  - source: sum-of-primes.mnd
-    samples: 2000
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-04.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-18.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-26.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-28.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-31.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-31b.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-45.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: "C:\\Home\\mindcode\\compiler\\src\\test\\resources\\info\\teksol\\mc\\mindcode\\tests\\euler\\project-euler-97.mnd"
-    samples: 500
-    defaults: run-test
-
-  - source: impact-reactor-logic.mnd
-    samples: 125
-
-  - source: "C:\\Home\\golem\\benchmarks\\breakout.mnd"
-    samples: 1200
-
-  - source: "C:\\Home\\golem\\schematics\\detector.mnd"
-    samples: 100
-
-  - source: "C:\\Home\\golem-old\\mindcode\\factory-monitor.mnd"
-    samples: 100
-
-  - source: "C:\\Home\\golem-old\\mindcode\\factory-monitor-silicon.mnd"
-    samples: 100
-
-  - source: "C:\\Home\\golem-old\\mindcode\\factory-monitor-surge-alloy.mnd"
-    samples: 100
-
-  - source: "C:\\Home\\golem\\power-plant\\power-plant-battery-level.mnd"
-    samples: 100
-
-  - source: "C:\\Home\\golem\\power-plant\\power-plant-reactor-control.mnd"
-    samples: 100
-
-  - source: "C:\\Home\\golem\\overdrive\\overdrive-dome.mnd"
-    samples: 100
-
-  - source: "C:\\Home\\golem-old\\mindcode\\instant-overdrive-projector.mnd"
-    samples: 100
-
-#  - source: "C:\\Home\\golem\\mandelbrot\\mandelbrot-compute.mnd"
-#    samples: 250
-#
-#  - source: "C:\\Home\\golem\\unit-transport\\unit-transport.mnd"
-#    samples: 80
-
-
-
 case-switching-defaults:
   # Number of test cases to execute
   samples: 500
@@ -272,37 +160,192 @@ case-switching-defaults:
   jump-straightening: [ none ]
   jump-threading: [ none ]
 
+# LIST OF SOURCES
+
 # A single file to be tested
 # Unspecified settings are inherited from default
+single-source:
+  - source: recursion.mnd
+    defaults: run-test
+    samples: 1200000
+
+# Case-switching tests - standalone
 case-switching:
   - source: case-homogenous-none.mnd
     defaults: case-switching-defaults
-    case-configurations: 647
+    case-configurations: 2200
+    samples: 500
 
   - source: case-homogenous-null.mnd
     defaults: case-switching-defaults
-    case-configurations: 647
+    case-configurations: 2200
+    samples: 500
 
   - source: case-homogenous-zero.mnd
     defaults: case-switching-defaults
-    case-configurations: 1215
+    case-configurations: 15429
+    samples: 500
 
   - source: case-homogenous-both.mnd
     defaults: case-switching-defaults
-    case-configurations: 1215
-    
+    case-configurations: 15429
+    samples: 500
+
   - source: case-distinct-none.mnd
     defaults: case-switching-defaults
     case-configurations: 49
+    samples: 500
 
   - source: case-distinct-null.mnd
     defaults: case-switching-defaults
     case-configurations: 49
+    samples: 500
 
   - source: case-distinct-zero.mnd
     defaults: case-switching-defaults
     case-configurations: 228
+    samples: 500
 
   - source: case-distinct-both.mnd
     defaults: case-switching-defaults
     case-configurations: 228
+    samples: 500
+
+# List of all files to test
+all-sources:
+  - source: math.mnd
+    samples: 200
+    # Different default configuration
+    defaults: run-test
+
+  - source: printing.mnd
+    samples: 400
+    # Different default configuration
+    defaults: run-test
+    # Overriding settings from the default configuration
+    print-merging: [ none, basic, advanced ]
+
+  - source: quick-sort.mnd
+    samples: 5000
+    defaults: run-test
+    stack-optimization: [ none, basic ]
+
+  - source: heap-sort.mnd
+    samples: 5000
+    defaults: run-test
+
+  - source: bubble-sort.mnd
+    samples: 2000
+    defaults: run-test
+
+  - source: sum-of-primes.mnd
+    samples: 2000
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-04.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-18.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-26.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-28.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-31.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-31b.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-45.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: "C:\Home\mindcode\compiler\src\test\resources\info\teksol\mc\mindcode\tests\euler\project-euler-97.mnd"
+    samples: 500
+    defaults: run-test
+
+  - source: impact-reactor-logic.mnd
+    samples: 125
+
+  - source: "C:\Home\golem\benchmarks\breakout.mnd"
+    samples: 1200
+
+  - source: "C:\Home\golem\schematics\detector.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem-old\mindcode\factory-monitor.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem-old\mindcode\factory-monitor-silicon.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem-old\mindcode\factory-monitor-surge-alloy.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\power-plant\power-plant-battery-level.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\power-plant\power-plant-reactor-control.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem\overdrive\overdrive-dome.mnd"
+    samples: 100
+
+  - source: "C:\Home\golem-old\mindcode\instant-overdrive-projector.mnd"
+    samples: 100
+
+#  - source: "C:\Home\golem\mandelbrot\mandelbrot-compute.mnd"
+#    samples: 250
+#
+#  - source: "C:\Home\golem\unit-transport\unit-transport.mnd"
+#    samples: 80
+
+  - source: case-homogenous-none.mnd
+    defaults: case-switching-defaults
+    case-configurations: 2200
+    samples: 500
+
+  - source: case-homogenous-null.mnd
+    defaults: case-switching-defaults
+    case-configurations: 2200
+    samples: 500
+
+  - source: case-homogenous-zero.mnd
+    defaults: case-switching-defaults
+    case-configurations: 15429
+    samples: 500
+
+  - source: case-homogenous-both.mnd
+    defaults: case-switching-defaults
+    case-configurations: 15429
+    samples: 500
+
+  - source: case-distinct-none.mnd
+    defaults: case-switching-defaults
+    case-configurations: 49
+    samples: 100
+
+  - source: case-distinct-null.mnd
+    defaults: case-switching-defaults
+    case-configurations: 49
+    samples: 100
+
+  - source: case-distinct-zero.mnd
+    defaults: case-switching-defaults
+    case-configurations: 228
+    samples: 458
+
+  - source: case-distinct-both.mnd
+    defaults: case-switching-defaults
+    case-configurations: 228
+    samples: 458

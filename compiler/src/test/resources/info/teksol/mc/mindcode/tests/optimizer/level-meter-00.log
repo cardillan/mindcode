@@ -18,20 +18,20 @@
 
 Pass 1: speed optimization selection (cost limit 831):
   * Replicate loop condition at line 122:1                       cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
-  o Convert case at line 34:9 (segments: 6)                      cost     7, benefit     3521.6, efficiency    503.091
+  o Convert case at line 34:9 (segments: 6)                      cost     7, benefit     2598.6, efficiency    371.223
   o Convert case at line 34:9 (segments: 5)                      cost    11, benefit     3627.4, efficiency    329.764
-  o Convert case at line 34:9 (segments: 5)                      cost    12, benefit     4605.8, efficiency    383.814
+  o Convert case at line 34:9 (segments: 5)                      cost    12, benefit     3682.7, efficiency    306.891
+  o Convert case at line 34:9 (segments: 4)                      cost    13, benefit     4115.4, efficiency    316.568
   o Convert case at line 34:9 (segments: 3)                      cost    18, benefit     5199.5, efficiency    288.862
-  o Convert case at line 34:9 (segments: 3)                      cost    72, benefit     5326.9, efficiency     73.985
   o Convert case at line 34:9 (segments: 1)                      cost    74, benefit     5935.1, efficiency     80.204
   o Convert case at line 34:9 (segments: 1, zero based)          cost   137, benefit     5980.8, efficiency     43.655
 
 Pass 1: speed optimization selection (cost limit 830):
-  o Convert case at line 34:9 (segments: 6)                      cost     7, benefit     3521.6, efficiency    503.091
+  o Convert case at line 34:9 (segments: 6)                      cost     7, benefit     2598.6, efficiency    371.223
   o Convert case at line 34:9 (segments: 5)                      cost    11, benefit     3627.4, efficiency    329.764
-  o Convert case at line 34:9 (segments: 5)                      cost    12, benefit     4605.8, efficiency    383.814
+  o Convert case at line 34:9 (segments: 5)                      cost    12, benefit     3682.7, efficiency    306.891
+  o Convert case at line 34:9 (segments: 4)                      cost    13, benefit     4115.4, efficiency    316.568
   o Convert case at line 34:9 (segments: 3)                      cost    18, benefit     5199.5, efficiency    288.862
-  o Convert case at line 34:9 (segments: 3)                      cost    72, benefit     5326.9, efficiency     73.985
   o Convert case at line 34:9 (segments: 1)                      cost    74, benefit     5935.1, efficiency     80.204
   * Convert case at line 34:9 (segments: 1, zero based)          cost   137, benefit     5980.8, efficiency     43.655 (+137 instructions)
 

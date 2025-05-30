@@ -75,13 +75,6 @@ abstract class ActionHandler {
                 .type(Arguments.booleanType("specific", "compatible"));
 
         createArgument(container, defaults,
-                CompilerProfile::isUnsafeCaseOptimization,
-                (profile, arguments, name) -> profile.setUnsafeCaseOptimization(arguments.getBoolean(name)),
-                "--unsafe-case-optimization")
-                .help("omits range checking of case expressions without an else branch during optimization")
-                .type(Arguments.booleanType());
-
-        createArgument(container, defaults,
                 CompilerProfile::getSyntacticMode,
                 (profile, arguments, name) -> profile.setSyntacticMode(arguments.get(name)),
                 "-y", "--syntax")
@@ -110,6 +103,22 @@ abstract class ActionHandler {
                 .help("sets maximal number of optimization passes to be made")
                 .type(Integer.class)
                 .choices(Arguments.range(1, CompilerProfile.MAX_PASSES_CMDLINE));
+
+        createArgument(container, defaults,
+                CompilerProfile::isUnsafeCaseOptimization,
+                (profile, arguments, name) -> profile.setUnsafeCaseOptimization(arguments.getBoolean(name)),
+                "--unsafe-case-optimization")
+                .help("omits range checking of case expressions without an else branch during optimization")
+                .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
+                CompilerProfile::getCaseOptimizationStrength,
+                (profile, arguments, name) -> profile.setCaseOptimizationStrength(arguments.getInt(name)),
+                "--case-optimization-strength")
+                .help("sets the strength of case switching optimization: higher number means more case configurations are considered," +
+                        "potentially producing a more efficient code, at the cost of longer compilation time")
+                .type(Integer.class)
+                .choices(Arguments.range(1, CompilerProfile.MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE));
 
         createArgument(container, defaults,
                 CompilerProfile::getRemarks,

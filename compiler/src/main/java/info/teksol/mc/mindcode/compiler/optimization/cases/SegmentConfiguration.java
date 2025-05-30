@@ -5,46 +5,75 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 public final class SegmentConfiguration {
-    private final List<Segment> singularSegments;
-    private final List<Segment> mergedSegments;
+    /// Contains the original partitions
+    private final List<Partition> partitions;
 
-    public SegmentConfiguration(List<Segment> singularSegments, List<Segment> mergedSegments) {
-        this.singularSegments = singularSegments;
-        this.mergedSegments = mergedSegments;
+    /// Contains a list of segments created by merging partitions. Each segment is a contiguous range of partitions;
+    /// individual segments in a configuration do not overlap.
+    private final List<Segment> segments;
+
+    public SegmentConfiguration(List<Partition> partitions, List<Segment> segments) {
+        this.partitions = partitions;
+        this.segments = segments;
     }
 
-    public List<Segment> segments() {
-        return mergedSegments;
+    public List<Partition> getPartitions() {
+        return partitions;
     }
 
-    public List<Segment> completeSegments(Consumer<String> dbg) {
-        List<Segment> result = new ArrayList<>(mergedSegments);
-        List<Segment> segments = new ArrayList<>(singularSegments);
-        for (Segment mergedSegment : mergedSegments) {
-            segments.removeIf(mergedSegment::contains);
+    public List<Segment> getMergedSegments() {
+        return segments;
+    }
+
+    public List<Segment> createSegments(boolean handleNulls, Targets targets) {
+        List<Segment> result = segments.stream().map(Segment::duplicate).collect(Collectors.toCollection(ArrayList::new));
+        List<Partition> partitions = new ArrayList<>(this.partitions);
+
+        // Remove partitions which are already merged
+        for (Segment Segment : segments) {
+            partitions.removeIf(Segment::contains);
         }
 
+        // Merge the remaining partitions into JUMP_TABLE segments
         int i = 0;
-        while (i < segments.size()) {
-            Segment segment = segments.get(i);
+        while (i < partitions.size()) {
+            Partition partition = partitions.get(i);
             int j = i + 1;
-            while (j < segments.size() && segments.get(j).follows(segments.get(j - 1))) j++;
+            while (j < partitions.size() && partitions.get(j).follows(partitions.get(j - 1))) j++;
             result.add(new Segment(i == j - 1 ? SegmentType.SINGLE : SegmentType.JUMP_TABLE,
-                    segment.from(), segments.get(j - 1).to(), segment.majorityLabel()));
+                    partition.from(), partitions.get(j - 1).to(), partition.majorityLabel()));
             i = j;
         }
 
         // Remove completely empty segments
+        // They could have been created either by merging or from remaining partitions
         result.removeIf(segment -> segment.type() == SegmentType.SINGLE && segment.majorityLabel() == LogicLabel.EMPTY);
         result.sort(null);
 
-//        dbg.accept("Singular segments: \n" + singularSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
-//        dbg.accept("Merged segments: \n" + mergedSegments.stream().map(Object::toString).collect(Collectors.joining("\n")));
-//        dbg.accept("Result: \n" + result.stream().map(Object::toString).collect(Collectors.joining("\n")));
-//        dbg.accept("\n");
+        // Set flags
+        result.getLast().setLast();
+
+        // Null handling:
+        // NULL    ZERO    Handling
+        //  No      No     None - nulls go to the else branch
+        //  Yes     No     Handler at the `else` branch, needs routing in segments
+        //  No      Yes    Handler at the `zero` branch, no handling in segments
+        //  Yes     Yes    Handler at the `zero` branch, no handling in segments
+        if (handleNulls && targets.hasNullKey() && !targets.hasZeroKey()) {
+            result.stream().filter(s -> s.from() >= 0).findFirst().ifPresent(Segment::setHandleNulls);
+        }
+
+        Segment last = null;
+        for (Segment segment : result) {
+            if (segment.from() > 0 && (last == null || last.to() <= 0)) {
+                segment.setPadToZero();
+                break;
+            }
+            last = segment;
+        }
 
         return result;
     }
@@ -54,19 +83,19 @@ public final class SegmentConfiguration {
         if (obj == this) return true;
         if (obj == null || obj.getClass() != this.getClass()) return false;
         var that = (SegmentConfiguration) obj;
-        return Objects.equals(this.mergedSegments, that.mergedSegments);
+        return Objects.equals(this.segments, that.segments);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(mergedSegments);
+        return Objects.hash(segments);
     }
 
     @Override
     public String toString() {
         return "SegmentConfiguration{" +
-                "singularSegments=" + singularSegments +
-                ", mergedSegments=" + mergedSegments +
+                "singularSegments=" + partitions +
+                ", mergedSegments=" + segments +
                 '}';
     }
 }
