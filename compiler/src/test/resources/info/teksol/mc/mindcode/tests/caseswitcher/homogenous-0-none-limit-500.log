@@ -12,19 +12,20 @@
    252 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 460):
-  o Convert case at line 5:5 (segments: 4)                       cost     0, benefit      439.1, efficiency   Infinity
-  o Convert case at line 5:5 (segments: 4)                       cost     9, benefit      443.7, efficiency     49.295
-  o Convert case at line 5:5 (segments: 4, zero based)           cost    25, benefit      443.8, efficiency     17.750
-  o Convert case at line 5:5 (segments: 4)                       cost   176, benefit      444.0, efficiency      2.523
-  o Convert case at line 5:5 (segments: 3)                       cost   178, benefit      448.9, efficiency      2.522
-  o Convert case at line 5:5 (segments: 2)                       cost   188, benefit      452.0, efficiency      2.404
-  o Convert case at line 5:5 (segments: 3, zero based)           cost   190, benefit      454.0, efficiency      2.390
-  o Convert case at line 5:5 (segments: 2)                       cost   191, benefit      455.1, efficiency      2.383
-  o Convert case at line 5:5 (segments: 4, zero based)           cost   192, benefit      460.3, efficiency      2.397
-  o Convert case at line 5:5 (segments: 3, zero based)           cost   194, benefit      465.7, efficiency      2.400
-  o Convert case at line 5:5 (segments: 2, zero based)           cost   204, benefit      470.1, efficiency      2.304
-  o Convert case at line 5:5 (segments: 2, zero based)           cost   207, benefit      473.6, efficiency      2.288
-  * Convert case at line 5:5 (segments: 1, zero based)           cost   214, benefit      478.3, efficiency      2.235 (+214 instructions)
+  o Convert case at line 5:5 (segments: 3)                       size    -9, benefit      432.9, efficiency   Infinity
+  o Convert case at line 5:5 (segments: 4)                       size    -7, benefit      439.1, efficiency   Infinity
+  o Convert case at line 5:5 (segments: 4)                       size    +9, benefit      443.7, efficiency     49.295
+  o Convert case at line 5:5 (segments: 4, zero based)           size   +25, benefit      443.8, efficiency     17.750
+  o Convert case at line 5:5 (segments: 4)                       size  +176, benefit      444.0, efficiency      2.523
+  o Convert case at line 5:5 (segments: 3)                       size  +178, benefit      448.9, efficiency      2.522
+  o Convert case at line 5:5 (segments: 2)                       size  +188, benefit      452.0, efficiency      2.404
+  o Convert case at line 5:5 (segments: 3, zero based)           size  +190, benefit      454.0, efficiency      2.390
+  o Convert case at line 5:5 (segments: 2)                       size  +191, benefit      455.1, efficiency      2.383
+  o Convert case at line 5:5 (segments: 4, zero based)           size  +192, benefit      460.3, efficiency      2.397
+  o Convert case at line 5:5 (segments: 3, zero based)           size  +194, benefit      465.7, efficiency      2.400
+  o Convert case at line 5:5 (segments: 2, zero based)           size  +204, benefit      470.1, efficiency      2.304
+  o Convert case at line 5:5 (segments: 2, zero based)           size  +207, benefit      473.6, efficiency      2.288
+  * Convert case at line 5:5 (segments: 1, zero based)           size  +214, benefit      478.3, efficiency      2.235 (+214 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  

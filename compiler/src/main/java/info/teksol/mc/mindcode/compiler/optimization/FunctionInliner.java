@@ -211,7 +211,7 @@ class FunctionInliner extends BaseOptimizer {
         if (body == null) {
             return null;
         }
-        // Cost: body size minus one (return) times number of calls minus body size (we'll remove the original)
+        // Cost: body size minus one (return) times the number of calls minus body size (we'll remove the original)
         int cost = body.realSize() - 1;
         return cost <= costLimit ? new InlineFunctionCallAction(call, cost, benefit) : null;
     }

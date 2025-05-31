@@ -22,7 +22,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Updated the `log2()` function to use `op logn` when possible.
 * Changed all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).
 * The `noinit` keyword has no effect in `linked` variable declarations. Guard code is not generated unless the `guarded` modifier is used to explicitly request it.
-* Changed the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) to generate many different ways to compress a jump table, selecting the most efficient one for given constraints. 
+* Changed the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) to generate many different ways to compress a jump table, selecting the most efficient one for given constraints.
+* Removed the optimization goal `auto` and added `neutral`. Implemented new optimization selection according to the [optimization goal](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-goal). The Case Switching optimization is capable of generation optimizations for the `size` and `neutral` goals. 
 
 ### Miscellaneous
 

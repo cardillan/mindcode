@@ -23,6 +23,10 @@ public interface OptimizationAction {
     /// @return cost of realizing this optimization
     int cost();
 
+    default int positiveCost() {
+        return Math.max(cost(), 0);
+    }
+
     /// Total benefit from realizing this optimization. Computed as sum of weights (from the AstContext) of all
     /// instructions multiplied by real instruction size that will be eliminated/avoided. Benefit computed this way may
     /// be altered to factor-in specific circumstances of given optimization, but ultimately needs to be based on
@@ -49,7 +53,15 @@ public interface OptimizationAction {
     /// @return an identifier of a group this action belongs to.
     default @Nullable String getGroup() { return null; }
 
-    default double efficiency() {
-        return benefit() / cost();
+    default double speedEfficiency() {
+        return benefit() / positiveCost();
+    }
+
+    default double sizeEfficiency() {
+        return -cost();
+    }
+
+    default double neutralEfficiency() {
+        return -cost() * benefit();
     }
 }

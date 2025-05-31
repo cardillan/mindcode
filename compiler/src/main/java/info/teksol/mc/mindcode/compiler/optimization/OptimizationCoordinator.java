@@ -19,6 +19,8 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationPhase.*;
 
@@ -176,6 +178,12 @@ public class OptimizationCoordinator {
             return modified;
         }
 
+        Predicate<OptimizationAction> actionFilter = switch (profile.getGoal()) {
+            case SIZE    -> action -> action.cost() < 0;
+            case NEUTRAL -> action -> action.cost() <= 0 && action.benefit() >= 0 && (action.cost() < 0 || action.benefit() > 0);
+            case SPEED   -> action -> action.benefit() > 0;
+        };
+
         while (true) {
             int initialSize = codeSize();
             int costLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, profile.getInstructionLimit() - initialSize);
@@ -186,6 +194,7 @@ public class OptimizationCoordinator {
                     .map(optimizers::get)
                     .filter(Objects::nonNull)
                     .flatMap(o -> o.getPossibleOptimizations(expandedCostLimit).stream())
+                    .filter(actionFilter)
                     .toList();
             optimizationContext.finish();
 
@@ -211,12 +220,10 @@ public class OptimizationCoordinator {
                 }
             }
 
-            if (profile.getGoal() != GenerationGoal.SIZE) {
-                int difference = codeSize() - initialSize;
-                optimizationStatistics.add(OptimizerMessage.debug(
-                        "\nPass %d: speed optimization selection (cost limit %d):", pass, costLimit));
-                possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
-            }
+            int difference = codeSize() - initialSize;
+            optimizationStatistics.add(OptimizerMessage.debug(
+                    "\nPass %d: %s optimization selection (cost limit %d):", pass, profile.getGoal().toString().toLowerCase(), costLimit));
+            possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
 
             if (selectedAction == null) {
                 break;
@@ -226,10 +233,40 @@ public class OptimizationCoordinator {
         return modified;
     }
 
-    /// Selects an optimization action, taking action groups into account. An action in an action group with a better
-    ///
+    /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectAction(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
-        List<OptimizationAction> actions = possibleOptimizations.stream().sorted(ACTION_COMPARATOR.reversed()).toList();
+        return switch (profile.getGoal()) {
+            case SIZE -> selectActionForSize(possibleOptimizations);
+            case NEUTRAL -> selectActionNeutral(possibleOptimizations, costLimit, considered);
+            case SPEED -> selectActionForSpeed(possibleOptimizations, costLimit, considered);
+        };
+    }
+
+    private static final Comparator<OptimizationAction> SIZE_GOAL_COMPARATOR =
+            Comparator.comparingInt(OptimizationAction::cost)
+                    .thenComparing(Comparator.comparingDouble(OptimizationAction::benefit).reversed());
+
+    /// Selects an optimization action, taking action groups into account.
+    private @Nullable OptimizationAction selectActionForSize(List<OptimizationAction> possibleOptimizations) {
+        return possibleOptimizations.stream().min(SIZE_GOAL_COMPARATOR).orElse(null);
+    }
+
+    // We're maximizing the effect of the optimization: instructions saved times execution benefit.
+    private static final Comparator<OptimizationAction> NEUTRAL_GOAL_COMPARATOR =
+            Comparator.comparingDouble(a -> -a.cost() * a.benefit());
+
+    /// Selects an optimization action, taking action groups into account.
+    private @Nullable OptimizationAction selectActionNeutral(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
+        return possibleOptimizations.stream().max(NEUTRAL_GOAL_COMPARATOR).orElse(null);
+    }
+
+    private static final Comparator<OptimizationAction> SPEED_GOAL_COMPARATOR =
+            Comparator.comparingDouble(OptimizationAction::speedEfficiency).reversed()
+                    .thenComparingInt(OptimizationAction::cost);
+
+    /// Selects an optimization action, taking action groups into account.
+    private @Nullable OptimizationAction selectActionForSpeed(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
+        List<OptimizationAction> actions = possibleOptimizations.stream().sorted(SPEED_GOAL_COMPARATOR).toList();
 
         // Last considered action cost per group
         Map<String, Integer> actionCosts = new HashMap<>();
@@ -259,21 +296,23 @@ public class OptimizationCoordinator {
         return InstructionCounter.globalSize(program);
     }
 
-    private static final Comparator<OptimizationAction> ACTION_COMPARATOR =
-            Comparator.comparingDouble(OptimizationAction::efficiency)
-                    .thenComparing(Comparator.comparingInt(OptimizationAction::cost).reversed());
-
     private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference,
             Set<OptimizationAction> considered) {
-        OptimizerMessage message;
+        Function<OptimizationAction, Double> efficiency = switch (profile.getGoal()) {
+            case SIZE -> OptimizationAction::sizeEfficiency;
+            case NEUTRAL -> OptimizationAction::neutralEfficiency;
+            case SPEED -> OptimizationAction::speedEfficiency;
+        };
+
         if (opt == selected) {
-            message = OptimizerMessage.debug("  * %-60s cost %5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
-                    opt, opt.cost(), opt.benefit(), opt.efficiency(), difference);
+            optimizationStatistics.add(
+                    OptimizerMessage.debug("  * %-60s size %+5d, benefit %10.1f, efficiency %10.3f (%+d instructions)",
+                            opt, opt.cost(), opt.benefit(), efficiency.apply(opt), difference));
         } else {
-            message = OptimizerMessage.debug("  %s %-60s cost %5d, benefit %10.1f, efficiency %10.3f",
-                    opt.cost() > costLimit ? "!" : considered.contains(opt) ? "o" : " ",
-                    opt, opt.cost(), opt.benefit(), opt.efficiency());
+            optimizationStatistics.add(
+                    OptimizerMessage.debug("  %s %-60s size %+5d, benefit %10.1f, efficiency %10.3f",
+                            opt.cost() > costLimit ? "!" : considered.contains(opt) ? "o" : " ",
+                            opt, opt.cost(), opt.benefit(), efficiency.apply(opt)));
         }
-        optimizationStatistics.add(message);
     }
 }

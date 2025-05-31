@@ -11,7 +11,7 @@ import java.util.Map;
 public enum GenerationGoal {
     SIZE,
     SPEED,
-    AUTO,
+    NEUTRAL,
     ;
 
     private static final Map<String, GenerationGoal> VALUE_MAP = createValueMap();

@@ -11,29 +11,29 @@
     71 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 923):
-  * Replicate loop condition at line 17:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Replicate loop condition at line 24:1                        cost     1, benefit       25.0, efficiency     25.000
-    Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency     25.000
-    Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency     25.000
-    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency     25.000
+  * Replicate loop condition at line 17:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+    Replicate loop condition at line 24:1                        size    +1, benefit       25.0, efficiency     25.000
+    Replicate loop condition at line 32:1                        size    +1, benefit       25.0, efficiency     25.000
+    Replicate loop condition at line 45:1                        size    +1, benefit       25.0, efficiency     25.000
+    Replicate loop condition at line 58:1                        size    +1, benefit       25.0, efficiency     25.000
 
 Pass 1: speed optimization selection (cost limit 922):
-  * Replicate loop condition at line 24:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency     25.000
-    Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency     25.000
-    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency     25.000
+  * Replicate loop condition at line 24:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+    Replicate loop condition at line 32:1                        size    +1, benefit       25.0, efficiency     25.000
+    Replicate loop condition at line 45:1                        size    +1, benefit       25.0, efficiency     25.000
+    Replicate loop condition at line 58:1                        size    +1, benefit       25.0, efficiency     25.000
 
 Pass 1: speed optimization selection (cost limit 921):
-  * Replicate loop condition at line 32:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency     25.000
-    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency     25.000
+  * Replicate loop condition at line 32:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+    Replicate loop condition at line 45:1                        size    +1, benefit       25.0, efficiency     25.000
+    Replicate loop condition at line 58:1                        size    +1, benefit       25.0, efficiency     25.000
 
 Pass 1: speed optimization selection (cost limit 920):
-  * Replicate loop condition at line 45:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency     25.000
+  * Replicate loop condition at line 45:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+    Replicate loop condition at line 58:1                        size    +1, benefit       25.0, efficiency     25.000
 
 Pass 1: speed optimization selection (cost limit 919):
-  * Replicate loop condition at line 58:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Replicate loop condition at line 58:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-6 instructions):
  

@@ -14,7 +14,7 @@
     90 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 890):
-  * Replicate loop condition at line 39:1                        cost     1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  * Replicate loop condition at line 39:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  

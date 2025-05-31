@@ -93,7 +93,7 @@ abstract class ActionHandler {
                 CompilerProfile::getGoal,
                 (profile, arguments, name) -> profile.setGoal(arguments.get(name)),
                 "-g", "--goal")
-                .help("sets code generation goal: minimize code size, minimize execution speed, or choose automatically")
+                .help("sets code generation goal: minimize code size, minimize execution speed, or no specific preference")
                 .type(LowerCaseEnumArgumentType.forEnum(GenerationGoal.class));
 
         createArgument(container, defaults,

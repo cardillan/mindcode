@@ -19,113 +19,113 @@
    595 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 630):
-    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
-    Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444
-  * Unroll loop at line 152:5                                    cost   521, benefit   156250.0, efficiency    299.904 (+519 instructions)
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit    27343.8, efficiency  27343.750
+    Replicate loop condition at line 58:1                        size    +7, benefit       25.0, efficiency      3.571
+    Unroll iteration loop at line 71:5                           size   +81, benefit     1575.0, efficiency     19.444
+  * Unroll loop at line 152:5                                    size  +521, benefit   156250.0, efficiency    299.904 (+519 instructions)
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit    27343.8, efficiency  27343.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit    27343.8, efficiency  27343.750
 
 Pass 1: speed optimization selection (cost limit 111):
-    Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571
-  * Unroll iteration loop at line 71:5                           cost    81, benefit     1575.0, efficiency     19.444 (-12 instructions)
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+    Replicate loop condition at line 58:1                        size    +7, benefit       25.0, efficiency      3.571
+  * Unroll iteration loop at line 71:5                           size   +81, benefit     1575.0, efficiency     19.444 (-12 instructions)
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 123):
-  * Replicate loop condition at line 58:1                        cost     7, benefit       25.0, efficiency      3.571 (+7 instructions)
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Replicate loop condition at line 58:1                        size    +7, benefit       25.0, efficiency      3.571 (+7 instructions)
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 116):
-  * Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 115):
-  * Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 114):
-  * Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 113):
-  * Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 112):
-  * Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 111):
-  * Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 110):
-  * Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 109):
-  * Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 108):
-  * Convert case at line 213:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
-  o Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750
+  * Convert case at line 213:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  o Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750
 
 Pass 1: speed optimization selection (cost limit 107):
-  * Convert case at line 165:5 (segments: 1)                     cost     1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
+  * Convert case at line 165:5 (segments: 1)                     size    +1, benefit     1093.8, efficiency   1093.750 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-3 instructions):
  

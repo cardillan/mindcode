@@ -11,7 +11,7 @@ abstract class AbstractOptimizationAction implements OptimizationAction {
 
     public AbstractOptimizationAction(AstContext astContext, int cost, double benefit) {
         this.astContext = astContext;
-        this.cost = Math.max(cost, 0);
+        this.cost = cost;
         this.benefit = benefit;
     }
 

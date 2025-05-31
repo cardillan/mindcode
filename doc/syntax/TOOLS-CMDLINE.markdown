@@ -92,7 +92,7 @@ Actions:
 usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
                 [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
-                [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,auto}] [-e {1..1000}]
+                [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
                 [--unsafe-case-optimization {true,false}] [--case-optimization-strength {1..256}]
                 [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
@@ -160,9 +160,9 @@ compiler options:
                          specifies syntactic mode used to compile the source code
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
-  -g, --goal {size,speed,auto}
-                         sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
-                         automatically
+  -g, --goal {size,speed,neutral}
+                         sets code generation  goal:  minimize  code  size,  minimize  execution  speed,  or no specific
+                         preference
   -e, --passes {1..1000}
                          sets maximal number of optimization passes to be made
   --unsafe-case-optimization {true,false}
@@ -334,7 +334,7 @@ named arguments:
 ```
 usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a TAG [TAG ...]]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
-                [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,auto}] [-e {1..1000}]
+                [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
                 [--unsafe-case-optimization {true,false}] [--case-optimization-strength {1..256}]
                 [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
@@ -380,9 +380,9 @@ compiler options:
                          specifies syntactic mode used to compile the source code
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
-  -g, --goal {size,speed,auto}
-                         sets  code  generation  goal:  minimize  code   size,   minimize  execution  speed,  or  choose
-                         automatically
+  -g, --goal {size,speed,neutral}
+                         sets code generation  goal:  minimize  code  size,  minimize  execution  speed,  or no specific
+                         preference
   -e, --passes {1..1000}
                          sets maximal number of optimization passes to be made
   --unsafe-case-optimization {true,false}

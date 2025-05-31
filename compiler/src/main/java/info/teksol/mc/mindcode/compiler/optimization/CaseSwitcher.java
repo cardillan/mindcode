@@ -251,17 +251,12 @@ public class CaseSwitcher extends BaseOptimizer {
         if (segments.stream().noneMatch(s -> s.contains(0))) {
             ConvertCaseExpressionAction action = new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, segments,
                     contentType, removeRangeCheck, true);
-            if (action.benefit() > 0 && action.cost() <= costLimit) {
-                actions.add(action);
-            }
+            actions.add(action);
             if (!action.zeroPadded) return;
         }
 
-        ConvertCaseExpressionAction action = new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, segments,
-                contentType, removeRangeCheck, false);
-        if (action.benefit() > 0 && action.cost() <= costLimit) {
-            actions.add(action);
-        }
+        actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, segments,
+                contentType, removeRangeCheck, false));
     }
 
     private int computeTotalSize(ContentType contentType, Targets targets) {
@@ -324,10 +319,6 @@ public class CaseSwitcher extends BaseOptimizer {
 
         @Override
         public int cost() {
-            return Math.max(cost, 0);
-        }
-
-        public int rawCost() {
             return cost;
         }
 

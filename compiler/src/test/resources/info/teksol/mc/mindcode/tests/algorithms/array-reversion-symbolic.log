@@ -15,18 +15,18 @@
      3 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 895):
-    Unroll loop at line 6:5                                      cost     3, benefit      500.0, efficiency    166.667
-  * Unroll iteration loop at line 18:5                           cost     0, benefit       69.0, efficiency   Infinity (-29 instructions)
-    Inline write jump table of array 'array'                     cost     0, benefit       50.0, efficiency   Infinity
-    Inline 'array' write access at line 7:9                      cost    17, benefit       50.0, efficiency      2.941
+    Unroll loop at line 6:5                                      size    +3, benefit      500.0, efficiency    166.667
+  * Unroll iteration loop at line 18:5                           size   -39, benefit       69.0, efficiency   Infinity (-29 instructions)
+    Inline write jump table of array 'array'                     size    -4, benefit       50.0, efficiency   Infinity
+    Inline 'array' write access at line 7:9                      size   +17, benefit       50.0, efficiency      2.941
 
 Pass 1: speed optimization selection (cost limit 924):
-    Unroll loop at line 6:5                                      cost     3, benefit      500.0, efficiency    166.667
-  * Inline write jump table of array 'array'                     cost     0, benefit       50.0, efficiency   Infinity (-4 instructions)
-    Inline 'array' write access at line 7:9                      cost    17, benefit       50.0, efficiency      2.941
+    Unroll loop at line 6:5                                      size    +3, benefit      500.0, efficiency    166.667
+  * Inline write jump table of array 'array'                     size    -4, benefit       50.0, efficiency   Infinity (-4 instructions)
+    Inline 'array' write access at line 7:9                      size   +17, benefit       50.0, efficiency      2.941
 
 Pass 1: speed optimization selection (cost limit 928):
-  * Unroll loop at line 6:5                                      cost     0, benefit      500.0, efficiency   Infinity (+186 instructions)
+  * Unroll loop at line 6:5                                      size   -14, benefit      500.0, efficiency   Infinity (+186 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  

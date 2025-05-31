@@ -31,8 +31,8 @@ public interface Optimizer {
     ///
     /// When a set - or multiple sets - of mutually exclusive optimizations are produced, none of the sets
     /// may contain an action which has the same cost or higher cost as another action, while having the same
-    /// or smaller benefit than the other action. in other words, when ordering the actions in the set by increasing
-    /// costs, the benefits must also increase. The efficiency in such an ordered set of action, on the other hand,
+    /// or smaller benefit than the other action. In other words, when ordering the actions in the set by increasing
+    /// costs, the benefits must also increase. The efficiency in such an ordered set of actions, on the other hand,
     /// may decrease.
     ///
     /// @return list of possible optimizations

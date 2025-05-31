@@ -70,7 +70,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 }
 
                 int sizeDifference = newSize - originalSize;
-                int expectedSizeDifference = diagnosticData.getFirst().rawCost();
+                int expectedSizeDifference = diagnosticData.getFirst().cost();
                 if (sizeDifference != expectedSizeDifference) {
                     progress.reportError(new ErrorResult(testCaseId,
                             compiler.compilerProfile(), "", compiler.getExecutionException(),

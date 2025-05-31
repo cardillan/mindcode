@@ -153,8 +153,8 @@ public abstract class AbstractCommandLineTest {
 
             @Test
             public void shortArgumentAuto() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-g auto");
-                assertEquals(GenerationGoal.AUTO, profile.getGoal());
+                CompilerProfile profile = parseToProfile("-g neutral");
+                assertEquals(GenerationGoal.NEUTRAL, profile.getGoal());
             }
 
             @Test
@@ -171,8 +171,8 @@ public abstract class AbstractCommandLineTest {
 
             @Test
             public void longArgumentAuto() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--goal auto");
-                assertEquals(GenerationGoal.AUTO, profile.getGoal());
+                CompilerProfile profile = parseToProfile("--goal neutral");
+                assertEquals(GenerationGoal.NEUTRAL, profile.getGoal());
             }
         }
 

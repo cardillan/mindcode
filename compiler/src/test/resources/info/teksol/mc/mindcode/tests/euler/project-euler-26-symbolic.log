@@ -11,16 +11,16 @@
    520 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 966):
-  * Replicate loop condition at line 17:5                        cost     1, benefit      625.0, efficiency    625.000 (+1 instructions)
-    Replicate loop condition at line 18:5                        cost     1, benefit      625.0, efficiency    625.000
-    Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency    254.107
+  * Replicate loop condition at line 17:5                        size    +1, benefit      625.0, efficiency    625.000 (+1 instructions)
+    Replicate loop condition at line 18:5                        size    +1, benefit      625.0, efficiency    625.000
+    Unroll loop at line 24:5                                     size  +487, benefit   123750.0, efficiency    254.107
 
 Pass 1: speed optimization selection (cost limit 965):
-  * Replicate loop condition at line 18:5                        cost     1, benefit      625.0, efficiency    625.000 (+1 instructions)
-    Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency    254.107
+  * Replicate loop condition at line 18:5                        size    +1, benefit      625.0, efficiency    625.000 (+1 instructions)
+    Unroll loop at line 24:5                                     size  +487, benefit   123750.0, efficiency    254.107
 
 Pass 1: speed optimization selection (cost limit 964):
-  * Unroll loop at line 24:5                                     cost   487, benefit   123750.0, efficiency    254.107 (+485 instructions)
+  * Unroll loop at line 24:5                                     size  +487, benefit   123750.0, efficiency    254.107 (+485 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-6 instructions):
  

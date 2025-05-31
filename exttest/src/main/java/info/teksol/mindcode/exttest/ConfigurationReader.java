@@ -126,7 +126,7 @@ public class ConfigurationReader {
     private static List<GenerationGoal> getGenerationGoals(YamlMapping mapping, YamlMapping defaults) {
         YamlSequence values = sequence(mapping, defaults, "goal");
         if (values == null) {
-            return List.of(GenerationGoal.AUTO);
+            return List.of(GenerationGoal.SPEED);
         } else {
             return values.values().stream()
                     .map(YamlNode::asScalar)

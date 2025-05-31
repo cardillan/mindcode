@@ -54,7 +54,7 @@ public class CompilerProfile {
     private int debugLevel = 0;
     private FileReferences fileReferences = FileReferences.PATH;
     private FinalCodeOutput finalCodeOutput = FinalCodeOutput.NONE;
-    private GenerationGoal goal = GenerationGoal.AUTO;
+    private GenerationGoal goal = GenerationGoal.SPEED;
     private int instructionLimit = 1000;
     private int mlogIndent = -1;
     private int optimizationPasses;

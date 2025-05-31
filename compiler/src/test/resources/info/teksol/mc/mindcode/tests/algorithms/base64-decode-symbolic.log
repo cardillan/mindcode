@@ -19,17 +19,17 @@
     59 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 946):
-  * Unroll loop at line 24:9                                     cost    18, benefit     5000.0, efficiency    277.778 (+16 instructions)
-    Inline function 'printbyte' defined at line 15:1             cost     3, benefit      262.5, efficiency     87.500
-    Inline function call at line 31:9                            cost     2, benefit       87.5, efficiency     43.750
-    Inline function call at line 32:9                            cost     2, benefit       87.5, efficiency     43.750
-    Inline function call at line 33:9                            cost     2, benefit       87.5, efficiency     43.750
+  * Unroll loop at line 24:9                                     size   +18, benefit     5000.0, efficiency    277.778 (+16 instructions)
+    Inline function 'printbyte' defined at line 15:1             size    +3, benefit      262.5, efficiency     87.500
+    Inline function call at line 31:9                            size    +2, benefit       87.5, efficiency     43.750
+    Inline function call at line 32:9                            size    +2, benefit       87.5, efficiency     43.750
+    Inline function call at line 33:9                            size    +2, benefit       87.5, efficiency     43.750
 
 Pass 1: speed optimization selection (cost limit 930):
-  * Inline function 'printbyte' defined at line 15:1             cost     3, benefit      262.5, efficiency     87.500 (-3 instructions)
-    Inline function call at line 31:9                            cost     2, benefit       87.5, efficiency     43.750
-    Inline function call at line 32:9                            cost     2, benefit       87.5, efficiency     43.750
-    Inline function call at line 33:9                            cost     2, benefit       87.5, efficiency     43.750
+  * Inline function 'printbyte' defined at line 15:1             size    +3, benefit      262.5, efficiency     87.500 (-3 instructions)
+    Inline function call at line 31:9                            size    +2, benefit       87.5, efficiency     43.750
+    Inline function call at line 32:9                            size    +2, benefit       87.5, efficiency     43.750
+    Inline function call at line 33:9                            size    +2, benefit       87.5, efficiency     43.750
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  

@@ -383,7 +383,7 @@ class LoopUnroller extends BaseOptimizer {
         int size = body.realSize();
 
         // Optimization cost could actually get negative
-        int cost = Math.max(size * loops - savings, 0);
+        int cost = size * loops - savings;
         return cost > costLimit ? null : new UnrollListIterationLoopAction(loop, cost, loop.totalWeight() * savings);
     }
 
