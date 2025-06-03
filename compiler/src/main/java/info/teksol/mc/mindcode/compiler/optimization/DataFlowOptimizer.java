@@ -480,7 +480,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 propagateUninitialized = initialValue != LogicBoolean.FALSE;
             } else {
                 // We don't understand the condition structure, and therefore cannot guarantee the loop will be executed at least once
-                // Variable that are initialized in the loop body, but not before the loop, need to remain uninitialized
+                // Variables that are initialized in the loop body, but not before the loop, need to remain uninitialized
                 propagateUninitialized = true;
             }
         }
@@ -507,7 +507,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 }
             }
 
-            variableStates = variableStates.merge(initial, propagateUninitialized, "inside loop");
+            variableStates = variableStates.merge(initial, propagateUninitialized, "inside loop", true);
             propagateUninitialized = true;
         }
 
@@ -561,7 +561,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 iterator.setNextIndex(firstInstructionIndex(context));
                 VariableStates copy = variableStates.copy("leading loop iterator");
                 variableStates = processContext(localContext, context, variableStates, modifyInstructionsInPass);
-                variableStates = variableStates.merge(copy, false, "leading loop iterator");
+                variableStates = variableStates.merge(copy, false, "leading loop iterator", true);
             }
 
             for (AstContext context : bodyContexts) {
@@ -578,14 +578,14 @@ class DataFlowOptimizer extends BaseOptimizer {
                     iterator.setNextIndex(firstInstructionIndex(context));
                     VariableStates copy = variableStates.copy("trailing loop iterator");
                     variableStates = processContext(localContext, context, variableStates, modifyInstructionsInPass);
-                    variableStates = variableStates.merge(copy, false, "trailing loop iterator");
+                    variableStates = variableStates.merge(copy, false, "trailing loop iterator", true);
                 }
             }
 
             if (initial == null) {
                 initial = variableStates.copy("for each loop first pass state");
             } else {
-                variableStates = variableStates.merge(initial, true, "inside loop");
+                variableStates = variableStates.merge(initial, true, "inside loop", true);
             }
         }
 

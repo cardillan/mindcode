@@ -2,13 +2,13 @@
      6 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
      1 instructions eliminated by Dead Code Elimination (5 iterations).
-     4 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     3 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
      7 instructions eliminated by Jump Straightening (3 passes, 6 iterations).
      1 instructions updated by JumpThreading.
      3 instructions eliminated by Unreachable Code Elimination (3 iterations).
-    48 instructions after optimizations.
+    49 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -213,185 +213,170 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     60 label *label1
     61 assertprints "ABBBCCCD" "complex-case-expression"
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-     1 # "Function: def test()"
-     2 set :d:n 1
-     3 call *label0 :d*retaddr :d*retval
--    * set *tmp1 :d*retval
-+    4 set :test:i :d*retval
-     5 set :d:n 10
-     6 call *label0 :d*retaddr :d*retval
      7 set *tmp3 :d*retval
--    * set :test:i *tmp1
-     8 label *label2
-     9 jump *label4 greaterThan :test:i *tmp3
-    10 label *label18
-
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
- 
-     6 call *label0 :d*retaddr :d*retval
-     7 set *tmp3 :d*retval
-     8 label *label2
+     8 set :test:i *tmp1
+     9 label *label2
 -    * jump *label4 greaterThan :test:i *tmp3
-+    9 jump *label4 greaterThan :test:i :d*retval
-    10 label *label18
-    11 set :d:n 1
-    12 call *label0 :d*retaddr :d*retval
++   10 jump *label4 greaterThan *tmp1 :d*retval
+    11 label *label18
+    12 set :d:n 1
+    13 call *label0 :d*retaddr :d*retval
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
-     5 set :d:n 10
      6 call *label0 :d*retaddr :d*retval
      7 set *tmp3 :d*retval
+     8 set :test:i *tmp1
 -    * label *label2
-     8 jump *label4 greaterThan :test:i :d*retval
-     9 label *label18
-    10 set :d:n 1
+     9 jump *label4 greaterThan *tmp1 :d*retval
+    10 label *label18
+    11 set :d:n 1
  
-    27 jump *label5 always
-    28 label *label8
-    29 jump *label10 notEqual :test:i 5
+    28 jump *label5 always
+    29 label *label8
+    30 jump *label10 notEqual :test:i 5
 -    * label *label11
-    30 jump *label3 always
-    31 jump *label5 always
-    32 label *label10
+    31 jump *label3 always
+    32 jump *label5 always
+    33 label *label10
  
-    43 jump *label5 always
-    44 label *label12
-    45 jump *label15 notEqual :test:i 10
+    44 jump *label5 always
+    45 label *label12
+    46 jump *label15 notEqual :test:i 10
 -    * label *label16
-    46 jump *label4 always
-    47 jump *label5 always
-    48 label *label15
+    47 jump *label4 always
+    48 jump *label5 always
+    49 label *label15
  
-    53 op add :test:i :test:i 1
-    54 jump *label18 lessThanEq :test:i *tmp3
-    55 label *label4
+    54 op add :test:i :test:i 1
+    55 jump *label18 lessThanEq :test:i *tmp3
+    56 label *label4
 -    * label *label1
-    56 assertprints "ABBBCCCD" "complex-case-expression"
-    57 stop
-    58 end
-    59 label *label0
-    60 # "Function: noinline def d(in n)"
-    61 set :d*retval :d:n
+    57 assertprints "ABBBCCCD" "complex-case-expression"
+    58 stop
+    59 end
+    60 label *label0
+    61 # "Function: noinline def d(in n)"
+    62 set :d*retval :d:n
 -    * label *label17
-    62 return :d*retaddr
-    63 end
+    63 return :d*retaddr
+    64 end
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
  
-     9 label *label18
-    10 set :d:n 1
-    11 call *label0 :d*retaddr :d*retval
+    10 label *label18
+    11 set :d:n 1
+    12 call *label0 :d*retaddr :d*retval
 -    * jump *label7 equal :test:i :d*retval
 -    * jump *label6 always
-+   12 jump *label6 notEqual :test:i :d*retval
-    13 label *label7
-    14 set *tmp4 "A"
-    15 jump *label5 always
++   13 jump *label6 notEqual :test:i :d*retval
+    14 label *label7
+    15 set *tmp4 "A"
+    16 jump *label5 always
 
 Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
  
-    10 set :d:n 1
-    11 call *label0 :d*retaddr :d*retval
-    12 jump *label6 notEqual :test:i :d*retval
+    11 set :d:n 1
+    12 call *label0 :d*retaddr :d*retval
+    13 jump *label6 notEqual :test:i :d*retval
 -    * label *label7
-    13 set *tmp4 "A"
-    14 jump *label5 always
-    15 label *label6
+    14 set *tmp4 "A"
+    15 jump *label5 always
+    16 label *label6
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
-    30 label *label10
-    31 set :d:n 6
-    32 call *label0 :d*retaddr :d*retval
+    31 label *label10
+    32 set :d:n 6
+    33 call *label0 :d*retaddr :d*retval
 -    * jump *label14 lessThan :test:i :d*retval
-+   33 jump *label12 lessThan :test:i :d*retval
-    34 set :d:n 8
-    35 call *label0 :d*retaddr :d*retval
-    36 jump *label13 lessThanEq :test:i :d*retval
++   34 jump *label12 lessThan :test:i :d*retval
+    35 set :d:n 8
+    36 call *label0 :d*retaddr :d*retval
+    37 jump *label13 lessThanEq :test:i :d*retval
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-3 instructions):
  
-    26 label *label8
-    27 jump *label10 notEqual :test:i 5
-    28 jump *label3 always
+    27 label *label8
+    28 jump *label10 notEqual :test:i 5
+    29 jump *label3 always
 -    * jump *label5 always
-    29 label *label10
-    30 set :d:n 6
-    31 call *label0 :d*retaddr :d*retval
+    30 label *label10
+    31 set :d:n 6
+    32 call *label0 :d*retaddr :d*retval
  
-    33 set :d:n 8
-    34 call *label0 :d*retaddr :d*retval
-    35 jump *label13 lessThanEq :test:i :d*retval
+    34 set :d:n 8
+    35 call *label0 :d*retaddr :d*retval
+    36 jump *label13 lessThanEq :test:i :d*retval
 -    * label *label14
-    36 jump *label12 always
-    37 label *label13
-    38 set *tmp4 "C"
+    37 jump *label12 always
+    38 label *label13
+    39 set *tmp4 "C"
  
-    40 label *label12
-    41 jump *label15 notEqual :test:i 10
-    42 jump *label4 always
+    41 label *label12
+    42 jump *label15 notEqual :test:i 10
+    43 jump *label4 always
 -    * jump *label5 always
-    43 label *label15
-    44 set *tmp4 "D"
-    45 label *label5
+    44 label *label15
+    45 set *tmp4 "D"
+    46 label *label5
  
-    55 # "Function: noinline def d(in n)"
-    56 set :d*retval :d:n
-    57 return :d*retaddr
+    56 # "Function: noinline def d(in n)"
+    57 set :d*retval :d:n
+    58 return :d*retaddr
 -    * end
 
 Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-3 instructions):
  
-    24 set *tmp4 "B"
-    25 jump *label5 always
-    26 label *label8
+    25 set *tmp4 "B"
+    26 jump *label5 always
+    27 label *label8
 -    * jump *label10 notEqual :test:i 5
 -    * jump *label3 always
-+   27 jump *label3 equal :test:i 5
-    28 label *label10
++   28 jump *label3 equal :test:i 5
+    29 label *label10
+    30 set :d:n 6
+    31 call *label0 :d*retaddr :d*retval
+    32 jump *label12 lessThan :test:i :d*retval
+    33 set :d:n 8
+    34 call *label0 :d*retaddr :d*retval
+-    * jump *label13 lessThanEq :test:i :d*retval
+-    * jump *label12 always
++   35 jump *label12 greaterThan :test:i :d*retval
+    36 label *label13
+    37 set *tmp4 "C"
+    38 jump *label5 always
+    39 label *label12
+-    * jump *label15 notEqual :test:i 10
+-    * jump *label4 always
++   40 jump *label4 equal :test:i 10
+    41 label *label15
+    42 set *tmp4 "D"
+    43 label *label5
+
+Modifications by Jumps phase, Jump Optimization, pass 5, iteration 1:
+ 
+    26 jump *label5 always
+    27 label *label8
+    28 jump *label3 equal :test:i 5
+-    * label *label10
     29 set :d:n 6
     30 call *label0 :d*retaddr :d*retval
     31 jump *label12 lessThan :test:i :d*retval
     32 set :d:n 8
     33 call *label0 :d*retaddr :d*retval
--    * jump *label13 lessThanEq :test:i :d*retval
--    * jump *label12 always
-+   34 jump *label12 greaterThan :test:i :d*retval
-    35 label *label13
-    36 set *tmp4 "C"
-    37 jump *label5 always
-    38 label *label12
--    * jump *label15 notEqual :test:i 10
--    * jump *label4 always
-+   39 jump *label4 equal :test:i 10
-    40 label *label15
-    41 set *tmp4 "D"
-    42 label *label5
-
-Modifications by Jumps phase, Jump Optimization, pass 5, iteration 1:
- 
-    25 jump *label5 always
-    26 label *label8
-    27 jump *label3 equal :test:i 5
--    * label *label10
-    28 set :d:n 6
-    29 call *label0 :d*retaddr :d*retval
-    30 jump *label12 lessThan :test:i :d*retval
-    31 set :d:n 8
-    32 call *label0 :d*retaddr :d*retval
-    33 jump *label12 greaterThan :test:i :d*retval
+    34 jump *label12 greaterThan :test:i :d*retval
 -    * label *label13
-    34 set *tmp4 "C"
-    35 jump *label5 always
-    36 label *label12
-    37 jump *label4 equal :test:i 10
+    35 set *tmp4 "C"
+    36 jump *label5 always
+    37 label *label12
+    38 jump *label4 equal :test:i 10
 -    * label *label15
-    38 set *tmp4 "D"
-    39 label *label5
-    40 print *tmp4
+    39 set *tmp4 "D"
+    40 label *label5
+    41 print *tmp4
 
 Final code before resolving virtual instructions:
 
@@ -399,11 +384,12 @@ assertflush
 # "Function: def test()"
 set :d:n 1
 call *label0 :d*retaddr :d*retval
-set :test:i :d*retval
+set *tmp1 :d*retval
 set :d:n 10
 call *label0 :d*retaddr :d*retval
 set *tmp3 :d*retval
-jump *label4 greaterThan :test:i :d*retval
+set :test:i *tmp1
+jump *label4 greaterThan *tmp1 :d*retval
 label *label18
 set :d:n 1
 call *label0 :d*retaddr :d*retval

@@ -475,6 +475,7 @@ class DataFlowVariableStates {
                 }
 
                 definition.references.add(reference);
+                definition.killOnMerge = true;
                 trace("Registering usage of " + variable.toMlog());
             }
 
@@ -512,6 +513,10 @@ class DataFlowVariableStates {
         /// @param propagateUninitialized propagate uninitialized variables from the other instance
         /// @param reason                 reasons for the merge, for debug purposes
         public VariableStates merge(VariableStates other, boolean propagateUninitialized, String reason) {
+            return merge(other, propagateUninitialized, reason, false);
+        }
+
+        public VariableStates merge(VariableStates other, boolean propagateUninitialized, String reason, boolean loopMerge) {
             trace("*** Merge " + reason);
             optimizationContext.indentInc();
             print("This");
@@ -533,7 +538,7 @@ class DataFlowVariableStates {
 
             modifications++;
 
-            merge(definitions, other.definitions);
+            merge(definitions, other.definitions, loopMerge);
 
             for (LogicVariable variable : other.reads.keySet()) {
                 if (!reads.containsKey(variable) || reads.get(variable) < other.reads.get(variable)) {
@@ -579,14 +584,17 @@ class DataFlowVariableStates {
         ///
         /// @param map1 instance to merge into
         /// @param map2 instance to be merged
-        private void merge(Map<LogicVariable, Definition> map1, Map<LogicVariable, Definition> map2) {
+        private void merge(Map<LogicVariable, Definition> map1, Map<LogicVariable, Definition> map2, boolean loopMerge) {
             for (LogicVariable variable : map2.keySet()) {
                 if (map1.containsKey(variable)) {
                     Definition current = map1.get(variable);
                     Definition other = map2.get(variable);
-                    if (current == other) continue;
+                    if (current == other) {
+                        if (current.killOnMerge && !loopMerge) current.references.add(null);
+                        continue;
+                    }
 
-                    Definition merged = current.merge(other);
+                    Definition merged = current.merge(other, loopMerge);
                     optimizer.definitions.remove(current);
                     optimizer.definitions.remove(other);
                     optimizer.definitions.add(merged);
@@ -839,6 +847,10 @@ class DataFlowVariableStates {
         /// List of instructions depending on this version of the variable
         final Set<@Nullable LogicInstruction> references = createIdentitySet(5);
 
+        /// New references were made in this code path. When variable states get merged,
+        /// the references need to be invalidated.
+        boolean killOnMerge;
+
         public Definition(LogicVariable variable, int counter) {
             this(variable, counter, true, List.of());
         }
@@ -858,7 +870,7 @@ class DataFlowVariableStates {
             return references.size() == 1 ? references.iterator().next() : null;
         }
 
-        Definition merge(Definition other) {
+        Definition merge(Definition other, boolean loopMerge) {
             if (!variable.equals(other.variable)) {
                 throw new MindcodeInternalError("Trying to merge definitions of different variables.");
             }
@@ -868,6 +880,7 @@ class DataFlowVariableStates {
 
             result.references.addAll(references);
             result.references.addAll(other.references);
+            if ((killOnMerge || other.killOnMerge) && !loopMerge) result.references.add(null);
             return result;
         }
 

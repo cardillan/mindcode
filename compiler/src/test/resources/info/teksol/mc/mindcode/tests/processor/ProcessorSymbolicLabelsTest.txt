@@ -1,6 +1,6 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 assignments-in-expressions.mnd:                    13       13     100.0%   3E55A40DD17DEC43   6FCC40820CBC45B3
-complex-case-expression.mnd:                       48      294      97.9%   E6AA465B5328A02F   9CEBD39D23804BEA
+complex-case-expression.mnd:                       49      295      97.9%   E6AA465B5328A02F   945A331408EFA54B
 equality-comparisons.mnd:                          85       81      95.2%   16DB5681427420C5   863C2DD09850EF61
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   62C4AA5A21DAC882
 expression-evaluation-compile-time.mnd:            75       75     100.0%   40CFDDDBE9B141D4   78AFD04A4ADEC1B3
@@ -14,7 +14,7 @@ prints-values.mnd:                                 42       42     100.0%   EA63
 processesAssertBounds:                              5        5     100.0%   442250AE1653638F   5ED4E258FEEC3347
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   30633B28AE9D9EDA
-ranged-for-loop-break-continue.mnd:                24       61      95.8%   0E564BDD58072C70   852B5560536DCD8B
+ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   58A58482F10A4CAB
 recursive-calls.mnd:                              103      278      99.0%   9CB0965E0E62F089   5F9E144A611E59FF
 recursive-function-condition.mnd:                  22       26      95.4%   02C171DDB1F56F08   60A7D389E0880959
 switched-case-expression.mnd:                      61     2130     100.0%   D8AE9E78FC18AFFC   DD2630B69BDB4548

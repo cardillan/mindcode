@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the `sync()` function not requiring a volatile variable as an argument ([#260](https://github.com/cardillan/mindcode/issues/260)).
+* Fixed the Data Flow Optimization incorrectly removing a condition ([#261](https://github.com/cardillan/mindcode/issues/261)).
 
 ### Added
 

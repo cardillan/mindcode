@@ -6,7 +6,7 @@
     12 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-    15 instructions eliminated by Data Flow Optimization (3 passes, 9 iterations).
+    14 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      5 instructions modified by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
      7 instructions added by Case Switching (5 iterations).
@@ -14,7 +14,7 @@
      4 instructions eliminated by Jump Straightening (5 iterations).
      1 instructions updated by JumpThreading.
     14 instructions eliminated by Print Merging.
-   190 instructions after optimizations.
+   191 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 798):
   * Replicate loop condition at line 91:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
@@ -1369,24 +1369,6 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    170 label *label34
    171 label *label24
 
-Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-1 instructions):
- 
-   159 op sub :crx 93 2
-   160 op add :crw 83 1
-   161 set :cry 0
--    * set *tmp62 176
-+  162 set :crh 176
-   163 jump *label36 greaterThanEq TO_INDEX 16
-   164 op mod *tmp63 TO_INDEX 8
-   165 op mul *tmp64 *tmp63 22
--    * op add *tmp62 4 *tmp64
-+  166 op add :crh 4 *tmp64
-   167 label *label36
--    * set :crh *tmp62
-   168 label *label33
-   169 label *label34
-   170 label *label24
-
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
      4 set .MEMORY null
@@ -1460,72 +1442,72 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    134 op add *tmp46 4 *tmp47
    135 label *label30
  
-   153 op add :crh 4 *tmp64
    154 label *label36
-   155 label *label33
+   155 set :crh *tmp62
+   156 label *label33
 -    * label *label34
-   156 label *label24
-   157 label *label18
-   158 set .MAX CAPACITY
-   159 op div .MUL 60 CAPACITY
-   160 jump *label37 equal .MEMORY null
-   161 set :n 0
+   157 label *label24
+   158 label *label18
+   159 set .MAX CAPACITY
+   160 op div .MUL 60 CAPACITY
+   161 jump *label37 equal .MEMORY null
+   162 set :n 0
 -    * label *label39
-   162 jump *label41 greaterThanEq 0 @links
-   163 label *label60
-   164 write 0 .MEMORY :n
+   163 jump *label41 greaterThanEq 0 @links
+   164 label *label60
+   165 write 0 .MEMORY :n
 -    * label *label40
-   165 op add :n :n 1
-   166 jump *label60 lessThan :n @links
-   167 label *label41
-   168 label *label37
+   166 op add :n :n 1
+   167 jump *label60 lessThan :n @links
+   168 label *label41
+   169 label *label37
 -    * label *label38
-   169 control enabled .SWITCH 0
+   170 control enabled .SWITCH 0
 -    * label *label42
-   170 sensor *tmp76 .SWITCH @enabled
-   171 jump *label44 notEqual *tmp76 0
-   172 label *label62
+   171 sensor *tmp76 .SWITCH @enabled
+   172 jump *label44 notEqual *tmp76 0
+   173 label *label62
  
-   177 draw stroke 2
-   178 set :index FROM_INDEX
-   179 set :n 0
+   178 draw stroke 2
+   179 set :index FROM_INDEX
+   180 set :n 0
 -    * label *label45
-   180 jump *label47 greaterThanEq 0 @links
-   181 label *label61
-   182 getlink :driver :n
+   181 jump *label47 greaterThanEq 0 @links
+   182 label *label61
+   183 getlink :driver :n
  
-   205 op mul .MAX 2 CAPACITY
-   206 op div .MUL 60 .MAX
-   207 label *label50
+   206 op mul .MAX 2 CAPACITY
+   207 op div .MUL 60 .MAX
+   208 label *label50
 -    * label *label51
-   208 jump *label52 greaterThan .MAX CAPACITY
-   209 draw color 0 128 0 255
-   210 jump *label53 always
+   209 jump *label52 greaterThan .MAX CAPACITY
+   210 draw color 0 128 0 255
+   211 jump *label53 always
  
-   218 op mul *tmp110 :maxx .MUL
-   219 draw lineRect :x :y *tmp110 14
-   220 label *label54
+   219 op mul *tmp110 :maxx .MUL
+   220 draw lineRect :x :y *tmp110 14
+   221 label *label54
 -    * label *label55
-   221 jump *label56 greaterThan .MAX CAPACITY
-   222 draw color 0 255 0 255
-   223 draw lineRect :x :y 60 14
+   222 jump *label56 greaterThan .MAX CAPACITY
+   223 draw color 0 255 0 255
+   224 draw lineRect :x :y 60 14
  
-   230 label *label57
-   231 op add :index :index 1
-   232 label *label48
+   231 label *label57
+   232 op add :index :index 1
+   233 label *label48
 -    * label *label49
 -    * label *label46
-   233 op add :n :n 1
-   234 jump *label61 lessThan :n @links
-   235 label *label47
+   234 op add :n :n 1
+   235 jump *label61 lessThan :n @links
+   236 label *label47
  
-   243 print " "
-   244 print "ms"
-   245 printflush .MESSAGE
+   244 print " "
+   245 print "ms"
+   246 printflush .MESSAGE
 -    * label *label43
-   246 sensor *tmp76 .SWITCH @enabled
-   247 jump *label62 equal *tmp76 0
-   248 label *label44
+   247 sensor *tmp76 .SWITCH @enabled
+   248 jump *label62 equal *tmp76 0
+   249 label *label44
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -1533,28 +1515,28 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      2 set TO_INDEX 16
      3 set CAPACITY 120
  
-   169 label *label37
-   170 control enabled .SWITCH 0
-   171 sensor *tmp76 .SWITCH @enabled
+   170 label *label37
+   171 control enabled .SWITCH 0
+   172 sensor *tmp76 .SWITCH @enabled
 -    * jump *label44 notEqual *tmp76 0
-+  172 jump __start__ notEqual *tmp76 0
-   173 label *label62
-   174 set :start @time
-   175 draw color 0 0 80 255
++  173 jump __start__ notEqual *tmp76 0
+   174 label *label62
+   175 set :start @time
+   176 draw color 0 0 80 255
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
  
-   246 printflush .MESSAGE
-   247 sensor *tmp76 .SWITCH @enabled
-   248 jump *label62 equal *tmp76 0
+   247 printflush .MESSAGE
+   248 sensor *tmp76 .SWITCH @enabled
+   249 jump *label62 equal *tmp76 0
 -    * label *label44
-   249 end
+   250 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   246 printflush .MESSAGE
-   247 sensor *tmp76 .SWITCH @enabled
-   248 jump *label62 equal *tmp76 0
+   247 printflush .MESSAGE
+   248 sensor *tmp76 .SWITCH @enabled
+   249 jump *label62 equal *tmp76 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
@@ -1607,22 +1589,22 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
     63 printflush .MESSAGE
     64 jump *label58 equal .DISPLAY null
  
-   225 jump *label61 lessThan :n @links
-   226 label *label47
-   227 drawflush .DISPLAY
+   226 jump *label61 lessThan :n @links
+   227 label *label47
+   228 drawflush .DISPLAY
 -    * print "Mass Driver Monitor"
 -    * print "\n"
-+  228 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
-   229 op sub *tmp116 @time :start
-   230 op floor *tmp117 *tmp116
++  229 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
+   230 op sub *tmp116 @time :start
+   231 op floor *tmp117 *tmp116
 -    * print "[lightgray]Draw time: "
 -    * print *tmp117
 -    * print " "
 -    * print "ms"
-+  231 format *tmp117
-   232 printflush .MESSAGE
-   233 sensor *tmp76 .SWITCH @enabled
-   234 jump *label62 equal *tmp76 0
++  232 format *tmp117
+   233 printflush .MESSAGE
+   234 sensor *tmp76 .SWITCH @enabled
+   235 jump *label62 equal *tmp76 0
 
 Final code before resolving virtual instructions:
 
@@ -1766,12 +1748,13 @@ jump *label33 lessThan TO_INDEX 8
 op sub :crx 93 2
 op add :crw 83 1
 set :cry 0
-set :crh 176
+set *tmp62 176
 jump *label36 greaterThanEq TO_INDEX 16
 op mod *tmp63 TO_INDEX 8
 op mul *tmp64 *tmp63 22
-op add :crh 4 *tmp64
+op add *tmp62 4 *tmp64
 label *label36
+set :crh *tmp62
 label *label33
 label *label24
 label *label18
