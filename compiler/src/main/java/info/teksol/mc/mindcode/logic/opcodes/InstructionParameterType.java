@@ -48,10 +48,10 @@ public enum InstructionParameterType {
     /// Item to fetch in `fetch` instruction
     FETCH           (Flags.SELECTOR),
 
-    /// An input parameter requiring a global variable - see the `sync` instruction.
-    GLOBAL          (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
+    /// An input parameter requiring a volatile variable - see the `sync` instruction.
+    VOLATILE        (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
 
-    /// A const parameter. Specifies group of buildings to locate. 
+    /// A const parameter. Specifies a group of buildings to locate.
     GROUP           ("blockGroup", Flags.KEYWORD, MindustryMetadata::getBlockFlags, blockGroup),
 
     /// Non-specific input parameter. Accepts literals and variables 

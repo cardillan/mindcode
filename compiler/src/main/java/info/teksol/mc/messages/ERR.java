@@ -6,7 +6,6 @@ import org.jspecify.annotations.NullMarked;
 public class ERR {
     public static final String ALLOCATION_MULTIPLE_HEAP = "Multiple heap allocation declarations.";
     public static final String ALLOCATION_MULTIPLE_STACK = "Multiple stack allocation declarations.";
-    public static final String ARGUMENT_GLOBAL_VARIABLE_REQUIRED = "A global variable is required in a call to '%s'.";
     public static final String ARGUMENT_IN_MODIFIER_NOT_ALLOWED = "Parameter '%s' isn't input, 'in' modifier not allowed.";
     public static final String ARGUMENT_IN_OUT_MODIFIER_REQUESTED = "Parameter '%s' is declared 'in out' and no 'in' or 'out' argument modifier was used.";
     public static final String ARGUMENT_KEYWORD_INVALID_VALUE = "Invalid value '%s' for keyword parameter: allowed values are '%s'.";
@@ -21,6 +20,7 @@ public class ERR {
     public static final String ARGUMENT_REF_MODIFIER_REQUESTED = "Parameter '%s' is a reference and 'ref' argument modifier was not used.";
     public static final String ARGUMENT_UNNAMED_NOT_OPTIONAL = "Parameter corresponding to this argument isn't optional, a value must be provided.";
     public static final String ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED = "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.";
+    public static final String ARGUMENT_VOLATILE_VARIABLE_REQUIRED = "A 'volatile' variable is required in a call to '%s'.";
     public static final String ARGUMENT_WAIT_OUT_NOT_ALLOWED = "'out' modifier not allowed with special value '%s'.";
     public static final String ARGUMENT_WRITE_TO_INPUT = "Parameter '%s' is output and 'out' modifier was not used.";
     public static final String ARRAY_ASSIGNMENT_SIZE_MISMATCH = "The arrays in the array expression have different sizes: %s[%d] versus %s[%d].";

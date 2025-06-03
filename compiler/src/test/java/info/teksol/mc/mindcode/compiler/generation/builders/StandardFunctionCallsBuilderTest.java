@@ -2103,9 +2103,10 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesSync() {
             assertCompilesTo("""
-                            sync(GLOBAL);
+                            volatile global;
+                            sync(global);
                             """,
-                    createInstruction(SYNC, "GLOBAL"),
+                    createInstruction(SYNC, "global"),
                     createInstruction(END)
             );
         }
@@ -2113,7 +2114,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesLocalVariableForSync() {
             assertGeneratesMessages(expectedMessages()
-                            .add("A global variable is required in a call to 'sync'."),
+                            .add("A 'volatile' variable is required in a call to 'sync'."),
                     "sync(local);"
             );
         }
@@ -2121,7 +2122,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesLiteralForSync() {
             assertGeneratesMessages(expectedMessages()
-                            .add("A global variable is required in a call to 'sync'."),
+                            .add("A 'volatile' variable is required in a call to 'sync'."),
                     "sync(10);"
             );
         }

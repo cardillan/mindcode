@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.6.0 - Unreleased
 
+### Fixed
+
+* Fixed the `sync()` function not requiring a volatile variable as an argument ([#260](https://github.com/cardillan/mindcode/issues/260)).
+
 ### Added
 
 * **Breaking:** added new `guarded` keyword. The keyword is a variable declaration modifier that ensures the generation of the guard code for linked variables.

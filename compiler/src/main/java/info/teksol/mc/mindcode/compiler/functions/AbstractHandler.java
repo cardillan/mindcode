@@ -139,8 +139,8 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         return null;
     }
 
-    protected boolean isGlobalVariable(FunctionArgument argument) {
-        return argument.unwrap() instanceof LogicVariable variable && variable.isGlobalVariable();
+    protected boolean isVolatileVariable(FunctionArgument argument) {
+        return argument.unwrap() instanceof LogicVariable variable && variable.isVolatile();
     }
 
     private LogicKeyword toKeyword(FunctionArgument argument, boolean requireValidKeyword) {
@@ -238,8 +238,8 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         for (NamedParameter p : opcodeVariant.namedParameters()) {
             // Function call was validated, meaning all mandatory parameters have corresponding arguments
 
-            if (p.type().isGlobal() && argIndex < arguments.size() && !isGlobalVariable(arguments.get(argIndex))) {
-                error(arguments.get(argIndex).sourcePosition(), ERR.ARGUMENT_GLOBAL_VARIABLE_REQUIRED, name);
+            if (p.type().isGlobal() && argIndex < arguments.size() && !isVolatileVariable(arguments.get(argIndex))) {
+                error(arguments.get(argIndex).sourcePosition(), ERR.ARGUMENT_VOLATILE_VARIABLE_REQUIRED, name);
                 ixArgs.add(LogicVariable.INVALID);
             } else if (p.type() == InstructionParameterType.RESULT) {
                 ixArgs.add(result);
