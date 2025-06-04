@@ -884,11 +884,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             case MindcodeLexer.ASSIGN_IDIV         -> MindcodeLexer.IDIV;
             case MindcodeLexer.ASSIGN_MINUS        -> MindcodeLexer.MINUS;
             case MindcodeLexer.ASSIGN_MOD          -> MindcodeLexer.MOD;
+            case MindcodeLexer.ASSIGN_EMOD         -> MindcodeLexer.EMOD;
             case MindcodeLexer.ASSIGN_MUL          -> MindcodeLexer.MUL;
             case MindcodeLexer.ASSIGN_PLUS         -> MindcodeLexer.PLUS;
             case MindcodeLexer.ASSIGN_POW          -> MindcodeLexer.POW;
             case MindcodeLexer.ASSIGN_SHIFT_LEFT   -> MindcodeLexer.SHIFT_LEFT;
             case MindcodeLexer.ASSIGN_SHIFT_RIGHT  -> MindcodeLexer.SHIFT_RIGHT;
+            case MindcodeLexer.ASSIGN_USHIFT_RIGHT -> MindcodeLexer.USHIFT_RIGHT;
             default -> throw new MindcodeInternalError("Cannot map assignment token %s to operation token.", ctx.operation.getText());
         };
 

@@ -11,6 +11,7 @@ assertEquals(1.5,           6 /  4,                 "div");
 assertEquals(1e-5,          1 /  1e5,               "div exp");
 assertEquals(1,             6 \  4,                 "idiv");
 assertEquals(2,             6 %  4,                 "mod");
+assertEquals(5,            -3 %% 8,                 "emod");
 assertEquals(16,            2 ** 4,                 "pow");
 
 assertEquals(true,          5 == 5,                 "equal 1");
@@ -40,6 +41,7 @@ assertEquals(true,          null === null,          "strictEqual 2");
 
 assertEquals(4,             1 << 2,                 "shl");
 assertEquals(2,             9 >> 2,                 "shr");
+assertEquals(7,            -1 >>> 61,               "ushr");
 
 assertEquals(3,             1 |  2,                 "or");
 assertEquals(2,             3 &  2,                 "and");
@@ -61,9 +63,11 @@ assertEquals(1,             sign(2),                "sign(2)");
 assertEquals(0,             sign(0),                "sign(0)");
 assertEquals(1,             log(2.718281828459045), "log");
 assertEquals(1,             log10(10),              "log10");
+assertEquals(4,             logn(16, 2),            "logn");
 
 assertEquals(2,             floor(2.5),             "floor");
 assertEquals(3,             ceil(2.5),              "ceil");
+assertEquals(3,             round(2.5),             "round");
 assertEquals(4,             sqrt(16),               "sqrt");
 
 assertEquals(45,            angle(1, 1),            "angle");

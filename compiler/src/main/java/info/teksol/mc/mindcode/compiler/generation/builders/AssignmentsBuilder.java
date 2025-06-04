@@ -16,6 +16,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -67,6 +68,11 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             return applyArrayOperation(node, targetArray, eval, operation, returnPriorValue);
         }
 
+        if (operation != null && !processor.getProcessorVersion().atLeast(operation.getProcessorVersion())) {
+            error(node, ERR.OPERATOR_REQUIRES_SPECIFIC_TARGET, operation.getMindcode() + "=",
+                    operation.getProcessorVersion().versionName());
+            return LogicVariable.INVALID;
+        }
 
         // We want to visit target first, so that heap variables are allocated left-to-right.
         ValueStore target = resolveLValue(targetNode, targetValue);
@@ -101,7 +107,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             // use the r-value that was assigned
             result = target instanceof LogicVariable var && !var.isVolatile() ? var : rvalue;
         } else if (returnPriorValue) {
-            // No need to check for string operands
+            // No need to check for string operands.
             // The grammar won't allow expressions like `"a"++`.
 
             // Evaluate the target and store it as a result
@@ -120,7 +126,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
             error(pos(targetNode, valueNode), ERR.UNSUPPORTED_STRING_EXPRESSION);
             result = LogicVariable.INVALID;
         } else {
-            // Compound assignment modifies the target. Current value is the left operator.
+            // Compound assignment modifies the target. The current value is the left operator.
             LogicValue left = target.getValue(assembler);
             Consumer<LogicVariable> valueSetter = createValueSetter(operation, left, rvalue);
 
@@ -142,7 +148,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         }
 
         if (result instanceof LogicVariable variable && !variable.isUserVariable()) {
-            // result holds the value of this node -- when it is a variable, it needs to be registered
+            // `result` holds the value of this node -- when it is a variable, it needs to be registered
             // in parent node context: the variable was (possibly) created in a child context, but will
             // be accessed in parent context.
             variables.registerParentNodeVariable(variable);
@@ -152,16 +158,24 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
     }
 
     private Consumer<LogicVariable> createValueSetter(Operation operation, LogicValue left, LogicValue rvalue) {
-        if (operation == Operation.BOOLEAN_OR) {
-            return variable -> {
+        return switch (operation) {
+            case BOOLEAN_OR -> variable -> {
                 final LogicVariable tmp = assembler.nextTemp();
                 assembler.createOp(Operation.BOOLEAN_OR, tmp, left, rvalue);
                 // Ensure the result is 0 or 1
                 assembler.createOp(Operation.NOT_EQUAL, variable, tmp, LogicBoolean.FALSE);
             };
-        } else {
-            return variable -> assembler.createOp(operation, variable, left, rvalue);
-        }
+            case EMOD -> processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)
+                    ? variable -> assembler.createOp(operation, variable, left, rvalue)
+                    : variable -> {
+                final LogicVariable tmp = assembler.nextTemp();
+                // Emulate the emod using normal mod
+                assembler.createOp(Operation.MOD, tmp, left, rvalue);
+                assembler.createOp(Operation.ADD, tmp, tmp, rvalue);
+                assembler.createOp(Operation.MOD, variable, tmp, rvalue);
+            };
+            default -> variable -> assembler.createOp(operation, variable, left, rvalue);
+        };
     }
 
     private ValueStore applyArrayOperation(AstExpression node, ArrayStore target, ValueStore eval,

@@ -3,8 +3,8 @@ assignments-in-expressions.mnd:                    13       13     100.0%   3E55
 complex-case-expression.mnd:                       49      295      97.9%   E6AA465B5328A02F   02434E9DEBAA37FD
 equality-comparisons.mnd:                          85       81      95.2%   16DB5681427420C5   7ADE2A2FE44482A9
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   DA836CDEF7D4597E
-expression-evaluation-compile-time.mnd:            75       75     100.0%   40CFDDDBE9B141D4   BFA95311B0A3B27E
-expression-evaluation-runtime.mnd:                157      156      99.3%   B3BDC6D695D7A468   DD2D08AFB102A2B1
+expression-evaluation-compile-time.mnd:            79       79     100.0%   1CFFE222D3784C4B   754F69281A12ADE7
+expression-evaluation-runtime.mnd:                169      168      99.4%   1DA9B18201BEBB8A   F479A05AC92FA30F
 fixed-bounds-ranged-for.mnd:                        9       36     100.0%   6CB678A2E1E09678   F27824FD4C9C2F3F
 for-each-loop-break-continue.mnd:                  83       95      83.1%   DB8BCD3905B56BCF   8C9F9695397D6141
 function-inlining.mnd:                            900      900     100.0%   B3AB880177C19FDA   8D420C61DBAD05FD

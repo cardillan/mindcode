@@ -164,23 +164,23 @@ Non-alphanumeric operators don't require spaces around them: `a+b` is a valid ex
 
 The full list of Mindcode operators in the order of precedence is as follows:
 
-| Category            | Operators                                                                            |
-|---------------------|--------------------------------------------------------------------------------------|
-| postfix             | `var++` `var--`                                                                      |
-| prefix              | `++var` `--var`                                                                      |
-| unary               | `+` `-` `~` `!` `not`                                                                |
-| exponentiation      | `**`                                                                                 |
-| multiplicative      | `*` `/` `\` `%`                                                                      |
-| additive            | `+` `-`                                                                              |
-| shift               | `<<` `>>`                                                                            |
-| bitwise AND         | `&`                                                                                  |
-| bitwise XOR/OR      | `^` `\|`                                                                             |
-| relational          | `<` `<=` `>` `>=`                                                                    |
-| equality            | `==` `!=` `===` `!==`                                                                |
-| boolean/logical AND | `&&` `and`                                                                           |
-| boolean/logical OR  | `\|\|` `or`                                                                          |
-| ternary             | `? :`                                                                                |
-| assignment          | `=` `**=` `*=` `/=` `\=` `%=` `+=` `-=`<br>`<<=` `>>=` `&=` `^=` `\|=` `&&=` `\|\|=` |
+| Category            | Operators                                                                                         |
+|---------------------|---------------------------------------------------------------------------------------------------|
+| postfix             | `var++` `var--`                                                                                   |
+| prefix              | `++var` `--var`                                                                                   |
+| unary               | `+` `-` `~` `!` `not`                                                                             |
+| exponentiation      | `**`                                                                                              |
+| multiplicative      | `*` `/` `\` `%` `%%`                                                                              |
+| additive            | `+` `-`                                                                                           |
+| shift               | `<<` `>>` `>>>`                                                                                   |
+| bitwise AND         | `&`                                                                                               |
+| bitwise XOR/OR      | `^` `\|`                                                                                          |
+| relational          | `<` `<=` `>` `>=`                                                                                 |
+| equality            | `==` `!=` `===` `!==`                                                                             |
+| boolean/logical AND | `&&` `and`                                                                                        |
+| boolean/logical OR  | `\|\|` `or`                                                                                       |
+| ternary             | `? :`                                                                                             |
+| assignment          | `=` `**=` `*=` `/=` `\=` `%=` `%%=` `+=` `-=`<br>`<<=` `>>=` `>>>=` `&=` `^=` `\|=` `&&=` `\|\|=` |
 
 ## Postfix and prefix operators
 
@@ -215,10 +215,13 @@ Exponentiation works as usual: `2**4` is `2 * 2 * 2 * 2`, or 16.
 
 ## Multiplicative operators
 
-* `*`: multiplication,
-* `/`: floating point division,
-* `\`: integer division: `3 \ 2` gives `1`
-* `%`: modulo (remainder after division): `10 % 7` gives `3`. Is defined both for integers and floating point numbers.
+* `*` (multiplication),
+* `/` (floating point division),
+* `\` (integer division: `3 \ 2` gives `1`)
+* `%` (modulo): remainder after division; `10 % 7` gives `3`. Defined both for integers and floating point numbers,
+* `%%` (positive modulo): like modulo, except when the divisor is positive and the dividend negative, still returns a positive number.
+
+Note: positive modulo is natively supported in Mindustry Logic 8 or higher. When the current target is smaller than `8`, the operator is compiled into three instructions.  
 
 ## Additive operators
 
@@ -271,6 +274,16 @@ The results of the operation are easily inspected in binary form:
 * `0b001011 >> 2` becomes `0b000010` (the bits shifted "outside" the value are lost).
 
 Shifting left is equivalent to an integer multiplication by a given power of two, shifting right is an equivalent of an integer division by a power of two.
+
+The unsigned right-shift operator (`>>>`) is available in target `8` or higher. The difference between `>>>` and `>>` is that the first one shifts in zeroes from the right, while the second one copies the value of the highest bit (the sign bit) to lower bits, preserving it. Consider:
+
+```Mindcode
+#set target = 8;
+println(-1 >> 60);
+println(-1 >>> 60);
+```
+
+prints `-1` and `15`.
 
 ## Bitwise AND, OR, XOR operators
 

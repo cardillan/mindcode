@@ -1,540 +1,586 @@
-   145 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination.
+   155 instructions before optimizations.
+     3 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Single Step Elimination (5 iterations).
      3 instructions modified by Expression Optimization (2 iterations).
-    78 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+    83 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
     11 instructions added by Function Inlining (3 iterations).
      6 function calls inlined by Function Inlining.
-    75 instructions after optimizations.
+    79 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 893):
+Pass 1: speed optimization selection (cost limit 889):
   * Inline function 'assertEqualsRound' defined at line 3:1      size   +19, benefit       27.0, efficiency      1.421 (-31 instructions)
-    Inline function call at line 74:1                            size    +4, benefit        4.5, efficiency      1.125
-    Inline function call at line 75:1                            size    +4, benefit        4.5, efficiency      1.125
-    Inline function call at line 76:1                            size    +4, benefit        4.5, efficiency      1.125
     Inline function call at line 78:1                            size    +4, benefit        4.5, efficiency      1.125
     Inline function call at line 79:1                            size    +4, benefit        4.5, efficiency      1.125
     Inline function call at line 80:1                            size    +4, benefit        4.5, efficiency      1.125
+    Inline function call at line 82:1                            size    +4, benefit        4.5, efficiency      1.125
+    Inline function call at line 83:1                            size    +4, benefit        4.5, efficiency      1.125
+    Inline function call at line 84:1                            size    +4, benefit        4.5, efficiency      1.125
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-3 instructions):
  
-   140 stop
-   141 end
-   142 label *label3
--    * op mul *tmp5 :assertEqualsRound:actual 100000000
--    * set :round:x *tmp5
-+  143 op mul :round:x :assertEqualsRound:actual 100000000
-   144 op add *tmp7 :round:x 0.5
--    * op floor *tmp8 *tmp7
--    * set *tmp6 *tmp8
-+  145 op floor *tmp6 *tmp7
-   146 label *label11
-   147 op div *tmp9 *tmp6 100000000
-   148 assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
+    49 set :logn:base 2
+    50 op log *tmp4 :logn:number
+    51 op log *tmp5 :logn:base
+-    * op div *tmp6 *tmp4 *tmp5
+-    * set *tmp3 *tmp6
++   52 op div *tmp3 *tmp4 *tmp5
+    53 label *label4
+    54 assertequals 4 *tmp3 "logn"
+    55 assertequals 2 2 "floor"
+ 
+   150 stop
+   151 end
+   152 label *label3
+-    * op mul *tmp9 :assertEqualsRound:actual 100000000
+-    * set :round:x *tmp9
++  153 op mul :round:x :assertEqualsRound:actual 100000000
+   154 op add *tmp11 :round:x 0.5
+-    * op floor *tmp12 *tmp11
+-    * set *tmp10 *tmp12
++  155 op floor *tmp10 *tmp11
+   156 label *label12
+   157 op div *tmp13 *tmp10 100000000
+   158 assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1:
  
-   126 op xor :a :a 2
-   127 assertequals 1 :a "^="
-   128 set :a 1
+   136 op xor :a :a 2
+   137 assertequals 1 :a "^="
+   138 set :a 1
 -    * op land :a :a 0
-+  129 set :a false
-   130 assertequals false :a "&&="
-   131 set :a 1
-   132 op land :a :a 2
-   133 assertequals true :a "&&="
-   134 set :a 0
--    * op or *tmp3 :a 2
-+  135 set *tmp3 true
-   136 op notEqual :a *tmp3 false
-   137 assertequals true :a "||="
--    * sensor *tmp4 @copper-wall @id
-+  138 set *tmp4 17
-   139 assertequals 17 *tmp4 "Logic ID"
-   140 stop
-   141 end
++  139 set :a false
+   140 assertequals false :a "&&="
+   141 set :a 1
+   142 op land :a :a 2
+   143 assertequals true :a "&&="
+   144 set :a 0
+-    * op or *tmp7 :a 2
++  145 set *tmp7 true
+   146 op notEqual :a *tmp7 false
+   147 assertequals true :a "||="
+-    * sensor *tmp8 @copper-wall @id
++  148 set *tmp8 17
+   149 assertequals 17 *tmp8 "Logic ID"
+   150 stop
+   151 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-2 instructions):
  
-    31 assertequals -1 -1 "not 1"
-    32 assertequals -65536 -65536 "not 2"
-    33 set :a 0xabcdefabcdef
+    33 assertequals -1 -1 "not 1"
+    34 assertequals -65536 -65536 "not 2"
+    35 set :a 0xabcdefabcdef
 -    * op add *tmp0 :a 1
 -    * op sub *tmp1 0 *tmp0
 -    * op not *tmp2 :a
 -    * assertequals *tmp1 *tmp2 "not 3"
-+   34 op add *tmp0 0xabcdefabcdef 1
-+   35 op sub *tmp1 0 188900977659376
-+   36 op not *tmp2 0xabcdefabcdef
-+   37 assertequals -188900977659376 -188900977659376 "not 3"
-    38 assertequals 4 4 "max"
-    39 assertequals 2 2 "min"
-    40 assertequals 2 2 "abs"
++   36 op add *tmp0 0xabcdefabcdef 1
++   37 op sub *tmp1 0 188900977659376
++   38 op not *tmp2 0xabcdefabcdef
++   39 assertequals -188900977659376 -188900977659376 "not 3"
+    40 assertequals 4 4 "max"
+    41 assertequals 2 2 "min"
+    42 assertequals 2 2 "abs"
  
-    90 assertequals 0 false "boolean negation 2"
-    91 assertequals 0 false "boolean negation 3"
-    92 set :a 2
+    47 assertequals 1 1 "log10"
+    48 set :logn:number 16
+    49 set :logn:base 2
+-    * op log *tmp4 :logn:number
+-    * op log *tmp5 :logn:base
+-    * op div *tmp3 *tmp4 *tmp5
++   50 op log *tmp4 16
++   51 op log *tmp5 2
++   52 op div *tmp3 2.772588722239781 0.6931471805599453
+    53 label *label4
+-    * assertequals 4 *tmp3 "logn"
++   54 assertequals 4 4 "logn"
+    55 assertequals 2 2 "floor"
+    56 assertequals 3 3 "ceil"
+    57 assertequals 3 3 "round"
+ 
+   100 assertequals 0 false "boolean negation 2"
+   101 assertequals 0 false "boolean negation 3"
+   102 set :a 2
 -    * op pow :a :a 4
 -    * assertequals 16 :a "**="
-+   93 op pow :a 2 4
-+   94 assertequals 16 16 "**="
-    95 set :a 2
++  103 op pow :a 2 4
++  104 assertequals 16 16 "**="
+   105 set :a 2
 -    * op mul :a :a 4
 -    * assertequals 8 :a "*="
-+   96 op mul :a 2 4
-+   97 assertequals 8 8 "*="
-    98 set :a 6
++  106 op mul :a 2 4
++  107 assertequals 8 8 "*="
+   108 set :a 6
 -    * op div :a :a 4
 -    * assertequals 1.5 :a "/="
-+   99 op div :a 6 4
-+  100 assertequals 1.5 1.5 "/="
-   101 set :a 6
++  109 op div :a 6 4
++  110 assertequals 1.5 1.5 "/="
+   111 set :a 6
 -    * op idiv :a :a 4
 -    * assertequals 1 :a "\="
-+  102 op idiv :a 6 4
-+  103 assertequals 1 1 "\="
-   104 set :a 6
++  112 op idiv :a 6 4
++  113 assertequals 1 1 "\="
+   114 set :a 6
 -    * op mod :a :a 4
 -    * assertequals 2 :a "%="
-+  105 op mod :a 6 4
-+  106 assertequals 2 2 "%="
-   107 set :a 4
++  115 op mod :a 6 4
++  116 assertequals 2 2 "%="
+   117 set :a 4
 -    * op add :a :a 2
 -    * assertequals 6 :a "+="
-+  108 op add :a 4 2
-+  109 assertequals 6 6 "+="
-   110 set :a 4
++  118 op add :a 4 2
++  119 assertequals 6 6 "+="
+   120 set :a 4
 -    * op sub :a :a 2
 -    * assertequals 2 :a "-="
-+  111 op sub :a 4 2
-+  112 assertequals 2 2 "-="
-   113 set :a 1
++  121 op sub :a 4 2
++  122 assertequals 2 2 "-="
+   123 set :a 1
 -    * op shl :a :a 2
 -    * assertequals 4 :a "<<="
-+  114 op shl :a 1 2
-+  115 assertequals 4 4 "<<="
-   116 set :a 9
++  124 op shl :a 1 2
++  125 assertequals 4 4 "<<="
+   126 set :a 9
 -    * op shr :a :a 2
 -    * assertequals 2 :a ">>="
-+  117 op shr :a 9 2
-+  118 assertequals 2 2 ">>="
-   119 set :a 1
++  127 op shr :a 9 2
++  128 assertequals 2 2 ">>="
+   129 set :a 1
 -    * op or :a :a 2
 -    * assertequals 3 :a "|="
-+  120 op or :a 1 2
-+  121 assertequals 3 3 "|="
-   122 set :a 3
++  130 op or :a 1 2
++  131 assertequals 3 3 "|="
+   132 set :a 3
 -    * op and :a :a 2
 -    * assertequals 2 :a "&="
-+  123 op and :a 3 2
-+  124 assertequals 2 2 "&="
-   125 set :a 3
++  133 op and :a 3 2
++  134 assertequals 2 2 "&="
+   135 set :a 3
 -    * op xor :a :a 2
 -    * assertequals 1 :a "^="
 -    * set :a 1
-+  126 op xor :a 3 2
-+  127 assertequals 1 1 "^="
-   128 set :a false
++  136 op xor :a 3 2
++  137 assertequals 1 1 "^="
+   138 set :a false
 -    * assertequals false :a "&&="
-+  129 assertequals false false "&&="
-   130 set :a 1
++  139 assertequals false false "&&="
+   140 set :a 1
 -    * op land :a :a 2
 -    * assertequals true :a "&&="
 -    * set :a 0
-+  131 op land :a 1 2
-+  132 assertequals true true "&&="
-   133 set *tmp3 true
--    * op notEqual :a *tmp3 false
++  141 op land :a 1 2
++  142 assertequals true true "&&="
+   143 set *tmp7 true
+-    * op notEqual :a *tmp7 false
 -    * assertequals true :a "||="
-+  134 op notEqual :a true false
-+  135 assertequals true true "||="
-   136 set *tmp4 17
--    * assertequals 17 *tmp4 "Logic ID"
-+  137 assertequals 17 17 "Logic ID"
-   138 stop
-   139 end
-   140 label *label3
++  144 op notEqual :a true false
++  145 assertequals true true "||="
+   146 set *tmp8 17
+-    * assertequals 17 *tmp8 "Logic ID"
++  147 assertequals 17 17 "Logic ID"
+   148 stop
+   149 end
+   150 label *label3
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-34 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-39 instructions):
  
-    30 assertequals 1 1 "xor"
-    31 assertequals -1 -1 "not 1"
-    32 assertequals -65536 -65536 "not 2"
+    32 assertequals 1 1 "xor"
+    33 assertequals -1 -1 "not 1"
+    34 assertequals -65536 -65536 "not 2"
 -    * set :a 0xabcdefabcdef
 -    * op add *tmp0 0xabcdefabcdef 1
 -    * op sub *tmp1 0 188900977659376
 -    * op not *tmp2 0xabcdefabcdef
-    33 assertequals -188900977659376 -188900977659376 "not 3"
-    34 assertequals 4 4 "max"
-    35 assertequals 2 2 "min"
+    35 assertequals -188900977659376 -188900977659376 "not 3"
+    36 assertequals 4 4 "max"
+    37 assertequals 2 2 "min"
  
-    85 assertequals 1 true "boolean negation 1"
-    86 assertequals 0 false "boolean negation 2"
-    87 assertequals 0 false "boolean negation 3"
+    41 assertequals 0 0 "sign(0)"
+    42 assertequals 1 1 "log"
+    43 assertequals 1 1 "log10"
+-    * set :logn:number 16
+-    * set :logn:base 2
+-    * op log *tmp4 16
+-    * op log *tmp5 2
+-    * op div *tmp3 2.772588722239781 0.6931471805599453
+    44 label *label4
+    45 assertequals 4 4 "logn"
+    46 assertequals 2 2 "floor"
+ 
+    90 assertequals 1 true "boolean negation 1"
+    91 assertequals 0 false "boolean negation 2"
+    92 assertequals 0 false "boolean negation 3"
 -    * set :a 2
 -    * op pow :a 2 4
-    88 assertequals 16 16 "**="
+    93 assertequals 16 16 "**="
 -    * set :a 2
 -    * op mul :a 2 4
-    89 assertequals 8 8 "*="
+    94 assertequals 8 8 "*="
 -    * set :a 6
 -    * op div :a 6 4
-    90 assertequals 1.5 1.5 "/="
+    95 assertequals 1.5 1.5 "/="
 -    * set :a 6
 -    * op idiv :a 6 4
-    91 assertequals 1 1 "\="
+    96 assertequals 1 1 "\="
 -    * set :a 6
 -    * op mod :a 6 4
-    92 assertequals 2 2 "%="
+    97 assertequals 2 2 "%="
 -    * set :a 4
 -    * op add :a 4 2
-    93 assertequals 6 6 "+="
+    98 assertequals 6 6 "+="
 -    * set :a 4
 -    * op sub :a 4 2
-    94 assertequals 2 2 "-="
+    99 assertequals 2 2 "-="
 -    * set :a 1
 -    * op shl :a 1 2
-    95 assertequals 4 4 "<<="
+   100 assertequals 4 4 "<<="
 -    * set :a 9
 -    * op shr :a 9 2
-    96 assertequals 2 2 ">>="
+   101 assertequals 2 2 ">>="
 -    * set :a 1
 -    * op or :a 1 2
-    97 assertequals 3 3 "|="
+   102 assertequals 3 3 "|="
 -    * set :a 3
 -    * op and :a 3 2
-    98 assertequals 2 2 "&="
+   103 assertequals 2 2 "&="
 -    * set :a 3
 -    * op xor :a 3 2
-    99 assertequals 1 1 "^="
+   104 assertequals 1 1 "^="
 -    * set :a false
-   100 assertequals false false "&&="
+   105 assertequals false false "&&="
 -    * set :a 1
 -    * op land :a 1 2
-   101 assertequals true true "&&="
--    * set *tmp3 true
+   106 assertequals true true "&&="
+-    * set *tmp7 true
 -    * op notEqual :a true false
-   102 assertequals true true "||="
--    * set *tmp4 17
-   103 assertequals 17 17 "Logic ID"
-   104 stop
-   105 end
+   107 assertequals true true "||="
+-    * set *tmp8 17
+   108 assertequals 17 17 "Logic ID"
+   109 stop
+   110 end
 
 Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 instructions):
  
-    48 set :assertEqualsRound:expected 1
-    49 set :assertEqualsRound:actual 1
-    50 set :assertEqualsRound:title "sin"
--    * setaddr :assertEqualsRound*retaddr *label4 (h:*label4)
--    * call *label3 *invalid :assertEqualsRound*retval (m:*label4) (h:*label4)
--    * label *label4
-+   51 label *label12
-+   52 op mul :round:x :assertEqualsRound:actual 100000000
-+   53 op add *tmp7 :round:x 0.5
-+   54 op floor *tmp6 *tmp7
-+   55 label *label13
-+   56 op div *tmp9 *tmp6 100000000
-+   57 assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   58 label *label14
-    59 set :assertEqualsRound:expected -1
-    60 set :assertEqualsRound:actual -1
-    61 set :assertEqualsRound:title "cos"
+    53 set :assertEqualsRound:expected 1
+    54 set :assertEqualsRound:actual 1
+    55 set :assertEqualsRound:title "sin"
 -    * setaddr :assertEqualsRound*retaddr *label5 (h:*label5)
 -    * call *label3 *invalid :assertEqualsRound*retval (m:*label5) (h:*label5)
 -    * label *label5
-+   62 label *label15
-+   63 op mul :round:x :assertEqualsRound:actual 100000000
-+   64 op add *tmp7 :round:x 0.5
-+   65 op floor *tmp6 *tmp7
-+   66 label *label16
-+   67 op div *tmp9 *tmp6 100000000
-+   68 assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   69 label *label17
-    70 set :assertEqualsRound:expected 1
-    71 set :assertEqualsRound:actual 0.9999999999999999
-    72 set :assertEqualsRound:title "tan"
++   56 label *label13
++   57 op mul :round:x :assertEqualsRound:actual 100000000
++   58 op add *tmp11 :round:x 0.5
++   59 op floor *tmp10 *tmp11
++   60 label *label14
++   61 op div *tmp13 *tmp10 100000000
++   62 assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   63 label *label15
+    64 set :assertEqualsRound:expected -1
+    65 set :assertEqualsRound:actual -1
+    66 set :assertEqualsRound:title "cos"
 -    * setaddr :assertEqualsRound*retaddr *label6 (h:*label6)
 -    * call *label3 *invalid :assertEqualsRound*retval (m:*label6) (h:*label6)
 -    * label *label6
-+   73 label *label18
-+   74 op mul :round:x :assertEqualsRound:actual 100000000
-+   75 op add *tmp7 :round:x 0.5
-+   76 op floor *tmp6 *tmp7
-+   77 label *label19
-+   78 op div *tmp9 *tmp6 100000000
-+   79 assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   80 label *label20
-    81 set :assertEqualsRound:expected 90
-    82 set :assertEqualsRound:actual 90
-    83 set :assertEqualsRound:title "asin"
++   67 label *label16
++   68 op mul :round:x :assertEqualsRound:actual 100000000
++   69 op add *tmp11 :round:x 0.5
++   70 op floor *tmp10 *tmp11
++   71 label *label17
++   72 op div *tmp13 *tmp10 100000000
++   73 assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   74 label *label18
+    75 set :assertEqualsRound:expected 1
+    76 set :assertEqualsRound:actual 0.9999999999999999
+    77 set :assertEqualsRound:title "tan"
 -    * setaddr :assertEqualsRound*retaddr *label7 (h:*label7)
 -    * call *label3 *invalid :assertEqualsRound*retval (m:*label7) (h:*label7)
 -    * label *label7
-+   84 label *label21
-+   85 op mul :round:x :assertEqualsRound:actual 100000000
-+   86 op add *tmp7 :round:x 0.5
-+   87 op floor *tmp6 *tmp7
-+   88 label *label22
-+   89 op div *tmp9 *tmp6 100000000
-+   90 assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   91 label *label23
-    92 set :assertEqualsRound:expected 0
-    93 set :assertEqualsRound:actual 0
-    94 set :assertEqualsRound:title "acos"
++   78 label *label19
++   79 op mul :round:x :assertEqualsRound:actual 100000000
++   80 op add *tmp11 :round:x 0.5
++   81 op floor *tmp10 *tmp11
++   82 label *label20
++   83 op div *tmp13 *tmp10 100000000
++   84 assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   85 label *label21
+    86 set :assertEqualsRound:expected 90
+    87 set :assertEqualsRound:actual 90
+    88 set :assertEqualsRound:title "asin"
 -    * setaddr :assertEqualsRound*retaddr *label8 (h:*label8)
 -    * call *label3 *invalid :assertEqualsRound*retval (m:*label8) (h:*label8)
 -    * label *label8
-+   95 label *label24
-+   96 op mul :round:x :assertEqualsRound:actual 100000000
-+   97 op add *tmp7 :round:x 0.5
-+   98 op floor *tmp6 *tmp7
-+   99 label *label25
-+  100 op div *tmp9 *tmp6 100000000
-+  101 assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+  102 label *label26
-   103 set :assertEqualsRound:expected 45
-   104 set :assertEqualsRound:actual 45
-   105 set :assertEqualsRound:title "atan"
++   89 label *label22
++   90 op mul :round:x :assertEqualsRound:actual 100000000
++   91 op add *tmp11 :round:x 0.5
++   92 op floor *tmp10 *tmp11
++   93 label *label23
++   94 op div *tmp13 *tmp10 100000000
++   95 assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   96 label *label24
+    97 set :assertEqualsRound:expected 0
+    98 set :assertEqualsRound:actual 0
+    99 set :assertEqualsRound:title "acos"
 -    * setaddr :assertEqualsRound*retaddr *label9 (h:*label9)
 -    * call *label3 *invalid :assertEqualsRound*retval (m:*label9) (h:*label9)
 -    * label *label9
-+  106 label *label27
-+  107 op mul :round:x :assertEqualsRound:actual 100000000
-+  108 op add *tmp7 :round:x 0.5
-+  109 op floor *tmp6 *tmp7
-+  110 label *label28
-+  111 op div *tmp9 *tmp6 100000000
-+  112 assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+  113 label *label29
-   114 assertequals -8 -8 "unary minus"
-   115 assertequals 1 true "boolean negation 1"
-   116 assertequals 0 false "boolean negation 2"
++  100 label *label25
++  101 op mul :round:x :assertEqualsRound:actual 100000000
++  102 op add *tmp11 :round:x 0.5
++  103 op floor *tmp10 *tmp11
++  104 label *label26
++  105 op div *tmp13 *tmp10 100000000
++  106 assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++  107 label *label27
+   108 set :assertEqualsRound:expected 45
+   109 set :assertEqualsRound:actual 45
+   110 set :assertEqualsRound:title "atan"
+-    * setaddr :assertEqualsRound*retaddr *label10 (h:*label10)
+-    * call *label3 *invalid :assertEqualsRound*retval (m:*label10) (h:*label10)
+-    * label *label10
++  111 label *label28
++  112 op mul :round:x :assertEqualsRound:actual 100000000
++  113 op add *tmp11 :round:x 0.5
++  114 op floor *tmp10 *tmp11
++  115 label *label29
++  116 op div *tmp13 *tmp10 100000000
++  117 assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++  118 label *label30
+   119 assertequals -8 -8 "unary minus"
+   120 assertequals 1 true "boolean negation 1"
+   121 assertequals 0 false "boolean negation 2"
  
-   133 assertequals 17 17 "Logic ID"
-   134 stop
-   135 end
+   138 assertequals 17 17 "Logic ID"
+   139 stop
+   140 end
 -    * label *label3
 -    * op mul :round:x :assertEqualsRound:actual 100000000
--    * op add *tmp7 :round:x 0.5
--    * op floor *tmp6 *tmp7
+-    * op add *tmp11 :round:x 0.5
+-    * op floor *tmp10 *tmp11
+-    * label *label12
+-    * op div *tmp13 *tmp10 100000000
+-    * assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
 -    * label *label11
--    * op div *tmp9 *tmp6 100000000
--    * assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
--    * label *label10
 -    * return :assertEqualsRound*retaddr
 -    * end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    49 set :assertEqualsRound:actual 1
-    50 set :assertEqualsRound:title "sin"
-    51 label *label12
+    54 set :assertEqualsRound:actual 1
+    55 set :assertEqualsRound:title "sin"
+    56 label *label13
 -    * op mul :round:x :assertEqualsRound:actual 100000000
--    * op add *tmp7 :round:x 0.5
--    * op floor *tmp6 *tmp7
-+   52 op mul :round:x 1 100000000
-+   53 op add *tmp7 100000000 0.5
-+   54 op floor *tmp6 100000000.5
-    55 label *label13
--    * op div *tmp9 *tmp6 100000000
--    * assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   56 op div *tmp9 100000000 100000000
-+   57 assertequals 1 1 "sin"
-    58 label *label14
-    59 set :assertEqualsRound:expected -1
-    60 set :assertEqualsRound:actual -1
-    61 set :assertEqualsRound:title "cos"
-    62 label *label15
+-    * op add *tmp11 :round:x 0.5
+-    * op floor *tmp10 *tmp11
++   57 op mul :round:x 1 100000000
++   58 op add *tmp11 100000000 0.5
++   59 op floor *tmp10 100000000.5
+    60 label *label14
+-    * op div *tmp13 *tmp10 100000000
+-    * assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   61 op div *tmp13 100000000 100000000
++   62 assertequals 1 1 "sin"
+    63 label *label15
+    64 set :assertEqualsRound:expected -1
+    65 set :assertEqualsRound:actual -1
+    66 set :assertEqualsRound:title "cos"
+    67 label *label16
 -    * op mul :round:x :assertEqualsRound:actual 100000000
--    * op add *tmp7 :round:x 0.5
--    * op floor *tmp6 *tmp7
-+   63 op mul :round:x -1 100000000
-+   64 op add *tmp7 -100000000 0.5
-+   65 op floor *tmp6 -99999999.5
-    66 label *label16
--    * op div *tmp9 *tmp6 100000000
--    * assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   67 op div *tmp9 -100000000 100000000
-+   68 assertequals -1 -1 "cos"
-    69 label *label17
-    70 set :assertEqualsRound:expected 1
-    71 set :assertEqualsRound:actual 0.9999999999999999
-    72 set :assertEqualsRound:title "tan"
-    73 label *label18
+-    * op add *tmp11 :round:x 0.5
+-    * op floor *tmp10 *tmp11
++   68 op mul :round:x -1 100000000
++   69 op add *tmp11 -100000000 0.5
++   70 op floor *tmp10 -99999999.5
+    71 label *label17
+-    * op div *tmp13 *tmp10 100000000
+-    * assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   72 op div *tmp13 -100000000 100000000
++   73 assertequals -1 -1 "cos"
+    74 label *label18
+    75 set :assertEqualsRound:expected 1
+    76 set :assertEqualsRound:actual 0.9999999999999999
+    77 set :assertEqualsRound:title "tan"
+    78 label *label19
 -    * op mul :round:x :assertEqualsRound:actual 100000000
--    * op add *tmp7 :round:x 0.5
--    * op floor *tmp6 *tmp7
-+   74 op mul :round:x 0.9999999999999999 100000000
-+   75 op add *tmp7 99999999.99999999 0.5
-+   76 op floor *tmp6 100000000.49999999
-    77 label *label19
--    * op div *tmp9 *tmp6 100000000
--    * assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   78 op div *tmp9 100000000 100000000
-+   79 assertequals 1 1 "tan"
-    80 label *label20
-    81 set :assertEqualsRound:expected 90
-    82 set :assertEqualsRound:actual 90
-    83 set :assertEqualsRound:title "asin"
-    84 label *label21
+-    * op add *tmp11 :round:x 0.5
+-    * op floor *tmp10 *tmp11
++   79 op mul :round:x 0.9999999999999999 100000000
++   80 op add *tmp11 99999999.99999999 0.5
++   81 op floor *tmp10 100000000.49999999
+    82 label *label20
+-    * op div *tmp13 *tmp10 100000000
+-    * assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   83 op div *tmp13 100000000 100000000
++   84 assertequals 1 1 "tan"
+    85 label *label21
+    86 set :assertEqualsRound:expected 90
+    87 set :assertEqualsRound:actual 90
+    88 set :assertEqualsRound:title "asin"
+    89 label *label22
 -    * op mul :round:x :assertEqualsRound:actual 100000000
--    * op add *tmp7 :round:x 0.5
--    * op floor *tmp6 *tmp7
-+   85 op mul :round:x 90 100000000
-+   86 op add *tmp7 9000000000 0.5
-+   87 op floor *tmp6 9000000000.5
-    88 label *label22
--    * op div *tmp9 *tmp6 100000000
--    * assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+   89 op div *tmp9 9000000000 100000000
-+   90 assertequals 90 90 "asin"
-    91 label *label23
-    92 set :assertEqualsRound:expected 0
-    93 set :assertEqualsRound:actual 0
-    94 set :assertEqualsRound:title "acos"
-    95 label *label24
+-    * op add *tmp11 :round:x 0.5
+-    * op floor *tmp10 *tmp11
++   90 op mul :round:x 90 100000000
++   91 op add *tmp11 9000000000 0.5
++   92 op floor *tmp10 9000000000.5
+    93 label *label23
+-    * op div *tmp13 *tmp10 100000000
+-    * assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++   94 op div *tmp13 9000000000 100000000
++   95 assertequals 90 90 "asin"
+    96 label *label24
+    97 set :assertEqualsRound:expected 0
+    98 set :assertEqualsRound:actual 0
+    99 set :assertEqualsRound:title "acos"
+   100 label *label25
 -    * op mul :round:x :assertEqualsRound:actual 100000000
--    * op add *tmp7 :round:x 0.5
--    * op floor *tmp6 *tmp7
-+   96 op mul :round:x 0 100000000
-+   97 op add *tmp7 0 0.5
-+   98 op floor *tmp6 0.5
-    99 label *label25
--    * op div *tmp9 *tmp6 100000000
--    * assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+  100 op div *tmp9 0 100000000
-+  101 assertequals 0 0 "acos"
-   102 label *label26
-   103 set :assertEqualsRound:expected 45
-   104 set :assertEqualsRound:actual 45
-   105 set :assertEqualsRound:title "atan"
-   106 label *label27
+-    * op add *tmp11 :round:x 0.5
+-    * op floor *tmp10 *tmp11
++  101 op mul :round:x 0 100000000
++  102 op add *tmp11 0 0.5
++  103 op floor *tmp10 0.5
+   104 label *label26
+-    * op div *tmp13 *tmp10 100000000
+-    * assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++  105 op div *tmp13 0 100000000
++  106 assertequals 0 0 "acos"
+   107 label *label27
+   108 set :assertEqualsRound:expected 45
+   109 set :assertEqualsRound:actual 45
+   110 set :assertEqualsRound:title "atan"
+   111 label *label28
 -    * op mul :round:x :assertEqualsRound:actual 100000000
--    * op add *tmp7 :round:x 0.5
--    * op floor *tmp6 *tmp7
-+  107 op mul :round:x 45 100000000
-+  108 op add *tmp7 4500000000 0.5
-+  109 op floor *tmp6 4500000000.5
-   110 label *label28
--    * op div *tmp9 *tmp6 100000000
--    * assertequals :assertEqualsRound:expected *tmp9 :assertEqualsRound:title
-+  111 op div *tmp9 4500000000 100000000
-+  112 assertequals 45 45 "atan"
-   113 label *label29
-   114 assertequals -8 -8 "unary minus"
-   115 assertequals 1 true "boolean negation 1"
+-    * op add *tmp11 :round:x 0.5
+-    * op floor *tmp10 *tmp11
++  112 op mul :round:x 45 100000000
++  113 op add *tmp11 4500000000 0.5
++  114 op floor *tmp10 4500000000.5
+   115 label *label29
+-    * op div *tmp13 *tmp10 100000000
+-    * assertequals :assertEqualsRound:expected *tmp13 :assertEqualsRound:title
++  116 op div *tmp13 4500000000 100000000
++  117 assertequals 45 45 "atan"
+   118 label *label30
+   119 assertequals -8 -8 "unary minus"
+   120 assertequals 1 true "boolean negation 1"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-42 instructions):
  
-    45 assertequals 45 45 "angle"
-    46 assertequals 90 90 "angleDiff"
-    47 assertequals 5 5 "len"
+    50 assertequals 45 45 "angle"
+    51 assertequals 90 90 "angleDiff"
+    52 assertequals 5 5 "len"
 -    * set :assertEqualsRound:expected 1
 -    * set :assertEqualsRound:actual 1
 -    * set :assertEqualsRound:title "sin"
-    48 label *label12
+    53 label *label13
 -    * op mul :round:x 1 100000000
--    * op add *tmp7 100000000 0.5
--    * op floor *tmp6 100000000.5
-    49 label *label13
--    * op div *tmp9 100000000 100000000
-    50 assertequals 1 1 "sin"
-    51 label *label14
+-    * op add *tmp11 100000000 0.5
+-    * op floor *tmp10 100000000.5
+    54 label *label14
+-    * op div *tmp13 100000000 100000000
+    55 assertequals 1 1 "sin"
+    56 label *label15
 -    * set :assertEqualsRound:expected -1
 -    * set :assertEqualsRound:actual -1
 -    * set :assertEqualsRound:title "cos"
-    52 label *label15
+    57 label *label16
 -    * op mul :round:x -1 100000000
--    * op add *tmp7 -100000000 0.5
--    * op floor *tmp6 -99999999.5
-    53 label *label16
--    * op div *tmp9 -100000000 100000000
-    54 assertequals -1 -1 "cos"
-    55 label *label17
+-    * op add *tmp11 -100000000 0.5
+-    * op floor *tmp10 -99999999.5
+    58 label *label17
+-    * op div *tmp13 -100000000 100000000
+    59 assertequals -1 -1 "cos"
+    60 label *label18
 -    * set :assertEqualsRound:expected 1
 -    * set :assertEqualsRound:actual 0.9999999999999999
 -    * set :assertEqualsRound:title "tan"
-    56 label *label18
+    61 label *label19
 -    * op mul :round:x 0.9999999999999999 100000000
--    * op add *tmp7 99999999.99999999 0.5
--    * op floor *tmp6 100000000.49999999
-    57 label *label19
--    * op div *tmp9 100000000 100000000
-    58 assertequals 1 1 "tan"
-    59 label *label20
+-    * op add *tmp11 99999999.99999999 0.5
+-    * op floor *tmp10 100000000.49999999
+    62 label *label20
+-    * op div *tmp13 100000000 100000000
+    63 assertequals 1 1 "tan"
+    64 label *label21
 -    * set :assertEqualsRound:expected 90
 -    * set :assertEqualsRound:actual 90
 -    * set :assertEqualsRound:title "asin"
-    60 label *label21
+    65 label *label22
 -    * op mul :round:x 90 100000000
--    * op add *tmp7 9000000000 0.5
--    * op floor *tmp6 9000000000.5
-    61 label *label22
--    * op div *tmp9 9000000000 100000000
-    62 assertequals 90 90 "asin"
-    63 label *label23
+-    * op add *tmp11 9000000000 0.5
+-    * op floor *tmp10 9000000000.5
+    66 label *label23
+-    * op div *tmp13 9000000000 100000000
+    67 assertequals 90 90 "asin"
+    68 label *label24
 -    * set :assertEqualsRound:expected 0
 -    * set :assertEqualsRound:actual 0
 -    * set :assertEqualsRound:title "acos"
-    64 label *label24
+    69 label *label25
 -    * op mul :round:x 0 100000000
--    * op add *tmp7 0 0.5
--    * op floor *tmp6 0.5
-    65 label *label25
--    * op div *tmp9 0 100000000
-    66 assertequals 0 0 "acos"
-    67 label *label26
+-    * op add *tmp11 0 0.5
+-    * op floor *tmp10 0.5
+    70 label *label26
+-    * op div *tmp13 0 100000000
+    71 assertequals 0 0 "acos"
+    72 label *label27
 -    * set :assertEqualsRound:expected 45
 -    * set :assertEqualsRound:actual 45
 -    * set :assertEqualsRound:title "atan"
-    68 label *label27
+    73 label *label28
 -    * op mul :round:x 45 100000000
--    * op add *tmp7 4500000000 0.5
--    * op floor *tmp6 4500000000.5
-    69 label *label28
--    * op div *tmp9 4500000000 100000000
-    70 assertequals 45 45 "atan"
-    71 label *label29
-    72 assertequals -8 -8 "unary minus"
+-    * op add *tmp11 4500000000 0.5
+-    * op floor *tmp10 4500000000.5
+    74 label *label29
+-    * op div *tmp13 4500000000 100000000
+    75 assertequals 45 45 "atan"
+    76 label *label30
+    77 assertequals -8 -8 "unary minus"
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
-    45 assertequals 45 45 "angle"
-    46 assertequals 90 90 "angleDiff"
-    47 assertequals 5 5 "len"
--    * label *label12
+    41 assertequals 0 0 "sign(0)"
+    42 assertequals 1 1 "log"
+    43 assertequals 1 1 "log10"
+-    * label *label4
+    44 assertequals 4 4 "logn"
+    45 assertequals 2 2 "floor"
+    46 assertequals 3 3 "ceil"
+ 
+    49 assertequals 45 45 "angle"
+    50 assertequals 90 90 "angleDiff"
+    51 assertequals 5 5 "len"
 -    * label *label13
-    48 assertequals 1 1 "sin"
 -    * label *label14
+    52 assertequals 1 1 "sin"
 -    * label *label15
 -    * label *label16
-    49 assertequals -1 -1 "cos"
 -    * label *label17
+    53 assertequals -1 -1 "cos"
 -    * label *label18
 -    * label *label19
-    50 assertequals 1 1 "tan"
 -    * label *label20
+    54 assertequals 1 1 "tan"
 -    * label *label21
 -    * label *label22
-    51 assertequals 90 90 "asin"
 -    * label *label23
+    55 assertequals 90 90 "asin"
 -    * label *label24
 -    * label *label25
-    52 assertequals 0 0 "acos"
 -    * label *label26
+    56 assertequals 0 0 "acos"
 -    * label *label27
 -    * label *label28
-    53 assertequals 45 45 "atan"
 -    * label *label29
-    54 assertequals -8 -8 "unary minus"
-    55 assertequals 1 true "boolean negation 1"
-    56 assertequals 0 false "boolean negation 2"
+    57 assertequals 45 45 "atan"
+-    * label *label30
+    58 assertequals -8 -8 "unary minus"
+    59 assertequals 1 true "boolean negation 1"
+    60 assertequals 0 false "boolean negation 2"
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-    72 assertequals true true "||="
-    73 assertequals 17 17 "Logic ID"
-    74 stop
+    76 assertequals true true "||="
+    77 assertequals 17 17 "Logic ID"
+    78 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -546,6 +592,7 @@ assertequals 1.5 1.5 "div"
 assertequals 0.00001 0.00001 "div exp"
 assertequals 1 1 "idiv"
 assertequals 2 2 "mod"
+assertequals 5 5 "emod"
 assertequals 16 16 "pow"
 assertequals true true "equal 1"
 assertequals false false "equal 2"
@@ -567,6 +614,7 @@ assertequals false false "strictEqual 1"
 assertequals true true "strictEqual 2"
 assertequals 4 4 "shl"
 assertequals 2 2 "shr"
+assertequals 7 7 "ushr"
 assertequals 3 3 "or"
 assertequals 2 2 "and"
 assertequals 1 1 "xor"
@@ -581,8 +629,10 @@ assertequals 1 1 "sign(2)"
 assertequals 0 0 "sign(0)"
 assertequals 1 1 "log"
 assertequals 1 1 "log10"
+assertequals 4 4 "logn"
 assertequals 2 2 "floor"
 assertequals 3 3 "ceil"
+assertequals 3 3 "round"
 assertequals 4 4 "sqrt"
 assertequals 45 45 "angle"
 assertequals 90 90 "angleDiff"

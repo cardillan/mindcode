@@ -95,6 +95,7 @@ LOGICAL_NOT             : 'not' ;
 LOGICAL_OR              : 'or';
 SHIFT_LEFT              : '<<' ;
 SHIFT_RIGHT             : '>>' ;
+USHIFT_RIGHT            : '>>>' ;
 
 // Opening/closing symbols
 // Braces - '{', '}' - aren't defined here
@@ -111,6 +112,7 @@ IDIV                    : '\\' ;
 INCREMENT               : '++' ;
 MINUS                   : '-' ;
 MOD                     : '%' ;
+EMOD                    : '%%' ;
 MUL                     : '*' ;
 PLUS                    : '+' ;
 POW                     : '**' ;
@@ -126,11 +128,13 @@ ASSIGN_DIV              : '/=' ;
 ASSIGN_IDIV             : '\\=' ;
 ASSIGN_MINUS            : '-=' ;
 ASSIGN_MOD              : '%=' ;
+ASSIGN_EMOD             : '%%=' ;
 ASSIGN_MUL              : '*=' ;
 ASSIGN_PLUS             : '+=' ;
 ASSIGN_POW              : '**=' ;
 ASSIGN_SHIFT_LEFT       : '<<=' ;
 ASSIGN_SHIFT_RIGHT      : '>>=' ;
+ASSIGN_USHIFT_RIGHT     : '>>>=' ;
 
 // Symbols
 AT                      : '@' ;

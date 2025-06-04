@@ -13,22 +13,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* **Breaking:** added new `guarded` keyword. The keyword is a variable declaration modifier that ensures the generation of the guard code for linked variables.
+* **Breaking:** added new [`guarded` keyword](/doc/syntax/SYNTAX-1-VARIABLES.markdown#guard-code-for-linked-variables). The keyword is a variable declaration modifier that ensures the generation of the guard code for linked variables.
 * Added support for the new `op logn` Mindustry BE instruction to the compiler and processor emulator.
-* Added the `logn()` function to the `math`system library. This function corresponds to the Mindustry 8 instruction `op logn`, and when target 8 is selected, the instruction is used instead of the library implementation.
-* Added support for declaring new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
-* Added support for constant arrays. Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.
-* Added the `scaleDisplay` function to the `graphics` system library. The function compensates for rounding errors in Mindustry Logic `draw scale` instruction. 
-* Added the `noControlWithin` function to the `units` system library. The function determines whether the current unit lies within a given radius without taking control of the unit.
+* Added the `logn()` function to the `math` system library. This function corresponds to the Mindustry Logic 8 instruction `op logn`, and when target `8` is selected, the instruction is used instead of the library implementation.
+* Added the [`%%` (positive modulo) operator](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#multiplicative-operators) to the compiler and processor emulator. When target `8` is selected, the native Mindustry Logic instruction is used; for lower targets, the operation is emulated by a sequence of three instructions.
+* Added the [`>>>` (unsigned right shift) operator](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#shift-operators) to the compiler and processor emulator. Only available for target `8` or higher.
+* Added the ability to declare new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
+* Added support for [constant arrays](/doc/syntax/SYNTAX-1-VARIABLES.markdown#internal-arrays-1). Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.
+* Added the [`scaleDisplay` function](/doc/syntax/SYSTEM-LIBRARY.markdown#scaledisplay) to the `graphics` system library. The function compensates for rounding errors in Mindustry Logic `draw scale` instruction. 
+* Added the [`noControlWithin` function](/doc/syntax/SYSTEM-LIBRARY.markdown#nocontrolwithin) to the `units` system library. The function determines whether the current unit lies within a given radius without taking control of the unit.
 
 ### Changed
 
 * Updated the `scaleSmallToLarge()` and `scaleLargeToSmall()` functions to compensate for rounding errors in Mindustry Logic `draw scale` instruction.
 * Updated the `log2()` function to use `op logn` when possible.
-* Changed all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).
-* The `noinit` keyword has no effect in `linked` variable declarations. Guard code is not generated unless the `guarded` modifier is used to explicitly request it.
-* Changed the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) to generate many different ways to compress a jump table, selecting the most efficient one for given constraints.
-* Removed the optimization goal `auto` and added `neutral`. Implemented new optimization selection according to the [optimization goal](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#optimization-goal). The Case Switching optimization is capable of generation optimizations for the `size` and `neutral` goals. 
+* Updated all conditional operators to support string arguments (e.g., `name == "Phillip"` is now a valid expression).
+* The `noinit` keyword has no longer any effect in `linked` variable declarations. Guard code is not generated unless the `guarded` modifier is used to explicitly request it.
+* Changed the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) to generate many different ways to compress a jump table, selecting the most efficient one for the given optimization goal and instruction-space constraints.
+* Removed the optimization goal `auto` and added `neutral`. Implemented new optimization selection according to the [optimization goal](/doc/syntax/SYNTAX-5-OTHER.markdown#option-goal). The Case Switching optimization is capable of generation optimizations for the `size` and `neutral` goals. 
 
 ### Miscellaneous
 

@@ -517,7 +517,7 @@ class MindcodeParserTest extends AbstractParserTest {
         @Test
         void parsesExpressions() {
             assertParses("""
-                    ~a + !b ** c / (d * -e) % f \\ g << h >> i;
+                    ~a + !b ** c / (d * -e) % f \\ g << h >> i >>> j %% k;
                     a and b & c && d;
                     e or f || g | h;
                     a < b <= c > d >= e;

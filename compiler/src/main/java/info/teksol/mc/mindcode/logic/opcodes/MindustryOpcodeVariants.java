@@ -90,6 +90,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("div"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("idiv"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("mod"),          res("result"),  in("a"), in("b"));
+        add(list, V8A, MAX, S, NONE, Opcode.OP,         op("emod"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("pow"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("equal"),        res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("notEqual"),     res("result"),  in("a"), in("b"));
@@ -101,6 +102,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("strictEqual"),  res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shl"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shr"),          res("result"),  in("a"), in("b"));
+        add(list, V8A, MAX, S, NONE, Opcode.OP,         op("ushr"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("or"),           res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("and"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("xor"),          res("result"),  in("a"), in("b"));
@@ -114,6 +116,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("abs"),          res("result"),  in("a"));
         add(list, V8A, MAX, S, FUNC, Opcode.OP,         op("sign"),         res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log"),          res("result"),  in("a"));
+        add(list, V8A, MAX, S, FUNC, Opcode.OP,         op("logn"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log10"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("floor"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("ceil"),         res("result"),  in("a"));

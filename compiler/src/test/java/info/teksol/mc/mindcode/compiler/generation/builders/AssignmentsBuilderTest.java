@@ -142,11 +142,13 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             c /= d;
                             e \\= f;
                             g %= h;
+                            i %%= j;
                             """,
                     createInstruction(OP, "mul", "a", "a", "b"),
                     createInstruction(OP, "div", "c", "c", "d"),
                     createInstruction(OP, "idiv", "e", "e", "f"),
-                    createInstruction(OP, "mod", "g", "g", "h")
+                    createInstruction(OP, "mod", "g", "g", "h"),
+                    createInstruction(OP, "emod", "i", "i", "j")
             );
         }
 
@@ -166,9 +168,11 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a <<= b;
                             c >>= d;
+                            e >>>= f;
                             """,
-                    createInstruction(OP, "shl", "a", "a", "b"),
-                    createInstruction(OP, "shr", "c", "c", "d")
+                    createInstruction(OP, "shl", ":a", ":a", ":b"),
+                    createInstruction(OP, "shr", ":c", ":c", ":d"),
+                    createInstruction(OP, "ushr", ":e", ":e", ":f")
             );
         }
 
@@ -198,7 +202,7 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void compilesExternapVariablesWithCompoundAssignments() {
+        void compilesExternalVariablesWithCompoundAssignments() {
             assertCompilesTo("""
                             allocate heap in bank1;
                             $A += $B;
@@ -207,6 +211,29 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(READ, tmp(0), "bank1", "0"),
                     createInstruction(OP, "add", tmp(2), tmp(0), tmp(1)),
                     createInstruction(WRITE, tmp(2), "bank1", "0")
+            );
+        }
+
+        @Test
+        void emulatesEmodInTarget7() {
+            assertCompilesTo("""
+                            #set target = 7;
+                            e %%= f;
+                            """,
+                    createInstruction(OP, "mod", tmp(0), ":e", ":f"),
+                    createInstruction(OP, "add", tmp(0), tmp(0), ":f"),
+                    createInstruction(OP, "mod", ":e", tmp(0), ":f")
+            );
+        }
+
+        @Test
+        void reportsWrongTargetForUshr() {
+            assertGeneratesMessage(
+                    "The '>>>=' operator requires language target 8 or higher.",
+                    """
+                            #set target = 7;
+                            a >>>= b;
+                            """
             );
         }
     }

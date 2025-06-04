@@ -158,9 +158,10 @@ expression
     | prefix = (INCREMENT | DECREMENT) exp = lvalue                                     # astOperatorIncDecPrefix
     | op = (BITWISE_NOT | BOOLEAN_NOT | LOGICAL_NOT | PLUS | MINUS) exp = expression    # astOperatorUnary
     | left = expression op = POW right = expression                                     # astOperatorBinaryExp
-    | left = expression op = (MUL | DIV | IDIV | MOD) right = expression                # astOperatorBinaryMul
+    | left = expression op = (MUL | DIV | IDIV | MOD | EMOD) right = expression         # astOperatorBinaryMul
     | left = expression op = (PLUS | MINUS) right = expression                          # astOperatorBinaryAdd
-    | left = expression op = (SHIFT_LEFT | SHIFT_RIGHT) right = expression              # astOperatorBinaryShift
+    | left = expression
+        op = (SHIFT_LEFT | SHIFT_RIGHT | USHIFT_RIGHT) right = expression               # astOperatorBinaryShift
     | left = expression op = BITWISE_AND right=expression                               # astOperatorBinaryBitwiseAnd
     | left = expression op = (BITWISE_OR | BITWISE_XOR) right = expression              # astOperatorBinaryBitwiseOr
     | left = expression
@@ -178,8 +179,8 @@ expression
          COLON falseBranch = expression                                                 # astOperatorTernary
     | <assoc = right> target = expression
         operation = (ASSIGN | ASSIGN_POW |
-                     ASSIGN_MUL | ASSIGN_DIV | ASSIGN_IDIV | ASSIGN_MOD |
-                     ASSIGN_PLUS | ASSIGN_MINUS | ASSIGN_SHIFT_LEFT | ASSIGN_SHIFT_RIGHT |
+                     ASSIGN_MUL | ASSIGN_DIV | ASSIGN_IDIV | ASSIGN_MOD | ASSIGN_EMOD |
+                     ASSIGN_PLUS | ASSIGN_MINUS | ASSIGN_SHIFT_LEFT | ASSIGN_SHIFT_RIGHT | ASSIGN_USHIFT_RIGHT |
                      ASSIGN_BITWISE_AND | ASSIGN_BITWISE_OR | ASSIGN_BITWISE_XOR |
                      ASSIGN_BOOLEAN_AND | ASSIGN_BOOLEAN_OR)
         value = expression                                                              # astAssignment

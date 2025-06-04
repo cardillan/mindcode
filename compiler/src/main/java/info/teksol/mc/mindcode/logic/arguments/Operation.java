@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.logic.arguments;
 
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.antlr.MindcodeLexer;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -26,9 +27,11 @@ public enum Operation implements LogicArgument {
     DIV             (2, true, "div",  MindcodeLexer.DIV),
     IDIV            (2, true, "idiv", MindcodeLexer.IDIV),
     MOD             (2, true, "mod",  MindcodeLexer.MOD),
+    EMOD            (2, true, "emod", MindcodeLexer.EMOD),      // No minimal processor version: the operator is emulated in lower versions
     POW             (2, true, "pow",  MindcodeLexer.POW),
     SHL             (2, true, "shl",  MindcodeLexer.SHIFT_LEFT),
     SHR             (2, true, "shr",  MindcodeLexer.SHIFT_RIGHT),
+    USHR            (2, true, "ushr", MindcodeLexer.USHIFT_RIGHT, ProcessorVersion.V8A),
 
     BITWISE_AND     (2, true, "and",  MindcodeLexer.BITWISE_AND),
     BITWISE_OR      (2, true, "or",   MindcodeLexer.BITWISE_OR),
@@ -53,7 +56,7 @@ public enum Operation implements LogicArgument {
     ABS             (1, true,  "abs"),
     SIGN            (1, true,  "sign"),
     LOG             (1, true,  "log"),
-    LOGN            (1, true,  "logn"),
+    LOGN            (2, true,  "logn"),
     LOG10           (1, true,  "log10"),
     FLOOR           (1, true,  "floor"),
     CEIL            (1, true,  "ceil"),
@@ -68,6 +71,10 @@ public enum Operation implements LogicArgument {
     ATAN            (1, true,  "atan"),
     ;
 
+    /// For operators, we keep the information about minimal required target here. It duplicates the information
+    /// in MindustryOpcodeVariants, but is kept like this for easier usage.
+    private final ProcessorVersion processorVersion;
+
     private final @Nullable String mlog;
     private final String mindcode;
     private final int token;
@@ -75,11 +82,23 @@ public enum Operation implements LogicArgument {
     private final boolean deterministic;
     private final boolean function;
 
+    Operation(int arity, boolean deterministic, @Nullable String mlog, int token, ProcessorVersion processorVersion) {
+        this.mlog = mlog;
+        String literalName = MindcodeLexer.VOCABULARY.getLiteralName(token);
+        this.mindcode = literalName.substring(1, literalName.length() - 1);
+        this.token = token;
+        this.processorVersion = processorVersion;
+        this.operands = arity;
+        this.deterministic = deterministic;
+        this.function = false;
+    }
+
     Operation(int arity, boolean deterministic, @Nullable String mlog, int token) {
         this.mlog = mlog;
         String literalName = MindcodeLexer.VOCABULARY.getLiteralName(token);
         this.mindcode = literalName.substring(1, literalName.length() - 1);
         this.token = token;
+        this.processorVersion = ProcessorVersion.V6;
         this.operands = arity;
         this.deterministic = deterministic;
         this.function = false;
@@ -89,6 +108,7 @@ public enum Operation implements LogicArgument {
         this.mlog = mlog;
         this.mindcode = mlog;
         this.token = -1;
+        this.processorVersion = ProcessorVersion.V6;
         this.operands = arity;
         this.deterministic = deterministic;
         this.function = true;
@@ -104,6 +124,10 @@ public enum Operation implements LogicArgument {
 
     public static Operation fromToken(int tokenType) {
         return Objects.requireNonNull(TOKENS.get(tokenType), "Unknown or invalid token " + tokenType);
+    }
+
+    public ProcessorVersion getProcessorVersion() {
+        return processorVersion;
     }
 
     @Override

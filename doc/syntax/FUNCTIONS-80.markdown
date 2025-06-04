@@ -233,6 +233,7 @@ Perform an operation on one or two variables.
 |`result = abs(a)`|`op abs result a 0`|
 |`result = sign(a)`|`op sign result a 0`|
 |`result = log(a)`|`op log result a 0`|
+|`result = logn(a, b)`|`op logn result a b`|
 |`result = log10(a)`|`op log10 result a 0`|
 |`result = floor(a)`|`op floor result a 0`|
 |`result = ceil(a)`|`op ceil result a 0`|

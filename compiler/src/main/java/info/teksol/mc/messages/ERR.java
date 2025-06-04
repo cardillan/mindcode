@@ -128,6 +128,7 @@ public class ERR {
     public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
     public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of file '%s'.";
     public static final String MULTIPLE_PROCESSOR_BINDINGS = "Multiple bindings of processor '%s'.";
+    public static final String OPERATOR_REQUIRES_SPECIFIC_TARGET = "The '%s' operator requires language target %s or higher.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
     public static final String PARAMETER_NAME_RESERVED_LINKED = "Parameter '%s' of function '%s' uses name reserved for linked blocks.";
     public static final String PARAMETER_VARARGS_NOT_LAST = "Parameter '%s' of function '%s' is declared vararg, but is not last in the parameter list.";

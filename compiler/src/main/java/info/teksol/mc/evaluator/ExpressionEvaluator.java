@@ -90,6 +90,7 @@ public class ExpressionEvaluator {
         map.put(Operation.DIV,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() / b.getDoubleValue()));
         map.put(Operation.IDIV,             (r, a, b) -> r.setDoubleValue(Math.floor(a.getDoubleValue() / b.getDoubleValue())));
         map.put(Operation.MOD,              (r, a, b) -> r.setDoubleValue(a.getDoubleValue() % b.getDoubleValue()));
+        map.put(Operation.EMOD,             (r, a, b) -> r.setDoubleValue(((a.getDoubleValue() % b.getDoubleValue()) + b.getDoubleValue()) % b.getDoubleValue()));
         map.put(Operation.POW,              (r, a, b) -> r.setDoubleValue(Math.pow(a.getDoubleValue(), b.getDoubleValue())));
 
         map.put(Operation.EQUAL,            (r, a, b) -> r.setBooleanValue(equals(a, b)));
@@ -102,6 +103,7 @@ public class ExpressionEvaluator {
 
         map.put(Operation.SHL,              (r, a, b) -> r.setLongValue(a.getLongValue() <<  b.getLongValue()));
         map.put(Operation.SHR,              (r, a, b) -> r.setLongValue(a.getLongValue() >>  b.getLongValue()));
+        map.put(Operation.USHR,             (r, a, b) -> r.setLongValue(a.getLongValue() >>> b.getLongValue()));
         map.put(Operation.BITWISE_XOR,      (r, a, b) -> r.setLongValue(a.getLongValue() ^ b.getLongValue()));
 
         map.put(Operation.BITWISE_NOT,      (r, a, b) -> r.setLongValue(~a.getLongValue()));

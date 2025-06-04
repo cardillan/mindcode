@@ -29,11 +29,13 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
                             c / d;
                             e \\ f;
                             g % h;
+                            i %% j;
                             """,
                     createInstruction(OP, "mul", var(0), "a", "b"),
                     createInstruction(OP, "div", var(1), "c", "d"),
                     createInstruction(OP, "idiv", var(2), "e", "f"),
-                    createInstruction(OP, "mod", var(3), "g", "h")
+                    createInstruction(OP, "mod", var(3), "g", "h"),
+                    createInstruction(OP, "emod", var(4), "i", "j")
             );
         }
 
@@ -53,9 +55,11 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             a << b;
                             c >> d;
+                            e >>> f;
                             """,
-                    createInstruction(OP, "shl", var(0), "a", "b"),
-                    createInstruction(OP, "shr", var(1), "c", "d")
+                    createInstruction(OP, "shl", var(0), ":a", ":b"),
+                    createInstruction(OP, "shr", var(1), ":c", ":d"),
+                    createInstruction(OP, "ushr", var(2), ":e", ":f")
             );
         }
 
@@ -119,6 +123,28 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
             );
         }
 
+        @Test
+        void emulatesEmodInTarget7() {
+            assertCompilesTo("""
+                            #set target = 7;
+                            e %% f;
+                            """,
+                    createInstruction(OP, "mod", tmp(0), ":e", ":f"),
+                    createInstruction(OP, "add", tmp(0), tmp(0), ":f"),
+                    createInstruction(OP, "mod", tmp(0), tmp(0), ":f")
+            );
+        }
+
+        @Test
+        void reportsWrongTargetForUshr() {
+            assertGeneratesMessage(
+                    "The '>>>' operator requires language target 8 or higher.",
+                    """
+                            #set target = 7;
+                            a >>> b;
+                            """
+            );
+        }
     }
 
     @Nested

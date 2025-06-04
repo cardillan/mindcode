@@ -1,43 +1,33 @@
-# Optimization goal
+# Dynamic optimizations
 
-Most of the optimizations Mindcode performs are fairly simple: they're relatively small changes to the code that are known to improve the code size, the (average) execution time, or both, while also not making either of these two metrics worse. We call these optimizations _static optimizations_. A few of the optimizers are capable of more complex optimizations that may increase the code size to achieve a better performance or sacrifice some performance to decrease code size. THese optimizations are called _dynamic optimizations_.
+Most of the optimizations Mindcode performs are fairly simple: they're relatively small changes to the code that are known to improve the code size, the (average) execution time, or both, while also not making either of these two metrics worse. We call these optimizations _static optimizations_. A few of the optimizers are capable of more complex optimizations that may increase the code size to achieve a better performance or sacrifice some performance to decrease code size. These optimizations are called _dynamic optimizations_.
 
-Mindcode provides the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) to specify whether Mindcode should generate code that is smaller (the goal is `size`) or a code that is faster (`speed` - the default goal). There's a third option - `neutral` - which only performs optimizations that generate code which is either smaller or faster (or both) than the original code.
+Mindcode provides the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) to specify which dynamic optimizations to apply:
+
+* `speed` (the default value): Mindcode applies dynamic optimizations that make the resulting code larger, but faster, while adhering to the 1000-instruction limit. When several possible optimizations of this kind are available, the ones having the best effect (the highest speedup per additional instruction generated) are selected until the instruction limit is reached.
+* `neutral`: Mindcode applies dynamic optimizations making the code either smaller or faster (or both) than the original code.
+* `size`: Mindcode applies dynamic optimizations leading to the smallest code possible, even at the expense of execution speed.
 
 ## Optimization efficiency
 
 To decide which dynamic optimizations to apply given the optimization goal, three metrics are computed for each possible optimization:
 
-* **Size**: the number of additional instructions that will be created by the optimization. When the optimization decreases the code size, the cost is negative.
-* **Benefit**: a measure of execution improvement achieved by the optimization. The benefit is negative when the optimization results in a slower code execution.
-* **Efficiency**: the efficiency gives the overall value of the optimization, which allows it to be compared with other optimizations. Efficiency computation depends on the optimization goal:
-  * `speed`: the efficiency of the optimization is computed by dividing the benefit by the size, providing a measure of execution speed improvement per additional instruction of code. When the optimization size is zero or negative, the efficiency is infinite.
-  * `neutral`: the efficiency of the optimization is computed as a negative product of the size and the benefit.
-  * `size`: in this case, the optimizer always chooses the smallest code, so the efficiency equals to the negative size (i.e., code size savings) of the optimization.  
-
-### Optimization for speed
-
-When the optimization goal is `speed`, there is a constraint on the total code size (1000 instructions by default). The optimizations are applied in the order of effectiveness until the total code size exceeds the constraint, or all optimization opportunities are exhausted.
-
-However, some optimizers (e.g., [Case Switching](#case-switching)) can produce several different ways to optimize the same portion of code, of which only one can be selected. In this case, the most efficient optimization, according to the optimization goal, is selected. For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated as a group against other possible optimizations, choosing the best possible optimization while respecting the total code size constraint. 
-
-Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional optimizations might even reduce the code size again, providing space for further optimizations. Since all remaining optimizations are considered after applying the most efficient one, Mindcode will automatically discover and process these additional optimizations.   
-
-Mindcode writes the possible optimizations it considers to the log file. For better understanding, optimizations exceeding the total code size constraint by a small amount are listed in the log file. It is possible to let Mindcode perform additional optimizations by changing the value of the total code size constraint, using the  [`instruction-limit` option](SYNTAX-5-OTHER.markdown#option-instruction-limit). Sometimes increasing the instruction limit by a small amount can produce a code which still fits into the total code size constraint. Here's a [demonstration](https://github.com/cardillan/mindcode/discussions/106) of this approach being applied to a real-life code example.  
-
-### Optimization for size and neutral optimization
-
-These two optimization goals do not increase code size and therefore aren't subject to the total code size constraint. In these cases all possible optimizations are applied. If there's a group of mutually exclusive optimizations, the best one according to the optimization goal is always selected. 
+* **Size**: the number of additional instructions that will be created by the optimization. When the optimization reduces the number of instructions, the **Size** is negative.
+* **Benefit**: a measure of execution improvement achieved by the optimization. The **Benefit** is negative when the optimization results in a slower code execution.
+* **Efficiency**: this measure gives the overall value of the optimization, which allows it to be compared with other optimizations. The **Efficiency** computation depends on the optimization goal:
+  * `speed`: the **Efficiency** of the optimization is computed by dividing the **Benefit** by the **Size**, providing a measure of execution speed improvement per additional instruction of code. When the **Size** is zero or negative, the **Efficiency** is infinite.
+  * `neutral`: the **Efficiency** of the optimization is computed as a negative product of the **Size** and the **Benefit**.
+  * `size`: in this case, the optimizer always chooses the smallest code, so the **Efficiency** equals to the negative **Size** (i.e., code size savings) of the optimization.  
 
 ## Optimization benefit
 
-It's quite obvious that calculating the benefit is a key part of the optimization evaluation. Increasing (or decreasing) the execution speed of code which gets executed a lot provides more benefit (or drawback) than similar change to a code that is executed just once. Mindcode therefore assigns each instruction a _weight_, a measure of how often the instruction is expected to be executed. In general, it is impossible to compute this number precisely. Mindcode uses a simplistic algorithm to determine instruction weights:
+It's quite obvious that calculating the benefit is a key part of the optimization evaluation. Increasing or decreasing the execution speed of code which gets executed a lot provides more benefit or drawback than similar change to a code that is executed just once. Mindcode therefore assigns each instruction a _weight_, a measure of how often the instruction is expected to be executed. In general, it is impossible to compute this number precisely. Mindcode uses a straightforward algorithm to determine instruction weights:
 
 * At the beginning of code generation, the current weight is established:
-  * one, for the main program,
-  * number of places a function is called from for out-of-line or recursive functions.
-* Each generated instruction is assigned the current weight.
-* When entering a branch of an `if` statement, the current weight is halved. It is restored when exiting the branch. This corresponds to a very simplistic expectation that the condition will be evaluated to true 50% of the time, and therefore a branch in the if statement will be executed only half as often as the surrounding code.
+  * one; for the main program,
+  * the number of places a function is called from for out-of-line or recursive functions.
+* The current weight is assigned to each generated instruction.
+* When entering a branch of an `if` statement, the current weight is halved. It is restored when exiting the branch. This corresponds to a very simplistic expectation that the condition will be evaluated to true 50% of the time, and therefore a branch in the `if` statement will be executed only half as often as the surrounding code.
 * When entering a `when` branch of a `case` expression, the weight is divided by the number of branches in the expression. The reasoning (and inaccuracy) is analogous to the `if` statement approximation described above.
 * When entering a loop body, the weight is multiplied by the number of loop's iterations. When the number of iterations cannot be determined at compile time, 25 is used instead.
 * The weight of stackless and recursive functions is adjusted:
@@ -47,10 +37,23 @@ It's quite obvious that calculating the benefit is a key part of the optimizatio
 
 The benefit of an optimization is then computed as the total weight of instructions that would be avoided thanks to the optimization. The net result is that Mindcode strongly prefers optimizing code inside loops, and defers optimizations inside the branches of `if` and `case` statements.
 
+## Optimization for speed
+
+When the optimization goal is `speed`, there is a constraint on the total code size (1000 instructions by default). The optimizations are applied in the order of effectiveness until the total code size reaches the constraint, or all optimization opportunities are exhausted.
+
+Some optimizers (e.g., [Case Switching](#case-switching)) can produce several different ways to optimize the same portion of code, of which only one can be selected.  For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated against other possible optimizations, choosing the most effective optimization while respecting the total code size constraint. 
+
+Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further dynamic optimizations. Mindcode is unable to include the effects of these static optimizations when computing synamic optimization effects, but uses the additional instruction space when applying remaining optimizations.     
+
+Mindcode writes the possible optimizations it considers to the log file. For better understanding, this includes optimizations exceeding the total code size constraint by a small margin. It is possible to let Mindcode perform additional optimizations by changing the value of the total code size constraint, using the  [`instruction-limit` option](SYNTAX-5-OTHER.markdown#option-instruction-limit). Sometimes, increasing the instruction limit a bit can produce a code which still fits into the total code size constraint. Here's a [demonstration](https://github.com/cardillan/mindcode/discussions/106) of this approach being applied to a real-life code example.  
+
+## Optimization for size and neutral optimization
+
+These two optimization goals do not increase code size and therefore aren't subject to the total code size constraint. In these cases, all possible optimizations are eventually applied. If there's a group of mutually exclusive optimizations, the best one according to the optimization goal is always selected. 
+
 # Code optimization
 
-Code optimization runs on compiled (mlog) code. The compiled code is inspected for sequences of instructions which can be removed or replaced by a functionally equivalent, but shorter and/or faster sequence of instructions. The new sequence might even be longer than the original one if it is executing faster (see the
-[`goal` option](SYNTAX-5-OTHER.markdown#option-goal)).
+Code optimization runs on compiled (mlog) code. The compiled code is inspected for sequences of instructions which can be removed or replaced by a functionally equivalent, but shorter and/or faster sequence of instructions. The new sequence might even be longer than the original one if it is executing faster (see the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal)).
 
 The information on compiler optimizations is a bit technical. It might be useful if you're trying to better understand how Mindcode generates the mlog code.
 
@@ -775,7 +778,7 @@ The loop optimization improves loops with the condition at the beginning by perf
 * If the loop jump condition is invertible, the unconditional jump at the end of the loop to the loop condition is replaced by a conditional jump with an inverted loop condition targeting the first instruction of the loop body. This doesn't affect the number of instructions but executes one less instruction per loop.
   * If the loop condition isn't invertible (that is, the jump condition is `===`), the optimization isn't done, since the saved jump would be spent on inverting the condition, and the code size would increase for no benefit at all.  
 * If the previous optimization was done and the loop condition is known to be true before the first iteration of the loop, the optimizer removes the jump at the front of the loop. The Loop Optimizer uses information gathered by Data Flow Optimization to evaluate the initial loop condition.  
-* Loop conditions that are complex expressions spanning several instructions can still be replicated at the end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). As a result, the code size might actually increase after performing this kind of optimization. See [Optimization goal](#optimization-goal) for details on performing these optimizations.
+* Loop conditions that are complex expressions spanning several instructions can still be replicated at the end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). As a result, the code size might actually increase after performing this kind of optimization. See [Dynamic optimizations](#dynamic-optimizations) for details on performing these optimizations.
 
 The result of the first two optimizations in the list can be seen here:
 
@@ -827,7 +830,7 @@ print "A switch has been reset."
 
 ## Loop Unrolling
 
-Loop unrolling is a dynamic optimization and is only applied when it is compatible with the [optimization goal](#optimization-goal). Furthermore, loop unrolling depends on the [Data Flow optimization](#data-flow-optimization) and isn't functional when Data Flow Optimization is not active.
+Loop unrolling is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Furthermore, loop unrolling depends on the [Data Flow optimization](#data-flow-optimization) and isn't functional when Data Flow Optimization is not active.
 
 ### The fundamentals of loop unrolling
 
@@ -872,7 +875,7 @@ write 0 cell1 9
 
 The size of the loop is now 10 instructions instead of 4, but it takes just these 10 instructions to execute, instead of the 31 in the previous case, executing three times as fast!
 
-The price for this speedup is the increased number of instructions themselves. Since there's a hard limit of 1000 instructions in a Mindustry Logic program, loops with a large number of iterations cannot be unrolled. See [optimization goal](#optimization-goal) for an explanation of how Mindcode decides whether to unroll a loop.
+The price for this speedup is the increased number of instructions themselves. Since there's a hard limit of 1000 instructions in a Mindustry Logic program, loops with a large number of iterations cannot be unrolled. See [Dynamic optimizations](#dynamic-optimizations) for an explanation of how Mindcode decides whether to unroll a loop.
 
 Apart from removing the superfluous instructions, loop unrolling also replaces variables with constant values. This can make further optimization opportunities arise, especially for a Data Flow Optimizer and possibly for others. A not particularly practical, but nonetheless striking example is this program that computes the sum of numbers from 0 to 100:
 
@@ -1082,7 +1085,7 @@ For [list iteration loops with modifications](SYNTAX-3-STATEMENTS.markdown#modif
 
 ## Function Inlining
 
-Function Inlining is a dynamic optimization and is only applied when it is compatible with the [optimization goal](#optimization-goal).
+Function Inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
 ### The fundamentals of function inlining
 
@@ -1101,7 +1104,7 @@ It is therefore no longer necessary to use the `inline` keyword, except in cases
 
 ## Case Switching
 
-Case Switching is a dynamic optimization and is only applied when it is compatible with the [optimization goal](#optimization-goal). Case Switching optimization is, at this moment, unique in its ability to generate optimizations applicable to all three optimization goals. 
+Case Switching is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Case Switching optimization is, at this moment, unique in its ability to generate optimizations applicable to all three optimization goals. 
 
 Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates—on average—half of all existing conditions, assuming even distribution of the case expression input values. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
 
@@ -1171,18 +1174,15 @@ The following preconditions need to be met to apply content conversion:
 
 #### Null values
 
-> [!NOTE]
-> When `case` expressions over integer values contain a `when null` branch, the Case Switching optimization is not applied to them, even though the null values are still correctly handled by the case expression. The following information only applies to case expressions over Mindustry contents objects.  
+When Mindustry content conversion occurs, `null` values in `when` clauses are supported. When the `null` value is explicitly handled (i.e., there is a `when null` branch present), the corresponding branch is executed for `null` input values. In case the `when null` branch is missing, `null` input values are handled by the `else` branch, or skipped altogether if there is no else branch.
 
-When Mindustry content conversion occurs, `null` values in `when` clauses are supported. When the `null` value is explicitly handled, the corresponding branch is executed for `null` input values. In case the `when null` clause is missing, `null` input values are handled by the `else` branch (or skipped altogether if there is no else branch).
-
-Mindcode arranges to code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, `case` expressions checking for `null` in `when` branches may be more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
+Mindcode arranges the code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, an optimized `case` expressions checking for `null` in `when` branches is typically more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
 
 ### Jump table compression
 
 Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. The more diverse segments are encoded as separate, smaller jump tables. The optimizer considers several such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well.
 
-The total number of possible jump table segments arrangements can be quite large. The optimizer generates a number of these arrangements and selects the best one from this set. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The `case-optimization-strength` compiler directive can be used to control the number of considered arrangements.
+The total number of possible jump table segments arrangements can be quite large. The optimizer generates a number of these arrangements and selects the best one from this set. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements.
 
 Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both significantly smaller and faster than the unoptimized `case` expression.   
 
@@ -1316,11 +1316,13 @@ Loop unrolling may replace random access to array elements with sequential code 
 
 ### Array access inlining
 
+Array access inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+
 To facilitate random array access, shared jump tables for read and write access are generated for each array. These jump tables are shared by all read/write random access of an individual array. This requires using a dedicated _array access variable_ for each access, and setting up return addresses for resuming the control flow after the array element has been processed. 
 
 Array access inlining builds a dedicated jump table at each place an array access operation is performed, eliminating the need for array access variables and return addresses.
 
-Inlining a jump table in a general case reduces the number of steps required per element access from 6 to 4. Please note that in case of accessing an element of the array in a loop at most once for reading and once for writing, the usage of array access variables can be streamlined, and return addresses setup can be hoisted out of the loop, reducing a lot of the overhead of shared jump tables.  
+Inlining a jump table in a general case reduces the number of steps required per element access from 6 to 4. When accessing an element of the array in a loop at most once for reading and once for writing, the usage of array access variables can be streamlined and return addresses setup can be hoisted out of the loop. This reduces a lot of the overhead of shared jump tables.  
 
 ### Short array optimizations
 
@@ -1350,7 +1352,7 @@ This optimization allows additional [If Expression optimizations](#if-expression
 
 ## Return Optimization
 
-Return Optimization is a dynamic optimization and is only applied when it is compatible with the [optimization goal](#optimization-goal).
+Return Optimization is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
 The Return Optimization is simple: whenever there's an unconditional jump to the final sequence of instructions representing a return from the call (which is always three instructions long), the jump is replaced by the entire return sequence. The jump execution is avoided at the price of two additional instructions.        
 

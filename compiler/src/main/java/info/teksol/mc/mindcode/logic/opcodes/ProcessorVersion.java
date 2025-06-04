@@ -43,6 +43,10 @@ public enum ProcessorVersion {
         return Set.copyOf(ALL.stream().filter(v -> v.matches(min, max)).toList());
     }
 
+    public String versionName() {
+        return minor == 0 ? String.valueOf(major) : major + "." + minor;
+    }
+
     private static final List<ProcessorVersion> ALL = List.of(values());
     private static final Map<String, ProcessorVersion> MAP = createMap();
 

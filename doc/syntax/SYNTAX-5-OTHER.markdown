@@ -58,7 +58,7 @@ Use the `goal` option to specify whether Mindcode should prefer to generate smal
 * `neutral`: When an optimization making the code either smaller or faster than the original code can be found, it is applied. Otherwise, the original code is used. The optimized code should never be bigger or slower than the original code.
 * `size`: Mindcode tries to generate the smallest code possible, even at the expense of execution speed.
 
-See [Optimization goal](SYNTAX-6-OPTIMIZATIONS.markdown#optimization-goal) for a detailed explanation of the optimization goals. 
+See [Dynamic optimizations](SYNTAX-6-OPTIMIZATIONS.markdown#dynamic-optimizations) for a detailed explanation of the optimization goals. 
 
 ## Option `instruction-limit`
 
