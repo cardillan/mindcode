@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.6.0 - Unreleased
+## 3.6.0 - 2025-06-04
 
 ### Fixed
 
@@ -79,7 +79,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Miscellaneous
 
-* Mindustry Logic built-in functions take precedence over functions defined in the system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in the current target.
+* Mindustry Logic functions take precedence over functions defined in the system library. This allows system libraries to contain functions that can be used when a corresponding Mindustry Logic function doesn't exist in the current target.
 * A list of supported keywords and built-in variables for instruction parameters are now provided by mimex-generated metadata.  
 * Added a list of accepted built-in variables to the description of functions in the function reference.
 * The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
