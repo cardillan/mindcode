@@ -1,9 +1,12 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
@@ -217,6 +220,10 @@ public class OptimizationCoordinator {
                         optimizer.optimize(phase, pass);
                     }
                     modified = true;
+                } else {
+                    instructionProcessor.error(SourcePosition.EMPTY, ERR.INTERNAL_ERROR_OPTIMIZER_ACTION,
+                            selectedAction.optimization().getName(), selectedAction.optimization().getOptionName());
+                    throw new MindcodeInternalError("Error applying dynamic optimization: " + selectedAction);
                 }
             }
 

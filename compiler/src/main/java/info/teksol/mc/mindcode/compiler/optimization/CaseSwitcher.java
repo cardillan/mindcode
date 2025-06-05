@@ -313,6 +313,11 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         @Override
+        public Optimization optimization() {
+            return optimization;
+        }
+
+        @Override
         public AstContext astContext() {
             return astContext;
         }

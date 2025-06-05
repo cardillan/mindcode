@@ -4442,8 +4442,8 @@ Modifications by Unroll iteration loop at line 169:9 (+7 instructions):
 +   18 set :locateDomeAndCore:type @flare
 +   19 label *label338
 +   20 set :locateCore:type :locateDomeAndCore:type
-+   21 setaddr :locateCore*retaddr *label339 (h:*label15)
-+   22 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
++   21 setaddr :locateCore*retaddr *label339 (h:*label339)
++   22 call *label0 *invalid :locateCore*retval (m:*label339) (h:*label339)
 +   23 label *label339
 +   24 jump *label340 equal :locateCore*retval false
 +   25 jump *label1 always
@@ -4453,8 +4453,8 @@ Modifications by Unroll iteration loop at line 169:9 (+7 instructions):
 +   29 set :locateDomeAndCore:type @poly
 +   30 label *label345
 +   31 set :locateCore:type :locateDomeAndCore:type
-+   32 setaddr :locateCore*retaddr *label346 (h:*label15)
-+   33 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
++   32 setaddr :locateCore*retaddr *label346 (h:*label346)
++   33 call *label0 *invalid :locateCore*retval (m:*label346) (h:*label346)
 +   34 label *label346
 +   35 jump *label347 equal :locateCore*retval false
 +   36 jump *label1 always
@@ -4464,8 +4464,8 @@ Modifications by Unroll iteration loop at line 169:9 (+7 instructions):
 +   40 set :locateDomeAndCore:type @mega
 +   41 label *label352
 +   42 set :locateCore:type :locateDomeAndCore:type
-+   43 setaddr :locateCore*retaddr *label353 (h:*label15)
-+   44 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
++   43 setaddr :locateCore*retaddr *label353 (h:*label353)
++   44 call *label0 *invalid :locateCore*retval (m:*label353) (h:*label353)
 +   45 label *label353
 +   46 jump *label354 equal :locateCore*retval false
 +   47 jump *label1 always
@@ -4475,8 +4475,8 @@ Modifications by Unroll iteration loop at line 169:9 (+7 instructions):
 +   51 set :locateDomeAndCore:type @mono
 +   52 label *label359
 +   53 set :locateCore:type :locateDomeAndCore:type
-+   54 setaddr :locateCore*retaddr *label360 (h:*label15)
-+   55 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
++   54 setaddr :locateCore*retaddr *label360 (h:*label360)
++   55 call *label0 *invalid :locateCore*retval (m:*label360) (h:*label360)
 +   56 label *label360
 +   57 jump *label361 equal :locateCore*retval false
 +   58 jump *label1 always
@@ -4511,8 +4511,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     19 label *label338
 -    * set :locateCore:type :locateDomeAndCore:type
 +   20 set :locateCore:type @flare
-    21 setaddr :locateCore*retaddr *label339 (h:*label15)
-    22 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    21 setaddr :locateCore*retaddr *label339 (h:*label339)
+    22 call *label0 *invalid :locateCore*retval (m:*label339) (h:*label339)
     23 label *label339
  
     28 label *label342
@@ -4520,8 +4520,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     30 label *label345
 -    * set :locateCore:type :locateDomeAndCore:type
 +   31 set :locateCore:type @poly
-    32 setaddr :locateCore*retaddr *label346 (h:*label15)
-    33 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    32 setaddr :locateCore*retaddr *label346 (h:*label346)
+    33 call *label0 *invalid :locateCore*retval (m:*label346) (h:*label346)
     34 label *label346
  
     39 label *label349
@@ -4529,8 +4529,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     41 label *label352
 -    * set :locateCore:type :locateDomeAndCore:type
 +   42 set :locateCore:type @mega
-    43 setaddr :locateCore*retaddr *label353 (h:*label15)
-    44 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    43 setaddr :locateCore*retaddr *label353 (h:*label353)
+    44 call *label0 *invalid :locateCore*retval (m:*label353) (h:*label353)
     45 label *label353
  
     50 label *label356
@@ -4538,8 +4538,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     52 label *label359
 -    * set :locateCore:type :locateDomeAndCore:type
 +   53 set :locateCore:type @mono
-    54 setaddr :locateCore*retaddr *label360 (h:*label15)
-    55 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    54 setaddr :locateCore*retaddr *label360 (h:*label360)
+    55 call *label0 *invalid :locateCore*retval (m:*label360) (h:*label360)
     56 label *label360
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
@@ -4550,7 +4550,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :locateDomeAndCore:type @flare
     18 label *label338
     19 set :locateCore:type @flare
-    20 setaddr :locateCore*retaddr *label339 (h:*label15)
+    20 setaddr :locateCore*retaddr *label339 (h:*label339)
  
     25 label *label340
     26 label *label341
@@ -4558,7 +4558,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :locateDomeAndCore:type @poly
     28 label *label345
     29 set :locateCore:type @poly
-    30 setaddr :locateCore*retaddr *label346 (h:*label15)
+    30 setaddr :locateCore*retaddr *label346 (h:*label346)
  
     35 label *label347
     36 label *label348
@@ -4566,7 +4566,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :locateDomeAndCore:type @mega
     38 label *label352
     39 set :locateCore:type @mega
-    40 setaddr :locateCore*retaddr *label353 (h:*label15)
+    40 setaddr :locateCore*retaddr *label353 (h:*label353)
  
     45 label *label354
     46 label *label355
@@ -4574,7 +4574,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4
 -    * set :locateDomeAndCore:type @mono
     48 label *label359
     49 set :locateCore:type @mono
-    50 setaddr :locateCore*retaddr *label360 (h:*label15)
+    50 setaddr :locateCore*retaddr *label360 (h:*label360)
 
 Modifications by Replicate loop condition at line 54:5 (+1 instructions):
  
@@ -5454,8 +5454,8 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
     15 label *label5
 -    * label *label338
     16 set :locateCore:type @flare
-    17 setaddr :locateCore*retaddr *label339 (h:*label15)
-    18 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    17 setaddr :locateCore*retaddr *label339 (h:*label339)
+    18 call *label0 *invalid :locateCore*retval (m:*label339) (h:*label339)
  
     20 jump *label340 equal :locateCore*retval false
     21 jump *label1 always
@@ -5464,8 +5464,8 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label342
 -    * label *label345
     23 set :locateCore:type @poly
-    24 setaddr :locateCore*retaddr *label346 (h:*label15)
-    25 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    24 setaddr :locateCore*retaddr *label346 (h:*label346)
+    25 call *label0 *invalid :locateCore*retval (m:*label346) (h:*label346)
  
     27 jump *label347 equal :locateCore*retval false
     28 jump *label1 always
@@ -5474,8 +5474,8 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label349
 -    * label *label352
     30 set :locateCore:type @mega
-    31 setaddr :locateCore*retaddr *label353 (h:*label15)
-    32 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    31 setaddr :locateCore*retaddr *label353 (h:*label353)
+    32 call *label0 *invalid :locateCore*retval (m:*label353) (h:*label353)
  
     34 jump *label354 equal :locateCore*retval false
     35 jump *label1 always
@@ -5484,8 +5484,8 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label356
 -    * label *label359
     37 set :locateCore:type @mono
-    38 setaddr :locateCore*retaddr *label360 (h:*label15)
-    39 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    38 setaddr :locateCore*retaddr *label360 (h:*label360)
+    39 call *label0 *invalid :locateCore*retval (m:*label360) (h:*label360)
  
     41 jump *label361 equal :locateCore*retval false
     42 jump *label1 always
@@ -6378,32 +6378,32 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 
 Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-21 instructions):
  
-    17 setaddr :locateCore*retaddr *label339 (h:*label15)
-    18 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    17 setaddr :locateCore*retaddr *label339 (h:*label339)
+    18 call *label0 *invalid :locateCore*retval (m:*label339) (h:*label339)
     19 label *label339
 -    * jump *label340 equal :locateCore*retval false
 -    * jump *label1 always
 +   20 jump *label1 notEqual :locateCore*retval false
     21 label *label340
     22 set :locateCore:type @poly
-    23 setaddr :locateCore*retaddr *label346 (h:*label15)
-    24 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    23 setaddr :locateCore*retaddr *label346 (h:*label346)
+    24 call *label0 *invalid :locateCore*retval (m:*label346) (h:*label346)
     25 label *label346
 -    * jump *label347 equal :locateCore*retval false
 -    * jump *label1 always
 +   26 jump *label1 notEqual :locateCore*retval false
     27 label *label347
     28 set :locateCore:type @mega
-    29 setaddr :locateCore*retaddr *label353 (h:*label15)
-    30 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    29 setaddr :locateCore*retaddr *label353 (h:*label353)
+    30 call *label0 *invalid :locateCore*retval (m:*label353) (h:*label353)
     31 label *label353
 -    * jump *label354 equal :locateCore*retval false
 -    * jump *label1 always
 +   32 jump *label1 notEqual :locateCore*retval false
     33 label *label354
     34 set :locateCore:type @mono
-    35 setaddr :locateCore*retaddr *label360 (h:*label15)
-    36 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    35 setaddr :locateCore*retaddr *label360 (h:*label360)
+    36 call *label0 *invalid :locateCore*retval (m:*label360) (h:*label360)
     37 label *label360
 -    * jump *label361 equal :locateCore*retval false
 -    * jump *label1 always
@@ -6584,25 +6584,25 @@ Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-21 instr
 
 Modifications by Jumps phase, Jump Optimization, pass 5, iteration 1:
  
-    18 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    18 call *label0 *invalid :locateCore*retval (m:*label339) (h:*label339)
     19 label *label339
     20 jump *label1 notEqual :locateCore*retval false
 -    * label *label340
     21 set :locateCore:type @poly
-    22 setaddr :locateCore*retaddr *label346 (h:*label15)
-    23 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    22 setaddr :locateCore*retaddr *label346 (h:*label346)
+    23 call *label0 *invalid :locateCore*retval (m:*label346) (h:*label346)
     24 label *label346
     25 jump *label1 notEqual :locateCore*retval false
 -    * label *label347
     26 set :locateCore:type @mega
-    27 setaddr :locateCore*retaddr *label353 (h:*label15)
-    28 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    27 setaddr :locateCore*retaddr *label353 (h:*label353)
+    28 call *label0 *invalid :locateCore*retval (m:*label353) (h:*label353)
     29 label *label353
     30 jump *label1 notEqual :locateCore*retval false
 -    * label *label354
     31 set :locateCore:type @mono
-    32 setaddr :locateCore*retaddr *label360 (h:*label15)
-    33 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    32 setaddr :locateCore*retaddr *label360 (h:*label360)
+    33 call *label0 *invalid :locateCore*retval (m:*label360) (h:*label360)
     34 label *label360
     35 jump *label1 notEqual :locateCore*retval false
 -    * label *label361
@@ -7216,8 +7216,8 @@ Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 i
 
 Modifications by Jumps phase, Jump Straightening, pass 6, iteration 1 (-1 instructions):
  
-    33 setaddr :locateCore*retaddr *label360 (h:*label15)
-    34 call *label0 *invalid :locateCore*retval (m:*label15) (h:*label15)
+    33 setaddr :locateCore*retaddr *label360 (h:*label360)
+    34 call *label0 *invalid :locateCore*retval (m:*label360) (h:*label360)
     35 label *label360
 -    * jump *label1 notEqual :locateCore*retval false
 -    * jump *label5 always

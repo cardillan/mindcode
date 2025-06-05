@@ -121,4 +121,39 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         return instructionProcessor.replaceArgs(instruction, newArgs);
     }
     //</editor-fold>
+
+    @NullMarked
+    protected abstract class AbstractOptimizationAction implements OptimizationAction {
+        protected final AstContext astContext;
+        protected final int cost;
+        protected final double benefit;
+
+        public AbstractOptimizationAction(AstContext astContext, int cost, double benefit) {
+            this.astContext = astContext;
+            this.cost = cost;
+            this.benefit = benefit;
+        }
+
+        @Override
+        public Optimization optimization() {
+            return optimization;
+        }
+
+        @Override
+        public AstContext astContext() {
+            return astContext;
+        }
+
+        @Override
+        public int cost() {
+            return cost;
+        }
+
+        @Override
+        public double benefit() {
+            return benefit;
+        }
+
+        public abstract String toString();
+    }
 }

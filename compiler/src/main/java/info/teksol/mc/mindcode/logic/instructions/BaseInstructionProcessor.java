@@ -337,7 +337,9 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     public <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap) {
         Function<LogicArgument, LogicArgument> mapper =
                 arg -> arg instanceof LogicLabel label ? labelMap.getOrDefault(label, label) : arg;
-        return replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
+        T ix = replaceArgs(instruction, instruction.getArgs().stream().map(mapper).toList());
+        ix.remapInfoLabels(labelMap);
+        return ix;
     }
 
     private final EnumMap<Opcode, Integer> instructionSizes = new EnumMap<>(Opcode.class);

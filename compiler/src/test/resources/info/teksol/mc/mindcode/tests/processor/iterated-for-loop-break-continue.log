@@ -137,13 +137,13 @@ Modifications by Replicate loop condition at line 4:5 (+7 instructions):
     37 op add :test:j :test:j 1
 -    * jump *label2 always
 +   38 set :d:n :test:i
-+   39 setaddr :d*retaddr *label15 (h:*label5)
-+   40 call *label0 *invalid :d*retval (m:*label5) (h:*label5)
++   39 setaddr :d*retaddr *label15 (h:*label15)
++   40 call *label0 *invalid :d*retval (m:*label15) (h:*label15)
 +   41 label *label15
 +   42 set *tmp1 :d*retval
 +   43 set :d:n :test:j
-+   44 setaddr :d*retaddr *label16 (h:*label6)
-+   45 call *label0 *invalid :d*retval (m:*label6) (h:*label6)
++   44 setaddr :d*retaddr *label16 (h:*label16)
++   45 call *label0 *invalid :d*retval (m:*label16) (h:*label16)
 +   46 label *label16
 +   47 jump *label14 lessThanEq *tmp1 :d*retval
     48 label *label4

@@ -26,8 +26,11 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 /// Inlines functions
 @NullMarked
 class FunctionInliner extends BaseOptimizer {
+    private static final int LIMIT = Integer.MAX_VALUE;
+
     private int invocations = 0;
     private int count = 0;
+    private int optimizations = 0;
 
     public FunctionInliner(OptimizationContext optimizationContext) {
         super(Optimization.FUNCTION_INLINING, optimizationContext);
@@ -51,10 +54,12 @@ class FunctionInliner extends BaseOptimizer {
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
         invocations++;
         List<OptimizationAction> actions = new ArrayList<>();
-        actions.addAll(forEachContext(AstContextType.FUNCTION, BODY,
-                context -> findPossibleInlining(context, costLimit)));
-        actions.addAll(forEachContext(c -> c.matches(OUT_OF_LINE_CALL),
-                context -> findPossibleCallInlining(context, costLimit)));
+        if (this.optimizations < LIMIT) {
+            actions.addAll(forEachContext(AstContextType.FUNCTION, BODY,
+                    context -> findPossibleInlining(context, costLimit)));
+            actions.addAll(forEachContext(c -> c.matches(OUT_OF_LINE_CALL),
+                    context -> findPossibleCallInlining(context, costLimit)));
+        }
         return actions;
     }
 
@@ -118,6 +123,7 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunction(AstContext context, int costLimit) {
+        optimizations++;
         MindcodeFunction function = Objects.requireNonNull(context.function());
         if (function.isRecursive() || function.isInline()) {
             return OptimizationResult.INVALID;
@@ -188,12 +194,8 @@ class FunctionInliner extends BaseOptimizer {
 
 
     private @Nullable OptimizationAction findPossibleCallInlining(AstContext call, int costLimit) {
-        if (call.function() == null) {
-            // Shouldn't happen here
-            return null;
-        }
         MindcodeFunction function = call.function();
-        if (function.isRecursive() || function.isInline() || function.cannotInline()) {
+        if (function == null || function.isRecursive() || function.isInline() || function.cannotInline()) {
             return null;
         }
 
@@ -217,6 +219,7 @@ class FunctionInliner extends BaseOptimizer {
     }
 
     private OptimizationResult inlineFunctionCall(AstContext call, int costLimit) {
+        optimizations++;
         Optional<LogicInstruction> cix = contextStream(call.parent())
                 .filter(ix -> ix.getOpcode() == Opcode.CALL && ix.getAstContext() == call).findFirst();
         MindcodeFunction function = call.existingFunction();
@@ -255,17 +258,20 @@ class FunctionInliner extends BaseOptimizer {
     private class InlineFunctionCallAction extends AbstractOptimizationAction {
         public InlineFunctionCallAction(AstContext astContext, int cost, double benefit) {
             super(astContext, cost, benefit);
+            debugOutput("Created action: " + this);
         }
 
         @Override
         public OptimizationResult apply(int costLimit) {
+            debugOutput("Applying action: " + this + "\n\n");
             return applyOptimization(() -> inlineFunctionCall(astContext(), costLimit), toString());
         }
 
         @Override
         public String toString() {
             assert astContext.node() != null;
-            return "Inline function call at " + astContext.node().sourcePosition().formatForLog();
+            return "Inline function call at " + astContext.node().sourcePosition().formatForLog()
+                    + (isDebugOutput() ? "(ctx " + astContext.id + ")" : "");
         }
     }
 }

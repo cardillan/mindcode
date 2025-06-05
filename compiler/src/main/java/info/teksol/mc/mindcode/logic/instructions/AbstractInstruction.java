@@ -4,15 +4,13 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.IntStream;
 
 @NullMarked
@@ -145,6 +143,15 @@ public abstract class AbstractInstruction implements LogicInstruction {
     @Override
     public LogicInstruction resetInfo(InstructionInfo instructionInfo) {
         info.remove(instructionInfo);
+        return this;
+    }
+
+    public LogicInstruction remapInfoLabels(Map<LogicLabel, LogicLabel> labelMap) {
+        for (Map.Entry<InstructionInfo, Object> entry : info.entrySet()) {
+            if (entry.getValue() instanceof LogicLabel label && labelMap.containsKey(label)) {
+                entry.setValue(labelMap.get(label));
+            }
+        }
         return this;
     }
 

@@ -27,6 +27,8 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction resetInfo(InstructionInfo instructionInfo);
 
+    LogicInstruction remapInfoLabels(Map<LogicLabel, LogicLabel> labelMap);
+
     LogicInstruction copyInfo(LogicInstruction other);
 
     boolean belongsTo(@Nullable AstContext astContext);

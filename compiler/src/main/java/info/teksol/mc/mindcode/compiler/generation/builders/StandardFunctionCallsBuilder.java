@@ -240,7 +240,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             final LogicLabel returnLabel = assembler.nextLabel();
             assembler.createSetAddress(retAddr, returnLabel).setHoistId(returnLabel);
             assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
-            // We're putting INVALID as retAddr: in no symbolic labels mode, the CALL instruction doesn't
+            // We're putting INVALID as retAddr: in absolute addressing mode, the CALL instruction doesn't
             // set function return address, it is set up separately by the previous instruction
             assembler.createCallStackless(function.getLabel(), LogicVariable.INVALID,LogicVariable.fnRetVal(function))
                     .setMarker(returnLabel).setHoistId(returnLabel);
