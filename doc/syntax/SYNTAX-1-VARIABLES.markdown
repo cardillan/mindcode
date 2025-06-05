@@ -1042,6 +1042,38 @@ The list of all existing icons is quite huge:
 
 </details>
 
+### Compiler-defined constants
+
+Mindcode provides the following built-in constants which reflect the compiler options used for the compilation: 
+
+* `__MINDUSTRY_VERSION__`: String. The Mindustry version specified by the `target` option (e.g. `v146`).
+* `__TARGET_MAJOR__`: Integer. Major target version number (i.e., `6`, `7` or `8`).
+* `__TARGET_MINOR__`: Integer. Minor target version number (e.g., `0` or `1`).
+* `__PROCESSOR_EDITION__`: String. `S` for standard and `W` for world edition.
+
+Through these constants, it is possible to support several different targets in the same code, for example:
+
+```Mindcode
+void printExactHex(n)
+    for var i in 0 ... 16 descending do
+        var digit = (n >> (4 * i)) & 0xF;
+        if __TARGET_MAJOR__ < 8 then
+            case digit
+                when 0 .. 9 then print(digit);
+                when 10 then print("A");
+                when 11 then print("B");
+                when 12 then print("C");
+                when 13 then print("D");
+                when 14 then print("E");
+                when 15 then print("F");
+            end;
+        else
+            printchar('0' + digit + (digit >= 10) * ('A' - 0xA - '0'));
+        end;
+    end;
+end;
+```
+
 ## Linked variables
 
 > [!NOTE]

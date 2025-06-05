@@ -9,10 +9,7 @@ import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
-import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
-import info.teksol.mc.mindcode.logic.arguments.LogicString;
-import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
@@ -54,7 +51,10 @@ public class Variables extends AbstractMessageEmitter {
         processor = context.instructionProcessor();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
-        putVariable("__TARGET__", LogicString.create(profile.getProcessorVersion().mimexVersion));
+        putVariable("__MINDUSTRY_VERSION__", LogicString.create(profile.getProcessorVersion().mimexVersion));
+        putVariable("__TARGET_MAJOR__", LogicNumber.create(profile.getProcessorVersion().major));
+        putVariable("__TARGET_MINOR__", LogicNumber.create(profile.getProcessorVersion().minor));
+        putVariable("__PROCESSOR_EDITION__", LogicString.create(profile.getProcessorEdition().getCode()));
     }
 
     public List<LogicVariable> getVolatileVariables() {

@@ -75,9 +75,9 @@ assertflush
 print "{2}"
 set :formatBinaryNumber:digits 0
 op floor :formatBinaryNumber:n 0b1001 0
-op and *tmp12 :formatBinaryNumber:n 1
+op and *tmp24 :formatBinaryNumber:n 1
 format "{2}{1}"
-format *tmp12
+format *tmp24
 op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 77 greaterThan :formatBinaryNumber:n 0
@@ -91,9 +91,9 @@ assertflush
 print "{2}"
 set :formatBinaryNumber:digits 6
 op floor :formatBinaryNumber:n 0b1010 0
-op and *tmp12 :formatBinaryNumber:n 1
+op and *tmp24 :formatBinaryNumber:n 1
 format "{2}{1}"
-format *tmp12
+format *tmp24
 op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
 op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
 jump 93 greaterThan :formatBinaryNumber:n 0
@@ -105,38 +105,55 @@ format "0b"
 assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
 assertflush
 print "{2}"
+set :formatBinaryNumber:digits 6
+format "-{2}"
+op floor :formatBinaryNumber:n 10 0
+op and *tmp24 :formatBinaryNumber:n 1
+format "{2}{1}"
+format *tmp24
+op shr :formatBinaryNumber:n :formatBinaryNumber:n 1
+op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
+jump 110 greaterThan :formatBinaryNumber:n 0
+jump 120 lessThanEq :formatBinaryNumber:digits 0
+format "{2}0"
+op sub :formatBinaryNumber:digits :formatBinaryNumber:digits 1
+jump 117 greaterThan :formatBinaryNumber:digits 0
+format "0b"
+assertprints "-0b001010" "printBinaryNumber(-0b1010, 6)"
+assertflush
+print "{2}"
 set :formatHexNumber:digits 0
 op floor :formatHexNumber:n 0xABCDEF 0
 op mod :formatHexNumber:digit :formatHexNumber:n 16
-jump 115 lessThan :formatHexNumber:digit 0
-jump 115 greaterThan :formatHexNumber:digit 9
+jump 132 lessThan :formatHexNumber:digit 0
+jump 132 greaterThan :formatHexNumber:digit 9
 format "{2}{1}"
 format :formatHexNumber:digit
-jump 132 always 0 0
-jump 118 notEqual :formatHexNumber:digit 10
+jump 149 always 0 0
+jump 135 notEqual :formatHexNumber:digit 10
 format "{2}A"
-jump 132 always 0 0
-jump 121 notEqual :formatHexNumber:digit 11
+jump 149 always 0 0
+jump 138 notEqual :formatHexNumber:digit 11
 format "{2}B"
-jump 132 always 0 0
-jump 124 notEqual :formatHexNumber:digit 12
+jump 149 always 0 0
+jump 141 notEqual :formatHexNumber:digit 12
 format "{2}C"
-jump 132 always 0 0
-jump 127 notEqual :formatHexNumber:digit 13
+jump 149 always 0 0
+jump 144 notEqual :formatHexNumber:digit 13
 format "{2}D"
-jump 132 always 0 0
-jump 130 notEqual :formatHexNumber:digit 14
+jump 149 always 0 0
+jump 147 notEqual :formatHexNumber:digit 14
 format "{2}E"
-jump 132 always 0 0
-jump 132 notEqual :formatHexNumber:digit 15
+jump 149 always 0 0
+jump 149 notEqual :formatHexNumber:digit 15
 format "{2}F"
 op shr :formatHexNumber:n :formatHexNumber:n 4
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
-jump 109 greaterThan :formatHexNumber:n 0
-jump 139 lessThanEq :formatHexNumber:digits 0
+jump 126 greaterThan :formatHexNumber:n 0
+jump 156 lessThanEq :formatHexNumber:digits 0
 format "{2}0"
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
-jump 136 greaterThan :formatHexNumber:digits 0
+jump 153 greaterThan :formatHexNumber:digits 0
 format "0x"
 assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
 assertflush
@@ -144,35 +161,35 @@ print "{2}"
 set :formatHexNumber:digits 0
 op floor :formatHexNumber:n 0x1234567890 0
 op mod :formatHexNumber:digit :formatHexNumber:n 16
-jump 151 lessThan :formatHexNumber:digit 0
-jump 151 greaterThan :formatHexNumber:digit 9
+jump 168 lessThan :formatHexNumber:digit 0
+jump 168 greaterThan :formatHexNumber:digit 9
 format "{2}{1}"
 format :formatHexNumber:digit
-jump 168 always 0 0
-jump 154 notEqual :formatHexNumber:digit 10
+jump 185 always 0 0
+jump 171 notEqual :formatHexNumber:digit 10
 format "{2}A"
-jump 168 always 0 0
-jump 157 notEqual :formatHexNumber:digit 11
+jump 185 always 0 0
+jump 174 notEqual :formatHexNumber:digit 11
 format "{2}B"
-jump 168 always 0 0
-jump 160 notEqual :formatHexNumber:digit 12
+jump 185 always 0 0
+jump 177 notEqual :formatHexNumber:digit 12
 format "{2}C"
-jump 168 always 0 0
-jump 163 notEqual :formatHexNumber:digit 13
+jump 185 always 0 0
+jump 180 notEqual :formatHexNumber:digit 13
 format "{2}D"
-jump 168 always 0 0
-jump 166 notEqual :formatHexNumber:digit 14
+jump 185 always 0 0
+jump 183 notEqual :formatHexNumber:digit 14
 format "{2}E"
-jump 168 always 0 0
-jump 168 notEqual :formatHexNumber:digit 15
+jump 185 always 0 0
+jump 185 notEqual :formatHexNumber:digit 15
 format "{2}F"
 op shr :formatHexNumber:n :formatHexNumber:n 4
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
-jump 145 greaterThan :formatHexNumber:n 0
-jump 175 lessThanEq :formatHexNumber:digits 0
+jump 162 greaterThan :formatHexNumber:n 0
+jump 192 lessThanEq :formatHexNumber:digits 0
 format "{2}0"
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
-jump 172 greaterThan :formatHexNumber:digits 0
+jump 189 greaterThan :formatHexNumber:digits 0
 format "0x"
 assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
 assertflush
@@ -180,37 +197,74 @@ print "{2}"
 set :formatHexNumber:digits 8
 op floor :formatHexNumber:n 0xAABBCC 0
 op mod :formatHexNumber:digit :formatHexNumber:n 16
-jump 187 lessThan :formatHexNumber:digit 0
-jump 187 greaterThan :formatHexNumber:digit 9
+jump 204 lessThan :formatHexNumber:digit 0
+jump 204 greaterThan :formatHexNumber:digit 9
 format "{2}{1}"
 format :formatHexNumber:digit
-jump 204 always 0 0
-jump 190 notEqual :formatHexNumber:digit 10
+jump 221 always 0 0
+jump 207 notEqual :formatHexNumber:digit 10
 format "{2}A"
-jump 204 always 0 0
-jump 193 notEqual :formatHexNumber:digit 11
+jump 221 always 0 0
+jump 210 notEqual :formatHexNumber:digit 11
 format "{2}B"
-jump 204 always 0 0
-jump 196 notEqual :formatHexNumber:digit 12
+jump 221 always 0 0
+jump 213 notEqual :formatHexNumber:digit 12
 format "{2}C"
-jump 204 always 0 0
-jump 199 notEqual :formatHexNumber:digit 13
+jump 221 always 0 0
+jump 216 notEqual :formatHexNumber:digit 13
 format "{2}D"
-jump 204 always 0 0
-jump 202 notEqual :formatHexNumber:digit 14
+jump 221 always 0 0
+jump 219 notEqual :formatHexNumber:digit 14
 format "{2}E"
-jump 204 always 0 0
-jump 204 notEqual :formatHexNumber:digit 15
+jump 221 always 0 0
+jump 221 notEqual :formatHexNumber:digit 15
 format "{2}F"
 op shr :formatHexNumber:n :formatHexNumber:n 4
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
-jump 181 greaterThan :formatHexNumber:n 0
-jump 211 lessThanEq :formatHexNumber:digits 0
+jump 198 greaterThan :formatHexNumber:n 0
+jump 228 lessThanEq :formatHexNumber:digits 0
 format "{2}0"
 op sub :formatHexNumber:digits :formatHexNumber:digits 1
-jump 208 greaterThan :formatHexNumber:digits 0
+jump 225 greaterThan :formatHexNumber:digits 0
 format "0x"
 assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+assertflush
+print "{2}"
+set :formatHexNumber:digits 8
+format "-{2}"
+op floor :formatHexNumber:n 11189196 0
+op mod :formatHexNumber:digit :formatHexNumber:n 16
+jump 241 lessThan :formatHexNumber:digit 0
+jump 241 greaterThan :formatHexNumber:digit 9
+format "{2}{1}"
+format :formatHexNumber:digit
+jump 258 always 0 0
+jump 244 notEqual :formatHexNumber:digit 10
+format "{2}A"
+jump 258 always 0 0
+jump 247 notEqual :formatHexNumber:digit 11
+format "{2}B"
+jump 258 always 0 0
+jump 250 notEqual :formatHexNumber:digit 12
+format "{2}C"
+jump 258 always 0 0
+jump 253 notEqual :formatHexNumber:digit 13
+format "{2}D"
+jump 258 always 0 0
+jump 256 notEqual :formatHexNumber:digit 14
+format "{2}E"
+jump 258 always 0 0
+jump 258 notEqual :formatHexNumber:digit 15
+format "{2}F"
+op shr :formatHexNumber:n :formatHexNumber:n 4
+op sub :formatHexNumber:digits :formatHexNumber:digits 1
+jump 235 greaterThan :formatHexNumber:n 0
+jump 265 lessThanEq :formatHexNumber:digits 0
+format "{2}0"
+op sub :formatHexNumber:digits :formatHexNumber:digits 1
+jump 262 greaterThan :formatHexNumber:digits 0
+format "0x"
+assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
 assertflush
 print null
 assertprints "null" "printExactFast(null)"
@@ -224,152 +278,250 @@ assertflush
 print "1.000000100000000"
 assertprints "1.000000100000000" "printExactFast(1.0000001)"
 assertflush
+op floor *tmp59 3.00000007 0
 print "3.000000070000000"
+op mod *tmp60 700.0000001866624 1
+op floor :printExactFast:t 0.018666241885512136 0
 assertprints "3.000000070000000" "printExactFast(3.00000007)"
 assertflush
 print "3E50"
 assertprints "3E50" "printExactFast(3e50)"
 assertflush
+op abs *tmp39 1.0123456789 0
+op log10 *tmp45 1.0123456789 0
+op floor :printExactFast:exp 0.005328833456870865 0
+op sub *tmp47 0 0
+op pow *tmp48 10 0
+op mul :printExactFast:base 1.0123456789 1
+op add *tmp51 1.0123456789 0.5
+op floor *tmp50 1.5123456789 0
+op sub *tmp53 1.0123456789 1
+op abs :printExactFast:cmp 0.012345678900000046 0
 print 1.0123456789
 assertprints "1.0123456789" "printExactFast(1.0123456789)"
 assertflush
-print "1.000000099999999E20"
+set :printExactFast:n 10000001E13
+set :printExactFast*retaddr 305
+jump 374 always 0 0
 assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
 assertflush
-print "1.2345000000000002E-50"
+set :printExactFast:n 12345E-54
+set :printExactFast*retaddr 310
+jump 374 always 0 0
 assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush
-print "-1.2345000000000002E-50"
+set :printExactFast:n -12345E-54
+set :printExactFast*retaddr 315
+jump 374 always 0 0
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
-print null
+set :printExactSlow:n null
+set :printExactSlow*retaddr 320
+jump 448 always 0 0
 assertprints "null" "printExactSlow(null)"
 assertflush
-print 0
+set :printExactSlow:n 0
+set :printExactSlow*retaddr 325
+jump 448 always 0 0
 assertprints "0" "printExactSlow(0)"
 assertflush
-print "1.000000000000000"
+set :printExactSlow:n 1
+set :printExactSlow*retaddr 330
+jump 448 always 0 0
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
-op abs *tmp60 1.0000001 0
-op log10 *tmp66 1.0000001 0
-op floor :printExactSlow:exp 0.000000043429446044209946 0
-op sub *tmp68 0 0
-op pow *tmp69 10 0
-op floor *tmp71 1.0000001 0
-print "1.000000100000000"
-op mod *tmp72 0.005838671768287895 1
-op mul :printExactSlow:base 0.005838671768287895 10
-op floor *tmp75 0.05838671768287895 0
+set :printExactSlow:n 1.0000001
+set :printExactSlow*retaddr 335
+jump 448 always 0 0
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
 set :printExactSlow:n 3.00000007
-set :printExactSlow*retaddr 268
-jump 296 always 0 0
+set :printExactSlow*retaddr 340
+jump 448 always 0 0
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
 set :printExactSlow:n 3E50
-set :printExactSlow*retaddr 273
-jump 296 always 0 0
+set :printExactSlow*retaddr 345
+jump 448 always 0 0
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
 set :printExactSlow:n 1.0123456789
-set :printExactSlow*retaddr 278
-jump 296 always 0 0
+set :printExactSlow*retaddr 350
+jump 448 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
 set :printExactSlow:n 10000001E13
-set :printExactSlow*retaddr 283
-jump 296 always 0 0
+set :printExactSlow*retaddr 355
+jump 448 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
 set :printExactSlow:n 12345E-54
-set :printExactSlow*retaddr 288
-jump 296 always 0 0
+set :printExactSlow*retaddr 360
+jump 448 always 0 0
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
 set :printExactSlow:n -12345E-54
-set :printExactSlow*retaddr 293
-jump 296 always 0 0
+set :printExactSlow*retaddr 365
+jump 448 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+assertflush
+print "1111111111111111111111110000111100000000000000000000000000000000"
+assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
+assertflush
+print "FFFFFF0F00000000"
+assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
 stop
 end
-op abs *tmp60 :printExactSlow:n 0
-jump 300 greaterThan *tmp60 0
+op abs *tmp39 :printExactFast:n 0
+jump 378 greaterThan *tmp39 0
+print :printExactFast:n
+set @counter :printExactFast*retaddr
+jump 381 greaterThanEq :printExactFast:n 0
+print "-"
+op abs :printExactFast:n :printExactFast:n 0
+op log10 *tmp45 :printExactFast:n 0
+op floor :printExactFast:exp *tmp45 0
+op sub *tmp47 0 :printExactFast:exp
+op pow *tmp48 10 *tmp47
+op mul :printExactFast:base :printExactFast:n *tmp48
+op add *tmp51 :printExactFast:base 0.5
+op floor *tmp50 *tmp51 0
+op sub *tmp53 :printExactFast:base *tmp50
+op abs :printExactFast:cmp *tmp53 0
+jump 393 greaterThan :printExactFast:cmp 0
+print :printExactFast:base
+jump 444 always 0 0
+jump 396 lessThanEq :printExactFast:cmp 0.00001
+print :printExactFast:base
+jump 444 always 0 0
+op floor *tmp59 :printExactFast:base 0
+print *tmp59
+print "."
+op mod *tmp60 :printExactFast:base 1
+op mul :printExactFast:base *tmp60 100000
+op floor :printExactFast:t :printExactFast:base 0
+jump 405 greaterThanEq :printExactFast:t 10
+print "0000"
+jump 413 always 0 0
+jump 408 greaterThanEq :printExactFast:t 100
+print "000"
+jump 413 always 0 0
+jump 411 greaterThanEq :printExactFast:t 1000
+print "00"
+jump 413 always 0 0
+jump 413 greaterThanEq :printExactFast:t 10000
+print "0"
+print :printExactFast:t
+op mod *tmp60 :printExactFast:base 1
+op mul :printExactFast:base *tmp60 100000
+op floor :printExactFast:t :printExactFast:base 0
+jump 420 greaterThanEq :printExactFast:t 10
+print "0000"
+jump 428 always 0 0
+jump 423 greaterThanEq :printExactFast:t 100
+print "000"
+jump 428 always 0 0
+jump 426 greaterThanEq :printExactFast:t 1000
+print "00"
+jump 428 always 0 0
+jump 428 greaterThanEq :printExactFast:t 10000
+print "0"
+print :printExactFast:t
+op mod *tmp60 :printExactFast:base 1
+op mul :printExactFast:base *tmp60 100000
+op floor :printExactFast:t :printExactFast:base 0
+jump 435 greaterThanEq :printExactFast:t 10
+print "0000"
+jump 443 always 0 0
+jump 438 greaterThanEq :printExactFast:t 100
+print "000"
+jump 443 always 0 0
+jump 441 greaterThanEq :printExactFast:t 1000
+print "00"
+jump 443 always 0 0
+jump 443 greaterThanEq :printExactFast:t 10000
+print "0"
+print :printExactFast:t
+jump 447 equal :printExactFast:exp 0
+print "E"
+print :printExactFast:exp
+set @counter :printExactFast*retaddr
+op abs *tmp75 :printExactSlow:n 0
+jump 452 greaterThan *tmp75 0
 print :printExactSlow:n
 set @counter :printExactSlow*retaddr
-jump 303 greaterThanEq :printExactSlow:n 0
+jump 455 greaterThanEq :printExactSlow:n 0
 print "-"
 op abs :printExactSlow:n :printExactSlow:n 0
-op log10 *tmp66 :printExactSlow:n 0
-op floor :printExactSlow:exp *tmp66 0
-op sub *tmp68 0 :printExactSlow:exp
-op pow *tmp69 10 *tmp68
-op mul :printExactSlow:base :printExactSlow:n *tmp69
-op floor *tmp71 :printExactSlow:base 0
-print *tmp71
+op log10 *tmp81 :printExactSlow:n 0
+op floor :printExactSlow:exp *tmp81 0
+op sub *tmp83 0 :printExactSlow:exp
+op pow *tmp84 10 *tmp83
+op mul :printExactSlow:base :printExactSlow:n *tmp84
+op floor *tmp86 :printExactSlow:base 0
+print *tmp86
 print "."
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-op mod *tmp72 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp72 10
-op floor *tmp75 :printExactSlow:base 0
-print *tmp75
-jump 374 equal :printExactSlow:exp 0
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+op mod *tmp87 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp87 10
+op floor *tmp90 :printExactSlow:base 0
+print *tmp90
+jump 526 equal :printExactSlow:exp 0
 print "E"
 print :printExactSlow:exp
 set @counter :printExactSlow*retaddr

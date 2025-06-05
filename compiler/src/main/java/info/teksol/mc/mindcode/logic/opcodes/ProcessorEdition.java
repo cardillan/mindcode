@@ -19,6 +19,13 @@ public enum ProcessorEdition {
         return title;
     }
 
+    public String getCode() {
+        return switch (this) {
+            case STANDARD_PROCESSOR -> "S";
+            case WORLD_PROCESSOR -> "W";
+        };
+    }
+
     public static final ProcessorEdition S = ProcessorEdition.STANDARD_PROCESSOR;
     public static final ProcessorEdition W = ProcessorEdition.WORLD_PROCESSOR;
 

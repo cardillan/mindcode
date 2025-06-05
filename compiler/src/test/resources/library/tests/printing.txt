@@ -12,9 +12,11 @@ printNumber(-1234567)               :* "-1,234,567"
 printNumber(9009099)                :* "9,009,099"
 printBinaryNumber(0b1001, 0)        :* "0b1001"
 printBinaryNumber(0b1010, 6)        :* "0b001010"
+printBinaryNumber(-0b1010, 6)       :* "-0b001010"
 printHexNumber(0xABCDEF, 0)         :* "0xABCDEF"
 printHexNumber(0x1234567890, 0)     :* "0x1234567890"
 printHexNumber(0xAABBCC, 8)         :* "0x00AABBCC"
+printHexNumber(-0xAABBCC, 8)        :* "-0x00AABBCC"
 printExactFast(null)                :* "null"
 printExactFast(0)                   :* "0"
 printExactFast(1)                   :* "1"
@@ -35,7 +37,8 @@ printExactSlow(1.0123456789)        :* "1.012345678900000"
 printExactSlow(1.0000001e20)        :* "1.000000099999999E20"
 printExactSlow(1.2345e-50)          :* "1.234500000000000E-50"
 printExactSlow(-1.2345e-50)         :* "-1.234500000000000E-50"
-
+printExactBinary(0xFFFFFF0F << 32)  :* "1111111111111111111111110000111100000000000000000000000000000000"
+printExactHex(0xFFFFFF0F << 32)     :* "FFFFFF0F00000000"
 stopProcessor();
 
 end;

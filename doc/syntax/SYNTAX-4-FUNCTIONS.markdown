@@ -529,11 +529,11 @@ printflush message1
 
 ## Remote calls
 
-The built-in functions `async()`, `finished()` and `await()` serve to 
+The built-in functions `async()`, `finished()` and `await()` are part of the Remote Function framework and are described [here](REMOTE-CALLS.markdown#asynchronous-remote-calls).   
 
 # System library functions
 
-The system functions discussed so far are provided directly by the compiler. Additional system functions, defined in plain Mindcode, are included in a [system library](SYSTEM-LIBRARY.markdown).
+The functions discussed so far are either mapped directly to Mindustry Logic, or built-in to the compiler. Additional system functions, defined in plain Mindcode, are included in the [system libraries](SYSTEM-LIBRARY.markdown).
 
 # User-defined functions
 

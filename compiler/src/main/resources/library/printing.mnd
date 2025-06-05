@@ -84,7 +84,8 @@ end;
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
  * Formats the number passed in as a parameter into the text buffer in binary base, outputting at least the given
- * number of binary digits. The fractional part of the number to be printed is ignored.
+ * number of binary digits. The fractional part of the number to be printed is ignored. Negative numbers are
+ * formatted with a minus sign.
  *
  * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
  * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -98,6 +99,10 @@ end;
  * - `digits`: minimal number of digits to output (padded on the left by zeroes)
  */
 void formatBinaryNumber(number, digits)
+    if number < 0 then
+        format("-{2}");
+        number = abs(number);
+    end;
     var n = floor(number);
     do
         format("{2}{1}", n & 1);
@@ -118,7 +123,8 @@ end;
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
  * Prints the number passed in as a parameter into the text buffer in binary base, outputting at least the given
- * number of binary digits. The fractional part of the number to be printed is ignored.
+ * number of binary digits. The fractional part of the number to be printed is ignored. Negative numbers are printed
+ * with a minus sign.
  *
  * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
  * The number will be printed at the end of the print buffer.
@@ -141,7 +147,8 @@ end;
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
  * Formats the number passed in as a parameter into the text buffer in hexadecimal base, outputting at least the given
- * number of hexadecimal digits. The fractional part of the number to be printed is ignored.
+ * number of hexadecimal digits. The fractional part of the number to be printed is ignored. Negative numbers are
+ * formatted with a minus sign.
  *
  * To use the function, a placeholder must be inserted into the text buffer prior to the call of this function.
  * The placeholder must be `{2}` or higher, placeholders `{0}` and `{1}` are reserved. The number will be rendered
@@ -155,6 +162,10 @@ end;
  * - `digits`: minimal number of digits to output (padded on the left by zeroes)
  */
 void formatHexNumber(number, digits)
+    if number < 0 then
+        format("-{2}");
+        number = abs(number);
+    end;
     var n = floor(number);
     do
         var digit = n % 16;
@@ -184,7 +195,8 @@ end;
  * **Note:** Function requires Mindustry Logic version 8 or later.
  *
  * Prints the number passed in as a parameter into the text buffer in hexadecimal base, outputting at least the given
- * number of hexadecimal digits. The fractional part of the number to be printed is ignored.
+ * number of hexadecimal digits. The fractional part of the number to be printed is ignored. Negative numbers are
+ * printed with a minus sign.
  *
  * To use the function, the text buffer must not contain placeholders `{0}`, `{1}` or `{2}`.
  * The number will be printed at the end of the print buffer.
@@ -223,6 +235,10 @@ end;
  * > [!IMPORTANT]
  * > The mathematical operations used by `printExact` to output the value may introduce small additional numerical
  * > errors to the output value; for example `printExact(3.00000003)` outputs `3.000000029999999`.
+ *
+ * **Inputs and outputs:**
+ *
+ * - `n`: number to be printed
  */
 void printExactFast(n)
     if isZero(n) then
@@ -232,7 +248,7 @@ void printExactFast(n)
         if n < 0 then
             print("-");
             n = abs(n);
-         end;
+        end;
         var exp = floor(log10(n));
         var base = n * 10 ** -exp;
         var cmp = abs(base - round(base));
@@ -279,6 +295,10 @@ end;
  * **Note:** This function uses exact (slow) printing for all values except zero.
  *
  * See also [`printExactFast`](#printexactfast)
+ *
+ * **Inputs and outputs:**
+ *
+ * - `n`: number to be printed
  */
 void printExactSlow(n)
     if isZero(n) then
@@ -288,7 +308,7 @@ void printExactSlow(n)
         if n < 0 then
             print("-");
             n = abs(n);
-         end;
+        end;
         var exp = floor(log10(n));
         var base = n * 10 ** -exp;
         print(floor(base), ".");
@@ -300,6 +320,62 @@ void printExactSlow(n)
 
         if exp != 0 then
             print("E", exp);
+        end;
+    end;
+end;
+
+/**
+ * Prints the number passed in as a parameter into the text buffer in a binary base, always outputting 64 binary digits.
+ * No prefix (i.e., `0b`) is printed.
+ *
+ * The fractional part of the number to be printed is ignored. Negative values are printed with the most significant
+ * bit (the sign bit) set to `1`.
+ *
+ * This function is safe to use with numbers in the unsafe integer range: no precision loos occurs during the printing
+ * itself, except the conversion of the number from a `double` to a 64-bit integer (`long`).
+ *
+ * **Inputs and outputs:**
+ *
+ * - `n`: number to be printed
+ */
+void printExactBinary(n)
+    for var i in 0 ... 64 descending do
+        print((n >> i) & 1);
+    end;
+end;
+
+/**
+ * **Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistics is valid for
+ * target 8, for earlier targets the code size may be higher.
+ *
+ * Prints the number passed in as a parameter into the text buffer in a hexadecimal base, always outputting 16
+ * hexadecimal digits. No prefix (i.e., `0b`) is printed.
+ *
+ * The fractional part of the number to be printed is ignored. Negative values are printed with the most significant
+ * bit (the sign bit) set to `1`.
+ *
+ * This function is safe to use with numbers in the unsafe integer range: no precision loos occurs during the printing
+ * itself, except the conversion of the number from a `double` to a 64-bit integer (`long`).
+ *
+ * **Inputs and outputs:**
+ *
+ * - `n`: number to be printed
+ */
+void printExactHex(n)
+    for var i in 0 ... 16 descending do
+        var digit = (n >> (4 * i)) & 0xF;
+        if __TARGET_MAJOR__ < 8 then
+            case digit
+                when 0 .. 9 then print(digit);
+                when 10 then print("A");
+                when 11 then print("B");
+                when 12 then print("C");
+                when 13 then print("D");
+                when 14 then print("E");
+                when 15 then print("F");
+            end;
+        else
+            printchar('0' + digit + (digit >= 10) * ('A' - 0xA - '0'));
         end;
     end;
 end;

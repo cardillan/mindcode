@@ -12,6 +12,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed the Print Merging optimization merging prints across function calls ([#264](https://github.com/cardillan/mindcode/issues/264)).
 * Fixed wrong evaluation of compile-time expressions with character literals ([#265](https://github.com/cardillan/mindcode/issues/265)).
 
+### Added
+
+* Several [compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) were added.
+* The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#printing-library). The functions print all digits (64/16) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.  
+
+### Changed
+
+* Inactive branches in `if` expressions with compile-time constant conditions are now omitted from compiling, effectively amounting to conditional compilation. Note: this feature was already implemented in past versions, but got meanwhile deactivated due to a bug.
+* The `formatBinaryNumber`, `printBinaryNumber`, `formatHezNumber` and `printHexNumber` functions in the `printing` system library were updated to support formatting/printing negative numbers. A minus sign is printed in front of a negative number, including its prefix.
+
 ## 3.6.0 - 2025-06-04
 
 ### Fixed

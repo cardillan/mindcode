@@ -216,14 +216,18 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
             AstMindcodeNode conditionValue = evaluateNode(branch.getCondition(), local);
             if (conditionValue instanceof AstLiteralNumeric n) {
                 // When true, return the branch's body
+                // We need to wrap it in a statement list -- this is a hack to prevent not well-understood problems
+                // with case expressions, but the entire conditional compilation should be implemented differently
+                // in the future.
                 if (ExpressionEvaluator.isTrue(n.getDoubleValue())) {
-                    return evaluateBody(branch.getBody(), local);
+                    AstMindcodeNode body = evaluateBody(branch.getBody(), local);
+                    return new AstStatementList(body.sourcePosition(), List.of(body));
                 }
 
                 //  When false, continue evaluating the other branches
             } else {
                 // Can't determine the value of this branch.
-                // Pell away the branches known to be false
+                // Peel away the branches known to be false
                 return i == 0 ? node : new AstIfExpression(node.sourcePosition(),
                         node.getIfBranches().subList(i, size), node.getElseBranch());
             }
