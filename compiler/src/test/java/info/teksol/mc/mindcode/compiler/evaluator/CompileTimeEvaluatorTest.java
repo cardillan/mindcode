@@ -40,6 +40,15 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void evaluatesExpressionsWithCharacterLiterals() {
+        assertCompilesTo("""
+                        print('Z' - 'A');
+                        """,
+                createInstruction(PRINT, "25")
+        );
+    }
+
+    @Test
     void acceptsStringConstants() {
         assertCompilesTo("""
                         const TEXT = "Hello";

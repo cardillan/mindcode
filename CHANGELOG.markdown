@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed the compiler refusing compile-time expressions with unrepresentable values ([#262](https://github.com/cardillan/mindcode/issues/262)).
 * Fixed the Print Merging optimization merging prints across function calls ([#264](https://github.com/cardillan/mindcode/issues/264)).
+* Fixed wrong evaluation of compile-time expressions with character literals ([#265](https://github.com/cardillan/mindcode/issues/265)).
 
 ## 3.6.0 - 2025-06-04
 
