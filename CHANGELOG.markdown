@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.6.1 - Unreleased
+
+### Fixed
+
+* Fixed the compiler refusing compile-time expressions with unrepresentable values ([#262](https://github.com/cardillan/mindcode/issues/262)).
+
 ## 3.6.0 - 2025-06-04
 
 ### Fixed

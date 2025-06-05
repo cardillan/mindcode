@@ -7,7 +7,7 @@ factory-monitor-surge-alloy-00.mnd:               184   B570A56D64509A07   7C4F6
 impact-reactor-logic-00.mnd:                      823   3E95B78DA13C7171   CEAF529C906DDFF1
 instant-overdrive-dome-01.mnd:                    925   3BF7A6865C2ACD1C   45166EFE4B015E05
 item-counter-00.mnd:                               90   DBF0CE14BD53EC86   D365C400D522FDDE
-item-counter-micro-00.mnd:                        128   AB81229C62913E11   21E3F077FFA33257
+item-counter-micro-00.mnd:                        128   AB81229C62913E11   D17FD5BD8B208670
 item-rate-display-00.mnd:                         657   B3F3156754BCE6C9   ABD0122246C347AA
 item-rate-meter-00.mnd:                            96   199812ADE3D3F8C3   97AEFC6EF3F85047
 level-display-00.mnd:                              94   B0F2701257FEF4C3   1377119B2F0ED61D
@@ -20,7 +20,7 @@ reactor-control-00.mnd:                           443   0B5F71D4A736D2F1   9FCF8
 reactor-control-battery-level-00.mnd:             578   BEBDD58A4C35FD11   D18185E084EB0BF2
 regulator-00.mnd:                                 274   F49BECB5341151DD   6150BC0BBE51BE81
 remote-vault-00.mnd:                               68   9EA444978E177496   5B693A206F892FA5
-storage-display-00.mnd:                           595   2F638AC4A4196293   411F874D0BE0BE81
+storage-display-00.mnd:                           595   2F638AC4A4196293   49FE3581A73B132F
 unit-housekeeping-00.mnd:                         101   F607CA415057529A   19F6A9F747D2E07B
 unit-speed-00.mnd:                                 71   2A68EEB3B75D1513   B5C845BF9C2A5514
 unit-transport-00.mnd:                            677   26FE3A15D7EA529B   9204823418A8C4D9

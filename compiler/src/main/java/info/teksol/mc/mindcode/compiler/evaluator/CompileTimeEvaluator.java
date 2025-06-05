@@ -72,7 +72,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         AstMindcodeNode evaluated = evaluateNode(node, local);
 
         if (!requireMlogConstant && evaluated instanceof IntermediateValue value) {
-            AstLiteral literal = value.toNumericLiteral();
+            AstLiteral literal = value.toNumericLiteral(processor);
             return literal == null ? node : literal;
         } else {
             return evaluated;
@@ -122,7 +122,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 } else if (right.isValid()) {
                     Result result = new Result();
                     eval.execute(result, left, right);
-                    return result.toAstMindcodeNode(node, base);
+                    return result.toAstMindcodeNode(processor, node, base);
                 }
             }
         }
@@ -138,15 +138,15 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 ExpressionValue right = ExpressionValue.create(profile, processor, evaluateNode(node.getRight(), local));
                 if (left.isString() || right.isString()) {
                     if (operation.isCondition()) {
-                        // Only the addition of a string and a non-null value is supported
                         if (left.isString() && right.isString()) {
                             Result result = new Result();
                             eval.execute(result, left, right);
-                            return result.toAstMindcodeNode(node);
+                            return result.toAstMindcodeNode(processor, node);
                         } else {
                             return node;
                         }
                     } else if (operation == Operation.ADD && !left.isNull() && !right.isNull()) {
+                        // Only the addition of a string and a non-null value is supported
                         return new AstLiteralString(node.sourcePosition(), left.print() + right.print());
                     } else {
                         error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
@@ -155,7 +155,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 } else if (left.isValid() && right.isValid()) {
                     Result result = new Result();
                     eval.execute(result, left, right);
-                    return result.toAstMindcodeNode(node);
+                    return result.toAstMindcodeNode(processor, node);
                 } else if (left.isValid() != right.isValid()) {
                     // We know just one of them is valid
                     return evaluatePartially(node, left.isValid() ? left : right, left.isValid() ? node.getRight() : node.getLeft());
@@ -265,7 +265,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                 }
                 Result result = new Result();
                 eval.execute(result, left, right);
-                return result.toAstMindcodeNode(node);
+                return result.toAstMindcodeNode(processor, node);
             }
         }
 

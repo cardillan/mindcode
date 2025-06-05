@@ -4,8 +4,7 @@ import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
 
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.PRINT;
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.SET;
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
@@ -269,6 +268,16 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                         print(log10(10 ** 50));
                         """,
                 createInstruction(PRINT, "50")
+        );
+    }
+
+    @Test
+    void ignoresUnrepresentableValues() {
+        assertCompilesTo("""
+                        print(1 << 63);
+                        """,
+                createInstruction(OP, "shl", tmp(0), "1", "63"),
+                createInstruction(PRINT, tmp(0))
         );
     }
 }

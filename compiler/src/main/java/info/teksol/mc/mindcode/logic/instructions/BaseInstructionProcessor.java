@@ -581,9 +581,9 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public Optional<String> mlogRewrite(SourcePosition sourcePosition, String literal) {
+    public Optional<String> mlogRewrite(SourcePosition sourcePosition, String literal, boolean allowPrecisionLoss) {
         try {
-            return mlogFormat(sourcePosition, Double.parseDouble(literal), literal, true);
+            return mlogFormat(sourcePosition, Double.parseDouble(literal), literal, allowPrecisionLoss);
         } catch (NumberFormatException ex) {
             return Optional.empty();
         }

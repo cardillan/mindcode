@@ -42,9 +42,13 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     MindustryMetadata getMetadata();
 
     LogicLabel nextLabel();
+
     LogicLabel nextMarker();
+
     LogicVariable nextTemp();
+
     String nextFunctionPrefix(MindcodeFunction function);
+
     LogicVariable unusedVariable();
 
     /// Adds a custom-defined block name value.
@@ -56,7 +60,8 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Adds a custom keyword. Returns true if the category is valid for current target.
     boolean addKeyword(KeywordCategory keywordCategory, String keyword);
 
-    @Nullable List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
+    @Nullable
+    List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments);
 
     Collection<String> getParameterValues(InstructionParameterType type);
 
@@ -85,10 +90,10 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// More than one argument of the instruction can be modified. A new instruction is always created.
     ///
     /// @param instruction instruction to modify
-    /// @param oldArg value of arguments to find
-    /// @param newArg new value for the arguments equal to the old value
+    /// @param oldArg      value of arguments to find
+    /// @param newArg      new value for the arguments equal to the old value
+    /// @param <T>         type of instruction being processed
     /// @return a modified instruction
-    /// @param <T> type of instruction being processed
     <T extends LogicInstruction> T replaceAllArgs(T instruction, LogicArgument oldArg, LogicArgument newArg);
 
     <T extends LogicInstruction> T replaceAllArgs(T instruction, Map<LogicArgument, LogicArgument> argumentMap);
@@ -99,9 +104,9 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// is mapped to. Used when duplication sections of code containing labels.
     ///
     /// @param instruction instructions to modify
-    /// @param labelMap map assigning new labels to the old ones
+    /// @param labelMap    map assigning new labels to the old ones
+    /// @param <T>         type of instruction being processed
     /// @return a modified instruction (original one if modification wasn't necessary)
-    /// @param <T> type of instruction being processed
     <T extends LogicInstruction> T replaceLabels(T instruction, Map<LogicLabel, LogicLabel> labelMap);
 
     /// Determines the number of arguments needed to print the instruction
@@ -133,7 +138,7 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Returns true if an instruction with given opcode and arguments is supported by current processor
     /// settings (version, edition).
     ///
-    /// @param opcode instruction opcode
+    /// @param opcode    instruction opcode
     /// @param arguments instruction arguments
     /// @return true if the instruction is supported
     boolean isSupported(Opcode opcode, List<LogicArgument> arguments);
@@ -173,9 +178,12 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     /// Rewrites the literal to conform to mlog limitations. If such a conversion isn't possible, an empty optional
     /// is returned.
     ///
-    /// @param literal the literal to process
+    /// @param sourcePosition     the source position of the literal
+    /// @param literal            the literal to process
+    /// @param allowPrecisionLoss `true` to format literals leading to precision loss (emits a warning),
+    ///                           `false` to refuse formating such literals
     /// @return Optional containing mlog compatible literal, or nothing if mlog compatible equivalent doesn't exist
-    Optional<String> mlogRewrite(SourcePosition sourcePosition, String literal);
+    Optional<String> mlogRewrite(SourcePosition sourcePosition, String literal, boolean allowPrecisionLoss);
 
     Optional<LogicLiteral> createLiteral(SourcePosition sourcePosition, double value, boolean allowPrecisionLoss);
 

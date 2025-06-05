@@ -101,7 +101,7 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
             List<MindcodeMessage> messages = new ArrayList<>();
             InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(messages::add,
                     ProcessorVersion.V8A, ProcessorEdition.W);
-            processor.mlogRewrite(SourcePosition.EMPTY, number);
+            processor.mlogRewrite(SourcePosition.EMPTY, number, true);
             Assertions.assertEquals(List.of(), messages);
         });
     }
@@ -112,7 +112,7 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
             List<MindcodeMessage> messages = new ArrayList<>();
             InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(messages::add,
                     ProcessorVersion.V7A, ProcessorEdition.W);
-            processor.mlogRewrite(SourcePosition.EMPTY, number);
+            processor.mlogRewrite(SourcePosition.EMPTY, number, true);
             if (messages.isEmpty()) {
                 Assertions.fail("No precision loss for number " + number);
             }
@@ -136,12 +136,12 @@ public class BaseInstructionProcessorTest extends AbstractCodeGeneratorTest {
 
     private void checkDouble(String value) {
         Assertions.assertEquals(Double.parseDouble(value),
-                Double.parseDouble(ip.mlogRewrite(SourcePosition.EMPTY, value).orElse("NaN")), 0.00001);
+                Double.parseDouble(ip.mlogRewrite(SourcePosition.EMPTY, value, true).orElse("NaN")), 0.00001);
     }
 
     private void checkLong(String value) {
         Assertions.assertEquals(Long.parseLong(value),
-                Long.parseLong(ip.mlogRewrite(SourcePosition.EMPTY, value).orElse("NaN")));
+                Long.parseLong(ip.mlogRewrite(SourcePosition.EMPTY, value, true).orElse("NaN")));
     }
 
     //@Test

@@ -151,7 +151,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
     }
 
     private LogicNumber visitNumericLiteral(AstLiteral node) {
-        Optional<String> literal = processor.mlogRewrite(node.sourcePosition(), node.getLiteral());
+        Optional<String> literal = processor.mlogRewrite(node.sourcePosition(), node.getLiteral(), true);
         if (literal.isPresent()) {
             return LogicNumber.create(processor, node.sourcePosition(), literal.get());
         } else {

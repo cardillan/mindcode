@@ -1,10 +1,10 @@
-   307 instructions before optimizations.
+   275 instructions before optimizations.
     32 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-    50 instructions eliminated by Dead Code Elimination (6 iterations).
-     9 instructions eliminated by Jump Normalization (4 iterations).
+    34 instructions eliminated by Dead Code Elimination (6 iterations).
+     1 instructions eliminated by Jump Normalization (4 iterations).
     17 instructions eliminated by Jump Optimization (4 iterations).
-    22 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+    14 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions eliminated by Expression Optimization (2 iterations).
      7 instructions eliminated by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
@@ -93,134 +93,128 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-30 instruct
     88 label *label1
     89 jump *label0 always
  
-   134 label *label24
-   135 set *tmp28 null
-   136 label *label25
--    * set *tmp25 *tmp28
-   137 jump *label23 always
-   138 label *label22
--    * set *tmp25 null
-   139 label *label23
-   140 jump *label26 equal true false
-   141 sensor *tmp30 .CONV2 @totalItems
- 
-   148 label *label28
-   149 set *tmp32 null
-   150 label *label29
--    * set *tmp29 *tmp32
-   151 jump *label27 always
-   152 label *label26
--    * set *tmp29 null
-   153 label *label27
-   154 jump *label30 equal true false
-   155 sensor *tmp34 .CONV3 @totalItems
- 
-   162 label *label32
-   163 set *tmp36 null
-   164 label *label33
--    * set *tmp33 *tmp36
-   165 jump *label31 always
-   166 label *label30
+   128 op lessThan *tmp26 :a1 :b1
+   129 jump *label22 equal *tmp26 false
+   130 op add :batches :batches 1
+-    * set *tmp27 :batches
+   131 jump *label23 always
+   132 label *label22
+-    * set *tmp27 null
+   133 label *label23
+   134 sensor *tmp28 .CONV2 @totalItems
+   135 set :a2 *tmp28
+   136 op lessThan *tmp29 :a2 :b2
+   137 jump *label24 equal *tmp29 false
+   138 op add :batches :batches 1
+-    * set *tmp30 :batches
+   139 jump *label25 always
+   140 label *label24
+-    * set *tmp30 null
+   141 label *label25
+   142 sensor *tmp31 .CONV3 @totalItems
+   143 set :a3 *tmp31
+   144 op lessThan *tmp32 :a3 :b3
+   145 jump *label26 equal *tmp32 false
+   146 op add :batches :batches 1
+-    * set *tmp33 :batches
+   147 jump *label27 always
+   148 label *label26
 -    * set *tmp33 null
-   167 label *label31
-   168 jump *label34 equal true false
-   169 sensor *tmp38 .CONV4 @totalItems
+   149 label *label27
+   150 sensor *tmp34 .CONV4 @totalItems
+   151 set :a4 *tmp34
+   152 op lessThan *tmp35 :a4 :b4
+   153 jump *label28 equal *tmp35 false
+   154 op add :batches :batches 1
+-    * set *tmp36 :batches
+   155 jump *label29 always
+   156 label *label28
+-    * set *tmp36 null
+   157 label *label29
+   158 op greaterThan *tmp37 :batches :limit
+   159 jump *label30 equal *tmp37 false
  
-   176 label *label36
-   177 set *tmp40 null
-   178 label *label37
--    * set *tmp37 *tmp40
-   179 jump *label35 always
-   180 label *label34
--    * set *tmp37 null
-   181 label *label35
-   182 op greaterThan *tmp41 :batches :limit
-   183 jump *label38 equal *tmp41 false
+   176 set .BATCH *tmp50
+   177 op mul *tmp51 .BATCH 10
+   178 set .BATCH_TXT *tmp51
+-    * set *tmp48 .BATCH_TXT
+   179 jump *label33 always
+   180 label *label32
+-    * set *tmp48 null
+   181 label *label33
+   182 op add :limit :limit .BATCH
+-    * set *tmp38 :limit
+   183 jump *label31 always
+   184 label *label30
+-    * set *tmp38 null
+   185 label *label31
+   186 op mul *tmp53 :batches 10
+   187 set :total *tmp53
  
-   200 set .BATCH *tmp54
-   201 op mul *tmp55 .BATCH 10
-   202 set .BATCH_TXT *tmp55
--    * set *tmp52 .BATCH_TXT
-   203 jump *label41 always
-   204 label *label40
--    * set *tmp52 null
-   205 label *label41
-   206 op add :limit :limit .BATCH
--    * set *tmp42 :limit
-   207 jump *label39 always
-   208 label *label38
--    * set *tmp42 null
-   209 label *label39
-   210 op mul *tmp57 :batches 10
-   211 set :total *tmp57
- 
-   238 label *label44
-   239 set *tmp61 null
-   240 label *label45
--    * set *tmp58 *tmp61
-   241 jump *label43 always
-   242 label *label42
--    * set *tmp58 null
-   243 label *label43
-   244 jump *label46 equal true false
-   245 sensor *tmp63 .CONV2 @totalItems
- 
-   252 label *label48
-   253 set *tmp65 null
-   254 label *label49
--    * set *tmp62 *tmp65
-   255 jump *label47 always
-   256 label *label46
+   208 op lessThan *tmp55 :b1 :a1
+   209 jump *label34 equal *tmp55 false
+   210 op add :batches :batches 1
+-    * set *tmp56 :batches
+   211 jump *label35 always
+   212 label *label34
+-    * set *tmp56 null
+   213 label *label35
+   214 sensor *tmp57 .CONV2 @totalItems
+   215 set :b2 *tmp57
+   216 op lessThan *tmp58 :b2 :a2
+   217 jump *label36 equal *tmp58 false
+   218 op add :batches :batches 1
+-    * set *tmp59 :batches
+   219 jump *label37 always
+   220 label *label36
+-    * set *tmp59 null
+   221 label *label37
+   222 sensor *tmp60 .CONV3 @totalItems
+   223 set :b3 *tmp60
+   224 op lessThan *tmp61 :b3 :a3
+   225 jump *label38 equal *tmp61 false
+   226 op add :batches :batches 1
+-    * set *tmp62 :batches
+   227 jump *label39 always
+   228 label *label38
 -    * set *tmp62 null
-   257 label *label47
-   258 jump *label50 equal true false
-   259 sensor *tmp67 .CONV3 @totalItems
+   229 label *label39
+   230 sensor *tmp63 .CONV4 @totalItems
+   231 set :b4 *tmp63
+   232 op lessThan *tmp64 :b4 :a4
+   233 jump *label40 equal *tmp64 false
+   234 op add :batches :batches 1
+-    * set *tmp65 :batches
+   235 jump *label41 always
+   236 label *label40
+-    * set *tmp65 null
+   237 label *label41
+   238 op sub *tmp66 @time :startTime
+   239 op floor *tmp67 *tmp66
  
-   266 label *label52
-   267 set *tmp69 null
-   268 label *label53
--    * set *tmp66 *tmp69
-   269 jump *label51 always
-   270 label *label50
--    * set *tmp66 null
-   271 label *label51
-   272 jump *label54 equal true false
-   273 sensor *tmp71 .CONV4 @totalItems
+   252 set :ratePerMin 0
+   253 set *tmp76 @time
+   254 set :startTime *tmp76
+-    * set *tmp69 :startTime
+   255 jump *label43 always
+   256 label *label42
+-    * set *tmp69 null
+   257 label *label43
+   258 print "Batch size: [green]"
+   259 print .BATCH_TXT
  
-   280 label *label56
-   281 set *tmp73 null
-   282 label *label57
--    * set *tmp70 *tmp73
-   283 jump *label55 always
-   284 label *label54
--    * set *tmp70 null
-   285 label *label55
-   286 op sub *tmp74 @time :startTime
-   287 op floor *tmp75 *tmp74
- 
-   300 set :ratePerMin 0
-   301 set *tmp84 @time
-   302 set :startTime *tmp84
--    * set *tmp77 :startTime
-   303 jump *label59 always
-   304 label *label58
--    * set *tmp77 null
-   305 label *label59
-   306 print "Batch size: [green]"
-   307 print .BATCH_TXT
- 
-   324 op notEqual *tmp88 .LINKS @links
-   325 jump *label60 equal *tmp88 false
-   326 end
--    * set *tmp89 null
-   327 jump *label61 always
-   328 label *label60
--    * set *tmp89 null
-   329 label *label61
-   330 label *label20
-   331 jump *label19 always
+   276 op notEqual *tmp80 .LINKS @links
+   277 jump *label44 equal *tmp80 false
+   278 end
+-    * set *tmp81 null
+   279 jump *label45 always
+   280 label *label44
+-    * set *tmp81 null
+   281 label *label45
+   282 label *label20
+   283 jump *label19 always
 
-Modifications by Initial phase, Dead Code Elimination, iteration 2 (-18 instructions):
+Modifications by Initial phase, Dead Code Elimination, iteration 2 (-2 instructions):
  
     69 print .LINKED
     70 print ")"
@@ -237,94 +231,6 @@ Modifications by Initial phase, Dead Code Elimination, iteration 2 (-18 instruct
     84 label *label16
     85 label *label14
     86 label *label1
- 
-   127 op lessThan *tmp27 :a1 :b1
-   128 jump *label24 equal *tmp27 false
-   129 op add :batches :batches 1
--    * set *tmp28 :batches
-   130 jump *label25 always
-   131 label *label24
--    * set *tmp28 null
-   132 label *label25
-   133 jump *label23 always
-   134 label *label22
- 
-   139 op lessThan *tmp31 :a2 :b2
-   140 jump *label28 equal *tmp31 false
-   141 op add :batches :batches 1
--    * set *tmp32 :batches
-   142 jump *label29 always
-   143 label *label28
--    * set *tmp32 null
-   144 label *label29
-   145 jump *label27 always
-   146 label *label26
- 
-   151 op lessThan *tmp35 :a3 :b3
-   152 jump *label32 equal *tmp35 false
-   153 op add :batches :batches 1
--    * set *tmp36 :batches
-   154 jump *label33 always
-   155 label *label32
--    * set *tmp36 null
-   156 label *label33
-   157 jump *label31 always
-   158 label *label30
- 
-   163 op lessThan *tmp39 :a4 :b4
-   164 jump *label36 equal *tmp39 false
-   165 op add :batches :batches 1
--    * set *tmp40 :batches
-   166 jump *label37 always
-   167 label *label36
--    * set *tmp40 null
-   168 label *label37
-   169 jump *label35 always
-   170 label *label34
- 
-   223 op lessThan *tmp60 :b1 :a1
-   224 jump *label44 equal *tmp60 false
-   225 op add :batches :batches 1
--    * set *tmp61 :batches
-   226 jump *label45 always
-   227 label *label44
--    * set *tmp61 null
-   228 label *label45
-   229 jump *label43 always
-   230 label *label42
- 
-   235 op lessThan *tmp64 :b2 :a2
-   236 jump *label48 equal *tmp64 false
-   237 op add :batches :batches 1
--    * set *tmp65 :batches
-   238 jump *label49 always
-   239 label *label48
--    * set *tmp65 null
-   240 label *label49
-   241 jump *label47 always
-   242 label *label46
- 
-   247 op lessThan *tmp68 :b3 :a3
-   248 jump *label52 equal *tmp68 false
-   249 op add :batches :batches 1
--    * set *tmp69 :batches
-   250 jump *label53 always
-   251 label *label52
--    * set *tmp69 null
-   252 label *label53
-   253 jump *label51 always
-   254 label *label50
- 
-   259 op lessThan *tmp72 :b4 :a4
-   260 jump *label56 equal *tmp72 false
-   261 op add :batches :batches 1
--    * set *tmp73 :batches
-   262 jump *label57 always
-   263 label *label56
--    * set *tmp73 null
-   264 label *label57
-   265 jump *label55 always
-   266 label *label54
 
 Modifications by Initial phase, Dead Code Elimination, iteration 3 (-2 instructions):
  
@@ -398,166 +304,159 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-32 ins
    110 jump *label21 equal *tmp23 false
 -    * set *tmp24 @time
 -    * set :start *tmp24
+-    * sensor *tmp25 .CONV1 @totalItems
+-    * set :a1 *tmp25
 +  111 set :start @time
-   112 jump *label22 equal true false
--    * sensor *tmp26 .CONV1 @totalItems
--    * set :a1 *tmp26
-+  113 sensor :a1 .CONV1 @totalItems
-   114 op lessThan *tmp27 :a1 :b1
-   115 jump *label24 equal *tmp27 false
-   116 op add :batches :batches 1
++  112 sensor :a1 .CONV1 @totalItems
+   113 op lessThan *tmp26 :a1 :b1
+   114 jump *label22 equal *tmp26 false
+   115 op add :batches :batches 1
+   116 jump *label23 always
+   117 label *label22
+   118 label *label23
+-    * sensor *tmp28 .CONV2 @totalItems
+-    * set :a2 *tmp28
++  119 sensor :a2 .CONV2 @totalItems
+   120 op lessThan *tmp29 :a2 :b2
+   121 jump *label24 equal *tmp29 false
+   122 op add :batches :batches 1
+   123 jump *label25 always
+   124 label *label24
+   125 label *label25
+-    * sensor *tmp31 .CONV3 @totalItems
+-    * set :a3 *tmp31
++  126 sensor :a3 .CONV3 @totalItems
+   127 op lessThan *tmp32 :a3 :b3
+   128 jump *label26 equal *tmp32 false
+   129 op add :batches :batches 1
+   130 jump *label27 always
+   131 label *label26
+   132 label *label27
+-    * sensor *tmp34 .CONV4 @totalItems
+-    * set :a4 *tmp34
++  133 sensor :a4 .CONV4 @totalItems
+   134 op lessThan *tmp35 :a4 :b4
+   135 jump *label28 equal *tmp35 false
+   136 op add :batches :batches 1
  
-   121 label *label22
-   122 label *label23
-   123 jump *label26 equal true false
--    * sensor *tmp30 .CONV2 @totalItems
--    * set :a2 *tmp30
-+  124 sensor :a2 .CONV2 @totalItems
-   125 op lessThan *tmp31 :a2 :b2
-   126 jump *label28 equal *tmp31 false
-   127 op add :batches :batches 1
+   139 label *label29
+   140 op greaterThan *tmp37 :batches :limit
+   141 jump *label30 equal *tmp37 false
+-    * op sub *tmp39 @time :startTime
+-    * set :duration *tmp39
+-    * set *tmp40 @time
+-    * set :startTime *tmp40
+-    * op div *tmp41 .BATCH :duration
+-    * set :rate *tmp41
++  142 op sub :duration @time :startTime
++  143 set :startTime @time
++  144 op div :rate .BATCH :duration
+   145 set *tmp42 :lastCell
+   146 op mul *tmp44 :rate 166.66666666666666
+   147 write *tmp44 .MEMORY *tmp42
+   148 op mul *tmp45 :rate 600000
+-    * op floor *tmp46 *tmp45
+-    * set :ratePerMin *tmp46
++  149 op floor :ratePerMin *tmp45
+   150 op lessThanEq *tmp47 :duration .BATCH_DURATION
+   151 jump *label32 equal *tmp47 false
+   152 op add *tmp49 .BATCH .BATCH_STEP
+-    * op min *tmp50 *tmp49 .EFF_MAX_BATCH
+-    * set .BATCH *tmp50
+-    * op mul *tmp51 .BATCH 10
+-    * set .BATCH_TXT *tmp51
++  153 op min .BATCH *tmp49 .EFF_MAX_BATCH
++  154 op mul .BATCH_TXT .BATCH 10
+   155 jump *label33 always
+   156 label *label32
+   157 label *label33
  
-   132 label *label26
-   133 label *label27
-   134 jump *label30 equal true false
--    * sensor *tmp34 .CONV3 @totalItems
--    * set :a3 *tmp34
-+  135 sensor :a3 .CONV3 @totalItems
-   136 op lessThan *tmp35 :a3 :b3
-   137 jump *label32 equal *tmp35 false
-   138 op add :batches :batches 1
+   159 jump *label31 always
+   160 label *label30
+   161 label *label31
+-    * op mul *tmp53 :batches 10
+-    * set :total *tmp53
++  162 op mul :total :batches 10
+   163 write :total .MEMORY 0
+   164 print "Item Counter                  "
+   165 print "\n"
  
-   143 label *label30
-   144 label *label31
-   145 jump *label34 equal true false
--    * sensor *tmp38 .CONV4 @totalItems
--    * set :a4 *tmp38
-+  146 sensor :a4 .CONV4 @totalItems
-   147 op lessThan *tmp39 :a4 :b4
-   148 jump *label36 equal *tmp39 false
-   149 op add :batches :batches 1
+   178 print "["
+   179 print "] items/min"
+   180 print "\n"
+-    * sensor *tmp54 .CONV1 @totalItems
+-    * set :b1 *tmp54
++  181 sensor :b1 .CONV1 @totalItems
+   182 op lessThan *tmp55 :b1 :a1
+   183 jump *label34 equal *tmp55 false
+   184 op add :batches :batches 1
+   185 jump *label35 always
+   186 label *label34
+   187 label *label35
+-    * sensor *tmp57 .CONV2 @totalItems
+-    * set :b2 *tmp57
++  188 sensor :b2 .CONV2 @totalItems
+   189 op lessThan *tmp58 :b2 :a2
+   190 jump *label36 equal *tmp58 false
+   191 op add :batches :batches 1
+   192 jump *label37 always
+   193 label *label36
+   194 label *label37
+-    * sensor *tmp60 .CONV3 @totalItems
+-    * set :b3 *tmp60
++  195 sensor :b3 .CONV3 @totalItems
+   196 op lessThan *tmp61 :b3 :a3
+   197 jump *label38 equal *tmp61 false
+   198 op add :batches :batches 1
+   199 jump *label39 always
+   200 label *label38
+   201 label *label39
+-    * sensor *tmp63 .CONV4 @totalItems
+-    * set :b4 *tmp63
++  202 sensor :b4 .CONV4 @totalItems
+   203 op lessThan *tmp64 :b4 :a4
+   204 jump *label40 equal *tmp64 false
+   205 op add :batches :batches 1
  
-   155 label *label35
-   156 op greaterThan *tmp41 :batches :limit
-   157 jump *label38 equal *tmp41 false
--    * op sub *tmp43 @time :startTime
--    * set :duration *tmp43
--    * set *tmp44 @time
--    * set :startTime *tmp44
--    * op div *tmp45 .BATCH :duration
--    * set :rate *tmp45
-+  158 op sub :duration @time :startTime
-+  159 set :startTime @time
-+  160 op div :rate .BATCH :duration
-   161 set *tmp46 :lastCell
-   162 op mul *tmp48 :rate 166.66666666666666
-   163 write *tmp48 .MEMORY *tmp46
-   164 op mul *tmp49 :rate 600000
--    * op floor *tmp50 *tmp49
--    * set :ratePerMin *tmp50
-+  165 op floor :ratePerMin *tmp49
-   166 op lessThanEq *tmp51 :duration .BATCH_DURATION
-   167 jump *label40 equal *tmp51 false
-   168 op add *tmp53 .BATCH .BATCH_STEP
--    * op min *tmp54 *tmp53 .EFF_MAX_BATCH
--    * set .BATCH *tmp54
--    * op mul *tmp55 .BATCH 10
--    * set .BATCH_TXT *tmp55
-+  169 op min .BATCH *tmp53 .EFF_MAX_BATCH
-+  170 op mul .BATCH_TXT .BATCH 10
-   171 jump *label41 always
-   172 label *label40
-   173 label *label41
+   207 label *label40
+   208 label *label41
+   209 op sub *tmp66 @time :startTime
+-    * op floor *tmp67 *tmp66
+-    * set :elapsed *tmp67
++  210 op floor :elapsed *tmp66
+   211 op greaterThanEq *tmp68 :elapsed 10000
+   212 jump *label42 equal *tmp68 false
+   213 op idiv *tmp70 .BATCH 5
+-    * op max *tmp71 *tmp70 .EFF_MIN_BATCH
+-    * set .BATCH *tmp71
+-    * op mul *tmp72 .BATCH 10
+-    * set .BATCH_TXT *tmp72
+-    * op add *tmp73 :batches .BATCH
+-    * set :limit *tmp73
+-    * set *tmp74 :lastCell
+-    * write 0 .MEMORY *tmp74
++  214 op max .BATCH *tmp70 .EFF_MIN_BATCH
++  215 op mul .BATCH_TXT .BATCH 10
++  216 op add :limit :batches .BATCH
++  217 write 0 .MEMORY :lastCell
+   218 set :ratePerMin 0
+-    * set *tmp76 @time
+-    * set :startTime *tmp76
++  219 set :startTime @time
+   220 jump *label43 always
+   221 label *label42
+   222 label *label43
  
-   175 jump *label39 always
-   176 label *label38
-   177 label *label39
--    * op mul *tmp57 :batches 10
--    * set :total *tmp57
-+  178 op mul :total :batches 10
-   179 write :total .MEMORY 0
-   180 print "Item Counter                  "
-   181 print "\n"
- 
-   195 print "] items/min"
-   196 print "\n"
-   197 jump *label42 equal true false
--    * sensor *tmp59 .CONV1 @totalItems
--    * set :b1 *tmp59
-+  198 sensor :b1 .CONV1 @totalItems
-   199 op lessThan *tmp60 :b1 :a1
-   200 jump *label44 equal *tmp60 false
-   201 op add :batches :batches 1
- 
-   206 label *label42
-   207 label *label43
-   208 jump *label46 equal true false
--    * sensor *tmp63 .CONV2 @totalItems
--    * set :b2 *tmp63
-+  209 sensor :b2 .CONV2 @totalItems
-   210 op lessThan *tmp64 :b2 :a2
-   211 jump *label48 equal *tmp64 false
-   212 op add :batches :batches 1
- 
-   217 label *label46
-   218 label *label47
-   219 jump *label50 equal true false
--    * sensor *tmp67 .CONV3 @totalItems
--    * set :b3 *tmp67
-+  220 sensor :b3 .CONV3 @totalItems
-   221 op lessThan *tmp68 :b3 :a3
-   222 jump *label52 equal *tmp68 false
-   223 op add :batches :batches 1
- 
-   228 label *label50
-   229 label *label51
-   230 jump *label54 equal true false
--    * sensor *tmp71 .CONV4 @totalItems
--    * set :b4 *tmp71
-+  231 sensor :b4 .CONV4 @totalItems
-   232 op lessThan *tmp72 :b4 :a4
-   233 jump *label56 equal *tmp72 false
-   234 op add :batches :batches 1
- 
-   239 label *label54
-   240 label *label55
-   241 op sub *tmp74 @time :startTime
--    * op floor *tmp75 *tmp74
--    * set :elapsed *tmp75
-+  242 op floor :elapsed *tmp74
-   243 op greaterThanEq *tmp76 :elapsed 10000
-   244 jump *label58 equal *tmp76 false
-   245 op idiv *tmp78 .BATCH 5
--    * op max *tmp79 *tmp78 .EFF_MIN_BATCH
--    * set .BATCH *tmp79
--    * op mul *tmp80 .BATCH 10
--    * set .BATCH_TXT *tmp80
--    * op add *tmp81 :batches .BATCH
--    * set :limit *tmp81
--    * set *tmp82 :lastCell
--    * write 0 .MEMORY *tmp82
-+  246 op max .BATCH *tmp78 .EFF_MIN_BATCH
-+  247 op mul .BATCH_TXT .BATCH 10
-+  248 op add :limit :batches .BATCH
-+  249 write 0 .MEMORY :lastCell
-   250 set :ratePerMin 0
--    * set *tmp84 @time
--    * set :startTime *tmp84
-+  251 set :startTime @time
-   252 jump *label59 always
-   253 label *label58
-   254 label *label59
- 
-   280 jump *label19 always
-   281 label *label21
-   282 control enabled switch1 0
--    * set *tmp91 :lastCell
--    * write 0 .MEMORY *tmp91
-+  283 write 0 .MEMORY :lastCell
-   284 write 0 .MEMORY 0
-   285 end
+   248 jump *label19 always
+   249 label *label21
+   250 control enabled switch1 0
+-    * set *tmp83 :lastCell
+-    * write 0 .MEMORY *tmp83
++  251 write 0 .MEMORY :lastCell
+   252 write 0 .MEMORY 0
+   253 end
 
-Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 instructions):
+Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-1 instructions):
  
      1 set MAX_BATCH 1000
      2 set :lastCell 0
@@ -566,70 +465,6 @@ Modifications by Iterated phase, Jump Normalization, pass 1, iteration 1 (-9 ins
      4 set .CONV4 null
      5 set .CONV3 .CONV4
      6 set .CONV2 .CONV3
- 
-   108 op equal *tmp23 *tmp22 0
-   109 jump *label21 equal *tmp23 false
-   110 set :start @time
--    * jump *label22 equal true false
-   111 sensor :a1 .CONV1 @totalItems
-   112 op lessThan *tmp27 :a1 :b1
-   113 jump *label24 equal *tmp27 false
- 
-   118 jump *label23 always
-   119 label *label22
-   120 label *label23
--    * jump *label26 equal true false
-   121 sensor :a2 .CONV2 @totalItems
-   122 op lessThan *tmp31 :a2 :b2
-   123 jump *label28 equal *tmp31 false
- 
-   128 jump *label27 always
-   129 label *label26
-   130 label *label27
--    * jump *label30 equal true false
-   131 sensor :a3 .CONV3 @totalItems
-   132 op lessThan *tmp35 :a3 :b3
-   133 jump *label32 equal *tmp35 false
- 
-   138 jump *label31 always
-   139 label *label30
-   140 label *label31
--    * jump *label34 equal true false
-   141 sensor :a4 .CONV4 @totalItems
-   142 op lessThan *tmp39 :a4 :b4
-   143 jump *label36 equal *tmp39 false
- 
-   189 print "["
-   190 print "] items/min"
-   191 print "\n"
--    * jump *label42 equal true false
-   192 sensor :b1 .CONV1 @totalItems
-   193 op lessThan *tmp60 :b1 :a1
-   194 jump *label44 equal *tmp60 false
- 
-   199 jump *label43 always
-   200 label *label42
-   201 label *label43
--    * jump *label46 equal true false
-   202 sensor :b2 .CONV2 @totalItems
-   203 op lessThan *tmp64 :b2 :a2
-   204 jump *label48 equal *tmp64 false
- 
-   209 jump *label47 always
-   210 label *label46
-   211 label *label47
--    * jump *label50 equal true false
-   212 sensor :b3 .CONV3 @totalItems
-   213 op lessThan *tmp68 :b3 :a3
-   214 jump *label52 equal *tmp68 false
- 
-   219 jump *label51 always
-   220 label *label50
-   221 label *label51
--    * jump *label54 equal true false
-   222 sensor :b4 .CONV4 @totalItems
-   223 op lessThan *tmp72 :b4 :a4
-   224 jump *label56 equal *tmp72 false
 
 Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-3 instructions):
  
@@ -703,124 +538,108 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-17 ins
 +  101 jump *label21 notEqual *tmp22 0
    102 set :start @time
    103 sensor :a1 .CONV1 @totalItems
--    * op lessThan *tmp27 :a1 :b1
--    * jump *label24 equal *tmp27 false
-+  104 jump *label24 greaterThanEq :a1 :b1
+-    * op lessThan *tmp26 :a1 :b1
+-    * jump *label22 equal *tmp26 false
++  104 jump *label22 greaterThanEq :a1 :b1
    105 op add :batches :batches 1
-   106 jump *label25 always
-   107 label *label24
- 
-   110 label *label22
-   111 label *label23
-   112 sensor :a2 .CONV2 @totalItems
--    * op lessThan *tmp31 :a2 :b2
--    * jump *label28 equal *tmp31 false
-+  113 jump *label28 greaterThanEq :a2 :b2
-   114 op add :batches :batches 1
-   115 jump *label29 always
-   116 label *label28
- 
+   106 jump *label23 always
+   107 label *label22
+   108 label *label23
+   109 sensor :a2 .CONV2 @totalItems
+-    * op lessThan *tmp29 :a2 :b2
+-    * jump *label24 equal *tmp29 false
++  110 jump *label24 greaterThanEq :a2 :b2
+   111 op add :batches :batches 1
+   112 jump *label25 always
+   113 label *label24
+   114 label *label25
+   115 sensor :a3 .CONV3 @totalItems
+-    * op lessThan *tmp32 :a3 :b3
+-    * jump *label26 equal *tmp32 false
++  116 jump *label26 greaterThanEq :a3 :b3
+   117 op add :batches :batches 1
+   118 jump *label27 always
    119 label *label26
    120 label *label27
-   121 sensor :a3 .CONV3 @totalItems
--    * op lessThan *tmp35 :a3 :b3
--    * jump *label32 equal *tmp35 false
-+  122 jump *label32 greaterThanEq :a3 :b3
+   121 sensor :a4 .CONV4 @totalItems
+-    * op lessThan *tmp35 :a4 :b4
+-    * jump *label28 equal *tmp35 false
++  122 jump *label28 greaterThanEq :a4 :b4
    123 op add :batches :batches 1
-   124 jump *label33 always
-   125 label *label32
+   124 jump *label29 always
+   125 label *label28
+   126 label *label29
+-    * op greaterThan *tmp37 :batches :limit
+-    * jump *label30 equal *tmp37 false
++  127 jump *label30 lessThanEq :batches :limit
+   128 op sub :duration @time :startTime
+   129 set :startTime @time
+   130 op div :rate .BATCH :duration
  
-   128 label *label30
-   129 label *label31
-   130 sensor :a4 .CONV4 @totalItems
--    * op lessThan *tmp39 :a4 :b4
--    * jump *label36 equal *tmp39 false
-+  131 jump *label36 greaterThanEq :a4 :b4
-   132 op add :batches :batches 1
-   133 jump *label37 always
-   134 label *label36
+   133 write *tmp44 .MEMORY *tmp42
+   134 op mul *tmp45 :rate 600000
+   135 op floor :ratePerMin *tmp45
+-    * op lessThanEq *tmp47 :duration .BATCH_DURATION
+-    * jump *label32 equal *tmp47 false
++  136 jump *label32 greaterThan :duration .BATCH_DURATION
+   137 op add *tmp49 .BATCH .BATCH_STEP
+   138 op min .BATCH *tmp49 .EFF_MAX_BATCH
+   139 op mul .BATCH_TXT .BATCH 10
  
-   136 jump *label35 always
-   137 label *label34
-   138 label *label35
--    * op greaterThan *tmp41 :batches :limit
--    * jump *label38 equal *tmp41 false
-+  139 jump *label38 lessThanEq :batches :limit
-   140 op sub :duration @time :startTime
-   141 set :startTime @time
-   142 op div :rate .BATCH :duration
- 
-   145 write *tmp48 .MEMORY *tmp46
-   146 op mul *tmp49 :rate 600000
-   147 op floor :ratePerMin *tmp49
--    * op lessThanEq *tmp51 :duration .BATCH_DURATION
--    * jump *label40 equal *tmp51 false
-+  148 jump *label40 greaterThan :duration .BATCH_DURATION
-   149 op add *tmp53 .BATCH .BATCH_STEP
-   150 op min .BATCH *tmp53 .EFF_MAX_BATCH
-   151 op mul .BATCH_TXT .BATCH 10
- 
-   176 print "] items/min"
-   177 print "\n"
-   178 sensor :b1 .CONV1 @totalItems
--    * op lessThan *tmp60 :b1 :a1
--    * jump *label44 equal *tmp60 false
-+  179 jump *label44 greaterThanEq :b1 :a1
+   164 print "] items/min"
+   165 print "\n"
+   166 sensor :b1 .CONV1 @totalItems
+-    * op lessThan *tmp55 :b1 :a1
+-    * jump *label34 equal *tmp55 false
++  167 jump *label34 greaterThanEq :b1 :a1
+   168 op add :batches :batches 1
+   169 jump *label35 always
+   170 label *label34
+   171 label *label35
+   172 sensor :b2 .CONV2 @totalItems
+-    * op lessThan *tmp58 :b2 :a2
+-    * jump *label36 equal *tmp58 false
++  173 jump *label36 greaterThanEq :b2 :a2
+   174 op add :batches :batches 1
+   175 jump *label37 always
+   176 label *label36
+   177 label *label37
+   178 sensor :b3 .CONV3 @totalItems
+-    * op lessThan *tmp61 :b3 :a3
+-    * jump *label38 equal *tmp61 false
++  179 jump *label38 greaterThanEq :b3 :a3
    180 op add :batches :batches 1
-   181 jump *label45 always
-   182 label *label44
+   181 jump *label39 always
+   182 label *label38
+   183 label *label39
+   184 sensor :b4 .CONV4 @totalItems
+-    * op lessThan *tmp64 :b4 :a4
+-    * jump *label40 equal *tmp64 false
++  185 jump *label40 greaterThanEq :b4 :a4
+   186 op add :batches :batches 1
+   187 jump *label41 always
+   188 label *label40
+   189 label *label41
+   190 op sub *tmp66 @time :startTime
+   191 op floor :elapsed *tmp66
+-    * op greaterThanEq *tmp68 :elapsed 10000
+-    * jump *label42 equal *tmp68 false
++  192 jump *label42 lessThan :elapsed 10000
+   193 op idiv *tmp70 .BATCH 5
+   194 op max .BATCH *tmp70 .EFF_MIN_BATCH
+   195 op mul .BATCH_TXT .BATCH 10
  
-   185 label *label42
-   186 label *label43
-   187 sensor :b2 .CONV2 @totalItems
--    * op lessThan *tmp64 :b2 :a2
--    * jump *label48 equal *tmp64 false
-+  188 jump *label48 greaterThanEq :b2 :a2
-   189 op add :batches :batches 1
-   190 jump *label49 always
-   191 label *label48
- 
-   194 label *label46
-   195 label *label47
-   196 sensor :b3 .CONV3 @totalItems
--    * op lessThan *tmp68 :b3 :a3
--    * jump *label52 equal *tmp68 false
-+  197 jump *label52 greaterThanEq :b3 :a3
-   198 op add :batches :batches 1
-   199 jump *label53 always
-   200 label *label52
- 
-   203 label *label50
-   204 label *label51
-   205 sensor :b4 .CONV4 @totalItems
--    * op lessThan *tmp72 :b4 :a4
--    * jump *label56 equal *tmp72 false
-+  206 jump *label56 greaterThanEq :b4 :a4
-   207 op add :batches :batches 1
-   208 jump *label57 always
-   209 label *label56
- 
-   213 label *label55
-   214 op sub *tmp74 @time :startTime
-   215 op floor :elapsed *tmp74
--    * op greaterThanEq *tmp76 :elapsed 10000
--    * jump *label58 equal *tmp76 false
-+  216 jump *label58 lessThan :elapsed 10000
-   217 op idiv *tmp78 .BATCH 5
-   218 op max .BATCH *tmp78 .EFF_MIN_BATCH
-   219 op mul .BATCH_TXT .BATCH 10
- 
-   242 print " "
-   243 print "ms"
-   244 printflush message1
--    * op notEqual *tmp88 .LINKS @links
--    * jump *label60 equal *tmp88 false
-+  245 jump *label60 equal .LINKS @links
-   246 end
-   247 jump *label61 always
-   248 label *label60
+   218 print " "
+   219 print "ms"
+   220 printflush message1
+-    * op notEqual *tmp80 .LINKS @links
+-    * jump *label44 equal *tmp80 false
++  221 jump *label44 equal .LINKS @links
+   222 end
+   223 jump *label45 always
+   224 label *label44
 
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-21 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-13 instructions):
  
     32 set .CONV2 .CONV1
     33 set .CONV1 :block
@@ -831,130 +650,106 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
     37 label *label4
  
    102 sensor :a1 .CONV1 @totalItems
-   103 jump *label24 greaterThanEq :a1 :b1
+   103 jump *label22 greaterThanEq :a1 :b1
    104 op add :batches :batches 1
--    * jump *label25 always
-   105 label *label24
-   106 label *label25
 -    * jump *label23 always
-   107 label *label22
-   108 label *label23
-   109 sensor :a2 .CONV2 @totalItems
-   110 jump *label28 greaterThanEq :a2 :b2
-   111 op add :batches :batches 1
--    * jump *label29 always
-   112 label *label28
-   113 label *label29
+   105 label *label22
+   106 label *label23
+   107 sensor :a2 .CONV2 @totalItems
+   108 jump *label24 greaterThanEq :a2 :b2
+   109 op add :batches :batches 1
+-    * jump *label25 always
+   110 label *label24
+   111 label *label25
+   112 sensor :a3 .CONV3 @totalItems
+   113 jump *label26 greaterThanEq :a3 :b3
+   114 op add :batches :batches 1
 -    * jump *label27 always
-   114 label *label26
-   115 label *label27
-   116 sensor :a3 .CONV3 @totalItems
-   117 jump *label32 greaterThanEq :a3 :b3
-   118 op add :batches :batches 1
+   115 label *label26
+   116 label *label27
+   117 sensor :a4 .CONV4 @totalItems
+   118 jump *label28 greaterThanEq :a4 :b4
+   119 op add :batches :batches 1
+-    * jump *label29 always
+   120 label *label28
+   121 label *label29
+   122 jump *label30 lessThanEq :batches :limit
+ 
+   132 op add *tmp49 .BATCH .BATCH_STEP
+   133 op min .BATCH *tmp49 .EFF_MAX_BATCH
+   134 op mul .BATCH_TXT .BATCH 10
 -    * jump *label33 always
-   119 label *label32
-   120 label *label33
+   135 label *label32
+   136 label *label33
+   137 op add :limit :limit .BATCH
 -    * jump *label31 always
-   121 label *label30
-   122 label *label31
-   123 sensor :a4 .CONV4 @totalItems
-   124 jump *label36 greaterThanEq :a4 :b4
-   125 op add :batches :batches 1
--    * jump *label37 always
-   126 label *label36
-   127 label *label37
+   138 label *label30
+   139 label *label31
+   140 op mul :total :batches 10
+ 
+   159 sensor :b1 .CONV1 @totalItems
+   160 jump *label34 greaterThanEq :b1 :a1
+   161 op add :batches :batches 1
 -    * jump *label35 always
-   128 label *label34
-   129 label *label35
-   130 jump *label38 lessThanEq :batches :limit
- 
-   140 op add *tmp53 .BATCH .BATCH_STEP
-   141 op min .BATCH *tmp53 .EFF_MAX_BATCH
-   142 op mul .BATCH_TXT .BATCH 10
--    * jump *label41 always
-   143 label *label40
-   144 label *label41
-   145 op add :limit :limit .BATCH
+   162 label *label34
+   163 label *label35
+   164 sensor :b2 .CONV2 @totalItems
+   165 jump *label36 greaterThanEq :b2 :a2
+   166 op add :batches :batches 1
+-    * jump *label37 always
+   167 label *label36
+   168 label *label37
+   169 sensor :b3 .CONV3 @totalItems
+   170 jump *label38 greaterThanEq :b3 :a3
+   171 op add :batches :batches 1
 -    * jump *label39 always
-   146 label *label38
-   147 label *label39
-   148 op mul :total :batches 10
- 
-   167 sensor :b1 .CONV1 @totalItems
-   168 jump *label44 greaterThanEq :b1 :a1
-   169 op add :batches :batches 1
--    * jump *label45 always
-   170 label *label44
-   171 label *label45
--    * jump *label43 always
-   172 label *label42
-   173 label *label43
-   174 sensor :b2 .CONV2 @totalItems
-   175 jump *label48 greaterThanEq :b2 :a2
+   172 label *label38
+   173 label *label39
+   174 sensor :b4 .CONV4 @totalItems
+   175 jump *label40 greaterThanEq :b4 :a4
    176 op add :batches :batches 1
--    * jump *label49 always
-   177 label *label48
-   178 label *label49
--    * jump *label47 always
-   179 label *label46
-   180 label *label47
-   181 sensor :b3 .CONV3 @totalItems
-   182 jump *label52 greaterThanEq :b3 :a3
-   183 op add :batches :batches 1
--    * jump *label53 always
-   184 label *label52
-   185 label *label53
--    * jump *label51 always
-   186 label *label50
-   187 label *label51
-   188 sensor :b4 .CONV4 @totalItems
-   189 jump *label56 greaterThanEq :b4 :a4
-   190 op add :batches :batches 1
--    * jump *label57 always
-   191 label *label56
-   192 label *label57
--    * jump *label55 always
-   193 label *label54
-   194 label *label55
-   195 op sub *tmp74 @time :startTime
+-    * jump *label41 always
+   177 label *label40
+   178 label *label41
+   179 op sub *tmp66 @time :startTime
  
-   202 write 0 .MEMORY :lastCell
-   203 set :ratePerMin 0
-   204 set :startTime @time
--    * jump *label59 always
-   205 label *label58
-   206 label *label59
-   207 print "Batch size: [green]"
+   186 write 0 .MEMORY :lastCell
+   187 set :ratePerMin 0
+   188 set :startTime @time
+-    * jump *label43 always
+   189 label *label42
+   190 label *label43
+   191 print "Batch size: [green]"
  
-   224 printflush message1
-   225 jump *label60 equal .LINKS @links
-   226 end
--    * jump *label61 always
-   227 label *label60
-   228 label *label61
-   229 label *label20
+   208 printflush message1
+   209 jump *label44 equal .LINKS @links
+   210 end
+-    * jump *label45 always
+   211 label *label44
+   212 label *label45
+   213 label *label20
 
 Modifications by Iterated phase, Expression Optimization, pass 1, iteration 1 (-2 instructions):
  
-   134 set *tmp46 :lastCell
-   135 op mul *tmp48 :rate 166.66666666666666
-   136 write *tmp48 .MEMORY *tmp46
--    * op mul *tmp49 :rate 600000
--    * op floor :ratePerMin *tmp49
-+  137 op idiv :ratePerMin :rate 0.0000016666666666666667
-   138 jump *label40 greaterThan :duration .BATCH_DURATION
-   139 op add *tmp53 .BATCH .BATCH_STEP
-   140 op min .BATCH *tmp53 .EFF_MAX_BATCH
+   126 set *tmp42 :lastCell
+   127 op mul *tmp44 :rate 166.66666666666666
+   128 write *tmp44 .MEMORY *tmp42
+-    * op mul *tmp45 :rate 600000
+-    * op floor :ratePerMin *tmp45
++  129 op idiv :ratePerMin :rate 0.0000016666666666666667
+   130 jump *label32 greaterThan :duration .BATCH_DURATION
+   131 op add *tmp49 .BATCH .BATCH_STEP
+   132 op min .BATCH *tmp49 .EFF_MAX_BATCH
  
-   214 print "] ms"
-   215 print "\n"
-   216 op sub *tmp85 @time :start
--    * op div *tmp86 *tmp85 2
--    * op floor *tmp87 *tmp86
-+  217 op idiv *tmp87 *tmp85 2
-   218 print "[lightgray]Loop time: "
-   219 print *tmp87
-   220 print " "
+   198 print "] ms"
+   199 print "\n"
+   200 op sub *tmp77 @time :start
+-    * op div *tmp78 *tmp77 2
+-    * op floor *tmp79 *tmp78
++  201 op idiv *tmp79 *tmp77 2
+   202 print "[lightgray]Loop time: "
+   203 print *tmp79
+   204 print " "
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -1002,19 +797,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     97 set :startTime @time
     98 label *label19
  
-   133 op div :rate .BATCH :duration
-   134 set *tmp46 :lastCell
-   135 op mul *tmp48 :rate 166.66666666666666
--    * write *tmp48 .MEMORY *tmp46
-+  136 write *tmp48 .MEMORY :lastCell
-   137 op idiv :ratePerMin :rate 0.0000016666666666666667
--    * jump *label40 greaterThan :duration .BATCH_DURATION
--    * op add *tmp53 .BATCH .BATCH_STEP
-+  138 jump *label40 greaterThan :duration 2000
-+  139 op add *tmp53 .BATCH 1
-   140 op min .BATCH *tmp53 .EFF_MAX_BATCH
-   141 op mul .BATCH_TXT .BATCH 10
-   142 label *label40
+   125 op div :rate .BATCH :duration
+   126 set *tmp42 :lastCell
+   127 op mul *tmp44 :rate 166.66666666666666
+-    * write *tmp44 .MEMORY *tmp42
++  128 write *tmp44 .MEMORY :lastCell
+   129 op idiv :ratePerMin :rate 0.0000016666666666666667
+-    * jump *label32 greaterThan :duration .BATCH_DURATION
+-    * op add *tmp49 .BATCH .BATCH_STEP
++  130 jump *label32 greaterThan :duration 2000
++  131 op add *tmp49 .BATCH 1
+   132 op min .BATCH *tmp49 .EFF_MAX_BATCH
+   133 op mul .BATCH_TXT .BATCH 10
+   134 label *label32
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3 instructions):
  
@@ -1063,13 +858,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-3
     95 set :startTime @time
     96 label *label19
  
-   129 op sub :duration @time :startTime
-   130 set :startTime @time
-   131 op div :rate .BATCH :duration
--    * set *tmp46 :lastCell
-   132 op mul *tmp48 :rate 166.66666666666666
-   133 write *tmp48 .MEMORY :lastCell
-   134 op idiv :ratePerMin :rate 0.0000016666666666666667
+   121 op sub :duration @time :startTime
+   122 set :startTime @time
+   123 op div :rate .BATCH :duration
+-    * set *tmp42 :lastCell
+   124 op mul *tmp44 :rate 166.66666666666666
+   125 write *tmp44 .MEMORY :lastCell
+   126 op idiv :ratePerMin :rate 0.0000016666666666666667
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
  
@@ -1115,20 +910,20 @@ Modifications by Replicate loop condition at line 69:1 (+1 instructions):
     92 label *label19
     93 sensor *tmp22 switch1 @enabled
     94 jump *label21 notEqual *tmp22 0
-+   95 label *label62
++   95 label *label46
     96 set :start @time
     97 sensor :a1 .CONV1 @totalItems
-    98 jump *label24 greaterThanEq :a1 :b1
+    98 jump *label22 greaterThanEq :a1 :b1
  
-   219 label *label60
-   220 label *label61
-   221 label *label20
+   203 label *label44
+   204 label *label45
+   205 label *label20
 -    * jump *label19 always
-+  222 sensor *tmp22 switch1 @enabled
-+  223 jump *label62 equal *tmp22 0
-   224 label *label21
-   225 control enabled switch1 0
-   226 write 0 .MEMORY :lastCell
++  206 sensor *tmp22 switch1 @enabled
++  207 jump *label46 equal *tmp22 0
+   208 label *label21
+   209 control enabled switch1 0
+   210 write 0 .MEMORY :lastCell
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -1176,96 +971,80 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label19
     86 sensor *tmp22 switch1 @enabled
     87 jump *label21 notEqual *tmp22 0
-    88 label *label62
+    88 label *label46
  
-    91 jump *label24 greaterThanEq :a1 :b1
+    91 jump *label22 greaterThanEq :a1 :b1
     92 op add :batches :batches 1
-    93 label *label24
--    * label *label25
--    * label *label22
+    93 label *label22
 -    * label *label23
     94 sensor :a2 .CONV2 @totalItems
-    95 jump *label28 greaterThanEq :a2 :b2
+    95 jump *label24 greaterThanEq :a2 :b2
     96 op add :batches :batches 1
-    97 label *label28
--    * label *label29
--    * label *label26
--    * label *label27
+    97 label *label24
+-    * label *label25
     98 sensor :a3 .CONV3 @totalItems
-    99 jump *label32 greaterThanEq :a3 :b3
+    99 jump *label26 greaterThanEq :a3 :b3
    100 op add :batches :batches 1
-   101 label *label32
--    * label *label33
--    * label *label30
--    * label *label31
+   101 label *label26
+-    * label *label27
    102 sensor :a4 .CONV4 @totalItems
-   103 jump *label36 greaterThanEq :a4 :b4
+   103 jump *label28 greaterThanEq :a4 :b4
    104 op add :batches :batches 1
-   105 label *label36
--    * label *label37
--    * label *label34
--    * label *label35
-   106 jump *label38 lessThanEq :batches :limit
+   105 label *label28
+-    * label *label29
+   106 jump *label30 lessThanEq :batches :limit
    107 op sub :duration @time :startTime
    108 set :startTime @time
  
-   115 op min .BATCH *tmp53 .EFF_MAX_BATCH
+   115 op min .BATCH *tmp49 .EFF_MAX_BATCH
    116 op mul .BATCH_TXT .BATCH 10
-   117 label *label40
--    * label *label41
+   117 label *label32
+-    * label *label33
    118 op add :limit :limit .BATCH
-   119 label *label38
--    * label *label39
+   119 label *label30
+-    * label *label31
    120 op mul :total :batches 10
    121 write :total .MEMORY 0
    122 print "Item Counter                  "
  
-   140 jump *label44 greaterThanEq :b1 :a1
+   140 jump *label34 greaterThanEq :b1 :a1
    141 op add :batches :batches 1
-   142 label *label44
--    * label *label45
--    * label *label42
--    * label *label43
+   142 label *label34
+-    * label *label35
    143 sensor :b2 .CONV2 @totalItems
-   144 jump *label48 greaterThanEq :b2 :a2
+   144 jump *label36 greaterThanEq :b2 :a2
    145 op add :batches :batches 1
-   146 label *label48
--    * label *label49
--    * label *label46
--    * label *label47
+   146 label *label36
+-    * label *label37
    147 sensor :b3 .CONV3 @totalItems
-   148 jump *label52 greaterThanEq :b3 :a3
+   148 jump *label38 greaterThanEq :b3 :a3
    149 op add :batches :batches 1
-   150 label *label52
--    * label *label53
--    * label *label50
--    * label *label51
+   150 label *label38
+-    * label *label39
    151 sensor :b4 .CONV4 @totalItems
-   152 jump *label56 greaterThanEq :b4 :a4
+   152 jump *label40 greaterThanEq :b4 :a4
    153 op add :batches :batches 1
-   154 label *label56
--    * label *label57
--    * label *label54
--    * label *label55
-   155 op sub *tmp74 @time :startTime
-   156 op floor :elapsed *tmp74
-   157 jump *label58 lessThan :elapsed 10000
+   154 label *label40
+-    * label *label41
+   155 op sub *tmp66 @time :startTime
+   156 op floor :elapsed *tmp66
+   157 jump *label42 lessThan :elapsed 10000
  
    163 set :ratePerMin 0
    164 set :startTime @time
-   165 label *label58
--    * label *label59
+   165 label *label42
+-    * label *label43
    166 print "Batch size: [green]"
    167 print .BATCH_TXT
    168 print "["
  
-   183 jump *label60 equal .LINKS @links
+   183 jump *label44 equal .LINKS @links
    184 end
-   185 label *label60
--    * label *label61
+   185 label *label44
+-    * label *label45
 -    * label *label20
    186 sensor *tmp22 switch1 @enabled
-   187 jump *label62 equal *tmp22 0
+   187 jump *label46 equal *tmp22 0
    188 label *label21
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
@@ -1350,7 +1129,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
     45 jump *label0 always
     46 label *label15
  
-   101 label *label38
+   101 label *label30
    102 op mul :total :batches 10
    103 write :total .MEMORY 0
 -    * print "Item Counter                  "
@@ -1375,12 +1154,12 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 +  106 format :total
 +  107 format :ratePerMin
    108 sensor :b1 .CONV1 @totalItems
-   109 jump *label44 greaterThanEq :b1 :a1
+   109 jump *label34 greaterThanEq :b1 :a1
    110 op add :batches :batches 1
  
    132 set :ratePerMin 0
    133 set :startTime @time
-   134 label *label58
+   134 label *label42
 -    * print "Batch size: [green]"
 -    * print .BATCH_TXT
 -    * print "["
@@ -1394,15 +1173,15 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 +  135 print "Batch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
 +  136 format .BATCH_TXT
 +  137 format :elapsed
-   138 op sub *tmp85 @time :start
-   139 op idiv *tmp87 *tmp85 2
+   138 op sub *tmp77 @time :start
+   139 op idiv *tmp79 *tmp77 2
 -    * print "[lightgray]Loop time: "
--    * print *tmp87
+-    * print *tmp79
 -    * print " "
 -    * print "ms"
-+  140 format *tmp87
++  140 format *tmp79
    141 printflush message1
-   142 jump *label60 equal .LINKS @links
+   142 jump *label44 equal .LINKS @links
    143 end
 
 Final code before resolving virtual instructions:
@@ -1477,38 +1256,38 @@ set :ratePerMin 0
 set :startTime @time
 sensor *tmp22 switch1 @enabled
 jump *label21 notEqual *tmp22 0
-label *label62
+label *label46
 set :start @time
 sensor :a1 .CONV1 @totalItems
-jump *label24 greaterThanEq :a1 :b1
+jump *label22 greaterThanEq :a1 :b1
+op add :batches :batches 1
+label *label22
+sensor :a2 .CONV2 @totalItems
+jump *label24 greaterThanEq :a2 :b2
 op add :batches :batches 1
 label *label24
-sensor :a2 .CONV2 @totalItems
-jump *label28 greaterThanEq :a2 :b2
+sensor :a3 .CONV3 @totalItems
+jump *label26 greaterThanEq :a3 :b3
+op add :batches :batches 1
+label *label26
+sensor :a4 .CONV4 @totalItems
+jump *label28 greaterThanEq :a4 :b4
 op add :batches :batches 1
 label *label28
-sensor :a3 .CONV3 @totalItems
-jump *label32 greaterThanEq :a3 :b3
-op add :batches :batches 1
-label *label32
-sensor :a4 .CONV4 @totalItems
-jump *label36 greaterThanEq :a4 :b4
-op add :batches :batches 1
-label *label36
-jump *label38 lessThanEq :batches :limit
+jump *label30 lessThanEq :batches :limit
 op sub :duration @time :startTime
 set :startTime @time
 op div :rate .BATCH :duration
-op mul *tmp48 :rate 166.66666666666666
-write *tmp48 .MEMORY :lastCell
+op mul *tmp44 :rate 166.66666666666666
+write *tmp44 .MEMORY :lastCell
 op idiv :ratePerMin :rate 0.0000016666666666666667
-jump *label40 greaterThan :duration 2000
-op add *tmp53 .BATCH 1
-op min .BATCH *tmp53 .EFF_MAX_BATCH
+jump *label32 greaterThan :duration 2000
+op add *tmp49 .BATCH 1
+op min .BATCH *tmp49 .EFF_MAX_BATCH
 op mul .BATCH_TXT .BATCH 10
-label *label40
+label *label32
 op add :limit :limit .BATCH
-label *label38
+label *label30
 op mul :total :batches 10
 write :total .MEMORY 0
 print "Item Counter                  \nMonitoring [green]{0}[] conveyors\nTotal items: [gold]{0}[]\nRate: [green]{0}[] items/min\n"
@@ -1516,44 +1295,44 @@ format .LINKED
 format :total
 format :ratePerMin
 sensor :b1 .CONV1 @totalItems
-jump *label44 greaterThanEq :b1 :a1
+jump *label34 greaterThanEq :b1 :a1
 op add :batches :batches 1
-label *label44
+label *label34
 sensor :b2 .CONV2 @totalItems
-jump *label48 greaterThanEq :b2 :a2
+jump *label36 greaterThanEq :b2 :a2
 op add :batches :batches 1
-label *label48
+label *label36
 sensor :b3 .CONV3 @totalItems
-jump *label52 greaterThanEq :b3 :a3
+jump *label38 greaterThanEq :b3 :a3
 op add :batches :batches 1
-label *label52
+label *label38
 sensor :b4 .CONV4 @totalItems
-jump *label56 greaterThanEq :b4 :a4
+jump *label40 greaterThanEq :b4 :a4
 op add :batches :batches 1
-label *label56
-op sub *tmp74 @time :startTime
-op floor :elapsed *tmp74
-jump *label58 lessThan :elapsed 10000
-op idiv *tmp78 .BATCH 5
-op max .BATCH *tmp78 .EFF_MIN_BATCH
+label *label40
+op sub *tmp66 @time :startTime
+op floor :elapsed *tmp66
+jump *label42 lessThan :elapsed 10000
+op idiv *tmp70 .BATCH 5
+op max .BATCH *tmp70 .EFF_MIN_BATCH
 op mul .BATCH_TXT .BATCH 10
 op add :limit :batches .BATCH
 write 0 .MEMORY :lastCell
 set :ratePerMin 0
 set :startTime @time
-label *label58
+label *label42
 print "Batch size: [green]{0}[]\nBatch time: [gold]{0}[] ms\n[lightgray]Loop time: {0} ms"
 format .BATCH_TXT
 format :elapsed
-op sub *tmp85 @time :start
-op idiv *tmp87 *tmp85 2
-format *tmp87
+op sub *tmp77 @time :start
+op idiv *tmp79 *tmp77 2
+format *tmp79
 printflush message1
-jump *label60 equal .LINKS @links
+jump *label44 equal .LINKS @links
 end
-label *label60
+label *label44
 sensor *tmp22 switch1 @enabled
-jump *label62 equal *tmp22 0
+jump *label46 equal *tmp22 0
 label *label21
 control enabled switch1 0
 write 0 .MEMORY :lastCell
