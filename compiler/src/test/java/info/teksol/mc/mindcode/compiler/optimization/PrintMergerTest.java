@@ -152,4 +152,27 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                 createInstruction(PRINT, q("#$"))
         );
     }
+
+    @Test
+    void skipsFunctionCalls() {
+        assertCompilesTo("""
+                        #set symbolic-labels = true;
+                        noinline void foo()
+                            println("In");
+                        end;
+                        
+                        println("Out");
+                        foo();
+                        println("Out");
+                        """,
+                createInstruction(PRINT, q("Out\n")),
+                createInstruction(CALL, label(0), ":foo*retaddr", ":foo*retval"),
+                createInstruction(PRINT, q("Out\n")),
+                createInstruction(END),
+                createInstruction(LABEL, label(0)),
+                createInstruction(COMMENT, q("Function: noinline void foo()")),
+                createInstruction(PRINT, q("In\n")),
+                createInstruction(RETURN, ":foo*retaddr")
+        );
+    }
 }
