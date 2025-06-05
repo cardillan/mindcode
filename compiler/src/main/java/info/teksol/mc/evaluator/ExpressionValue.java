@@ -30,7 +30,7 @@ public class ExpressionValue implements LogicWritable {
 
     @Override
     public void setLongValue(long value) {
-        literal = LogicNumber.create(value);
+        literal = instructionProcessor.isValidIntegerLiteral(value) ? LogicNumber.create(value) : null;
     }
 
     @Override

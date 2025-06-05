@@ -362,6 +362,18 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         }
 
         @Test
+        void avoidsUnrepresentableLiterals() {
+            assertCompilesTo("""
+                            a = 1;
+                            b = 63;
+                            print(a << b);
+                            """,
+                    createInstruction(OP, "shl", tmp(1), "1", "63"),
+                    createInstruction(PRINT, tmp(1))
+            );
+        }
+
+        @Test
         void optimizesAddAfterSub() {
             assertOptimizesTo(
                     List.of(

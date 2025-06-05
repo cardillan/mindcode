@@ -9,13 +9,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the compiler refusing compile-time expressions with unrepresentable values ([#262](https://github.com/cardillan/mindcode/issues/262)).
+* Fixed the Data Flow optimization producing unrepresentable mlog values ([#263](https://github.com/cardillan/mindcode/issues/263)).
 * Fixed the Print Merging optimization merging prints across function calls ([#264](https://github.com/cardillan/mindcode/issues/264)).
 * Fixed wrong evaluation of compile-time expressions with character literals ([#265](https://github.com/cardillan/mindcode/issues/265)).
 
 ### Added
 
 * Several [compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) were added.
-* The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#printing-library). The functions print all digits (64/16) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.  
+* The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#printing-library). The functions print all digits (64 or 16, respectively) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.  
 
 ### Changed
 
