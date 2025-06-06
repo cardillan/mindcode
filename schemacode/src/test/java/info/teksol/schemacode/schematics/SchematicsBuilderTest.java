@@ -163,6 +163,21 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
     }
 
     @Test
+    void refusesMissingLinkNames() {
+        assertGeneratesErrors(
+                ExpectedMessages.create()
+                        .add("A link name was not specified."),
+                """
+                        schematic
+                            @micro-processor at (0, 0) processor
+                                links +(1, 0) end
+                            end
+                        end
+                        """
+        );
+    }
+
+    @Test
     void buildsSchematicsWithName() {
         Schematic actual = buildSchematics("""
                 schematic

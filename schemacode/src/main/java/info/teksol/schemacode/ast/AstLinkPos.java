@@ -7,7 +7,6 @@ import info.teksol.schemacode.schematics.SchematicsBuilder;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @NullMarked
@@ -15,11 +14,19 @@ public record AstLinkPos(SourcePosition sourcePosition, AstConnection connection
 
     @Override
     public void getProcessorLinks(Consumer<Link> linkConsumer, SchematicsBuilder builder, Position processorPosition) {
-        linkConsumer.accept(new Link(stripPrefix(trueLinkName()), connection.evaluate(builder, processorPosition)));
+        linkConsumer.accept(new Link(stripPrefix(trueLinkName(builder)), connection.evaluate(builder, processorPosition)));
     }
 
-    private String trueLinkName() {
-        return name == null ? Objects.requireNonNull(connection().id()) : name;
+    private String trueLinkName(SchematicsBuilder builder) {
+        if (name == null) {
+            if (connection().id() == null) {
+                builder.error(sourcePosition, "A link name was not specified.");
+                return "link1";
+            }
+            return connection().id();
+        } else {
+            return name;
+        }
     }
 
     @Override

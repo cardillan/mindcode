@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed the Print Merging optimization merging prints across function calls ([#264](https://github.com/cardillan/mindcode/issues/264)).
 * Fixed wrong evaluation of compile-time expressions with character literals ([#265](https://github.com/cardillan/mindcode/issues/265)).
 * Fixed erroneous loop unrolling optimization ([#266](https://github.com/cardillan/mindcode/issues/266)).
+* Fixed internal error in Schemacode builder on missing link name ([#267](https://github.com/cardillan/mindcode/issues/267)).
 
 ### Added
 

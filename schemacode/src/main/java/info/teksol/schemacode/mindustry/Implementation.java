@@ -25,8 +25,8 @@ public enum Implementation {
     CANVASBLOCK,
     CLIFF,
     CONDUIT,
-    CONSTRUCTOR(ConfigurationType.BLOCK),
     CONSTRUCTBLOCK,
+    CONSTRUCTOR(ConfigurationType.BLOCK),
     CONSUMEGENERATOR,
     CONTINUOUSLIQUIDTURRET,
     CONTINUOUSTURRET,
@@ -125,6 +125,7 @@ public enum Implementation {
     TALLBLOCK,
     THERMALGENERATOR,
     THRUSTER,
+    TILEABLELOGICDISPLAY,
     TRACTORBEAMTURRET,
     TREEBLOCK,
     UNITASSEMBLER,
@@ -157,7 +158,7 @@ public enum Implementation {
     }
 
     private static final Map<String, Implementation> STRING_MAP =
-            Arrays.stream(values()).collect(Collectors.toMap(v -> v.name(),v -> v));
+            Arrays.stream(values()).collect(Collectors.toMap(Enum::name,v -> v));
 
     public static Implementation fromBlockType(BlockType blockType) {
         return STRING_MAP.get(blockType.implementation());
