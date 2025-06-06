@@ -312,6 +312,10 @@ public class MindustryMetadata {
     public @Nullable BlockType getBlockById(int id) {
         return getBlockIdMap().get(id);
     }
+
+    public Collection<BlockType> getAllBlocks() {
+        return getBlockMap().values();
+    }
     //</editor-fold>
 
     //<editor-fold desc="Colors">

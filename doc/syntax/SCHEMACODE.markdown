@@ -545,6 +545,7 @@ The following block types can have boolean configuration specified:
 * `@door`
 * `@door-large`
 * `@switch`
+* `@world-switch`
 
 ## Color configuration
 
@@ -683,6 +684,7 @@ The following block types can have item configuration specified:
 * `@unloader`
 * `@duct-router`
 * `@duct-unloader`
+* `@landing-pad`
 * `@surge-router`
 * `@unit-cargo-unload-point`
 * `@item-source`

@@ -18,7 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Several [compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) were added.
-* The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#printing-library). The functions print all digits (64 or 16, respectively) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.  
+* The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#printing-library). The functions print all digits (64 or 16, respectively) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.
+* Added missing support for new Mindustry 8 blocks to Schemacode (e.g., `@landing-pad` including suppport for configuration, and `@tile-logic-display`).
 
 ### Changed
 
