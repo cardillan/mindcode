@@ -339,8 +339,11 @@ end;
  * - `n`: number to be printed
  */
 void printExactBinary(n)
-    for var i in 0 ... 64 descending do
-        print((n >> i) & 1);
+    // Printing the high
+    for var t in n >> 32, n & 0xFFFFFFFF do
+        for var i in 0 ... 32 descending do
+            print((t >> i) & 1);
+        end;
     end;
 end;
 
@@ -362,20 +365,22 @@ end;
  * - `n`: number to be printed
  */
 void printExactHex(n)
-    for var i in 0 ... 16 descending do
-        var digit = (n >> (4 * i)) & 0xF;
-        if __TARGET_MAJOR__ < 8 then
-            case digit
-                when 0 .. 9 then print(digit);
-                when 10 then print("A");
-                when 11 then print("B");
-                when 12 then print("C");
-                when 13 then print("D");
-                when 14 then print("E");
-                when 15 then print("F");
+    for var t in n >> 32, n & 0xFFFFFFFF do
+        for var i in 0 ... 8 descending do
+            var digit = (t >> (4 * i)) & 0xF;
+            if __TARGET_MAJOR__ < 8 then
+                case digit
+                    when 0 .. 9 then print(digit);
+                    when 10 then print("A");
+                    when 11 then print("B");
+                    when 12 then print("C");
+                    when 13 then print("D");
+                    when 14 then print("E");
+                    when 15 then print("F");
+                end;
+            else
+                printchar('0' + digit + (digit >= 10) * ('A' - 0xA - '0'));
             end;
-        else
-            printchar('0' + digit + (digit >= 10) * ('A' - 0xA - '0'));
         end;
     end;
 end;

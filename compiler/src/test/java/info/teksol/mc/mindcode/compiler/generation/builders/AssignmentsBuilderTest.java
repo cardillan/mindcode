@@ -220,20 +220,26 @@ class AssignmentsBuilderTest extends AbstractCodeGeneratorTest {
                             #set target = 7;
                             e %%= f;
                             """,
-                    createInstruction(OP, "mod", tmp(0), ":e", ":f"),
-                    createInstruction(OP, "add", tmp(0), tmp(0), ":f"),
-                    createInstruction(OP, "mod", ":e", tmp(0), ":f")
+                    createInstruction(OP, "mod", ":e", ":e", ":f"),
+                    createInstruction(OP, "add", ":e", ":e", ":f"),
+                    createInstruction(OP, "mod", ":e", ":e", ":f")
             );
         }
 
         @Test
-        void reportsWrongTargetForUshr() {
-            assertGeneratesMessage(
-                    "The '>>>=' operator requires language target 8 or higher.",
-                    """
+        void emulatesUshrInTarget7() {
+            assertCompilesTo("""
                             #set target = 7;
                             a >>>= b;
-                            """
+                            """,
+                    createInstruction(SET, ":a", ":a"),
+                    createInstruction(OP, "and", tmp(0), ":b", "63"),
+                    createInstruction(JUMP, label(0), "lessThanEq", tmp(0), "0"),
+                    createInstruction(OP, "shr", ":a", ":a", "1"),
+                    createInstruction(OP, "and", ":a", ":a", "0x7FFFFFFFFFFFFFFF"),
+                    createInstruction(OP, "sub", tmp(0), tmp(0), "1"),
+                    createInstruction(OP, "shr", ":a", ":a", tmp(0)),
+                    createInstruction(LABEL, label(0))
             );
         }
     }

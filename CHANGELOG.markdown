@@ -17,9 +17,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
+* Added support for the [`>>>` (unsigned right shift) operator](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#shift-operators) to the compiler for targets preceding `8`. In these earlier targets, the operation is emulated by a sequence of up to seven instructions.   
 * Several [compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) were added.
 * The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#printing-library). The functions print all digits (64 or 16, respectively) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.
-* Added missing support for new Mindustry 8 blocks to Schemacode (e.g., `@landing-pad` including suppport for configuration, and `@tile-logic-display`).
+* Added missing support for new Mindustry 8 blocks to Schemacode (e.g., `@landing-pad` including support for configuration, and `@tile-logic-display`).
 
 ### Changed
 

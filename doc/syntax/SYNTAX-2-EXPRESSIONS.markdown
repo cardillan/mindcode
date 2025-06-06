@@ -221,7 +221,7 @@ Exponentiation works as usual: `2**4` is `2 * 2 * 2 * 2`, or 16.
 * `%` (modulo): remainder after division; `10 % 7` gives `3`. Defined both for integers and floating point numbers,
 * `%%` (positive modulo): like modulo, except when the divisor is positive and the dividend negative, still returns a positive number.
 
-Note: positive modulo is natively supported in Mindustry Logic 8 or higher. When the current target is smaller than `8`, the operator is compiled into three instructions.  
+Note: the positive modulo operator (`%%`) is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into three instructions.  
 
 ## Additive operators
 
@@ -268,14 +268,13 @@ Compile-time string concatenation isn't supported for [formattable string litera
 
 These operators shift the numeric value of the first operand left or right by the number of bits specified by the second operand. If the second operand is outside the `0 .. 63` range, it's value is taken modulo 64.
 
-The results of the operation are easily inspected in binary form:
+Shifting left is equivalent to an integer multiplication by a given power of two, shifting right is an equivalent of an integer division by a power of two. The results of the operation are most easily inspected in binary form:
 
 * `0b001001 << 2` becomes `0b100100`,
 * `0b001011 >> 2` becomes `0b000010` (the bits shifted "outside" the value are lost).
 
-Shifting left is equivalent to an integer multiplication by a given power of two, shifting right is an equivalent of an integer division by a power of two.
 
-The unsigned right-shift operator (`>>>`) is available in target `8` or higher. The difference between `>>>` and `>>` is that the first one shifts in zeroes from the right, while the second one copies the value of the highest bit (the sign bit) to lower bits, preserving it. Consider:
+The difference between the signed (`>>`) and unsigned (`>>>`) right shift operators concerns negative numbers: the signed operator copies the value of the leftmost bit (the sign bit) to lower bits when shifting, while the unsigned operator shifts in zeroes:
 
 ```Mindcode
 #set target = 8;
@@ -284,6 +283,31 @@ println(-1 >>> 60);
 ```
 
 prints `-1` and `15`.
+
+Notes on the unsigned right-shift operator (`>>>`):
+
+* The operator is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into a sequence of up to 7 instructions.
+* Right-shifting a negative number by at least one will produce a positive number. It is possible that the positive number will be outside the safe integer range, even though the original number was initially within the safe integer range. Example:
+
+```Mindcode
+require printing;
+
+printExactHex(-1);
+println();
+printExactHex(-1 >>> 1);
+println();
+printExactHex(-1 >>> 2);
+```
+
+produces:
+
+```
+FFFFFFFFFFFFFFFF
+7FFFFFFFFFFFF00F
+4000000000000000
+```
+
+The exact result, without precision loss, would be `7FFFFFFFFFFFFFFF` and `3FFFFFFFFFFFFFFF` respectively. In the first case, only the lower bits are affected. In the second case, the double conversion, while introducing a difference small in terms of absolute value, changes the binary representation dramatically. 
 
 ## Bitwise AND, OR, XOR operators
 

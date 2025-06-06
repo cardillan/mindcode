@@ -14,6 +14,7 @@ public class LogicNumber extends AbstractArgument implements LogicLiteral {
     public static final LogicNumber ONE = create(1);
     public static final LogicNumber TWO = create(2);
     public static final LogicNumber THREE = create(3);
+    public static final LogicNumber LONG_MAX = create(SourcePosition.EMPTY, "0x7FFFFFFFFFFFFFFF", 0x7FFFFFFFFFFFFFFFL);
 
     private final SourcePosition sourcePosition;
     private final String literal;

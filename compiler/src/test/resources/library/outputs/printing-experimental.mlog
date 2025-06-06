@@ -184,260 +184,362 @@ jump 180 greaterThan :formatHexNumber:digits 0
 format "0x"
 assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
 assertflush
+op abs *tmp45 null 0
 print null
 assertprints "null" "printExactFast(null)"
 assertflush
-op abs *tmp39 0 0
-print 0
+set :printExactFast:n 0
+set :printExactFast*retaddr 193
+jump 392 always 0 0
 assertprints "0" "printExactFast(0)"
 assertflush
 set :printExactFast:n 1
-set :printExactFast*retaddr 196
-jump 290 always 0 0
+set :printExactFast*retaddr 198
+jump 392 always 0 0
 assertprints "1" "printExactFast(1)"
 assertflush
 set :printExactFast:n 1.0000001
-set :printExactFast*retaddr 201
-jump 290 always 0 0
+set :printExactFast*retaddr 203
+jump 392 always 0 0
 assertprints "1.000000100000000" "printExactFast(1.0000001)"
 assertflush
 set :printExactFast:n 3.00000007
-set :printExactFast*retaddr 206
-jump 290 always 0 0
+set :printExactFast*retaddr 208
+jump 392 always 0 0
 assertprints "3.000000070000000" "printExactFast(3.00000007)"
 assertflush
 set :printExactFast:n 3E50
-set :printExactFast*retaddr 211
-jump 290 always 0 0
+set :printExactFast*retaddr 213
+jump 392 always 0 0
 assertprints "3E50" "printExactFast(3e50)"
 assertflush
 set :printExactFast:n 1.0123456789
-set :printExactFast*retaddr 216
-jump 290 always 0 0
+set :printExactFast*retaddr 218
+jump 392 always 0 0
 assertprints "1.0123456789" "printExactFast(1.0123456789)"
 assertflush
 set :printExactFast:n 10000001E13
-set :printExactFast*retaddr 221
-jump 290 always 0 0
+set :printExactFast*retaddr 223
+jump 392 always 0 0
 assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
 assertflush
 set :printExactFast:n 12345E-54
-set :printExactFast*retaddr 226
-jump 290 always 0 0
+set :printExactFast*retaddr 228
+jump 392 always 0 0
 assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
 assertflush
 set :printExactFast:n -12345E-54
-set :printExactFast*retaddr 231
-jump 290 always 0 0
+set :printExactFast*retaddr 233
+jump 392 always 0 0
 assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
 assertflush
 set :printExactSlow:n null
-set :printExactSlow*retaddr 236
-jump 364 always 0 0
+set :printExactSlow*retaddr 238
+jump 466 always 0 0
 assertprints "null" "printExactSlow(null)"
 assertflush
 set :printExactSlow:n 0
-set :printExactSlow*retaddr 241
-jump 364 always 0 0
+set :printExactSlow*retaddr 243
+jump 466 always 0 0
 assertprints "0" "printExactSlow(0)"
 assertflush
 set :printExactSlow:n 1
-set :printExactSlow*retaddr 246
-jump 364 always 0 0
+set :printExactSlow*retaddr 248
+jump 466 always 0 0
 assertprints "1.000000000000000" "printExactSlow(1)"
 assertflush
 set :printExactSlow:n 1.0000001
-set :printExactSlow*retaddr 251
-jump 364 always 0 0
+set :printExactSlow*retaddr 253
+jump 466 always 0 0
 assertprints "1.000000100000000" "printExactSlow(1.0000001)"
 assertflush
 set :printExactSlow:n 3.00000007
-set :printExactSlow*retaddr 256
-jump 364 always 0 0
+set :printExactSlow*retaddr 258
+jump 466 always 0 0
 assertprints "3.000000070000000" "printExactSlow(3.00000007)"
 assertflush
 set :printExactSlow:n 3E50
-set :printExactSlow*retaddr 261
-jump 364 always 0 0
+set :printExactSlow*retaddr 263
+jump 466 always 0 0
 assertprints "3.000000000000000E50" "printExactSlow(3e50)"
 assertflush
 set :printExactSlow:n 1.0123456789
-set :printExactSlow*retaddr 266
-jump 364 always 0 0
+set :printExactSlow*retaddr 268
+jump 466 always 0 0
 assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
 assertflush
 set :printExactSlow:n 10000001E13
-set :printExactSlow*retaddr 271
-jump 364 always 0 0
+set :printExactSlow*retaddr 273
+jump 466 always 0 0
 assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
 assertflush
 set :printExactSlow:n 12345E-54
-set :printExactSlow*retaddr 276
-jump 364 always 0 0
+set :printExactSlow*retaddr 278
+jump 466 always 0 0
 assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
 assertflush
 set :printExactSlow:n -12345E-54
-set :printExactSlow*retaddr 281
-jump 364 always 0 0
+set :printExactSlow*retaddr 283
+jump 466 always 0 0
 assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
 assertflush
-print "1111111111111111111111110000111100000000000000000000000000000000"
+op shr :printExactBinary:t -1035087118336 32
+set *tmp1 288
+jump 290 always 0 0
+op and :printExactBinary:t -1035087118336 0xFFFFFFFF
+set *tmp1 386
+op shr *tmp4 :printExactBinary:t 31
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 30
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 29
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 28
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 27
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 26
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 25
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 24
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 23
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 22
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 21
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 20
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 19
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 18
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 17
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 16
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 15
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 14
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 13
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 12
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 11
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 10
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 9
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 8
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 7
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 6
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 5
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 4
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 3
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 2
+op and *tmp5 *tmp4 1
+print *tmp5
+op shr *tmp4 :printExactBinary:t 1
+op and *tmp5 *tmp4 1
+print *tmp5
+op and *tmp5 :printExactBinary:t 1
+print *tmp5
+set @counter *tmp1
 assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
 assertflush
 print "FFFFFF0F00000000"
 assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
 stop
 end
-op abs *tmp39 :printExactFast:n 0
-jump 294 greaterThan *tmp39 0
+op abs *tmp45 :printExactFast:n 0
+jump 396 greaterThan *tmp45 0
 print :printExactFast:n
 set @counter :printExactFast*retaddr
-jump 297 greaterThanEq :printExactFast:n 0
+jump 399 greaterThanEq :printExactFast:n 0
 print "-"
 op abs :printExactFast:n :printExactFast:n 0
-op log10 *tmp45 :printExactFast:n 0
-op floor :printExactFast:exp *tmp45 0
-op sub *tmp47 0 :printExactFast:exp
-op pow *tmp48 10 *tmp47
-op mul :printExactFast:base :printExactFast:n *tmp48
-op add *tmp51 :printExactFast:base 0.5
-op floor *tmp50 *tmp51 0
-op sub *tmp53 :printExactFast:base *tmp50
-op abs :printExactFast:cmp *tmp53 0
-jump 309 greaterThan :printExactFast:cmp 0
+op log10 *tmp51 :printExactFast:n 0
+op floor :printExactFast:exp *tmp51 0
+op sub *tmp53 0 :printExactFast:exp
+op pow *tmp54 10 *tmp53
+op mul :printExactFast:base :printExactFast:n *tmp54
+op add *tmp57 :printExactFast:base 0.5
+op floor *tmp56 *tmp57 0
+op sub *tmp59 :printExactFast:base *tmp56
+op abs :printExactFast:cmp *tmp59 0
+jump 411 greaterThan :printExactFast:cmp 0
 print :printExactFast:base
-jump 360 always 0 0
-jump 312 lessThanEq :printExactFast:cmp 0.00001
+jump 462 always 0 0
+jump 414 lessThanEq :printExactFast:cmp 0.00001
 print :printExactFast:base
-jump 360 always 0 0
-op floor *tmp59 :printExactFast:base 0
-print *tmp59
+jump 462 always 0 0
+op floor *tmp65 :printExactFast:base 0
+print *tmp65
 print "."
-op mod *tmp60 :printExactFast:base 1
-op mul :printExactFast:base *tmp60 100000
+op mod *tmp66 :printExactFast:base 1
+op mul :printExactFast:base *tmp66 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 321 greaterThanEq :printExactFast:t 10
+jump 423 greaterThanEq :printExactFast:t 10
 print "0000"
-jump 329 always 0 0
-jump 324 greaterThanEq :printExactFast:t 100
+jump 431 always 0 0
+jump 426 greaterThanEq :printExactFast:t 100
 print "000"
-jump 329 always 0 0
-jump 327 greaterThanEq :printExactFast:t 1000
+jump 431 always 0 0
+jump 429 greaterThanEq :printExactFast:t 1000
 print "00"
-jump 329 always 0 0
-jump 329 greaterThanEq :printExactFast:t 10000
+jump 431 always 0 0
+jump 431 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-op mod *tmp60 :printExactFast:base 1
-op mul :printExactFast:base *tmp60 100000
+op mod *tmp66 :printExactFast:base 1
+op mul :printExactFast:base *tmp66 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 336 greaterThanEq :printExactFast:t 10
+jump 438 greaterThanEq :printExactFast:t 10
 print "0000"
-jump 344 always 0 0
-jump 339 greaterThanEq :printExactFast:t 100
+jump 446 always 0 0
+jump 441 greaterThanEq :printExactFast:t 100
 print "000"
-jump 344 always 0 0
-jump 342 greaterThanEq :printExactFast:t 1000
+jump 446 always 0 0
+jump 444 greaterThanEq :printExactFast:t 1000
 print "00"
-jump 344 always 0 0
-jump 344 greaterThanEq :printExactFast:t 10000
+jump 446 always 0 0
+jump 446 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-op mod *tmp60 :printExactFast:base 1
-op mul :printExactFast:base *tmp60 100000
+op mod *tmp66 :printExactFast:base 1
+op mul :printExactFast:base *tmp66 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 351 greaterThanEq :printExactFast:t 10
+jump 453 greaterThanEq :printExactFast:t 10
 print "0000"
-jump 359 always 0 0
-jump 354 greaterThanEq :printExactFast:t 100
+jump 461 always 0 0
+jump 456 greaterThanEq :printExactFast:t 100
 print "000"
-jump 359 always 0 0
-jump 357 greaterThanEq :printExactFast:t 1000
+jump 461 always 0 0
+jump 459 greaterThanEq :printExactFast:t 1000
 print "00"
-jump 359 always 0 0
-jump 359 greaterThanEq :printExactFast:t 10000
+jump 461 always 0 0
+jump 461 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-jump 363 equal :printExactFast:exp 0
+jump 465 equal :printExactFast:exp 0
 print "E"
 print :printExactFast:exp
 set @counter :printExactFast*retaddr
-op abs *tmp75 :printExactSlow:n 0
-jump 368 greaterThan *tmp75 0
+op abs *tmp81 :printExactSlow:n 0
+jump 470 greaterThan *tmp81 0
 print :printExactSlow:n
 set @counter :printExactSlow*retaddr
-jump 371 greaterThanEq :printExactSlow:n 0
+jump 473 greaterThanEq :printExactSlow:n 0
 print "-"
 op abs :printExactSlow:n :printExactSlow:n 0
-op log10 *tmp81 :printExactSlow:n 0
-op floor :printExactSlow:exp *tmp81 0
-op sub *tmp83 0 :printExactSlow:exp
-op pow *tmp84 10 *tmp83
-op mul :printExactSlow:base :printExactSlow:n *tmp84
-op floor *tmp86 :printExactSlow:base 0
-print *tmp86
+op log10 *tmp87 :printExactSlow:n 0
+op floor :printExactSlow:exp *tmp87 0
+op sub *tmp89 0 :printExactSlow:exp
+op pow *tmp90 10 *tmp89
+op mul :printExactSlow:base :printExactSlow:n *tmp90
+op floor *tmp92 :printExactSlow:base 0
+print *tmp92
 print "."
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-op mod *tmp87 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp87 10
-op floor *tmp90 :printExactSlow:base 0
-print *tmp90
-jump 442 equal :printExactSlow:exp 0
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+op mod *tmp93 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp93 10
+op floor *tmp96 :printExactSlow:base 0
+print *tmp96
+jump 544 equal :printExactSlow:exp 0
 print "E"
 print :printExactSlow:exp
 set @counter :printExactSlow*retaddr

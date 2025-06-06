@@ -4,7 +4,10 @@ import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
+import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
@@ -13,12 +16,17 @@ import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray.Inter
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.function.Supplier;
+
+import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.BASIC;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.CONDITION;
+import static info.teksol.mc.mindcode.logic.arguments.Operation.*;
 
 /// Base class for code builders. Each builder generates code for a subset os AST node types.
 /// Instances of these classes need to be registered in CodeGenerator, and no two classes may handle the
@@ -225,7 +233,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
     /// Tries to resolve an expression, which vas already processed, as an l-value. To be used when the node value
     /// needs to be read first (and therefore the node needs to be evaluated), and then a value needs to be written
-    /// - for example an in out function argument.
+    /// - for example, an in-out function argument.
     protected ValueStore resolveLValue(AstExpression targetNode, ValueStore target) {
         if (target.isLvalue()) {
             return target;
@@ -260,5 +268,66 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
     protected Condition outsideRangeCondition(AstRange range) {
         return insideRangeCondition(range).inverse();
+    }
+
+    protected LogicVariable createOperation(AstMindcodeNode node, Operation operation, LogicVariable tmp, LogicValue left, LogicValue right) {
+        ProcessorVersion version = operation.getProcessorVersion();
+
+        if (version != null && processor.getProcessorVersion().atLeast(version)) {
+            assembler.createOp(operation, tmp, left, right);
+            return tmp;
+        }
+
+        switch (operation) {
+            case BOOLEAN_OR         -> emulateBooleanOr(node, tmp, left, right);
+            case STRICT_NOT_EQUAL   -> emulateStrictNotEqual(node, tmp, left, right);
+            case EMOD               -> emulateEmod(node, tmp, left, right);
+            case USHR               -> emulateUshr(node, tmp, left, right);
+            default -> {
+                if (version == null) throw new MindcodeInternalError("Virtual operator " + operation + " not implemented.");
+                error(node, ERR.OPERATOR_REQUIRES_SPECIFIC_TARGET, operation.getMindcode(), version.versionName());
+                return LogicVariable.INVALID;
+            }
+        }
+
+        return tmp;
+    }
+
+    private void emulateStrictNotEqual(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {
+        final LogicVariable tmp2 = assembler.unprotectedTemp();
+        assembler.createOp(STRICT_EQUAL, tmp2, left, right);
+        assembler.createOp(EQUAL, tmp, tmp2, LogicBoolean.FALSE);
+    }
+
+    private void emulateBooleanOr(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {
+        final LogicVariable tmp2 = assembler.unprotectedTemp();
+        assembler.createOp(BOOLEAN_OR, tmp2, left, right);
+        // Ensure the result is 0 or 1
+        assembler.createOp(NOT_EQUAL, tmp, tmp2, LogicBoolean.FALSE);
+    }
+
+    private void emulateEmod(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {
+        assembler.createOp(MOD, tmp, left, right);
+        assembler.createOp(ADD, tmp, tmp, right);
+        assembler.createOp(MOD, tmp, tmp, right);
+    }
+
+    private void emulateUshr(AstMindcodeNode node, LogicVariable tmp, LogicValue left, LogicValue right) {
+        final LogicLabel endTarget = assembler.nextLabel();
+        final LogicVariable tmp2 = assembler.unprotectedTemp();
+        assembler.setContextType(node, AstContextType.IF, BASIC);
+        assembler.setSubcontextType(CONDITION, 1.0);
+        assembler.createSet(tmp, left.getValue(assembler));
+        assembler.createOp(BITWISE_AND, tmp2, right.getValue(assembler), LogicNumber.create(63));
+        assembler.createJump(endTarget, Condition.LESS_THAN_EQ, tmp2, LogicNumber.ZERO);
+        assembler.setSubcontextType(AstSubcontextType.BODY, 1.0);
+        assembler.createOp(SHR, tmp, tmp, LogicNumber.ONE);
+        assembler.createOp(BITWISE_AND, tmp, tmp, LogicNumber.LONG_MAX);
+        assembler.createOp(SUB, tmp2, tmp2, LogicNumber.ONE);
+        assembler.createOp(SHR, tmp, tmp, tmp2);
+        assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
+        assembler.createLabel(endTarget);
+        assembler.clearSubcontextType();
+        assembler.clearContextType(node);
     }
 }

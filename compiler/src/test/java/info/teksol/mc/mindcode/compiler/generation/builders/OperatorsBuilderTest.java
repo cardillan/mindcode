@@ -5,8 +5,7 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.OP;
-import static info.teksol.mc.mindcode.logic.opcodes.Opcode.SET;
+import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
@@ -136,14 +135,19 @@ class OperatorsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void reportsWrongTargetForUshr() {
-            assertGeneratesMessage(
-                    "The '>>>' operator requires language target 8 or higher.",
-                    """
+        void emulatesUshrInTarget7() {
+            assertCompilesTo("""
                             #set target = 7;
                             a >>> b;
-                            """
-            );
+                            """,
+                    createInstruction(SET, tmp(0), ":a"),
+                    createInstruction(OP, "and", tmp(1), ":b", "63"),
+                    createInstruction(JUMP, label(0), "lessThanEq", tmp(1), "0"),
+                    createInstruction(OP, "shr", tmp(0), tmp(0), "1"),
+                    createInstruction(OP, "and", tmp(0), tmp(0), "0x7FFFFFFFFFFFFFFF"),
+                    createInstruction(OP, "sub", tmp(1), tmp(1), "1"),
+                    createInstruction(OP, "shr", tmp(0), tmp(0), tmp(1)),
+                    createInstruction(LABEL, label(0))            );
         }
     }
 

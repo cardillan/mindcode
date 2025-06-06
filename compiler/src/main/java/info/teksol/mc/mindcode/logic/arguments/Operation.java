@@ -19,7 +19,7 @@ public enum Operation implements LogicArgument {
     GREATER_THAN    (2, true, "greaterThan",   MindcodeLexer.GREATER_THAN),
     GREATER_THAN_EQ (2, true, "greaterThanEq", MindcodeLexer.GREATER_THAN_EQUAL),
     STRICT_EQUAL    (2, true, "strictEqual",   MindcodeLexer.STRICT_EQUAL),
-    STRICT_NOT_EQUAL(2, true, null,            MindcodeLexer.STRICT_NOT_EQUAL),
+    STRICT_NOT_EQUAL(2, true, null,            MindcodeLexer.STRICT_NOT_EQUAL, null),
 
     ADD             (2, true, "add",  MindcodeLexer.PLUS),
     SUB             (2, true, "sub",  MindcodeLexer.MINUS),
@@ -27,7 +27,7 @@ public enum Operation implements LogicArgument {
     DIV             (2, true, "div",  MindcodeLexer.DIV),
     IDIV            (2, true, "idiv", MindcodeLexer.IDIV),
     MOD             (2, true, "mod",  MindcodeLexer.MOD),
-    EMOD            (2, true, "emod", MindcodeLexer.EMOD),      // No minimal processor version: the operator is emulated in lower versions
+    EMOD            (2, true, "emod", MindcodeLexer.EMOD, ProcessorVersion.V8A),
     POW             (2, true, "pow",  MindcodeLexer.POW),
     SHL             (2, true, "shl",  MindcodeLexer.SHIFT_LEFT),
     SHR             (2, true, "shr",  MindcodeLexer.SHIFT_RIGHT),
@@ -39,7 +39,7 @@ public enum Operation implements LogicArgument {
     BITWISE_NOT     (1, true, "not",  MindcodeLexer.BITWISE_NOT),
     // Boolean: guaranteed to produce 0/1.
     BOOLEAN_AND     (2, true, "land", MindcodeLexer.BOOLEAN_AND),
-    BOOLEAN_OR      (2, true, "or",   MindcodeLexer.BOOLEAN_OR),
+    BOOLEAN_OR      (2, true, "or",   MindcodeLexer.BOOLEAN_OR, null),
     BOOLEAN_NOT     (1, true, null,   MindcodeLexer.BOOLEAN_NOT),
     // Logical: produce null/zero or nonzero, can be short-circuited.
     LOGICAL_AND     (2, true, "land", MindcodeLexer.LOGICAL_AND),
@@ -73,7 +73,8 @@ public enum Operation implements LogicArgument {
 
     /// For operators, we keep the information about minimal required target here. It duplicates the information
     /// in MindustryOpcodeVariants, but is kept like this for easier usage.
-    private final ProcessorVersion processorVersion;
+    /// A `null` here means the operator is not available in any target and needs to be emulated always.
+    private final @Nullable ProcessorVersion processorVersion;
 
     private final @Nullable String mlog;
     private final String mindcode;
@@ -82,7 +83,7 @@ public enum Operation implements LogicArgument {
     private final boolean deterministic;
     private final boolean function;
 
-    Operation(int arity, boolean deterministic, @Nullable String mlog, int token, ProcessorVersion processorVersion) {
+    Operation(int arity, boolean deterministic, @Nullable String mlog, int token, @Nullable ProcessorVersion processorVersion) {
         this.mlog = mlog;
         String literalName = MindcodeLexer.VOCABULARY.getLiteralName(token);
         this.mindcode = literalName.substring(1, literalName.length() - 1);
@@ -126,7 +127,7 @@ public enum Operation implements LogicArgument {
         return Objects.requireNonNull(TOKENS.get(tokenType), "Unknown or invalid token " + tokenType);
     }
 
-    public ProcessorVersion getProcessorVersion() {
+    public @Nullable ProcessorVersion getProcessorVersion() {
         return processorVersion;
     }
 

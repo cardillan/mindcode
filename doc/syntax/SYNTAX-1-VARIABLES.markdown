@@ -27,7 +27,7 @@ All numeric values, both integer and floating-point, are stored as `double`, a 6
 > 
 > Values larger than 2<sup>63</sup> are converted to 2<sup>63</sup> during integer conversion.  
 >
-> While `long` values are able to keep 64 bits, `double` values only hold 53 significant bits of precision. Processor variables are therefore limited to 53 significant bits after integer conversion. When an integer operation produces a number between 2<sup>53</sup> and 2<sup>63</sup>-1, the result is rounded to the closest double representation for storage in a processor variable. This operation (a _double conversion_) may alter the values of the 53 least significant bits of the number.
+> While `long` values are able to keep 64 bits, `double` values only hold 53 significant bits of precision. Processor variables are therefore limited to 53 significant bits after integer conversion. When an integer operation produces a number between 2<sup>53</sup> and 2<sup>63</sup>-1, the result is rounded to the closest double representation for storage in a processor variable. This rounding during a _double conversion_ on a number exceeding the safe integer range (i.e., outside the -2<sup>53</sup> to 2<sup>53</sup> range) may destroy information stored in individual bits of the number's integer representation.
 >
 > Every intermediate result during expression evaluation is stored in a processor variable, so the integer/double conversion happens at every step of computation in mlog.
 
