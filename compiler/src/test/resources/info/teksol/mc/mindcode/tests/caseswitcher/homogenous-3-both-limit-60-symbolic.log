@@ -6,25 +6,18 @@
      2 instructions eliminated by Data Flow Optimization (7 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      1 loops improved by Loop Optimization.
-     6 instructions eliminated by Case Switching (5 iterations).
+     5 instructions eliminated by Case Switching (5 iterations).
      1 case expressions converted to switched jumps Case Switching.
      2 instructions eliminated by Jump Straightening (2 passes, 6 iterations).
-    33 instructions after optimizations.
+    34 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 18):
-  o Convert case at line 5:5 (segments: 4)                       size    -9, benefit      455.9, efficiency   Infinity
-  o Convert case at line 5:5 (segments: 4)                       size    -8, benefit      460.4, efficiency   Infinity
-  o Convert case at line 5:5 (segments: 5)                       size    -7, benefit      462.1, efficiency   Infinity
-  * Convert case at line 5:5 (segments: 5)                       size    -6, benefit      466.6, efficiency   Infinity (-6 instructions)
-  ! Convert case at line 5:5 (segments: 5)                       size   +21, benefit      470.1, efficiency     22.386
-  ! Convert case at line 5:5 (segments: 3)                       size   +22, benefit      485.1, efficiency     22.050
-  ! Convert case at line 5:5 (segments: 4)                       size   +24, benefit      491.3, efficiency     20.473
-  ! Convert case at line 5:5 (segments: 3)                       size  +189, benefit      501.6, efficiency      2.654
-  ! Convert case at line 5:5 (segments: 4)                       size  +191, benefit      507.9, efficiency      2.659
-  ! Convert case at line 5:5 (segments: 3)                       size  +193, benefit      513.3, efficiency      2.659
-  ! Convert case at line 5:5 (segments: 2)                       size  +203, benefit      517.7, efficiency      2.550
-  ! Convert case at line 5:5 (segments: 2)                       size  +206, benefit      521.2, efficiency      2.530
-  ! Convert case at line 5:5 (segments: 1)                       size  +213, benefit      525.9, efficiency      2.469
+  o Convert case at line 5:5 (#719, segments: 6)                 size    -7, benefit      520.1, efficiency   Infinity
+  o Convert case at line 5:5 (#467, segments: 7)                 size    -6, benefit      520.2, efficiency   Infinity
+  * Convert case at line 5:5 (#672, segments: 7)                 size    -5, benefit      523.1, efficiency   Infinity (-5 instructions)
+  ! Convert case at line 5:5 (#4566, segments: 6)                size   +23, benefit      523.4, efficiency     22.755
+  ! Convert case at line 5:5 (#508, segments: 5)                 size   +24, benefit      523.5, efficiency     21.811
+  ! Convert case at line 5:5 (#4559, segments: 5)                size   +25, benefit      526.3, efficiency     21.054
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -252,7 +245,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     50 print :hash
     51 assertequals 226523029 :hash "Test selected blocks"
 
-Modifications by Convert case at line 5:5 (segments: 5) (-6 instructions):
+Modifications by Convert case at line 5:5 (#672, segments: 7) (-5 instructions):
  
      3 label *label9
      4 lookup block :block :i
@@ -284,60 +277,61 @@ Modifications by Convert case at line 5:5 (segments: 5) (-6 instructions):
 -    * jump *label6 equal :block @carbide-wall
 -    * jump *label5 notEqual :block @carbide-wall-large
 +    6 sensor *tmp9 :block @id
-+    7 jump *label12 greaterThanEq *tmp9 17
-+    8 jump *label11 equal *tmp9 0
-+    9 jump *label10 always
-+   10 label *label12
-+   11 jump *label13 greaterThanEq *tmp9 35
-+   12 jump *label10 equal *tmp9 29
-+   13 jump *label10 equal *tmp9 30
-+   14 jump *label6 always
-+   15 label *label13
-+   16 jump *label14 greaterThanEq *tmp9 208
-+   17 jump *label10 equal *tmp9 205
-+   18 jump *label10 lessThan *tmp9 203
-+   19 jump *label6 always
-+   20 label *label14
-+   21 jump *label15 greaterThanEq *tmp9 226
-+   22 jump *label6 equal *tmp9 220
-+   23 jump *label6 equal *tmp9 221
-+   24 jump *label6 equal *tmp9 225
++    7 jump *label12 greaterThanEq *tmp9 203
++    8 jump *label10 greaterThanEq *tmp9 35
++    9 jump *label13 greaterThanEq *tmp9 17
++   10 jump *label10 greaterThanEq *tmp9 1
++   11 jump *label11 always
++   12 label *label13
++   13 jump *label10 equal *tmp9 29
++   14 jump *label10 equal *tmp9 30
++   15 jump *label6 always
++   16 label *label12
++   17 jump *label10 greaterThanEq *tmp9 235
++   18 jump *label14 greaterThanEq *tmp9 222
++   19 jump *label15 greaterThanEq *tmp9 208
++   20 jump *label10 equal *tmp9 205
++   21 jump *label6 always
++   22 label *label15
++   23 jump *label6 equal *tmp9 220
++   24 jump *label6 equal *tmp9 221
 +   25 jump *label10 always
-+   26 label *label15
-+   27 jump *label6 equal *tmp9 234
-+   28 jump *label10 always
-+   29 label *label11
-+   30 jump *label6 strictEqual *tmp9 null
-    31 label *label6
-    32 set *tmp2 true
-    33 jump *label4 always
-    34 label *label5
-+   35 label *label10
-    36 set *tmp2 false
-    37 label *label4
-    38 label *label3
++   26 label *label14
++   27 jump *label6 equal *tmp9 225
++   28 jump *label6 equal *tmp9 234
++   29 jump *label10 always
++   30 label *label11
++   31 jump *label6 strictEqual *tmp9 null
+    32 label *label6
+    33 set *tmp2 true
+    34 jump *label4 always
+    35 label *label5
++   36 label *label10
+    37 set *tmp2 false
+    38 label *label4
+    39 label *label3
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
-    27 jump *label6 equal *tmp9 234
-    28 jump *label10 always
-    29 label *label11
+    28 jump *label6 equal *tmp9 234
+    29 jump *label10 always
+    30 label *label11
 -    * jump *label6 strictEqual *tmp9 null
-    30 label *label6
-    31 set *tmp2 true
-    32 jump *label4 always
+    31 label *label6
+    32 set *tmp2 true
+    33 jump *label4 always
 
 Modifications by Iterated phase, Jump Straightening, pass 3, iteration 1 (-1 instructions):
  
-    24 jump *label6 equal *tmp9 225
     25 jump *label10 always
-    26 label *label15
+    26 label *label14
+    27 jump *label6 equal *tmp9 225
 -    * jump *label6 equal *tmp9 234
 -    * jump *label10 always
-+   27 jump *label10 notEqual *tmp9 234
-    28 label *label11
-    29 label *label6
-    30 set *tmp2 true
++   28 jump *label10 notEqual *tmp9 234
+    29 label *label11
+    30 label *label6
+    31 set *tmp2 true
 
 Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
      0 set :hash 0
@@ -347,34 +341,34 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
      3 lookup block :block :i
      4 # "Function: def isWall(in block)"
  
-    28 label *label6
-    29 set *tmp2 true
-    30 jump *label4 always
+    29 label *label6
+    30 set *tmp2 true
+    31 jump *label4 always
 -    * label *label5
-    31 label *label10
-    32 set *tmp2 false
-    33 label *label4
+    32 label *label10
+    33 set *tmp2 false
+    34 label *label4
 -    * label *label3
-    34 jump *label7 equal *tmp2 false
-    35 op mul *tmp5 :hash 31
-    36 op add *tmp6 *tmp5 :i
-    37 op add *tmp7 *tmp6 251
-    38 op and :hash *tmp7 0xFFFFFFFF
-    39 label *label7
+    35 jump *label7 equal *tmp2 false
+    36 op mul *tmp5 :hash 31
+    37 op add *tmp6 *tmp5 :i
+    38 op add *tmp7 *tmp6 251
+    39 op and :hash *tmp7 0xFFFFFFFF
+    40 label *label7
 -    * label *label8
 -    * label *label1
-    40 op add :i :i 1
-    41 jump *label9 lessThan :i 240
+    41 op add :i :i 1
+    42 jump *label9 lessThan :i 240
 -    * label *label2
-    42 print :hash
-    43 assertequals 226523029 :hash "Test selected blocks"
-    44 end
+    43 print :hash
+    44 assertequals 226523029 :hash "Test selected blocks"
+    45 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
  
-    41 jump *label9 lessThan :i 240
-    42 print :hash
-    43 assertequals 226523029 :hash "Test selected blocks"
+    42 jump *label9 lessThan :i 240
+    43 print :hash
+    44 assertequals 226523029 :hash "Test selected blocks"
 -    * end
 
 Final code before resolving virtual instructions:
@@ -385,26 +379,27 @@ label *label9
 lookup block :block :i
 # "Function: def isWall(in block)"
 sensor *tmp9 :block @id
-jump *label12 greaterThanEq *tmp9 17
-jump *label11 equal *tmp9 0
-jump *label10 always
-label *label12
-jump *label13 greaterThanEq *tmp9 35
+jump *label12 greaterThanEq *tmp9 203
+jump *label10 greaterThanEq *tmp9 35
+jump *label13 greaterThanEq *tmp9 17
+jump *label10 greaterThanEq *tmp9 1
+jump *label11 always
+label *label13
 jump *label10 equal *tmp9 29
 jump *label10 equal *tmp9 30
 jump *label6 always
-label *label13
-jump *label14 greaterThanEq *tmp9 208
+label *label12
+jump *label10 greaterThanEq *tmp9 235
+jump *label14 greaterThanEq *tmp9 222
+jump *label15 greaterThanEq *tmp9 208
 jump *label10 equal *tmp9 205
-jump *label10 lessThan *tmp9 203
 jump *label6 always
-label *label14
-jump *label15 greaterThanEq *tmp9 226
+label *label15
 jump *label6 equal *tmp9 220
 jump *label6 equal *tmp9 221
-jump *label6 equal *tmp9 225
 jump *label10 always
-label *label15
+label *label14
+jump *label6 equal *tmp9 225
 jump *label10 notEqual *tmp9 234
 label *label11
 label *label6

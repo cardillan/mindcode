@@ -6,8 +6,8 @@ threads: 24
 # The name of the section containing the list of tests to execute
 # Several sections can be present in the config file, the active one is selected here
 #test-suite: single-source
-#test-suite: case-switching
-test-suite: all-sources
+test-suite: case-switching
+#test-suite: all-sources
 
 # Where to put all the output files
 # When not set, test-specific output files will be generated in the directory containing the source file
@@ -18,8 +18,8 @@ output-path: .
 # (full tests would typically take many hours to complete)
 full-tests: false
 
-# The number of samples configured to run per test will be multiplied by this number
-# Allows to create a basic configuration that runs reasonably fast
+# This number will multiply the number of samples configured to run per test
+# Allows creating a basic configuration that runs reasonably fast
 # and just increase the multiplier for longer, more comprehensive tests
 sample-multiplier: 1
 
@@ -162,8 +162,8 @@ case-switching-defaults:
 
 # LIST OF SOURCES
 
-# A single file to be tested
-# Unspecified settings are inherited from default
+# A single file to be tested.
+# Unspecified settings are inherited from default.
 single-source:
   - source: recursion.mnd
     defaults: run-test
@@ -171,45 +171,41 @@ single-source:
 
 # Case-switching tests - standalone
 case-switching:
+  - source: case-small.mnd
+    defaults: case-switching-defaults
+    case-configurations: 4
+
   - source: case-homogenous-none.mnd
     defaults: case-switching-defaults
-    case-configurations: 2200
-    samples: 500
+    case-configurations: 2751
 
   - source: case-homogenous-null.mnd
     defaults: case-switching-defaults
-    case-configurations: 2200
-    samples: 500
+    case-configurations: 2751
 
   - source: case-homogenous-zero.mnd
     defaults: case-switching-defaults
     case-configurations: 15429
-    samples: 500
 
   - source: case-homogenous-both.mnd
     defaults: case-switching-defaults
     case-configurations: 15429
-    samples: 500
 
   - source: case-distinct-none.mnd
     defaults: case-switching-defaults
-    case-configurations: 49
-    samples: 500
+    case-configurations: 98
 
   - source: case-distinct-null.mnd
     defaults: case-switching-defaults
-    case-configurations: 49
-    samples: 500
+    case-configurations: 98
 
   - source: case-distinct-zero.mnd
     defaults: case-switching-defaults
     case-configurations: 228
-    samples: 500
 
   - source: case-distinct-both.mnd
     defaults: case-switching-defaults
     case-configurations: 228
-    samples: 500
 
 # List of all files to test
 all-sources:
@@ -310,42 +306,38 @@ all-sources:
 #  - source: "C:\Home\golem\unit-transport\unit-transport.mnd"
 #    samples: 80
 
+  - source: case-small.mnd
+    defaults: case-switching-defaults
+    case-configurations: 4
+
   - source: case-homogenous-none.mnd
     defaults: case-switching-defaults
-    case-configurations: 2200
-    samples: 500
+    case-configurations: 2751
 
   - source: case-homogenous-null.mnd
     defaults: case-switching-defaults
-    case-configurations: 2200
-    samples: 500
+    case-configurations: 2751
 
   - source: case-homogenous-zero.mnd
     defaults: case-switching-defaults
     case-configurations: 15429
-    samples: 500
 
   - source: case-homogenous-both.mnd
     defaults: case-switching-defaults
     case-configurations: 15429
-    samples: 500
 
   - source: case-distinct-none.mnd
     defaults: case-switching-defaults
-    case-configurations: 49
-    samples: 100
+    case-configurations: 98
 
   - source: case-distinct-null.mnd
     defaults: case-switching-defaults
-    case-configurations: 49
-    samples: 100
+    case-configurations: 98
 
   - source: case-distinct-zero.mnd
     defaults: case-switching-defaults
     case-configurations: 228
-    samples: 458
 
   - source: case-distinct-both.mnd
     defaults: case-switching-defaults
     case-configurations: 228
-    samples: 458

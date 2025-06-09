@@ -17,6 +17,6 @@ processesBasicCode:                                 4        4     100.0%   A4E4
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   1E61DD9C4EC01A43
 recursive-calls.mnd:                               97      266      98.9%   9CB0965E0E62F089   B6EE4C8BF2BAD9E9
 recursive-function-condition.mnd:                  20       24      95.0%   02C171DDB1F56F08   EB6850A06B1B54EC
-switched-case-expression.mnd:                      61     2130     100.0%   D8AE9E78FC18AFFC   2002A1C32E98DB72
+switched-case-expression.mnd:                      61     2130     100.0%   D8AE9E78FC18AFFC   9230711C605F5263
 testSuiteRecognizesUnexpectedWarnings:              1        1     100.0%   002B7E6873B65270   4A3761D7B5564792
 while-loop.mnd:                                    20       66      95.0%   D881ACAA07A1E8A0   69602CD821B8B6AB

@@ -1,15 +1,68 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.mimex.ContentType;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
+import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
+@NullMarked
 public class Targets {
+    private final boolean hasElseBranch;
     private final NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
     public @Nullable LogicLabel nullTarget;        // Handles null only
     public @Nullable LogicLabel elseTarget;        // Handles else only
     public @Nullable LogicLabel nullOrElseTarget;  // Handles else or null
+
+    private int totalSize;
+    private int elseValues;
+
+    private @Nullable Segment leadingSegment;
+    private @Nullable Segment trailingSegment;
+
+    public Targets(boolean hasElseBranch) {
+        this.hasElseBranch = hasElseBranch;
+    }
+
+    public void computeElseValues(ContentType contentType, MindustryMetadata metadata) {
+        totalSize = computeTotalSize(contentType, metadata);
+        elseValues = Math.max(totalSize - targets.size(), 0);
+        int elseValuesLow = totalSize > 0 ? targets.firstKey() : 0;
+
+        if (contentType == ContentType.UNKNOWN) {
+            leadingSegment = new Segment(SegmentType.SINGLE, targets.firstKey(), targets.firstKey(), LogicLabel.EMPTY);
+            trailingSegment = new Segment(SegmentType.SINGLE, targets.lastKey() + 1, targets.lastKey() + 1, LogicLabel.EMPTY);
+        } else {
+            leadingSegment = elseValuesLow == 0 ? null : new Segment(SegmentType.SINGLE, 0, targets.firstKey(), LogicLabel.EMPTY);
+            trailingSegment = new Segment(SegmentType.SINGLE, targets.lastKey() + 1, totalSize, LogicLabel.EMPTY);
+        }
+    }
+
+    private int computeTotalSize(ContentType contentType, MindustryMetadata metadata) {
+        String lookupKeyword = contentType.getLookupKeyword();
+        if (lookupKeyword == null) return targets.size();
+        Map<Integer, ?> lookupMap = metadata.getLookupMap(lookupKeyword);
+        return lookupMap == null ? targets.size() : lookupMap.size();
+    }
+
+    public boolean hasElseBranch() {
+        return hasElseBranch;
+    }
+
+    public int getTotalSize() {
+        return totalSize;
+    }
+
+    public int getElseValues() {
+        return elseValues;
+    }
+
+    public void addLimitSegments(List<Segment> segments) {
+        if (leadingSegment != null) segments.addFirst(leadingSegment.duplicate());
+        segments.addLast(Objects.requireNonNull(trailingSegment).duplicate());
+    }
 
     public boolean hasZeroKey() {
         return targets.containsKey(0);

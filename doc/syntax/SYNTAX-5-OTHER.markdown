@@ -41,6 +41,8 @@ This option affects the number of segment arrangements considered when the Case 
 
 The default value of this option is `4` for the web application, and `8` for the command-line tool. The maximal possible value is `6` for the web application, and `256` for the command-line tool. Values larger than `8` only bring additional benefits for case expressions with a very complex structure.
 
+Setting the optimization strength to `0` causes the optimizer to forgo considering any segment arrangements and only consider turning the entire case statement into a jump table. 
+
 ## Option `function-prefix`
 
 Specifies which function prefix is used to generate mlog names of local variables. Possible values are:

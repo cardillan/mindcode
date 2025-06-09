@@ -1,0 +1,18 @@
+#set target-optimization = specific;
+#set err-invalid-content = false;
+#set single-step-elimination = none;
+#set jump-straightening = none;
+#set jump-threading = none;
+
+def identifyBlock(block)
+    case block
+        when @message then "M";
+        when @switch then "S";
+        when @memory-bank, @memory-cell then "R";
+        else "0";
+    end;
+end;
+
+for i in 0 ... @blockCount do
+    print(identifyBlock(lookup(:block, i)));
+end;

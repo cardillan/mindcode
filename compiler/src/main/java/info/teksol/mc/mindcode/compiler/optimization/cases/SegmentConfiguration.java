@@ -1,12 +1,13 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+@NullMarked
 public final class SegmentConfiguration {
     /// Contains the original partitions
     private final List<Partition> partitions;
@@ -28,7 +29,7 @@ public final class SegmentConfiguration {
         return segments;
     }
 
-    public List<Segment> createSegments(boolean handleNulls, Targets targets) {
+    public List<Segment> createSegments(boolean removeRangeCheck, boolean handleNulls, Targets targets) {
         List<Segment> result = segments.stream().map(Segment::duplicate).collect(Collectors.toCollection(ArrayList::new));
         List<Partition> partitions = new ArrayList<>(this.partitions);
 
@@ -44,35 +45,23 @@ public final class SegmentConfiguration {
             int j = i + 1;
             while (j < partitions.size() && partitions.get(j).follows(partitions.get(j - 1))) j++;
             result.add(new Segment(i == j - 1 ? SegmentType.SINGLE : SegmentType.JUMP_TABLE,
-                    partition.from(), partitions.get(j - 1).to(), partition.majorityLabel()));
+                    partition.from(), partitions.get(j - 1).to(), partition.label()));
             i = j;
         }
 
-        // Remove completely empty segments
-        // They could have been created either by merging or from remaining partitions
-        result.removeIf(segment -> segment.type() == SegmentType.SINGLE && segment.majorityLabel() == LogicLabel.EMPTY);
         result.sort(null);
-
-        // Set flags
-        result.getLast().setLast();
+        if (!removeRangeCheck) {
+            targets.addLimitSegments(result);
+        }
 
         // Null handling:
         // NULL    ZERO    Handling
         //  No      No     None - nulls go to the else branch
-        //  Yes     No     Handler at the `else` branch, needs routing in segments
+        //  Yes     No     --> Handler at the `else` branch, needs routing in segments <--
         //  No      Yes    Handler at the `zero` branch, no handling in segments
         //  Yes     Yes    Handler at the `zero` branch, no handling in segments
         if (handleNulls && targets.hasNullKey() && !targets.hasZeroKey()) {
             result.stream().filter(s -> s.from() >= 0).findFirst().ifPresent(Segment::setHandleNulls);
-        }
-
-        Segment last = null;
-        for (Segment segment : result) {
-            if (segment.from() > 0 && (last == null || last.to() <= 0)) {
-                segment.setPadToZero();
-                break;
-            }
-            last = segment;
         }
 
         return result;

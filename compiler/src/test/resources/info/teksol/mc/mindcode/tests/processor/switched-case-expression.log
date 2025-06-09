@@ -417,8 +417,8 @@ Modifications by Convert case at line 27:5 (segments: 1) (+3 instructions):
     16 label *label30
     17 op mod :processDigit:n :processNumber:n 10
 -    * jump *label9 notEqual :processDigit:n 0
-+   18 jump *label31 greaterThanEq :processDigit:n 10
-+   19 jump *label31 lessThan :processDigit:n 0
++   18 jump *label31 lessThan :processDigit:n 0
++   19 jump *label31 greaterThanEq :processDigit:n 10
 +   20 multijump *label32 :processDigit:n 0 (m:*label42)
 +   21 multilabel *label32 (m:*label42)
 +   22 jump *label10 always
@@ -502,7 +502,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   15 jump *label6 lessThanEq :i 0
     16 label *label30
     17 op mod :processDigit:n :processNumber:n 10
-    18 jump *label31 greaterThanEq :processDigit:n 10
+    18 jump *label31 lessThan :processDigit:n 0
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -597,8 +597,8 @@ set :processNumber:n :i
 jump *label6 lessThanEq :i 0
 label *label30
 op mod :processDigit:n :processNumber:n 10
-jump *label31 greaterThanEq :processDigit:n 10
 jump *label31 lessThan :processDigit:n 0
+jump *label31 greaterThanEq :processDigit:n 10
 multijump *label32 :processDigit:n 0
 multilabel *label32
 jump *label10 always

@@ -4,6 +4,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.7.0 - Unreleased
+
+### Changed
+
+* The [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) now uses bisection search to locate the proper segment when performing Jump Table compression, providing up to 15% speedup in some scenarios.
+* It is now possible to turn off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) by setting the `case-optimization-strength` compiler option to `0`.
+
 ## 3.6.1 - 2025-06-06
 
 ### Fixed
@@ -25,7 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * Inactive branches in `if` expressions with compile-time constant conditions are now omitted from compiling, effectively amounting to conditional compilation. Note: this feature was already implemented in past versions, but got meanwhile deactivated due to a bug.
-* The `formatBinaryNumber`, `printBinaryNumber`, `formatHezNumber` and `printHexNumber` functions in the `printing` system library were updated to support formatting/printing negative numbers. A minus sign is printed in front of a negative number, including its prefix.
+* The `formatBinaryNumber`, `printBinaryNumber`, `formatHexNumber` and `printHexNumber` functions in the `printing` system library were updated to support formatting/printing negative numbers. A minus sign is printed in front of a negative number, including its prefix.
 
 ## 3.6.0 - 2025-06-04
 
@@ -106,7 +113,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * A list of supported keywords and built-in variables for instruction parameters are now provided by mimex-generated metadata.  
 * Added a list of accepted built-in variables to the description of functions in the function reference.
 * The docker definition was updated to avoid unnecessary recompilations (courtesy of 3bd).
-* Updated BE metadata to the latest available BE build.
+* Updated metadata corresponding to the BE version to the latest available BE build.
 * Added new metadata types, fixed zero logic IDs problem.
 
 ## 3.4.0 - 2025-05-11
@@ -137,8 +144,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The `-o` command-line option no longer sets the optimization level, but specifies the name of the output file. 
   * The output file needs to be specified using the `-o` or `--output` named argument.
   * There's a new `-O` option taking a numerical value (optimization level). Values `0` to `3` correspond to optimization levels `none`, `basic`, `advanced` and `experimental`.  
-* **Breaking**: the remote call mechanism was redesigned. When recompiling code in a processor which utilizes remote calls, all related processors need to be recompiled too.
-* The mlog decompiler replaces illegal characters in mlog variable names with underscores. If names of some variables collide due to these conversions, a numeric index is appended to some of them until a unique name is found. 
+* **Breaking**: the remote call mechanism was redesigned. When recompiling code in a processor which uses remote calls, all related processors need to be recompiled too.
+* The mlog decompiler replaces illegal characters in mlog variable names with underscores. If the names of some variables collide due to these conversions, a numeric index is appended to some of them until a unique name is found. 
 
 ### Miscellaneous
 
@@ -186,8 +193,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Small improvements in chained random array access optimizations.
 
 ### Miscellaneous
- 
-* Updated BE metadata to the last available BE build.  
+
+* Updated metadata corresponding to the BE version to the latest available BE build.
 
 ## 3.3.0 - 2025-04-11
 
@@ -318,7 +325,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 #### Experimental features
 
 * Added the "backpropagation" optimization to Data Flow Optimization (closes [#151](https://github.com/cardillan/mindcode/issues/151)).
-* Added support for compiling in runtime checks for checking internal array elements are not accessed out of bounds. One of the methods uses the MlogAssertions mod, which is currently only available for Mindustry 7.
+* Added support for compiling-in runtime checks for checking internal array elements are not accessed out of bounds. One of the methods uses the MlogAssertions mod, which is currently only available for Mindustry 7.
 
 ### Changed
 

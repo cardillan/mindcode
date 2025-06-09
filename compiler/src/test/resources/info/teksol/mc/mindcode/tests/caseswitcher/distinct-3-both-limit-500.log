@@ -12,19 +12,22 @@
    303 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 408):
-  o Convert case at line 5:5 (segments: 5)                       size   +10, benefit      466.4, efficiency     46.644
-  o Convert case at line 5:5 (segments: 6)                       size   +12, benefit      472.7, efficiency     39.391
-  o Convert case at line 5:5 (segments: 5)                       size   +23, benefit      473.3, efficiency     20.577
-  o Convert case at line 5:5 (segments: 4)                       size   +25, benefit      491.3, efficiency     19.654
-  o Convert case at line 5:5 (segments: 5)                       size   +27, benefit      497.6, efficiency     18.429
-  o Convert case at line 5:5 (segments: 4)                       size   +38, benefit      498.2, efficiency     13.110
-  o Convert case at line 5:5 (segments: 4)                       size   +41, benefit      501.3, efficiency     12.226
-  o Convert case at line 5:5 (segments: 3)                       size   +48, benefit      505.1, efficiency     10.523
-  o Convert case at line 5:5 (segments: 3)                       size  +191, benefit      529.0, efficiency      2.770
-  o Convert case at line 5:5 (segments: 3)                       size  +192, benefit      538.3, efficiency      2.803
-  o Convert case at line 5:5 (segments: 2)                       size  +202, benefit      542.7, efficiency      2.687
-  o Convert case at line 5:5 (segments: 2)                       size  +205, benefit      546.2, efficiency      2.664
-  * Convert case at line 5:5 (segments: 1)                       size  +212, benefit      550.9, efficiency      2.598 (+212 instructions)
+  o Convert case at line 5:5 (#4, segments: 7)                   size   +13, benefit      498.5, efficiency     38.343
+  o Convert case at line 5:5 (#49, segments: 7)                  size   +14, benefit      502.0, efficiency     35.859
+  o Convert case at line 5:5 (#50, segments: 8)                  size   +16, benefit      502.2, efficiency     31.388
+  o Convert case at line 5:5 (#47, segments: 6)                  size   +23, benefit      503.9, efficiency     21.911
+  o Convert case at line 5:5 (#7, segments: 6)                   size   +24, benefit      504.1, efficiency     21.006
+  o Convert case at line 5:5 (#9, segments: 6)                   size   +27, benefit      505.2, efficiency     18.711
+  o Convert case at line 5:5 (#5, segments: 5)                   size   +33, benefit      507.9, efficiency     15.390
+  o Convert case at line 5:5 (#2, segments: 3)                   size   +47, benefit      509.7, efficiency     10.845
+  o Convert case at line 5:5 (#33, segments: 5)                  size  +178, benefit      520.6, efficiency      2.925
+  o Convert case at line 5:5 (#63, segments: 5)                  size  +179, benefit      522.8, efficiency      2.921
+  o Convert case at line 5:5 (#58, segments: 4)                  size  +189, benefit      526.4, efficiency      2.785
+  o Convert case at line 5:5 (#30, segments: 3)                  size  +192, benefit      539.0, efficiency      2.807
+  o Convert case at line 5:5 (#148, segments: 3)                 size  +193, benefit      541.3, efficiency      2.804
+  o Convert case at line 5:5 (#130, segments: 2)                 size  +203, benefit      546.3, efficiency      2.691
+  o Convert case at line 5:5 (#153, segments: 2)                 size  +206, benefit      547.7, efficiency      2.659
+  * Convert case at line 5:5 (#1, segments: 1)                   size  +212, benefit      550.9, efficiency      2.598 (+212 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -653,7 +656,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    150 assertequals 0x03FFFFFF :total "Test selected blocks"
    151 end
 
-Modifications by Convert case at line 5:5 (segments: 1) (+212 instructions):
+Modifications by Convert case at line 5:5 (#1, segments: 1) (+212 instructions):
  
      2 label *label0
      3 label *label59

@@ -118,7 +118,7 @@ abstract class ActionHandler {
                 .help("sets the strength of case switching optimization: higher number means more case configurations are considered," +
                         "potentially producing a more efficient code, at the cost of longer compilation time")
                 .type(Integer.class)
-                .choices(Arguments.range(1, CompilerProfile.MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE));
+                .choices(Arguments.range(0, CompilerProfile.MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE));
 
         createArgument(container, defaults,
                 CompilerProfile::getRemarks,

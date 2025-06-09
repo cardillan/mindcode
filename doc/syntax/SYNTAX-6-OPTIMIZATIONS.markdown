@@ -1180,11 +1180,11 @@ Mindcode arranges the code to only perform checks distinguishing between `null` 
 
 ### Jump table compression
 
-Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. The more diverse segments are encoded as separate, smaller jump tables. The optimizer considers several such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well.
+Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers several such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well.
 
-The total number of possible jump table segments arrangements can be quite large. The optimizer generates a number of these arrangements and selects the best one from this set. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements.
+The total number of possible jump table segments arrangements can be quite large. The optimizer generates a number of these arrangements and selects the best one from this set. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
 
-Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both significantly smaller and faster than the unoptimized `case` expression.   
+Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both smaller and significantly faster than the unoptimized `case` expression.   
 
 Jump table compression is particularly useful when using block types in case expressions, as, given the large dispersion of block type IDs, full jump tables tend to get quite large.
 
@@ -1243,68 +1243,69 @@ The above case expression is transformed to this:
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
     sensor *tmp4 *tmp2 @id
-        jump label_40 greaterThanEq *tmp4 35
+        jump label_41 greaterThanEq *tmp4 203
+        jump label_57 greaterThanEq *tmp4 35
         op add @counter @counter *tmp4
-        jump label_55 always 0 0
         jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_56 always 0 0
-        jump label_56 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-        jump label_53 always 0 0
-    label_40:
-        jump label_44 greaterThanEq *tmp4 208
-        jump label_56 equal *tmp4 205
-        jump label_56 lessThan *tmp4 203
-        jump label_53 always 0 0
-    label_44:
-        jump label_49 greaterThanEq *tmp4 226
-        jump label_53 equal *tmp4 220
-        jump label_53 equal *tmp4 221
-        jump label_53 equal *tmp4 225
-        jump label_56 always 0 0
-    label_49:
-        jump label_53 equal *tmp4 234
-        jump label_56 always 0 0
-    label_51:
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_57 always 0 0
+        jump label_57 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+        jump label_54 always 0 0
+    label_41:
+        jump label_48 greaterThanEq *tmp4 222
+        jump label_45 greaterThanEq *tmp4 208
+        jump label_57 equal *tmp4 205
+        jump label_54 always 0 0
+    label_45:
+        jump label_54 equal *tmp4 220
+        jump label_54 equal *tmp4 221
+        jump label_57 always 0 0
+    label_48:
+        jump label_57 greaterThanEq *tmp4 235
+        jump label_54 equal *tmp4 225
+        jump label_54 equal *tmp4 234
+        jump label_57 always 0 0
+    label_52:
         set *tmp0 "No block found"
-        jump label_57 always 0 0
-    label_53:
+        jump label_58 always 0 0
+    label_54:
         set *tmp0 "Wall"
-        jump label_57 always 0 0
-label_55:
-    jump label_51 strictEqual *tmp4 null
+        jump label_58 always 0 0
 label_56:
+    jump label_52 strictEqual *tmp4 null
+label_57:
     set *tmp0 "Not wall"
-    label_57:
+    label_58:
     print *tmp0
 ```
 

@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mindcode.exttest.ErrorResult;
 import info.teksol.mindcode.exttest.TestProgress;
 import org.jspecify.annotations.NullMarked;
@@ -42,7 +43,9 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
 
             // Second round
             compiler = compilerSupplier.get();
-            compiler.compilerProfile().setCaseOptimizationStrength(256);
+            compiler.compilerProfile()
+                    .setGoal(GenerationGoal.SPEED)
+                    .setCaseOptimizationStrength(256);
             if (!compile(compiler, progress)) return;
             int newSteps = compiler.getEmulator().getSteps();
             int newSize = compiler.getInstructions().size();
@@ -74,7 +77,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 if (sizeDifference != expectedSizeDifference) {
                     progress.reportError(new ErrorResult(testCaseId,
                             compiler.compilerProfile(), "", compiler.getExecutionException(),
-                            String.format("Original size: %d, new size: %d, difference: %d (expected %d).",
+                            String.format("Original size: %d, new size: %d, difference: %d (expected %d)",
                                     originalSize, newSize, sizeDifference, expectedSizeDifference)));
                 }
 

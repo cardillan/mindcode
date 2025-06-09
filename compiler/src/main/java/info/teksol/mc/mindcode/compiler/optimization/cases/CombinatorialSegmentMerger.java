@@ -1,23 +1,25 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 
+@NullMarked
 public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
     private static final int MINIMAL_SEGMENT_SIZE = 4;
     private static final int MAX_EXCEPTIONS_WHEN = 2;
     private static final int MAX_EXCEPTIONS_ELSE = 3;
 
     private final List<Partition> partitions;
-    private final int maxMerges;
+    private final int strength;
     private final int iterationDecrease;
 
     private int configurationCount = 0;
 
-    public CombinatorialSegmentMerger(Targets targets, boolean logicConversion, int maxMerges, int iterationDecrease) {
+    public CombinatorialSegmentMerger(Targets targets, boolean logicConversion, int strength, int iterationDecrease) {
         partitions = splitToPartitions(targets, logicConversion);
-        this.maxMerges = maxMerges;
+        this.strength = strength;
         this.iterationDecrease = iterationDecrease;
     }
 
@@ -33,9 +35,14 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
     @Override
     public Set<SegmentConfiguration> createSegmentConfigurations() {
         Set<SegmentConfiguration> configurations = new LinkedHashSet<>();
+        // The basic solution: single segment
         configurations.add(new SegmentConfiguration(partitions, List.of()));
-        configurationCount++;
-        createSegmentConfigurations(configurations, partitions, List.of(), 0);
+
+        // The other
+        if (strength > 0) {
+            configurationCount++;
+            createSegmentConfigurations(configurations, partitions, List.of(), 0);
+        }
         return configurations;
     }
 
@@ -54,7 +61,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
                 createSegmentConfigurations(configurations, newPartitions, newSegments, depth + iterationDecrease);
             }
 
-            if (++count >= maxMerges) break;
+            if (++count >= strength) break;
         }
     }
 
@@ -71,7 +78,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
             Partition last = start;
 
             boolean startGap = i == 0 || partitions.get(i - 1).to() != start.from();
-            LogicLabel label = start.majorityLabel();
+            LogicLabel label = start.label();
             int size = start.size();
             int lastSize = size;
             int count = 1;
@@ -86,7 +93,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
 
                 size += next.size();
                 count++;
-                if (!label.equals(next.majorityLabel())) {
+                if (!label.equals(next.label())) {
                     exceptions += next.size();
                 }
 
@@ -96,7 +103,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
                 }
 
                 if (size > count) {
-                    if (next.majorityLabel().equals(label) || startGap || j == partitions.size() - 1 || partitions.get(j + 1).from() != next.to()) {
+                    if (next.label().equals(label) || startGap || j == partitions.size() - 1 || partitions.get(j + 1).from() != next.to()) {
                         // The merged segment may stop here
                         // Last never points at an impossible end segment
                         stop = next;

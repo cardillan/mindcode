@@ -86,7 +86,7 @@ public class BasicTestProgress extends AbstractTestProgress {
             gcTime += gcBean.getCollectionTime();
         }
 
-        System.out.printf("Tests: %,d/%,d (%.1f%% done), failures: %,d (rate %.2f%%), speed: %7.1f tests/s, elapsed %s, remaining: %s" +
+        System.out.printf("        Tests: %,d/%,d (%.1f%% done), failures: %,d (rate %.2f%%), speed: %7.1f tests/s, elapsed %s, remaining: %s" +
                           "    memory size %,5d MB, GC: %+,d runs, %+.3f s%n",
                 count, samples, 100d * count / samples, errors, 100d * errors / count, rate,
                 formatTime((int) (elapsed / 1_000_000_000d)), formatTime(remaining),
@@ -113,8 +113,7 @@ public class BasicTestProgress extends AbstractTestProgress {
             gcTime += gcBean.getCollectionTime();
         }
 
-        printf(writer, "%n");
-        printf(writer, errors > 0 ? "Failures encountered!%n" : "Finished.%n");
+        printf(writer, errors > 0 ? "    Failures encountered!%n" : "    Finished.%n");
         printf(writer, "    Total tests: %,d, total failures: %,d (rate %.2f%%), speed: %.2f tests/sec, total time: %s, GC runs: %,d, GC time: %s%n",
                 count, errors, 100d * errors / count, totalRate, formatTime((long) (elapsed / 1_000_000_000d)), gcRuns, formatTime(gcTime / 1000));
     }

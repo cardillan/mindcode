@@ -12,21 +12,23 @@
    301 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 411):
-  o Convert case at line 5:5 (segments: 4)                       size   +10, benefit      467.0, efficiency     46.702
-  o Convert case at line 5:5 (segments: 5)                       size   +12, benefit      473.3, efficiency     39.439
-  o Convert case at line 5:5 (segments: 4)                       size   +23, benefit      473.8, efficiency     20.602
-  o Convert case at line 5:5 (segments: 4)                       size   +26, benefit      476.9, efficiency     18.343
-  o Convert case at line 5:5 (segments: 3)                       size   +33, benefit      480.8, efficiency     14.569
-  o Convert case at line 5:5 (segments: 3, zero based)           size   +49, benefit      482.4, efficiency      9.845
-  o Convert case at line 5:5 (segments: 3)                       size  +176, benefit      488.4, efficiency      2.775
-  o Convert case at line 5:5 (segments: 3)                       size  +177, benefit      497.3, efficiency      2.810
-  o Convert case at line 5:5 (segments: 2)                       size  +187, benefit      500.4, efficiency      2.676
-  o Convert case at line 5:5 (segments: 2)                       size  +190, benefit      503.5, efficiency      2.650
-  o Convert case at line 5:5 (segments: 3, zero based)           size  +192, benefit      506.3, efficiency      2.637
-  o Convert case at line 5:5 (segments: 3, zero based)           size  +193, benefit      515.6, efficiency      2.671
-  o Convert case at line 5:5 (segments: 2, zero based)           size  +203, benefit      520.0, efficiency      2.562
-  o Convert case at line 5:5 (segments: 2, zero based)           size  +206, benefit      523.5, efficiency      2.541
-  * Convert case at line 5:5 (segments: 1, zero based)           size  +213, benefit      528.2, efficiency      2.480 (+213 instructions)
+  o Convert case at line 5:5 (#6, segments: 5)                   size   +12, benefit      476.0, efficiency     39.663
+  o Convert case at line 5:5 (#30, segments: 5)                  size   +13, benefit      479.5, efficiency     36.886
+  o Convert case at line 5:5 (#32, segments: 6)                  size   +15, benefit      479.7, efficiency     31.981
+  o Convert case at line 5:5 (#26, segments: 4)                  size   +22, benefit      481.4, efficiency     21.884
+  o Convert case at line 5:5 (#8, segments: 4)                   size   +23, benefit      481.6, efficiency     20.941
+  o Convert case at line 5:5 (#12, segments: 4)                  size   +26, benefit      482.7, efficiency     18.565
+  o Convert case at line 5:5 (#4, segments: 3)                   size   +32, benefit      485.4, efficiency     15.168
+  o Convert case at line 5:5 (#3, segments: 3, zero based)       size   +48, benefit      487.0, efficiency     10.146
+  o Convert case at line 5:5 (#20, segments: 3)                  size  +177, benefit      498.1, efficiency      2.814
+  o Convert case at line 5:5 (#58, segments: 3)                  size  +178, benefit      500.3, efficiency      2.811
+  o Convert case at line 5:5 (#48, segments: 2)                  size  +188, benefit      503.9, efficiency      2.681
+  o Convert case at line 5:5 (#62, segments: 2)                  size  +191, benefit      505.0, efficiency      2.644
+  o Convert case at line 5:5 (#19, segments: 3, zero based)      size  +193, benefit      516.3, efficiency      2.675
+  o Convert case at line 5:5 (#57, segments: 3, zero based)      size  +194, benefit      518.6, efficiency      2.673
+  o Convert case at line 5:5 (#47, segments: 2, zero based)      size  +204, benefit      523.6, efficiency      2.566
+  o Convert case at line 5:5 (#61, segments: 2, zero based)      size  +207, benefit      525.0, efficiency      2.536
+  * Convert case at line 5:5 (#1, segments: 1, zero based)       size  +213, benefit      528.2, efficiency      2.480 (+213 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -635,7 +637,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    145 assertequals 0x03FFFFFD :total "Test selected blocks"
    146 end
 
-Modifications by Convert case at line 5:5 (segments: 1, zero based) (+213 instructions):
+Modifications by Convert case at line 5:5 (#1, segments: 1, zero based) (+213 instructions):
  
      2 label *label0
      3 label *label57

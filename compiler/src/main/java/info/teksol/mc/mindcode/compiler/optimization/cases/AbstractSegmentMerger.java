@@ -1,11 +1,13 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 public abstract class AbstractSegmentMerger implements SegmentMerger {
 
     static List<Partition> splitToPartitions(Targets targets, boolean logicConversion) {

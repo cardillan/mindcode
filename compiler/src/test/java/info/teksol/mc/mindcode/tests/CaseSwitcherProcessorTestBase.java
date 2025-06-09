@@ -29,7 +29,9 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
 
     @Override
     protected CompilerProfile createCompilerProfile() {
-        return super.createCompilerProfile().setCaseOptimizationStrength(256);
+        return super.createCompilerProfile()
+                .setDebugOutput(true)
+                .setCaseOptimizationStrength(256);
     }
 
     void executeCaseSwitchingTest(String fileName, int codeSize) throws IOException {

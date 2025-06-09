@@ -182,7 +182,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("boolean-eval",                 node -> setBooleanOption(node, profile::setShortCircuitEval, "short", "full"));
         map.put("boundary-checks",              node -> setEnumOption(node, RuntimeChecks::byName, profile::setBoundaryChecks, RuntimeChecks::allowedValues));
         map.put("case-configuration",           node -> setIntOption(node, profile::setCaseConfiguration, 0, Integer.MAX_VALUE));
-        map.put("case-optimization-strength",   node -> setIntOption(node, profile::setCaseOptimizationStrength, 1, profile.getMaxCaseOptimizationStrength()));
+        map.put("case-optimization-strength",   node -> setIntOption(node, profile::setCaseOptimizationStrength, 0, profile.getMaxCaseOptimizationStrength()));
         map.put("debug-output",                 node -> setBooleanOption(node, profile::setDebugOutput));
         map.put("function-prefix",              node -> setBooleanOption(node, profile::setShortFunctionPrefix, "short", "long"));
         map.put("goal",                         node -> setEnumOption(node, GenerationGoal::byName, profile::setGoal, GenerationGoal::allowedValues));
