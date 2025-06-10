@@ -4,8 +4,6 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.Objects;
-
 // Note: to is exclusive
 @NullMarked
 public final class Segment implements Comparable<Segment> {
@@ -14,8 +12,14 @@ public final class Segment implements Comparable<Segment> {
     private final int to;
     private final LogicLabel majorityLabel;
 
-    private int bisectionSteps;
+    /// The else path of this segment needs to handle nulls
     private boolean handleNulls;
+
+    /// Bisection depth
+    private int depth;
+
+    /// Resolved by the bisection jump
+    private boolean inline;
 
     public Segment(SegmentType type, int from, int to, LogicLabel majorityLabel) {
         this.type = type;
@@ -24,20 +28,22 @@ public final class Segment implements Comparable<Segment> {
         this.majorityLabel = majorityLabel;
     }
 
-    private Segment(SegmentType type, int from, int to, LogicLabel majorityLabel, boolean handleNulls) {
+    private Segment(SegmentType type, int from, int to, LogicLabel majorityLabel, boolean handleNulls, boolean inline) {
         this.type = type;
         this.from = from;
         this.to = to;
         this.majorityLabel = majorityLabel;
         this.handleNulls = handleNulls;
+        this.inline = inline;
     }
 
     public Segment duplicate() {
-        return new Segment(type, from, to, majorityLabel, handleNulls);
+        return new Segment(type, from, to, majorityLabel, handleNulls, inline);
     }
 
-    public void setBisectionSteps(int bisectionSteps) {
-        this.bisectionSteps = bisectionSteps;
+    public void setBisectionSteps(int depth, boolean inline) {
+        this.depth = depth;
+        this.inline = inline;
     }
 
     public void setHandleNulls() {
@@ -89,12 +95,16 @@ public final class Segment implements Comparable<Segment> {
         return majorityLabel;
     }
 
-    public int bisectionSteps() {
-        return bisectionSteps;
+    public int depth() {
+        return depth;
     }
 
     public boolean handleNulls() {
         return handleNulls;
+    }
+
+    public boolean inline() {
+        return inline;
     }
 
     @Override
@@ -104,18 +114,22 @@ public final class Segment implements Comparable<Segment> {
         Segment segment = (Segment) o;
         return from == segment.from
                 && to == segment.to
+                && depth == segment.depth
                 && handleNulls == segment.handleNulls
+                && inline == segment.inline
                 && type == segment.type
-                && Objects.equals(majorityLabel, segment.majorityLabel);
+                && majorityLabel.equals(segment.majorityLabel);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hashCode(type);
+        int result = type.hashCode();
         result = 31 * result + from;
         result = 31 * result + to;
-        result = 31 * result + Objects.hashCode(majorityLabel);
+        result = 31 * result + majorityLabel.hashCode();
+        result = 31 * result + depth;
         result = 31 * result + Boolean.hashCode(handleNulls);
+        result = 31 * result + Boolean.hashCode(inline);
         return result;
     }
 
@@ -126,7 +140,9 @@ public final class Segment implements Comparable<Segment> {
                 ", from=" + from +
                 ", to=" + to +
                 ", majorityLabel=" + majorityLabel +
+                ", depth=" + depth +
                 ", handleNulls=" + handleNulls +
+                ", inline=" + inline +
                 '}';
     }
 }

@@ -169,44 +169,6 @@ single-source:
     defaults: run-test
     samples: 1200000
 
-# Case-switching tests - standalone
-case-switching:
-  - source: case-small.mnd
-    defaults: case-switching-defaults
-    case-configurations: 4
-
-  - source: case-homogenous-none.mnd
-    defaults: case-switching-defaults
-    case-configurations: 2751
-
-  - source: case-homogenous-null.mnd
-    defaults: case-switching-defaults
-    case-configurations: 2751
-
-  - source: case-homogenous-zero.mnd
-    defaults: case-switching-defaults
-    case-configurations: 15429
-
-  - source: case-homogenous-both.mnd
-    defaults: case-switching-defaults
-    case-configurations: 15429
-
-  - source: case-distinct-none.mnd
-    defaults: case-switching-defaults
-    case-configurations: 98
-
-  - source: case-distinct-null.mnd
-    defaults: case-switching-defaults
-    case-configurations: 98
-
-  - source: case-distinct-zero.mnd
-    defaults: case-switching-defaults
-    case-configurations: 228
-
-  - source: case-distinct-both.mnd
-    defaults: case-switching-defaults
-    case-configurations: 228
-
 # List of all files to test
 all-sources:
   - source: math.mnd
@@ -341,3 +303,50 @@ all-sources:
   - source: case-distinct-both.mnd
     defaults: case-switching-defaults
     case-configurations: 228
+
+# Case-switching tests - standalone
+case-switching:
+  - source: case-small.mnd
+    defaults: case-switching-defaults
+    case-configurations: 4
+
+  - source: case-homogenous-none.mnd
+    defaults: case-switching-defaults
+    case-configurations: 2751
+
+  - source: case-homogenous-null.mnd
+    defaults: case-switching-defaults
+    case-configurations: 2751
+
+  - source: case-homogenous-zero.mnd
+    defaults: case-switching-defaults
+    case-configurations: 15429
+
+  - source: case-homogenous-both.mnd
+    defaults: case-switching-defaults
+    case-configurations: 15429
+
+  - source: case-homogenous-max.mnd
+    defaults: case-switching-defaults
+    case-configurations: 15429
+
+  - source: case-distinct-none.mnd
+    defaults: case-switching-defaults
+    case-configurations: 98
+
+  - source: case-distinct-null.mnd
+    defaults: case-switching-defaults
+    case-configurations: 98
+
+  - source: case-distinct-zero.mnd
+    defaults: case-switching-defaults
+    case-configurations: 228
+
+  - source: case-distinct-both.mnd
+    defaults: case-switching-defaults
+    case-configurations: 228
+
+  - source: case-distinct-max.mnd
+    defaults: case-switching-defaults
+    case-configurations: 228
+

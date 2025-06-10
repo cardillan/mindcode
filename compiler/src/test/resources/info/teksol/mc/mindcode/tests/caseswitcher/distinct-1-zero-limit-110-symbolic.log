@@ -21,7 +21,6 @@ Pass 1: speed optimization selection (cost limit 21):
   ! Convert case at line 6:5 (#40, segments: 6, padded low)      size   +31, benefit      481.3, efficiency     15.527
   ! Convert case at line 6:5 (#16, segments: 4, padded low)      size   +43, benefit      482.4, efficiency     11.219
   ! Convert case at line 6:5 (#6, segments: 3, padded low)       size   +49, benefit      484.2, efficiency      9.882
-  ! Convert case at line 6:5 (#55, segments: 2)                  size  +189, benefit      484.2, efficiency      2.562
   ! Convert case at line 6:5 (#30, segments: 3, padded both)     size  +192, benefit      506.3, efficiency      2.637
   ! Convert case at line 6:5 (#24, segments: 3, padded low)      size  +193, benefit      516.3, efficiency      2.675
   ! Convert case at line 6:5 (#66, segments: 3, padded low)      size  +194, benefit      518.6, efficiency      2.673

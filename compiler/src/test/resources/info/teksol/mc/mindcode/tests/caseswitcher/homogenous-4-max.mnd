@@ -1,0 +1,31 @@
+#set target-optimization = specific;
+#set err-invalid-content = false;
+
+def isWall(block)
+    case block
+        when null, @graphite-press, @copper-wall, @copper-wall-large, @titanium-wall, @titanium-wall-large,
+             @plastanium-wall, @plastanium-wall-large, @thorium-wall, @thorium-wall-large,
+             @phase-wall, @phase-wall-large, @surge-wall, @surge-wall-large,
+             @scrap-wall, @scrap-wall-large, @scrap-wall-huge, @scrap-wall-gigantic,
+             @beryllium-wall, @beryllium-wall-large, @tungsten-wall, @tungsten-wall-large,
+             @reinforced-surge-wall, @reinforced-surge-wall-large, @carbide-wall, @carbide-wall-large,
+             @tile-logic-display
+        then true;
+        else false;
+    end;
+end;
+
+begin
+    assertEquals(260, @blockCount, "Verify block count");
+
+    var hash = 0;
+    for var i in -1 ... @blockCount do
+        var block = lookup(:block, i);
+        if isWall(block) then
+            hash = (hash * 31 + i + 251) & 0xFFFFFFFF;
+        end;
+    end;
+
+    print(hash);
+    assertEquals(2727247113, hash, "Test selected blocks");
+end;

@@ -15,6 +15,10 @@ distinct-3-both (limit    0):                      91     7897      97.8%   794F
 distinct-3-both (limit  110):                     108     3178      97.2%   260FE6A9D7FAF7F0   B565DC8F28100A80
 distinct-3-both (limit  200):                     139     3110      98.5%   DDEFEBE522DD0B66   A04B4B52887CD5EA
 distinct-3-both (limit  500):                     327     2441      93.2%   3DAC8E6950801BA0   7ABC8B37EFB28A69
+distinct-4-max (limit    0):                       95     8814      97.8%   A0CAF662E7767B64   8949C3C50E9AF9C9
+distinct-4-max (limit  110):                      109     3440      98.1%   6E98F233632D0B4C   5167586C9071D09A
+distinct-4-max (limit  200):                      166     3333      98.7%   EEA2B8C3BF8C42E3   B2A488B37DA3F1D5
+distinct-4-max (limit  500):                      330     2643      99.3%   F1726E4CFC5F512B   BEA5C01A74D118FF
 homogenous-0-none (limit    0):                    39     6837     100.0%   849C60DA0859527D   9675A3D4F2520BB9
 homogenous-0-none (limit   60):                    32     2263     100.0%   89816443F1573810   06E0CCE5CA138962
 homogenous-0-none (limit  100):                    64     2248     100.0%   5D68F34F7E07B56D   0A900A9AF33D00D3
@@ -31,3 +35,7 @@ homogenous-3-both (limit    0):                    41     7280     100.0%   C953
 homogenous-3-both (limit   60):                    34     2293     100.0%   F4F1EA4FFF0CEAC9   7CCA10B93E6DC750
 homogenous-3-both (limit  100):                    64     2258     100.0%   0B07EA07A18150AD   E86944562429F208
 homogenous-3-both (limit  500):                   277     2062      92.7%   0E13EA07A1F13D1A   022533CC742F07B5
+homogenous-4-max (limit    0):                     43     8141     100.0%   16A3580263B62B5F   358B7640CF7C4865
+homogenous-4-max (limit   60):                     37     2495     100.0%   0509EB2E7CACE5C4   7066EBDB2CB009B3
+homogenous-4-max (limit  100):                     67     2460     100.0%   12DCF2757C589A73   0B2BE3FEFF3DF9CF
+homogenous-4-max (limit  500):                    277     2227     100.0%   4F72356E7A98D9B0   1F067DC08BA709C0

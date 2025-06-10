@@ -1170,7 +1170,12 @@ The following preconditions need to be met to apply content conversion:
 * The optimization level must be set to `advanced`.
 
 > [!NOTE]
-> The out-of-range handling instructions are omitted when `unsafe-case-optimization` is set to `true` and there's no `else` branch. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g., item selected in a sorter), keep in mind the value obtained this way might be `null`.  
+> When `unsafe-case-optimization` is set to `true` and there's no `else` branch, the optimizer creates a jump table omitting the out-of-range checks. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g., item selected in a sorter), keep in mind the value obtained this way might be `null`.  
+
+The range check is also partially or fully removed when the following conditions are met:
+
+* There is a `when` branch corresponding to the Mindustry content with a zero ID: in this case, Mindcode knows the minimum possible numerical value of the ID (that is, zero) is handled by the case expression and doesn't check for IDs less than zero.
+* There is a `when` branch corresponding to the Mindustry content with a maximum ID, and `target-optimization` is set to `specific`: in this case, Mindcode knows the maximum possible numerical value of the ID is handled by the case expression and doesn't check for IDs greater than the maximum value.
 
 #### Null values
 

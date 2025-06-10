@@ -26,17 +26,18 @@ public class Targets {
         this.hasElseBranch = hasElseBranch;
     }
 
-    public void computeElseValues(ContentType contentType, MindustryMetadata metadata) {
+    public void computeElseValues(ContentType contentType, MindustryMetadata metadata, boolean targetSpecificOptimization) {
         totalSize = computeTotalSize(contentType, metadata);
         elseValues = Math.max(totalSize - targets.size(), 0);
-        int elseValuesLow = totalSize > 0 ? targets.firstKey() : 0;
 
         if (contentType == ContentType.UNKNOWN) {
             leadingSegment = new Segment(SegmentType.SINGLE, targets.firstKey(), targets.firstKey(), LogicLabel.EMPTY);
             trailingSegment = new Segment(SegmentType.SINGLE, targets.lastKey() + 1, targets.lastKey() + 1, LogicLabel.EMPTY);
         } else {
-            leadingSegment = elseValuesLow == 0 ? null : new Segment(SegmentType.SINGLE, 0, targets.firstKey(), LogicLabel.EMPTY);
-            trailingSegment = new Segment(SegmentType.SINGLE, targets.lastKey() + 1, totalSize, LogicLabel.EMPTY);
+            boolean limitLow = targets.firstKey() > 0;
+            boolean limitHigh = !targetSpecificOptimization || (targets.lastKey() + 1 < totalSize);
+            leadingSegment = limitLow ? new Segment(SegmentType.SINGLE, 0, targets.firstKey(), LogicLabel.EMPTY) : null;
+            trailingSegment = limitHigh ? new Segment(SegmentType.SINGLE, targets.lastKey() + 1, totalSize, LogicLabel.EMPTY) : null;
         }
     }
 
@@ -61,7 +62,7 @@ public class Targets {
 
     public void addLimitSegments(List<Segment> segments) {
         if (leadingSegment != null) segments.addFirst(leadingSegment.duplicate());
-        segments.addLast(Objects.requireNonNull(trailingSegment).duplicate());
+        if (trailingSegment != null) segments.addLast(trailingSegment.duplicate());
     }
 
     public boolean hasZeroKey() {
