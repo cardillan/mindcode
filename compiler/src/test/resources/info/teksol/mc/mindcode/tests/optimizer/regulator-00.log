@@ -26,8 +26,8 @@ Pass 1: speed optimization selection (cost limit 819):
   o Convert case at line 25:9 (segments: 2)                      size   +39, benefit     2291.7, efficiency     58.761
   o Convert case at line 25:9 (segments: 4)                      size   +66, benefit     2673.6, efficiency     40.509
   o Convert case at line 25:9 (segments: 2)                      size   +80, benefit     2847.2, efficiency     35.590
-  o Convert case at line 25:9 (segments: 3, zero based)          size   +88, benefit     2881.9, efficiency     32.749
-  o Convert case at line 25:9 (segments: 2, zero based)          size  +127, benefit     3437.5, efficiency     27.067
+  o Convert case at line 25:9 (segments: 3, padded low)          size   +88, benefit     2881.9, efficiency     32.749
+  o Convert case at line 25:9 (segments: 2, padded low)          size  +127, benefit     3437.5, efficiency     27.067
 
 Pass 1: speed optimization selection (cost limit 818):
   o Convert case at line 25:9 (segments: 6)                      size    +4, benefit     1770.8, efficiency    442.708
@@ -37,8 +37,8 @@ Pass 1: speed optimization selection (cost limit 818):
   o Convert case at line 25:9 (segments: 2)                      size   +39, benefit     2291.7, efficiency     58.761
   o Convert case at line 25:9 (segments: 4)                      size   +66, benefit     2673.6, efficiency     40.509
   o Convert case at line 25:9 (segments: 2)                      size   +80, benefit     2847.2, efficiency     35.590
-  o Convert case at line 25:9 (segments: 3, zero based)          size   +88, benefit     2881.9, efficiency     32.749
-  * Convert case at line 25:9 (segments: 2, zero based)          size  +127, benefit     3437.5, efficiency     27.067 (+127 instructions)
+  o Convert case at line 25:9 (segments: 3, padded low)          size   +88, benefit     2881.9, efficiency     32.749
+  * Convert case at line 25:9 (segments: 2, padded low)          size  +127, benefit     3437.5, efficiency     27.067 (+127 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -959,7 +959,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    209 getlink :block :n
    210 control enabled :block .ON
 
-Modifications by Convert case at line 25:9 (segments: 2, zero based) (+127 instructions):
+Modifications by Convert case at line 25:9 (segments: 2, padded low) (+127 instructions):
  
     19 print :block
     20 print "\n"

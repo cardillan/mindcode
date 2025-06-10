@@ -8,7 +8,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* The [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching) now uses bisection search to locate the proper segment when performing Jump Table compression, providing up to 15% speedup in some scenarios.
+* Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)
+  * The optimization now uses bisection search to locate the proper segment when performing Jump Table compression, providing up to 15% speedup in some scenarios.
+  * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `target-optimization` to be set to `specific`. 
 * It is now possible to turn off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) by setting the `case-optimization-strength` compiler option to `0`.
 
 ## 3.6.1 - 2025-06-06

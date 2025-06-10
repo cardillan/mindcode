@@ -1196,14 +1196,14 @@ Notes:
 
 ### Jump table padding
 
-When the jump table starts at zero value, the generated code can be both smaller and faster due to these effects:
+When the jump table starts at zero value, it is possible to generate a faster code due to these effects:
 
 * When the Mindustry content conversion is applied, the optimizer knows the logic IDs cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
 * When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation handling the non-zero offset can be omitted.
 
-When symbolic labels are generated, the jump table padding may save up to two instructions, which is a significant speedup.
+Similarly, when the Mindustry content conversion is applied, the `target-optimization` option is set to `specific` and the jump table ends at the largest ID of the respective Mindustry content, a jump instruction handling values larger than the end of the table can be omitted, as the optimizer knows no larger values may occur. 
 
-The optimizer considers the possibility of padding the jump table to start at zero value and chooses it if it gives the best performance under the cost limit.
+When the jump table doesn't start or end at these values naturally, Mindcode may pad the table at either end with additional jumps to the `else` branch. The optimizer considers the possibility of padding the table at the low end, high end, or both, and chooses the option that gives the best performance under the given cost limit.
 
 ### Example
 

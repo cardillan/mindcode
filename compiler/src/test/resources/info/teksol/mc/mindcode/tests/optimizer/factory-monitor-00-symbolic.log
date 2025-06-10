@@ -18,14 +18,14 @@
 
 Pass 1: speed optimization selection (cost limit 622):
   * Replicate loop condition at line 160:1                       size    +1, benefit       25.0, efficiency     25.000 (-5 instructions)
-  o Convert case at line 20:9 (segments: 3, zero based)          size    +8, benefit     3855.8, efficiency    481.971
-  o Convert case at line 20:9 (segments: 2, zero based)          size  +135, benefit     4490.4, efficiency     33.262
-  o Convert case at line 20:9 (segments: 1, zero based)          size  +138, benefit     4790.9, efficiency     34.716
+  o Convert case at line 20:9 (segments: 3, padded low)          size    +8, benefit     3855.8, efficiency    481.971
+  o Convert case at line 20:9 (segments: 2, padded low)          size  +135, benefit     4490.4, efficiency     33.262
+  o Convert case at line 20:9 (segments: 1, padded low)          size  +138, benefit     4790.9, efficiency     34.716
 
 Pass 1: speed optimization selection (cost limit 627):
-  o Convert case at line 20:9 (segments: 3, zero based)          size    +8, benefit     3855.8, efficiency    481.971
-  o Convert case at line 20:9 (segments: 2, zero based)          size  +135, benefit     4490.4, efficiency     33.262
-  * Convert case at line 20:9 (segments: 1, zero based)          size  +138, benefit     4790.9, efficiency     34.716 (+138 instructions)
+  o Convert case at line 20:9 (segments: 3, padded low)          size    +8, benefit     3855.8, efficiency    481.971
+  o Convert case at line 20:9 (segments: 2, padded low)          size  +135, benefit     4490.4, efficiency     33.262
+  * Convert case at line 20:9 (segments: 1, padded low)          size  +138, benefit     4790.9, efficiency     34.716 (+138 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -1848,7 +1848,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-6
    179 label *label2
    180 sensor *tmp30 .DISPLAY @type
 
-Modifications by Convert case at line 20:9 (segments: 1, zero based) (+138 instructions):
+Modifications by Convert case at line 20:9 (segments: 1, padded low) (+138 instructions):
  
     24 op sub :n :n 1
     25 getlink :block :n

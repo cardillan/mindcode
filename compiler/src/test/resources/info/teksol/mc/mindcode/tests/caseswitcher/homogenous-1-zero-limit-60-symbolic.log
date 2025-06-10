@@ -12,12 +12,14 @@
     36 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 19):
-  o Convert case at line 5:5 (#719, segments: 6)                 size    -6, benefit      495.1, efficiency   Infinity
-  o Convert case at line 5:5 (#467, segments: 7)                 size    -5, benefit      495.2, efficiency   Infinity
-  * Convert case at line 5:5 (#672, segments: 7)                 size    -4, benefit      498.1, efficiency   Infinity (-4 instructions)
-  ! Convert case at line 5:5 (#4566, segments: 6)                size   +24, benefit      498.4, efficiency     20.765
-  ! Convert case at line 5:5 (#508, segments: 5)                 size   +25, benefit      498.5, efficiency     19.938
-  ! Convert case at line 5:5 (#4559, segments: 5)                size   +26, benefit      501.3, efficiency     19.283
+  o Convert case at line 6:5 (#740, segments: 6, padded high)    size    -7, benefit      486.2, efficiency   Infinity
+  o Convert case at line 6:5 (#739, segments: 6)                 size    -6, benefit      495.1, efficiency   Infinity
+  o Convert case at line 6:5 (#480, segments: 7)                 size    -5, benefit      495.2, efficiency   Infinity
+  * Convert case at line 6:5 (#692, segments: 7)                 size    -4, benefit      498.1, efficiency   Infinity (-4 instructions)
+  ! Convert case at line 6:5 (#4698, segments: 6)                size   +24, benefit      498.4, efficiency     20.765
+  ! Convert case at line 6:5 (#521, segments: 5)                 size   +25, benefit      498.5, efficiency     19.938
+  ! Convert case at line 6:5 (#4691, segments: 5)                size   +26, benefit      501.3, efficiency     19.283
+  ! Convert case at line 6:5 (#2, segments: 1, padded high)      size  +238, benefit      521.1, efficiency      2.189
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -241,7 +243,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     49 print :hash
     50 assertequals 1061505871 :hash "Test selected blocks"
 
-Modifications by Convert case at line 5:5 (#672, segments: 7) (-4 instructions):
+Modifications by Convert case at line 6:5 (#692, segments: 7) (-4 instructions):
  
      3 label *label9
      4 lookup block :block :i

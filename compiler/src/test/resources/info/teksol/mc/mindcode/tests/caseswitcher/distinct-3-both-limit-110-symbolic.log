@@ -12,19 +12,22 @@
    108 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 18):
-  o Convert case at line 5:5 (#47, segments: 6)                  size   +13, benefit      498.8, efficiency     38.373
-  o Convert case at line 5:5 (#49, segments: 7)                  size   +15, benefit      500.3, efficiency     33.353
-  * Convert case at line 5:5 (#50, segments: 8)                  size   +17, benefit      500.5, efficiency     29.440 (+17 instructions)
-  ! Convert case at line 5:5 (#85, segments: 4)                  size   +26, benefit      502.4, efficiency     19.323
-  ! Convert case at line 5:5 (#92, segments: 5)                  size   +28, benefit      503.8, efficiency     17.995
-  ! Convert case at line 5:5 (#95, segments: 6)                  size   +30, benefit      504.0, efficiency     16.801
-  ! Convert case at line 5:5 (#18, segments: 4)                  size   +42, benefit      505.1, efficiency     12.026
-  ! Convert case at line 5:5 (#2, segments: 3)                   size   +48, benefit      506.9, efficiency     10.561
-  ! Convert case at line 5:5 (#30, segments: 3)                  size  +192, benefit      539.0, efficiency      2.807
-  ! Convert case at line 5:5 (#148, segments: 3)                 size  +193, benefit      541.3, efficiency      2.804
-  ! Convert case at line 5:5 (#130, segments: 2)                 size  +203, benefit      546.3, efficiency      2.691
-  ! Convert case at line 5:5 (#153, segments: 2)                 size  +206, benefit      547.7, efficiency      2.659
-  ! Convert case at line 5:5 (#1, segments: 1)                   size  +212, benefit      550.9, efficiency      2.598
+  o Convert case at line 6:5 (#54, segments: 6, padded high)     size   +12, benefit      489.7, efficiency     40.809
+  o Convert case at line 6:5 (#53, segments: 6)                  size   +13, benefit      498.8, efficiency     38.373
+  o Convert case at line 6:5 (#56, segments: 7)                  size   +15, benefit      500.3, efficiency     33.353
+  * Convert case at line 6:5 (#57, segments: 8)                  size   +17, benefit      500.5, efficiency     29.440 (+17 instructions)
+  ! Convert case at line 6:5 (#93, segments: 4)                  size   +26, benefit      502.4, efficiency     19.323
+  ! Convert case at line 6:5 (#102, segments: 5)                 size   +28, benefit      503.8, efficiency     17.995
+  ! Convert case at line 6:5 (#105, segments: 6)                 size   +30, benefit      504.0, efficiency     16.801
+  ! Convert case at line 6:5 (#21, segments: 4)                  size   +42, benefit      505.1, efficiency     12.026
+  ! Convert case at line 6:5 (#3, segments: 3)                   size   +48, benefit      506.9, efficiency     10.561
+  ! Convert case at line 6:5 (#92, segments: 3, padded high)     size  +191, benefit      529.0, efficiency      2.770
+  ! Convert case at line 6:5 (#33, segments: 3)                  size  +192, benefit      539.0, efficiency      2.807
+  ! Convert case at line 6:5 (#160, segments: 3)                 size  +193, benefit      541.3, efficiency      2.804
+  ! Convert case at line 6:5 (#142, segments: 2)                 size  +203, benefit      546.3, efficiency      2.691
+  ! Convert case at line 6:5 (#165, segments: 2)                 size  +206, benefit      547.7, efficiency      2.659
+  ! Convert case at line 6:5 (#1, segments: 1)                   size  +212, benefit      550.9, efficiency      2.598
+  ! Convert case at line 6:5 (#2, segments: 1, padded high)      size  +236, benefit      571.1, efficiency      2.420
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -653,7 +656,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    151 assertequals 0x03FFFFFF :total "Test selected blocks"
    152 end
 
-Modifications by Convert case at line 5:5 (#50, segments: 8) (+17 instructions):
+Modifications by Convert case at line 6:5 (#57, segments: 8) (+17 instructions):
  
      3 label *label59
      4 lookup block :block :i

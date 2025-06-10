@@ -12,22 +12,24 @@
    134 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 115):
-  o Convert case at line 5:5 (#26, segments: 4)                  size   +13, benefit      428.0, efficiency     32.922
-  o Convert case at line 5:5 (#30, segments: 5)                  size   +15, benefit      429.4, efficiency     28.628
-  o Convert case at line 5:5 (#32, segments: 6)                  size   +17, benefit      429.6, efficiency     25.271
-  o Convert case at line 5:5 (#25, segments: 4, zero based)      size   +28, benefit      429.8, efficiency     15.350
-  o Convert case at line 5:5 (#12, segments: 4)                  size   +29, benefit      430.7, efficiency     14.851
-  o Convert case at line 5:5 (#29, segments: 5, zero based)      size   +30, benefit      431.3, efficiency     14.375
-  o Convert case at line 5:5 (#31, segments: 6, zero based)      size   +32, benefit      431.4, efficiency     13.483
-  o Convert case at line 5:5 (#4, segments: 3)                   size   +35, benefit      432.5, efficiency     12.357
-  * Convert case at line 5:5 (#3, segments: 3, zero based)       size   +50, benefit      434.3, efficiency      8.687 (+50 instructions)
-  ! Convert case at line 5:5 (#48, segments: 2)                  size  +190, benefit      435.9, efficiency      2.294
-  ! Convert case at line 5:5 (#62, segments: 2)                  size  +193, benefit      436.5, efficiency      2.262
-  ! Convert case at line 5:5 (#19, segments: 3, zero based)      size  +194, benefit      466.4, efficiency      2.404
-  ! Convert case at line 5:5 (#57, segments: 3, zero based)      size  +195, benefit      468.7, efficiency      2.403
-  ! Convert case at line 5:5 (#47, segments: 2, zero based)      size  +205, benefit      473.7, efficiency      2.311
-  ! Convert case at line 5:5 (#61, segments: 2, zero based)      size  +208, benefit      475.1, efficiency      2.284
-  ! Convert case at line 5:5 (#1, segments: 1, zero based)       size  +214, benefit      478.3, efficiency      2.235
+  o Convert case at line 6:5 (#33, segments: 4, padded high)     size   +12, benefit      418.8, efficiency     34.904
+  o Convert case at line 6:5 (#31, segments: 4)                  size   +13, benefit      428.0, efficiency     32.922
+  o Convert case at line 6:5 (#37, segments: 5)                  size   +15, benefit      429.4, efficiency     28.628
+  o Convert case at line 6:5 (#39, segments: 6)                  size   +17, benefit      429.6, efficiency     25.271
+  o Convert case at line 6:5 (#32, segments: 4, padded low)      size   +28, benefit      429.8, efficiency     15.350
+  o Convert case at line 6:5 (#15, segments: 4)                  size   +29, benefit      430.7, efficiency     14.851
+  o Convert case at line 6:5 (#38, segments: 5, padded low)      size   +30, benefit      431.3, efficiency     14.375
+  o Convert case at line 6:5 (#40, segments: 6, padded low)      size   +32, benefit      431.4, efficiency     13.483
+  o Convert case at line 6:5 (#5, segments: 3)                   size   +35, benefit      432.5, efficiency     12.357
+  * Convert case at line 6:5 (#6, segments: 3, padded low)       size   +50, benefit      434.3, efficiency      8.687 (+50 instructions)
+  ! Convert case at line 6:5 (#55, segments: 2)                  size  +190, benefit      435.9, efficiency      2.294
+  ! Convert case at line 6:5 (#30, segments: 3, padded both)     size  +193, benefit      456.4, efficiency      2.365
+  ! Convert case at line 6:5 (#24, segments: 3, padded low)      size  +194, benefit      466.4, efficiency      2.404
+  ! Convert case at line 6:5 (#66, segments: 3, padded low)      size  +195, benefit      468.7, efficiency      2.403
+  ! Convert case at line 6:5 (#56, segments: 2, padded low)      size  +205, benefit      473.7, efficiency      2.311
+  ! Convert case at line 6:5 (#70, segments: 2, padded low)      size  +208, benefit      475.1, efficiency      2.284
+  ! Convert case at line 6:5 (#2, segments: 1, padded low)       size  +214, benefit      478.3, efficiency      2.235
+  ! Convert case at line 6:5 (#4, segments: 1, padded both)      size  +238, benefit      498.5, efficiency      2.094
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -622,7 +624,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    140 assertequals 0x03FFFFFC :total "Test selected blocks"
    141 end
 
-Modifications by Convert case at line 5:5 (#3, segments: 3, zero based) (+50 instructions):
+Modifications by Convert case at line 6:5 (#6, segments: 3, padded low) (+50 instructions):
  
      3 label *label55
      4 lookup block :block :i

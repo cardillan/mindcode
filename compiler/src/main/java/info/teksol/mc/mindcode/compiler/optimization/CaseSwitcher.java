@@ -210,7 +210,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
         List<ConvertCaseExpressionAction> actions = new ArrayList<>();
         for (SegmentConfiguration mergedSegments : configurations) {
-            createOptimizationActions(actions, costLimit, context, jumps, valueSteps, variable, targets,
+            createOptimizationActions(actions, context, jumps, valueSteps, variable, targets,
                     mergedSegments.createSegments(removeRangeCheck, analyzer.isMindustryContent(), targets),
                     analyzer.getContentType(), removeRangeCheck);
         }
@@ -238,32 +238,54 @@ public class CaseSwitcher extends BaseOptimizer {
         }
     }
 
-    private void createOptimizationActions(List<ConvertCaseExpressionAction> actions, int costLimit, AstContext astContext,
+    private void createOptimizationActions(List<ConvertCaseExpressionAction> actions, AstContext astContext,
             int jumps, int valueSteps, LogicVariable variable, Targets targets, List<Segment> segments, ContentType contentType,
             boolean removeRangeCheck) {
-        int zeroPadSegment = findZeroPadSegment(segments);
-        if (zeroPadSegment == 0) {
+        actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, segments,
+                contentType, removeRangeCheck, false, false));
+
+        int lowPadIndex = findLowPadSegment(segments);
+        int highPadIndex = findHighPadSegment(targets, contentType, segments);
+
+        if (lowPadIndex >= 0) {
+            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
+                    padLow(segments, contentType, lowPadIndex), contentType, removeRangeCheck, true, false));
+        }
+
+        if (highPadIndex >= 0) {
+            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
+                    padHigh(segments, targets, highPadIndex), contentType, removeRangeCheck, false, true));
+        }
+
+        if (lowPadIndex >= 0 && highPadIndex >= 0) {
+            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
+                    padLow(padHigh(segments, targets, highPadIndex), contentType, lowPadIndex),
+                    contentType, removeRangeCheck, true, true));
+        }
+    }
+
+    private List<Segment> padLow(List<Segment> segments, ContentType contentType, int index) {
+        if (index == 0) {
             Segment curr = segments.getFirst();
             Segment newSegment = new Segment(curr.type(), 0, curr.to(), curr.majorityLabel());
-            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, List.of(newSegment),
-                    contentType, removeRangeCheck, true));
-        } else if (zeroPadSegment > 0) {
+            return List.of(newSegment);
+        } else {
             List<Segment> newSegments = new ArrayList<>(segments);
-            Segment prev = newSegments.get(zeroPadSegment - 1);
-            Segment curr = newSegments.get(zeroPadSegment);
+            Segment prev = newSegments.get(index - 1);
+            Segment curr = newSegments.get(index);
 
             if (contentType == ContentType.UNKNOWN) {
                 if (prev.from() < 0) {
-                    newSegments.set(zeroPadSegment - 1, new Segment(prev.type(), prev.from(), 0, prev.majorityLabel()));
+                    newSegments.set(index - 1, new Segment(prev.type(), prev.from(), 0, prev.majorityLabel()));
                 } else {
-                    newSegments.set(zeroPadSegment - 1, new Segment(prev.type(), 0, 0, prev.majorityLabel()));
+                    newSegments.set(index - 1, new Segment(prev.type(), 0, 0, prev.majorityLabel()));
                 }
-                newSegments.set(zeroPadSegment, new Segment(curr.type(), 0, curr.to(), curr.majorityLabel()));
+                newSegments.set(index, new Segment(curr.type(), 0, curr.to(), curr.majorityLabel()));
                 if (prev.handleNulls()) {
-                    newSegments.get(zeroPadSegment).setHandleNulls();
+                    newSegments.get(index).setHandleNulls();
                 }
             } else {
-                if (zeroPadSegment != 1 || prev.from() != 0) throw new MindcodeInternalError("Mindustry content not starting at index 0");
+                if (index != 1 || prev.from() != 0) throw new MindcodeInternalError("Mindustry content not starting at index 0");
                 newSegments.removeFirst();
                 newSegments.set(0, new Segment(curr.type(), 0, curr.to(), curr.majorityLabel()));
                 if (prev.handleNulls()) {
@@ -271,15 +293,23 @@ public class CaseSwitcher extends BaseOptimizer {
                 }
             }
 
-            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, newSegments,
-                    contentType, removeRangeCheck, true));
+            return newSegments;
         }
-
-        actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, segments,
-                contentType, removeRangeCheck, false));
     }
 
-    private int findZeroPadSegment(List<Segment> segments) {
+    private List<Segment> padHigh(List<Segment> segments, Targets targets, int index) {
+        List<Segment> newSegments = new ArrayList<>(segments);
+        Segment curr = newSegments.get(index);
+        newSegments.set(index, new Segment(curr.type(), curr.from(), targets.getTotalSize(), curr.majorityLabel()));
+        if (index < segments.size() - 1) {
+            if (index != segments.size() - 2) throw new MindcodeInternalError("Pad high segment not the last one");
+            newSegments.removeLast();
+        }
+
+        return newSegments;
+    }
+
+    private int findLowPadSegment(List<Segment> segments) {
         // It is the first one?
         // Support for single segments (the removeRangeCheck scenario)
         int firstPossibleIndex = segments.size() < 2 ? 0 : 1;
@@ -299,6 +329,21 @@ public class CaseSwitcher extends BaseOptimizer {
         return -1;
     }
 
+    private int findHighPadSegment(Targets targets, ContentType contentType, List<Segment> segments) {
+        // Only high pad Mindustry content when target optimization is set
+        // When there is just one segment, it is because range checking is off, in which case padding high makes no sense
+        if (contentType == ContentType.UNKNOWN || !getProfile().isTargetOptimization() || segments.size() < 2) return -1;
+
+        // It can only be the very last segment
+        int lastPossibleIndex = segments.size() < 2 ? segments.size() - 1 : segments.size() - 2;
+        Segment segment = segments.get(lastPossibleIndex);
+        if (segment.to() <= targets.getTotalSize() && segment.type() == SegmentType.JUMP_TABLE) {
+            return lastPossibleIndex;
+        }
+
+        return -1;
+    }
+
     public class ConvertCaseExpressionAction implements OptimizationAction {
         private final int id = ++actionCounter;
         private final AstContext astContext;
@@ -311,18 +356,24 @@ public class CaseSwitcher extends BaseOptimizer {
         private final List<Segment> segments;
         private final boolean logicConversion;
         private final boolean removeRangeCheck;
-        private final boolean zeroPadded;
         private final boolean symbolic = getProfile().isSymbolicLabels();
+        private final String padding;
 
         private ConvertCaseExpressionAction(AstContext astContext, int jumps, int valueSteps, LogicVariable variable,
-                Targets targets, List<Segment> segments, ContentType contentType, boolean removeRangeCheck, boolean zeroPadded) {
+                Targets targets, List<Segment> segments, ContentType contentType, boolean removeRangeCheck,
+                boolean lowPadded, boolean highPadded) {
             this.astContext = astContext;
             this.variable = variable;
             this.targets = targets;
             this.segments = segments;
             this.logicConversion = contentType != ContentType.UNKNOWN;
             this.removeRangeCheck = removeRangeCheck;
-            this.zeroPadded = zeroPadded;
+            this.padding = switch ((lowPadded ? 1 : 0) + (highPadded ? 2 : 0)) {
+                case 1 -> "padded low";
+                case 2 -> "padded high";
+                case 3 -> "padded both";
+                default -> "";
+            };
 
             debugOutput("\n\n *** " + this + " *** \n");
             if (removeRangeCheck) {
@@ -371,7 +422,7 @@ public class CaseSwitcher extends BaseOptimizer {
             int numSegments = segments.size() - (segments.getFirst().empty() ? 1 : 0) - (segments.getLast().empty() ? 1 : 0);
             String strId = CaseSwitcher.super.isDebugOutput() ? "#" + id + ", " : "";
             return "Convert case at " + Objects.requireNonNull(astContext.node()).sourcePosition().formatForLog() +
-                    " (" + strId + "segments: " + numSegments + (zeroPadded ? ", zero based" : "") + ")";
+                    " (" + strId + "segments: " + numSegments + (padding.isEmpty() ? "" : ", " + padding) + ")";
         }
 
         private void computeCostAndBenefitNoRangeCheck(int originalJumps, int originalValueSteps) {
@@ -449,7 +500,7 @@ public class CaseSwitcher extends BaseOptimizer {
             benefit = rawBenefit * astContext.totalWeight();
 
             debugOutput("Original size: %d, new size: %d, cost: %d", originalJumps, cost + originalJumps, cost);
-            if (zeroPadded) debugOutput("*** ZERO PADDED ***");
+            if (!padding.isEmpty()) debugOutput("*** " + padding.toUpperCase() + " ***");
             debugOutput("");
         }
 

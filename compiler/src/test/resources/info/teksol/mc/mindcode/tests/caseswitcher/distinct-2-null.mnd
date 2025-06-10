@@ -1,3 +1,4 @@
+#set target-optimization = specific;
 #set err-invalid-content = false;
 
 def identifyBlock(block)
