@@ -1,7 +1,6 @@
 package info.teksol.mindcode.exttest;
 
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationCoordinator;
-import info.teksol.mindcode.exttest.Configuration.SingleTestConfiguration;
 import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import info.teksol.mindcode.exttest.cases.TestCaseCreatorScreening;
 import info.teksol.mindcode.exttest.forkjoin.ForkJoinFramework;
@@ -14,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @NullMarked
 public class ExtendedTests {
@@ -33,15 +33,16 @@ public class ExtendedTests {
 
 
         try (PrintWriter master = new PrintWriter("results.txt")) {
-            if (!runScreeningTests(master, configuration)) {
+            List<TestConfiguration> testConfigurations = new CopyOnWriteArrayList<>();
+
+            if (!runScreeningTests(master, configuration, testConfigurations)) {
                 return;
             }
 
             List<String> failedSources = new ArrayList<>();
-            List<SingleTestConfiguration> testConfigurations = configuration.configurations();
 
             int test = 1;
-            for (SingleTestConfiguration testConfiguration : testConfigurations) {
+            for (TestConfiguration testConfiguration : testConfigurations) {
                 printf(master, "%n");
                 printf(master,"TEST %d/%d%n", test++, testConfigurations.size());
                 printf(master,"    Source: %s (%s), parallel tests: %d%n", testConfiguration.getSourceFileName(),
@@ -92,8 +93,9 @@ public class ExtendedTests {
         }
     }
 
-    private static boolean runScreeningTests(PrintWriter writer, Configuration configuration) {
-        TestCaseCreatorScreening testCaseCreator = new TestCaseCreatorScreening(configuration.configurations());
+    private static boolean runScreeningTests(PrintWriter writer, Configuration configuration,
+            List<TestConfiguration> updatedConfigurations) {
+        TestCaseCreatorScreening testCaseCreator = new TestCaseCreatorScreening(configuration.configurations(), updatedConfigurations);
 
         System.out.printf("Running %d screening tests:%n", testCaseCreator.getTotalCases());
 

@@ -13,6 +13,10 @@ public abstract class BaseTestCaseCreator implements TestCaseCreator {
     protected abstract CompilerProfile getCompilerProfile(int testRunNumber);
     protected abstract String getTestCaseId(int testRunNumber);
 
+    protected void updateConfiguration(TestConfiguration configuration) {
+        // Do nothing by default
+    }
+
     @Override
     public TestCaseExecutor createExecutor(int testRunNumber) {
         TestConfiguration configuration = getConfiguration(testRunNumber);
@@ -21,8 +25,11 @@ public abstract class BaseTestCaseCreator implements TestCaseCreator {
         if (configuration.isCaseSwitchingTest()) {
             String caseId = getTestCaseId(testRunNumber) + (profile.getCaseConfiguration() == 0 ? "" : " (case " + profile.getCaseConfiguration() + ")" );
             return new CaseSwitchingTestCaseExecutor(caseId, inputFiles.getMainInputFile(),
-                    () -> createCompiler(inputFiles, testRunNumber));
+                    () -> createCompiler(inputFiles, testRunNumber),
+                    caseSwitching -> updateConfiguration(configuration.withCaseSwitching(caseSwitching))
+            );
         } else {
+            updateConfiguration(configuration);
             return new BasicTestCaseExecutor(getTestCaseId(testRunNumber), inputFiles.getMainInputFile(),
                     () -> createCompiler(inputFiles, testRunNumber));
         }

@@ -8,6 +8,7 @@ import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mindcode.exttest.cases.TestCaseCreator;
 import org.jspecify.annotations.NullMarked;
 
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +25,13 @@ public interface TestConfiguration {
     Map<Optimization, List<OptimizationLevel>> getOptimizationLevels();
     List<GenerationGoal> getGenerationGoals();
     List<Boolean> getSymbolicLabels();
+
+    String getSourceFileName();
+    Path getResultPath();
+    boolean isRun();
+
+    int getCaseSwitching();
+    TestConfiguration withCaseSwitching(int caseSwitching);
     boolean isCaseSwitchingTest();
 
     TestCaseCreator getTestCaseCreator();

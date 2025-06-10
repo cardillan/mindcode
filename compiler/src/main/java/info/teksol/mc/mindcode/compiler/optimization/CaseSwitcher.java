@@ -224,10 +224,8 @@ public class CaseSwitcher extends BaseOptimizer {
         optimizationContext.addDiagnosticData(new CaseSwitcherConfigurations(context.sourcePosition(), configurations.size()));
 
         List<ConvertCaseExpressionAction> actions = new ArrayList<>();
-        for (SegmentConfiguration mergedSegments : configurations) {
-            createOptimizationActions(actions, context, jumps, valueSteps, variable, targets,
-                    mergedSegments.createSegments(removeRangeCheck, analyzer.isMindustryContent(), targets),
-                    analyzer.getContentType(), removeRangeCheck);
+        for (SegmentConfiguration segmentConfiguration : configurations) {
+            createOptimizationActions(actions, context, jumps, valueSteps, variable, targets, analyzer,segmentConfiguration, removeRangeCheck);
         }
 
         actionCounter = 0;
@@ -254,10 +252,13 @@ public class CaseSwitcher extends BaseOptimizer {
     }
 
     private void createOptimizationActions(List<ConvertCaseExpressionAction> actions, AstContext astContext,
-            int jumps, int valueSteps, LogicVariable variable, Targets targets, List<Segment> segments, ContentType contentType,
-            boolean removeRangeCheck) {
-        actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets, segments,
-                contentType, removeRangeCheck, false, false));
+            int jumps, int valueSteps, LogicVariable variable, Targets targets, WhenValueAnalyzer analyzer,
+            SegmentConfiguration segmentConfiguration, boolean removeRangeCheck) {
+        ContentType contentType = analyzer.getContentType();
+        List<Segment> segments = segmentConfiguration.createSegments(removeRangeCheck, analyzer.isMindustryContent(), targets);
+
+        actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
+                segments, contentType, removeRangeCheck, false, false));
 
         int lowPadIndex = findLowPadSegment(segments);
         int highPadIndex = findHighPadSegment(targets, contentType, segments);
@@ -391,7 +392,8 @@ public class CaseSwitcher extends BaseOptimizer {
                 default -> "";
             };
 
-            debugOutput("\n\n *** " + this + " *** \n");
+            debugOutput("%n%n*** %s ***%n", this);
+
             if (removeRangeCheck) {
                 computeCostAndBenefitNoRangeCheck(jumps, valueSteps);
             } else {

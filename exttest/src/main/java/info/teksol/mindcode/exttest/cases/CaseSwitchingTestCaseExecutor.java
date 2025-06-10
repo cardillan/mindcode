@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mindcode.exttest.ErrorResult;
 import info.teksol.mindcode.exttest.TestProgress;
@@ -14,6 +15,7 @@ import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.function.IntConsumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -22,11 +24,14 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
     private final String testCaseId;
     private final InputFile inputFile;
     private final Supplier<MindcodeCompiler> compilerSupplier;
+    private final IntConsumer caseSwitcherCountConsumer;
 
-    public CaseSwitchingTestCaseExecutor(String testCaseId, InputFile inputFile, Supplier<MindcodeCompiler> compilerSupplier) {
+    public CaseSwitchingTestCaseExecutor(String testCaseId, InputFile inputFile, Supplier<MindcodeCompiler> compilerSupplier,
+            IntConsumer caseSwitcherCountConsumer) {
         this.testCaseId = testCaseId;
         this.inputFile = inputFile;
         this.compilerSupplier = compilerSupplier;
+        this.caseSwitcherCountConsumer = caseSwitcherCountConsumer;
     }
 
     @Override
@@ -50,6 +55,11 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             int newSteps = compiler.getEmulator().getSteps();
             int newSize = compiler.getInstructions().size();
             String newOutput = compiler.getEmulator().getTextBuffer().getFormattedOutput();
+
+            List<CaseSwitcherConfigurations> configurationData = compiler.getDiagnosticData(CaseSwitcherConfigurations.class);
+            if (configurationData.size() == 1) {
+                caseSwitcherCountConsumer.accept(configurationData.getFirst().configurationsCount());
+            }
 
             if (!Objects.equals(originalOutput, newOutput)) {
                 progress.reportError(new ErrorResult(testCaseId,

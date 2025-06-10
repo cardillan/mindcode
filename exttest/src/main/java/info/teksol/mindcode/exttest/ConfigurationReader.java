@@ -80,7 +80,7 @@ public class ConfigurationReader {
         List<Boolean> symbolicLabels = getSymbolicLabels(mapping, defaults);
         int sampleCount = integer(mapping, defaults, "samples");
         int failureLimit = integer(mapping, defaults, "failure-limit");
-        int caseSwitching = integer(mapping, defaults, "case-configurations");
+        boolean caseSwitchingTest = bool(mapping, defaults, "case-switching-test");
         boolean run = bool(mapping, defaults, "run");
 
         configuration.addTestConfiguration(
@@ -91,7 +91,7 @@ public class ConfigurationReader {
                 symbolicLabels,
                 sampleCount,
                 failureLimit,
-                caseSwitching,
+                caseSwitchingTest ? 1 : 0,
                 run);
     }
 

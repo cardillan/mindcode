@@ -175,6 +175,11 @@ public record Configuration(
             return caseSwitching > 0;
         }
 
+        public TestConfiguration withCaseSwitching(int caseSwitching) {
+            return new SingleTestConfiguration(sourceFileName, inputFiles, optimizationLevels, generationGoals,
+                    symbolicLabels, sampleCount, failureLimit, caseSwitching, run);
+        }
+
         @Override
         public CompilerProfile createCompilerProfile(int testCase) {
             CompilerProfile profile = new CompilerProfile(false, OptimizationLevel.NONE)
