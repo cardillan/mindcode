@@ -16,13 +16,15 @@
 
 Pass 1: speed optimization selection (cost limit 881):
   * Replicate loop condition at line 68:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-    Convert case at line 17:9 (segments: 1)                      size   +92, benefit      230.8, efficiency      2.508
-    Convert case at line 17:9 (segments: 2, padded low)          size  +141, benefit      250.0, efficiency      1.773
+  o Convert case at line 17:9 (segments: 3, padded low)          size    +5, benefit      221.2, efficiency     44.231
+  o Convert case at line 17:9 (segments: 4)                      size    +6, benefit      413.5, efficiency     68.910
+  o Convert case at line 17:9 (segments: 5)                      size    +7, benefit      423.1, efficiency     60.440
     Convert case at line 17:9 (segments: 1, padded low)          size  +144, benefit      538.5, efficiency      3.739
 
 Pass 1: speed optimization selection (cost limit 880):
-  o Convert case at line 17:9 (segments: 1)                      size   +92, benefit      230.8, efficiency      2.508
-  o Convert case at line 17:9 (segments: 2, padded low)          size  +141, benefit      250.0, efficiency      1.773
+  o Convert case at line 17:9 (segments: 3, padded low)          size    +5, benefit      221.2, efficiency     44.231
+  o Convert case at line 17:9 (segments: 4)                      size    +6, benefit      413.5, efficiency     68.910
+  o Convert case at line 17:9 (segments: 5)                      size    +7, benefit      423.1, efficiency     60.440
   * Convert case at line 17:9 (segments: 1, padded low)          size  +144, benefit      538.5, efficiency      3.739 (+144 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):

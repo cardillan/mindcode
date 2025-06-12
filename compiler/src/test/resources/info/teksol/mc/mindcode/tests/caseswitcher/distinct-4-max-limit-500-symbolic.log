@@ -12,28 +12,17 @@
    330 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 404):
-  o Convert case at line 6:5 (#11, segments: 7)                  size   +13, benefit      516.3, efficiency     39.712
-  o Convert case at line 6:5 (#124, segments: 7)                 size   +14, benefit      517.3, efficiency     36.951
-  o Convert case at line 6:5 (#34, segments: 8)                  size   +15, benefit      517.8, efficiency     34.519
-  o Convert case at line 6:5 (#243, segments: 8)                 size   +16, benefit      518.2, efficiency     32.386
-  o Convert case at line 6:5 (#244, segments: 9)                 size   +17, benefit      518.4, efficiency     30.492
-  o Convert case at line 6:5 (#10, segments: 5)                  size   +26, benefit      519.8, efficiency     19.993
-  o Convert case at line 6:5 (#136, segments: 5)                 size   +27, benefit      520.9, efficiency     19.291
-  o Convert case at line 6:5 (#42, segments: 6)                  size   +28, benefit      521.3, efficiency     18.620
-  o Convert case at line 6:5 (#286, segments: 6)                 size   +29, benefit      521.7, efficiency     17.991
-  o Convert case at line 6:5 (#289, segments: 7)                 size   +30, benefit      521.9, efficiency     17.397
-  o Convert case at line 6:5 (#279, segments: 5)                 size   +39, benefit      522.2, efficiency     13.390
-  o Convert case at line 6:5 (#39, segments: 5)                  size   +40, benefit      522.3, efficiency     13.058
-  o Convert case at line 6:5 (#9, segments: 4)                   size   +41, benefit      522.6, efficiency     12.746
-  o Convert case at line 6:5 (#44, segments: 5)                  size   +43, benefit      523.0, efficiency     12.162
-  o Convert case at line 6:5 (#28, segments: 4)                  size   +49, benefit      524.8, efficiency     10.710
-  o Convert case at line 6:5 (#2, segments: 3)                   size   +71, benefit      527.5, efficiency      7.430
-  o Convert case at line 6:5 (#111, segments: 3)                 size  +192, benefit      557.8, efficiency      2.905
-  o Convert case at line 6:5 (#342, segments: 4)                 size  +194, benefit      559.1, efficiency      2.882
-  o Convert case at line 6:5 (#75, segments: 2)                  size  +202, benefit      561.9, efficiency      2.782
-  o Convert case at line 6:5 (#324, segments: 3)                 size  +204, benefit      564.1, efficiency      2.765
-  o Convert case at line 6:5 (#98, segments: 2)                  size  +205, benefit      565.7, efficiency      2.759
-  o Convert case at line 6:5 (#195, segments: 2)                 size  +213, benefit      568.8, efficiency      2.670
+  o Convert case at line 6:5 (#424, segments: 8)                 size   +12, benefit      498.7, efficiency     41.554
+  o Convert case at line 6:5 (#12574, segments: 8)               size   +13, benefit      563.8, efficiency     43.373
+  o Convert case at line 6:5 (#12577, segments: 9)               size   +14, benefit      563.9, efficiency     40.282
+  o Convert case at line 6:5 (#12613, segments: 9)               size   +15, benefit      565.1, efficiency     37.673
+  o Convert case at line 6:5 (#12573, segments: 6)               size   +26, benefit      567.4, efficiency     21.823
+  o Convert case at line 6:5 (#12582, segments: 7)               size   +27, benefit      567.5, efficiency     21.019
+  o Convert case at line 6:5 (#12639, segments: 7)               size   +28, benefit      568.7, efficiency     20.309
+  o Convert case at line 6:5 (#12621, segments: 7)               size   +39, benefit      568.8, efficiency     14.586
+  o Convert case at line 6:5 (#12641, segments: 6)               size   +43, benefit      568.9, efficiency     13.231
+  o Convert case at line 6:5 (#12602, segments: 5)               size   +49, benefit      570.2, efficiency     11.637
+  o Convert case at line 6:5 (#12562, segments: 4)               size   +71, benefit      570.8, efficiency      8.039
   * Convert case at line 6:5 (#1, segments: 1)                   size  +235, benefit      593.7, efficiency      2.526 (+235 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):

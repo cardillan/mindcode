@@ -246,8 +246,8 @@ and repackaging them back.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  26 |                 26 |
-| Function body                  |                  27 |                 27 |
+| Inlined function               |                  29 |                 26 |
+| Function body                  |                  30 |                 27 |
 | Function call                  |                   7 |                  7 |
 
 Creates a packed color using the HSV color model. The individual components (hue, saturation, value, alpha)

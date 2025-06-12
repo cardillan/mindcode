@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
@@ -12,15 +13,27 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
     private static final int MAX_EXCEPTIONS_ELSE = 3;
 
     private final List<Partition> partitions;
-    private final int strength;
+    private final int strengthLarge;
+    private final int strengthSmall;
     private final int iterationDecrease;
 
     private int configurationCount = 0;
 
-    public CombinatorialSegmentMerger(Targets targets, boolean logicConversion, int strength, int iterationDecrease) {
-        partitions = splitToPartitions(targets, logicConversion);
-        this.strength = strength;
+    public CombinatorialSegmentMerger(Targets targets, boolean logicConversion, int strengthLarge, int iterationDecrease) {
+        this.partitions = splitToPartitions(targets, logicConversion);
+        this.strengthLarge = strengthLarge;
         this.iterationDecrease = iterationDecrease;
+
+        // Density is the average number of targets per branch
+        double density = (double) targets.size() / targets.getTargetCount();
+
+        // High density case expressions generate a lot of segment configurations from segment merging, and do not
+        // benefit from isolating small segments. The strength of generating small (isolated) segments is therefore
+        // inversely proportional to density. Increasing the multiplication factor increases the number of small
+        // segment configurations quite dramatically in some scenarios. Values higher than 6 lead to a very high
+        // number of combinations and unacceptable optimization times.
+        double multiplicationFactor = 3.0;
+        this.strengthSmall = (int) (multiplicationFactor / density);
     }
 
     @Override
@@ -39,7 +52,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
         configurations.add(new SegmentConfiguration(partitions, List.of()));
 
         // The other
-        if (strength > 0) {
+        if (strengthLarge > 0) {
             configurationCount++;
             createSegmentConfigurations(configurations, partitions, List.of(), 0);
         }
@@ -48,9 +61,14 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
 
     void createSegmentConfigurations(Collection<SegmentConfiguration> configurations, List<Partition> partitions,
             List<Segment> segments, int depth) {
-        int count = depth;
+        int limitLarge = Math.max(1, (strengthLarge - iterationDecrease * depth));
+        int limitSmall = Math.max(0, (strengthSmall - 2 * depth));
 
-        for (Segment largestSegment : findLargestSegments(partitions)) {
+        List<Segment> merged = CollectionUtils.mergeLists(
+                findLargestSegments(partitions, limitLarge),
+                findSmallestSegments(partitions, limitSmall));
+
+        for (Segment largestSegment : merged) {
             List<Partition> newPartitions = partitions.stream().filter(s -> !largestSegment.contains(s)).toList();
             List<Segment> newSegments = new ArrayList<>(segments);
             newSegments.add(largestSegment);
@@ -58,10 +76,8 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
             configurationCount++;
 
             if (!newPartitions.isEmpty()) {
-                createSegmentConfigurations(configurations, newPartitions, newSegments, depth + iterationDecrease);
+                createSegmentConfigurations(configurations, newPartitions, newSegments, depth + 1);
             }
-
-            if (++count >= strength) break;
         }
     }
 
@@ -69,7 +85,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
     // 1. The number of exceptions in the partition is <= MAX_EXCEPTIONS
     // 2. The merged segment starts and stops with the same label, or has no neighbor at one or both ends
     // 3. The average segment size > 1
-    List<Segment> findLargestSegments(List<Partition> partitions) {
+    List<Segment> findLargestSegments(List<Partition> partitions, int limit) {
         List<Segment> result = new ArrayList<>();
 
         for (int i = 0; i < partitions.size(); i++) {
@@ -123,4 +139,24 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
         result.sort(Comparator.comparing(Segment::size).reversed());
         return result;
     }
+
+    List<Segment> findSmallestSegments(List<Partition> partitions, int limit) {
+        List<SingleSegment> singleSegments = new ArrayList<>();
+
+        for (int i = 0; i < partitions.size(); i++) {
+            if (partitions.get(i).size() == 1 && partitions.get(i).label() != LogicLabel.EMPTY) {
+                singleSegments.add(new SingleSegment(partitions.get(i),
+                        (i > 0 ? partitions.get(i - 1).size() : 0) + ((i < partitions.size() - 1) ? partitions.get(i + 1).size() : 0)));
+            }
+        }
+
+        return singleSegments.stream()
+                .sorted(Comparator.comparing(SingleSegment::size).reversed())
+                .limit(limit)
+                .map(SingleSegment::partition)
+                .map(p -> new Segment(SegmentType.SINGLE, p.from(), p.to(), p.label(), 1))
+                .toList();
+    }
+
+    private record SingleSegment(Partition partition, int size) {}
 }

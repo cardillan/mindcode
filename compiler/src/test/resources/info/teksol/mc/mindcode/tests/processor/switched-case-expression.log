@@ -7,13 +7,14 @@
     26 instructions modified by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
-     3 instructions added by Case Switching (3 iterations).
+     4 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
     10 instructions eliminated by Jump Straightening (4 iterations).
-    61 instructions after optimizations.
+    62 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 941):
-  * Convert case at line 27:5 (segments: 1)                      size    +3, benefit      937.5, efficiency    312.500 (+3 instructions)
+  o Convert case at line 27:5 (segments: 1)                      size    +3, benefit      937.5, efficiency    312.500
+  * Convert case at line 27:5 (segments: 3)                      size    +4, benefit     1125.0, efficiency    281.250 (+4 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -411,34 +412,34 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     78 assertequals 11 .S0 "Unexpected value of S0"
     79 assertequals 21 .S1 "Unexpected value of S1"
 
-Modifications by Convert case at line 27:5 (segments: 1) (+3 instructions):
+Modifications by Convert case at line 27:5 (segments: 3) (+4 instructions):
  
     15 jump *label6 lessThanEq :processNumber:n 0
     16 label *label30
     17 op mod :processDigit:n :processNumber:n 10
 -    * jump *label9 notEqual :processDigit:n 0
-+   18 jump *label31 lessThan :processDigit:n 0
-+   19 jump *label31 greaterThanEq :processDigit:n 10
-+   20 multijump *label32 :processDigit:n 0 (m:*label42)
-+   21 multilabel *label32 (m:*label42)
-+   22 jump *label10 always
-+   23 multilabel *label33 (m:*label42)
-+   24 jump *label12 always
-+   25 multilabel *label34 (m:*label42)
++   18 jump *label32 greaterThanEq :processDigit:n 2
++   19 jump *label12 greaterThanEq :processDigit:n 1
++   20 jump *label10 greaterThanEq :processDigit:n 0
++   21 jump *label31 always
++   22 label *label32
++   23 jump *label31 greaterThanEq :processDigit:n 10
++   24 multijump *label33 :processDigit:n 2 (m:*label41)
++   25 multilabel *label33 (m:*label41)
 +   26 jump *label14 always
-+   27 multilabel *label35 (m:*label42)
++   27 multilabel *label34 (m:*label41)
 +   28 jump *label16 always
-+   29 multilabel *label36 (m:*label42)
++   29 multilabel *label35 (m:*label41)
 +   30 jump *label18 always
-+   31 multilabel *label37 (m:*label42)
++   31 multilabel *label36 (m:*label41)
 +   32 jump *label20 always
-+   33 multilabel *label38 (m:*label42)
++   33 multilabel *label37 (m:*label41)
 +   34 jump *label22 always
-+   35 multilabel *label39 (m:*label42)
++   35 multilabel *label38 (m:*label41)
 +   36 jump *label24 always
-+   37 multilabel *label40 (m:*label42)
++   37 multilabel *label39 (m:*label41)
 +   38 jump *label26 always
-+   39 multilabel *label41 (m:*label42)
++   39 multilabel *label40 (m:*label41)
 +   40 jump *label28 always
     41 label *label10
     42 op add .S0 .S0 1
@@ -502,7 +503,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   15 jump *label6 lessThanEq :i 0
     16 label *label30
     17 op mod :processDigit:n :processNumber:n 10
-    18 jump *label31 lessThan :processDigit:n 0
+    18 jump *label32 greaterThanEq :processDigit:n 2
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -597,28 +598,28 @@ set :processNumber:n :i
 jump *label6 lessThanEq :i 0
 label *label30
 op mod :processDigit:n :processNumber:n 10
-jump *label31 lessThan :processDigit:n 0
+jump *label32 greaterThanEq :processDigit:n 2
+jump *label12 greaterThanEq :processDigit:n 1
+jump *label10 greaterThanEq :processDigit:n 0
+jump *label31 always
+label *label32
 jump *label31 greaterThanEq :processDigit:n 10
-multijump *label32 :processDigit:n 0
-multilabel *label32
-jump *label10 always
+multijump *label33 :processDigit:n 2
 multilabel *label33
-jump *label12 always
-multilabel *label34
 jump *label14 always
-multilabel *label35
+multilabel *label34
 jump *label16 always
-multilabel *label36
+multilabel *label35
 jump *label18 always
-multilabel *label37
+multilabel *label36
 jump *label20 always
-multilabel *label38
+multilabel *label37
 jump *label22 always
-multilabel *label39
+multilabel *label38
 jump *label24 always
-multilabel *label40
+multilabel *label39
 jump *label26 always
-multilabel *label41
+multilabel *label40
 jump *label28 always
 label *label10
 op add .S0 .S0 1

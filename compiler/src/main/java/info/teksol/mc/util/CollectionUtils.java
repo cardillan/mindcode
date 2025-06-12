@@ -132,4 +132,17 @@ public class CollectionUtils {
             return List.copyOf(list);
         }
     }
+
+    public static <E> @NonNull List<E> mergeLists(List<E> list1, List<E> list2) {
+        if (list1.isEmpty()) {
+            return list2;
+        } else if (list2.isEmpty()) {
+            return list1;
+        } else {
+            List<E> list = new ArrayList<>(list1.size() + list2.size());
+            list.addAll(list1);
+            list.addAll(list2);
+            return List.copyOf(list);
+        }
+    }
 }

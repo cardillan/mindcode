@@ -12,28 +12,17 @@
    109 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 14):
-  o Convert case at line 6:5 (#11, segments: 7)                  size   +13, benefit      516.3, efficiency     39.712
-  * Convert case at line 6:5 (#124, segments: 7)                 size   +14, benefit      517.3, efficiency     36.951 (+14 instructions)
-  ! Convert case at line 6:5 (#34, segments: 8)                  size   +15, benefit      517.8, efficiency     34.519
-  ! Convert case at line 6:5 (#243, segments: 8)                 size   +16, benefit      518.2, efficiency     32.386
-  ! Convert case at line 6:5 (#244, segments: 9)                 size   +17, benefit      518.4, efficiency     30.492
-  ! Convert case at line 6:5 (#10, segments: 5)                  size   +26, benefit      519.8, efficiency     19.993
-  ! Convert case at line 6:5 (#136, segments: 5)                 size   +27, benefit      520.9, efficiency     19.291
-  ! Convert case at line 6:5 (#42, segments: 6)                  size   +28, benefit      521.3, efficiency     18.620
-  ! Convert case at line 6:5 (#286, segments: 6)                 size   +29, benefit      521.7, efficiency     17.991
-  ! Convert case at line 6:5 (#289, segments: 7)                 size   +30, benefit      521.9, efficiency     17.397
-  ! Convert case at line 6:5 (#279, segments: 5)                 size   +39, benefit      522.2, efficiency     13.390
-  ! Convert case at line 6:5 (#39, segments: 5)                  size   +40, benefit      522.3, efficiency     13.058
-  ! Convert case at line 6:5 (#9, segments: 4)                   size   +41, benefit      522.6, efficiency     12.746
-  ! Convert case at line 6:5 (#44, segments: 5)                  size   +43, benefit      523.0, efficiency     12.162
-  ! Convert case at line 6:5 (#28, segments: 4)                  size   +49, benefit      524.8, efficiency     10.710
-  ! Convert case at line 6:5 (#2, segments: 3)                   size   +71, benefit      527.5, efficiency      7.430
-  ! Convert case at line 6:5 (#111, segments: 3)                 size  +192, benefit      557.8, efficiency      2.905
-  ! Convert case at line 6:5 (#342, segments: 4)                 size  +194, benefit      559.1, efficiency      2.882
-  ! Convert case at line 6:5 (#75, segments: 2)                  size  +202, benefit      561.9, efficiency      2.782
-  ! Convert case at line 6:5 (#324, segments: 3)                 size  +204, benefit      564.1, efficiency      2.765
-  ! Convert case at line 6:5 (#98, segments: 2)                  size  +205, benefit      565.7, efficiency      2.759
-  ! Convert case at line 6:5 (#195, segments: 2)                 size  +213, benefit      568.8, efficiency      2.670
+  o Convert case at line 6:5 (#424, segments: 8)                 size   +12, benefit      498.7, efficiency     41.554
+  o Convert case at line 6:5 (#12574, segments: 8)               size   +13, benefit      563.8, efficiency     43.373
+  * Convert case at line 6:5 (#12577, segments: 9)               size   +14, benefit      563.9, efficiency     40.282 (+14 instructions)
+  ! Convert case at line 6:5 (#12613, segments: 9)               size   +15, benefit      565.1, efficiency     37.673
+  ! Convert case at line 6:5 (#12573, segments: 6)               size   +26, benefit      567.4, efficiency     21.823
+  ! Convert case at line 6:5 (#12582, segments: 7)               size   +27, benefit      567.5, efficiency     21.019
+  ! Convert case at line 6:5 (#12639, segments: 7)               size   +28, benefit      568.7, efficiency     20.309
+  ! Convert case at line 6:5 (#12621, segments: 7)               size   +39, benefit      568.8, efficiency     14.586
+  ! Convert case at line 6:5 (#12641, segments: 6)               size   +43, benefit      568.9, efficiency     13.231
+  ! Convert case at line 6:5 (#12602, segments: 5)               size   +49, benefit      570.2, efficiency     11.637
+  ! Convert case at line 6:5 (#12562, segments: 4)               size   +71, benefit      570.8, efficiency      8.039
   ! Convert case at line 6:5 (#1, segments: 1)                   size  +235, benefit      593.7, efficiency      2.526
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -684,7 +673,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    157 assertequals 0x07FFFFFF :total "Test selected blocks"
    158 end
 
-Modifications by Convert case at line 6:5 (#124, segments: 7) (+14 instructions):
+Modifications by Convert case at line 6:5 (#12577, segments: 9) (+14 instructions):
  
      4 label *label61
      5 lookup block :block :i
@@ -692,65 +681,65 @@ Modifications by Convert case at line 6:5 (#124, segments: 7) (+14 instructions)
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
 +    7 sensor *tmp6 :block @id
-+    8 jump *label64 greaterThanEq *tmp6 205
-+    9 jump *label65 greaterThanEq *tmp6 35
-+   10 jump *label66 greaterThanEq *tmp6 17
++    8 jump *label64 greaterThanEq *tmp6 203
++    9 jump *label62 greaterThanEq *tmp6 35
++   10 jump *label65 greaterThanEq *tmp6 17
 +   11 jump *label62 greaterThanEq *tmp6 1
 +   12 jump *label63 always
-+   13 label *label66
-+   14 multijump *label67 *tmp6 17 (m:*label85)
-+   15 multilabel *label67 (m:*label85)
++   13 label *label65
++   14 multijump *label66 *tmp6 17 (m:*label84)
++   15 multilabel *label66 (m:*label84)
 +   16 jump *label10 always
-+   17 multilabel *label68 (m:*label85)
++   17 multilabel *label67 (m:*label84)
 +   18 jump *label12 always
-+   19 multilabel *label69 (m:*label85)
++   19 multilabel *label68 (m:*label84)
 +   20 jump *label14 always
-+   21 multilabel *label70 (m:*label85)
++   21 multilabel *label69 (m:*label84)
 +   22 jump *label16 always
-+   23 multilabel *label71 (m:*label85)
++   23 multilabel *label70 (m:*label84)
 +   24 jump *label18 always
-+   25 multilabel *label72 (m:*label85)
++   25 multilabel *label71 (m:*label84)
 +   26 jump *label20 always
-+   27 multilabel *label73 (m:*label85)
++   27 multilabel *label72 (m:*label84)
 +   28 jump *label22 always
-+   29 multilabel *label74 (m:*label85)
++   29 multilabel *label73 (m:*label84)
 +   30 jump *label24 always
-+   31 multilabel *label75 (m:*label85)
++   31 multilabel *label74 (m:*label84)
 +   32 jump *label26 always
-+   33 multilabel *label76 (m:*label85)
++   33 multilabel *label75 (m:*label84)
 +   34 jump *label28 always
-+   35 multilabel *label77 (m:*label85)
++   35 multilabel *label76 (m:*label84)
 +   36 jump *label30 always
-+   37 multilabel *label78 (m:*label85)
++   37 multilabel *label77 (m:*label84)
 +   38 jump *label32 always
-+   39 multilabel *label79 (m:*label85)
++   39 multilabel *label78 (m:*label84)
 +   40 jump *label62 always
-+   41 multilabel *label80 (m:*label85)
++   41 multilabel *label79 (m:*label84)
 +   42 jump *label62 always
-+   43 multilabel *label81 (m:*label85)
++   43 multilabel *label80 (m:*label84)
 +   44 jump *label34 always
-+   45 multilabel *label82 (m:*label85)
++   45 multilabel *label81 (m:*label84)
 +   46 jump *label36 always
-+   47 multilabel *label83 (m:*label85)
++   47 multilabel *label82 (m:*label84)
 +   48 jump *label38 always
-+   49 multilabel *label84 (m:*label85)
++   49 multilabel *label83 (m:*label84)
 +   50 jump *label40 always
-+   51 label *label65
-+   52 jump *label42 equal *tmp6 203
-+   53 jump *label44 equal *tmp6 204
-+   54 jump *label62 always
-+   55 label *label64
-+   56 jump *label86 greaterThanEq *tmp6 226
-+   57 jump *label87 greaterThanEq *tmp6 220
++   51 label *label64
++   52 jump *label85 greaterThanEq *tmp6 226
++   53 jump *label86 greaterThanEq *tmp6 220
++   54 jump *label87 greaterThanEq *tmp6 205
++   55 jump *label44 greaterThanEq *tmp6 204
++   56 jump *label42 always
++   57 label *label87
 +   58 jump *label46 equal *tmp6 206
 +   59 jump *label48 equal *tmp6 207
 +   60 jump *label62 always
-+   61 label *label87
++   61 label *label86
 +   62 jump *label50 equal *tmp6 220
 +   63 jump *label52 equal *tmp6 221
 +   64 jump *label54 equal *tmp6 225
 +   65 jump *label62 always
-+   66 label *label86
++   66 label *label85
 +   67 jump *label56 equal *tmp6 234
 +   68 jump *label58 equal *tmp6 259
 +   69 jump *label62 always
@@ -1048,65 +1037,65 @@ label *label61
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
 sensor *tmp6 :block @id
-jump *label64 greaterThanEq *tmp6 205
-jump *label65 greaterThanEq *tmp6 35
-jump *label66 greaterThanEq *tmp6 17
+jump *label64 greaterThanEq *tmp6 203
+jump *label62 greaterThanEq *tmp6 35
+jump *label65 greaterThanEq *tmp6 17
 jump *label62 greaterThanEq *tmp6 1
 jump *label63 always
-label *label66
-multijump *label67 *tmp6 17
-multilabel *label67
+label *label65
+multijump *label66 *tmp6 17
+multilabel *label66
 jump *label10 always
-multilabel *label68
+multilabel *label67
 jump *label12 always
-multilabel *label69
+multilabel *label68
 jump *label14 always
-multilabel *label70
+multilabel *label69
 jump *label16 always
-multilabel *label71
+multilabel *label70
 jump *label18 always
-multilabel *label72
+multilabel *label71
 jump *label20 always
-multilabel *label73
+multilabel *label72
 jump *label22 always
-multilabel *label74
+multilabel *label73
 jump *label24 always
-multilabel *label75
+multilabel *label74
 jump *label26 always
-multilabel *label76
+multilabel *label75
 jump *label28 always
-multilabel *label77
+multilabel *label76
 jump *label30 always
-multilabel *label78
+multilabel *label77
 jump *label32 always
+multilabel *label78
+jump *label62 always
 multilabel *label79
 jump *label62 always
 multilabel *label80
-jump *label62 always
-multilabel *label81
 jump *label34 always
-multilabel *label82
+multilabel *label81
 jump *label36 always
-multilabel *label83
+multilabel *label82
 jump *label38 always
-multilabel *label84
+multilabel *label83
 jump *label40 always
-label *label65
-jump *label42 equal *tmp6 203
-jump *label44 equal *tmp6 204
-jump *label62 always
 label *label64
-jump *label86 greaterThanEq *tmp6 226
-jump *label87 greaterThanEq *tmp6 220
+jump *label85 greaterThanEq *tmp6 226
+jump *label86 greaterThanEq *tmp6 220
+jump *label87 greaterThanEq *tmp6 205
+jump *label44 greaterThanEq *tmp6 204
+jump *label42 always
+label *label87
 jump *label46 equal *tmp6 206
 jump *label48 equal *tmp6 207
 jump *label62 always
-label *label87
+label *label86
 jump *label50 equal *tmp6 220
 jump *label52 equal *tmp6 221
 jump *label54 equal *tmp6 225
 jump *label62 always
-label *label86
+label *label85
 jump *label56 equal *tmp6 234
 jump *label58 equal *tmp6 259
 jump *label62 always

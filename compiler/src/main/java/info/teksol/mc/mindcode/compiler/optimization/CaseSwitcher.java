@@ -219,7 +219,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
         debugOutput("Singular segments: \n" + segmentMerger.getPartitions().stream()
                 .map(Object::toString).collect(Collectors.joining("\n")));
-
+        debugOutput("Segment configurations: %,d", configurations.size());
 
         optimizationContext.addDiagnosticData(new CaseSwitcherConfigurations(context.sourcePosition(), configurations.size()));
 
@@ -229,7 +229,7 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         actionCounter = 0;
-        debugOutput("%nCase switching optimization: %d distinct configurations generated.%n", actions.size());
+        debugOutput("%nCase switching optimization: %,d distinct configurations generated.%n", actions.size());
 
         if (!actions.isEmpty()) {
             if (caseConfiguration > 0) {

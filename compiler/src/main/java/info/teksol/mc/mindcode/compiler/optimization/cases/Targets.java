@@ -11,6 +11,7 @@ import java.util.*;
 @NullMarked
 public class Targets {
     private final boolean hasElseBranch;
+    private final Set<LogicLabel> labels = new HashSet<>();
     private final NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
     public @Nullable LogicLabel nullTarget;        // Handles null only
     public @Nullable LogicLabel elseTarget;        // Handles else only
@@ -53,6 +54,10 @@ public class Targets {
         return hasElseBranch;
     }
 
+    public int getTargetCount() {
+        return labels.size();
+    }
+
     public int getTotalSize() {
         return totalSize;
     }
@@ -91,6 +96,7 @@ public class Targets {
     }
 
     public @Nullable LogicLabel put(@Nullable Integer key, LogicLabel value) {
+        labels.add(value);
         if (key == null) {
             LogicLabel previous = nullTarget;
             nullTarget = value;
