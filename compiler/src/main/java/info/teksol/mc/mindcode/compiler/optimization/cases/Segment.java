@@ -11,6 +11,7 @@ public final class Segment implements Comparable<Segment> {
     private final int from;
     private final int to;
     private final LogicLabel majorityLabel;
+    private final int majoritySize;
 
     /// The else path of this segment needs to handle nulls
     private boolean handleNulls;
@@ -21,24 +22,36 @@ public final class Segment implements Comparable<Segment> {
     /// Resolved by the bisection jump
     private boolean inline;
 
-    public Segment(SegmentType type, int from, int to, LogicLabel majorityLabel) {
+    public Segment(SegmentType type, int from, int to, LogicLabel majorityLabel, int majoritySize) {
         this.type = type;
         this.from = from;
         this.to = to;
         this.majorityLabel = majorityLabel;
+        this.majoritySize = majoritySize;
     }
 
-    private Segment(SegmentType type, int from, int to, LogicLabel majorityLabel, boolean handleNulls, boolean inline) {
+    private Segment(SegmentType type, int from, int to, LogicLabel majorityLabel, int majoritySize, boolean handleNulls, boolean inline) {
         this.type = type;
         this.from = from;
         this.to = to;
         this.majorityLabel = majorityLabel;
+        this.majoritySize = majoritySize;
         this.handleNulls = handleNulls;
         this.inline = inline;
     }
 
     public Segment duplicate() {
-        return new Segment(type, from, to, majorityLabel, handleNulls, inline);
+        return new Segment(type, from, to, majorityLabel, majoritySize, handleNulls, inline);
+    }
+
+    public Segment limitLow(int from) {
+        int diff = majorityLabel == LogicLabel.EMPTY ? this.from - from : 0;
+        return new Segment(type, from, to, majorityLabel, majoritySize + diff, handleNulls, inline);
+    }
+
+    public Segment limitHigh(int to) {
+        int diff = majorityLabel == LogicLabel.EMPTY ? to - this.to : 0;
+        return new Segment(type, from, to, majorityLabel, majoritySize + diff, handleNulls, inline);
     }
 
     public void setBisectionSteps(int depth, boolean inline) {
@@ -95,6 +108,10 @@ public final class Segment implements Comparable<Segment> {
         return majorityLabel;
     }
 
+    public int majoritySize() {
+        return majoritySize;
+    }
+
     public int depth() {
         return depth;
     }
@@ -114,6 +131,7 @@ public final class Segment implements Comparable<Segment> {
         Segment segment = (Segment) o;
         return from == segment.from
                 && to == segment.to
+                && majoritySize == segment.majoritySize
                 && depth == segment.depth
                 && handleNulls == segment.handleNulls
                 && inline == segment.inline
@@ -127,6 +145,7 @@ public final class Segment implements Comparable<Segment> {
         result = 31 * result + from;
         result = 31 * result + to;
         result = 31 * result + majorityLabel.hashCode();
+        result = 31 * result + majoritySize;
         result = 31 * result + depth;
         result = 31 * result + Boolean.hashCode(handleNulls);
         result = 31 * result + Boolean.hashCode(inline);
@@ -140,6 +159,7 @@ public final class Segment implements Comparable<Segment> {
                 ", from=" + from +
                 ", to=" + to +
                 ", majorityLabel=" + majorityLabel +
+                ", majoritySize=" + majoritySize +
                 ", depth=" + depth +
                 ", handleNulls=" + handleNulls +
                 ", inline=" + inline +

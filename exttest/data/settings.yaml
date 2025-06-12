@@ -84,7 +84,7 @@ run-test:
   run: true
 
   # List of goal settings to use
-  goal: [ speed, size ]
+  goal: [ speed, size, neutral ]
 
   # List of symbolic labels settings to use
   symbolic-labels: [ false, true ]
@@ -129,7 +129,7 @@ case-switching-defaults:
   run: true
 
   # List of goal settings to use
-  goal: [ size, neutral, speed ]
+  goal: [ speed ]
 
   # List of symbolic labels settings to use
   symbolic-labels: [ false, true ]

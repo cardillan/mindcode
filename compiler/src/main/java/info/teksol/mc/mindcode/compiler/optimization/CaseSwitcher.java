@@ -282,9 +282,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
     private List<Segment> padLow(List<Segment> segments, ContentType contentType, int index) {
         if (index == 0) {
-            Segment curr = segments.getFirst();
-            Segment newSegment = new Segment(curr.type(), 0, curr.to(), curr.majorityLabel());
-            return List.of(newSegment);
+            return List.of(segments.getFirst().limitLow(0));
         } else {
             List<Segment> newSegments = new ArrayList<>(segments);
             Segment prev = newSegments.get(index - 1);
@@ -292,18 +290,18 @@ public class CaseSwitcher extends BaseOptimizer {
 
             if (contentType == ContentType.UNKNOWN) {
                 if (prev.from() < 0) {
-                    newSegments.set(index - 1, new Segment(prev.type(), prev.from(), 0, prev.majorityLabel()));
+                    newSegments.set(index - 1, prev.limitHigh(0));
                 } else {
-                    newSegments.set(index - 1, new Segment(prev.type(), 0, 0, prev.majorityLabel()));
+                    newSegments.set(index - 1, new Segment(prev.type(), 0, 0, prev.majorityLabel(), 0));
                 }
-                newSegments.set(index, new Segment(curr.type(), 0, curr.to(), curr.majorityLabel()));
+                newSegments.set(index, curr.limitLow(0));
                 if (prev.handleNulls()) {
                     newSegments.get(index).setHandleNulls();
                 }
             } else {
                 if (index != 1 || prev.from() != 0) throw new MindcodeInternalError("Mindustry content not starting at index 0");
                 newSegments.removeFirst();
-                newSegments.set(0, new Segment(curr.type(), 0, curr.to(), curr.majorityLabel()));
+                newSegments.set(0, curr.limitLow(0));
                 if (prev.handleNulls()) {
                     newSegments.getFirst().setHandleNulls();
                 }
@@ -316,7 +314,7 @@ public class CaseSwitcher extends BaseOptimizer {
     private List<Segment> padHigh(List<Segment> segments, Targets targets, int index) {
         List<Segment> newSegments = new ArrayList<>(segments);
         Segment curr = newSegments.get(index);
-        newSegments.set(index, new Segment(curr.type(), curr.from(), targets.getTotalSize(), curr.majorityLabel()));
+        newSegments.set(index, curr.limitHigh(targets.getTotalSize()));
         if (index < segments.size() - 1) {
             if (index != segments.size() - 2) throw new MindcodeInternalError("Pad high segment not the last one");
             newSegments.removeLast();
@@ -694,18 +692,13 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         private int maxSelectEntries(int from) {
-            return symbolic && from != 0 ? 4 : 3;
+            return symbolic && from != 0 ? 3 : 2;
         }
 
         private SegmentStats computeJumpTable(Segment segment, int activeTargets) {
-            if (!removeRangeCheck && (activeTargets <= maxSelectEntries(segment.from()))) {
-                // It's a select table actually
-                int elseValues = segment.size() - activeTargets;
-                return new SegmentStats(activeTargets + 1,
-                        activeTargets,
-                        activeTargets * (activeTargets + 1) / 2,
-                        elseValues,
-                        elseValues * (activeTargets + 1));
+            int minorityTargets = segment.size() - segment.majoritySize();
+            if (!removeRangeCheck && (minorityTargets <= maxSelectEntries(segment.from()))) {
+                return computeMixedSegment(segment, activeTargets);
             } else {
                 int multiJump = symbolic && segment.from() != 0 ? 2 : 1;
                 int tableSize = segment.size();
@@ -728,9 +721,9 @@ public class CaseSwitcher extends BaseOptimizer {
         // Values less than 'from' are sent to the final label
         // Values greater than or equal to 'to' are sent to the next segment
         private void generateJumpTable(Segment segment, LogicLabel finalLabel) {
-            int activeTargets = (int) targets.keySet().stream().filter(segment::contains).count();
-            if (!removeRangeCheck && (activeTargets <= maxSelectEntries(segment.from()))) {
-                generateSelectTable(segment, finalLabel);
+            int minorityTargets = segment.size() - segment.majoritySize();
+            if (!removeRangeCheck && (minorityTargets <= maxSelectEntries(segment.from()))) {
+                generateMixedSegment(segment, finalLabel);
                 return;
             }
 
@@ -747,17 +740,6 @@ public class CaseSwitcher extends BaseOptimizer {
                 LogicLabel updatedTarget = segment.from() + i == 0 && target == finalLabel ? targets.getNullOrElseTarget() : target;
                 insertInstruction(createJumpUnconditional(newAstContext, updatedTarget));
             }
-        }
-
-        private void generateSelectTable(Segment segment, LogicLabel finalLabel) {
-            assert newAstContext != null;
-            assert caseVariable != null;
-
-            targets.subMap(segment.from(), segment.to()).forEach((value, label) ->
-                    insertInstruction(createJump(newAstContext, label, Condition.EQUAL, caseVariable, LogicNumber.create(value))));
-
-            LogicLabel target = segment.handleNulls() ? targets.getNullOrElseTarget() : finalLabel;
-            insertInstruction(createJumpUnconditional(newAstContext, target));
         }
 
         private int computeBisectionTable(List<Segment> segments, int depth) {

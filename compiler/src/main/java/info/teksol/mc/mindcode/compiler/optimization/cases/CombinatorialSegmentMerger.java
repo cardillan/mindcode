@@ -116,7 +116,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
 
             if (stop.to() - start.from() >= MINIMAL_SEGMENT_SIZE) {
                 SegmentType type = start == stop ? SegmentType.SINGLE : SegmentType.MIXED;
-                result.add(new Segment(type, start.from(), stop.to(), label));
+                result.add(new Segment(type, start.from(), stop.to(), label, size - exceptions));
             }
         }
 
