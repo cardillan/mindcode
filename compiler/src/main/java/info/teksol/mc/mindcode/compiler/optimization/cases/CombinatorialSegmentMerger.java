@@ -56,6 +56,13 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
             configurationCount++;
             createSegmentConfigurations(configurations, partitions, List.of(), 0);
         }
+
+//        // The basic solution: bisectional search
+//        List<Segment> allSegments = partitions.stream()
+//                .map(p -> new Segment(SegmentType.SINGLE, p.from(), p.to(), p.label(), p.size()))
+//                .toList();
+//        configurations.add(new SegmentConfiguration(partitions, allSegments));
+
         return configurations;
     }
 
@@ -88,20 +95,19 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
     List<Segment> findLargestSegments(List<Partition> partitions, int limit) {
         List<Segment> result = new ArrayList<>();
 
-        for (int i = 0; i < partitions.size(); i++) {
-            Partition start = partitions.get(i);
-            Partition stop = start;
-            Partition last = start;
+        for (int start = 0; start < partitions.size(); start++) {
+            int stop = start;
+            Partition last = partitions.get(start);
 
-            boolean startGap = i == 0 || partitions.get(i - 1).to() != start.from();
-            LogicLabel label = start.label();
-            int size = start.size();
+            boolean startGap = start == 0 || partitions.get(start - 1).to() != last.from();
+            LogicLabel label = last.label();
+            int size = last.size();
             int lastSize = size;
             int count = 1;
             int exceptions = 0;
             int maxExceptions = label == LogicLabel.EMPTY ? MAX_EXCEPTIONS_ELSE : MAX_EXCEPTIONS_WHEN;
 
-            for (int j = i + 1; j < partitions.size(); j++) {
+            for (int j = start + 1; j < partitions.size(); j++) {
                 Partition next = partitions.get(j);
 
                 // A hole in the middle is not allowed
@@ -122,7 +128,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
                     if (next.label().equals(label) || startGap || j == partitions.size() - 1 || partitions.get(j + 1).from() != next.to()) {
                         // The merged segment may stop here
                         // Last never points at an impossible end segment
-                        stop = next;
+                        stop = j;
                         lastSize = size;
                     }
                 }
@@ -130,9 +136,10 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
                 last = next;
             }
 
-            if (stop.to() - start.from() >= MINIMAL_SEGMENT_SIZE) {
-                SegmentType type = start == stop ? SegmentType.SINGLE : SegmentType.MIXED;
-                result.add(new Segment(type, start.from(), stop.to(), label, size - exceptions));
+            List<Partition> newPartitions = partitions.subList(start, stop + 1);
+            if (newPartitions.getLast().to() - newPartitions.getFirst().from() >= MINIMAL_SEGMENT_SIZE) {
+                SegmentType type = newPartitions.size() == 1 ? SegmentType.SINGLE : SegmentType.MIXED;
+                result.add(Segment.fromPartitions(type, newPartitions));
             }
         }
 

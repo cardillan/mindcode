@@ -4,6 +4,10 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 // Note: to is exclusive
 @NullMarked
 public final class Segment implements Comparable<Segment> {
@@ -38,6 +42,20 @@ public final class Segment implements Comparable<Segment> {
         this.majoritySize = majoritySize;
         this.handleNulls = handleNulls;
         this.inline = inline;
+    }
+
+    public static Segment fromPartitions(SegmentType type, List<Partition> partitions) {
+        Map<LogicLabel, Integer> sizes = partitions.stream()
+                .collect(Collectors.groupingBy(Partition::label, Collectors.summingInt(Partition::size)));
+
+        LogicLabel majorityLabel = sizes.entrySet().stream()
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(LogicLabel.EMPTY);
+
+        int majoritySize = sizes.getOrDefault(majorityLabel, 0);
+
+        return new Segment(type, partitions.getFirst().from(), partitions.getLast().to(), majorityLabel, majoritySize);
     }
 
     public Segment duplicate() {

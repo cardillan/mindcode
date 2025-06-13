@@ -1,11 +1,9 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -47,19 +45,8 @@ public final class SegmentConfiguration {
             int j = i + 1;
             while (j < partitions.size() && partitions.get(j).follows(partitions.get(j - 1))) j++;
             List<Partition> mergedPartitions = partitions.subList(i, j);
-
-            Map<LogicLabel, Integer> sizes = mergedPartitions.stream()
-                    .collect(Collectors.groupingBy(Partition::label, Collectors.summingInt(Partition::size)));
-
-            LogicLabel majorityLabel = sizes.entrySet().stream()
-                    .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey)
-                    .orElse(LogicLabel.EMPTY);
-
-            int majoritySize = sizes.getOrDefault(majorityLabel, 0);
-
-            result.add(new Segment(mergedPartitions.size() == 1 ? SegmentType.SINGLE : SegmentType.JUMP_TABLE,
-                    mergedPartitions.getFirst().from(), mergedPartitions.getLast().to(), majorityLabel, majoritySize));
+            SegmentType type = mergedPartitions.size() == 1 ? SegmentType.SINGLE : SegmentType.JUMP_TABLE;
+            result.add(Segment.fromPartitions(type, mergedPartitions));
             i = j;
         }
 

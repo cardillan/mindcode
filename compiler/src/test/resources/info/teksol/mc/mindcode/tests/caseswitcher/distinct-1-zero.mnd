@@ -1,5 +1,11 @@
+#set target = 8;
 #set target-optimization = specific;
 #set err-invalid-content = false;
+#set single-step-elimination = none;
+#set jump-straightening = none;
+#set jump-threading = none;
+#set debug-output = true;
+#set case-optimization-strength = 256;
 
 def identifyBlock(block)
     case block
@@ -34,7 +40,7 @@ end;
 
 begin
     var total = 0;
-    for var i in -1 ... 240 do
+    for var i in -1 ... @blockCount do
         var block = lookup(:block, i);
         var bit = identifyBlock(block);
         if total & bit then

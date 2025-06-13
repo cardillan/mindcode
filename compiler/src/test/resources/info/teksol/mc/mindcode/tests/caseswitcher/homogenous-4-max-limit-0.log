@@ -1,13 +1,11 @@
     54 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-     2 instructions eliminated by Dead Code Elimination (4 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     2 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
-     1 instructions eliminated by Jump Straightening (4 iterations).
-    43 instructions after optimizations.
+    46 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -108,28 +106,6 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
     49 label *label7
     50 label *label8
 
-Modifications by Iterated phase, Jump Straightening, pass 1, iteration 1 (-1 instructions):
- 
-    30 jump *label6 equal :isWall:block @reinforced-surge-wall-large
-    31 jump *label6 equal :isWall:block @carbide-wall
-    32 jump *label6 equal :isWall:block @carbide-wall-large
--    * jump *label6 equal :isWall:block @tile-logic-display
--    * jump *label5 always
-+   33 jump *label5 notEqual :isWall:block @tile-logic-display
-    34 label *label6
-    35 set *tmp2 true
-    36 jump *label4 always
-
-Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-1 instructions):
- 
-    44 op add *tmp6 *tmp5 :i
-    45 op add *tmp7 *tmp6 251
-    46 op and :hash *tmp7 0xFFFFFFFF
--    * jump *label8 always
-    47 label *label7
-    48 label *label8
-    49 label *label1
-
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
      4 jump *label2 greaterThanEq :i @blockCount
@@ -161,7 +137,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * jump *label6 equal :isWall:block @reinforced-surge-wall-large
 -    * jump *label6 equal :isWall:block @carbide-wall
 -    * jump *label6 equal :isWall:block @carbide-wall-large
--    * jump *label5 notEqual :isWall:block @tile-logic-display
+-    * jump *label6 equal :isWall:block @tile-logic-display
 +    7 jump *label6 strictEqual :block null
 +    8 jump *label6 equal :block @graphite-press
 +    9 jump *label6 equal :block @copper-wall
@@ -188,19 +164,19 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 +   30 jump *label6 equal :block @reinforced-surge-wall-large
 +   31 jump *label6 equal :block @carbide-wall
 +   32 jump *label6 equal :block @carbide-wall-large
-+   33 jump *label5 notEqual :block @tile-logic-display
-    34 label *label6
-    35 set *tmp2 true
-    36 jump *label4 always
++   33 jump *label6 equal :block @tile-logic-display
+    34 jump *label5 always
+    35 label *label6
+    36 set *tmp2 true
  
-    39 label *label4
-    40 set *tmp1 *tmp2
-    41 label *label3
+    40 label *label4
+    41 set *tmp1 *tmp2
+    42 label *label3
 -    * jump *label7 equal *tmp1 false
-+   42 jump *label7 equal *tmp2 false
-    43 op mul *tmp5 :hash 31
-    44 op add *tmp6 *tmp5 :i
-    45 op add *tmp7 *tmp6 251
++   43 jump *label7 equal *tmp2 false
+    44 op mul *tmp5 :hash 31
+    45 op add *tmp6 *tmp5 :i
+    46 op add *tmp7 *tmp6 251
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
  
@@ -212,13 +188,13 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      7 jump *label6 equal :block @graphite-press
      8 jump *label6 equal :block @copper-wall
  
-    36 label *label5
-    37 set *tmp2 false
-    38 label *label4
+    37 label *label5
+    38 set *tmp2 false
+    39 label *label4
 -    * set *tmp1 *tmp2
-    39 label *label3
-    40 jump *label7 equal *tmp2 false
-    41 op mul *tmp5 :hash 31
+    40 label *label3
+    41 jump *label7 equal *tmp2 false
+    42 op mul *tmp5 :hash 31
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -231,14 +207,14 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
      6 jump *label6 strictEqual :block null
      7 jump *label6 equal :block @graphite-press
  
-    46 label *label8
-    47 label *label1
-    48 op add :i :i 1
+    48 label *label8
+    49 label *label1
+    50 op add :i :i 1
 -    * jump *label0 always
-+   49 jump *label9 lessThan :i @blockCount
-    50 label *label2
-    51 print :hash
-    52 assertequals 2727247113 :hash "Test selected blocks"
++   51 jump *label9 lessThan :i @blockCount
+    52 label *label2
+    53 print :hash
+    54 assertequals 2727247113 :hash "Test selected blocks"
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      0 assertequals 260 @blockCount "Verify block count"
@@ -249,31 +225,24 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      4 lookup block :block :i
      5 jump *label6 strictEqual :block null
  
-    35 label *label5
-    36 set *tmp2 false
-    37 label *label4
+    36 label *label5
+    37 set *tmp2 false
+    38 label *label4
 -    * label *label3
-    38 jump *label7 equal *tmp2 false
-    39 op mul *tmp5 :hash 31
-    40 op add *tmp6 *tmp5 :i
-    41 op add *tmp7 *tmp6 251
-    42 op and :hash *tmp7 0xFFFFFFFF
-    43 label *label7
--    * label *label8
--    * label *label1
-    44 op add :i :i 1
-    45 jump *label9 lessThan :i @blockCount
--    * label *label2
-    46 print :hash
-    47 assertequals 2727247113 :hash "Test selected blocks"
-    48 end
-
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+    39 jump *label7 equal *tmp2 false
+    40 op mul *tmp5 :hash 31
+    41 op add *tmp6 *tmp5 :i
  
-    45 jump *label9 lessThan :i @blockCount
-    46 print :hash
-    47 assertequals 2727247113 :hash "Test selected blocks"
--    * end
+    44 jump *label8 always
+    45 label *label7
+    46 label *label8
+-    * label *label1
+    47 op add :i :i 1
+    48 jump *label9 lessThan :i @blockCount
+-    * label *label2
+    49 print :hash
+    50 assertequals 2727247113 :hash "Test selected blocks"
+    51 end
 
 Final code before resolving virtual instructions:
 
@@ -308,7 +277,8 @@ jump *label6 equal :block @reinforced-surge-wall
 jump *label6 equal :block @reinforced-surge-wall-large
 jump *label6 equal :block @carbide-wall
 jump *label6 equal :block @carbide-wall-large
-jump *label5 notEqual :block @tile-logic-display
+jump *label6 equal :block @tile-logic-display
+jump *label5 always
 label *label6
 set *tmp2 true
 jump *label4 always
@@ -320,8 +290,11 @@ op mul *tmp5 :hash 31
 op add *tmp6 *tmp5 :i
 op add *tmp7 *tmp6 251
 op and :hash *tmp7 0xFFFFFFFF
+jump *label8 always
 label *label7
+label *label8
 op add :i :i 1
 jump *label9 lessThan :i @blockCount
 print :hash
 assertequals 2727247113 :hash "Test selected blocks"
+end
