@@ -40,7 +40,7 @@ public class CompilerProfile {
     public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 8;
     public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 4;
     public static final int MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 256;
-    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 6;
+    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 10;
 
     private final boolean webApplication;
 

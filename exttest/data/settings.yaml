@@ -177,19 +177,19 @@ all-sources:
     defaults: run-test
 
   - source: printing.mnd
-    samples: 400
+    samples: 250
     # Different default configuration
     defaults: run-test
     # Overriding settings from the default configuration
     print-merging: [ none, basic, advanced ]
 
   - source: quick-sort.mnd
-    samples: 5000
+    samples: 1000
     defaults: run-test
     stack-optimization: [ none, basic ]
 
   - source: heap-sort.mnd
-    samples: 5000
+    samples: 1500
     defaults: run-test
 
   - source: bubble-sort.mnd
@@ -236,7 +236,7 @@ all-sources:
     samples: 125
 
   - source: "C:\Home\golem\benchmarks\breakout.mnd"
-    samples: 1200
+    samples: 600
 
   - source: "C:\Home\golem\schematics\detector.mnd"
     samples: 100
@@ -289,19 +289,27 @@ all-sources:
 
   - source: case-distinct-none.mnd
     defaults: case-switching-defaults
+    samples: 200
 
   - source: case-distinct-null.mnd
     defaults: case-switching-defaults
+    samples: 200
 
   - source: case-distinct-zero.mnd
     defaults: case-switching-defaults
+    samples: 200
 
   - source: case-distinct-both.mnd
     defaults: case-switching-defaults
+    samples: 200
 
   - source: case-distinct-max.mnd
     defaults: case-switching-defaults
-    samples: 250
+    samples: 200
+
+  - source: case-variable.mnd
+    defaults: case-switching-defaults
+    samples: 100
 
 # Case-switching tests - standalone
 case-switching:
@@ -336,4 +344,7 @@ case-switching:
     defaults: case-switching-defaults
 
   - source: case-distinct-max.mnd
+    defaults: case-switching-defaults
+
+  - source: case-variable.mnd
     defaults: case-switching-defaults

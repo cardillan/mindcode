@@ -209,15 +209,15 @@ public class CaseSwitcher extends BaseOptimizer {
 
         targets.computeElseValues(analyzer.contentType, metadata, getProfile().isTargetOptimization());
 
-        SegmentMerger segmentMerger = new CombinatorialSegmentMerger(targets, analyzer.contentType != ContentType.UNKNOWN,
+        SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(targets, analyzer.contentType != ContentType.UNKNOWN,
                 getProfile().getCaseOptimizationStrength(), 1);
 
         // When no range checking, don't bother trying to merge segments.
         Set<SegmentConfiguration> configurations = removeRangeCheck
-                ? Set.of(new SegmentConfiguration(segmentMerger.getPartitions(), List.of()))
-                : segmentMerger.createSegmentConfigurations();
+                ? Set.of(new SegmentConfiguration(segmentConfigurationGenerator.getPartitions(), List.of()))
+                : segmentConfigurationGenerator.createSegmentConfigurations();
 
-        debugOutput("Singular segments: \n" + segmentMerger.getPartitions().stream()
+        debugOutput("Singular segments: \n" + segmentConfigurationGenerator.getPartitions().stream()
                 .map(Object::toString).collect(Collectors.joining("\n")));
         debugOutput("Segment configurations: %,d", configurations.size());
 
@@ -528,8 +528,10 @@ public class CaseSwitcher extends BaseOptimizer {
 //            }
 
             int allTargets = targets.size();
-            int activeTargets = (int) targets.keySet().stream().filter(segment::contains).count();
-            int remainingTargets = (int) targets.keySet().stream().filter(i -> i >= segment.from()).count();
+            int activeTargets = 0;
+            for (int target : targets.keySet()) {
+                if (segment.contains(target)) activeTargets++;
+            }
 
             SegmentStats stats = switch (segment.type()) {
                 case SINGLE -> computeSingleSegment(segment, activeTargets);
@@ -537,9 +539,11 @@ public class CaseSwitcher extends BaseOptimizer {
                 case JUMP_TABLE -> computeJumpTable(segment, activeTargets);
             };
 
-            debugOutput("Segment %3d to %3d: %s, %s, depth %d, bisection steps: %d, total steps: %d",
-                    segment.from(), segment.to(), segment.typeName(), stats, segment.depth(),
-                    segment.depth() * (stats.values + stats.elseValues), stats.steps + stats.elseSteps);
+            if (isDebugOutput()) {
+                debugOutput("Segment %3d to %3d: %s, %s, depth %d, bisection steps: %d, total steps: %d",
+                        segment.from(), segment.to(), segment.typeName(), stats, segment.depth(),
+                        segment.depth() * (stats.values + stats.elseValues), stats.steps + stats.elseSteps);
+            }
 
             cost += stats.size;
             targetSteps += stats.steps + segment.depth() * stats.values;
