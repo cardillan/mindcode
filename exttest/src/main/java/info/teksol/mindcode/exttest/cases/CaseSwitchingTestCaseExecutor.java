@@ -40,7 +40,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
         try {
             compiler.compilerProfile()
                     .setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE)
-                    .setCaseOptimizationStrength(256);
+                    .setCaseOptimizationStrength(32);
             if (!compile(compiler, progress)) return;
             int originalSteps = compiler.getEmulator().getSteps();
             int originalSize = compiler.getInstructions().size();
@@ -50,7 +50,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             compiler = compilerSupplier.get();
             compiler.compilerProfile()
                     .setGoal(GenerationGoal.SPEED)
-                    .setCaseOptimizationStrength(256);
+                    .setCaseOptimizationStrength(32);
             if (!compile(compiler, progress)) return;
             int newSteps = compiler.getEmulator().getSteps();
             int newSize = compiler.getInstructions().size();

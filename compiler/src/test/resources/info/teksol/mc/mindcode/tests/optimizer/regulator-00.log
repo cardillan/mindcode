@@ -20,30 +20,26 @@
 Pass 1: speed optimization selection (cost limit 819):
   * Replicate loop condition at line 72:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
   o Convert case at line 25:9 (segments: 7)                      size    +2, benefit     2083.3, efficiency   1041.667
-  o Convert case at line 25:9 (segments: 8)                      size    +4, benefit     2187.5, efficiency    546.875
-  o Convert case at line 25:9 (segments: 6)                      size   +23, benefit     2256.9, efficiency     98.128
-  o Convert case at line 25:9 (segments: 5)                      size   +26, benefit     2326.4, efficiency     89.476
-  o Convert case at line 25:9 (segments: 4)                      size   +36, benefit     2361.1, efficiency     65.586
-  o Convert case at line 25:9 (segments: 5)                      size   +63, benefit     2395.8, efficiency     38.029
-  o Convert case at line 25:9 (segments: 5)                      size   +64, benefit     2430.6, efficiency     37.977
+  o Convert case at line 25:9 (segments: 8)                      size    +3, benefit     2222.2, efficiency    740.741
+  o Convert case at line 25:9 (segments: 7)                      size   +22, benefit     2256.9, efficiency    102.588
+  o Convert case at line 25:9 (segments: 8)                      size   +23, benefit     2326.4, efficiency    101.147
+  o Convert case at line 25:9 (segments: 6)                      size   +26, benefit     2361.1, efficiency     90.812
+  o Convert case at line 25:9 (segments: 7)                      size   +48, benefit     2395.8, efficiency     49.913
   o Convert case at line 25:9 (segments: 4)                      size   +65, benefit     2743.1, efficiency     42.201
   o Convert case at line 25:9 (segments: 2)                      size   +80, benefit     2847.2, efficiency     35.590
-  o Convert case at line 25:9 (segments: 3, padded low)          size   +88, benefit     2881.9, efficiency     32.749
-    Convert case at line 25:9 (segments: 4, padded low)          size  +125, benefit     2916.7, efficiency     23.333
+  o Convert case at line 25:9 (segments: 5, padded low)          size   +88, benefit     2881.9, efficiency     32.749
   o Convert case at line 25:9 (segments: 2, padded low)          size  +127, benefit     3437.5, efficiency     27.067
 
 Pass 1: speed optimization selection (cost limit 818):
   o Convert case at line 25:9 (segments: 7)                      size    +2, benefit     2083.3, efficiency   1041.667
-  o Convert case at line 25:9 (segments: 8)                      size    +4, benefit     2187.5, efficiency    546.875
-  o Convert case at line 25:9 (segments: 6)                      size   +23, benefit     2256.9, efficiency     98.128
-  o Convert case at line 25:9 (segments: 5)                      size   +26, benefit     2326.4, efficiency     89.476
-  o Convert case at line 25:9 (segments: 4)                      size   +36, benefit     2361.1, efficiency     65.586
-  o Convert case at line 25:9 (segments: 5)                      size   +63, benefit     2395.8, efficiency     38.029
-  o Convert case at line 25:9 (segments: 5)                      size   +64, benefit     2430.6, efficiency     37.977
+  o Convert case at line 25:9 (segments: 8)                      size    +3, benefit     2222.2, efficiency    740.741
+  o Convert case at line 25:9 (segments: 7)                      size   +22, benefit     2256.9, efficiency    102.588
+  o Convert case at line 25:9 (segments: 8)                      size   +23, benefit     2326.4, efficiency    101.147
+  o Convert case at line 25:9 (segments: 6)                      size   +26, benefit     2361.1, efficiency     90.812
+  o Convert case at line 25:9 (segments: 7)                      size   +48, benefit     2395.8, efficiency     49.913
   o Convert case at line 25:9 (segments: 4)                      size   +65, benefit     2743.1, efficiency     42.201
   o Convert case at line 25:9 (segments: 2)                      size   +80, benefit     2847.2, efficiency     35.590
-  o Convert case at line 25:9 (segments: 3, padded low)          size   +88, benefit     2881.9, efficiency     32.749
-  o Convert case at line 25:9 (segments: 4, padded low)          size  +125, benefit     2916.7, efficiency     23.333
+  o Convert case at line 25:9 (segments: 5, padded low)          size   +88, benefit     2881.9, efficiency     32.749
   * Convert case at line 25:9 (segments: 2, padded low)          size  +127, benefit     3437.5, efficiency     27.067 (+127 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):

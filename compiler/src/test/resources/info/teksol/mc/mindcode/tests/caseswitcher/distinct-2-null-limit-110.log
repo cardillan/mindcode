@@ -9,17 +9,15 @@
    113 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 0):
-  o Convert case at line 12:5 (#70, segments: 8)                 size   -12, benefit     1024.5, efficiency   Infinity
-  o Convert case at line 12:5 (#6, segments: 7)                  size   -11, benefit     1042.2, efficiency   Infinity
-  o Convert case at line 12:5 (#3910, segments: 9)               size   -10, benefit     1092.0, efficiency   Infinity
-  o Convert case at line 12:5 (#3915, segments: 8)               size    -9, benefit     1092.9, efficiency   Infinity
-  o Convert case at line 12:5 (#3911, segments: 9)               size    -6, benefit     1093.0, efficiency   Infinity
-  * Convert case at line 12:5 (#3908, segments: 8)               size    +0, benefit     1094.3, efficiency   Infinity (+0 instructions)
-  ! Convert case at line 12:5 (#3913, segments: 7)               size    +1, benefit     1094.4, efficiency   1094.423
-  ! Convert case at line 12:5 (#3916, segments: 7)               size    +4, benefit     1095.1, efficiency    273.774
-  ! Convert case at line 12:5 (#3905, segments: 6)               size   +10, benefit     1097.2, efficiency    109.721
-  ! Convert case at line 12:5 (#3901, segments: 4)               size   +24, benefit     1099.0, efficiency     45.793
-  ! Convert case at line 12:5 (#2, segments: 1, padded high)     size  +213, benefit     1114.8, efficiency      5.234
+  o Convert case at line 11:5 (#3252, segments: 10, padded high) size   -12, benefit     1084.7, efficiency   Infinity
+  o Convert case at line 11:5 (#3398, segments: 9)               size   -11, benefit     1089.8, efficiency   Infinity
+  o Convert case at line 11:5 (#3387, segments: 9)               size   -10, benefit     1092.0, efficiency   Infinity
+  * Convert case at line 11:5 (#3385, segments: 8)               size    +0, benefit     1094.3, efficiency   Infinity (+0 instructions)
+  ! Convert case at line 11:5 (#3391, segments: 7)               size    +1, benefit     1094.4, efficiency   1094.423
+  ! Convert case at line 11:5 (#3510, segments: 6)               size    +5, benefit     1094.7, efficiency    218.942
+  ! Convert case at line 11:5 (#3378, segments: 6)               size   +10, benefit     1097.2, efficiency    109.721
+  ! Convert case at line 11:5 (#3314, segments: 4)               size   +24, benefit     1099.0, efficiency     45.793
+  ! Convert case at line 11:5 (#2, segments: 1, padded high)     size  +213, benefit     1114.8, efficiency      5.234
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -478,7 +476,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    169 assertequals 0x03FFFFFE :total "Test selected blocks"
    170 end
 
-Modifications by Convert case at line 12:5 (#3908, segments: 8):
+Modifications by Convert case at line 11:5 (#3385, segments: 8):
  
      2 label *label0
      3 label *label57

@@ -18,19 +18,17 @@
 
 Pass 1: speed optimization selection (cost limit 831):
   * Replicate loop condition at line 122:1                       size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-  o Convert case at line 34:9 (segments: 6)                      size    +9, benefit      769.2, efficiency     85.470
-    Convert case at line 34:9 (segments: 5, padded low)          size   +75, benefit     1057.7, efficiency     14.103
-    Convert case at line 34:9 (segments: 4, padded low)          size   +76, benefit     1105.8, efficiency     14.550
-    Convert case at line 34:9 (segments: 4, padded low)          size   +77, benefit     1153.8, efficiency     14.985
+  o Convert case at line 34:9 (segments: 6)                      size    +7, benefit      817.3, efficiency    116.758
+    Convert case at line 34:9 (segments: 3)                      size   +73, benefit      865.4, efficiency     11.855
+    Convert case at line 34:9 (segments: 4, padded low)          size   +75, benefit     1153.8, efficiency     15.385
     Convert case at line 34:9 (segments: 3, padded low)          size   +94, benefit     1298.1, efficiency     13.809
     Convert case at line 34:9 (segments: 2, padded low)          size  +134, benefit     1730.8, efficiency     12.916
     Convert case at line 34:9 (segments: 1, padded low)          size  +137, benefit     1875.0, efficiency     13.686
 
 Pass 1: speed optimization selection (cost limit 830):
-  o Convert case at line 34:9 (segments: 6)                      size    +9, benefit      769.2, efficiency     85.470
-  o Convert case at line 34:9 (segments: 5, padded low)          size   +75, benefit     1057.7, efficiency     14.103
-  o Convert case at line 34:9 (segments: 4, padded low)          size   +76, benefit     1105.8, efficiency     14.550
-  o Convert case at line 34:9 (segments: 4, padded low)          size   +77, benefit     1153.8, efficiency     14.985
+  o Convert case at line 34:9 (segments: 6)                      size    +7, benefit      817.3, efficiency    116.758
+  o Convert case at line 34:9 (segments: 3)                      size   +73, benefit      865.4, efficiency     11.855
+  o Convert case at line 34:9 (segments: 4, padded low)          size   +75, benefit     1153.8, efficiency     15.385
   o Convert case at line 34:9 (segments: 3, padded low)          size   +94, benefit     1298.1, efficiency     13.809
   o Convert case at line 34:9 (segments: 2, padded low)          size  +134, benefit     1730.8, efficiency     12.916
   * Convert case at line 34:9 (segments: 1, padded low)          size  +137, benefit     1875.0, efficiency     13.686 (+137 instructions)

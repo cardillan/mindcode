@@ -5,7 +5,6 @@
 #set jump-straightening = none;
 #set jump-threading = none;
 #set debug-output = true;
-#set case-optimization-strength = 256;
 
 def identifyBlock(block)
     case block

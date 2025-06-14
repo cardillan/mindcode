@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Set;
 
 @NullMarked
-public interface SegmentMerger {
+public interface SegmentConfigurationGenerator {
     List<Partition> getPartitions();
 
     Set<SegmentConfiguration> createSegmentConfigurations();

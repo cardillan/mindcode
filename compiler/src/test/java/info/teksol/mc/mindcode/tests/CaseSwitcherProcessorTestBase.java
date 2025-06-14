@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.tests;
 
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -24,6 +25,11 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;
+    }
+
+    @Override
+    protected CompilerProfile createCompilerProfile() {
+        return super.createCompilerProfile();
     }
 
     void executeCaseSwitchingTest(String fileName, int codeSize) throws IOException {
@@ -56,6 +62,7 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
         int i = fileName.indexOf("-");
         return switch(fileName.substring(0, i)) {
             case "distinct" -> IntStream.of(0, 110, 200, 500);
+            case "mixed" -> IntStream.of(0, 140, 230, 500);
             case "homogenous" -> IntStream.of(0, 60, 100, 500);
             default -> throw new IllegalArgumentException("Unknown test name: " + fileName);
         };

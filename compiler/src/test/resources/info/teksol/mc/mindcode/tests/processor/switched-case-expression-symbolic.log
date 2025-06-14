@@ -6,14 +6,14 @@
      1 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
-     5 instructions added by Case Switching (3 iterations).
+     4 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
     10 instructions eliminated by Jump Straightening (4 iterations).
-    63 instructions after optimizations.
+    62 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 941):
   o Convert case at line 27:5 (segments: 1)                      size    +3, benefit      937.5, efficiency    312.500
-  * Convert case at line 27:5 (segments: 10)                     size    +5, benefit     1062.5, efficiency    212.500 (+5 instructions)
+  * Convert case at line 27:5 (segments: 4)                      size    +4, benefit     1125.0, efficiency    281.250 (+4 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -471,82 +471,86 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     80 assertequals 11 .S0 "Unexpected value of S0"
     81 assertequals 21 .S1 "Unexpected value of S1"
 
-Modifications by Convert case at line 27:5 (segments: 10) (+5 instructions):
+Modifications by Convert case at line 27:5 (segments: 4) (+4 instructions):
  
     17 label *label30
     18 op mod *tmp2 :processNumber:n 10
     19 # "Function: def processDigit(in n)"
 -    * jump *label9 notEqual *tmp2 0
-+   20 jump *label32 greaterThanEq *tmp2 5
-+   21 jump *label33 greaterThanEq *tmp2 2
-+   22 jump *label12 greaterThanEq *tmp2 1
-+   23 jump *label10 greaterThanEq *tmp2 0
-+   24 jump *label31 always
-+   25 label *label33
-+   26 jump *label14 lessThan *tmp2 3
-+   27 jump *label18 greaterThanEq *tmp2 4
-+   28 jump *label16 always
-+   29 label *label32
-+   30 jump *label34 greaterThanEq *tmp2 7
-+   31 jump *label22 greaterThanEq *tmp2 6
-+   32 jump *label20 always
-+   33 label *label34
-+   34 jump *label24 lessThan *tmp2 8
-+   35 jump *label26 lessThan *tmp2 9
-+   36 jump *label28 lessThan *tmp2 10
-+   37 jump *label31 always
-    38 label *label10
-    39 op add .S0 .S0 1
-    40 jump *label8 always
-    41 label *label9
--    * jump *label11 notEqual *tmp2 1
-    42 label *label12
-    43 op add .S1 .S1 1
++   20 jump *label32 greaterThanEq *tmp2 7
++   21 jump *label31 lessThan *tmp2 0
++   22 multijump *label33 *tmp2 0 (m:*label40)
++   23 multilabel *label33 (m:*label40)
++   24 jump *label10 always
++   25 multilabel *label34 (m:*label40)
++   26 jump *label12 always
++   27 multilabel *label35 (m:*label40)
++   28 jump *label14 always
++   29 multilabel *label36 (m:*label40)
++   30 jump *label16 always
++   31 multilabel *label37 (m:*label40)
++   32 jump *label18 always
++   33 multilabel *label38 (m:*label40)
++   34 jump *label20 always
++   35 multilabel *label39 (m:*label40)
++   36 jump *label22 always
++   37 label *label32
++   38 jump *label24 lessThan *tmp2 8
++   39 jump *label26 lessThan *tmp2 9
++   40 jump *label28 lessThan *tmp2 10
++   41 jump *label31 always
+    42 label *label10
+    43 op add .S0 .S0 1
     44 jump *label8 always
-    45 label *label11
--    * jump *label13 notEqual *tmp2 2
-    46 label *label14
-    47 op add .S2 .S2 1
+    45 label *label9
+-    * jump *label11 notEqual *tmp2 1
+    46 label *label12
+    47 op add .S1 .S1 1
     48 jump *label8 always
-    49 label *label13
--    * jump *label15 notEqual *tmp2 3
-    50 label *label16
-    51 op add .S3 .S3 1
+    49 label *label11
+-    * jump *label13 notEqual *tmp2 2
+    50 label *label14
+    51 op add .S2 .S2 1
     52 jump *label8 always
-    53 label *label15
--    * jump *label17 notEqual *tmp2 4
-    54 label *label18
-    55 op add .S4 .S4 1
+    53 label *label13
+-    * jump *label15 notEqual *tmp2 3
+    54 label *label16
+    55 op add .S3 .S3 1
     56 jump *label8 always
-    57 label *label17
--    * jump *label19 notEqual *tmp2 5
-    58 label *label20
-    59 op add .S5 .S5 1
+    57 label *label15
+-    * jump *label17 notEqual *tmp2 4
+    58 label *label18
+    59 op add .S4 .S4 1
     60 jump *label8 always
-    61 label *label19
--    * jump *label21 notEqual *tmp2 6
-    62 label *label22
-    63 op add .S6 .S6 1
+    61 label *label17
+-    * jump *label19 notEqual *tmp2 5
+    62 label *label20
+    63 op add .S5 .S5 1
     64 jump *label8 always
-    65 label *label21
--    * jump *label23 notEqual *tmp2 7
-    66 label *label24
-    67 op add .S7 .S7 1
+    65 label *label19
+-    * jump *label21 notEqual *tmp2 6
+    66 label *label22
+    67 op add .S6 .S6 1
     68 jump *label8 always
-    69 label *label23
--    * jump *label25 notEqual *tmp2 8
-    70 label *label26
-    71 op add .S8 .S8 1
+    69 label *label21
+-    * jump *label23 notEqual *tmp2 7
+    70 label *label24
+    71 op add .S7 .S7 1
     72 jump *label8 always
-    73 label *label25
+    73 label *label23
+-    * jump *label25 notEqual *tmp2 8
+    74 label *label26
+    75 op add .S8 .S8 1
+    76 jump *label8 always
+    77 label *label25
 -    * jump *label27 notEqual *tmp2 9
-    74 label *label28
-    75 op add .S9 .S9 1
-    76 label *label27
-+   77 label *label31
-    78 label *label8
-    79 label *label7
-    80 op idiv :processNumber:n :processNumber:n 10
+    78 label *label28
+    79 op add .S9 .S9 1
+    80 label *label27
++   81 label *label31
+    82 label *label8
+    83 label *label7
+    84 op idiv :processNumber:n :processNumber:n 10
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -573,66 +577,66 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     15 label *label30
     16 op mod *tmp2 :processNumber:n 10
  
-    36 label *label10
-    37 op add .S0 .S0 1
-    38 jump *label8 always
+    40 label *label10
+    41 op add .S0 .S0 1
+    42 jump *label8 always
 -    * label *label9
-    39 label *label12
-    40 op add .S1 .S1 1
-    41 jump *label8 always
+    43 label *label12
+    44 op add .S1 .S1 1
+    45 jump *label8 always
 -    * label *label11
-    42 label *label14
-    43 op add .S2 .S2 1
-    44 jump *label8 always
+    46 label *label14
+    47 op add .S2 .S2 1
+    48 jump *label8 always
 -    * label *label13
-    45 label *label16
-    46 op add .S3 .S3 1
-    47 jump *label8 always
+    49 label *label16
+    50 op add .S3 .S3 1
+    51 jump *label8 always
 -    * label *label15
-    48 label *label18
-    49 op add .S4 .S4 1
-    50 jump *label8 always
+    52 label *label18
+    53 op add .S4 .S4 1
+    54 jump *label8 always
 -    * label *label17
-    51 label *label20
-    52 op add .S5 .S5 1
-    53 jump *label8 always
+    55 label *label20
+    56 op add .S5 .S5 1
+    57 jump *label8 always
 -    * label *label19
-    54 label *label22
-    55 op add .S6 .S6 1
-    56 jump *label8 always
+    58 label *label22
+    59 op add .S6 .S6 1
+    60 jump *label8 always
 -    * label *label21
-    57 label *label24
-    58 op add .S7 .S7 1
-    59 jump *label8 always
+    61 label *label24
+    62 op add .S7 .S7 1
+    63 jump *label8 always
 -    * label *label23
-    60 label *label26
-    61 op add .S8 .S8 1
-    62 jump *label8 always
+    64 label *label26
+    65 op add .S8 .S8 1
+    66 jump *label8 always
 -    * label *label25
-    63 label *label28
-    64 op add .S9 .S9 1
+    67 label *label28
+    68 op add .S9 .S9 1
 -    * label *label27
-    65 label *label31
-    66 label *label8
+    69 label *label31
+    70 label *label8
 -    * label *label7
-    67 op idiv :processNumber:n :processNumber:n 10
+    71 op idiv :processNumber:n :processNumber:n 10
 -    * label *label5
-    68 jump *label30 greaterThan :processNumber:n 0
-    69 label *label6
+    72 jump *label30 greaterThan :processNumber:n 0
+    73 label *label6
 -    * label *label3
 -    * label *label1
-    70 op add :i :i 1
-    71 jump *label29 lessThanEq :i 100
+    74 op add :i :i 1
+    75 jump *label29 lessThanEq :i 100
 -    * label *label2
-    72 assertequals 11 .S0 "Unexpected value of S0"
-    73 assertequals 21 .S1 "Unexpected value of S1"
-    74 assertequals 20 .S2 "Unexpected value of S2"
+    76 assertequals 11 .S0 "Unexpected value of S0"
+    77 assertequals 21 .S1 "Unexpected value of S1"
+    78 assertequals 20 .S2 "Unexpected value of S2"
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-    80 assertequals 20 .S8 "Unexpected value of S8"
-    81 assertequals 20 .S9 "Unexpected value of S9"
-    82 stop
+    84 assertequals 20 .S8 "Unexpected value of S8"
+    85 assertequals 20 .S9 "Unexpected value of S9"
+    86 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -655,20 +659,24 @@ jump *label6 lessThanEq :i 0
 label *label30
 op mod *tmp2 :processNumber:n 10
 # "Function: def processDigit(in n)"
-jump *label32 greaterThanEq *tmp2 5
-jump *label33 greaterThanEq *tmp2 2
-jump *label12 greaterThanEq *tmp2 1
-jump *label10 greaterThanEq *tmp2 0
-jump *label31 always
-label *label33
-jump *label14 lessThan *tmp2 3
-jump *label18 greaterThanEq *tmp2 4
+jump *label32 greaterThanEq *tmp2 7
+jump *label31 lessThan *tmp2 0
+multijump *label33 *tmp2 0
+multilabel *label33
+jump *label10 always
+multilabel *label34
+jump *label12 always
+multilabel *label35
+jump *label14 always
+multilabel *label36
 jump *label16 always
-label *label32
-jump *label34 greaterThanEq *tmp2 7
-jump *label22 greaterThanEq *tmp2 6
+multilabel *label37
+jump *label18 always
+multilabel *label38
 jump *label20 always
-label *label34
+multilabel *label39
+jump *label22 always
+label *label32
 jump *label24 lessThan *tmp2 8
 jump *label26 lessThan *tmp2 9
 jump *label28 lessThan *tmp2 10

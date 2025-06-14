@@ -39,7 +39,7 @@ Possible values for the `boundary-checks` directive are:
 
 This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). When performing the optimization, the optimizer extracts segments from the jump table, orders them by size and chooses a number of the largest ones corresponding to the specified value of the `case-optimization-strength` option. For each such segment, the process is repeated recursively on the remaining parts of the jump table, decreasing the number of selected segments by one for each level of recursion.
 
-The default value of this option is `4` for the web application, and `8` for the command-line tool. The maximal possible value is `6` for the web application, and `256` for the command-line tool. Values larger than `8` only bring additional benefits for case expressions with a very complex structure.
+The default value of this option is `4` for the web application, and `8` for the command-line tool. The maximal possible value is `10` for the web application, and `256` for the command-line tool. Values larger than `8` only bring additional benefits for case expressions with a very complex structure.
 
 Setting the optimization strength to `0` causes the optimizer to forgo considering any segment arrangements and only consider turning the entire case statement into a jump table. 
 

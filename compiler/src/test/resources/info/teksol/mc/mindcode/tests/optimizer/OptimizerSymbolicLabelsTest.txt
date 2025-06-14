@@ -1,6 +1,6 @@
 Name                                     Instructions   Source CRC         Compiled CRC    
 breakout-00.mnd:                                  184   DAE429A013DB4541   E3140CF4299708DB
-detector-00.mnd:                                  131   0E3BEC8B5680A194   2CCF5DADA33068A0
+detector-00.mnd:                                  130   0E3BEC8B5680A194   EE2FBAC21E75DBFD
 factory-monitor-00.mnd:                           481   863D948F911F2E7A   7015D38CC0DE408E
 factory-monitor-silicon-00.mnd:                   287   92331871E01FEB02   B5A34A093CE5B83F
 factory-monitor-surge-alloy-00.mnd:               184   B570A56D64509A07   5EF0124C2C62AA1C

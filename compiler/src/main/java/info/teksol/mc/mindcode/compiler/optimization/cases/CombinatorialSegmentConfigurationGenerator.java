@@ -1,39 +1,28 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.*;
 
 @NullMarked
-public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
+public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentConfigurationGenerator {
     private static final int MINIMAL_SEGMENT_SIZE = 4;
     private static final int MAX_EXCEPTIONS_WHEN = 2;
     private static final int MAX_EXCEPTIONS_ELSE = 3;
 
     private final List<Partition> partitions;
-    private final int strengthLarge;
-    private final int strengthSmall;
+    private final int maxConfigurations;
+    private final int strength;
     private final int iterationDecrease;
 
     private int configurationCount = 0;
 
-    public CombinatorialSegmentMerger(Targets targets, boolean logicConversion, int strengthLarge, int iterationDecrease) {
+    public CombinatorialSegmentConfigurationGenerator(Targets targets, boolean logicConversion, int strength, int iterationDecrease) {
         this.partitions = splitToPartitions(targets, logicConversion);
-        this.strengthLarge = strengthLarge;
+        this.maxConfigurations = 1000 * strength;
+        this.strength = strength;
         this.iterationDecrease = iterationDecrease;
-
-        // Density is the average number of targets per branch
-        double density = (double) targets.size() / targets.getTargetCount();
-
-        // High density case expressions generate a lot of segment configurations from segment merging, and do not
-        // benefit from isolating small segments. The strength of generating small (isolated) segments is therefore
-        // inversely proportional to density. Increasing the multiplication factor increases the number of small
-        // segment configurations quite dramatically in some scenarios. Values higher than 6 lead to a very high
-        // number of combinations and unacceptable optimization times.
-        double multiplicationFactor = 3.0;
-        this.strengthSmall = (int) (multiplicationFactor / density);
     }
 
     @Override
@@ -52,9 +41,9 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
         configurations.add(new SegmentConfiguration(partitions, List.of()));
 
         // The other
-        if (strengthLarge > 0) {
+        if (strength > 0) {
             configurationCount++;
-            createSegmentConfigurations(configurations, partitions, List.of(), 0);
+            createSegmentConfigurations(configurations, partitions, List.of(), 0, maxConfigurations);
 
             // Full bisectional search
             List<Segment> allSegments = partitions.stream()
@@ -66,36 +55,50 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
         return configurations;
     }
 
-    void createSegmentConfigurations(Collection<SegmentConfiguration> configurations, List<Partition> partitions,
-            List<Segment> segments, int depth) {
-        int limitLarge = Math.max(0, (strengthLarge - iterationDecrease * depth));
-        int limitSmall = Math.max(0, (strengthSmall - 2 * depth));
-        if (limitLarge + limitSmall == 0) return;
+    int createSegmentConfigurations(Collection<SegmentConfiguration> configurations, List<Partition> partitions,
+            List<Segment> segments, int depth, int maxConfigurations) {
+        int created = 0;
 
-        List<Segment> merged = CollectionUtils.mergeLists(
-                findLargestSegments(partitions, limitLarge),
-                findSmallestSegments(partitions, limitSmall));
+        List<PartitionSelection> selections = new ArrayList<>();
+        findLargestSegments(partitions, selections);
+        findIsolatedSegments(partitions, selections);
 
-        for (Segment largestSegment : merged) {
-            List<Partition> newPartitions = partitions.stream().filter(s -> !largestSegment.contains(s)).toList();
+        List<Segment> selected = selections.stream()
+                .sorted(Comparator.comparingInt(PartitionSelection::size).reversed())
+                .limit(Math.max(strength - iterationDecrease * depth, 1))
+                .map(PartitionSelection::partitions)
+                .map(p -> Segment.fromPartitions(p.size() == 1 ? SegmentType.SINGLE : SegmentType.MIXED, p))
+                .toList();
+
+        if (selected.isEmpty()) return 0;
+
+        int maxConfigurationsPerSegment = maxConfigurations / selected.size();
+
+        for (Segment segment : selected) {
             List<Segment> newSegments = new ArrayList<>(segments);
-            newSegments.add(largestSegment);
+            newSegments.add(segment);
             configurations.add(new SegmentConfiguration(this.partitions, newSegments));
+            created++;
             configurationCount++;
 
-            if (!newPartitions.isEmpty()) {
-                createSegmentConfigurations(configurations, newPartitions, newSegments, depth + 1);
+            if (strength > iterationDecrease * (depth + 1)) {
+                List<Partition> newPartitions = partitions.stream().filter(p -> !segment.contains(p)).toList();
+                if (!newPartitions.isEmpty()) {
+                    created += createSegmentConfigurations(configurations, newPartitions, newSegments, depth + 1, maxConfigurationsPerSegment);
+                }
+
+                if (created >= maxConfigurations) break;
             }
         }
+
+        return created;
     }
 
     // Rules for merging partitions:
     // 1. The number of exceptions in the partition is <= MAX_EXCEPTIONS
     // 2. The merged segment starts and stops with the same label, or has no neighbor at one or both ends
     // 3. The average segment size > 1
-    List<Segment> findLargestSegments(List<Partition> partitions, int limit) {
-        List<Segment> result = new ArrayList<>();
-
+    private void findLargestSegments(List<Partition> partitions, List<PartitionSelection> selections) {
         for (int start = 0; start < partitions.size(); start++) {
             int stop = start;
             Partition last = partitions.get(start);
@@ -137,33 +140,23 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
                 last = next;
             }
 
-            List<Partition> newPartitions = partitions.subList(start, stop + 1);
-            if (newPartitions.getLast().to() - newPartitions.getFirst().from() >= MINIMAL_SEGMENT_SIZE) {
-                SegmentType type = newPartitions.size() == 1 ? SegmentType.SINGLE : SegmentType.MIXED;
-                result.add(Segment.fromPartitions(type, newPartitions));
+
+            int newSize = partitions.get(stop).to() - partitions.get(start).from();
+            if (newSize >= MINIMAL_SEGMENT_SIZE) {
+                List<Partition> newPartitions = partitions.subList(start, stop + 1);
+                selections.add(new PartitionSelection(newPartitions, newSize));
             }
         }
-
-        return result.stream().sorted(Comparator.comparing(Segment::size).reversed()).limit(limit).toList();
     }
 
-    List<Segment> findSmallestSegments(List<Partition> partitions, int limit) {
-        List<SingleSegment> singleSegments = new ArrayList<>();
-
+    private void findIsolatedSegments(List<Partition> partitions, List<PartitionSelection> selections) {
         for (int i = 0; i < partitions.size(); i++) {
             if (partitions.get(i).size() == 1 && partitions.get(i).label() != LogicLabel.EMPTY) {
-                singleSegments.add(new SingleSegment(partitions.get(i),
+                selections.add(new PartitionSelection(List.of(partitions.get(i)),
                         (i > 0 ? partitions.get(i - 1).size() : 0) + ((i < partitions.size() - 1) ? partitions.get(i + 1).size() : 0)));
             }
         }
-
-        return singleSegments.stream()
-                .sorted(Comparator.comparing(SingleSegment::size).reversed())
-                .limit(limit)
-                .map(SingleSegment::partition)
-                .map(p -> new Segment(SegmentType.SINGLE, p.from(), p.to(), p.label(), 1))
-                .toList();
     }
 
-    private record SingleSegment(Partition partition, int size) {}
+    private record PartitionSelection(List<Partition> partitions, int size) {}
 }

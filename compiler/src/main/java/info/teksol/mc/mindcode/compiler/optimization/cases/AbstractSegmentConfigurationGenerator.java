@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @NullMarked
-public abstract class AbstractSegmentMerger implements SegmentMerger {
+public abstract class AbstractSegmentConfigurationGenerator implements SegmentConfigurationGenerator {
 
     static List<Partition> splitToPartitions(Targets targets, boolean logicConversion) {
         LogicLabel zeroTarget = targets.get(0);

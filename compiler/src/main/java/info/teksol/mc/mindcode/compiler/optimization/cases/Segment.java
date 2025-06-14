@@ -45,17 +45,41 @@ public final class Segment implements Comparable<Segment> {
     }
 
     public static Segment fromPartitions(SegmentType type, List<Partition> partitions) {
-        Map<LogicLabel, Integer> sizes = partitions.stream()
-                .collect(Collectors.groupingBy(Partition::label, Collectors.summingInt(Partition::size)));
+        if (partitions.size() == 1) {
+            Partition partition = partitions.getFirst();
+            return new Segment(type, partition.from(), partition.to(), partition.label(), partition.size());
+        } else if (partitions.size() == 2) {
+            Partition first =  partitions.getFirst();
+            Partition last =  partitions.getLast();
+            if (first.label() != LogicLabel.INVALID && (first.size() >= last.size() || last.label() == LogicLabel.INVALID)) {
+                return new Segment(type, first.from(), last.to(), first.label(), first.size());
+            } else {
+                return new Segment(type, first.from(), last.to(), last.label(), last.size());
+            }
+        } else if (partitions.size() == 3 && partitions.getFirst().label() == partitions.getLast().label()) {
+            Partition first =  partitions.getFirst();
+            Partition middle =  partitions.get(1);
+            Partition last =  partitions.getLast();
+            int outerSize = first.size() + last.size();
 
-        LogicLabel majorityLabel = sizes.entrySet().stream()
-                .max(Map.Entry.comparingByValue())
-                .map(Map.Entry::getKey)
-                .orElse(LogicLabel.EMPTY);
+            if (first.label() != LogicLabel.INVALID && (outerSize >= middle.size() || middle.label() == LogicLabel.INVALID)) {
+                return new Segment(type, first.from(), last.to(), first.label(), outerSize);
+            } else {
+                return new Segment(type, first.from(), last.to(), middle.label(), middle.size());
+            }
+        } else {
+            Map<LogicLabel, Integer> sizes = partitions.stream()
+                    .collect(Collectors.groupingBy(Partition::label, Collectors.summingInt(Partition::size)));
 
-        int majoritySize = sizes.getOrDefault(majorityLabel, 0);
+            LogicLabel majorityLabel = sizes.entrySet().stream()
+                    .max(Map.Entry.comparingByValue())
+                    .map(Map.Entry::getKey)
+                    .orElse(LogicLabel.EMPTY);
 
-        return new Segment(type, partitions.getFirst().from(), partitions.getLast().to(), majorityLabel, majoritySize);
+            int majoritySize = sizes.getOrDefault(majorityLabel, 0);
+
+            return new Segment(type, partitions.getFirst().from(), partitions.getLast().to(), majorityLabel, majoritySize);
+        }
     }
 
     public Segment duplicate() {
