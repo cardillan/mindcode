@@ -12,9 +12,7 @@
 Pass 1: speed optimization selection (cost limit 456):
   o Convert case at line 12:5 (#480, segments: 7)                size    -7, benefit      542.8, efficiency   Infinity
   o Convert case at line 12:5 (#692, segments: 7)                size    -6, benefit      545.7, efficiency   Infinity
-  o Convert case at line 12:5 (#739, segments: 6)                size   +16, benefit      546.9, efficiency     34.183
-  o Convert case at line 12:5 (#4691, segments: 5)               size   +24, benefit      548.9, efficiency     22.873
-  o Convert case at line 12:5 (#9367, segments: 4)               size   +46, benefit      550.2, efficiency     11.961
+  o Convert case at line 12:5 (#15684, segments: 15)             size    -5, benefit      550.6, efficiency   Infinity
   * Convert case at line 12:5 (#2, segments: 1, padded high)     size  +236, benefit      568.7, efficiency      2.410 (+236 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):

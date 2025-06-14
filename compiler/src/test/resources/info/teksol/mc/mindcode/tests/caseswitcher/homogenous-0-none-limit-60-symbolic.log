@@ -5,16 +5,14 @@
      2 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
-    15 instructions added by Case Switching (3 iterations).
+     6 instructions eliminated by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
-    57 instructions after optimizations.
+    36 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 18):
   o Convert case at line 12:5 (#135, segments: 5)                size    -8, benefit      497.0, efficiency   Infinity
   o Convert case at line 12:5 (#206, segments: 5)                size    -7, benefit      499.9, efficiency   Infinity
-  * Convert case at line 12:5 (#253, segments: 4)                size   +15, benefit      501.2, efficiency     33.410 (+15 instructions)
-  ! Convert case at line 12:5 (#561, segments: 5, padded low)    size   +25, benefit      501.4, efficiency     20.058
-  ! Convert case at line 12:5 (#1559, segments: 4, padded low)   size   +47, benefit      502.7, efficiency     10.696
+  * Convert case at line 12:5 (#2825, segments: 13)              size    -6, benefit      504.8, efficiency   Infinity (-6 instructions)
   ! Convert case at line 12:5 (#4, segments: 1, padded both)     size  +237, benefit      521.2, efficiency      2.199
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -213,7 +211,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     50 print :hash
     51 assertequals 2750008148 :hash "Test selected blocks"
 
-Modifications by Convert case at line 12:5 (#253, segments: 4) (+15 instructions):
+Modifications by Convert case at line 12:5 (#2825, segments: 13) (-6 instructions):
  
      3 label *label9
      4 lookup block :block :i
@@ -247,78 +245,32 @@ Modifications by Convert case at line 12:5 (#253, segments: 4) (+15 instructions
 +    7 jump *label11 greaterThanEq *tmp9 203
 +    8 jump *label10 greaterThanEq *tmp9 35
 +    9 jump *label10 lessThan *tmp9 17
-+   10 jump *label10 equal *tmp9 29
-+   11 jump *label10 equal *tmp9 30
-+   12 jump *label6 always
++   10 jump *label6 lessThan *tmp9 29
++   11 jump *label6 greaterThanEq *tmp9 31
++   12 jump *label10 always
 +   13 label *label11
-+   14 jump *label10 greaterThanEq *tmp9 235
-+   15 jump *label12 greaterThanEq *tmp9 208
-+   16 jump *label10 equal *tmp9 205
-+   17 jump *label6 always
-+   18 label *label12
-+   19 multijump *label13 *tmp9 208 (m:*label40)
-+   20 multilabel *label13 (m:*label40)
-+   21 jump *label10 always
-+   22 multilabel *label14 (m:*label40)
-+   23 jump *label10 always
-+   24 multilabel *label15 (m:*label40)
-+   25 jump *label10 always
-+   26 multilabel *label16 (m:*label40)
-+   27 jump *label10 always
-+   28 multilabel *label17 (m:*label40)
-+   29 jump *label10 always
-+   30 multilabel *label18 (m:*label40)
-+   31 jump *label10 always
-+   32 multilabel *label19 (m:*label40)
-+   33 jump *label10 always
-+   34 multilabel *label20 (m:*label40)
-+   35 jump *label10 always
-+   36 multilabel *label21 (m:*label40)
-+   37 jump *label10 always
-+   38 multilabel *label22 (m:*label40)
-+   39 jump *label10 always
-+   40 multilabel *label23 (m:*label40)
-+   41 jump *label10 always
-+   42 multilabel *label24 (m:*label40)
-+   43 jump *label10 always
-+   44 multilabel *label25 (m:*label40)
-+   45 jump *label6 always
-+   46 multilabel *label26 (m:*label40)
-+   47 jump *label6 always
-+   48 multilabel *label27 (m:*label40)
-+   49 jump *label10 always
-+   50 multilabel *label28 (m:*label40)
-+   51 jump *label10 always
-+   52 multilabel *label29 (m:*label40)
-+   53 jump *label10 always
-+   54 multilabel *label30 (m:*label40)
-+   55 jump *label6 always
-+   56 multilabel *label31 (m:*label40)
-+   57 jump *label10 always
-+   58 multilabel *label32 (m:*label40)
-+   59 jump *label10 always
-+   60 multilabel *label33 (m:*label40)
-+   61 jump *label10 always
-+   62 multilabel *label34 (m:*label40)
-+   63 jump *label10 always
-+   64 multilabel *label35 (m:*label40)
-+   65 jump *label10 always
-+   66 multilabel *label36 (m:*label40)
-+   67 jump *label10 always
-+   68 multilabel *label37 (m:*label40)
-+   69 jump *label10 always
-+   70 multilabel *label38 (m:*label40)
-+   71 jump *label10 always
-+   72 multilabel *label39 (m:*label40)
-+   73 jump *label6 always
-    74 label *label6
-    75 set *tmp2 true
-    76 jump *label4 always
-    77 label *label5
-+   78 label *label10
-    79 set *tmp2 false
-    80 label *label4
-    81 label *label3
++   14 jump *label12 greaterThanEq *tmp9 234
++   15 jump *label13 greaterThanEq *tmp9 220
++   16 jump *label10 greaterThanEq *tmp9 208
++   17 jump *label6 lessThan *tmp9 205
++   18 jump *label6 greaterThanEq *tmp9 206
++   19 jump *label10 always
++   20 label *label13
++   21 jump *label10 greaterThanEq *tmp9 226
++   22 jump *label6 lessThan *tmp9 222
++   23 jump *label10 lessThan *tmp9 225
++   24 jump *label6 always
++   25 label *label12
++   26 jump *label10 greaterThanEq *tmp9 235
++   27 jump *label6 always
+    28 label *label6
+    29 set *tmp2 true
+    30 jump *label4 always
+    31 label *label5
++   32 label *label10
+    33 set *tmp2 false
+    34 label *label4
+    35 label *label3
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      0 set :hash 0
@@ -328,28 +280,28 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      3 lookup block :block :i
      4 # "Function: def isWall(in block)"
  
-    73 label *label6
-    74 set *tmp2 true
-    75 jump *label4 always
+    27 label *label6
+    28 set *tmp2 true
+    29 jump *label4 always
 -    * label *label5
-    76 label *label10
-    77 set *tmp2 false
-    78 label *label4
+    30 label *label10
+    31 set *tmp2 false
+    32 label *label4
 -    * label *label3
-    79 jump *label7 equal *tmp2 false
-    80 op mul *tmp5 :hash 31
-    81 op add *tmp6 *tmp5 :i
+    33 jump *label7 equal *tmp2 false
+    34 op mul *tmp5 :hash 31
+    35 op add *tmp6 *tmp5 :i
  
-    84 jump *label8 always
-    85 label *label7
-    86 label *label8
+    38 jump *label8 always
+    39 label *label7
+    40 label *label8
 -    * label *label1
-    87 op add :i :i 1
-    88 jump *label9 lessThan :i @blockCount
+    41 op add :i :i 1
+    42 jump *label9 lessThan :i @blockCount
 -    * label *label2
-    89 print :hash
-    90 assertequals 2750008148 :hash "Test selected blocks"
-    91 end
+    43 print :hash
+    44 assertequals 2750008148 :hash "Test selected blocks"
+    45 end
 
 Final code before resolving virtual instructions:
 
@@ -362,69 +314,23 @@ sensor *tmp9 :block @id
 jump *label11 greaterThanEq *tmp9 203
 jump *label10 greaterThanEq *tmp9 35
 jump *label10 lessThan *tmp9 17
-jump *label10 equal *tmp9 29
-jump *label10 equal *tmp9 30
-jump *label6 always
+jump *label6 lessThan *tmp9 29
+jump *label6 greaterThanEq *tmp9 31
+jump *label10 always
 label *label11
-jump *label10 greaterThanEq *tmp9 235
-jump *label12 greaterThanEq *tmp9 208
-jump *label10 equal *tmp9 205
+jump *label12 greaterThanEq *tmp9 234
+jump *label13 greaterThanEq *tmp9 220
+jump *label10 greaterThanEq *tmp9 208
+jump *label6 lessThan *tmp9 205
+jump *label6 greaterThanEq *tmp9 206
+jump *label10 always
+label *label13
+jump *label10 greaterThanEq *tmp9 226
+jump *label6 lessThan *tmp9 222
+jump *label10 lessThan *tmp9 225
 jump *label6 always
 label *label12
-multijump *label13 *tmp9 208
-multilabel *label13
-jump *label10 always
-multilabel *label14
-jump *label10 always
-multilabel *label15
-jump *label10 always
-multilabel *label16
-jump *label10 always
-multilabel *label17
-jump *label10 always
-multilabel *label18
-jump *label10 always
-multilabel *label19
-jump *label10 always
-multilabel *label20
-jump *label10 always
-multilabel *label21
-jump *label10 always
-multilabel *label22
-jump *label10 always
-multilabel *label23
-jump *label10 always
-multilabel *label24
-jump *label10 always
-multilabel *label25
-jump *label6 always
-multilabel *label26
-jump *label6 always
-multilabel *label27
-jump *label10 always
-multilabel *label28
-jump *label10 always
-multilabel *label29
-jump *label10 always
-multilabel *label30
-jump *label6 always
-multilabel *label31
-jump *label10 always
-multilabel *label32
-jump *label10 always
-multilabel *label33
-jump *label10 always
-multilabel *label34
-jump *label10 always
-multilabel *label35
-jump *label10 always
-multilabel *label36
-jump *label10 always
-multilabel *label37
-jump *label10 always
-multilabel *label38
-jump *label10 always
-multilabel *label39
+jump *label10 greaterThanEq *tmp9 235
 jump *label6 always
 label *label6
 set *tmp2 true

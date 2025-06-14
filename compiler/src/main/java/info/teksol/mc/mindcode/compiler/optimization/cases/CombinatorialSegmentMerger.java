@@ -48,28 +48,29 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
     @Override
     public Set<SegmentConfiguration> createSegmentConfigurations() {
         Set<SegmentConfiguration> configurations = new LinkedHashSet<>();
-        // The basic solution: single segment
+        // The basic solution: single segment (single jump table)
         configurations.add(new SegmentConfiguration(partitions, List.of()));
 
         // The other
         if (strengthLarge > 0) {
             configurationCount++;
             createSegmentConfigurations(configurations, partitions, List.of(), 0);
-        }
 
-//        // The basic solution: bisectional search
-//        List<Segment> allSegments = partitions.stream()
-//                .map(p -> new Segment(SegmentType.SINGLE, p.from(), p.to(), p.label(), p.size()))
-//                .toList();
-//        configurations.add(new SegmentConfiguration(partitions, allSegments));
+            // Full bisectional search
+            List<Segment> allSegments = partitions.stream()
+                    .map(p -> new Segment(SegmentType.SINGLE, p.from(), p.to(), p.label(), p.size()))
+                    .toList();
+            configurations.add(new SegmentConfiguration(partitions, allSegments));
+        }
 
         return configurations;
     }
 
     void createSegmentConfigurations(Collection<SegmentConfiguration> configurations, List<Partition> partitions,
             List<Segment> segments, int depth) {
-        int limitLarge = Math.max(1, (strengthLarge - iterationDecrease * depth));
+        int limitLarge = Math.max(0, (strengthLarge - iterationDecrease * depth));
         int limitSmall = Math.max(0, (strengthSmall - 2 * depth));
+        if (limitLarge + limitSmall == 0) return;
 
         List<Segment> merged = CollectionUtils.mergeLists(
                 findLargestSegments(partitions, limitLarge),
@@ -143,8 +144,7 @@ public class CombinatorialSegmentMerger extends AbstractSegmentMerger {
             }
         }
 
-        result.sort(Comparator.comparing(Segment::size).reversed());
-        return result;
+        return result.stream().sorted(Comparator.comparing(Segment::size).reversed()).limit(limit).toList();
     }
 
     List<Segment> findSmallestSegments(List<Partition> partitions, int limit) {

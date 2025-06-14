@@ -5,16 +5,17 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      2 instructions eliminated by Single Step Elimination (5 iterations).
      1 instructions modified by Data Flow Optimization (4 iterations).
-     4 instructions added by Case Switching (3 iterations).
+     5 instructions added by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
      7 instructions eliminated by Jump Straightening (4 iterations).
      8 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     94 instructions eliminated by Print Merging.
-   130 instructions after optimizations.
+   131 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 778):
-  * Convert case at line 17:9 (segments: 3)                      size    +4, benefit        5.4, efficiency      1.339 (+4 instructions)
+  o Convert case at line 17:9 (segments: 3)                      size    +4, benefit        5.4, efficiency      1.339
+  * Convert case at line 17:9 (segments: 7)                      size    +5, benefit        7.1, efficiency      1.429 (+5 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -298,88 +299,86 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    216 sensor *tmp55 .BLOCK @flag
    217 print "flag: "
 
-Modifications by Convert case at line 17:9 (segments: 3) (+4 instructions):
+Modifications by Convert case at line 17:9 (segments: 7) (+5 instructions):
  
     20 sensor *tmp10 .BLOCK @type
     21 print *tmp10
     22 print " - "
 -    * jump *label8 notEqual :page 1
-+   23 jump *label23 greaterThanEq :page 3
-+   24 jump *label11 greaterThanEq :page 2
++   23 jump *label23 greaterThanEq :page 4
++   24 jump *label24 greaterThanEq :page 2
 +   25 jump *label9 greaterThanEq :page 1
 +   26 jump *label22 always
-+   27 label *label23
-+   28 jump *label22 greaterThanEq :page 8
-+   29 multijump *label24 :page 3 (m:*label29)
-+   30 multilabel *label24 (m:*label29)
-+   31 jump *label13 always
-+   32 multilabel *label25 (m:*label29)
++   27 label *label24
++   28 jump *label13 greaterThanEq :page 3
++   29 jump *label11 always
++   30 label *label23
++   31 jump *label25 greaterThanEq :page 6
++   32 jump *label17 greaterThanEq :page 5
 +   33 jump *label15 always
-+   34 multilabel *label26 (m:*label29)
-+   35 jump *label17 always
-+   36 multilabel *label27 (m:*label29)
-+   37 jump *label19 always
-+   38 multilabel *label28 (m:*label29)
-+   39 jump *label21 always
-    40 label *label9
-    41 print "contents:"
-    42 print "\n"
++   34 label *label25
++   35 jump *label19 lessThan :page 7
++   36 jump *label21 lessThan :page 8
++   37 jump *label22 always
+    38 label *label9
+    39 print "contents:"
+    40 print "\n"
  
-    63 print "\n"
-    64 jump *label7 always
-    65 label *label8
+    61 print "\n"
+    62 jump *label7 always
+    63 label *label8
 -    * jump *label10 notEqual :page 2
-    66 label *label11
-    67 print "power:"
-    68 print "\n"
+    64 label *label11
+    65 print "power:"
+    66 print "\n"
  
-    96 print "\n"
-    97 jump *label7 always
-    98 label *label10
+    94 print "\n"
+    95 jump *label7 always
+    96 label *label10
 -    * jump *label12 notEqual :page 3
-    99 label *label13
-   100 print "combat:"
-   101 print "\n"
+    97 label *label13
+    98 print "combat:"
+    99 print "\n"
  
-   117 print "\n"
-   118 jump *label7 always
-   119 label *label12
+   115 print "\n"
+   116 jump *label7 always
+   117 label *label12
 -    * jump *label14 notEqual :page 4
-   120 label *label15
-   121 print "status:"
-   122 print "\n"
+   118 label *label15
+   119 print "status:"
+   120 print "\n"
  
-   142 print "\n"
-   143 jump *label7 always
-   144 label *label14
+   140 print "\n"
+   141 jump *label7 always
+   142 label *label14
 -    * jump *label16 notEqual :page 5
-   145 label *label17
-   146 print "position:"
-   147 print "\n"
+   143 label *label17
+   144 print "position:"
+   145 print "\n"
  
-   163 print "\n"
-   164 jump *label7 always
-   165 label *label16
+   161 print "\n"
+   162 jump *label7 always
+   163 label *label16
 -    * jump *label18 notEqual :page 6
-   166 label *label19
-   167 print "unit:"
-   168 print "\n"
+   164 label *label19
+   165 print "unit:"
+   166 print "\n"
  
-   212 print "\n"
-   213 jump *label7 always
-   214 label *label18
+   210 print "\n"
+   211 jump *label7 always
+   212 label *label18
 -    * jump *label20 notEqual :page 7
-   215 label *label21
-   216 print "other:"
-   217 print "\n"
+   213 label *label21
+   214 print "other:"
+   215 print "\n"
  
-   240 print *tmp58
-   241 print "\n"
-   242 label *label20
-+  243 label *label22
-   244 label *label7
-   245 jump *label6 always
-   246 label *label5
+   238 print *tmp58
+   239 print "\n"
+   240 label *label20
++  241 label *label22
+   242 label *label7
+   243 jump *label6 always
+   244 label *label5
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -391,163 +390,169 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     11 print :page
     12 print "/"
  
-    61 print *tmp18
-    62 print "\n"
-    63 jump *label7 always
+    59 print *tmp18
+    60 print "\n"
+    61 jump *label7 always
 -    * label *label8
-    64 label *label11
-    65 print "power:"
-    66 print "\n"
+    62 label *label11
+    63 print "power:"
+    64 print "\n"
  
-    93 print *tmp28
-    94 print "\n"
-    95 jump *label7 always
+    91 print *tmp28
+    92 print "\n"
+    93 jump *label7 always
 -    * label *label10
-    96 label *label13
-    97 print "combat:"
-    98 print "\n"
+    94 label *label13
+    95 print "combat:"
+    96 print "\n"
  
-   113 print *tmp32
-   114 print "\n"
-   115 jump *label7 always
+   111 print *tmp32
+   112 print "\n"
+   113 jump *label7 always
 -    * label *label12
-   116 label *label15
-   117 print "status:"
-   118 print "\n"
+   114 label *label15
+   115 print "status:"
+   116 print "\n"
  
-   137 print *tmp37
-   138 print "\n"
-   139 jump *label7 always
+   135 print *tmp37
+   136 print "\n"
+   137 jump *label7 always
 -    * label *label14
-   140 label *label17
-   141 print "position:"
-   142 print "\n"
+   138 label *label17
+   139 print "position:"
+   140 print "\n"
  
-   157 print *tmp41
-   158 print "\n"
-   159 jump *label7 always
+   155 print *tmp41
+   156 print "\n"
+   157 jump *label7 always
 -    * label *label16
-   160 label *label19
-   161 print "unit:"
-   162 print "\n"
+   158 label *label19
+   159 print "unit:"
+   160 print "\n"
  
-   205 print *tmp52
-   206 print "\n"
-   207 jump *label7 always
+   203 print *tmp52
+   204 print "\n"
+   205 jump *label7 always
 -    * label *label18
-   208 label *label21
-   209 print "other:"
-   210 print "\n"
+   206 label *label21
+   207 print "other:"
+   208 print "\n"
  
-   232 print "enabled: "
-   233 print *tmp58
-   234 print "\n"
+   230 print "enabled: "
+   231 print *tmp58
+   232 print "\n"
 -    * label *label20
-   235 label *label22
-   236 label *label7
-   237 jump *label6 always
+   233 label *label22
+   234 label *label7
+   235 jump *label6 always
  
-   240 print "\n"
-   241 label *label6
-   242 printflush message1
+   238 print "\n"
+   239 label *label6
+   240 printflush message1
 -    * label *label1
-   243 jump *label0 always
+   241 jump *label0 always
 -    * label *label2
-   244 end
+   242 end
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
-    22 jump *label23 greaterThanEq :page 3
-    23 jump *label11 greaterThanEq :page 2
+    22 jump *label23 greaterThanEq :page 4
+    23 jump *label24 greaterThanEq :page 2
     24 jump *label9 greaterThanEq :page 1
 -    * jump *label22 always
 +   25 jump *label6 always
-    26 label *label23
--    * jump *label22 greaterThanEq :page 8
-+   27 jump *label6 greaterThanEq :page 8
-    28 multijump *label24 :page 3 (m:*label29)
-    29 multilabel *label24 (m:*label29)
-    30 jump *label13 always
+    26 label *label24
+    27 jump *label13 greaterThanEq :page 3
+    28 jump *label11 always
  
-    60 print "liquidCapacity: "
-    61 print *tmp18
-    62 print "\n"
--    * jump *label7 always
-+   63 jump *label6 always
-    64 label *label11
-    65 print "power:"
-    66 print "\n"
+    33 label *label25
+    34 jump *label19 lessThan :page 7
+    35 jump *label21 lessThan :page 8
+-    * jump *label22 always
++   36 jump *label6 always
+    37 label *label9
+    38 print "contents:"
+    39 print "\n"
  
-    92 print "powerNetOut: "
-    93 print *tmp28
-    94 print "\n"
+    58 print "liquidCapacity: "
+    59 print *tmp18
+    60 print "\n"
 -    * jump *label7 always
-+   95 jump *label6 always
-    96 label *label13
-    97 print "combat:"
-    98 print "\n"
++   61 jump *label6 always
+    62 label *label11
+    63 print "power:"
+    64 print "\n"
  
-   112 print "maxHealth: "
-   113 print *tmp32
-   114 print "\n"
+    90 print "powerNetOut: "
+    91 print *tmp28
+    92 print "\n"
 -    * jump *label7 always
-+  115 jump *label6 always
-   116 label *label15
-   117 print "status:"
-   118 print "\n"
++   93 jump *label6 always
+    94 label *label13
+    95 print "combat:"
+    96 print "\n"
  
-   136 print "range: "
-   137 print *tmp37
-   138 print "\n"
+   110 print "maxHealth: "
+   111 print *tmp32
+   112 print "\n"
 -    * jump *label7 always
-+  139 jump *label6 always
-   140 label *label17
-   141 print "position:"
-   142 print "\n"
++  113 jump *label6 always
+   114 label *label15
+   115 print "status:"
+   116 print "\n"
  
-   156 print "size: "
-   157 print *tmp41
-   158 print "\n"
+   134 print "range: "
+   135 print *tmp37
+   136 print "\n"
 -    * jump *label7 always
-+  159 jump *label6 always
-   160 label *label19
-   161 print "unit:"
-   162 print "\n"
++  137 jump *label6 always
+   138 label *label17
+   139 print "position:"
+   140 print "\n"
  
-   204 print "controller: "
-   205 print *tmp52
-   206 print "\n"
+   154 print "size: "
+   155 print *tmp41
+   156 print "\n"
 -    * jump *label7 always
-+  207 jump *label6 always
-   208 label *label21
-   209 print "other:"
-   210 print "\n"
++  157 jump *label6 always
+   158 label *label19
+   159 print "unit:"
+   160 print "\n"
+ 
+   202 print "controller: "
+   203 print *tmp52
+   204 print "\n"
+-    * jump *label7 always
++  205 jump *label6 always
+   206 label *label21
+   207 print "other:"
+   208 print "\n"
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   232 print "enabled: "
-   233 print *tmp58
-   234 print "\n"
+   230 print "enabled: "
+   231 print *tmp58
+   232 print "\n"
 -    * label *label22
 -    * label *label7
-   235 jump *label6 always
-   236 label *label5
-   237 print "No linked block found."
+   233 jump *label6 always
+   234 label *label5
+   235 print "No linked block found."
  
-   239 label *label6
-   240 printflush message1
-   241 jump *label0 always
+   237 label *label6
+   238 printflush message1
+   239 jump *label0 always
 -    * end
 
 Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   212 print "team: "
-   213 print *tmp53
-   214 print "\n"
+   210 print "team: "
+   211 print *tmp53
+   212 print "\n"
 -    * sensor *tmp54 .BLOCK @type
-   215 print "type: "
-   216 print *tmp10
-   217 print "\n"
+   213 print "type: "
+   214 print *tmp10
+   215 print "\n"
 
 Modifications by Final phase, Print Merging, iteration 1 (-94 instructions):
  
@@ -566,259 +571,259 @@ Modifications by Final phase, Print Merging, iteration 1 (-94 instructions):
     13 op strictEqual *tmp8 *tmp7 0
     14 jump *label5 equal *tmp8 false
  
-    33 multilabel *label28 (m:*label29)
-    34 jump *label21 always
-    35 label *label9
+    31 jump *label21 lessThan :page 8
+    32 jump *label6 always
+    33 label *label9
 -    * print "contents:"
 -    * print "\n"
-+   36 print "contents:\ntotalItems: {0}\nfirstItem: {0}\nitemCapacity: {0}\ntotalLiquids: {0}\nliquidCapacity: {0}\n"
-    37 sensor *tmp13 .BLOCK @totalItems
++   34 print "contents:\ntotalItems: {0}\nfirstItem: {0}\nitemCapacity: {0}\ntotalLiquids: {0}\nliquidCapacity: {0}\n"
+    35 sensor *tmp13 .BLOCK @totalItems
 -    * print "totalItems: "
 -    * print *tmp13
 -    * print "\n"
-+   38 format *tmp13
-    39 sensor *tmp14 .BLOCK @firstItem
++   36 format *tmp13
+    37 sensor *tmp14 .BLOCK @firstItem
 -    * print "firstItem: "
 -    * print *tmp14
 -    * print "\n"
-+   40 format *tmp14
-    41 sensor *tmp15 .BLOCK @itemCapacity
++   38 format *tmp14
+    39 sensor *tmp15 .BLOCK @itemCapacity
 -    * print "itemCapacity: "
 -    * print *tmp15
 -    * print "\n"
-+   42 format *tmp15
-    43 sensor *tmp16 .BLOCK @totalLiquids
-    44 op floor *tmp17 *tmp16
++   40 format *tmp15
+    41 sensor *tmp16 .BLOCK @totalLiquids
+    42 op floor *tmp17 *tmp16
 -    * print "totalLiquids: "
 -    * print *tmp17
 -    * print "\n"
-+   45 format *tmp17
-    46 sensor *tmp18 .BLOCK @liquidCapacity
++   43 format *tmp17
+    44 sensor *tmp18 .BLOCK @liquidCapacity
 -    * print "liquidCapacity: "
 -    * print *tmp18
 -    * print "\n"
-+   47 format *tmp18
-    48 jump *label6 always
-    49 label *label11
++   45 format *tmp18
+    46 jump *label6 always
+    47 label *label11
 -    * print "power:"
 -    * print "\n"
-+   50 print "power:\ntotalPower: {0}\npowerCapacity: {0}\npowerNetStored: {0}\npowerNetCapacity: {0}\npowerNetIn: {0}\npowerNetOut: {0}\n"
-    51 sensor *tmp19 .BLOCK @totalPower
-    52 op floor *tmp20 *tmp19
++   48 print "power:\ntotalPower: {0}\npowerCapacity: {0}\npowerNetStored: {0}\npowerNetCapacity: {0}\npowerNetIn: {0}\npowerNetOut: {0}\n"
+    49 sensor *tmp19 .BLOCK @totalPower
+    50 op floor *tmp20 *tmp19
 -    * print "totalPower: "
 -    * print *tmp20
 -    * print "\n"
-+   53 format *tmp20
-    54 sensor *tmp21 .BLOCK @powerCapacity
++   51 format *tmp20
+    52 sensor *tmp21 .BLOCK @powerCapacity
 -    * print "powerCapacity: "
 -    * print *tmp21
 -    * print "\n"
-+   55 format *tmp21
-    56 sensor *tmp22 .BLOCK @powerNetStored
-    57 op floor *tmp23 *tmp22
++   53 format *tmp21
+    54 sensor *tmp22 .BLOCK @powerNetStored
+    55 op floor *tmp23 *tmp22
 -    * print "powerNetStored: "
 -    * print *tmp23
 -    * print "\n"
-+   58 format *tmp23
-    59 sensor *tmp24 .BLOCK @powerNetCapacity
++   56 format *tmp23
+    57 sensor *tmp24 .BLOCK @powerNetCapacity
 -    * print "powerNetCapacity: "
 -    * print *tmp24
 -    * print "\n"
-+   60 format *tmp24
-    61 sensor *tmp25 .BLOCK @powerNetIn
-    62 op floor *tmp26 *tmp25
++   58 format *tmp24
+    59 sensor *tmp25 .BLOCK @powerNetIn
+    60 op floor *tmp26 *tmp25
 -    * print "powerNetIn: "
 -    * print *tmp26
 -    * print "\n"
-+   63 format *tmp26
-    64 sensor *tmp27 .BLOCK @powerNetOut
-    65 op floor *tmp28 *tmp27
++   61 format *tmp26
+    62 sensor *tmp27 .BLOCK @powerNetOut
+    63 op floor *tmp28 *tmp27
 -    * print "powerNetOut: "
 -    * print *tmp28
 -    * print "\n"
-+   66 format *tmp28
-    67 jump *label6 always
-    68 label *label13
++   64 format *tmp28
+    65 jump *label6 always
+    66 label *label13
 -    * print "combat:"
 -    * print "\n"
-+   69 print "combat:\nammo: {0}\nammoCapacity: {0}\nhealth: {0}\nmaxHealth: {0}\n"
-    70 sensor *tmp29 .BLOCK @ammo
++   67 print "combat:\nammo: {0}\nammoCapacity: {0}\nhealth: {0}\nmaxHealth: {0}\n"
+    68 sensor *tmp29 .BLOCK @ammo
 -    * print "ammo: "
 -    * print *tmp29
 -    * print "\n"
-+   71 format *tmp29
-    72 sensor *tmp30 .BLOCK @ammoCapacity
++   69 format *tmp29
+    70 sensor *tmp30 .BLOCK @ammoCapacity
 -    * print "ammoCapacity: "
 -    * print *tmp30
 -    * print "\n"
-+   73 format *tmp30
-    74 sensor *tmp31 .BLOCK @health
++   71 format *tmp30
+    72 sensor *tmp31 .BLOCK @health
 -    * print "health: "
 -    * print *tmp31
 -    * print "\n"
-+   75 format *tmp31
-    76 sensor *tmp32 .BLOCK @maxHealth
++   73 format *tmp31
+    74 sensor *tmp32 .BLOCK @maxHealth
 -    * print "maxHealth: "
 -    * print *tmp32
 -    * print "\n"
-+   77 format *tmp32
-    78 jump *label6 always
-    79 label *label15
++   75 format *tmp32
+    76 jump *label6 always
+    77 label *label15
 -    * print "status:"
 -    * print "\n"
-+   80 print "status:\nheat: {0}\nefficiency: {0}\ntimescale: {0}\ndead: {0}\nrange: {0}\n"
-    81 sensor *tmp33 .BLOCK @heat
++   78 print "status:\nheat: {0}\nefficiency: {0}\ntimescale: {0}\ndead: {0}\nrange: {0}\n"
+    79 sensor *tmp33 .BLOCK @heat
 -    * print "heat: "
 -    * print *tmp33
 -    * print "\n"
-+   82 format *tmp33
-    83 sensor *tmp34 .BLOCK @efficiency
++   80 format *tmp33
+    81 sensor *tmp34 .BLOCK @efficiency
 -    * print "efficiency: "
 -    * print *tmp34
 -    * print "\n"
-+   84 format *tmp34
-    85 sensor *tmp35 .BLOCK @timescale
++   82 format *tmp34
+    83 sensor *tmp35 .BLOCK @timescale
 -    * print "timescale: "
 -    * print *tmp35
 -    * print "\n"
-+   86 format *tmp35
-    87 sensor *tmp36 .BLOCK @dead
++   84 format *tmp35
+    85 sensor *tmp36 .BLOCK @dead
 -    * print "dead: "
 -    * print *tmp36
 -    * print "\n"
-+   88 format *tmp36
-    89 sensor *tmp37 .BLOCK @range
++   86 format *tmp36
+    87 sensor *tmp37 .BLOCK @range
 -    * print "range: "
 -    * print *tmp37
 -    * print "\n"
-+   90 format *tmp37
-    91 jump *label6 always
-    92 label *label17
++   88 format *tmp37
+    89 jump *label6 always
+    90 label *label17
 -    * print "position:"
 -    * print "\n"
-+   93 print "position:\nrotation: {0}\nx: {0}\ny: {0}\nsize: {0}\n"
-    94 sensor *tmp38 .BLOCK @rotation
++   91 print "position:\nrotation: {0}\nx: {0}\ny: {0}\nsize: {0}\n"
+    92 sensor *tmp38 .BLOCK @rotation
 -    * print "rotation: "
 -    * print *tmp38
 -    * print "\n"
-+   95 format *tmp38
-    96 sensor *tmp39 .BLOCK @x
++   93 format *tmp38
+    94 sensor *tmp39 .BLOCK @x
 -    * print "x: "
 -    * print *tmp39
 -    * print "\n"
-+   97 format *tmp39
-    98 sensor *tmp40 .BLOCK @y
++   95 format *tmp39
+    96 sensor *tmp40 .BLOCK @y
 -    * print "y: "
 -    * print *tmp40
 -    * print "\n"
-+   99 format *tmp40
-   100 sensor *tmp41 .BLOCK @size
++   97 format *tmp40
+    98 sensor *tmp41 .BLOCK @size
 -    * print "size: "
 -    * print *tmp41
 -    * print "\n"
-+  101 format *tmp41
-   102 jump *label6 always
-   103 label *label19
++   99 format *tmp41
+   100 jump *label6 always
+   101 label *label19
 -    * print "unit:"
 -    * print "\n"
-+  104 print "unit:\nshootX: {0}\nshootY: {0}\nshooting: {0}\nboosting: {0}\nmineX: {0}\nmineY: {0}\nmining: {0}\npayloadCount: {0}\npayloadType: {0}\ncontrolled: {0}\ncontroller: {0}\n"
-   105 sensor *tmp42 .BLOCK @shootX
++  102 print "unit:\nshootX: {0}\nshootY: {0}\nshooting: {0}\nboosting: {0}\nmineX: {0}\nmineY: {0}\nmining: {0}\npayloadCount: {0}\npayloadType: {0}\ncontrolled: {0}\ncontroller: {0}\n"
+   103 sensor *tmp42 .BLOCK @shootX
 -    * print "shootX: "
 -    * print *tmp42
 -    * print "\n"
-+  106 format *tmp42
-   107 sensor *tmp43 .BLOCK @shootY
++  104 format *tmp42
+   105 sensor *tmp43 .BLOCK @shootY
 -    * print "shootY: "
 -    * print *tmp43
 -    * print "\n"
-+  108 format *tmp43
-   109 sensor *tmp44 .BLOCK @shooting
++  106 format *tmp43
+   107 sensor *tmp44 .BLOCK @shooting
 -    * print "shooting: "
 -    * print *tmp44
 -    * print "\n"
-+  110 format *tmp44
-   111 sensor *tmp45 .BLOCK @boosting
++  108 format *tmp44
+   109 sensor *tmp45 .BLOCK @boosting
 -    * print "boosting: "
 -    * print *tmp45
 -    * print "\n"
-+  112 format *tmp45
-   113 sensor *tmp46 .BLOCK @mineX
++  110 format *tmp45
+   111 sensor *tmp46 .BLOCK @mineX
 -    * print "mineX: "
 -    * print *tmp46
 -    * print "\n"
-+  114 format *tmp46
-   115 sensor *tmp47 .BLOCK @mineY
++  112 format *tmp46
+   113 sensor *tmp47 .BLOCK @mineY
 -    * print "mineY: "
 -    * print *tmp47
 -    * print "\n"
-+  116 format *tmp47
-   117 sensor *tmp48 .BLOCK @mining
++  114 format *tmp47
+   115 sensor *tmp48 .BLOCK @mining
 -    * print "mining: "
 -    * print *tmp48
 -    * print "\n"
-+  118 format *tmp48
-   119 sensor *tmp49 .BLOCK @payloadCount
++  116 format *tmp48
+   117 sensor *tmp49 .BLOCK @payloadCount
 -    * print "payloadCount: "
 -    * print *tmp49
 -    * print "\n"
-+  120 format *tmp49
-   121 sensor *tmp50 .BLOCK @payloadType
++  118 format *tmp49
+   119 sensor *tmp50 .BLOCK @payloadType
 -    * print "payloadType: "
 -    * print *tmp50
 -    * print "\n"
-+  122 format *tmp50
-   123 sensor *tmp51 .BLOCK @controlled
++  120 format *tmp50
+   121 sensor *tmp51 .BLOCK @controlled
 -    * print "controlled: "
 -    * print *tmp51
 -    * print "\n"
-+  124 format *tmp51
-   125 sensor *tmp52 .BLOCK @controller
++  122 format *tmp51
+   123 sensor *tmp52 .BLOCK @controller
 -    * print "controller: "
 -    * print *tmp52
 -    * print "\n"
-+  126 format *tmp52
-   127 jump *label6 always
-   128 label *label21
++  124 format *tmp52
+   125 jump *label6 always
+   126 label *label21
 -    * print "other:"
 -    * print "\n"
-+  129 print "other:\nteam: {0}\ntype: {0}\nflag: {0}\nname: {0}\nconfig: {0}\nenabled: {0}\n"
-   130 sensor *tmp53 .BLOCK @team
++  127 print "other:\nteam: {0}\ntype: {0}\nflag: {0}\nname: {0}\nconfig: {0}\nenabled: {0}\n"
+   128 sensor *tmp53 .BLOCK @team
 -    * print "team: "
 -    * print *tmp53
 -    * print "\n"
 -    * print "type: "
 -    * print *tmp10
 -    * print "\n"
-+  131 format *tmp53
-+  132 format *tmp10
-   133 sensor *tmp55 .BLOCK @flag
++  129 format *tmp53
++  130 format *tmp10
+   131 sensor *tmp55 .BLOCK @flag
 -    * print "flag: "
 -    * print *tmp55
 -    * print "\n"
-+  134 format *tmp55
-   135 sensor *tmp56 .BLOCK @name
++  132 format *tmp55
+   133 sensor *tmp56 .BLOCK @name
 -    * print "name: "
 -    * print *tmp56
 -    * print "\n"
-+  136 format *tmp56
-   137 sensor *tmp57 .BLOCK @config
++  134 format *tmp56
+   135 sensor *tmp57 .BLOCK @config
 -    * print "config: "
 -    * print *tmp57
 -    * print "\n"
-+  138 format *tmp57
-   139 sensor *tmp58 .BLOCK @enabled
++  136 format *tmp57
+   137 sensor *tmp58 .BLOCK @enabled
 -    * print "enabled: "
 -    * print *tmp58
 -    * print "\n"
-+  140 format *tmp58
-   141 jump *label6 always
-   142 label *label5
++  138 format *tmp58
+   139 jump *label6 always
+   140 label *label5
 -    * print "No linked block found."
 -    * print "\n"
-+  143 print "No linked block found.\n"
-   144 label *label6
-   145 printflush message1
-   146 jump *label0 always
++  141 print "No linked block found.\n"
+   142 label *label6
+   143 printflush message1
+   144 jump *label0 always
 
 Final code before resolving virtual instructions:
 
@@ -840,23 +845,21 @@ jump *label5 equal *tmp8 false
 sensor *tmp10 .BLOCK @type
 print *tmp10
 print " - "
-jump *label23 greaterThanEq :page 3
-jump *label11 greaterThanEq :page 2
+jump *label23 greaterThanEq :page 4
+jump *label24 greaterThanEq :page 2
 jump *label9 greaterThanEq :page 1
 jump *label6 always
+label *label24
+jump *label13 greaterThanEq :page 3
+jump *label11 always
 label *label23
-jump *label6 greaterThanEq :page 8
-multijump *label24 :page 3
-multilabel *label24
-jump *label13 always
-multilabel *label25
+jump *label25 greaterThanEq :page 6
+jump *label17 greaterThanEq :page 5
 jump *label15 always
-multilabel *label26
-jump *label17 always
-multilabel *label27
-jump *label19 always
-multilabel *label28
-jump *label21 always
+label *label25
+jump *label19 lessThan :page 7
+jump *label21 lessThan :page 8
+jump *label6 always
 label *label9
 print "contents:\ntotalItems: {0}\nfirstItem: {0}\nitemCapacity: {0}\ntotalLiquids: {0}\nliquidCapacity: {0}\n"
 sensor *tmp13 .BLOCK @totalItems

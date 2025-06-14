@@ -11,12 +11,7 @@
 
 Pass 1: speed optimization selection (cost limit 454):
   o Convert case at line 12:5 (#2480, segments: 7)               size    -7, benefit      562.2, efficiency   Infinity
-  o Convert case at line 12:5 (#8078, segments: 8)               size    -5, benefit      563.5, efficiency   Infinity
-  o Convert case at line 12:5 (#2501, segments: 7)               size    +8, benefit      565.1, efficiency     70.637
-  o Convert case at line 12:5 (#8099, segments: 8)               size   +10, benefit      565.2, efficiency     56.519
-  o Convert case at line 12:5 (#8125, segments: 7)               size   +16, benefit      567.3, efficiency     35.457
-  o Convert case at line 12:5 (#23981, segments: 6)              size   +38, benefit      570.3, efficiency     15.008
-  o Convert case at line 12:5 (#16640, segments: 5)              size   +46, benefit      570.6, efficiency     12.404
+  o Convert case at line 12:5 (#55447, segments: 17)             size    -5, benefit      570.7, efficiency   Infinity
   o Convert case at line 12:5 (#35680, segments: 5)              size   +65, benefit      571.0, efficiency      8.784
   o Convert case at line 12:5 (#34663, segments: 4)              size   +68, benefit      573.6, efficiency      8.435
   * Convert case at line 12:5 (#1, segments: 1)                  size  +235, benefit      591.2, efficiency      2.516 (+235 instructions)
