@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
+    private static final int STRENGTH = 5;
+
     private final String testCaseId;
     private final InputFile inputFile;
     private final Supplier<MindcodeCompiler> compilerSupplier;
@@ -40,7 +42,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
         try {
             compiler.compilerProfile()
                     .setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE)
-                    .setCaseOptimizationStrength(32);
+                    .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
             int originalSteps = compiler.getEmulator().getSteps();
             int originalSize = compiler.getInstructions().size();
@@ -50,7 +52,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             compiler = compilerSupplier.get();
             compiler.compilerProfile()
                     .setGoal(GenerationGoal.SPEED)
-                    .setCaseOptimizationStrength(32);
+                    .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
             int newSteps = compiler.getEmulator().getSteps();
             int newSize = compiler.getInstructions().size();

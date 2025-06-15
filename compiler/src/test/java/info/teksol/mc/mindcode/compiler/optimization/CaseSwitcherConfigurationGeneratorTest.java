@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.ConvertCaseExpressionAction;
+import info.teksol.mc.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.*;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -20,9 +22,35 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @NullMarked
 @Order(5)
 public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTest<CaseSwitcher> {
-    private static final int MAX_STRENGTH = 10;
-
     public static final String SCRIPTS_DIRECTORY = SCRIPTS_BASE_DIRECTORY + "/caseswitcher";
+
+    private static final int MAX_STRENGTH = 6;
+    private record TestResult(int configurationCount, int[] steps) {}
+    private record StrengthStatistic(int configurations, double improvement) {}
+
+    private static final Map<String, List<StrengthStatistic>> results = new ConcurrentHashMap<>();
+
+    @AfterAll
+    static void done() throws IOException {
+        StringBuilder text = new StringBuilder();
+        TreeMap<String, List<StrengthStatistic>> sorted = new TreeMap<>(results);
+
+        text.append("Strength;Improvement");
+        sorted.keySet().forEach(key -> text.append(";").append(key));
+        text.append("\n");
+
+        for (int i = 1; i <= MAX_STRENGTH; i++) {
+            text.append(i);
+            final int strength = i;
+            double improvement = sorted.values().stream().map(l -> l.get(strength)).mapToDouble(StrengthStatistic::improvement).average().orElse(0);
+            text.append(";").append(str(-improvement));
+            sorted.values().forEach(l -> text.append(";").append(str(l.get(strength).improvement)));
+            text.append("\n");
+        }
+
+        Path path = Path.of(SCRIPTS_DIRECTORY, CaseSwitcherConfigurationGeneratorTest.class.getSimpleName() + ".txt");
+        Files.writeString(path, text);
+    }
 
     protected String getScriptsDirectory() {
         return SCRIPTS_DIRECTORY;
@@ -38,26 +66,36 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
         return Optimization.LIST;
     }
 
-    int[] executeCaseSwitchingTest(String fileContent, int strength) {
-        List<ConvertCaseExpressionAction> diagnosticData = new ArrayList<>();
+    private static String str(double value) {
+        return String.format(Locale.US, "%.2f", value);
+    }
+
+    private static double d(int i) {
+        return i;
+    }
+
+    TestResult executeCaseSwitchingTest(String fileContent, int strength) {
+        List<CaseSwitcherConfigurations> configurations = new ArrayList<>();
+        List<ConvertCaseExpressionAction> actions = new ArrayList<>();
         String source = "#set case-optimization-strength = " + strength + ";\n" + fileContent;
         compile(expectedMessages(), source, compiler -> {
-            diagnosticData.addAll(compiler.getDiagnosticData(ConvertCaseExpressionAction.class));
-            if (diagnosticData.isEmpty()) {
+            configurations.addAll(compiler.getDiagnosticData(CaseSwitcherConfigurations.class));
+            actions.addAll(compiler.getDiagnosticData(ConvertCaseExpressionAction.class));
+            if (configurations.isEmpty() || actions.isEmpty()) {
                 throw new IllegalStateException("No diagnostic data found.");
             }
         });
 
-        diagnosticData.sort(Comparator.comparingInt(ConvertCaseExpressionAction::rawCost));
-        int max = diagnosticData.getLast().rawCost() + 1;
+        actions.sort(Comparator.comparingInt(ConvertCaseExpressionAction::rawCost));
+        int max = actions.getLast().rawCost() + 1;
 
         int[] result = new int[max];
-        Arrays.fill(result, diagnosticData.getLast().originalSteps());
-        for (ConvertCaseExpressionAction d : diagnosticData) {
+        Arrays.fill(result, actions.getLast().originalSteps());
+        for (ConvertCaseExpressionAction d : actions) {
             Arrays.fill(result, d.rawCost(), max, d.executionSteps());
         }
 
-        return result;
+        return new TestResult(configurations.getFirst().configurationsCount(), result);
     }
 
     void executeCaseSwitchingTest(String fileName) throws IOException {
@@ -66,36 +104,46 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
         StringBuilder text2 = new StringBuilder();
         List<int[]> fullData = new ArrayList<>();
         List<String> regressions = new ArrayList<>();
+        List<StrengthStatistic> statistics = new ArrayList<>();
         int[] last = null;
         int lastSum = 0;
-        text.append("Strength;Total steps;Avg steps;Avg difference;Regression\n");
+        text.append("Strength;Configurations;Total steps;Avg steps;Avg difference;Regression\n");
         for (int strength = 0; strength <= MAX_STRENGTH; strength++) {
-            int[] steps = executeCaseSwitchingTest(fileContent, strength);
+            TestResult testResult = executeCaseSwitchingTest(fileContent, strength);
+            double avgDifference;
             if (last != null) {
-                if (last.length != steps.length) {
+                if (last.length != testResult.steps.length) {
                     throw new IllegalStateException("Steps length mismatch.");
                 }
 
                 int sum = 0;
                 boolean regression = false;
-                for (int i = 0; i < steps.length; i++) {
-                    if (steps[i] > last[i] && last[i] > 0) {
+                for (int i = 0; i < testResult.steps.length; i++) {
+                    if (testResult.steps[i] > last[i] && last[i] > 0) {
                         regression = true;
                     }
-                    sum += steps[i];
+                    sum += testResult.steps[i];
                 }
 
+                avgDifference = d(sum - lastSum) / testResult.steps.length;
                 text.append(strength).append(";")
+                        .append(testResult.configurationCount).append(";")
                         .append(sum).append(";")
-                        .append(String.format(Locale.US, "%.2f", ((double)sum) / steps.length)).append(";")
-                        .append(lastSum > 0 ? String.format(Locale.US, "%.2f", ((double)sum - lastSum) / steps.length) : "").append(";")
+                        .append(str(d(sum) / testResult.steps.length)).append(";")
+                        .append(lastSum > 0 ? str(avgDifference) : "").append(";")
                         .append(regression ? "yes" : "").append("\n");
 
                 lastSum = sum;
                 if (regression) regressions.add(String.valueOf(strength));
+            } else {
+                for (int i = 0; i < testResult.steps.length; i++) {
+                    lastSum += testResult.steps[i];
+                }
+                avgDifference = 0;
             }
-            fullData.add(steps);
-            last = steps;
+            statistics.add(new StrengthStatistic(testResult.configurationCount, avgDifference));
+            fullData.add(testResult.steps);
+            last = testResult.steps;
         }
 
         addStrengthHeader(text);
@@ -136,6 +184,7 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
         Path path = Path.of(getScriptsDirectory(), fileName.replace(".mnd", ".txt"));
         Files.writeString(path, text);
 
+        results.put(fileName.replace(".mnd", ""), statistics);
         assertTrue(regressions.isEmpty(), "Regressions at strength: " + String.join(", ", regressions));
     }
 

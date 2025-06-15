@@ -37,10 +37,10 @@ public class CompilerProfile {
     public static final int MAX_PASSES_CMDLINE = 1000;
     public static final int MAX_PASSES_WEBAPP = 25;
 
-    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 8;
-    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 4;
-    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 256;
-    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 10;
+    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 3;
+    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 2;
+    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 6;
+    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 4;
 
     private final boolean webApplication;
 
@@ -197,7 +197,7 @@ public class CompilerProfile {
     }
 
     public CompilerProfile setCaseOptimizationStrength(int caseOptimizationStrength) {
-        this.caseOptimizationStrength = Math.min(Math.max(caseOptimizationStrength, 1), getMaxCaseOptimizationStrength());
+        this.caseOptimizationStrength = Math.min(Math.max(caseOptimizationStrength, 0), getMaxCaseOptimizationStrength());
         return this;
     }
 

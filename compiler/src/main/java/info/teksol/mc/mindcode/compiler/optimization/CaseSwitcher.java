@@ -209,8 +209,8 @@ public class CaseSwitcher extends BaseOptimizer {
 
         targets.computeElseValues(analyzer.contentType, metadata, getProfile().isTargetOptimization());
 
-        SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(targets, analyzer.contentType != ContentType.UNKNOWN,
-                getProfile().getCaseOptimizationStrength(), 1);
+        SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(targets,
+                analyzer.contentType != ContentType.UNKNOWN, getProfile().getCaseOptimizationStrength());
 
         // When no range checking, don't bother trying to merge segments.
         Set<SegmentConfiguration> configurations = removeRangeCheck
@@ -380,6 +380,7 @@ public class CaseSwitcher extends BaseOptimizer {
         private final boolean logicConversion;
         private final boolean removeRangeCheck;
         private final boolean symbolic = getProfile().isSymbolicLabels();
+        private final boolean considerElse;
         private final String padding;
         private boolean applied;
 
@@ -393,6 +394,7 @@ public class CaseSwitcher extends BaseOptimizer {
             this.segments = segments;
             this.logicConversion = contentType != ContentType.UNKNOWN;
             this.removeRangeCheck = removeRangeCheck;
+            this.considerElse = targets.hasElseBranch() && targets.getElseValues() > 0;
             this.padding = switch ((lowPadded ? 1 : 0) + (highPadded ? 2 : 0)) {
                 case 1 -> "padded low";
                 case 2 -> "padded high";
@@ -482,10 +484,6 @@ public class CaseSwitcher extends BaseOptimizer {
             executionSteps = averageSteps * targets.size();
         }
 
-        private boolean considerElse() {
-            return targets.hasElseBranch() && targets.getElseValues() > 0;
-        }
-
         // Per target, not totals
         int targetSteps = 0;
         int elseSteps = 0;
@@ -524,7 +522,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
             segments.forEach(this::computeSegmentCostAndBenefit);
 
-            if (considerElse()) {
+            if (considerElse) {
                 originalSteps = originalValueSteps + targets.getElseValues() * originalCost;
 
                 debugOutput("Original steps: %d, new steps: %d (target: %d, else: %d; bisection: %s)",
@@ -585,9 +583,12 @@ public class CaseSwitcher extends BaseOptimizer {
         private int bisect(List<Segment> segments) {
             if (segments.size() <= 1) return -1;
 
-            int middle = segments.getFirst().from() + (segments.getLast().to() - segments.getFirst().from()) / 2;
+            int min = segments.getFirst().from() - (considerElse && segments.getFirst().size() == 0 ? 1 : 0);
+            int max = segments.getLast().to() + (considerElse && segments.getLast().size() == 0 ? 1 : 0);
+            int middle = min + (max - min) / 2;
 
-            int distance = Integer.MAX_VALUE, best = -1;
+            int distance = Integer.MAX_VALUE;
+            int best = -1;
             for (int i = 1; i < segments.size(); i++) {
                 Segment segment = segments.get(i);
                 int d = Math.abs(segment.from() - middle);
@@ -781,7 +782,7 @@ public class CaseSwitcher extends BaseOptimizer {
             if (bisection < 0) {
                 segments.forEach(segment -> {
                     segment.setBisectionSteps(depth, false);
-                    debugOutput("    %s",  segment);
+                    debugOutput("%s%s", " ".repeat(4 * depth), segment);
                 });
                 return 0;
             }
@@ -794,17 +795,17 @@ public class CaseSwitcher extends BaseOptimizer {
             int min = segments.getFirst().from();
             int max = segments.getLast().to();
             int steps = max - min;
-            debugOutput("Bisection at %d (%d to %d)", highSegments.getFirst().from(), min, max);
+            debugOutput("%sBisection at %d (%d to %d)", " ".repeat(4 * depth), highSegments.getFirst().from(), min, max);
 
             int nextDepth = depth + 1;
 
             if (inlineSegment == InlineSegment.LOW) {
                 lowSegments.getFirst().setBisectionSteps(nextDepth, true);
-                debugOutput("    %s",  lowSegments.getFirst());
+                debugOutput("%s    %s", " ".repeat(4 * depth), lowSegments.getFirst());
                 return steps + computeBisectionTable(highSegments, nextDepth);
             } else if (inlineSegment == InlineSegment.HIGH) {
                 highSegments.getFirst().setBisectionSteps(nextDepth, true);
-                debugOutput("    %s",  highSegments.getFirst());
+                debugOutput("%s    %s", " ".repeat(4 * depth), highSegments.getFirst());
                 return steps + computeBisectionTable(lowSegments, nextDepth);
             } else {
                 return steps
@@ -870,7 +871,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
         private int size(Segment segment) {
             // Empty segments have zero steps when `else` path is not considered
-            return segment.empty() && !considerElse() ? 0 : segment.size();
+            return segment.empty() && !considerElse ? 0 : segment.size();
         }
 
         // Returns true if the segment can be handled by a simple jump right from the bisection table.

@@ -93,7 +93,7 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
                 [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
-                [--unsafe-case-optimization {true,false}] [--case-optimization-strength {0..256}]
+                [--unsafe-case-optimization {true,false}] [--case-optimization-strength {0..6}]
                 [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--no-signature] [--printflush {true,false}]
@@ -167,7 +167,7 @@ compiler options:
                          sets maximal number of optimization passes to be made
   --unsafe-case-optimization {true,false}
                          omits range checking of case expressions without an else branch during optimization
-  --case-optimization-strength {0..256}
+  --case-optimization-strength {0..6}
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered,potentially producing a more efficient  code,  at the cost of longer compilation
                          time
@@ -335,7 +335,7 @@ named arguments:
 usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a TAG [TAG ...]]
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8w}] [--target-optimization {specific,compatible}]
                 [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
-                [--unsafe-case-optimization {true,false}] [--case-optimization-strength {0..256}]
+                [--unsafe-case-optimization {true,false}] [--case-optimization-strength {0..6}]
                 [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--no-signature] [--printflush {true,false}]
@@ -387,7 +387,7 @@ compiler options:
                          sets maximal number of optimization passes to be made
   --unsafe-case-optimization {true,false}
                          omits range checking of case expressions without an else branch during optimization
-  --case-optimization-strength {0..256}
+  --case-optimization-strength {0..6}
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered,potentially producing a more efficient  code,  at the cost of longer compilation
                          time

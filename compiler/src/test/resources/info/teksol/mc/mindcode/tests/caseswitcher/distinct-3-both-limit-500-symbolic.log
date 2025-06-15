@@ -10,15 +10,9 @@
    328 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 383):
-  o Convert case at line 11:5 (segments: 8, padded high)         size   -14, benefit     1131.2, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 8)                      size   -13, benefit     1138.0, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 9)                      size   -12, benefit     1139.2, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 9)                      size   -11, benefit     1140.3, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 7)                      size   -12, benefit     1090.5, efficiency   Infinity
   o Convert case at line 11:5 (segments: 32)                     size    -5, benefit     1140.6, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 8)                      size    +0, benefit     1141.2, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 6)                      size    +1, benefit     1142.6, efficiency   1142.596
-  o Convert case at line 11:5 (segments: 6)                      size    +2, benefit     1144.5, efficiency    572.260
-  o Convert case at line 11:5 (segments: 6, padded low)          size   +13, benefit     1144.7, efficiency     88.055
+  o Convert case at line 11:5 (segments: 6)                      size    +1, benefit     1141.6, efficiency   1141.635
   o Convert case at line 11:5 (segments: 4)                      size   +23, benefit     1146.1, efficiency     49.829
   * Convert case at line 11:5 (segments: 1, padded high)         size  +211, benefit     1164.8, efficiency      5.520 (+211 instructions)
 

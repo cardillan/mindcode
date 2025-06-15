@@ -1185,9 +1185,9 @@ Mindcode arranges the code to only perform checks distinguishing between `null` 
 
 ### Jump table compression
 
-Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers several such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well. To locate the segment handling a particular input value, a bisectional search is used. 
+Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well. To locate the segment handling a particular input value, a bisectional search is used. 
 
-The total number of possible jump table segments arrangements can be quite large. The optimizer generates a number of these arrangements and selects the best one from this set. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
+The total number of possible segment arrangements can be quite large. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
 
 Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both smaller and significantly faster than the unoptimized `case` expression.   
 
@@ -1227,6 +1227,7 @@ The sample has been artificially constructed to demonstrate the above effects.
 #set target-optimization = specific;
 #set symbolic-labels = true;
 #set instruction-limit = 150;
+#set case-optimization-strength = 4;
 
 text = case getlink(0).@type
     when null then "none";
