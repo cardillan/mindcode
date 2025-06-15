@@ -285,31 +285,24 @@ all-sources:
 
   - source: case-homogenous-max.mnd
     defaults: case-switching-defaults
-    samples: 100
 
   - source: case-distinct-none.mnd
     defaults: case-switching-defaults
-    samples: 200
 
   - source: case-distinct-null.mnd
     defaults: case-switching-defaults
-    samples: 200
 
   - source: case-distinct-zero.mnd
     defaults: case-switching-defaults
-    samples: 200
 
   - source: case-distinct-both.mnd
     defaults: case-switching-defaults
-    samples: 200
 
   - source: case-distinct-max.mnd
     defaults: case-switching-defaults
-    samples: 200
 
   - source: case-variable.mnd
     defaults: case-switching-defaults
-    samples: 100
 
 # Case-switching tests - standalone
 case-switching:

@@ -10,17 +10,12 @@
    137 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 87):
-  o Convert case at line 11:5 (segments: 8, padded high)         size   -14, benefit     1089.6, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 7)                      size   -13, benefit     1095.7, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 9)                      size   -12, benefit     1099.8, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 8)                      size   -11, benefit     1100.0, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 8)                      size    -2, benefit     1100.9, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 7)                      size    -1, benefit     1101.1, efficiency   Infinity
-  o Convert case at line 11:5 (segments: 9, padded low)          size    +4, benefit     1101.4, efficiency    275.361
-  o Convert case at line 11:5 (segments: 8, padded low)          size    +5, benefit     1101.6, efficiency    220.327
+  o Convert case at line 11:5 (segments: 6)                      size   -14, benefit     1029.4, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 5)                      size   -13, benefit     1047.1, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 6)                      size   -12, benefit     1094.9, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 30)                     size    -5, benefit     1095.5, efficiency   Infinity
+  o Convert case at line 11:5 (segments: 6, padded low)          size    +4, benefit     1096.5, efficiency    274.135
   o Convert case at line 11:5 (segments: 4)                      size    +8, benefit     1102.1, efficiency    137.764
-  o Convert case at line 11:5 (segments: 8, padded low)          size   +14, benefit     1102.5, efficiency     78.750
-  o Convert case at line 11:5 (segments: 7, padded low)          size   +15, benefit     1102.7, efficiency     73.513
   * Convert case at line 11:5 (segments: 4, padded low)          size   +24, benefit     1103.8, efficiency     45.990 (+24 instructions)
   ! Convert case at line 11:5 (segments: 1, padded both)         size  +213, benefit     1119.5, efficiency      5.256
 

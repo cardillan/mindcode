@@ -1,6 +1,6 @@
 Name                                     Instructions   Source CRC         Compiled CRC    
 breakout-00.mnd:                                  184   DAE429A013DB4541   E3140CF4299708DB
-detector-00.mnd:                                  130   0E3BEC8B5680A194   EE2FBAC21E75DBFD
+detector-00.mnd:                                  131   0E3BEC8B5680A194   2CCF5DADA33068A0
 factory-monitor-00.mnd:                           481   863D948F911F2E7A   7015D38CC0DE408E
 factory-monitor-silicon-00.mnd:                   287   92331871E01FEB02   B5A34A093CE5B83F
 factory-monitor-surge-alloy-00.mnd:               184   B570A56D64509A07   5EF0124C2C62AA1C
@@ -18,7 +18,7 @@ mass-driver-monitor-00.mnd:                       184   6E6F762403154535   2E5B9
 mass-driver-monitor-surge-alloy-00.mnd:           237   84BE8CA14CE3386F   47E2926D0E178A08
 reactor-control-00.mnd:                           443   0B5F71D4A736D2F1   AABD73E2E3787DD5
 reactor-control-battery-level-00.mnd:             578   BEBDD58A4C35FD11   13B7195589C27A67
-regulator-00.mnd:                                 269   F49BECB5341151DD   31D52B9D69CE74E8
+regulator-00.mnd:                                 274   F49BECB5341151DD   5616C2D9BF05CFA5
 remote-vault-00.mnd:                               68   9EA444978E177496   6F061D3572082F7D
 storage-display-00.mnd:                           595   2F638AC4A4196293   1380FEDC5F767A9D
 unit-housekeeping-00.mnd:                         101   F607CA415057529A   8B7ADFA55D6A2724

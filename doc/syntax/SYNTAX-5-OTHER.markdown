@@ -37,15 +37,18 @@ Possible values for the `boundary-checks` directive are:
 
 ## Option `case-optimization-strength`
 
-This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). When performing the optimization, the optimizer extracts segments from the jump table, orders them by size and chooses a number of the largest ones corresponding to the specified value of the `case-optimization-strength` option. For each such segment, the process is repeated recursively on the remaining parts of the jump table, decreasing the number of selected segments by one for each level of recursion.
+This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). The higher the number, the more segment arrangements are considered, but the more time is needed for generating and evaluating them. The default value of this option is `2` for the web application, and `3` for the command-line tool. The maximal possible value is `4` for the web application, and `6` for the command-line tool. Values larger than `4` typically only bring additional benefits for case expressions with a very complex structure. Increasing the value by one significantly increases both the number of segment arrangements and the optimization time. 
 
-The default value of this option is `4` for the web application, and `8` for the command-line tool. The maximal possible value is `10` for the web application, and `256` for the command-line tool. Values larger than `8` only bring additional benefits for case expressions with a very complex structure.
+Setting the optimization strength to `0` causes the optimizer to forgo considering any segment arrangements and only consider turning the entire case statement into a jump table.
 
-Setting the optimization strength to `0` causes the optimizer to forgo considering any segment arrangements and only consider turning the entire case statement into a jump table. 
+Setting the optimization strength to `6` may lead to very long compilation time (from tens of seconds to minutes or more), and only improves the efficiency of very complex case expressions.
+
+> [!NOTE]
+> This option only improves [compressed jump tables](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). If there's enough instruction space for a full jump table, and the [optimization goal](#option-goal) is set to `speed`, increasing the value of this option cannot bring additional benefit, but still increases the compilation time.
 
 ## Option `function-prefix`
 
-Specifies which function prefix is used to generate mlog names of local variables. Possible values are:
+This option specifies the function prefix to use to generate mlog names of local variables. Possible values are:
 
 * `long` (the default value): the prefix is composed of a function name and a number, starting at 0. Variable names may become long and often will be incompletely displayed in Mindustry interface, but the function name is part of variable name, making it easier to recognize each variable.   
 * `short`: the prefix is `:fn` followed by a number, starting at 0. Leads to short variable names, which are more easily readable when displayed in Mindustry interface, but it is not immediately noticeable which function each variable belongs to.

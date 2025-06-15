@@ -12,17 +12,13 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
     private static final int MAX_EXCEPTIONS_ELSE = 3;
 
     private final List<Partition> partitions;
-    private final int maxConfigurations;
     private final int strength;
-    private final int iterationDecrease;
 
     private int configurationCount = 0;
 
-    public CombinatorialSegmentConfigurationGenerator(Targets targets, boolean logicConversion, int strength, int iterationDecrease) {
+    public CombinatorialSegmentConfigurationGenerator(Targets targets, boolean logicConversion, int strength) {
         this.partitions = splitToPartitions(targets, logicConversion);
-        this.maxConfigurations = 1000 * strength;
-        this.strength = strength;
-        this.iterationDecrease = iterationDecrease;
+        this.strength = (1 << strength) >> 1;
     }
 
     @Override
@@ -43,7 +39,7 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
         // The other
         if (strength > 0) {
             configurationCount++;
-            createSegmentConfigurations(configurations, partitions, List.of(), 0, maxConfigurations);
+            createSegmentConfigurations(configurations, partitions, List.of(), 0);
 
             // Full bisectional search
             List<Segment> allSegments = partitions.stream()
@@ -55,9 +51,10 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
         return configurations;
     }
 
-    int createSegmentConfigurations(Collection<SegmentConfiguration> configurations, List<Partition> partitions,
-            List<Segment> segments, int depth, int maxConfigurations) {
-        int created = 0;
+    void createSegmentConfigurations(Collection<SegmentConfiguration> configurations, List<Partition> partitions,
+            List<Segment> segments, int depth) {
+        int limit = strength >> depth;
+        if (limit == 0) return;
 
         List<PartitionSelection> selections = new ArrayList<>();
         findLargestSegments(partitions, selections);
@@ -65,33 +62,26 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
 
         List<Segment> selected = selections.stream()
                 .sorted(Comparator.comparingInt(PartitionSelection::size).reversed())
-                .limit(Math.max(strength - iterationDecrease * depth, 1))
+                .limit(limit)
                 .map(PartitionSelection::partitions)
                 .map(p -> Segment.fromPartitions(p.size() == 1 ? SegmentType.SINGLE : SegmentType.MIXED, p))
                 .toList();
 
-        if (selected.isEmpty()) return 0;
-
-        int maxConfigurationsPerSegment = maxConfigurations / selected.size();
+        if (selected.isEmpty()) return;
 
         for (Segment segment : selected) {
             List<Segment> newSegments = new ArrayList<>(segments);
             newSegments.add(segment);
             configurations.add(new SegmentConfiguration(this.partitions, newSegments));
-            created++;
             configurationCount++;
 
-            if (strength > iterationDecrease * (depth + 1)) {
+            if (limit > 1) {
                 List<Partition> newPartitions = partitions.stream().filter(p -> !segment.contains(p)).toList();
                 if (!newPartitions.isEmpty()) {
-                    created += createSegmentConfigurations(configurations, newPartitions, newSegments, depth + 1, maxConfigurationsPerSegment);
+                    createSegmentConfigurations(configurations, newPartitions, newSegments, depth + 1);
                 }
-
-                if (created >= maxConfigurations) break;
             }
         }
-
-        return created;
     }
 
     // Rules for merging partitions:
@@ -152,8 +142,9 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
     private void findIsolatedSegments(List<Partition> partitions, List<PartitionSelection> selections) {
         for (int i = 0; i < partitions.size(); i++) {
             if (partitions.get(i).size() == 1 && partitions.get(i).label() != LogicLabel.EMPTY) {
+                int count = (i == 0 || i == partitions.size() - 1) ? 1 : 2;
                 selections.add(new PartitionSelection(List.of(partitions.get(i)),
-                        (i > 0 ? partitions.get(i - 1).size() : 0) + ((i < partitions.size() - 1) ? partitions.get(i + 1).size() : 0)));
+                        ((i > 0 ? partitions.get(i - 1).size() : 0) + ((i < partitions.size() - 1) ? partitions.get(i + 1).size() : 0)) / count));
             }
         }
     }

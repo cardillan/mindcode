@@ -5,8 +5,6 @@
 #set jump-straightening = none;
 #set jump-threading = none;
 
-#set case-optimization-strength = 32;
-
 def identifyBlock(block)
     case block
         when null                                                                   then "A";

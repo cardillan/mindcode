@@ -88,8 +88,8 @@ class DirectivePreprocessorTest {
     void processesDirectiveCaseGenerationLimit() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setCaseOptimizationStrength(1);
-        processDirective(profile, "case-optimization-strength", "20");
-        assertEquals(20, profile.getCaseOptimizationStrength());
+        processDirective(profile, "case-optimization-strength", "4");
+        assertEquals(4, profile.getCaseOptimizationStrength());
     }
 
     @Test
