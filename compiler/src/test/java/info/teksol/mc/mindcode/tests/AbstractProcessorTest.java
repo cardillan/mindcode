@@ -43,8 +43,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @NullMarked
 public abstract class AbstractProcessorTest extends AbstractTestBase {
 
-    public static final String SCRIPTS_BASE_DIRECTORY = "src/test/resources/info/teksol/mc/mindcode/tests";
-
     protected final String logSuffix;
     protected final boolean symbolicLabels;
 
@@ -136,11 +134,6 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     @BeforeEach
     void init(TestInfo testInfo) {
         this.testInfo = testInfo;
-    }
-
-    protected String readFile(String filename) throws IOException {
-        Path path = Path.of(getScriptsDirectory(), filename);
-        return Files.readString(path);
     }
 
     private void writeLogFile(@Nullable Path logFile, MindcodeCompiler compiler, List<LogicInstruction> instructions) {

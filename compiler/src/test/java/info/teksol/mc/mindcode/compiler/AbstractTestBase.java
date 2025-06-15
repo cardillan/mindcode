@@ -25,6 +25,9 @@ import org.intellij.lang.annotations.Language;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -34,6 +37,8 @@ import java.util.stream.Collectors;
 
 @NullMarked
 public abstract class AbstractTestBase {
+    public static final String SCRIPTS_BASE_DIRECTORY = "src/test/resources/info/teksol/mc/mindcode/tests";
+
     protected static final SourcePosition EMPTY = SourcePosition.EMPTY;
 
     protected abstract CompilationPhase getTargetPhase();
@@ -48,6 +53,15 @@ public abstract class AbstractTestBase {
 
     protected void setDebugPrinterProvider(MindcodeCompiler compiler) {
         // Do nothing by default
+    }
+
+    protected String getScriptsDirectory() {
+        return SCRIPTS_BASE_DIRECTORY;
+    }
+
+    protected String readFile(String filename) throws IOException {
+        Path path = Path.of(getScriptsDirectory(), filename);
+        return Files.readString(path);
     }
 
     protected InputFiles createInputFiles(String source) {
@@ -181,6 +195,10 @@ public abstract class AbstractTestBase {
 
         @Override
         public void addDiagnosticData(Object data) {
+        }
+
+        @Override
+        public <T> void addDiagnosticData(Class<T> dataClass, List<T> data) {
         }
     }
 

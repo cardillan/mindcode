@@ -4,7 +4,7 @@ import info.teksol.mc.common.InputFile;
 import info.teksol.mc.emulator.processor.Assertion;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
-import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher;
+import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.ConvertCaseExpressionAction;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
@@ -67,14 +67,16 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                         "The original and optimized outputs differ:\n" + originalOutput + "\n" + newOutput));
             }
 
-            List<CaseSwitcher.ConvertCaseExpressionAction> diagnosticData = compiler.getDiagnosticData(CaseSwitcher.ConvertCaseExpressionAction.class);
+            List<ConvertCaseExpressionAction> diagnosticData = compiler.getDiagnosticData(ConvertCaseExpressionAction.class)
+                    .stream().filter(ConvertCaseExpressionAction::applied).toList();
             if (diagnosticData.size() != 1) {
                 progress.reportError(new ErrorResult(testCaseId,
                         compiler.compilerProfile(), "", compiler.getExecutionException(), "No Case-Switching diagnostic information found."));
             } else {
+                ConvertCaseExpressionAction action = diagnosticData.getFirst();
                 int blockCount = compiler.metadata().getBlockCount();
                 int stepDifference = originalSteps - newSteps;
-                int expectedStepDifference = (int) Math.round(blockCount * diagnosticData.getFirst().rawBenefit());
+                int expectedStepDifference = action.originalSteps() - action.executionSteps();
                 if (stepDifference != expectedStepDifference) {
                     progress.reportError(new ErrorResult(testCaseId,
                             compiler.compilerProfile(), "", compiler.getExecutionException(),
@@ -83,7 +85,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 }
 
                 int sizeDifference = newSize - originalSize;
-                int expectedSizeDifference = diagnosticData.getFirst().cost();
+                int expectedSizeDifference = action.cost();
                 if (sizeDifference != expectedSizeDifference) {
                     progress.reportError(new ErrorResult(testCaseId,
                             compiler.compilerProfile(), "", compiler.getExecutionException(),

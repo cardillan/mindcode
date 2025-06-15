@@ -4,6 +4,7 @@
 #set single-step-elimination = none;
 #set jump-straightening = none;
 #set jump-threading = none;
+//#set debug-output = true;
 
 def identifyBlock(block)
     case block

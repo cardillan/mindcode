@@ -571,6 +571,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         diagnosticData.computeIfAbsent(data.getClass(), k -> new ArrayList<>()).add(data);
     }
 
+    public <T> void addDiagnosticData(Class<T> dataClass, List<T> data) {
+        diagnosticData.computeIfAbsent(dataClass, k -> new ArrayList<>()).addAll(data);
+    }
+
     @SuppressWarnings("unchecked")
     public <T> List<T> getDiagnosticData(Class<T> type) {
         return (List<T>) diagnosticData.getOrDefault(type, List.of());

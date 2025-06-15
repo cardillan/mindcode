@@ -8,5 +8,6 @@ import java.util.List;
 @NullMarked
 public interface OptimizerContext extends CompilerContext {
     void addDiagnosticData(Object data);
+    <T> void addDiagnosticData(Class<T> dataClass, List<T> data);
     <T> List<T> getDiagnosticData(Class<T> type);
 }

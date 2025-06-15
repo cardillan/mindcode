@@ -21,6 +21,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.CollectionUtils;
 import info.teksol.mc.util.TraceFile;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -123,6 +124,10 @@ class OptimizationContext {
 
     public void addDiagnosticData(Object data) {
         optimizerContext.addDiagnosticData(data);
+    }
+
+    public <T> void addDiagnosticData(Class<T> dataClass, List<T> data) {
+        optimizerContext.addDiagnosticData(dataClass, data);
     }
 
     List<LogicInstruction> getProgram() {
@@ -1411,8 +1416,8 @@ class OptimizationContext {
     }
 
 
-    private <T> List<T> forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
-        List<T> result = new ArrayList<>();
+    private <T> List<@NotNull T> forEachContext(AstContext astContext, Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
+        List<@NotNull T> result = new ArrayList<>();
         forEachContext(astContext, matcher, action, result);
         return List.copyOf(result);
     }

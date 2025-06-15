@@ -46,16 +46,13 @@ public abstract class CaseSwitcherProcessorTestBase extends AbstractProcessorTes
 
     private String decorateCode(String fileName, int codeSize) throws IOException {
         return (codeSize == 0
-                ? "#set case-switching = none;"
+                ? "#set case-switching = none;\n"
                 : "#set instruction-limit = " + codeSize + ";\n"
         ) + readFile(fileName);
     }
 
     private String getTestName(String fileName, int codeSize) {
-        return fileName
-                .replace(".mnd", "")
-                .replace("case-switching-", "Case switcher ")
-                + String.format(" (limit %4d)", codeSize);
+        return fileName.replace(".mnd", String.format(" (limit %4d)", codeSize));
     }
 
     private IntStream codeSizes(String fileName) {

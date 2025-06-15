@@ -232,22 +232,27 @@ public class CaseSwitcher extends BaseOptimizer {
         debugOutput("%nCase switching optimization: %,d distinct configurations generated.%n", actions.size());
 
         if (!actions.isEmpty()) {
+            List<ConvertCaseExpressionAction> selected = new ArrayList<>();
             if (caseConfiguration > 0) {
-                actions.stream().filter(a -> a.id == caseConfiguration).forEach(result::add);
-                if (!result.isEmpty()) return;
+                actions.stream().filter(a -> a.id == caseConfiguration).forEach(selected::add);
             }
 
-            // Comparing by cost (ascending) then by benefit (descending)
-            actions.sort(Comparator.comparing(OptimizationAction::cost).thenComparing(Comparator.comparing(OptimizationAction::benefit).reversed()));
-            ConvertCaseExpressionAction last = null;
-            for (ConvertCaseExpressionAction action : actions) {
-                // This action has a higher or equal cost to the last.
-                // It needs to give a better benefit to be considered.
-                if (last == null || action.benefit() > last.benefit()) {
-                    result.add(action);
-                    last = action;
+            if (selected.isEmpty()) {
+                // Comparing by cost (ascending) then by benefit (descending)
+                actions.sort(Comparator.comparing(OptimizationAction::cost).thenComparing(Comparator.comparing(OptimizationAction::benefit).reversed()));
+                ConvertCaseExpressionAction last = null;
+                for (ConvertCaseExpressionAction action : actions) {
+                    // This action has a higher or equal cost to the last.
+                    // It needs to give a better benefit to be considered.
+                    if (last == null || action.benefit() > last.benefit()) {
+                        selected.add(action);
+                        last = action;
+                    }
                 }
             }
+
+            result.addAll(selected);
+            optimizationContext.addDiagnosticData(ConvertCaseExpressionAction.class, selected);
         }
     }
 
@@ -363,9 +368,12 @@ public class CaseSwitcher extends BaseOptimizer {
         private final int id = ++actionCounter;
         private final AstContext astContext;
         private final int group = groupCount;
+        private final int originalCost;
         private int cost;
-        private double rawBenefit;
+        private int originalSteps;
+        private int executionSteps;
         private double benefit;
+        private double rawBenefit;
         private final LogicVariable variable;
         private final Targets targets;
         private final List<Segment> segments;
@@ -373,11 +381,13 @@ public class CaseSwitcher extends BaseOptimizer {
         private final boolean removeRangeCheck;
         private final boolean symbolic = getProfile().isSymbolicLabels();
         private final String padding;
+        private boolean applied;
 
-        private ConvertCaseExpressionAction(AstContext astContext, int jumps, int valueSteps, LogicVariable variable,
+        private ConvertCaseExpressionAction(AstContext astContext, int originalCost, int valueSteps, LogicVariable variable,
                 Targets targets, List<Segment> segments, ContentType contentType, boolean removeRangeCheck,
                 boolean lowPadded, boolean highPadded) {
             this.astContext = astContext;
+            this.originalCost = originalCost;
             this.variable = variable;
             this.targets = targets;
             this.segments = segments;
@@ -393,9 +403,9 @@ public class CaseSwitcher extends BaseOptimizer {
             debugOutput("%n%n*** %s ***%n", this);
 
             if (removeRangeCheck) {
-                computeCostAndBenefitNoRangeCheck(jumps, valueSteps);
+                computeCostAndBenefitNoRangeCheck(valueSteps);
             } else {
-                computeCostAndBenefit(jumps, valueSteps);
+                computeCostAndBenefit(valueSteps);
             }
         }
 
@@ -411,6 +421,10 @@ public class CaseSwitcher extends BaseOptimizer {
 
         @Override
         public int cost() {
+            return cost - originalCost;
+        }
+
+        public int rawCost() {
             return cost;
         }
 
@@ -421,6 +435,18 @@ public class CaseSwitcher extends BaseOptimizer {
 
         public double rawBenefit() {
             return rawBenefit;
+        }
+
+        public int originalSteps() {
+            return originalSteps;
+        }
+
+        public int executionSteps() {
+            return executionSteps;
+        }
+
+        public boolean applied() {
+            return applied;
         }
 
         @Override
@@ -441,18 +467,19 @@ public class CaseSwitcher extends BaseOptimizer {
                     " (" + strId + "segments: " + numSegments + (padding.isEmpty() ? "" : ", " + padding) + ")";
         }
 
-        private void computeCostAndBenefitNoRangeCheck(int originalJumps, int originalValueSteps) {
+        private void computeCostAndBenefitNoRangeCheck(int originalValueSteps) {
             int min = targets.firstKey();
             int max = targets.lastKey();
 
             int symbolicCost = symbolic && min != 0 ? 1 : 0;                // Cost of computing offset
             int contentCost = logicConversion ? 1 : 0;                      // Cost of converting type to logic ID
             int jumpTableCost = (max - min + 1) + 1;                        // Table size plus initial jump
-            cost = jumpTableCost + symbolicCost + contentCost - originalJumps;
+            cost = jumpTableCost + symbolicCost + contentCost;
 
-            int executionSteps = 2 + symbolicCost + contentCost;            // 1x multiJump, 1x jump table, additional costs
-            rawBenefit = (double) originalValueSteps / targets.getTotalSize() - executionSteps;
+            int averageSteps = 2 + symbolicCost + contentCost;            // 1x multiJump, 1x jump table, additional costs
+            rawBenefit = (double) originalValueSteps / targets.getTotalSize() - averageSteps;
             benefit = rawBenefit * astContext.totalWeight();
+            executionSteps = averageSteps * targets.size();
         }
 
         private boolean considerElse() {
@@ -463,14 +490,14 @@ public class CaseSwitcher extends BaseOptimizer {
         int targetSteps = 0;
         int elseSteps = 0;
 
-        private void computeCostAndBenefit(int originalJumps, int originalValueSteps) {
+        private void computeCostAndBenefit(int originalValueSteps) {
 //            if (caseConfiguration == actionCounter) {
 //                System.out.print(""); // For breakpoint
 //            }
 
             // One time costs
             int contentCost = logicConversion ? 1 : 0;          // Cost of converting type to logic ID
-            cost = contentCost - originalJumps;
+            cost = contentCost;
             targetSteps = contentCost * targets.size();
             elseSteps = contentCost * targets.getElseValues();
 
@@ -498,22 +525,25 @@ public class CaseSwitcher extends BaseOptimizer {
             segments.forEach(this::computeSegmentCostAndBenefit);
 
             if (considerElse()) {
-                int originalSteps = originalValueSteps + targets.getElseValues() * originalJumps;
+                originalSteps = originalValueSteps + targets.getElseValues() * originalCost;
 
                 debugOutput("Original steps: %d, new steps: %d (target: %d, else: %d; bisection: %s)",
                         originalSteps, targetSteps + elseSteps, targetSteps, elseSteps, bisectionSteps);
 
                 rawBenefit = (double) (originalSteps - targetSteps - elseSteps) / targets.getTotalSize();
+                executionSteps = targetSteps + elseSteps;
             } else {
+                originalSteps = originalValueSteps;
                 // We disregard else steps in both computations
-                debugOutput("Original steps: %d, new steps: %d (target: %d, disregarding else; bisection: %d)", originalValueSteps,
+                debugOutput("Original steps: %d, new steps: %d (target: %d, disregarding else; bisection: %d)", originalSteps,
                         targetSteps, targetSteps, bisectionSteps);
 
                 rawBenefit = (double) (originalValueSteps - targetSteps) / targets.size();
+                executionSteps = targetSteps;
             }
             benefit = rawBenefit * astContext.totalWeight();
 
-            debugOutput("Original size: %d, new size: %d, cost: %d", originalJumps, cost + originalJumps, cost);
+            debugOutput("Original size: %d, new size: %d, cost: %d", originalCost, cost, cost - originalCost);
             if (!padding.isEmpty()) debugOutput("*** " + padding.toUpperCase() + " ***");
             debugOutput("");
         }
@@ -914,7 +944,7 @@ public class CaseSwitcher extends BaseOptimizer {
             }
 
             count++;
-            optimizationContext.addDiagnosticData(ConvertCaseExpressionAction.this);
+            applied = true;
             return OptimizationResult.REALIZED;
         }
     }
