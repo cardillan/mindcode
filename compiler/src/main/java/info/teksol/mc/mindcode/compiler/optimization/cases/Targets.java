@@ -13,10 +13,14 @@ public class Targets {
     private final boolean hasElseBranch;
     private final Set<LogicLabel> labels = new HashSet<>();
     private final NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
+    private boolean hasNullKey;
+    private boolean hasZeroKey;
     public @Nullable LogicLabel nullTarget;        // Handles null only
     public @Nullable LogicLabel elseTarget;        // Handles else only
     public @Nullable LogicLabel nullOrElseTarget;  // Handles else or null
 
+    /// For a given key, contains the number of targets with values less than the key
+    private final NavigableMap<Integer, Integer> targetCount = new TreeMap<>();
     private int totalSize;
     private int elseValues;
 
@@ -28,6 +32,12 @@ public class Targets {
     }
 
     public void computeElseValues(ContentType contentType, MindustryMetadata metadata, boolean targetSpecificOptimization) {
+        int count = 0;
+        for (int key : targets.keySet()) {
+            targetCount.put(key, count++);
+        }
+        targetCount.put(Integer.MAX_VALUE, count);
+
         totalSize = computeTotalSize(contentType, metadata);
         elseValues = Math.max(totalSize - targets.size(), 0);
 
@@ -72,15 +82,15 @@ public class Targets {
     }
 
     public boolean hasZeroKey() {
-        return targets.containsKey(0);
+        return hasZeroKey;
     }
 
     public boolean hasNullKey() {
-        return nullTarget != null;
+        return hasNullKey;
     }
 
     public boolean hasNullOrZeroKey() {
-        return nullTarget != null || targets.containsKey(0);
+        return hasNullKey || hasZeroKey;
     }
 
     public @Nullable LogicLabel get(Integer key) {
@@ -95,13 +105,26 @@ public class Targets {
         return targets.getOrDefault(key, defaultValue);
     }
 
+    /// Returns the number of active targets contained in the given segment
+    public int targetCount(Segment segment) {
+        return targetCount(segment.from(), segment.to());
+    }
+
+    public int targetCount(int from, int to) {
+        int fromCount = targetCount.ceilingEntry(from).getValue();
+        int toCount = targetCount.ceilingEntry(to).getValue();
+        return toCount - fromCount;
+    }
+
     public @Nullable LogicLabel put(@Nullable Integer key, LogicLabel value) {
         labels.add(value);
         if (key == null) {
             LogicLabel previous = nullTarget;
             nullTarget = value;
+            hasNullKey = true;
             return previous;
         } else {
+            if (key == 0) hasZeroKey = true;
             return targets.put(key, value);
         }
     }

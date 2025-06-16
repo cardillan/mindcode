@@ -1,0 +1,40 @@
+#set target = 8;
+#set target-optimization = specific;
+#set err-invalid-content = false;
+#set single-step-elimination = none;
+#set jump-straightening = none;
+#set jump-threading = none;
+#set loop-unrolling = none;
+
+def identifyBlock(block)
+    case block
+        when @kiln                  then "A";
+        when @plastanium-compressor then "B";
+        when @phase-weaver          then "C";
+        when @cryofluid-mixer       then "D";
+        when @pyratite-mixer        then "E";
+        when @blast-mixer           then "F";
+        when @melter                then "G";
+        when @separator             then "H";
+        when @disassembler          then "I";
+        when @spore-press           then "J";
+        when @door, @door-large     then "K";
+        when @disperse              then "L";
+        when @unit-repair-tower     then "M";
+        when @diffuse               then "N";
+        when @prime-refabricator    then "O";
+        when @tank-refabricator     then "P";
+        when @mech-refabricator     then "Q";
+        when @ship-refabricator     then "R";
+        when @slag-heater           then "S";
+        when @lustre                then "T";
+        when @scathe                then "U";
+    end;
+end;
+
+for block in @kiln, @plastanium-compressor, @phase-weaver, @cryofluid-mixer, @pyratite-mixer, @blast-mixer,
+    @melter, @separator, @disassembler, @spore-press, @door,@door-large, @disperse, @unit-repair-tower, @diffuse,
+    @prime-refabricator, @tank-refabricator, @mech-refabricator, @ship-refabricator, @slag-heater, @lustre, @scathe
+do
+    print(identifyBlock(block));
+end;

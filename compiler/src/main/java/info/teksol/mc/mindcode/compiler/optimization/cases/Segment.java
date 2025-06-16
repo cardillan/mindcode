@@ -45,6 +45,8 @@ public final class Segment implements Comparable<Segment> {
     }
 
     public static Segment fromPartitions(SegmentType type, List<Partition> partitions) {
+        // List sizes 1 to 3 handled separately to avoid costly computation of majority labels
+        // in cases where it can be done cheaply.
         if (partitions.size() == 1) {
             Partition partition = partitions.getFirst();
             return new Segment(type, partition.from(), partition.to(), partition.label(), partition.size());

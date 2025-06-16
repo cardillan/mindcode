@@ -201,13 +201,15 @@ public class CaseSwitcher extends BaseOptimizer {
             }
         }
 
-        int valueSteps = jumps * values - savedSteps;
-
         // Unsupported case expressions: no input variable, no branches, or null and integers
         if (variable == null || analyzer.contentType == null || targets.isEmpty()
                 || analyzer.hasNull && analyzer.contentType == ContentType.UNKNOWN) return;
 
         targets.computeElseValues(analyzer.contentType, metadata, getProfile().isTargetOptimization());
+
+        int originalCost = jumps;
+        int originalSteps = jumps * values - savedSteps
+                + (targets.hasElseBranch() ? targets.getElseValues() * originalCost : 0);
 
         SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(targets,
                 analyzer.contentType != ContentType.UNKNOWN, getProfile().getCaseOptimizationStrength());
@@ -223,9 +225,13 @@ public class CaseSwitcher extends BaseOptimizer {
 
         optimizationContext.addDiagnosticData(new CaseSwitcherConfigurations(context.sourcePosition(), configurations.size()));
 
+        ConvertCaseActionParameters param = new ConvertCaseActionParameters(groupCount, context, variable, targets,
+                originalCost, originalSteps, analyzer.isMindustryContent(), removeRangeCheck,
+                getProfile().isSymbolicLabels(), targets.hasElseBranch() && targets.getElseValues() > 0);
+
         List<ConvertCaseExpressionAction> actions = new ArrayList<>();
         for (SegmentConfiguration segmentConfiguration : configurations) {
-            createOptimizationActions(actions, context, jumps, valueSteps, variable, targets, analyzer,segmentConfiguration, removeRangeCheck);
+            createOptimizationActions(param, actions, segmentConfiguration);
         }
 
         actionCounter = 0;
@@ -256,36 +262,30 @@ public class CaseSwitcher extends BaseOptimizer {
         }
     }
 
-    private void createOptimizationActions(List<ConvertCaseExpressionAction> actions, AstContext astContext,
-            int jumps, int valueSteps, LogicVariable variable, Targets targets, WhenValueAnalyzer analyzer,
-            SegmentConfiguration segmentConfiguration, boolean removeRangeCheck) {
-        ContentType contentType = analyzer.getContentType();
-        List<Segment> segments = segmentConfiguration.createSegments(removeRangeCheck, analyzer.isMindustryContent(), targets);
+    private void createOptimizationActions(ConvertCaseActionParameters param, List<ConvertCaseExpressionAction> actions,
+            SegmentConfiguration segmentConfiguration) {
+        List<Segment> segments = segmentConfiguration.createSegments(param.removeRangeCheck, param.mindustryContent, param.targets);
 
-        actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
-                segments, contentType, removeRangeCheck, false, false));
+        actions.add(new ConvertCaseExpressionAction(param, segments, ""));
 
         int lowPadIndex = findLowPadSegment(segments);
-        int highPadIndex = findHighPadSegment(targets, contentType, segments);
+        int highPadIndex = findHighPadSegment(param, segments);
 
         if (lowPadIndex >= 0) {
-            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
-                    padLow(segments, contentType, lowPadIndex), contentType, removeRangeCheck, true, false));
+            actions.add(new ConvertCaseExpressionAction(param, padLow(segments, param, lowPadIndex), "padded low"));
         }
 
         if (highPadIndex >= 0) {
-            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
-                    padHigh(segments, targets, highPadIndex), contentType, removeRangeCheck, false, true));
+            actions.add(new ConvertCaseExpressionAction(param, padHigh(segments, param, highPadIndex), "padded high"));
         }
 
         if (lowPadIndex >= 0 && highPadIndex >= 0) {
-            actions.add(new ConvertCaseExpressionAction(astContext, jumps, valueSteps, variable, targets,
-                    padLow(padHigh(segments, targets, highPadIndex), contentType, lowPadIndex),
-                    contentType, removeRangeCheck, true, true));
+            actions.add(new ConvertCaseExpressionAction(param, padLow(padHigh(segments, param, highPadIndex), param, lowPadIndex),
+                    "padded both"));
         }
     }
 
-    private List<Segment> padLow(List<Segment> segments, ContentType contentType, int index) {
+    private List<Segment> padLow(List<Segment> segments, ConvertCaseActionParameters parameters, int index) {
         if (index == 0) {
             return List.of(segments.getFirst().limitLow(0));
         } else {
@@ -293,7 +293,14 @@ public class CaseSwitcher extends BaseOptimizer {
             Segment prev = newSegments.get(index - 1);
             Segment curr = newSegments.get(index);
 
-            if (contentType == ContentType.UNKNOWN) {
+            if (parameters.mindustryContent) {
+                if (index != 1 || prev.from() != 0) throw new MindcodeInternalError("Mindustry content not starting at index 0");
+                newSegments.removeFirst();
+                newSegments.set(0, curr.limitLow(0));
+                if (prev.handleNulls()) {
+                    newSegments.getFirst().setHandleNulls();
+                }
+            } else {
                 if (prev.from() < 0) {
                     newSegments.set(index - 1, prev.limitHigh(0));
                 } else {
@@ -303,23 +310,16 @@ public class CaseSwitcher extends BaseOptimizer {
                 if (prev.handleNulls()) {
                     newSegments.get(index).setHandleNulls();
                 }
-            } else {
-                if (index != 1 || prev.from() != 0) throw new MindcodeInternalError("Mindustry content not starting at index 0");
-                newSegments.removeFirst();
-                newSegments.set(0, curr.limitLow(0));
-                if (prev.handleNulls()) {
-                    newSegments.getFirst().setHandleNulls();
-                }
             }
 
             return newSegments;
         }
     }
 
-    private List<Segment> padHigh(List<Segment> segments, Targets targets, int index) {
+    private List<Segment> padHigh(List<Segment> segments, ConvertCaseActionParameters parameters, int index) {
         List<Segment> newSegments = new ArrayList<>(segments);
         Segment curr = newSegments.get(index);
-        newSegments.set(index, curr.limitHigh(targets.getTotalSize()));
+        newSegments.set(index, curr.limitHigh(parameters.targets.getTotalSize()));
         if (index < segments.size() - 1) {
             if (index != segments.size() - 2) throw new MindcodeInternalError("Pad high segment not the last one");
             newSegments.removeLast();
@@ -348,15 +348,15 @@ public class CaseSwitcher extends BaseOptimizer {
         return -1;
     }
 
-    private int findHighPadSegment(Targets targets, ContentType contentType, List<Segment> segments) {
-        // Only high pad Mindustry content when target optimization is set
-        // When there is just one segment, it is because range checking is off, in which case padding high makes no sense
-        if (contentType == ContentType.UNKNOWN || !getProfile().isTargetOptimization() || segments.size() < 2) return -1;
+    private int findHighPadSegment(ConvertCaseActionParameters parameters, List<Segment> segments) {
+        // Only high pad Mindustry content when target optimization is set.
+        // When range checking is off, padding high makes no sense.
+        if (!parameters.mindustryContent || !getProfile().isTargetOptimization() || parameters.removeRangeCheck) return -1;
 
         // It can only be the very last segment
         int lastPossibleIndex = segments.getLast().type() == SegmentType.JUMP_TABLE ? segments.size() - 1 : segments.size() - 2;
         Segment segment = segments.get(lastPossibleIndex);
-        if (segment.to() <= targets.getTotalSize() && segment.type() == SegmentType.JUMP_TABLE
+        if (segment.to() <= parameters.targets.getTotalSize() && segment.type() == SegmentType.JUMP_TABLE
                 && (segments.getLast() == segment || segments.getLast().empty())) {
             return lastPossibleIndex;
         }
@@ -364,50 +364,41 @@ public class CaseSwitcher extends BaseOptimizer {
         return -1;
     }
 
+    private record ConvertCaseActionParameters(
+            int group,
+            AstContext context,
+            LogicVariable variable,
+            Targets targets,
+            int originalCost,
+            int originalSteps,
+            boolean mindustryContent,
+            boolean removeRangeCheck,
+            boolean symbolic,
+            boolean considerElse) {
+    }
+
     public class ConvertCaseExpressionAction implements OptimizationAction {
         private final int id = ++actionCounter;
-        private final AstContext astContext;
-        private final int group = groupCount;
-        private final int originalCost;
+        private final ConvertCaseActionParameters param;
+        private final List<Segment> segments;
+        private final String padding;
         private int cost;
-        private int originalSteps;
         private int executionSteps;
         private double benefit;
         private double rawBenefit;
-        private final LogicVariable variable;
-        private final Targets targets;
-        private final List<Segment> segments;
-        private final boolean logicConversion;
-        private final boolean removeRangeCheck;
-        private final boolean symbolic = getProfile().isSymbolicLabels();
-        private final boolean considerElse;
-        private final String padding;
         private boolean applied;
 
-        private ConvertCaseExpressionAction(AstContext astContext, int originalCost, int valueSteps, LogicVariable variable,
-                Targets targets, List<Segment> segments, ContentType contentType, boolean removeRangeCheck,
-                boolean lowPadded, boolean highPadded) {
-            this.astContext = astContext;
-            this.originalCost = originalCost;
-            this.variable = variable;
-            this.targets = targets;
+        private ConvertCaseExpressionAction(ConvertCaseActionParameters param, List<Segment> segments, String padding) {
+            this.param = param;
             this.segments = segments;
-            this.logicConversion = contentType != ContentType.UNKNOWN;
-            this.removeRangeCheck = removeRangeCheck;
-            this.considerElse = targets.hasElseBranch() && targets.getElseValues() > 0;
-            this.padding = switch ((lowPadded ? 1 : 0) + (highPadded ? 2 : 0)) {
-                case 1 -> "padded low";
-                case 2 -> "padded high";
-                case 3 -> "padded both";
-                default -> "";
-            };
+            this.padding = padding;
 
             debugOutput("%n%n*** %s ***%n", this);
 
-            if (removeRangeCheck) {
-                computeCostAndBenefitNoRangeCheck(valueSteps);
+            if (param.removeRangeCheck) {
+                computeCostAndBenefitNoRangeCheck();
             } else {
-                computeCostAndBenefit(valueSteps);
+                computeCostAndBenefit();
             }
         }
 
@@ -418,12 +409,12 @@ public class CaseSwitcher extends BaseOptimizer {
 
         @Override
         public AstContext astContext() {
-            return astContext;
+            return param.context;
         }
 
         @Override
         public int cost() {
-            return cost - originalCost;
+            return cost - param.originalCost;
         }
 
         public int rawCost() {
@@ -440,7 +431,7 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         public int originalSteps() {
-            return originalSteps;
+            return param.originalSteps;
         }
 
         public int executionSteps() {
@@ -458,58 +449,58 @@ public class CaseSwitcher extends BaseOptimizer {
 
         @Override
         public @Nullable String getGroup() {
-            return "CaseSwitcher" + group;
+            return "CaseSwitcher" + param.group;
         }
 
         @Override
         public String toString() {
             int numSegments = segments.size() - (segments.getFirst().empty() ? 1 : 0) - (segments.getLast().empty() ? 1 : 0);
             String strId = CaseSwitcher.super.isDebugOutput() ? "#" + id + ", " : "";
-            return "Convert case at " + Objects.requireNonNull(astContext.node()).sourcePosition().formatForLog() +
+            return "Convert case at " + Objects.requireNonNull(param.context.node()).sourcePosition().formatForLog() +
                     " (" + strId + "segments: " + numSegments + (padding.isEmpty() ? "" : ", " + padding) + ")";
         }
 
-        private void computeCostAndBenefitNoRangeCheck(int originalValueSteps) {
-            int min = targets.firstKey();
-            int max = targets.lastKey();
+        private void computeCostAndBenefitNoRangeCheck() {
+            int min = param.targets.firstKey();
+            int max = param.targets.lastKey();
 
-            int symbolicCost = symbolic && min != 0 ? 1 : 0;                // Cost of computing offset
-            int contentCost = logicConversion ? 1 : 0;                      // Cost of converting type to logic ID
+            int symbolicCost = param.symbolic && min != 0 ? 1 : 0;     // Cost of computing offset
+            int contentCost = param.mindustryContent ? 1 : 0;           // Cost of converting type to logic ID
             int jumpTableCost = (max - min + 1) + 1;                        // Table size plus initial jump
             cost = jumpTableCost + symbolicCost + contentCost;
 
             int averageSteps = 2 + symbolicCost + contentCost;            // 1x multiJump, 1x jump table, additional costs
-            rawBenefit = (double) originalValueSteps / targets.getTotalSize() - averageSteps;
-            benefit = rawBenefit * astContext.totalWeight();
-            executionSteps = averageSteps * targets.size();
+            rawBenefit = (double) param.originalSteps / param.targets.getTotalSize() - averageSteps;
+            benefit = rawBenefit * param.context.totalWeight();
+            executionSteps = averageSteps * param.targets.size();
         }
 
         // Per target, not totals
         int targetSteps = 0;
         int elseSteps = 0;
 
-        private void computeCostAndBenefit(int originalValueSteps) {
+        private void computeCostAndBenefit() {
 //            if (caseConfiguration == actionCounter) {
 //                System.out.print(""); // For breakpoint
 //            }
 
             // One time costs
-            int contentCost = logicConversion ? 1 : 0;          // Cost of converting type to logic ID
+            int contentCost = param.mindustryContent ? 1 : 0;   // Cost of converting type to logic ID
             cost = contentCost;
-            targetSteps = contentCost * targets.size();
-            elseSteps = contentCost * targets.getElseValues();
+            targetSteps = contentCost * param.targets.size();
+            elseSteps = contentCost * param.targets.getElseValues();
 
             debugOutput(this);
-            debugOutput("Case expression initialization: instructions: " + contentCost
-                    + ", average steps: " + contentCost + ", total steps: " + contentCost * targets.getTotalSize());
+            debugOutput("Case expression initialization: instructions: %d, average steps: %d, total steps: %d",
+                    contentCost, contentCost, contentCost * param.targets.getTotalSize());
 
             // Account for null handling: an instruction per zero value
             // Note: null handling when zero is not there is accounted for in individual segments
-            if (logicConversion && targets.hasNullOrZeroKey()) {
-                if (targets.hasZeroKey()) {
+            if (param.mindustryContent && param.targets.hasNullOrZeroKey()) {
+                if (param.targets.hasZeroKey()) {
                     // There's a handler on the `0` branch
-                    double nullHandling = 1.0 / targets.getTotalSize();
-                    debugOutput("Null handling: instructions: 1, average steps: %g, total steps: 1", nullHandling);
+                    double nullHandling = 1.0 / param.targets.getTotalSize();
+                    if (isDebugOutput()) debugOutput("Null handling: instructions: 1, average steps: %g, total steps: 1", nullHandling);
                     targetSteps++;
                 } else {
                     // There's a handler on the else branch
@@ -522,27 +513,24 @@ public class CaseSwitcher extends BaseOptimizer {
 
             segments.forEach(this::computeSegmentCostAndBenefit);
 
-            if (considerElse) {
-                originalSteps = originalValueSteps + targets.getElseValues() * originalCost;
-
+            if (param.considerElse) {
                 debugOutput("Original steps: %d, new steps: %d (target: %d, else: %d; bisection: %s)",
-                        originalSteps, targetSteps + elseSteps, targetSteps, elseSteps, bisectionSteps);
+                        param.originalSteps, targetSteps + elseSteps, targetSteps, elseSteps, bisectionSteps);
 
-                rawBenefit = (double) (originalSteps - targetSteps - elseSteps) / targets.getTotalSize();
+                rawBenefit = (double) (param.originalSteps - targetSteps - elseSteps) / param.targets.getTotalSize();
                 executionSteps = targetSteps + elseSteps;
             } else {
-                originalSteps = originalValueSteps;
                 // We disregard else steps in both computations
-                debugOutput("Original steps: %d, new steps: %d (target: %d, disregarding else; bisection: %d)", originalSteps,
+                debugOutput("Original steps: %d, new steps: %d (target: %d, disregarding else; bisection: %d)", param.originalSteps,
                         targetSteps, targetSteps, bisectionSteps);
 
-                rawBenefit = (double) (originalValueSteps - targetSteps) / targets.size();
+                rawBenefit = (double) (param.originalSteps - targetSteps) / param.targets.size();
                 executionSteps = targetSteps;
             }
-            benefit = rawBenefit * astContext.totalWeight();
+            benefit = rawBenefit * param.context.totalWeight();
 
-            debugOutput("Original size: %d, new size: %d, cost: %d", originalCost, cost, cost - originalCost);
-            if (!padding.isEmpty()) debugOutput("*** " + padding.toUpperCase() + " ***");
+            debugOutput("Original size: %d, new size: %d, cost: %d", param.originalCost, cost, cost - param.originalCost);
+            if (isDebugOutput() && !padding.isEmpty()) debugOutput("*** " + padding.toUpperCase() + " ***");
             debugOutput("");
         }
 
@@ -555,11 +543,8 @@ public class CaseSwitcher extends BaseOptimizer {
 //                System.out.print(""); // For breakpoint
 //            }
 
-            int allTargets = targets.size();
-            int activeTargets = 0;
-            for (int target : targets.keySet()) {
-                if (segment.contains(target)) activeTargets++;
-            }
+            int allTargets = param.targets.size();
+            int activeTargets = param.targets.targetCount(segment);
 
             SegmentStats stats = switch (segment.type()) {
                 case SINGLE -> computeSingleSegment(segment, activeTargets);
@@ -578,13 +563,19 @@ public class CaseSwitcher extends BaseOptimizer {
             elseSteps += stats.elseSteps + segment.depth() * stats.elseValues;
         }
 
-        // Note: this might need to be updated for integer case expressions,
-        // as those do not consider the `else` targets and need to compute segment weights differently
+        // TODO this might need to be updated for integer case expressions,
+        //      as those do not consider the `else` targets and may need to compute segment weights differently
+        //      Use Targets.targetCount(from, to), it's cheap
+        // Note: the problem is that for sparse integer case expressions, there will be segments created for
+        // values inside the case range that aren't valid targets. This significantly increases bisection costs
+        // compared to continuous case ranges, making pure bisectional solution unfeasible.
+        // We might need a separate option which would tell the case expression need not handle else values at all,
+        // including else values withing the case range.
         private int bisect(List<Segment> segments) {
             if (segments.size() <= 1) return -1;
 
-            int min = segments.getFirst().from() - (considerElse && segments.getFirst().size() == 0 ? 1 : 0);
-            int max = segments.getLast().to() + (considerElse && segments.getLast().size() == 0 ? 1 : 0);
+            int min = segments.getFirst().from() - (param.considerElse && segments.getFirst().size() == 0 ? 1 : 0);
+            int max = segments.getLast().to() + (param.considerElse && segments.getLast().size() == 0 ? 1 : 0);
             int middle = min + (max - min) / 2;
 
             int distance = Integer.MAX_VALUE;
@@ -602,7 +593,7 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         private SegmentStats computeSingleSegment(Segment segment, int activeTargets) {
-            boolean handleNull = logicConversion && segment.from() == 0;
+            boolean handleNull = param.mindustryContent && segment.from() == 0;
 
             int size = segment.inline() ? 0 : 1;
             int steps = segment.inline() ? 0 : segment.size();
@@ -616,9 +607,9 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         private LogicLabel findSingleSegmentTarget(Segment segment, LogicLabel finalLabel) {
-            return segment.empty() ? segment.handleNulls() ? targets.getNullOrElseTarget() : finalLabel
-                    : segment.majorityLabel() == LogicLabel.INVALID ? targets.getExisting(0)
-                    : segment.majorityLabel();
+            return segment.empty()
+                    ? segment.handleNulls() ? param.targets.getNullOrElseTarget() : finalLabel
+                    : segment.majorityLabel() == LogicLabel.INVALID ? param.targets.getExisting(0) : segment.majorityLabel();
         }
 
         private void generateSingleSegment(Segment segment, LogicLabel finalLabel) {
@@ -661,7 +652,7 @@ public class CaseSwitcher extends BaseOptimizer {
                         elseValues * (activeTargets + 1) + nullHandling);
             } else {
                 // Majority branch is a when branch
-                int majorityTargets = (int) targets.entrySet().stream().filter(
+                int majorityTargets = (int) param.targets.entrySet().stream().filter(
                         e -> segment.contains(e.getKey()) && segment.majorityLabel().equals(e.getValue())).count();
                 int branchTargets = activeTargets - majorityTargets;
                 int elseTargets = segment.size() - activeTargets;
@@ -675,7 +666,7 @@ public class CaseSwitcher extends BaseOptimizer {
                 // values will see.
                 int size = 0;
                 for (int value = segment.to() - 1; value >= segment.from(); value--) {
-                    LogicLabel target = targets.get(value);
+                    LogicLabel target = param.targets.get(value);
                     if (target == null) {
                         // Here is a jump to an else branch. It adds a step and is counted.
                         size++;
@@ -712,30 +703,30 @@ public class CaseSwitcher extends BaseOptimizer {
 
             LogicLabel majorityTarget = majorityIsElse ? finalLabel : segment.majorityLabel();
             for (int value = segment.from(); value < segment.to(); value++) {
-                LogicLabel target = targets.getOrDefault(value, finalLabel);
-                LogicLabel updatedTarget = value == 0 && target == finalLabel ? targets.getNullOrElseTarget() : target;
+                LogicLabel target = param.targets.getOrDefault(value, finalLabel);
+                LogicLabel updatedTarget = value == 0 && target == finalLabel ? param.targets.getNullOrElseTarget() : target;
                 if (!majorityTarget.equals(target)) {
                     insertInstruction(createJump(newAstContext, target, Condition.EQUAL, caseVariable, LogicNumber.create(value)));
                 }
             }
 
             if (segment.handleNulls() && majorityIsElse) {
-                insertInstruction(createJumpUnconditional(newAstContext, targets.getNullOrElseTarget()));
+                insertInstruction(createJumpUnconditional(newAstContext, param.targets.getNullOrElseTarget()));
             } else {
                 insertInstruction(createJumpUnconditional(newAstContext, majorityTarget));
             }
         }
 
         private int maxSelectEntries(int from) {
-            return symbolic && from != 0 ? 3 : 2;
+            return param.symbolic && from != 0 ? 3 : 2;
         }
 
         private SegmentStats computeJumpTable(Segment segment, int activeTargets) {
             int minorityTargets = segment.size() - segment.majoritySize();
-            if (!removeRangeCheck && (minorityTargets <= maxSelectEntries(segment.from()))) {
+            if (!param.removeRangeCheck && (minorityTargets <= maxSelectEntries(segment.from()))) {
                 return computeMixedSegment(segment, activeTargets);
             } else {
-                int multiJump = symbolic && segment.from() != 0 ? 2 : 1;
+                int multiJump = param.symbolic && segment.from() != 0 ? 2 : 1;
                 int tableSize = segment.size();
                 int elseValues = tableSize - activeTargets;
                 int elseSteps = elseValues * (multiJump + 1);
@@ -757,7 +748,7 @@ public class CaseSwitcher extends BaseOptimizer {
         // Values greater than or equal to 'to' are sent to the next segment
         private void generateJumpTable(Segment segment, LogicLabel finalLabel) {
             int minorityTargets = segment.size() - segment.majoritySize();
-            if (!removeRangeCheck && (minorityTargets <= maxSelectEntries(segment.from()))) {
+            if (!param.removeRangeCheck && (minorityTargets <= maxSelectEntries(segment.from()))) {
                 generateMixedSegment(segment, finalLabel);
                 return;
             }
@@ -771,8 +762,8 @@ public class CaseSwitcher extends BaseOptimizer {
 
             for (int i = 0; i < labels.size(); i++) {
                 insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
-                LogicLabel target = targets.getOrDefault(segment.from() + i, finalLabel);
-                LogicLabel updatedTarget = segment.from() + i == 0 && target == finalLabel ? targets.getNullOrElseTarget() : target;
+                LogicLabel target = param.targets.getOrDefault(segment.from() + i, finalLabel);
+                LogicLabel updatedTarget = segment.from() + i == 0 && target == finalLabel ? param.targets.getNullOrElseTarget() : target;
                 insertInstruction(createJumpUnconditional(newAstContext, updatedTarget));
             }
         }
@@ -782,7 +773,7 @@ public class CaseSwitcher extends BaseOptimizer {
             if (bisection < 0) {
                 segments.forEach(segment -> {
                     segment.setBisectionSteps(depth, false);
-                    debugOutput("%s%s", " ".repeat(4 * depth), segment);
+                    if (isDebugOutput()) debugOutput("%s%s", " ".repeat(4 * depth), segment);
                 });
                 return 0;
             }
@@ -795,17 +786,17 @@ public class CaseSwitcher extends BaseOptimizer {
             int min = segments.getFirst().from();
             int max = segments.getLast().to();
             int steps = max - min;
-            debugOutput("%sBisection at %d (%d to %d)", " ".repeat(4 * depth), highSegments.getFirst().from(), min, max);
+            if (isDebugOutput()) debugOutput("%sBisection at %d (%d to %d)", " ".repeat(4 * depth), highSegments.getFirst().from(), min, max);
 
             int nextDepth = depth + 1;
 
             if (inlineSegment == InlineSegment.LOW) {
                 lowSegments.getFirst().setBisectionSteps(nextDepth, true);
-                debugOutput("%s    %s", " ".repeat(4 * depth), lowSegments.getFirst());
+                if (isDebugOutput()) debugOutput("%s    %s", " ".repeat(4 * depth), lowSegments.getFirst());
                 return steps + computeBisectionTable(highSegments, nextDepth);
             } else if (inlineSegment == InlineSegment.HIGH) {
                 highSegments.getFirst().setBisectionSteps(nextDepth, true);
-                debugOutput("%s    %s", " ".repeat(4 * depth), highSegments.getFirst());
+                if (isDebugOutput()) debugOutput("%s    %s", " ".repeat(4 * depth), highSegments.getFirst());
                 return steps + computeBisectionTable(lowSegments, nextDepth);
             } else {
                 return steps
@@ -845,7 +836,8 @@ public class CaseSwitcher extends BaseOptimizer {
                 }
             } else {
                 for (Segment segment : segments) {
-                    debugOutput("Building segment " + segment + ", size: " + segment.size() + ", targets: " + targets.subMap(segment.from(), segment.to()).size());
+                    debugOutput("Building segment %s, size: %d, targets: %d", segment, segment.size(),
+                            param.targets.subMap(segment.from(), segment.to()).size());
                     switch (segment.type()) {
                         case SINGLE -> generateSingleSegment(segment, finalLabel);
                         case MIXED -> generateMixedSegment(segment, finalLabel);
@@ -871,7 +863,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
         private int size(Segment segment) {
             // Empty segments have zero steps when `else` path is not considered
-            return segment.empty() && !considerElse ? 0 : segment.size();
+            return segment.empty() && !param.considerElse ? 0 : segment.size();
         }
 
         // Returns true if the segment can be handled by a simple jump right from the bisection table.
@@ -886,61 +878,59 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         private OptimizationResult convertCaseExpression(int costLimit) {
-            //System.out.println(id);
-
-            index = firstInstructionIndex(Objects.requireNonNull(astContext.findSubcontext(CONDITION)));
-            AstContext elseContext = astContext.findSubcontext(ELSE);
-            AstContext finalContext = elseContext != null ? elseContext : Objects.requireNonNull(astContext.lastChild());
+            index = firstInstructionIndex(Objects.requireNonNull(param.context.findSubcontext(CONDITION)));
+            AstContext elseContext = param.context.findSubcontext(ELSE);
+            AstContext finalContext = elseContext != null ? elseContext : Objects.requireNonNull(param.context.lastChild());
             LogicLabel finalLabel = obtainContextLabel(finalContext);
 
-            targets.elseTarget = finalLabel;
-            targets.nullOrElseTarget = finalLabel;
+            param.targets.elseTarget = finalLabel;
+            param.targets.nullOrElseTarget = finalLabel;
 
-            newAstContext = astContext.createSubcontext(FLOW_CONTROL, 1.0);
+            newAstContext = param.context.createSubcontext(FLOW_CONTROL, 1.0);
 
-            if (logicConversion) {
+            if (param.mindustryContent) {
                 caseVariable = instructionProcessor.nextTemp();
-                insertInstruction(createSensor(Objects.requireNonNull(astContext.parent()),
-                        caseVariable, variable, LogicBuiltIn.ID));
+                insertInstruction(createSensor(Objects.requireNonNull(param.context.parent()),
+                        caseVariable, param.variable, LogicBuiltIn.ID));
 
                 // We need to install a null check
-                LogicLabel zeroLabel = targets.get(0);
+                LogicLabel zeroLabel = param.targets.get(0);
                 if (zeroLabel == null) {
-                    if (targets.nullTarget != null) {
+                    if (param.targets.nullTarget != null) {
                         // There's an explicit null branch, and no `0` branch
                         // Install a null check on the else branch
                         int elseIndex = optimizationContext.getLabelInstructionIndex(finalLabel);
                         LogicInstruction elseLabelIx = instructionAt(elseIndex);
-                        targets.nullOrElseTarget = instructionProcessor.nextLabel();
+                        param.targets.nullOrElseTarget = instructionProcessor.nextLabel();
                         optimizationContext.insertInstruction(elseIndex++, createLabel(elseLabelIx.getAstContext(),
-                                targets.nullOrElseTarget));
+                                param.targets.nullOrElseTarget));
                         optimizationContext.insertInstruction(elseIndex, createJump(elseLabelIx.getAstContext(),
-                                targets.nullTarget, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
+                                param.targets.nullTarget, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
                     }
                 } else {
                     // There's a zero branch. Need to install the handler there
-                    if (targets.nullTarget == null) {
-                        targets.nullTarget = finalLabel;
+                    if (param.targets.nullTarget == null) {
+                        param.targets.nullTarget = finalLabel;
                     }
 
                     LogicLabel nullOrZeroTarget = instructionProcessor.nextLabel();
-                    targets.put(0, nullOrZeroTarget);
+                    param.targets.put(0, nullOrZeroTarget);
 
                     int zeroIndex = optimizationContext.getLabelInstructionIndex(zeroLabel);
                     LogicInstruction zeroLabelIx = instructionAt(zeroIndex);
                     optimizationContext.insertInstruction(zeroIndex++, createLabel(zeroLabelIx.getAstContext(),
                             nullOrZeroTarget));
                     optimizationContext.insertInstruction(zeroIndex, createJump(zeroLabelIx.getAstContext(),
-                            targets.nullTarget, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
+                            param.targets.nullTarget, Condition.STRICT_EQUAL, caseVariable, LogicNull.NULL));
                 }
             } else {
-                caseVariable = variable;
+                caseVariable = param.variable;
             }
 
             generateBisectionTable(segments, finalLabel);
 
             // Remove all conditions
-            for (AstContext condition : astContext.findSubcontexts(CONDITION)) {
+            for (AstContext condition : param.context.findSubcontexts(CONDITION)) {
                 removeMatchingInstructions(ix -> ix.belongsTo(condition));
             }
 

@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `target-optimization` to be set to `specific`. 
   * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time.
   * When compressing jump tables, the optimizer also generates segment configuration for a full bisectional search. This may improve case expressions too small for a full jump table optimization.
+  * The performance of the Case Switching optimization (in terms of compilation time) has been significantly improved.  
 * It is now possible to turn off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) by setting the `case-optimization-strength` compiler option to `0`.
 
 ## 3.6.1 - 2025-06-06
