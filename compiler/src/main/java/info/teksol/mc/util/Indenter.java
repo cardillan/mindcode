@@ -8,7 +8,7 @@ import java.util.List;
 @NullMarked
 public class Indenter {
     private final String indent;
-    private final List<String> indents  = new ArrayList<>(List.of(""));
+    private final List<String> indents = new ArrayList<>(List.of(""));
 
     public Indenter(String indent) {
         this.indent = indent;

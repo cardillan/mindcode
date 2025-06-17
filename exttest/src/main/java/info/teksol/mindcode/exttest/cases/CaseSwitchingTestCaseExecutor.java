@@ -98,6 +98,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 if (stepDifference == expectedStepDifference && sizeDifference == expectedSizeDifference) {
                     progress.reportSuccess();
                 }
+//                progress.reportSuccess();
             }
         } catch (Exception e) {
             progress.reportError(new ErrorResult(testCaseId,

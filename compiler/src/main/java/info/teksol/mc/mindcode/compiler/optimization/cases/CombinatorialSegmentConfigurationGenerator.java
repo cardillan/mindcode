@@ -41,10 +41,8 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
             configurationCount++;
             createSegmentConfigurations(configurations, partitions, List.of(), 0);
 
-            // Full bisectional search
-            List<Segment> allSegments = partitions.stream()
-                    .map(p -> new Segment(SegmentType.SINGLE, p.from(), p.to(), p.label(), p.size()))
-                    .toList();
+            // Add configuration for full bisection search
+            List<Segment> allSegments = partitions.stream().map(Partition::toSegment).toList();
             configurations.add(new SegmentConfiguration(partitions, allSegments));
         }
 
@@ -63,8 +61,7 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
         List<Segment> selected = selections.stream()
                 .sorted(Comparator.comparingInt(PartitionSelection::size).reversed())
                 .limit(limit)
-                .map(PartitionSelection::partitions)
-                .map(p -> Segment.fromPartitions(p.size() == 1 ? SegmentType.SINGLE : SegmentType.MIXED, p))
+                .map(p -> Segment.fromPartitions(SegmentType.MIXED, p.partitions))
                 .toList();
 
         if (selected.isEmpty()) return;

@@ -4,13 +4,13 @@
     85 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (6 iterations).
     25 instructions eliminated by Jump Optimization (6 iterations).
-    32 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
+    31 instructions eliminated by Single Step Elimination (3 passes, 9 iterations).
      1 instructions eliminated by Expression Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (2 passes, 4 iterations).
      6 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
-    76 instructions added by Case Switching (5 iterations).
+    75 instructions added by Case Switching (5 iterations).
      1 case expressions converted to switched jumps Case Switching.
     11 instructions eliminated by Jump Straightening (6 iterations).
     11 instructions updated by JumpThreading.
@@ -19,10 +19,10 @@
    443 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 588):
-  o Convert case at line 419:9 (segments: 7)                     size    +2, benefit      125.0, efficiency     62.500
-  o Convert case at line 419:9 (segments: 4, padded low)         size   +41, benefit      187.5, efficiency      4.573
-  o Convert case at line 419:9 (segments: 2, padded low)         size   +59, benefit      375.0, efficiency      6.356
-  * Convert case at line 419:9 (segments: 1, padded low)         size   +76, benefit      937.5, efficiency     12.336 (+75 instructions)
+  o Convert case at line 419:9 (segments: 7)                     size    +0, benefit      125.0, efficiency   Infinity
+  o Convert case at line 419:9 (segments: 3, padded low)         size   +44, benefit      187.5, efficiency      4.261
+  o Convert case at line 419:9 (segments: 3, padded low)         size   +58, benefit      375.0, efficiency      6.466
+  * Convert case at line 419:9 (segments: 1, padded low)         size   +75, benefit     1000.0, efficiency     13.333 (+74 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-4 instructions):
  
@@ -1791,12 +1791,22 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    300 op add *tmp121 .REACTORS_ON *tmp119
    301 op min .REACTORS_ON *tmp121 :reactors
 
-Modifications by Convert case at line 419:9 (segments: 1, padded low) (+76 instructions):
+Modifications by Convert case at line 419:9 (segments: 1, padded low) (+75 instructions):
  
    462 label *label120
    463 getlink :block :n
    464 sensor *tmp204 :block @type
 -    * jump *label106 notEqual *tmp204 @impact-reactor
+-    * label *label107
+-    * op add :reactors :reactors 1
+-    * op lessThanEq :enabled :reactors .REACTORS_ON
+-    * control enabled :block :enabled
+-    * jump *label108 equal :enabled false
+-    * sensor *tmp210 :block @timescale
+-    * op add :boosts :boosts *tmp210
+-    * label *label108
+-    * label *label109
+-    * jump *label105 always
 +  465 sensor *tmp225 *tmp204 @id
 +  466 jump *label121 greaterThanEq *tmp225 83
 +  467 multijump *label122 *tmp225 0 (m:*label205)
@@ -1965,20 +1975,23 @@ Modifications by Convert case at line 419:9 (segments: 1, padded low) (+76 instr
 +  630 multilabel *label203 (m:*label205)
 +  631 jump *label121 always
 +  632 multilabel *label204 (m:*label205)
-+  633 jump *label107 always
-   634 label *label107
-   635 op add :reactors :reactors 1
-   636 op lessThanEq :enabled :reactors .REACTORS_ON
- 
-   642 label *label109
-   643 jump *label105 always
-   644 label *label106
++  633 label *label107
++  634 op add :reactors :reactors 1
++  635 op lessThanEq :enabled :reactors .REACTORS_ON
++  636 control enabled :block :enabled
++  637 jump *label206 equal :enabled false
++  638 sensor *tmp210 :block @timescale
++  639 op add :boosts :boosts *tmp210
++  640 label *label206
++  641 label *label207
++  642 jump *label105 always
+   643 label *label106
 -    * jump *label111 equal *tmp204 @overdrive-projector
 -    * jump *label110 notEqual *tmp204 @overdrive-dome
-   645 label *label111
-   646 control enabled :block .OVERDRIVE
-   647 jump *label105 always
-   648 label *label110
+   644 label *label111
+   645 control enabled :block .OVERDRIVE
+   646 jump *label105 always
+   647 label *label110
 -    * jump *label113 equal *tmp204 @conduit
 -    * jump *label113 equal *tmp204 @pulse-conduit
 -    * jump *label113 equal *tmp204 @plated-conduit
@@ -1986,13 +1999,13 @@ Modifications by Convert case at line 419:9 (segments: 1, padded low) (+76 instr
 -    * jump *label113 equal *tmp204 @titanium-conveyor
 -    * jump *label113 equal *tmp204 @plastanium-conveyor
 -    * jump *label112 notEqual *tmp204 @armored-conveyor
-   649 label *label113
-   650 control enabled :block :startup
-   651 label *label112
-+  652 label *label121
-   653 label *label105
-   654 label *label103
-   655 op add :n :n 1
+   648 label *label113
+   649 control enabled :block :startup
+   650 label *label112
++  651 label *label121
+   652 label *label105
+   653 label *label103
+   654 op add :n :n 1
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1 instructions):
  
@@ -2013,7 +2026,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
    462 getlink :block :n
    463 sensor *tmp204 :block @type
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-3 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-2 instructions):
  
     55 set .REASON "Reason unknown -- out of power?"
     56 jump *label14 notEqual .MODE 0
@@ -2030,14 +2043,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    296 label *label69
    297 op add *tmp121 .REACTORS_ON *tmp119
    298 op min .REACTORS_ON *tmp121 :reactors
- 
-   627 multilabel *label203 (m:*label205)
-   628 jump *label121 always
-   629 multilabel *label204 (m:*label205)
--    * jump *label107 always
-   630 label *label107
-   631 op add :reactors :reactors 1
-   632 op lessThanEq :enabled :reactors .REACTORS_ON
 
 Modifications by Iterated phase, If Expression Optimization, pass 2, iteration 1:
  
@@ -2311,8 +2316,8 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
  
    596 sensor *tmp210 :block @timescale
    597 op add :boosts :boosts *tmp210
-   598 label *label108
--    * label *label109
+   598 label *label206
+-    * label *label207
    599 jump *label105 always
 -    * label *label106
    600 label *label111
@@ -2423,11 +2428,11 @@ Modifications by Jumps phase, Jump Threading, pass 5, iteration 1:
    592 op add :reactors :reactors 1
    593 op lessThanEq :enabled :reactors .REACTORS_ON
    594 control enabled :block :enabled
--    * jump *label108 equal :enabled false
+-    * jump *label206 equal :enabled false
 +  595 jump *label105 equal :enabled false
    596 sensor *tmp210 :block @timescale
    597 op add :boosts :boosts *tmp210
-   598 label *label108
+   598 label *label206
  
    621 set .STARTUPS 0
    622 set .RESETS 0
@@ -2494,7 +2499,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 
    586 jump *label105 equal :enabled false
    587 sensor *tmp210 :block @timescale
    588 op add :boosts :boosts *tmp210
--    * label *label108
+-    * label *label206
    589 jump *label105 always
    590 label *label111
    591 control enabled :block .OVERDRIVE

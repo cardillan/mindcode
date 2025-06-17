@@ -11,7 +11,7 @@ import java.util.*;
 @NullMarked
 public class Targets {
     private final boolean hasElseBranch;
-    private final Set<LogicLabel> labels = new HashSet<>();
+    private final Set<LogicLabel> movableLabels = new HashSet<>();
     private final NavigableMap<Integer, LogicLabel> targets = new TreeMap<>();
     private boolean hasNullKey;
     private boolean hasZeroKey;
@@ -32,6 +32,7 @@ public class Targets {
     }
 
     public void computeElseValues(ContentType contentType, MindustryMetadata metadata, boolean targetSpecificOptimization) {
+        final LogicLabel label = LogicLabel.EMPTY;
         int count = 0;
         for (int key : targets.keySet()) {
             targetCount.put(key, count++);
@@ -41,15 +42,16 @@ public class Targets {
         totalSize = computeTotalSize(contentType, metadata);
         elseValues = Math.max(totalSize - targets.size(), 0);
 
+        int firstKey = targets.firstKey();
+        int lastKey = targets.lastKey() + 1;
         if (contentType == ContentType.UNKNOWN) {
-            leadingSegment = new Segment(SegmentType.SINGLE, targets.firstKey(), targets.firstKey(), LogicLabel.EMPTY, 0);
-            trailingSegment = new Segment(SegmentType.SINGLE, targets.lastKey() + 1, targets.lastKey() + 1, LogicLabel.EMPTY, 0);
+            leadingSegment = Segment.empty(firstKey, firstKey);
+            trailingSegment = Segment.empty(lastKey, lastKey);
         } else {
-            int lastKey = targets.lastKey() + 1;
-            boolean limitLow = targets.firstKey() > 0;
+            boolean limitLow = firstKey > 0;
             boolean limitHigh = !targetSpecificOptimization || (lastKey < totalSize);
-            leadingSegment = limitLow ? new Segment(SegmentType.SINGLE, 0, targets.firstKey(), LogicLabel.EMPTY, targets.firstKey()) : null;
-            trailingSegment = limitHigh ? new Segment(SegmentType.SINGLE, lastKey, totalSize, LogicLabel.EMPTY, totalSize - lastKey) : null;
+            leadingSegment = limitLow ? Segment.empty(0, firstKey) : null;
+            trailingSegment = limitHigh ? Segment.empty(lastKey, totalSize) : null;
         }
     }
 
@@ -62,10 +64,6 @@ public class Targets {
 
     public boolean hasElseBranch() {
         return hasElseBranch;
-    }
-
-    public int getTargetCount() {
-        return labels.size();
     }
 
     public int getTotalSize() {
@@ -117,7 +115,6 @@ public class Targets {
     }
 
     public @Nullable LogicLabel put(@Nullable Integer key, LogicLabel value) {
-        labels.add(value);
         if (key == null) {
             LogicLabel previous = nullTarget;
             nullTarget = value;
@@ -127,6 +124,14 @@ public class Targets {
             if (key == 0) hasZeroKey = true;
             return targets.put(key, value);
         }
+    }
+
+    public void addMovableLabel(LogicLabel label) {
+        movableLabels.add(label);
+    }
+
+    public boolean isMovableLabel(LogicLabel label) {
+        return movableLabels.contains(label);
     }
 
     public boolean isEmpty() {

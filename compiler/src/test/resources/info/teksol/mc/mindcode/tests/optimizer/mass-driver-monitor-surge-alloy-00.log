@@ -7,27 +7,23 @@
     17 instructions eliminated by Data Flow Optimization (6 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
-   144 instructions added by Case Switching (4 iterations).
+   143 instructions added by Case Switching (4 iterations).
      1 case expressions converted to switched jumps Case Switching.
      8 instructions eliminated by Jump Straightening (4 iterations).
      5 instructions updated by JumpThreading.
     26 instructions eliminated by Print Merging.
-   237 instructions after optimizations.
+   236 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 881):
   * Replicate loop condition at line 68:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-  o Convert case at line 17:9 (segments: 3, padded low)          size    +5, benefit      221.2, efficiency     44.231
-  o Convert case at line 17:9 (segments: 4)                      size    +6, benefit      413.5, efficiency     68.910
-  o Convert case at line 17:9 (segments: 6)                      size    +7, benefit      432.7, efficiency     61.813
-    Convert case at line 17:9 (segments: 1)                      size   +91, benefit      449.5, efficiency      4.940
-    Convert case at line 17:9 (segments: 1, padded low)          size  +144, benefit      538.5, efficiency      3.739
+  o Convert case at line 17:9 (segments: 6)                      size    +4, benefit      439.9, efficiency    109.976
+    Convert case at line 17:9 (segments: 1)                      size   +90, benefit      451.9, efficiency      5.021
+    Convert case at line 17:9 (segments: 1, padded low)          size  +143, benefit      540.9, efficiency      3.782
 
 Pass 1: speed optimization selection (cost limit 880):
-  o Convert case at line 17:9 (segments: 3, padded low)          size    +5, benefit      221.2, efficiency     44.231
-  o Convert case at line 17:9 (segments: 4)                      size    +6, benefit      413.5, efficiency     68.910
-  o Convert case at line 17:9 (segments: 6)                      size    +7, benefit      432.7, efficiency     61.813
-  o Convert case at line 17:9 (segments: 1)                      size   +91, benefit      449.5, efficiency      4.940
-  * Convert case at line 17:9 (segments: 1, padded low)          size  +144, benefit      538.5, efficiency      3.739 (+144 instructions)
+  o Convert case at line 17:9 (segments: 6)                      size    +4, benefit      439.9, efficiency    109.976
+  o Convert case at line 17:9 (segments: 1)                      size   +90, benefit      451.9, efficiency      5.021
+  * Convert case at line 17:9 (segments: 1, padded low)          size  +143, benefit      540.9, efficiency      3.782 (+143 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -491,7 +487,7 @@ Modifications by Replicate loop condition at line 68:1 (+1 instructions):
    147 label *label26
    148 end
 
-Modifications by Convert case at line 17:9 (segments: 1, padded low) (+144 instructions):
+Modifications by Convert case at line 17:9 (segments: 1, padded low) (+143 instructions):
  
     16 op sub :n :n 1
     17 getlink :block :n
@@ -789,33 +785,35 @@ Modifications by Convert case at line 17:9 (segments: 1, padded low) (+144 instr
 +  308 multilabel *label173 (m:*label175)
 +  309 jump *label29 always
 +  310 multilabel *label174 (m:*label175)
-+  311 jump *label23 always
-   312 label *label8
-   313 set .MESSAGE :block
-   314 jump *label6 always
-   315 label *label7
++  311 label *label23
++  312 set .DISPLAY :block
++  313 jump *label6 always
+   314 label *label8
+   315 set .MESSAGE :block
+   316 jump *label6 always
+   317 label *label7
 -    * jump *label9 notEqual *tmp5 @switch
-   316 label *label10
-   317 set .SWITCH :block
-   318 jump *label6 always
-   319 label *label9
+   318 label *label10
+   319 set .SWITCH :block
+   320 jump *label6 always
+   321 label *label9
 -    * jump *label11 notEqual *tmp5 @mass-driver
-   320 label *label12
-   321 sensor *tmp8 :block @firstItem
-   322 jump *label14 notEqual *tmp8 @titanium
+   322 label *label12
+   323 sensor *tmp8 :block @firstItem
+   324 jump *label14 notEqual *tmp8 @titanium
  
-   341 label *label13
-   342 jump *label6 always
-   343 label *label11
+   343 label *label13
+   344 jump *label6 always
+   345 label *label11
 -    * jump *label22 notEqual *tmp5 @logic-display
-   344 label *label23
-   345 set .DISPLAY :block
-   346 jump *label6 always
-   347 label *label22
-+  348 label *label29
-   349 print "\n"
-   350 print :block
-   351 print " is not supported."
+-    * label *label23
+-    * set .DISPLAY :block
+-    * jump *label6 always
+   346 label *label22
++  347 label *label29
+   348 print "\n"
+   349 print :block
+   350 print " is not supported."
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -827,79 +825,82 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     14 label *label27
     15 op sub :n :n 1
  
-   311 label *label8
-   312 set .MESSAGE :block
-   313 jump *label6 always
+   307 multilabel *label173 (m:*label175)
+   308 jump *label29 always
+   309 multilabel *label174 (m:*label175)
+-    * label *label23
+   310 set .DISPLAY :block
+   311 jump *label6 always
+   312 label *label8
+   313 set .MESSAGE :block
+   314 jump *label6 always
 -    * label *label7
-   314 label *label10
-   315 set .SWITCH :block
-   316 jump *label6 always
+   315 label *label10
+   316 set .SWITCH :block
+   317 jump *label6 always
 -    * label *label9
-   317 label *label12
-   318 sensor *tmp8 :block @firstItem
-   319 jump *label14 notEqual *tmp8 @titanium
+   318 label *label12
+   319 sensor *tmp8 :block @firstItem
+   320 jump *label14 notEqual *tmp8 @titanium
 -    * label *label15
-   320 set .TITANIUM :block
-   321 jump *label13 always
-   322 label *label14
-   323 jump *label16 notEqual *tmp8 @silicon
+   321 set .TITANIUM :block
+   322 jump *label13 always
+   323 label *label14
+   324 jump *label16 notEqual *tmp8 @silicon
 -    * label *label17
-   324 set .SILICON :block
-   325 jump *label13 always
-   326 label *label16
-   327 jump *label18 notEqual *tmp8 @copper
+   325 set .SILICON :block
+   326 jump *label13 always
+   327 label *label16
+   328 jump *label18 notEqual *tmp8 @copper
 -    * label *label19
-   328 set .COPPER :block
-   329 jump *label13 always
-   330 label *label18
-   331 jump *label20 notEqual *tmp8 @lead
+   329 set .COPPER :block
+   330 jump *label13 always
+   331 label *label18
+   332 jump *label20 notEqual *tmp8 @lead
 -    * label *label21
-   332 set .LEAD :block
-   333 label *label20
-   334 label *label13
-   335 jump *label6 always
+   333 set .LEAD :block
+   334 label *label20
+   335 label *label13
+   336 jump *label6 always
 -    * label *label11
-   336 label *label23
-   337 set .DISPLAY :block
-   338 jump *label6 always
 -    * label *label22
-   339 label *label29
-   340 print "\n"
-   341 print :block
+   337 label *label29
+   338 print "\n"
+   339 print :block
  
-   351 print null
-   352 print "/"
-   353 print "min"
+   349 print null
+   350 print "/"
+   351 print "min"
 -    * label *label4
-   354 jump *label27 greaterThan :n 0
-   355 label *label5
-   356 print "Message: "
+   352 jump *label27 greaterThan :n 0
+   353 label *label5
+   354 print "Message: "
  
-   375 print .LEAD
-   376 print "\n"
-   377 printflush .MESSAGE
+   373 print .LEAD
+   374 print "\n"
+   375 printflush .MESSAGE
 -    * label *label1
-   378 op equal *tmp10 .TITANIUM null
-   379 op equal *tmp11 .SILICON null
-   380 op or *tmp12 *tmp10 *tmp11
+   376 op equal *tmp10 .TITANIUM null
+   377 op equal *tmp11 .SILICON null
+   378 op or *tmp12 *tmp10 *tmp11
  
-   383 op equal *tmp15 .LEAD null
-   384 op or *tmp16 *tmp14 *tmp15
-   385 jump *label0 notEqual *tmp16 false
+   381 op equal *tmp15 .LEAD null
+   382 op or *tmp16 *tmp14 *tmp15
+   383 jump *label0 notEqual *tmp16 false
 -    * label *label2
-   386 control enabled .SWITCH 0
+   384 control enabled .SWITCH 0
 -    * label *label24
-   387 sensor *tmp26 .SWITCH @enabled
-   388 jump *label26 notEqual *tmp26 0
-   389 label *label28
+   385 sensor *tmp26 .SWITCH @enabled
+   386 jump *label26 notEqual *tmp26 0
+   387 label *label28
  
-   418 op floor *tmp38 *tmp37
-   419 print *tmp38
-   420 printflush .MESSAGE
+   416 op floor *tmp38 *tmp37
+   417 print *tmp38
+   418 printflush .MESSAGE
 -    * label *label25
-   421 sensor *tmp26 .SWITCH @enabled
-   422 jump *label28 equal *tmp26 0
-   423 label *label26
+   419 sensor *tmp26 .SWITCH @enabled
+   420 jump *label28 equal *tmp26 0
+   421 label *label26
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
@@ -907,59 +908,59 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
      2 set .DISPLAY null
      3 set .MESSAGE null
  
-   319 sensor *tmp8 :block @firstItem
-   320 jump *label14 notEqual *tmp8 @titanium
-   321 set .TITANIUM :block
+   320 sensor *tmp8 :block @firstItem
+   321 jump *label14 notEqual *tmp8 @titanium
+   322 set .TITANIUM :block
 -    * jump *label13 always
-+  322 jump *label6 always
-   323 label *label14
-   324 jump *label16 notEqual *tmp8 @silicon
-   325 set .SILICON :block
++  323 jump *label6 always
+   324 label *label14
+   325 jump *label16 notEqual *tmp8 @silicon
+   326 set .SILICON :block
 -    * jump *label13 always
-+  326 jump *label6 always
-   327 label *label16
-   328 jump *label18 notEqual *tmp8 @copper
-   329 set .COPPER :block
++  327 jump *label6 always
+   328 label *label16
+   329 jump *label18 notEqual *tmp8 @copper
+   330 set .COPPER :block
 -    * jump *label13 always
-+  330 jump *label6 always
-   331 label *label18
++  331 jump *label6 always
+   332 label *label18
 -    * jump *label20 notEqual *tmp8 @lead
-+  332 jump *label6 notEqual *tmp8 @lead
-   333 set .LEAD :block
-   334 label *label20
-   335 label *label13
++  333 jump *label6 notEqual *tmp8 @lead
+   334 set .LEAD :block
+   335 label *label20
+   336 label *label13
  
-   386 jump *label0 notEqual *tmp16 false
-   387 control enabled .SWITCH 0
-   388 sensor *tmp26 .SWITCH @enabled
+   384 jump *label0 notEqual *tmp16 false
+   385 control enabled .SWITCH 0
+   386 sensor *tmp26 .SWITCH @enabled
 -    * jump *label26 notEqual *tmp26 0
-+  389 jump __start__ notEqual *tmp26 0
-   390 label *label28
-   391 set :start @time
-   392 draw clear 0 0 80
++  387 jump __start__ notEqual *tmp26 0
+   388 label *label28
+   389 set :start @time
+   390 draw clear 0 0 80
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
  
-   331 label *label18
-   332 jump *label6 notEqual *tmp8 @lead
-   333 set .LEAD :block
+   332 label *label18
+   333 jump *label6 notEqual *tmp8 @lead
+   334 set .LEAD :block
 -    * label *label20
 -    * label *label13
-   334 jump *label6 always
-   335 label *label23
-   336 set .DISPLAY :block
+   335 jump *label6 always
+   336 label *label29
+   337 print "\n"
  
-   419 printflush .MESSAGE
-   420 sensor *tmp26 .SWITCH @enabled
-   421 jump *label28 equal *tmp26 0
+   417 printflush .MESSAGE
+   418 sensor *tmp26 .SWITCH @enabled
+   419 jump *label28 equal *tmp26 0
 -    * label *label26
-   422 end
+   420 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-   419 printflush .MESSAGE
-   420 sensor *tmp26 .SWITCH @enabled
-   421 jump *label28 equal *tmp26 0
+   417 printflush .MESSAGE
+   418 sensor *tmp26 .SWITCH @enabled
+   419 jump *label28 equal *tmp26 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
@@ -976,15 +977,15 @@ Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
     11 jump *label5 lessThanEq :n 0
     12 label *label27
  
-   333 set .DISPLAY :block
-   334 jump *label6 always
-   335 label *label29
+   331 set .LEAD :block
+   332 jump *label6 always
+   333 label *label29
 -    * print "\n"
 -    * print :block
 -    * print " is not supported."
-+  336 print "\n{0} is not supported."
-+  337 format :block
-   338 label *label6
++  334 print "\n{0} is not supported."
++  335 format :block
+   336 label *label6
 -    * print "\n"
 -    * print "Nominal production: "
 -    * print null
@@ -995,9 +996,9 @@ Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
 -    * print null
 -    * print "/"
 -    * print "min"
-+  339 print "\nNominal production: null/min\nActual production: null/min"
-   340 jump *label27 greaterThan :n 0
-   341 label *label5
++  337 print "\nNominal production: null/min\nActual production: null/min"
+   338 jump *label27 greaterThan :n 0
+   339 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -1019,17 +1020,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-26 instructions):
 -    * print "Lead: "
 -    * print .LEAD
 -    * print "\n"
-+  342 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nTitanium: {0}\nSilicon: {0}\nCopper: {0}\nLead: {0}\n"
-+  343 format .MESSAGE
-+  344 format .SWITCH
-+  345 format .DISPLAY
-+  346 format .TITANIUM
-+  347 format .SILICON
-+  348 format .COPPER
-+  349 format .LEAD
-   350 printflush .MESSAGE
-   351 op equal *tmp10 .TITANIUM null
-   352 op equal *tmp11 .SILICON null
++  340 print "Message: {0}\nSwitch: {0}\nDisplay: {0}\nTitanium: {0}\nSilicon: {0}\nCopper: {0}\nLead: {0}\n"
++  341 format .MESSAGE
++  342 format .SWITCH
++  343 format .DISPLAY
++  344 format .TITANIUM
++  345 format .SILICON
++  346 format .COPPER
++  347 format .LEAD
+   348 printflush .MESSAGE
+   349 op equal *tmp10 .TITANIUM null
+   350 op equal *tmp11 .SILICON null
 
 Final code before resolving virtual instructions:
 
@@ -1341,7 +1342,8 @@ jump *label29 always
 multilabel *label173
 jump *label29 always
 multilabel *label174
-jump *label23 always
+set .DISPLAY :block
+jump *label6 always
 label *label8
 set .MESSAGE :block
 jump *label6 always
@@ -1364,9 +1366,6 @@ jump *label6 always
 label *label18
 jump *label6 notEqual *tmp8 @lead
 set .LEAD :block
-jump *label6 always
-label *label23
-set .DISPLAY :block
 jump *label6 always
 label *label29
 print "\n{0} is not supported."

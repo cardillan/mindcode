@@ -267,16 +267,17 @@ void printExactFast(n)
             for var digit in 1 .. 3 do
                 base = frac(base) * 100000;
                 var t = floor(base);
-                if t < 10 then
-                    print("0000");
-                elsif t < 100 then
-                    print("000");
+                if t < 100 then
+                    if t < 10 then
+                        print("0000");
+                    else
+                        print("000");
+                    end;
                 elsif t < 1000 then
                     print("00");
                 elsif t < 10000 then
                     print("0");
                 end;
-
                 print(t);
             end;
         end;
@@ -379,7 +380,8 @@ void printExactHex(n)
                     when 15 then print("F");
                 end;
             else
-                printchar('0' + digit + (digit >= 10) * ('A' - 0xA - '0'));
+                if digit >= 10 then digit += 'A' - 0xA - '0'; end;
+                printchar(digit + '0');
             end;
         end;
     end;

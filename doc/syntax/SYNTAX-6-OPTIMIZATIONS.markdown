@@ -1127,7 +1127,7 @@ jump <when branch for minimal when value + 2 address>
 jump <when branch for maximal when value address>
 ```
 
-The jump table is put in front of the `when` branches. Original conditions in front of each processed `when` branch are removed. Each `when` branch jumps to the end of the case expression as usual.
+The jump table is put in front of the `when` branches. Original conditions in front of each processed `when` branch are removed. Each `when` branch jumps to the end of the case expression as usual. The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps.
 
 To build the jump table, the minimum and maximum value of existing `when` branches are determined first. Values outside this range are handled by the `else` branch (if there isn't an explicit `else` branch in the case statement, the `else` branch just jumps to the end of the case expression). Values inside this range are mapped to a particular `when` branch, or, if the value doesn't correspond to any of the `when` branches, to the `else` branch.
 
@@ -1139,6 +1139,7 @@ Notes:
 
 * When evaluating execution speed, the optimizer computes and averages execution costs of each value present in a `when` clause. All of these values are deemed equally probable to occur, and values leading to an `else` branch are not considered at all. In an unoptimized `case` expression, values handled by the `else` branch take the longest time to handle, while in the optimized case expression, values completely outside the range of `when` values are executed faster than any other values. This is a side effect of the optimization.  
 * As a consequence, if you put the more frequent values first in the case expression, and the value distribution is very skewed, converting the case expression to the jump table might actually worsen the average execution time. Mindcode has no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching optimization for your program.
+* For smaller case expressions, a full jump table might provide worse average performance than the original case expression. Mindcode might still optimize the case expression by applying the bisection search used in [Jump table compression](#jump-table-compression), providing both better average execution time of the entire case expression and more balanced execution time of individual branches.
  
 **Preconditions:**
 
@@ -1185,7 +1186,7 @@ Mindcode arranges the code to only perform checks distinguishing between `null` 
 
 ### Jump table compression
 
-Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well. To locate the segment handling a particular input value, a bisectional search is used. 
+Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well. To locate the segment handling a particular input value, a bisection search is used. 
 
 The total number of possible segment arrangements can be quite large. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
 
@@ -1198,6 +1199,7 @@ Notes:
 * Jump table compression is not performed when range checks for the given case expression are eliminated via the `unsafe-case-optimization` option, or when the [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) option has been set to 0.
 * When a compressed jump table is smaller, but slower than a full, or a less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
 * Compressing a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the optimizer will select the smaller version over the faster version, even when there is plenty of instruction space.
+* Since the bisection search provides better execution time than a linear search, it is considered and may be applied even to small case expressions, where a normal jump table would provide worse average execution time than the original case expression.
 
 ### Jump table padding
 
@@ -1250,60 +1252,59 @@ The above case expression is transformed to this:
     getlink *tmp1 0
     sensor *tmp2 *tmp1 @type
     sensor *tmp4 *tmp2 @id
-        jump label_20 greaterThanEq *tmp4 230
-        jump label_47 greaterThanEq *tmp4 14
+        jump label_21 greaterThanEq *tmp4 230
+        jump label_45 greaterThanEq *tmp4 14
         op add @counter @counter *tmp4
-        jump label_46 always 0 0
-        jump label_47 always 0 0
-        jump label_47 always 0 0
-        jump label_47 always 0 0
-        jump label_38 always 0 0
-        jump label_40 always 0 0
-        jump label_38 always 0 0
-        jump label_40 always 0 0
-        jump label_38 always 0 0
-        jump label_40 always 0 0
-        jump label_38 always 0 0
-        jump label_40 always 0 0
-        jump label_38 always 0 0
-        jump label_40 always 0 0
-    label_20:
-        jump label_47 greaterThanEq *tmp4 243
-        jump label_42 lessThan *tmp4 231
-        op sub *tmp5 *tmp4 231
-        op add @counter @counter *tmp5
         jump label_44 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
         jump label_42 always 0 0
-        jump label_47 always 0 0
-        jump label_47 always 0 0
-        jump label_44 always 0 0
+        jump label_19 always 0 0
         jump label_42 always 0 0
-        jump label_44 always 0 0
+        jump label_19 always 0 0
         jump label_42 always 0 0
-        jump label_47 always 0 0
-        jump label_47 always 0 0
-        jump label_44 always 0 0
+        jump label_19 always 0 0
         jump label_42 always 0 0
-    label_36:
-        set *tmp0 "none"
-        jump label_48 always 0 0
-    label_38:
-        set *tmp0 "A"
-        jump label_48 always 0 0
-    label_40:
+        jump label_19 always 0 0
+        jump label_42 always 0 0
+    label_19:
         set *tmp0 "B"
-        jump label_48 always 0 0
-    label_42:
-        set *tmp0 "C"
-        jump label_48 always 0 0
-    label_44:
+        jump label_46 always 0 0
+    label_21:
+        jump label_45 greaterThanEq *tmp4 243
+        jump label_26 greaterThanEq *tmp4 232
+        jump label_38 lessThan *tmp4 231
+    label_24:
         set *tmp0 "D"
-        jump label_48 always 0 0
-label_46:
-    jump label_36 strictEqual *tmp4 null
-label_47:
+        jump label_46 always 0 0
+    label_26:
+        op sub *tmp5 *tmp4 232
+        op add @counter @counter *tmp5
+        jump label_38 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
+        jump label_24 always 0 0
+        jump label_38 always 0 0
+        jump label_24 always 0 0
+        jump label_38 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
+        jump label_24 always 0 0
+    label_38:
+        set *tmp0 "C"
+        jump label_46 always 0 0
+    label_40:
+        set *tmp0 "none"
+        jump label_46 always 0 0
+    label_42:
+        set *tmp0 "A"
+        jump label_46 always 0 0
+label_44:
+    jump label_40 strictEqual *tmp4 null
+label_45:
     set *tmp0 "E"
-    label_48:
+    label_46:
     print *tmp0
 ```
 

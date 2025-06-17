@@ -221,7 +221,7 @@ class BaseOptimizerTest extends AbstractTestBase {
 
     @Test
     void handlesInsertInstructions() {
-        LogicList list = test.contextInstructions(mockAstContext).duplicate();
+        LogicList list = test.contextInstructions(mockAstContext).duplicate(true);
         test.insertInstructions(1, list);
         LabelInstruction duplicatedLabel = test.createLabel(mockAstContext, LogicLabel.symbolic("*label0"));
         assertEquals(List.of(ix0, ix0, duplicatedLabel, ix2, ix1, ix2), program);

@@ -1628,19 +1628,19 @@ class OptimizationContext {
             instructions.forEach(action);
         }
 
-        /// Duplicates this logic list including the context structure. This **must** be used when duplicating
-        /// existing instructions, as reusing existing contexts might lead to context discontinuity (even when placing
+        /// Duplicates this logic list including the context structure. This **must** be used when duplicating or moving
+        /// existing instructions, as reusing existing contexts might lead to context discontinuity. Even when placing
         /// the copy right before or after the original - in this case, encompassing context will be continuous, but
-        /// child contexts might not be).
+        /// child contexts might not be.
         ///
         /// @return LogicList containing duplicated code.
-        public LogicList duplicate() {
+        public LogicList duplicate(boolean remapLabels) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
             }
 
             // Duplicate labels
-            Map<LogicLabel, LogicLabel> labelMap = duplicateLabels();
+            Map<LogicLabel, LogicLabel> labelMap = remapLabels ? duplicateLabels() : Map.of();
 
             Map<AstContext, AstContext> contextMap = astContext.createDeepCopy();
             return new LogicList(contextMap.get(astContext), stream()

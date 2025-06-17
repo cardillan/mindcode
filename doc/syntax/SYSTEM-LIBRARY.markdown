@@ -246,8 +246,8 @@ and repackaging them back.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  29 |                 26 |
-| Function body                  |                  30 |                 27 |
+| Inlined function               |                  26 |                 26 |
+| Function body                  |                  27 |                 27 |
 | Function call                  |                   7 |                  7 |
 
 Creates a packed color using the HSV color model. The individual components (hue, saturation, value, alpha)
@@ -1064,8 +1064,8 @@ itself, except the conversion of the number from a `double` to a 64-bit integer 
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                 112 |                 17 |
-| Function body                  |                 113 |                 18 |
+| Inlined function               |                  96 |                 16 |
+| Function body                  |                  97 |                 17 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistics is valid for

@@ -13,4 +13,8 @@ public record Partition(int from, int to, LogicLabel label) {
     public boolean follows(Partition other) {
         return from == other.to;
     }
+
+    public Segment toSegment() {
+        return new Segment(SegmentType.SINGLE, from, to, label, size(), label, size());
+    }
 }

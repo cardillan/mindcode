@@ -5,7 +5,6 @@ import org.jspecify.annotations.NullMarked;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @NullMarked
 public final class SegmentConfiguration {
@@ -29,8 +28,8 @@ public final class SegmentConfiguration {
         return segments;
     }
 
-    public List<Segment> createSegments(boolean removeRangeCheck, boolean handleNulls, Targets targets) {
-        List<Segment> result = segments.stream().map(Segment::duplicate).collect(Collectors.toCollection(ArrayList::new));
+    public List<Segment> createSegments(boolean removeRangeCheck, boolean handleNulls, boolean symbolicLabels, Targets targets) {
+        List<Segment> result = new ArrayList<>(segments);
         List<Partition> partitions = new ArrayList<>(this.partitions);
 
         // Remove partitions which are already merged
@@ -44,9 +43,8 @@ public final class SegmentConfiguration {
             Partition partition = partitions.get(i);
             int j = i + 1;
             while (j < partitions.size() && partitions.get(j).follows(partitions.get(j - 1))) j++;
-            List<Partition> mergedPartitions = partitions.subList(i, j);
-            SegmentType type = mergedPartitions.size() == 1 ? SegmentType.SINGLE : SegmentType.JUMP_TABLE;
-            result.add(Segment.fromPartitions(type, mergedPartitions));
+            Segment segment = Segment.fromPartitions(SegmentType.JUMP_TABLE, partitions.subList(i, j));
+            result.add(verifyJumpTable(segment, removeRangeCheck, symbolicLabels));
             i = j;
         }
 
@@ -66,6 +64,17 @@ public final class SegmentConfiguration {
         }
 
         return result;
+    }
+
+    private Segment verifyJumpTable(Segment segment, boolean removeRangeCheck, boolean symbolicLabels) {
+        if (!removeRangeCheck && segment.type() == SegmentType.JUMP_TABLE) {
+            int minJumpTableSize = symbolicLabels && segment.from() != 0 ? 4 : 3;
+            int minorityTargets = segment.size() - segment.majoritySize();
+            if (minorityTargets < minJumpTableSize) {
+                return segment.convertToMixed();
+            }
+        }
+        return segment;
     }
 
     @Override

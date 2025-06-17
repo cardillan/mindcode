@@ -139,7 +139,7 @@ class LoopOptimizer extends BaseOptimizer {
             LogicList conditionEvaluation, boolean removeOriginal,
             BiFunction<AstContext, LogicLabel, JumpInstruction> newJumpCreator) {
         LogicLabel bodyLabel = obtainContextLabel(requireNonNull(loop.findSubcontext(BODY)));
-        LogicList copy = conditionEvaluation.duplicate();
+        LogicList copy = conditionEvaluation.duplicate(true);
 
         // Replace the last jump first, then insert the rest of the code *before* it
         int index = instructionIndex(backJump);

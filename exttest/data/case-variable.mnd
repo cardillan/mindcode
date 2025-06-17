@@ -1,9 +1,9 @@
 #set target = 8;
 #set target-optimization = specific;
 #set err-invalid-content = false;
-#set single-step-elimination = none;
-#set jump-straightening = none;
-#set jump-threading = none;
+//#set single-step-elimination = none;
+//#set jump-straightening = none;
+//#set jump-threading = none;
 
 def identifyBlock(block)
     case block

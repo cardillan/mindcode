@@ -184,7 +184,7 @@ jump 180 greaterThan :formatHexNumber:digits 0
 format "0x"
 assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
 assertflush
-op abs *tmp45 null 0
+op abs *tmp44 null 0
 print null
 assertprints "null" "printExactFast(null)"
 assertflush
@@ -390,38 +390,38 @@ print "FFFFFF0F00000000"
 assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
 stop
 end
-op abs *tmp45 :printExactFast:n 0
-jump 396 greaterThan *tmp45 0
+op abs *tmp44 :printExactFast:n 0
+jump 396 greaterThan *tmp44 0
 print :printExactFast:n
 set @counter :printExactFast*retaddr
 jump 399 greaterThanEq :printExactFast:n 0
 print "-"
 op abs :printExactFast:n :printExactFast:n 0
-op log10 *tmp51 :printExactFast:n 0
-op floor :printExactFast:exp *tmp51 0
-op sub *tmp53 0 :printExactFast:exp
-op pow *tmp54 10 *tmp53
-op mul :printExactFast:base :printExactFast:n *tmp54
-op add *tmp57 :printExactFast:base 0.5
-op floor *tmp56 *tmp57 0
-op sub *tmp59 :printExactFast:base *tmp56
-op abs :printExactFast:cmp *tmp59 0
+op log10 *tmp50 :printExactFast:n 0
+op floor :printExactFast:exp *tmp50 0
+op sub *tmp52 0 :printExactFast:exp
+op pow *tmp53 10 *tmp52
+op mul :printExactFast:base :printExactFast:n *tmp53
+op add *tmp56 :printExactFast:base 0.5
+op floor *tmp55 *tmp56 0
+op sub *tmp58 :printExactFast:base *tmp55
+op abs :printExactFast:cmp *tmp58 0
 jump 411 greaterThan :printExactFast:cmp 0
 print :printExactFast:base
 jump 462 always 0 0
 jump 414 lessThanEq :printExactFast:cmp 0.00001
 print :printExactFast:base
 jump 462 always 0 0
-op floor *tmp65 :printExactFast:base 0
-print *tmp65
+op floor *tmp64 :printExactFast:base 0
+print *tmp64
 print "."
-op mod *tmp66 :printExactFast:base 1
-op mul :printExactFast:base *tmp66 100000
+op mod *tmp65 :printExactFast:base 1
+op mul :printExactFast:base *tmp65 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 423 greaterThanEq :printExactFast:t 10
+jump 426 greaterThanEq :printExactFast:t 100
+jump 424 greaterThanEq :printExactFast:t 10
 print "0000"
 jump 431 always 0 0
-jump 426 greaterThanEq :printExactFast:t 100
 print "000"
 jump 431 always 0 0
 jump 429 greaterThanEq :printExactFast:t 1000
@@ -430,13 +430,13 @@ jump 431 always 0 0
 jump 431 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-op mod *tmp66 :printExactFast:base 1
-op mul :printExactFast:base *tmp66 100000
+op mod *tmp65 :printExactFast:base 1
+op mul :printExactFast:base *tmp65 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 438 greaterThanEq :printExactFast:t 10
+jump 441 greaterThanEq :printExactFast:t 100
+jump 439 greaterThanEq :printExactFast:t 10
 print "0000"
 jump 446 always 0 0
-jump 441 greaterThanEq :printExactFast:t 100
 print "000"
 jump 446 always 0 0
 jump 444 greaterThanEq :printExactFast:t 1000
@@ -445,13 +445,13 @@ jump 446 always 0 0
 jump 446 greaterThanEq :printExactFast:t 10000
 print "0"
 print :printExactFast:t
-op mod *tmp66 :printExactFast:base 1
-op mul :printExactFast:base *tmp66 100000
+op mod *tmp65 :printExactFast:base 1
+op mul :printExactFast:base *tmp65 100000
 op floor :printExactFast:t :printExactFast:base 0
-jump 453 greaterThanEq :printExactFast:t 10
+jump 456 greaterThanEq :printExactFast:t 100
+jump 454 greaterThanEq :printExactFast:t 10
 print "0000"
 jump 461 always 0 0
-jump 456 greaterThanEq :printExactFast:t 100
 print "000"
 jump 461 always 0 0
 jump 459 greaterThanEq :printExactFast:t 1000
@@ -464,81 +464,81 @@ jump 465 equal :printExactFast:exp 0
 print "E"
 print :printExactFast:exp
 set @counter :printExactFast*retaddr
-op abs *tmp81 :printExactSlow:n 0
-jump 470 greaterThan *tmp81 0
+op abs *tmp80 :printExactSlow:n 0
+jump 470 greaterThan *tmp80 0
 print :printExactSlow:n
 set @counter :printExactSlow*retaddr
 jump 473 greaterThanEq :printExactSlow:n 0
 print "-"
 op abs :printExactSlow:n :printExactSlow:n 0
-op log10 *tmp87 :printExactSlow:n 0
-op floor :printExactSlow:exp *tmp87 0
-op sub *tmp89 0 :printExactSlow:exp
-op pow *tmp90 10 *tmp89
-op mul :printExactSlow:base :printExactSlow:n *tmp90
-op floor *tmp92 :printExactSlow:base 0
-print *tmp92
+op log10 *tmp86 :printExactSlow:n 0
+op floor :printExactSlow:exp *tmp86 0
+op sub *tmp88 0 :printExactSlow:exp
+op pow *tmp89 10 *tmp88
+op mul :printExactSlow:base :printExactSlow:n *tmp89
+op floor *tmp91 :printExactSlow:base 0
+print *tmp91
 print "."
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
-op mod *tmp93 :printExactSlow:base 1
-op mul :printExactSlow:base *tmp93 10
-op floor *tmp96 :printExactSlow:base 0
-print *tmp96
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
+op mod *tmp92 :printExactSlow:base 1
+op mul :printExactSlow:base *tmp92 10
+op floor *tmp95 :printExactSlow:base 0
+print *tmp95
 jump 544 equal :printExactSlow:exp 0
 print "E"
 print :printExactSlow:exp

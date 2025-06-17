@@ -10,29 +10,33 @@
      7 instructions eliminated by Data Flow Optimization (3 passes, 11 iterations).
      1 instructions added by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-   132 instructions added by Case Switching (5 iterations).
+   131 instructions added by Case Switching (5 iterations).
      1 case expressions converted to switched jumps Case Switching.
      7 instructions eliminated by Jump Straightening (5 iterations).
      3 instructions updated by JumpThreading.
     35 instructions eliminated by Print Merging.
-   274 instructions after optimizations.
+   273 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 819):
   * Replicate loop condition at line 72:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
-  o Convert case at line 25:9 (segments: 6)                      size    +2, benefit     1944.4, efficiency    972.222
-  o Convert case at line 25:9 (segments: 5, padded low)          size   +68, benefit     2361.1, efficiency     34.722
-  o Convert case at line 25:9 (segments: 2, padded low)          size   +86, benefit     2812.5, efficiency     32.703
-  o Convert case at line 25:9 (segments: 5, padded low)          size   +88, benefit     2847.2, efficiency     32.355
+  o Convert case at line 25:9 (segments: 15)                     size    +0, benefit     2013.9, efficiency   Infinity
+  o Convert case at line 25:9 (segments: 6)                      size    +1, benefit     2118.1, efficiency   2118.056
+  o Convert case at line 25:9 (segments: 4, padded low)          size   +67, benefit     2395.8, efficiency     35.759
+  o Convert case at line 25:9 (segments: 6, padded low)          size   +68, benefit     2500.0, efficiency     36.765
+  o Convert case at line 25:9 (segments: 2, padded low)          size   +85, benefit     2847.2, efficiency     33.497
+  o Convert case at line 25:9 (segments: 5, padded low)          size   +86, benefit     2881.9, efficiency     33.511
   o Convert case at line 25:9 (segments: 3, padded low)          size  +127, benefit     3333.3, efficiency     26.247
-  o Convert case at line 25:9 (segments: 1, padded low)          size  +132, benefit     3437.5, efficiency     26.042
+  o Convert case at line 25:9 (segments: 1, padded low)          size  +131, benefit     3472.2, efficiency     26.506
 
 Pass 1: speed optimization selection (cost limit 818):
-  o Convert case at line 25:9 (segments: 6)                      size    +2, benefit     1944.4, efficiency    972.222
-  o Convert case at line 25:9 (segments: 5, padded low)          size   +68, benefit     2361.1, efficiency     34.722
-  o Convert case at line 25:9 (segments: 2, padded low)          size   +86, benefit     2812.5, efficiency     32.703
-  o Convert case at line 25:9 (segments: 5, padded low)          size   +88, benefit     2847.2, efficiency     32.355
+  o Convert case at line 25:9 (segments: 15)                     size    +0, benefit     2013.9, efficiency   Infinity
+  o Convert case at line 25:9 (segments: 6)                      size    +1, benefit     2118.1, efficiency   2118.056
+  o Convert case at line 25:9 (segments: 4, padded low)          size   +67, benefit     2395.8, efficiency     35.759
+  o Convert case at line 25:9 (segments: 6, padded low)          size   +68, benefit     2500.0, efficiency     36.765
+  o Convert case at line 25:9 (segments: 2, padded low)          size   +85, benefit     2847.2, efficiency     33.497
+  o Convert case at line 25:9 (segments: 5, padded low)          size   +86, benefit     2881.9, efficiency     33.511
   o Convert case at line 25:9 (segments: 3, padded low)          size  +127, benefit     3333.3, efficiency     26.247
-  * Convert case at line 25:9 (segments: 1, padded low)          size  +132, benefit     3437.5, efficiency     26.042 (+132 instructions)
+  * Convert case at line 25:9 (segments: 1, padded low)          size  +131, benefit     3472.2, efficiency     26.506 (+131 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -957,7 +961,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    212 getlink :block :n
    213 control enabled :block .ON
 
-Modifications by Convert case at line 25:9 (segments: 1, padded low) (+132 instructions):
+Modifications by Convert case at line 25:9 (segments: 1, padded low) (+131 instructions):
  
     19 print :block
     20 print "\n"
@@ -1259,125 +1263,130 @@ Modifications by Convert case at line 25:9 (segments: 1, padded low) (+132 instr
 +  315 multilabel *label201 (m:*label203)
 +  316 jump *label55 always
 +  317 multilabel *label202 (m:*label203)
-+  318 jump *label16 always
-   319 label *label8
-   320 set .MESSAGE :block
-   321 jump *label6 always
-   322 label *label7
++  318 label *label16
++  319 set .CONTAINER :block
++  320 set .SENSOR @totalLiquids
++  321 set .MAXIMUM @liquidCapacity
++  322 op add .START :n 1
++  323 jump *label6 always
+   324 label *label8
+   325 set .MESSAGE :block
+   326 jump *label6 always
+   327 label *label7
 -    * jump *label9 notEqual *tmp5 @switch
-   323 label *label10
-   324 set .SWITCH :block
-   325 jump *label6 always
-   326 label *label9
+   328 label *label10
+   329 set .SWITCH :block
+   330 jump *label6 always
+   331 label *label9
 -    * jump *label12 equal *tmp5 @sorter
 -    * jump *label12 equal *tmp5 @inverted-sorter
 -    * jump *label11 notEqual *tmp5 @unloader
-   327 label *label12
-   328 set .SORTER :block
-   329 jump *label6 always
-   330 label *label11
+   332 label *label12
+   333 set .SORTER :block
+   334 jump *label6 always
+   335 label *label11
 -    * jump *label14 equal *tmp5 @vault
 -    * jump *label14 equal *tmp5 @container
 -    * jump *label14 equal *tmp5 @core-shard
 -    * jump *label14 equal *tmp5 @core-foundation
 -    * jump *label13 notEqual *tmp5 @core-nucleus
-   331 label *label14
-   332 set .CONTAINER :block
-   333 set .SENSOR @totalItems
+   336 label *label14
+   337 set .CONTAINER :block
+   338 set .SENSOR @totalItems
  
-   335 op add .START :n 1
-   336 jump *label6 always
-   337 label *label13
+   340 op add .START :n 1
+   341 jump *label6 always
+   342 label *label13
 -    * jump *label16 equal *tmp5 @liquid-tank
 -    * jump *label16 equal *tmp5 @liquid-container
 -    * jump *label15 notEqual *tmp5 @liquid-router
-   338 label *label16
-   339 set .CONTAINER :block
-   340 set .SENSOR @totalLiquids
- 
-   342 op add .START :n 1
-   343 jump *label6 always
-   344 label *label15
+-    * label *label16
+-    * set .CONTAINER :block
+-    * set .SENSOR @totalLiquids
+-    * set .MAXIMUM @liquidCapacity
+-    * op add .START :n 1
+-    * jump *label6 always
+   343 label *label15
 -    * jump *label18 equal *tmp5 @battery
 -    * jump *label17 notEqual *tmp5 @battery-large
-   345 label *label18
-   346 set .CONTAINER :block
-   347 set .SENSOR @totalPower
+   344 label *label18
+   345 set .CONTAINER :block
+   346 set .SENSOR @totalPower
  
-   349 op add .START :n 1
-   350 jump *label6 always
-   351 label *label17
+   348 op add .START :n 1
+   349 jump *label6 always
+   350 label *label17
 -    * jump *label20 equal *tmp5 @power-node
 -    * jump *label20 equal *tmp5 @power-node-large
 -    * jump *label19 notEqual *tmp5 @surge-tower
-   352 label *label20
-   353 set .CONTAINER :block
-   354 set .SENSOR @powerNetStored
-   355 set .MAXIMUM @powerNetCapacity
-   356 op add .START :n 1
-   357 label *label19
-+  358 label *label55
-   359 label *label6
-   360 label *label4
-   361 jump *label52 greaterThan :n 0
+   351 label *label20
+   352 set .CONTAINER :block
+   353 set .SENSOR @powerNetStored
+   354 set .MAXIMUM @powerNetCapacity
+   355 op add .START :n 1
+   356 label *label19
++  357 label *label55
+   358 label *label6
+   359 label *label4
+   360 jump *label52 greaterThan :n 0
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-1 instructions):
  
-   384 sensor *tmp14 .SORTER @type
-   385 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   386 # "Function: inline def setState(in newState)"
+   383 sensor *tmp14 .SORTER @type
+   384 op strictEqual .INVERTED *tmp14 @inverted-sorter
+   385 # "Function: inline def setState(in newState)"
 -    * jump *label24 equal null true
-   387 set .STATE true
-   388 op xor .ON .INVERTED true
-   389 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   386 set .STATE true
+   387 op xor .ON .INVERTED true
+   388 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
 
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-3 instructions):
  
-   389 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   390 jump *label27 equal .ON false
-   391 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   388 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   389 jump *label27 equal .ON false
+   390 set .ACTIVE_TEXT "\nCurrently active:[green]"
 -    * jump *label27 always
-   392 label *label27
-   393 label *label24
-   394 label *label25
+   391 label *label27
+   392 label *label24
+   393 label *label25
  
-   429 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   430 jump *label39 equal .ON false
-   431 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   428 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   429 jump *label39 equal .ON false
+   430 set .ACTIVE_TEXT "\nCurrently active:[green]"
 -    * jump *label39 always
-   432 label *label39
-   433 label *label36
-   434 label *label37
+   431 label *label39
+   432 label *label36
+   433 label *label37
  
-   444 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   445 jump *label46 equal .ON false
-   446 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   443 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   444 jump *label46 equal .ON false
+   445 set .ACTIVE_TEXT "\nCurrently active:[green]"
 -    * jump *label46 always
-   447 label *label46
-   448 label *label43
-   449 label *label44
+   446 label *label46
+   447 label *label43
+   448 label *label44
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-   440 jump *label43 equal .STATE false
-   441 set .STATE false
-   442 op add .CYCLES .CYCLES 1
+   439 jump *label43 equal .STATE false
+   440 set .STATE false
+   441 op add .CYCLES .CYCLES 1
 -    * op xor .ON .INVERTED false
-+  443 set .ON .INVERTED
-   444 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   445 jump *label46 equal .ON false
-   446 set .ACTIVE_TEXT "\nCurrently active:[green]"
++  442 set .ON .INVERTED
+   443 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   444 jump *label46 equal .ON false
+   445 set .ACTIVE_TEXT "\nCurrently active:[green]"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
-   442 op add .CYCLES .CYCLES 1
-   443 set .ON .INVERTED
-   444 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   441 op add .CYCLES .CYCLES 1
+   442 set .ON .INVERTED
+   443 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
 -    * jump *label46 equal .ON false
-+  445 jump *label46 equal .INVERTED false
-   446 set .ACTIVE_TEXT "\nCurrently active:[green]"
-   447 label *label46
-   448 label *label43
++  444 jump *label46 equal .INVERTED false
+   445 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   446 label *label46
+   447 label *label43
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
@@ -1389,120 +1398,114 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     14 label *label52
     15 op sub :n :n 1
  
-   318 label *label8
-   319 set .MESSAGE :block
-   320 jump *label6 always
+   323 label *label8
+   324 set .MESSAGE :block
+   325 jump *label6 always
 -    * label *label7
-   321 label *label10
-   322 set .SWITCH :block
-   323 jump *label6 always
+   326 label *label10
+   327 set .SWITCH :block
+   328 jump *label6 always
 -    * label *label9
-   324 label *label12
-   325 set .SORTER :block
-   326 jump *label6 always
+   329 label *label12
+   330 set .SORTER :block
+   331 jump *label6 always
 -    * label *label11
-   327 label *label14
-   328 set .CONTAINER :block
-   329 set .SENSOR @totalItems
-   330 set .MAXIMUM @itemCapacity
-   331 op add .START :n 1
-   332 jump *label6 always
+   332 label *label14
+   333 set .CONTAINER :block
+   334 set .SENSOR @totalItems
+   335 set .MAXIMUM @itemCapacity
+   336 op add .START :n 1
+   337 jump *label6 always
 -    * label *label13
-   333 label *label16
-   334 set .CONTAINER :block
-   335 set .SENSOR @totalLiquids
-   336 set .MAXIMUM @liquidCapacity
-   337 op add .START :n 1
-   338 jump *label6 always
 -    * label *label15
-   339 label *label18
-   340 set .CONTAINER :block
-   341 set .SENSOR @totalPower
-   342 set .MAXIMUM @powerCapacity
-   343 op add .START :n 1
-   344 jump *label6 always
+   338 label *label18
+   339 set .CONTAINER :block
+   340 set .SENSOR @totalPower
+   341 set .MAXIMUM @powerCapacity
+   342 op add .START :n 1
+   343 jump *label6 always
 -    * label *label17
-   345 label *label20
-   346 set .CONTAINER :block
-   347 set .SENSOR @powerNetStored
-   348 set .MAXIMUM @powerNetCapacity
-   349 op add .START :n 1
+   344 label *label20
+   345 set .CONTAINER :block
+   346 set .SENSOR @powerNetStored
+   347 set .MAXIMUM @powerNetCapacity
+   348 op add .START :n 1
 -    * label *label19
-   350 label *label55
-   351 label *label6
+   349 label *label55
+   350 label *label6
 -    * label *label4
-   352 jump *label52 greaterThan :n 0
-   353 label *label5
-   354 print "Message: "
+   351 jump *label52 greaterThan :n 0
+   352 label *label5
+   353 print "Message: "
  
-   367 print "No container."
-   368 print "\n"
-   369 label *label21
+   366 print "No container."
+   367 print "\n"
+   368 label *label21
 -    * label *label22
-   370 printflush .MESSAGE
+   369 printflush .MESSAGE
 -    * label *label1
-   371 jump *label0 equal .CONTAINER null
+   370 jump *label0 equal .CONTAINER null
 -    * label *label2
-   372 sensor *tmp14 .SORTER @type
-   373 op strictEqual .INVERTED *tmp14 @inverted-sorter
-   374 # "Function: inline def setState(in newState)"
+   371 sensor *tmp14 .SORTER @type
+   372 op strictEqual .INVERTED *tmp14 @inverted-sorter
+   373 # "Function: inline def setState(in newState)"
  
-   378 jump *label27 equal .ON false
-   379 set .ACTIVE_TEXT "\nCurrently active:[green]"
-   380 label *label27
+   377 jump *label27 equal .ON false
+   378 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   379 label *label27
 -    * label *label24
 -    * label *label25
 -    * label *label23
-   381 set .CYCLES 0
-   382 control enabled .SWITCH 0
+   380 set .CYCLES 0
+   381 control enabled .SWITCH 0
 -    * label *label28
-   383 sensor *tmp23 .SWITCH @enabled
-   384 jump *label30 notEqual *tmp23 0
-   385 label *label54
+   382 sensor *tmp23 .SWITCH @enabled
+   383 jump *label30 notEqual *tmp23 0
+   384 label *label54
  
-   415 set .ACTIVE_TEXT "\nCurrently active:[green]"
-   416 label *label39
-   417 label *label36
+   414 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   415 label *label39
+   416 label *label36
 -    * label *label37
 -    * label *label35
-   418 jump *label34 always
-   419 label *label33
-   420 jump *label40 lessThan :pct PCT_HIGH
+   417 jump *label34 always
+   418 label *label33
+   419 jump *label40 lessThan :pct PCT_HIGH
  
-   428 set .ACTIVE_TEXT "\nCurrently active:[green]"
-   429 label *label46
-   430 label *label43
+   427 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   428 label *label46
+   429 label *label43
 -    * label *label44
 -    * label *label42
-   431 label *label40
+   430 label *label40
 -    * label *label41
-   432 label *label34
-   433 print "\n"
-   434 print "Level: [gold]"
+   431 label *label34
+   432 print "\n"
+   433 print "Level: [gold]"
  
-   461 label *label48
-   462 print .ACTIVE_TEXT
-   463 set :n .START
+   460 label *label48
+   461 print .ACTIVE_TEXT
+   462 set :n .START
 -    * label *label49
-   464 jump *label51 greaterThanEq .START @links
-   465 label *label53
-   466 getlink :block :n
+   463 jump *label51 greaterThanEq .START @links
+   464 label *label53
+   465 getlink :block :n
  
-   468 print "\n    "
-   469 print :block
-   470 op add :n :n 1
+   467 print "\n    "
+   468 print :block
+   469 op add :n :n 1
 -    * label *label50
-   471 jump *label53 lessThan :n @links
-   472 label *label51
-   473 print "[]"
+   470 jump *label53 lessThan :n @links
+   471 label *label51
+   472 print "[]"
  
-   482 print " "
-   483 print "ms"
-   484 printflush .MESSAGE
+   481 print " "
+   482 print "ms"
+   483 printflush .MESSAGE
 -    * label *label29
-   485 sensor *tmp23 .SWITCH @enabled
-   486 jump *label54 equal *tmp23 0
-   487 label *label30
+   484 sensor *tmp23 .SWITCH @enabled
+   485 jump *label54 equal *tmp23 0
+   486 label *label30
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -1510,52 +1513,52 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      2 set PCT_HIGH 80
      3 set .CONTAINER null
  
-   382 set .CYCLES 0
-   383 control enabled .SWITCH 0
-   384 sensor *tmp23 .SWITCH @enabled
+   381 set .CYCLES 0
+   382 control enabled .SWITCH 0
+   383 sensor *tmp23 .SWITCH @enabled
 -    * jump *label30 notEqual *tmp23 0
-+  385 jump __start__ notEqual *tmp23 0
-   386 label *label54
-   387 set :start @time
-   388 sensor :item .SORTER @config
++  384 jump __start__ notEqual *tmp23 0
+   385 label *label54
+   386 set :start @time
+   387 sensor :item .SORTER @config
  
-   407 op idiv :pct *tmp33 :max
-   408 jump *label33 greaterThan :pct PCT_LOW
-   409 # "Function: inline def setState(in newState)"
+   406 op idiv :pct *tmp33 :max
+   407 jump *label33 greaterThan :pct PCT_LOW
+   408 # "Function: inline def setState(in newState)"
 -    * jump *label36 equal .STATE true
-+  410 jump *label34 equal .STATE true
-   411 set .STATE true
-   412 op add .CYCLES .CYCLES 1
-   413 op xor .ON .INVERTED true
-   414 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
++  409 jump *label34 equal .STATE true
+   410 set .STATE true
+   411 op add .CYCLES .CYCLES 1
+   412 op xor .ON .INVERTED true
+   413 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
 -    * jump *label39 equal .ON false
-+  415 jump *label34 equal .ON false
-   416 set .ACTIVE_TEXT "\nCurrently active:[green]"
-   417 label *label39
-   418 label *label36
++  414 jump *label34 equal .ON false
+   415 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   416 label *label39
+   417 label *label36
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
  
-   414 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
-   415 jump *label34 equal .ON false
-   416 set .ACTIVE_TEXT "\nCurrently active:[green]"
+   413 set .ACTIVE_TEXT "\nCurrently inactive:[salmon]"
+   414 jump *label34 equal .ON false
+   415 set .ACTIVE_TEXT "\nCurrently active:[green]"
 -    * label *label39
 -    * label *label36
-   417 jump *label34 always
-   418 label *label33
-   419 jump *label40 lessThan :pct PCT_HIGH
+   416 jump *label34 always
+   417 label *label33
+   418 jump *label40 lessThan :pct PCT_HIGH
  
-   483 printflush .MESSAGE
-   484 sensor *tmp23 .SWITCH @enabled
-   485 jump *label54 equal *tmp23 0
+   482 printflush .MESSAGE
+   483 sensor *tmp23 .SWITCH @enabled
+   484 jump *label54 equal *tmp23 0
 -    * label *label30
-   486 end
+   485 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   483 printflush .MESSAGE
-   484 sensor *tmp23 .SWITCH @enabled
-   485 jump *label54 equal *tmp23 0
+   482 printflush .MESSAGE
+   483 sensor *tmp23 .SWITCH @enabled
+   484 jump *label54 equal *tmp23 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
@@ -1580,9 +1583,9 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
     20 sensor *tmp56 *tmp5 @id
     21 jump *label55 greaterThanEq *tmp56 147
  
-   350 label *label6
-   351 jump *label52 greaterThan :n 0
-   352 label *label5
+   349 label *label6
+   350 jump *label52 greaterThan :n 0
+   351 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -1595,43 +1598,43 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 -    * print "Container: "
 -    * print .CONTAINER
 -    * print "\n"
-+  353 print "Message: {0}\nSwitch: {0}\nSorter: {0}\nContainer: {0}\n"
-+  354 format .MESSAGE
-+  355 format .SWITCH
-+  356 format .SORTER
-+  357 format .CONTAINER
-   358 jump *label21 notEqual .CONTAINER null
++  352 print "Message: {0}\nSwitch: {0}\nSorter: {0}\nContainer: {0}\n"
++  353 format .MESSAGE
++  354 format .SWITCH
++  355 format .SORTER
++  356 format .CONTAINER
+   357 jump *label21 notEqual .CONTAINER null
 -    * print "No container."
 -    * print "\n"
-+  359 print "No container.\n"
-   360 label *label21
-   361 printflush .MESSAGE
-   362 jump *label0 equal .CONTAINER null
++  358 print "No container.\n"
+   359 label *label21
+   360 printflush .MESSAGE
+   361 jump *label0 equal .CONTAINER null
  
-   385 print .CONTAINER
-   386 jump *label32 always
-   387 label *label31
+   384 print .CONTAINER
+   385 jump *label32 always
+   386 label *label31
 -    * print "Measuring [gold]"
 -    * print :item
 -    * print "["
 -    * print "] in "
-+  388 print "Measuring [gold]{0}[] in "
-+  389 format :item
-   390 print .CONTAINER
-   391 label *label32
-   392 sensor :max .CONTAINER .MAXIMUM
++  387 print "Measuring [gold]{0}[] in "
++  388 format :item
+   389 print .CONTAINER
+   390 label *label32
+   391 sensor :max .CONTAINER .MAXIMUM
  
-   417 label *label43
-   418 label *label40
-   419 label *label34
+   416 label *label43
+   417 label *label40
+   418 label *label34
 -    * print "\n"
 -    * print "Level: [gold]"
 -    * print :pct
 -    * print "%"
 -    * print "[]"
-+  420 print "\nLevel: [gold]{0}%[]"
-+  421 format :pct
-   422 jump *label47 equal .INVERTED false
++  419 print "\nLevel: [gold]{0}%[]"
++  420 format :pct
+   421 jump *label47 equal .INVERTED false
 -    * print "\n"
 -    * print "Activate above [green]"
 -    * print PCT_HIGH
@@ -1642,11 +1645,11 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 -    * print PCT_LOW
 -    * print "%"
 -    * print "[]"
-+  423 print "\nActivate above [green]{0}%[]\nDeactivate below [salmon]{0}%[]"
-+  424 format PCT_HIGH
-+  425 format PCT_LOW
-   426 jump *label48 always
-   427 label *label47
++  422 print "\nActivate above [green]{0}%[]\nDeactivate below [salmon]{0}%[]"
++  423 format PCT_HIGH
++  424 format PCT_LOW
+   425 jump *label48 always
+   426 label *label47
 -    * print "\n"
 -    * print "Activate below [green]"
 -    * print PCT_LOW
@@ -1657,33 +1660,33 @@ Modifications by Final phase, Print Merging, iteration 1 (-35 instructions):
 -    * print PCT_HIGH
 -    * print "%"
 -    * print "[]"
-+  428 print "\nActivate below [green]{0}%[]\nDeactivate above [salmon]{0}%[]"
-+  429 format PCT_LOW
-+  430 format PCT_HIGH
-   431 label *label48
-   432 print .ACTIVE_TEXT
-   433 set :n .START
++  427 print "\nActivate below [green]{0}%[]\nDeactivate above [salmon]{0}%[]"
++  428 format PCT_LOW
++  429 format PCT_HIGH
+   430 label *label48
+   431 print .ACTIVE_TEXT
+   432 set :n .START
  
-   440 op add :n :n 1
-   441 jump *label53 lessThan :n @links
-   442 label *label51
+   439 op add :n :n 1
+   440 jump *label53 lessThan :n @links
+   441 label *label51
 -    * print "[]"
 -    * print "\n"
 -    * print "# of cycles: "
 -    * print .CYCLES
-+  443 print "[]\n# of cycles: {0}\n[lightgray]Loop: {0} ms"
-+  444 format .CYCLES
-   445 op sub *tmp54 @time :start
-   446 op floor *tmp55 *tmp54
++  442 print "[]\n# of cycles: {0}\n[lightgray]Loop: {0} ms"
++  443 format .CYCLES
+   444 op sub *tmp54 @time :start
+   445 op floor *tmp55 *tmp54
 -    * print "\n"
 -    * print "[lightgray]Loop: "
 -    * print *tmp55
 -    * print " "
 -    * print "ms"
-+  447 format *tmp55
-   448 printflush .MESSAGE
-   449 sensor *tmp23 .SWITCH @enabled
-   450 jump *label54 equal *tmp23 0
++  446 format *tmp55
+   447 printflush .MESSAGE
+   448 sensor *tmp23 .SWITCH @enabled
+   449 jump *label54 equal *tmp23 0
 
 Final code before resolving virtual instructions:
 
@@ -2003,7 +2006,12 @@ jump *label55 always
 multilabel *label201
 jump *label55 always
 multilabel *label202
-jump *label16 always
+label *label16
+set .CONTAINER :block
+set .SENSOR @totalLiquids
+set .MAXIMUM @liquidCapacity
+op add .START :n 1
+jump *label6 always
 label *label8
 set .MESSAGE :block
 jump *label6 always
@@ -2017,12 +2025,6 @@ label *label14
 set .CONTAINER :block
 set .SENSOR @totalItems
 set .MAXIMUM @itemCapacity
-op add .START :n 1
-jump *label6 always
-label *label16
-set .CONTAINER :block
-set .SENSOR @totalLiquids
-set .MAXIMUM @liquidCapacity
 op add .START :n 1
 jump *label6 always
 label *label18
