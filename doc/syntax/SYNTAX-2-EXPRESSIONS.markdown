@@ -303,7 +303,7 @@ produces:
 
 ```
 FFFFFFFFFFFFFFFF
-7FFFFFFFFFFFF00F
+7FFFFFFFFFFFFFFF
 4000000000000000
 ```
 
@@ -480,11 +480,11 @@ Constant expressions can be used in [constant](SYNTAX-1-VARIABLES.markdown#const
 Furthermore, expressions that contain some constant subexpressions (e.g., `ticks * 60 / 1000` contains a constant subexpression `60 / 1000`) may be partially evaluated by the [Data Flow Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#constant-folding).
 
 > [!TIP]
-> Compile-time expression evaluation produces results identical computations performed on an actual Mindustry Logic processor, emulating the behavior corresponding to the selected language/processor target.
+> Compile-time expression evaluation produces results identical to computations performed on an actual Mindustry Logic processor, emulating the behavior corresponding to the selected language/processor target.
 
 ## Constant expressions in Mindustry Logic 7 and earlier
 
-If the result of a constant expression is a value that [cannot be encoded into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), the expression isn't evaluated at compile time, but rather computed at runtime. If the resulting value can only be encoded to mlog with loss of precision, the expression isn't evaluated at compile time, unless the value is assigned to a constant or program parameter. In such a case a warning is issued.   
+If the result of a constant expression is a value that [cannot be encoded into an mlog literal](SYNTAX.markdown#specifics-of-numeric-literals-in-mindustry-logic), the expression isn't evaluated at compile time, but rather computed at runtime. If the resulting value can only be encoded to mlog with loss of precision, the expression isn't evaluated at compile time, unless the value is assigned to a constant or program parameter. In such a case, a warning is issued.   
 
 When evaluating expressions, it isn't required that all the intermediate values can also be encoded to mlog, just the final ones:
 

@@ -465,9 +465,6 @@ Modifications by Convert case at line 11:5 (segments: 30) (-16 instructions):
      5 # "Function: def identifyBlock(in block)"
 -    * jump *label6 equal :block @copper-wall
 -    * jump *label5 always
--    * label *label6
--    * set *tmp2 0x00000004
--    * jump *label4 always
 +    6 sensor *tmp6 :block @id
 +    7 jump *label57 greaterThanEq *tmp6 203
 +    8 jump *label56 greaterThanEq *tmp6 35
@@ -476,7 +473,9 @@ Modifications by Convert case at line 11:5 (segments: 30) (-16 instructions):
 +   11 jump *label59 greaterThanEq *tmp6 21
 +   12 jump *label60 greaterThanEq *tmp6 19
 +   13 jump *label8 greaterThanEq *tmp6 18
-+   14 label *label6
+    14 label *label6
+-    * set *tmp2 0x00000004
+-    * jump *label4 always
 +   15 set *tmp2 0x00000004
 +   16 jump *label4 always
 +   17 label *label60

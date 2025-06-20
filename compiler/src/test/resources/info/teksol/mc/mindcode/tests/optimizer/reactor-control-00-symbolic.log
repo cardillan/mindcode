@@ -1797,16 +1797,6 @@ Modifications by Convert case at line 419:9 (segments: 1, padded low) (+75 instr
    463 getlink :block :n
    464 sensor *tmp204 :block @type
 -    * jump *label106 notEqual *tmp204 @impact-reactor
--    * label *label107
--    * op add :reactors :reactors 1
--    * op lessThanEq :enabled :reactors .REACTORS_ON
--    * control enabled :block :enabled
--    * jump *label108 equal :enabled false
--    * sensor *tmp210 :block @timescale
--    * op add :boosts :boosts *tmp210
--    * label *label108
--    * label *label109
--    * jump *label105 always
 +  465 sensor *tmp225 *tmp204 @id
 +  466 jump *label121 greaterThanEq *tmp225 83
 +  467 multijump *label122 *tmp225 0 (m:*label205)
@@ -1975,7 +1965,16 @@ Modifications by Convert case at line 419:9 (segments: 1, padded low) (+75 instr
 +  630 multilabel *label203 (m:*label205)
 +  631 jump *label121 always
 +  632 multilabel *label204 (m:*label205)
-+  633 label *label107
+   633 label *label107
+-    * op add :reactors :reactors 1
+-    * op lessThanEq :enabled :reactors .REACTORS_ON
+-    * control enabled :block :enabled
+-    * jump *label108 equal :enabled false
+-    * sensor *tmp210 :block @timescale
+-    * op add :boosts :boosts *tmp210
+-    * label *label108
+-    * label *label109
+-    * jump *label105 always
 +  634 op add :reactors :reactors 1
 +  635 op lessThanEq :enabled :reactors .REACTORS_ON
 +  636 control enabled :block :enabled

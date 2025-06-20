@@ -4,16 +4,16 @@
 
 The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown).
 
-To run the code produced by Mindcode Logic 8, you need to use one the pre-release version, or one of the development versions of Mindustry (a "bleeding-edge" version).
+To run the code produced by Mindcode Logic 8, you need to use one of the pre-release versions, or one of the development versions of Mindustry (a "bleeding-edge" version).
 
 > [!CAUTION]
-> If you save a game or a campaign in a pre-release or development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular development version you're using, meaning there would be no official release which would be able to read your game state.
+> If you save a game or a campaign in a pre-release or development version of Mindustry, you will no longer be able to open this game/campaign in older versions of the game. Additionally, there exists a possibility that a future version of Mindustry, including an official Mindustry release, won't be compatible with a particular development version you're using. There thus might be no official release that would be able to read your game state.
 >
 > It is strongly recommended to back up the state of your current game (Settings/Game Data/Export data) before running any pre-release or development version of Mindustry.
 
 ## Running a pre-release version
 
-You can download and install the pre-release version in the same way as an official release, for example from [Itch](https://anuke.itch.io/mindustry). 
+You can download and install the pre-release version in the same way as an official release, for example, from [Itch](https://anuke.itch.io/mindustry). 
 
 ## Running development versions of Mindustry
 
@@ -21,7 +21,7 @@ How to run a development versions of Mindustry:
 
 1. Download a Java installation package from https://github.com/Anuken/MindustryJreBuilds/releases/tag/v1.
 2. Extract the package into a directory on your computer.
-3. Obtain a development version of Mindustry from https://github.com/Anuken/MindustryBuilds/releases.
+3. Download a development version of Mindustry from https://github.com/Anuken/MindustryBuilds/releases.
    - This link leads to all the versions of mindustry ever released. Use the latest version if you don't know which to use, or version [25368](https://github.com/Anuken/MindustryBuilds/releases/tag/25368).
    - Download the `Mindustry-BE-Desktop-<build number>.jar` file
 4. Run the following command:
@@ -30,14 +30,18 @@ How to run a development versions of Mindustry:
 java.exe -jar Mindustry-BE-Desktop-<build number>.jar
 ```
 
-- Use the full path to java.exe from the directory into which you've placed the files in step 2.
-- Use the full path including a correct name of the file you've downloaded in step 3.
+- Use the full path to `java.exe` from the directory into which you've placed the files in step 2.
+- Use the full path including the correct name of the file you've downloaded in step 3.
 
 # New functionality in Mindustry 8
 
 ## Numeric literals
 
 Mindustry now handles the numeric literals with double precision. Loss of precision, and inability to encode some numeric constants into mlog, no longer happen.  
+
+## Named color literals
+
+Color literals for named colors (e.g., `%[red]`), are also supported by Mindcode.
 
 ## `format` instruction
 
@@ -65,7 +69,7 @@ The upside is that `fmt` can be a variable and the formatting still works. The d
 
 Apart from the `printf()`, Mindcode supports new `format()` function, which just outputs the `format` instruction for each of its arguments.
 
-The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example to print numbers with thousands separators:
+The `format` instruction searches the text buffer, looking for a placeholder with the lowest number. The first occurrence of this placeholder is then replaced by the value supplied to the `format`. This means that each format only replaces one placeholder: `printf("{0}{0}{1}", "A", "B")` followed by `printflush` therefore outputs `AB{1}` and not `AAB`. On the other hand, `printf("A{0}B", "1{0}2", "X")` outputs `A1X2B` - the placeholder inserted into the text buffer by the `format` instruction is used by the subsequent `format`. That opens up a lot of possibilities for building outputs dynamically; for example, to print numbers with thousands separators:
 
 ```Mindcode
 #set target = 8;
@@ -159,7 +163,7 @@ The `format` instruction is also supported by the emulator, allowing you to expe
 
 ## `printchar` instruction
 
-The `printchar` instruction allows to output individual characters to the text buffer. The character is identified by its ASCII code. The ASCII code can be specified directly (`printchar(65);`), using Mindcode's character literal (`printchar('!');`) or using the `ascii()` function (`printchar(ascii("Today"));`).
+The `printchar` instruction allows outputting individual characters to the text buffer. The character is identified by its ASCII code. The ASCII code can be specified directly (`printchar(65);`), using Mindcode's character literal (`printchar('!');`) or using the `ascii()` function (`printchar(ascii("Today"));`).
 
 When an object is used as instruction argument, the corresponding icon is output instead: `printchar(@mega);`.
 
@@ -189,9 +193,11 @@ format :amount
 printflush message1
 ```
 
+To make using the `printchar()` function easier, Mindcode also supports [character literals](SYNTAX.markdown#character-literals). 
+
 ## Reading characters from strings
 
-Mindustry 8 supports accessing individual characters of string values as UTF-16 numeric values using the `read` instruction. Characters are indexed starting at 0. The instruction returns `null` when the index is out of bounds.
+Mindustry 8 supports accessing individual characters of string values as UTF-16 numeric values using the `read` instruction. Characters are indexed starting at `0`. The instruction returns `null` when the index is out of bounds.
 
 This functionality is accessible in Mindcode via the [`char()` function](SYNTAX-4-FUNCTIONS.markdown#the-char-function).  
 
@@ -221,7 +227,7 @@ op add *tmp2 :x :y
 write *tmp2 processor1 "z"
 ```
 
-Unlike external variables, access to other processor's variables is not limited to numeric values. All possible variable values are correctly transferred using these new instructions.    
+Unlike external variables, access to another processor's variables is not limited to numeric values. All possible variable values are correctly transferred using these new instructions.    
 
 ### Remote functions and variables
 
@@ -231,7 +237,7 @@ Thanks to the ability to access other processors' variables, Mindcode now suppor
 
 ### `draw print`
 
-Prints the contents of the text buffer onto the display. So, instead of `printflush(message1);` you'll use `drawPrint(x, y, alignment); drawflush(display1);` to output the text on the display instead of a message block.
+This instruction prints the contents of the text buffer onto the display. So, instead of `printflush(message1);` you'll use `drawPrint(x, y, alignment); drawflush(display1);` to output the text on the display instead of a message block.
 
 The new `draw print` instruction is represented by the `drawPrint()` function, as `print()` is already taken. 
 
@@ -243,7 +249,7 @@ New `draw rotate`, `draw translate` and `draw scale` can be used to rotate, tran
 
 These instructions are represented by `rotate()`, `translate()`, `scale()` and `reset()` functions. By issuing `reset(); rotate(90); translate(0, -176);` it is possible to rotate the output by 90 degrees counterclockwise when drawing to the large display.
 
-Figuring out the correct transformations isn't always easy. Issuing incorrect ones may result into all the output being drawn off-screen, which is then difficult to diagnose. For this reason, the following system functions are defined:
+Figuring out the correct transformations isn't always easy. Issuing incorrect ones may result in all the output being drawn off-screen, which might be challenging to diagnose. For this reason, the following system functions are defined:
 
 * `rotateLeftLarge()`, `rotateRightLarge()`, `upsideDownLarge()`: ensures the output to the large display will be rotated left, right or upside down by issuing `reset()`, `rotate()` and `translate()` as needed.
 * `flipVerticalLarge()`, `flipHorizontalLarge()`: flips output to the large display vertically or horizontally.   
@@ -251,11 +257,25 @@ Figuring out the correct transformations isn't always easy. Issuing incorrect on
 * `rotateLeft(display)`: will inspect the display and apply the correct transformation for small/large ones.
 * `smallToLarge()`, `largeToSmall()`: will set up scaling so that output to a small display will be mapped completely to the large one or vice versa. Especially the `largeToSmall()` transformation results into a graphics which is still nicely readable on a smaller display.
 
-## New standard processor instructions
+## Additional standard processor instructions
+
+Note: these new instructions map either to functions or to operators. When compiling for Mindustry 7, the new operators are available by default, and the new functions are available through system libraries `graphics` and `math`, implemented in a backwards compatible way. This way you can start using these operators and functions in Mindustry 7 and seamlessly transition to Mindustry 8 without having to update your code. 
 
 ### `unpackcolor`
 
 Reverses the `packcolor` instruction. Prior to version 8, the same operation may be performed by the `unpackcolor()` function from the `graphics` library.  
+
+### `op emod`
+
+Positive modulo: like modulo, except when the divisor is positive and the dividend negative, still returns a positive number. The instruction is mapped to the `%%` operator.
+
+### `op ushr`
+
+Unsigned right-shift operator. The difference between the signed (`>>`) and unsigned (`>>>`) right shift operators concerns negative numbers: the signed operator copies the value of the leftmost bit (the sign bit) to lower bits when shifting, while the unsigned operator shifts in zeroes.
+
+### `op logn`
+
+The instruction `op logn result a b` computes the logarithm of `a` in base `b`. Prior to version 8, the same operation may be performed by the `logn()` function from the `math` library.
 
 ### `op sign`
 
@@ -265,11 +285,11 @@ Provides the signum of the argument (`-1`, `0` or `1` for a negative, zero or po
 
 Rounds the argument to the closest integer. Prior to version 8, the same operation may be performed by the `round()` function from the `math` library.
 
-## New World processor instructions
+## Additional World processor instructions
 
 ### `weathersense`, `weatherset`
 
-Allows to determine whether given weather type is active, or activate/deactivate it. Supported weathers are `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog` and `@suspend-particles`
+Allows determining whether a given weather type is active, or activate/deactivate it. Supported weathers are `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog` and `@suspend-particles`
 
 ### `message`
 
@@ -281,9 +301,9 @@ The instruction has a new parameter to specify whether the explosion triggers ad
 
 ### `playsound`
 
-Plays a sound, either on a specific position, or with a global volume and pan.
+Plays a sound, either in a specific position on the world map or with a global volume and pan.
 
-<details><summary>Show full list of available sounds.</summary>
+<details><summary>Show the full list of available sounds.</summary>
 
 `@sfx-artillery`
 `@sfx-bang`
@@ -384,7 +404,7 @@ Plays a sound, either on a specific position, or with a global volume and pan.
 
 ### `setmarker`, `makemarker`
 
-These instructions serve for displaying markers on the map or minimap, as part of creating interactive map objectives (I believe).  
+These instructions serve for displaying markers on the map or minimap, as part of creating interactive map objectives.  
 
 ### `localeprint`
 

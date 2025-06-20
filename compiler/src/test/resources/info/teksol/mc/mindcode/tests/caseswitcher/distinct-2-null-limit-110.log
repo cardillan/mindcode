@@ -479,9 +479,6 @@ Modifications by Convert case at line 11:5 (segments: 32) (-16 instructions):
      4 lookup block :block :i
 -    * jump *label6 equal :block @graphite-press
 -    * jump *label5 always
--    * label *label6
--    * set *tmp2 0x00000002
--    * jump *label4 always
 +    5 sensor *tmp6 :block @id
 +    6 jump *label60 greaterThanEq *tmp6 203
 +    7 jump *label58 greaterThanEq *tmp6 35
@@ -489,7 +486,9 @@ Modifications by Convert case at line 11:5 (segments: 32) (-16 instructions):
 +    9 jump *label58 greaterThanEq *tmp6 1
 +   10 label *label59
 +   11 jump *label58 strictEqual *tmp6 null
-+   12 label *label6
+    12 label *label6
+-    * set *tmp2 0x00000002
+-    * jump *label4 always
 +   13 set *tmp2 0x00000002
 +   14 jump *label4 always
 +   15 label *label61

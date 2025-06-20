@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
+import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.compiler.optimization.cases.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
@@ -163,9 +164,10 @@ public class CaseSwitcher extends BaseOptimizer {
         LogicVariable variable = null;
         Targets targets = new Targets(hasElseBranch);
         WhenValueAnalyzer analyzer = new WhenValueAnalyzer();
+        final Map<LogicLabel, Integer> bodySizes = new HashMap<>();
 
         // Used to compute the size and execution costs of the case expression
-        int jumps = 0, values = 0, savedSteps = 0;
+        int jumps = 0, values = 0, savedSteps = 0, bodySize = 0;
         ExpState expState = null;
         LogicLabel target = null;
 
@@ -174,6 +176,7 @@ public class CaseSwitcher extends BaseOptimizer {
                 LogicInstruction ix = iterator.next();
                 if (conditionMatcher.matches(ix.getAstContext())) {
                     expState = ExpState.CONDITION;
+                    bodySize = 0;
                     if (ix instanceof JumpInstruction jump) {
                         jumps++;
 
@@ -216,15 +219,17 @@ public class CaseSwitcher extends BaseOptimizer {
                         // Something different from a jump in a condition --> unsupported structure
                         return;
                     }
-                } else if (expState == ExpState.CONDITION && bodyMatcher.matches(ix.getAstContext())) {
+                } else if (bodyMatcher.matches(ix.getAstContext())) {
                     expState = ExpState.BODY;
+                    bodySize += ix.getRealSize(null);
                 } else if (expState == ExpState.BODY && ix.getAstContext().parent() == context && ix.getAstContext().matches(FLOW_CONTROL)) {
+                    if (target == null) throw new MindcodeInternalError("Target not set in condition");
+                    bodySizes.put(target, bodySize);
                     // The first flow control after a body:
                     // If the first instruction isn't a jump, can't move this body.
                     expState = ix instanceof JumpInstruction jump && jump.isUnconditional() ? ExpState.FLOW : null;
                 } else if (expState == ExpState.FLOW) {
                     if (ix instanceof LabelInstruction) {
-                        if (target == null) throw new MindcodeInternalError("Target not set in condition");
                         targets.addMovableLabel(target);
                     }
                     expState = null;
@@ -243,7 +248,7 @@ public class CaseSwitcher extends BaseOptimizer {
                 + (targets.hasElseBranch() ? targets.getElseValues() * originalCost : 0);
 
         ConvertCaseActionParameters param = new ConvertCaseActionParameters(groupCount, context, variable, targets,
-                originalCost, originalSteps, analyzer.isMindustryContent(), removeRangeCheck,
+                bodySizes, originalCost, originalSteps, analyzer.isMindustryContent(), removeRangeCheck,
                 getProfile().isSymbolicLabels(), targets.hasElseBranch() && targets.getElseValues() > 0);
 
         SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(targets,
@@ -298,22 +303,32 @@ public class CaseSwitcher extends BaseOptimizer {
         List<Segment> segments = segmentConfiguration.createSegments(param.removeRangeCheck, param.mindustryContent,
                 param.symbolic, param.targets);
 
-        actions.add(new ConvertCaseExpressionAction(param, segments, ""));
+        addOptimizationAction(actions, param, segments, "");
 
         int lowPadIndex = findLowPadSegment(segments);
         int highPadIndex = findHighPadSegment(param, segments);
 
         if (lowPadIndex >= 0) {
-            actions.add(new ConvertCaseExpressionAction(param, padLow(segments, param, lowPadIndex), "padded low"));
+            addOptimizationAction(actions, param, padLow(segments, param, lowPadIndex), "padded low");
         }
 
         if (highPadIndex >= 0) {
-            actions.add(new ConvertCaseExpressionAction(param, padHigh(segments, param, highPadIndex), "padded high"));
+            addOptimizationAction(actions, param, padHigh(segments, param, highPadIndex), "padded high");
         }
 
         if (lowPadIndex >= 0 && highPadIndex >= 0) {
-            actions.add(new ConvertCaseExpressionAction(param, padLow(padHigh(segments, param, highPadIndex), param, lowPadIndex),
-                    "padded both"));
+            addOptimizationAction(actions, param, padLow(padHigh(segments, param, highPadIndex), param, lowPadIndex), "padded both");
+        }
+    }
+
+    private void addOptimizationAction(List<ConvertCaseExpressionAction> actions, ConvertCaseActionParameters param,
+            List<Segment> segments, String padding) {
+        actions.add(new ConvertCaseExpressionAction(param, segments, padding, false));
+        if (experimental()) {
+            boolean canMoveMoreBodies = actions.getLast().segments.stream().anyMatch(s -> s.moveable() && !s.embedded());
+            if (canMoveMoreBodies) {
+                actions.add(new ConvertCaseExpressionAction(param, segments, padding, true));
+            }
         }
     }
 
@@ -398,6 +413,7 @@ public class CaseSwitcher extends BaseOptimizer {
             AstContext context,
             LogicVariable variable,
             Targets targets,
+            Map<LogicLabel, Integer> bodySizes,
             int originalCost,
             int originalSteps,
             boolean mindustryContent,
@@ -411,16 +427,18 @@ public class CaseSwitcher extends BaseOptimizer {
         private final ConvertCaseActionParameters param;
         private final List<Segment> segments;
         private final String padding;
+        private final boolean moveAllBodies;
         private int cost;
         private int executionSteps;
         private double benefit;
         private double rawBenefit;
         private boolean applied;
 
-        private ConvertCaseExpressionAction(ConvertCaseActionParameters param, List<Segment> segments, String padding) {
+        private ConvertCaseExpressionAction(ConvertCaseActionParameters param, List<Segment> segments, String padding, boolean moveAllBodies) {
             this.param = param;
             this.segments = segments.stream().map(Segment::duplicate).toList();
             this.padding = padding;
+            this.moveAllBodies = moveAllBodies;
 
             debugOutput("%n%n*** %s ***%n", this);
 
@@ -486,7 +504,8 @@ public class CaseSwitcher extends BaseOptimizer {
             int numSegments = segments.size() - (segments.getFirst().empty() ? 1 : 0) - (segments.getLast().empty() ? 1 : 0);
             String strId = CaseSwitcher.super.isDebugOutput() ? "#" + id + ", " : "";
             return "Convert case at " + Objects.requireNonNull(param.context.node()).sourcePosition().formatForLog() +
-                    " (" + strId + "segments: " + numSegments + (padding.isEmpty() ? "" : ", " + padding) + ")";
+                    " (" + strId + "segments: " + numSegments + (padding.isEmpty() ? "" : ", " + padding) +
+                    (moveAllBodies && CaseSwitcher.super.isDebugOutput() ? ", embed all)" : ")");
         }
 
         private void computeCostAndBenefitNoRangeCheck() {
@@ -538,9 +557,19 @@ public class CaseSwitcher extends BaseOptimizer {
                 cost++;
             }
 
-            computeRetargeting();
+            computeEmbedding();
 
             int bisectionSteps = computeBisectionTable(segments, 0);
+
+            if (moveAllBodies) {
+                Set<LogicLabel> moved = new HashSet<>();
+                for (Segment segment : segments) {
+                    LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.targets.getExisting(0) : segment.endLabel();
+                    if (segment.embedded() && !moved.add(label)) {
+                        segment.setEmbeddingSize(param.bodySizes().get(label) + 1);
+                    }
+                }
+            }
 
             segments.forEach(this::computeSegmentCostAndBenefit);
 
@@ -580,12 +609,12 @@ public class CaseSwitcher extends BaseOptimizer {
             };
 
             if (isDebugOutput()) {
-                debugOutput("Segment %3d to %3d: %s, %s, depth %d, bisection steps: %d, total steps: %d",
-                        segment.from(), segment.to(), segment.typeName(), stats, segment.depth(),
+                debugOutput("Segment %3d to %3d: %s, %s, embed size %d, depth %d, bisection steps: %d, total steps: %d",
+                        segment.from(), segment.to(), segment.typeName(), stats, segment.embeddingSize(), segment.depth(),
                         segment.depth() * (stats.values + stats.elseValues), stats.steps + stats.elseSteps);
             }
 
-            cost += stats.size;
+            cost += stats.size + segment.embeddingSize();
             targetSteps += stats.steps + segment.depth() * stats.values;
             elseSteps += stats.elseSteps + segment.depth() * stats.elseValues;
         }
@@ -623,9 +652,9 @@ public class CaseSwitcher extends BaseOptimizer {
         private SegmentStats computeSingleSegment(Segment segment, int activeTargets) {
             boolean handleNull = param.mindustryContent && segment.from() == 0;
 
-            int size = segment.inline() || segment.direct() ? 0 : 1;
-            int steps = segment.inline() || segment.direct() ? 0 : segment.size();
-            int nullSteps = segment.handleNulls() ? segment.size() : 0;  // Only for empty segments
+            int size = segment.inline() || segment.embedded() ? 0 : 1;
+            int steps = segment.inline() || segment.embedded() ? 0 : segment.size();
+            int nullSteps = segment.handleNulls() ? segment.size() : 0;  // Only for empty segments, these can't be direct
 
             if (segment.empty()) {
                 return new SegmentStats(size, 0, 0, segment.size(), steps + nullSteps);
@@ -642,7 +671,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
         private void generateSingleSegment(Segment segment, LogicLabel finalLabel) {
             assert newAstContext != null;
-            if (segment.direct()) {
+            if (segment.embedded()) {
                 moveBody(segment.endLabel());
             } else {
                 insertInstruction(createJumpUnconditional(newAstContext, findSingleSegmentTarget(segment, finalLabel)));
@@ -673,7 +702,7 @@ public class CaseSwitcher extends BaseOptimizer {
             if (segment.majorityLabel() == LogicLabel.EMPTY) {
                 // Majority branch is the else branch
                 // Final jump counts as else branch
-                int finalJump = segment.direct() ? 0 : 1;
+                int finalJump = segment.embedded() ? 0 : 1;
 
                 // Account for null handling on the else branch
                 int nullHandling = segment.handleNulls() ? elseValues : 0;
@@ -715,8 +744,8 @@ public class CaseSwitcher extends BaseOptimizer {
                 // Compute execution through the select table by majority targets and else values
                 activeSteps += size * majorityTargets;
 
-                // The final jump to majority target (not present for direct segments)
-                if (!segment.direct()) {
+                // The final jump to majority target (not present for embedded segments)
+                if (!segment.embedded()) {
                     size++;
                     activeSteps += majorityTargets;
                 }
@@ -745,7 +774,7 @@ public class CaseSwitcher extends BaseOptimizer {
                 }
             }
 
-            if (segment.direct()) {
+            if (segment.embedded()) {
                 moveBody(segment.endLabel());
             } else {
                 if (segment.handleNulls() && majorityIsElse) {
@@ -769,8 +798,8 @@ public class CaseSwitcher extends BaseOptimizer {
             // Account for null handling on the else branch
             int nullHandling = segment.handleNulls() ? 1 : 0;
 
-            // When direct, the last jump in the jump table will be avoided
-            int savedSize = segment.direct() ? 1 : 0;
+            // When embedded, the last jump in the jump table will be avoided
+            int savedSize = segment.embedded() ? 1 : 0;
             int savedTarget = segment.endLabel() == LogicLabel.EMPTY ? 0 : savedSize;
             int savedElse = segment.endLabel() == LogicLabel.EMPTY ? savedSize : 0;
 
@@ -792,7 +821,7 @@ public class CaseSwitcher extends BaseOptimizer {
             List<LogicLabel> labels = IntStream.range(segment.from(), segment.to()).mapToObj(i -> instructionProcessor.nextLabel()).toList();
             LogicLabel marker = instructionProcessor.nextLabel();
             insertInstruction(createMultiJump(newAstContext, labels.getFirst(), caseVariable, LogicNumber.create(segment.from()), marker));
-            int end = labels.size() - (segment.direct() ? 1 : 0);
+            int end = labels.size() - (segment.embedded() ? 1 : 0);
 
             for (int i = 0; i < end; i++) {
                 insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
@@ -801,80 +830,96 @@ public class CaseSwitcher extends BaseOptimizer {
                 insertInstruction(createJumpUnconditional(newAstContext, updatedTarget));
             }
 
-            if (segment.direct()) {
+            if (segment.embedded()) {
                 insertInstruction(createMultiLabel(newAstContext, labels.getLast(), marker));
                 moveBody(segment.endLabel());
             }
         }
 
+        private record BranchContents(LogicList body, LogicList jump) { }
+        private final Map<LogicLabel, BranchContents> branches = new HashMap<>();
+
         private void moveBody(LogicLabel endLabel) {
             LogicLabel label = endLabel == LogicLabel.INVALID ? param.targets.getExisting(0) : endLabel;
-            int startIndex = optimizationContext.getLabelInstructionIndex(label);
+            BranchContents branch = branches.get(label);
 
-            AstContext labelContext = optimizationContext.instructionAt(startIndex).getAstContext();
-            OptimizationContext.LogicList labelInstructions = optimizationContext.contextInstructions(labelContext);
-            if (!labelContext.matches(AstContextType.CASE, FLOW_CONTROL) || (labelInstructions.size() != 1 && labelInstructions.size() != 3))
-                throw new MindcodeInternalError("Unexpected context structure");
+            if (branch == null) {
+                // Moving the branch body for the first time: extract and remove the original instructions
+                int startIndex = optimizationContext.getLabelInstructionIndex(label);
 
-            AstContext bodyContext = optimizationContext.instructionAt(startIndex + labelInstructions.size()).getAstContext();
-            while (bodyContext.existingParent() != astContext()) bodyContext = bodyContext.existingParent();
-            OptimizationContext.LogicList bodyInstructions = optimizationContext.contextInstructions(bodyContext);
-            if (!bodyContext.matches(AstContextType.CASE, AstSubcontextType.BODY))
-                throw new MindcodeInternalError("Unexpected context structure");
+                AstContext labelContext = optimizationContext.instructionAt(startIndex).getAstContext();
+                LogicList labelInstructions = optimizationContext.contextInstructions(labelContext);
+                if (!labelContext.matches(AstContextType.CASE, FLOW_CONTROL) || (labelInstructions.size() != 1 && labelInstructions.size() != 3))
+                    throw new MindcodeInternalError("Unexpected context structure");
 
-            AstContext jumpContext = optimizationContext.instructionAt(startIndex + labelInstructions.size() + bodyInstructions.size()).getAstContext();
-            OptimizationContext.LogicList jumpInstructions = optimizationContext.contextInstructions(jumpContext);
-            if (!jumpContext.matches(AstContextType.CASE, FLOW_CONTROL) || jumpInstructions.size() != 2)
-                throw new MindcodeInternalError("Unexpected context structure");
+                AstContext bodyContext = optimizationContext.instructionAt(startIndex + labelInstructions.size()).getAstContext();
+                while (bodyContext.existingParent() != astContext()) bodyContext = bodyContext.existingParent();
+                LogicList bodyInstructions = optimizationContext.contextInstructions(bodyContext);
+                if (!bodyContext.matches(AstContextType.CASE, AstSubcontextType.BODY))
+                    throw new MindcodeInternalError("Unexpected context structure");
 
-            int size = labelInstructions.size() + bodyInstructions.size() + 1;
-            for (int i = 0; i < size; i++) {
-                optimizationContext.removeInstruction(startIndex);
+                AstContext jumpContext = optimizationContext.instructionAt(startIndex + labelInstructions.size() + bodyInstructions.size()).getAstContext();
+                LogicList jumpInstructions = optimizationContext.contextInstructions(jumpContext);
+                if (!jumpContext.matches(AstContextType.CASE, FLOW_CONTROL) || jumpInstructions.size() != 2)
+                    throw new MindcodeInternalError("Unexpected context structure");
+
+                int size = labelInstructions.size() + bodyInstructions.size() + 1;
+                for (int i = 0; i < size; i++) {
+                    optimizationContext.removeInstruction(startIndex);
+                }
+
+                labelInstructions.forEach(this::insertInstruction);
+
+                branch = new BranchContents(bodyInstructions, jumpInstructions);
+                branches.put(label, branch);
             }
 
             // We're duplicating the contexts to ensure no AST context collision after moving.
-            OptimizationContext.LogicList newLabelInstructions = labelInstructions.duplicate(false);
-            OptimizationContext.LogicList newBodyInstructions = bodyInstructions.duplicate(true);
-            OptimizationContext.LogicList newJumpInstructions = jumpInstructions.duplicate(false);
+            LogicList body = branch.body.duplicate(true);
+            LogicList jump = branch.jump.duplicate(false);
 
-            newLabelInstructions.forEach(this::insertInstruction);
-            newBodyInstructions.forEach(this::insertInstruction);
-            insertInstruction(Objects.requireNonNull(newJumpInstructions.getFirst()));
+            body.forEach(this::insertInstruction);
+            insertInstruction(Objects.requireNonNull(jump.getFirst()));
 
             // By moving the body here, we've broken the common context. Start a new one.
             newAstContext = param.context.createSubcontext(FLOW_CONTROL, 1.0);
         }
 
-        private void computeRetargeting() {
-            // If we can't retarget, remember the label to avoid
-            LogicLabel avoidLabel = canRetargetZero() ? null : param.targets.get(0);
+        private void computeEmbedding() {
+            // If we can't embed, remember the label to avoid
+            LogicLabel avoidLabel = canEmbedZero() ? null : param.targets.get(0);
 
             Map<LogicLabel, Segment> bestSegments = new HashMap<>();
             for (Segment segment : segments) {
                 LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.targets.getExisting(0) : segment.endLabel();
 
-                // We won't retarget the else branch: we'd save a jump to the else branch,
+                // We won't embed the else branch: we'd save a jump to the else branch,
                 // but we'd need another jump to the end of the case statement anyway.
                 if (label == LogicLabel.EMPTY || label == avoidLabel || !param.targets.isMovableLabel(label)) continue;
 
-                Segment previous = bestSegments.get(label);
-                // Prefer non-single segments in case of tie
-                if (previous == null || previous.endLabelWeight() < segment.endLabelWeight()
-                        || (previous.endLabelWeight() == segment.endLabelWeight() && segment.type() != SegmentType.SINGLE)) {
-                    bestSegments.put(label, segment);
+                segment.setMoveable();
+                if (moveAllBodies) {
+                    segment.setEmbedded();
+                } else {
+                    Segment previous = bestSegments.get(label);
+                    // Prefer non-single segments in case of tie, as they cannot be inlined
+                    if (previous == null || previous.endLabelWeight() < segment.endLabelWeight()
+                            || (previous.endLabelWeight() == segment.endLabelWeight() && segment.type() != SegmentType.SINGLE)) {
+                        bestSegments.put(label, segment);
+                    }
                 }
             }
 
-            bestSegments.values().forEach(Segment::setDirect);
+            bestSegments.values().forEach(Segment::setEmbedded);
         }
 
         // Returns true if the zero key can be retargeted:
         // Either nulls cannot appear or the zero target is not shared with anything else.
-        private boolean canRetargetZero() {
+        private boolean canEmbedZero() {
             // No nulls
             if (!param.mindustryContent) return true;
 
-            // No zero target: zero cannot be retargeted (won't be even attempted, so it is meaningless).
+            // No zero target: zero cannot be embedded (won't be even attempted, so it is meaningless).
             LogicLabel zeroLabel = param.targets.get(0);
             if (zeroLabel == null) return false;
 
@@ -972,22 +1017,30 @@ public class CaseSwitcher extends BaseOptimizer {
                 Segment lowSegment = lowSegments.getFirst();
                 Segment highSegment = highSegments.getFirst();
 
-                if (lowSegment.direct() != highSegment.direct()) {
-                    // Inline the non-direct one: the inlined will get a conditional jump
-                    return lowSegment.direct() ? InlineSegment.HIGH : InlineSegment.LOW;
+                if (lowSegment.embedded() != highSegment.embedded()) {
+                    // Inline the non-embedded one: the inlined will get a conditional jump
+                    return lowSegment.embedded() ? InlineSegment.HIGH : InlineSegment.LOW;
                 } else {
                     // Inline the larger one - saves more steps
-                    // We need to reset the direct flag (if any) on the segment that gets inlined
+                    // We need to reset the embedding (if any) on the segment that gets inlined
                     if (size(lowSegment) > size(highSegment)) {
-                        lowSegment.resetDirect();
+                        lowSegment.resetEmbedded();
                         return InlineSegment.LOW;
                     } else {
-                        highSegment.resetDirect();
+                        highSegment.resetEmbedded();
                         return InlineSegment.HIGH;
                     }
                 }
+            } else if (low) {
+                // If we can inline the segment, it is better than embedding it.
+                // Both inlining and embedding save a jump, but embedding increases code size.
+                lowSegments.getFirst().resetEmbedded();
+                return InlineSegment.LOW;
+            } else if (high) {
+                highSegments.getFirst().resetEmbedded();
+                return InlineSegment.HIGH;
             } else {
-                return low ? InlineSegment.LOW : high ? InlineSegment.HIGH : InlineSegment.NONE;
+                return InlineSegment.NONE;
             }
         }
 

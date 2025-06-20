@@ -127,7 +127,7 @@ public class LiteralsBuilder extends AbstractBuilder implements
 
             if (!processor.isValidIntegerLiteral(absValue)) {
                 error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, absValue);
-            } else if (!node.isSuppressWarning() && (absValue == Long.MIN_VALUE || Math.abs(absValue) > (1L << 52))) {
+            } else if (!node.isSuppressWarning() && (absValue == Long.MIN_VALUE || Math.abs(absValue) >= (1L << 53))) {
                 warn(node, WARN.LITERAL_UNSAFE_DECIMAL_RANGE, literal);
             }
 

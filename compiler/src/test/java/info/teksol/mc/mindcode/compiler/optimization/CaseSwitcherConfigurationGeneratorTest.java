@@ -43,7 +43,7 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
             text.append(i);
             final int strength = i;
             double improvement = sorted.values().stream().map(l -> l.get(strength)).mapToDouble(StrengthStatistic::improvement).average().orElse(0);
-            text.append(";").append(str(-improvement));
+            text.append(";").append(str(improvement));
             sorted.values().forEach(l -> text.append(";").append(str(l.get(strength).improvement)));
             text.append("\n");
         }
@@ -107,7 +107,7 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
         List<StrengthStatistic> statistics = new ArrayList<>();
         int[] last = null;
         int lastSum = 0;
-        text.append("Strength;Configurations;Total steps;Avg steps;Avg difference;Regression\n");
+        text.append("Strength;Configurations;Total steps;Avg steps;Avg improvement;Regression\n");
         for (int strength = 0; strength <= MAX_STRENGTH; strength++) {
             TestResult testResult = executeCaseSwitchingTest(fileContent, strength);
             double avgDifference;
@@ -125,7 +125,7 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
                     sum += testResult.steps[i];
                 }
 
-                avgDifference = d(sum - lastSum) / testResult.steps.length;
+                avgDifference = d(lastSum - sum) / testResult.steps.length;
                 text.append(strength).append(";")
                         .append(testResult.configurationCount).append(";")
                         .append(sum).append(";")

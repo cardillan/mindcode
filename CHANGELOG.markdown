@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.7.0 - Unreleased
 
+### Fixed
+
+* Mindcode incorrectly warned about possible loss of precision for integer literals larger than 2<sup>52</sup>-1. The correct maximum safe integer value is 2<sup>53</sup>-1.
+
 ### Changed
 
 * Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)

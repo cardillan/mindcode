@@ -31,7 +31,7 @@ All numeric values, both integer and floating-point, are stored as `double`, a 6
 >
 > Every intermediate result during expression evaluation is stored in a processor variable, so the integer/double conversion happens at every step of computation in mlog.
 
-Producing integer numbers this large would be somewhat unusual in a typical Mindustry Logic program, except using bitwise operations to manipulate individual bits. In these cases, make sure to use at most 52 bits of each variable. Using 53 bits is not safe, because performing bitwise complement (operation inverting all bits) on values larger than 2<sup>52</sup> may lead to loss of precision as well.
+Producing integer numbers this large would be somewhat unusual in a typical Mindustry Logic program, except using bitwise operations to manipulate individual bits. In these cases, make sure to use at most 53 bits of each variable. Using 54 bits is not safe, because performing bitwise complement (operation inverting all bits) on values larger than 2<sup>53</sup>-1 may lead to loss of precision as well.
  
 ## Linked blocks
 

@@ -151,7 +151,7 @@ If the condition is part of a loop, it might be possible to avoid the boolean ex
 while x > 0 do
     if x >= 10 then break; end;
     print("in loop");
-    x = vault1.@coal;  // Jusst changing the value of x in some way       
+    x = vault1.@coal;  // Just changing the value of x in some way       
 end;
 printflush(message1);
 ```
@@ -179,7 +179,7 @@ Furthermore, Mindcode is able to unroll more complex loops on [advanced optimiza
 
 ## Determining the number of iterations
 
-Mindcode determines the number of iterations by analyzing the loop condition. It doesn't take `break` statements into account. The following loop won't get unrolled, even though the maximal number of iterations it apparent:
+Mindcode determines the number of iterations by analyzing the loop condition. It doesn't take `break` statements into account. The following loop won't get unrolled, even though the maximal number of iterations is obvious:
 
 ```Mindcode
 i = 0;
@@ -317,7 +317,7 @@ The long-term goal is to produce identical, optimal code in both of these cases.
 
 ## Arrays in non-unrolled loops
 
-When the loop cannot get unrolled for some reason, list iteration loops are generally faster than loops using index-based array access. When more than a single variable is used, or when the array is modified by the loop, list iteration loops provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of space.  
+When the loop cannot get unrolled for some reason, list iteration loops are generally faster than loops using index-based array access. When more than a single variable is used, or when the array is modified in the loop, list iteration loops provide much better performance than index-based loops. Index-based access may be preferable when the arrays are huge, as a single jump table can be generated for the array to be accessed from multiple places of the program, saving a considerable amount of instruction space.  
 
 Example of simple array access:
 

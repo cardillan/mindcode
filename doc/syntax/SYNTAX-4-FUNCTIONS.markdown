@@ -506,6 +506,8 @@ op add :index :index 1
 jump 2 always 0 0
 ```
 
+
+
 ## The `strlen()` function
 
 The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8` or higher.

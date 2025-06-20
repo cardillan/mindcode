@@ -31,8 +31,14 @@ public final class Segment implements Comparable<Segment> {
     /// Resolved by the bisection jump
     private boolean inline;
 
-    /// Instead of jumping to a target, this segment will be followed by the corresponding body
-    private boolean direct;
+    /// This segment's body can be moved (embedded)
+    private boolean moveable;
+
+    /// This segment's body has been selected for embedding
+    private boolean embedded;
+
+    /// Additional size due to embedding
+    private int embeddingSize;
 
     private final int hashCode;
 
@@ -159,12 +165,21 @@ public final class Segment implements Comparable<Segment> {
         this.handleNulls = true;
     }
 
-    public void setDirect() {
-        this.direct = true;
+    public void setMoveable() {
+        this.moveable = true;
     }
 
-    public void resetDirect() {
-        this.direct = false;
+    public void setEmbeddingSize(int embeddingSize) {
+        this.embeddingSize = embeddingSize;
+    }
+
+    public void setEmbedded() {
+        this.embedded = true;
+    }
+
+    public void resetEmbedded() {
+        this.moveable = false;
+        this.embedded = false;
     }
 
     @Override
@@ -240,8 +255,16 @@ public final class Segment implements Comparable<Segment> {
         return inline;
     }
 
-    public boolean direct() {
-        return direct;
+    public boolean moveable() {
+        return moveable;
+    }
+
+    public boolean embedded() {
+        return embedded;
+    }
+
+    public int embeddingSize() {
+        return embeddingSize;
     }
 
     @Override
@@ -284,7 +307,8 @@ public final class Segment implements Comparable<Segment> {
                 ", depth=" + depth +
                 ", handleNulls=" + handleNulls +
                 ", inline=" + inline +
-                ", direct=" + direct +
+                ", moveable=" + moveable +
+                ", embedded=" + embedded +
                 '}';
     }
 }

@@ -305,7 +305,10 @@ Modifications by Convert case at line 17:9 (segments: 7) (+2 instructions):
     21 print *tmp10
     22 print " - "
 -    * jump *label8 notEqual :page 1
--    * label *label9
++   23 jump *label23 greaterThanEq :page 4
++   24 jump *label24 greaterThanEq :page 2
++   25 jump *label22 lessThan :page 1
+    26 label *label9
 -    * print "contents:"
 -    * print "\n"
 -    * sensor *tmp13 .BLOCK @totalItems
@@ -330,10 +333,6 @@ Modifications by Convert case at line 17:9 (segments: 7) (+2 instructions):
 -    * print *tmp18
 -    * print "\n"
 -    * jump *label7 always
-+   23 jump *label23 greaterThanEq :page 4
-+   24 jump *label24 greaterThanEq :page 2
-+   25 jump *label22 lessThan :page 1
-+   26 label *label9
 +   27 print "contents:"
 +   28 print "\n"
 +   29 sensor *tmp13 .BLOCK @totalItems

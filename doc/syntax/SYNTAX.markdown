@@ -60,7 +60,7 @@ Additional information on Mindcode and Mindustry Logic:
 
 Mindcode program is a sequence of expressions or statements. Semicolons separate statements and expressions, as in `a = 5; b = 10;`. Expressions have a value: `1 + 2` is an expression whose value is `3`. Whitespace (spaces, tabs, new-line characters) serves to separate individual _tokens_: keywords, identifiers, operators, and so on, but is otherwise ignored. Indentation, while recommended, is ignored by the compiler.
 
-Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second is not and could - but shouldn't - be used as a variable or function name).
+Mindcode identifiers and keywords are case-sensitive -- `if` is different from `If` (first is a keyword, the second is not and could be used as a variable or function name).
 
 A text enclosed between `/*` and `*/` is a comment that can span several lines. Additionally, anything following a `//` is a comment till the end of the line. Comments are completely ignored by Mindcode.
 
@@ -96,7 +96,7 @@ The `require` statement can appear anywhere in the compiled code, although it is
 
 A file added though a `require` statement can also use a `require` statement. Circular dependencies between files are resolved, and each file is compiled only once.
 
-In the web application, the `require` statement can only be used to import system libraries, or source code contained in string values within a [Schemacode file](SCHEMACODE.markdown). Using the statement with external files is not supported.
+In the web application, the `require` statement can only be used to import system libraries or source code contained in string values within a [Schemacode file](SCHEMACODE.markdown). Using the statement with external files is not supported.
 
 In the command-line tool, using the `require` statement with external files is analogous to the [`--append` command-line argument](TOOLS-CMDLINE.markdown#additional-input-files).
 
@@ -107,12 +107,10 @@ In the command-line tool, using the `require` statement with external files is a
 
 Mindcode provides the web application and the command-line compiler for compiling Mindcode into mlog code. There are several [optimization levels](SYNTAX-5-OTHER.markdown#option-optimization) available:
 
-* `none`: completely switches off optimization. The only practical use is when you have a suspicion that there's a bug in Mindcode: switching off optimizations and running comparing the results might help pinpoint the problem. (In any case, if you suspect a bug in Mindcode, please don't hesitate to [open an issue](https://github.com/cardillan/mindcode/issues/new)-we'll have a look into it.)     
+* `none`: completely switches off optimization. The only practical use is when you have a suspicion that there's a bug in Mindcode: switching off optimizations and running the resulting code might help pinpoint the problem. (In any case, if you suspect a bug in Mindcode, please don't hesitate to [open an issue](https://github.com/cardillan/mindcode/issues/new)-we'll have a look into it.)     
 * `basic`: at this level, most optimizations are performed, but some are avoided so that the structure of the compiled program is more understandable. Some optimizations (such as loop unrolling) will still modify the resulting mlog code a lot.  
 * `advanced`: all standard optimizations are performed.
-* `experimental`: experimental optimizations are kept in a separate category either because they're new and can be easily switched off if there's a bug in them, or because they break backwards compatibility and need to be deactivated until older code is updated to the new standard.
-
-The web application uses `basic` by default, while the command-line compiler uses `advanced`. In both it is possible to easily select a different optimization level.
+* `experimental` (the default): experimental optimizations are kept in a separate category either because they're new and can be easily switched off if there's a bug in them, or because they break backwards compatibility and need to be deactivated until older code is updated to the new standard.
 
 All examples in this documentation are run on the `basic` level, unless specified otherwise.
 
@@ -266,7 +264,7 @@ Variables created by the Mindcode compiler never interfere with user variables o
 
 ## Built-in variables and constants
 
-Mindustry Logic provides variables and constants that start with `@`. They can be read-only variables (such as `@unit` or `@time`) or effectively constant values (such as `@coal` or `@this`). Multi-word built-in variable names in mlog use the kebab-case convention (e.g., `@blast-compound`).           
+Mindustry Logic provides variables and constants that start with `@`. They can be read-only variables (such as `@unit` or `@time`) or effectively constant values (such as `@coal` or `@this`). Built-in variable names in mlog usually (but not always) use the kebab-case convention (e.g., `@blast-compound`), when consisting of several words.           
 
 Built-in variables and constants can be used as-is in Mindcode, e.g., `@time` or `@titanium-conveyor`. The leading `@` is always present.
 
@@ -341,7 +339,7 @@ When the target version of Mindustry is capable of parsing the literal as given,
 
 ### Color literals
 
-Mindustry Logic recognizes special literals designed for encoding colors in version 7 and higher. These literals use `%` (a percent character) as a prefix, followed by six or eight hexadecimal digits. The first six digits encode red, green, and blue channels respectively, the (optional) 7th-8th digits encode the alpha channel (0 = transparent, 255 = opaque), when not specified, the alpha channel defaults to opaque:
+Mindustry Logic recognizes special literals designed for encoding colors in version 7 and higher. These literals use `%` (a percent character) as a prefix, followed by six or eight hexadecimal digits. The first six digits encode red, green, and blue channels respectively, the (optional) 7th-8th digits encode the alpha channel (`00` = transparent, `FF` = opaque); when not specified, the alpha channel defaults to `FF`:
 
 * `%FF0000`: bright red
 * `%007F00`: dark green

@@ -417,14 +417,13 @@ Modifications by Convert case at line 27:5 (segments: 10) (+2 instructions):
     16 label *label30
     17 op mod :processDigit:n :processNumber:n 10
 -    * jump *label9 notEqual :processDigit:n 0
--    * label *label10
--    * op add .S0 .S0 1
--    * jump *label8 always
 +   18 jump *label32 greaterThanEq :processDigit:n 5
 +   19 jump *label33 greaterThanEq :processDigit:n 2
 +   20 jump *label31 lessThan :processDigit:n 0
 +   21 jump *label12 greaterThanEq :processDigit:n 1
-+   22 label *label10
+    22 label *label10
+-    * op add .S0 .S0 1
+-    * jump *label8 always
 +   23 op add .S0 .S0 1
 +   24 jump *label8 always
 +   25 label *label33

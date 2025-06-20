@@ -206,10 +206,10 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void generatesImprecisionWarningForDecimalLiterals() {
         assertGeneratesMessage(
-                "Literal '4503599627370497' exceeds safe range for integer operations (0 .. 2**52).",
+                "Literal '9007199254740992' exceeds safe range for integer operations (0 ... 2**53).",
                 """
-                        var a = 4503599627370496;
-                        var b = 4503599627370497;
+                        var a = 9007199254740991;
+                        var b = 9007199254740992;
                         """
         );
     }
@@ -217,10 +217,10 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void generatesImprecisionWarningForHexadecimalLiterals() {
         assertGeneratesMessage(
-                "Literal '0x10000000000001' exceeds safe range for integer operations (0 .. 2**52).",
+                "Literal '0x20000000000000' exceeds safe range for integer operations (0 ... 2**53).",
                 """
-                        var a = 0x10000000000000;
-                        var b = 0x10000000000001;
+                        var a = 0x1FFFFFFFFFFFFF;
+                        var b = 0x20000000000000;
                         """
         );
     }
@@ -228,10 +228,10 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     @Test
     void generatesImprecisionWarningForBinaryLiterals() {
         assertGeneratesMessage(
-                "Literal '0b10000000000000000000000000000000000000000000000000001' exceeds safe range for integer operations (0 .. 2**52).",
+                "Literal '0b100000000000000000000000000000000000000000000000000000' exceeds safe range for integer operations (0 ... 2**53).",
                 """
-                        var a = 0b10000000000000000000000000000000000000000000000000000;
-                        var b = 0b10000000000000000000000000000000000000000000000000001;
+                        var a = 0b011111111111111111111111111111111111111111111111111111;
+                        var b = 0b100000000000000000000000000000000000000000000000000000;
                         """
         );
     }
@@ -240,7 +240,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     void refusesTooBigDecimalLiterals() {
         assertGeneratesMessages(
                 expectedMessages()
-                        .add("Literal '9223372036854775807' exceeds safe range for integer operations (0 .. 2**52).")
+                        .add("Literal '9223372036854775807' exceeds safe range for integer operations (0 ... 2**53).")
                         .add("Literal '9223372036854775808' exceeds maximum possible value (9223372036854775807)."),
                 """
                         var a = 9223372036854775807;
@@ -253,7 +253,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     void refusesTooBigHexadecimalLiterals() {
         assertGeneratesMessages(
                 expectedMessages()
-                        .add("Literal '0x7fffffffffffffff' exceeds safe range for integer operations (0 .. 2**52).")
+                        .add("Literal '0x7fffffffffffffff' exceeds safe range for integer operations (0 ... 2**53).")
                         .add("Value '-9223372036854775808' does not have a valid mlog representation."),
                 """
                         var a = 0x7fffffffffffffff;
@@ -266,7 +266,7 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     void refusesTooBigBinaryLiterals() {
         assertGeneratesMessages(
                 expectedMessages()
-                        .add("Literal '0b0111111111111111111111111111111111111111111111111111111111111111' exceeds safe range for integer operations (0 .. 2**52).")
+                        .add("Literal '0b0111111111111111111111111111111111111111111111111111111111111111' exceeds safe range for integer operations (0 ... 2**53).")
                         .add("Value '-9223372036854775808' does not have a valid mlog representation."),
                 """
                         var a = 0b0111111111111111111111111111111111111111111111111111111111111111;
