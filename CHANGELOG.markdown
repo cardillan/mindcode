@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)
+  * The optimization now processes integer case expression with ranges too. Ranges must not overlap other ranges or standalone values. 
   * The optimization now uses bisection search to locate the proper segment when performing Jump Table compression, providing up to 15% speedup in some scenarios.
   * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `target-optimization` to be set to `specific`. 
   * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time. The value of `0` doesn't consider any other configuration except a full jump table, effectively turning off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression).
@@ -29,7 +30,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Miscellaneous
 
-* Updated metadata corresponding to the BE version to the latest available BE build.
+* Updated the BE version metadata to the latest available BE build.
 
 ## 3.6.1 - 2025-06-06
 

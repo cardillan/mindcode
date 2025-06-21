@@ -1,23 +1,25 @@
     71 instructions before optimizations.
      7 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
-     3 instructions eliminated by Dead Code Elimination (5 iterations).
-     1 instructions eliminated by Jump Optimization (6 iterations).
-     1 instructions eliminated by Single Step Elimination (7 iterations).
+     3 instructions eliminated by Dead Code Elimination (4 iterations).
+     1 instructions eliminated by Jump Optimization (5 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-    14 instructions eliminated by Data Flow Optimization (4 passes, 14 iterations).
+    14 instructions eliminated by Data Flow Optimization (4 passes, 15 iterations).
      2 loops improved by Loop Hoisting.
      1 instructions eliminated by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
-    23 instructions added by Loop Unrolling (5 iterations).
+    23 instructions added by Loop Unrolling (6 iterations).
      1 loops unrolled by Loop Unrolling.
-     2 instructions eliminated by Function Inlining (5 iterations).
+     2 instructions eliminated by Function Inlining (6 iterations).
      3 function calls inlined by Function Inlining.
-     4 instructions eliminated by Jump Straightening (2 passes, 6 iterations).
-     6 instructions updated by JumpThreading.
-     1 instructions eliminated by Unreachable Code Elimination (3 iterations).
+     1 instructions added by Case Switching (6 iterations).
+     1 case expressions converted to switched jumps Case Switching.
+     2 instructions eliminated by Jump Straightening (5 iterations).
+     4 instructions updated by JumpThreading.
+     1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     12 instructions modified by Print Merging.
-    59 instructions after optimizations.
+    62 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 946):
   * Unroll loop at line 24:9                                     size   +19, benefit     5000.0, efficiency    263.158 (+16 instructions)
@@ -25,12 +27,17 @@ Pass 1: speed optimization selection (cost limit 946):
     Inline function call at line 31:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 32:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 33:9                            size    +2, benefit       87.5, efficiency     43.750
+  o Convert case at line 7:5 (segments: 5)                       size    +1, benefit     2232.1, efficiency   2232.143
 
 Pass 1: speed optimization selection (cost limit 930):
   * Inline function 'printbyte' defined at line 15:1             size    +3, benefit      262.5, efficiency     87.500 (-3 instructions)
     Inline function call at line 31:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 32:9                            size    +2, benefit       87.5, efficiency     43.750
     Inline function call at line 33:9                            size    +2, benefit       87.5, efficiency     43.750
+  o Convert case at line 7:5 (segments: 5)                       size    +1, benefit     2232.1, efficiency   2232.143
+
+Pass 1: speed optimization selection (cost limit 933):
+  * Convert case at line 7:5 (segments: 5)                       size    +1, benefit     2232.1, efficiency   2232.143 (+1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -560,6 +567,64 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     79 op and :printbyte:ch :decode64:bytes 0xFF
     80 jump *label51 equal :printbyte:ch false
 
+Modifications by Convert case at line 7:5 (segments: 5) (+1 instructions):
+ 
+    90 assertprints "All Hail the King!" "Decoded value"
+    91 end
+    92 label *label0
+-    * jump *label17 lessThan :charToInt:ch 65
+-    * jump *label16 lessThanEq :charToInt:ch 90
+-    * label *label17
+-    * jump *label15 always
++   93 jump *label55 greaterThanEq :charToInt:ch 91
++   94 jump *label16 greaterThanEq :charToInt:ch 65
++   95 jump *label56 greaterThanEq :charToInt:ch 44
++   96 jump *label54 lessThan :charToInt:ch 43
++   97 label *label22
++   98 set *tmp7 62
++   99 jump *label14 always
++  100 label *label56
++  101 jump *label22 equal :charToInt:ch 45
++  102 jump *label24 equal :charToInt:ch 47
++  103 jump *label54 always
++  104 label *label55
++  105 jump *label57 greaterThanEq :charToInt:ch 97
++  106 jump *label24 equal :charToInt:ch 95
++  107 jump *label54 always
++  108 label *label57
++  109 jump *label54 greaterThanEq :charToInt:ch 123
++  110 label *label19
++  111 op sub *tmp7 :charToInt:ch 71
++  112 jump *label14 always
+   113 label *label16
+   114 op sub *tmp7 :charToInt:ch 65
+   115 jump *label14 always
+   116 label *label15
+-    * jump *label20 lessThan :charToInt:ch 97
+-    * jump *label19 lessThanEq :charToInt:ch 122
+-    * label *label20
+-    * jump *label18 always
+-    * label *label19
+-    * op sub *tmp7 :charToInt:ch 71
+-    * jump *label14 always
+   117 label *label18
+-    * jump *label22 equal :charToInt:ch 43
+-    * jump *label21 notEqual :charToInt:ch 45
+-    * label *label22
+-    * set *tmp7 62
+-    * jump *label14 always
+   118 label *label21
+-    * jump *label24 equal :charToInt:ch 95
+-    * jump *label23 notEqual :charToInt:ch 47
+   119 label *label24
+   120 set *tmp7 63
+   121 jump *label14 always
+   122 label *label23
++  123 label *label54
+   124 set *tmp7 null
+   125 label *label14
+   126 set :charToInt*retval *tmp7
+
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
     12 setaddr :charToInt*retaddr *label31
@@ -605,43 +670,41 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1 (-4
     38 call *label0 *invalid :charToInt*retval (m:*label37) (h:*label37)
     39 label *label37
  
-    92 label *label17
-    93 jump *label15 always
-    94 label *label16
--    * op sub *tmp7 :charToInt:ch 65
-+   95 op sub :charToInt*retval :charToInt:ch 65
-    96 jump *label14 always
-    97 label *label15
-    98 jump *label20 lessThan :charToInt:ch 97
- 
-   100 label *label20
-   101 jump *label18 always
-   102 label *label19
--    * op sub *tmp7 :charToInt:ch 71
-+  103 op sub :charToInt*retval :charToInt:ch 71
-   104 jump *label14 always
-   105 label *label18
-   106 jump *label22 equal :charToInt:ch 43
-   107 jump *label21 notEqual :charToInt:ch 45
-   108 label *label22
+    92 jump *label56 greaterThanEq :charToInt:ch 44
+    93 jump *label54 lessThan :charToInt:ch 43
+    94 label *label22
 -    * set *tmp7 62
-+  109 set :charToInt*retval 62
-   110 jump *label14 always
-   111 label *label21
-   112 jump *label24 equal :charToInt:ch 95
-   113 jump *label23 notEqual :charToInt:ch 47
-   114 label *label24
++   95 set :charToInt*retval 62
+    96 jump *label14 always
+    97 label *label56
+    98 jump *label22 equal :charToInt:ch 45
+ 
+   105 label *label57
+   106 jump *label54 greaterThanEq :charToInt:ch 123
+   107 label *label19
+-    * op sub *tmp7 :charToInt:ch 71
++  108 op sub :charToInt*retval :charToInt:ch 71
+   109 jump *label14 always
+   110 label *label16
+-    * op sub *tmp7 :charToInt:ch 65
++  111 op sub :charToInt*retval :charToInt:ch 65
+   112 jump *label14 always
+   113 label *label15
+   114 label *label18
+   115 label *label21
+   116 label *label24
 -    * set *tmp7 63
-+  115 set :charToInt*retval 63
-   116 jump *label14 always
-   117 label *label23
++  117 set :charToInt*retval 63
+   118 jump *label14 always
+   119 label *label23
+   120 label *label54
 -    * set *tmp7 null
-+  118 set :charToInt*retval null
-   119 label *label14
++  121 set :charToInt*retval null
+   122 label *label14
 -    * set :charToInt*retval *tmp7
-   120 label *label13
-   121 return :charToInt*retaddr
-   122 end
+   123 label *label13
+   124 return :charToInt*retaddr
+   125 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2:
  
@@ -740,115 +803,65 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     65 end
     66 label *label0
  
-    94 label *label23
-    95 set :charToInt*retval null
-    96 label *label14
+    81 jump *label54 always
+    82 label *label57
+    83 jump *label54 greaterThanEq :charToInt:ch 123
+-    * label *label19
+    84 op sub :charToInt*retval :charToInt:ch 71
+    85 jump *label14 always
+    86 label *label16
+    87 op sub :charToInt*retval :charToInt:ch 65
+    88 jump *label14 always
+-    * label *label15
+-    * label *label18
+-    * label *label21
+    89 label *label24
+    90 set :charToInt*retval 63
+    91 jump *label14 always
+-    * label *label23
+    92 label *label54
+    93 set :charToInt*retval null
+    94 label *label14
 -    * label *label13
-    97 return :charToInt*retaddr
-    98 end
+    95 return :charToInt*retaddr
+    96 end
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
  
-    64 assertprints "All Hail the King!" "Decoded value"
-    65 end
-    66 label *label0
--    * jump *label17 lessThan :charToInt:ch 65
-+   67 jump *label15 lessThan :charToInt:ch 65
-    68 jump *label16 lessThanEq :charToInt:ch 90
-    69 label *label17
-    70 jump *label15 always
-    71 label *label16
-    72 op sub :charToInt*retval :charToInt:ch 65
+    70 jump *label54 lessThan :charToInt:ch 43
+    71 label *label22
+    72 set :charToInt*retval 62
 -    * jump *label14 always
 +   73 return :charToInt*retaddr
-    74 label *label15
--    * jump *label20 lessThan :charToInt:ch 97
-+   75 jump *label18 lessThan :charToInt:ch 97
-    76 jump *label19 lessThanEq :charToInt:ch 122
-    77 label *label20
-    78 jump *label18 always
-    79 label *label19
-    80 op sub :charToInt*retval :charToInt:ch 71
+    74 label *label56
+    75 jump *label22 equal :charToInt:ch 45
+    76 jump *label24 equal :charToInt:ch 47
+ 
+    82 label *label57
+    83 jump *label54 greaterThanEq :charToInt:ch 123
+    84 op sub :charToInt*retval :charToInt:ch 71
 -    * jump *label14 always
-+   81 return :charToInt*retaddr
-    82 label *label18
-    83 jump *label22 equal :charToInt:ch 43
-    84 jump *label21 notEqual :charToInt:ch 45
-    85 label *label22
-    86 set :charToInt*retval 62
++   85 return :charToInt*retaddr
+    86 label *label16
+    87 op sub :charToInt*retval :charToInt:ch 65
 -    * jump *label14 always
-+   87 return :charToInt*retaddr
-    88 label *label21
-    89 jump *label24 equal :charToInt:ch 95
-    90 jump *label23 notEqual :charToInt:ch 47
-    91 label *label24
-    92 set :charToInt*retval 63
++   88 return :charToInt*retaddr
+    89 label *label24
+    90 set :charToInt*retval 63
 -    * jump *label14 always
-+   93 return :charToInt*retaddr
-    94 label *label23
-    95 set :charToInt*retval null
-    96 label *label14
++   91 return :charToInt*retaddr
+    92 label *label54
+    93 set :charToInt*retval null
+    94 label *label14
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
  
-    66 label *label0
-    67 jump *label15 lessThan :charToInt:ch 65
-    68 jump *label16 lessThanEq :charToInt:ch 90
--    * label *label17
-    69 jump *label15 always
-    70 label *label16
-    71 op sub :charToInt*retval :charToInt:ch 65
- 
-    73 label *label15
-    74 jump *label18 lessThan :charToInt:ch 97
-    75 jump *label19 lessThanEq :charToInt:ch 122
--    * label *label20
-    76 jump *label18 always
-    77 label *label19
-    78 op sub :charToInt*retval :charToInt:ch 71
- 
     91 return :charToInt*retaddr
-    92 label *label23
+    92 label *label54
     93 set :charToInt*retval null
 -    * label *label14
     94 return :charToInt*retaddr
 -    * end
-
-Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-2 instructions):
- 
-    65 end
-    66 label *label0
-    67 jump *label15 lessThan :charToInt:ch 65
--    * jump *label16 lessThanEq :charToInt:ch 90
--    * jump *label15 always
-+   68 jump *label15 greaterThan :charToInt:ch 90
-    69 label *label16
-    70 op sub :charToInt*retval :charToInt:ch 65
-    71 return :charToInt*retaddr
-    72 label *label15
-    73 jump *label18 lessThan :charToInt:ch 97
--    * jump *label19 lessThanEq :charToInt:ch 122
--    * jump *label18 always
-+   74 jump *label18 greaterThan :charToInt:ch 122
-    75 label *label19
-    76 op sub :charToInt*retval :charToInt:ch 71
-    77 return :charToInt*retaddr
-
-Modifications by Jumps phase, Jump Optimization, pass 5, iteration 1:
- 
-    66 label *label0
-    67 jump *label15 lessThan :charToInt:ch 65
-    68 jump *label15 greaterThan :charToInt:ch 90
--    * label *label16
-    69 op sub :charToInt*retval :charToInt:ch 65
-    70 return :charToInt*retaddr
-    71 label *label15
-    72 jump *label18 lessThan :charToInt:ch 97
-    73 jump *label18 greaterThan :charToInt:ch 122
--    * label *label19
-    74 op sub :charToInt*retval :charToInt:ch 71
-    75 return :charToInt*retaddr
-    76 label *label18
 
 Modifications by Final phase, Print Merging, iteration 1:
  
@@ -955,27 +968,31 @@ printflush message1
 assertprints "All Hail the King!" "Decoded value"
 end
 label *label0
-jump *label15 lessThan :charToInt:ch 65
-jump *label15 greaterThan :charToInt:ch 90
-op sub :charToInt*retval :charToInt:ch 65
-return :charToInt*retaddr
-label *label15
-jump *label18 lessThan :charToInt:ch 97
-jump *label18 greaterThan :charToInt:ch 122
-op sub :charToInt*retval :charToInt:ch 71
-return :charToInt*retaddr
-label *label18
-jump *label22 equal :charToInt:ch 43
-jump *label21 notEqual :charToInt:ch 45
+jump *label55 greaterThanEq :charToInt:ch 91
+jump *label16 greaterThanEq :charToInt:ch 65
+jump *label56 greaterThanEq :charToInt:ch 44
+jump *label54 lessThan :charToInt:ch 43
 label *label22
 set :charToInt*retval 62
 return :charToInt*retaddr
-label *label21
+label *label56
+jump *label22 equal :charToInt:ch 45
+jump *label24 equal :charToInt:ch 47
+jump *label54 always
+label *label55
+jump *label57 greaterThanEq :charToInt:ch 97
 jump *label24 equal :charToInt:ch 95
-jump *label23 notEqual :charToInt:ch 47
+jump *label54 always
+label *label57
+jump *label54 greaterThanEq :charToInt:ch 123
+op sub :charToInt*retval :charToInt:ch 71
+return :charToInt*retaddr
+label *label16
+op sub :charToInt*retval :charToInt:ch 65
+return :charToInt*retaddr
 label *label24
 set :charToInt*retval 63
 return :charToInt*retaddr
-label *label23
+label *label54
 set :charToInt*retval null
 return :charToInt*retaddr

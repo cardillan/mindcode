@@ -142,6 +142,8 @@ print "yes"
 printflush message1
 ```
 
+Mindcode applies a very powerful optimization to case expressions, especially to larger case expressions. A case expression typically produces much faster code than a series of `if` statements. 
+
 ## Avoiding boolean operators in loop conditions
 
 If the condition is part of a loop, it might be possible to avoid the boolean expression in it:

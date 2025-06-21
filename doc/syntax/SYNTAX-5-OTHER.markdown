@@ -465,7 +465,7 @@ Most optimizations don't support the `advanced` level. For those the level `adva
 | [Loop Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#loop-optimization)                             | loop-optimization            |    N     |
 | [Loop Unrolling](SYNTAX-6-OPTIMIZATIONS.markdown#loop-unrolling)                                   | loop-unrolling               |    Y     |
 | [Function Inlining](SYNTAX-6-OPTIMIZATIONS.markdown#function-inlining)                             | function-inlining            |    N     |
-| [Case Switching](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)                                   | case-switching               |    N     |
+| [Case Switching](SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)                                   | case-switching               |    Y     |
 | [Array Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization)                           | array-optimization           |    N     |
 | [Return Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#return-optimization)                         | case-switching               |    Y     |
 | [Jump Straightening](SYNTAX-6-OPTIMIZATIONS.markdown#jump-straightening)                           | return-optimization          |    N     |

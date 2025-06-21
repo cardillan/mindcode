@@ -43,7 +43,7 @@ When the optimization goal is `speed`, there is a constraint on the total code s
 
 Some optimizers (e.g., [Case Switching](#case-switching)) can produce several different ways to optimize the same portion of code, of which only one can be selected.  For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated against other possible optimizations, choosing the most effective optimization while respecting the total code size constraint. 
 
-Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further dynamic optimizations. Mindcode is unable to include the effects of these static optimizations when computing synamic optimization effects, but uses the additional instruction space when applying remaining optimizations.     
+Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further dynamic optimizations. Mindcode is unable to include the effects of these static optimizations when computing dynamic optimization effects, but uses the additional instruction space when applying remaining optimizations.     
 
 Mindcode writes the possible optimizations it considers to the log file. For better understanding, this includes optimizations exceeding the total code size constraint by a small margin. It is possible to let Mindcode perform additional optimizations by changing the value of the total code size constraint, using the  [`instruction-limit` option](SYNTAX-5-OTHER.markdown#option-instruction-limit). Sometimes, increasing the instruction limit a bit can produce a code which still fits into the total code size constraint. Here's a [demonstration](https://github.com/cardillan/mindcode/discussions/106) of this approach being applied to a real-life code example.  
 
@@ -128,7 +128,7 @@ Prerequisites:
 
 ## Single Step Elimination
 
-This optimizer simplifies the following sequences of jump that are a result of the code generation and various optimizations:
+This optimizer simplifies the following sequences of jumps that are a result of the code generation and various optimizations:
 
 * A conditional or unconditional jump targeting the next instruction.
 * A conditional or unconditional jump is removed if there is an identical jump immediately following it. The second jump may be a target of another jump. 
@@ -834,7 +834,7 @@ Loop unrolling is a [dynamic optimization](#dynamic-optimizations) and is only a
 
 ### The fundamentals of loop unrolling
 
-Loop unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in speedup of program execution, since the jump instruction representing a condition which terminates the loop, and oftentimes also instruction(s) that change the loop control variable value, can be removed from the unrolled loop and only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight"—contain very little instructions apart from the loop itself. The most dramatic practical example is probably something like this (let's see it first without the loop unrolling):
+Loop unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in speedup of program execution, since the jump instruction representing a condition which terminates the loop, and oftentimes also instruction(s) that change the loop control variable value, can be removed from the unrolled loop and only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight"—contain very few instructions apart from the loop itself. The most dramatic practical example is probably something like this (let's see it first without the loop unrolling):
 
 ```Mindcode
 #set loop-unrolling = none;
@@ -1052,7 +1052,7 @@ for i in 0 ... 100 do
 end;
 ```
 
-Both loops are eligible for unrolling at the beginning, and the inner one is chosen. After that the outer loop can no longer be unrolled, because the instruction limit would be hit.
+Both loops are eligible for unrolling at the beginning, and the inner one is chosen. After that, the outer loop can no longer be unrolled, because the instruction limit would be hit.
 
 Sometimes unrolling an outer loop can make the inner loop eligible for unrolling too. In this case, the inner loop cannot be unrolled first, as it is not constant:
 
@@ -1090,7 +1090,7 @@ Function Inlining is a [dynamic optimization](#dynamic-optimizations) and is onl
 ### The fundamentals of function inlining
 
 Function inlining converts out-of-line function calls into inline function calls. This conversion alone saves a few instructions: storing the return address, jumping to the function body, and jumping back at the original address. However, many additional optimizations might be available once a function is inlined, especially if the inlined 
-function call is using constant argument values. In such a situation many other powerful optimizations, such as constant folding or loop unrolling, may become available.
+function call is using constant argument values. In such a situation, many other powerful optimizations, such as constant folding or loop unrolling, may become available.
 
 User-defined, non-recursive function which is called just once in the entire program, is automatically inlined, and this cannot be prevented: such code is always both faster and smaller. It is also possible to declare individual functions using the `inline` keyword, forcing all calls of such functions to be inlined.
 
@@ -1098,7 +1098,7 @@ User-defined, non-recursive function which is called just once in the entire pro
 
 This optimization can inline additional functions that aren't recursive and also aren't declared `inline` in the source code. If there's enough instruction space, all function calls may be inlined and the original function body removed from the program. 
 
-When there isn't enough instruction space, only a single one or several specific function calls may be inlined; in such a case the original function body remains in the program and is used by the function calls that weren't inlined. If there are only the last two function calls remaining, either both of them or none of them will be inlined.    
+When there isn't enough instruction space, only a single one or several specific function calls may be inlined; in such a case, the original function body remains in the program and is used by the function calls that weren't inlined. If there are only the last two function calls remaining, either both of them or none of them will be inlined.    
 
 It is therefore no longer necessary to use the `inline` keyword, except in cases when Mindcode's automatic inlining chooses function different from the one(s) you prefer to be inlined, or when using functions with variable number of parameters.  
 
@@ -1108,12 +1108,16 @@ Case Switching is a [dynamic optimization](#dynamic-optimizations) and is only a
 
 Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates—on average—half of all existing conditions, assuming even distribution of the case expression input values. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
 
-The Case Switching optimization improves case expressions which branch on integer values of the expression.
+The Case Switching optimization improves case expressions which branch on integer values of the expression, or on Mindustry content objects.
 
 > [!WARNING]
 > It is assumed that a case statement branching exclusively on integer values always gets an integer value on input as well. If the input value of the case expression may take on non-integer values, this optimization will produce wrong code. At this moment Mindcode isn't able to recognize such a situation; if this is the case, you need to disable the Case Switching optimization manually.
 
-The sequence of conditional jumps in such statements is replaced by a _jump table_. A jump table facilitates direct jumps to the corresponding `when` branch. The actual instructions used to build a jump table are
+The basic structure used by this optimization is a _jump table_.
+
+### Jump tables
+
+A jump table replaces the sequence of conditional jumps by direct jumps to the corresponding `when` branch. The actual instructions used to build a jump table are
 
 ```
 jump <else branch address> lessThan value minimal_when_value
@@ -1127,13 +1131,13 @@ jump <when branch for minimal when value + 2 address>
 jump <when branch for maximal when value address>
 ```
 
-The jump table is put in front of the `when` branches. Original conditions in front of each processed `when` branch are removed. Each `when` branch jumps to the end of the case expression as usual. The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps.
+The jump table is put in front of the `when` branches. Original conditions in front of each processed `when` branch are removed. Each `when` branch jumps to the end of the case expression as usual. The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps. On `experimental` level, the bodies of `when` branches may be duplicated to several suitable places to avoid even more jumps at the cost of additional code size increase. This optimization usually only kicks in for small branch bodies, since for larger code increases, a better performing solution can be achieved by a different segment arrangement.
 
 To build the jump table, the minimum and maximum value of existing `when` branches are determined first. Values outside this range are handled by the `else` branch (if there isn't an explicit `else` branch in the case statement, the `else` branch just jumps to the end of the case expression). Values inside this range are mapped to a particular `when` branch, or, if the value doesn't correspond to any of the `when` branches, to the `else` branch.
 
 The first two instructions in the example above (`jump lessThan`, `jump greaterThan`) handle the cases where the input value lies outside the range supported by the jump table. The `op add @counter` instruction then transfers the control to the corresponding specific jump in the jump table and consequently to the proper `when` branch.
 
-The jump table executes at most four instructions on each case expression execution (less if the input value lies outside the supported range). We've mentioned above that the original case statement executes half of the conditional jumps on average. This means that converting the case expression to a jump table only makes sense when there are at least eight conditional jumps in the case expression.
+A basic jump table executes at most four instructions on each case expression execution (less if the input value lies outside the supported range). We've mentioned above that the original case statement executes half of the conditional jumps on average. This means that converting the case expression to a jump table only makes sense when there are at least eight conditional jumps in the case expression.
 
 Notes:
 
@@ -1146,21 +1150,20 @@ Notes:
 The following conditions must be met for a case expression to be processed by this optimization:
 
 * All values used in `when` clauses must be effectively constant.
-* All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)).
-* Values used in `when` clauses must be unique. 
-* Ranges must not be used in the `when` clauses.
+* All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)). Specifically, no `null` values may be used.
+* Values used in `when` clauses must be unique; when ranges are used, they must not overlap with other ranges or standalone values. 
 
 ### Range check elimination
 
-When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, Mindcode assumes all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
+When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, you inform Mindcode that all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
 
-Putting an `else` branch into a case expression obviously means not all input values are handled, and doing so disables the unsafe optimization (the out-of-range checks will remain).
+Putting an `else` branch into a case expression indicates not all input values are handled, and doing so disables the unsafe case optimization: the basic optimization may still happen, but the out-of-range checks will remain.
 
 If you activate the `unsafe-case-optimization` directive, and an unhandled input value is encountered, the behavior of the generated code is undefined.
 
 ### Mindustry content conversion
 
-When all `when` branches in the case expression contain built-in constants representing Mindustry content of the same type (items, liquids, unit types, or block types) and the optimization level is set to `advanced`, the case switcher converts these built-in constants to logic IDs, adds an instruction to convert the input value to a logic ID (using the `sensor` instruction with the `@id` property) and attempts to build a jump table over the resulting numeric values.
+When all `when` branches in the case expression contain built-in constants representing Mindustry content of the same type (items, liquids, unit types, or block types) and the optimization level is set to `advanced`, this optimization converts these built-in constants to logic IDs, adds an instruction to convert the input value to a logic ID (using the `sensor` instruction with the `@id` property) and attempts to build a jump table over the resulting numeric values.
 
 The following preconditions need to be met to apply content conversion:
 
@@ -1186,7 +1189,7 @@ Mindcode arranges the code to only perform checks distinguishing between `null` 
 
 ### Jump table compression
 
-Building a single jump table for the entire case expression typically leads to the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations into account as well. To locate the segment handling a particular input value, a bisection search is used. 
+Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations described here into account as well. To locate the segment handling a particular input value, a bisection search is used. 
 
 The total number of possible segment arrangements can be quite large. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
 
@@ -1199,7 +1202,7 @@ Notes:
 * Jump table compression is not performed when range checks for the given case expression are eliminated via the `unsafe-case-optimization` option, or when the [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) option has been set to 0.
 * When a compressed jump table is smaller, but slower than a full, or a less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
 * Compressing a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the optimizer will select the smaller version over the faster version, even when there is plenty of instruction space.
-* Since the bisection search provides better execution time than a linear search, it is considered and may be applied even to small case expressions, where a normal jump table would provide worse average execution time than the original case expression.
+* Since the bisection search provides better execution time than a linear search, it may be applied even to case expressions too small for a full jump table optimization.
 
 ### Jump table padding
 
@@ -1210,7 +1213,7 @@ When the jump table starts at zero value, it is possible to generate a faster co
 
 Similarly, when the Mindustry content conversion is applied, the `target-optimization` option is set to `specific` and the jump table ends at the largest ID of the respective Mindustry content, a jump instruction handling values larger than the end of the table can be omitted, as the optimizer knows no larger values may occur. 
 
-When the jump table doesn't start or end at these values naturally, Mindcode may pad the table at either end with additional jumps to the `else` branch. The optimizer considers the possibility of padding the table at the low end, high end, or both, and chooses the option that gives the best performance under the given cost limit.
+When the jump table doesn't start or end at these values naturally, Mindcode may pad the table at either end with additional jumps to the `else` branch. The optimizer considers the possibility of padding the table at the low end, high end, or both, and chooses the option that gives the best performance given the instruction space limit.
 
 ### Example
 
@@ -1221,6 +1224,7 @@ The example illustrates the following optimization aspects:
 * Handling of `null` values
 * Jump table compression
 * Jump table padding
+* Moving bodies of `when` branches
 
 The sample has been artificially constructed to demonstrate the above effects. 
 

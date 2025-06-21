@@ -8,8 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static info.teksol.mc.mindcode.compiler.optimization.cases.SegmentType.MIXED;
-import static info.teksol.mc.mindcode.compiler.optimization.cases.SegmentType.SINGLE;
+import static info.teksol.mc.mindcode.compiler.optimization.cases.SegmentType.*;
 
 // Note: to is exclusive
 @NullMarked
@@ -136,6 +135,25 @@ public final class Segment implements Comparable<Segment> {
             int endLabelWeight = type == MIXED ? majoritySize : 1;
             return new Segment(type, partitions.getFirst().from(), partitions.getLast().to(), majorityLabel, majoritySize, endLabel, endLabelWeight);
         }
+    }
+
+    public static Segment jumpTable(List<Partition> partitions) {
+        Map<LogicLabel, Integer> sizes = partitions.stream()
+                .collect(Collectors.groupingBy(Partition::label, Collectors.summingInt(Partition::size)));
+
+        LogicLabel majorityLabel = sizes.entrySet().stream()
+                .filter(e -> e.getKey() != LogicLabel.INVALID)
+                .max(Map.Entry.comparingByValue())
+                .map(Map.Entry::getKey)
+                .orElse(LogicLabel.EMPTY);
+
+        int majoritySize = sizes.getOrDefault(majorityLabel, 0);
+
+        // For mixed segment, the end label is the majority label; for jump table, it is the last partition's label by definition
+        LogicLabel endLabel = partitions.getLast().label();
+        // For mixed segment, the end weight is the majority weight; for jump table, it is always 1
+        int endLabelWeight = 1;
+        return new Segment(JUMP_TABLE, partitions.getFirst().from(), partitions.getLast().to(), majorityLabel, majoritySize, endLabel, endLabelWeight);
     }
 
     public Segment convertToMixed() {

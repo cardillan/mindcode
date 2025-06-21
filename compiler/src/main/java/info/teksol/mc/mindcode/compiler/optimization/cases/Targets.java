@@ -142,6 +142,10 @@ public class Targets {
         return targets.size();
     }
 
+    public int range() {
+        return targets.isEmpty() ? 0 : targets.lastKey() - targets.firstKey() + 1;
+    }
+
     public SortedMap<Integer, LogicLabel> subMap(int from, int to) {
         return targets.subMap(from, to);
     }

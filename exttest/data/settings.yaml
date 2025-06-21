@@ -271,6 +271,9 @@ all-sources:
   - source: case-small.mnd
     defaults: case-switching-defaults
 
+  - source: case-range.mnd
+    defaults: case-switching-defaults
+
   - source: case-no-else.mnd
     defaults: case-switching-defaults
 
@@ -310,6 +313,9 @@ all-sources:
 # Case-switching tests - standalone
 case-switching:
   - source: case-small.mnd
+    defaults: case-switching-defaults
+
+  - source: case-range.mnd
     defaults: case-switching-defaults
 
   - source: case-no-else.mnd

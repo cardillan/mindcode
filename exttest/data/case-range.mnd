@@ -1,0 +1,23 @@
+#set target-optimization = specific;
+#set err-invalid-content = false;
+//#set single-step-elimination = none;
+//#set jump-straightening = none;
+//#set jump-threading = none;
+
+def convertHexDigit(digit)
+    case digit
+        when 0 .. 9 then print(digit);
+        when 10 then print("A");
+        when 11 then print("B");
+        when 12 then print("C");
+        when 13 then print("D");
+        when 14 then print("E");
+        when 15 then print("F");
+    end;
+end;
+
+param p = 16;
+
+for i in 0 ... p do
+    print(convertHexDigit(i));
+end;

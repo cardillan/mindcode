@@ -13,6 +13,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.util.Indenter;
@@ -77,6 +78,7 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 /// * handleNulls: true if the segment needs to handle nulls for else values within or below its range.
 @NullMarked
 public class CaseSwitcher extends BaseOptimizer {
+    private static final int MAX_CASE_RANGE = 1000;
     private static final Indenter indenter = new Indenter("    ");
 
     private final int caseConfiguration;
@@ -148,6 +150,21 @@ public class CaseSwitcher extends BaseOptimizer {
 
     private enum ExpState { CONDITION, BODY, FLOW }
 
+    private @Nullable LogicLabel findNextLabel(AstContext context, LogicIterator iterator, JumpInstruction jump) {
+        AstContext jumpAstContext = jump.getAstContext();
+        AstContext flowContext = context.nextChild(jumpAstContext);
+        while (iterator.hasNext() && iterator.peek(0) instanceof NoOpInstruction noop && noop.belongsTo(jumpAstContext)) {
+            // Skipping noops, nothing else may occur here
+            iterator.next();
+        }
+        if (flowContext != null && iterator.peek(0).belongsTo(flowContext)) {
+            return obtainContextLabel(flowContext);
+        } else {
+            // Unsupported case structure
+            return null;
+        }
+    }
+
     private void findPossibleCaseSwitches(AstContext context, int costLimit, List<OptimizationAction> result) {
         groupCount++;
 
@@ -161,69 +178,110 @@ public class CaseSwitcher extends BaseOptimizer {
         boolean hasElseBranch = !(context.node() instanceof AstCaseExpression exp) || exp.isElseDefined();
         boolean removeRangeCheck = getProfile().isUnsafeCaseOptimization() && !hasElseBranch;
 
-        LogicVariable variable = null;
         Targets targets = new Targets(hasElseBranch);
         WhenValueAnalyzer analyzer = new WhenValueAnalyzer();
         final Map<LogicLabel, Integer> bodySizes = new HashMap<>();
 
         // Used to compute the size and execution costs of the case expression
+        LogicVariable variable = null;
         int jumps = 0, values = 0, savedSteps = 0, bodySize = 0;
         ExpState expState = null;
         LogicLabel target = null;
+        Integer rangeLowValue = null;
 
+        // ANALYZE CASE STRUCTURE
+        // Gathers all information about the case expression we need
         try (LogicIterator iterator = createIteratorAtContext(context)) {
             while (iterator.hasNext()) {
                 LogicInstruction ix = iterator.next();
                 if (conditionMatcher.matches(ix.getAstContext())) {
                     expState = ExpState.CONDITION;
                     bodySize = 0;
-                    if (ix instanceof JumpInstruction jump) {
-                        jumps++;
 
-                        // NOT_EQUAL might have been created by jump over jump optimization
-                        if (jump.getCondition().isEquality()
-                                && jump.getX() instanceof LogicVariable var && (variable == null || var.equals(variable))
-                                && analyzer.analyze(jump.getY())
-                                && getLabelInstruction(jump.getTarget()).getAstContext().parent() == context) {
-                            variable = var;
+                    // Ignore these in conditions
+                    if (ix instanceof LabelInstruction || ix instanceof NoOpInstruction) continue;
+
+                    if (!(ix instanceof JumpInstruction jump)) return;
+                    jumps++;
+
+                    if (jump.isUnconditional()) {
+                        // Unconditional jump is a jump to the next when branch/value
+                        // An unfinished range expression: we don't understand the structure of this expression, bail out
+                        if (rangeLowValue != null) return;
+                        savedSteps += values;
+                    } else {
+                        // X needs to be the case variable
+                        if (!(jump.getX() instanceof LogicVariable var) || (variable != null && !var.equals(variable))) return;
+
+                        // Unexpected context: we don't understand the structure of this expression, bail out
+                        if (getLabelInstruction(jump.getTarget()).getAstContext().parent() != context) return;
+
+                        variable = var;
+                        LogicValue value = jump.getY();
+
+                        if (jump.getCondition().isEquality()) {
+                            // An unfinished range expression: we don't understand the structure of this expression, bail out
+                            // Analyzer refuses our value: bail out
+                            if (rangeLowValue != null || !analyzer.analyze(value)) return;
+
                             if (jump.getCondition() == Condition.EQUAL || jump.getCondition() == Condition.STRICT_EQUAL) {
                                 target = jump.getTarget();
                             } else {
-                                AstContext condition = ix.getAstContext();
-                                while (iterator.hasNext() && iterator.peek(0).belongsTo(condition)) {
-                                    iterator.next();
-                                }
-                                AstContext bodyContext = context.nextChild(ix.getAstContext());
-                                if (bodyContext != null && iterator.peek(0).belongsTo(bodyContext)) {
-                                    target = obtainContextLabel(bodyContext);
-                                } else {
-                                    return;
-                                }
+                                // NOT_EQUAL might have been created by jump over jump optimization
+                                target = findNextLabel(context, iterator, jump);
+                                if (target == null) return;
                             }
 
-                            if (targets.put(analyzer.getLastValue(), target) != null) {
-                                return;
-                            }
+                            if (targets.put(analyzer.getLastValue(), target) != null) return;
 
                             savedSteps += values;
-                            if (analyzer.getLastValue() != null) {
-                                values++;
-                            }
-                        } else if (jump.isUnconditional()) {
-                            savedSteps += values;
+                            if (analyzer.getLastValue() != null) values++;  // We do not count nulls
                         } else {
-                            // Unconditional jump is a jump to the next when branch
-                            return;
+                            // This is an inequality comparison -- can't be unconditional.
+                            // Needs an integer variable
+                            if (!value.isNumericConstant() || !value.isInteger()) return;
+
+                            if (rangeLowValue == null) {
+                                // Opening jump: must be LESS_THAN
+                                if (jump.getCondition() != Condition.LESS_THAN) return;
+                                rangeLowValue = value.getIntValue();
+                            } else {
+                                int rangeHighValue;     // Exclusive
+                                if (jump.getCondition() == Condition.LESS_THAN || jump.getCondition() == Condition.LESS_THAN_EQ) {
+                                    // Closing jump, in original form.
+                                    target = jump.getTarget();
+                                    rangeHighValue = value.getIntValue() + (jump.getCondition() == Condition.LESS_THAN_EQ ? 1 : 0);
+                                } else {
+                                    // The original jump modified by the jump over jump optimization
+                                    target = findNextLabel(context, iterator, jump);
+                                    if (target == null) return;
+                                    // When condition is met, the value doesn't belong to the range
+                                    rangeHighValue = value.getIntValue() + (jump.getCondition() == Condition.GREATER_THAN ? 1 : 0);
+                                }
+
+                                int range = rangeHighValue - rangeLowValue;
+                                if (range > MAX_CASE_RANGE) return;
+
+                                // Add in all targets
+                                for (int i = rangeLowValue; i < rangeHighValue; i++) {
+                                    if (targets.put(i, target) != null) return;
+                                }
+
+                                // Each value comes through these two jumps
+                                values += 2 * range;
+                                savedSteps += values;
+
+                                // Range has been processed
+                                rangeLowValue = null;
+                            }
                         }
-                    } else {
-                        // Something different from a jump in a condition --> unsupported structure
-                        return;
                     }
                 } else if (bodyMatcher.matches(ix.getAstContext())) {
                     expState = ExpState.BODY;
                     bodySize += ix.getRealSize(null);
                 } else if (expState == ExpState.BODY && ix.getAstContext().parent() == context && ix.getAstContext().matches(FLOW_CONTROL)) {
-                    if (target == null) throw new MindcodeInternalError("Target not set in condition");
+                    // This may happen with compile-time resolved case expressions
+                    if (target == null) return;
                     bodySizes.put(target, bodySize);
                     // The first flow control after a body:
                     // If the first instruction isn't a jump, can't move this body.
@@ -237,8 +295,8 @@ public class CaseSwitcher extends BaseOptimizer {
             }
         }
 
-        // Unsupported case expressions: no input variable, no branches, or null and integers
-        if (variable == null || analyzer.contentType == null || targets.isEmpty()
+        // Unsupported case expressions: no input variable, no branches, range too large or null and integers
+        if (variable == null || analyzer.contentType == null || targets.isEmpty() || targets.range() >MAX_CASE_RANGE
                 || analyzer.hasNull && analyzer.contentType == ContentType.UNKNOWN) return;
 
         targets.computeElseValues(analyzer.contentType, metadata, getProfile().isTargetOptimization());
@@ -509,18 +567,26 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         private void computeCostAndBenefitNoRangeCheck() {
-            int min = param.targets.firstKey();
-            int max = param.targets.lastKey();
+            if (segments.size() != 1) throw new MindcodeInternalError("Unexpected number of segments");
+            Segment segment = segments.getFirst();
 
-            int symbolicCost = param.symbolic && min != 0 ? 1 : 0;     // Cost of computing offset
+            int min = segment.from();
+            int max = segment.to();
+
+            int symbolicCost = param.symbolic && min != 0 ? 1 : 0;      // Cost of computing offset
             int contentCost = param.mindustryContent ? 1 : 0;           // Cost of converting type to logic ID
-            int jumpTableCost = (max - min + 1) + 1;                        // Table size plus initial jump
+            int jumpTableCost = (max - min) + 1;                        // Table size plus initial jump
             cost = jumpTableCost + symbolicCost + contentCost;
 
-            int averageSteps = 2 + symbolicCost + contentCost;            // 1x multiJump, 1x jump table, additional costs
+            int averageSteps = 2 + symbolicCost + contentCost;          // 1x multiJump, 1x jump table, additional costs
             rawBenefit = (double) param.originalSteps / param.targets.getTotalSize() - averageSteps;
             benefit = rawBenefit * param.context.totalWeight();
             executionSteps = averageSteps * param.targets.size();
+
+            debugOutput("Original steps: %d, new steps: %d", param.originalSteps, executionSteps);
+            debugOutput("Original size: %d, new size: %d, cost: %d", param.originalCost, cost, cost - param.originalCost);
+            if (isDebugOutput() && !padding.isEmpty()) debugOutput("*** " + padding.toUpperCase() + " ***");
+            debugOutput("");
         }
 
         // Per target, not totals

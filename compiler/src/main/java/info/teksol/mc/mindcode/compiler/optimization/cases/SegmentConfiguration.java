@@ -15,9 +15,19 @@ public final class SegmentConfiguration {
     /// individual segments in a configuration do not overlap.
     private final List<Segment> segments;
 
+    /// Forces creation of a single segment from all partitions
+    private final boolean singleSegment;
+
+    public SegmentConfiguration(List<Partition> partitions) {
+        this.partitions = partitions;
+        this.segments = List.of();
+        singleSegment = true;
+    }
+
     public SegmentConfiguration(List<Partition> partitions, List<Segment> segments) {
         this.partitions = partitions;
         this.segments = segments;
+        singleSegment = false;
     }
 
     public List<Partition> getPartitions() {
@@ -29,6 +39,10 @@ public final class SegmentConfiguration {
     }
 
     public List<Segment> createSegments(boolean removeRangeCheck, boolean handleNulls, boolean symbolicLabels, Targets targets) {
+        if (singleSegment) {
+            return List.of(Segment.jumpTable(partitions));
+        }
+
         List<Segment> result = new ArrayList<>(segments);
         List<Partition> partitions = new ArrayList<>(this.partitions);
 

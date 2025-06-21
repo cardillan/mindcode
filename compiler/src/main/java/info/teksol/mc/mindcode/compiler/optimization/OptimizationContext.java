@@ -1232,8 +1232,8 @@ class OptimizationContext {
             return createIteratorAtIndex(cursor);
         }
 
-        /// Returns the instruction at given offset from current position. Both positive and negative offsets are valid,
-        /// offset 0 returns the instruction that would be returned by calling [#next()]. If the resulting
+        /// Returns the instruction at given offset from the current position. Both positive and negative offsets
+        /// are valid, offset 0 returns the instruction that would be returned by calling [#next()]. If the resulting
         /// instruction position lies outside the program range, null is returned and no exception is thrown.
         ///
         /// @param offset offset relative to current position

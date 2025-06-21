@@ -11,7 +11,7 @@ import java.util.List;
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
-abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> {
+class CaseSwitcherTest extends AbstractOptimizerTest<CaseSwitcher> {
 
     @Override
     protected Class<CaseSwitcher> getTestedClass() {
@@ -33,6 +33,7 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
         @Test
         void processesBasicSwitch() {
             assertCompilesTo("""
+                            #set case-optimization-strength = 0;
                             i = rand(10);
                             case i
                                 when 0 then print(0);
@@ -50,8 +51,8 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                             print("end");
                             """,
                     createInstruction(OP, "rand", ":i", "10"),
-                    createInstruction(JUMP, label(21), "greaterThanEq", ":i", "10"),
                     createInstruction(JUMP, label(21), "lessThan", ":i", "0"),
+                    createInstruction(JUMP, label(21), "greaterThanEq", ":i", "10"),
                     createInstruction(MULTIJUMP, label(22), ":i", "0"),
                     createInstruction(MULTILABEL, label(22)),
                     createInstruction(JUMP, label(2), "always"),
@@ -72,7 +73,8 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(MULTILABEL, label(30)),
                     createInstruction(JUMP, label(18), "always"),
                     createInstruction(MULTILABEL, label(31)),
-                    createInstruction(JUMP, label(20), "always"),
+                    createInstruction(PRINT, "9"),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(PRINT, "0"),
                     createInstruction(JUMP, label(0), "always"),
@@ -100,9 +102,6 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(LABEL, label(18)),
                     createInstruction(PRINT, "8"),
                     createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(20)),
-                    createInstruction(PRINT, "9"),
-                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(21)),
                     createInstruction(PRINT, q("oh no!")),
                     createInstruction(LABEL, label(0)),
@@ -113,6 +112,7 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
         @Test
         void processesBasicSwitchNoElse() {
             assertCompilesTo("""
+                            #set case-optimization-strength = 0;
                             i = rand(10);
                             case i
                                 when 0 then print(0);
@@ -129,8 +129,8 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                             print("end");
                             """,
                     createInstruction(OP, "rand", ":i", "10"),
-                    createInstruction(JUMP, label(21), "greaterThanEq", ":i", "10"),
                     createInstruction(JUMP, label(21), "lessThan", ":i", "0"),
+                    createInstruction(JUMP, label(21), "greaterThanEq", ":i", "10"),
                     createInstruction(MULTIJUMP, label(22), ":i", "0"),
                     createInstruction(MULTILABEL, label(22)),
                     createInstruction(JUMP, label(2), "always"),
@@ -190,6 +190,7 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
         @Test
         void processesReturningSwitchWithElse() {
             assertCompilesTo("""
+                            #set case-optimization-strength = 0;
                             value = floor(rand(20));
                             text = case value
                                 when 0 then "None";
@@ -203,8 +204,8 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                             """,
                     createInstruction(OP, "rand", tmp(0), "20"),
                     createInstruction(OP, "floor", ":value", tmp(0)),
-                    createInstruction(JUMP, label(11), "greaterThanEq", ":value", "11"),
                     createInstruction(JUMP, label(11), "lessThan", ":value", "0"),
+                    createInstruction(JUMP, label(11), "greaterThanEq", ":value", "11"),
                     createInstruction(MULTIJUMP, label(12), ":value", "0"),
                     createInstruction(MULTILABEL, label(12)),
                     createInstruction(JUMP, label(2), "always"),
@@ -227,7 +228,8 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(MULTILABEL, label(21)),
                     createInstruction(JUMP, label(11), "always"),
                     createInstruction(MULTILABEL, label(22)),
-                    createInstruction(JUMP, label(10), "always"),
+                    createInstruction(SET, tmp(2), q("Ten")),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(2), q("None")),
                     createInstruction(JUMP, label(0), "always"),
@@ -239,9 +241,6 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(8)),
                     createInstruction(SET, tmp(2), q("Several")),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(10)),
-                    createInstruction(SET, tmp(2), q("Ten")),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(11)),
                     createInstruction(SET, tmp(2), q("I don't known this number!")),
@@ -449,14 +448,13 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(MULTILABEL, label(15)),
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(16)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(6)),
                     createInstruction(JUMP, label(5), "strictEqual", tmp(1), "null"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(0), q("A")),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(4)),
-                    createInstruction(SET, tmp(0), q("B")),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(5)),
                     createInstruction(SET, tmp(0), q("C")),
@@ -471,16 +469,19 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                             #set instruction-limit = 60;
                             param p = 0;
                             print(case p
-                                when 0, 2, 4, 50, 52, 54 then "A";
-                                when 1, 3, 5, 51, 53, 55 then "B";
+                                when 0, 2, 4, 6, 50, 52, 54, 56 then "A";
+                                when 1, 3, 5, 7, 51, 53, 55, 57 then "B";
                             end);
                             """,
                     createInstruction(SET, "p", "0"),
-                    createInstruction(JUMP, label(6), "greaterThanEq", "p", "6"),
+                    createInstruction(JUMP, label(6), "greaterThanEq", "p", "8"),
+                    createInstruction(JUMP, label(7), "greaterThanEq", "p", "1"),
                     createInstruction(JUMP, label(5), "lessThan", "p", "0"),
-                    createInstruction(MULTIJUMP, label(7), "p", "0"),
-                    createInstruction(MULTILABEL, label(7)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), q("A")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(MULTIJUMP, label(8), "p", "1"),
                     createInstruction(MULTILABEL, label(8)),
                     createInstruction(JUMP, label(4), "always"),
                     createInstruction(MULTILABEL, label(9)),
@@ -491,14 +492,16 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(12)),
                     createInstruction(JUMP, label(4), "always"),
-                    createInstruction(LABEL, label(6)),
-                    createInstruction(JUMP, label(5), "greaterThanEq", "p", "56"),
-                    createInstruction(JUMP, label(5), "lessThan", "p", "50"),
-                    createInstruction(MULTIJUMP, label(14), "p", "50"),
-                    createInstruction(MULTILABEL, label(14)),
+                    createInstruction(MULTILABEL, label(13)),
                     createInstruction(JUMP, label(2), "always"),
-                    createInstruction(MULTILABEL, label(15)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(MULTILABEL, label(14)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(JUMP, label(5), "lessThan", "p", "50"),
+                    createInstruction(JUMP, label(5), "greaterThanEq", "p", "58"),
+                    createInstruction(MULTIJUMP, label(16), "p", "50"),
                     createInstruction(MULTILABEL, label(16)),
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(17)),
@@ -507,10 +510,13 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(19)),
                     createInstruction(JUMP, label(4), "always"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(SET, tmp(0), q("A")),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(4)),
+                    createInstruction(MULTILABEL, label(20)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(21)),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(MULTILABEL, label(22)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(23)),
                     createInstruction(SET, tmp(0), q("B")),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(5)),
@@ -524,14 +530,16 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
         void processesSplitJumpTableWithSymbolicLabels() {
             assertCompilesTo("""
                             #set instruction-limit = 60;
+                            #set symbolic-labels = true;
                             param p = 0;
                             print(case p
-                                when 0, 2, 4, 6, 8, 50, 52, 54, 56 then "A";
-                                when 1, 3, 5, 7, 9, 51, 53, 55, 57 then "B";
+                                when 0, 2, 4, 6, 8, 50, 52, 54, 56, 58, 60 then "A";
+                                when 1, 3, 5, 7, 9, 51, 53, 55, 57, 59, 61 then "B";
                             end);
                             """,
                     createInstruction(SET, "p", "0"),
-                    createInstruction(JUMP, label(6), "greaterThanEq", "p", "10"),
+                    createInstruction(JUMP, label(6), "greaterThanEq", "p", "50"),
+                    createInstruction(JUMP, label(5), "greaterThanEq", "p", "10"),
                     createInstruction(JUMP, label(5), "lessThan", "p", "0"),
                     createInstruction(MULTIJUMP, label(7), "p", "0"),
                     createInstruction(MULTILABEL, label(7)),
@@ -553,10 +561,11 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(MULTILABEL, label(15)),
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(16)),
-                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(6)),
-                    createInstruction(JUMP, label(5), "greaterThanEq", "p", "58"),
-                    createInstruction(JUMP, label(5), "lessThan", "p", "50"),
+                    createInstruction(JUMP, label(5), "greaterThanEq", "p", "62"),
                     createInstruction(MULTIJUMP, label(18), "p", "50"),
                     createInstruction(MULTILABEL, label(18)),
                     createInstruction(JUMP, label(2), "always"),
@@ -574,11 +583,17 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(25)),
                     createInstruction(JUMP, label(4), "always"),
+                    createInstruction(MULTILABEL, label(26)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(27)),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(MULTILABEL, label(28)),
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(MULTILABEL, label(29)),
+                    createInstruction(SET, tmp(0), q("B")),
+                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(2)),
                     createInstruction(SET, tmp(0), q("A")),
-                    createInstruction(JUMP, label(0), "always"),
-                    createInstruction(LABEL, label(4)),
-                    createInstruction(SET, tmp(0), q("B")),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(5)),
                     createInstruction(SET, tmp(0), "null"),
@@ -599,10 +614,13 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                             """,
                     createInstruction(SET, "p", "0"),
                     createInstruction(JUMP, label(6), "greaterThanEq", "p", "10"),
+                    createInstruction(JUMP, label(7), "greaterThanEq", "p", "1"),
                     createInstruction(JUMP, label(5), "lessThan", "p", "0"),
-                    createInstruction(MULTIJUMP, label(7), "p", "0"),
-                    createInstruction(MULTILABEL, label(7)),
-                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, tmp(0), q("A")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(MULTIJUMP, label(8), "p", "1"),
                     createInstruction(MULTILABEL, label(8)),
                     createInstruction(JUMP, label(4), "always"),
                     createInstruction(MULTILABEL, label(9)),
@@ -620,18 +638,50 @@ abstract class CaseSwitcherTestBase extends AbstractOptimizerTest<CaseSwitcher> 
                     createInstruction(MULTILABEL, label(15)),
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(MULTILABEL, label(16)),
-                    createInstruction(JUMP, label(4), "always"),
-                    createInstruction(LABEL, label(6)),
-                    createInstruction(JUMP, label(2), "equal", "p", "50"),
-                    createInstruction(JUMP, label(4), "equal", "p", "51"),
-                    createInstruction(JUMP, label(5), "notEqual", "p", "52"),
-                    createInstruction(LABEL, label(2)),
-                    createInstruction(SET, tmp(0), q("A")),
-                    createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(4)),
                     createInstruction(SET, tmp(0), q("B")),
                     createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(JUMP, label(5), "greaterThanEq", "p", "53"),
+                    createInstruction(JUMP, label(2), "equal", "p", "50"),
+                    createInstruction(JUMP, label(4), "equal", "p", "51"),
+                    createInstruction(JUMP, label(2), "equal", "p", "52"),
                     createInstruction(LABEL, label(5)),
+                    createInstruction(SET, tmp(0), "null"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void avoidsTooLargeExpressions() {
+            assertCompilesTo("""
+                            #set unsafe-case-optimization = true;
+                            param p = 0;
+                            print(case p
+                                when 0 then "0";
+                                when 1 then "1";
+                                when 2 then "2";
+                                when 1000 then "1000";
+                            end);
+                            """,
+                    createInstruction(SET, "p", "0"),
+                    createInstruction(JUMP, label(1), "notEqual", "p", "0"),
+                    createInstruction(SET, tmp(0), q("0")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(JUMP, label(3), "notEqual", "p", "1"),
+                    createInstruction(SET, tmp(0), q("1")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(JUMP, label(5), "notEqual", "p", "2"),
+                    createInstruction(SET, tmp(0), q("2")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(JUMP, label(7), "notEqual", "p", "1000"),
+                    createInstruction(SET, tmp(0), q("1000")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(7)),
                     createInstruction(SET, tmp(0), "null"),
                     createInstruction(LABEL, label(0)),
                     createInstruction(PRINT, tmp(0))

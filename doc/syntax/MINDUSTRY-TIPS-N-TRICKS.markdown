@@ -167,7 +167,7 @@ Mindcode provides the `printExactFast` and `printExactSlow` functions in the `pr
 
 Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately noticeable what needs to be done or what went wrong with your code if it doesn't work as expected.
 
-I'm laying out just the basic pointers here, you'll need to combine the techniques mentioned in your own way to create a truly robust solution. 
+I'm laying out just the basic pointers here, you'll need to combine the techniques mentioned in your own way to create a truly robust solution.
 
 ### Binding units
 
@@ -285,7 +285,7 @@ end;
 
 Unit can become lost if a player or another rogue processor takes it over, so it is definitely useful to guard yourself against this possibility.
 
-Unit becomes controlled by the processor when it is issued a command. Most [ucontrol instructions](FUNCTIONS-80.markdown#instruction-unit-control) will do so. Notably, setting a flag marks the unit as controlled while querying the flag or other properties of the unit won't.
+A unit becomes controlled by the processor when it is issued a command. Most [ucontrol instructions](FUNCTIONS-80.markdown#instruction-unit-control) will do so. Notably, setting a flag marks the unit as controlled while querying the flag or other properties of the unit won't.
 
 If a unit is not issued commands from a processor for some time, it becomes free again and both `@controlled` and `@controller` properties are cleared. My tests show it takes about 10 seconds:
 
@@ -312,6 +312,43 @@ if @unit.@controller != @this or @unit.@dead == 1 then
 end;
 ```
 
+### Commanding units
+
+Once a unit is bound to the processor, it can be issued commands using the [`ucontrol` instruction](FUNCTIONS-80.markdown#instruction-unit-control). There's a caveat, though: the processor doesn't wait for the unit to complete the command you've given to it, but continues executing your program. If another command is issued to the unit before the previous command has been finished, the unit will abandon the previous command and will start executing the new one. For example:
+
+```Mindcode
+require units;
+
+findFreeUnit(@mono, 123456789);
+while true do
+    move(10, 10);
+    move(20, 20);
+end;
+```
+
+It might appear that this program will bind a single unit (mono) and will make it patrol between coordinates (10, 10) and (20, 20). What will actually happen is that the mono will travel close to the coordinates given. However, then it will stay practically in one place, as the commands to move to one point and to the other point will alternate too fast.
+
+The solution to this problem is to detect whether the unit has completed the command, and only when it did, issue another command. In case of movements, you need to verify the unit has arrived to the destination before issuing a new command:
+
+```Mindcode
+require units;
+
+def moveTo(x, y)
+    do
+        move(x, y);
+    while !within(x, y, 1);
+end;
+
+findFreeUnit(@mono, 123456789);
+
+while true do
+    moveTo(10, 10);
+    moveTo(20, 20);
+end;
+```
+
+The above program keeps issuing the `move` command, until the unit is within one tile from the intended destination. Issuing the command repeatedly, instead of just waiting, might be important in some cases, as it you don't issue a command to a unit for ten seconds, the unit becomes   
+
 ### Discarding unwanted items
 
 Units can carry only one type of items at a time. It might therefore be sometimes necessary to discard items that are no longer needed. The simple, but not-so-obvious way of doing so is to drop the item into the air:
@@ -322,7 +359,7 @@ itemDrop(@air, @unit.@totalItems);
 
 In case of dropping things into the air, all items are always dropped, regardless of the specified amount. I'd still suggest specifying the correct amount, just in case something will change in the future.     
 
-## Using Buildings
+## Using buildings
 
 Mindustry allows your processors to control and receive information from any allied building only if they are linked to your processor, which can be done on a limited processor's range. Otherwise, you can only use units to get building and block information. Getting this data is not just limited to your buildings. You can also obtain enemy building information, which is not possible with linking to your processor since you can't link to an enemy building.
 
