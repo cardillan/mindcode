@@ -26,13 +26,13 @@ assertflush
 print "{2}"
 op floor :formatNumber:n 1234567 0
 op mod :formatNumber:mod :formatNumber:n 1000
-jump 31 greaterThanEq :formatNumber:mod 10
-format "{2},00{1}"
+jump 31 lessThan :formatNumber:mod 100
+format "{2},{1}"
 jump 35 always 0 0
-jump 34 greaterThanEq :formatNumber:mod 100
+jump 34 lessThan :formatNumber:mod 10
 format "{2},0{1}"
 jump 35 always 0 0
-format "{2},{1}"
+format "{2},00{1}"
 format :formatNumber:mod
 op idiv :formatNumber:n :formatNumber:n 1000
 jump 27 greaterThan :formatNumber:n 999
@@ -43,13 +43,13 @@ print "{2}"
 op floor :formatNumber:n 1234567 0
 format "-{2}"
 op mod :formatNumber:mod :formatNumber:n 1000
-jump 48 greaterThanEq :formatNumber:mod 10
-format "{2},00{1}"
+jump 48 lessThan :formatNumber:mod 100
+format "{2},{1}"
 jump 52 always 0 0
-jump 51 greaterThanEq :formatNumber:mod 100
+jump 51 lessThan :formatNumber:mod 10
 format "{2},0{1}"
 jump 52 always 0 0
-format "{2},{1}"
+format "{2},00{1}"
 format :formatNumber:mod
 op idiv :formatNumber:n :formatNumber:n 1000
 jump 44 greaterThan :formatNumber:n 999
@@ -57,20 +57,20 @@ format :formatNumber:n
 assertprints "-1,234,567" "printNumber(-1234567)"
 assertflush
 print "{2}"
-op floor :formatNumber:n 9009099 0
+op floor :formatNumber:n 9009099999 0
 op mod :formatNumber:mod :formatNumber:n 1000
-jump 64 greaterThanEq :formatNumber:mod 10
-format "{2},00{1}"
+jump 64 lessThan :formatNumber:mod 100
+format "{2},{1}"
 jump 68 always 0 0
-jump 67 greaterThanEq :formatNumber:mod 100
+jump 67 lessThan :formatNumber:mod 10
 format "{2},0{1}"
 jump 68 always 0 0
-format "{2},{1}"
+format "{2},00{1}"
 format :formatNumber:mod
 op idiv :formatNumber:n :formatNumber:n 1000
 jump 60 greaterThan :formatNumber:n 999
 format :formatNumber:n
-assertprints "9,009,099" "printNumber(9009099)"
+assertprints "9,009,099,999" "printNumber(9009099999)"
 assertflush
 print "{2}"
 set :formatBinaryNumber:digits 0

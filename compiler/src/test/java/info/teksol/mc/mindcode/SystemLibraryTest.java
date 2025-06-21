@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
+import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.DynamicContainer;
 import org.junit.jupiter.api.DynamicNode;
@@ -99,7 +100,7 @@ public class SystemLibraryTest {
         }
 
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + ".mnd"),
-                normalizeLineEndings(inputFile.getCode()), StandardCharsets.UTF_8);
+                StringUtils.normalizeLineEndings(inputFile.getCode()), StandardCharsets.UTF_8);
 
         profile.setRun(executableTest);
         compiler.compile(inputFile);
@@ -116,10 +117,10 @@ public class SystemLibraryTest {
                 .map(m -> m.formatMessage(sp -> sp.formatForIde(FileReferences.WINDOWS_URI)))
                 .collect(Collectors.joining("\n"));
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + "-" + level.name().toLowerCase() + ".log"),
-                normalizeLineEndings(messages), StandardCharsets.UTF_8);
+                StringUtils.normalizeLineEndings(messages), StandardCharsets.UTF_8);
 
         Files.writeString(Path.of(LIBRARY_OUTPUTS_DIRECTORY, libraryName + "-" + level.name().toLowerCase() + ".mlog"),
-                normalizeLineEndings(compiler.getOutput()), StandardCharsets.UTF_8);
+                StringUtils.normalizeLineEndings(compiler.getOutput()), StandardCharsets.UTF_8);
 
         System.out.println(compiler.getTextBuffer().getFormattedOutput());
 
@@ -203,11 +204,6 @@ public class SystemLibraryTest {
                 .collect(Collectors.joining("\n"));
 
         return initializations + "\n" + variables + "\n\n" + functionCalls + "\n\n" + procedureCalls + "end;";
-    }
-
-    private String normalizeLineEndings(String string) {
-        return string.replaceAll("\\R", System.lineSeparator());
-
     }
 
     private static Stream<String> extractVariables(String declaration) {

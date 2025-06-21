@@ -9,7 +9,7 @@ assertPrints("1", printNumber(1.5), "printNumber(1.5)");
 assertPrints("-1", printNumber(-1.5), "printNumber(-1.5)");
 assertPrints("1,234,567", printNumber(1234567), "printNumber(1234567)");
 assertPrints("-1,234,567", printNumber(-1234567), "printNumber(-1234567)");
-assertPrints("9,009,099", printNumber(9009099), "printNumber(9009099)");
+assertPrints("9,009,099,999", printNumber(9009099999), "printNumber(9009099999)");
 assertPrints("0b1001", printBinaryNumber(0b1001, 0), "printBinaryNumber(0b1001, 0)");
 assertPrints("0b001010", printBinaryNumber(0b1010, 6), "printBinaryNumber(0b1010, 6)");
 assertPrints("-0b001010", printBinaryNumber(-0b1010, 6), "printBinaryNumber(-0b1010, 6)");

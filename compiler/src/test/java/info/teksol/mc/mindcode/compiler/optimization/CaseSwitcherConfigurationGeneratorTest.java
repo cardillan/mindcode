@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.ConvertCaseExpressionAction;
 import info.teksol.mc.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
+import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.*;
@@ -49,7 +50,7 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
         }
 
         Path path = Path.of(SCRIPTS_DIRECTORY, CaseSwitcherConfigurationGeneratorTest.class.getSimpleName() + ".txt");
-        Files.writeString(path, text);
+        Files.writeString(path, StringUtils.normalizeLineEndings(text.toString()));
     }
 
     protected String getScriptsDirectory() {
@@ -182,7 +183,7 @@ public class CaseSwitcherConfigurationGeneratorTest extends AbstractOptimizerTes
         text.append(text2);
 
         Path path = Path.of(getScriptsDirectory(), fileName.replace(".mnd", ".txt"));
-        Files.writeString(path, text);
+        Files.writeString(path, StringUtils.normalizeLineEndings(text.toString()));
 
         results.put(fileName.replace(".mnd", ""), statistics);
         assertTrue(regressions.isEmpty(), "Regressions at strength: " + String.join(", ", regressions));

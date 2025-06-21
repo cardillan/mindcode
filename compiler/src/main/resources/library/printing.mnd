@@ -49,7 +49,7 @@ void formatNumber(number)
     while n > 999 do
         var mod = n % 1000;
         // Insert placeholder for the next group, thousands separator, leading zeroes (if any) and a placeholder for this group.
-        format(mod < 10 ? "{2},00{1}" : mod < 100 ? "{2},0{1}" : "{2},{1}");
+        format(mod >= 100 ? "{2},{1}" : mod >= 10 ? "{2},0{1}" : "{2},00{1}");
         format(mod);
         n \= 1000;
     end;

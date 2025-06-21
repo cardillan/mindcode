@@ -42,10 +42,10 @@ set :printNumber*retaddr 42
 jump 237 always 0 0
 assertprints "-1,234,567" "printNumber(-1234567)"
 assertflush
-set :printNumber:number 9009099
+set :printNumber:number 9009099999
 set :printNumber*retaddr 47
 jump 237 always 0 0
-assertprints "9,009,099" "printNumber(9009099)"
+assertprints "9,009,099,999" "printNumber(9009099999)"
 assertflush
 set :printBinaryNumber:number 0b1001
 set :printBinaryNumber:digits 0
@@ -250,15 +250,15 @@ op greaterThan *tmp19 :formatNumber:n 999
 jump 266 equal *tmp19 false
 op mod *tmp20 :formatNumber:n 1000
 set :formatNumber:mod *tmp20
-op lessThan *tmp21 :formatNumber:mod 10
+op greaterThanEq *tmp21 :formatNumber:mod 100
 jump 256 equal *tmp21 false
-set *tmp22 "{2},00{1}"
+set *tmp22 "{2},{1}"
 jump 262 always 0 0
-op lessThan *tmp23 :formatNumber:mod 100
+op greaterThanEq *tmp23 :formatNumber:mod 10
 jump 260 equal *tmp23 false
 set *tmp24 "{2},0{1}"
 jump 261 always 0 0
-set *tmp24 "{2},{1}"
+set *tmp24 "{2},00{1}"
 set *tmp22 *tmp24
 format *tmp22
 format :formatNumber:mod

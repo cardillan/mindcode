@@ -214,7 +214,7 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferUsage`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@id`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
+|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferUsage`, `@operations`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@id`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
 
 ## Instruction `Operation`
 
@@ -653,6 +653,7 @@ Set a property for a marker. The ID used must be the same as in the Make Marker 
 |`setmarker(:color, id, color)`|`setmarker color id color 0 0`|
 |`setmarker(:radius, id, radius)`|`setmarker radius id radius 0 0`|
 |`setmarker(:stroke, id, stroke)`|`setmarker stroke id stroke 0 0`|
+|`setmarker(:outline, id, outline)`|`setmarker outline id outline 0 0`|
 |`setmarker(:rotation, id, rotation)`|`setmarker rotation id rotation 0 0`|
 |`setmarker(:shape, id, sides, fill, outline)`|`setmarker shape id sides fill outline`|
 |`setmarker(:arc, id, from, to)`|`setmarker arc id from to 0`|

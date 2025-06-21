@@ -372,6 +372,7 @@ name;global;isobj;constant;numval
 @oil;global;true;true;0.0
 @oil-extractor;global;true;true;0.0
 @omura;global;true;true;0.0
+@operations;global;true;true;0.0
 @ore-beryllium;global;true;true;0.0
 @ore-coal;global;true;true;0.0
 @ore-copper;global;true;true;0.0

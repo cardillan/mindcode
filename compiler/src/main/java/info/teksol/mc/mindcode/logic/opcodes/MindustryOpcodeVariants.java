@@ -305,6 +305,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("color"),       in("id"), in("color"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("radius"),      in("id"), in("radius"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("stroke"),      in("id"), in("stroke"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("outline"),     in("id"), in("outline"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("rotation"),    in("id"), in("rotation"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("shape"),       in("id"), in("sides"), in("fill"), in("outline"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("arc"),         in("id"), in("from"), in("to"));

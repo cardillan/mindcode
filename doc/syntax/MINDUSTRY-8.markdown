@@ -35,17 +35,27 @@ java.exe -jar Mindustry-BE-Desktop-<build number>.jar
 
 # New functionality in Mindustry 8
 
-## Numeric literals
+The changes that affect Mindcode the most are described here. For a comprehensive list of changes to Mindustry Logic, see [Changes to Mindustry Logic](https://github.com/cardillan/mindcode/wiki/Changes-to-Mindustry-Logic).  
 
-Mindustry now handles the numeric literals with double precision. Loss of precision, and inability to encode some numeric constants into mlog, no longer happen.  
+## Literals and properties
 
-## Named color literals
+### Numeric literals
+
+Mindustry now handles the numeric literals with double precision. Loss of precision, and the inability to encode some numeric constants into mlog, no longer happen.  
+
+### Named color literals
 
 Color literals for named colors (e.g., `%[red]`), are also supported by Mindcode.
 
-## `format` instruction
+### Properties
 
-Allows dynamic text formatting. It is possible to output special placeholders `{0}` to `{9}` into the text buffer. The `format` instruction then replaces a placeholder with actual value. Example:
+A number of properties to be used with the `sensor` instructions were added. Mindcode supports using new properties out of the box, so no special support for these was needed.  
+
+## Text output
+
+### `format` instruction
+
+The `format` instruction allows dynamic text formatting. It is possible to output special placeholders `{0}` to `{9}` into the text buffer. The `format` instruction then replaces a placeholder with actual value. Example:
 
 ```
 print `Test: {1}{0}`
@@ -109,7 +119,9 @@ myPrintNumber(floor(rand(100000)));
 
 Note: `formatNumber` and `printNumber` functions, identical to those above, are part of the [system library](SYSTEM-LIBRARY.markdown).
 
-Existing Print Merging optimization is enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target earlier than 8 compiles into
+### Print merging optimization
+
+The [Print Merging optimization](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) was enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target earlier than 8 compiles into
 
 ```
 print `Minimum: `
@@ -161,11 +173,13 @@ Value: 10
 
 The `format` instruction is also supported by the emulator, allowing you to experiment with the new print support right away in the web app.
 
-## `printchar` instruction
+### `printchar` instruction
 
 The `printchar` instruction allows outputting individual characters to the text buffer. The character is identified by its ASCII code. The ASCII code can be specified directly (`printchar(65);`), using Mindcode's character literal (`printchar('!');`) or using the `ascii()` function (`printchar(ascii("Today"));`).
 
 When an object is used as instruction argument, the corresponding icon is output instead: `printchar(@mega);`.
+
+The Print Merging optimization handles the `printchar` instructions when possible:
 
 ```Mindcode
 #set target = 8;
@@ -193,19 +207,13 @@ format :amount
 printflush message1
 ```
 
-To make using the `printchar()` function easier, Mindcode also supports [character literals](SYNTAX.markdown#character-literals). 
+To make using the `printchar()` function easier, [character literals](SYNTAX.markdown#character-literals) were added to Mindcode. 
 
-## Reading characters from strings
+## `read` and `write` enhancements
 
-Mindustry 8 supports accessing individual characters of string values as UTF-16 numeric values using the `read` instruction. Characters are indexed starting at `0`. The instruction returns `null` when the index is out of bounds.
+The `read` and `write` instructions were updated to support reading and writing data to other blocks and objects apart from memory blocks.
 
-This functionality is accessible in Mindcode via the [`char()` function](SYNTAX-4-FUNCTIONS.markdown#the-char-function).  
-
-## Obtaining string length
-
-A length of a string can be obtained by sensing it's `@size` property. This functionality is accessible in Mindcode either using the `@size` property, `sensor` function or the specialized [`strlen()` function](SYNTAX-4-FUNCTIONS.markdown#the-strlen-function).
-
-## Reading and writing linked processor variables
+### Reading and writing linked processor variables
 
 Mindustry 8 allows reading and writing variables of another processor, addressing them by name. This functionality is provided as an extension to the `read` and `write` instructions, which can take processors instead of memory cells/banks, and string values representing variable names instead of numerical index.
 
@@ -229,11 +237,25 @@ write *tmp2 processor1 "z"
 
 Unlike external variables, access to another processor's variables is not limited to numeric values. All possible variable values are correctly transferred using these new instructions.    
 
-### Remote functions and variables
+#### Remote functions and variables
 
 Thanks to the ability to access other processors' variables, Mindcode now supports remote functions and variables, as described [here](REMOTE-CALLS.markdown).   
 
-## New drawing commands
+### Reading characters from strings
+
+Mindustry 8 supports accessing individual characters of string values as UTF-16 numeric values using the `read` instruction. Characters are indexed starting at `0`. The instruction returns `null` when the index is out of bounds.
+
+This functionality is accessible in Mindcode via the [`char()` function](SYNTAX-4-FUNCTIONS.markdown#the-char-function).
+
+#### Obtaining string length
+
+A length of a string can be obtained by sensing it's `@size` property. This functionality is accessible in Mindcode either using the `@size` property, `sensor` function or the specialized [`strlen()` function](SYNTAX-4-FUNCTIONS.markdown#the-strlen-function).
+
+### Reading and writing canvas pixels
+
+Mindustry 8 allows reading and writing individual canvas pixels using `read` and `write`. Canvas is an Erekir-specific block, so this is only relevant when working with mixed tech or when creating world processors for Erekir maps. The indexes need to be in the `0 ... 64` range, and individual pixel values are in the `0 ... 8` range (there's only eight different colors supported by canvases).
+
+## Graphic output
 
 ### `draw print`
 
@@ -241,7 +263,7 @@ This instruction prints the contents of the text buffer onto the display. So, in
 
 The new `draw print` instruction is represented by the `drawPrint()` function, as `print()` is already taken. 
 
-The text is drawn using monospace font. Each character being printed represents one graphical operation. The graphics buffer has a capacity of 256 operations, after which it doesn't accept new ones and must be output using `drawflush`.
+The text is drawn using monospace font. Each character being printed represents one graphical operation. The graphics buffer has a capacity of 256 operations, after which it doesn't accept new ones and must be applied using `drawflush`.
 
 ### Output transformations
 
@@ -257,9 +279,9 @@ Figuring out the correct transformations isn't always easy. Issuing incorrect on
 * `rotateLeft(display)`: will inspect the display and apply the correct transformation for small/large ones.
 * `smallToLarge()`, `largeToSmall()`: will set up scaling so that output to a small display will be mapped completely to the large one or vice versa. Especially the `largeToSmall()` transformation results into a graphics which is still nicely readable on a smaller display.
 
-## Additional standard processor instructions
+## Other standard processor instructions
 
-Note: these new instructions map either to functions or to operators. When compiling for Mindustry 7, the new operators are available by default, and the new functions are available through system libraries `graphics` and `math`, implemented in a backwards compatible way. This way you can start using these operators and functions in Mindustry 7 and seamlessly transition to Mindustry 8 without having to update your code. 
+Note: these new instructions map either to functions or to operators. When compiling for Mindustry 7, the new operators are available by default, and the new functions are available through system libraries `graphics` and `math`, implemented in a backwards compatible way. This way you can start using these operators and functions when compiling for Mindustry 7 and seamlessly transition to Mindustry 8 without having to update your code. 
 
 ### `unpackcolor`
 
@@ -285,7 +307,7 @@ Provides the signum of the argument (`-1`, `0` or `1` for a negative, zero or po
 
 Rounds the argument to the closest integer. Prior to version 8, the same operation may be performed by the `round()` function from the `math` library.
 
-## Additional World processor instructions
+## World processor instructions
 
 ### `weathersense`, `weatherset`
 

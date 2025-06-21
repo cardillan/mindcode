@@ -2,23 +2,23 @@
     27 instructions eliminated by Temp Variables Elimination.
      1 instructions eliminated by Case Expression Optimization.
     42 instructions eliminated by Dead Code Elimination (7 iterations).
-    64 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
+    72 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
     23 instructions eliminated by Jump Optimization (7 iterations).
-    49 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
+    52 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
      1 instructions modified by Expression Optimization (4 iterations).
      2 instructions eliminated by If Expression Optimization (4 iterations).
-   320 instructions eliminated by Data Flow Optimization (23 passes, 73 iterations).
+   322 instructions eliminated by Data Flow Optimization (23 passes, 73 iterations).
      4 instructions eliminated by Loop Optimization (4 iterations).
      7 loops improved by Loop Optimization.
-   644 instructions added by Loop Unrolling (25 iterations).
+   654 instructions added by Loop Unrolling (25 iterations).
     17 loops unrolled by Loop Unrolling.
    298 instructions added by Function Inlining (25 iterations).
     15 function calls inlined by Function Inlining.
      8 instructions eliminated by Jump Straightening (2 passes, 7 iterations).
-   148 instructions updated by JumpThreading.
-   340 instructions eliminated by Unreachable Code Elimination (3 iterations).
+   143 instructions updated by JumpThreading.
+   335 instructions eliminated by Unreachable Code Elimination (3 iterations).
     20 instructions eliminated by Print Merging.
-   545 instructions after optimizations.
+   547 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 623):
   * Unroll iteration loop at *printing:23:5                      size    -5, benefit       11.0, efficiency   Infinity (-5 instructions)
@@ -39,7 +39,7 @@ Pass 1: speed optimization selection (cost limit 623):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -86,7 +86,7 @@ Pass 1: speed optimization selection (cost limit 628):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -132,7 +132,7 @@ Pass 1: speed optimization selection (cost limit 538):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -177,7 +177,7 @@ Pass 1: speed optimization selection (cost limit 500):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -221,7 +221,7 @@ Pass 1: speed optimization selection (cost limit 447):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -264,7 +264,7 @@ Pass 1: speed optimization selection (cost limit 420):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -309,7 +309,7 @@ Pass 1: speed optimization selection (cost limit 403):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -350,7 +350,7 @@ Pass 1: speed optimization selection (cost limit 402):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -391,7 +391,7 @@ Pass 1: speed optimization selection (cost limit 401):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -431,7 +431,7 @@ Pass 1: speed optimization selection (cost limit 404):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -471,7 +471,7 @@ Pass 1: speed optimization selection (cost limit 403):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -510,7 +510,7 @@ Pass 1: speed optimization selection (cost limit 406):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -539,7 +539,7 @@ Pass 1: speed optimization selection (cost limit 406):
 Pass 1: speed optimization selection (cost limit 328):
   * Unroll loop at *printing:49:5                                size    +6, benefit      100.0, efficiency     16.667 (+3 instructions)
     Unroll loop at *printing:49:5                                size    +6, benefit      100.0, efficiency     16.667
-    Unroll loop at *printing:49:5                                size    +6, benefit      100.0, efficiency     16.667
+    Unroll loop at *printing:49:5                                size   +15, benefit      150.0, efficiency     10.000
     Unroll iteration loop at *printing:344:5                     size  +185, benefit        7.0, efficiency      0.038
     Unroll iteration loop at *printing:369:5                     size   +89, benefit        7.0, efficiency      0.079
     Inline function 'printHexNumber' defined at *printing:213:1  size  +113, benefit       16.0, efficiency      0.142
@@ -572,7 +572,7 @@ Pass 1: speed optimization selection (cost limit 328):
 
 Pass 1: speed optimization selection (cost limit 325):
   * Unroll loop at *printing:49:5                                size    +6, benefit      100.0, efficiency     16.667 (+3 instructions)
-    Unroll loop at *printing:49:5                                size    +6, benefit      100.0, efficiency     16.667
+    Unroll loop at *printing:49:5                                size   +15, benefit      150.0, efficiency     10.000
     Unroll iteration loop at *printing:344:5                     size  +185, benefit        7.0, efficiency      0.038
     Unroll iteration loop at *printing:369:5                     size   +89, benefit        7.0, efficiency      0.079
     Inline function 'printHexNumber' defined at *printing:213:1  size  +113, benefit       16.0, efficiency      0.142
@@ -604,7 +604,7 @@ Pass 1: speed optimization selection (cost limit 325):
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
 Pass 1: speed optimization selection (cost limit 322):
-  * Unroll loop at *printing:49:5                                size    +6, benefit      100.0, efficiency     16.667 (+3 instructions)
+  * Unroll loop at *printing:49:5                                size   +15, benefit      150.0, efficiency     10.000 (+11 instructions)
     Unroll iteration loop at *printing:344:5                     size  +185, benefit        7.0, efficiency      0.038
     Unroll iteration loop at *printing:369:5                     size   +89, benefit        7.0, efficiency      0.079
     Inline function 'printHexNumber' defined at *printing:213:1  size  +113, benefit       16.0, efficiency      0.142
@@ -635,7 +635,7 @@ Pass 1: speed optimization selection (cost limit 322):
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 1: speed optimization selection (cost limit 319):
+Pass 1: speed optimization selection (cost limit 311):
     Unroll iteration loop at *printing:344:5                     size  +185, benefit        7.0, efficiency      0.038
     Unroll iteration loop at *printing:369:5                     size   +89, benefit        7.0, efficiency      0.079
   * Inline function 'printHexNumber' defined at *printing:213:1  size  +113, benefit       16.0, efficiency      0.142 (+93 instructions)
@@ -666,9 +666,9 @@ Pass 1: speed optimization selection (cost limit 319):
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 1: speed optimization selection (cost limit 226):
+Pass 1: speed optimization selection (cost limit 218):
   * Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439 (+110 instructions)
-    Unroll loop at *printing:170:5                               size  +223, benefit      500.0, efficiency      2.242
+  ! Unroll loop at *printing:170:5                               size  +223, benefit      500.0, efficiency      2.242
     Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439
     Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439
     Unroll iteration loop at *printing:344:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -696,7 +696,7 @@ Pass 1: speed optimization selection (cost limit 226):
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 1: speed optimization selection (cost limit 116):
+Pass 1: speed optimization selection (cost limit 108):
   ! Unroll loop at *printing:170:5                               size  +223, benefit      500.0, efficiency      2.242
   ! Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439
   ! Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439
@@ -723,7 +723,7 @@ Pass 1: speed optimization selection (cost limit 116):
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 1: speed optimization selection (cost limit 138):
+Pass 1: speed optimization selection (cost limit 130):
   ! Unroll loop at *printing:170:5                               size  +223, benefit      500.0, efficiency      2.242
   * Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439 (+110 instructions)
     Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439
@@ -749,7 +749,7 @@ Pass 1: speed optimization selection (cost limit 138):
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 1: speed optimization selection (cost limit 28):
+Pass 1: speed optimization selection (cost limit 20):
   ! Unroll loop at *printing:170:5                               size  +223, benefit      500.0, efficiency      2.242
   * Unroll loop at *printing:185:5                               size    -2, benefit      100.0, efficiency   Infinity (-3 instructions)
   ! Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439
@@ -775,7 +775,7 @@ Pass 1: speed optimization selection (cost limit 28):
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
 
-Pass 1: speed optimization selection (cost limit 31):
+Pass 1: speed optimization selection (cost limit 23):
   ! Unroll loop at *printing:170:5                               size  +223, benefit      500.0, efficiency      2.242
   ! Unroll loop at *printing:170:5                               size  +123, benefit      300.0, efficiency      2.439
   ! Unroll iteration loop at *printing:344:5                     size  +185, benefit        7.0, efficiency      0.038
@@ -942,586 +942,588 @@ Final code before resolving virtual instructions:
    40:  assertprints "-1,234,567" "printNumber(-1234567)"
    41:  assertflush
    42:  print "{2}"
-   43:  format "{2},0{1}"
-   44:  format 99
-   45:  format "{2},00{1}"
-   46:  format 9
-   47:  format 9
-   48:  assertprints "9,009,099" "printNumber(9009099)"
-   49:  assertflush
-   50:  print "{2}"
-   51:  format "{2}{1}"
-   52:  format 1
+   43:  format "{2},{1}"
+   44:  format 999
+   45:  format "{2},0{1}"
+   46:  format 99
+   47:  format "{2},00{1}"
+   48:  format 9
+   49:  format 9
+   50:  assertprints "9,009,099,999" "printNumber(9009099999)"
+   51:  assertflush
+   52:  print "{2}"
    53:  format "{2}{1}"
-   54:  format 0
+   54:  format 1
    55:  format "{2}{1}"
    56:  format 0
    57:  format "{2}{1}"
-   58:  format 1
-   59:  format "0b"
-   60:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
-   61:  assertflush
-   62:  print "{2}"
-   63:  format "{2}{1}"
-   64:  format 0
+   58:  format 0
+   59:  format "{2}{1}"
+   60:  format 1
+   61:  format "0b"
+   62:  assertprints "0b1001" "printBinaryNumber(0b1001, 0)"
+   63:  assertflush
+   64:  print "{2}"
    65:  format "{2}{1}"
-   66:  format 1
+   66:  format 0
    67:  format "{2}{1}"
-   68:  format 0
+   68:  format 1
    69:  format "{2}{1}"
-   70:  format 1
-   71:  format "{2}0"
-   72:  format "{2}0"
-   73:  format "0b"
-   74:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
-   75:  assertflush
-   76:  print "{2}"
-   77:  format "-{2}"
-   78:  format "{2}{1}"
-   79:  format 0
+   70:  format 0
+   71:  format "{2}{1}"
+   72:  format 1
+   73:  format "{2}0"
+   74:  format "{2}0"
+   75:  format "0b"
+   76:  assertprints "0b001010" "printBinaryNumber(0b1010, 6)"
+   77:  assertflush
+   78:  print "{2}"
+   79:  format "-{2}"
    80:  format "{2}{1}"
-   81:  format 1
+   81:  format 0
    82:  format "{2}{1}"
-   83:  format 0
+   83:  format 1
    84:  format "{2}{1}"
-   85:  format 1
-   86:  format "{2}0"
-   87:  format "{2}0"
-   88:  format "0b"
-   89:  assertprints "-0b001010" "printBinaryNumber(-0b1010, 6)"
-   90:  assertflush
-   91:  print "{2}"
-   92:  format "{2}F"
-   93:  format "{2}E"
-   94:  format "{2}D"
-   95:  format "{2}C"
-   96:  format "{2}B"
-   97:  format "{2}A"
-   98:  format "0x"
-   99:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
-  100:  assertflush
-  101:  print "{2}"
-  102:  set :formatHexNumber:digits 0
-  103:  op floor :formatHexNumber:n 0x1234567890 0
-        label *label582
-  104:  op mod :formatHexNumber:digit :formatHexNumber:n 16
-  105:  jump *label585 lessThan :formatHexNumber:digit 0
-  106:  jump *label585 greaterThan :formatHexNumber:digit 9
-  107:  format "{2}{1}"
-  108:  format :formatHexNumber:digit
-  109:  jump *label598 always 0 0
-        label *label585
-  110:  jump *label587 notEqual :formatHexNumber:digit 10
-  111:  format "{2}A"
-  112:  jump *label598 always 0 0
-        label *label587
-  113:  jump *label589 notEqual :formatHexNumber:digit 11
-  114:  format "{2}B"
-  115:  jump *label598 always 0 0
-        label *label589
-  116:  jump *label591 notEqual :formatHexNumber:digit 12
-  117:  format "{2}C"
-  118:  jump *label598 always 0 0
+   85:  format 0
+   86:  format "{2}{1}"
+   87:  format 1
+   88:  format "{2}0"
+   89:  format "{2}0"
+   90:  format "0b"
+   91:  assertprints "-0b001010" "printBinaryNumber(-0b1010, 6)"
+   92:  assertflush
+   93:  print "{2}"
+   94:  format "{2}F"
+   95:  format "{2}E"
+   96:  format "{2}D"
+   97:  format "{2}C"
+   98:  format "{2}B"
+   99:  format "{2}A"
+  100:  format "0x"
+  101:  assertprints "0xABCDEF" "printHexNumber(0xABCDEF, 0)"
+  102:  assertflush
+  103:  print "{2}"
+  104:  set :formatHexNumber:digits 0
+  105:  op floor :formatHexNumber:n 0x1234567890 0
+        label *label588
+  106:  op mod :formatHexNumber:digit :formatHexNumber:n 16
+  107:  jump *label591 lessThan :formatHexNumber:digit 0
+  108:  jump *label591 greaterThan :formatHexNumber:digit 9
+  109:  format "{2}{1}"
+  110:  format :formatHexNumber:digit
+  111:  jump *label604 always 0 0
         label *label591
-  119:  jump *label593 notEqual :formatHexNumber:digit 13
-  120:  format "{2}D"
-  121:  jump *label598 always 0 0
+  112:  jump *label593 notEqual :formatHexNumber:digit 10
+  113:  format "{2}A"
+  114:  jump *label604 always 0 0
         label *label593
-  122:  jump *label595 notEqual :formatHexNumber:digit 14
-  123:  format "{2}E"
-  124:  jump *label598 always 0 0
+  115:  jump *label595 notEqual :formatHexNumber:digit 11
+  116:  format "{2}B"
+  117:  jump *label604 always 0 0
         label *label595
-  125:  jump *label597 notEqual :formatHexNumber:digit 15
-  126:  format "{2}F"
+  118:  jump *label597 notEqual :formatHexNumber:digit 12
+  119:  format "{2}C"
+  120:  jump *label604 always 0 0
         label *label597
-        label *label598
-  127:  op shr :formatHexNumber:n :formatHexNumber:n 4
-  128:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  129:  jump *label582 greaterThan :formatHexNumber:n 0
-  130:  jump *label604 lessThanEq :formatHexNumber:digits 0
-        label *label602
-  131:  format "{2}0"
-  132:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  133:  jump *label602 greaterThan :formatHexNumber:digits 0
+  121:  jump *label599 notEqual :formatHexNumber:digit 13
+  122:  format "{2}D"
+  123:  jump *label604 always 0 0
+        label *label599
+  124:  jump *label601 notEqual :formatHexNumber:digit 14
+  125:  format "{2}E"
+  126:  jump *label604 always 0 0
+        label *label601
+  127:  jump *label603 notEqual :formatHexNumber:digit 15
+  128:  format "{2}F"
+        label *label603
         label *label604
-  134:  format "0x"
-  135:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
-  136:  assertflush
-  137:  print "{2}"
-  138:  format "{2}C"
-  139:  format "{2}C"
-  140:  format "{2}B"
-  141:  format "{2}B"
-  142:  format "{2}A"
-  143:  format "{2}A"
-  144:  format "{2}0"
-  145:  format "{2}0"
-  146:  format "0x"
-  147:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
-  148:  assertflush
-  149:  print "{2}"
-  150:  set :formatHexNumber:digits 8
-  151:  format "-{2}"
-  152:  op floor :formatHexNumber:n 11189196 0
-        label *label638
-  153:  op mod :formatHexNumber:digit :formatHexNumber:n 16
-  154:  jump *label641 lessThan :formatHexNumber:digit 0
-  155:  jump *label641 greaterThan :formatHexNumber:digit 9
-  156:  format "{2}{1}"
-  157:  format :formatHexNumber:digit
-  158:  jump *label654 always 0 0
-        label *label641
-  159:  jump *label643 notEqual :formatHexNumber:digit 10
-  160:  format "{2}A"
-  161:  jump *label654 always 0 0
-        label *label643
-  162:  jump *label645 notEqual :formatHexNumber:digit 11
-  163:  format "{2}B"
-  164:  jump *label654 always 0 0
-        label *label645
-  165:  jump *label647 notEqual :formatHexNumber:digit 12
-  166:  format "{2}C"
-  167:  jump *label654 always 0 0
+  129:  op shr :formatHexNumber:n :formatHexNumber:n 4
+  130:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
+  131:  jump *label588 greaterThan :formatHexNumber:n 0
+  132:  jump *label610 lessThanEq :formatHexNumber:digits 0
+        label *label608
+  133:  format "{2}0"
+  134:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
+  135:  jump *label608 greaterThan :formatHexNumber:digits 0
+        label *label610
+  136:  format "0x"
+  137:  assertprints "0x1234567890" "printHexNumber(0x1234567890, 0)"
+  138:  assertflush
+  139:  print "{2}"
+  140:  format "{2}C"
+  141:  format "{2}C"
+  142:  format "{2}B"
+  143:  format "{2}B"
+  144:  format "{2}A"
+  145:  format "{2}A"
+  146:  format "{2}0"
+  147:  format "{2}0"
+  148:  format "0x"
+  149:  assertprints "0x00AABBCC" "printHexNumber(0xAABBCC, 8)"
+  150:  assertflush
+  151:  print "{2}"
+  152:  set :formatHexNumber:digits 8
+  153:  format "-{2}"
+  154:  op floor :formatHexNumber:n 11189196 0
+        label *label644
+  155:  op mod :formatHexNumber:digit :formatHexNumber:n 16
+  156:  jump *label647 lessThan :formatHexNumber:digit 0
+  157:  jump *label647 greaterThan :formatHexNumber:digit 9
+  158:  format "{2}{1}"
+  159:  format :formatHexNumber:digit
+  160:  jump *label660 always 0 0
         label *label647
-  168:  jump *label649 notEqual :formatHexNumber:digit 13
-  169:  format "{2}D"
-  170:  jump *label654 always 0 0
+  161:  jump *label649 notEqual :formatHexNumber:digit 10
+  162:  format "{2}A"
+  163:  jump *label660 always 0 0
         label *label649
-  171:  jump *label651 notEqual :formatHexNumber:digit 14
-  172:  format "{2}E"
-  173:  jump *label654 always 0 0
+  164:  jump *label651 notEqual :formatHexNumber:digit 11
+  165:  format "{2}B"
+  166:  jump *label660 always 0 0
         label *label651
-  174:  jump *label653 notEqual :formatHexNumber:digit 15
-  175:  format "{2}F"
+  167:  jump *label653 notEqual :formatHexNumber:digit 12
+  168:  format "{2}C"
+  169:  jump *label660 always 0 0
         label *label653
-        label *label654
-  176:  op shr :formatHexNumber:n :formatHexNumber:n 4
-  177:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  178:  jump *label638 greaterThan :formatHexNumber:n 0
-  179:  jump *label660 lessThanEq :formatHexNumber:digits 0
-        label *label658
-  180:  format "{2}0"
-  181:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
-  182:  jump *label658 greaterThan :formatHexNumber:digits 0
+  170:  jump *label655 notEqual :formatHexNumber:digit 13
+  171:  format "{2}D"
+  172:  jump *label660 always 0 0
+        label *label655
+  173:  jump *label657 notEqual :formatHexNumber:digit 14
+  174:  format "{2}E"
+  175:  jump *label660 always 0 0
+        label *label657
+  176:  jump *label659 notEqual :formatHexNumber:digit 15
+  177:  format "{2}F"
+        label *label659
         label *label660
-  183:  format "0x"
-  184:  assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
-  185:  assertflush
-  186:  op abs *tmp44 null 0
-  187:  print null
-  188:  assertprints "null" "printExactFast(null)"
-  189:  assertflush
-  190:  set :printExactFast:n 0
-  191:  setaddr :printExactFast*retaddr *label30
-  192:  call *label6 *invalid :printExactFast*retval
+  178:  op shr :formatHexNumber:n :formatHexNumber:n 4
+  179:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
+  180:  jump *label644 greaterThan :formatHexNumber:n 0
+  181:  jump *label666 lessThanEq :formatHexNumber:digits 0
+        label *label664
+  182:  format "{2}0"
+  183:  op sub :formatHexNumber:digits :formatHexNumber:digits 1
+  184:  jump *label664 greaterThan :formatHexNumber:digits 0
+        label *label666
+  185:  format "0x"
+  186:  assertprints "-0x00AABBCC" "printHexNumber(-0xAABBCC, 8)"
+  187:  assertflush
+  188:  op abs *tmp44 null 0
+  189:  print null
+  190:  assertprints "null" "printExactFast(null)"
+  191:  assertflush
+  192:  set :printExactFast:n 0
+  193:  setaddr :printExactFast*retaddr *label30
+  194:  call *label6 *invalid :printExactFast*retval
         label *label30
-  193:  assertprints "0" "printExactFast(0)"
-  194:  assertflush
-  195:  set :printExactFast:n 1
-  196:  setaddr :printExactFast*retaddr *label31
-  197:  call *label6 *invalid :printExactFast*retval
+  195:  assertprints "0" "printExactFast(0)"
+  196:  assertflush
+  197:  set :printExactFast:n 1
+  198:  setaddr :printExactFast*retaddr *label31
+  199:  call *label6 *invalid :printExactFast*retval
         label *label31
-  198:  assertprints "1" "printExactFast(1)"
-  199:  assertflush
-  200:  set :printExactFast:n 1.0000001
-  201:  setaddr :printExactFast*retaddr *label32
-  202:  call *label6 *invalid :printExactFast*retval
+  200:  assertprints "1" "printExactFast(1)"
+  201:  assertflush
+  202:  set :printExactFast:n 1.0000001
+  203:  setaddr :printExactFast*retaddr *label32
+  204:  call *label6 *invalid :printExactFast*retval
         label *label32
-  203:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
-  204:  assertflush
-  205:  set :printExactFast:n 3.00000007
-  206:  setaddr :printExactFast*retaddr *label33
-  207:  call *label6 *invalid :printExactFast*retval
+  205:  assertprints "1.000000100000000" "printExactFast(1.0000001)"
+  206:  assertflush
+  207:  set :printExactFast:n 3.00000007
+  208:  setaddr :printExactFast*retaddr *label33
+  209:  call *label6 *invalid :printExactFast*retval
         label *label33
-  208:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
-  209:  assertflush
-  210:  set :printExactFast:n 3E50
-  211:  setaddr :printExactFast*retaddr *label34
-  212:  call *label6 *invalid :printExactFast*retval
+  210:  assertprints "3.000000070000000" "printExactFast(3.00000007)"
+  211:  assertflush
+  212:  set :printExactFast:n 3E50
+  213:  setaddr :printExactFast*retaddr *label34
+  214:  call *label6 *invalid :printExactFast*retval
         label *label34
-  213:  assertprints "3E50" "printExactFast(3e50)"
-  214:  assertflush
-  215:  set :printExactFast:n 1.0123456789
-  216:  setaddr :printExactFast*retaddr *label35
-  217:  call *label6 *invalid :printExactFast*retval
+  215:  assertprints "3E50" "printExactFast(3e50)"
+  216:  assertflush
+  217:  set :printExactFast:n 1.0123456789
+  218:  setaddr :printExactFast*retaddr *label35
+  219:  call *label6 *invalid :printExactFast*retval
         label *label35
-  218:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
-  219:  assertflush
-  220:  set :printExactFast:n 10000001E13
-  221:  setaddr :printExactFast*retaddr *label36
-  222:  call *label6 *invalid :printExactFast*retval
+  220:  assertprints "1.0123456789" "printExactFast(1.0123456789)"
+  221:  assertflush
+  222:  set :printExactFast:n 10000001E13
+  223:  setaddr :printExactFast*retaddr *label36
+  224:  call *label6 *invalid :printExactFast*retval
         label *label36
-  223:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
-  224:  assertflush
-  225:  set :printExactFast:n 12345E-54
-  226:  setaddr :printExactFast*retaddr *label37
-  227:  call *label6 *invalid :printExactFast*retval
+  225:  assertprints "1.000000099999999E20" "printExactFast(1.0000001e20)"
+  226:  assertflush
+  227:  set :printExactFast:n 12345E-54
+  228:  setaddr :printExactFast*retaddr *label37
+  229:  call *label6 *invalid :printExactFast*retval
         label *label37
-  228:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
-  229:  assertflush
-  230:  set :printExactFast:n -12345E-54
-  231:  setaddr :printExactFast*retaddr *label38
-  232:  call *label6 *invalid :printExactFast*retval
+  230:  assertprints "1.2345000000000002E-50" "printExactFast(1.2345e-50)"
+  231:  assertflush
+  232:  set :printExactFast:n -12345E-54
+  233:  setaddr :printExactFast*retaddr *label38
+  234:  call *label6 *invalid :printExactFast*retval
         label *label38
-  233:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
-  234:  assertflush
-  235:  set :printExactSlow:n null
-  236:  setaddr :printExactSlow*retaddr *label39
-  237:  call *label7 *invalid :printExactSlow*retval
+  235:  assertprints "-1.2345000000000002E-50" "printExactFast(-1.2345e-50)"
+  236:  assertflush
+  237:  set :printExactSlow:n null
+  238:  setaddr :printExactSlow*retaddr *label39
+  239:  call *label7 *invalid :printExactSlow*retval
         label *label39
-  238:  assertprints "null" "printExactSlow(null)"
-  239:  assertflush
-  240:  set :printExactSlow:n 0
-  241:  setaddr :printExactSlow*retaddr *label40
-  242:  call *label7 *invalid :printExactSlow*retval
+  240:  assertprints "null" "printExactSlow(null)"
+  241:  assertflush
+  242:  set :printExactSlow:n 0
+  243:  setaddr :printExactSlow*retaddr *label40
+  244:  call *label7 *invalid :printExactSlow*retval
         label *label40
-  243:  assertprints "0" "printExactSlow(0)"
-  244:  assertflush
-  245:  set :printExactSlow:n 1
-  246:  setaddr :printExactSlow*retaddr *label41
-  247:  call *label7 *invalid :printExactSlow*retval
+  245:  assertprints "0" "printExactSlow(0)"
+  246:  assertflush
+  247:  set :printExactSlow:n 1
+  248:  setaddr :printExactSlow*retaddr *label41
+  249:  call *label7 *invalid :printExactSlow*retval
         label *label41
-  248:  assertprints "1.000000000000000" "printExactSlow(1)"
-  249:  assertflush
-  250:  set :printExactSlow:n 1.0000001
-  251:  setaddr :printExactSlow*retaddr *label42
-  252:  call *label7 *invalid :printExactSlow*retval
+  250:  assertprints "1.000000000000000" "printExactSlow(1)"
+  251:  assertflush
+  252:  set :printExactSlow:n 1.0000001
+  253:  setaddr :printExactSlow*retaddr *label42
+  254:  call *label7 *invalid :printExactSlow*retval
         label *label42
-  253:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
-  254:  assertflush
-  255:  set :printExactSlow:n 3.00000007
-  256:  setaddr :printExactSlow*retaddr *label43
-  257:  call *label7 *invalid :printExactSlow*retval
+  255:  assertprints "1.000000100000000" "printExactSlow(1.0000001)"
+  256:  assertflush
+  257:  set :printExactSlow:n 3.00000007
+  258:  setaddr :printExactSlow*retaddr *label43
+  259:  call *label7 *invalid :printExactSlow*retval
         label *label43
-  258:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
-  259:  assertflush
-  260:  set :printExactSlow:n 3E50
-  261:  setaddr :printExactSlow*retaddr *label44
-  262:  call *label7 *invalid :printExactSlow*retval
+  260:  assertprints "3.000000070000000" "printExactSlow(3.00000007)"
+  261:  assertflush
+  262:  set :printExactSlow:n 3E50
+  263:  setaddr :printExactSlow*retaddr *label44
+  264:  call *label7 *invalid :printExactSlow*retval
         label *label44
-  263:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
-  264:  assertflush
-  265:  set :printExactSlow:n 1.0123456789
-  266:  setaddr :printExactSlow*retaddr *label45
-  267:  call *label7 *invalid :printExactSlow*retval
+  265:  assertprints "3.000000000000000E50" "printExactSlow(3e50)"
+  266:  assertflush
+  267:  set :printExactSlow:n 1.0123456789
+  268:  setaddr :printExactSlow*retaddr *label45
+  269:  call *label7 *invalid :printExactSlow*retval
         label *label45
-  268:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
-  269:  assertflush
-  270:  set :printExactSlow:n 10000001E13
-  271:  setaddr :printExactSlow*retaddr *label46
-  272:  call *label7 *invalid :printExactSlow*retval
+  270:  assertprints "1.012345678900000" "printExactSlow(1.0123456789)"
+  271:  assertflush
+  272:  set :printExactSlow:n 10000001E13
+  273:  setaddr :printExactSlow*retaddr *label46
+  274:  call *label7 *invalid :printExactSlow*retval
         label *label46
-  273:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
-  274:  assertflush
-  275:  set :printExactSlow:n 12345E-54
-  276:  setaddr :printExactSlow*retaddr *label47
-  277:  call *label7 *invalid :printExactSlow*retval
+  275:  assertprints "1.000000099999999E20" "printExactSlow(1.0000001e20)"
+  276:  assertflush
+  277:  set :printExactSlow:n 12345E-54
+  278:  setaddr :printExactSlow*retaddr *label47
+  279:  call *label7 *invalid :printExactSlow*retval
         label *label47
-  278:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
-  279:  assertflush
-  280:  set :printExactSlow:n -12345E-54
-  281:  setaddr :printExactSlow*retaddr *label48
-  282:  call *label7 *invalid :printExactSlow*retval
+  280:  assertprints "1.234500000000000E-50" "printExactSlow(1.2345e-50)"
+  281:  assertflush
+  282:  set :printExactSlow:n -12345E-54
+  283:  setaddr :printExactSlow*retaddr *label48
+  284:  call *label7 *invalid :printExactSlow*retval
         label *label48
-  283:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
-  284:  assertflush
-  285:  op shr :printExactBinary:t -1035087118336 32
-  286:  setaddr *tmp1 *label53
-  287:  jump *label50 always 0 0
+  285:  assertprints "-1.234500000000000E-50" "printExactSlow(-1.2345e-50)"
+  286:  assertflush
+  287:  op shr :printExactBinary:t -1035087118336 32
+  288:  setaddr *tmp1 *label53
+  289:  jump *label50 always 0 0
         multilabel *label53
-  288:  op and :printExactBinary:t -1035087118336 0xFFFFFFFF
-  289:  setaddr *tmp1 *label54
+  290:  op and :printExactBinary:t -1035087118336 0xFFFFFFFF
+  291:  setaddr *tmp1 *label54
         label *label50
-  290:  op shr *tmp4 :printExactBinary:t 31
-  291:  op and *tmp5 *tmp4 1
-  292:  print *tmp5
-  293:  op shr *tmp4 :printExactBinary:t 30
-  294:  op and *tmp5 *tmp4 1
-  295:  print *tmp5
-  296:  op shr *tmp4 :printExactBinary:t 29
-  297:  op and *tmp5 *tmp4 1
-  298:  print *tmp5
-  299:  op shr *tmp4 :printExactBinary:t 28
-  300:  op and *tmp5 *tmp4 1
-  301:  print *tmp5
-  302:  op shr *tmp4 :printExactBinary:t 27
-  303:  op and *tmp5 *tmp4 1
-  304:  print *tmp5
-  305:  op shr *tmp4 :printExactBinary:t 26
-  306:  op and *tmp5 *tmp4 1
-  307:  print *tmp5
-  308:  op shr *tmp4 :printExactBinary:t 25
-  309:  op and *tmp5 *tmp4 1
-  310:  print *tmp5
-  311:  op shr *tmp4 :printExactBinary:t 24
-  312:  op and *tmp5 *tmp4 1
-  313:  print *tmp5
-  314:  op shr *tmp4 :printExactBinary:t 23
-  315:  op and *tmp5 *tmp4 1
-  316:  print *tmp5
-  317:  op shr *tmp4 :printExactBinary:t 22
-  318:  op and *tmp5 *tmp4 1
-  319:  print *tmp5
-  320:  op shr *tmp4 :printExactBinary:t 21
-  321:  op and *tmp5 *tmp4 1
-  322:  print *tmp5
-  323:  op shr *tmp4 :printExactBinary:t 20
-  324:  op and *tmp5 *tmp4 1
-  325:  print *tmp5
-  326:  op shr *tmp4 :printExactBinary:t 19
-  327:  op and *tmp5 *tmp4 1
-  328:  print *tmp5
-  329:  op shr *tmp4 :printExactBinary:t 18
-  330:  op and *tmp5 *tmp4 1
-  331:  print *tmp5
-  332:  op shr *tmp4 :printExactBinary:t 17
-  333:  op and *tmp5 *tmp4 1
-  334:  print *tmp5
-  335:  op shr *tmp4 :printExactBinary:t 16
-  336:  op and *tmp5 *tmp4 1
-  337:  print *tmp5
-  338:  op shr *tmp4 :printExactBinary:t 15
-  339:  op and *tmp5 *tmp4 1
-  340:  print *tmp5
-  341:  op shr *tmp4 :printExactBinary:t 14
-  342:  op and *tmp5 *tmp4 1
-  343:  print *tmp5
-  344:  op shr *tmp4 :printExactBinary:t 13
-  345:  op and *tmp5 *tmp4 1
-  346:  print *tmp5
-  347:  op shr *tmp4 :printExactBinary:t 12
-  348:  op and *tmp5 *tmp4 1
-  349:  print *tmp5
-  350:  op shr *tmp4 :printExactBinary:t 11
-  351:  op and *tmp5 *tmp4 1
-  352:  print *tmp5
-  353:  op shr *tmp4 :printExactBinary:t 10
-  354:  op and *tmp5 *tmp4 1
-  355:  print *tmp5
-  356:  op shr *tmp4 :printExactBinary:t 9
-  357:  op and *tmp5 *tmp4 1
-  358:  print *tmp5
-  359:  op shr *tmp4 :printExactBinary:t 8
-  360:  op and *tmp5 *tmp4 1
-  361:  print *tmp5
-  362:  op shr *tmp4 :printExactBinary:t 7
-  363:  op and *tmp5 *tmp4 1
-  364:  print *tmp5
-  365:  op shr *tmp4 :printExactBinary:t 6
-  366:  op and *tmp5 *tmp4 1
-  367:  print *tmp5
-  368:  op shr *tmp4 :printExactBinary:t 5
-  369:  op and *tmp5 *tmp4 1
-  370:  print *tmp5
-  371:  op shr *tmp4 :printExactBinary:t 4
-  372:  op and *tmp5 *tmp4 1
-  373:  print *tmp5
-  374:  op shr *tmp4 :printExactBinary:t 3
-  375:  op and *tmp5 *tmp4 1
-  376:  print *tmp5
-  377:  op shr *tmp4 :printExactBinary:t 2
-  378:  op and *tmp5 *tmp4 1
-  379:  print *tmp5
-  380:  op shr *tmp4 :printExactBinary:t 1
-  381:  op and *tmp5 *tmp4 1
-  382:  print *tmp5
-  383:  op and *tmp5 :printExactBinary:t 1
+  292:  op shr *tmp4 :printExactBinary:t 31
+  293:  op and *tmp5 *tmp4 1
+  294:  print *tmp5
+  295:  op shr *tmp4 :printExactBinary:t 30
+  296:  op and *tmp5 *tmp4 1
+  297:  print *tmp5
+  298:  op shr *tmp4 :printExactBinary:t 29
+  299:  op and *tmp5 *tmp4 1
+  300:  print *tmp5
+  301:  op shr *tmp4 :printExactBinary:t 28
+  302:  op and *tmp5 *tmp4 1
+  303:  print *tmp5
+  304:  op shr *tmp4 :printExactBinary:t 27
+  305:  op and *tmp5 *tmp4 1
+  306:  print *tmp5
+  307:  op shr *tmp4 :printExactBinary:t 26
+  308:  op and *tmp5 *tmp4 1
+  309:  print *tmp5
+  310:  op shr *tmp4 :printExactBinary:t 25
+  311:  op and *tmp5 *tmp4 1
+  312:  print *tmp5
+  313:  op shr *tmp4 :printExactBinary:t 24
+  314:  op and *tmp5 *tmp4 1
+  315:  print *tmp5
+  316:  op shr *tmp4 :printExactBinary:t 23
+  317:  op and *tmp5 *tmp4 1
+  318:  print *tmp5
+  319:  op shr *tmp4 :printExactBinary:t 22
+  320:  op and *tmp5 *tmp4 1
+  321:  print *tmp5
+  322:  op shr *tmp4 :printExactBinary:t 21
+  323:  op and *tmp5 *tmp4 1
+  324:  print *tmp5
+  325:  op shr *tmp4 :printExactBinary:t 20
+  326:  op and *tmp5 *tmp4 1
+  327:  print *tmp5
+  328:  op shr *tmp4 :printExactBinary:t 19
+  329:  op and *tmp5 *tmp4 1
+  330:  print *tmp5
+  331:  op shr *tmp4 :printExactBinary:t 18
+  332:  op and *tmp5 *tmp4 1
+  333:  print *tmp5
+  334:  op shr *tmp4 :printExactBinary:t 17
+  335:  op and *tmp5 *tmp4 1
+  336:  print *tmp5
+  337:  op shr *tmp4 :printExactBinary:t 16
+  338:  op and *tmp5 *tmp4 1
+  339:  print *tmp5
+  340:  op shr *tmp4 :printExactBinary:t 15
+  341:  op and *tmp5 *tmp4 1
+  342:  print *tmp5
+  343:  op shr *tmp4 :printExactBinary:t 14
+  344:  op and *tmp5 *tmp4 1
+  345:  print *tmp5
+  346:  op shr *tmp4 :printExactBinary:t 13
+  347:  op and *tmp5 *tmp4 1
+  348:  print *tmp5
+  349:  op shr *tmp4 :printExactBinary:t 12
+  350:  op and *tmp5 *tmp4 1
+  351:  print *tmp5
+  352:  op shr *tmp4 :printExactBinary:t 11
+  353:  op and *tmp5 *tmp4 1
+  354:  print *tmp5
+  355:  op shr *tmp4 :printExactBinary:t 10
+  356:  op and *tmp5 *tmp4 1
+  357:  print *tmp5
+  358:  op shr *tmp4 :printExactBinary:t 9
+  359:  op and *tmp5 *tmp4 1
+  360:  print *tmp5
+  361:  op shr *tmp4 :printExactBinary:t 8
+  362:  op and *tmp5 *tmp4 1
+  363:  print *tmp5
+  364:  op shr *tmp4 :printExactBinary:t 7
+  365:  op and *tmp5 *tmp4 1
+  366:  print *tmp5
+  367:  op shr *tmp4 :printExactBinary:t 6
+  368:  op and *tmp5 *tmp4 1
+  369:  print *tmp5
+  370:  op shr *tmp4 :printExactBinary:t 5
+  371:  op and *tmp5 *tmp4 1
+  372:  print *tmp5
+  373:  op shr *tmp4 :printExactBinary:t 4
+  374:  op and *tmp5 *tmp4 1
+  375:  print *tmp5
+  376:  op shr *tmp4 :printExactBinary:t 3
+  377:  op and *tmp5 *tmp4 1
+  378:  print *tmp5
+  379:  op shr *tmp4 :printExactBinary:t 2
+  380:  op and *tmp5 *tmp4 1
+  381:  print *tmp5
+  382:  op shr *tmp4 :printExactBinary:t 1
+  383:  op and *tmp5 *tmp4 1
   384:  print *tmp5
-  385:  multijump *tmp1 0 0
+  385:  op and *tmp5 :printExactBinary:t 1
+  386:  print *tmp5
+  387:  multijump *tmp1 0 0
         multilabel *label54
-  386:  assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
-  387:  assertflush
-  388:  print "FFFFFF0F00000000"
-  389:  assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
-  390:  stop
-  391:  end
+  388:  assertprints "1111111111111111111111110000111100000000000000000000000000000000" "printExactBinary(0xFFFFFF0F << 32)"
+  389:  assertflush
+  390:  print "FFFFFF0F00000000"
+  391:  assertprints "FFFFFF0F00000000" "printExactHex(0xFFFFFF0F << 32)"
+  392:  stop
+  393:  end
         label *label6
-  392:  op abs *tmp44 :printExactFast:n 0
-  393:  jump *label118 greaterThan *tmp44 0
-  394:  print :printExactFast:n
-  395:  return :printExactFast*retaddr
+  394:  op abs *tmp44 :printExactFast:n 0
+  395:  jump *label118 greaterThan *tmp44 0
+  396:  print :printExactFast:n
+  397:  return :printExactFast*retaddr
         label *label118
-  396:  jump *label120 greaterThanEq :printExactFast:n 0
-  397:  print "-"
-  398:  op abs :printExactFast:n :printExactFast:n 0
+  398:  jump *label120 greaterThanEq :printExactFast:n 0
+  399:  print "-"
+  400:  op abs :printExactFast:n :printExactFast:n 0
         label *label120
-  399:  op log10 *tmp50 :printExactFast:n 0
-  400:  op floor :printExactFast:exp *tmp50 0
-  401:  op sub *tmp52 0 :printExactFast:exp
-  402:  op pow *tmp53 10 *tmp52
-  403:  op mul :printExactFast:base :printExactFast:n *tmp53
-  404:  op add *tmp56 :printExactFast:base 0.5
-  405:  op floor *tmp55 *tmp56 0
-  406:  op sub *tmp58 :printExactFast:base *tmp55
-  407:  op abs :printExactFast:cmp *tmp58 0
-  408:  jump *label123 greaterThan :printExactFast:cmp 0
-  409:  print :printExactFast:base
-  410:  jump *label124 always 0 0
+  401:  op log10 *tmp50 :printExactFast:n 0
+  402:  op floor :printExactFast:exp *tmp50 0
+  403:  op sub *tmp52 0 :printExactFast:exp
+  404:  op pow *tmp53 10 *tmp52
+  405:  op mul :printExactFast:base :printExactFast:n *tmp53
+  406:  op add *tmp56 :printExactFast:base 0.5
+  407:  op floor *tmp55 *tmp56 0
+  408:  op sub *tmp58 :printExactFast:base *tmp55
+  409:  op abs :printExactFast:cmp *tmp58 0
+  410:  jump *label123 greaterThan :printExactFast:cmp 0
+  411:  print :printExactFast:base
+  412:  jump *label124 always 0 0
         label *label123
-  411:  jump *label125 lessThanEq :printExactFast:cmp 0.00001
-  412:  print :printExactFast:base
-  413:  jump *label126 always 0 0
+  413:  jump *label125 lessThanEq :printExactFast:cmp 0.00001
+  414:  print :printExactFast:base
+  415:  jump *label126 always 0 0
         label *label125
-  414:  op floor *tmp64 :printExactFast:base 0
-  415:  print *tmp64
-  416:  print "."
-  417:  op mod *tmp65 :printExactFast:base 1
-  418:  op mul :printExactFast:base *tmp65 100000
-  419:  op floor :printExactFast:t :printExactFast:base 0
-  420:  jump *label322 greaterThanEq :printExactFast:t 100
-  421:  jump *label320 greaterThanEq :printExactFast:t 10
-  422:  print "0000"
-  423:  jump *label327 always 0 0
-        label *label320
-  424:  print "000"
+  416:  op floor *tmp64 :printExactFast:base 0
+  417:  print *tmp64
+  418:  print "."
+  419:  op mod *tmp65 :printExactFast:base 1
+  420:  op mul :printExactFast:base *tmp65 100000
+  421:  op floor :printExactFast:t :printExactFast:base 0
+  422:  jump *label322 greaterThanEq :printExactFast:t 100
+  423:  jump *label320 greaterThanEq :printExactFast:t 10
+  424:  print "0000"
   425:  jump *label327 always 0 0
+        label *label320
+  426:  print "000"
+  427:  jump *label327 always 0 0
         label *label322
-  426:  jump *label323 greaterThanEq :printExactFast:t 1000
-  427:  print "00"
-  428:  jump *label326 always 0 0
+  428:  jump *label323 greaterThanEq :printExactFast:t 1000
+  429:  print "00"
+  430:  jump *label326 always 0 0
         label *label323
-  429:  jump *label324 greaterThanEq :printExactFast:t 10000
-  430:  print "0"
+  431:  jump *label324 greaterThanEq :printExactFast:t 10000
+  432:  print "0"
         label *label324
         label *label326
         label *label327
-  431:  print :printExactFast:t
-  432:  op mod *tmp65 :printExactFast:base 1
-  433:  op mul :printExactFast:base *tmp65 100000
-  434:  op floor :printExactFast:t :printExactFast:base 0
-  435:  jump *label333 greaterThanEq :printExactFast:t 100
-  436:  jump *label331 greaterThanEq :printExactFast:t 10
-  437:  print "0000"
-  438:  jump *label338 always 0 0
-        label *label331
-  439:  print "000"
+  433:  print :printExactFast:t
+  434:  op mod *tmp65 :printExactFast:base 1
+  435:  op mul :printExactFast:base *tmp65 100000
+  436:  op floor :printExactFast:t :printExactFast:base 0
+  437:  jump *label333 greaterThanEq :printExactFast:t 100
+  438:  jump *label331 greaterThanEq :printExactFast:t 10
+  439:  print "0000"
   440:  jump *label338 always 0 0
+        label *label331
+  441:  print "000"
+  442:  jump *label338 always 0 0
         label *label333
-  441:  jump *label334 greaterThanEq :printExactFast:t 1000
-  442:  print "00"
-  443:  jump *label337 always 0 0
+  443:  jump *label334 greaterThanEq :printExactFast:t 1000
+  444:  print "00"
+  445:  jump *label337 always 0 0
         label *label334
-  444:  jump *label335 greaterThanEq :printExactFast:t 10000
-  445:  print "0"
+  446:  jump *label335 greaterThanEq :printExactFast:t 10000
+  447:  print "0"
         label *label335
         label *label337
         label *label338
-  446:  print :printExactFast:t
-  447:  op mod *tmp65 :printExactFast:base 1
-  448:  op mul :printExactFast:base *tmp65 100000
-  449:  op floor :printExactFast:t :printExactFast:base 0
-  450:  jump *label344 greaterThanEq :printExactFast:t 100
-  451:  jump *label342 greaterThanEq :printExactFast:t 10
-  452:  print "0000"
-  453:  jump *label349 always 0 0
-        label *label342
-  454:  print "000"
+  448:  print :printExactFast:t
+  449:  op mod *tmp65 :printExactFast:base 1
+  450:  op mul :printExactFast:base *tmp65 100000
+  451:  op floor :printExactFast:t :printExactFast:base 0
+  452:  jump *label344 greaterThanEq :printExactFast:t 100
+  453:  jump *label342 greaterThanEq :printExactFast:t 10
+  454:  print "0000"
   455:  jump *label349 always 0 0
+        label *label342
+  456:  print "000"
+  457:  jump *label349 always 0 0
         label *label344
-  456:  jump *label345 greaterThanEq :printExactFast:t 1000
-  457:  print "00"
-  458:  jump *label348 always 0 0
+  458:  jump *label345 greaterThanEq :printExactFast:t 1000
+  459:  print "00"
+  460:  jump *label348 always 0 0
         label *label345
-  459:  jump *label346 greaterThanEq :printExactFast:t 10000
-  460:  print "0"
+  461:  jump *label346 greaterThanEq :printExactFast:t 10000
+  462:  print "0"
         label *label346
         label *label348
         label *label349
-  461:  print :printExactFast:t
+  463:  print :printExactFast:t
         label *label126
         label *label124
-  462:  jump *label139 equal :printExactFast:exp 0
-  463:  print "E"
-  464:  print :printExactFast:exp
+  464:  jump *label139 equal :printExactFast:exp 0
+  465:  print "E"
+  466:  print :printExactFast:exp
         label *label139
-  465:  return :printExactFast*retaddr
+  467:  return :printExactFast*retaddr
         label *label7
-  466:  op abs *tmp80 :printExactSlow:n 0
-  467:  jump *label143 greaterThan *tmp80 0
-  468:  print :printExactSlow:n
-  469:  return :printExactSlow*retaddr
+  468:  op abs *tmp80 :printExactSlow:n 0
+  469:  jump *label143 greaterThan *tmp80 0
+  470:  print :printExactSlow:n
+  471:  return :printExactSlow*retaddr
         label *label143
-  470:  jump *label145 greaterThanEq :printExactSlow:n 0
-  471:  print "-"
-  472:  op abs :printExactSlow:n :printExactSlow:n 0
+  472:  jump *label145 greaterThanEq :printExactSlow:n 0
+  473:  print "-"
+  474:  op abs :printExactSlow:n :printExactSlow:n 0
         label *label145
-  473:  op log10 *tmp86 :printExactSlow:n 0
-  474:  op floor :printExactSlow:exp *tmp86 0
-  475:  op sub *tmp88 0 :printExactSlow:exp
-  476:  op pow *tmp89 10 *tmp88
-  477:  op mul :printExactSlow:base :printExactSlow:n *tmp89
-  478:  op floor *tmp91 :printExactSlow:base 0
-  479:  print *tmp91
-  480:  print "."
-  481:  op mod *tmp92 :printExactSlow:base 1
-  482:  op mul :printExactSlow:base *tmp92 10
-  483:  op floor *tmp95 :printExactSlow:base 0
-  484:  print *tmp95
-  485:  op mod *tmp92 :printExactSlow:base 1
-  486:  op mul :printExactSlow:base *tmp92 10
-  487:  op floor *tmp95 :printExactSlow:base 0
-  488:  print *tmp95
-  489:  op mod *tmp92 :printExactSlow:base 1
-  490:  op mul :printExactSlow:base *tmp92 10
-  491:  op floor *tmp95 :printExactSlow:base 0
-  492:  print *tmp95
-  493:  op mod *tmp92 :printExactSlow:base 1
-  494:  op mul :printExactSlow:base *tmp92 10
-  495:  op floor *tmp95 :printExactSlow:base 0
-  496:  print *tmp95
-  497:  op mod *tmp92 :printExactSlow:base 1
-  498:  op mul :printExactSlow:base *tmp92 10
-  499:  op floor *tmp95 :printExactSlow:base 0
-  500:  print *tmp95
-  501:  op mod *tmp92 :printExactSlow:base 1
-  502:  op mul :printExactSlow:base *tmp92 10
-  503:  op floor *tmp95 :printExactSlow:base 0
-  504:  print *tmp95
-  505:  op mod *tmp92 :printExactSlow:base 1
-  506:  op mul :printExactSlow:base *tmp92 10
-  507:  op floor *tmp95 :printExactSlow:base 0
-  508:  print *tmp95
-  509:  op mod *tmp92 :printExactSlow:base 1
-  510:  op mul :printExactSlow:base *tmp92 10
-  511:  op floor *tmp95 :printExactSlow:base 0
-  512:  print *tmp95
-  513:  op mod *tmp92 :printExactSlow:base 1
-  514:  op mul :printExactSlow:base *tmp92 10
-  515:  op floor *tmp95 :printExactSlow:base 0
-  516:  print *tmp95
-  517:  op mod *tmp92 :printExactSlow:base 1
-  518:  op mul :printExactSlow:base *tmp92 10
-  519:  op floor *tmp95 :printExactSlow:base 0
-  520:  print *tmp95
-  521:  op mod *tmp92 :printExactSlow:base 1
-  522:  op mul :printExactSlow:base *tmp92 10
-  523:  op floor *tmp95 :printExactSlow:base 0
-  524:  print *tmp95
-  525:  op mod *tmp92 :printExactSlow:base 1
-  526:  op mul :printExactSlow:base *tmp92 10
-  527:  op floor *tmp95 :printExactSlow:base 0
-  528:  print *tmp95
-  529:  op mod *tmp92 :printExactSlow:base 1
-  530:  op mul :printExactSlow:base *tmp92 10
-  531:  op floor *tmp95 :printExactSlow:base 0
-  532:  print *tmp95
-  533:  op mod *tmp92 :printExactSlow:base 1
-  534:  op mul :printExactSlow:base *tmp92 10
-  535:  op floor *tmp95 :printExactSlow:base 0
-  536:  print *tmp95
-  537:  op mod *tmp92 :printExactSlow:base 1
-  538:  op mul :printExactSlow:base *tmp92 10
-  539:  op floor *tmp95 :printExactSlow:base 0
-  540:  print *tmp95
-  541:  jump *label151 equal :printExactSlow:exp 0
-  542:  print "E"
-  543:  print :printExactSlow:exp
+  475:  op log10 *tmp86 :printExactSlow:n 0
+  476:  op floor :printExactSlow:exp *tmp86 0
+  477:  op sub *tmp88 0 :printExactSlow:exp
+  478:  op pow *tmp89 10 *tmp88
+  479:  op mul :printExactSlow:base :printExactSlow:n *tmp89
+  480:  op floor *tmp91 :printExactSlow:base 0
+  481:  print *tmp91
+  482:  print "."
+  483:  op mod *tmp92 :printExactSlow:base 1
+  484:  op mul :printExactSlow:base *tmp92 10
+  485:  op floor *tmp95 :printExactSlow:base 0
+  486:  print *tmp95
+  487:  op mod *tmp92 :printExactSlow:base 1
+  488:  op mul :printExactSlow:base *tmp92 10
+  489:  op floor *tmp95 :printExactSlow:base 0
+  490:  print *tmp95
+  491:  op mod *tmp92 :printExactSlow:base 1
+  492:  op mul :printExactSlow:base *tmp92 10
+  493:  op floor *tmp95 :printExactSlow:base 0
+  494:  print *tmp95
+  495:  op mod *tmp92 :printExactSlow:base 1
+  496:  op mul :printExactSlow:base *tmp92 10
+  497:  op floor *tmp95 :printExactSlow:base 0
+  498:  print *tmp95
+  499:  op mod *tmp92 :printExactSlow:base 1
+  500:  op mul :printExactSlow:base *tmp92 10
+  501:  op floor *tmp95 :printExactSlow:base 0
+  502:  print *tmp95
+  503:  op mod *tmp92 :printExactSlow:base 1
+  504:  op mul :printExactSlow:base *tmp92 10
+  505:  op floor *tmp95 :printExactSlow:base 0
+  506:  print *tmp95
+  507:  op mod *tmp92 :printExactSlow:base 1
+  508:  op mul :printExactSlow:base *tmp92 10
+  509:  op floor *tmp95 :printExactSlow:base 0
+  510:  print *tmp95
+  511:  op mod *tmp92 :printExactSlow:base 1
+  512:  op mul :printExactSlow:base *tmp92 10
+  513:  op floor *tmp95 :printExactSlow:base 0
+  514:  print *tmp95
+  515:  op mod *tmp92 :printExactSlow:base 1
+  516:  op mul :printExactSlow:base *tmp92 10
+  517:  op floor *tmp95 :printExactSlow:base 0
+  518:  print *tmp95
+  519:  op mod *tmp92 :printExactSlow:base 1
+  520:  op mul :printExactSlow:base *tmp92 10
+  521:  op floor *tmp95 :printExactSlow:base 0
+  522:  print *tmp95
+  523:  op mod *tmp92 :printExactSlow:base 1
+  524:  op mul :printExactSlow:base *tmp92 10
+  525:  op floor *tmp95 :printExactSlow:base 0
+  526:  print *tmp95
+  527:  op mod *tmp92 :printExactSlow:base 1
+  528:  op mul :printExactSlow:base *tmp92 10
+  529:  op floor *tmp95 :printExactSlow:base 0
+  530:  print *tmp95
+  531:  op mod *tmp92 :printExactSlow:base 1
+  532:  op mul :printExactSlow:base *tmp92 10
+  533:  op floor *tmp95 :printExactSlow:base 0
+  534:  print *tmp95
+  535:  op mod *tmp92 :printExactSlow:base 1
+  536:  op mul :printExactSlow:base *tmp92 10
+  537:  op floor *tmp95 :printExactSlow:base 0
+  538:  print *tmp95
+  539:  op mod *tmp92 :printExactSlow:base 1
+  540:  op mul :printExactSlow:base *tmp92 10
+  541:  op floor *tmp95 :printExactSlow:base 0
+  542:  print *tmp95
+  543:  jump *label151 equal :printExactSlow:exp 0
+  544:  print "E"
+  545:  print :printExactSlow:exp
         label *label151
-  544:  return :printExactSlow*retaddr
+  546:  return :printExactSlow*retaddr
 
 
 stop instruction encountered, dumping variable values:
-*tmp1: 386.0
+*tmp1: 388.0
 *tmp4: 0.0
 *tmp44: 1.2345E-50
 *tmp5: 0.0
@@ -1545,14 +1547,14 @@ stop instruction encountered, dumping variable values:
 :formatHexNumber:n: 0.0
 :formatNumber:n: 1.0
 :printExactBinary:t: 0.0
-:printExactFast*retaddr: 233.0
+:printExactFast*retaddr: 235.0
 :printExactFast:base: 1.2345000000000002
 :printExactFast:cmp: 0.23450000000000015
 :printExactFast:exp: -50.0
 :printExactFast:n: 1.2345E-50
 :printExactFast:t: 99999.0
-:printExactSlow*retaddr: 283.0
+:printExactSlow*retaddr: 285.0
 :printExactSlow:base: 0.15276668818842154
 :printExactSlow:exp: -50.0
 :printExactSlow:n: 1.2345E-50
-@counter: 391.0
+@counter: 393.0

@@ -58,11 +58,11 @@ Final code before resolving virtual instructions:
         label *label20
    42:  assertprints "-1,234,567" "printNumber(-1234567)"
    43:  assertflush
-   44:  set :printNumber:number 9009099
+   44:  set :printNumber:number 9009099999
    45:  setaddr :printNumber*retaddr *label21
    46:  call *label3 *invalid :printNumber*retval
         label *label21
-   47:  assertprints "9,009,099" "printNumber(9009099)"
+   47:  assertprints "9,009,099,999" "printNumber(9009099999)"
    48:  assertflush
    49:  set :printBinaryNumber:number 0b1001
    50:  set :printBinaryNumber:digits 0
@@ -318,17 +318,17 @@ Final code before resolving virtual instructions:
   249:  jump *label75 equal *tmp19 false
   250:  op mod *tmp20 :formatNumber:n 1000
   251:  set :formatNumber:mod *tmp20
-  252:  op lessThan *tmp21 :formatNumber:mod 10
+  252:  op greaterThanEq *tmp21 :formatNumber:mod 100
   253:  jump *label76 equal *tmp21 false
-  254:  set *tmp22 "{2},00{1}"
+  254:  set *tmp22 "{2},{1}"
   255:  jump *label77 always 0 0
         label *label76
-  256:  op lessThan *tmp23 :formatNumber:mod 100
+  256:  op greaterThanEq *tmp23 :formatNumber:mod 10
   257:  jump *label78 equal *tmp23 false
   258:  set *tmp24 "{2},0{1}"
   259:  jump *label79 always 0 0
         label *label78
-  260:  set *tmp24 "{2},{1}"
+  260:  set *tmp24 "{2},00{1}"
         label *label79
   261:  set *tmp22 *tmp24
         label *label77
@@ -664,17 +664,17 @@ stop instruction encountered, dumping variable values:
 *tmp12: 0.0
 *tmp13: null
 *tmp14: 48.0
-*tmp15: 9009099.0
-*tmp16: 9009099.0
+*tmp15: 9.009099999E9
+*tmp16: 9.009099999E9
 *tmp17: 0.0
 *tmp18: null
 *tmp19: 0.0
 *tmp2: -241.0
 *tmp20: 9.0
-*tmp21: 1.0
+*tmp21: 0.0
 *tmp22: {2},00{1}
-*tmp23: 1.0
-*tmp24: {2},0{1}
+*tmp23: 0.0
+*tmp24: {2},00{1}
 *tmp25: 1.0
 *tmp26: 10.0
 *tmp27: 10.0
@@ -764,7 +764,7 @@ stop instruction encountered, dumping variable values:
 :formatHexNumber:number: 1.1189196E7
 :formatNumber:mod: 9.0
 :formatNumber:n: 9.0
-:formatNumber:number: 9009099.0
+:formatNumber:number: 9.009099999E9
 :frac.1:x: 0.015276668818842154
 :frac:x: 999.9999983634211
 :isZero.1:x: -1.2345E-50
@@ -796,6 +796,6 @@ stop instruction encountered, dumping variable values:
 :printHexNumber:number: -1.1189196E7
 :printLines:line: 3.0
 :printNumber*retaddr: 47.0
-:printNumber:number: 9009099.0
+:printNumber:number: 9.009099999E9
 :round:x: 1.2345000000000002
 @counter: 236.0

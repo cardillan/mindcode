@@ -10,16 +10,26 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Mindcode incorrectly warned about possible loss of precision for integer literals larger than 2<sup>52</sup>-1. The correct maximum safe integer value is 2<sup>53</sup>-1.
 
+### Added
+
+* Added support for the new `setmarker outline` instruction.
+* Added the new `@operations` property.
+
 ### Changed
 
 * Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)
   * The optimization now uses bisection search to locate the proper segment when performing Jump Table compression, providing up to 15% speedup in some scenarios.
   * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `target-optimization` to be set to `specific`. 
-  * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time.
+  * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time. The value of `0` doesn't consider any other configuration except a full jump table, effectively turning off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression).
   * When compressing jump tables, the optimizer also generates segment configuration for a full bisection search. This may improve case expressions too small for a full jump table optimization.
   * The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps.
+  * On `experimental` optimization level, the bodies of `when` branches may be duplicated to avoid even more jumps at the cost of additional code size increase. This optimization usually only kicks in for small branch bodies, since for larger code increases, a better performing solution can be achieved by a different segment arrangement. 
   * The performance of the Case Switching optimization (in terms of compilation time) has been significantly improved.  
-* It is now possible to turn off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression) by setting the `case-optimization-strength` compiler option to `0`.
+* Small improvements to the `printExactHex` and `printExactFast` functions in the `printing` library.
+
+### Miscellaneous
+
+* Updated metadata corresponding to the BE version to the latest available BE build.
 
 ## 3.6.1 - 2025-06-06
 

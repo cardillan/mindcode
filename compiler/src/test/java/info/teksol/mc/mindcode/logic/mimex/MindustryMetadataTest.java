@@ -47,7 +47,7 @@ class MindustryMetadataTest {
 
         try {
             Path file = Path.of(MIMEX_BASE_DIRECTORY, "stable-builtins.txt");
-            Files.writeString(file, String.join("\n", stableIds));
+            Files.writeString(file, String.join(System.lineSeparator(), stableIds));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

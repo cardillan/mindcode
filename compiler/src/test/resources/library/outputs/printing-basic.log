@@ -38,7 +38,7 @@ Pass 1: speed optimization selection (cost limit 623):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -85,7 +85,7 @@ Pass 1: speed optimization selection (cost limit 628):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -131,7 +131,7 @@ Pass 1: speed optimization selection (cost limit 538):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -176,7 +176,7 @@ Pass 1: speed optimization selection (cost limit 500):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -220,7 +220,7 @@ Pass 1: speed optimization selection (cost limit 447):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -263,7 +263,7 @@ Pass 1: speed optimization selection (cost limit 420):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 13:24                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 14:26                           size   +17, benefit        4.0, efficiency      0.235
     Inline function call at line 15:27                           size   +17, benefit        4.0, efficiency      0.235
@@ -305,7 +305,7 @@ Pass 1: speed optimization selection (cost limit 403):
     Inline function call at line 9:20                            size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 10:27                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 11:28                           size   +17, benefit        3.5, efficiency      0.206
-    Inline function call at line 12:27                           size   +17, benefit        3.5, efficiency      0.206
+    Inline function call at line 12:31                           size   +17, benefit        3.5, efficiency      0.206
     Inline function call at line 16:26                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 17:30                           size   +38, benefit        4.0, efficiency      0.105
     Inline function call at line 18:28                           size   +38, benefit        4.0, efficiency      0.105
@@ -624,15 +624,15 @@ Final code before resolving virtual instructions:
    26:  op floor :formatNumber:n 1234567 0
         label *label443
    27:  op mod :formatNumber:mod :formatNumber:n 1000
-   28:  jump *label444 greaterThanEq :formatNumber:mod 10
-   29:  format "{2},00{1}"
+   28:  jump *label444 lessThan :formatNumber:mod 100
+   29:  format "{2},{1}"
    30:  jump *label447 always 0 0
         label *label444
-   31:  jump *label445 greaterThanEq :formatNumber:mod 100
+   31:  jump *label445 lessThan :formatNumber:mod 10
    32:  format "{2},0{1}"
    33:  jump *label446 always 0 0
         label *label445
-   34:  format "{2},{1}"
+   34:  format "{2},00{1}"
         label *label446
         label *label447
    35:  format :formatNumber:mod
@@ -646,15 +646,15 @@ Final code before resolving virtual instructions:
    43:  format "-{2}"
         label *label456
    44:  op mod :formatNumber:mod :formatNumber:n 1000
-   45:  jump *label457 greaterThanEq :formatNumber:mod 10
-   46:  format "{2},00{1}"
+   45:  jump *label457 lessThan :formatNumber:mod 100
+   46:  format "{2},{1}"
    47:  jump *label460 always 0 0
         label *label457
-   48:  jump *label458 greaterThanEq :formatNumber:mod 100
+   48:  jump *label458 lessThan :formatNumber:mod 10
    49:  format "{2},0{1}"
    50:  jump *label459 always 0 0
         label *label458
-   51:  format "{2},{1}"
+   51:  format "{2},00{1}"
         label *label459
         label *label460
    52:  format :formatNumber:mod
@@ -664,25 +664,25 @@ Final code before resolving virtual instructions:
    56:  assertprints "-1,234,567" "printNumber(-1234567)"
    57:  assertflush
    58:  print "{2}"
-   59:  op floor :formatNumber:n 9009099 0
+   59:  op floor :formatNumber:n 9009099999 0
         label *label469
    60:  op mod :formatNumber:mod :formatNumber:n 1000
-   61:  jump *label470 greaterThanEq :formatNumber:mod 10
-   62:  format "{2},00{1}"
+   61:  jump *label470 lessThan :formatNumber:mod 100
+   62:  format "{2},{1}"
    63:  jump *label473 always 0 0
         label *label470
-   64:  jump *label471 greaterThanEq :formatNumber:mod 100
+   64:  jump *label471 lessThan :formatNumber:mod 10
    65:  format "{2},0{1}"
    66:  jump *label472 always 0 0
         label *label471
-   67:  format "{2},{1}"
+   67:  format "{2},00{1}"
         label *label472
         label *label473
    68:  format :formatNumber:mod
    69:  op idiv :formatNumber:n :formatNumber:n 1000
    70:  jump *label469 greaterThan :formatNumber:n 999
    71:  format :formatNumber:n
-   72:  assertprints "9,009,099" "printNumber(9009099)"
+   72:  assertprints "9,009,099,999" "printNumber(9009099999)"
    73:  assertflush
    74:  print "{2}"
    75:  set :formatBinaryNumber:digits 0
