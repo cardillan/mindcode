@@ -110,7 +110,7 @@ Each of these functions takes the following arguments:
   * User variable: the variable is used as an instruction argument. The argument must use the `in` and/or `out` modifier to inform Mindcode how the corresponding instruction argument behaves:
     * `in`: the argument represents an input value—the instruction reads and uses the value of the variable.
     * `out`: the argument represents an output value—the instruction produces a value and stores it in the variable.
-    * `in out`: the argument represents an input/output value—the instruction both reads and uses the input value, and then updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
+    * `in out`: the argument represents an input/output value—the instruction reads the input value, and/or updates the variable with a new value. With a possible exception to the `sync` instruction, no mlog instruction currently takes an input/output argument.
 
 > [!TIP]
 > Keywords can be encoded either using the Mindcode keyword syntax (e.g., `:keyword`), or as a string literal (`"keyword"`). Only if the keyword contains characters unsupported by Mindcode syntax, it can only be encoded as a string literal (e.g., `"unsupported:keyword"`). This is the only way to encode such a keyword to mlog.  

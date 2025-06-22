@@ -259,7 +259,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         return createLabel(nextLabel()).getLabel();
     }
 
-    public void createCustomInstruction(boolean safe, boolean text, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
-        addInstruction(new CustomInstruction(astContext, safe, text, opcode, args, params));
+    public void createCustomInstruction(boolean safe, boolean text, boolean label, String opcode, List<LogicArgument> args, List<InstructionParameterType> params) {
+        addInstruction(new CustomInstruction(astContext, safe, text, label, opcode, args, params));
     }
 }

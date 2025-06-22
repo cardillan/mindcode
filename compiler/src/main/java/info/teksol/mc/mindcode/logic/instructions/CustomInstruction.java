@@ -8,19 +8,22 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @NullMarked
 public class CustomInstruction extends AbstractInstruction {
     private final boolean safe;
     private final boolean text;
+    private final boolean label;
     private final String opcode;
 
-    public CustomInstruction(AstContext astContext, boolean safe, boolean text, String opcode, List<LogicArgument> args,
+    public CustomInstruction(AstContext astContext, boolean safe, boolean text, boolean label, String opcode, List<LogicArgument> args,
             @Nullable List<InstructionParameterType> params) {
         super(astContext, args, params);
         this.safe = safe;
         this.text = text;
+        this.label = label;
         this.opcode = Objects.requireNonNull(opcode);
     }
 
@@ -28,6 +31,7 @@ public class CustomInstruction extends AbstractInstruction {
         super(other, astContext);
         this.safe = other.safe;
         this.text = other.text;
+        this.label = other.label;
         this.opcode = other.opcode;
     }
 
@@ -53,6 +57,20 @@ public class CustomInstruction extends AbstractInstruction {
 
     public boolean isText() {
         return text;
+    }
+
+    public boolean isLabel() {
+        return label;
+    }
+
+    @Override
+    public boolean isReal() {
+        return !label;
+    }
+
+    @Override
+    public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
+        return label ? 0 : 1;
     }
 
     @Override

@@ -204,6 +204,7 @@ public class MindustryMetadata {
         return cacheInstance(allConstants, () ->
                 Stream.of(getItemMap(), getLiquidMap(), getUnitMap(), getUnitCommandMap(), getBlockMap())
                         .flatMap(m -> m.values().stream())
+                        .filter(o -> !o.legacy())
                         .collect(Collectors.toMap(MindustryContent::name, t -> t,
                                 (a, b) -> a, HashMap::new)));
     }
@@ -344,6 +345,10 @@ public class MindustryMetadata {
     public Set<String> getItemNames() {
         return getItemMap().keySet();
     }
+
+    public Collection<Item> getAllItems() {
+        return getItemMap().values();
+    }
     //</editor-fold>
     
     //<editor-fold desc="Liquids">
@@ -358,6 +363,10 @@ public class MindustryMetadata {
     public @Nullable Liquid getLiquidById(int id) {
         return getLiquidIdMap().get(id);
     }
+
+    public Collection<Liquid> getAllLiquids() {
+        return getLiquidMap().values();
+    }
     //</editor-fold>
     
     //<editor-fold desc="Units">
@@ -371,6 +380,10 @@ public class MindustryMetadata {
 
     public @Nullable Unit getUnitById(int id) {
         return getUnitIdMap().get(id);
+    }
+
+    public Collection<Unit> getAllUnits() {
+        return getUnitMap().values();
     }
     //</editor-fold>
 
@@ -504,7 +517,7 @@ public class MindustryMetadata {
     }
 
     private class BlockTypeReader extends AbstractContentReader<BlockType> {
-        private int name, id, visibility, implementation, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
+        private int name, id, visibility, implementation, legacy, size, hasPower, configurable, category, range, maxNodes, rotate, unitPlans;
 
         public BlockTypeReader(String resource) {
             super(resource);
@@ -516,6 +529,7 @@ public class MindustryMetadata {
             id = findColumn("id");
             visibility = findColumn("visibility");
             implementation = findColumn("subclass");
+            legacy = findColumn("legacy");
             size = findColumn("size");
             hasPower = findColumn("hasPower");
             configurable = findColumn("configurable");
@@ -535,6 +549,7 @@ public class MindustryMetadata {
                     parseLogicId(columns),
                     columns[visibility],
                     columns[implementation].toUpperCase(),
+                    Boolean.parseBoolean(columns[legacy]),
                     Integer.parseInt(columns[size]),
                     Boolean.parseBoolean(columns[hasPower]),
                     Boolean.parseBoolean(columns[configurable]),

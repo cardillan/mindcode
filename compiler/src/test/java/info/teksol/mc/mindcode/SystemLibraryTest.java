@@ -66,6 +66,7 @@ public class SystemLibraryTest {
                 Stream.of(files)
                         .map(File::getName)
                         .map(f -> f.replace(".mnd", ""))
+                        .filter(s -> !"compatibility".equals(s))
                         .flatMap(name -> levels.stream().map(
                                 level -> DynamicTest.dynamicTest(name + ":" + level,
                                         null, () -> testLibrary(name, level))

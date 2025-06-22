@@ -118,11 +118,13 @@ public class ERR {
     public static final String LVALUE_VARIABLE_EXPECTED = "Variable expected.";
     public static final String METHOD_CALL_UNDEFINED = "Unknown method '%s'.";
     public static final String METHOD_CALL_UNRESOLVED = "Cannot resolve method '%s'.";
-    public static final String MLOG_FIRST_ARGUMENT_NOT_LITERAL = "First argument to the '%s' function must be a string literal.";
-    public static final String MLOG_FIRST_ARGUMENT_NO_MODIFIERS = "First argument to the '%s' function must not use any modifier.";
+    public static final String MLOG_FIRST_ARGUMENT_NOT_LITERAL = "The first argument to the '%s' function must be a string literal.";
+    public static final String MLOG_FIRST_ARGUMENT_NO_MODIFIERS = "The first argument to the '%s' function must not use any modifier.";
     public static final String MLOG_IN_OUT_KEYWORD_NOT_ALLOWED = "A keyword passed to the '%s' function must not use any modifier.";
     public static final String MLOG_IN_OUT_LITERAL_NOT_ALLOWED = "A literal passed to the '%s' function must not use any modifier.";
+    public static final String MLOG_INVALID_OPCODE = "The first argument to the '%s' function must be an opcode, not an mlog label.";
     public static final String MLOG_NO_LITERAL_OR_VARIABLE = "All arguments to the '%s' function must be literals or user variables.";
+    public static final String MLOG_NOT_A_LABEL = "The argument to the %s function needs to be an mlog label, including ':' at the end.";
     public static final String MLOG_OUT_STRING_NOT_ALLOWED = "A string literal passed to the '%s' function must not use an 'out' modifier.";
     public static final String MLOG_UNSPECIFIED_ARGUMENT = "All arguments to the '%s' function need to be specified.";
     public static final String MLOG_VARIABLE_WITHOUT_MODIFIERS = "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.";

@@ -14,7 +14,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added support for the new `setmarker outline` instruction.
 * Added the new `@operations` property.
-* Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both `target` and `target-optimization` options.   
+* Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both `target` and `target-optimization` options.
+* Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#compatibility-library). The library provides function for verifying Mindcode's compatibility with the Mindustry version in which it is run.   
 
 ### Changed
 
@@ -31,6 +32,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Miscellaneous
 
+* Added a `legacy` attribute to the Blocks metadata.
 * Updated the BE version metadata to the latest available BE build.
 
 ## 3.6.1 - 2025-06-06

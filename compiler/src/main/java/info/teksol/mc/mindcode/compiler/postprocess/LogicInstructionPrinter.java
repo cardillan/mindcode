@@ -236,7 +236,7 @@ public class LogicInstructionPrinter {
         @Override
         public String printLineNumber(LogicInstruction instruction, String decoration) {
             String result;
-            if (!instruction.isReal()) {
+            if (!instruction.isReal() || instruction instanceof CustomInstruction cix && cix.isLabel()) {
                 result = "%5s%s   ".formatted("", decoration);
                 lastRemark = false;
             } else {

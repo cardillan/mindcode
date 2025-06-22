@@ -11,11 +11,13 @@ The order in which system libraries are imported doesn't matter.
 
 System libraries contain functions and sometimes constants that can be used by a Mindcode program. The following system libraries are provided:
 
-* `graphics`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
-* `printing`: functions for outputting formatted numbers. Some functions require the Mindustry Logic 8 instruction set.
+* `arrays`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
 * `blocks`: block-related functions (just the `findLinkedBlocks` function at this moment).
-* `units`: functions for searching and binding available units of a required type.
+* `compatibility`: a special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
+* `graphics`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
 * `math`: mathematical functions.
+* `printing`: functions for outputting formatted numbers. Some functions require the Mindustry Logic 8 instruction set.
+* `units`: functions for searching and binding available units of a required type.
 
 ## Compiled function sizes
 

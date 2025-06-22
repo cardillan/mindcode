@@ -13,6 +13,7 @@ public record BlockType(
         int logicId,
         String visibility,
         String implementation,
+        boolean legacy,
         int size,
         boolean hasPower,
         boolean configurable,

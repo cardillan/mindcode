@@ -49,7 +49,7 @@ public interface LogicInstruction extends MlogInstruction {
         return false;
     }
 
-    /// Indicates the instructions is real - produces an actual code. Non-real (virtual) instructions
+    /// Indicates the instruction is real - produces an actual code. Non-real (virtual) instructions
     /// include labels and no-op.
     default boolean isReal() {
         return getOpcode().getSize() > 0;

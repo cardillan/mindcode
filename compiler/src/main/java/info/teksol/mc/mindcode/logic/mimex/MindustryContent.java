@@ -26,6 +26,14 @@ public interface MindustryContent extends NamedContent, MindustryObject, Compara
         return -1;
     }
 
+    /// This is a legacy object. It is not available through the builtin name. The `sensor @id` instruction won't
+    /// handle this object.
+    ///
+    /// @return `true` if this is a legacy object
+    default boolean legacy() {
+        return false;
+    }
+
     /// Formats the object for output. Used when printing the object to the text buffer.
     ///
     /// @return text representation of the object

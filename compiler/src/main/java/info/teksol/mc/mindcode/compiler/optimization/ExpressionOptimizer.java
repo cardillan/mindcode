@@ -59,7 +59,7 @@ class ExpressionOptimizer extends BaseOptimizer {
             Map<Integer, ? extends MindustryContent> lookupMap = metadata.getLookupMap(ix.getType().getKeyword());
             if (lookupMap != null) {
                 MindustryContent object = lookupMap.get(ix.getIndex().getIntValue());
-                if (object != null && (getProfile().isTargetOptimization() || metadata.isStableBuiltin(object.name()))) {
+                if (object != null && !object.legacy() && (getProfile().isTargetOptimization() || metadata.isStableBuiltin(object.name()))) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object, false)));
                 }
             }
@@ -263,7 +263,8 @@ class ExpressionOptimizer extends BaseOptimizer {
                 } else if (property.equals(LogicBuiltIn.Y)) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.THIS_Y));
                 }
-            } else if (advanced() && property.equals(LogicBuiltIn.ID) && object.getObject() != null && object.getObject().logicId() != -1) {
+            } else if (advanced() && property.equals(LogicBuiltIn.ID) && object.getObject() != null
+                    && object.getObject().logicId() != -1 && !object.getObject().legacy()) {
                 if (getProfile().isTargetOptimization() || metadata.isStableBuiltin(object.getObject().name())) {
                     logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
                             LogicNumber.create(ix.sourcePosition(), object.getObject().logicId())));

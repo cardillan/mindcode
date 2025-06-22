@@ -11,11 +11,13 @@ The order in which system libraries are imported doesn't matter.
 
 System libraries contain functions and sometimes constants that can be used by a Mindcode program. The following system libraries are provided:
 
-* `graphics`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
-* `printing`: functions for outputting formatted numbers. Some functions require the Mindustry Logic 8 instruction set.
+* `arrays`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
 * `blocks`: block-related functions (just the `findLinkedBlocks` function at this moment).
-* `units`: functions for searching and binding available units of a required type.
+* `compatibility`: a special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
+* `graphics`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
 * `math`: mathematical functions.
+* `printing`: functions for outputting formatted numbers. Some functions require the Mindustry Logic 8 instruction set.
+* `units`: functions for searching and binding available units of a required type.
 
 ## Compiled function sizes
 
@@ -163,6 +165,43 @@ When the function call ends, the `display` and `memory` variables are set to a l
 bank respectively. `message` and `switch` are set if corresponding blocks are linked to the processor,
 otherwise they're `null`.
 
+
+# Compatibility library
+
+To use the Compatibility library, use the `require compatibility;` statement.
+
+## Functions
+
+### runCompatibilityTest
+
+**Definition:** `inline void runCompatibilityTest()`
+
+| Compiled code size when...     | optimized for speed | optimized for size |
+|--------------------------------|--------------------:|-------------------:|
+| Inlined function               |                 900 |                900 |
+
+This function runs the compatibility test on a Mindustry Logic processor. The compatibility test verifies that the
+compiler's metadata corresponding to the current target are identical to the actual data in the Mindustry processor.
+The test needs to be run on a logic processor (a microprocessor can also be used, but it takes a bit longer to finish
+the test) with a message block linked as `message1`. The result of the test is output on the message block.
+
+The function never returns: when the test finishes, the processor loops indefinitely. This test isn't meant to be
+ incorporated into a larger program. Typically, a program for running the test will look like this:
+
+```
+// Set the target appropriately
+#set target = 8;
+
+require compatibility;
+
+runCompatibilityTest();
+```
+
+If the test fails, the message will suggest compiler options to use to avoid compatibility issues. By using the
+suggested compiler options, Mindcode will generate code that should run correctly on the logic processor on which
+the test was performed, avoiding the compatibility issues.
+
+Note: The Mindcode processor emulator currently isn't able to run this function.
 
 # Graphics library
 

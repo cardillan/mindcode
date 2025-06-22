@@ -311,7 +311,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
         LogicInstruction result;
         if (instruction instanceof CustomInstruction ix) {
-            result = new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.isText(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
+            result = new CustomInstruction(ix.getAstContext(), ix.isSafe(), ix.isText(), ix.isLabel(), ix.getMlogOpcode(), newArgs, ix.getArgumentTypes());
         } else {
             result = createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
         }

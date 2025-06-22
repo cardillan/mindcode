@@ -59,6 +59,10 @@ public class DocGeneratorTest {
             this.writer = writer;
         }
 
+        protected CompilerProfile createCompilerProfile() {
+            return super.createCompilerProfile().setRun(false);
+        }
+
         private void processTemplateLine(String line) {
             if (line.startsWith(PREFIX)) {
                 processAllLibraries();

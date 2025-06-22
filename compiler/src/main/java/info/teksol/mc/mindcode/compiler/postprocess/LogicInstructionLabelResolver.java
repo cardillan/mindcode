@@ -355,7 +355,7 @@ public class LogicInstructionLabelResolver {
 
             int counter = 0;
             for (LogicInstruction instruction : instructions) {
-                if (!(instruction instanceof CommentInstruction)) {
+                if (instruction.isReal()) {
                     if (labels.get(counter)) {
                         result.add(processor.createLabel(addressContexts.getOrDefault(counter, rootAstContext),
                                 LogicLabel.symbolic(labelPrefix + counter)));
