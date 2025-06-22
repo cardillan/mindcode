@@ -1522,11 +1522,10 @@ class OptimizationContext {
 
     private final LogicList EMPTY = new LogicList(null, java.util.List.of());
 
+    // TODO allow modifications to be done to the LogicList - a block of code could be created in LogicList
+    //      and then inserted into the program.
     /// Class for accessing context instructions in an organized manner.
     /// Is always created from a specific AST context.
-    ///
-    /// TODO allow modifications to be done to the LogicList - a block of code could be created in LogicList
-    ///      and then inserted into the program.
     protected class LogicList implements Iterable<LogicInstruction> {
         private final @Nullable AstContext astContext;
         private final List<LogicInstruction> instructions;

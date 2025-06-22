@@ -483,8 +483,6 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     /// @param parameter parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced input argument
     private boolean misplacedInput(MindcodeFunction function, FunctionArgument argument, FunctionParameter functionParameter) {
-        // TODO When function parameters become ValueStores, the isInputFunctionParameter
-        //        will be called directly without casting
         return functionParameter.isInput()
                && argument.unwrap() instanceof LogicVariable variable
                && function.isInputFunctionParameter(variable)
@@ -549,8 +547,6 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     /// @param parameter parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced output argument
     private boolean misplacedOutput(MindcodeFunction function, FunctionArgument argument, FunctionParameter functionParameter) {
-        // TODO When function parameters become ValueStores, the isOutputFunctionParameter
-        //        will be called directly without casting
         return argument.isOutput()
                && argument.unwrap() instanceof LogicVariable variable
                && function.isOutputFunctionParameter(variable)

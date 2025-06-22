@@ -160,16 +160,27 @@ Mindcode provides the `printExactFast` and `printExactSlow` functions in the `pr
 
 ## Using units
 
-> [!TIP]
-> The `units` system library contains functions you can use to search for and bind free units. For more information, see [System library](SYSTEM-LIBRARY.markdown#units-library).
-> 
-> The unit functions in the system library are based on the principles described here. 
+Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately noticeable what needs to be done or what went wrong with your code if it doesn't work as expected. Note that this chapter contains just the very basic information, you'll need to build upon these techniques in your own way to create a truly robust solution.
 
-Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately noticeable what needs to be done or what went wrong with your code if it doesn't work as expected.
+Here are the basic principles governing units:
 
-I'm laying out just the basic pointers here, you'll need to combine the techniques mentioned in your own way to create a truly robust solution.
+* Each processor can control at most one unit at a time; this unit is acquired through `ubind()` an is available as the `@unit` variable.
+* The `ubind()` function, when run repeatedly, returns units of the given type one by one, after cycling through all units, it starts again from the first one. 
+* It is possible to store a bound unit in a variable and bind it again later: `savedUnit = @unit; ...; ubind(savedUnit);`. This way, several units can be stored in variables (or an [internal array](SYNTAX-1-VARIABLES.markdown#internal-arrays)).
+* On the other hand, it is not possible to store units in memory cells and memory banks.
+* Binding a unit doesn't make that unit controlled by the processor. This only happens after using one of unit-related instructions: [`ucontrol`](FUNCTIONS-80.markdown#instruction-unit-control), [`ulocate`](FUNCTIONS-80.markdown#instruction-unit-locate) or [`uradar`](FUNCTIONS-80.markdown#instruction-unit-radar).
+  * The `within()` function which maps to `ucontrol within`, makes the unit controlled by the processor.
+  * Sensing unit's properties, such as `@x`, `@y`, `@dead` or `@controller` doesn't make the unit controlled by the processor.
+* Binding a unit to a processor doesn't make the unit exclusive to that processor: other processors might bind the same unit, or a player might take over the unit and control it manually, "stealing" it.
+* A unit controlled by the processor (or stored in a variable) may die. To detect the unit is dead, sense its `@dead` property (e.g., `@unit.@dead`).
+* When a command is issued to a unit using `ucontrol`, the processor doesn't wait for the unit to complete the command. Explicit checks to see the unit has finished the command are sometimes necessary.
 
 ### Binding units
+
+> [!TIP]
+> The `units` system library contains functions you can use to search for and bind free units. For more information, see [System library](SYSTEM-LIBRARY.markdown#units-library).
+>
+> The unit functions in the system library are based on the principles described here.
 
 Unit needs to be bound to the processor to be controlled through it, using the `ubind` instruction (and a corresponding `ubind()` function). Only one unit can be bound at a time. All [commands controlling the unit](FUNCTIONS-80.markdown#instruction-unit-control) are then sent to the bound unit.
 
@@ -270,8 +281,6 @@ def findFreeUnit(unitType, initialFlag)
 end;
 ```
 
-
-
 We're still flagging the unit. Firstly, it assigns the initial state to it right off the bat, and secondly, it will signal to other processors that might use flags to recognize free units that this one is busy.
 
 The other property is `@unit.@controller`. This returns the processor that is actively controlling the unit, or `null` if no processor controls that unit. Use this property to detect that your unit was lost:
@@ -297,6 +306,9 @@ do while @unit.@controller == @this;
 print($"Unit was controlled for ${floor(@time - start)} ms");
 printflush(message1);
 ```
+
+> [!NOTE]
+> Unit controllers aren't stored in a map file. When a game is loaded from a save, or when a sector is changed in a campaign, the unit controllers are reset. If your logic depends on identifying owned units using `@controller`, the situation where all units are suddenly lost needs to be accounted for.
 
 ### Detecting destroyed units
 

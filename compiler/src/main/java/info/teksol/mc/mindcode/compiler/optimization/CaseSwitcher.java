@@ -685,14 +685,11 @@ public class CaseSwitcher extends BaseOptimizer {
             elseSteps += stats.elseSteps + segment.depth() * stats.elseValues;
         }
 
-        // TODO this might need to be updated for integer case expressions,
-        //      as those do not consider the `else` targets and may need to compute segment weights differently
-        //      Use Targets.targetCount(from, to), it's cheap
-        // Note: the problem is that for sparse integer case expressions, there will be segments created for
-        // values inside the case range that aren't valid targets. This significantly increases bisection costs
-        // compared to continuous case ranges, making pure bisection solution unfeasible.
-        // We might need a separate option which would tell the case expression need not handle else values at all,
-        // including else values withing the case range.
+        // There's a problem for sparse integer case expressions, where segments are created for values
+        // inside the case range that aren't valid targets. This significantly increases bisection costs
+        // compared to continuous case ranges, making a pure bisection solution unfeasible.
+        // We might need a separate option which would tell the case expression need not handle else values
+        // at all, including else values withing the case range.
         private int bisect(List<Segment> segments) {
             if (segments.size() <= 1) return -1;
 
