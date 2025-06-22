@@ -115,4 +115,12 @@ public interface LogicInstruction extends MlogInstruction {
     default LogicInstruction setSideEffects(SideEffects sideEffects) {
         return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
     }
+
+    default boolean isTargetGuard() {
+        return (boolean) getInfo(InstructionInfo.TARGET_GUARD);
+    }
+
+    default LogicInstruction setTargetGuard(boolean targetGuard) {
+        return setInfo(InstructionInfo.TARGET_GUARD, targetGuard);
+    }
 }

@@ -382,6 +382,25 @@ To use a world-processor variant of Mindcode language, it is necessary to add `W
 
 The same names of version targets are used with the `-t` / `--target` command-line option.
 
+## Option `target-guard`
+
+When set, adds a guard code to the beginning of the program which verifies the code is run by a Mindustry version compatible with both `target` and `target-optimization` options. If the processor isn't compatible with the compiler options used to generate the code, the execution remains stuck at the beginning of the program. This prevents the code from running on an incompatible processor, resulting in potentially faulty execution of the code.
+
+THe target guard code doesn't distinguish between world and standard processors. 
+
+The guard code is always a single `jump` instruction which jumps back to itself if an incompatible processor is detected. The following table shows the guard instructions corresponding to given target settings:
+
+| Target and optimization | Instruction                        |
+|-------------------------|------------------------------------|
+| 6, compatible           | No test, code runs on all versions |
+| 6, specific             | `jump 0 greaterThan %FFFFFF 0`     |
+| 7, compatible           | `jump 0 strictEqual %FFFFFF null`  |
+| 7, specific             | `jump 0 notEqual @blockCount 254`  |
+| 8, compatible           | `jump 0 strictEqual %[red] null`   |
+| 8, specific             | `jump 0 strictEqual %[red] null`   |
+
+The jump target (`0`) is replaced with proper instruction address when it's not the first in the compiled code.
+
 ## Option `target-optimization`
 
 Chooses how Mindcode takes into account the [`target` option](#option-target). Possible values are:

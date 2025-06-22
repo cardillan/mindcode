@@ -64,6 +64,7 @@ public class CompilerProfile {
     private boolean outputProfiling = false;
     private Remarks remarks = Remarks.PASSIVE;
     private boolean targetOptimization = false;
+    private boolean targetGuard = false;
     private boolean unsafeCaseOptimization = false;
     private boolean shortCircuitEval = false;
     private boolean shortFunctionPrefix = false;
@@ -474,6 +475,15 @@ public class CompilerProfile {
 
     public CompilerProfile setTargetOptimization(boolean targetOptimization) {
         this.targetOptimization = targetOptimization;
+        return this;
+    }
+
+    public boolean isTargetGuard() {
+        return targetGuard;
+    }
+
+    public CompilerProfile setTargetGuard(boolean targetGuard) {
+        this.targetGuard = targetGuard;
         return this;
     }
 

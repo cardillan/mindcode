@@ -16,7 +16,7 @@ import java.util.function.Consumer;
 @NullMarked
 public interface LogicValue extends LogicArgument, ValueStore {
     /// Provides a text representation of the contained value as if printed by Mindustry Logic
-    /// Supported only for compile-time constants. Is not the same as an mlog representation!
+    /// Supported only for compile-time constants. Is different from an mlog representation!
     ///
     /// @param instructionProcessor instruction processor to use for version-dependent formatting
     /// @return a text representation of the contained value

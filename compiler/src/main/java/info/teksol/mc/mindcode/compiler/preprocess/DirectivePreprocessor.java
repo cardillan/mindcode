@@ -198,6 +198,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("symbolic-labels",              node ->  setBooleanOption(node, profile::setSymbolicLabels));
         map.put("syntax",                       node ->  setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode, SyntacticMode::allowedValues));
         map.put("target",                       this::setTarget);
+        map.put("target-guard",                 node -> setBooleanOption(node, profile::setTargetGuard));
         map.put("target-optimization",          node -> setBooleanOption(node, profile::setTargetOptimization, "specific", "compatible"));
         map.put("unsafe-case-optimization",     node -> setBooleanOption(node, profile::setUnsafeCaseOptimization));
 

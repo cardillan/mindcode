@@ -210,6 +210,14 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveTargetGuard() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setTargetGuard(false);
+        processDirective(profile, "target-guard", "true");
+        assertTrue(profile.isTargetGuard());
+    }
+
+    @Test
     void processesDirectiveTargetOptimization() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setTargetOptimization(false);

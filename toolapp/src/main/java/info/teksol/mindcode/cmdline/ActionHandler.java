@@ -67,6 +67,14 @@ abstract class ActionHandler {
                 .choices(new CaseInsensitiveChoices(ProcessorVersion.getPossibleVersions()));
 
         createArgument(container, defaults,
+                CompilerProfile::isTargetGuard,
+                (profile, arguments, name) -> profile.setTargetGuard(arguments.getBoolean(name)),
+                "--target-guard")
+                .help("generates guard code at the beginning of the program ensuring the processor runs in the " +
+                        "Mindustry version compatible with the 'target' and 'target-optimization' options")
+                .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
                 CompilerProfile::isTargetOptimization,
                 (profile, arguments, name) -> profile.setTargetOptimization(arguments.getBoolean(name)),
                 "--target-optimization")

@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
-import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
@@ -19,10 +18,7 @@ import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
-import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicString;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
-import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.DrawInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
@@ -41,6 +37,8 @@ import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static info.teksol.mc.common.SourcePosition.EMPTY;
 
 @NullMarked
 public class CodeGenerator extends AbstractMessageEmitter {
@@ -143,9 +141,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private void generateCode() {
-        if (!program.isMainProgram()) {
-            generateRemoteJumpTable();
-        }
+        if (!program.isMainProgram()) generateRemoteJumpTable();
+        if (profile.isTargetGuard()) generateTargetGuard();
 
         variables.enterFunction(callGraph.getMain(), List.of());
         assembler.enterAstNode(program);
@@ -190,10 +187,42 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (remoteFunctions.isEmpty()) return;
 
         assembler.setContextType(program, AstContextType.JUMPS, AstSubcontextType.REMOTE_INIT);
-        LogicLabel jumpTableLabel = assembler.nextLabel().withoutStateTransfer();
-        assembler.createJumpUnconditional(jumpTableLabel);
+        LogicLabel jumpTableEndLabel = assembler.nextLabel().withoutStateTransfer();
+        assembler.createJumpUnconditional(jumpTableEndLabel);
         remoteFunctions.stream().map(function -> Objects.requireNonNull(function.getLabel())).forEach(assembler::createJumpUnconditional);
-        assembler.createLabel(jumpTableLabel);
+        assembler.createLabel(jumpTableEndLabel);
+        assembler.clearContextType(program);
+    }
+
+    private void generateTargetGuard() {
+        assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.INIT);
+        LogicLabel guardLabel = assembler.nextLabel().withoutStateTransfer();
+        assembler.createLabel(guardLabel);
+        switch (profile.getProcessorVersion()) {
+            case V6 -> {
+                if (profile.isTargetOptimization()) {
+                    // Specific
+                    assembler.createJump(guardLabel, Condition.GREATER_THAN, new LogicToken("%FFFFFF"), LogicNumber.ZERO).setTargetGuard(true);
+                } else {
+                    // Compatible
+                    // Do nothing. Everything is compatible with V6.
+                }
+            }
+            case V7, V7A -> {
+                if (profile.isTargetOptimization()) {
+                    // Specific
+                    assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
+                } else {
+                    // Compatible
+                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%FFFFFF"), LogicNull.NULL).setTargetGuard(true);
+                }
+            }
+            case V8A -> {
+                // No distinction between specific and compatible: there are no other compatible versions besides V8
+                assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%[red]"), LogicNull.NULL).setTargetGuard(true);
+            }
+            default -> throw new MindcodeInternalError("Unhandled processor version " + profile.getProcessorVersion());
+        }
         assembler.clearContextType(program);
     }
 
@@ -240,7 +269,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         program.add(mainBodyEndIndex,
                 context.instructionProcessor().createPrintflush(Objects.requireNonNull(mainBodyContext),
-                        LogicVariable.block(SourcePosition.EMPTY, "message1")));
+                        LogicVariable.block(EMPTY, "message1")));
 
         warn(WARN.MISSING_PRINTFLUSH_ADDED);
     }

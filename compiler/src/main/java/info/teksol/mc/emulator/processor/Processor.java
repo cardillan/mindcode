@@ -209,6 +209,8 @@ public class Processor extends AbstractMessageEmitter {
     }
 
     private boolean execute(LogicInstruction instruction) {
+        if (instruction.isTargetGuard()) return true;
+
         return switch(instruction.getOpcode()) {
             case ASSERT_EQUALS  -> executeAssertEquals(instruction);
             case ASSERT_BOUNDS  -> executeAssertBounds(instruction);

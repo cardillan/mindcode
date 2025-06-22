@@ -54,6 +54,21 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
+        class TargetGuardArgumentTest {
+            @Test
+            public void longArgumentTrue() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--target-guard true");
+                assertTrue(profile.isTargetGuard());
+            }
+
+            @Test
+            public void longArgumentFalse() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--target-guard false");
+                assertFalse(profile.isTargetGuard());
+            }
+        }
+
+        @Nested
         class TargetOptimizationArgumentTest {
             @Test
             public void longArgumentSpecific() throws ArgumentParserException {

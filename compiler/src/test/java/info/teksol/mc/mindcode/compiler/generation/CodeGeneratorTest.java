@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation;
 
 import org.jspecify.annotations.NullMarked;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
@@ -182,94 +183,186 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
         );
     }
 
-    @Test
-    void compilesModuleWithRemoteFunctions() {
-        assertCompilesTo("""
-                        module test;
-                        
-                        remote void foo(in a, out b)
-                            b = 2 * a;
-                        end;
-                        
-                        remote def bar(in x)
-                            sin(x) * 2;
-                        end;
-                        """,
-                createInstruction(JUMP, label(2), "always"),
-                createInstruction(JUMP, label(1), "always"),
-                createInstruction(JUMP, label(0), "always"),
-                createInstruction(LABEL, label(2)),
-                createInstruction(SET, "*signature", q("8275dc9ca6c8f234:v1")),
-                createInstruction(LABEL, label(3)),
-                createInstruction(WAIT, "1e12"),
-                createInstruction(JUMP, label(3), "always"),
-                createInstruction(END),
-                createInstruction(LABEL, label(0)),
-                createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
-                createInstruction(SET, ":foo:b", tmp(0)),
-                createInstruction(LABEL, label(4)),
-                createInstruction(SET, ":foo*finished", "true"),
-                createInstruction(JUMP, label(3), "always"),
-                createInstruction(END),
-                createInstruction(LABEL, label(1)),
-                createInstruction(OP, "sin", tmp(1), ":bar:x"),
-                createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
-                createInstruction(SET, ":bar*retval", tmp(2)),
-                createInstruction(LABEL, label(5)),
-                createInstruction(SET, ":bar*finished", "true"),
-                createInstruction(JUMP, label(3), "always")
-        );
+    @Nested
+    class RemoteModulesTest {
+        @Test
+        void compilesModuleWithRemoteFunctions() {
+            assertCompilesTo("""
+                            module test;
+                            
+                            remote void foo(in a, out b)
+                                b = 2 * a;
+                            end;
+                            
+                            remote def bar(in x)
+                                sin(x) * 2;
+                            end;
+                            """,
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SET, "*signature", q("8275dc9ca6c8f234:v1")),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(WAIT, "1e12"),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
+                    createInstruction(SET, ":foo:b", tmp(0)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(SET, ":foo*finished", "true"),
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "sin", tmp(1), ":bar:x"),
+                    createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
+                    createInstruction(SET, ":bar*retval", tmp(2)),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(SET, ":bar*finished", "true"),
+                    createInstruction(JUMP, label(3), "always")
+            );
+        }
+
+        @Test
+        void compilesModuleWithRemoteFunctionsAndBackgroundProcess() {
+            assertCompilesTo("""
+                            module test;
+                            
+                            var invocations = -1;
+                            
+                            remote void foo(in a, out b)
+                                b = 2 * a;
+                            end;
+                            
+                            remote def bar(in x)
+                                sin(x) * 2;
+                            end;
+                            
+                            void backgroundProcess()
+                                print($"Number of invocations: ${++invocations}");
+                                printflush(message1);
+                            end;
+                            """,
+                    createInstruction(JUMP, label(3), "always"),
+                    createInstruction(JUMP, label(1), "always"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(SET, ".invocations", "-1"),
+                    createInstruction(SET, "*signature", q("8275dc9ca6c8f234:v1")),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(OP, "add", ".invocations", ".invocations", "1"),
+                    createInstruction(PRINT, q("Number of invocations: ")),
+                    createInstruction(PRINT, ".invocations"),
+                    createInstruction(PRINTFLUSH, "message1"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(WAIT, "1e12"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
+                    createInstruction(SET, ":foo:b", tmp(0)),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(SET, ":foo*finished", "true"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(OP, "sin", tmp(1), ":bar:x"),
+                    createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
+                    createInstruction(SET, ":bar*retval", tmp(2)),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(SET, ":bar*finished", "true"),
+                    createInstruction(JUMP, label(4), "always")
+            );
+        }
     }
 
-    @Test
-    void compilesModuleWithRemoteFunctionsAndBackgroundProcess() {
-        assertCompilesTo("""
-                        module test;
-                        
-                        var invocations = -1;
-                        
-                        remote void foo(in a, out b)
-                            b = 2 * a;
-                        end;
-                        
-                        remote def bar(in x)
-                            sin(x) * 2;
-                        end;
-                        
-                        void backgroundProcess()
-                            print($"Number of invocations: ${++invocations}");
-                            printflush(message1);
-                        end;
-                        """,
-                createInstruction(JUMP, label(3), "always"),
-                createInstruction(JUMP, label(1), "always"),
-                createInstruction(JUMP, label(0), "always"),
-                createInstruction(LABEL, label(3)),
-                createInstruction(SET, ".invocations", "-1"),
-                createInstruction(SET, "*signature", q("8275dc9ca6c8f234:v1")),
-                createInstruction(LABEL, label(4)),
-                createInstruction(OP, "add", ".invocations", ".invocations", "1"),
-                createInstruction(PRINT, q("Number of invocations: ")),
-                createInstruction(PRINT, ".invocations"),
-                createInstruction(PRINTFLUSH, "message1"),
-                createInstruction(LABEL, label(5)),
-                createInstruction(WAIT, "1e12"),
-                createInstruction(JUMP, label(4), "always"),
-                createInstruction(END),
-                createInstruction(LABEL, label(0)),
-                createInstruction(OP, "mul", tmp(0), "2", ":foo:a"),
-                createInstruction(SET, ":foo:b", tmp(0)),
-                createInstruction(LABEL, label(6)),
-                createInstruction(SET, ":foo*finished", "true"),
-                createInstruction(JUMP, label(4), "always"),
-                createInstruction(END),
-                createInstruction(LABEL, label(1)),
-                createInstruction(OP, "sin", tmp(1), ":bar:x"),
-                createInstruction(OP, "mul", tmp(2), tmp(1), "2"),
-                createInstruction(SET, ":bar*retval", tmp(2)),
-                createInstruction(LABEL, label(7)),
-                createInstruction(SET, ":bar*finished", "true"),
-                createInstruction(JUMP, label(4), "always")
-        );
+    @Nested
+    class TargetGuardsTest {
+        @Test
+        void compilesGuardForTarget6Compatible() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target = 6;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget6Specific() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target-optimization = specific;
+                            #set target = 6;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "greaterThan", "%FFFFFF", "0"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget7Compatible() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target = 7;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "strictEqual", "%FFFFFF", "null"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget7Specific() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target-optimization = specific;
+                            #set target = 7;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "notEqual", "@blockCount", "254"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget8Compatible() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target = 8;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "strictEqual", "%[red]", "null"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget8Specific() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target-optimization = specific;
+                            #set target = 8;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "strictEqual", "%[red]", "null"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
     }
 }

@@ -21,6 +21,12 @@ public enum InstructionInfo {
     /// Hoisted instruction is marked with Boolean.TRUE. When unrolling loops, a tagged hoisted instruction
     /// is returned to the loop (using the CALL_TAG) to ensure correct processing.
     HOISTED(Boolean.FALSE),
+
+    /// This instruction is a target guard code. Information for the processor emulator to skip executing
+    /// this instruction.
+    /// Once the emulator is rewritten to operate on plain mlog, it won't be necessary, as the emulator will
+    /// properly emulate the target version of the processor.
+    TARGET_GUARD(Boolean.FALSE),
     ;
 
     public final Object defaultValue;
