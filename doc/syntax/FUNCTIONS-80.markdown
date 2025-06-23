@@ -468,11 +468,16 @@ Set a game rule.
 |`setrule(:unitCap, value)`|`setrule unitCap value 0 0 0 0`|
 |`setrule(:mapArea, x, y, width, height)`|`setrule mapArea 0 x y width height`|
 |`setrule(:lighting, value)`|`setrule lighting value 0 0 0 0`|
+|`setrule(:canGameOver, value)`|`setrule canGameOver value 0 0 0 0`|
 |`setrule(:ambientLight, value)`|`setrule ambientLight value 0 0 0 0`|
 |`setrule(:solarMultiplier, value)`|`setrule solarMultiplier value 0 0 0 0`|
+|`setrule(:dragMultiplier, value)`|`setrule dragMultiplier value 0 0 0 0`|
+|`setrule(:ban, value)`|`setrule ban value 0 0 0 0`|
+|`setrule(:unban, value)`|`setrule unban value 0 0 0 0`|
 |`setrule(:buildSpeed, value, team)`|`setrule buildSpeed value team 0 0 0`|
 |`setrule(:unitHealth, value, team)`|`setrule unitHealth value team 0 0 0`|
 |`setrule(:unitBuildSpeed, value, team)`|`setrule unitBuildSpeed value team 0 0 0`|
+|`setrule(:unitMineSpeed, value, team)`|`setrule unitMineSpeed value team 0 0 0`|
 |`setrule(:unitCost, value, team)`|`setrule unitCost value team 0 0 0`|
 |`setrule(:unitDamage, value, team)`|`setrule unitDamage value team 0 0 0`|
 |`setrule(:blockHealth, value, team)`|`setrule blockHealth value team 0 0 0`|

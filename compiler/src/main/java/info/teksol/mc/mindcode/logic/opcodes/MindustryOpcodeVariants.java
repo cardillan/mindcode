@@ -213,11 +213,16 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitCap"),               in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("mapArea"),               unused("0"), in("x"), in("y"), in("width"), in("height"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("lighting"),              in("value"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("canGameOver"),           in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("ambientLight"),          in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("solarMultiplier"),       in("value"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("dragMultiplier"),        in("value"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("ban"),                   in("value"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("unban"),                 in("value"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("buildSpeed"),            in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitHealth"),            in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitBuildSpeed"),        in("value"), in("team"));
+        add(list, V8A, MAX, W, FUNC, Opcode.SETRULE,   rule("unitMineSpeed"),         in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitCost"),              in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("unitDamage"),            in("value"), in("team"));
         add(list, V7,  MAX, W, FUNC, Opcode.SETRULE,   rule("blockHealth"),           in("value"), in("team"));

@@ -24,29 +24,29 @@ public enum InstructionParameterType {
     /// Input parameter accepting blocks (buildings).
     BLOCK           (Flags.INPUT),
 
-    /// Selector for the `control` instruction.
-    BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION),
+    /// Selector for the `control` instruction (LAccess.controls)
+    BLOCK_CONTROL   (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getLAccessControllableNames),
 
     /// A boolean parameter - expected as an input 
     BOOL            (Flags.INPUT),
 
     /// True/false to set/clear status in `status` instruction.
-    CLEAR           (Flags.SELECTOR | Flags.FUNCTION),
+    CLEAR           (Flags.SELECTOR | Flags.FUNCTION, m -> Set.of("true", "false")),
 
     /// Selector for the `jump` instruction.
-    CONDITION       (Flags.SELECTOR),
+    CONDITION       (Flags.SELECTOR, MindustryMetadata::getConditions),
 
     /// Type of cut scene in `cutscene` instruction
-    CUTSCENE        (Flags.SELECTOR),
+    CUTSCENE        (Flags.SELECTOR, MindustryMetadata::getCutsceneActions),
 
     /// Selector for the `draw` instruction.
-    DRAW            (Flags.SELECTOR | Flags.FUNCTION),
+    DRAW            (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getGraphicsTypes),
 
     /// Type of visual effect 
-    EFFECT          (Flags.SELECTOR),
+    EFFECT          (Flags.SELECTOR,  MindustryMetadata::getEffects),
 
     /// Item to fetch in `fetch` instruction
-    FETCH           (Flags.SELECTOR),
+    FETCH           (Flags.SELECTOR, MindustryMetadata::getFetchTypes),
 
     /// An input parameter requiring a volatile variable - see the `sync` instruction.
     VOLATILE        (Flags.GLOBAL | Flags.INPUT | Flags.OUTPUT),
@@ -67,7 +67,7 @@ public enum InstructionParameterType {
     LAYER           ("layer", Flags.KEYWORD, MindustryMetadata::getTileLayers, tileLayer),
 
     /// Selector for the `ulocate` instruction. No Flags.FUNCTION!
-    LOCATE          ("locate", Flags.SELECTOR),
+    LOCATE          ("locate", Flags.SELECTOR, MindustryMetadata::getLocateTypes),
 
     /// Specifies lookup category.
     LOOKUP          ("itemType", Flags.KEYWORD, MindustryMetadata::getLookableContents, lookupType),
@@ -76,10 +76,10 @@ public enum InstructionParameterType {
     MARKER_TYPE     ("markerType", Flags.KEYWORD, MindustryMetadata::getMarkerTypes, markerType),
 
     /// Type of message in `message` instruction
-    MESSAGE         (Flags.SELECTOR),
+    MESSAGE         (Flags.SELECTOR, MindustryMetadata::getMessageTypes),
 
     /// Selector for the `op` instruction.
-    OPERATION       (Flags.SELECTOR | Flags.FUNCTION),
+    OPERATION       (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getOperations),
 
     /// Input parameter accepting ore type. 
     ORE             ("oreType", Flags.INPUT, MindustryMetadata::getItemNames),
@@ -97,10 +97,10 @@ public enum InstructionParameterType {
     RESULT          (Flags.OUTPUT),
 
     /// Game rule in `setrule` instruction
-    RULE            (Flags.SELECTOR),
+    RULE            (Flags.SELECTOR, MindustryMetadata::getLogicRules),
 
     /// Scope for the `playsound` instruction: true=positional, false=global
-    SCOPE           (Flags.SELECTOR),
+    SCOPE           (Flags.SELECTOR, m -> Set.of("true", "false")),
 
     /// Input parameter accepting property id. 
     SENSOR          ("property", Flags.INPUT, MindustryMetadata::getLAccessNames),
@@ -109,9 +109,9 @@ public enum InstructionParameterType {
     SETTABLE        ("property", Flags.INPUT, MindustryMetadata::getLAccessSettableNames),
 
     /// For the `setmarker` instruction
-    SET_MARKER      (Flags.SELECTOR),
+    SET_MARKER      (Flags.SELECTOR, MindustryMetadata::getMarkerControls),
 
-    /// Settable layer in `setblock` instruction
+    /// Settable layer in `setblock` instruction (TileLayer.settable)
     SETTABLE_LAYER  ("layer", Flags.SELECTOR, MindustryMetadata::getTileLayersSettable, settableTileLayer),
 
     /// Sound to play 
@@ -127,7 +127,7 @@ public enum InstructionParameterType {
     UNIT            ("unitType", Flags.INPUT, MindustryMetadata::getUnitTypes),
 
     /// Selector for the `ucontrol` instruction.
-    UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION),
+    UNIT_CONTROL    (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getUnitControls),
 
     /// Non-specific parameter type for generic instructions 
     UNSPECIFIED     (0),
@@ -158,6 +158,13 @@ public enum InstructionParameterType {
         this.typeName = typeName;
         this.flags = flags;
         this.keywordsSupplier = null;
+        this.keywordCategory = null;
+    }
+
+    InstructionParameterType(int flags, Function<MindustryMetadata, Collection<String>> keywordsSupplier) {
+        this.typeName = name();
+        this.flags = flags;
+        this.keywordsSupplier = keywordsSupplier;
         this.keywordCategory = null;
     }
 

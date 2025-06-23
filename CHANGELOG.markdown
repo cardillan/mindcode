@@ -9,12 +9,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Mindcode incorrectly warned about possible loss of precision for integer literals larger than 2<sup>52</sup>-1. The correct maximum safe integer value is 2<sup>53</sup>-1.
+* Added missing `setrule` instruction variants (`canGameOver`, `dragMultiplier`, `ban`, `unban` and `unitMineSpeed`) for target 8. 
 
 ### Added
 
 * Added support for the new `setmarker outline` instruction.
 * Added the new `@operations` property.
-* Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both `target` and `target-optimization` options.
+* Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both the `target` and `target-optimization` options.
 * Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#compatibility-library). The library provides function for verifying Mindcode's compatibility with the Mindustry version in which it is run.   
 
 ### Changed
@@ -33,7 +34,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Miscellaneous
 
 * Added a `legacy` attribute to the Blocks metadata.
+* Added new types of metadata corresponding to all opcode selectors.
 * Updated the BE version metadata to the latest available BE build.
+* Added automatic test for verifying that existing instruction opcodes correspond 1:1 to known metadata. 
 
 ## 3.6.1 - 2025-06-06
 

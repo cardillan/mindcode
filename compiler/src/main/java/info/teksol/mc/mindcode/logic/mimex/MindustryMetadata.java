@@ -60,16 +60,28 @@ public class MindustryMetadata {
 
     private final AtomicReference<Set<String>> alignments = new AtomicReference<>();
     private final AtomicReference<Set<String>> blockFlags = new AtomicReference<>();
-    private final AtomicReference<Set<String>> tileLayers = new AtomicReference<>();
-    private final AtomicReference<Set<String>> lookableContents = new AtomicReference<>();
-    private final AtomicReference<Set<String>> markerTypes = new AtomicReference<>();
-    private final AtomicReference<Set<String>> radarTargets = new AtomicReference<>();
-    private final AtomicReference<Set<String>> radarSorts = new AtomicReference<>();
+    private final AtomicReference<Set<String>> conditions = new AtomicReference<>();
+    private final AtomicReference<Set<String>> cutsceneActions = new AtomicReference<>();
+    private final AtomicReference<Set<String>> effects = new AtomicReference<>();
+    private final AtomicReference<Set<String>> fetchTypes = new AtomicReference<>();
+    private final AtomicReference<Set<String>> graphicsTypes = new AtomicReference<>();
     private final AtomicReference<Set<String>> lAccessNames = new AtomicReference<>();
+    private final AtomicReference<Set<String>> lAccessControllable = new AtomicReference<>();
     private final AtomicReference<Set<String>> lAccessSettable = new AtomicReference<>();
-    private final AtomicReference<Set<String>> tileLayersSettable = new AtomicReference<>();
+    private final AtomicReference<Set<String>> locateTypes = new AtomicReference<>();
+    private final AtomicReference<Set<String>> logicRules = new AtomicReference<>();
+    private final AtomicReference<Set<String>> lookableContents = new AtomicReference<>();
+    private final AtomicReference<Set<String>> markerControls = new AtomicReference<>();
+    private final AtomicReference<Set<String>> markerTypes = new AtomicReference<>();
+    private final AtomicReference<Set<String>> messageTypes = new AtomicReference<>();
+    private final AtomicReference<Set<String>> operations = new AtomicReference<>();
+    private final AtomicReference<Set<String>> radarSorts = new AtomicReference<>();
+    private final AtomicReference<Set<String>> radarTargets = new AtomicReference<>();
     private final AtomicReference<Set<String>> soundNames = new AtomicReference<>();
     private final AtomicReference<Set<String>> statusEffects = new AtomicReference<>();
+    private final AtomicReference<Set<String>> tileLayers = new AtomicReference<>();
+    private final AtomicReference<Set<String>> tileLayersSettable = new AtomicReference<>();
+    private final AtomicReference<Set<String>> unitControls = new AtomicReference<>();
 
     public static MindustryMetadata getLatest() {
         return forVersion(ProcessorVersion.MAX);
@@ -209,7 +221,7 @@ public class MindustryMetadata {
                                 (a, b) -> a, HashMap::new)));
     }
 
-    // Alignments
+    // String metadata
     public Set<String> getAlignments() {
         return cacheInstance(alignments, () -> new NamedReader("mimex-alignments.txt").createFromResource());
     }
@@ -219,30 +231,36 @@ public class MindustryMetadata {
                 "logic", "true"::equalsIgnoreCase).createFromResource());
     }
 
-    public Set<String> getTileLayers() {
-        return cacheInstance(tileLayers, () -> new NamedReader("mimex-layers.txt").createFromResource());
+    public Set<String> getConditions() {
+        return cacheInstance(conditions, () -> new NamedReader("mimex-conditions.txt").createFromResource());
     }
 
-    public Set<String> getLookableContents() {
-        return cacheInstance(lookableContents, () -> new NamedReader("mimex-contents.txt",
-                "lookable", "true"::equalsIgnoreCase).createFromResource());
+    public Set<String> getCutsceneActions() {
+        return cacheInstance(cutsceneActions, () -> new NamedReader("mimex-cutscene-actions.txt").createFromResource());
     }
 
-    public Set<String> getMarkerTypes() {
-        return cacheInstance(markerTypes, () -> new NamedReader("mimex-markers.txt").createFromResource());
+    public Set<String> getEffects() {
+        return cacheInstance(effects, () -> new NamedReader("mimex-effects.txt").createFromResource());
     }
 
-    public Set<String> getRadarTargets() {
-        return cacheInstance(radarTargets, () -> new NamedReader("mimex-radar-targets.txt").createFromResource());
+    public Set<String> getFetchTypes() {
+        return cacheInstance(fetchTypes, () -> new NamedReader("mimex-fetch-types.txt").createFromResource());
     }
 
-    public Set<String> getRadarSorts() {
-        return cacheInstance(radarSorts, () -> new NamedReader("mimex-radar-sorts.txt").createFromResource());
+    public Set<String> getGraphicsTypes() {
+        return cacheInstance(graphicsTypes, () -> new NamedReader("mimex-graphics-types.txt").createFromResource());
     }
 
     public Set<String> getLAccessNames() {
         return cacheInstance(lAccessNames, () -> getLAccessMap().values().stream()
                 .filter(LAccess::senseable)
+                .map(LAccess::name)
+                .collect(Collectors.toCollection(LinkedHashSet::new)));
+    }
+
+    public Set<String> getLAccessControllableNames() {
+        return cacheInstance(lAccessControllable, () -> getLAccessMap().values().stream()
+                .filter(LAccess::controllable)
                 .map(LAccess::name)
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
@@ -254,9 +272,41 @@ public class MindustryMetadata {
                 .collect(Collectors.toCollection(LinkedHashSet::new)));
     }
 
-    public Set<String> getTileLayersSettable() {
-        return cacheInstance(tileLayersSettable, () -> new NamedReader("mimex-layers.txt",
-                "settable", "true"::equalsIgnoreCase).createFromResource());
+    public Set<String> getLocateTypes() {
+        return cacheInstance(locateTypes, () -> new NamedReader("mimex-locate.txt").createFromResource());
+    }
+
+    public Set<String> getLogicRules() {
+        return cacheInstance(logicRules, () -> new NamedReader("mimex-logic-rules.txt").createFromResource());
+    }
+
+    public Set<String> getLookableContents() {
+        return cacheInstance(lookableContents, () -> new NamedReader("mimex-contents.txt",
+                "lookable", "true"::equalsIgnoreCase).createFromResource());
+    }
+
+    public Set<String> getMarkerControls() {
+        return cacheInstance(markerControls, () -> new NamedReader("mimex-marker-control.txt").createFromResource());
+    }
+
+    public Set<String> getMarkerTypes() {
+        return cacheInstance(markerTypes, () -> new NamedReader("mimex-markers.txt").createFromResource());
+    }
+
+    public Set<String> getMessageTypes() {
+        return cacheInstance(messageTypes, () -> new NamedReader("mimex-message-types.txt").createFromResource());
+    }
+
+    public Set<String> getOperations() {
+        return cacheInstance(operations, () -> new NamedReader("mimex-operations.txt").createFromResource());
+    }
+
+    public Set<String> getRadarSorts() {
+        return cacheInstance(radarSorts, () -> new NamedReader("mimex-radar-sorts.txt").createFromResource());
+    }
+
+    public Set<String> getRadarTargets() {
+        return cacheInstance(radarTargets, () -> new NamedReader("mimex-radar-targets.txt").createFromResource());
     }
 
     public Set<String> getSoundNames() {
@@ -266,6 +316,19 @@ public class MindustryMetadata {
     public Set<String> getStatusEffects() {
         return cacheInstance(statusEffects, () -> new NamedReader("mimex-status-effects.txt",
                 "hidden", "false"::equalsIgnoreCase).createFromResource());
+    }
+
+    public Set<String> getTileLayers() {
+        return cacheInstance(tileLayers, () -> new NamedReader("mimex-layers.txt").createFromResource());
+    }
+
+    public Set<String> getTileLayersSettable() {
+        return cacheInstance(tileLayersSettable, () -> new NamedReader("mimex-layers.txt",
+                "settable", "true"::equalsIgnoreCase).createFromResource());
+    }
+
+    public Set<String> getUnitControls() {
+        return cacheInstance(unitControls, () -> new NamedReader("mimex-unit-control.txt").createFromResource());
     }
 
     public Set<String> getUnitTypes() {
