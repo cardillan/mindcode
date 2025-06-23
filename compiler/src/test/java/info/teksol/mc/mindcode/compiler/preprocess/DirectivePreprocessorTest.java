@@ -77,6 +77,14 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveBuiltinEvaluation() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setBuiltinEvaluation(BuiltinEvaluation.COMPATIBLE);
+        processDirective(profile, "builtin-evaluation", "none");
+        assertEquals(BuiltinEvaluation.NONE, profile.getBuiltinEvaluation());
+    }
+
+    @Test
     void processesDirectiveCaseConfiguration() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setCaseConfiguration(0);
@@ -215,14 +223,6 @@ class DirectivePreprocessorTest {
         profile.setTargetGuard(false);
         processDirective(profile, "target-guard", "true");
         assertTrue(profile.isTargetGuard());
-    }
-
-    @Test
-    void processesDirectiveTargetOptimization() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        profile.setTargetOptimization(false);
-        processDirective(profile, "target-optimization", "specific");
-        assertTrue(profile.isTargetOptimization());
     }
 
     @Test

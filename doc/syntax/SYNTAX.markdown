@@ -280,14 +280,14 @@ Examples of mlog keywords are `add` in `op add result a 10`, or the first occurr
 > [!TIP]
 > Like built-in variables, mlog keywords may consist of multiple words. Most of the time the multi-word keywords are specified in camelCase convention (`:bottomLeft`), but at least one of currently existing keywords follows a kebab-case convention (`:spore-slowed`).
 
-Some of these keywords do not occur in Mindcode, for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to the Mindustry Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prepended with a colon, e.g., `:building`. The function call corresponding to the `ulocate` instruction above is:
+Some of these keywords do not occur in Mindcode, for example, all mlog keywords that can appear in an `op` instruction are mapped to Mindcode functions and operators. In other cases, mlog keywords must be specified as arguments to the Mindustry Logic functions. To make a distinction between an mlog keyword and an identifier in Mindcode, the keywords are prefixed with a colon, e.g., `:building`. The function call corresponding to the `ulocate` instruction above is:
 
 ```Mindcode
 building = ulocate(:building, :core, enemy, out outx, out outy, out found);
 ```
 
 > [!NOTE]
-> Mlog keywords are prepended with a colon in Mindcode but appear without the colon in mlog. On the other hand, names of local variables in Mindcode have no prefix, but are prepended with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.  
+> While mlog keywords are prefixed with a colon in Mindcode, they appear without the prefix in mlog. On the other hand, names of local variables in Mindcode have no prefix, but are prefixed with a colon in mlog. This might make it confusing at first when comparing emitted mlog code to the Mindcode source. Using an mlog syntax highlighter, such as [mlogls](https://github.com/JeanJPNM/mlogls), might help.  
 
 Mlog keywords can appear in these contexts in Mindcode:
 

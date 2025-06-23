@@ -31,7 +31,7 @@ public class Targets {
         this.hasElseBranch = hasElseBranch;
     }
 
-    public void computeElseValues(ContentType contentType, MindustryMetadata metadata, boolean targetSpecificOptimization) {
+    public void computeElseValues(ContentType contentType, MindustryMetadata metadata, boolean fullBuiltinEvaluation) {
         final LogicLabel label = LogicLabel.EMPTY;
         int count = 0;
         for (int key : targets.keySet()) {
@@ -49,7 +49,7 @@ public class Targets {
             trailingSegment = Segment.empty(lastKey, lastKey);
         } else {
             boolean limitLow = firstKey > 0;
-            boolean limitHigh = !targetSpecificOptimization || (lastKey < totalSize);
+            boolean limitHigh = !fullBuiltinEvaluation || (lastKey < totalSize);
             leadingSegment = limitLow ? Segment.empty(0, firstKey) : null;
             trailingSegment = limitHigh ? Segment.empty(lastKey, totalSize) : null;
         }

@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -57,9 +58,10 @@ public class IdentifiersBuilder extends AbstractBuilder implements
             warn(node, WARN.BUILT_IN_VARIABLE_NOT_RECOGNIZED, node.getName());
         }
 
-        // Target optimization: evaluate all numerical builtins
-        // No target optimization: evaluate stable numerical builtins except @unitCount, @itemCount etc.
-        return profile.isTargetOptimization() || (!node.getName().endsWith("Count") && metadata.isStableBuiltin(node.getName()))
+        // Full evaluation: evaluate all numerical builtins
+        // Compatible evaluation: evaluate stable numerical builtins
+        return profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL
+                || profile.getBuiltinEvaluation() == BuiltinEvaluation.COMPATIBLE && metadata.isStableBuiltin(node.getName())
                 ? LogicBuiltinConst.create(processor, node.sourcePosition(), node.getName())
                 : LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
     }

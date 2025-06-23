@@ -15,15 +15,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added support for the new `setmarker outline` instruction.
 * Added the new `@operations` property.
-* Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both the `target` and `target-optimization` options.
+* Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both the `target` and `builtin-evaluation` options.
 * Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#compatibility-library). The library provides function for verifying Mindcode's compatibility with the Mindustry version in which it is run.   
 
 ### Changed
 
+* **Breaking:** the `target-optimization` compiler option has been replaced with the [`builtin-evaluation` option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-builtin-evaluation). Instead of `#set target-optimization = specific;` use `#set builtin-evaluation = full;`.
 * Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)
   * The optimization now processes integer case expression with ranges too. Ranges must not overlap other ranges or standalone values. 
   * The optimization now uses bisection search to locate the proper segment when performing Jump Table compression, providing up to 15% speedup in some scenarios.
-  * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `target-optimization` to be set to `specific`. 
+  * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `builtin-evaluation` to be set to `full`. 
   * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time. The value of `0` doesn't consider any other configuration except a full jump table, effectively turning off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression).
   * When compressing jump tables, the optimizer also generates segment configuration for a full bisection search. This may improve case expressions too small for a full jump table optimization.
   * The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps.
@@ -36,7 +37,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a `legacy` attribute to the Blocks metadata.
 * Added new types of metadata corresponding to all opcode selectors.
 * Updated the BE version metadata to the latest available BE build.
-* Added automatic test for verifying that existing instruction opcodes correspond 1:1 to known metadata. 
+* Added automatic test for verifying that existing instruction opcodes correspond one-to-one to the known metadata. 
 
 ## 3.6.1 - 2025-06-06
 
@@ -257,7 +258,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 #### Experimental features
 
 * Added support for passing arguments to inline functions [by reference](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters). It is possible to pass variables and arrays this way.
-* Added new [`target-optimization` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-optimization). The `specific` option generates code for the specific compilation target only, the `compatible` option generates code intended for the compilation target and future versions of Mindustry Logic.    
+* Added new `target-optimization` compiler directive/command line option. The `specific` option generates code for the specific compilation target only, the `compatible` option generates code intended for the compilation target and future versions of Mindustry Logic.    
 * Added [array-specific optimizations for speed](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) (available on `experimental` level).
 * Added new [`arrays` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#arrays-library) with some basic array functions. The size calculations for the library functions are possibly incorrect, as new means for determining code size of functions taking an array as a ref argument needs to be developed.    
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).

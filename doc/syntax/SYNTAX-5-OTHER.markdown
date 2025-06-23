@@ -35,6 +35,61 @@ Possible values for the `boundary-checks` directive are:
 * `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes three instructions.
 * `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes four instructions.
 
+## Option `builtin-evaluation`
+
+This option specifies how Mindcode handles built-in variables (stable and unstable) having numeric values. Possible values are:
+
+* `none`: no built-in variables are compile-time evaluated, 
+* `compatible` (the default value): expressions using stable built-in variables will be compile-time evaluated when possible, 
+* `full`: all expressions using built-in variables will be compile-time evaluated when possible.
+
+Numerical built-in variables and logic IDs are considered stable if their value is the same in all known versions of Mindustry Logic in which they appear, and if they weren't removed in a later known Mindustry version.
+
+In the `compatible` setting only the stable the built-in and logic ID values are evaluated at compile time. It is expected these values won't change in a future release. For all other values, the compiled code corresponds to the _meaning_ of all logic built-ins. For example, in the following code
+
+```Mindustry
+for var unitIndex in 0 ... @unitCount do
+    var unitType = lookup(:unit, unitIndex);
+    // Handle the unit type, e.g., deflag all units of this type
+end;
+```
+
+the loop won't be unrolled, and the code will loop through all unit types available in the version in which it is actually run.
+
+The `full` setting ensures even the unstable built-in variables will be compile-time evaluated, using the value corresponding to the Mindustry version specified by the `target` option. This not only allows performing more optimizations (such as unroll loops) but also allows using the built-in variables to specify array sizes. However, the code will only produce a correct result when run on the processor of the correct Mindustry version:
+
+```Mindcode
+#set target = 7;
+#set builtin-evaluation = full;
+
+// This wouldn't compile on the compatible setting
+var items[@itemCount];
+
+for var i in 17 ... @itemCount do
+    items[i] = lookup(:item, i); 
+end;
+
+for var item in items[17 ... length(items)] do
+    println(item);
+end; 
+
+printflush(message1);
+```
+
+compiles to
+
+```mlog
+print "fissile-matter\ndormant-cyst\ntungsten\ncarbide\noxide\n"
+printflush message1
+```
+
+When `target` is set to `8`, the code instead compiles to
+
+```
+print "tungsten\noxide\ncarbide\n"
+printflush message1
+```
+
 ## Option `case-optimization-strength`
 
 This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). The higher the number, the more segment arrangements are considered, but the more time is needed for generating and evaluating them. The default value of this option is `2` for the web application, and `3` for the command-line tool. The maximal possible value is `4` for the web application, and `6` for the command-line tool. Values larger than `4` typically only bring additional benefits for case expressions with a very complex structure. Increasing the value by one significantly increases both the number of segment arrangements and the optimization time. 
@@ -384,7 +439,7 @@ The same names of version targets are used with the `-t` / `--target` command-li
 
 ## Option `target-guard`
 
-When set, adds a guard code to the beginning of the program which verifies the code is run by a Mindustry version compatible with both `target` and `target-optimization` options. If the processor isn't compatible with the compiler options used to generate the code, the execution remains stuck at the beginning of the program. This prevents the code from running on an incompatible processor, resulting in potentially faulty execution of the code.
+When set, adds a guard code to the beginning of the program which verifies the code is run by a Mindustry version compatible with both the `target` and `builtin-evaluation` options. If the processor isn't compatible with the compiler options used to generate the code, the execution remains stuck at the beginning of the program. This prevents the code from running on an incompatible processor, resulting in potentially faulty execution of the code.
 
 THe target guard code doesn't distinguish between world and standard processors. 
 
@@ -400,60 +455,6 @@ The guard code is always a single `jump` instruction which jumps back to itself 
 | 8, specific             | `jump 0 strictEqual %[red] null`   |
 
 The jump target (`0`) is replaced with proper instruction address when it's not the first in the compiled code.
-
-## Option `target-optimization`
-
-Chooses how Mindcode takes into account the [`target` option](#option-target). Possible values are:
-
-* `compatible` (the default value): the code is supposed to be run in a Mindustry version specified by the `target` option, or any later version. 
-* `specific`: the code is only expected to be run in a Mindustry version specified by the `target` option, not in any other version.
-
-The difference lies in the handling of unstable [built-in variables](SYNTAX-1-VARIABLES.markdown#built-in-variables) and logic IDs. Numerical built-in variables and logic IDs are considered stable if their value is the same in all known versions of Mindustry Logic in which they appear, and if they weren't removed in a later known Mindustry version.   
-
-In the `compatible` setting only the stable the built-in and logic ID values are evaluated at compile time. It is expected these values won't change in a future release. For all other values, the compiled code corresponds to the _meaning_ of all logic built-ins. For example, in the following code 
-
-```Mindustry
-for var unitIndex in 0 ... @unitCount do
-    var unitType = lookup(:unit, unitIndex);
-    // Handle the unit type, e.g., deflag all units of this type
-end;
-```
-
-the loop won't be unrolled, and the code will loop through all unit types available in the version in which it is actually run.
-
-The `specific` setting ensures even the unstable built-in variables will be compile-time evaluated, using the value corresponding to the Mindustry version specified by the `target` option. This not only allows performing more optimizations (such as unroll loops) but also allows using the built-in variables to specify array sizes. However, the code will only produce a correct result when run on the processor of the correct Mindustry version:
-
-```Mindcode
-#set target = 7;
-#set target-optimization = specific;
-
-// This wouldn't compile on the compatible setting
-var items[@itemCount];
-
-for var i in 17 ... @itemCount do
-    items[i] = lookup(:item, i); 
-end;
-
-for var item in items[17 ... length(items)] do
-    println(item);
-end; 
-
-printflush(message1);
-```
-
-compiles to 
-
-```mlog
-print "fissile-matter\ndormant-cyst\ntungsten\ncarbide\noxide\n"
-printflush message1
-```
-
-When `target` is set to `8`, the code instead compiles to
-
-```
-print "tungsten\noxide\ncarbide\n"
-printflush message1
-```
 
 ## Option `unsafe-case-optimization`
 

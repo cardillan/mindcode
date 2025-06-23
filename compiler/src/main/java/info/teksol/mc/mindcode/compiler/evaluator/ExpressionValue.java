@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.LVar;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -55,9 +56,10 @@ class ExpressionValue implements LogicReadable {
     }
 
     private static @NonNull ExpressionValue evaluateBuiltin(CompilerProfile profile, InstructionProcessor processor, AstBuiltInIdentifier b) {
-        if (profile.isTargetOptimization()) {
+        if (profile.getBuiltinEvaluation() != BuiltinEvaluation.NONE) {
             LVar var = processor.getMetadata().getLVar(b.getName());
             return var != null && var.isNumericConstant()
+                    && (profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL || processor.getMetadata().isStableBuiltin(var.name()))
                     ? new ExpressionValue(processor, null, var.numericValue()) : new InvalidValue(processor);
         } else {
             return new InvalidValue(processor);

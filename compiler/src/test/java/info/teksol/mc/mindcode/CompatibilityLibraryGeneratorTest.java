@@ -85,13 +85,13 @@ public class CompatibilityLibraryGeneratorTest {
                 mlogLabel("general:");
                 mlog("print", in
                     "[salmon]Mindcode metadata of stable built-ins are not compatible with this Mindustry version.[]\\n" +
-                    "Please report the problem, and use [gold]#set builtin-optimization = false;[]\\n" +
+                    "Please report the problem, and use [gold]#set builtin-evaluation = none;[]\\n" +
                     "to avoid incompatibility issues.");
                 mlog("jump", "finish", "always", 0, 0);
                 mlogLabel("specific:");
                 mlog("print", in
                     "[salmon]Mindcode metadata of unstable built-ins are not compatible with this Mindustry version.[]\\n" +
-                    "Please report the problem, and use [gold]#set target-optimization = compatible;[]\\n" +
+                    "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\\n" +
                     "to avoid incompatibility issues.");
                 mlogLabel("finish:");
                 printflush(message1);
@@ -114,11 +114,11 @@ public class CompatibilityLibraryGeneratorTest {
     }
 
     private boolean isStableBuiltin(MindustryMetadata metadata, LVar var) {
-        return var.isNumericConstant() && !var.name().endsWith("Count") && metadata.isStableBuiltin(var.name());
+        return var.isNumericConstant() && metadata.isStableBuiltin(var.name());
     }
 
     private boolean isUnStableBuiltin(MindustryMetadata metadata, LVar var) {
-        return var.isNumericConstant() && (var.name().endsWith("Count") || !metadata.isStableBuiltin(var.name()));
+        return var.isNumericConstant() && !metadata.isStableBuiltin(var.name());
     }
 
     private static final String BUILTIN_TEST = """

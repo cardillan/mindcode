@@ -55,13 +55,13 @@ inline void _compatibilityTest6()
     mlogLabel("general:");
     mlog("print", in
         "[salmon]Mindcode metadata of stable built-ins are not compatible with this Mindustry version.[]\n" +
-        "Please report the problem, and use [gold]#set builtin-optimization = false;[]\n" +
+        "Please report the problem, and use [gold]#set builtin-evaluation = none;[]\n" +
         "to avoid incompatibility issues.");
     mlog("jump", "finish", "always", 0, 0);
     mlogLabel("specific:");
     mlog("print", in
         "[salmon]Mindcode metadata of unstable built-ins are not compatible with this Mindustry version.[]\n" +
-        "Please report the problem, and use [gold]#set target-optimization = compatible;[]\n" +
+        "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\n" +
         "to avoid incompatibility issues.");
     mlogLabel("finish:");
     printflush(message1);
@@ -862,13 +862,13 @@ inline void _compatibilityTest7()
     mlogLabel("general:");
     mlog("print", in
         "[salmon]Mindcode metadata of stable built-ins are not compatible with this Mindustry version.[]\n" +
-        "Please report the problem, and use [gold]#set builtin-optimization = false;[]\n" +
+        "Please report the problem, and use [gold]#set builtin-evaluation = none;[]\n" +
         "to avoid incompatibility issues.");
     mlog("jump", "finish", "always", 0, 0);
     mlogLabel("specific:");
     mlog("print", in
         "[salmon]Mindcode metadata of unstable built-ins are not compatible with this Mindustry version.[]\n" +
-        "Please report the problem, and use [gold]#set target-optimization = compatible;[]\n" +
+        "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\n" +
         "to avoid incompatibility issues.");
     mlogLabel("finish:");
     printflush(message1);
@@ -1774,13 +1774,13 @@ inline void _compatibilityTest8()
     mlogLabel("general:");
     mlog("print", in
         "[salmon]Mindcode metadata of stable built-ins are not compatible with this Mindustry version.[]\n" +
-        "Please report the problem, and use [gold]#set builtin-optimization = false;[]\n" +
+        "Please report the problem, and use [gold]#set builtin-evaluation = none;[]\n" +
         "to avoid incompatibility issues.");
     mlog("jump", "finish", "always", 0, 0);
     mlogLabel("specific:");
     mlog("print", in
         "[salmon]Mindcode metadata of unstable built-ins are not compatible with this Mindustry version.[]\n" +
-        "Please report the problem, and use [gold]#set target-optimization = compatible;[]\n" +
+        "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\n" +
         "to avoid incompatibility issues.");
     mlogLabel("finish:");
     printflush(message1);

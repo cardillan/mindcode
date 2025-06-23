@@ -296,7 +296,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
         void compilesGuardForTarget6Specific() {
             assertCompilesTo("""
                             #set target-guard = true;
-                            #set target-optimization = specific;
+                            #set builtin-evaluation = full;
                             #set target = 6;
                             
                             print("Hello");
@@ -325,7 +325,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
         void compilesGuardForTarget7Specific() {
             assertCompilesTo("""
                             #set target-guard = true;
-                            #set target-optimization = specific;
+                            #set builtin-evaluation = full;
                             #set target = 7;
                             
                             print("Hello");
@@ -354,7 +354,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
         void compilesGuardForTarget8Specific() {
             assertCompilesTo("""
                             #set target-guard = true;
-                            #set target-optimization = specific;
+                            #set builtin-evaluation = full;
                             #set target = 8;
                             
                             print("Hello");

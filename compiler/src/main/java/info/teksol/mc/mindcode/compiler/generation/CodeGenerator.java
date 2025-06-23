@@ -24,6 +24,7 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.util.CRC64;
@@ -200,8 +201,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.createLabel(guardLabel);
         switch (profile.getProcessorVersion()) {
             case V6 -> {
-                if (profile.isTargetOptimization()) {
-                    // Specific
+                if (profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // Full
                     assembler.createJump(guardLabel, Condition.GREATER_THAN, new LogicToken("%FFFFFF"), LogicNumber.ZERO).setTargetGuard(true);
                 } else {
                     // Compatible
@@ -209,8 +210,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 }
             }
             case V7, V7A -> {
-                if (profile.isTargetOptimization()) {
-                    // Specific
+                if (profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // Full
                     assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
                 } else {
                     // Compatible
@@ -218,7 +219,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 }
             }
             case V8A -> {
-                // No distinction between specific and compatible: there are no other compatible versions besides V8
+                // No distinction between full and compatible: there are no other compatible versions besides V8
                 assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%[red]"), LogicNull.NULL).setTargetGuard(true);
             }
             default -> throw new MindcodeInternalError("Unhandled processor version " + profile.getProcessorVersion());

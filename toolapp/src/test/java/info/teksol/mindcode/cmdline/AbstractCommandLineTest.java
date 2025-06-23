@@ -54,6 +54,27 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
+        class BuiltinEvaluationArgumentTest {
+            @Test
+            public void longArgumentNone() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--builtin-evaluation none");
+                assertEquals(BuiltinEvaluation.NONE, profile.getBuiltinEvaluation());
+            }
+
+            @Test
+            public void longArgumentCompatible() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--builtin-evaluation compatible");
+                assertEquals(BuiltinEvaluation.COMPATIBLE, profile.getBuiltinEvaluation());
+            }
+
+            @Test
+            public void longArgumentFull() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--builtin-evaluation full");
+                assertEquals(BuiltinEvaluation.FULL, profile.getBuiltinEvaluation());
+            }
+        }
+
+        @Nested
         class TargetGuardArgumentTest {
             @Test
             public void longArgumentTrue() throws ArgumentParserException {
@@ -65,21 +86,6 @@ public abstract class AbstractCommandLineTest {
             public void longArgumentFalse() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("--target-guard false");
                 assertFalse(profile.isTargetGuard());
-            }
-        }
-
-        @Nested
-        class TargetOptimizationArgumentTest {
-            @Test
-            public void longArgumentSpecific() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--target-optimization specific");
-                assertTrue(profile.isTargetOptimization());
-            }
-
-            @Test
-            public void longArgumentCompatible() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--target-optimization compatible");
-                assertFalse(profile.isTargetOptimization());
             }
         }
 

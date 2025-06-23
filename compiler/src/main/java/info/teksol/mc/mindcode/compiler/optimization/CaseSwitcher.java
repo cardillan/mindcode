@@ -16,6 +16,7 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.util.Indenter;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -58,7 +59,7 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 ///   search is used. The bisection routing is also responsible for handling the out-of-range values via the leading
 ///   and trailing segments (which represent values below and above the valid range, respectively).
 /// * When the range check is omitted (either due to the `unsafe-case-optimization` compiler option or when handling
-///   Mindustry content, possibly with `target-optimization` set to `specific`), the leading and/or trailing segments
+///   Mindustry content, possibly with `builtin-evaluation` set to `full`), the leading and/or trailing segments
 ///   are not generated.
 ///
 /// **Segment types**
@@ -299,7 +300,7 @@ public class CaseSwitcher extends BaseOptimizer {
         if (variable == null || analyzer.contentType == null || targets.isEmpty() || targets.range() >MAX_CASE_RANGE
                 || analyzer.hasNull && analyzer.contentType == ContentType.UNKNOWN) return;
 
-        targets.computeElseValues(analyzer.contentType, metadata, getProfile().isTargetOptimization());
+        targets.computeElseValues(analyzer.contentType, metadata, getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL);
 
         int originalCost = jumps;
         int originalSteps = jumps * values - savedSteps
@@ -451,9 +452,9 @@ public class CaseSwitcher extends BaseOptimizer {
     }
 
     private int findHighPadSegment(ConvertCaseActionParameters parameters, List<Segment> segments) {
-        // Only high pad Mindustry content when target optimization is set.
+        // Only high pad Mindustry content when full builtin evaluation is active.
         // When range checking is off, padding high makes no sense.
-        if (!parameters.mindustryContent || !getProfile().isTargetOptimization() || parameters.removeRangeCheck) return -1;
+        if (!parameters.mindustryContent || getProfile().getBuiltinEvaluation() != BuiltinEvaluation.FULL || parameters.removeRangeCheck) return -1;
 
         // It can only be the very last segment
         int lastPossibleIndex = segments.getLast().type() == SegmentType.JUMP_TABLE ? segments.size() - 1 : segments.size() - 2;
@@ -1224,9 +1225,10 @@ public class CaseSwitcher extends BaseOptimizer {
         private boolean canConvert(LogicBuiltIn builtIn) {
             MindustryContent object = builtIn.getObject();
             return object != null
+                    && getProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE
                     && object.contentType().hasLookup
                     && object.logicId() >= 0
-                    && (getProfile().isTargetOptimization() || metadata.isStableBuiltin(builtIn.getName()));
+                    && (getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(builtIn.getName()));
         }
 
         public @Nullable Integer getLastValue() {

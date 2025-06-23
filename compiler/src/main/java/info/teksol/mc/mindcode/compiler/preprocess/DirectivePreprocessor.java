@@ -181,6 +181,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("auto-printflush",              node -> setBooleanOption(node, profile::setAutoPrintflush));
         map.put("boolean-eval",                 node -> setBooleanOption(node, profile::setShortCircuitEval, "short", "full"));
         map.put("boundary-checks",              node -> setEnumOption(node, RuntimeChecks::byName, profile::setBoundaryChecks, RuntimeChecks::allowedValues));
+        map.put("builtin-evaluation",           node -> setEnumOption(node, BuiltinEvaluation::byName, profile::setBuiltinEvaluation, BuiltinEvaluation::allowedValues));
         map.put("case-configuration",           node -> setIntOption(node, profile::setCaseConfiguration, 0, Integer.MAX_VALUE));
         map.put("case-optimization-strength",   node -> setIntOption(node, profile::setCaseOptimizationStrength, 0, profile.getMaxCaseOptimizationStrength()));
         map.put("debug-output",                 node -> setBooleanOption(node, profile::setDebugOutput));
@@ -199,7 +200,6 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("syntax",                       node ->  setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode, SyntacticMode::allowedValues));
         map.put("target",                       this::setTarget);
         map.put("target-guard",                 node -> setBooleanOption(node, profile::setTargetGuard));
-        map.put("target-optimization",          node -> setBooleanOption(node, profile::setTargetOptimization, "specific", "compatible"));
         map.put("unsafe-case-optimization",     node -> setBooleanOption(node, profile::setUnsafeCaseOptimization));
 
         for (Optimization optimization : Optimization.LIST) {

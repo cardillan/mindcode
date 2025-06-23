@@ -498,4 +498,24 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                 createInstruction(PRINT, "20")
         );
     }
+
+    @Test
+    void optimizesBuiltinConstants() {
+        assertCompilesTo("""
+                        print(2 * @pi);
+                        """,
+                createInstruction(PRINT, "6.2831854820251465")
+        );
+    }
+
+    @Test
+    void preservesBuiltinConstants() {
+        assertCompilesTo("""
+                        #set builtin-evaluation = none;
+                        print(2 * @pi);
+                        """,
+                createInstruction(OP, "mul", tmp(0), "2", "@pi"),
+                createInstruction(PRINT, tmp(0))
+        );
+    }
 }

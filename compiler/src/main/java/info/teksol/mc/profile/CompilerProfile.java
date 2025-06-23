@@ -63,7 +63,7 @@ public class CompilerProfile {
     private boolean printStackTrace = false;
     private boolean outputProfiling = false;
     private Remarks remarks = Remarks.PASSIVE;
-    private boolean targetOptimization = false;
+    private BuiltinEvaluation builtinEvaluation = BuiltinEvaluation.COMPATIBLE;
     private boolean targetGuard = false;
     private boolean unsafeCaseOptimization = false;
     private boolean shortCircuitEval = false;
@@ -469,12 +469,12 @@ public class CompilerProfile {
         return this;
     }
 
-    public boolean isTargetOptimization() {
-        return targetOptimization;
+    public BuiltinEvaluation getBuiltinEvaluation() {
+        return builtinEvaluation;
     }
 
-    public CompilerProfile setTargetOptimization(boolean targetOptimization) {
-        this.targetOptimization = targetOptimization;
+    public CompilerProfile setBuiltinEvaluation(BuiltinEvaluation builtinEvaluation) {
+        this.builtinEvaluation = builtinEvaluation;
         return this;
     }
 

@@ -67,20 +67,19 @@ abstract class ActionHandler {
                 .choices(new CaseInsensitiveChoices(ProcessorVersion.getPossibleVersions()));
 
         createArgument(container, defaults,
+                CompilerProfile::getBuiltinEvaluation,
+                (profile, arguments, name) -> profile.setBuiltinEvaluation(arguments.get(name)),
+                "--builtin-evaluation")
+                .help("sets the level of compile-time evaluation of numeric builtin constants")
+                .type(LowerCaseEnumArgumentType.forEnum(BuiltinEvaluation.class));
+
+        createArgument(container, defaults,
                 CompilerProfile::isTargetGuard,
                 (profile, arguments, name) -> profile.setTargetGuard(arguments.getBoolean(name)),
                 "--target-guard")
                 .help("generates guard code at the beginning of the program ensuring the processor runs in the " +
-                        "Mindustry version compatible with the 'target' and 'target-optimization' options")
+                        "Mindustry version compatible with the 'target' and 'builtin-evaluation' options")
                 .type(Arguments.booleanType());
-
-        createArgument(container, defaults,
-                CompilerProfile::isTargetOptimization,
-                (profile, arguments, name) -> profile.setTargetOptimization(arguments.getBoolean(name)),
-                "--target-optimization")
-                .help("'specific' produces code guaranteed to run on the processor of the chosen target version only, " +
-                        "'compatible' produces code compatible with current target and future versions of Mindustry Logic")
-                .type(Arguments.booleanType("specific", "compatible"));
 
         createArgument(container, defaults,
                 CompilerProfile::getSyntacticMode,

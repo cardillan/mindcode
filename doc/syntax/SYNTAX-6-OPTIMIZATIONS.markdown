@@ -180,16 +180,16 @@ Some mlog operations are produced by different Mindcode operators. When the opti
 > [!IMPORTANT]
 > Some optimizations applied to `or`, `and`, `land`, `xor`, `shl` and `shr` operations applied to non-integer or non-boolean values may produce different results from unoptimized code: unoptimized code would result into an integer value (or boolean value in case of `land`), while the optimized code may produce a non-integer value. Passing a non-integer/non-boolean value into these operators is unusual, but not impossible. These optimizations are therefore only performed on `advanced` level and can be turned off by setting the level to `basic`.
 
-If the optimization level is `advanced`, the following additional expressions are handled:
+When the `builtin-evaluation` option is set to `compatible` or `full`, the following additional expressions are handled:
 
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
 * If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block, or unit with given ID and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block, or unit literal.
 
-Some Mindustry objects may have different logic IDs in different Mindustry versions. For these objects, the above optimizations only happen when the [`target-optimization` option](SYNTAX-5-OTHER.markdown#option-target-optimization) is set to `specific`:
+Some Mindustry objects may have different logic IDs in different Mindustry versions. For these objects, the above optimizations only happen when the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `full`:
 
 ```Mindcode
 #set target = 7;
-#set target-optimization = specific;
+#set builtin-evaluation = full;
 println(lookup(:item, 18));
 println(@tungsten.@id);
 printflush(message1);
@@ -202,7 +202,7 @@ print "dormant-cyst\n19\n"
 printflush message1
 ```
 
-When compiled with `target-optimization` set to `compatible`, the code is 
+When compiled with `builtin-evaluation` set to `compatible`, the code is 
 
 ```mlog
 lookup item *tmp0 18
@@ -1167,11 +1167,12 @@ When all `when` branches in the case expression contain built-in constants repre
 
 The following preconditions need to be met to apply content conversion:
 
-* All values in `when` branches must be either `null`, or built-in variables referencing Mindustry content of the same type (items, building types and so on).
-* Values used in `when` clauses must be unique.
-* The logic ID must be known to Mindcode for all `when` values. 
-* All logic IDs must be stable, or `target-optimization` mode must be set to `specific`.
-* The optimization level must be set to `advanced`.
+* The optimization level is set to `advanced`.
+* The `builtin-evaluation` option is set to `compatible` or `full`.
+* All values in `when` branches are either `null`, or built-in variables referencing Mindustry content of the same type (items, building types and so on).
+* Values used in `when` clauses are unique.
+* The logic ID is known to Mindcode for all `when` values. 
+* All logic IDs are stable, or `builtin-evaluation` mode is set to `full`.
 
 > [!NOTE]
 > When `unsafe-case-optimization` is set to `true` and there's no `else` branch, the optimizer creates a jump table omitting the out-of-range checks. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g., item selected in a sorter), keep in mind the value obtained this way might be `null`.  
@@ -1179,7 +1180,7 @@ The following preconditions need to be met to apply content conversion:
 The range check is also partially or fully removed when the following conditions are met:
 
 * There is a `when` branch corresponding to the Mindustry content with a zero ID: in this case, Mindcode knows the minimum possible numerical value of the ID (that is, zero) is handled by the case expression and doesn't check for IDs less than zero.
-* There is a `when` branch corresponding to the Mindustry content with a maximum ID, and `target-optimization` is set to `specific`: in this case, Mindcode knows the maximum possible numerical value of the ID is handled by the case expression and doesn't check for IDs greater than the maximum value.
+* There is a `when` branch corresponding to the Mindustry content with a maximum ID, and `builtin-evaluation` is set to `full`: in this case, Mindcode knows the maximum possible numerical value of the ID is handled by the case expression and doesn't check for IDs greater than the maximum value.
 
 #### Null values
 
@@ -1211,7 +1212,7 @@ When the jump table starts at zero value, it is possible to generate a faster co
 * When the Mindustry content conversion is applied, the optimizer knows the logic IDs cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
 * When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation handling the non-zero offset can be omitted.
 
-Similarly, when the Mindustry content conversion is applied, the `target-optimization` option is set to `specific` and the jump table ends at the largest ID of the respective Mindustry content, a jump instruction handling values larger than the end of the table can be omitted, as the optimizer knows no larger values may occur. 
+Similarly, when the Mindustry content conversion is applied, the `builtin-evaluation` option is set to `full` and the jump table ends at the largest ID of the respective Mindustry content, a jump instruction handling values larger than the end of the table can be omitted, as the optimizer knows no larger values may occur. 
 
 When the jump table doesn't start or end at these values naturally, Mindcode may pad the table at either end with additional jumps to the `else` branch. The optimizer considers the possibility of padding the table at the low end, high end, or both, and chooses the option that gives the best performance given the instruction space limit.
 
@@ -1230,7 +1231,7 @@ The sample has been artificially constructed to demonstrate the above effects.
 
 ```Mindcode
 #set target = 7;
-#set target-optimization = specific;
+#set builtin-evaluation = full;
 #set symbolic-labels = true;
 #set instruction-limit = 150;
 #set case-optimization-strength = 4;

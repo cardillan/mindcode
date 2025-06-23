@@ -11,6 +11,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -98,10 +99,12 @@ class MindustryMetadataTest {
                 .collect(Collectors.toMap(MindustryContent::name, Function.identity()));
     }
 
+    private static final Set<String> UNSTABLE_COUNTS = Set.of("@itemCount", "@liquidCount", "@unitCount", "@buildCount");
+
     private Map<String, LVar> createLVarList(Map<String, LVar> content) {
         return content.values().stream()
                 .filter(LVar::isNumericConstant)
-                .filter(c -> !c.name().endsWith("Count"))
+                .filter(c -> !UNSTABLE_COUNTS.contains(c.name()))
                 .collect(Collectors.toMap(MindustryContent::name, Function.identity()));
     }
 }

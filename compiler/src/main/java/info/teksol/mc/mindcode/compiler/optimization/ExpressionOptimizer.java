@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -55,11 +56,11 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processLookupInstruction(LogicIterator logicIterator, LookupInstruction ix) {
-        if (advanced() && ix.getIndex().isNumericConstant() && ix.getIndex().isInteger()) {
+        if (getProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE && ix.getIndex().isNumericConstant() && ix.getIndex().isInteger()) {
             Map<Integer, ? extends MindustryContent> lookupMap = metadata.getLookupMap(ix.getType().getKeyword());
             if (lookupMap != null) {
                 MindustryContent object = lookupMap.get(ix.getIndex().getIntValue());
-                if (object != null && !object.legacy() && (getProfile().isTargetOptimization() || metadata.isStableBuiltin(object.name()))) {
+                if (object != null && !object.legacy() && (getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(object.name()))) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object, false)));
                 }
             }
@@ -263,9 +264,9 @@ class ExpressionOptimizer extends BaseOptimizer {
                 } else if (property.equals(LogicBuiltIn.Y)) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.THIS_Y));
                 }
-            } else if (advanced() && property.equals(LogicBuiltIn.ID) && object.getObject() != null
-                    && object.getObject().logicId() != -1 && !object.getObject().legacy()) {
-                if (getProfile().isTargetOptimization() || metadata.isStableBuiltin(object.getObject().name())) {
+            } else if (getProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE && property.equals(LogicBuiltIn.ID)
+                    && object.getObject() != null && object.getObject().logicId() != -1 && !object.getObject().legacy()) {
+                if (getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(object.getObject().name())) {
                     logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
                             LogicNumber.create(ix.sourcePosition(), object.getObject().logicId())));
                 }
