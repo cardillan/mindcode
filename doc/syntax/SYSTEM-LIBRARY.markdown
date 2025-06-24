@@ -182,7 +182,7 @@ To use the Compatibility library, use the `require compatibility;` statement.
 
 This function runs the compatibility test on a Mindustry Logic processor. The compatibility test verifies that the
 compiler's metadata corresponding to the current target are identical to the actual data in the Mindustry processor.
-The test needs to be run on a logic processor (a microprocessor can also be used, but it takes a bit longer to finish
+The test needs to be run on a logic processor (a microprocessor can also be used, but it takes a few seconds to finish
 the test) with a message block linked as `message1`. The result of the test is output on the message block.
 
 The function never returns: when the test finishes, the processor loops indefinitely. This test isn't meant to be

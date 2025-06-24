@@ -1388,7 +1388,7 @@ An additional benefit is that, upon closer inspection, the expected range of the
 
 Some built-in variables represent a constant numerical value, such as `@pi` or `@blockCount`. The actual numerical value is either _stable_, meaning it is the same in all released versions of Mindustry (e.g., `@pi`) since the first one in which it appeared, or _unstable_, meaning the value depends on the actual version of Mindustry used (e.g., `@blockCount`).
 
-When `builtin-evaluation` option is set to `compatible` (which is the default value), Mindcode evaluates expressions involving stable numerical built-in variables at compile time, including string conversion for printing. However, when the original value is not affected by expression evaluation, it is written using the symbolic name into mlog:
+When the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `compatible` (which is the default value), Mindcode evaluates expressions involving stable numerical built-in variables at compile time, including string conversion for printing. However, when the original value is not affected by expression evaluation, it is written using the symbolic name into mlog:
 
 ```Mindcode
 print(@pi);         // No evaluation
@@ -1410,9 +1410,9 @@ print "3.1415927410125732\n"
 printflush message3
 ```
 
-The unstable built-in variables are compile-time evaluated when the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `full`. This setting is useful when the program is meant to be only run in the version of Mindustry selected by the `target` option, and not on later versions.
+The unstable built-in variables are compile-time evaluated when the `builtin-evaluation` option is set to `full`. This setting is useful when the program is meant to be only run in the version of Mindustry selected by the `target` option, and not on later versions.
 
-All other built-in constants and variables (that is, those that aren't numerical constants) are compiled into mlog code as is, although Mindcode emits a warning when an unknown built-in variable is encountered as protection against mistyped identifiers. However, contents unknown to Mindcode (provided by a mod, for example) can be directly used in Mindcode programs if you ignore the warning, or declared using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-built-in-variables) to eliminate the warning.
+All other built-in constants and variables (that is, those that aren't numerical constants) are compiled into mlog code as is, although Mindcode emits a warning when an unknown built-in variable is encountered as protection against mistyped identifiers. Valid built-in variables unknown to Mindcode (provided by a mod, for example) can be declared using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-built-in-variables) to eliminate the warning.
 
 > [!TIP]
 > Assignments to built-in variables aren't supported. As far as we know, there exists only one built-in variable that can be assigned a new value: `@counter`. Allowing direct assignments to it would make Mindcode unsafe.       

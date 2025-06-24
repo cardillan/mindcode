@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.7.0 - Unreleased
+## 3.7.0 - 2025-06-24
 
 ### Fixed
 
@@ -16,19 +16,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for the new `setmarker outline` instruction.
 * Added the new `@operations` property.
 * Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both the `target` and `builtin-evaluation` options.
-* Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#compatibility-library). The library provides function for verifying Mindcode's compatibility with the Mindustry version in which it is run.   
+* Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#compatibility-library). The library provides a function that verifies Mindcode's compatibility with the Mindustry version in which it is run.   
 
 ### Changed
 
 * **Breaking:** the `target-optimization` compiler option has been replaced with the [`builtin-evaluation` option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-builtin-evaluation). Instead of `#set target-optimization = specific;` use `#set builtin-evaluation = full;`.
-* Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching)
-  * The optimization now processes integer case expression with ranges too. Ranges must not overlap other ranges or standalone values. 
-  * The optimization now uses bisection search to locate the proper segment when performing Jump Table compression, providing up to 15% speedup in some scenarios.
+* Improvements to the [Case Switching optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
+  * The optimization now processes integer case expression with ranges too if ranges do not overlap other ranges or standalone values. 
+  * The optimization now uses bisection search to locate the proper segment when performing [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression).
   * The jump table can be padded not just towards zero, but also towards the maximum value, to remove the need for the range check. Requires `builtin-evaluation` to be set to `full`. 
-  * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time. The value of `0` doesn't consider any other configuration except a full jump table, effectively turning off [Jump Table Compression](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression).
-  * When compressing jump tables, the optimizer also generates segment configuration for a full bisection search. This may improve case expressions too small for a full jump table optimization.
+  * The `case-optimization-strength` option now has a range from `0` to `6`. Each additional value significantly increases the number of segment arrangements considered, as well as optimization time. The value of `0` doesn't consider any other configuration except a full jump table, effectively turning Jump Table compression off.
+  * When `case-optimization-strength` is greater than zero, the optimizer also generates segment configuration for a full bisection search. This may improve case expressions which are too small for a full jump table optimization.
   * The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps.
-  * On `experimental` optimization level, the bodies of `when` branches may be duplicated to avoid even more jumps at the cost of additional code size increase. This optimization usually only kicks in for small branch bodies, since for larger code increases, a better performing solution can be achieved by a different segment arrangement. 
+  * On the `experimental` optimization level, the bodies of `when` branches may be duplicated to avoid even more jumps at the cost of additional code size increase. This optimization usually only kicks in with jump table compression for small branch bodies, since for larger code increases, a better performing solution can be achieved by a different segment arrangement. 
   * The performance of the Case Switching optimization (in terms of compilation time) has been significantly improved.  
 * Small improvements to the `printExactHex` and `printExactFast` functions in the `printing` library.
 

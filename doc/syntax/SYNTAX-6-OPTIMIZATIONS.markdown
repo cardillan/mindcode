@@ -1,10 +1,10 @@
 # Dynamic optimizations
 
-Most of the optimizations Mindcode performs are fairly simple: they're relatively small changes to the code that are known to improve the code size, the (average) execution time, or both, while also not making either of these two metrics worse. We call these optimizations _static optimizations_. A few of the optimizers are capable of more complex optimizations that may increase the code size to achieve a better performance or sacrifice some performance to decrease code size. These optimizations are called _dynamic optimizations_.
+Most of the optimizations Mindcode performs are fairly simple: they're relatively small changes to the code that are known to improve the code size, the (average) execution time, or both, while also not making either of these two metrics worse. We call these optimizations _static optimizations_. A few of the optimizers are capable of performing more complex optimizations that may increase the code size to achieve a better performance or sacrifice some performance to decrease code size. These optimizations are called _dynamic optimizations_.
 
 Mindcode provides the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) to specify which dynamic optimizations to apply:
 
-* `speed` (the default value): Mindcode applies dynamic optimizations that make the resulting code larger, but faster, while adhering to the 1000-instruction limit. When several possible optimizations of this kind are available, the ones having the best effect (the highest speedup per additional instruction generated) are selected until the instruction limit is reached.
+* `speed` (the default value): Mindcode applies dynamic optimizations that make the resulting code larger, but faster, while adhering to the current [instruction limit](SYNTAX-5-OTHER.markdown#option-instruction-limit). When several possible optimizations of this kind are available, the ones having the best effect (the highest speedup per additional instruction generated) are applied first until the instruction limit is reached.
 * `neutral`: Mindcode applies dynamic optimizations making the code either smaller or faster (or both) than the original code.
 * `size`: Mindcode applies dynamic optimizations leading to the smallest code possible, even at the expense of execution speed.
 
@@ -21,7 +21,7 @@ To decide which dynamic optimizations to apply given the optimization goal, thre
 
 ## Optimization benefit
 
-It's quite obvious that calculating the benefit is a key part of the optimization evaluation. Increasing or decreasing the execution speed of code which gets executed a lot provides more benefit or drawback than similar change to a code that is executed just once. Mindcode therefore assigns each instruction a _weight_, a measure of how often the instruction is expected to be executed. In general, it is impossible to compute this number precisely. Mindcode uses a straightforward algorithm to determine instruction weights:
+Calculating the benefit is a key part of the optimization evaluation. Increasing or decreasing the execution speed of code which gets executed a lot provides more benefit or drawback than similar change to a code that is executed just once. Mindcode therefore assigns each instruction a _weight_, a measure of how often the instruction is expected to be executed. In general, it is impossible to compute this number precisely. Mindcode uses a straightforward algorithm to determine instruction weights:
 
 * At the beginning of code generation, the current weight is established:
   * one; for the main program,
@@ -41,7 +41,7 @@ The benefit of an optimization is then computed as the total weight of instructi
 
 When the optimization goal is `speed`, there is a constraint on the total code size (1000 instructions by default). The optimizations are applied in the order of effectiveness until the total code size reaches the constraint, or all optimization opportunities are exhausted.
 
-Some optimizers (e.g., [Case Switching](#case-switching)) can produce several different ways to optimize the same portion of code, of which only one can be selected.  For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated against other possible optimizations, choosing the most effective optimization while respecting the total code size constraint. 
+Some optimizers (e.g., [Case Switching](#case-switching)) can produce several different ways to optimize the same portion of code, of which one needs to be selected. For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated against other possible optimizations, choosing the most effective optimization while respecting the total code size constraint. 
 
 Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further dynamic optimizations. Mindcode is unable to include the effects of these static optimizations when computing dynamic optimization effects, but uses the additional instruction space when applying remaining optimizations.     
 
@@ -51,7 +51,7 @@ Mindcode writes the possible optimizations it considers to the log file. For bet
 
 These two optimization goals do not increase code size and therefore aren't subject to the total code size constraint. In these cases, all possible optimizations are eventually applied. If there's a group of mutually exclusive optimizations, the best one according to the optimization goal is always selected. 
 
-# Code optimization
+# Individual Mindcode optimization
 
 Code optimization runs on compiled (mlog) code. The compiled code is inspected for sequences of instructions which can be removed or replaced by a functionally equivalent, but shorter and/or faster sequence of instructions. The new sequence might even be longer than the original one if it is executing faster (see the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal)).
 
@@ -185,7 +185,7 @@ When the `builtin-evaluation` option is set to `compatible` or `full`, the follo
 * If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
 * If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block, or unit with given ID and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block, or unit literal.
 
-Some Mindustry objects may have different logic IDs in different Mindustry versions. For these objects, the above optimizations only happen when the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `full`:
+Some Mindustry content objects may have different logic IDs in different Mindustry versions (these objects are called "unstable"). For these objects, the above optimizations only happen when the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `full`:
 
 ```Mindcode
 #set target = 7;
@@ -213,8 +213,6 @@ print *tmp1
 print "\n"
 printflush message1
 ```
-
-Mindcode contains a list of known Mindustry objects and their IDs, obtained from the latest Mindustry version. These IDs are expected to be immutable, but the optimization can be turned off by setting the optimization level to `basic` if the actual IDs turn out to be different from the IDs known to Mindcode.   
 
 ## If Expression Optimization
 
@@ -346,7 +344,7 @@ The forward assignment optimization is performed when these conditions are met:
 * the other branch doesn't use the resulting variable anywhere except the last statement,
 * the last statement of the other branch doesn't depend on the resulting variable.
 
-Depending on the type of condition and the branch sizes, either true branch or false branch can get eliminated this way. The average execution time remains the same, although in some cases the number of executed instructions per branch can change by one (the total number of instructions executed by both branches remains the same).
+Depending on the type of condition and the branch sizes, either the true branch or the false branch can get eliminated this way. The average execution time remains the same, although in some cases the number of executed instructions per branch may change by one.
 
 ### Compound condition elimination
 
@@ -419,10 +417,7 @@ print *tmp1
 
 This optimization inspects the actual data flow in the program and removes instructions and variables (both user-defined and temporary) that are dispensable or have no effect on the program execution. Each optimization performed is described separately below.
 
-Data Flow Optimizations can have a profound effect on the resulting code. User-defined variables can get eliminated, and variables in expressions can get replaced by various other variables that were determined to hold the same value. The goal of these replacements is to allow elimination of some instructions. The optimizer doesn't try to avoid variable replacements that do not lead to instruction elimination—this would make the resulting code more understandable, but the optimizer would have to be more complex and therefore more prone to errors.
-
-> [!WARNING]
-> In older versions of Mindcode, global variables were intended for program parametrization. In current version, global variables are fully optimized in a way similar to main or local variables and aren't suitable for program parametrization. [Program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters) need to be used instead.
+Data Flow Optimizations can have a profound effect on the resulting code. User-defined variables can get eliminated, and variables in expressions can get replaced by various other variables that were determined to hold the same value. The goal of these replacements is to eliminate some instructions, making the resulting code both smaller and faster. The optimizer doesn't try to avoid variable replacements that do not lead to instruction elimination—this would make the resulting code more understandable, but the optimizer would have to be more complex and therefore more prone to errors.
 
 ### Handling of uninitialized variables
 
@@ -649,7 +644,7 @@ The backpropagation optimization is available on the `experimental` level.
 
 Variables and expressions passed as arguments to inline functions, as well as return values of inline functions, are processed in the same way as other local variables. Using an inlined function, therefore, doesn't incur any overhead at all in Mindcode.
 
-Data flow analysis, with some restrictions, is also applied to stackless and recursive function calls. Assignments to global variables inside stackless and recursive functions are tracked and properly handled. Optimizations are applied to function arguments and return values.
+The data flow analysis, with some restrictions, is also applied to stackless and recursive function calls. Assignments to global variables inside stackless and recursive functions are tracked and properly handled. Optimizations are applied to function arguments and return values.
 
 ### Support for other optimizations
 
@@ -830,11 +825,11 @@ print "A switch has been reset."
 
 ## Loop Unrolling
 
-Loop unrolling is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Furthermore, loop unrolling depends on the [Data Flow optimization](#data-flow-optimization) and isn't functional when Data Flow Optimization is not active.
+Loop unrolling is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Furthermore, loop unrolling depends on the [Data Flow optimization](#data-flow-optimization) and isn't functional when the Data Flow optimization is not active.
 
 ### The fundamentals of loop unrolling
 
-Loop unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in speedup of program execution, since the jump instruction representing a condition which terminates the loop, and oftentimes also instruction(s) that change the loop control variable value, can be removed from the unrolled loop and only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight"—contain very few instructions apart from the loop itself. The most dramatic practical example is probably something like this (let's see it first without the loop unrolling):
+The Loop Unrolling optimization works by replacing loops whose number of iterations can be determined by the compiler with a linear sequence of instructions. This results in a significant speedup of program execution: the jump instruction representing an exit condition, and oftentimes also the instruction(s) updating the loop control variable, can be removed from the unrolled loop, so that only instructions actually performing the intended work of the loop remain. The optimization is most efficient on loops that are very "tight"—contain very few instructions apart from the loop itself. The most dramatic practical example is probably something like this (let's see it first without the loop unrolling):
 
 ```Mindcode
 #set loop-unrolling = none;
@@ -905,7 +900,7 @@ op add :i :i 1
 ...
 ```
 
-Data Flow Optimization then evaluated all those expressions using the combination of [constant propagation](#constant-propagation) and [constant folding](#constant-folding), all the way into the final sum of `5050`, which is then directly printed.
+Data Flow Optimization then evaluated all those expressions using the combination of [constant propagation](#constant-propagation) and [constant folding](#constant-folding), all the way to the final sum of `5050`, which is then directly printed.
 
 ### Loop unrolling preconditions
 
@@ -1089,16 +1084,15 @@ Function Inlining is a [dynamic optimization](#dynamic-optimizations) and is onl
 
 ### The fundamentals of function inlining
 
-Function inlining converts out-of-line function calls into inline function calls. This conversion alone saves a few instructions: storing the return address, jumping to the function body, and jumping back at the original address. However, many additional optimizations might be available once a function is inlined, especially if the inlined 
-function call is using constant argument values. In such a situation, many other powerful optimizations, such as constant folding or loop unrolling, may become available.
+Function inlining converts out-of-line function calls into inline function calls. This conversion alone saves a few execution steps: storing the return address, jumping to the function body, and jumping back at the original address. However, additional optimizations might be available once a function is inlined, especially if the inlined function call is using constant argument values. In such a situation, many other powerful optimizations, such as constant folding or loop unrolling, may become available.
 
-User-defined, non-recursive function which is called just once in the entire program, is automatically inlined, and this cannot be prevented: such code is always both faster and smaller. It is also possible to declare individual functions using the `inline` keyword, forcing all calls of such functions to be inlined.
+User-defined, non-recursive function which is called just once in the entire program, is automatically inlined, and this cannot be prevented except by the `noinline` keyword: such code is always both faster and smaller. It is also possible to declare individual functions using the `inline` keyword, forcing all calls of such functions to be inlined.
 
 ### Automatic function inlining
 
-This optimization can inline additional functions that aren't recursive and also aren't declared `inline` in the source code. If there's enough instruction space, all function calls may be inlined and the original function body removed from the program. 
+This optimization can inline additional functions that aren't recursive and also aren't declared `inline` or `noinline` in the source code. If there's enough instruction space, all function calls may be inlined and the original function body removed from the program. 
 
-When there isn't enough instruction space, only a single one or several specific function calls may be inlined; in such a case, the original function body remains in the program and is used by the function calls that weren't inlined. If there are only the last two function calls remaining, either both of them or none of them will be inlined.    
+When there isn't enough instruction space, only a single one or several specific function calls may be inlined; in this case, the original function body remains in the program and is used by the function calls that weren't inlined. If there are only the last two function calls remaining, either both of them or none of them will be inlined.    
 
 It is therefore no longer necessary to use the `inline` keyword, except in cases when Mindcode's automatic inlining chooses function different from the one(s) you prefer to be inlined, or when using functions with variable number of parameters.  
 
@@ -1333,7 +1327,7 @@ Inlining a jump table in a general case reduces the number of steps required per
 
 This optimization is performed for arrays of up to three elements.
 
-Short array optimizations cause out-of-bounds indexes to always resolve to one of the elements (the last one). Using an out-of-bounds index can't derail the program execution. Nevertheless, runtime checks still get generated when prescribed by a compiler directive.
+Short array optimizations cause out-of-bounds indexes to always resolve to the last element. Using an out-of-bounds index can't derail the program execution. Nevertheless, runtime checks still get generated when prescribed by a compiler directive.
 
 #### Arrays of length 1
 
@@ -1348,7 +1342,7 @@ For arrays of length 2, the optimization effectively replaces the jump table wit
 * `a[x] = b;` gets converted to `if x == 0 then a[0] = b; else a[1] = b; end;`.
 * `b = a[x]` gets converted to  `if x == 0 then b = a[0]; else b = a[1]; end;`.
 
-For arrays of length 3, the optimization is analogous:
+For arrays of length 3, the optimization can be described like this:
 
 * `a[x] = b;` gets converted to `if x == 0 then a[0] = b; elsif x == 1 then a[1] = b; else a[2] = b end;`.
 * `b = a[x]` gets converted to  `if x == 0 then b = a[0]; elsif x == 1 then b = a[1]; else b = a[2] end;`.
