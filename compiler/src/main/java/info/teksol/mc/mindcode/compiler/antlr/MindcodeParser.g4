@@ -29,6 +29,54 @@ identifierList
     : (IDENTIFIER COMMA)* IDENTIFIER
     ;
 
+// MLOG BLOCKS
+
+// mlogSeparators is a sequence of newlines or semicolons
+// We can have any number of separators at the beginning of an mlog block
+// Followed by a statement list
+// The last statement doesn't need a separator after
+mlogBlock
+    : mlogSeparators? (mlogStatement mlogSeparators)* mlogStatement? MLOGWHITESPACE*
+    ;
+
+mlogSeparators
+    : MLOGWHITESPACE* (MLOGSEPARATOR MLOGWHITESPACE*)+
+    ;
+
+mlogStatement
+    : label = MLOGLABEL                                                                 # astMlogLabel
+    | mlogInstruction                                                                   # astMlogInstruction
+    | mlogInstruction (whitespace=MLOGWHITESPACE)? comment=MLOGCOMMENT                  # astMlogInstructionWithComment
+    | comment=MLOGCOMMENT                                                               # astMlogComment
+    ;
+
+mlogInstruction
+    : opcode = MLOGTOKEN (MLOGWHITESPACE+ tokes = mlogTokenOrLiteral)*
+    ;
+
+mlogTokenOrLiteral
+    : MLOGTOKEN                                                                         # astMlogToken
+    | MLOGBUILTIN                                                                       # astMlogBuiltin
+    | MLOGSTRING                                                                        # astMlogString
+    | MLOGCOLOR                                                                         # astMlogColor
+    | MLOGNAMEDCOLOR                                                                    # astMlogNamedColor
+    | MLOGBINARY                                                                        # astMlogBinary
+    | MLOGHEXADECIMAL                                                                   # astMlogHexadecimal
+    | MLOGDECIMAL                                                                       # astMlogDecimal
+    | MLOGFLOAT                                                                         # astMlogFloat
+    | MLOGCHAR                                                                          # astMlogChar
+    ;
+
+mlogVariableList
+    : LPAREN RPAREN
+    | LPAREN (mlogVariable COMMA)* mlogVariable RPAREN
+    ;
+
+mlogVariable
+    : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER varargs = DOT3?
+    | modifier_out = OUT modifier_in = IN    name = IDENTIFIER varargs = DOT3?
+    ;
+
 // A statement is an expression, which provides a value, or an executable statement, which is executable, but doesn't
 // provide a value, or a declaration. Using a statement/declaration where an expression is expected is an error,
 // recognized by the grammar.
@@ -62,6 +110,8 @@ statement
     | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
     | RETURN value = expression?                                                        # astReturnStatement
     | BEGIN exp = astStatementList? END                                                 # astCodeBlock
+    | MLOG (variables = mlogVariableList)? LBRACE mlogBlock                             # astMlogBlock
+                // No RBRACE: RBRACE is converted to semicolon to serve as statement separator
     ;
 
 // For use with iterated for loops to unambiguosly distinguish between declaration and expression list
@@ -134,7 +184,7 @@ expression
     : lvalue                                                                            # expLvalue
     | KEYWORD                                                                           # astKeyword
     | END LPAREN RPAREN                                                                 # astFunctionCallEnd
-    | function = IDENTIFIER args = argumentList                                         # astFunctionCall
+    | function = (IDENTIFIER | MLOG) args = argumentList                                # astFunctionCall
     | object = expression DOT function = IDENTIFIER args = argumentList                 # astMethodCall
     | object = expression DOT member = IDENTIFIER                                       # astMemberAccess
     | object = expression DOT property = BUILTINIDENTIFIER                              # astPropertyAccess

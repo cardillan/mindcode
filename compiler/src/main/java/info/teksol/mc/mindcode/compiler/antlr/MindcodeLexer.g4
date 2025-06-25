@@ -25,6 +25,7 @@ lexer grammar MindcodeLexer;
 @members {
     boolean newLines = true;
     boolean inFormat = false;
+    boolean inMlogBlock = false;
 }
 
 // Keywords
@@ -54,6 +55,7 @@ INLINE                  : 'inline' ;
 LINKED                  : 'linked' ;
 LOOP                    : 'loop' ;
 MODULE                  : 'module' ;
+MLOG                    : 'mlog' ;
 NOINIT                  : 'noinit' ;
 NOINLINE                : 'noinline' ;
 NULL                    : 'null' ;
@@ -99,7 +101,7 @@ USHIFT_RIGHT            : '>>>' ;
 
 // Opening/closing symbols
 // Braces - '{', '}' - aren't defined here
-// They only appear as part of interpolated strings and are handled specially there
+// They only appear as part of interpolated strings/mlog blocks and are handled specially there
 LPAREN                  : '(' ;
 RPAREN                  : ')' ;
 LBRACKET                : '[' ;
@@ -182,7 +184,12 @@ FLOAT                   : DecDigit+ DecExponent
 // A single character. Converted to its ASCII value
 CHAR                    : '\'' ~[\r\n'] '\''
                         | '\'\\\'\''
+                        | '\'\\n\''
                         ;
+
+// Mlog blocks
+//LBRACE                  : {!inMlogBlock}? '{' {inMlogBlock = true; newLines=false;} -> pushMode(InMlogBlock);
+LBRACE                  : '{' {inMlogBlock = true; newLines=false;} -> pushMode(InMlogBlock);
 
 // Directives
 HASHDECLARE             : '#declare';
@@ -209,6 +216,44 @@ WHITESPACE              : [ \t]+                    -> skip;
 UNKNOWN_CHAR : . ;
 
 // MODES
+
+mode InMlogBlock;
+
+//MLOGCLOSE               : {inMlogBlock}? '}' {inMlogBlock=false; newLines=true;} -> type(SEMICOLON), popMode ;
+MLOGCLOSE               : '}' {inMlogBlock=false; newLines=true;} -> type(SEMICOLON), popMode ;
+
+MLOGCOMMENT             : '#'  ~[\r\n]* ;
+MLOGSILENTCOMMENT       : '//' ~[\r\n]* -> skip ;
+
+fragment PlusOrMinus    : [+-] ;
+
+// Literals - need to be defined again in mlog mode
+// We also need the plus and minus signs explicitly here
+MLOGSTRING              : '"' ~[\r\n"]* '"' ;
+MLOGCOLOR               : '%'  HexDigit+ ;
+MLOGNAMEDCOLOR          : '%[' Letter+ ']';
+MLOGBINARY              : PlusOrMinus? '0b' BinDigit+ ;
+MLOGHEXADECIMAL         : PlusOrMinus? '0x' HexDigit+ ;
+MLOGDECIMAL             : PlusOrMinus? DecDigit+ ;
+MLOGFLOAT               : PlusOrMinus? DecDigit+ DecExponent
+                        | PlusOrMinus? DecDigit* DOT DecDigit+ DecExponent?
+                        ;
+MLOGCHAR                : '\'' ~[\r\n'] '\''
+                        | '\'\\\'\''
+                        | '\'\\n\''
+                        ;
+MLOGBUILTIN             : AT Letter
+                        | AT Letter LetterDigitDash* LetterOrDigit ;
+
+MLOGLABEL               : Letter LetterOrDigit* ':' ;
+MLOGTOKEN               : ':' ~["#; \t\r\n] ~[#; \t\r\n]*
+                        | ~["'#; \t\r\n]* ~["'#;} \t\r\n]
+                        ;
+
+MLOGSEPARATOR           : [;\n\r]+ ;
+MLOGWHITESPACE          : [ \t]+;
+
+MLOG_UNKNOWN_CHAR       : . ;
 
 mode InDirective;
 

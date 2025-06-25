@@ -48,6 +48,224 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitIdentifierList(MindcodeParser.IdentifierListContext ctx);
 	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#mlogBlock}.
+	 * @param ctx the parse tree
+	 */
+	void enterMlogBlock(MindcodeParser.MlogBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#mlogBlock}.
+	 * @param ctx the parse tree
+	 */
+	void exitMlogBlock(MindcodeParser.MlogBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#mlogSeparators}.
+	 * @param ctx the parse tree
+	 */
+	void enterMlogSeparators(MindcodeParser.MlogSeparatorsContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#mlogSeparators}.
+	 * @param ctx the parse tree
+	 */
+	void exitMlogSeparators(MindcodeParser.MlogSeparatorsContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogLabel}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogLabel(MindcodeParser.AstMlogLabelContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogLabel}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogLabel(MindcodeParser.AstMlogLabelContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogInstruction}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogInstruction(MindcodeParser.AstMlogInstructionContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogInstruction}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogInstruction(MindcodeParser.AstMlogInstructionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogInstructionWithComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogInstructionWithComment(MindcodeParser.AstMlogInstructionWithCommentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogInstructionWithComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogInstructionWithComment(MindcodeParser.AstMlogInstructionWithCommentContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogComment(MindcodeParser.AstMlogCommentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogComment(MindcodeParser.AstMlogCommentContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#mlogInstruction}.
+	 * @param ctx the parse tree
+	 */
+	void enterMlogInstruction(MindcodeParser.MlogInstructionContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#mlogInstruction}.
+	 * @param ctx the parse tree
+	 */
+	void exitMlogInstruction(MindcodeParser.MlogInstructionContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogToken}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogToken(MindcodeParser.AstMlogTokenContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogToken}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogToken(MindcodeParser.AstMlogTokenContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogBuiltin}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogBuiltin(MindcodeParser.AstMlogBuiltinContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogBuiltin}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogBuiltin(MindcodeParser.AstMlogBuiltinContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogString}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogString(MindcodeParser.AstMlogStringContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogString}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogString(MindcodeParser.AstMlogStringContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogColor}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogColor(MindcodeParser.AstMlogColorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogColor}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogColor(MindcodeParser.AstMlogColorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogNamedColor}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogNamedColor(MindcodeParser.AstMlogNamedColorContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogNamedColor}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogNamedColor(MindcodeParser.AstMlogNamedColorContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogBinary}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogBinary(MindcodeParser.AstMlogBinaryContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogBinary}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogBinary(MindcodeParser.AstMlogBinaryContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogHexadecimal}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogHexadecimal(MindcodeParser.AstMlogHexadecimalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogHexadecimal}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogHexadecimal(MindcodeParser.AstMlogHexadecimalContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogDecimal}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogDecimal(MindcodeParser.AstMlogDecimalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogDecimal}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogDecimal(MindcodeParser.AstMlogDecimalContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogFloat}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogFloat(MindcodeParser.AstMlogFloatContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogFloat}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogFloat(MindcodeParser.AstMlogFloatContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogChar}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogChar(MindcodeParser.AstMlogCharContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogChar}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogChar(MindcodeParser.AstMlogCharContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#mlogVariableList}.
+	 * @param ctx the parse tree
+	 */
+	void enterMlogVariableList(MindcodeParser.MlogVariableListContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#mlogVariableList}.
+	 * @param ctx the parse tree
+	 */
+	void exitMlogVariableList(MindcodeParser.MlogVariableListContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MindcodeParser#mlogVariable}.
+	 * @param ctx the parse tree
+	 */
+	void enterMlogVariable(MindcodeParser.MlogVariableContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MindcodeParser#mlogVariable}.
+	 * @param ctx the parse tree
+	 */
+	void exitMlogVariable(MindcodeParser.MlogVariableContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
@@ -275,6 +493,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code astMlogBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogBlock(MindcodeParser.AstMlogBlockContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogBlock(MindcodeParser.AstMlogBlockContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MindcodeParser#declarationOrExpressionList}.
 	 * @param ctx the parse tree

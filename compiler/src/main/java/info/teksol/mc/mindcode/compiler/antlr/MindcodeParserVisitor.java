@@ -35,6 +35,134 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitIdentifierList(MindcodeParser.IdentifierListContext ctx);
 	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#mlogBlock}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMlogBlock(MindcodeParser.MlogBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#mlogSeparators}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMlogSeparators(MindcodeParser.MlogSeparatorsContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogLabel}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogLabel(MindcodeParser.AstMlogLabelContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogInstruction}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogInstruction(MindcodeParser.AstMlogInstructionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogInstructionWithComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogInstructionWithComment(MindcodeParser.AstMlogInstructionWithCommentContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogComment(MindcodeParser.AstMlogCommentContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#mlogInstruction}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMlogInstruction(MindcodeParser.MlogInstructionContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogToken}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogToken(MindcodeParser.AstMlogTokenContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogBuiltin}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogBuiltin(MindcodeParser.AstMlogBuiltinContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogString}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogString(MindcodeParser.AstMlogStringContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogColor}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogColor(MindcodeParser.AstMlogColorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogNamedColor}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogNamedColor(MindcodeParser.AstMlogNamedColorContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogBinary}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogBinary(MindcodeParser.AstMlogBinaryContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogHexadecimal}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogHexadecimal(MindcodeParser.AstMlogHexadecimalContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogDecimal}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogDecimal(MindcodeParser.AstMlogDecimalContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogFloat}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogFloat(MindcodeParser.AstMlogFloatContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogChar}
+	 * labeled alternative in {@link MindcodeParser#mlogTokenOrLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogChar(MindcodeParser.AstMlogCharContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#mlogVariableList}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMlogVariableList(MindcodeParser.MlogVariableListContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MindcodeParser#mlogVariable}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitMlogVariable(MindcodeParser.MlogVariableContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.
 	 * @param ctx the parse tree
@@ -167,6 +295,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitAstCodeBlock(MindcodeParser.AstCodeBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code astMlogBlock}
+	 * labeled alternative in {@link MindcodeParser#statement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogBlock(MindcodeParser.AstMlogBlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MindcodeParser#declarationOrExpressionList}.
 	 * @param ctx the parse tree

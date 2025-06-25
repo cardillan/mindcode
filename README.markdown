@@ -48,7 +48,7 @@ The most important recent changes to Mindcode include:
   * Expressions in string interpolation: `print($"Sum: ${a + b}.")`.
   * Support for color literals: `%00ffff80`.
   * Prefix/postfix increment/decrement operators: `i++`, `--j`.
-* Basic functionality
+* Other functionality
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
   * Using Mindustry Logic metadata corresponding to the target selected for compilation.
   * Profiling information for code executed using the built-in processor emulator.

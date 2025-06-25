@@ -723,7 +723,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         String literal = ctx.CHAR().getText();
         return switch (literal.length()) {
             case 3 -> new AstLiteralChar(pos(ctx), literal.charAt(1));
-            case 4 -> new AstLiteralChar(pos(ctx), literal.charAt(2));
+            case 4 -> new AstLiteralChar(pos(ctx), literal.charAt(2) == 'n' ? 10 : literal.charAt(2));
             default -> {
                 context.error(pos(ctx), ERR.LITERAL_INVALID_CHAR_FORMAT);
                 yield new AstLiteralChar(pos(ctx), ' ');

@@ -1009,10 +1009,12 @@ class MindcodeParserTest extends AbstractParserTest {
         @Test
         void parsesOtherLiterals() {
             assertParses("""
+                    '\\n';
                     null;
                     true;
                     false;
                     'A';
+                    '\\'';
                     """);
         }
 
@@ -1066,8 +1068,168 @@ class MindcodeParserTest extends AbstractParserTest {
                             .addRegex(1, 8, "Parse error: .*")
                     ,
                     """
-                            a = '\\n';
+                            a = '\\x';
                             """);
+        }
+    }
+
+    @Nested
+    class MlogBlocks {
+        @Test
+        void parsesEmptyMlogBlock() {
+            assertParses("""
+                    mlog { }
+                    mlog {
+                        //
+                    }
+                    mlog () {;;;}
+                    """);
+        }
+
+        @Test
+        void parsesBlockWithoutWhitespace() {
+            assertParses("mlog{a;a b;c}");
+        }
+
+        @Test
+        void parsesStringLiterals() {
+            assertParses("""
+                    mlog {
+                        print "A string literal"
+                        print ""
+                    }
+                    """);
+        }
+
+        @Test
+        void parsesColorLiterals() {
+            assertParses("""
+                    mlog {
+                        print %abcdef
+                        print %123456
+                        print %ABCDEF00
+                        print %ABCDEF00
+                        print %[red]
+                    }
+                    """);
+        }
+
+        @Test
+        void parsesFloatLiterals() {
+            assertParses("""
+                    mlog {
+                        print 1.0
+                        print 0.0
+                        print .5
+                        print 1e5
+                        print 1e+5
+                        print 1e-5
+                        print 1E10
+                        print 1E+10
+                        print 1E-10
+                        print 2.5E10
+                        print 2.5E+10
+                        print 2.5E-10
+                        print .5E10
+                        print .5E+10
+                        print .5E-10
+
+                        print +1.0
+                        print +0.0
+                        print +.5
+                        print +1e5
+                        print +1e+5
+                        print +1e-5
+                        print +1E10
+                        print +1E+10
+                        print +1E-10
+                        print +2.5E10
+                        print +2.5E+10
+                        print +2.5E-10
+                        print +.5E10
+                        print +.5E+10
+                        print +.5E-10
+
+                        print -1.0
+                        print -0.0
+                        print -.5
+                        print -1e5
+                        print -1e+5
+                        print -1e-5
+                        print -1E10
+                        print -1E+10
+                        print -1E-10
+                        print -2.5E10
+                        print -2.5E+10
+                        print -2.5E-10
+                        print -.5E10
+                        print -.5E+10
+                        print -.5E-10
+                    }
+                    """);
+        }
+
+        @Test
+        void parsesNumericLiterals() {
+            assertParses("""
+                    mlog {
+                        print 0b0011
+                        print 0x0123456789ABCDEF
+                        print 0xfedcba9876543210
+                        print 0
+                        print 01
+                        print 123
+                        print +0b0011
+                        print +0x0123456789ABCDEF
+                        print +0xfedcba9876543210
+                        print +0
+                        print +01
+                        print +123
+                        print -0b0011
+                        print -0x0123456789ABCDEF
+                        print -0xfedcba9876543210
+                        print -0
+                        print -01
+                        print -123
+                    }
+                    """);
+        }
+
+        @Test
+        void parsesOtherLiterals() {
+            assertParses("""
+                    mlog {
+                        print null
+                        print true
+                        print false
+                        print 'A'
+                        print '\\''
+                        print '\\n'
+                    }
+                    """);
+        }
+
+        @Test
+        void refusesQuotesWithinStringLiterals() {
+            assertGeneratesMessageRegex(2, 18, "Parse error: .*",
+                    """
+                            mlog {
+                                print "Hi, \\"friend\\""
+                            }
+                            """);
+        }
+
+        @Test
+        void refusesEmptyCharLiteral() {
+            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
+                    "mlog { printchar '' }");
+        }
+
+        @Test
+        void refusesTooLongCharLiteral() {
+            assertGeneratesMessageRegex(
+                    1, 8, "Parse error: .*",
+                    "mlog { printchar '\\x' }");
         }
     }
 
