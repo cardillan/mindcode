@@ -10,7 +10,7 @@ public class AstLiteralBinary extends AstLiteralNumeric {
 
     public AstLiteralBinary(SourcePosition sourcePosition, String literal, boolean suppressWarning) {
         super(sourcePosition, literal, suppressWarning);
-        if (!literal.startsWith("0b") && !literal.startsWith("-0b")) {
+        if (!literal.startsWith("0b") && !literal.startsWith("-0b") && !literal.startsWith("+0b")) {
             throw new IllegalArgumentException("Binary literal must start with '0b'");
         }
     }

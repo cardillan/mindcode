@@ -230,7 +230,7 @@ fragment PlusOrMinus    : [+-] ;
 // Literals - need to be defined again in mlog mode
 // We also need the plus and minus signs explicitly here
 MLOGSTRING              : '"' ~[\r\n"]* '"' ;
-MLOGCOLOR               : '%'  HexDigit+ ;
+MLOGCOLOR               : '%' HexDigit HexDigit HexDigit HexDigit HexDigit HexDigit ( HexDigit HexDigit )? ;
 MLOGNAMEDCOLOR          : '%[' Letter+ ']';
 MLOGBINARY              : PlusOrMinus? '0b' BinDigit+ ;
 MLOGHEXADECIMAL         : PlusOrMinus? '0x' HexDigit+ ;
@@ -253,7 +253,7 @@ MLOGTOKEN               : ':' ~["#; \t\r\n] ~[#; \t\r\n]*
 MLOGSEPARATOR           : [;\n\r]+ ;
 MLOGWHITESPACE          : [ \t]+;
 
-MLOG_UNKNOWN_CHAR       : . ;
+MLOG_UNKNOWN            : . ;
 
 mode InDirective;
 

@@ -85,6 +85,10 @@ public class AbstractAstBuilderTest extends AbstractTestBase {
         return new AstBuiltInIdentifier(EMPTY, name);
     }
 
+    protected static AstLiteralString str(String str) {
+        return new AstLiteralString(EMPTY, str);
+    }
+
     protected static AstLiteralDecimal number(int number) {
         return new AstLiteralDecimal(EMPTY, String.valueOf(number), false);
     }

@@ -51,30 +51,30 @@ mlogStatement
     ;
 
 mlogInstruction
-    : opcode = MLOGTOKEN (MLOGWHITESPACE+ tokes = mlogTokenOrLiteral)*
+    : opcode = MLOGTOKEN (MLOGWHITESPACE+ mlogTokens = mlogTokenOrLiteral)*
     ;
 
 mlogTokenOrLiteral
-    : MLOGTOKEN                                                                         # astMlogToken
-    | MLOGBUILTIN                                                                       # astMlogBuiltin
-    | MLOGSTRING                                                                        # astMlogString
-    | MLOGCOLOR                                                                         # astMlogColor
-    | MLOGNAMEDCOLOR                                                                    # astMlogNamedColor
-    | MLOGBINARY                                                                        # astMlogBinary
-    | MLOGHEXADECIMAL                                                                   # astMlogHexadecimal
-    | MLOGDECIMAL                                                                       # astMlogDecimal
-    | MLOGFLOAT                                                                         # astMlogFloat
-    | MLOGCHAR                                                                          # astMlogChar
+    : token = MLOGTOKEN                                                                 # astMlogToken
+    | builtin = MLOGBUILTIN                                                             # astMlogBuiltin
+    | literal = MLOGSTRING                                                              # astMlogString
+    | literal = MLOGCOLOR                                                               # astMlogColor
+    | literal = MLOGNAMEDCOLOR                                                          # astMlogNamedColor
+    | literal = MLOGBINARY                                                              # astMlogBinary
+    | literal = MLOGHEXADECIMAL                                                         # astMlogHexadecimal
+    | literal = MLOGDECIMAL                                                             # astMlogDecimal
+    | literal = MLOGFLOAT                                                               # astMlogFloat
+    | literal = MLOGCHAR                                                                # astMlogChar
     ;
 
 mlogVariableList
     : LPAREN RPAREN
-    | LPAREN (mlogVariable COMMA)* mlogVariable RPAREN
+    | LPAREN (astMlogVariable COMMA)* astMlogVariable RPAREN
     ;
 
-mlogVariable
-    : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER varargs = DOT3?
-    | modifier_out = OUT modifier_in = IN    name = IDENTIFIER varargs = DOT3?
+astMlogVariable
+    : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER
+    | modifier_out = OUT modifier_in = IN    name = IDENTIFIER
     ;
 
 // A statement is an expression, which provides a value, or an executable statement, which is executable, but doesn't
@@ -110,7 +110,7 @@ statement
     | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
     | RETURN value = expression?                                                        # astReturnStatement
     | BEGIN exp = astStatementList? END                                                 # astCodeBlock
-    | MLOG (variables = mlogVariableList)? LBRACE mlogBlock                             # astMlogBlock
+    | MLOG (variables = mlogVariableList)? LBRACE block = mlogBlock                     # astMlogBlock
                 // No RBRACE: RBRACE is converted to semicolon to serve as statement separator
     ;
 

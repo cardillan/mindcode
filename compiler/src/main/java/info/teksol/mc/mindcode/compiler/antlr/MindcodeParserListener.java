@@ -256,15 +256,15 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitMlogVariableList(MindcodeParser.MlogVariableListContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MindcodeParser#mlogVariable}.
+	 * Enter a parse tree produced by {@link MindcodeParser#astMlogVariable}.
 	 * @param ctx the parse tree
 	 */
-	void enterMlogVariable(MindcodeParser.MlogVariableContext ctx);
+	void enterAstMlogVariable(MindcodeParser.AstMlogVariableContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MindcodeParser#mlogVariable}.
+	 * Exit a parse tree produced by {@link MindcodeParser#astMlogVariable}.
 	 * @param ctx the parse tree
 	 */
-	void exitMlogVariable(MindcodeParser.MlogVariableContext ctx);
+	void exitAstMlogVariable(MindcodeParser.AstMlogVariableContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.

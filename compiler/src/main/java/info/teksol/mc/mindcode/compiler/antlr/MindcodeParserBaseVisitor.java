@@ -172,7 +172,7 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitMlogVariable(MindcodeParser.MlogVariableContext ctx) { return visitChildren(ctx); }
+	@Override public T visitAstMlogVariable(MindcodeParser.AstMlogVariableContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

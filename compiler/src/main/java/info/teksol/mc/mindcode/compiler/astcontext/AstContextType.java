@@ -8,6 +8,7 @@ public enum AstContextType {
     ROOT            ("ROOT"),
     INIT            ("INIT"),
     BODY            ("BODY"),
+    MLOG            ("MLOG"),
     FUNCTION        ("FNDF"),
     CALL            ("CALL", true),
     RETURN          ("RETN", true),

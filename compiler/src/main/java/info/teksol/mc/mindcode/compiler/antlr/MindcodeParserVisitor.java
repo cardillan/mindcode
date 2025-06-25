@@ -157,11 +157,11 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitMlogVariableList(MindcodeParser.MlogVariableListContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MindcodeParser#mlogVariable}.
+	 * Visit a parse tree produced by {@link MindcodeParser#astMlogVariable}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitMlogVariable(MindcodeParser.MlogVariableContext ctx);
+	T visitAstMlogVariable(MindcodeParser.AstMlogVariableContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code astExpression}
 	 * labeled alternative in {@link MindcodeParser#statement}.

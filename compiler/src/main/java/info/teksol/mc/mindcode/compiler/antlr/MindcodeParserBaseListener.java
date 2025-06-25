@@ -281,13 +281,13 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterMlogVariable(MindcodeParser.MlogVariableContext ctx) { }
+	@Override public void enterAstMlogVariable(MindcodeParser.AstMlogVariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitMlogVariable(MindcodeParser.MlogVariableContext ctx) { }
+	@Override public void exitAstMlogVariable(MindcodeParser.AstMlogVariableContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

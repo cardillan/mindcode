@@ -1958,6 +1958,146 @@ class AstBuilderTest extends AbstractAstBuilderTest {
     }
 
     @Nested
+    class MlogBlocks {
+        private AstMlogToken t(String token) {
+            return new AstMlogToken(EMPTY, token);
+        }
+
+        private AstMlogInstruction ix(String opcode, AstExpression... arguments) {
+            return new AstMlogInstruction(EMPTY, t(opcode), List.of(arguments));
+        }
+
+        private AstMlogStatement stmt(String opcode, AstExpression... arguments) {
+            return new AstMlogStatement(EMPTY, null, ix(opcode, arguments), null);
+        }
+
+        @Test
+        void buildsMlogBlock() {
+            assertBuildsTo("""
+                            mlog (in foo) {
+                                label:
+                                print foo
+                                print bar # not a variable
+                                # single line comment
+                            }
+                            """,
+                    List.of(
+                            new AstMlogBlock(EMPTY,
+                                    List.of(new AstMlogVariable(EMPTY, id("foo"), true, false)),
+                                    List.of(
+                                            new AstMlogStatement(EMPTY, id("label:"), null, null),
+                                            new AstMlogStatement(EMPTY, null,
+                                                    ix("print", t("foo")), null),
+                                            new AstMlogStatement(EMPTY, null,
+                                                    ix("print", t("bar")),
+                                                    new AstMlogComment(EMPTY, " ", "# not a variable")),
+                                            new AstMlogStatement(EMPTY, null, null,
+                                                    new AstMlogComment(EMPTY, "", "# single line comment"))
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsMlogBlockWithLiterals() {
+            assertBuildsTo("""
+                            mlog {
+                                print @coal
+                                print "a"
+                                print %abcdef
+                                print %[red]
+                                print 0b101
+                                print 0xabcd
+                                print 10
+                                print 123.456
+                                print 'A'
+                            }
+                            """,
+                    List.of(
+                            new AstMlogBlock(EMPTY,
+                                    List.of(),
+                                    List.of(
+                                            stmt("print", builtIn("@coal")),
+                                            stmt("print", str("a")),
+                                            stmt("print", new AstLiteralColor(EMPTY, "%abcdef")),
+                                            stmt("print", new AstLiteralNamedColor(EMPTY, "%[red]")),
+                                            stmt("print", new AstLiteralBinary(EMPTY, "0b101")),
+                                            stmt("print", new AstLiteralHexadecimal(EMPTY, "0xabcd")),
+                                            stmt("print", number(10)),
+                                            stmt("print", number(123.456)),
+                                            stmt("print", new AstLiteralChar(EMPTY, 'A'))
+                                    )
+                            )
+                    )
+            );
+        }
+
+
+        @Test
+        void buildsMlogBlockWithSignedLiterals() {
+            assertBuildsTo("""
+                            mlog () {
+                                print +0b101
+                                print +0xabcd
+                                print +10
+                                print +123.456
+                                print -0b101
+                                print -0xabcd
+                                print -10
+                                print -123.456
+                            }
+                            """,
+                    List.of(
+                            new AstMlogBlock(EMPTY,
+                                    List.of(),
+                                    List.of(
+                                            stmt("print", new AstLiteralBinary(EMPTY, "+0b101")),
+                                            stmt("print", new AstLiteralHexadecimal(EMPTY, "+0xabcd")),
+                                            stmt("print", new AstLiteralDecimal(EMPTY, "+10")),
+                                            stmt("print", new AstLiteralFloat(EMPTY, "+123.456")),
+                                            stmt("print", new AstLiteralBinary(EMPTY, "-0b101")),
+                                            stmt("print", new AstLiteralHexadecimal(EMPTY, "-0xabcd")),
+                                            stmt("print", new AstLiteralDecimal(EMPTY, "-10")),
+                                            stmt("print", new AstLiteralFloat(EMPTY, "-123.456"))
+                                    )
+                            )
+                    )
+            );
+        }
+
+        @Test
+        void buildsMlogBlockWithMalformedLiterals() {
+            assertBuildsTo("""
+                            mlog {
+                                print @co*al
+                                print %1234567
+                                print %[]
+                                print 0b101b
+                                print 0xabcdefg
+                                print 10a
+                                print 123.456.789
+                            }
+                            """,
+                    List.of(
+                            new AstMlogBlock(EMPTY,
+                                    List.of(),
+                                    List.of(
+                                            stmt("print", t("@co*al")),
+                                            stmt("print", t("%1234567")),
+                                            stmt("print", t("%[]")),
+                                            stmt("print", t("0b101b")),
+                                            stmt("print", t("0xabcdefg")),
+                                            stmt("print", t("10a")),
+                                            stmt("print", t("123.456.789"))
+                                    )
+                            )
+                    )
+            );
+        }
+    }
+
+    @Nested
     class RangedForLoop {
         @Test
         void buildsRangedForLoop() {

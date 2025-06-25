@@ -151,15 +151,6 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return SourcePosition.create(inputFile, node.getSymbol());
     }
 
-    private Operation operation(Token token) {
-        return Operation.fromToken(token.getType());
-    }
-
-    private AstLiteralString literalString(TerminalNode node) {
-        String literal = node.getText();
-        return new AstLiteralString(pos(node), literal.substring(1, literal.length() - 1));
-    }
-
     private AstIdentifier identifier(Token token) {
         return new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER);
     }
@@ -172,6 +163,43 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     private List<AstIdentifier> identifiers(List<TerminalNode> tokens) {
         return tokens.stream().map(TerminalNode::getSymbol).map(this::identifier).toList();
+    }
+
+    private Operation operation(Token token) {
+        return Operation.fromToken(token.getType());
+    }
+
+    private AstLiteralString literalString(TerminalNode node) {
+        String literal = node.getText();
+        return new AstLiteralString(pos(node), literal.substring(1, literal.length() - 1));
+    }
+
+    private AstLiteralColor color(TerminalNode node) {
+        String literal = node.getText();
+        if (literal.length() != 7 && literal.length() != 9) {
+            context.error(pos(node), ERR.LITERAL_INVALID_COLOR_FORMAT);
+            if (literal.length() < 9) {
+                // pad with zeroes
+                return new AstLiteralColor(pos(node), literal + "%00000000".substring(literal.length(), 9));
+            } else {
+                // trim to size
+                return new AstLiteralColor(pos(node), literal.substring(0, 9));
+            }
+        } else {
+            return new AstLiteralColor(pos(node), literal);
+        }
+    }
+
+    private AstLiteralChar charLiteral(TerminalNode node) {
+        String literal = node.getText();
+        return switch (literal.length()) {
+            case 3 -> new AstLiteralChar(pos(node), literal.charAt(1));
+            case 4 -> new AstLiteralChar(pos(node), literal.charAt(2) == 'n' ? 10 : literal.charAt(2));
+            default -> {
+                context.error(pos(node), ERR.LITERAL_INVALID_CHAR_FORMAT);
+                yield new AstLiteralChar(pos(node), ' ');
+            }
+        };
     }
 
     private @Nullable AstDocComment findDocComment(Token token) {
@@ -505,7 +533,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
-    public AstBuiltInIdentifier visitAstBuiltInIdentifier(MindcodeParser.AstBuiltInIdentifierContext ctx) {
+    public AstBuiltInIdentifier visitAstBuiltInIdentifier(AstBuiltInIdentifierContext ctx) {
         return new AstBuiltInIdentifier(pos(ctx), ctx.builtin.getText());
     }
 
@@ -673,19 +701,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstLiteralColor visitAstLiteralColor(AstLiteralColorContext ctx) {
-        String literal = ctx.COLOR().getText();
-        if (literal.length() != 7 && literal.length() != 9) {
-            context.error(pos(ctx), ERR.LITERAL_INVALID_COLOR_FORMAT);
-            if (literal.length() < 9) {
-                // pad with zeroes
-                return new AstLiteralColor(pos(ctx), literal + "%00000000".substring(literal.length(), 9));
-            } else {
-                // trim to size
-                return new AstLiteralColor(pos(ctx), literal.substring(0, 9));
-            }
-        } else {
-            return new AstLiteralColor(pos(ctx), literal);
-        }
+        return color(ctx.COLOR());
     }
 
     @Override
@@ -720,15 +736,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstLiteralChar visitAstLiteralChar(MindcodeParser.AstLiteralCharContext ctx) {
-        String literal = ctx.CHAR().getText();
-        return switch (literal.length()) {
-            case 3 -> new AstLiteralChar(pos(ctx), literal.charAt(1));
-            case 4 -> new AstLiteralChar(pos(ctx), literal.charAt(2) == 'n' ? 10 : literal.charAt(2));
-            default -> {
-                context.error(pos(ctx), ERR.LITERAL_INVALID_CHAR_FORMAT);
-                yield new AstLiteralChar(pos(ctx), ' ');
-            }
-        };
+        return charLiteral(ctx.CHAR());
     }
 
     @Override
@@ -944,6 +952,141 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 visitAstExpression(ctx.firstValue),
                 visitAstExpression(ctx.lastValue),
                 ctx.operator.getType() == MindcodeLexer.DOT3);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Rules: mlog blocks">
+
+    @Override
+    public AstMlogBlock visitAstMlogBlock(AstMlogBlockContext ctx) {
+        return new AstMlogBlock(pos(ctx),
+                processMlogVariables(ctx.variables),
+                processMlogStatements(ctx.mlogBlock().mlogStatement())
+        );
+    }
+
+    private List<AstMlogVariable> processMlogVariables(MlogVariableListContext ctx) {
+        return ctx != null
+                ? ctx.astMlogVariable().stream().map(this::visitAstMlogVariable).toList()
+                : List.of();
+    }
+
+    @Override
+    public AstMlogVariable visitAstMlogVariable(AstMlogVariableContext ctx) {
+        return new AstMlogVariable(pos(ctx),
+                identifier(ctx.name),
+                ctx.modifier_in != null,
+                ctx.modifier_out != null);
+    }
+
+    private List<AstMlogStatement> processMlogStatements(List<MlogStatementContext> ctx) {
+        return ctx != null
+                ? ctx.stream().map(this::visit).map(AstMlogStatement.class::cast).toList()
+                : List.of();
+    }
+
+    @Override
+    public AstMlogStatement visitAstMlogLabel(AstMlogLabelContext ctx) {
+        return new AstMlogStatement(pos(ctx),
+                identifier(ctx.label),  // Note: the identifier contains the colon at the end
+                null,
+                null);
+    }
+
+    @Override
+    public AstMindcodeNode visitAstMlogInstruction(AstMlogInstructionContext ctx) {
+        return new AstMlogStatement(pos(ctx),
+                null,
+                processMlogInstruction(ctx.mlogInstruction()),
+                null);
+    }
+
+    @Override
+    public AstMindcodeNode visitAstMlogInstructionWithComment(AstMlogInstructionWithCommentContext ctx) {
+        return new AstMlogStatement(pos(ctx),
+                null,
+                processMlogInstruction(ctx.mlogInstruction()),
+                processComment(ctx.whitespace, ctx.comment));
+    }
+
+    @Override
+    public AstMindcodeNode visitAstMlogComment(AstMlogCommentContext ctx) {
+        return new AstMlogStatement(pos(ctx),
+                null,
+                null,
+                processComment(null, ctx.comment));
+    }
+
+    private AstMlogInstruction processMlogInstruction(MlogInstructionContext ctx) {
+        return new AstMlogInstruction(pos(ctx),
+                processMlogToken(ctx.opcode),
+                ctx.mlogTokenOrLiteral().stream().map(this::visit).map(AstExpression.class::cast).toList()
+        );
+    }
+
+    private AstMlogComment processComment(@Nullable Token whitespace, Token comment) {
+        return new AstMlogComment(pos(comment),
+                whitespace == null ? "" : whitespace.getText(),
+                comment.getText());
+    }
+
+    private AstMlogToken processMlogToken(Token token) {
+        return new AstMlogToken(pos(token), token.getText());
+    }
+
+    @Override
+    public AstMlogToken visitAstMlogToken(AstMlogTokenContext ctx) {
+        return new AstMlogToken(pos(ctx.token), ctx.token.getText());
+    }
+
+    @Override
+    public AstBuiltInIdentifier visitAstMlogBuiltin(AstMlogBuiltinContext ctx) {
+        return new AstBuiltInIdentifier(pos(ctx), ctx.builtin.getText());
+    }
+
+    @Override
+    public AstLiteralString visitAstMlogString(AstMlogStringContext ctx) {
+        return literalString(ctx.MLOGSTRING());
+    }
+
+    @Override
+    public AstLiteralColor visitAstMlogColor(AstMlogColorContext ctx) {
+        return color(ctx.MLOGCOLOR());
+    }
+
+    @Override
+    public AstLiteralNamedColor visitAstMlogNamedColor(AstMlogNamedColorContext ctx) {
+        String literal = ctx.MLOGNAMEDCOLOR().getText();
+        return new AstLiteralNamedColor(pos(ctx), literal);
+    }
+
+    @Override
+    public AstLiteralBinary visitAstMlogBinary(AstMlogBinaryContext ctx) {
+        String literal = ctx.MLOGBINARY().getText();
+        return new AstLiteralBinary(pos(ctx), literal, false);
+    }
+
+    @Override
+    public AstLiteralHexadecimal visitAstMlogHexadecimal(AstMlogHexadecimalContext ctx) {
+        String literal = ctx.MLOGHEXADECIMAL().getText();
+        return new AstLiteralHexadecimal(pos(ctx), literal, false);
+    }
+
+    @Override
+    public AstLiteralDecimal visitAstMlogDecimal(AstMlogDecimalContext ctx) {
+        String literal = ctx.MLOGDECIMAL().getText();
+        return new AstLiteralDecimal(pos(ctx), literal, false);
+    }
+
+    @Override
+    public AstLiteralFloat visitAstMlogFloat(AstMlogFloatContext ctx) {
+        String literal = ctx.MLOGFLOAT().getText();
+        return new AstLiteralFloat(pos(ctx), literal, false);
+    }
+
+    @Override
+    public AstLiteralChar visitAstMlogChar(AstMlogCharContext ctx) {
+        return charLiteral(ctx.MLOGCHAR());
     }
     //</editor-fold>
 }
