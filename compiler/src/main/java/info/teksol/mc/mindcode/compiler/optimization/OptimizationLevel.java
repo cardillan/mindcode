@@ -22,8 +22,6 @@ public enum OptimizationLevel {
         for (OptimizationLevel level : values()) {
             map.put(level.name().toLowerCase(), level);
         }
-        map.put("off", OptimizationLevel.NONE);
-        map.put("aggressive", OptimizationLevel.ADVANCED);
         return Map.copyOf(map);
     }
 

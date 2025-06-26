@@ -7,6 +7,13 @@ import java.util.*;
 @NullMarked
 public class StringSimilarity {
 
+    // Mindcode specific equivalences between keywords
+    private static final List<Set<String>> equivalences = List.of(
+            Set.of("false", "off", "none", "no"),
+            Set.of("true", "on", "full", "yes"),
+            Set.of("aggressive", "advanced")
+    );
+
     // Implementation of the Levenshtein Edit Distance
     // See https://rosettacode.org/wiki/Levenshtein_distance#Java
     private static int editDistance0(String s1, String s2) {
@@ -63,15 +70,34 @@ public class StringSimilarity {
         return sum;
     }
 
-    public static Optional<String> findBestAlternative(String value, Collection<String> allowedValues) {
-        return allowedValues.stream()
-                .min(Comparator.comparingDouble(a -> editDistance(a, value)))
-                .filter(s -> editDistance(s, value) < 1);
+    private static Set<String> findAlternatives(String value) {
+        for (Set<String> set : equivalences) {
+            if (set.contains(value)) return set;
+        }
+        return Set.of(value);
     }
 
-    public static Optional<String> findBestAlternative(String value, String[] allowedValues) {
+    private static WordDistance editDistanceWithAlternatives(String existingWord, String userValue) {
+        Set<String> alternatives = findAlternatives(existingWord);
+        double value = alternatives.stream()
+                .mapToDouble(a -> editDistance(a, userValue))
+                .min().orElse(Double.MAX_VALUE);
+        return new WordDistance(existingWord, value);
+    }
+
+    public static Optional<String> findBestAlternative(String value, Collection<String> allowedValues) {
+        return allowedValues.stream()
+                .map(a -> editDistanceWithAlternatives(a, value))
+                .min(Comparator.comparingDouble(WordDistance::distance))
+                .filter(d -> d.distance < 1)
+                .map(WordDistance::word);
+    }
+
+    public static Optional<String> findBestAlternative(String value, String... allowedValues) {
         return findBestAlternative(value, Arrays.asList(allowedValues));
     }
+
+    private record WordDistance(String word, double distance) {}
 
     public static void main(String[] args) {
         String option = "large-scale";

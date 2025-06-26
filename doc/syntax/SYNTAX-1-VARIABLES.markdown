@@ -1496,7 +1496,7 @@ In short, global variables start with `.`, local variables start with `:` and co
 If the same main or local variable is declared multiple times in the same function (in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and further declarations, separated by `.` (a dot):
 
 ```Mindcode
-#set optimization = off;
+#set optimization = none;
 begin var i = 1; end;
 begin var i = 2; end;
 ```
