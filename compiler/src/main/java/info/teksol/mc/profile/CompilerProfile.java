@@ -65,6 +65,7 @@ public class CompilerProfile {
     private Remarks remarks = Remarks.PASSIVE;
     private BuiltinEvaluation builtinEvaluation = BuiltinEvaluation.COMPATIBLE;
     private boolean targetGuard = false;
+    private boolean mlogBlockOptimization = false;
     private boolean unsafeCaseOptimization = false;
     private boolean shortCircuitEval = false;
     private boolean shortFunctionPrefix = false;
@@ -493,6 +494,15 @@ public class CompilerProfile {
 
     public CompilerProfile setUnsafeCaseOptimization(boolean unsafeCaseOptimization) {
         this.unsafeCaseOptimization = unsafeCaseOptimization;
+        return this;
+    }
+
+    public boolean isMlogBlockOptimization() {
+        return mlogBlockOptimization;
+    }
+
+    public CompilerProfile setMlogBlockOptimization(boolean mlogBlockOptimization) {
+        this.mlogBlockOptimization = mlogBlockOptimization;
         return this;
     }
 

@@ -21,13 +21,11 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
         super(builder);
     }
 
-    public ValueStore handleMlog(AstFunctionCall call, boolean safe, boolean text, boolean label) {
+    public ValueStore handleMlog(AstFunctionCall call, boolean safe, boolean text) {
         if (call.getArguments().isEmpty()) {
             error(call, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS,
                     call.getFunctionName(), 1, call.getArguments().size());
             return LogicVoid.VOID;
-        } else if (label && call.getArguments().size() != 1) {
-            error(call, ERR.FUNCTION_CALL_WRONG_NUMBER_OF_ARGS, call.getFunctionName(), 1, call.getArguments().size());
         }
 
         assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
@@ -40,8 +38,8 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
         final String opcode;
         if (args.getFirst().unwrap() instanceof LogicString str) {
             opcode = str.format(processor);
-            if (label != isLabel(opcode)) {
-                error(args.getFirst(), label ? ERR.MLOG_NOT_A_LABEL : ERR.MLOG_INVALID_OPCODE, call.getFunctionName());
+            if (isLabel(opcode)) {
+                error(args.getFirst(), ERR.MLOG_FIRST_ARGUMENT_NO_LABEL, call.getFunctionName());
             }
         } else {
             error(args.getFirst(), ERR.MLOG_FIRST_ARGUMENT_NOT_LITERAL, call.getFunctionName());
@@ -91,7 +89,7 @@ public class BuiltinFunctionMlogBuilder extends AbstractFunctionBuilder {
             }
         }
 
-        assembler.createCustomInstruction(safe, text, label, opcode, arguments, parameters);
+        assembler.createCustomInstruction(safe, text, false, opcode, arguments, parameters);
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         assembler.clearSubcontextType();
 

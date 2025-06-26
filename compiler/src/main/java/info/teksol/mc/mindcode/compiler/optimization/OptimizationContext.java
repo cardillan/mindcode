@@ -232,7 +232,7 @@ class OptimizationContext {
 
     private BitSet computeUnreachableInstructions() {
         BitSet unreachableInstructions = new BitSet(program.size());
-        // Also serves as a data stop for reaching the end of instruction list naturally.
+        // Also serves as a data stop for reaching the end of the instruction list naturally.
         unreachableInstructions.set(0, program.size());
         Queue<Integer> heads = new ArrayDeque<>();
         heads.offer(0);
@@ -250,7 +250,11 @@ class OptimizationContext {
                 unreachableInstructions.clear(index);
                 LogicInstruction ix = program.get(index);
                 switch (ix.getOpcode()) {
-                    case END, RETURN, RETURNREC -> {
+                    case END -> {
+                        // `end` inside an mlog block is ignored - we don't see into the data flow there
+                        if (!ix.getAstContext().matches(AstContextType.MLOG)) continue MainLoop;
+                    }
+                    case RETURN, RETURNREC -> {
                         continue MainLoop;
                     }
                     case JUMP -> {

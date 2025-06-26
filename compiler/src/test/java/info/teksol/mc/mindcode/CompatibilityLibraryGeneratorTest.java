@@ -64,6 +64,18 @@ public class CompatibilityLibraryGeneratorTest {
                 end;
             end;
             
+            const _MESSAGE_OK = "[green]No compatibility issues encountered. Mindcode is fully compatible with this Mindustry version.";
+            
+            const _MESSAGE_GENERAL =
+                "[salmon]Mindcode metadata of stable built-ins are not compatible with this Mindustry version.[]\\n" +
+                "Please report the problem, and use [gold]#set builtin-evaluation = none;[]\\n" +
+                "to avoid incompatibility issues.";
+            
+            const _MESSAGE_SPECIFIC =
+                "[salmon]Mindcode metadata of unstable built-ins are not compatible with this Mindustry version.[]\\n" +
+                "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\\n" +
+                "to avoid incompatibility issues.";
+            
             inline void _compatibilityTest6()
             %send;
             
@@ -75,26 +87,22 @@ public class CompatibilityLibraryGeneratorTest {
             """;
 
     public static final String CODE = """
-                print("Testing...");
-                printflush(message1);
+                mlog {
+                    print "Testing..."
+                    printflush message1
+
             %s
             %s
-                mlog("print", in
-                    "[green]No compatibility issues encountered. Mindcode is fully compatible with this Mindustry version.");
-                mlog("jump", "finish", "always", 0, 0);
-                mlogLabel("general:");
-                mlog("print", in
-                    "[salmon]Mindcode metadata of stable built-ins are not compatible with this Mindustry version.[]\\n" +
-                    "Please report the problem, and use [gold]#set builtin-evaluation = none;[]\\n" +
-                    "to avoid incompatibility issues.");
-                mlog("jump", "finish", "always", 0, 0);
-                mlogLabel("specific:");
-                mlog("print", in
-                    "[salmon]Mindcode metadata of unstable built-ins are not compatible with this Mindustry version.[]\\n" +
-                    "Please report the problem, and use [gold]#set builtin-evaluation = compatible;[]\\n" +
-                    "to avoid incompatibility issues.");
-                mlogLabel("finish:");
-                printflush(message1);
+                    print $_MESSAGE_OK
+                    jump finish always 0 0
+                general:
+                    print $_MESSAGE_GENERAL
+                    jump finish always 0 0
+                specific:
+                    print $_MESSAGE_SPECIFIC
+                finish:
+                    printflush message1;
+                }
                 do while true;
             """;
 
@@ -121,22 +129,22 @@ public class CompatibilityLibraryGeneratorTest {
         return var.isNumericConstant() && !metadata.isStableBuiltin(var.name());
     }
 
-    private static final String BUILTIN_TEST = """
-                mlog("jump", "general", "notEqual", "%s", %s);
+    private static final String BUILTIN_TEST_GENERAL = """
+                    jump general notEqual %s %s
             """;
 
-    private static final String BUILTIN_TEST_STRICT = """
-                mlog("op", "strictEqual", "result", "%s", %s);
-                mlog("jump", "general", "equal", "result", "false");
+    private static final String BUILTIN_TEST_GENERAL_STRICT = """
+                    op strictEqual result %s %s
+                    jump general equal result false
             """;
 
     private static final String BUILTIN_TEST_SPECIFIC = """
-                mlog("jump", "specific", "notEqual", "%s", %s);
+                    jump specific notEqual %s %s
             """;
 
     private static final String BUILTIN_TEST_SPECIFIC_STRICT = """
-                mlog("op", "strictEqual", "result", "%s", %s);
-                mlog("jump", "general", "equal", "result", "false");
+                    op strictEqual result %s %s
+                    jump specific equal result false
             """;
 
     private final double MAX_COLOR = Color.parseColor("%FFFFFFFF");
@@ -158,7 +166,7 @@ public class CompatibilityLibraryGeneratorTest {
         StringBuilder sb = new StringBuilder();
 
         metadata.getAllLVars().stream().filter(var -> isStableBuiltin(metadata, var))
-                .map(var -> String.format(isIntegerValue(var.numericValue()) ? BUILTIN_TEST : BUILTIN_TEST_STRICT,
+                .map(var -> String.format(isIntegerValue(var.numericValue()) ? BUILTIN_TEST_GENERAL : BUILTIN_TEST_GENERAL_STRICT,
                         var.name(), formatValue(var.numericValue())))
                 .forEach(sb::append);
 
@@ -185,8 +193,8 @@ public class CompatibilityLibraryGeneratorTest {
     }
 
     private static final String CONTENT_TEST = """
-                mlog("sensor", "id", "%s", "@id");
-                mlog("jump", "%s", "notEqual", "id", %d);
+                    sensor id %s @id
+                    jump %s notEqual id %d
             """;
 
     private void appendMindustryContent(StringBuilder sb, MindustryMetadata metadata, Collection<? extends MindustryContent> content, boolean stable) {

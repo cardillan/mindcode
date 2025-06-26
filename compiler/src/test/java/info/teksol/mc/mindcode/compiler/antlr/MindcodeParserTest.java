@@ -1087,6 +1087,51 @@ class MindcodeParserTest extends AbstractParserTest {
         }
 
         @Test
+        void parsesMlogBlockWithVariousWhitespace() {
+            assertParses("""
+                    mlog {a}
+                    mlog { a}
+                    mlog {a }
+                    mlog { a }
+                    mlog {a;}
+                    mlog { a;}
+                    mlog {a; }
+                    mlog { a; }
+                    mlog {;a}
+                    mlog { ;a}
+                    mlog {;a }
+                    mlog { ;a }
+
+                    mlog {a ;}
+                    mlog { a ;}
+                    mlog {a ; }
+                    mlog { a ; }
+                    mlog { ;a}
+                    mlog {  ;a}
+                    mlog { ;a }
+                    mlog {  ;a }
+
+                    mlog {a; }
+                    mlog { a; }
+                    mlog {a;  }
+                    mlog { a;  }
+                    mlog {; a}
+                    mlog { ; a}
+                    mlog {; a }
+                    mlog { ; a }
+
+                    mlog {a ; }
+                    mlog { a ; }
+                    mlog {a ;  }
+                    mlog { a ;  }
+                    mlog { ; a}
+                    mlog {  ; a}
+                    mlog { ; a }
+                    mlog {  ; a }
+                    """);
+        }
+
+        @Test
         void parsesBlockWithoutWhitespace() {
             assertParses("mlog{a;a b;c}");
         }
@@ -1221,14 +1266,14 @@ class MindcodeParserTest extends AbstractParserTest {
 
         @Test
         void refusesEmptyCharLiteral() {
-            assertGeneratesMessageRegex(1, 8, "Parse error: .*",
+            assertGeneratesMessageRegex(1, 18, "Parse error: .*",
                     "mlog { printchar '' }");
         }
 
         @Test
         void refusesTooLongCharLiteral() {
             assertGeneratesMessageRegex(
-                    1, 8, "Parse error: .*",
+                    1, 18, "Parse error: .*",
                     "mlog { printchar '\\x' }");
         }
     }

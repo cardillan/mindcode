@@ -11,7 +11,7 @@ import java.util.List;
 
 @NullMarked
 @AstNode
-public class AstMlogBlock extends AstDeclaration {
+public class AstMlogBlock extends AstStatement {
     private final List<AstMlogVariable> variables;
     private final List<AstMlogStatement> statements;
 

@@ -116,7 +116,7 @@ public class DocGeneratorTest {
                 parameters.stream().filter(parameter -> !parameter.getParameterName().startsWith("_")).forEach(this::processParameter);
             }
 
-            if (!constants.isEmpty()) {
+            if (constants.stream().flatMap(d -> d.getVariables().stream()).anyMatch(specification -> !specification.getName().startsWith("_"))) {
                 writer.println();
                 writer.println("## Constants");
                 constants.forEach(

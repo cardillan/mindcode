@@ -105,6 +105,21 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
+        class MlogBlockOptimizationArgumentTest {
+            @Test
+            public void longArgumentTrue() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--mlog-block-optimization true");
+                assertTrue(profile.isMlogBlockOptimization());
+            }
+
+            @Test
+            public void longArgumentFalse() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--mlog-block-optimization false");
+                assertFalse(profile.isMlogBlockOptimization());
+            }
+        }
+
+        @Nested
         class SyntaxArgumentTest {
             @Test
             public void shortArgumentRelaxed() throws ArgumentParserException {

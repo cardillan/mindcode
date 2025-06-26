@@ -188,6 +188,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("function-prefix",              node -> setBooleanOption(node, profile::setShortFunctionPrefix, "short", "long"));
         map.put("goal",                         node -> setEnumOption(node, GenerationGoal::byName, profile::setGoal, GenerationGoal::allowedValues));
         map.put("instruction-limit",            node -> setIntOption(node, profile::setInstructionLimit, 1, profile.getMaxInstructionLimit()));
+        map.put("mlog-block-optimization",      node -> setBooleanOption(node, profile::setMlogBlockOptimization));
         map.put("mlog-indent",                  node -> setIntOption(node, profile::setMlogIndent, 0, CompilerProfile.MAX_MLOG_INDENT));
         map.put("optimization",                 node -> setEnumOption(node, OptimizationLevel::byName, profile::setAllOptimizationLevels, OptimizationLevel::allowedValues));
         map.put("output-profiling",             node -> setBooleanOption(node, profile::setOutputProfiling));
@@ -196,8 +197,8 @@ public class DirectivePreprocessor extends AbstractMessageEmitter implements Ast
         map.put("profile",                      this::setProfile);
         map.put("remarks",                      node -> setEnumOption(node, Remarks::byName, profile::setRemarks, Remarks::allowedValues));
         map.put("sort-variables",               this::setSortVariables);
-        map.put("symbolic-labels",              node ->  setBooleanOption(node, profile::setSymbolicLabels));
-        map.put("syntax",                       node ->  setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode, SyntacticMode::allowedValues));
+        map.put("symbolic-labels",              node -> setBooleanOption(node, profile::setSymbolicLabels));
+        map.put("syntax",                       node -> setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode, SyntacticMode::allowedValues));
         map.put("target",                       this::setTarget);
         map.put("target-guard",                 node -> setBooleanOption(node, profile::setTargetGuard));
         map.put("unsafe-case-optimization",     node -> setBooleanOption(node, profile::setUnsafeCaseOptimization));

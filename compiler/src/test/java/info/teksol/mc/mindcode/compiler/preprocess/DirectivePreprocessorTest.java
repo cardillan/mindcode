@@ -234,6 +234,14 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveMlogBlockOptimization() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setMlogBlockOptimization(false);
+        processDirective(profile, "mlog-block-optimization", "true");
+        assertTrue(profile.isMlogBlockOptimization());
+    }
+
+    @Test
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         ExpectedMessages.create()

@@ -129,6 +129,47 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void compilesPositiveFloatLiterals() {
+        assertCompilesTo("""
+                        a = +1.0;
+                        a = +0.0;
+                        a = +.5;
+                        a = +1e5;
+                        a = +1e+5;
+                        a = +1e-5;
+                        a = +1E10;
+                        a = +1E+10;
+                        a = +1E-10;
+                        a = +2.5E10;
+                        a = +2.5E+10;
+                        a = +2.5E-10;
+                        a = +.5E10;
+                        a = +.5E+10;
+                        a = +.5E-10;
+                        a = +1.5E+30;
+                        a = +1.5E-30;
+                        """,
+                createInstruction(SET, "a", "1"),
+                createInstruction(SET, "a", "0"),
+                createInstruction(SET, "a", "0.5"),
+                createInstruction(SET, "a", "100000"),
+                createInstruction(SET, "a", "100000"),
+                createInstruction(SET, "a", "0.00001"),
+                createInstruction(SET, "a", "10000000000"),
+                createInstruction(SET, "a", "10000000000"),
+                createInstruction(SET, "a", "0.0000000001"),
+                createInstruction(SET, "a", "25000000000"),
+                createInstruction(SET, "a", "25000000000"),
+                createInstruction(SET, "a", "0.00000000025"),
+                createInstruction(SET, "a", "5000000000"),
+                createInstruction(SET, "a", "5000000000"),
+                createInstruction(SET, "a", "0.00000000005"),
+                createInstruction(SET, "a", "15E29"),
+                createInstruction(SET, "a", "15E-31")
+        );
+    }
+
+    @Test
     void compilesNumericLiterals() {
         assertCompilesTo("""
                         a = 0b0011;
@@ -165,6 +206,25 @@ class LiteralsBuilderTest extends AbstractCodeGeneratorTest {
                 createInstruction(SET, ":a", "0"),
                 createInstruction(SET, ":a", "-1"),
                 createInstruction(SET, ":a", "-123")
+        );
+    }
+
+    @Test
+    void compilesPositiveNumericLiterals() {
+        assertCompilesTo("""
+                        a = +0b0011;
+                        a = +0x0123456789ABCDEF;
+                        a = +0xfedcba987654321;
+                        a = +0;
+                        a = +01;
+                        a = +123;
+                        """,
+                createInstruction(SET, ":a", "0b11"),
+                createInstruction(SET, ":a", "0x123456789abcdf0"),
+                createInstruction(SET, ":a", "0xfedcba987654300"),
+                createInstruction(SET, ":a", "0"),
+                createInstruction(SET, ":a", "1"),
+                createInstruction(SET, ":a", "123")
         );
     }
 

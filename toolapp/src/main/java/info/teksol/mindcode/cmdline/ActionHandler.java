@@ -128,6 +128,13 @@ abstract class ActionHandler {
                 .choices(Arguments.range(0, CompilerProfile.MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE));
 
         createArgument(container, defaults,
+                CompilerProfile::isMlogBlockOptimization,
+                (profile, arguments, name) -> profile.setMlogBlockOptimization(arguments.getBoolean(name)),
+                "--mlog-block-optimization")
+                .help("allows (limited) optimization of code inside mlog blocks")
+                .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
                 CompilerProfile::getRemarks,
                 (profile, arguments, name) -> profile.setRemarks(arguments.get(name)),
                 "-r", "--remarks")

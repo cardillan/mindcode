@@ -117,13 +117,17 @@ public class LiteralsBuilder extends AbstractBuilder implements
         return LogicString.create(node.sourcePosition(), node.getValue());
     }
 
-    private LogicNumber visitIntegerLiteral(AstLiteral node, int beginIndex, int radix) {
+    private LogicNumber visitIntegerLiteral(AstLiteral node, int start, int radix) {
         String literal = node.getLiteral();
-        boolean negative = literal.startsWith("-");
+        if (literal.isEmpty()) throw new MindcodeInternalError("Empty literal.");
+
+        char ch = literal.charAt(0);
+        boolean negative = ch == '-';
+        int beginIndex = start + (ch == '+' || ch == '-' ? 1 : 0);
         try {
             long absValue = radix == 10
-                    ? Long.parseLong(literal, beginIndex + (negative ? 1 : 0), literal.length(), radix)
-                    : Long.parseUnsignedLong(literal, beginIndex + (negative ? 1 : 0), literal.length(), radix);
+                    ? Long.parseLong(literal, beginIndex, literal.length(), radix)
+                    : Long.parseUnsignedLong(literal, beginIndex, literal.length(), radix);
 
             if (!processor.isValidIntegerLiteral(absValue)) {
                 error(node, ERR.LITERAL_NO_VALID_REPRESENTATION, absValue);

@@ -15,12 +15,10 @@ class BuiltinFunctionMlogBuilderTest extends AbstractCodeGeneratorTest {
         assertCompilesTo("""
                         a = 10;
                         mlog("foo", "bar", in "baz", in a, out b, 0, null, true);
-                        mlogLabel("label:");
                         print(b);
                         """,
                 createInstruction(SET, "a", "10"),
                 customInstruction("foo", "bar", q("baz"), "a", "b", "0", "null", "true"),
-                customLabelInstruction("label:"),
                 createInstruction(PRINT, "b")
         );
     }
@@ -37,13 +35,6 @@ class BuiltinFunctionMlogBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "The first argument to the 'mlog' function must be an opcode, not an mlog label.",
                 "mlog(\"foo:\");");
-    }
-
-    @Test
-    void refusesInvalidLabel() {
-        assertGeneratesMessage(
-                "The argument to the mlogLabel function needs to be an mlog label, including ':' at the end.",
-                "mlogLabel(\"foo\");");
     }
 
     @Test

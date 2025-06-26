@@ -1011,6 +1011,8 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (variable.getType() == ArgumentType.FUNCTION_RETVAL
                 && (instruction.getOpcode() == Opcode.CALL || instruction.getOpcode() == Opcode.CALLREC)) return false;
 
+        if (instruction.getAstContext().matches(AstContextType.MLOG) && !getProfile().isMlogBlockOptimization()) return false;
+
         return switch (variable.getType()) {
             case PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PARAMETER -> false;
 
