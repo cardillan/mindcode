@@ -166,9 +166,9 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         return codeGenerator.visit(node, true);
     }
 
-    /// Processes the node by passing it to the proper builder according to node type, ignoring the resulting value
+    /// Processes the node by passing it to the proper builder according to a node type, ignoring the resulting value
     /// of the node. To be called when the resulting value of the node is not needed for further processing
-    /// (e.g. expressions but the last one in a statement list, init or update clause of the for statement, or
+    /// (e.g. expressions but the last one in a statement list, init or update clause of the `for` statement, or
     /// the function body of a `void` function).
     ///
     /// @param node node to process
@@ -180,7 +180,6 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     ///
     /// @return `LogicVoid.VOID`
     protected ValueStore visitBody(List<? extends AstMindcodeNode> body) {
-        // The accumulator ensures we'll evaluate all nodes and return the last node evaluation as the result
         body.forEach(this::compile);
         return LogicVoid.VOID;
     }
@@ -202,7 +201,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
     ///  Evaluates every expression in the list, returning a list of evaluated values.
     ///
-    /// @return the value of all expressions in list
+    /// @return the value of all expressions in the list
     protected List<ValueStore> evaluateExpressions(List<? extends AstMindcodeNode> expressions) {
         return expressions.stream().map(this::evaluate).toList();
     }
@@ -212,7 +211,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     /// because it can be evaluated in different contexts and caching compile-time evaluations might lead to
     /// wrong evaluation next time.
     ///
-    /// @return the value of all expressions in list
+    /// @return the value of all expressions in the list
     protected List<ValueStore> evaluateExpressionsUncached(List<? extends AstMindcodeNode> expressions) {
         List<ValueStore> list = expressions.stream().map(this::evaluate).toList();
         evaluator.purgeFromCache(expressions);

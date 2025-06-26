@@ -52,7 +52,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
     protected void convertArgument(AstFunctionArgument argument, Consumer<FunctionArgument> consumer) {
         if (!argument.hasModifier() && argument.getExpression() instanceof AstIdentifier identifier) {
             // If it is an array, expand it right here
-            ValueStore valueStore = variables.findVariable(identifier, false);
+            ValueStore valueStore = variables.findVariable(identifier.getName(), false);
             if (valueStore instanceof ArrayStore array) {
                 expandArray(argument, array, consumer);
             } else {
@@ -60,7 +60,7 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
             }
         } else if (argument.hasRefModifier()) {
             if (argument.getExpression() instanceof AstIdentifier identifier) {
-                ValueStore valueStore = variables.findVariable(identifier, false);
+                ValueStore valueStore = variables.findVariable(identifier.getName(), false);
                 consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier, true));
             } else {
                 error(argument, ERR.ARGUMENT_REF_IDENTIFIER_REQUESTED);

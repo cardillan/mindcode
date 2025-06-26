@@ -202,6 +202,11 @@ public enum InstructionParameterType {
         return (flags & Flags.INPUT) != 0;
     }
 
+    /// @return true if this parameter is input only
+    public boolean isInputOnly() {
+        return (flags & (Flags.INPUT + Flags.OUTPUT)) == Flags.INPUT;
+    }
+
     /// @return true if this parameter can write to a variable
     public boolean isOutput() {
         return (flags & Flags.OUTPUT) != 0;

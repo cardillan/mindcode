@@ -4,7 +4,6 @@ import info.teksol.mc.common.InputFile;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.profile.FinalCodeOutput;
 import info.teksol.mc.util.Indenter;
@@ -20,15 +19,16 @@ import java.util.stream.Collectors;
 @NullMarked
 public class LogicInstructionPrinter {
 
+    /// Produces the final compiler output
+    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
+            boolean symbolicLabels, int mlogIndent) {
+        return toString(instructionProcessor, instructions, symbolicLabels, mlogIndent, i -> "");
+    }
+
     public static String toStringWithProfiling(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
             boolean symbolicLabels, int mlogIndent, int[] profile) {
         return toString(instructionProcessor, instructions, symbolicLabels, mlogIndent,
                 i -> profile[i] >= 0 ? String.format("%6d: ", profile[i]) : "        ");
-    }
-
-    public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
-            boolean symbolicLabels, int mlogIndent) {
-        return toString(instructionProcessor, instructions, symbolicLabels, mlogIndent, i -> "");
     }
 
     public static String toString(InstructionProcessor instructionProcessor, List<LogicInstruction> instructions,
@@ -43,14 +43,12 @@ public class LogicInstructionPrinter {
             buffer.append(indenter.getIndent(indent(instruction, symbolicLabels)));
 
             if (instruction instanceof CommentInstruction rem) {
-                buffer.append("# ");
-                buffer.append(rem.getValue() instanceof LogicString str ? str.getValue() : rem.getValue().toMlog());
+                buffer.append(rem.toMlog());
             } else if (instruction instanceof LabeledInstruction label) {
                 buffer.append(label.getLabel().toMlog()).append(":");
             } else {
                 buffer.append(prefix);
-                buffer.append(instruction.getMlogOpcode());
-                addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+                addInstruction(buffer, instruction, instructionProcessor.getPrintArgumentCount(instruction));
             }
             buffer.append("\n");
         }
@@ -84,8 +82,7 @@ public class LogicInstructionPrinter {
         RealLineNumberGenerator lineNumberGenerator = new RealLineNumberGenerator();
         instructions.forEach(instruction -> {
             buffer.append(lineNumberGenerator.printLineNumber(instruction, ""));
-            buffer.append(instruction.getMlogOpcode());
-            addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+            addInstruction(buffer, instruction, instructionProcessor.getPrintArgumentCount(instruction));
             buffer.append("\n");
         });
 
@@ -111,8 +108,7 @@ public class LogicInstructionPrinter {
             String hierarchy = unroll.stream().limit(10).map(c -> c.contextType().text).collect(Collectors.joining(" "));
             AstContext ctx = instruction.getAstContext();
             buffer.append("%-50s  %s (%3d)  %10s  ".formatted(hierarchy, ctx.subcontextType().text, ctx.id, format.format(ctx.totalWeight())));
-            buffer.append(instruction.getMlogOpcode());
-            addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+            addInstruction(buffer, instruction, instructionProcessor.getPrintArgumentCount(instruction));
             buffer.append("\n");
         });
 
@@ -132,8 +128,7 @@ public class LogicInstructionPrinter {
             AstContext ctx = instruction.getAstContext();
             buffer.append("%3d:%s  %s %8s ".formatted(ctx.level(), ctx.contextType().text,
                     ctx.subcontextType().text, format.format(ctx.totalWeight())));
-            buffer.append(instruction.getMlogOpcode());
-            addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+            addInstruction(buffer, instruction, instructionProcessor.getPrintArgumentCount(instruction));
             buffer.append("\n");
         });
 
@@ -162,8 +157,7 @@ public class LogicInstructionPrinter {
         for (LogicInstruction instruction : instructions) {
             buffer.append(lineNumberGenerator.printLineNumber(instruction, decorator.apply(index++)));
             lineBuffer.setLength(0);
-            lineBuffer.append(instruction.getMlogOpcode());
-            addArgs(instructionProcessor.getPrintArgumentCount(instruction), lineBuffer, instruction);
+            addInstruction(lineBuffer, instruction, instructionProcessor.getPrintArgumentCount(instruction));
 
             AstContext astContext = instruction.getAstContext();
             if (astContext.node() != null && !astContext.node().sourcePosition().isEmpty()) {
@@ -202,26 +196,37 @@ public class LogicInstructionPrinter {
 
     public static String toString(InstructionProcessor instructionProcessor, LogicInstruction instruction) {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append(instruction.getMlogOpcode());
-        addArgs(instructionProcessor.getPrintArgumentCount(instruction), buffer, instruction);
+        addInstruction(buffer, instruction, instructionProcessor.getPrintArgumentCount(instruction));
         return buffer.toString();
     }
 
     public static String toStringSimple(MlogInstruction instruction) {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append(instruction.getMlogOpcode());
-        addArgs(instruction.getArgs().size(), buffer, instruction);
+        addInstruction(buffer, instruction, instruction.getArgs().size());
         return buffer.toString();
     }
 
-    private static void addArgs(int count, StringBuilder buffer, MlogInstruction instruction) {
-        for (int i = 0; i < count; i++) {
+    private static final int COMMENT_COLUMN = 39;
+    private static final String SPACES = " ".repeat(COMMENT_COLUMN);
+
+    private static void addInstruction(StringBuilder buffer, MlogInstruction instruction, int argumentCount) {
+        int start = buffer.length();
+
+        buffer.append(instruction.getMlogOpcode());
+        for (int i = 0; i < argumentCount; i++) {
             buffer.append(" ");
             if (instruction.getArgs().size() > i) {
                 buffer.append(instruction.getArg(i).toMlog());
             } else {
                 buffer.append("0");
             }
+        }
+
+        if (instruction instanceof LogicInstruction ix && !ix.getComment().isEmpty()) {
+            int length = COMMENT_COLUMN - (buffer.length() - start);
+            if (length > 0) buffer.append(SPACES, 0, length);
+            buffer.append(" ");
+            buffer.append(ix.getComment());
         }
     }
 

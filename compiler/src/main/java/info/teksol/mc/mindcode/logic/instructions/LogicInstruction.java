@@ -123,4 +123,12 @@ public interface LogicInstruction extends MlogInstruction {
     default LogicInstruction setTargetGuard(boolean targetGuard) {
         return setInfo(InstructionInfo.TARGET_GUARD, targetGuard);
     }
+
+    default String getComment() {
+        return (String) getInfo(InstructionInfo.COMMENT);
+    }
+
+    default LogicInstruction setComment(String comment) {
+        return setInfo(InstructionInfo.COMMENT, comment);
+    }
 }

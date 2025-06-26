@@ -63,6 +63,11 @@ public interface MlogInstruction {
         return getTypedArguments().stream().filter(TypedArgument::isInput).map(TypedArgument::argument);
     }
 
+    /// @return stream of arguments assigned to input-only parameters
+    default Stream<LogicArgument> inputOnlyArgumentsStream() {
+        return getTypedArguments().stream().filter(TypedArgument::isInputOnly).map(TypedArgument::argument);
+    }
+
     /// @return stream of arguments assigned to output parameters
     default Stream<LogicArgument> outputArgumentsStream() {
         return getTypedArguments().stream().filter(TypedArgument::isOutput).map(TypedArgument::argument);

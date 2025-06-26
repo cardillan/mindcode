@@ -26,12 +26,32 @@ public class AstMlogStatement extends AstFragment {
         return label;
     }
 
+    public String getLabelName() {
+        return Objects.requireNonNull(label).getName();
+    }
+
+    public boolean isLabel() {
+        return label != null;
+    }
+
     public @Nullable AstMlogInstruction getInstruction() {
         return instruction;
     }
 
+    public boolean isInstruction() {
+        return instruction != null;
+    }
+
     public @Nullable AstMlogComment getComment() {
         return comment;
+    }
+
+    public String getCommentText() {
+        return Objects.requireNonNull(comment).getComment();
+    }
+
+    public boolean isComment() {
+        return comment != null && instruction == null;
     }
 
     @Override

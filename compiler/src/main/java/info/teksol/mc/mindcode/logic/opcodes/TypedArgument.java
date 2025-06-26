@@ -16,6 +16,10 @@ public record TypedArgument(InstructionParameterType type, LogicArgument argumen
         return type.isInput();
     }
 
+    public boolean isInputOnly() {
+        return type.isInputOnly();
+    }
+
     public boolean isOutput() {
         return type.isOutput();
     }

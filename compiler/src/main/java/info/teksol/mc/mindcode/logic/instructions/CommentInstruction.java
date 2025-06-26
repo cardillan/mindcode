@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -28,5 +29,15 @@ public class CommentInstruction extends BaseInstruction {
 
     public final LogicValue getValue() {
         return (LogicValue) getArg(0);
+    }
+
+    @Override
+    public String toMlog() {
+        if (getValue() instanceof LogicString str) {
+            String text = str.getValue();
+            return text.startsWith("#") ? text : "# " + text;
+        } else {
+            return getValue().toMlog();
+        }
     }
 }

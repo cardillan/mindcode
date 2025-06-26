@@ -14,6 +14,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -113,7 +114,7 @@ class DataFlowOptimizer extends BaseOptimizer {
             for (Definition definition : definitions) {
                 LogicVariable variable = definition.variable;
 
-                // If some of the definitions are side effect, do not perform the optimization
+                // If some definitions are a side effect, do not perform the optimization
                 if (definition.instructions.stream().anyMatch(ix -> ix.outputArgumentsStream().noneMatch(variable::equals))) {
                     continue;
                 }
@@ -912,15 +913,16 @@ class DataFlowOptimizer extends BaseOptimizer {
         // This needs to be done even when not modifying instructions, because it keeps track of read variables.
 
         // Try to find possible replacements of input arguments to this instruction
-        List<LogicVariable> inputs = instruction.inputArgumentsStream()
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
+        List<TypedArgument> inputs = instruction.typedArgumentsStream()
+                .filter(TypedArgument::isInput)
+                .filter(a -> a.argument() instanceof LogicVariable)
                 .toList();
 
         Map<LogicVariable, LogicValue> valueReplacements = new HashMap<>();
-        for (LogicVariable variable : inputs) {
+        for (TypedArgument argument : inputs) {
+            LogicVariable variable = (LogicVariable) argument.argument();
             LogicValue constantValue = variableStates.valueRead(variable, instruction, reachable);
-            if (canEliminate(instruction, variable)) {
+            if (argument.isInputOnly() && canEliminate(instruction, variable)) {
                 if (constantValue != null) {
                     valueReplacements.put(variable, constantValue);
                 } else {
@@ -1016,7 +1018,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 if (variable.isPreserved()) yield false;
 
                 // Function output variables cannot be eliminated inside their functions - at this point we have no
-                // information whether they're read somewhere. Outside their functions they're processed normally
+                // information whether they're read somewhere. Outside their functions, they're processed normally
                 // (can be optimized freely).
                 // Output values in remote functions aren't protected either, since output values get copied to the
                 // main processor within the function and aren't accessed elsewhere.

@@ -317,12 +317,12 @@ public class Variables extends AbstractMessageEmitter {
     /// @param identifier variable identifier
     /// @param local      `true` to search in the local context as well.
     /// @return ValueStore instance containing the variable
-    public @Nullable ValueStore findVariable(AstIdentifier identifier, boolean local) {
+    public @Nullable ValueStore findVariable(String name, boolean local) {
         // Look for local variables first
-        if (local && functionContext.variables().containsKey(identifier.getName())) {
-            return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
-        } else if (globalVariables.containsKey(identifier.getName())) {
-            return Objects.requireNonNull(globalVariables.get(identifier.getName()));
+        if (local && functionContext.variables().containsKey(name)) {
+            return Objects.requireNonNull(functionContext.variables().get(name));
+        } else if (globalVariables.containsKey(name)) {
+            return Objects.requireNonNull(globalVariables.get(name));
         }
         return null;
     }

@@ -27,6 +27,10 @@ public enum InstructionInfo {
     /// Once the emulator is rewritten to operate on plain mlog, it won't be necessary, as the emulator will
     /// properly emulate the target version of the processor.
     TARGET_GUARD(Boolean.FALSE),
+
+    /// An instruction-specific comment
+    /// Created, for example, within mlog blocks. Is emitted to the final output at the same line as the instruction
+    COMMENT("")
     ;
 
     public final Object defaultValue;

@@ -118,6 +118,12 @@ public class ERR {
     public static final String LVALUE_VARIABLE_EXPECTED = "Variable expected.";
     public static final String METHOD_CALL_UNDEFINED = "Unknown method '%s'.";
     public static final String METHOD_CALL_UNRESOLVED = "Cannot resolve method '%s'.";
+    public static final String MLOG_BLOCK_DUPLICATE_LABEL = "Label '%s' is already declared in this mlog block.";
+    public static final String MLOG_BLOCK_INVALID_LABEL = "Label expected.";
+    public static final String MLOG_BLOCK_MISSING_LABEL = "A 'jump' instruction needs a label.";
+    public static final String MLOG_BLOCK_UNKNOWN_LABEL = "Label '%s' is not defined in this mlog block.";
+    public static final String MLOG_BLOCK_VARIABLE_NOT_FOUND = "Variable '%s' not defined outside the mlog block.";
+    public static final String MLOG_BLOCK_VARIABLE_NOT_SIMPLE = "Variable '%s' is not a simple variable and cannot be accessed in an mlog block.";
     public static final String MLOG_FIRST_ARGUMENT_NOT_LITERAL = "The first argument to the '%s' function must be a string literal.";
     public static final String MLOG_FIRST_ARGUMENT_NO_MODIFIERS = "The first argument to the '%s' function must not use any modifier.";
     public static final String MLOG_IN_OUT_KEYWORD_NOT_ALLOWED = "A keyword passed to the '%s' function must not use any modifier.";

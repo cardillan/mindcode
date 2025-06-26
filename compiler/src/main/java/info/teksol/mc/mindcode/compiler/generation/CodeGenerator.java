@@ -92,6 +92,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor.registerVisitor(new IteratedForLoopStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new LiteralsBuilder(this, context));
         nodeVisitor.registerVisitor(new MemberAccessBuilder(this, context));
+        nodeVisitor.registerVisitor(new MlogBlocksBuilder(this, context));
         nodeVisitor.registerVisitor(new OperatorsBuilder(this, context));
         nodeVisitor.registerVisitor(new RangedForLoopStatementsBuilder(this, context));
         nodeVisitor.registerVisitor(new StatementListsBuilder(this, context));
