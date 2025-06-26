@@ -54,6 +54,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstMlogLabel(MindcodeParser.AstMlogLabelContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astMlogLabelWithComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstMlogLabelWithComment(MindcodeParser.AstMlogLabelWithCommentContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astMlogInstruction}
 	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
 	 * @param ctx the parse tree

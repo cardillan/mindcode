@@ -20,6 +20,10 @@ public class AstMlogToken extends AstExpression {
         return token;
     }
 
+    public String getPlainToken() {
+        return token.startsWith(":") ? token.substring(1) : token;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;

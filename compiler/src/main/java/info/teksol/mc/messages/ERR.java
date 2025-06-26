@@ -118,9 +118,11 @@ public class ERR {
     public static final String LVALUE_VARIABLE_EXPECTED = "Variable expected.";
     public static final String METHOD_CALL_UNDEFINED = "Unknown method '%s'.";
     public static final String METHOD_CALL_UNRESOLVED = "Cannot resolve method '%s'.";
+    public static final String MLOG_BLOCK_CONFLICTING_LABEL = "Label '%s' conflicts with a declared input or output variable.";
     public static final String MLOG_BLOCK_DUPLICATE_LABEL = "Label '%s' is already declared in this mlog block.";
-    public static final String MLOG_BLOCK_INVALID_LABEL = "Label expected.";
+    public static final String MLOG_BLOCK_INVALID_LABEL = "A label must contain only alphanumeric characters.";
     public static final String MLOG_BLOCK_MISSING_LABEL = "A 'jump' instruction needs a label.";
+    public static final String MLOG_BLOCK_NOT_A_LABEL = "Label expected.";
     public static final String MLOG_BLOCK_UNKNOWN_LABEL = "Label '%s' is not defined in this mlog block.";
     public static final String MLOG_BLOCK_VARIABLE_NOT_FOUND = "Variable '%s' not defined outside the mlog block.";
     public static final String MLOG_BLOCK_VARIABLE_NOT_SIMPLE = "Variable '%s' is not a plain mlog variable and cannot be accessed in an mlog block.";

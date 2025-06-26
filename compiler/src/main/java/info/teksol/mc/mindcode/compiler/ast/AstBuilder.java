@@ -994,6 +994,14 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     @Override
+    public AstMindcodeNode visitAstMlogLabelWithComment(AstMlogLabelWithCommentContext ctx) {
+        return new AstMlogStatement(pos(ctx),
+                identifier(ctx.label),  // Note: the identifier contains the colon at the end
+                null,
+                processComment(ctx.whitespace, ctx.comment));
+    }
+
+    @Override
     public AstMindcodeNode visitAstMlogInstruction(AstMlogInstructionContext ctx) {
         return new AstMlogStatement(pos(ctx),
                 null,

@@ -16,19 +16,19 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 
 @NullMarked
 public class MlogBlocksBuilder extends AbstractBuilder implements
         AstMlogBlockVisitor<ValueStore>,
-        AstMlogStatementVisitor<ValueStore>
-{
+        AstMlogStatementVisitor<ValueStore> {
     public MlogBlocksBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
     }
 
-    private record MlogVariable(String name, ValueStore valueStore, boolean in, boolean out) {
+    private record MlogVariable(String name, LogicArgument argument, boolean in, boolean out) {
         InstructionParameterType type() {
             return out ? in ? InstructionParameterType.INPUT_OUTPUT : InstructionParameterType.OUTPUT : InstructionParameterType.INPUT;
         }
@@ -59,25 +59,54 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
         }
     }
 
-    private void resolveMlogVariable(AstMlogVariable variable) {
-        ValueStore valueStore = variables.resolveVariable(variable.getIdentifier(), true, false);
-        if (valueStore.isComplex()) {
-            error(variable, ERR.MLOG_BLOCK_VARIABLE_NOT_SIMPLE, variable.getName());
+    private void resolveMlogVariable(AstMlogVariable node) {
+        LogicArgument argument = findMlogVariable(
+                variables.resolveVariable(node.getIdentifier(), true, false));
+
+        if (argument == null) {
+            error(node, ERR.MLOG_BLOCK_VARIABLE_NOT_SIMPLE, node.getName());
         } else {
-            MlogVariable mlogVariable = new MlogVariable(variable.getName(), valueStore, variable.isInput(), variable.isOutput());
-            mlogVariables.put(variable.getName(), mlogVariable);
+            if (node.isOutput() && !argument.isUserWritable()) {
+                error(node, ERR.LVALUE_ASSIGNMENT_TO_CONST_NOT_ALLOWED, node.getName());
+            }
+            MlogVariable mlogVariable = new MlogVariable(node.getName(), argument, node.isInput(), node.isOutput());
+            mlogVariables.put(node.getName(), mlogVariable);
         }
     }
 
-    private void processLabel(AstMlogStatement astMlogStatement) {
-        assert astMlogStatement.getLabel() != null;
-        String label = astMlogStatement.getLabel().getName();
+    private void processLabel(AstMlogStatement astLabel) {
+        assert astLabel.getLabel() != null;
+        String label = astLabel.getLabel().getName();
         if (!label.endsWith(":")) {
             throw new MindcodeInternalError("Label without the ':' suffix: " + label);
         }
         String name = label.substring(0, label.length() - 1);
+        if (mlogVariables.containsKey(name)) {
+            error(astLabel, ERR.MLOG_BLOCK_CONFLICTING_LABEL, label);
+        }
         if (!labels.add(name)) {
-            error(astMlogStatement, ERR.MLOG_BLOCK_DUPLICATE_LABEL, name);
+            error(astLabel, ERR.MLOG_BLOCK_DUPLICATE_LABEL, name);
+        }
+    }
+
+    private @Nullable LogicArgument findMlogVariable(@Nullable ValueStore valueStore) {
+        if (valueStore instanceof LogicArgument argument) {
+            return switch (argument.getType()) {
+                case NULL_LITERAL,
+                     COLOR_LITERAL,
+                     NAMED_COLOR_LITERAL,
+                     BOOLEAN_LITERAL,
+                     NUMERIC_LITERAL,
+                     STRING_LITERAL,
+                     BUILT_IN,
+                     BLOCK,
+                     PARAMETER,
+                     GLOBAL_VARIABLE,
+                     LOCAL_VARIABLE -> argument;
+                default -> null;
+            };
+        } else {
+            return null;
         }
     }
 
@@ -85,8 +114,11 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
     public ValueStore visitMlogStatement(AstMlogStatement node) {
         if (node.isLabel()) {
             // A label
-            assembler.createCustomInstruction(false, false, true, mlogBlockPrefix + node.getLabelName(),
-                    List.of(), List.of());
+            LogicInstruction instruction = assembler.createCustomInstruction(false, false, true,
+                    mlogBlockPrefix + node.getLabelName(), List.of(), List.of());
+            if (node.getComment() != null) {
+                instruction.setComment(node.getCommentText());
+            }
         } else if (node.getInstruction() != null) {
             LogicInstruction instruction = processMlogInstruction(node.getInstruction());
             if (node.getComment() != null) {
@@ -96,13 +128,17 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
             // Plain comment
             assembler.createComment(node.getCommentText());
         } else {
-            throw new MindcodeInternalError("Mlog statement has not active content");
+            throw new MindcodeInternalError("Mlog statement doesn't have an active content");
         }
         return LogicVoid.VOID;
     }
 
     private LogicInstruction processMlogInstruction(AstMlogInstruction instruction) {
-        String opcode = instruction.getOpcode().getToken();
+        String opcode = instruction.getOpcode().getPlainToken();
+
+        if (opcode.endsWith(":") && instruction.getTokens().isEmpty()) {
+            error(instruction.getOpcode(), ERR.MLOG_BLOCK_INVALID_LABEL);
+        }
 
         if (opcode.equals(Opcode.END.getOpcode())) return assembler.createEnd();
 
@@ -112,10 +148,10 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
             } else {
                 if (instruction.getToken(0) instanceof AstMlogToken token) {
                     if (!labels.contains(token.getToken())) {
-                        error(instruction.getToken(0), ERR.MLOG_BLOCK_UNKNOWN_LABEL, token.getToken());
+                        error(token, ERR.MLOG_BLOCK_UNKNOWN_LABEL, token.getToken());
                     }
                 } else {
-                    error(instruction.getToken(0), ERR.MLOG_BLOCK_INVALID_LABEL);
+                    error(instruction.getToken(0), ERR.MLOG_BLOCK_NOT_A_LABEL);
                 }
             }
         }
@@ -124,34 +160,36 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
         List<InstructionParameterType> parameters = new ArrayList<>();
 
         for (AstExpression expression : instruction.getTokens()) {
-            if (expression instanceof AstMlogToken token) {
-                String mlog = token.getToken();
-                MlogVariable mlogVariable = mlogVariables.get(mlog);
+            if (expression instanceof AstMlogToken astToken) {
+                String token = astToken.getToken();
 
-                if (labels.contains(mlog)) {
+                // Note: mlogVariables can't contain keys starting with ':', so raw tokens are not matched
+                MlogVariable mlogVariable = mlogVariables.get(token);
+
+                if (labels.contains(token)) {
                     // A label
-                    arguments.add(new LogicToken(mlogBlockPrefix + mlog));
+                    arguments.add(new LogicToken(mlogBlockPrefix + token));
                     parameters.add(InstructionParameterType.UNSPECIFIED);
-                } else if (mlog.startsWith("$")) {
+                } else if (token.startsWith("$")) {
                     // An inlined variable
-                    String name = mlog.substring(1);
+                    String name = token.substring(1);
                     ValueStore value = variables.findVariable(name, true);
-                    if (value == null || value.isComplex()) {
-                        error(token, value == null ? ERR.MLOG_BLOCK_VARIABLE_NOT_FOUND
+                    LogicArgument argument = findMlogVariable(value);
+                    if (argument == null) {
+                        error(astToken, value == null ? ERR.MLOG_BLOCK_VARIABLE_NOT_FOUND
                                 : ERR.MLOG_BLOCK_VARIABLE_NOT_SIMPLE, name);
-                        arguments.add(new LogicToken(mlog));
+                        arguments.add(new LogicToken(token));
                         parameters.add(InstructionParameterType.UNSPECIFIED);
                     } else {
-                        arguments.add(value.getValue(assembler));
+                        arguments.add(argument);
                         parameters.add(InstructionParameterType.INPUT);
                     }
                 } else if (mlogVariable != null) {
                     // A declared variable
-                    arguments.add(mlogVariable.valueStore.getValue(assembler));
+                    arguments.add(mlogVariable.argument);
                     parameters.add(mlogVariable.type());
                 } else {
-                    // Note: mlogVariables can't contain keys starting with ':'
-                    arguments.add(new LogicToken(mlog.startsWith(":") ? mlog.substring(1) : mlog));
+                    arguments.add(new LogicToken(astToken.getPlainToken()));
                     parameters.add(InstructionParameterType.UNSPECIFIED);
                 }
             } else {

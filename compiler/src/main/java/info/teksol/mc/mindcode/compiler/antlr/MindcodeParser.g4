@@ -36,7 +36,7 @@ identifierList
 // Followed by a statement list
 // The last statement doesn't need a separator after
 // Alternatively, the mlog block may be completely empty except separators
-// - the whitespace may occur multiple times because the `//` comments may break it
+// The whitespace may occur multiple times in a row because the `//` comments may split it into pieces
 mlogBlock
     : mlogSeparators? (mlogStatement mlogSeparators)* mlogStatement mlogSeparators? MLOGWHITESPACE*
     | (MLOGWHITESPACE* MLOGSEPARATOR)* MLOGWHITESPACE*
@@ -48,6 +48,8 @@ mlogSeparators
 
 mlogStatement
     : ws = MLOGWHITESPACE* label = MLOGLABEL                                            # astMlogLabel
+    | ws = MLOGWHITESPACE* label = MLOGLABEL (whitespace=MLOGWHITESPACE)?
+            comment=MLOGCOMMENT                                                         # astMlogLabelWithComment
     | ws = MLOGWHITESPACE* mlogInstruction                                              # astMlogInstruction
     | ws = MLOGWHITESPACE* mlogInstruction (whitespace=MLOGWHITESPACE)?
             comment=MLOGCOMMENT                                                         # astMlogInstructionWithComment

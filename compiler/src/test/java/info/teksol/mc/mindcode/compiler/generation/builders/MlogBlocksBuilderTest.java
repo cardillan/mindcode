@@ -144,6 +144,27 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void processesKeywordTokens() {
+        assertCompilesTo("""
+                        var foo = 10;
+                        mlog (in foo) {
+                            :print :"Hello"         // Supports string literals as raw tokens
+                            label:
+                            :jump label :always
+                            foo foo                 // The opcode won't be substituted
+                            :foo :foo
+                        }
+                        """,
+                createInstruction(SET, ".foo", "10"),
+                customInstruction("print", q("Hello")),
+                customInstruction("m0_label:"),
+                customInstruction("jump", "m0_label", "always"),
+                customInstruction("foo", ".foo"),
+                customInstruction("foo", "foo")
+        );
+    }
+
+    @Test
     void optimizesMlogBlockVariables() {
         assertCompilesTo("""
                         #set mlog-block-optimization = true;
@@ -179,10 +200,24 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void refusesConflictingLabels() {
+        assertGeneratesMessage(
+                "Label 'label:' conflicts with a declared input or output variable.",
+                "mlog (label) { label: }");
+    }
+
+    @Test
     void refusesDuplicateLabels() {
         assertGeneratesMessage(
                 "Label 'label' is already declared in this mlog block.",
                 "mlog { label: ; label: }");
+    }
+
+    @Test
+    void refusesInvalidLabels() {
+        assertGeneratesMessage(
+                "A label must contain only alphanumeric characters.",
+                "mlog  { la()bel: }");
     }
 
     @Test
@@ -197,6 +232,13 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
         assertGeneratesMessage(
                 "Variable 'foo' not defined outside the mlog block.",
                 "mlog { print $foo }");
+    }
+
+    @Test
+    void refusesUnwritableOutputVariables() {
+        assertGeneratesMessage(
+                "Assignment to constant or parameter 'p' not allowed.",
+                "param p = 10; mlog (out p) { set p 5 }");
     }
 
     @Test

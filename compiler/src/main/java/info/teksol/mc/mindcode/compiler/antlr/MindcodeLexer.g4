@@ -248,6 +248,7 @@ MLOGBUILTIN             : AT Letter
 MLOGLABEL               : Letter LetterOrDigit* ':' ;
 MLOGTOKEN               : ':' ~["#; \t\r\n] ~[#; \t\r\n]*
                         | ~["'#; \t\r\n]* ~["'#;} \t\r\n]
+                        | ':"' ~[\r\n"]* '"'
                         ;
 
 MLOGSEPARATOR           : [;\n\r]+ ;

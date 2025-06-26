@@ -80,6 +80,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstMlogLabel(MindcodeParser.AstMlogLabelContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astMlogLabelWithComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstMlogLabelWithComment(MindcodeParser.AstMlogLabelWithCommentContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astMlogLabelWithComment}
+	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstMlogLabelWithComment(MindcodeParser.AstMlogLabelWithCommentContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astMlogInstruction}
 	 * labeled alternative in {@link MindcodeParser#mlogStatement}.
 	 * @param ctx the parse tree

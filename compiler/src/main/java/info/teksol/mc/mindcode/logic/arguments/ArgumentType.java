@@ -36,7 +36,7 @@ public enum ArgumentType {
 
     // Compiler variables
 
-    GLOBAL_PRESERVED,               // A global variable which must not be eliminated
+    GLOBAL_PRESERVED,               // A global variable, which must not be eliminated
     PRESERVED,                      // Must not be eliminated
 
     TMP_VARIABLE,

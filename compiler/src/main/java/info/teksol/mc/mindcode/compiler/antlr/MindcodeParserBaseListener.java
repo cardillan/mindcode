@@ -101,6 +101,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstMlogLabelWithComment(MindcodeParser.AstMlogLabelWithCommentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstMlogLabelWithComment(MindcodeParser.AstMlogLabelWithCommentContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstMlogInstruction(MindcodeParser.AstMlogInstructionContext ctx) { }
 	/**
 	 * {@inheritDoc}
