@@ -13,6 +13,7 @@ public enum Modifier {
     EXTERNAL        (MindcodeLexer.EXTERNAL),
     GUARDED         (MindcodeLexer.GUARDED),
     LINKED          (MindcodeLexer.LINKED),
+    MLOG            (MindcodeLexer.MLOG),
     NOINIT          (MindcodeLexer.NOINIT),
     REMOTE          (MindcodeLexer.REMOTE),
     VOLATILE        (MindcodeLexer.VOLATILE),
@@ -53,9 +54,10 @@ public enum Modifier {
         map.put(EXTERNAL, Set.of(CACHED, NOINIT));
         map.put(GUARDED, Set.of(LINKED));
         map.put(LINKED, Set.of(GUARDED, NOINIT));
-        map.put(NOINIT, Set.of(CACHED, EXTERNAL, LINKED, REMOTE, VOLATILE));
+        map.put(MLOG, Set.of(NOINIT, VOLATILE));
+        map.put(NOINIT, Set.of(CACHED, EXTERNAL, LINKED, REMOTE, VOLATILE, MLOG));
         map.put(REMOTE, Set.of(NOINIT, VOLATILE));
-        map.put(VOLATILE, Set.of(NOINIT, REMOTE));
+        map.put(VOLATILE, Set.of(NOINIT, REMOTE, MLOG));
         return map;
     }
 }

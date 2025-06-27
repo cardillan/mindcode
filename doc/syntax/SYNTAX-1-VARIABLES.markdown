@@ -333,7 +333,7 @@ a[1 ... 10];            // All but the first element of an internal array
 Regular variables directly correspond to Mindustry Logic variables. They are the most basic all-purpose variables. Regular variables are declared using this syntax:
 
 ```
-[noinit] [volatile] var <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
+[noinit] [volatile] [mlog "name"] var <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
 ```
 
 When an initial value is provided, it is assigned to the variable at the moment of the declaration. Any expression can be used as the initial value, including function calls.
@@ -342,6 +342,9 @@ When declaring global variables, these additional modifiers can be used:
 
 * `noinit`: this modifier suppresses the "uninitialized variable" warning for the declared variable. Uninitialized global variables retain the last value assigned to them in the last iteration of the program. This modifier cannot be used if the variable is assigned an initial value.
 * `volatile`: the compiler assumes that volatile variables can be changed externally (for example, by other processors, or via the `sync` instruction) and handles them correspondingly.
+* `mlog`: by using the `mlog` modifier, it is possible to specify the mlog name of the variable. This is mainly useful if you want to create an mlog variable with a fixed name to be accessed by other processors.
+  * The `mlog` modifier must be used in global scope only, variables created this way are therefore always global. 
+  * When using the `mlog` modifier, only one variable can be specified per declaration (as multiple variables would share the same mlog name otherwise). Do not use the `mlog` modifier to create different variables with matching mlog name; otherwise the program behavior is undefined.  
 
 Modifiers can be specified in any order.
 
@@ -1180,7 +1183,7 @@ When an initial value is provided, it is assigned to the variable and written to
 
 Cached variables are useful in situations where you want to store the latest values in a memory to be reused when the processor is reset. Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors. In both cases, you can read from the variables without any performance penalty, but all the writes are automatically propagated to the external memory.
 
-A _storage specification_ can be included after the `external` keyword. The storage clause consist of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the external keyword are allocated in given memory block, starting at the given index/range. If more space than provided by given range is required for variables, an error is reported.
+A _storage specification_ can be included after the `external` keyword. The storage clause consist of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the `external` keyword are allocated in given memory block, starting at the given index/range. If more space than provided by given range is required for variables, an error is reported.
 
 When no storage clause is specified, the external variable is placed in the heap.
 
@@ -1307,7 +1310,7 @@ Remote variables must be declared in remote modules. For more details, see [remo
 
 Program parameters are processor variables that have a value assigned to them at declaration which, after the initial assignment, remains constant for the entire execution of the program. Assignments to program parameters, apart from the initialization in the declaration, aren't allowed.
 
-The initial value assigned to the parameter is compiled to a single `set` instruction. The assigned value may be changed in the compiled code—there is always exactly one `set` instruction assigning a value to the program parameter—and such a change has the same effect on the program as if the code was actually compiled with the new parameter value. In other words, program parameters allow users of your program to change some basic parameters (such as unit types, linked blocks, or various numeric limits) without having to recompile the entire program, and potentially without having access to your original source code and/or Mindcode compiler.
+The initial value assigned to the parameter is compiled to a single `set` instruction. The assigned value may be changed in the compiled code—there is always exactly one `set` instruction assigning a value to the program parameter—and such a change has the same effect on the program as if the code was actually compiled with the new parameter value. In other words, program parameters allow users of your program to change some basic parameters (such as unit types, linked blocks, or various numeric limits) without having to recompile the entire program; even without having access to the original source code and/or Mindcode compiler.
 
 > [!IMPORTANT]
 > Correct execution of the program is only guaranteed if the value assigned to the program parameter in the compiled code is constant. When modifying the compiled code to assign a non-constant value (for example `@links` or `@time`) to a program parameter, the behavior of the resulting code is generally undefined.

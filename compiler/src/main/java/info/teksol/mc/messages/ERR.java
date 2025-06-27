@@ -35,6 +35,7 @@ public class ERR {
     public static final String ARRAY_INVALID = "'%s' is not an array.'";
     public static final String ARRAY_LINKED = "Arrays cannot be declared 'linked'.";
     public static final String ARRAY_LOCAL = "Arrays must be declared in the global scope.";
+    public static final String ARRAY_MLOG = "Arrays cannot be declared 'mlog'.";
     public static final String ARRAY_MUTABLE_SIZE = "Array size must be constant.";
     public static final String ARRAY_NOINIT = "Arrays cannot be declared 'noinit'.";
     public static final String ARRAY_NON_INTEGER_INDEX = "Array index must be an integer.";
@@ -151,6 +152,8 @@ public class ERR {
     public static final String REMOTE_PROCESSOR_NOT_GLOBAL = "A global variable or a linked block required.";
     public static final String REMOTE_REQUIRES_TARGET_8 = "Remote functionality requires target 8 or higher.";
     public static final String REMOTE_UNKNOWN_PARAMETER = "Function '%s': unknown output parameter '%s'.";
+    public static final String REMOTE_STORAGE_INVALID_PROCESSOR = "Cannot use '%s' as a remote processor.";
+    public static final String REMOTE_STORAGE_INVALID_PROCESSOR_VALUE = "Cannot use value assigned to parameter '%s' as a remote processor for remote storage.";
     public static final String REMOTE_WRONG_ARGUMENT = "The '%s' function requires a remote function name as an argument.";
     public static final String REMOTE_WRONG_PROCESSOR = "Unrecognized remote processor.";
     public static final String REQUIRE_ERROR_READING_FILE = "Error reading file '%s'.";
@@ -171,15 +174,19 @@ public class ERR {
     public static final String UNDEFINED_LOOP_LABEL = "Undefined loop label '%s'.";
     public static final String UNSUPPORTED_STRING_EXPRESSION = "Unsupported string expression.";
     public static final String VARIABLE_INCOMPATIBLE_MODIFIER = "Modifier '%s' is incompatible with previous modifiers.";
+    public static final String VARIABLE_LOCAL_CANNOT_BE_MLOG = "Local variable cannot be declared 'mlog'.";
     public static final String VARIABLE_LOCAL_CANNOT_BE_REMOTE = "Local variable cannot be declared 'remote'.";
     public static final String VARIABLE_LOCAL_CANNOT_BE_VOLATILE = "Local variable cannot be declared 'volatile'.";
     public static final String VARIABLE_MISSING_MODIFIER = "Modifier '%s' used without '%s'.";
     public static final String VARIABLE_MULTIPLE_DECLARATIONS = "Multiple declarations of '%s'.";
     public static final String VARIABLE_MULTIPLE_DECLARATIONS_REMOTE = "Variable '%s' collides with a remote function.";
+    public static final String VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG = "Only one variable may be specified within an `mlog` declaration.";
+    public static final String VARIABLE_MULTIPLE_SPECIFICATIONS_REMOTE = "Only one variable may be specified within a `remote` declaration with an mlog name specification.";
     public static final String VARIABLE_NAME_RESERVED_FOR_LINKS = "Name '%s' is reserved for linked blocks.";
     public static final String VARIABLE_NOINIT_CANNOT_BE_INITIALIZED = "Variable declared as 'noinit' cannot be initialized.";
     public static final String VARIABLE_NOT_DEFINED = "Variable '%s' is not defined.";
     public static final String VARIABLE_NOT_RESOLVED = "Cannot resolve variable '%s'.";
+    public static final String VARIABLE_REMOTE_CANNOT_BE_INITIALIZED = "Variable declared as 'remote' with processor specification cannot be initialized.";
     public static final String VARIABLE_REPEATED_MODIFIER = "Repeated modifier '%s'.";
     public static final String VOID_ARGUMENT = "Expression doesn't have any value. Using value-less expressions in function calls is deprecated.";
 }

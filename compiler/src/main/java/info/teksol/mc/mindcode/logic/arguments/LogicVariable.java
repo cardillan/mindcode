@@ -228,6 +228,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 identifier.getName(), "." + identifier.getName(), volatileVar, noinit, false);
     }
 
+    public static LogicVariable global(AstIdentifier identifier, boolean volatileVar, boolean noinit, String mlog) {
+        return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
+                identifier.getName(), mlog, volatileVar, noinit, false);
+    }
+
     @SuppressWarnings("ConfusingMainMethod")
     public static LogicVariable main(AstIdentifier identifier) {
         return new LogicVariable(identifier.sourcePosition(), LOCAL_VARIABLE,

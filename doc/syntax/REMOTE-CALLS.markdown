@@ -78,6 +78,52 @@ remote array1[10];
 
 Remote variables are available through remote access in code which imports the module. Remote variables/arrays may or may not be initialized. When some remote variables or array elements are unused within the module (and the corresponding mlog variables would therefore not be created when parsing the code by the logic processor), the missing variables are explicitly created using `draw triangle` instruction(s), so that they may be accessed remotely. These instructions are placed at the end of the generated code and are never executed.
 
+#### Remote variables with storage specification
+
+The above declarations are always placed in modules and become available to the main processor when the module is `require`d. Sometimes you might want to use variables in remote processors which weren't declared in a module, possibly because the other processor's code was not compiled by Mindcode. Another use case is for the module to access the main processor's variables directly (although in this case, a reference to the main processor must be made available to the module in some way).
+
+To specify where the remote variable is located, and even what name it uses, include a _storage specification_:   
+
+```
+remote <processor> ["name"] [var] <variable1>;
+```
+
+The _storage specification_ is included after the `remote` keyword. The storage clause consist of the name of the remote processor block (e.g., `processor1`, or a variable), and optionally an mlog name as a string literal. When the mlog name is not specified, it is derived from the name of the variable being declared this way using Mindcode's convention. All variables created this way are stored in the given remote processor.
+
+Note: the storage specification is very similar to the [storage specification of external variables](SYNTAX-1-VARIABLES.markdown#external-variables). 
+
+The following restrictions apply to remote variables declared with storage specification:
+* Such variables must be declared in global scope and are therefore always global.
+* No initial value can be specified for these variables, as it is expected that it is the remote processor that will assign its variables an initial value.
+* When the mlog name is present, only one variable can be specified per declaration (as otherwise multiple variables would share the same mlog name and would be redundant).
+* Declaring remote arrays with storage specification is not supported (use regular modules for that).
+
+```Mindcode
+#set target = 8;
+#set remarks = comments;
+
+/// Remote variables named using Mindcode's naming convention
+remote processor1 x, y;         
+print(x, y);
+
+/// Remote variable named using the specified name
+remote processor1 "foo" z;       
+print(z);
+```
+
+compiles to:
+
+```mlog
+# Remote variables named using Mindcode's naming convention
+read *tmp0 processor1 ".x"
+print *tmp0
+read *tmp2 processor1 ".y"
+print *tmp2
+# Remote variable named using the specified name
+read *tmp4 processor1 "foo"
+print *tmp4
+```
+
 ### Remote functions
 
 Function to be called remotely must be declared using the `remote` keyword:

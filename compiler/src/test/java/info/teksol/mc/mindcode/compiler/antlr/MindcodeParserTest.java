@@ -273,6 +273,10 @@ class MindcodeParserTest extends AbstractParserTest {
                     
                     var a = 10, b = func();
                     external var $x = 5, $y;
+                    mlog "abc" var abc;
+                    remote a = 10;
+                    remote p1 var b;
+                    remote p1 "c" var d;
                     linked cell1, message1;
                     
                     allocate stack in cell1;

@@ -156,9 +156,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     }
 
     private @Nullable AstIdentifier identifierIfNonNull(@Nullable Token token) {
-        return token != null
-                ? new AstIdentifier(pos(token), token.getText(), token.getType() == MindcodeLexer.EXTIDENTIFIER)
-                : null;
+        return token != null ? identifier(token) : null;
     }
 
     private List<AstIdentifier> identifiers(List<TerminalNode> tokens) {
@@ -169,9 +167,13 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         return Operation.fromToken(token.getType());
     }
 
-    private AstLiteralString literalString(TerminalNode node) {
-        String literal = node.getText();
-        return new AstLiteralString(pos(node), literal.substring(1, literal.length() - 1));
+    private AstLiteralString literalString(Token token) {
+        String literal = token.getText();
+        return new AstLiteralString(pos(token), literal.substring(1, literal.length() - 1));
+    }
+
+    private @Nullable AstLiteralString literalStringIfNonNull(@Nullable Token token) {
+        return token != null ? literalString(token) : null;
     }
 
     private AstLiteralColor color(TerminalNode node) {
@@ -340,7 +342,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstRequireFile visitAstRequireFile(MindcodeParser.AstRequireFileContext ctx) {
-        AstRequireFile requirement = new AstRequireFile(pos(ctx), literalString(ctx.STRING()),
+        AstRequireFile requirement = new AstRequireFile(pos(ctx), literalString(ctx.file),
                 ctx.processors == null ? List.of() : identifiers(ctx.processors.IDENTIFIER()));
         context.addRequirement(requirement);
         return requirement;
@@ -363,6 +365,11 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         if (modifier == Modifier.EXTERNAL && ctx.memory != null) {
             return new AstExternalParameters(pos(ctx), identifier(ctx.memory),
                     visitAstRangeIfNonNull(ctx.astRange()), visitAstExpressionIfNonNull(ctx.index));
+        } else if (modifier == Modifier.REMOTE && ctx.processor != null) {
+            return new AstRemoteParameters(pos(ctx), identifier(ctx.processor),
+                    literalStringIfNonNull(ctx.name));
+        } else if (modifier == Modifier.MLOG) {
+            return new AstMlogParameters(pos(ctx), literalString(ctx.name));
         } else {
             return null;
         }
@@ -696,7 +703,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstLiteralString visitAstLiteralString(MindcodeParser.AstLiteralStringContext ctx) {
-        return literalString(ctx.STRING());
+        return literalString(ctx.string);
     }
 
     @Override
@@ -1054,7 +1061,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstLiteralString visitAstMlogString(AstMlogStringContext ctx) {
-        return literalString(ctx.MLOGSTRING());
+        return literalString(ctx.literal);
     }
 
     @Override

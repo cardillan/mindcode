@@ -49,7 +49,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             BUILT_IN,
             BLOCK);
 
-    private static final Set<ArgumentType> memoryExpressionTypes = Set.of(
+    private static final Set<ArgumentType> blockExpressionTypes = Set.of(
             GLOBAL_VARIABLE,
             PARAMETER,
             BLOCK);
@@ -219,6 +219,14 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             node.getModifiers().forEach(this::verifyLocalContextModifiers);
         }
 
+        if (node.getVariables().size() > 1) {
+            if (modifiers.containsKey(Modifier.MLOG)) {
+                error(node.getVariables().get(1), ERR.VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG);
+            } else if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage s && s.name() != null) {
+                error(node.getVariables().get(1), ERR.VARIABLE_MULTIPLE_SPECIFICATIONS_REMOTE);
+            }
+        }
+
         for (AstVariableSpecification specification : node.getVariables()) {
             if (specification.isArray()) {
                 node.getModifiers().forEach(this::verifyArrayModifiers);
@@ -312,7 +320,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         module.getChildren().stream()
                 .filter(AstVariablesDeclaration.class::isInstance)
                 .map(AstVariablesDeclaration.class::cast)
-                .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == Modifier.REMOTE))
+                .filter(n -> n.getModifiers().stream().anyMatch(
+                        m -> m.getModifier() == Modifier.REMOTE && m.getParametrization() == null))
                 .forEach(n -> visitRemoteVariablesDeclaration(module, n, processor, reportArrayErrors, structureMembers));
     }
 
@@ -366,6 +375,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         switch (element.getModifier()) {
             case EXTERNAL -> error(element, ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
             case GUARDED, LINKED -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
+            case MLOG -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_MLOG);
             case REMOTE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_REMOTE);
             case VOLATILE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
         }
@@ -430,6 +440,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             case CACHED -> error(element, ERR.ARRAY_CACHED);
             case GUARDED -> error(element, ERR.ARRAY_GUARDED);
             case LINKED -> error(element, ERR.ARRAY_LINKED);
+            case MLOG -> error(element, ERR.ARRAY_MLOG);
             case NOINIT -> error(element, ERR.ARRAY_NOINIT);
         }
     }
@@ -466,7 +477,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
 
         if (specification.getExpressions().isEmpty()) {
-            if (modifiers.containsKey(Modifier.REMOTE)) {
+            if (modifiers.get(Modifier.REMOTE) == EMPTY_PARAMETRIZATION) {
+                // A remote modified was used without processor specification
                 context.addRemoteVariable((LogicVariable) variable);
             }
 
@@ -482,6 +494,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
             if (modifiers.containsKey(Modifier.NOINIT)) {
                 error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALIZED);
+            } else if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage) {
+                error(specification, ERR.VARIABLE_REMOTE_CANNOT_BE_INITIALIZED);
             }
 
             AstExpression expression = specification.getExpressions().getFirst();
@@ -512,7 +526,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             return variables.createExternalVariable(specification.getIdentifier(), modifiers);
         } else if (modifiers.containsKey(Modifier.GUARDED) || modifiers.containsKey(Modifier.LINKED)) {
             return createLinkedVariable(modifiers, specification);
-        } else if (modifiers.isEmpty() || modifiers.containsKey(Modifier.NOINIT)
+        } else if (modifiers.isEmpty() || modifiers.containsKey(Modifier.NOINIT) || modifiers.containsKey(Modifier.MLOG)
                 || modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE)) {
             // Local variables need to be created within the parent node, as the current node is the
             // AstVariablesDeclaration node. If the variable was created within the current node, it
@@ -571,11 +585,12 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private Object createParametrization(@Nullable AstMindcodeNode node) {
-        if (node instanceof ExternalStorage externalStorage) {
-            return resolveExternalStorage(externalStorage).createTracker(context);
-        } else {
-            return EMPTY_PARAMETRIZATION;
-        }
+        return switch (node) {
+            case ExternalStorage externalStorage -> resolveExternalStorage(externalStorage).createTracker(context);
+            case AstRemoteParameters param -> new ProcessorStorage(resolveProcessor(param), param.getStringName());
+            case AstMlogParameters param -> new ProcessorStorage(null, param.getName().getValue());
+            case null, default -> EMPTY_PARAMETRIZATION;
+        };
     }
 
     private SourceElement modifierElement(AstVariablesDeclaration node, Modifier modifier) {
@@ -596,13 +611,26 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     private LogicVariable resolveMemory(ExternalStorage node) {
         ValueStore memory = evaluate(node.getMemory());
-        if (memory instanceof LogicVariable variable && (memoryExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
-            if (variable instanceof LogicParameter parameter && !memoryExpressionTypes.contains(parameter.getValue().getType())) {
+        if (memory instanceof LogicVariable variable && (blockExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
+            if (variable instanceof LogicParameter parameter && !blockExpressionTypes.contains(parameter.getValue().getType())) {
                 error(node.getMemory(), ERR.EXT_STORAGE_INVALID_MEMORY_VALUE, parameter.getName());
             }
             return variable;
         } else {
             error(node.getMemory(), ERR.EXT_STORAGE_INVALID_MEMORY, node.getMemory().getName());
+            return LogicVariable.INVALID;
+        }
+    }
+
+    private LogicVariable resolveProcessor(AstRemoteParameters node) {
+        ValueStore memory = evaluate(node.getProcessor());
+        if (memory instanceof LogicVariable variable && (blockExpressionTypes.contains(variable.getType()) || variable.isMainVariable())) {
+            if (variable instanceof LogicParameter parameter && !blockExpressionTypes.contains(parameter.getValue().getType())) {
+                error(node.getProcessor(), ERR.REMOTE_STORAGE_INVALID_PROCESSOR_VALUE, parameter.getName());
+            }
+            return variable;
+        } else {
+            error(node.getProcessor(), ERR.REMOTE_STORAGE_INVALID_PROCESSOR, node.getProcessor().getName());
             return LogicVariable.INVALID;
         }
     }

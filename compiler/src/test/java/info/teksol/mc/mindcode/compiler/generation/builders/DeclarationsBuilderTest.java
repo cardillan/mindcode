@@ -868,6 +868,43 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
+        void compilesMlogVariables() {
+            assertCompilesTo("""
+                            mlog "abc" var x = 10;
+                            mlog "def" y = 2;
+                            noinit mlog "ghi" var z;
+                            volatile mlog "jkl" var w;
+                            print(z, w);
+                            """,
+                    createInstruction(SET, "abc", "10"),
+                    createInstruction(SET, "def", "2"),
+                    createInstruction(PRINT, "ghi"),
+                    createInstruction(SET, tmp(0), "jkl"),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void compilesRemoteVariables() {
+            assertCompilesTo("""
+                            remote processor1 a, x;
+                            remote processor1 "b" b;
+                            remote processor1 var c, y;
+                            remote processor1 "d" var d;
+                            print(a, b, c, d);
+                            """,
+                    createInstruction(READ, tmp(0), "processor1", q(".a")),
+                    createInstruction(PRINT, tmp(0)),
+                    createInstruction(READ, tmp(1), "processor1", q("b")),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(READ, tmp(2), "processor1", q(".c")),
+                    createInstruction(PRINT, tmp(2)),
+                    createInstruction(READ, tmp(4), "processor1", q("d")),
+                    createInstruction(PRINT, tmp(4))
+            );
+        }
+
+        @Test
         void compilesMainVariableDeclarationsOverGlobalVariable() {
             assertCompilesTo("""
                             var a = 1;
@@ -975,6 +1012,24 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Modifier 'cached' is incompatible with previous modifiers.",
                     "remote cached var a = 10;");
+        }
+
+        @Test
+        void refusesMultipleMlogVariableSpecifications() {
+            assertGeneratesMessage(
+                    "Only one variable may be specified within an `mlog` declaration.",
+                    """
+                            mlog "a" var a, b;
+                            """);
+        }
+
+        @Test
+        void refusesMultipleRemoteNamedVariableSpecifications() {
+            assertGeneratesMessage(
+                    "Only one variable may be specified within a `remote` declaration with an mlog name specification.",
+                    """
+                            remote proc "a" var a, b;
+                            """);
         }
     }
 }

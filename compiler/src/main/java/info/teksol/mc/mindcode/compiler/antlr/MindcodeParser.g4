@@ -48,10 +48,10 @@ mlogSeparators
 
 mlogStatement
     : ws = MLOGWHITESPACE* label = MLOGLABEL                                            # astMlogLabel
-    | ws = MLOGWHITESPACE* label = MLOGLABEL (whitespace=MLOGWHITESPACE)?
+    | ws = MLOGWHITESPACE* label = MLOGLABEL whitespace = MLOGWHITESPACE?
             comment=MLOGCOMMENT                                                         # astMlogLabelWithComment
     | ws = MLOGWHITESPACE* mlogInstruction                                              # astMlogInstruction
-    | ws = MLOGWHITESPACE* mlogInstruction (whitespace=MLOGWHITESPACE)?
+    | ws = MLOGWHITESPACE* mlogInstruction whitespace = MLOGWHITESPACE?
             comment=MLOGCOMMENT                                                         # astMlogInstructionWithComment
     | ws = MLOGWHITESPACE* comment=MLOGCOMMENT                                          # astMlogComment
     ;
@@ -82,6 +82,8 @@ astMlogVariable
     : modifier_in = IN?  modifier_out = OUT? name = IDENTIFIER
     | modifier_out = OUT modifier_in = IN    name = IDENTIFIER
     ;
+
+// STATEMENTS
 
 // A statement is an expression, which provides a value, or an executable statement, which is executable, but doesn't
 // provide a value, or a declaration. Using a statement/declaration where an expression is expected is an error,
@@ -116,7 +118,7 @@ statement
     | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
     | RETURN value = expression?                                                        # astReturnStatement
     | BEGIN exp = astStatementList? END                                                 # astCodeBlock
-    | MLOG (variables = mlogVariableList)? LBRACE block = mlogBlock                     # astMlogBlock
+    | MLOG variables = mlogVariableList? LBRACE block = mlogBlock                       # astMlogBlock
                 // No RBRACE: RBRACE is converted to semicolon to serve as statement separator
     ;
 
@@ -137,13 +139,14 @@ variableDeclaration
 declModifier
     : modifier = CONST
     | modifier = CACHED
-    | modifier = EXTERNAL (memory = IDENTIFIER)?
+    | modifier = EXTERNAL memory = IDENTIFIER?
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET index = expression RBRACKET
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
     | modifier = GUARDED
     | modifier = LINKED
+    | modifier = MLOG name = STRING
     | modifier = NOINIT
-    | modifier = REMOTE
+    | modifier = REMOTE (processor = IDENTIFIER name = STRING?)?
     | modifier = VOLATILE
     ;
 
@@ -200,7 +203,7 @@ expression
         elsif = elsifBranches?
         (ELSE falseBranch = astStatementList?)? END                                     # astIfExpression
     | FORMATTABLELITERAL formattableContents* DOUBLEQUOTE                               # astFormattableLiteral
-    | STRING                                                                            # astLiteralString
+    | string = STRING                                                                   # astLiteralString
     | COLOR                                                                             # astLiteralColor
     | NAMEDCOLOR                                                                        # astLiteralNamedColor
     | BINARY                                                                            # astLiteralBinary
@@ -254,7 +257,7 @@ formattableContents
 
 formattablePlaceholder
     : EMPTYPLACEHOLDER                                                                  # formattablePlaceholderEmpty
-    | VARIABLEPLACEHOLDER (id = VARIABLE)?                                              # formattablePlaceholderVariable
+    | VARIABLEPLACEHOLDER id = VARIABLE?                                                # formattablePlaceholderVariable
     ;
 
 // Directives

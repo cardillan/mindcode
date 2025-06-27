@@ -128,11 +128,12 @@ public class Variables extends AbstractMessageEmitter {
         putStructuredVariable(identifier.getName(), structure);
     }
 
-    public void registerRemoteVariable(AstIdentifier identifier, ValueStore variable) {
+    public ValueStore registerRemoteVariable(AstIdentifier identifier, ValueStore variable) {
         ValueStore existing = putVariable(identifier.getName(), variable);
         if (existing != null) {
             error(existing, ERR.VARIABLE_MULTIPLE_DECLARATIONS, identifier.getName());
         }
+        return variable;
     }
 
     public void replaceFunctionVariable(AstIdentifier identifier, ValueStore variable) {
@@ -261,9 +262,27 @@ public class Variables extends AbstractMessageEmitter {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
                 return Objects.requireNonNull(globalVariables.get(identifier.getName()));
             }
-            return registerGlobalVariable(identifier, LogicVariable.global(identifier,
-                    modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
-                    modifiers.containsKey(Modifier.NOINIT)));
+
+            if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage(LogicVariable storageProcessor, String storageName)) {
+                if (storageProcessor == null) throw new MindcodeInternalError("No processor specification in the 'remote' clause.");
+
+                LogicString remoteName = storageName != null
+                        ? LogicString.create(storageName)
+                        : LogicVariable.global(identifier).getMlogString();
+
+                RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), storageProcessor,
+                        name, remoteName, this.processor.nextTemp(), false, false);
+
+                return registerRemoteVariable(identifier, variable);
+            } else if (modifiers.get(Modifier.MLOG) instanceof ProcessorStorage storage) {
+                return registerGlobalVariable(identifier, LogicVariable.global(identifier,
+                        modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
+                        modifiers.containsKey(Modifier.NOINIT), storage.getName()));
+            } else  {
+                return registerGlobalVariable(identifier, LogicVariable.global(identifier,
+                        modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
+                        modifiers.containsKey(Modifier.NOINIT)));
+            }
         }
     }
 
