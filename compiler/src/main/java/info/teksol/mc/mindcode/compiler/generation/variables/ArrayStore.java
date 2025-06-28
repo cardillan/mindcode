@@ -41,5 +41,6 @@ public interface ArrayStore extends ValueStore {
         INTERNAL,
         EXTERNAL,
         REMOTE,
+        REMOTE_SHARED,
     }
 }

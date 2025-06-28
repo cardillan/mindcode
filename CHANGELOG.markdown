@@ -12,6 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added a [storage specification clause](/doc/syntax/REMOTE-CALLS.markdown#remote-variables-with-storage-specification) to remote variables.
 * Added an [mlog clause](/doc/syntax/SYNTAX-1-VARIABLES.markdown#regular-variables) to regular variables, allowing to specify an mlog name for the variable to use.
 
+### Changed
+
+* When a remote module containing an array is instantiated multiple times, a `@counter` array shared among all processors is created, instead of a separate `@counter` array for each processor.
+
 ## 3.7.0 - 2025-06-24
 
 ### Fixed
@@ -25,7 +29,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the new `@operations` property.
 * Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both the `target` and `builtin-evaluation` options.
 * Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#compatibility-library). The library provides a function that verifies Mindcode's compatibility with the Mindustry version in which it is run.   
-
 ### Changed
 
 * **Breaking:** the `target-optimization` compiler option has been replaced with the [`builtin-evaluation` option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-builtin-evaluation). Instead of `#set target-optimization = specific;` use `#set builtin-evaluation = full;`.

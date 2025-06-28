@@ -5,7 +5,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
+import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -19,10 +19,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
+import java.util.function.Function;
 
 @NullMarked
 public class RegularArrayConstructor extends AbstractArrayConstructor {
+    private final LogicVariable proc;
     private final LogicVariable readInd;
     private final LogicVariable readVal;
     private final LogicVariable readRet;
@@ -35,13 +36,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
 
         String baseName = arrayStore.getName();
-//        readInd = LogicVariable.arrayIndex(baseName, "*rind");
-//        readVal = LogicVariable.arrayReadAccess(baseName);
-//        readRet = LogicVariable.arrayReturn(baseName, "*rret");
-//        writeInd = LogicVariable.arrayIndex(baseName, "*wind");
-//        writeVal = LogicVariable.arrayWriteAccess(baseName);
-//        writeRet = LogicVariable.arrayReturn(baseName, "*wret");
-
+        proc = LogicVariable.arrayAccess(baseName, "*proc", nameCreator.arrayAccess(baseName, "proc"));
         readInd = LogicVariable.arrayAccess(baseName, "*rind", nameCreator.arrayAccess(baseName, "rind"));
         readVal = LogicVariable.arrayAccess(baseName, "*r", nameCreator.arrayAccess(baseName, "r"));
         readRet = LogicVariable.arrayReturn(baseName, "*rret", nameCreator.arrayAccess(baseName, "rret"));
@@ -59,12 +54,18 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private SideEffects createReadSideEffects() {
-        List<LogicVariable> reads = arrayElementsConcat(Stream.of(readInd).filter(_ -> profile.isSymbolicLabels()));
+        List<LogicVariable> reads = arrayElementsPlus(
+                profile.isSymbolicLabels() ? readInd : null,
+                arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null
+        );
         return SideEffects.of(reads, List.of(), List.of(readVal));
     }
 
     private SideEffects createWriteSideEffects() {
-        List<LogicVariable> reads = profile.isSymbolicLabels() ? List.of(writeVal, writeInd) : List.of(writeVal);
+        List<LogicVariable> reads = arrayElementsPlus(writeVal,
+                profile.isSymbolicLabels() ? writeInd : null,
+                arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null
+        );
         return SideEffects.of(reads, List.of(), arrayElements());
     }
 
@@ -98,7 +99,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         }
 
         int checkSize = profile.getBoundaryChecks().getSize();
-        return checkSize + 4;
+        return checkSize + 4 + (arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? 1 : 0);
     }
 
     private List<LogicInstruction> buildJumpTable(AccessType accessType) {
@@ -118,8 +119,11 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
             creator.createMultiJump(firstLabel,accessType == AccessType.READ ? readInd : writeInd,LogicNumber.ZERO, marker);
         }
 
+        Function<ValueStore, ValueStore> arrayElementProcessor = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED
+                ? e -> ((RemoteVariable)e).withProcessor(proc)
+                : e -> e;
         Runnable createExit = () -> creator.createReturn(accessType == AccessType.READ ? readRet : writeRet);
-        generateJumpTable(creator, firstLabel, marker, createExit);
+        generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createExit);
         return result;
     }
 
@@ -137,11 +141,14 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
+        boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
+        LogicVariable remoteProcessor = shared ? ((InternalArray)arrayStore).getProcessor() : null;
         LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
+                if (shared) creator.createSet(proc, remoteProcessor);
                 creator.createOp(Operation.MUL, readInd, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, readInd, 2);
                 creator.createCallStackless(address, readRet, LogicVariable.INVALID).setSideEffects(rix.getSideEffects());
@@ -149,6 +156,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
             }
 
             case WriteArrInstruction wix -> {
+                if (shared) creator.createSet(proc, remoteProcessor);
                 creator.createSet(writeVal, wix.getValue());
                 creator.createOp(Operation.MUL, writeInd, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, writeInd, 2);
@@ -164,14 +172,18 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
+        boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
+        LogicVariable remoteProcessor = shared ? ((InternalArray)arrayStore).getProcessor() : null;
         LogicVariable temp = creator.nextTemp();
         LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
         LogicLabel marker2 = processor.nextMarker();
         LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
+
         switch (instruction) {
             case ReadArrInstruction rix -> {
+                if (shared) creator.createSet(proc, remoteProcessor);
                 creator.createSetAddress(readRet, returnLabel).setHoistId(marker2);
                 creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, temp, 2);
@@ -181,6 +193,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
             }
 
             case WriteArrInstruction wix -> {
+                if (shared) creator.createSet(proc, remoteProcessor);
                 creator.createSetAddress(writeRet, returnLabel).setHoistId(marker2);
                 creator.createSet(writeVal, wix.getValue());
                 creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);

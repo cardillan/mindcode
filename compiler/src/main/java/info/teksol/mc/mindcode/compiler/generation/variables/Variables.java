@@ -228,7 +228,7 @@ public class Variables extends AbstractMessageEmitter {
     /// @param variable variable specification
     /// @return ValueStore instance representing the created variable
     public ArrayStore createArray(AstIdentifier identifier, int size, Map<Modifier, @Nullable Object> modifiers,
-            List<ValueStore> initialValues, @Nullable LogicVariable processor) {
+            List<ValueStore> initialValues, @Nullable LogicVariable processor, boolean shared) {
         ArrayStore result;
 
         if (!verifyGlobalDeclaration(identifier, identifier)) {
@@ -239,7 +239,7 @@ public class Variables extends AbstractMessageEmitter {
             result = getHeapTracker(modifiers).createArray(identifier, size);
         } else {
             boolean isVolatile = modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE);
-            result = InternalArray.create(nameCreator, identifier, size, isVolatile, processor);
+            result = InternalArray.create(nameCreator, identifier, size, isVolatile, processor, shared);
         }
 
         putVariableIfAbsent(identifier.getName(), result);

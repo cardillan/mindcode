@@ -13,10 +13,14 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.RuntimeChecks;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @NullMarked
@@ -40,6 +44,19 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
                 .toList();
     }
 
+    protected List<LogicVariable> arrayElementsPlus(@Nullable LogicVariable... variables) {
+        ArrayList<LogicVariable> result = arrayStore.getElements().stream()
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        for (LogicVariable variable : variables) {
+            if (variable != null) result.add(variable);
+        }
+
+        return result;
+    }
+
     protected List<LogicVariable> arrayElementsConcat(Stream<? extends LogicArgument> variables) {
         return Stream.concat(variables,
                         arrayStore.getElements().stream())
@@ -61,10 +78,11 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            Runnable createExit) {
+            Function<ValueStore, ValueStore> arrayElementProcessor, Runnable createExit) {
         LogicLabel nextLabel = firstLabel;
 
-        for (ValueStore element : arrayStore.getElements()) {
+        for (ValueStore arrayElement : arrayStore.getElements()) {
+            ValueStore element = arrayElementProcessor.apply(arrayElement);
             creator.createMultiLabel(nextLabel, marker);
             switch (instruction) {
                 case ReadArrInstruction rix -> element.readValue(creator, (LogicVariable) transferVariable(AccessType.READ));

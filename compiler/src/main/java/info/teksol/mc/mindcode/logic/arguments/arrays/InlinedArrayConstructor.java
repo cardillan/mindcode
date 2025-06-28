@@ -12,7 +12,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.stream.Stream;
 
 @NullMarked
 public class InlinedArrayConstructor extends AbstractArrayConstructor {
@@ -55,10 +54,6 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
         return checkSize + 1 + 2 * arrayStore.getSize();
     }
 
-    private List<LogicVariable> arrayElementsPlus(LogicValue value) {
-        return arrayElementsConcat(Stream.of(value));
-    }
-
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         AccessType accessType = instruction.getAccessType();
@@ -85,7 +80,7 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
         };
 
         creator.createMultiJump(firstLabel,tmp, LogicNumber.ZERO, marker).setSideEffects(sideEffects);
-        generateJumpTable(creator, firstLabel, marker, () -> creator.createJumpUnconditional(finalLabel));
+        generateJumpTable(creator, firstLabel, marker, e -> e, () -> creator.createJumpUnconditional(finalLabel));
         creator.createLabel(finalLabel);
         creator.popContext();
     }

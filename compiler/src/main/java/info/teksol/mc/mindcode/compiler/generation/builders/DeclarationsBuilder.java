@@ -234,7 +234,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     error(specification, ERR.ARRAY_LOCAL);
                 }
 
-                processArray(modifiers, specification, true, null);
+                processArray(modifiers, specification, true, null, false);
             } else {
                 processVariable(modifiers, specification);
             }
@@ -255,7 +255,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         // If there's exactly one remote processor, import functions and variables to the local namespace
         if (processors.size() == 1 && processors.getFirst().getType() == BLOCK) {
-            createRemoteVariables(module, processors.getFirst(), true, null);
+            createRemoteVariables(module, processors.getFirst(), false, true, null);
             reportRemoteErrors = false;
 
             // Initialize function parameters
@@ -284,7 +284,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             Map<String, ValueStore> members = callGraph.getFunctions().stream()
                     .filter(f -> f.getModule() == module)
                     .collect(Collectors.toMap(MindcodeFunction::getName, f -> createFunctionOutputs(f, processor)));
-            createRemoteVariables(module, processor, reportRemoteErrors, members);
+            createRemoteVariables(module, processor, true, reportRemoteErrors, members);
             reportRemoteErrors = false;
 
             StructuredValueStore processorStructure = new StructuredValueStore(identifier.sourcePosition(), identifier.getName(), members);
@@ -315,18 +315,18 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return LogicVariable.INVALID;
     }
 
-    private void createRemoteVariables(AstModule module, LogicVariable processor, boolean reportArrayErrors,
-            @Nullable Map<String, ValueStore> structureMembers) {
+    private void createRemoteVariables(AstModule module, LogicVariable processor, boolean shared,
+            boolean reportArrayErrors, @Nullable Map<String, ValueStore> structureMembers) {
         module.getChildren().stream()
                 .filter(AstVariablesDeclaration.class::isInstance)
                 .map(AstVariablesDeclaration.class::cast)
                 .filter(n -> n.getModifiers().stream().anyMatch(
                         m -> m.getModifier() == Modifier.REMOTE && m.getParametrization() == null))
-                .forEach(n -> visitRemoteVariablesDeclaration(module, n, processor, reportArrayErrors, structureMembers));
+                .forEach(n -> visitRemoteVariablesDeclaration(module, n, processor, shared, reportArrayErrors, structureMembers));
     }
 
-    public void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node,
-            LogicVariable processor, boolean reportArrayErrors, @Nullable Map<String, ValueStore> structureMembers) {
+    public void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node, LogicVariable processor,
+            boolean shared, boolean reportArrayErrors, @Nullable Map<String, ValueStore> structureMembers) {
         Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
 
         if (isLocalContext()) {
@@ -345,10 +345,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
                 if (structureMembers != null) {
                     int arraySize = getArraySize(modifiers, specification, reportArrayErrors);
-                    InternalArray array = InternalArray.create(nameCreator, identifier, arraySize, true, processor);
+                    InternalArray array = InternalArray.create(nameCreator, identifier, arraySize, true, processor, shared);
                     structureMembers.put(name, array);
                 } else {
-                    processArray(modifiers, specification, reportArrayErrors, processor);
+                    processArray(modifiers, specification, reportArrayErrors, processor, shared);
                 }
             } else {
                 RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor, name,
@@ -402,7 +402,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private void processArray(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification,
-            boolean reportArrayErrors, @Nullable LogicVariable processor) {
+            boolean reportArrayErrors, @Nullable LogicVariable processor, boolean shared) {
         int declaredSize = getArraySize(modifiers, specification, reportArrayErrors);
         int initialSize = specification.getExpressions().size();
 
@@ -419,7 +419,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     .forEach(v -> error(v, ERR.ARRAY_CONST_NOT_CONSTANT));
         }
 
-        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers, initialValues, processor);
+        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers, initialValues, processor, shared);
 
         if (!modifiers.containsKey(Modifier.CONST)) {
             for (int i = 0; i < initialSize; i++) {

@@ -101,4 +101,8 @@ public class RemoteVariable implements FunctionParameter {
     public void storeValue(ContextfulInstructionCreator creator) {
         creator.createWrite(transferVariable, processor, remoteName);
     }
+
+    public RemoteVariable withProcessor(LogicVariable processor) {
+        return new RemoteVariable(sourcePosition, processor, name, remoteName, transferVariable, input, output);
+    }
 }

@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -88,30 +89,32 @@ class ArrayOptimizer extends BaseOptimizer {
     private @Nullable OptimizationAction findPossibleJumpTableInlining(List<ArrayAccessInstruction> instructions, int costLimit) {
         int k = instructions.size();                            // Number of instructions
         int n = instructions.getFirst().getArray().getSize();   // Array size
+        boolean shared = instructions.getFirst().getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
 
         // Costs:
-        int addedInstructions = k * (2 * n + 1);                // k times [ size of jump table - 1 + 2 ]
+        int addedInstructions = k * (2 * n + 1);                    // k times [ size of jump table - 1 + 2 ]
         int removedInstructions =
                 2 * n + (getProfile().isSymbolicLabels() ? 1 : 0)   // Central jump table
-                        + 4 * k;                                    // Call size
+                + instructions.stream().mapToInt(ix -> ix.getRealSize(null)).sum();
         int cost = addedInstructions - removedInstructions;
 
-        // Benefit: 2 per call
-        double benefit = instructions.stream().mapToDouble(ix -> ix.getAstContext().totalWeight()).sum() * 2;
+        // Benefit: 2 per call (3 for `@counter` arrays shared among processors)
+        double benefit = instructions.stream().mapToDouble(ix -> ix.getAstContext().totalWeight()).sum() * (shared ? 3 : 2);
 
         return cost <= costLimit ? new InlineJumpTableAction(instructions, cost, benefit) : null;
     }
 
     private @Nullable OptimizationAction findPossibleArrayAccessInlining(ArrayAccessInstruction instruction, int costLimit) {
         int n = instruction.getArray().getSize();   // Array size
+        boolean shared = instruction.getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
 
         // Costs:
         int addedInstructions = 2 * n + 1;
-        int removedInstructions = 4;
+        int removedInstructions = instruction.getRealSize(null);
         int cost = addedInstructions - removedInstructions;
 
         // Benefit: 2 per call
-        double benefit = instruction.getAstContext().totalWeight() * 2;
+        double benefit = instruction.getAstContext().totalWeight() * (shared ? 3 : 2);
 
         return cost <= costLimit ? new InlineArrayAccessAction(instruction, cost, benefit) : null;
     }
