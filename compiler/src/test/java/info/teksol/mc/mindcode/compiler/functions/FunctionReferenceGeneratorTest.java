@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.functions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapper.FunctionSample;
+import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
@@ -82,7 +83,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
 
     private void createFunctionReference(ProcessorVersion version) throws IOException {
         assertTrue(new File(SYNTAX_REL_PATH + "SYNTAX.markdown").isFile());
-        InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
+        InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W, new StandardNameCreator(false));
         FunctionMapper mapper = createFunctionMapper(processor);
         List<FunctionSample> samples = assertDoesNotThrow(mapper::generateSamples);
 

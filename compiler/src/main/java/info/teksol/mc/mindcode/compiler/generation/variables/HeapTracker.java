@@ -20,6 +20,7 @@ import java.util.stream.IntStream;
 @NullMarked
 public class HeapTracker extends AbstractMessageEmitter {
     private final InstructionProcessor processor;
+    private final NameCreator nameCreator;
     private final LogicVariable heapMemory;
     private final boolean heapAllocated;
     private int currentHeapIndex;
@@ -28,6 +29,7 @@ public class HeapTracker extends AbstractMessageEmitter {
     private HeapTracker(CodeGeneratorContext context, LogicVariable heapMemory, int startHeapIndex, int endHeapIndex) {
         super(context.messageConsumer());
         this.processor = context.instructionProcessor();
+        this.nameCreator = context.nameCreator();
         this.heapMemory = heapMemory;
         this.currentHeapIndex = startHeapIndex;
         this.endHeapIndex = endHeapIndex;
@@ -37,6 +39,7 @@ public class HeapTracker extends AbstractMessageEmitter {
     private HeapTracker(VariablesContext context) {
         super(context.messageConsumer());
         this.processor = context.instructionProcessor();
+        this.nameCreator = context.nameCreator();
         this.heapMemory = LogicVariable.INVALID;
         this.currentHeapIndex = 0;
         this.endHeapIndex = Integer.MAX_VALUE;
@@ -62,7 +65,8 @@ public class HeapTracker extends AbstractMessageEmitter {
         LogicValue index = LogicNumber.create(currentHeapIndex++);
 
         return modifiers.containsKey(Modifier.CACHED)
-                ? new ExternalCachedVariable(identifier.sourcePosition(), heapMemory, index, LogicVariable.global(identifier))
+                ? new ExternalCachedVariable(identifier.sourcePosition(), heapMemory, index,
+                LogicVariable.global(identifier, nameCreator.global(identifier.getName())))
                 : new ExternalVariable(identifier.sourcePosition(), heapMemory, index, processor.nextTemp());
     }
 
@@ -80,6 +84,7 @@ public class HeapTracker extends AbstractMessageEmitter {
         List<ValueStore> elements = IntStream.range(0, size).mapToObj(index -> (ValueStore) new ExternalVariable(identifier.sourcePosition(),
                 heapMemory, LogicNumber.create(currentHeapIndex++), processor.nextTemp())).toList();
 
-        return new ExternalArray(identifier.sourcePosition(), "." + identifier.getName(), heapMemory, baseIndex, elements);
+        return new ExternalArray(identifier.sourcePosition(),
+                nameCreator.arrayBase("", identifier.getName()), heapMemory, baseIndex, elements);
     }
 }

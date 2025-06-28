@@ -38,6 +38,7 @@ public class Variables extends AbstractMessageEmitter {
 
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
+    private final NameCreator nameCreator;
     private final Map<String, ValueStore> globalVariables;
     private final Map<String, StructuredValueStore> structuredVariables = new HashMap<>();
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
@@ -49,12 +50,17 @@ public class Variables extends AbstractMessageEmitter {
         super(context.messageConsumer());
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
+        nameCreator = context.nameCreator();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
         putVariable("__MINDUSTRY_VERSION__", LogicString.create(profile.getProcessorVersion().mimexVersion));
         putVariable("__TARGET_MAJOR__", LogicNumber.create(profile.getProcessorVersion().major));
         putVariable("__TARGET_MINOR__", LogicNumber.create(profile.getProcessorVersion().minor));
         putVariable("__PROCESSOR_EDITION__", LogicString.create(profile.getProcessorEdition().getCode()));
+    }
+
+    public NameCreator nameCreator() {
+        return nameCreator;
     }
 
     public List<LogicVariable> getVolatileVariables() {
@@ -151,7 +157,7 @@ public class Variables extends AbstractMessageEmitter {
         } else if (isLinkedVariable(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         } else if (isGlobalVariable(identifier)) {
-            return registerGlobalVariable(identifier, LogicVariable.global(identifier));
+            return registerGlobalVariable(identifier, LogicVariable.global(identifier, nameCreator.global(identifier.getName())));
         } else {
             return functionContext.registerFunctionVariable(identifier, VariableScope.FUNCTION, false, true);
         }
@@ -226,14 +232,14 @@ public class Variables extends AbstractMessageEmitter {
         ArrayStore result;
 
         if (!verifyGlobalDeclaration(identifier, identifier)) {
-            result = InternalArray.createInvalid(identifier, size);
+            result = InternalArray.createInvalid(nameCreator, identifier, size);
         } else if (modifiers.containsKey(Modifier.CONST)) {
-            result = InternalArray.createConst(identifier, size, initialValues);
+            result = InternalArray.createConst(nameCreator, identifier, size, initialValues);
         } else if (modifiers.containsKey(Modifier.EXTERNAL)) {
             result = getHeapTracker(modifiers).createArray(identifier, size);
         } else {
             boolean isVolatile = modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE);
-            result = InternalArray.create(identifier, size, isVolatile, processor);
+            result = InternalArray.create(nameCreator, identifier, size, isVolatile, processor);
         }
 
         putVariableIfAbsent(identifier.getName(), result);
@@ -266,22 +272,21 @@ public class Variables extends AbstractMessageEmitter {
             if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage(LogicVariable storageProcessor, String storageName)) {
                 if (storageProcessor == null) throw new MindcodeInternalError("No processor specification in the 'remote' clause.");
 
-                LogicString remoteName = storageName != null
-                        ? LogicString.create(storageName)
-                        : LogicVariable.global(identifier).getMlogString();
-
+                LogicString remoteName = storageName != null ? LogicString.create(storageName) : nameCreator.remote(identifier);
                 RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), storageProcessor,
                         name, remoteName, this.processor.nextTemp(), false, false);
 
                 return registerRemoteVariable(identifier, variable);
             } else if (modifiers.get(Modifier.MLOG) instanceof ProcessorStorage storage) {
-                return registerGlobalVariable(identifier, LogicVariable.global(identifier,
-                        modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
-                        modifiers.containsKey(Modifier.NOINIT), storage.getName()));
+                return registerGlobalVariable(identifier,
+                        LogicVariable.global(identifier, storage.getName(),
+                                modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
+                                modifiers.containsKey(Modifier.NOINIT)));
             } else  {
-                return registerGlobalVariable(identifier, LogicVariable.global(identifier,
-                        modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
-                        modifiers.containsKey(Modifier.NOINIT)));
+                return registerGlobalVariable(identifier,
+                        LogicVariable.global(identifier,nameCreator.global(identifier.getName()),
+                                modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
+                                modifiers.containsKey(Modifier.NOINIT)));
             }
         }
     }
@@ -356,8 +361,8 @@ public class Variables extends AbstractMessageEmitter {
     public void enterFunction(MindcodeFunction function, List<FunctionArgument> varargs) {
         contextStack.push(functionContext);
         functionContext = function.isRecursive()
-                ? new RecursiveContext(messageConsumer, function, varargs)
-                : new LocalContext(messageConsumer, function, varargs);
+                ? new RecursiveContext(messageConsumer, nameCreator, function, varargs)
+                : new LocalContext(messageConsumer, nameCreator, function, varargs);
     }
 
     /// Called when function processing is finished. Previous function context is restored from the stack.
@@ -405,7 +410,7 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     /// Encapsulates processing of given expression, by keeping temporary variable(s) created while evaluating
-    /// the expression out of current node context (see above). To be used on expressions that do not return value.
+    /// the expression out of the current node context (see above). To be used on expressions that do not return value.
     public void excludeVariablesFromTracking(Runnable expression) {
         excludeVariablesFromTracking(() -> {
             expression.run();

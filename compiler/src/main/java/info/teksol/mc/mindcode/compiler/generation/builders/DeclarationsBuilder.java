@@ -78,7 +78,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     final Allocation allocation = resolveExternalStorage(node);
                     context.stackTracker().setStackMemory(allocation.memory);
                     if (callGraph.containsRecursiveFunction()) {
-                        assembler.createSet(LogicVariable.STACK_POINTER,
+                        assembler.createSet(LogicVariable.preserved(nameCreator.stackPointer()),
                                 LogicNumber.create(node.sourcePosition(), allocation.start));
                     }
                 }
@@ -292,7 +292,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
             // Generate guard code for the processor
             if (processor.getType() == BLOCK) {
-                LogicString initializedName = LogicVariable.REMOTE_SIGNATURE.getMlogString();
+                LogicString initializedName = LogicString.create(nameCreator.remoteSignature());
                 LogicVariable tmp = assembler.unprotectedTemp();
                 LogicLabel label = assembler.createNextLabel();
                 assembler.createRead(tmp, processor, initializedName);
@@ -345,14 +345,14 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
                 if (structureMembers != null) {
                     int arraySize = getArraySize(modifiers, specification, reportArrayErrors);
-                    InternalArray array = InternalArray.create(identifier, arraySize, true, processor);
+                    InternalArray array = InternalArray.create(nameCreator, identifier, arraySize, true, processor);
                     structureMembers.put(name, array);
                 } else {
                     processArray(modifiers, specification, reportArrayErrors, processor);
                 }
             } else {
                 RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor, name,
-                        LogicVariable.global(identifier).getMlogString(), assembler.nextTemp(), false, false);
+                        nameCreator.remote(identifier), assembler.nextTemp(), false, false);
 
                 if (structureMembers != null) {
                     structureMembers.put(name, variable);

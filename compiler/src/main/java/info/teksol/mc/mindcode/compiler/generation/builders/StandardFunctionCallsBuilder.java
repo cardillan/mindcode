@@ -194,7 +194,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             assembler.createComment("Function: " + inlineFunction.getDeclaration().toSourceCode());
         }
 
-        MindcodeFunction function = inlineFunction.prepareInlinedForCall(processor.nextFunctionPrefix(inlineFunction));
+        MindcodeFunction function = inlineFunction.prepareInlinedForCall(nameCreator);
         final int nonVarargCount = Math.min(function.getStandardParameterCount(), arguments.size());
 
         // Varargs handling and validation: vararg arguments can't be unspecified.
@@ -232,17 +232,17 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         setupFunctionParameters(function, function.getParameters(), arguments, false);
         final boolean isVoid = function.isVoid();
 
-        LogicVariable retAddr = LogicVariable.fnRetAddr(functionPrefix);
+        LogicVariable retAddr = function.getFnRetAddr();
         if (profile.isSymbolicLabels()) {
             assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
-            assembler.createCallStackless(function.getLabel(), retAddr,LogicVariable.fnRetVal(function));
+            assembler.createCallStackless(function.getLabel(), retAddr,function.getFnRetVal());
         } else {
             final LogicLabel returnLabel = assembler.nextLabel();
             assembler.createSetAddress(retAddr, returnLabel).setHoistId(returnLabel);
             assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
             // We're putting INVALID as retAddr: in absolute addressing mode, the CALL instruction doesn't
             // set function return address, it is set up separately by the previous instruction
-            assembler.createCallStackless(function.getLabel(), LogicVariable.INVALID,LogicVariable.fnRetVal(function))
+            assembler.createCallStackless(function.getLabel(), LogicVariable.INVALID,function.getFnRetVal())
                     .setMarker(returnLabel).setHoistId(returnLabel);
             // Mark position where the function must return
             assembler.createLabel(returnLabel);
@@ -289,7 +289,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         // Recursive function call
         final LogicLabel returnLabel = assembler.nextLabel();
-        assembler.createCallRecursive(stack, function.getLabel(), returnLabel, LogicVariable.fnRetVal(function));
+        assembler.createCallRecursive(stack, function.getLabel(), returnLabel, function.getFnRetVal());
         assembler.createLabel(returnLabel); // where the function must return
 
         retrieveFunctionParameters(function, function.getParameters(), arguments, recursiveCall);
@@ -326,9 +326,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         setupFunctionParameters(function, parameters, arguments, false);
 
-        LogicVariable finished = LogicVariable.fnFinished(function);
+        LogicString mlogFinished = function.getFnFinished().getMlogString();
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
-        assembler.createWrite(LogicBoolean.FALSE, processor, finished.getMlogString());
+        assembler.createWrite(LogicBoolean.FALSE, processor, mlogFinished);
         assembler.createWrite(LogicNumber.create(function.getRemoteIndex()), processor, LogicString.create("@counter"));
 
         if (async) return LogicVoid.VOID;
@@ -336,7 +336,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         LogicLabel label = assembler.createNextLabel();
         assembler.createYieldExecution();
         LogicVariable tmp = assembler.nextTemp();
-        assembler.createRead(tmp, processor, finished.getMlogString());
+        assembler.createRead(tmp, processor, mlogFinished);
         assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
 
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
@@ -419,7 +419,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
         String remoteSignature = createRemoteSignature(module.get());
-        LogicString initializedName = LogicVariable.REMOTE_SIGNATURE.getMlogString();
+        LogicString initializedName = LogicString.create(nameCreator.remoteSignature());
         LogicVariable tmp = assembler.unprotectedTemp();
         LogicLabel label = assembler.createNextLabel();
         assembler.createRead(tmp, remoteProcessor, initializedName);
@@ -439,10 +439,10 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(remote.function, AstSubcontextType.REMOTE_CALL);
         LogicVariable result = assembler.nextNodeResultTemp();
-        assembler.createRead(result, remote.processor, LogicVariable.fnFinished(remote.function).getMlogString());
+        assembler.createRead(result, remote.processor, remote.function.getFnFinished().getMlogString());
         if (arguments.size() > 1) {
             LogicVariable tmp = assembler.nextTemp();
-            assembler.createRead(tmp, remote.processor, LogicVariable.fnRetVal(remote.function).getMlogString());
+            assembler.createRead(tmp, remote.processor, remote.function.getFnRetVal().getMlogString());
             arguments.get(1).setValue(assembler, tmp);
         }
         assembler.clearSubcontextType();
@@ -458,12 +458,12 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         LogicLabel label = assembler.createNextLabel();
         assembler.createYieldExecution();
         LogicVariable tmp = assembler.nextTemp();
-        assembler.createRead(tmp, remote.processor, LogicVariable.fnFinished(remote.function).getMlogString());
+        assembler.createRead(tmp, remote.processor, remote.function.getFnFinished().getMlogString());
         assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
         assembler.clearSubcontextType();
 
         return new RemoteVariable(remote.function.getSourcePosition(), remote.processor, remote.function.getName() + "()",
-                LogicVariable.fnRetVal(remote.function).getMlogString(),
+                remote.function.getFnRetVal().getMlogString(),
                 assembler.nextTemp(), false, false);
     }
 
@@ -588,9 +588,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             final LogicVariable resultVariable = assembler.nextNodeResultTemp();
             assembler.setSubcontextType(function, AstSubcontextType.RETURN_VALUE);
             if (processor != null) {
-                assembler.createRead(resultVariable, processor, LogicVariable.fnRetVal(function).getMlogString());
+                assembler.createRead(resultVariable, processor, function.getFnRetVal().getMlogString());
             } else {
-                assembler.createSet(resultVariable, LogicVariable.fnRetVal(function));
+                assembler.createSet(resultVariable, function.getFnRetVal());
             }
             return resultVariable;
         } else {
@@ -598,9 +598,9 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             // within this function's call tree
             return processor != null
                     ? new RemoteVariable(function.getSourcePosition(), processor, function.getName() + "()",
-                        LogicVariable.fnRetVal(function).getMlogString(),assembler.nextTemp(),
+                    function.getFnRetVal().getMlogString(),assembler.nextTemp(),
                         false, false)
-                    :   LogicVariable.fnRetVal(function);
+                    :   function.getFnRetVal();
         }
     }
 

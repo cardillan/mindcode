@@ -307,7 +307,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                     .forEach(variableStates::markInitialized);
             function.getParameters().stream().filter(FunctionParameter::isInput).map(LogicVariable.class::cast)
                     .forEach(variableStates::markInitialized);
-            variableStates.markInitialized(LogicVariable.fnRetAddr(function.getPrefix()));
+            variableStates.markInitialized(function.getFnRetAddr());
         }
 
         iterator = createIteratorAtContext(context);

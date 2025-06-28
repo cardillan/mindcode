@@ -48,6 +48,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     protected final CodeGeneratorContext context;
     protected final CompilerProfile profile;
     protected final InstructionProcessor processor;
+    protected final NameCreator nameCreator;
     protected final MindustryMetadata metadata;
     protected final CallGraph callGraph;
     protected final CodeAssembler assembler;
@@ -62,6 +63,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
+        nameCreator = context.nameCreator();
         metadata = context.metadata();
         callGraph = context.callGraph();
         assembler = context.assembler();
@@ -77,6 +79,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
         profile = context.compilerProfile();
         processor = context.instructionProcessor();
+        nameCreator = context.nameCreator();
         metadata = context.metadata();
         callGraph = context.callGraph();
         assembler = context.assembler();

@@ -54,12 +54,13 @@ public class LogicInstructionLabelResolver {
             return program;
         }
 
-        HashSet<LogicArgument> allVariables = program.stream()
+        HashSet<LogicVariable> allVariables = program.stream()
                 .flatMap(LogicInstruction::inputOutputArgumentsStream)
                 .filter(a -> a.isUserVariable() || a.getType() == ArgumentType.BLOCK)
+                .map(LogicVariable.class::cast)
                 .collect(Collectors.toCollection(HashSet::new));
 
-        List<LogicArgument> order = orderVariables(allVariables, profile.getSortVariables());
+        List<LogicVariable> order = orderVariables(allVariables, profile.getSortVariables());
 
         AstContext astContext = program.getFirst().getAstContext();
         List<LogicInstruction> variables = createVariables(astContext, order);
@@ -75,12 +76,12 @@ public class LogicInstructionLabelResolver {
         return result;
     }
 
-    public static List<LogicArgument> orderVariables(Set<LogicArgument> allVariables, List<SortCategory> categories) {
+    public static List<LogicVariable> orderVariables(Set<LogicVariable> allVariables, List<SortCategory> categories) {
         // Sort all categories except ALL
-        Map<SortCategory, List<LogicArgument>> sorted = new EnumMap<>(SortCategory.class);
+        Map<SortCategory, List<LogicVariable>> sorted = new EnumMap<>(SortCategory.class);
         for (SortCategory category : categories) {
             if (category != SortCategory.ALL) {
-                List<LogicArgument> selected = allVariables.stream()
+                List<LogicVariable> selected = allVariables.stream()
                         .filter(v -> matches(v, category))
                         .sorted(Comparator.comparing(LogicArgument::toMlog))
                         .toList();
@@ -91,12 +92,12 @@ public class LogicInstructionLabelResolver {
         }
 
         // What remains is ALL
-        sorted.put(SortCategory.ALL, allVariables.stream().sorted(Comparator.comparing(LogicArgument::toMlog)).toList());
+        sorted.put(SortCategory.ALL, allVariables.stream().sorted(Comparator.comparing(LogicVariable::getFullName)).toList());
 
         // Now put categories in the proper order
-        List<LogicArgument> order = new ArrayList<>();
+        List<LogicVariable> order = new ArrayList<>();
         for (SortCategory category : categories) {
-            List<LogicArgument> variables = sorted.remove(category);
+            List<LogicVariable> variables = sorted.remove(category);
             if (variables != null) {
                 order.addAll(variables);
             }
@@ -117,7 +118,7 @@ public class LogicInstructionLabelResolver {
         };
     }
 
-    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, List<LogicArgument> initVariables) {
+    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, List<LogicVariable> initVariables) {
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
                 .createSubcontext(AstContextType.CREATE_VARS, AstSubcontextType.BASIC, 1.0);
 
@@ -138,7 +139,7 @@ public class LogicInstructionLabelResolver {
                 program.add(processor.createEnd(last.getAstContext()));
             }
 
-            Set<LogicArgument> missingVariables = new LinkedHashSet<>(initVariables);
+            Set<LogicVariable> missingVariables = new LinkedHashSet<>(initVariables);
             program.stream()
                     .mapMulti((LogicInstruction instruction, Consumer<LogicVariable> consumer)
                             -> instruction.inputOutputArgumentsStream()
@@ -318,7 +319,7 @@ public class LogicInstructionLabelResolver {
                 -> processor.resolve(profile, instruction, consumer)).toList();
     }
 
-    private List<LogicInstruction> createVariables(AstContext astContext, Collection<LogicArgument> variables) {
+    private List<LogicInstruction> createVariables(AstContext astContext, Collection<LogicVariable> variables) {
         final int batchSize = 6;
 
         List<LogicInstruction> result = new ArrayList<>();

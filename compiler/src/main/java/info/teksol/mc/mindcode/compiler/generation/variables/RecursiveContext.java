@@ -14,8 +14,9 @@ public class RecursiveContext extends LocalContext {
     private List<LogicVariable> parentVariables = new ArrayList<>();
     private final Deque<List<LogicVariable>> nodeStack = new ArrayDeque<>();
 
-    public RecursiveContext(MessageConsumer messageConsumer, MindcodeFunction function, List<FunctionArgument> varargs) {
-        super(messageConsumer, function, varargs);
+    public RecursiveContext(MessageConsumer messageConsumer, NameCreator nameCreator, MindcodeFunction function,
+            List<FunctionArgument> varargs) {
+        super(messageConsumer, nameCreator, function, varargs);
     }
 
     @Override

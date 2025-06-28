@@ -370,7 +370,7 @@ class DataFlowVariableStates {
             optimizationContext.getFunctionReads(function).forEach(variable -> valueRead(variable, instruction, false, true));
             optimizationContext.getFunctionWrites(function).forEach(variable -> valueReset(variable, false));
             function.getParameters().stream().filter(FunctionParameter::isOutput).map(LogicVariable.class::cast).forEach(initialized::add);
-            initialized.add(LogicVariable.fnRetVal(function));
+            initialized.add(function.getFnRetVal());
         }
 
         /// Returns a VariableValue instance keeping the information about the variable's value, or null if nothing

@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.decompiler;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.functions.BaseFunctionMapper;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapper;
+import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -35,7 +36,7 @@ public class MlogDecompiler {
 
     public static String decompile(String mlog, boolean preamble) {
         InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(
-                ProcessorVersion.MAX, ProcessorEdition.W);
+                ProcessorVersion.MAX, ProcessorEdition.W, new StandardNameCreator());
         MlogParser mlogParser = new MlogParser(processor, mlog);
         ParsedMlog parsedMlog = mlogParser.parse();
         return new MlogDecompiler(processor, parsedMlog, preamble).decompile();

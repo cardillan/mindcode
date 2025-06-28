@@ -11,7 +11,9 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.CustomInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -131,10 +133,11 @@ public abstract class AbstractTestBase {
     }
 
     // Instruction creation
+    protected final NameCreator nameCreator = new StandardNameCreator(false);
 
     protected final CompilerProfile profile = createCompilerProfile();
     protected final InstructionProcessor ip = InstructionProcessorFactory.getInstructionProcessorNoValidate(
-            ExpectedMessages.throwOnMessage(), profile);
+            ExpectedMessages.throwOnMessage(), nameCreator, profile);
 
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
     protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.MOCK, 1.0);
@@ -206,6 +209,19 @@ public abstract class AbstractTestBase {
         }
     }
 
+    protected static LogicVariable block(String name) {
+        return LogicVariable.block(EMPTY, name);
+    }
+
+    protected static LogicVariable global(String name) {
+        return LogicVariable.global(new AstIdentifier(EMPTY, name), "." + name);
+    }
+
+    @SuppressWarnings("ConfusingMainMethod")
+    protected static LogicVariable main(String name) {
+        return LogicVariable.main(new AstIdentifier(EMPTY, name), ":" + name);
+    }
+
     // Common constants for creating instructions
     protected static final Operation
             add         = Operation.ADD,
@@ -236,7 +252,6 @@ public abstract class AbstractTestBase {
             N10         = LogicNumber.create(-10),
             N11         = LogicNumber.create(-11);
 
-
     protected static final LogicString
             message     = LogicString.create("message");
 
@@ -247,28 +262,28 @@ public abstract class AbstractTestBase {
             label2      = LogicLabel.symbolic("label2");
 
     protected static final LogicVariable
-            bank1       = LogicVariable.block(EMPTY, "bank1"),
-            cell1       = LogicVariable.block(EMPTY, "cell1"),
-            conveyor1   = LogicVariable.block(EMPTY, "conveyor1"),
-            vault1      = LogicVariable.block(EMPTY, "vault1"),
+            bank1       = block("bank1"),
+            cell1       = block("cell1"),
+            conveyor1   = block("conveyor1"),
+            vault1      = block("vault1"),
             unused      = LogicVariable.unusedVariable(),
-            C           = LogicVariable.global(new AstIdentifier(EMPTY, "C")),
-            a           = LogicVariable.main(new AstIdentifier(EMPTY, "a")),
-            b           = LogicVariable.main(new AstIdentifier(EMPTY, "b")),
-            c           = LogicVariable.main(new AstIdentifier(EMPTY, "c")),
-            d           = LogicVariable.main(new AstIdentifier(EMPTY, "d")),
-            another     = LogicVariable.main(new AstIdentifier(EMPTY, "another")),
-            divisor     = LogicVariable.main(new AstIdentifier(EMPTY, "divisor")),
-            value       = LogicVariable.main(new AstIdentifier(EMPTY, "value")),
-            var         = LogicVariable.main(new AstIdentifier(EMPTY, "var")),
-            foo         = LogicVariable.main(new AstIdentifier(EMPTY, "foo")),
-            result      = LogicVariable.main(new AstIdentifier(EMPTY, "result")),
-            ast0        = LogicVariable.ast("__ast0"),
-            tmp0        = LogicVariable.temporary("__tmp0"),
-            tmp1        = LogicVariable.temporary("__tmp1"),
-            tmp2        = LogicVariable.temporary("__tmp2"),
-            tmp3        = LogicVariable.temporary("__tmp3"),
-            fn0retval   = LogicVariable.fnRetVal("foo", "__fn0retval");
+            C           = global("C"),
+            a           = main("a"),
+            b           = main("b"),
+            c           = main("c"),
+            d           = main("d"),
+            another     = main("another"),
+            divisor     = main("divisor"),
+            value       = main("value"),
+            var         = main("var"),
+            foo         = main("foo"),
+            result      = main("result"),
+            ast0        = LogicVariable.ast("*ast0"),
+            tmp0        = LogicVariable.temporary("*tmp0"),
+            tmp1        = LogicVariable.temporary("*tmp1"),
+            tmp2        = LogicVariable.temporary("*tmp2"),
+            tmp3        = LogicVariable.temporary("*tmp3"),
+            fn0retval   = LogicVariable.fnRetVal("foo", ":fn0");
 
     protected static final LogicBuiltIn
             coal        = LogicBuiltIn.createForUnitTests("@coal",      false),

@@ -8,7 +8,6 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import org.jspecify.annotations.NullMarked;
 
@@ -33,7 +32,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
                 return;
             }
 
-            generateCodeForFunction(function.prepareInlinedForCall(processor.nextFunctionPrefix(function)));
+            generateCodeForFunction(function.prepareInlinedForCall(nameCreator));
         } else {
             generateCodeForFunction(function);
         }
@@ -57,7 +56,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
             assembler.createLabel(function.getLabel());
         }
 
-        final LogicValue returnValue = function.isVoid() ? LogicVoid.VOID : LogicVariable.fnRetVal(function);
+        final LogicValue returnValue = function.isVoid() ? LogicVoid.VOID : function.getFnRetVal();
         returnStack.enterFunction(processor.nextLabel(), returnValue);
 
         if (function.isRecursive()) {
@@ -84,7 +83,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
                 : evaluateBody(function.getBody());
 
         if (!function.isVoid()) {
-            assembler.createSet(LogicVariable.fnRetVal(function), valueStore.getValue(assembler));
+            assembler.createSet(function.getFnRetVal(), valueStore.getValue(assembler));
         }
 
         assembler.createLabel(returnStack.getReturnLabel());
@@ -100,7 +99,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         assembler.createLabel(function.getLabel().setRemote());
         compileFunctionBody(function);
 
-        assembler.createSet(LogicVariable.fnFinished(function), LogicBoolean.TRUE);
+        assembler.createSet(function.getFnFinished(), LogicBoolean.TRUE);
 
         // Jump to remote wait
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
@@ -110,6 +109,6 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
     private void appendStacklessFunctionDeclaration(MindcodeFunction function) {
         compileFunctionBody(function);
-        assembler.createReturn(LogicVariable.fnRetAddr(function.getPrefix()));
+        assembler.createReturn(function.getFnRetAddr());
     }
 }

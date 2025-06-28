@@ -9,7 +9,7 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -22,7 +22,6 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.regex.Matcher;
@@ -37,8 +36,8 @@ import static info.teksol.mc.util.CollectionUtils.indexOf;
 public abstract class BaseInstructionProcessor extends AbstractMessageEmitter implements InstructionProcessor {
     private final ProcessorVersion processorVersion;
     private final ProcessorEdition processorEdition;
+    private final NameCreator nameCreator;
     private @Nullable MindustryMetadata metadata;
-    private final boolean shortFunctionPrefix;
     private final boolean instructionValidation;
     private final List<OpcodeVariant> opcodeVariants;
     private final Map<Opcode, List<OpcodeVariant>> variantsByOpcode;
@@ -46,35 +45,31 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private final Map<Opcode, Integer> opcodeKeywordPosition;
     private final Map<InstructionParameterType, Collection<String>> validArgumentValues;
     private final Set<String> additionalBuiltins = new HashSet<>();
-    private final Map<String, AtomicInteger> functionPrefixCounter = new HashMap<>();
-    private final Set<String> functionPrefixes = new HashSet<>();
     private int tmpIndex = 0;
     private int labelIndex = 0;
     private int markerIndex = 0;
-    private int functionIndex = 0;
 
     static class InstructionProcessorParameters {
         public final MessageConsumer messageConsumer;
         public final ProcessorVersion version;
         public final ProcessorEdition edition;
-        public final boolean shortFunctionPrefix;
+        public final NameCreator nameCreator;
         public final boolean instructionValidation;
         public final List<OpcodeVariant> opcodeVariants;
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
-                ProcessorEdition edition, boolean shortFunctionPrefix, boolean instructionValidation, List<OpcodeVariant> opcodeVariants) {
+                ProcessorEdition edition, NameCreator nameCreator, boolean instructionValidation, List<OpcodeVariant> opcodeVariants) {
             this.messageConsumer = messageConsumer;
             this.version = version;
             this.edition = edition;
-            this.shortFunctionPrefix = shortFunctionPrefix;
+            this.nameCreator = nameCreator;
             this.instructionValidation = instructionValidation;
             this.opcodeVariants = opcodeVariants;
         }
 
-        public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
-                ProcessorEdition edition, boolean shortFunctionPrefix, boolean instructionValidation) {
-            this(messageConsumer, version, edition, shortFunctionPrefix, instructionValidation,
-                    MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
+        public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorEdition edition,
+                NameCreator nameCreator, boolean instructionValidation) {
+            this(messageConsumer, version, edition, nameCreator, instructionValidation, MindustryOpcodeVariants.getSpecificOpcodeVariants(version, edition));
         }
     }
 
@@ -82,7 +77,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         super(parameters.messageConsumer);
         this.processorVersion = parameters.version;
         this.processorEdition = parameters.edition;
-        this.shortFunctionPrefix = parameters.shortFunctionPrefix;
+        this.nameCreator = parameters.nameCreator;
         this.instructionValidation = parameters.instructionValidation;
         this.opcodeVariants = parameters.opcodeVariants;
         variantsByOpcode = opcodeVariants.stream().collect(Collectors.groupingBy(OpcodeVariant::opcode));
@@ -115,23 +110,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
 
     @Override
     public LogicVariable nextTemp() {
-        return LogicVariable.temporary(getTempPrefix() + tmpIndex++);
-    }
-
-    @Override
-    public String nextFunctionPrefix(MindcodeFunction function) {
-        if (shortFunctionPrefix) {
-            return getFunctionPrefix() + functionIndex++;
-        } else {
-            AtomicInteger counter = functionPrefixCounter.computeIfAbsent(function.getName(), k -> new AtomicInteger(0));
-            while (true) {
-                int index = counter.getAndIncrement();
-                String prefix = ':' + function.getName() + (index == 0 ? "" : "." + index);
-                if (functionPrefixes.add(prefix)) {
-                    return prefix;
-                }
-            }
-        }
+        return LogicVariable.temporary(nameCreator.temp(tmpIndex++));
     }
 
     @Override
@@ -245,8 +224,12 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         }
     }
 
+    private @Nullable LogicVariable stackPointer;
     private LogicVariable stackPointer() {
-        return LogicVariable.STACK_POINTER;
+        if (stackPointer == null) {
+            stackPointer = LogicVariable.preserved(nameCreator.stackPointer());
+        }
+        return stackPointer;
     }
 
     @Override

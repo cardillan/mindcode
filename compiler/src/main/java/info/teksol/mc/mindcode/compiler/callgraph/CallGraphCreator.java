@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
@@ -17,6 +18,7 @@ import java.util.Objects;
 public class CallGraphCreator extends AbstractMessageEmitter {
     private final CompilerProfile profile;
     private final InstructionProcessor processor;
+    private final NameCreator nameCreator;
     private final AstProgram program;
     private final FunctionDefinitions functionDefinitions;
     private final List<MindcodeFunction> functions = new ArrayList<>();
@@ -31,6 +33,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         super(context.messageConsumer());
         this.profile = context.compilerProfile();
         this.processor = context.instructionProcessor();
+        this.nameCreator = context.nameCreator();
         this.program = program;
         this.functionDefinitions = new FunctionDefinitions(messageConsumer);
         this.activeFunction = functionDefinitions.getMain();
@@ -120,8 +123,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private void setupOutOfLineFunction(MindcodeFunction function) {
         function.setLabel(processor.nextLabel());
-        function.setPrefix(processor.nextFunctionPrefix(function));
-        function.createParameters();
+        nameCreator.setupFunctionPrefix(function);
+        function.createVariables(nameCreator);
     }
 
     private boolean propagateIndirectCalls() {

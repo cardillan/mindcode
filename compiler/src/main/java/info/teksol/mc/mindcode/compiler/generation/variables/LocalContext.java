@@ -17,6 +17,7 @@ import java.util.function.Supplier;
 
 @NullMarked
 public class LocalContext extends AbstractMessageEmitter implements FunctionContext {
+    private final NameCreator nameCreator;
     private final MindcodeFunction function;
     private final List<FunctionArgument> varargs;
     private final Map<String, ValueStore> variables = new LinkedHashMap<>();
@@ -35,8 +36,10 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
     /// Keeps starting positions inside the nodeVariables list for all active (nested) nodes.
     private final Deque<Integer> nodeStack = new ArrayDeque<>(50);
 
-    public LocalContext(MessageConsumer messageConsumer, MindcodeFunction function, List<FunctionArgument> varargs) {
+    public LocalContext(MessageConsumer messageConsumer, NameCreator nameCreator, MindcodeFunction function,
+            List<FunctionArgument> varargs) {
         super(messageConsumer);
+        this.nameCreator = nameCreator;
         this.function = Objects.requireNonNull(function);
         this.varargs = Objects.requireNonNull(varargs);
         this.loopStack = new LoopStack(messageConsumer);
@@ -101,17 +104,15 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
     }
 
     private ValueStore createFunctionVariable(AstIdentifier identifier, boolean noinit, boolean implicitDeclaration) {
-        int i = variableReuses.computeIfAbsent(identifier.getName(), k -> new AtomicInteger(0)).getAndIncrement();
-        if (implicitDeclaration && i > 0) {
+        int index = variableReuses.computeIfAbsent(identifier.getName(), k -> new AtomicInteger(0)).getAndIncrement();
+        if (implicitDeclaration && index > 0) {
             error(identifier, ERR.VARIABLE_NOT_RESOLVED, identifier.getName());
         }
 
-        String suffix = i == 0 ? "" : "." + i;
-
         if (function.isMain()) {
-            return LogicVariable.main(identifier, suffix, noinit);
+            return LogicVariable.main(identifier, nameCreator.main(identifier.getName(), index), noinit);
         } else {
-            return LogicVariable.local(identifier, function.getName(), function.getPrefix(), suffix, noinit);
+            return LogicVariable.local(identifier, function, nameCreator.local(function, identifier.getName(), index), noinit);
         }
     }
 

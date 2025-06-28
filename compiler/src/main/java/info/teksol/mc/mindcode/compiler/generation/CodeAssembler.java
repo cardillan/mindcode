@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -49,6 +50,10 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         processor = context.instructionProcessor();
         variables = context.variables();
         astContext = context.rootAstContext();
+    }
+
+    public NameCreator nameCreator() {
+        return variables.nameCreator();
     }
 
     public InstructionProcessor getProcessor() {

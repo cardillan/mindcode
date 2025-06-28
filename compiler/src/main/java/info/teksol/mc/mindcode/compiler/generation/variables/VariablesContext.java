@@ -10,5 +10,6 @@ import org.jspecify.annotations.NullMarked;
 public interface VariablesContext extends CompilerContext {
     CompilerProfile compilerProfile();
     InstructionProcessor instructionProcessor();
+    NameCreator nameCreator();
     MindustryMetadata metadata();
 }

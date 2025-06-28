@@ -26,9 +26,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.CallGraphCreatorContext;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.generation.*;
-import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
-import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
-import info.teksol.mc.mindcode.compiler.generation.variables.VariablesContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.compiler.optimization.DebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.DiffDebugPrinter;
 import info.teksol.mc.mindcode.compiler.optimization.NullDebugPrinter;
@@ -69,11 +67,12 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     // MindcodeCompiler serves as a compiler context too
     private static final ThreadLocal<MindcodeCompiler> context = new ThreadLocal<>();
 
-    // Inputs, configurations and tools
+    // Inputs, configurations, and tools
     private final CompilationPhase targetPhase;
     private final CompilerProfile profile;
     private final InputFiles inputFiles;
     private @Nullable InstructionProcessor instructionProcessor;
+    private @Nullable NameCreator nameCreator;
     private @Nullable MindustryMetadata metadata;
     private @Nullable CompileTimeEvaluator compileTimeEvaluator;
 
@@ -86,7 +85,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final Map<AstRequire, InputFile> requiredFiles = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
-    private final List<LogicArgument> remoteVariables = new ArrayList<>();
+    private final List<LogicVariable> remoteVariables = new ArrayList<>();
     private final ReturnStack returnStack;
     private final StackTracker stackTracker;
     private @Nullable AstProgram astProgram;
@@ -250,7 +249,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         long compileStart = System.nanoTime();
         DirectivePreprocessor.processDirectives(this, astProgram);
 
-        instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, profile);
+        nameCreator = new StandardNameCreator(profile);
+        instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, nameCreator, profile);
         metadata = instructionProcessor.getMetadata();
 
         callGraph = CallGraphCreator.createCallGraph(this, astProgram);
@@ -501,6 +501,11 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     @Override
     public InstructionProcessor instructionProcessor() {
         return Objects.requireNonNull(instructionProcessor);
+    }
+
+    @Override
+    public NameCreator nameCreator() {
+        return Objects.requireNonNull(nameCreator);
     }
 
     @Override

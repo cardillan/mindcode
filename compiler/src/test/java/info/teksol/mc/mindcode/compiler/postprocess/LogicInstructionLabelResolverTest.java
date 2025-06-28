@@ -2,7 +2,10 @@ package info.teksol.mc.mindcode.compiler.postprocess;
 
 
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.Condition;
+import info.teksol.mc.mindcode.logic.arguments.LogicParameter;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SortCategory;
@@ -167,15 +170,15 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
 
     @Test
     void sortsCategories() {
-        LogicArgument global1 = LogicVariable.global(new AstIdentifier(EMPTY,"b1"));
-        LogicArgument global2 = LogicVariable.global(new AstIdentifier(EMPTY, "b2"));
-        LogicArgument main1 = LogicVariable.global(new AstIdentifier(EMPTY, "a1"));
-        LogicArgument main2 = LogicVariable.global(new AstIdentifier(EMPTY, "a2"));
-        LogicArgument param = LogicParameter.parameter(new AstIdentifier(EMPTY, "p"), LogicString.create("x"));
-        Set<LogicArgument> variables = new HashSet<>(List.of(global1, global2, main1, main2, param));
+        LogicVariable global1 = global("b1");
+        LogicVariable global2 = global("b2");
+        LogicVariable main1 = main("a1");
+        LogicVariable main2 = main("a2");
+        LogicVariable param = LogicParameter.parameter(new AstIdentifier(EMPTY, "p"), LogicString.create("x"));
+        Set<LogicVariable> variables = new HashSet<>(List.of(global1, global2, main1, main2, param));
 
-        List<LogicArgument> expected = List.of(main1, main2, global1, global2, param);
-        List<LogicArgument> actual = LogicInstructionLabelResolver.orderVariables(variables, List.of(SortCategory.ALL, SortCategory.PARAMS));
+        List<LogicVariable> expected = List.of(main1, main2, global1, global2, param);
+        List<LogicVariable> actual = LogicInstructionLabelResolver.orderVariables(variables, List.of(SortCategory.ALL, SortCategory.PARAMS));
 
         assertEquals(expected, actual);
     }

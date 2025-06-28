@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -31,14 +32,22 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
 
     public RegularArrayConstructor(ArrayAccessInstruction instruction) {
         super(instruction);
+        NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
 
         String baseName = arrayStore.getName();
-        readInd = LogicVariable.arrayIndex(baseName, "*rind");
-        readVal = LogicVariable.arrayReadAccess(baseName);
-        readRet = LogicVariable.arrayReturn(baseName, "*rret");
-        writeInd = LogicVariable.arrayIndex(baseName, "*wind");
-        writeVal = LogicVariable.arrayWriteAccess(baseName);
-        writeRet = LogicVariable.arrayReturn(baseName, "*wret");
+//        readInd = LogicVariable.arrayIndex(baseName, "*rind");
+//        readVal = LogicVariable.arrayReadAccess(baseName);
+//        readRet = LogicVariable.arrayReturn(baseName, "*rret");
+//        writeInd = LogicVariable.arrayIndex(baseName, "*wind");
+//        writeVal = LogicVariable.arrayWriteAccess(baseName);
+//        writeRet = LogicVariable.arrayReturn(baseName, "*wret");
+
+        readInd = LogicVariable.arrayAccess(baseName, "*rind", nameCreator.arrayAccess(baseName, "rind"));
+        readVal = LogicVariable.arrayAccess(baseName, "*r", nameCreator.arrayAccess(baseName, "r"));
+        readRet = LogicVariable.arrayReturn(baseName, "*rret", nameCreator.arrayAccess(baseName, "rret"));
+        writeInd = LogicVariable.arrayAccess(baseName, "*wind", nameCreator.arrayAccess(baseName, "wind"));
+        writeVal = LogicVariable.arrayAccess(baseName, "*w", nameCreator.arrayAccess(baseName, "w"));
+        writeRet = LogicVariable.arrayReturn(baseName, "*wret", nameCreator.arrayAccess(baseName, "wret"));
     }
 
     @Override

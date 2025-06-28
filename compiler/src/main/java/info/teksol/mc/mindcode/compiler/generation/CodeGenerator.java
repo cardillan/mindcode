@@ -16,6 +16,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.generation.builders.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -99,6 +100,10 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor.registerVisitor(new WhileLoopStatementsBuilder(this, context));
 
         functionCompiler = new FunctionDeclarationsBuilder(this, context);
+    }
+
+    public NameCreator nameCreator() {
+        return variables.nameCreator();
     }
 
     public String createRemoteSignature(Stream<AstFunctionDeclaration> functions) {
@@ -233,7 +238,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (!remoteFunctions.isEmpty()) {
             assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
             String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
-            assembler.createSet(LogicVariable.REMOTE_SIGNATURE, LogicString.create(remoteSignature));
+            assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.create(remoteSignature));
             assembler.clearContextType(program);
         }
 

@@ -1,5 +1,5 @@
    540 instructions before optimizations.
-    56 instructions eliminated by Temp Variables Elimination.
+    56 instructions eliminated by Temp Variables Elimination (2 iterations).
      1 instructions eliminated by Case Expression Optimization.
     43 instructions eliminated by Dead Code Elimination (6 iterations).
     20 instructions eliminated by Jump Optimization (5 iterations).

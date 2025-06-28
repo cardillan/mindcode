@@ -41,29 +41,35 @@ public class InternalArray extends AbstractArrayStore {
         logicArray = LogicArray.create(this, offset, offset + elements.size());
     }
 
-    public static InternalArray create(AstIdentifier identifier, int size, boolean isVolatile, @Nullable LogicVariable processor) {
+    public static InternalArray create(NameCreator nameCreator, AstIdentifier identifier, int size, boolean isVolatile, @Nullable LogicVariable processor) {
         if (processor != null) {
             CodeAssembler assembler = MindcodeCompiler.getContext().assembler();
-            return new InternalArray(identifier.sourcePosition(), "." + processor.getName() + "." + identifier.getName(),
+            return new InternalArray(identifier.sourcePosition(),
+                    nameCreator.arrayBase(processor.getName(), identifier.getName()),
                     IntStream.range(0, size)
                             .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
-                            processor.getName() + "." + identifier.getName() + "[" + index + "]",
-                            LogicString.create(LogicVariable.arrayVariableMlog(identifier, index)),
-                            assembler.nextTemp(), false, false)).toList(), true);
+                                    processor.getName() + "." + identifier.getName() + "[" + index + "]",
+                                    LogicString.create(nameCreator.remoteArrayElement(identifier.getName(), index)),
+                                    assembler.nextTemp(), false, false)).toList(), true);
         } else {
-            return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.range(0, size)
-                    .mapToObj(index -> (ValueStore) LogicVariable.arrayElement(identifier, index, isVolatile)).toList(), false);
+            return new InternalArray(identifier.sourcePosition(),
+                    nameCreator.arrayBase("", identifier.getName()),
+                    IntStream.range(0, size)
+                            .mapToObj(index -> (ValueStore) LogicVariable.arrayElement(identifier, index,
+                                    nameCreator.arrayElement(identifier.getName(), index), isVolatile)).toList(), false);
         }
     }
 
-    public static InternalArray createConst(AstIdentifier identifier, int size, List<ValueStore> elements) {
+    public static InternalArray createConst(NameCreator nameCreator, AstIdentifier identifier, int size, List<ValueStore> elements) {
         List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
-        return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), wrappedElements, false);
+        return new InternalArray(identifier.sourcePosition(),
+                nameCreator.arrayBase("", identifier.getName()), wrappedElements, false);
     }
 
-    public static InternalArray createInvalid(AstIdentifier identifier, int size) {
-        return new InternalArray(identifier.sourcePosition(), "." + identifier.getName(), IntStream.of(size)
-                .mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), false);
+    public static InternalArray createInvalid(NameCreator nameCreator, AstIdentifier identifier, int size) {
+        return new InternalArray(identifier.sourcePosition(),
+                nameCreator.arrayBase("", identifier.getName()),
+                IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), false);
     }
 
     public LogicArray getLogicArray() {

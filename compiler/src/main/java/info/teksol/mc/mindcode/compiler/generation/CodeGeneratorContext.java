@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapperContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
@@ -25,6 +26,7 @@ public interface CodeGeneratorContext extends
     AstModule getModule(AstRequire node);
     void setHeapAllocation(AstAllocation heapAllocation);
     @Nullable AstAllocation heapAllocation();
+    NameCreator nameCreator();
     MindustryMetadata metadata();
     CallGraph callGraph();
     Variables variables();

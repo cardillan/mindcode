@@ -46,8 +46,10 @@ class TempVariableEliminator extends BaseOptimizer {
         List<LogicInstruction> program = optimizationContext.getProgram();
         Map<LogicArgument, SortedSet<Integer>> variableUses = gatherTempVariableUses(program);
 
-        boolean result = false;
-        variableUses.forEach((variable, indices) -> {
+        boolean replaced = false;
+        for (Map.Entry<LogicArgument, SortedSet<Integer>> entry : variableUses.entrySet()) {
+            LogicArgument variable = entry.getKey();
+            SortedSet<Integer> indices = entry.getValue();
             if (indices.size() == 2 && program.subList(indices.getFirst() + 1, indices.getLast()).stream().allMatch(NoOpInstruction.class::isInstance)) {
                 // This temp variable is used by two consecutive instructions, designated 'first' and 'last'
                 LogicInstruction first = instructionAt(indices.getFirst());
@@ -64,6 +66,7 @@ class TempVariableEliminator extends BaseOptimizer {
                         // Replacing those arguments with the value of the set instruction
                         replaceInstruction(indices.getFirst(), createNoOp(first.getAstContext()));
                         replaceInstruction(indices.getLast(), replaceAllArgs(last, variable, set.getValue()).withContext(set.getAstContext()));
+                        replaced = true;
                     }
                 } else if (last instanceof SetInstruction set && set.getValue().equals(variable)) {
                     // Make sure all <variable> arguments of the other instruction are output
@@ -76,12 +79,13 @@ class TempVariableEliminator extends BaseOptimizer {
                         // Replacing those arguments with target of the set instruction
                         replaceInstruction(indices.getFirst(), replaceAllArgs(first, variable, set.getResult()).withContext(set.getAstContext()));
                         replaceInstruction(indices.getLast(), createNoOp(last.getAstContext()));
+                        replaced = true;
                     }
                 }
             }
-        });
+        }
 
-        return result;
+        return replaced;
     }
 
     private void replaceUnusedOutputs(Set<LogicArgument> inputTempVariables, LogicIterator iterator) {

@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.MessageEmitter;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
@@ -46,8 +45,6 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
     LogicLabel nextMarker();
 
     LogicVariable nextTemp();
-
-    String nextFunctionPrefix(MindcodeFunction function);
 
     LogicVariable unusedVariable();
 
@@ -196,13 +193,5 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     default String getLabelPrefix() {
         return "*label";
-    }
-
-    default String getTempPrefix() {
-        return "*tmp";
-    }
-
-    default String getFunctionPrefix() {
-        return ":fn";
     }
 }

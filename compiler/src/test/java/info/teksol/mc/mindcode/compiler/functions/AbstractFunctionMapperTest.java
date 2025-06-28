@@ -5,6 +5,8 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssemblerContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
+import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariablesContext;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -23,7 +25,7 @@ public class AbstractFunctionMapperTest {
 
     protected static void createFunctionMapper(List<OpcodeVariant> opcodeVariants) {
         InstructionProcessor instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(ProcessorVersion.V6,
-                ProcessorEdition.STANDARD_PROCESSOR, opcodeVariants);
+                ProcessorEdition.STANDARD_PROCESSOR, new StandardNameCreator((false)), opcodeVariants);
 
         createFunctionMapper(instructionProcessor);
     }
@@ -46,12 +48,14 @@ public class AbstractFunctionMapperTest {
     protected static class VariablesContextImpl extends AbstractMessageEmitter implements VariablesContext {
         private final CompilerProfile compilerProfile;
         private final InstructionProcessor instructionProcessor;
+        private final NameCreator nameCreator;
 
         public VariablesContextImpl(MessageConsumer messageConsumer, CompilerProfile compilerProfile,
                 InstructionProcessor instructionProcessor) {
             super(messageConsumer);
             this.compilerProfile = compilerProfile;
             this.instructionProcessor = instructionProcessor;
+            this.nameCreator = new StandardNameCreator(false);
         }
 
         @Override
@@ -62,6 +66,11 @@ public class AbstractFunctionMapperTest {
         @Override
         public InstructionProcessor instructionProcessor() {
             return instructionProcessor;
+        }
+
+        @Override
+        public NameCreator nameCreator() {
+            return nameCreator;
         }
 
         @Override

@@ -5,10 +5,10 @@ import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionParameter;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
@@ -37,6 +37,10 @@ public class MindcodeFunction {
     private List<FunctionParameter> parameters = List.of();
     private @Nullable LogicLabel label;
     private String prefix = "";
+    private int prefixIndex = 0;
+    private LogicVariable fnRetVal = LogicVariable.INVALID;
+    private LogicVariable fnRetAddr = LogicVariable.INVALID;
+    private LogicVariable fnFinished = LogicVariable.INVALID;
 
     /// Index of the function in the remote call dispatch table
     /// The dispatch table starts at index 1.
@@ -50,10 +54,10 @@ public class MindcodeFunction {
     /// All functions need to be visited to detect possible recursions among unused functions.
     private boolean visited = false;
 
-    /// Inlined by any reason: declaration, compiler or optimizer
+    /// Inlined for any reason: declaration, compiler or optimizer
     private boolean inlined = false;
 
-    /// Indicates this is a remote function which is statically bound to a single processor,
+    /// Indicates this is a remote function statically bound to a single processor,
     /// therefore callable as a function as well as a method.
     private boolean staticallyBound = false;
 
@@ -73,9 +77,7 @@ public class MindcodeFunction {
         parameterCount = declaration.getParameterCount();
     }
 
-    private MindcodeFunction(MindcodeFunction other, String prefix) {
-        this.prefix = prefix;
-
+    private MindcodeFunction(NameCreator nameCreator, MindcodeFunction other) {
         declaration = other.declaration;
         module = other.module;
         entryPoint = other.entryPoint;
@@ -90,12 +92,13 @@ public class MindcodeFunction {
         recursiveCalls.addAll(other.recursiveCalls);
         indirectCalls.addAll(other.indirectCalls);
 
-        createParameters();
+        nameCreator.setupFunctionPrefix(this);
+        createVariables(nameCreator);
     }
 
     /// Prepares an inlined function for call (by setting up a prefix for it)
-    public MindcodeFunction prepareInlinedForCall(String prefix) {
-        return new MindcodeFunction(this, prefix);
+    public MindcodeFunction prepareInlinedForCall(NameCreator nameCreator) {
+        return new MindcodeFunction(nameCreator, this);
     }
 
     void addCall(AstFunctionCall call) {
@@ -112,7 +115,7 @@ public class MindcodeFunction {
 
     /// Creates a list of possible calls from this function
     Stream<MindcodeFunction> getPossibleCalls(FunctionDefinitions functions, AstFunctionCall call) {
-        // When creating the function call graph, we can't match functions exactly from within the
+        // When creating the function call graph, we can't match functions exactly here
         return isVarargs()
                 ? functions.getFunctions(call.getFunctionName()).stream()
                 : Stream.of(call).map(c -> functions.getExactMatch(c, -1)).filter(Objects::nonNull);
@@ -184,7 +187,7 @@ public class MindcodeFunction {
         return declaration.getName();
     }
 
-    /// @return list of parameters of the function
+    /// @return list of the function's parameters
     public List<AstFunctionParameter> getDeclaredParameters() {
         return declaration.getParameters();
     }
@@ -197,7 +200,7 @@ public class MindcodeFunction {
         return parameterMap.get(name);
     }
 
-    /// @return list of parameters of the function as LogicVariable
+    /// @return list of the function's parameters as LogicVariables
     public List<FunctionParameter> getParameters() {
         return parameters;
     }
@@ -256,7 +259,7 @@ public class MindcodeFunction {
         return getSourcePosition().isLibrary();
     }
 
-    /// @return true if the function is used (is reachable from main program body)
+    /// @return true if the function is used (is reachable from the main program body)
     public boolean isUsed() {
         return placementCount > 0;
     }
@@ -285,7 +288,7 @@ public class MindcodeFunction {
     /// it can lead to another invocation of this function. If it is, the local context of the function needs
     /// to be saved and restored using stack.
     ///
-    /// @param calledFunction name of the function being called from this function
+    /// @param calledFunction a name of the function being called from this function
     /// @return true if this function call might be recursive
     public boolean isRecursiveCall(MindcodeFunction calledFunction) {
         return recursiveCalls.contains(calledFunction);
@@ -318,8 +321,8 @@ public class MindcodeFunction {
     }
 
     /// Determines whether the called function is called more than once from this function. If it is, the
-    /// returned value from each call needs to be stored in a unique variable, otherwise subsequent calls
-    /// might overwrite the returned value from previous call.
+    /// returned value from each call needs to be stored in a unique variable; otherwise later calls
+    /// might overwrite the returned value from the previous call.
     ///
     /// @param calledFunction function being called from this function
     /// @return true if the function is called more than once from this function
@@ -339,11 +342,27 @@ public class MindcodeFunction {
         return prefix;
     }
 
+    public int getPrefixIndex() {
+        return prefixIndex;
+    }
+
+    public LogicVariable getFnRetVal() {
+        return Objects.requireNonNull(fnRetVal);
+    }
+
+    public LogicVariable getFnRetAddr() {
+        return fnRetAddr;
+    }
+
+    public LogicVariable getFnFinished() {
+        return fnFinished;
+    }
+
     boolean addIndirectCalls(Set<MindcodeFunction> calls) {
         return indirectCalls.addAll(calls);
     }
 
-    // Mark the call from this function to called function as recursive. Used when cycle in the call graph
+    // Mark the call from this function to the called function as recursive. Used when cycle in the call graph
     // was detected.
     void addRecursiveCall(MindcodeFunction calledFunction) {
         recursiveCalls.add(calledFunction);
@@ -358,20 +377,26 @@ public class MindcodeFunction {
         this.label = label;
     }
 
-    public void setPrefix(String prefix) {
+    public void setPrefixAndIndex(String prefix, int prefixIndex) {
         this.prefix = prefix;
+        this.prefixIndex = prefixIndex;
     }
 
     public void setInlined() {
         inlined = true;
     }
 
-    void createParameters() {
+    void createVariables(NameCreator nameCreator) {
+        fnRetVal = LogicVariable.fnRetVal(this, nameCreator.retval(this));
+        fnRetAddr = LogicVariable.fnRetAddr(this, nameCreator.retaddr(this));
+        fnFinished = LogicVariable.fnFinished(this, nameCreator.finished(this));
+
         parameterMap = getDeclaredParameters().stream().collect(
                Collectors.toMap(AstFunctionParameter::getName, v -> v));
 
         parameters = getDeclaredParameters().stream()
-                .map(p -> (FunctionParameter) LogicVariable.parameter(p, this, isRemote())).toList();
+                .map(p -> (FunctionParameter) LogicVariable.parameter(p, this,
+                        nameCreator.parameter(this, p.getName()), isRemote())).toList();
     }
 
     public void setupRemoteParameters(CodeAssembler assembler, LogicVariable processor) {
@@ -386,8 +411,9 @@ public class MindcodeFunction {
     }
 
     private RemoteVariable createRemoteParameter(AstFunctionParameter parameter, CodeAssembler assembler, LogicVariable processor) {
+        NameCreator nameCreator = assembler.nameCreator();
         return new RemoteVariable(parameter.sourcePosition(), processor, parameter.getName(),
-                LogicString.create(parameter.sourcePosition(),prefix + ":" + parameter.getName()),
+                nameCreator.remoteParameter(this, parameter),
                 assembler.nextTemp(), parameter.isInput(), parameter.isOutput());
     }
 

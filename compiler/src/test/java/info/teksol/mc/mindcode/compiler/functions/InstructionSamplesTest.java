@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.functions;
 
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.logic.arguments.GenericArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
@@ -54,7 +55,7 @@ public class InstructionSamplesTest {
 
     private void createInstructionSamples(ProcessorVersion version) throws IOException {
         assertTrue(new File(".." + File.separatorChar + "README.markdown").isFile());
-        InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W);
+        InstructionProcessor processor = InstructionProcessorFactory.getInstructionProcessor(version, W, new StandardNameCreator(false));
         List<LogicInstruction> instructions = processor.getOpcodeVariants().stream()
                 .filter(v -> !v.opcode().isVirtual())
                 .flatMap(v -> createOpcodeSamples(processor, v).stream())
