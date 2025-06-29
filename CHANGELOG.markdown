@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.7.0 - Unreleased
 
+### Fixed
+
+* Fixed an internal error when function declaration contained duplicate parameters ([#270](https://github.com/cardillan/mindcode/issues/270)).
+
 ### Added
 
 * Added [mlog blocks](/doc/syntax/SYNTAX-EXTENSIONS.markdown#mlog-blocks) for embedding complex mlog logic into Mindcode sources.

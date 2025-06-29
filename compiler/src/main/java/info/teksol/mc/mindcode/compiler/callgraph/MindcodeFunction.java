@@ -392,7 +392,8 @@ public class MindcodeFunction {
         fnFinished = LogicVariable.fnFinished(this, nameCreator.finished(this));
 
         parameterMap = getDeclaredParameters().stream().collect(
-               Collectors.toMap(AstFunctionParameter::getName, v -> v));
+               Collectors.toMap(AstFunctionParameter::getName, v -> v,
+                (existing, replacement) -> existing));
 
         parameters = getDeclaredParameters().stream()
                 .map(p -> (FunctionParameter) LogicVariable.parameter(p, this,

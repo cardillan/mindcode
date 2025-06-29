@@ -10,9 +10,7 @@ import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @NullMarked
 public class CallGraphCreator extends AbstractMessageEmitter {
@@ -173,6 +171,14 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         List<AstFunctionParameter> params = function.getDeclaredParameters();
         if (!params.isEmpty()) {
+            // Find duplicated parameters
+            Set<String> names = new HashSet<>();
+            for (AstFunctionParameter p : params) {
+                if (!names.add(p.getName())) {
+                    error(p.getIdentifier(), ERR.VARIABLE_MULTIPLE_DECLARATIONS, p.getName());
+                }
+            }
+
             // Varargs
             params.subList(0, params.size() - 1).stream()
                     .filter(AstFunctionParameter::isVarargs)

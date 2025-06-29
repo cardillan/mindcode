@@ -23,7 +23,7 @@ public class LocalContext extends AbstractMessageEmitter implements FunctionCont
     private final Map<String, ValueStore> variables = new LinkedHashMap<>();
     private final LoopStack loopStack;
 
-    /// Keeps track of the number of declarations of the same variable within the function
+    /// Keeps the number of times a variable with the same name is declared within the function
     /// (in non-overlapping nodes)
     private final Map<String, AtomicInteger> variableReuses = new HashMap<>();
 
