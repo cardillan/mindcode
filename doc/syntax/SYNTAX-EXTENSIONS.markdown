@@ -6,13 +6,13 @@ In addition to supporting all mlog features available in the Mindustry version s
 2. A new version of Mindustry (either an official release or a bleeding-edge version) creates new instructions not known to Mindcode.
 3. An instruction was not implemented correctly in Mindcode and a fix is not yet available.
 
-Mindcode provides these options to extend its basic syntax:
+Mindcode offers these options to extend its basic syntax:
 
-* declaring new mlog keywords (function keywords),
-* declaring new builtin variables,
-* declaring new linked block names,
-* defining new mlog instructions,
-* embedding blocks of mlog code. 
+* [declaring new mlog keywords (function keywords)](#declaring-new-mlog-keywords),
+* [declaring new builtin variables](#declaring-new-built-in-variables),
+* [declaring new linked block names](#declaring-new-linked-block-names),
+* [defining new mlog instructions](#defining-new-mlog-instructions),
+* [embedding blocks of mlog code](#mlog-blocks). 
 
 ## Declaring new mlog keywords
 
@@ -252,7 +252,7 @@ An instruction consists of one or more tokens, separated by one or more tabs or 
 
 1. An instruction opcode. This is always the first token of the instruction, and it is not specially processed unless it is a raw token (see below).
 
-2. A literal. Literals are handled according to Mindcode rules: when the literal isn't compatible with pure mlog (e.g., `1.5e3`), it is rewritten so that it is mlog compatible (in this case, to `1500`). When the literals do not conform to Mindcode rules (e.g., a value is too large, or the literal isn't supported by the target Mindustry version), the usual warnings or errors are emitted. These kinds of literals are supported:
+2. A literal. Literals are handled according to Mindcode rules: when the literal isn't compatible with pure mlog (e.g., `1.5e3`), it is rewritten so that it is mlog compatible (in this case, to `1500`). When the literals do not conform to Mindcode rules (e.g., a value is too large, or the literal isn't recognized by the target Mindustry version), the usual warnings or errors are emitted. The following literals are supported:
    * [null](SYNTAX.markdown#null-literal) and [boolean literals](SYNTAX.markdown#boolean-literals),
    * [decimal literals](SYNTAX.markdown#decimal-literals), 
    * [binary and hexadecimal literals](SYNTAX.markdown#binary-and-hexadecimal-literals), 
@@ -263,7 +263,7 @@ An instruction consists of one or more tokens, separated by one or more tabs or 
 
 3. A [built-in variable](SYNTAX.markdown#built-in-variables-and-constants). Built-in variables are written to mlog as is, but warnings are generated if the variable is not recognized by Mindcode. Warnings are not generated for unknown built-in variables declared using the [#declare keyword](#declaring-new-built-in-variables).
 
-4. A Mindcode variable. A Mindcode variable token can be entered in two ways: either by specifying the name of the variable declared in the mlog block header, or by prepending the variable name with a `$` (e.g., `$index`). In the second case, the variable must be an input variable; it is not possible to specify an input/output or output variable this way. A variable accessed via the `$` prefix needs to be created or declared outside the mlog block, even in relaxed syntax mode. If the variable is not found, or can't be used in an mlog block (e.g., external variable), an error occurs. Variables are written to the compiled code using their mlog name, which is typically different from Mindcode name. Constants are encoded using their value.
+4. A Mindcode variable. A Mindcode variable token can be entered in two ways: either by specifying the name of the variable declared in the mlog block header, or by prepending the variable name with a `$` (e.g., `$index`). In the second case, the variable must be an input variable; it is not possible to specify an input/output or output variable this way. A variable accessed via the `$` prefix needs to be created or declared outside the mlog block, even in relaxed syntax mode. If the variable is not found, or doesn't represent a local processor variable (e.g., external variable), an error occurs. Variables are written to the compiled code using their mlog name, which is typically different from Mindcode name. Constants are encoded using their value.
 
 5. A label reference: a token matching an existing label defined in the current mlog block. Mindcode adds a unique, mlog-block specific prefix to label references as well as labels.
 
@@ -277,10 +277,10 @@ Tokens that would be invalid in pure mlog, such as unclosed string literals (`"t
 
 Jumps and labels can be used in an mlog block. Labels must be unique within a block in which they're defined. Mindcode adds a unique, block-specific prefix to all labels, which distinguishes labels in one mlog block from labels in another block. This also means that labels must be resolved within the current mlog block: jumping from one block to another is not allowed.
 
-Mindcode analyzes all `jump` instructions in an mlog block and inspects their labels; any label not resolved in the current mlog block causes an error.
+Mindcode analyzes all `jump` instructions in an mlog block and inspects their labels; any label not defined in the current mlog block causes an error.
 
 > [!NOTE]
-> Mindcode tries to prevent creating jumps or other means of control transfer from one mlog block to another. When this protection is circumvented and jumps between different code blocks are realized, the resulting behavior of the program is undefined.
+> Mindcode tries to prevent creating jumps or other means of control transfer from one mlog block to another. When this protection is circumvented and jumps between different code blocks are realized, the resulting behavior of the program [is undefined](#jumping-between-mlog-blocks).
 
 When a label appears as a token in _any_ instruction, it is replaced with the prefixed version. This ensures proper handling of possible future instructions referencing labels (say, `call label`). Naturally, any new, unknown instruction using labels won't be recognized by Mindcode and therefore can't be inspected to verify their labels are local.
 
@@ -310,7 +310,7 @@ Block comments (`/* A comment */`) are not supported in an mlog block.
 
 The code in an mlog block is not optimized at all. Optimizations such as unreachable code elimination, print merging, and others are not applied to an mlog block. Only the following processing is applied to mlog blocks:
 
-* A completely unreachable mlog block is removed by [Unreachable Code elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination). However, Mindcode can't detect when an mlog block itself makes the code following it unreachable (e.g., by using an infinite loop or the `end` instruction), and doesn't ever remove the code following the mlog block.
+* A completely unreachable mlog block is removed by [Unreachable Code elimination](SYNTAX-6-OPTIMIZATIONS.markdown#unreachable-code-elimination). However, Mindcode can't detect when an mlog block itself makes the code following it unreachable (e.g., by using an infinite loop or the `end` instruction), and doesn't ever remove the code following an mlog block.
 * If the mlog block contains an `end` instruction, Mindcode assumes the instruction may or may not be executed and updates the surrounding code accordingly.
 * The mlog block is always treated as if it manipulates the text buffer: no print merging across the block will occur. 
 * It is possible to activate a limited [Data Flow optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) of mlog blocks by setting `mlog-block-optimization` to `true`. Currently, the optimization is only able to propagate constant values to the mlog block when possible. Correctly declaring output variables is vital for this optimization to produce valid code. 
@@ -332,9 +332,9 @@ mlog(in switch, out time) {
     printflush message1                 # accessing a linked block using its implicit name
     control enabled switch false        # accessing a linked block using its Mindcode name
     set start @second                   # setting an mlog variable
-    // Here we loop till the button is pressed. This comment is ignored
+    // Here we loop till the button is pressed. (This comment is ignored.)
     loop:                               # a label
-        sensor enabled switch @enabled  // and this one is ignored too
+        sensor enabled switch @enabled
     jump loop notEqual enabled false
     op sub time @second start           # setting the output variable
     # here ends the mlog block

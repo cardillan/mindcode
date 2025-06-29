@@ -60,7 +60,7 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
     }
 
     private void resolveMlogVariable(AstMlogVariable node) {
-        LogicArgument argument = findMlogVariable(
+        LogicArgument argument = resolveMlogVariable(
                 variables.resolveVariable(node.getIdentifier(), true, false));
 
         if (argument == null) {
@@ -89,7 +89,7 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
         }
     }
 
-    private @Nullable LogicArgument findMlogVariable(@Nullable ValueStore valueStore) {
+    private @Nullable LogicArgument resolveMlogVariable(@Nullable ValueStore valueStore) {
         if (valueStore instanceof LogicArgument argument) {
             return switch (argument.getType()) {
                 case NULL_LITERAL,
@@ -128,7 +128,7 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
             // Plain comment
             assembler.createComment(node.getCommentText());
         } else {
-            throw new MindcodeInternalError("Mlog statement doesn't have an active content");
+            throw new MindcodeInternalError("The AstMlogStatement doesn't have an active content");
         }
         return LogicVoid.VOID;
     }
@@ -174,7 +174,7 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
                     // An inlined variable
                     String name = token.substring(1);
                     ValueStore value = variables.findVariable(name);
-                    LogicArgument argument = findMlogVariable(value);
+                    LogicArgument argument = resolveMlogVariable(value);
                     if (argument == null) {
                         error(astToken, value == null ? ERR.MLOG_BLOCK_VARIABLE_NOT_FOUND
                                 : ERR.MLOG_BLOCK_VARIABLE_NOT_SIMPLE, name);
@@ -189,6 +189,7 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
                     arguments.add(mlogVariable.argument);
                     parameters.add(mlogVariable.type());
                 } else {
+                    // This handles both unmatched ordinary tokens and raw tokens, thanks to getPlainToken()
                     arguments.add(new LogicToken(astToken.getPlainToken()));
                     parameters.add(InstructionParameterType.UNSPECIFIED);
                 }
