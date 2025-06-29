@@ -503,15 +503,14 @@ items from left to right.
 Some blocks are stored with specific configurations: connection for bridges or power nodes, item type for unloaders,
 text for messages or links, and code for processors. Schemacode supports the following types of configuration:
 
-* [Block type](#block-type-configuration): block type selected in a constructor or a payload source (a sandbox-only 
-  block).
+* [Block type](#block-type-configuration): block type selected in a constructor or a payload source (a sandbox-only block), or a payload router.
 * [Boolean](#boolean-configuration): on/off or open/close, for switches and doors.
 * [Color](#color-configuration): color of the illuminator block.
 * [Single connection](#connection-configuration): connection to another block (e.g., a bridge or a mass driver).
 * [Multiple connections](#connection-configuration): connections to several different blocks (e.g., for power nodes).
 * [Item](#item-configuration): item type selected in a sorter, unloader, or similar block.
 * [Liquid](#liquid-configuration): liquid type selected in a liquid source (a sandbox-only block).
-* [Unit](#unit-configuration): unit type selected in a unit factory or payload source.
+* [Unit](#unit-configuration): unit type selected in a unit factory, a payload source, or a payload router.
 * [Unit command](#unit-command-configuration): unit command selected in a reconstructor.
 * [Text](#text-configuration): text contents for message blocks.
 * [Processor](#processor-configuration): links and code for logic processors.
@@ -528,6 +527,7 @@ Block type configuration is specified as `block` followed by block type name (in
 
 The following block types can have block type configuration specified:
 
+* `@payload-router`
 * `@payload-source`
 * `@constructor`
 * `@large-constructor`
@@ -717,6 +717,7 @@ Available unit types depend on the type of the factory:
 * `mech-fabricator`:  `@merui`
 * `ship-fabricator`:  `@elude`
 * `tank-fabricator`:  `@stell`
+* `@payload-router`:  all unit types are allowed
 * `payload-source`:   all unit types are allowed
 
 ## Unit command configuration
