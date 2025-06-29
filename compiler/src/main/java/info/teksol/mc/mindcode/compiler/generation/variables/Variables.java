@@ -336,14 +336,13 @@ public class Variables extends AbstractMessageEmitter {
         return createImplicitVariable(identifier);
     }
 
-    /// Tries to find a variable among declared variables. Returns null when not found.
+    /// Tries to find a variable among declared variables (local, then global). Returns null when not found.
     ///
     /// @param identifier variable identifier
-    /// @param local      `true` to search in the local context as well.
     /// @return ValueStore instance containing the variable
-    public @Nullable ValueStore findVariable(String name, boolean local) {
+    public @Nullable ValueStore findVariable(String name) {
         // Look for local variables first
-        if (local && functionContext.variables().containsKey(name)) {
+        if (functionContext.variables().containsKey(name)) {
             return Objects.requireNonNull(functionContext.variables().get(name));
         } else if (globalVariables.containsKey(name)) {
             return Objects.requireNonNull(globalVariables.get(name));

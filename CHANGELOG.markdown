@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed an internal error when function declaration contained duplicate parameters ([#270](https://github.com/cardillan/mindcode/issues/270)).
+* Fixed an internal error when passing a ref array to another function ([#271](https://github.com/cardillan/mindcode/issues/271)).
 
 ### Added
 

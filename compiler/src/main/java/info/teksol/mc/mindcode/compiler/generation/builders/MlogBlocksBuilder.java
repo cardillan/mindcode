@@ -173,7 +173,7 @@ public class MlogBlocksBuilder extends AbstractBuilder implements
                 } else if (token.startsWith("$")) {
                     // An inlined variable
                     String name = token.substring(1);
-                    ValueStore value = variables.findVariable(name, true);
+                    ValueStore value = variables.findVariable(name);
                     LogicArgument argument = findMlogVariable(value);
                     if (argument == null) {
                         error(astToken, value == null ? ERR.MLOG_BLOCK_VARIABLE_NOT_FOUND
