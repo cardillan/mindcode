@@ -120,6 +120,49 @@ public class CompilerProfile {
                 o -> optimSet.contains(o) ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.NONE));
     }
 
+    public CompilerProfile(CompilerProfile other) {
+        this.webApplication = other.webApplication;
+        this.levels = new HashMap<>(other.levels);
+        this.executionFlags.addAll(other.executionFlags);
+        this.processorVersion = other.processorVersion;
+        this.processorEdition = other.processorEdition;
+        this.autoPrintflush = other.autoPrintflush;
+        this.boundaryChecks = other.boundaryChecks;
+        this.debugLevel = other.debugLevel;
+        this.fileReferences = other.fileReferences;
+        this.finalCodeOutput = other.finalCodeOutput;
+        this.goal = other.goal;
+        this.instructionLimit = other.instructionLimit;
+        this.mlogIndent = other.mlogIndent;
+        this.optimizationPasses = other.optimizationPasses;
+        this.caseOptimizationStrength = other.caseOptimizationStrength;
+        this.parseTreeLevel = other.parseTreeLevel;
+        this.printStackTrace = other.printStackTrace;
+        this.outputProfiling = other.outputProfiling;
+        this.remarks = other.remarks;
+        this.builtinEvaluation = other.builtinEvaluation;
+        this.targetGuard = other.targetGuard;
+        this.mlogBlockOptimization = other.mlogBlockOptimization;
+        this.unsafeCaseOptimization = other.unsafeCaseOptimization;
+        this.shortCircuitEval = other.shortCircuitEval;
+        this.shortFunctionPrefix = other.shortFunctionPrefix;
+        this.signature = other.signature;
+        this.sortVariables = new ArrayList<>(other.sortVariables);
+        this.symbolicLabels = other.symbolicLabels;
+        this.syntacticMode = other.syntacticMode;
+        this.libraryPrecedence = other.libraryPrecedence;
+        this.run = other.run;
+        this.stepLimit = other.stepLimit;
+        this.additionalTags = new ArrayList<>(other.additionalTags);
+        this.positionTranslator = other.positionTranslator;
+        this.debugOutput = other.debugOutput;
+        this.caseConfiguration = other.caseConfiguration;
+    }
+
+    public CompilerProfile duplicate() {
+        return new CompilerProfile(this);
+    }
+
     public int getMaxPasses() {
         return webApplication ? MAX_PASSES_WEBAPP : MAX_PASSES_CMDLINE;
     }

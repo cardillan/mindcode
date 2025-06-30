@@ -702,6 +702,13 @@ public interface MindcodeParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code astDirectiveSetLocal}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitAstDirectiveSetLocal(MindcodeParser.AstDirectiveSetLocalContext ctx);
+	/**
 	 * Visit a parse tree produced by the {@code astDirectiveDeclare}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree

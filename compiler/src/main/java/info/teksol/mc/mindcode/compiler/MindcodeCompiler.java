@@ -43,6 +43,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.FinalCodeOutput;
 import info.teksol.mc.util.CollectionUtils;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -71,6 +72,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final CompilationPhase targetPhase;
     private final CompilerProfile profile;
     private final InputFiles inputFiles;
+    private final DirectiveProcessor directiveProcessor;
     private @Nullable InstructionProcessor instructionProcessor;
     private @Nullable NameCreator nameCreator;
     private @Nullable MindustryMetadata metadata;
@@ -131,6 +133,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         this.targetPhase = targetPhase;
         this.profile = profile;
         this.inputFiles = inputFiles;
+        this.directiveProcessor = new DirectiveProcessor(messageConsumer);
         returnStack = new ReturnStack();
         stackTracker = new StackTracker(messageConsumer);
 
@@ -491,6 +494,11 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     @Override
     public MessageConsumer messageConsumer() {
         return super.messageConsumer();
+    }
+
+    @Override
+    public DirectiveProcessor directiveProcessor() {
+        return directiveProcessor;
     }
 
     @Override

@@ -8,9 +8,11 @@
 // (constants, parameters, function declarations).
 //
 // The are several lexer modes:
-// * InDirective: a mode for parsing the contents of the #set directives. These directives allow using various
-//   forms of option and value names (e.g. #set target = 7.1;). These names can't be matched by a normal Mindcode
-//   identifier, hence the separate mode. The mode ends when a semicolon is encountered.
+// * InMlogBlock: a mode for parsing mlog blocks. An mlog block contains mlog instructions in syntax derived
+//   from the Mindustry one. An mlog block is enclosed in braces; the mode ends when `}` is encountered.
+// * InDirective: a mode for parsing the contents of the #set  and #setlocal directives. These directives allow using
+//   various forms of option and value names (e.g. #set target = 7.1;). These names can't be matched by a normal
+//    Mindcode identifier, hence the separate mode. The mode ends when a semicolon is encountered.
 // * InFormattable: mode used for parsing the contents of the formattable string literal. The mode ends when
 //   encountering the closing double quote. Default mode is entered when encountering an interpolated expresson
 //   (${expression}). InFmtIdentifier mode is entered when encountering embedded variable ($variable).
@@ -194,6 +196,7 @@ LBRACE                  : '{' {inMlogBlock = true; newLines=false;} -> pushMode(
 // Directives
 HASHDECLARE             : '#declare';
 HASHSET                 : '#set' -> pushMode(InDirective) ;
+HASHSETLOCAL            : '#setlocal' -> pushMode(InDirective) ;
 
 // Formattable literals
 FORMATTABLELITERAL      : {!inFormat}? '$"' {inFormat = true;}  -> pushMode(InFormattable) ;

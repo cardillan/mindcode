@@ -275,11 +275,21 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstDirectiveSet visitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx) {
-        AstDirectiveValue option = new AstDirectiveValue(pos(ctx.option), ctx.option.getText());
-        if (ctx.directiveValues() == null) {
-            return new AstDirectiveSet(pos(ctx), option, List.of());
+        return createAstDirectiveSet(ctx, false, ctx.option, ctx.directiveValues());
+    }
+
+    @Override
+    public AstDirectiveSet visitAstDirectiveSetLocal(MindcodeParser.AstDirectiveSetLocalContext ctx) {
+        return createAstDirectiveSet(ctx, true, ctx.option, ctx.directiveValues());
+    }
+
+    private AstDirectiveSet createAstDirectiveSet(MindcodeParser.DirectiveContext ctx, boolean local,
+            AstDirectiveValueContext optionContext, @Nullable DirectiveValuesContext valueContext) {
+        AstDirectiveValue option = new AstDirectiveValue(pos(ctx), optionContext.getText());
+        if (valueContext == null) {
+            return new AstDirectiveSet(pos(ctx), local, option, List.of());
         } else {
-            return new AstDirectiveSet(pos(ctx), option, processDirectiveValues(ctx.directiveValues()));
+            return new AstDirectiveSet(pos(ctx), local, option, processDirectiveValues(valueContext));
         }
     }
     //</editor-fold>

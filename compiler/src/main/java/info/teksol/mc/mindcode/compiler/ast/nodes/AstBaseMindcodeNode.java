@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.generated.ast.AstNodeToString;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -55,6 +56,10 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
         return Arrays.asList(nodes);
     }
 
+    @Override
+    public CompilerProfile getProfile() {
+        return null;
+    }
 
     @Override
     public SourcePosition sourcePosition() {

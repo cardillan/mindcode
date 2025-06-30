@@ -28,7 +28,7 @@ class DirectivePreprocessorTest {
                         new AstModule(EMPTY,
                                 null,
                                 List.of(
-                                        new AstDirectiveSet(EMPTY,
+                                        new AstDirectiveSet(EMPTY, false,
                                                 new AstDirectiveValue(EMPTY, option),
                                                 Stream.of(values).map(this::directiveValue).toList())
                                 ),

@@ -648,17 +648,17 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             allocate stack in cell2[0 .. 63];
                             """,
                     List.of(
-                            new AstAllocations(EMPTY,
+                            new AstAllocations(profile, EMPTY,
                                     List.of(
-                                            new AstAllocation(EMPTY,
+                                            new AstAllocation(profile, EMPTY,
                                                     AstAllocation.AllocationType.HEAP,
                                                     id("cell1"),
                                                     null)
                                     )
                             ),
-                            new AstAllocations(EMPTY,
+                            new AstAllocations(profile, EMPTY,
                                     List.of(
-                                            new AstAllocation(EMPTY,
+                                            new AstAllocation(profile, EMPTY,
                                                     AstAllocation.AllocationType.STACK,
                                                     id("cell2"),
                                                     new AstRange(EMPTY, number(0), number(63), false))
@@ -674,13 +674,13 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             allocate heap in HEAPPTR[0 ... 64], stack in bank1;
                             """,
                     List.of(
-                            new AstAllocations(EMPTY,
+                            new AstAllocations(profile, EMPTY,
                                     List.of(
-                                            new AstAllocation(EMPTY,
+                                            new AstAllocation(profile, EMPTY,
                                                     AstAllocation.AllocationType.HEAP,
                                                     id("HEAPPTR"),
                                                     new AstRange(EMPTY, number(0), number(64), true)),
-                                            new AstAllocation(EMPTY,
+                                            new AstAllocation(profile, EMPTY,
                                                     AstAllocation.AllocationType.STACK,
                                                     id("bank1"),
                                                     null)
@@ -706,9 +706,9 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     List.of(new AstVariableModifier(EMPTY, Modifier.CONST, null)),
                                     List.of(new AstVariableSpecification(EMPTY, id("MAX"), new AstLiteralDecimal(EMPTY, "20")))
                             ),
-                            new AstAllocations(EMPTY,
+                            new AstAllocations(profile, EMPTY,
                                     List.of(
-                                            new AstAllocation(EMPTY,
+                                            new AstAllocation(profile, EMPTY,
                                                     AstAllocation.AllocationType.HEAP,
                                                     id("cell1"),
                                                     new AstRange(EMPTY, id("MIN"), id("MAX"), false))
@@ -921,7 +921,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             #set option-name;
                             """,
                     List.of(
-                            new AstDirectiveSet(EMPTY,
+                            new AstDirectiveSet(EMPTY, false,
                                     new AstDirectiveValue(EMPTY, "option-name"),
                                     List.of()
                             )
@@ -935,7 +935,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             #set option-name = some-value;
                             """,
                     List.of(
-                            new AstDirectiveSet(EMPTY,
+                            new AstDirectiveSet(EMPTY, false,
                                     new AstDirectiveValue(EMPTY, "option-name"),
                                     List.of(
                                             new AstDirectiveValue(EMPTY, "some-value")
@@ -951,7 +951,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             #set option-name = 7,7A,8;
                             """,
                     List.of(
-                            new AstDirectiveSet(EMPTY,
+                            new AstDirectiveSet(EMPTY, false,
                                     new AstDirectiveValue(EMPTY, "option-name"),
                                     List.of(
                                             new AstDirectiveValue(EMPTY, "7"),
@@ -969,7 +969,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             #declare category @fluffy-bunny;
                             """,
                     List.of(
-                            new AstDirectiveDeclare(EMPTY,
+                            new AstDirectiveDeclare(profile, EMPTY,
                                     id("category"),
                                     List.of(new AstBuiltInIdentifier(EMPTY, "@fluffy-bunny"))
                             )
@@ -983,7 +983,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             #declare category :keyword1, :keyword2;
                             """,
                     List.of(
-                            new AstDirectiveDeclare(EMPTY,
+                            new AstDirectiveDeclare(profile, EMPTY,
                                     id("category"),
                                     List.of(
                                             new AstKeyword(EMPTY, ":keyword1"),
@@ -1000,7 +1000,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             #declare category identifier1, identifier2;
                             """,
                     List.of(
-                            new AstDirectiveDeclare(EMPTY,
+                            new AstDirectiveDeclare(profile, EMPTY,
                                     id("category"),
                                     List.of(
                                             new AstIdentifier(EMPTY, "identifier1"),

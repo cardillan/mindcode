@@ -11,14 +11,29 @@ import java.util.Objects;
 @NullMarked
 @AstNode
 public class AstDirectiveSet extends AstDeclaration {
+    private final boolean local;
     private final AstDirectiveValue option;
     private final List<AstDirectiveValue> values;
 
-    public AstDirectiveSet(SourcePosition sourcePosition, AstDirectiveValue option,
-            List<AstDirectiveValue> values) {
+    public AstDirectiveSet(SourcePosition sourcePosition, boolean local, AstDirectiveValue option, List<AstDirectiveValue> values) {
         super(sourcePosition, children(list(option), values));
+        this.local = local;
         this.option = Objects.requireNonNull(option);
         this.values = Objects.requireNonNull(values);
+    }
+
+    @Override
+    public AstNodeScope getScope() {
+        return AstNodeScope.NONE;
+    }
+
+    @Override
+    public AstNodeScope getScopeRestriction() {
+        return local ? AstNodeScope.NONE : AstNodeScope.GLOBAL;
+    }
+
+    public boolean isLocal() {
+        return local;
     }
 
     public AstDirectiveValue getOption() {
@@ -35,14 +50,14 @@ public class AstDirectiveSet extends AstDeclaration {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstDirectiveSet that = (AstDirectiveSet) o;
-        return option.equals(that.option) && values.equals(that.values);
+        return local == that.local && option.equals(that.option) && values.equals(that.values);
     }
 
     @Override
     public int hashCode() {
-        int result = option.hashCode();
+        int result = Boolean.hashCode(local);
+        result = 31 * result + option.hashCode();
         result = 31 * result + values.hashCode();
         return result;
     }
-
 }

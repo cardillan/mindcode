@@ -725,6 +725,13 @@ public class MindcodeParserBaseVisitor<T> extends AbstractParseTreeVisitor<T> im
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
+	@Override public T visitAstDirectiveSetLocal(MindcodeParser.AstDirectiveSetLocalContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
 	@Override public T visitAstDirectiveDeclare(MindcodeParser.AstDirectiveDeclareContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}

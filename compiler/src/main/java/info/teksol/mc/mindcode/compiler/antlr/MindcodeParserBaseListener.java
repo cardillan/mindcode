@@ -1229,6 +1229,18 @@ public class MindcodeParserBaseListener implements MindcodeParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterAstDirectiveSetLocal(MindcodeParser.AstDirectiveSetLocalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitAstDirectiveSetLocal(MindcodeParser.AstDirectiveSetLocalContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterAstDirectiveDeclare(MindcodeParser.AstDirectiveDeclareContext ctx) { }
 	/**
 	 * {@inheritDoc}

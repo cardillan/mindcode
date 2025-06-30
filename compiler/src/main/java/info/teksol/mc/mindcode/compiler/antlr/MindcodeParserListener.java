@@ -1188,6 +1188,18 @@ public interface MindcodeParserListener extends ParseTreeListener {
 	 */
 	void exitAstDirectiveSet(MindcodeParser.AstDirectiveSetContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code astDirectiveSetLocal}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void enterAstDirectiveSetLocal(MindcodeParser.AstDirectiveSetLocalContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code astDirectiveSetLocal}
+	 * labeled alternative in {@link MindcodeParser#directive}.
+	 * @param ctx the parse tree
+	 */
+	void exitAstDirectiveSetLocal(MindcodeParser.AstDirectiveSetLocalContext ctx);
+	/**
 	 * Enter a parse tree produced by the {@code astDirectiveDeclare}
 	 * labeled alternative in {@link MindcodeParser#directive}.
 	 * @param ctx the parse tree
