@@ -5,7 +5,6 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstProgram;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
@@ -22,19 +21,16 @@ import static org.junit.jupiter.api.Assertions.*;
 @NullMarked
 class DirectivePreprocessorTest {
 
-    private AstProgram directive(String option, String... values) {
-        return new AstProgram(EMPTY,
+    private AstModule directive(String option, String... values) {
+        return new AstModule(EMPTY,
+                null,
                 List.of(
-                        new AstModule(EMPTY,
-                                null,
-                                List.of(
-                                        new AstDirectiveSet(EMPTY, false,
-                                                new AstDirectiveValue(EMPTY, option),
-                                                Stream.of(values).map(this::directiveValue).toList())
-                                ),
-                                Collections.emptySortedSet()
-                        )
-                )
+                        new AstDirectiveSet(EMPTY, false,
+                                new AstDirectiveValue(EMPTY, option),
+                                Stream.of(values).map(this::directiveValue).toList())
+                ),
+                Collections.emptySortedSet(),
+                true
         );
     }
 
@@ -43,7 +39,7 @@ class DirectivePreprocessorTest {
     }
 
     private void processDirective(MessageConsumer messageConsumer, CompilerProfile profile, String option, String... values) {
-        DirectivePreprocessor.processDirectives(new PreprocessorContextImpl(messageConsumer, profile),
+        DirectivePreprocessor.processGlobalDirectives(new PreprocessorContextImpl(messageConsumer), profile,
                 directive(option, values));
     }
 

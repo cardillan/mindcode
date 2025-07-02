@@ -36,7 +36,6 @@ import java.util.function.Supplier;
 public class Variables extends AbstractMessageEmitter {
     private final Set<AstMindcodeNode> reportedErrors = Collections.newSetFromMap(new IdentityHashMap<>());
 
-    private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
     private final Map<String, ValueStore> globalVariables;
@@ -48,11 +47,11 @@ public class Variables extends AbstractMessageEmitter {
 
     public Variables(VariablesContext context) {
         super(context.messageConsumer());
-        profile = context.compilerProfile();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
+        CompilerProfile profile = context.globalCompilerProfile();
         putVariable("__MINDUSTRY_VERSION__", LogicString.create(profile.getProcessorVersion().mimexVersion));
         putVariable("__TARGET_MAJOR__", LogicNumber.create(profile.getProcessorVersion().major));
         putVariable("__TARGET_MINOR__", LogicNumber.create(profile.getProcessorVersion().minor));
@@ -309,7 +308,7 @@ public class Variables extends AbstractMessageEmitter {
     /// - Strict syntax: an error is reported, and an invalid variable instance is returned.
     ///
     /// @param identifier variable identifier
-    /// @param local `true` if a local context is active. When local context is not active, local function variables
+    /// @param local `true` if a local context is active. When a local context is not active, local function variables
     ///         are excluded
     /// @param allowUndeclaredLinks `true` to automatically declare undeclared linked variables without an error.
     ///         Used by `param` and `allocate` nodes.
@@ -327,7 +326,7 @@ public class Variables extends AbstractMessageEmitter {
         }
 
         if (reportedErrors.add(identifier)) {
-            switch (profile.getSyntacticMode()) {
+            switch (identifier.getProfile().getSyntacticMode()) {
                 case STRICT -> error(identifier, ERR.VARIABLE_NOT_DEFINED, identifier.getName());
                 case MIXED  -> warn(identifier, WARN.VARIABLE_NOT_DEFINED, identifier.getName());
             }

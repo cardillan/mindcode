@@ -6,7 +6,6 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.profile.BuiltinEvaluation;
-import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -30,7 +29,7 @@ class ExpressionValue implements LogicReadable {
      * @param node the abstract syntax tree node holding the value of the expression.
      * @return an ExpressionValue instance representing the value of the given node.
      */
-    public static @NonNull ExpressionValue create(CompilerProfile profile, InstructionProcessor processor, AstMindcodeNode node) {
+    public static @NonNull ExpressionValue create(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor, AstMindcodeNode node) {
         try {
             return switch (node) {
                 case AstLiteralNull n -> new ExpressionValue(processor, null, null);
@@ -47,7 +46,7 @@ class ExpressionValue implements LogicReadable {
                         : new InvalidValue(processor);
                 case AstLiteral n ->
                         throw new MindcodeInternalError("Unhandled constant node " + node.getClass().getSimpleName());
-                case AstBuiltInIdentifier b -> evaluateBuiltin(profile, processor, b);
+                case AstBuiltInIdentifier b -> evaluateBuiltin(builtinEvaluation, processor, b);
                 default -> new InvalidValue(processor);
             };
         } catch (NumberFormatException e) {
@@ -55,11 +54,12 @@ class ExpressionValue implements LogicReadable {
         }
     }
 
-    private static @NonNull ExpressionValue evaluateBuiltin(CompilerProfile profile, InstructionProcessor processor, AstBuiltInIdentifier b) {
-        if (profile.getBuiltinEvaluation() != BuiltinEvaluation.NONE) {
+    private static @NonNull ExpressionValue evaluateBuiltin(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor,
+            AstBuiltInIdentifier b) {
+        if (builtinEvaluation != BuiltinEvaluation.NONE) {
             LVar var = processor.getMetadata().getLVar(b.getName());
             return var != null && var.isNumericConstant()
-                    && (profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL || processor.getMetadata().isStableBuiltin(var.name()))
+                   && (builtinEvaluation == BuiltinEvaluation.FULL || processor.getMetadata().isStableBuiltin(var.name()))
                     ? new ExpressionValue(processor, null, var.numericValue()) : new InvalidValue(processor);
         } else {
             return new InvalidValue(processor);

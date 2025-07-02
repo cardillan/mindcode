@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public interface CompileTimeEvaluatorContext extends CompilerContext {
-    CompilerProfile compilerProfile();
+    CompilerProfile globalCompilerProfile();
     InstructionProcessor instructionProcessor();
     Variables variables();
 }

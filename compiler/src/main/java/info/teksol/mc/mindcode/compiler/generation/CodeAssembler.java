@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -17,7 +18,6 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -27,14 +27,13 @@ import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.WAIT;
 
-/// CodeAssembler provides means for creating code from AST tree: methods for creating individual instructions and
-/// methods for maintaining and tracking AST context. The AST context tracked by this instance is automatically
-/// injected into all created instructions, so that the caller doesn't have to handle that.
+/// CodeAssembler provides means for creating code from the AST tree: methods for creating individual instructions
+/// and methods for maintaining and tracking AST context. The AST context tracked by this instance is automatically
+/// injected into all created instructions so that the caller doesn't have to handle that.
 ///
 /// Labels and temporary variables may also be generated through CodeAssembler.
 @NullMarked
 public class CodeAssembler extends AbstractMessageEmitter implements ContextfulInstructionCreator, Consumer<LogicInstruction> {
-    private final CompilerProfile profile;
     private final InstructionProcessor processor;
     private final Variables variables;
     private final List<LogicInstruction> instructions = new ArrayList<>();
@@ -46,7 +45,6 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
 
     public CodeAssembler(CodeAssemblerContext context) {
         super(context.messageConsumer());
-        profile = context.compilerProfile();
         processor = context.instructionProcessor();
         variables = context.variables();
         astContext = context.rootAstContext();
@@ -149,7 +147,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     }
 
     /// Activates/deactivates assembler status. An inactive assembler ignores generated instructions. This is
-    /// useful to compile unreachable code (e.g. unused function) to validate syntax, but avoid generating code.
+    /// useful to compile unreachable code (e.g., unused function) to validate syntax but avoid generating code.
     public void setActive(boolean active) {
         this.active = active;
     }
@@ -171,14 +169,14 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
     public void enterAstNode(AstMindcodeNode node, AstContextType contextType) {
         if (active) {
             if (node.getContextType() != AstContextType.NONE) {
-                astContext = astContext.createChild(profile, node, contextType);
+                astContext = astContext.createChild(node, contextType);
             }
         }
     }
 
-    public void enterFunctionAstNode(MindcodeFunction function, AstMindcodeNode node, double weight) {
+    public void enterFunctionAstNode(MindcodeFunction function, AstFunctionDeclaration node, double weight) {
         if (active) {
-            astContext = astContext.createFunctionDeclaration(profile, function, node, node.getContextType(), weight);
+            astContext = astContext.createFunctionDeclaration(function, node, node.getContextType(), weight);
         }
     }
 
@@ -220,7 +218,7 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
 
     public void setContextType(AstMindcodeNode node, AstContextType contextType, AstSubcontextType subcontextType) {
         if (active) {
-            astContext = astContext.createChild(profile, node, contextType, subcontextType);
+            astContext = astContext.createChild(node, contextType, subcontextType);
         }
     }
 

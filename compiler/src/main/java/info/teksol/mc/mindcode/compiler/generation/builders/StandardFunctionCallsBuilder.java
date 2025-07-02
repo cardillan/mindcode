@@ -47,7 +47,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     private ValueStore processCall(AstFunctionCall call, List<FunctionArgument> arguments,
             @Nullable ValueStore target, boolean async) {
         List<MindcodeFunction> exactMatches = callGraph.getExactMatches(call, arguments);
-        if (!exactMatches.isEmpty() && (profile.isLibraryPrecedence()
+        if (!exactMatches.isEmpty() && (call.getProfile().isLibraryPrecedence()
                 || exactMatches.stream().noneMatch(f -> f.isLibrary() && !f.getParameters().isEmpty()))) {
             // There are user functions exactly matching the call. Process them.
             return processMatchedCalls(call, arguments, target, exactMatches, async);
@@ -190,7 +190,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     }
 
     private LogicValue handleInlineFunctionCall(MindcodeFunction inlineFunction, List<FunctionArgument> arguments) {
-        if (profile.isSymbolicLabels()) {
+        if (inlineFunction.getProfile().isSymbolicLabels()) {
             assembler.createComment("Function: " + inlineFunction.getDeclaration().toSourceCode());
         }
 
@@ -233,7 +233,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final boolean isVoid = function.isVoid();
 
         LogicVariable retAddr = function.getFnRetAddr();
-        if (profile.isSymbolicLabels()) {
+        if (function.getProfile().isSymbolicLabels()) {
             assembler.setSubcontextType(function, AstSubcontextType.OUT_OF_LINE_CALL);
             assembler.createCallStackless(function.getLabel(), retAddr,function.getFnRetVal());
         } else {

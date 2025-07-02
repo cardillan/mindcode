@@ -10,6 +10,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -19,6 +20,7 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
     private final SourcePosition sourcePosition;
     private final List<AstMindcodeNode> children;
     protected final @Nullable AstDocComment docComment;
+    private @Nullable CompilerProfile profile;
 
     protected AstBaseMindcodeNode(SourcePosition sourcePosition) {
         this.sourcePosition = sourcePosition;
@@ -48,8 +50,8 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
     }
 
     @SafeVarargs
-    protected static List<AstMindcodeNode> children(List<? extends @Nullable AstMindcodeNode>... lists) {
-        return children(Stream.of(lists).flatMap(List::stream));
+    protected static List<AstMindcodeNode> children(Collection<? extends @Nullable AstMindcodeNode>... lists) {
+        return children(Stream.of(lists).flatMap(Collection::stream));
     }
 
     protected static List<@Nullable AstMindcodeNode> list(@Nullable AstMindcodeNode... nodes) {
@@ -58,7 +60,11 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
 
     @Override
     public CompilerProfile getProfile() {
-        return null;
+        return Objects.requireNonNull(profile);
+    }
+
+    public void setProfile(CompilerProfile profile) {
+        this.profile = profile;
     }
 
     @Override

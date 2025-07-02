@@ -10,10 +10,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
 
 @NullMarked
@@ -21,16 +18,18 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
     private final MindcodeFunction main;
     private final List<MindcodeFunction> functionList = new ArrayList<>();
     private final Map<String, List<MindcodeFunction>> functionMap = new HashMap<>();
+    private final Map<AstFunctionDeclaration, MindcodeFunction> declarationMap = new IdentityHashMap<>();
 
-    public FunctionDefinitions(MessageConsumer messageConsumer) {
+    public FunctionDefinitions(MessageConsumer messageConsumer, AstModule mainModule) {
         super(messageConsumer);
-        main = new MindcodeFunction(createMain(), AstModule.DEFAULT, true);
+        main = new MindcodeFunction(createMain(), mainModule, true);
         functionList.add(main);
     }
 
     public MindcodeFunction addFunctionDeclaration(AstFunctionDeclaration declaration, AstModule module, boolean entryPoint) {
         MindcodeFunction current = new MindcodeFunction(declaration, module, entryPoint);
         functionList.add(current);
+        declarationMap.put(declaration, current);
 
         List<MindcodeFunction> functions = functionMap.computeIfAbsent(declaration.getName(), k -> new ArrayList<>());
         functions.stream().filter(f -> conflicts(current, f)).forEach(f -> reportConflict(current, f));
@@ -77,6 +76,10 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
 
     public MindcodeFunction getMain() {
         return main;
+    }
+
+    public MindcodeFunction findFunction(AstFunctionDeclaration declaration) {
+        return Objects.requireNonNull(declarationMap.get(declaration));
     }
 
     public List<MindcodeFunction> getFunctions() {

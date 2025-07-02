@@ -60,8 +60,8 @@ public class IdentifiersBuilder extends AbstractBuilder implements
 
         // Full evaluation: evaluate all numerical builtins
         // Compatible evaluation: evaluate stable numerical builtins
-        return profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL
-                || profile.getBuiltinEvaluation() == BuiltinEvaluation.COMPATIBLE && metadata.isStableBuiltin(node.getName())
+        BuiltinEvaluation evaluation = node.getProfile().getBuiltinEvaluation();
+        return evaluation == BuiltinEvaluation.FULL || evaluation == BuiltinEvaluation.COMPATIBLE && metadata.isStableBuiltin(node.getName())
                 ? LogicBuiltinConst.create(processor, node.sourcePosition(), node.getName())
                 : LogicBuiltIn.create(processor, node.sourcePosition(), node.getName());
     }

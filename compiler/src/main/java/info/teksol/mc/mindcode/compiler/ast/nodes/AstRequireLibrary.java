@@ -5,7 +5,7 @@ import info.teksol.mc.common.SourcePosition;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collection;
+import java.util.List;
 import java.util.Objects;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -16,8 +16,8 @@ public class AstRequireLibrary extends AstRequire {
     private final AstIdentifier library;
     private final SortedSet<AstIdentifier> processors;
 
-    public AstRequireLibrary(SourcePosition sourcePosition, AstIdentifier library, Collection<AstIdentifier> processors) {
-        super(sourcePosition, library);
+    public AstRequireLibrary(SourcePosition sourcePosition, AstIdentifier library, List<AstIdentifier> processors) {
+        super(sourcePosition, children(List.of(library), processors));
         this.library = Objects.requireNonNull(library);
         this.processors = new TreeSet<>(processors);
     }

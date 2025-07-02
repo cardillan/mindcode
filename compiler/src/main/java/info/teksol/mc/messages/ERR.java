@@ -59,6 +59,7 @@ public class ERR {
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
     public static final String DIRECTIVE_INVALID_VALUE_WITH_SUGGESTION = "Invalid value '%s' of compiler directive '%s'. Did you mean '%s'?";
     public static final String DIRECTIVE_INVALID_VALUE_WITH_VALUES = "Invalid value '%s' of compiler directive '%s'. Valid values are '%s' and '%s'.";
+    public static final String DIRECTIVE_INVALID_SYNTAX_FOR_MODULE = "Syntax mode within a module must be set to 'strict'.";
     public static final String DIRECTIVE_MULTIPLE_VALUES = "Multiple values specified for option '%s'.";
     public static final String DIRECTIVE_NO_VALUE = "No value specified for option '%s'.";
     public static final String DIRECTIVE_UNKNOWN = "Unknown compiler directive '%s'.";
@@ -167,6 +168,7 @@ public class ERR {
     public static final String SCOPE_DECLARATION_WITHIN_CODE_BLOCK = "Statement or declaration not allowed within a main code block or function.";
     public static final String SCOPE_EXTERNAL_NOT_GLOBAL = "External variables must be declared in the global scope.";
     public static final String SCOPE_LINKED_NOT_GLOBAL = "Linked blocks must be declared in the global scope.";
+    public static final String SETLOCAL_NOT_USED = "The `#setlocal` directive must precede a statement or an expression.";
     public static final String SUBARRAY_INDEX_OUT_OF_BOUNDS = "Subarray index %d out of range %d .. %d.";
     public static final String SUBARRAY_INVALID_RANGE = "Empty or invalid subarray range.";
     public static final String SUBARRAY_MUTABLE_RANGE = "Subarray specification must use constant range.";

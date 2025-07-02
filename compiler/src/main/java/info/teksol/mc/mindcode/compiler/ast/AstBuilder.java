@@ -34,20 +34,22 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     private final InputFile inputFile;
     private final CommonTokenStream tokenStream;
     private final SortedSet<AstIdentifier> remoteProcessors;
+    private final boolean main;
 
     @Nullable AstModuleDeclaration moduleDeclaration;
 
     private AstBuilder(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream,
-            SortedSet<AstIdentifier> remoteProcessors) {
+            SortedSet<AstIdentifier> remoteProcessors, boolean main) {
         this.context = context;
         this.inputFile = inputFile;
         this.tokenStream = tokenStream;
         this.remoteProcessors = remoteProcessors;
+        this.main = main;
     }
 
     public static AstModule build(AstBuilderContext context, InputFile inputFile, CommonTokenStream tokenStream, ParseTree tree,
-            SortedSet<AstIdentifier> remoteProcessors) {
-        AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream, remoteProcessors);
+            SortedSet<AstIdentifier> remoteProcessors, boolean main) {
+        AstBuilder astBuilder = new AstBuilder(context, inputFile, tokenStream, remoteProcessors, main);
         return (AstModule) astBuilder.visitNonNull(tree);
     }
 
@@ -75,7 +77,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         } else if (result instanceof AstExpression expression) {
             return expression;
         } else {
-            // This is probably not even permitted by the syntax
+            // The syntax probably does not even permit this
             context.error(result, ERR.EXPRESSION_REQUIRED);
             return new AstLiteralNull(result.sourcePosition(), "null");
         }
@@ -224,7 +226,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     public AstModule visitAstModule(MindcodeParser.AstModuleContext ctx) {
         moduleDeclaration = null;
         List<AstMindcodeNode> body = processBody(ctx.astStatementList());
-        return new AstModule(pos(ctx), moduleDeclaration, body, remoteProcessors);
+        return new AstModule(pos(ctx), moduleDeclaration, body, remoteProcessors, main);
     }
 
     @Override

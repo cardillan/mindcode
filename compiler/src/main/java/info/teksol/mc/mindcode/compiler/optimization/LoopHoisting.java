@@ -101,7 +101,7 @@ class LoopHoisting extends BaseOptimizer {
         for (AstContext invariant : invariantIfs) {
             if (!contextStream(invariant).allMatch(NoOpInstruction.class::isInstance)) {
                 assert invariant.node() != null;
-                AstContext bodyContext = getInitContext(loop).createChild(invariant.getProfile(), invariant.node(), invariant.contextType());
+                AstContext bodyContext = getInitContext(loop).createChild(invariant.existingNode(), invariant.contextType());
                 LogicList original = contextInstructions(invariant);
                 LogicList duplicated = original.duplicateToContext(bodyContext);
                 duplicated.stream().filter(ix -> ix.getHoistId() != LogicLabel.EMPTY).forEach(ix -> ix.setHoisted(true));

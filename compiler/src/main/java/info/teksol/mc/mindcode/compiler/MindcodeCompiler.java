@@ -174,7 +174,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, profile, inputFiles);
 
         long parseTime = 0;
-        // Process all input files including files discovered through require directive.
+        // Process all input files including files discovered through the `require` directive.
+        // The first processed module is the main one
         try {
             while (!inputs.isEmpty()) {
                 ModulePlacement input = inputs.remove();
@@ -190,7 +191,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                     parseTrees.put(input.inputFile, parseTree);
                     if (targetPhase == CompilationPhase.PARSER) continue;
 
-                    AstModule module = AstBuilder.build(this, input.inputFile, tokenStream, parseTree, input.remoteProcessors);
+                    // The main module is the first processed one -- the list is still empty
+                    AstModule module = AstBuilder.build(this, input.inputFile, tokenStream, parseTree,
+                            input.remoteProcessors, moduleList.isEmpty());
                     modules.put(input.inputFile, module);
                     moduleList.addFirst(module);
                     parseTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
@@ -235,7 +238,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
 
         if (!modules.isEmpty()) {
-            astProgram = new AstProgram(new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
+            astProgram = new AstProgram(profile, new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
         }
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
 
@@ -250,7 +253,12 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
 
         long compileStart = System.nanoTime();
-        DirectivePreprocessor.processDirectives(this, astProgram);
+
+        DirectivePreprocessor.processGlobalDirectives(this, profile, astProgram.getMainModule());
+        astProgram.getModules().stream().filter(m -> !m.isMain())
+                .forEach(module -> DirectivePreprocessor.processModuleDirectives(this, profile, module));
+
+        DirectivePreprocessor.processLocalDirectives(this, profile, astProgram);
 
         nameCreator = new StandardNameCreator(profile);
         instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, nameCreator, profile);
@@ -502,7 +510,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     @Override
-    public CompilerProfile compilerProfile() {
+    public CompilerProfile globalCompilerProfile() {
         return profile;
     }
 

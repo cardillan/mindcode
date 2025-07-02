@@ -32,9 +32,13 @@ class BaseOptimizerTest extends AbstractTestBase {
         return CompilationPhase.OPTIMIZER;
     }
 
-    private final AstContext testContext = mockAstContext.createChild(profile,
-            new AstStatementList(EMPTY, List.of()),
-            AstContextType.NONE);
+    private AstStatementList createStatementList() {
+        AstStatementList result = new AstStatementList(EMPTY, List.of());
+        result.setProfile(profile);
+        return result;
+    }
+
+    private final AstContext testContext = mockAstContext.createChild(createStatementList(), AstContextType.NONE);
 
     private final LogicInstruction
             ix0 = ip.createInstruction(testContext, Opcode.SET, a, P0),
@@ -45,7 +49,7 @@ class BaseOptimizerTest extends AbstractTestBase {
     private final List<LogicInstruction> program = new ArrayList<>(List.of(ix0, ix1, ix2));
     private final OptimizationContext oc = new OptimizationContext(TraceFile.NULL_TRACE, m -> {},
             profile, ip, new TestOptimizerContext(m -> {}),
-            program, CallGraph.createEmpty(), AstContext.createRootNode(profile), false);
+            program, CallGraph.createEmpty(MAIN_MODULE), AstContext.createRootNode(profile), false);
     private final DummyOptimizer test = new DummyOptimizer(oc);
 
     @Test

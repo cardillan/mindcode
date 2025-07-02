@@ -14,7 +14,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 
 @NullMarked
@@ -49,8 +48,7 @@ public class ArraySize2Or3Constructor extends AbstractArrayConstructor {
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
 
-        AstContext astContext = this.instruction.getAstContext().createChild(profile,
-                Objects.requireNonNull(this.instruction.getAstContext().node()),
+        AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
                 AstContextType.IF, AstSubcontextType.BASIC);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 

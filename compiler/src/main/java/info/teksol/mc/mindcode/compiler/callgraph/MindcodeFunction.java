@@ -10,6 +10,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
 import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -119,6 +120,10 @@ public class MindcodeFunction {
         return isVarargs()
                 ? functions.getFunctions(call.getFunctionName()).stream()
                 : Stream.of(call).map(c -> functions.getExactMatch(c, -1)).filter(Objects::nonNull);
+    }
+
+    public CompilerProfile getProfile() {
+        return declaration.getProfile();
     }
 
     public AstModule getModule() {

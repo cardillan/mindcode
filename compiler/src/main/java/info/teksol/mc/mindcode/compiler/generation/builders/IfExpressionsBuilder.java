@@ -69,22 +69,28 @@ public class IfExpressionsBuilder extends AbstractBuilder implements
 
         AstIfBranch last = node.getIfBranches().getLast();
         AstOperatorTernary result = new AstOperatorTernary(last.sourcePosition(), last.getCondition(),
-                repackageBody(last.getCondition().sourcePosition(), last.getBody()),
-                repackageBody(last.getCondition().sourcePosition(), node.getElseBranch()));
+                repackageBody(last, last.getBody()),
+                repackageBody(last, node.getElseBranch()));
+        result.setProfile(node.getProfile());
 
         for (int i = node.getIfBranches().size() - 2; i >= 0; i--) {
             final AstIfBranch branch = node.getIfBranches().get(i);
             result = new AstOperatorTernary(branch.sourcePosition(), branch.getCondition(),
-                    repackageBody(branch.getCondition().sourcePosition(), branch.getBody()),
+                    repackageBody(branch, branch.getBody()),
                     result);
+            result.setProfile(branch.getProfile());
         }
 
         return result;
     }
 
-    private AstMindcodeNode repackageBody(SourcePosition position, List<AstMindcodeNode> expressions) {
-        return (expressions.size() == 1 && expressions.getFirst() instanceof AstExpression exp)
-                ? exp : new AstStatementList(expressions.isEmpty() ? position : expressions.getFirst().sourcePosition(), expressions);
+    private AstMindcodeNode repackageBody(AstIfBranch branch, List<AstMindcodeNode> expressions) {
+        SourcePosition position = branch.getCondition().sourcePosition();
+        if (expressions.size() == 1 && expressions.getFirst() instanceof AstExpression exp) return exp;
+
+        AstStatementList result = new AstStatementList(expressions.isEmpty() ? position : expressions.getFirst().sourcePosition(), expressions);
+        result.setProfile(branch.getProfile());
+        return result;
     }
 
     // Some constructs may produce VOID, but we want if statement branches to default to null,

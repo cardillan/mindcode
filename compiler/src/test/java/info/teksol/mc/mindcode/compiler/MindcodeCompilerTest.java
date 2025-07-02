@@ -159,8 +159,8 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
     @Test
     public void compilesMultipleFiles() {
         InputFiles inputFiles = InputFiles.create();
-        InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "print(\"File1\");");
-        InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "print(\"File2\");");
+        InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "begin print(\"File1\"); end;");
+        InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "begin print(\"File2\"); end;");
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         compile(expectedMessages().setLogger(messageLogger), inputFiles, compiler -> {

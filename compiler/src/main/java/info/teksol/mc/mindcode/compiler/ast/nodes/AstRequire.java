@@ -5,13 +5,14 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.SortedSet;
 
 @NullMarked
 public abstract class AstRequire extends AstDeclaration {
 
-    public AstRequire(SourcePosition sourcePosition, AstMindcodeNode child) {
-        super(sourcePosition, children(child));
+    public AstRequire(SourcePosition sourcePosition, List<AstMindcodeNode> children) {
+        super(sourcePosition, children);
     }
 
     public abstract boolean isLibrary();

@@ -7,7 +7,6 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.SortedSet;
@@ -15,9 +14,6 @@ import java.util.SortedSet;
 @AstNode
 @NullMarked
 public class AstModule extends AstStatement {
-    public static AstModule DEFAULT = new AstModule(SourcePosition.EMPTY,
-            null, List.of(), Collections.emptySortedSet());
-
     /// Module declaration
     private final @Nullable AstModuleDeclaration declaration;
 
@@ -27,12 +23,15 @@ public class AstModule extends AstStatement {
     /// Empty for local modules. For remote modules, identifies the processor(s) containing module code.
     private final SortedSet<AstIdentifier> remoteProcessors;
 
+    private final boolean main;
+
     public AstModule(SourcePosition sourcePosition, @Nullable AstModuleDeclaration declaration, List<AstMindcodeNode> statements,
-            SortedSet<AstIdentifier> remoteProcessors) {
+            SortedSet<AstIdentifier> remoteProcessors, boolean main) {
         super(sourcePosition, children(list(declaration), statements));
         this.declaration = declaration;
         this.statements = statements;
         this.remoteProcessors = remoteProcessors;
+        this.main = main;
     }
 
     public @Nullable AstModuleDeclaration getDeclaration() {
@@ -53,6 +52,10 @@ public class AstModule extends AstStatement {
 
     public boolean matchesProcessor(String name) {
         return remoteProcessors.stream().anyMatch(identifier -> identifier.getName().equals(name));
+    }
+
+    public boolean isMain() {
+        return main;
     }
 
     @Override

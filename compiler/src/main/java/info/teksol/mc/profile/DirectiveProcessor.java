@@ -23,6 +23,7 @@ import java.util.function.Supplier;
 
 @NullMarked
 public class DirectiveProcessor extends AbstractMessageEmitter {
+    private DirectiveScope scope = DirectiveScope.GLOBAL;
 
     private interface OptionHandler {
         void handle(CompilerProfile profile, AstDirectiveSet directive);
@@ -34,7 +35,14 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         super(messageConsumer);
     }
 
+    public void setScope(DirectiveScope scope) {
+        this.scope = scope;
+    }
+
     public void processDirective(CompilerProfile profile, AstDirectiveSet directive) {
+        DirectiveScope previousScope = scope;
+        if (directive.isLocal()) scope = DirectiveScope.LOCAL;
+
         String directiveText = directive.getOption().getText();
         OptionHandler handler = OPTION_HANDLERS.get(directiveText);
         if (handler == null) {
@@ -47,6 +55,8 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         } else {
             handler.handle(profile, directive);
         }
+
+        scope = previousScope;
     }
         
     private void firstValueError(AstDirectiveSet node, @PrintFormat String format, Object... args) {
@@ -92,6 +102,19 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
             profile.setSortVariables(List.of());
         } else {
             profile.setSortVariables(sortCategories);
+        }
+    }
+
+    private void setSyntax(CompilerProfile profile, AstDirectiveSet node) {
+        if (validateSingleValue(node)) {
+            SyntacticMode syntacticMode = SyntacticMode.byName(node.getValues().getFirst().getText());
+            if (syntacticMode == null) {
+                reportWrongOptionValue(node, node.getValues().getFirst(), SyntacticMode.allowedValues());
+            } else if (scope == DirectiveScope.MODULE && syntacticMode != SyntacticMode.STRICT) {
+                error(node.getValues().getFirst(), ERR.DIRECTIVE_INVALID_SYNTAX_FOR_MODULE);
+            } else {
+                profile.setSyntacticMode(syntacticMode);
+            }
         }
     }
 
@@ -180,7 +203,7 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         map.put("remarks",                      (profile, node) -> setEnumOption(node, Remarks::byName, profile::setRemarks, Remarks::allowedValues));
         map.put("sort-variables",               this::setSortVariables);
         map.put("symbolic-labels",              (profile, node) -> setBooleanOption(node, profile::setSymbolicLabels));
-        map.put("syntax",                       (profile, node) -> setEnumOption(node, SyntacticMode::byName, profile::setSyntacticMode, SyntacticMode::allowedValues));
+        map.put("syntax",                       this::setSyntax);
         map.put("target",                       this::setTarget);
         map.put("target-guard",                 (profile, node) -> setBooleanOption(node, profile::setTargetGuard));
         map.put("unsafe-case-optimization",     (profile, node) -> setBooleanOption(node, profile::setUnsafeCaseOptimization));

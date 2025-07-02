@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.ast.nodes;
 
 import info.teksol.annotations.AstNode;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -12,10 +13,11 @@ import java.util.List;
 public class AstProgram extends AstBaseMindcodeNode {
     private final List<AstModule> modules;
 
-    public AstProgram(SourcePosition sourcePosition, List<AstModule> modules) {
+    public AstProgram(CompilerProfile profile, SourcePosition sourcePosition, List<AstModule> modules) {
         super(sourcePosition, children(modules));
         if (modules.isEmpty()) throw new IllegalArgumentException("At least one module must be provided");
         this.modules = List.copyOf(modules);
+        setProfile(profile);
     }
 
     public List<AstModule> getModules() {

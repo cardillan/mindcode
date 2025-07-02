@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.functions.FunctionMapperContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
+import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
@@ -16,6 +17,7 @@ import org.jspecify.annotations.Nullable;
 
 @NullMarked
 public interface CodeGeneratorContext extends
+        PreprocessorContext,
         CodeAssemblerContext,
         CompileTimeEvaluatorContext,
         FunctionMapperContext {

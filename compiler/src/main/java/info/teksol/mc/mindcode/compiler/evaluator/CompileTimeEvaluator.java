@@ -15,7 +15,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -29,7 +29,7 @@ import java.util.*;
 /// Non-deterministic operations or operations with side effects remain unevaluated.
 @NullMarked
 public class CompileTimeEvaluator extends AbstractMessageEmitter {
-    private final CompilerProfile profile;
+    private final BuiltinEvaluation builtinEvaluation;
     private final InstructionProcessor processor;
     private final Map<String, AstLiteral> constants = new HashMap<>();
     private final IdentityHashMap<AstMindcodeNode, AstMindcodeNode> cache = new IdentityHashMap<>();
@@ -37,7 +37,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
 
     public CompileTimeEvaluator(CompileTimeEvaluatorContext context) {
         super(context.messageConsumer());
-        profile = context.compilerProfile();
+        builtinEvaluation = context.globalCompilerProfile().getBuiltinEvaluation();
         processor = context.instructionProcessor();
         variables = context.variables();
     }
@@ -115,7 +115,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
                     case AstLiteralHexadecimal n -> 16;
                     default -> 10;
                 };
-                ExpressionValue right = ExpressionValue.create(profile, processor, evaluateNode(node.getOperand(), local));
+                ExpressionValue right = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(node.getOperand(), local));
                 ExpressionValue left = operation.getOperands() == 1 ? right : ExpressionValue.zero(processor);
                 if (right.isString()) {
                     error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
@@ -134,8 +134,8 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         if (operation.isDeterministic()) {
             LogicOperation eval = ExpressionEvaluator.getOperation(operation);
             if (eval != null) {
-                ExpressionValue left = ExpressionValue.create(profile, processor, evaluateNode(node.getLeft(), local));
-                ExpressionValue right = ExpressionValue.create(profile, processor, evaluateNode(node.getRight(), local));
+                ExpressionValue left = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(node.getLeft(), local));
+                ExpressionValue right = ExpressionValue.create(builtinEvaluation, processor, evaluateNode(node.getRight(), local));
                 if (left.isString() || right.isString()) {
                     if (operation.isCondition()) {
                         if (left.isString() && right.isString()) {
@@ -261,8 +261,8 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
             if (evaluated.size() == numArgs) {
                 // All parameters are constants
                 // left and right are the same argument for unary functions
-                ExpressionValue left = ExpressionValue.create(profile, processor, evaluated.getFirst());
-                ExpressionValue right = ExpressionValue.create(profile, processor, evaluated.getLast());
+                ExpressionValue left = ExpressionValue.create(builtinEvaluation, processor, evaluated.getFirst());
+                ExpressionValue right = ExpressionValue.create(builtinEvaluation, processor, evaluated.getLast());
                 if (left.isString() || right.isString()) {
                     error(node, ERR.UNSUPPORTED_STRING_EXPRESSION);
                     return node;

@@ -14,7 +14,7 @@ import java.util.*;
 
 @NullMarked
 public class CallGraphCreator extends AbstractMessageEmitter {
-    private final CompilerProfile profile;
+    private final CompilerProfile globalProfile;
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
     private final AstProgram program;
@@ -29,11 +29,11 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
     private CallGraphCreator(CallGraphCreatorContext context, AstProgram program) {
         super(context.messageConsumer());
-        this.profile = context.compilerProfile();
+        this.globalProfile = context.globalCompilerProfile();
         this.processor = context.instructionProcessor();
         this.nameCreator = context.nameCreator();
         this.program = program;
-        this.functionDefinitions = new FunctionDefinitions(messageConsumer);
+        this.functionDefinitions = new FunctionDefinitions(messageConsumer, program.getMainModule());
         this.activeFunction = functionDefinitions.getMain();
     }
 
@@ -72,7 +72,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
             // Only process function bodies in non-remote modules
             MindcodeFunction previousFunction = activeFunction;
             activeFunction = functionDefinitions.addFunctionDeclaration(functionDeclaration, activeModule,
-                    !program.isMainProgram() && functionDeclaration.isRemote() && activeModule == program.getMainModule());
+                    !program.isMainProgram() && functionDeclaration.isRemote() && activeModule.isMain());
             functionDeclaration.getBody().forEach(this::visitNode);
             activeFunction = previousFunction;
         } else if (functionDeclaration.isRemote()) {
@@ -203,7 +203,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
                     .forEach(p -> error(function.getSourcePosition(), ERR.PARAMETER_REF_NOT_INLINE, p.getName(),  function.getName()));
         }
 
-        if (profile.getSyntacticMode() != SyntacticMode.STRICT) {
+        // When the module is not the main one, the syntax mode must be strict
+        if (globalProfile.getSyntacticMode() != SyntacticMode.STRICT || !function.getModule().isMain()) {
             params.stream()
                     .filter(p -> processor.isBlockName(p.getName()))
                     .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_LINKED, p.getName(), function.getName()));

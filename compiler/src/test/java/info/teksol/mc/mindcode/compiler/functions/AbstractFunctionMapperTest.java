@@ -59,7 +59,7 @@ public class AbstractFunctionMapperTest {
         }
 
         @Override
-        public CompilerProfile compilerProfile() {
+        public CompilerProfile globalCompilerProfile() {
             return compilerProfile;
         }
 
@@ -81,14 +81,21 @@ public class AbstractFunctionMapperTest {
 
 
     protected static class CodeAssemblerContextImpl extends VariablesContextImpl implements CodeAssemblerContext {
-        private final Variables variables;
         private final AstContext rootAstContext;
+        private final CompilerProfile compilerProfile;
+        private final Variables variables;
 
         public CodeAssemblerContextImpl(MessageConsumer messageConsumer, CompilerProfile compilerProfile,
                 InstructionProcessor instructionProcessor, AstContext rootAstContext) {
             super(messageConsumer, compilerProfile, instructionProcessor);
             this.rootAstContext = rootAstContext;
+            this.compilerProfile = compilerProfile;
             this.variables = new Variables(this);
+        }
+
+        @Override
+        public CompilerProfile globalCompilerProfile() {
+            return compilerProfile;
         }
 
         @Override

@@ -17,7 +17,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -119,7 +118,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     private void createMinimalRuntimeCheck(AstContext astContext, Consumer<LogicInstruction> consumer,
             LogicValue index, int max, String errorMessage) {
-        AstContext ctx = astContext.createChild(profile, Objects.requireNonNull(instruction.getAstContext().node()),
+        AstContext ctx = astContext.createChild(instruction.getAstContext().existingNode(),
                 AstContextType.IF, AstSubcontextType.CONDITION);
 
         LogicLabel logicLabel1 = processor.nextLabel();
@@ -132,7 +131,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     private void createSimpleOrDescribedRuntimeCheck(AstContext astContext, Consumer<LogicInstruction> consumer,
             LogicValue index, int max, String errorMessage) {
-        AstContext ctx = astContext.createChild(profile, Objects.requireNonNull(instruction.getAstContext().node()),
+        AstContext ctx = astContext.createChild(instruction.getAstContext().existingNode(),
                 AstContextType.IF, AstSubcontextType.CONDITION);
 
         LogicLabel logicLabelStop = processor.nextLabel();

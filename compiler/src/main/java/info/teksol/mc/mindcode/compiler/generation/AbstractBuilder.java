@@ -17,7 +17,6 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
-import info.teksol.mc.profile.CompilerProfile;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -46,7 +45,6 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     private final CodeGenerator codeGenerator;
 
     protected final CodeGeneratorContext context;
-    protected final CompilerProfile profile;
     protected final InstructionProcessor processor;
     protected final NameCreator nameCreator;
     protected final MindustryMetadata metadata;
@@ -61,7 +59,6 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         this.codeGenerator = codeGenerator;
         this.context = context;
 
-        profile = context.compilerProfile();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         metadata = context.metadata();
@@ -77,7 +74,6 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         this.codeGenerator = builder.codeGenerator;
         this.context = builder.context;
 
-        profile = context.compilerProfile();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         metadata = context.metadata();
@@ -112,11 +108,11 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         return elements.getFirst().sourcePosition().upTo(elements.getLast().sourcePosition());
     }
 
-    public AstModule getModule(AstRequire node) {
+    protected AstModule getModule(AstRequire node) {
         return codeGenerator.getModule(node);
     }
 
-    public String createRemoteSignature(AstModule module) {
+    protected String createRemoteSignature(AstModule module) {
         return codeGenerator.createRemoteSignature(module);
     }
 
@@ -183,6 +179,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     ///
     /// @return `LogicVoid.VOID`
     protected ValueStore visitBody(List<? extends AstMindcodeNode> body) {
+        // §§§ Move to codeGenerator, fail when there's unused setLocal directive.
         body.forEach(this::compile);
         return LogicVoid.VOID;
     }

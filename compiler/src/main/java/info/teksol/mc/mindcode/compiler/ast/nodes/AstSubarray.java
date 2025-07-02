@@ -16,7 +16,7 @@ public class AstSubarray extends AstExpression implements AstArray {
     private final AstRange range;
 
     public AstSubarray(SourcePosition sourcePosition, AstIdentifier array, AstRange range) {
-        super(sourcePosition);
+        super(sourcePosition, children(array, range));
         this.processor = null;
         this.array = array;
         this.range = range;

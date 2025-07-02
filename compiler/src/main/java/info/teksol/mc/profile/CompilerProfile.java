@@ -120,7 +120,7 @@ public class CompilerProfile {
                 o -> optimSet.contains(o) ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.NONE));
     }
 
-    public CompilerProfile(CompilerProfile other) {
+    public CompilerProfile(CompilerProfile other, boolean includeSemantic) {
         this.webApplication = other.webApplication;
         this.levels = new HashMap<>(other.levels);
         this.executionFlags.addAll(other.executionFlags);
@@ -142,8 +142,6 @@ public class CompilerProfile {
         this.remarks = other.remarks;
         this.builtinEvaluation = other.builtinEvaluation;
         this.targetGuard = other.targetGuard;
-        this.mlogBlockOptimization = other.mlogBlockOptimization;
-        this.unsafeCaseOptimization = other.unsafeCaseOptimization;
         this.shortCircuitEval = other.shortCircuitEval;
         this.shortFunctionPrefix = other.shortFunctionPrefix;
         this.signature = other.signature;
@@ -157,10 +155,15 @@ public class CompilerProfile {
         this.positionTranslator = other.positionTranslator;
         this.debugOutput = other.debugOutput;
         this.caseConfiguration = other.caseConfiguration;
+
+        if (includeSemantic) {
+            this.mlogBlockOptimization = other.mlogBlockOptimization;
+            this.unsafeCaseOptimization = other.unsafeCaseOptimization;
+        }
     }
 
-    public CompilerProfile duplicate() {
-        return new CompilerProfile(this);
+    public CompilerProfile duplicate(boolean includeSemantic) {
+        return new CompilerProfile(this, includeSemantic);
     }
 
     public int getMaxPasses() {

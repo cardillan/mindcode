@@ -62,7 +62,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     }
                                 }
                             ],
-                            remoteProcessors = []
+                            remoteProcessors = [],
+                            main = true
                         }"""
         );
     }
@@ -175,7 +176,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     }
                                 }
                             ],
-                            remoteProcessors = []
+                            remoteProcessors = [],
+                            main = true
                         }"""
         );
     }
@@ -249,7 +251,8 @@ public class AstIndentedPrinterTest extends AbstractAstBuilderTest {
                                     }
                                 }
                             ],
-                            remoteProcessors = []
+                            remoteProcessors = [],
+                            main = true
                         }"""
         );
     }

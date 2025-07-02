@@ -47,7 +47,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     // Stateless processing instances
     private final CodeGeneratorContext context;
     private final AstProgram program;
-    private final CompilerProfile profile;
+    private final CompilerProfile globalProfile;
     private final CallGraph callGraph;
     private final CompileTimeEvaluator evaluator;
     private final CodeAssembler assembler;
@@ -70,7 +70,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         super(context.messageConsumer());
         this.context = context;
         this.program = program;
-        profile = context.compilerProfile();
+        this.globalProfile = context.globalCompilerProfile();
         callGraph = context.callGraph();
         evaluator = context.compileTimeEvaluator();
         assembler = context.assembler();
@@ -79,7 +79,6 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nodeVisitor = new ComposedAstNodeVisitor<>(node -> {
             throw new MindcodeInternalError("Unhandled node " + node);
         });
-
 
         // Registration order is unimportant as long as multiple handlers do not handle the same node
         nodeVisitor.registerVisitor(new AssignmentsBuilder(this, context));
@@ -104,6 +103,10 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     public NameCreator nameCreator() {
         return variables.nameCreator();
+    }
+
+    public CompilerProfile getGlobalProfile() {
+        return globalProfile;
     }
 
     public String createRemoteSignature(Stream<AstFunctionDeclaration> functions) {
@@ -149,7 +152,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     private void generateCode() {
         if (!program.isMainProgram()) generateRemoteJumpTable();
-        if (profile.isTargetGuard()) generateTargetGuard();
+        if (globalProfile.isTargetGuard()) generateTargetGuard();
 
         variables.enterFunction(callGraph.getMain(), List.of());
         assembler.enterAstNode(program);
@@ -163,7 +166,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
                     ERR.FUNCTION_RECURSIVE_NO_STACK, f.getName()));
         }
 
-        // Separate main program from function declarations
+        // Separate the main program from function declarations
         assembler.createCompilerEnd();
 
         // From now on, we'll only compile function bodies, which is always a local context.
@@ -184,7 +187,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     /// Generates an error if the current target doesn't support remote calls or variables
     void verifyMinimalRemoteTarget(AstMindcodeNode node) {
-        if (!profile.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+        if (!globalProfile.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
             error(node, ERR.REMOTE_REQUIRES_TARGET_8);
         }
     }
@@ -205,9 +208,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.INIT);
         LogicLabel guardLabel = assembler.nextLabel().withoutStateTransfer();
         assembler.createLabel(guardLabel);
-        switch (profile.getProcessorVersion()) {
+        switch (globalProfile.getProcessorVersion()) {
             case V6 -> {
-                if (profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
                     // Full
                     assembler.createJump(guardLabel, Condition.GREATER_THAN, new LogicToken("%FFFFFF"), LogicNumber.ZERO).setTargetGuard(true);
                 } else {
@@ -216,7 +219,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 }
             }
             case V7, V7A -> {
-                if (profile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
                     // Full
                     assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
                 } else {
@@ -228,7 +231,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
                 // No distinction between full and compatible: there are no other compatible versions besides V8
                 assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%[red]"), LogicNull.NULL).setTargetGuard(true);
             }
-            default -> throw new MindcodeInternalError("Unhandled processor version " + profile.getProcessorVersion());
+            default -> throw new MindcodeInternalError("Unhandled processor version " + globalProfile.getProcessorVersion());
         }
         assembler.clearContextType(program);
     }
@@ -267,7 +270,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
     private void addMissingPrintflush() {
         List<LogicInstruction> program = assembler.getInstructions();
-        if (!profile.isAutoPrintflush()
+        if (!globalProfile.isAutoPrintflush()
                 || program.stream().noneMatch(ix -> ix instanceof PrintingInstruction)
                 || program.stream().anyMatch(ix -> ix.getOpcode() == Opcode.PRINTFLUSH
                 || ix instanceof DrawInstruction dix && dix.getType().getKeyword().equals("print"))) {
@@ -290,12 +293,12 @@ public class CodeGenerator extends AbstractMessageEmitter {
             codeInGlobalScopeWarning = true;
         }
 
-        if (profile.getSyntacticMode() != SyntacticMode.RELAXED || node.reportAllScopeErrors()) {
+        if (node.getProfile().getSyntacticMode() != SyntacticMode.RELAXED || node.reportAllScopeErrors()) {
             String message = isLocalContext()
                     ? ERR.SCOPE_DECLARATION_WITHIN_CODE_BLOCK
                     : ERR.SCOPE_CODE_OUTSIDE_CODE_BLOCK;
 
-            if (profile.getSyntacticMode() == SyntacticMode.STRICT || node.reportAllScopeErrors()) {
+            if (node.getProfile().getSyntacticMode() == SyntacticMode.STRICT || node.reportAllScopeErrors()) {
                 error(node, "%s", message);
             } else {
                 warn(node, "%s", message);
@@ -307,8 +310,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
         return allowUndeclaredLinks;
     }
 
-    boolean allowUndeclaredLinks = false;
-    boolean requireMlogConstant = false;
+    private boolean allowUndeclaredLinks = false;
+    private boolean requireMlogConstant = false;
 
     public ValueStore visit(AstMindcodeNode node, boolean evaluate) {
         if (node.getScopeRestriction().disallowed(isLocalContext() ? AstNodeScope.LOCAL : AstNodeScope.GLOBAL)) {
@@ -347,7 +350,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (node instanceof AstAllocations || node instanceof AstParameter || node instanceof AstRequire) allowUndeclaredLinks = false;
         if (node.getScope() == AstNodeScope.LOCAL) nested--;
 
-        // Reset global scope warning after exiting code block.
+        // Reset global scope warning after exiting a code block.
         if (node instanceof AstCodeBlock) codeInGlobalScopeWarning = false;
 
         return result;

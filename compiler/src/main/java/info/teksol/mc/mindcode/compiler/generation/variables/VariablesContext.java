@@ -8,7 +8,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public interface VariablesContext extends CompilerContext {
-    CompilerProfile compilerProfile();
+    CompilerProfile globalCompilerProfile();
     InstructionProcessor instructionProcessor();
     NameCreator nameCreator();
     MindustryMetadata metadata();

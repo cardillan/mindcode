@@ -59,24 +59,23 @@ public final class AstContext {
         return createRootNode(CompilerProfile.fullOptimizations(false));
     }
 
-    public AstContext createChild(CompilerProfile profile, AstMindcodeNode node, AstContextType contextType) {
-        AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
+    public AstContext createChild(AstMindcodeNode node, AstContextType contextType) {
+        AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, node.getSubcontextType(),
                 this, 1.0);
         children.add(child);
 
         return child;
     }
 
-    public AstContext createChild(CompilerProfile profile, AstMindcodeNode node, AstContextType contextType,
-            AstSubcontextType subcontextType) {
-        AstContext child = new AstContext(profile, function, level + 1, node, contextType, subcontextType,
+    public AstContext createChild(AstMindcodeNode node, AstContextType contextType, AstSubcontextType subcontextType) {
+        AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, subcontextType,
                 this, 1.0);
         children.add(child);
 
         return child;
     }
 
-    public AstContext createFunctionDeclaration(CompilerProfile profile, MindcodeFunction function, AstMindcodeNode node,
+    public AstContext createFunctionDeclaration(MindcodeFunction function, AstMindcodeNode node,
             AstContextType contextType, double weight) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
                 this, weight);

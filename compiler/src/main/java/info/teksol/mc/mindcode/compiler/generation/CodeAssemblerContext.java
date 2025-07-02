@@ -9,7 +9,7 @@ import org.jspecify.annotations.NullMarked;
 
 @NullMarked
 public interface CodeAssemblerContext extends CompilerContext {
-    CompilerProfile compilerProfile();
+    CompilerProfile globalCompilerProfile();
     InstructionProcessor instructionProcessor();
     Variables variables();
     AstContext rootAstContext();

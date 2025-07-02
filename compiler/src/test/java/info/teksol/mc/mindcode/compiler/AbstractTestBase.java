@@ -8,6 +8,7 @@ import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
@@ -32,6 +33,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -42,6 +44,9 @@ public abstract class AbstractTestBase {
     public static final String SCRIPTS_BASE_DIRECTORY = "src/test/resources/info/teksol/mc/mindcode/tests";
 
     protected static final SourcePosition EMPTY = SourcePosition.EMPTY;
+
+    protected static final AstModule MAIN_MODULE = new AstModule(EMPTY,
+            null, List.of(), Collections.emptySortedSet(), true);
 
     protected abstract CompilationPhase getTargetPhase();
 

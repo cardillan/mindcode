@@ -89,9 +89,9 @@ public class AstFunctionDeclaration extends AstDeclaration {
     }
 
     public int computeCallSize() {
-        // Call size: setting up return address, jump to function, jump back from function, plus passing arguments
+        // Call size: setting up a return address, jump to the function, jump back from the function, plus passing arguments
         // Note: the function return value is set by the function and not generated at the call site,
-        //       therefore it is not counted.
+        //       therefore, it is not counted.
         return 3 + parameters.stream().mapToInt(AstFunctionParameter::callSize).sum();
     }
 

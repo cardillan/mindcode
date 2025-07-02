@@ -92,7 +92,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                 iterations++;
             }
 
-            // For-each loops do not put done label into flow control subcontext
+            // For-each loops do not put the `done` label into flow control subcontext
             // Not a bug.
             assembler.createLabel(loopLabels.breakLabel());
 
@@ -117,10 +117,10 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             boolean lastIteration = !hasMoreData();
 
             // Setting the iterator address.
-            // Continue is disallowed in value list -> nextAddress can't be used before being set up.
+            // Continue is disallowed in a value list -> nextAddress can't be used before being set up.
             LogicLabel nextValueLabel = assembler.nextLabel();
 
-            if (profile.isSymbolicLabels()) {
+            if (node.getProfile().isSymbolicLabels()) {
                 if (lastIteration) {
                     assembler.createSet(nextAddress, LogicNull.NULL);
                 } else {

@@ -13,6 +13,7 @@ import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Collections;
 import java.util.List;
 
 import static info.teksol.mc.common.SourcePosition.EMPTY;
@@ -20,9 +21,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
 class AstContextTest {
+    private static final AstModule MAIN_MODULE = new AstModule(SourcePosition.EMPTY,
+            null, List.of(), Collections.emptySortedSet(), true);
+
     private final CompilerProfile profile = CompilerProfile.fullOptimizations(false);
     private final AstContext root = AstContext.createRootNode(profile);
-    private final CallGraph callGraph = CallGraph.createEmpty();
+    private final CallGraph callGraph = CallGraph.createEmpty(MAIN_MODULE);
     private final AstFunctionDeclaration functionDeclaration1 = new AstFunctionDeclaration( EMPTY, null,
             new AstIdentifier(EMPTY, "test1"), DataType.VAR,
             List.of(), List.of(), CallType.NONE);
@@ -35,12 +39,12 @@ class AstContextTest {
 
     @BeforeEach
     void setUp() {
-        FunctionDefinitions functions = new FunctionDefinitions(m -> {});
-        function1 = functions.addFunctionDeclaration(functionDeclaration1, AstModule.DEFAULT, false);
-        function2 = functions.addFunctionDeclaration(functionDeclaration2, AstModule.DEFAULT, false);
+        FunctionDefinitions functions = new FunctionDefinitions(m -> {}, MAIN_MODULE);
+        function1 = functions.addFunctionDeclaration(functionDeclaration1, MAIN_MODULE, false);
+        function2 = functions.addFunctionDeclaration(functionDeclaration2, MAIN_MODULE, false);
 
-        AstMindcodeNode node = new TestNode(AstContextType.FUNCTION, AstSubcontextType.BODY);
-        context = root.createFunctionDeclaration(profile, function1, node, node.getContextType(),1.0);
+        AstMindcodeNode node = new TestNode(profile, AstContextType.FUNCTION, AstSubcontextType.BODY);
+        context = root.createFunctionDeclaration(function1, node, node.getContextType(),1.0);
     }
 
     @Test
@@ -56,8 +60,8 @@ class AstContextTest {
 
     @Test
     void createChild() {
-        AstMindcodeNode node = new TestNode(AstContextType.IF, AstSubcontextType.CONDITION);
-        AstContext child = context.createChild(profile, node, node.getContextType());
+        AstMindcodeNode node = new TestNode(profile, AstContextType.IF, AstSubcontextType.CONDITION);
+        AstContext child = context.createChild(node, node.getContextType());
 
         assertEquals(context.function(), child.function());
         assertEquals(context.level() + 1, child.level());
@@ -69,8 +73,8 @@ class AstContextTest {
 
     @Test
     void createFunctionDeclaration() {
-        AstMindcodeNode node = new TestNode(AstContextType.FUNCTION, AstSubcontextType.BODY);
-        AstContext child = context.createFunctionDeclaration(profile, function2, node, node.getContextType(),2.0);
+        AstMindcodeNode node = new TestNode(profile, AstContextType.FUNCTION, AstSubcontextType.BODY);
+        AstContext child = context.createFunctionDeclaration(function2, node, node.getContextType(),2.0);
 
         assertEquals(function2, child.function());
         assertEquals(context.level() + 1, child.level());
@@ -159,8 +163,8 @@ class AstContextTest {
 
     @Test
     void findTopContextOfTypes() {
-        AstMindcodeNode node = new TestNode(root.contextType(), root.subcontextType());
-        AstContext child = context.createChild(profile, node, root.contextType());
+        AstMindcodeNode node = new TestNode(profile, root.contextType(), root.subcontextType());
+        AstContext child = context.createChild(node, root.contextType());
 
         assertEquals(root, child.findTopContextOfType(root.contextType()));
         assertEquals(context, child.findTopContextOfType(context.contextType()));
@@ -169,8 +173,8 @@ class AstContextTest {
 
     @Test
     void findDirectChild() {
-        AstMindcodeNode node = new TestNode(root.contextType(), root.subcontextType());
-        AstContext child = context.createChild(profile, node, root.contextType());
+        AstMindcodeNode node = new TestNode(profile, root.contextType(), root.subcontextType());
+        AstContext child = context.createChild(node, root.contextType());
 
         assertEquals(context, root.findDirectChild(child));
         assertEquals(context, root.findDirectChild(context));
@@ -180,7 +184,7 @@ class AstContextTest {
 
     @Test
     void findSubcontext() {
-        AstMindcodeNode node = new TestNode(context.contextType(), AstSubcontextType.SYSTEM_CALL);
+        AstMindcodeNode node = new TestNode(profile, context.contextType(), AstSubcontextType.SYSTEM_CALL);
         AstContext child1 = context.createSubcontext(AstSubcontextType.SYSTEM_CALL, 1.0);
         AstContext child2 = context.createSubcontext(AstSubcontextType.SYSTEM_CALL, 1.0);
 
@@ -190,7 +194,7 @@ class AstContextTest {
 
     @Test
     void findLastSubcontext() {
-        AstMindcodeNode node = new TestNode(context.contextType(), AstSubcontextType.SYSTEM_CALL);
+        AstMindcodeNode node = new TestNode(profile, context.contextType(), AstSubcontextType.SYSTEM_CALL);
         AstContext child1 = context.createSubcontext(AstSubcontextType.SYSTEM_CALL, 1.0);
         AstContext child2 = context.createSubcontext(AstSubcontextType.SYSTEM_CALL, 1.0);
 
@@ -200,7 +204,7 @@ class AstContextTest {
 
     @Test
     void findSubcontexts() {
-        AstMindcodeNode node = new TestNode(context.contextType(), AstSubcontextType.SYSTEM_CALL);
+        AstMindcodeNode node = new TestNode(profile, context.contextType(), AstSubcontextType.SYSTEM_CALL);
         AstContext child1 = context.createSubcontext(AstSubcontextType.INIT, 1.0);
         AstContext child2 = context.createSubcontext(AstSubcontextType.CONDITION, 1.0);
         AstContext child3 = context.createSubcontext(AstSubcontextType.INIT, 1.0);
@@ -232,7 +236,7 @@ class AstContextTest {
 
     @Test
     void children() {
-        AstMindcodeNode node = new TestNode(context.contextType(), AstSubcontextType.SYSTEM_CALL);
+        AstMindcodeNode node = new TestNode(profile, context.contextType(), AstSubcontextType.SYSTEM_CALL);
         AstContext child1 = context.createSubcontext(AstSubcontextType.INIT, 1.0);
         AstContext child2 = context.createSubcontext(AstSubcontextType.CONDITION, 1.0);
         AstContext child3 = context.createSubcontext(AstSubcontextType.INIT, 1.0);
@@ -248,8 +252,10 @@ class AstContextTest {
     private static class TestNode implements AstMindcodeNode {
         private final AstContextType contextType;
         private final AstSubcontextType subcontextType;
+        private CompilerProfile profile;
 
-        public TestNode(AstContextType contextType, AstSubcontextType subcontextType) {
+        public TestNode(CompilerProfile profile, AstContextType contextType, AstSubcontextType subcontextType) {
+            this.profile = profile;
             this.contextType = contextType;
             this.subcontextType = subcontextType;
         }
@@ -257,6 +263,16 @@ class AstContextTest {
         @Override
         public AstNodeScope getScopeRestriction() {
             return AstNodeScope.NONE;
+        }
+
+        @Override
+        public void setProfile(CompilerProfile profile) {
+            this.profile = profile;
+        }
+
+        @Override
+        public CompilerProfile getProfile() {
+            return profile;
         }
 
         @Override

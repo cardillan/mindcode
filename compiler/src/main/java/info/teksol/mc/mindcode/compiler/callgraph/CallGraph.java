@@ -1,6 +1,8 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import org.jspecify.annotations.NullMarked;
 
@@ -23,8 +25,8 @@ public final class CallGraph {
         this.functions = List.copyOf(functionDefinitions.getFunctions());
     }
 
-    public static CallGraph createEmpty() {
-        return new CallGraph(new FunctionDefinitions(mindcodeMessage -> {}));
+    public static CallGraph createEmpty(AstModule mainModule) {
+        return new CallGraph(new FunctionDefinitions(mindcodeMessage -> {}, mainModule));
     }
 
     public List<MindcodeFunction> assignRemoteFunctionIndexes(Predicate<MindcodeFunction> functionSelector) {
@@ -41,9 +43,13 @@ public final class CallGraph {
         return remoteFunctions;
     }
 
+    public MindcodeFunction findFunction(AstFunctionDeclaration declaration) {
+        return functionDefinitions.findFunction(declaration);
+    }
+
     /// Returns the representation of the main function, that is the main program body.
     ///
-    /// @return instance representing main body
+    /// @return instance representing the main body
     public MindcodeFunction getMain() {
         return functionDefinitions.getMain();
     }

@@ -1,43 +1,102 @@
 package info.teksol.mc.mindcode.compiler.preprocess;
 
-import info.teksol.mc.generated.ast.visitors.AstDirectiveSetVisitor;
 import info.teksol.mc.messages.AbstractMessageEmitter;
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstProgram;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
+import info.teksol.mc.profile.DirectiveScope;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/// Processes compiler directives in an AST node tree, modifying the given compiler profile accordingly.
-@NullMarked
-public class DirectivePreprocessor extends AbstractMessageEmitter implements AstDirectiveSetVisitor<@Nullable Void> {
-    private final DirectiveProcessor directiveProcessor;
-    private final CompilerProfile profile;
+import java.util.ArrayDeque;
+import java.util.Deque;
 
-    private DirectivePreprocessor(PreprocessorContext context) {
+/// Processes compiler directives both global/module and local) in an AST node tree, modifying the given compiler
+/// profile accordingly.
+@NullMarked
+public class DirectivePreprocessor extends AbstractMessageEmitter {
+    private final DirectiveProcessor directiveProcessor;
+    private CompilerProfile profile;
+
+    private DirectivePreprocessor(PreprocessorContext context, CompilerProfile profile, DirectiveScope scope) {
         super(context.messageConsumer());
         this.directiveProcessor = context.directiveProcessor();
-        this.profile = context.compilerProfile();
+        this.directiveProcessor.setScope(scope);
+        this.profile = profile;
     }
 
-    public static void processDirectives(PreprocessorContext context, AstProgram program) {
-        DirectivePreprocessor processor = new DirectivePreprocessor(context);
-        processor.visitNode(program);
+    public static void processGlobalDirectives(PreprocessorContext context, CompilerProfile profile, AstModule module) {
+        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, DirectiveScope.GLOBAL);
+        preprocessor.visitNode(module);
+        module.setProfile(profile);
+    }
+
+    public static void processModuleDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstModule module) {
+        CompilerProfile profile = globalProfile.duplicate(false);
+        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, DirectiveScope.MODULE);
+        preprocessor.visitNode(module);
+        module.setProfile(profile);
     }
 
     private void visitNode(AstMindcodeNode node) {
         if (node instanceof AstDirectiveSet directive) {
-            visitDirectiveSet(directive);
+            if (!directive.isLocal()) {
+                directiveProcessor.processDirective(profile, directive);
+            }
         } else {
             node.getChildren().forEach(this::visitNode);
         }
     }
 
-    @Override
-    public Void visitDirectiveSet(AstDirectiveSet directive) {
-        directiveProcessor.processDirective(profile, directive);
-        return null;
+    public static void processLocalDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstProgram program) {
+        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, globalProfile, DirectiveScope.LOCAL);
+        preprocessor.visitNodeLocal(program);
+    }
+
+    // A stack of compiler profiles
+    Deque<CompilerProfile> profileStack = new ArrayDeque<>();
+    private @Nullable AstDirectiveSet lastLocalDirective = null;
+
+    private void visitNodeLocal(AstMindcodeNode node) {
+        if (lastLocalDirective == null) {
+            // Skip the push for any node following a local directive
+            // The previous profile for this node has already been pushed by the first local directive in a sequence
+            profileStack.push(profile);
+        }
+
+        if (node instanceof AstDirectiveSet directive && directive.isLocal()) {
+            // Don't duplicate otherwise, as consequent local directives merge
+            if (lastLocalDirective == null) {
+                profile = profile.duplicate(true);
+            }
+
+            lastLocalDirective = directive;
+            directiveProcessor.processDirective(profile, directive);
+
+            // By returning here, the profile is not restored from the stack, meaning the current
+            // settings remain in effect for the next node.
+            // We also know directives do not have children to process.
+            return;
+        }
+
+        lastLocalDirective = null;
+
+        node.setProfile(profile);
+        node.getChildren().forEach(this::visitNodeLocal);
+
+        checkUnusedSetLocals();
+        profile = profileStack.pop();
+    }
+
+    private void checkUnusedSetLocals() {
+        if (lastLocalDirective != null) {
+            error(lastLocalDirective, ERR.SETLOCAL_NOT_USED);
+            profile = profileStack.pop();
+            lastLocalDirective = null;
+        }
     }
 }

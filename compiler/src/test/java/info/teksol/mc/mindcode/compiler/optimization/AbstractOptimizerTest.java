@@ -93,7 +93,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         final List<LogicInstruction> result;
         final OptimizationCoordinator optimizer = createMindcodeOptimizer(messageConsumer);
         optimizer.setDebugPrinter(debugPrinter);
-        result = optimizer.optimize(CallGraph.createEmpty(), instructions, mockAstRootContext);
+        result = optimizer.optimize(CallGraph.createEmpty(MAIN_MODULE), instructions, mockAstRootContext);
         debugPrinter.print(s -> messageConsumer.addMessage(new OptimizerMessage(MessageLevel.INFO, s)));
         return result;
     }

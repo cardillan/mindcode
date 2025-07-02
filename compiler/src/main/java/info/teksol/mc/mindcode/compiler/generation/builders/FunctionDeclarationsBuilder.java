@@ -23,7 +23,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         // Do not compile functions from modules included remotely
         if (!function.getModule().getRemoteProcessors().isEmpty()) return;
 
-        // Unused function are compiled to report syntax errors, except libraries
+        // Unused functions are compiled to report syntax errors, except libraries
         if (!function.isUsed() && function.getSourcePosition().isLibrary()) return;
 
         if (function.isInline()) {
@@ -38,7 +38,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         }
     }
 
-    /// Used to compile function body when the function is called implicitly
+    /// Used to compile a function body when the function is called implicitly
     public void placeFunctionBody(MindcodeFunction function) {
         enterFunction(function, List.of());
         returnStack.enterFunction(processor.nextLabel(), LogicVoid.VOID);
@@ -75,7 +75,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void compileFunctionBody(MindcodeFunction function) {
-        if (profile.isSymbolicLabels()) {
+        if (function.getProfile().isSymbolicLabels()) {
             assembler.createComment("Function: " + function.getDeclaration().toSourceCode());
         }
         ValueStore valueStore = function.isVoid()
