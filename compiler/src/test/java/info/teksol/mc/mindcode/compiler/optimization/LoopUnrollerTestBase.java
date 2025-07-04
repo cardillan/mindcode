@@ -517,4 +517,18 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
                         """
         );
     }
+
+    @Test
+    void unrollsLoopsWithReturn() {
+        assertCompiles("""
+                        inline def foo()
+                            for bar in 0 do
+                                return bar;
+                            end;
+                        end;
+                        
+                        foo();
+                        """
+        );
+    }
 }

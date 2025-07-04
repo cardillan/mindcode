@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -517,6 +518,8 @@ class LoopUnroller extends BaseOptimizer {
                 return list.subList(0, list.size() - 1);
             }
         } else {
+            if (list.stream().allMatch(ix -> ix.getOpcode() == Opcode.NOOP)) return list.subList(0, 0);
+
             int end = list.getLast() instanceof JumpInstruction ? 1 : 0;
             if (!(list.getFromEnd(end) instanceof SetAddressInstruction)) err();
             return list.subList(0, list.size() - end - 1);

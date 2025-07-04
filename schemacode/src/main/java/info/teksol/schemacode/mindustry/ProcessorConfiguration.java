@@ -160,7 +160,8 @@ public record ProcessorConfiguration(List<Link> links, String code) implements C
                 CompilerProfile compilerProfile = builder.getCompilerProfile();
                 compilerProfile.setPositionTranslator(processor.program().createPositionTranslator(builder));
                 List<MindcodeMessage> messages = new ArrayList<>();
-                MindcodeCompiler compiler = new MindcodeCompiler(messages::add, compilerProfile, builder.getInputFiles());
+                MindcodeCompiler compiler = new MindcodeCompiler(messages::add,
+                        compilerProfile.duplicate(true), builder.getInputFiles());
                 compiler.compile(fileToCompile);
 
                 messages.forEach(builder::addMessage);

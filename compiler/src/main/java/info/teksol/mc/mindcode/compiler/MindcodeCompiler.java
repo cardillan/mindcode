@@ -131,7 +131,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                 new TranslatingMessageConsumer(messageConsumer, profile.getPositionTranslator())));
         this.messageLogger = (ListMessageLogger) super.messageConsumer();
         this.targetPhase = targetPhase;
-        this.profile = profile.duplicate(true);
+        this.profile = profile;
         this.inputFiles = inputFiles;
         this.directiveProcessor = new DirectiveProcessor(messageConsumer);
         returnStack = new ReturnStack();
