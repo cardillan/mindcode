@@ -11,6 +11,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed an internal error when function declaration contained duplicate parameters ([#270](https://github.com/cardillan/mindcode/issues/270)).
 * Fixed an internal error when passing a ref array to another function ([#271](https://github.com/cardillan/mindcode/issues/271)).
 * Added missing support for configuring `@payload-router` (with a block type or a unit type) to Schemacode.
+* Fixed Mindcode compiler mistakenly updating the compiler profile for all processors within a schematic.
+* Fixed an error compiling unused inline functions with for-each loops over ref parameters ([#273](https://github.com/cardillan/mindcode/issues/273)).
 
 ### Added
 

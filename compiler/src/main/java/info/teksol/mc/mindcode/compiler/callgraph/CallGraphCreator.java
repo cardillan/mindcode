@@ -145,7 +145,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         callStack.add(function);
         if (index >= 0) {
             // Detected a cycle in the call graph starting at index. Mark all calls on the cycle as recursive, stop DFS
-            // We know function is now at the beginning and also at the end of the cycle in callStack
+            // We know the function is now at the beginning and also at the end of the cycle in callStack
             MindcodeFunction caller = function;
             for (MindcodeFunction nextCallee : callStack.subList(index + 1, callStack.size())) {
                 caller.addRecursiveCall(nextCallee);

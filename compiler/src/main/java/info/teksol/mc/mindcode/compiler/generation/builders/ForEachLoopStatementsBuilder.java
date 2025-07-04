@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.generated.ast.visitors.AstForEachLoopStatementVisitor;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
@@ -247,6 +248,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private final boolean descending;
         private int consumedValues = 0;
         private int missing = 0;
+        private boolean omitErrors = false;
 
         private IterationGroup(ArrayList<Iterator> iterators, ArrayList<ValueStore> values, boolean descending) {
             this.iterators = descending ? reverse(iterators) : iterators;
@@ -269,6 +271,8 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
         private ValueStore nextValue() {
             if (values.isEmpty()) {
+                if (omitErrors) return INACTIVE_VALUE;
+
                 if (missing == 0) {
                     error(sourcePosition(), ERR.FOR_EACH_WRONG_NUMBER_OF_VALUES, consumedValues, iterators.size());
                 }
@@ -281,7 +285,12 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
 
             if (value instanceof DeferredValueStore deferredValueStore) {
                 ValueStore evaluated = deferredValueStore.value();
-                if (evaluated instanceof ArrayStore arrayStore) {
+                if (evaluated instanceof LogicVariable var && var.isReference()) {
+                    // Can't happen except inline function compiled without being called
+                    if (assembler.isActive()) throw new MindcodeInternalError("Unresolved variable reference in active mode.");
+                    omitErrors = true;
+                    return INACTIVE_VALUE;
+                } else if (evaluated instanceof ArrayStore arrayStore) {
                     if (descending) {
                         values.addAll(0, reverse(new ArrayList<>(arrayStore.getElements())));
                     } else {
@@ -305,15 +314,6 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
                         outputs.add(new IterationElement(iterator, value));
                     }
                 }
-            }
-        }
-
-        List<IterationElement> next() {
-            if (values.isEmpty()) {
-                missing += iterators.size();
-                return iterators.stream().map(it -> new IterationElement(it, INACTIVE_VALUE)).toList();
-            } else {
-                return iterators.stream().map(it -> new IterationElement(it, nextValue())).toList();
             }
         }
 
