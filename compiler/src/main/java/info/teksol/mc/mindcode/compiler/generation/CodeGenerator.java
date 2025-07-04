@@ -143,9 +143,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nested--;
     }
 
-    public ValueStore processInLocalScope(Supplier<ValueStore> process) {
+    public <T> T processInLocalScope(Supplier<T> process) {
         nested++;
-        ValueStore result = process.get();
+        T result = process.get();
         nested--;
         return result;
     }

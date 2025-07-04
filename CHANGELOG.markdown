@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed Mindcode compiler mistakenly updating the compiler profile for all processors within a schematic.
 * Fixed an error compiling unused inline functions with for-each loops over ref parameters ([#273](https://github.com/cardillan/mindcode/issues/273)).
 * Fixed possible error when using `return` inside a for-each loop ([#274](https://github.com/cardillan/mindcode/issues/274)).
+* Fixed variable modifiers causing errors in strict syntax mode ([#275](https://github.com/cardillan/mindcode/issues/275)). 
 
 ### Added
 

@@ -570,7 +570,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 if (modifier == Modifier.REMOTE) {
                     verifyMinimalRemoteTarget(astModifier);
                 }
-                modifiers.put(modifier, createParametrization(astModifier.getParametrization()));
+                modifiers.put(modifier, this.processInLocalScope(() -> createParametrization(astModifier.getParametrization())));
             } else {
                 error(astModifier, ERR.VARIABLE_INCOMPATIBLE_MODIFIER, modifier.name().toLowerCase());
             }

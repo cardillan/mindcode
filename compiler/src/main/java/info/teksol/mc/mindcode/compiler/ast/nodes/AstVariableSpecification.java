@@ -33,6 +33,11 @@ public class AstVariableSpecification extends AstFragment {
         this.expressions = expressions;
     }
 
+    @Override
+    public AstNodeScope getScope() {
+        return AstNodeScope.NONE;
+    }
+
     public AstIdentifier getIdentifier() {
         return identifier;
     }

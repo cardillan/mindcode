@@ -1032,4 +1032,155 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             """);
         }
     }
+
+    @Nested
+    class VariableDeclarationsInStrictSyntax {
+
+        @Test
+        void compilesExternalVariableDeclarations() {
+            assertCompilesTo("""
+                            #set syntax = strict;
+                            linked cell1;
+                            external cell1[0] a;
+                            external cell1[1] b = a;
+                            begin print(b); end;
+                            """,
+                    createInstruction(READ, tmp(0), "cell1", "0"),
+                    createInstruction(WRITE, tmp(0), "cell1", "1"),
+                    createInstruction(READ, tmp(2), "cell1", "1"),
+                    createInstruction(PRINT, tmp(2))
+            );
+        }
+
+        @Test
+        void compilesGuardedVariables() {
+            assertCompilesTo("""
+                            #set syntax = strict;
+                            guarded switch1, message1;
+                            begin printflush(message1); end;
+                            """,
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(JUMP, var(1000), "equal", "switch1", "null"),
+                    createInstruction(LABEL, var(1001)),
+                    createInstruction(JUMP, var(1001), "equal", "message1", "null"),
+                    createInstruction(PRINTFLUSH, "message1")
+            );
+        }
+
+        @Test
+        void compilesLocalVariableDeclarations() {
+            assertCompilesTo("""
+                            #set syntax = strict;
+                            inline void foo()
+                                var a = 10;
+                                print(a);
+                            end;
+                            
+                            begin
+                                foo();
+                                foo();
+                            end;
+                            """,
+                    createInstruction(SET, ":fn0:a", "10"),
+                    createInstruction(PRINT, ":fn0:a"),
+                    createInstruction(LABEL, var(1000)),
+                    createInstruction(SET, ":fn1:a", "10"),
+                    createInstruction(PRINT, ":fn1:a"),
+                    createInstruction(LABEL, var(1001))
+            );
+        }
+
+        @Test
+        void compilesLocalVariableDeclarationsOverGlobalVariable() {
+            assertCompilesTo("""
+                            #set syntax = strict;
+                            var a = 1;
+                            
+                            inline void foo()
+                                var a = 10;
+                                print(a);
+                            end;
+                            
+                            begin
+                                print(a);
+                                foo();
+                            end;
+                            """,
+                    createInstruction(SET, ".a", "1"),
+                    createInstruction(PRINT, ".a"),
+                    createInstruction(SET, ":fn0:a", "10"),
+                    createInstruction(PRINT, ":fn0:a"),
+                    createInstruction(LABEL, var(1000))
+            );
+        }
+
+        @Test
+        void compilesMlogVariables() {
+            assertCompilesTo("""
+                            #set syntax = strict;
+                            mlog "abc" var x = 10;
+                            mlog "def" y = 2;
+                            noinit mlog "ghi" var z;
+                            volatile mlog "jkl" var w;
+                            begin print(z, w); end;
+                            """,
+                    createInstruction(SET, "abc", "10"),
+                    createInstruction(SET, "def", "2"),
+                    createInstruction(PRINT, "ghi"),
+                    createInstruction(SET, tmp(0), "jkl"),
+                    createInstruction(PRINT, tmp(0))
+            );
+        }
+
+        @Test
+        void compilesRemoteVariables() {
+            assertCompilesTo("""
+                            #set syntax = strict;
+                            linked processor1;
+                            remote processor1 a, x;
+                            remote processor1 "b" b;
+                            remote processor1 var c, y;
+                            remote processor1 "d" var d;
+                            begin print(a, b, c, d); end;
+                            """,
+                    createInstruction(READ, tmp(0), "processor1", q(".a")),
+                    createInstruction(PRINT, tmp(0)),
+                    createInstruction(READ, tmp(1), "processor1", q("b")),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(READ, tmp(2), "processor1", q(".c")),
+                    createInstruction(PRINT, tmp(2)),
+                    createInstruction(READ, tmp(4), "processor1", q("d")),
+                    createInstruction(PRINT, tmp(4))
+            );
+        }
+
+        @Test
+        void compilesMainVariableDeclarationsOverGlobalVariable() {
+            assertCompilesTo("""
+                            #set syntax = strict;
+                            var a = 1;
+                            
+                            inline void foo()
+                                print(a);
+                            end;
+                            
+                            begin
+                                var a = 10;
+                                print(a);
+                                foo();
+                            end;
+                            """,
+                    createInstruction(SET, ".a", "1"),
+                    createInstruction(SET, ":a", "10"),
+                    createInstruction(PRINT, ":a"),
+                    createInstruction(PRINT, ".a"),
+                    createInstruction(LABEL, var(1000))
+            );
+        }
+
+        @Test
+        void compilesUninitializedVariable() {
+            assertCompiles("#set syntax = strict; noinit var a;");
+        }
+    }
 }

@@ -132,7 +132,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
         return codeGenerator.allowUndeclaredLinks();
     }
 
-    protected ValueStore processInLocalScope(Supplier<ValueStore> process) {
+    protected <T> T processInLocalScope(Supplier<T> process) {
         return codeGenerator.processInLocalScope(process);
     }
 
