@@ -263,6 +263,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
                 if (argIndex >= arguments.size() || !arguments.get(argIndex).hasValue()) {
                     // Optional arguments are always output; generate temporary variable for them
                     ixArgs.add(functionMapper.processor.nextTemp());
+                    argIndex++;
                 } else {
                     FunctionArgument argument = validateOutput(p, arguments.get(argIndex++));
                     ixArgs.add(argument.getWriteVariable(assembler));
