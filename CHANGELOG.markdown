@@ -4,23 +4,27 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.8.0-preview1 - 2025-07-08
+## 3.8.0-beta.1 - 2025-07-08
+
+**Note:** this is a beta release. It contains a lot of bugfixes discovered during the Mindustry Logic jam, and is released to make these bugfixes available to other users possibly taking part in the jam. This release is available only as the command-line tool, the web application remains at version 3.7.0.
+
+The newly added features are fully functional. There's an unfinished support for the `#setlocal` directive. It doesn't have any effect at this time. 
 
 ### Fixed
 
 * Fixed an internal error when function declaration contained duplicate parameters ([#270](https://github.com/cardillan/mindcode/issues/270)).
 * Fixed an internal error when passing a ref array to another function ([#271](https://github.com/cardillan/mindcode/issues/271)).
-* Added missing support for configuring `@payload-router` (with a block type or a unit type) to Schemacode.
-* Fixed Mindcode compiler mistakenly updating the compiler profile for all processors within a schematic.
 * Fixed an error compiling unused inline functions with for-each loops over ref parameters ([#273](https://github.com/cardillan/mindcode/issues/273)).
 * Fixed possible error when using `return` inside a for-each loop ([#274](https://github.com/cardillan/mindcode/issues/274)).
 * Fixed variable modifiers causing errors in strict syntax mode ([#275](https://github.com/cardillan/mindcode/issues/275)). 
 * Fixed incorrect handling of omitted optional arguments in built-in function calls ([#276](https://github.com/cardillan/mindcode/issues/276)).
+* Fixed Mindcode compiler mistakenly updating the compiler profile for all processors within a schematic.
 * Fixed an internal error when using local variables in the `backgroundProcess()` function.
 * Fixed a missing remote signature in remote modules not containing any remote functions.
-* Fixed a mistakenly reported syntax error when specifying an external storage using an index.
+* Fixed a mistakenly reported syntax error when specifying an external storage using an index instead of a range.
 * Fixed a possible internal error when activating the `sort-variables` compiler option.
 * Fixed incorrect code generation of remote modules with an activated `sort-variables` compiler option.
+* Added missing support for configuring `@payload-router` (with a block type or a unit type) to Schemacode.
 
 ### Added
 
@@ -30,6 +34,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* Modules included in the compilation via the `require` directive must be compiled using the `strict` syntax mode. The `strict` mode is used for compiling the module even when a different syntax mode is specified in the main program. When using the `syntax` compiler option within the module, only the `strict` option is allowed.  
 * When a remote module containing an array is instantiated multiple times, a `@counter` array shared among all processors is created, instead of a separate `@counter` array for each processor.
 
 ## 3.7.0 - 2025-06-24
