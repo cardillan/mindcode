@@ -641,7 +641,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 && processor.isBlockName(memory.getName())
                 && memory.getName().startsWith("bank") ? 511 : 63;
         int startHeapIndex = getIndex(externalStorage, true, 0);
-        int endHeapIndex = getIndex(externalStorage, false, defaultEndValue) + 1;
+        int endHeapIndex = getIndex(externalStorage, false,
+                externalStorage.getStartIndex() == null ? defaultEndValue : startHeapIndex) + 1;
 
         if (startHeapIndex >= endHeapIndex) {
             error(externalStorage, ERR.EXT_STORAGE_INVALID_RANGE);

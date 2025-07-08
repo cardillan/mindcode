@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed incorrect handling of omitted optional arguments in built-in function calls ([#276](https://github.com/cardillan/mindcode/issues/276)).
 * Fixed an internal error when using local variables in the `backgroundProcess()` function.
 * Fixed a missing remote signature in remote modules not containing any remote functions.
+* Fixed a mistakenly reported syntax error when specifying an external storage using an index.  
 
 ### Added
 
