@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Fixed a missing remote signature in remote modules not containing any remote functions.
 * Fixed a mistakenly reported syntax error when specifying an external storage using an index.
 * Fixed a possible internal error when activating the `sort-variables` compiler option.
+* Fixed incorrect code generation of remote modules with an activated `sort-variables` compiler option.
 
 ### Added
 

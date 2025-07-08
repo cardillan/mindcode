@@ -67,13 +67,30 @@ public class LogicInstructionLabelResolver {
         List<LogicInstruction> variables = createVariables(astContext, order);
 
         int instructions = Math.min(limit, variables.size());
-        LogicLabel logicLabel = processor.nextLabel();
 
         List<LogicInstruction> result = new ArrayList<>();
-        result.add(processor.createJumpUnconditional(astContext, logicLabel));
-        result.addAll(variables.subList(0, instructions));
-        result.add(processor.createLabel(astContext, logicLabel));
-        result.addAll(program);
+
+        if (program.getFirst().getAstContext().matches(AstContextType.JUMPS, AstSubcontextType.REMOTE_INIT)) {
+            if (program.getFirst() instanceof JumpInstruction jump && jump.isUnconditional()) {
+                int index = 0;
+                while (program.get(index).getOpcode() == JUMP) index++;
+                if (program.get(index) instanceof LabelInstruction label && jump.getTarget().equals(label.getLabel())) {
+                    result.addAll(program.subList(0, index));
+                    result.addAll(variables);
+                    result.addAll(program.subList(index, program.size()));
+                    return result;
+                }
+            }
+
+            throw new MindcodeInternalError("Unexpected program structure.");
+        } else {
+            LogicLabel logicLabel = processor.nextLabel();
+            result.add(processor.createJumpUnconditional(astContext, logicLabel));
+            result.addAll(variables.subList(0, instructions));
+            result.add(processor.createLabel(astContext, logicLabel));
+            result.addAll(program);
+        }
+
         return result;
     }
 
