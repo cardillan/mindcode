@@ -62,7 +62,8 @@ public class LogicInstructionLabelResolver {
 
         List<LogicVariable> order = orderVariables(allVariables, profile.getSortVariables());
 
-        AstContext astContext = program.getFirst().getAstContext();
+        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
+                .createSubcontext(AstContextType.JUMPS, AstSubcontextType.BASIC, 1.0);
         List<LogicInstruction> variables = createVariables(astContext, order);
 
         int instructions = Math.min(limit, variables.size());

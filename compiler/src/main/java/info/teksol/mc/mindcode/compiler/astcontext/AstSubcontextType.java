@@ -10,7 +10,7 @@ public enum AstSubcontextType {
     /// Mocked context. Used by testing code.
     MOCK            ("    "),
 
-    /// System generated END instruction
+    /// System-generated END instruction
     END             ("END "),
 
     /// Sequence of statements, with a single entry point and (mostly) single exit point.

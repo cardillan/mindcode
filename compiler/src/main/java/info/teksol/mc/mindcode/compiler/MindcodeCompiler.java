@@ -301,7 +301,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.OPTIMIZER) <= 0) return;
 
-        // Run program through the array expander again, as optimizations might have been inactive.
+        // Run the program through the array expander again, as optimizations might have been inactive.
         instructions = arrayExpander.expandArrayInstructions(instructions);
 
         // Check there are no direct access instructions
