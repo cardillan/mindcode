@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
@@ -23,6 +24,8 @@ import java.util.stream.Stream;
 // Just "Function" would be preferred, but that conflicts with java.util.function.Function
 @NullMarked
 public class MindcodeFunction {
+    public static final String BACKGROUND_PROCESS = "backgroundProcess";
+
     private static final AtomicInteger functionIds = new AtomicInteger();
 
     // Function id
@@ -131,7 +134,7 @@ public class MindcodeFunction {
     }
 
     public boolean isEntryPoint() {
-        return entryPoint;
+        return entryPoint || isBackgroundProcess();
     }
 
     /// @return true if this is the main function
@@ -190,6 +193,11 @@ public class MindcodeFunction {
     /// @return name of the function
     public String getName() {
         return declaration.getName();
+    }
+
+    public boolean isBackgroundProcess() {
+        return module.getDeclaration() != null && declaration.getCallType() == CallType.NONE
+               && !isRecursive() && isVoid() && getParameters().isEmpty() && getName().equals(BACKGROUND_PROCESS);
     }
 
     /// @return list of the function's parameters

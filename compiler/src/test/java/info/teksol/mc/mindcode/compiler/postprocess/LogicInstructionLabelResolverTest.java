@@ -32,8 +32,9 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         remote a[10];
                         """,
                 """
+                        set *signature "0:v1"
                         wait 1e12
-                        jump 0 always 0 0
+                        jump 1 always 0 0
                         end
                         draw triangle .v .a*0 .a*1 .a*2 .a*3 .a*4
                         draw triangle .a*5 .a*6 .a*7 .a*8 .a*9 0

@@ -4,7 +4,6 @@ import info.teksol.mc.generated.ast.ComposedAstNodeVisitor;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
-import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -236,14 +235,12 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.clearContextType(program);
     }
 
-    private void generateVerifySignature() {
+    private void setupRemoteSignature() {
         List<MindcodeFunction> remoteFunctions = callGraph.getFunctions().stream().filter(f -> f.isRemote() && f.isEntryPoint()).toList();
-        if (!remoteFunctions.isEmpty()) {
-            assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
-            String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
-            assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.create(remoteSignature));
-            assembler.clearContextType(program);
-        }
+        assembler.setContextType(program, AstContextType.INIT, AstSubcontextType.REMOTE_INIT);
+        String remoteSignature = createRemoteSignature(remoteFunctions.stream().map(MindcodeFunction::getDeclaration));
+        assembler.createSet(LogicVariable.preserved(nameCreator().remoteSignature()), LogicString.create(remoteSignature));
+        assembler.clearContextType(program);
 
         assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
@@ -259,10 +256,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     }
 
     private Optional<MindcodeFunction> findBackgroundProcessFunction() {
-        return callGraph.getFunctions().stream()
-                .filter(f -> f.getDeclaration().getCallType() == CallType.NONE && !f.isRecursive() &&
-                             f.isVoid() && f.getParameters().isEmpty() && f.getName().equals("backgroundProcess"))
-                .findFirst();
+        return callGraph.getFunctions().stream().filter(MindcodeFunction::isBackgroundProcess).findFirst();
     }
 
     private @Nullable AstContext mainBodyContext;
@@ -340,7 +334,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
             mainBodyContext = assembler.getAstContext();
             mainBodyEndIndex = assembler.getInstructions().size();
             if (!program.isMainProgram()) {
-                generateVerifySignature();
+                setupRemoteSignature();
             }
         }
 
