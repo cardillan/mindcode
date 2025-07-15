@@ -50,6 +50,7 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
             "Function reference for Mindustry Logic 7.0", "FUNCTIONS-70.markdown",
             "Function reference for Mindustry Logic 7.1", "FUNCTIONS-71.markdown",
             "Function reference for Mindustry Logic 8.0", "FUNCTIONS-80.markdown",
+            "Function reference for Mindustry Logic 8.1", "FUNCTIONS-81.markdown",
             "System Library", "SYSTEM-LIBRARY.markdown",
     };
 
@@ -79,6 +80,11 @@ public class FunctionReferenceGeneratorTest extends AbstractFunctionMapperTest {
     @Test
     void createFunctionReferenceForV8A() throws IOException {
         createFunctionReference(ProcessorVersion.V8A);
+    }
+
+    @Test
+    void createFunctionReferenceForV8B() throws IOException {
+        createFunctionReference(ProcessorVersion.V8B);
     }
 
     private void createFunctionReference(ProcessorVersion version) throws IOException {

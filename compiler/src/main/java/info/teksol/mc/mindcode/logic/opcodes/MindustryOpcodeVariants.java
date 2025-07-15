@@ -90,7 +90,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("div"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("idiv"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("mod"),          res("result"),  in("a"), in("b"));
-        add(list, V8A, MAX, S, NONE, Opcode.OP,         op("emod"),         res("result"),  in("a"), in("b"));
+        add(list, V8B, MAX, S, NONE, Opcode.OP,         op("emod"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("pow"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("equal"),        res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("notEqual"),     res("result"),  in("a"), in("b"));
@@ -102,7 +102,7 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("strictEqual"),  res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shl"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("shr"),          res("result"),  in("a"), in("b"));
-        add(list, V8A, MAX, S, NONE, Opcode.OP,         op("ushr"),         res("result"),  in("a"), in("b"));
+        add(list, V8B, MAX, S, NONE, Opcode.OP,         op("ushr"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("or"),           res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("and"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, NONE, Opcode.OP,         op("xor"),          res("result"),  in("a"), in("b"));
@@ -114,13 +114,13 @@ public class MindustryOpcodeVariants {
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("len"),          res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("noise"),        res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("abs"),          res("result"),  in("a"));
-        add(list, V8A, MAX, S, FUNC, Opcode.OP,         op("sign"),         res("result"),  in("a"));
+        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("sign"),         res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log"),          res("result"),  in("a"));
-        add(list, V8A, MAX, S, FUNC, Opcode.OP,         op("logn"),         res("result"),  in("a"), in("b"));
+        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("logn"),         res("result"),  in("a"), in("b"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("log10"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("floor"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("ceil"),         res("result"),  in("a"));
-        add(list, V8A, MAX, S, FUNC, Opcode.OP,         op("round"),        res("result"),  in("a"));
+        add(list, V8B, MAX, S, FUNC, Opcode.OP,         op("round"),        res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sqrt"),         res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("rand"),         res("result"),  in("a"));
         add(list, V6,  MAX, S, FUNC, Opcode.OP,         op("sin"),          res("result"),  in("a"));
@@ -134,7 +134,7 @@ public class MindustryOpcodeVariants {
 
         add(list, V7,  MAX, S, FUNC, Opcode.PACKCOLOR,  res("result"), in("r"), in("g"), in("b"), in("a"));
 
-        add(list, V8A, MAX, S, FUNC, Opcode.UNPACKCOLOR,out("r"), out("g"), out("b"), out("a"), in("color"));
+        add(list, V8B, MAX, S, FUNC, Opcode.UNPACKCOLOR,out("r"), out("g"), out("b"), out("a"), in("color"));
 
         add(list, V7,  MAX, S, FUNC, Opcode.WAIT,       in("sec"));
         add(list, V7,  MAX, S, FUNC, Opcode.STOP);
@@ -310,7 +310,7 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("color"),       in("id"), in("color"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("radius"),      in("id"), in("radius"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("stroke"),      in("id"), in("stroke"));
-        add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("outline"),     in("id"), in("outline"));
+        add(list, V8B, MAX, W, FUNC, Opcode.SETMARKER, setmarker("outline"),     in("id"), in("outline"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("rotation"),    in("id"), in("rotation"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("shape"),       in("id"), in("sides"), in("fill"), in("outline"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("arc"),         in("id"), in("from"), in("to"));

@@ -226,7 +226,8 @@ public class CodeGenerator extends AbstractMessageEmitter {
                     assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%FFFFFF"), LogicNull.NULL).setTargetGuard(true);
                 }
             }
-            case V8A -> {
+            // TODO Handle
+            case V8A, V8B -> {
                 // No distinction between full and compatible: there are no other compatible versions besides V8
                 assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%[red]"), LogicNull.NULL).setTargetGuard(true);
             }

@@ -176,6 +176,7 @@ inline void _compatibilityTest7()
         jump general equal result false
         op strictEqual result @colorNegstat %e55454ff
         jump general equal result false
+        jump general notEqual @blockCount 254
         sensor id @graphite-press @id
         jump general notEqual id 0
         sensor id @multi-press @id
@@ -828,6 +829,12 @@ inline void _compatibilityTest7()
         jump general notEqual id 15
         sensor id @beryllium @id
         jump general notEqual id 16
+        sensor id @tungsten @id
+        jump general notEqual id 19
+        sensor id @carbide @id
+        jump general notEqual id 20
+        sensor id @oxide @id
+        jump general notEqual id 21
         sensor id @water @id
         jump general notEqual id 0
         sensor id @slag @id
@@ -851,7 +858,6 @@ inline void _compatibilityTest7()
         sensor id @arkycite @id
         jump general notEqual id 10
 
-        jump specific notEqual @blockCount 254
         jump specific notEqual @unitCount 56
         jump specific notEqual @itemCount 22
         jump specific notEqual @liquidCount 11
@@ -859,12 +865,6 @@ inline void _compatibilityTest7()
         jump specific notEqual id 17
         sensor id @dormant-cyst @id
         jump specific notEqual id 18
-        sensor id @tungsten @id
-        jump specific notEqual id 19
-        sensor id @carbide @id
-        jump specific notEqual id 20
-        sensor id @oxide @id
-        jump specific notEqual id 21
 
         print $_MESSAGE_OK
         jump finish always 0 0
@@ -884,6 +884,7 @@ inline void _compatibilityTest8()
         print "Testing..."
         printflush message1
 
+        jump general notEqual @blockCount 260
         op strictEqual result @colorAccent %ffd37fff
         jump general equal result false
         op strictEqual result @colorAcid %7fff00ff
@@ -1740,6 +1741,12 @@ inline void _compatibilityTest8()
         jump general notEqual id 15
         sensor id @beryllium @id
         jump general notEqual id 16
+        sensor id @tungsten @id
+        jump general notEqual id 17
+        sensor id @oxide @id
+        jump general notEqual id 18
+        sensor id @carbide @id
+        jump general notEqual id 19
         sensor id @water @id
         jump general notEqual id 0
         sensor id @slag @id
@@ -1763,16 +1770,9 @@ inline void _compatibilityTest8()
         sensor id @arkycite @id
         jump general notEqual id 10
 
-        jump specific notEqual @blockCount 260
         jump specific notEqual @itemCount 20
         jump specific notEqual @liquidCount 11
         jump specific notEqual @unitCount 56
-        sensor id @tungsten @id
-        jump specific notEqual id 17
-        sensor id @oxide @id
-        jump specific notEqual id 18
-        sensor id @carbide @id
-        jump specific notEqual id 19
 
         print $_MESSAGE_OK
         jump finish always 0 0

@@ -18,6 +18,15 @@
 
 **Schemacode**, an extension built over Mindcode, is a specialized definition language designed for creating a complete Mindustry schematic from a text file. [Schematics Builder](doc/syntax/SCHEMACODE.markdown) compiles these definition files directly into Mindustry schematics, either into binary `.msch` file, or into the text representation. Processors can be included in these schematics, complete with the code (specified either in Mindcode or mlog) and linked blocks.
 
+## Supported Mindustry versions
+
+Mindcode supports several Mindustry versions out of the box:
+
+* 6.0 Build 126.2: use `#set target = 6;` to select it.
+* 7.0 Build 146: the default one. Use `#set target = 7;` to explicitly select it.  
+* v8 Build 149 Beta: use `#set target = 8.0;` to select it.
+* Latest BE version (build 26094 as of now): use `#set target = 8.1;` to select it.
+
 > [!NOTE]
 > To use new Mindustry Logic capabilities from the new [Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v149), use `#set target = 8;` in your code. [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality.
 

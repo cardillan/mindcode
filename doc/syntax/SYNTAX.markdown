@@ -22,6 +22,7 @@ Function reference for individual [Mindcode targets](SYNTAX-5-OTHER.markdown#opt
 * [Function reference for Mindustry Logic 7.0](FUNCTIONS-70.markdown)
 * [Function reference for Mindustry Logic 7.1](FUNCTIONS-71.markdown)
 * [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)
+* [Function reference for Mindustry Logic 8.1](FUNCTIONS-81.markdown)
 
 Mindcode comes with a built-in library of useful functions:
 

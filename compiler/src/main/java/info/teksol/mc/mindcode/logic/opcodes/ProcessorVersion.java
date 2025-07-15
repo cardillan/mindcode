@@ -13,7 +13,8 @@ public enum ProcessorVersion {
     V6      (6, 0, "v126.2"),
     V7      (7, 0, "v146"),
     V7A     (7, 1, "v146"),
-    V8A     (8, 0, "be"),
+    V8A     (8, 0, "v149"),
+    V8B     (8, 1, "be"),
     MAX     (8, 0, "be"),
     ;
 

@@ -433,7 +433,8 @@ public class CompilerProfile {
             case V6 -> "6";
             case V7 -> "7.0" + suffix;
             case V7A -> "7" + suffix;
-            case V8A -> "8" + suffix;
+            case V8A -> "8.0" + suffix;
+            case V8B -> "8" + suffix;
             case MAX -> "8" + suffix;
         };
     }

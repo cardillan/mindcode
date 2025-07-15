@@ -331,6 +331,9 @@
 @blast-compound
 @pyratite
 @beryllium
+@tungsten
+@oxide
+@carbide
 @water
 @slag
 @oil
@@ -426,6 +429,7 @@
 @sfx-shootSmite
 @colorLightgrey
 @colorAccent
+@blockCount
 @sfx-unlock
 @sfx-extractLoop
 @colorSalmon

@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.8.0-beta.2 - Unreleased
+
+### Added
+
+* Added target 8.1 matching the latest supported BE version. Target 8.0 now corresponds to Mindustry Logic v8 Build 149 Beta.  
+
 ## 3.8.0-beta.1 - 2025-07-08
 
 **Note:** this is a beta release. It contains a lot of bugfixes discovered during the Mindustry Logic jam, and is released to make these bugfixes available to other users possibly taking part in the jam. This release is available only as the command-line tool, the web application remains at version 3.7.0.
