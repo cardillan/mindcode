@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.8.0-beta.2 - Unreleased
 
+**Breaking:** in the latest Mindustry BE version, setting `null` to `@counter` is no longer ignored, but it sets the counter to the numeric part of the source variable. This breaks some optimizations made when compiling with symbolic labels. All code that might run on Mindustry 8 in the future and uses symbolic labels should be recompiled.    
+
 ### Fixed
 
 * Fixed the `target` directive not recognizing minor target versions.
@@ -18,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
+* The code generation of list iteration loops with symbolic labels has been updated to avoid issues with assigning `null` to `@counter`.   
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
 * Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
 

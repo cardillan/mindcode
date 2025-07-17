@@ -122,16 +122,21 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             LogicLabel nextValueLabel = assembler.nextLabel();
 
             if (node.getProfile().isSymbolicLabels()) {
-                if (lastIteration) {
-                    assembler.createSet(nextAddress, LogicNull.NULL);
-                } else {
-                    assembler.createOp(Operation.ADD, nextAddress, LogicBuiltIn.COUNTER, LogicNumber.ONE);
-                }
+                assembler.createOp(Operation.ADD, nextAddress, LogicBuiltIn.COUNTER, LogicNumber.ONE);
             } else {
                 assembler.createSetAddress(nextAddress, nextValueLabel);
             }
 
+            LogicLabel lastValueLabel = null;
             if (lastIteration) {
+                if (node.getProfile().isSymbolicLabels()) {
+                    // In symbolic labels mode, the nextAddress leads here. We need to jump over the body.
+                    assembler.createJumpUnconditional(bodyLabel);
+                    assembler.createMultiLabel(assembler.nextLabel(), marker);
+                    lastValueLabel = assembler.nextLabel();
+                    assembler.createJumpUnconditional(lastValueLabel);
+                }
+
                 // The last iteration: continue to the loop body directly
                 createBody();
             } else {
@@ -143,6 +148,10 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // the loop body, so that the program flow naturally exits the loop after the last iteration.
             assembler.setSubcontextType(AstSubcontextType.ITR_TRAILING, 1.0);
             assembler.createMultiLabel(nextValueLabel, marker);
+
+            if (lastValueLabel != null) {
+                assembler.createLabel(lastValueLabel);
+            }
 
             // Copy iterator values back to the array - only for `out` iterators
             for (IterationElement output : outputs) {

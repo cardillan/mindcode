@@ -248,6 +248,7 @@ When symbolic labels are produced, the compiler also uses mlog comments to mark 
  
 The following features are affected when activating symbolic labels:
 
+* List iteration loops: the number of instructions used to create a list iteration loop code is increased by two.
 * Stackless function calls: instruction setting up a function return address cannot be hoisted.
 * Recursive function calls: the size and execution time of a recursive function call are increased by one.
 * Regular internal array element access (inlined array access is not affected):

@@ -237,7 +237,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
 
     @Test
     void optimizesChainedAssignments2() {
-        // TODO Run output tmp elimination once more?
+        // The set after select is normally eliminated by the DFO.
         assertCompilesTo("""
                         a = print(b = rand(10) > 5 ? 1 : 2);
                         print(a, b);
