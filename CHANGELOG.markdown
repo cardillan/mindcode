@@ -11,6 +11,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the `target` directive not recognizing minor target versions.
+* Fixed the compiler incorrectly refusing remote function parameters matching global variables or linked block names.     
 
 ### Added
 

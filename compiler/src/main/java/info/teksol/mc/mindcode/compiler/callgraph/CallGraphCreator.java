@@ -204,7 +204,8 @@ public class CallGraphCreator extends AbstractMessageEmitter {
         }
 
         // When the module is not the main one, the syntax mode must be strict
-        if (globalProfile.getSyntacticMode() != SyntacticMode.STRICT || !function.getModule().isMain()) {
+        // Remote functions use strict mode per being declared in a module
+        if (globalProfile.getSyntacticMode() != SyntacticMode.STRICT && function.getModule().isMain() && !function.isRemote()) {
             params.stream()
                     .filter(p -> processor.isBlockName(p.getName()))
                     .forEach(p -> error(p, ERR.PARAMETER_NAME_RESERVED_LINKED, p.getName(), function.getName()));
