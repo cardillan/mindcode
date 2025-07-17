@@ -121,9 +121,9 @@ To use the Blocks library, use the `require blocks;` statement.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Linking two blocks             |                  27 |                 27 |
-| Linking four blocks            |                  40 |                 40 |
-| Linking six blocks             |                  53 |                 53 |
+| Linking two blocks             |                  25 |                 25 |
+| Linking four blocks            |                  34 |                 34 |
+| Linking six blocks             |                  43 |                 43 |
 
 Searches blocks linked to the processor for blocks of requested types and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.
@@ -317,8 +317,8 @@ Clears the processor's graphics buffer without outputting the contents into any 
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   7 |                  7 |
-| Function body                  |                   8 |                  8 |
+| Inlined function               |                   5 |                  5 |
+| Function body                  |                   6 |                  6 |
 | Function call                  |                   4 |                  4 |
 
 Returns the actual display size based on the type of display passed in as an argument.
@@ -587,8 +587,8 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   6 |                  6 |
-| Function body                  |                   7 |                  7 |
+| Inlined function               |                   4 |                  4 |
+| Function body                  |                   5 |                  5 |
 | Function call                  |                   4 |                  4 |
 
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
@@ -820,9 +820,9 @@ Returns the median of five values.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Ten arguments in total         |                 693 |                 88 |
-| Fifteen arguments in total     |                 143 |                118 |
-| Twenty arguments in total      |                 183 |                148 |
+| Ten arguments in total         |                 683 |                 88 |
+| Fifteen arguments in total     |                 142 |                118 |
+| Twenty arguments in total      |                 182 |                148 |
 
 Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
 and is fairly slow as it doesn't modify the input array.
@@ -864,8 +864,8 @@ Prints all arguments passed to it, each on a new line.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  17 |                 17 |
-| Function body                  |                  18 |                 18 |
+| Inlined function               |                  15 |                 15 |
+| Function body                  |                  16 |                 16 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -889,8 +889,8 @@ Nulls are printed as 0.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  18 |                 18 |
-| Function body                  |                  19 |                 19 |
+| Inlined function               |                  16 |                 16 |
+| Function body                  |                  17 |                 17 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -1149,8 +1149,8 @@ but is slower. If you already control the current unit, use `within()` instead.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  16 |                 16 |
-| Function body                  |                  17 |                 17 |
+| Inlined function               |                  15 |                 15 |
+| Function body                  |                  16 |                 16 |
 | Function call                  |                   5 |                  5 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
@@ -1171,8 +1171,8 @@ The function doesn't use units that are controlled by a player or a different pr
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  31 |                 31 |
-| Function body                  |                  32 |                 32 |
+| Inlined function               |                  30 |                 30 |
+| Function body                  |                  31 |                 31 |
 | Function call                  |                   7 |                  7 |
 
 Searches for and binds a free unit of the given type closest to the coordinates on the map given.

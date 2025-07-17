@@ -3,9 +3,9 @@
      1 instructions eliminated by Case Expression Optimization.
     43 instructions eliminated by Dead Code Elimination (6 iterations).
     20 instructions eliminated by Jump Optimization (5 iterations).
-    16 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
+    14 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-     5 instructions eliminated by If Expression Optimization (3 iterations).
+    11 instructions eliminated by If Expression Optimization (3 iterations).
     26 instructions eliminated by Data Flow Optimization (2 passes, 10 iterations).
      3 instructions added by Loop Optimization (3 iterations).
      4 loops improved by Loop Optimization.
@@ -14,16 +14,16 @@
     11 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
      2 instructions updated by JumpThreading.
     22 instructions eliminated by Print Merging.
-   480 instructions after optimizations.
+   476 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 622):
+Pass 1: speed optimization selection (cost limit 628):
   * Replicate loop condition at line 160:1                       size    +1, benefit       25.0, efficiency     25.000 (-5 instructions)
   o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4747.6, efficiency   1186.899
   o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4752.4, efficiency    594.050
   o Convert case at line 20:9 (segments: 4, padded low)          size   +12, benefit     4764.4, efficiency    397.035
   o Convert case at line 20:9 (segments: 1, padded low)          size  +137, benefit     4793.3, efficiency     34.987
 
-Pass 1: speed optimization selection (cost limit 627):
+Pass 1: speed optimization selection (cost limit 633):
   o Convert case at line 20:9 (segments: 13)                     size    +4, benefit     4747.6, efficiency   1186.899
   o Convert case at line 20:9 (segments: 5, padded low)          size    +8, benefit     4752.4, efficiency    594.050
   o Convert case at line 20:9 (segments: 4, padded low)          size   +12, benefit     4764.4, efficiency    397.035
@@ -1652,7 +1652,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (+2 inst
    458 drawflush .DISPLAY
    459 op sub *tmp176 @time :start
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-5 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-11 instructions):
  
    193 set :crx 0
    194 op sub :clw 82 2
@@ -1745,34 +1745,46 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    270 op sub :crh *tmp82 0
    271 jump *label46 always
  
-   407 set :minimum :output
-   408 jump *label76 always
-   409 label *label75
-+  410 set :red 255
-   411 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
-   412 op land *tmp162 *tmp126 *tmp161
+   333 op sub *tmp116 100 :output
+   334 op lessThan *tmp117 *tmp116 :minimum
+   335 op land :showout *tmp115 *tmp117
+-    * jump *label65 equal :showout false
+-    * set :icon .OUTPUT
++  336 select :icon notEqual :showout false .OUTPUT :icon
+   337 label *label65
+   338 label *label66
+   339 op idiv :column :index 8
+ 
+   345 op greaterThan *tmp126 :minimum 66
+   346 op equal *tmp127 :showout false
+   347 op land *tmp128 *tmp126 *tmp127
+-    * jump *label67 equal *tmp128 false
+-    * set :icon .TYPE
++  348 select :icon notEqual *tmp128 false .TYPE :icon
+   349 label *label67
+   350 label *label68
+   351 draw color 255 255 255 255
+ 
+   407 label *label75
+   408 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
+   409 op land *tmp162 *tmp126 *tmp161
 -    * jump *label77 equal *tmp162 false
 -    * set *tmp163 0
-+  413 jump *label78 equal *tmp162 false
-+  414 set :red 0
-   415 jump *label78 always
--    * label *label77
+-    * jump *label78 always
++  410 select *tmp163 notEqual *tmp162 false 0 255
+   411 label *label77
 -    * set *tmp163 255
-   416 label *label78
--    * set :red *tmp163
+   412 label *label78
+   413 set :red *tmp163
 -    * jump *label79 lessThanEq :minimum 33
 -    * set *tmp165 255
-+  417 set :green 0
-+  418 jump *label80 lessThanEq :minimum 33
-+  419 set :green 255
-   420 jump *label80 always
--    * label *label79
+-    * jump *label80 always
++  414 select *tmp165 greaterThan :minimum 33 255 0
+   415 label *label79
 -    * set *tmp165 0
-   421 label *label80
--    * set :green *tmp165
-   422 set :blue 0
-   423 label *label76
-   424 label *label74
+   416 label *label80
+   417 set :green *tmp165
+   418 set :blue 0
 
 Modifications by Replicate loop condition at line 160:1 (+1 instructions):
  
@@ -1784,14 +1796,14 @@ Modifications by Replicate loop condition at line 160:1 (+1 instructions):
    286 print "Universal Factory Monitor"
    287 print "\n"
  
-   453 print " ms"
-   454 printflush .MESSAGE
-   455 label *label50
+   449 print " ms"
+   450 printflush .MESSAGE
+   451 label *label50
 -    * jump *label49 always
-+  456 sensor *tmp89 .SWITCH @enabled
-+  457 jump *label86 equal *tmp89 0
-   458 label *label51
-   459 end
++  452 sensor *tmp89 .SWITCH @enabled
++  453 jump *label86 equal *tmp89 0
+   454 label *label51
+   455 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -2229,7 +2241,7 @@ Modifications by Convert case at line 20:9 (segments: 1, padded low) (+137 instr
    420 print :block
    421 print " not supported"
 
-Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-6 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-4 instructions):
  
    483 jump *label34 greaterThanEq TO_INDEX 8
    484 op mul *tmp41 TO_INDEX 20
@@ -2262,19 +2274,6 @@ Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-
    543 label *label48
    544 op sub :crh *tmp82 0
    545 jump *label46 always
- 
-   687 op land *tmp162 *tmp126 *tmp161
-   688 jump *label78 equal *tmp162 false
-   689 set :red 0
--    * jump *label78 always
-   690 label *label78
-   691 set :green 0
-   692 jump *label80 lessThanEq :minimum 33
-   693 set :green 255
--    * jump *label80 always
-   694 label *label80
-   695 set :blue 0
-   696 label *label76
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
@@ -2452,47 +2451,60 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    582 op greaterThan *tmp115 :output 33
    583 op sub *tmp116 100 :output
    584 op lessThan *tmp117 *tmp116 :minimum
- 
-   586 jump *label65 equal :showout false
-   587 set :icon .OUTPUT
-   588 label *label65
+   585 op land :showout *tmp115 *tmp117
+   586 select :icon notEqual :showout false .OUTPUT :icon
+-    * label *label65
 -    * label *label66
-   589 op idiv :column :index 8
-   590 op mod :row :index 8
-   591 op mul *tmp122 :column .BAR_SPACE
+   587 op idiv :column :index 8
+   588 op mod :row :index 8
+   589 op mul *tmp122 :column .BAR_SPACE
  
-   598 jump *label67 equal *tmp128 false
-   599 set :icon .TYPE
-   600 label *label67
+   594 op equal *tmp127 :showout false
+   595 op land *tmp128 *tmp126 *tmp127
+   596 select :icon notEqual *tmp128 false .TYPE :icon
+-    * label *label67
 -    * label *label68
-   601 draw color 255 255 255 255
-   602 jump *label69 equal :e false
-   603 jump *label71 lessThanEq :power 0
+   597 draw color 255 255 255 255
+   598 jump *label69 equal :e false
+   599 jump *label71 lessThanEq :power 0
  
-   674 op max :blue 192 :blue
-   675 set :boost EXPECTED_BOOST
-   676 label *label81
+   654 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
+   655 op land *tmp162 *tmp126 *tmp161
+   656 select *tmp163 notEqual *tmp162 false 0 255
+-    * label *label77
+-    * label *label78
+   657 set :red *tmp163
+   658 select *tmp165 greaterThan :minimum 33 255 0
+-    * label *label79
+-    * label *label80
+   659 set :green *tmp165
+   660 set :blue 0
+   661 label *label76
+ 
+   666 op max :blue 192 :blue
+   667 set :boost EXPECTED_BOOST
+   668 label *label81
 -    * label *label82
-   677 op mul *tmp171 61 :boost
-   678 op idiv :length *tmp171 EXPECTED_BOOST
-   679 draw color :red :green :blue 128
+   669 op mul *tmp171 61 :boost
+   670 op idiv :length *tmp171 EXPECTED_BOOST
+   671 draw color :red :green :blue 128
  
-   684 draw lineRect :x :y :length 14
-   685 op add :index :index 1
-   686 label *label57
+   676 draw lineRect :x :y :length 14
+   677 op add :index :index 1
+   678 label *label57
 -    * label *label58
 -    * label *label53
-   687 op add :n :n 1
-   688 jump *label85 lessThan :n @links
-   689 label *label54
+   679 op add :n :n 1
+   680 jump *label85 lessThan :n @links
+   681 label *label54
  
-   694 print *tmp177
-   695 print " ms"
-   696 printflush .MESSAGE
+   686 print *tmp177
+   687 print " ms"
+   688 printflush .MESSAGE
 -    * label *label50
-   697 sensor *tmp89 .SWITCH @enabled
-   698 jump *label86 equal *tmp89 0
-   699 label *label51
+   689 sensor *tmp89 .SWITCH @enabled
+   690 jump *label86 equal *tmp89 0
+   691 label *label51
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
  
@@ -2531,36 +2543,36 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    540 set :start @time
    541 print "Universal Factory Monitor"
  
-   603 op add *tmp133 :x 7
-   604 op add *tmp134 :y 7
-   605 draw image *tmp133 *tmp134 :icon 16 0
+   599 op add *tmp133 :x 7
+   600 op add *tmp134 :y 7
+   601 draw image *tmp133 *tmp134 :icon 16 0
 -    * jump *label72 always
-+  606 jump *label70 always
-   607 label *label71
-   608 draw color 255 80 80 255
-   609 op add *tmp135 :y 3
++  602 jump *label70 always
+   603 label *label71
+   604 draw color 255 80 80 255
+   605 op add *tmp135 :y 3
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
  
-   620 op add *tmp142 :x 4
-   621 op add *tmp143 :y 6
-   622 draw rect *tmp142 *tmp143 2 2
+   616 op add *tmp142 :x 4
+   617 op add *tmp143 :y 6
+   618 draw rect *tmp142 *tmp143 2 2
 -    * label *label72
-   623 jump *label70 always
-   624 label *label69
-   625 draw color 255 80 80 255
+   619 jump *label70 always
+   620 label *label69
+   621 draw color 255 80 80 255
  
-   694 printflush .MESSAGE
-   695 sensor *tmp89 .SWITCH @enabled
-   696 jump *label86 equal *tmp89 0
+   686 printflush .MESSAGE
+   687 sensor *tmp89 .SWITCH @enabled
+   688 jump *label86 equal *tmp89 0
 -    * label *label51
-   697 end
+   689 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   694 printflush .MESSAGE
-   695 sensor *tmp89 .SWITCH @enabled
-   696 jump *label86 equal *tmp89 0
+   686 printflush .MESSAGE
+   687 sensor *tmp89 .SWITCH @enabled
+   688 jump *label86 equal *tmp89 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
@@ -2638,17 +2650,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
    524 draw color 0 0 80 255
    525 draw rect :clx :cly :clw :clh
  
-   667 drawflush .DISPLAY
-   668 op sub *tmp176 @time :start
-   669 op floor *tmp177 *tmp176
+   659 drawflush .DISPLAY
+   660 op sub *tmp176 @time :start
+   661 op floor *tmp177 *tmp176
 -    * print "\nDraw time: "
 -    * print *tmp177
 -    * print " ms"
-+  670 print "\nDraw time: {0} ms"
-+  671 format *tmp177
-   672 printflush .MESSAGE
-   673 sensor *tmp89 .SWITCH @enabled
-   674 jump *label86 equal *tmp89 0
++  662 print "\nDraw time: {0} ms"
++  663 format *tmp177
+   664 printflush .MESSAGE
+   665 sensor *tmp89 .SWITCH @enabled
+   666 jump *label86 equal *tmp89 0
 
 Final code before resolving virtual instructions:
 
@@ -3216,9 +3228,7 @@ op greaterThan *tmp115 :output 33
 op sub *tmp116 100 :output
 op lessThan *tmp117 *tmp116 :minimum
 op land :showout *tmp115 *tmp117
-jump *label65 equal :showout false
-set :icon .OUTPUT
-label *label65
+select :icon notEqual :showout false .OUTPUT :icon
 op idiv :column :index 8
 op mod :row :index 8
 op mul *tmp122 :column .BAR_SPACE
@@ -3228,9 +3238,7 @@ op add :y .OFFSET_Y *tmp124
 op greaterThan *tmp126 :minimum 66
 op equal *tmp127 :showout false
 op land *tmp128 *tmp126 *tmp127
-jump *label67 equal *tmp128 false
-set :icon .TYPE
-label *label67
+select :icon notEqual *tmp128 false .TYPE :icon
 draw color 255 255 255 255
 jump *label69 equal :e false
 jump *label71 lessThanEq :power 0
@@ -3287,16 +3295,12 @@ set :blue 255
 set :minimum :output
 jump *label76 always
 label *label75
-set :red 255
 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
 op land *tmp162 *tmp126 *tmp161
-jump *label78 equal *tmp162 false
-set :red 0
-label *label78
-set :green 0
-jump *label80 lessThanEq :minimum 33
-set :green 255
-label *label80
+select *tmp163 notEqual *tmp162 false 0 255
+set :red *tmp163
+select *tmp165 greaterThan :minimum 33 255 0
+set :green *tmp165
 set :blue 0
 label *label76
 label *label74

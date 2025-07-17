@@ -63,6 +63,7 @@ public class ArraySize2Or3Constructor extends AbstractArrayConstructor {
         createIfElse(creator, operation, 0, arraySize - 1);
     }
 
+    // TODO Use select in V8B
     private void createIfElse(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> operation, int startIndex, int endIndex) {
         creator.setSubcontextType(AstSubcontextType.CONDITION, 1.0);
         LogicLabel elseLabel = processor.nextLabel();

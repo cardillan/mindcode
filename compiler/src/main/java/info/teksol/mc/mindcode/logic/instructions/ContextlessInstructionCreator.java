@@ -139,6 +139,10 @@ public interface ContextlessInstructionCreator {
         return (ReturnRecInstruction) createInstruction(astContext, RETURNREC, stack);
     }
 
+    default SelectInstruction createSelect(AstContext astContext, LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicValue valueIfTrue, LogicValue valueIfFalse) {
+        return (SelectInstruction) createInstruction(astContext, SELECT, result, condition, x, y, valueIfTrue, valueIfFalse);
+    }
+
     default SensorInstruction createSensor(AstContext astContext, LogicVariable result, LogicValue target, LogicValue property) {
         return (SensorInstruction) createInstruction(astContext, SENSOR, result, target, property);
     }

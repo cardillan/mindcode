@@ -130,6 +130,15 @@ public class MindustryOpcodeVariants {
         add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("acos"),         res("result"),  in("a"));
         add(list, V7,  MAX, S, FUNC, Opcode.OP,         op("atan"),         res("result"),  in("a"));
 
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("equal"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("lessThan"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("greaterThanEq"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("notEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("lessThanEq"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("greaterThan"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("strictEqual"), in("x"), in("y"), in("valueIfTrue"), in("ValueIfFalse"));
+        add(list, V8B, MAX, S, NONE, Opcode.SELECT, res("result"), cond("always"), in("valueIfTrue"), in("ValueIfFalse"));
+
         add(list, V7,  MAX, S, FUNC, Opcode.LOOKUP,     lookup("type"), res("result"), in("index"));
 
         add(list, V7,  MAX, S, FUNC, Opcode.PACKCOLOR,  res("result"), in("r"), in("g"), in("b"), in("a"));
@@ -317,6 +326,8 @@ public class MindustryOpcodeVariants {
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("flushText"),   in("id"), in("fetch"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("fontSize"),    in("id"), in("size"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("textHeight"),  in("id"), in("height"));
+        add(list, V8B, MAX, W, FUNC, Opcode.SETMARKER, setmarker("textAlign"),   in("id"), align("alignment"));
+        add(list, V8B, MAX, W, FUNC, Opcode.SETMARKER, setmarker("lineAlign"),   in("id"), align("alignment"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("labelFlags"),  in("id"), in("background"), in("outline"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("texture"),     in("id"), in("printFlush"), in("name"));
         add(list, V8A, MAX, W, FUNC, Opcode.SETMARKER, setmarker("textureSize"), in("id"), in("width"), in("height"));

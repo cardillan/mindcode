@@ -15,7 +15,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 
 @NullMarked
-public class JumpInstruction extends BaseInstruction {
+public class JumpInstruction extends BaseInstruction implements ConditionalInstruction {
 
     JumpInstruction(AstContext astContext, List<LogicArgument> args, @Nullable List<InstructionParameterType> params) {
         super(astContext, Opcode.JUMP, args, params);
@@ -63,14 +63,6 @@ public class JumpInstruction extends BaseInstruction {
     @Override
     public boolean endsCodePath() {
         return isUnconditional();
-    }
-
-    public boolean isConditional() {
-        return getCondition() != Condition.ALWAYS;
-    }
-
-    public boolean isUnconditional() {
-        return getCondition() == Condition.ALWAYS;
     }
 
     public boolean isInvertible() {

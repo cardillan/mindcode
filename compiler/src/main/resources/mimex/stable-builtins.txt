@@ -351,8 +351,10 @@
 @sfx-windhowl
 @degToRad
 @sfx-combustion
+@top
 @colorLightgray
 @sfx-hum
+@bottomRight
 @sfx-blaster
 @colorNavy
 @colorGreen
@@ -416,6 +418,8 @@
 @colorTeal
 @sfx-bolt
 @sfx-buttonClick
+@right
+@bottom
 @colorStat
 @sfx-grinding
 @colorBlue
@@ -453,9 +457,12 @@
 @colorGrey
 @ctrlPlayer
 @colorOrange
+@topRight
+@bottomLeft
 @colorRed
 @sfx-spellLoop
 @sfx-fire
+@center
 @sfx-plasmadrop
 @sfx-rockBreak
 @colorMaroon
@@ -474,6 +481,7 @@
 @sfx-wind3
 @colorAcid
 @sfx-minebeam
+@topLeft
 @sfx-laserbeam
 @sfx-drill
 @sfx-pew
@@ -493,3 +501,4 @@
 @sfx-flame
 @sfx-machine
 @sfx-railgun
+@left

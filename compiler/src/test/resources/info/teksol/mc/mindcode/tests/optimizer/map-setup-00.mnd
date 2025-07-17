@@ -70,10 +70,10 @@ void displayNumber(display, number)
 
     clear(0, 0, 0);
     print(number);
-    drawPrint(0, 2, :center);
+    drawPrint(0, 2, @center);
     // For somewhat bolder font
     print(number);
-    drawPrint(0.25, 2, :center);
+    drawPrint(0.25, 2, @center);
     drawflush(display);
 end;
 

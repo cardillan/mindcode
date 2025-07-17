@@ -5,6 +5,7 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      6 instructions eliminated by Jump Optimization (4 iterations).
      6 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
+     1 instructions eliminated by If Expression Optimization (2 iterations).
     20 instructions modified by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
@@ -14,9 +15,9 @@
      2 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     13 instructions eliminated by Print Merging.
-   290 instructions after optimizations.
+   289 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 831):
+Pass 1: speed optimization selection (cost limit 832):
   * Replicate loop condition at line 122:1                       size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
   o Convert case at line 34:9 (segments: 15)                     size    +5, benefit      576.9, efficiency    115.385
   o Convert case at line 34:9 (segments: 6)                      size    +7, benefit      817.3, efficiency    116.758
@@ -24,7 +25,7 @@ Pass 1: speed optimization selection (cost limit 831):
     Convert case at line 34:9 (segments: 3, padded low)          size   +93, benefit     1346.2, efficiency     14.475
     Convert case at line 34:9 (segments: 1, padded low)          size  +136, benefit     1923.1, efficiency     14.140
 
-Pass 1: speed optimization selection (cost limit 830):
+Pass 1: speed optimization selection (cost limit 831):
   o Convert case at line 34:9 (segments: 15)                     size    +5, benefit      576.9, efficiency    115.385
   o Convert case at line 34:9 (segments: 6)                      size    +7, benefit      817.3, efficiency    116.758
   o Convert case at line 34:9 (segments: 4, padded low)          size   +74, benefit     1201.9, efficiency     16.242
@@ -596,6 +597,18 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    172 sensor :amount .CONTAINER .SENSOR
    173 sensor :max .CONTAINER .MAXIMUM
 
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+   175 op div *tmp40 *tmp39 :max
+   176 op add :scaled 10 *tmp40
+   177 op add :index :index 1
+-    * jump *label35 lessThanEq :index .END_INDEX
+-    * set :index .START_INDEX
++  178 select :index greaterThan :index .END_INDEX .START_INDEX :index
+   179 label *label35
+   180 label *label36
+   181 write :index .MEMORY 0
+
 Modifications by Replicate loop condition at line 122:1 (+1 instructions):
  
    150 label *label25
@@ -606,14 +619,14 @@ Modifications by Replicate loop condition at line 122:1 (+1 instructions):
    155 set :prevTick :nextTick
    156 op add :nextTick :nextTick TICKS
  
-   203 print "\n"
-   204 printflush .MESSAGE
-   205 label *label26
+   202 print "\n"
+   203 printflush .MESSAGE
+   204 label *label26
 -    * jump *label25 always
-+  206 sensor *tmp25 .SWITCH @enabled
-+  207 jump *label39 equal *tmp25 0
-   208 label *label27
-   209 end
++  205 sensor *tmp25 .SWITCH @enabled
++  206 jump *label39 equal *tmp25 0
+   207 label *label27
+   208 end
 
 Modifications by Convert case at line 34:9 (segments: 1, padded low) (+136 instructions):
  
@@ -1096,21 +1109,22 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    440 label *label32
    441 sensor :amount .CONTAINER .SENSOR
  
-   447 jump *label35 lessThanEq :index .END_INDEX
-   448 set :index .START_INDEX
-   449 label *label35
+   445 op add :scaled 10 *tmp40
+   446 op add :index :index 1
+   447 select :index greaterThan :index .END_INDEX .START_INDEX :index
+-    * label *label35
 -    * label *label36
-   450 write :index .MEMORY 0
-   451 write :scaled .MEMORY :index
-   452 op sub *tmp49 :index .SIZE
+   448 write :index .MEMORY 0
+   449 write :scaled .MEMORY :index
+   450 op sub *tmp49 :index .SIZE
  
-   469 print *tmp51
-   470 print "\n"
-   471 printflush .MESSAGE
+   467 print *tmp51
+   468 print "\n"
+   469 printflush .MESSAGE
 -    * label *label26
-   472 sensor *tmp25 .SWITCH @enabled
-   473 jump *label39 equal *tmp25 0
-   474 label *label27
+   470 sensor *tmp25 .SWITCH @enabled
+   471 jump *label39 equal *tmp25 0
+   472 label *label27
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
@@ -1147,11 +1161,11 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
    409 write .START_INDEX .MEMORY 0
    410 write .END_INDEX .MEMORY 2
  
-   470 printflush .MESSAGE
-   471 sensor *tmp25 .SWITCH @enabled
-   472 jump *label39 equal *tmp25 0
+   468 printflush .MESSAGE
+   469 sensor *tmp25 .SWITCH @enabled
+   470 jump *label39 equal *tmp25 0
 -    * label *label27
-   473 end
+   471 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-2 instructions):
  
@@ -1163,9 +1177,9 @@ Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-2 i
    408 write .START_INDEX .MEMORY 0
    409 write .END_INDEX .MEMORY 2
  
-   469 printflush .MESSAGE
-   470 sensor *tmp25 .SWITCH @enabled
-   471 jump *label39 equal *tmp25 0
+   467 printflush .MESSAGE
+   468 sensor *tmp25 .SWITCH @enabled
+   469 jump *label39 equal *tmp25 0
 -    * end
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
@@ -1198,9 +1212,9 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
    395 op equal *tmp7 .CONTAINER null
    396 op equal *tmp8 .MEMORY null
  
-   445 write :scaled .MEMORY :index
-   446 op sub *tmp49 :index .SIZE
-   447 write :scaled .MEMORY *tmp49
+   443 write :scaled .MEMORY :index
+   444 op sub *tmp49 :index .SIZE
+   445 write :scaled .MEMORY *tmp49
 -    * print "Item/Liquid/Energy Level Meter\n"
 -    * print "StartIndex: "
 -    * print .START_INDEX
@@ -1214,19 +1228,19 @@ Modifications by Final phase, Print Merging, iteration 1 (-13 instructions):
 -    * print "Scaled: "
 -    * print :scaled
 -    * print "\n"
-+  448 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
-+  449 format .START_INDEX
-+  450 format :index
-+  451 format :amount
-+  452 format :scaled
-   453 op sub *tmp51 @time :startTime
++  446 print "Item/Liquid/Energy Level Meter\nStartIndex: {0}\nIndex: {0}\nAmount: {0}\nScaled: {0}\nElapsed: {0}\n"
++  447 format .START_INDEX
++  448 format :index
++  449 format :amount
++  450 format :scaled
+   451 op sub *tmp51 @time :startTime
 -    * print "Elapsed: "
 -    * print *tmp51
 -    * print "\n"
-+  454 format *tmp51
-   455 printflush .MESSAGE
-   456 sensor *tmp25 .SWITCH @enabled
-   457 jump *label39 equal *tmp25 0
++  452 format *tmp51
+   453 printflush .MESSAGE
+   454 sensor *tmp25 .SWITCH @enabled
+   455 jump *label39 equal *tmp25 0
 
 Final code before resolving virtual instructions:
 
@@ -1671,9 +1685,7 @@ op mul *tmp39 :amount 150
 op div *tmp40 *tmp39 :max
 op add :scaled 10 *tmp40
 op add :index :index 1
-jump *label35 lessThanEq :index .END_INDEX
-set :index .START_INDEX
-label *label35
+select :index greaterThan :index .END_INDEX .START_INDEX :index
 write :index .MEMORY 0
 write :scaled .MEMORY :index
 op sub *tmp49 :index .SIZE

@@ -9,72 +9,70 @@ print "\n"
 ubind null
 jump 12 notEqual @unit null
 set *tmp7 null
-jump 24 always 0 0
+jump 23 always 0 0
 set :findFreeUnit:first_unit @unit
 sensor *tmp10 @unit @controlled
 jump 18 notEqual *tmp10 0
 ucontrol flag null 0 0 0 0
 set *tmp7 @unit
-jump 24 always 0 0
+jump 23 always 0 0
 sensor *tmp13 :findFreeUnit:first_unit @dead
-jump 21 notEqual *tmp13 1
-set :findFreeUnit:first_unit @unit
+select :findFreeUnit:first_unit equal *tmp13 1 @unit :findFreeUnit:first_unit
 ubind null
 jump 13 notEqual :findFreeUnit:first_unit @unit
 set *tmp7 null
 print *tmp7
 print "\n"
 ubind null
-jump 30 notEqual @unit null
+jump 29 notEqual @unit null
 set *tmp18 null
-jump 57 always 0 0
+jump 55 always 0 0
 set :findClosestUnit:first_unit @unit
 set :findClosestUnit:best_unit null
 set :findClosestUnit:best_distance 10000000000
 sensor *tmp21 @unit @controlled
-jump 44 notEqual *tmp21 0
+jump 43 notEqual *tmp21 0
 sensor *tmp24 @unit @x
 op sub *tmp25 *tmp24 null
 sensor *tmp26 @unit @y
 op sub *tmp27 *tmp26 null
 op len :findClosestUnit:distance *tmp25 *tmp27
-jump 47 greaterThanEq :findClosestUnit:distance :findClosestUnit:best_distance
+jump 45 greaterThanEq :findClosestUnit:distance :findClosestUnit:best_distance
 set :findClosestUnit:best_distance :findClosestUnit:distance
 set :findClosestUnit:best_unit @unit
-jump 47 always 0 0
+jump 45 always 0 0
 sensor *tmp32 :findClosestUnit:first_unit @dead
-jump 47 notEqual *tmp32 1
-set :findClosestUnit:first_unit @unit
+select :findClosestUnit:first_unit equal *tmp32 1 @unit :findClosestUnit:first_unit
 ubind null
-jump 33 notEqual :findClosestUnit:first_unit @unit
-jump 52 notEqual :findClosestUnit:best_unit null
+jump 32 notEqual :findClosestUnit:first_unit @unit
+jump 50 notEqual :findClosestUnit:best_unit null
 set *tmp18 null
-jump 57 always 0 0
+jump 55 always 0 0
 sensor *tmp39 :findClosestUnit:best_unit @controlled
-jump 26 notEqual *tmp39 0
+jump 25 notEqual *tmp39 0
 ubind :findClosestUnit:best_unit
 ucontrol flag null 0 0 0 0
 set *tmp18 :findClosestUnit:best_unit
 print *tmp18
 print "\n"
 ubind null
-jump 59 equal @unit null
+jump 57 equal @unit null
 sensor *tmp45 @unit @controlled
-jump 59 notEqual *tmp45 0
+jump 57 notEqual *tmp45 0
 ucontrol flag null 0 0 0 0
 set *tmp42 @unit
 print *tmp42
 print "\n"
 ubind null
-jump 72 notEqual @unit null
+jump 70 notEqual @unit null
 print "nullNo unit of type null found."
 printflush null
-jump 67 always 0 0
+jump 65 always 0 0
 sensor *tmp51 @unit @controlled
-jump 77 equal *tmp51 0
+jump 75 equal *tmp51 0
 print "nullLooking for a free null..."
 printflush null
-jump 67 always 0 0
+jump 65 always 0 0
 ucontrol flag null 0 0 0 0
 set *tmp48 @unit
 print *tmp48

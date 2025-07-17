@@ -380,7 +380,7 @@ payload-router;376;125;shown;3;PayloadRouter;false;true;units;0.0;false;false;fa
 reinforced-payload-conveyor;377;214;shown;3;PayloadConveyor;false;false;units;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;true;true;
 reinforced-payload-router;378;215;shown;3;PayloadRouter;false;true;units;0.0;false;false;false;10;false;true;false;false;10.0;false;true;false;true;false;0;false;true;
 payload-mass-driver;379;218;shown;3;PayloadMassDriver;false;true;units;87.5;false;false;false;10;false;true;false;false;10.0;true;true;false;true;false;0;true;true;
-large-payload-mass-driver;380;251;shown;5;PayloadMassDriver;false;true;units;137.5;false;false;false;10;false;true;false;false;10.0;true;true;false;true;false;0;true;true;
+large-payload-mass-driver;380;251;shown;5;PayloadMassDriver;false;true;units;262.5;false;false;false;10;false;true;false;false;10.0;true;true;false;true;false;0;true;true;
 small-deconstructor;381;199;shown;3;PayloadDeconstructor;false;false;units;0.0;true;false;false;100;false;true;false;false;10.0;true;true;false;true;false;0;true;false;
 deconstructor;382;147;shown;5;PayloadDeconstructor;false;false;units;0.0;true;false;false;250;false;true;false;false;10.0;true;true;false;true;false;0;true;false;
 constructor;383;148;shown;3;Constructor;false;true;units;0.0;true;true;false;10;false;true;false;false;10.0;true;true;false;true;false;0;true;true;

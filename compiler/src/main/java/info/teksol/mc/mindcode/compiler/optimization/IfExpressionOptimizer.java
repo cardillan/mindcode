@@ -3,15 +3,14 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
-import info.teksol.mc.mindcode.logic.arguments.ArgumentType;
-import info.teksol.mc.mindcode.logic.arguments.Condition;
-import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.IF;
@@ -75,22 +74,113 @@ class IfExpressionOptimizer extends BaseOptimizer {
         }
     }
 
+    private boolean optimizeUsingSelect(AstContext ifExpression, LogicList condition, JumpInstruction jump,
+            LogicList trueBranch, LogicList falseBranch) {
+        // select optimization
+
+        int trueSize = trueBranch.realSize();
+        int falseSize = falseBranch.realSize();
+        List<SetInstruction> replaced = new ArrayList<>();
+
+        LogicVariable result;
+        LogicValue trueValue, falseValue;
+        if (trueSize == 1 && falseSize == 1) {
+            if (trueBranch.getFirstReal() instanceof SetInstruction setTrue && falseBranch.getFirstReal() instanceof SetInstruction setFalse
+                && setTrue.getResult().equals(setFalse.getResult())) {
+                result = setTrue.getResult();
+                trueValue = setTrue.getValue();
+                falseValue = setFalse.getValue();
+                replaced.add(setTrue);
+                replaced.add(setFalse);
+            } else {
+                return false;
+            }
+        } else if (trueSize == 1 && falseSize == 0) {
+            if (trueBranch.getFirstReal() instanceof SetInstruction set) {
+                result = set.getResult();
+                trueValue = set.getValue();
+                falseValue = set.getResult();
+                replaced.add(set);
+            } else {
+                return false;
+            }
+        } else if (trueSize == 0 && falseSize == 1) {
+            if (falseBranch.getFirstReal() instanceof SetInstruction set) {
+                result = set.getResult();
+                trueValue = set.getResult();
+                falseValue = set.getValue();
+                replaced.add(set);
+            } else {
+                return false;
+            }
+        } else {
+            return false;
+        }
+
+        LogicList flowControl = contextInstructions(ifExpression.child(2));
+        if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()
+                || (falseSize == 0 && flowControl.getFirst() instanceof NoOpInstruction)) {
+            JumpInstruction invertedJump = negateCompoundCondition(condition);
+            if (invertedJump != null) {
+                removeInstruction(instructionIndex(jump) - 1);
+                replaceInstruction(jump, createSelect(jump.getAstContext(), result,
+                        invertedJump.getCondition(), invertedJump.getX(), invertedJump.getY(),
+                        trueValue, falseValue));
+            } else if (jump.getCondition().hasInverse()) {
+                // The compiler inverts the if condition because the jump leads to the false branch
+                // Here we invert it back, so true and false values remain the same
+                replaceInstruction(jump, createSelect(jump.getAstContext(), result,
+                        jump.getCondition().inverse(),
+                        jump.getX(), jump.getY(), trueValue, falseValue));
+
+            } else {
+                // The compiler inverts the if condition because the jump leads to the false branch
+                // Here we cannot invert it back, so the true and false values are swapped
+                replaceInstruction(jump, createSelect(jump.getAstContext(), result, jump.getCondition(),
+                        jump.getX(), jump.getY(), falseValue, trueValue));
+            }
+            replaced.forEach(this::invalidateInstruction);
+            invalidateInstruction(flowControl.getFirst());
+            return true;
+        }
+
+        return false;
+    }
+
+    private void optimizeSingleBranchedIfExpression(AstContext ifExpression) {
+        if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)) return;
+
+        LogicList condition = contextInstructions(ifExpression.child(0));
+        if (!(condition.getLast() instanceof JumpInstruction jump && jump.isConditional())) {
+            return;
+        }
+        LogicList trueBranch = contextInstructions(ifExpression.child(1));
+        LogicList falseBranch = contextInstructions(ifExpression.child(3));
+
+        optimizeUsingSelect(ifExpression, condition, jump, trueBranch, falseBranch);
+    }
+
     private void optimizeIfExpression(AstContext ifExpression) {
         if (!isSupportedIfElseExpression(ifExpression)) {
+            if (experimental() && getProfile().getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
+                optimizeSingleBranchedIfExpression(ifExpression);
+            }
             return;
         }
 
-        AstContext conditionContext = ifExpression.findSubcontext(CONDITION);
-        LogicList condition = contextInstructions(conditionContext);
-        if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)
-                || !(condition.getLast() instanceof JumpInstruction jump && jump.isConditional())
-                || !hasExpectedStructure(ifExpression)) {
+        LogicList condition = contextInstructions(ifExpression.child(0));
+        if (!(condition.getLast() instanceof JumpInstruction jump && jump.isConditional())) {
             return;
         }
 
         // See the expected subcontext structure above
         LogicList trueBranch = contextInstructions(ifExpression.child(1));
         LogicList falseBranch = contextInstructions(ifExpression.child(3));
+
+        if (experimental() && getProfile().getProcessorVersion().atLeast(ProcessorVersion.V8B)
+            && optimizeUsingSelect(ifExpression, condition, jump, trueBranch, falseBranch)) {
+            return;
+        }
 
         LogicInstruction lastTrue = getLastRealInstruction(trueBranch);
         LogicInstruction lastFalse = getLastRealInstruction(falseBranch);

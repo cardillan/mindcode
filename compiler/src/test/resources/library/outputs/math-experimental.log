@@ -1,17 +1,17 @@
   1654 instructions before optimizations.
     91 instructions eliminated by Temp Variables Elimination (2 iterations).
    124 instructions eliminated by Dead Code Elimination (5 iterations).
-    28 instructions modified by Jump Normalization (6 iterations).
-    68 instructions eliminated by Jump Optimization (6 iterations).
-    92 instructions eliminated by Single Step Elimination (3 passes, 11 iterations).
-     4 instructions modified by Expression Optimization (4 iterations).
-     8 instructions eliminated by If Expression Optimization (4 iterations).
-   310 instructions eliminated by Data Flow Optimization (6 passes, 24 iterations).
-    35 instructions added by Loop Unrolling (10 iterations).
+    28 instructions modified by Jump Normalization (7 iterations).
+    68 instructions eliminated by Jump Optimization (7 iterations).
+    91 instructions eliminated by Single Step Elimination (3 passes, 12 iterations).
+     4 instructions modified by Expression Optimization (5 iterations).
+    12 instructions eliminated by If Expression Optimization (2 passes, 5 iterations).
+   314 instructions eliminated by Data Flow Optimization (7 passes, 27 iterations).
+    44 instructions added by Loop Unrolling (11 iterations).
      6 loops unrolled by Loop Unrolling.
     34 instructions updated by JumpThreading.
      5 instructions eliminated by Unreachable Code Elimination (2 iterations).
-   991 instructions after optimizations.
+   993 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 0):
   * Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity (-8 instructions)
@@ -40,12 +40,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +5, benefit       10.5, efficiency      2.100
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 15:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 16:17                           size    +3, benefit        3.5, efficiency      1.167
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -86,12 +86,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +5, benefit       10.5, efficiency      2.100
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 15:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 16:17                           size    +3, benefit        3.5, efficiency      1.167
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -131,12 +131,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +5, benefit       10.5, efficiency      2.100
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 15:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 16:17                           size    +3, benefit        3.5, efficiency      1.167
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -175,12 +175,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +5, benefit       10.5, efficiency      2.100
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 15:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 16:17                           size    +3, benefit        3.5, efficiency      1.167
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -218,12 +218,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +5, benefit       10.5, efficiency      2.100
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 15:17                           size    +3, benefit        3.5, efficiency      1.167
+  ! Inline function call at line 16:17                           size    +3, benefit        3.5, efficiency      1.167
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -238,7 +238,7 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
   ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
 
-Pass 2: speed optimization selection (cost limit 22):
+Pass 2: speed optimization selection (cost limit 24):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
     Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
@@ -261,12 +261,12 @@ Pass 2: speed optimization selection (cost limit 22):
     Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
     Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-    Inline function 'signInexact' defined at *math:47:1          size    +7, benefit       10.5, efficiency      1.500
+    Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-    Inline function call at line 14:17                           size    +4, benefit        3.5, efficiency      0.875
-    Inline function call at line 15:17                           size    +4, benefit        3.5, efficiency      0.875
-    Inline function call at line 16:17                           size    +4, benefit        3.5, efficiency      0.875
+    Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+    Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+    Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
     Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
     Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -281,10 +281,10 @@ Pass 2: speed optimization selection (cost limit 22):
     Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
     Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 2: speed optimization selection (cost limit 9):
+Pass 2: speed optimization selection (cost limit 11):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
-  * Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143 (+7 instructions)
+    Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
     Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
@@ -295,19 +295,19 @@ Pass 2: speed optimization selection (cost limit 9):
     Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  * Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500 (+13 instructions)
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-    Inline function 'signInexact' defined at *math:47:1          size    +7, benefit       10.5, efficiency      1.500
+    Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+    Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-    Inline function call at line 14:17                           size    +4, benefit        3.5, efficiency      0.875
-    Inline function call at line 15:17                           size    +4, benefit        3.5, efficiency      0.875
-    Inline function call at line 16:17                           size    +4, benefit        3.5, efficiency      0.875
+    Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+    Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+    Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -322,9 +322,10 @@ Pass 2: speed optimization selection (cost limit 9):
   ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
   ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 2: speed optimization selection (cost limit 2):
+Pass 2: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +271, benefit       23.0, efficiency      0.085
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
@@ -340,14 +341,12 @@ Pass 2: speed optimization selection (cost limit 2):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +7, benefit       10.5, efficiency      1.500
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-  ! Inline function call at line 14:17                           size    +4, benefit        3.5, efficiency      0.875
-  ! Inline function call at line 15:17                           size    +4, benefit        3.5, efficiency      0.875
-  ! Inline function call at line 16:17                           size    +4, benefit        3.5, efficiency      0.875
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -362,9 +361,10 @@ Pass 2: speed optimization selection (cost limit 2):
   ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
   ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 3: speed optimization selection (cost limit 2):
+Pass 3: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +271, benefit       23.0, efficiency      0.085
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
@@ -380,14 +380,12 @@ Pass 3: speed optimization selection (cost limit 2):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +7, benefit       10.5, efficiency      1.500
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-  ! Inline function call at line 14:17                           size    +4, benefit        3.5, efficiency      0.875
-  ! Inline function call at line 15:17                           size    +4, benefit        3.5, efficiency      0.875
-  ! Inline function call at line 16:17                           size    +4, benefit        3.5, efficiency      0.875
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -402,9 +400,10 @@ Pass 3: speed optimization selection (cost limit 2):
   ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
   ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
 
-Pass 4: speed optimization selection (cost limit 2):
+Pass 4: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
-  ! Unroll iteration loop at *math:241:5                         size  +271, benefit       23.0, efficiency      0.085
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
@@ -420,14 +419,51 @@ Pass 4: speed optimization selection (cost limit 2):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +7, benefit       10.5, efficiency      1.500
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
-  ! Inline function call at line 14:17                           size    +4, benefit        3.5, efficiency      0.875
-  ! Inline function call at line 15:17                           size    +4, benefit        3.5, efficiency      0.875
-  ! Inline function call at line 16:17                           size    +4, benefit        3.5, efficiency      0.875
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 57:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 58:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 59:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 60:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 61:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 62:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 63:17                           size   +16, benefit        5.5, efficiency      0.344
+  ! Inline function call at line 64:17                           size   +16, benefit        5.5, efficiency      0.344
+
+Pass 5: speed optimization selection (cost limit 0):
+  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +229, benefit       23.0, efficiency      0.100
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size   +37, benefit       23.0, efficiency      0.622
+  ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +424, benefit       35.0, efficiency      0.083
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
+  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:202:1              size  +111, benefit       44.0, efficiency      0.396
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -660,1152 +696,1157 @@ Final code before resolving virtual instructions:
         label *label101
   183:  set :_isMedian.1:lt 0
   184:  set :_isMedian.1:gt 0
-  185:  jump *label703 greaterThanEq 1 :_median.1:i
-  186:  set :_isMedian.1:lt 1
-  187:  jump *label706 always 0 0
-        label *label703
-  188:  jump *label704 lessThanEq 1 :_median.1:i
-  189:  set :_isMedian.1:gt 1
-        label *label704
-        label *label706
-  190:  jump *label711 greaterThanEq 1 :_median.1:i
-  191:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  192:  jump *label714 always 0 0
-        label *label711
-  193:  jump *label712 lessThanEq 1 :_median.1:i
-  194:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label712
-        label *label714
-  195:  jump *label719 greaterThanEq 1 :_median.1:i
-  196:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  197:  jump *label722 always 0 0
-        label *label719
-  198:  jump *label720 lessThanEq 1 :_median.1:i
-  199:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label720
-        label *label722
-  200:  jump *label727 greaterThanEq 1 :_median.1:i
-  201:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  202:  jump *label730 always 0 0
-        label *label727
-  203:  jump *label728 lessThanEq 1 :_median.1:i
-  204:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label728
-        label *label730
-  205:  jump *label735 greaterThanEq 1 :_median.1:i
-  206:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  207:  jump *label738 always 0 0
-        label *label735
-  208:  jump *label736 lessThanEq 1 :_median.1:i
-  209:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label736
-        label *label738
-  210:  jump *label743 greaterThanEq 5 :_median.1:i
-  211:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  212:  jump *label746 always 0 0
-        label *label743
-  213:  jump *label744 lessThanEq 5 :_median.1:i
-  214:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label744
-        label *label746
-  215:  op sub *tmp153 :_isMedian.1:gt :_isMedian.1:lt
-  216:  op abs :_isMedian.1:dif *tmp153 0
-  217:  set *tmp158 false
-  218:  op add *tmp155 :_isMedian.1:gt :_isMedian.1:lt
-  219:  jump *label125 lessThan *tmp155 5
-  220:  op equal *tmp158 :_isMedian.1:gt :_isMedian.1:lt
+  185:  set :_isMedian.1:i 1
+  186:  setaddr *tmp148 *label114
+  187:  jump *label111 always 0 0
+        multilabel *label114
+  188:  set :_isMedian.1:i 1
+  189:  setaddr *tmp148 *label115
+  190:  jump *label111 always 0 0
+        multilabel *label115
+  191:  set :_isMedian.1:i 1
+  192:  setaddr *tmp148 *label116
+  193:  jump *label111 always 0 0
+        multilabel *label116
+  194:  set :_isMedian.1:i 1
+  195:  setaddr *tmp148 *label117
+  196:  jump *label111 always 0 0
+        multilabel *label117
+  197:  set :_isMedian.1:i 1
+  198:  setaddr *tmp148 *label118
+  199:  jump *label111 always 0 0
+        multilabel *label118
+  200:  set :_isMedian.1:i 5
+  201:  setaddr *tmp148 *label119
+        label *label111
+  202:  jump *label120 greaterThanEq :_isMedian.1:i :_median.1:i
+  203:  op add :_isMedian.1:lt :_isMedian.1:lt 1
+  204:  multijump *tmp148 0 0
+        label *label120
+  205:  jump *label122 lessThanEq :_isMedian.1:i :_median.1:i
+  206:  op add :_isMedian.1:gt :_isMedian.1:gt 1
+        label *label122
+  207:  multijump *tmp148 0 0
+        multilabel *label119
+  208:  op sub *tmp153 :_isMedian.1:gt :_isMedian.1:lt
+  209:  op abs :_isMedian.1:dif *tmp153 0
+  210:  set *tmp158 false
+  211:  op add *tmp155 :_isMedian.1:gt :_isMedian.1:lt
+  212:  jump *label125 lessThan *tmp155 5
+  213:  op equal *tmp158 :_isMedian.1:gt :_isMedian.1:lt
         label *label125
-  221:  jump *label126 equal *tmp158 false
-  222:  set *tmp145 :_median.1:i
-  223:  jump *label100 always 0 0
+  214:  jump *label126 equal *tmp158 false
+  215:  set *tmp145 :_median.1:i
+  216:  jump *label100 always 0 0
         label *label126
-  224:  jump *label128 greaterThanEq :_isMedian.1:dif :_median.1:bestDif
-  225:  set :_median.1:bestDif :_isMedian.1:dif
-  226:  set :_median.1:best :_median.1:i
-  227:  set :_median.1:count 1
-  228:  multijump *tmp146 0 0
+  217:  jump *label128 greaterThanEq :_isMedian.1:dif :_median.1:bestDif
+  218:  set :_median.1:bestDif :_isMedian.1:dif
+  219:  set :_median.1:best :_median.1:i
+  220:  set :_median.1:count 1
+  221:  multijump *tmp146 0 0
         label *label128
-  229:  jump *label130 greaterThan :_isMedian.1:dif :_median.1:bestDif
-  230:  op add :_median.1:best :_median.1:best :_median.1:i
-  231:  op add :_median.1:count :_median.1:count 1
+  222:  jump *label130 greaterThan :_isMedian.1:dif :_median.1:bestDif
+  223:  op add :_median.1:best :_median.1:best :_median.1:i
+  224:  op add :_median.1:count :_median.1:count 1
         label *label130
-  232:  multijump *tmp146 0 0
+  225:  multijump *tmp146 0 0
         multilabel *label109
-  233:  op div *tmp145 :_median.1:best :_median.1:count
+  226:  op div *tmp145 :_median.1:best :_median.1:count
         label *label100
-  234:  assertequals 1 *tmp145 "median(1,1,1,1,1,5)"
-  235:  set :_median.2:bestDif 10000000000
-  236:  set :_median.2:best null
-  237:  set :_median.2:count 1
-  238:  set :_median.2:i 1
-  239:  setaddr *tmp168 *label137
-  240:  jump *label134 always 0 0
+  227:  assertequals 1 *tmp145 "median(1,1,1,1,1,5)"
+  228:  set :_median.2:bestDif 10000000000
+  229:  set :_median.2:best null
+  230:  set :_median.2:count 1
+  231:  set :_median.2:i 1
+  232:  setaddr *tmp168 *label137
+  233:  jump *label134 always 0 0
         multilabel *label137
-  241:  set :_median.2:i 1
-  242:  setaddr *tmp168 *label138
-  243:  jump *label134 always 0 0
+  234:  set :_median.2:i 1
+  235:  setaddr *tmp168 *label138
+  236:  jump *label134 always 0 0
         multilabel *label138
-  244:  set :_median.2:i 1
-  245:  setaddr *tmp168 *label139
-  246:  jump *label134 always 0 0
+  237:  set :_median.2:i 1
+  238:  setaddr *tmp168 *label139
+  239:  jump *label134 always 0 0
         multilabel *label139
-  247:  set :_median.2:i 1
-  248:  setaddr *tmp168 *label140
-  249:  jump *label134 always 0 0
+  240:  set :_median.2:i 1
+  241:  setaddr *tmp168 *label140
+  242:  jump *label134 always 0 0
         multilabel *label140
-  250:  set :_median.2:i 5
-  251:  setaddr *tmp168 *label141
-  252:  jump *label134 always 0 0
+  243:  set :_median.2:i 5
+  244:  setaddr *tmp168 *label141
+  245:  jump *label134 always 0 0
         multilabel *label141
-  253:  set :_median.2:i 5
-  254:  setaddr *tmp168 *label142
+  246:  set :_median.2:i 5
+  247:  setaddr *tmp168 *label142
         label *label134
-  255:  set :_isMedian.2:lt 0
-  256:  set :_isMedian.2:gt 0
-  257:  set :_isMedian.2:i 1
-  258:  setaddr *tmp170 *label147
-  259:  jump *label144 always 0 0
+  248:  set :_isMedian.2:lt 0
+  249:  set :_isMedian.2:gt 0
+  250:  set :_isMedian.2:i 1
+  251:  setaddr *tmp170 *label147
+  252:  jump *label144 always 0 0
         multilabel *label147
-  260:  set :_isMedian.2:i 1
-  261:  setaddr *tmp170 *label148
-  262:  jump *label144 always 0 0
+  253:  set :_isMedian.2:i 1
+  254:  setaddr *tmp170 *label148
+  255:  jump *label144 always 0 0
         multilabel *label148
-  263:  set :_isMedian.2:i 1
-  264:  setaddr *tmp170 *label149
-  265:  jump *label144 always 0 0
+  256:  set :_isMedian.2:i 1
+  257:  setaddr *tmp170 *label149
+  258:  jump *label144 always 0 0
         multilabel *label149
-  266:  set :_isMedian.2:i 1
-  267:  setaddr *tmp170 *label150
-  268:  jump *label144 always 0 0
+  259:  set :_isMedian.2:i 1
+  260:  setaddr *tmp170 *label150
+  261:  jump *label144 always 0 0
         multilabel *label150
-  269:  set :_isMedian.2:i 5
-  270:  setaddr *tmp170 *label151
-  271:  jump *label144 always 0 0
+  262:  set :_isMedian.2:i 5
+  263:  setaddr *tmp170 *label151
+  264:  jump *label144 always 0 0
         multilabel *label151
-  272:  set :_isMedian.2:i 5
-  273:  setaddr *tmp170 *label152
+  265:  set :_isMedian.2:i 5
+  266:  setaddr *tmp170 *label152
         label *label144
-  274:  jump *label153 greaterThanEq :_isMedian.2:i :_median.2:i
-  275:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  276:  multijump *tmp170 0 0
+  267:  jump *label153 greaterThanEq :_isMedian.2:i :_median.2:i
+  268:  op add :_isMedian.2:lt :_isMedian.2:lt 1
+  269:  multijump *tmp170 0 0
         label *label153
-  277:  jump *label155 lessThanEq :_isMedian.2:i :_median.2:i
-  278:  op add :_isMedian.2:gt :_isMedian.2:gt 1
+  270:  jump *label155 lessThanEq :_isMedian.2:i :_median.2:i
+  271:  op add :_isMedian.2:gt :_isMedian.2:gt 1
         label *label155
-  279:  multijump *tmp170 0 0
+  272:  multijump *tmp170 0 0
         multilabel *label152
-  280:  op sub *tmp175 :_isMedian.2:gt :_isMedian.2:lt
-  281:  op abs :_isMedian.2:dif *tmp175 0
-  282:  set *tmp180 false
-  283:  op add *tmp177 :_isMedian.2:gt :_isMedian.2:lt
-  284:  jump *label158 lessThan *tmp177 5
-  285:  op equal *tmp180 :_isMedian.2:gt :_isMedian.2:lt
+  273:  op sub *tmp175 :_isMedian.2:gt :_isMedian.2:lt
+  274:  op abs :_isMedian.2:dif *tmp175 0
+  275:  set *tmp180 false
+  276:  op add *tmp177 :_isMedian.2:gt :_isMedian.2:lt
+  277:  jump *label158 lessThan *tmp177 5
+  278:  op equal *tmp180 :_isMedian.2:gt :_isMedian.2:lt
         label *label158
-  286:  jump *label159 equal *tmp180 false
-  287:  set *tmp167 :_median.2:i
-  288:  jump *label133 always 0 0
+  279:  jump *label159 equal *tmp180 false
+  280:  set *tmp167 :_median.2:i
+  281:  jump *label133 always 0 0
         label *label159
-  289:  jump *label161 greaterThanEq :_isMedian.2:dif :_median.2:bestDif
-  290:  set :_median.2:bestDif :_isMedian.2:dif
-  291:  set :_median.2:best :_median.2:i
-  292:  set :_median.2:count 1
-  293:  multijump *tmp168 0 0
+  282:  jump *label161 greaterThanEq :_isMedian.2:dif :_median.2:bestDif
+  283:  set :_median.2:bestDif :_isMedian.2:dif
+  284:  set :_median.2:best :_median.2:i
+  285:  set :_median.2:count 1
+  286:  multijump *tmp168 0 0
         label *label161
-  294:  jump *label163 greaterThan :_isMedian.2:dif :_median.2:bestDif
-  295:  op add :_median.2:best :_median.2:best :_median.2:i
-  296:  op add :_median.2:count :_median.2:count 1
+  287:  jump *label163 greaterThan :_isMedian.2:dif :_median.2:bestDif
+  288:  op add :_median.2:best :_median.2:best :_median.2:i
+  289:  op add :_median.2:count :_median.2:count 1
         label *label163
-  297:  multijump *tmp168 0 0
+  290:  multijump *tmp168 0 0
         multilabel *label142
-  298:  op div *tmp167 :_median.2:best :_median.2:count
+  291:  op div *tmp167 :_median.2:best :_median.2:count
         label *label133
-  299:  assertequals 1 *tmp167 "median(1,1,1,1,5,5)"
-  300:  set :_median.3:bestDif 10000000000
-  301:  set :_median.3:best null
-  302:  set :_median.3:count 1
-  303:  set :_median.3:i 1
-  304:  setaddr *tmp190 *label170
-  305:  jump *label167 always 0 0
+  292:  assertequals 1 *tmp167 "median(1,1,1,1,5,5)"
+  293:  set :_median.3:bestDif 10000000000
+  294:  set :_median.3:best null
+  295:  set :_median.3:count 1
+  296:  set :_median.3:i 1
+  297:  setaddr *tmp190 *label170
+  298:  jump *label167 always 0 0
         multilabel *label170
-  306:  set :_median.3:i 1
-  307:  setaddr *tmp190 *label171
-  308:  jump *label167 always 0 0
+  299:  set :_median.3:i 1
+  300:  setaddr *tmp190 *label171
+  301:  jump *label167 always 0 0
         multilabel *label171
-  309:  set :_median.3:i 1
-  310:  setaddr *tmp190 *label172
-  311:  jump *label167 always 0 0
+  302:  set :_median.3:i 1
+  303:  setaddr *tmp190 *label172
+  304:  jump *label167 always 0 0
         multilabel *label172
-  312:  set :_median.3:i 5
-  313:  setaddr *tmp190 *label173
-  314:  jump *label167 always 0 0
+  305:  set :_median.3:i 5
+  306:  setaddr *tmp190 *label173
+  307:  jump *label167 always 0 0
         multilabel *label173
-  315:  set :_median.3:i 5
-  316:  setaddr *tmp190 *label174
-  317:  jump *label167 always 0 0
+  308:  set :_median.3:i 5
+  309:  setaddr *tmp190 *label174
+  310:  jump *label167 always 0 0
         multilabel *label174
-  318:  set :_median.3:i 5
-  319:  setaddr *tmp190 *label175
+  311:  set :_median.3:i 5
+  312:  setaddr *tmp190 *label175
         label *label167
-  320:  set :_isMedian.3:lt 0
-  321:  set :_isMedian.3:gt 0
-  322:  set :_isMedian.3:i 1
-  323:  setaddr *tmp192 *label180
-  324:  jump *label177 always 0 0
+  313:  set :_isMedian.3:lt 0
+  314:  set :_isMedian.3:gt 0
+  315:  set :_isMedian.3:i 1
+  316:  setaddr *tmp192 *label180
+  317:  jump *label177 always 0 0
         multilabel *label180
-  325:  set :_isMedian.3:i 1
-  326:  setaddr *tmp192 *label181
-  327:  jump *label177 always 0 0
+  318:  set :_isMedian.3:i 1
+  319:  setaddr *tmp192 *label181
+  320:  jump *label177 always 0 0
         multilabel *label181
-  328:  set :_isMedian.3:i 1
-  329:  setaddr *tmp192 *label182
-  330:  jump *label177 always 0 0
+  321:  set :_isMedian.3:i 1
+  322:  setaddr *tmp192 *label182
+  323:  jump *label177 always 0 0
         multilabel *label182
-  331:  set :_isMedian.3:i 5
-  332:  setaddr *tmp192 *label183
-  333:  jump *label177 always 0 0
+  324:  set :_isMedian.3:i 5
+  325:  setaddr *tmp192 *label183
+  326:  jump *label177 always 0 0
         multilabel *label183
-  334:  set :_isMedian.3:i 5
-  335:  setaddr *tmp192 *label184
-  336:  jump *label177 always 0 0
+  327:  set :_isMedian.3:i 5
+  328:  setaddr *tmp192 *label184
+  329:  jump *label177 always 0 0
         multilabel *label184
-  337:  set :_isMedian.3:i 5
-  338:  setaddr *tmp192 *label185
+  330:  set :_isMedian.3:i 5
+  331:  setaddr *tmp192 *label185
         label *label177
-  339:  jump *label186 greaterThanEq :_isMedian.3:i :_median.3:i
-  340:  op add :_isMedian.3:lt :_isMedian.3:lt 1
-  341:  multijump *tmp192 0 0
+  332:  jump *label186 greaterThanEq :_isMedian.3:i :_median.3:i
+  333:  op add :_isMedian.3:lt :_isMedian.3:lt 1
+  334:  multijump *tmp192 0 0
         label *label186
-  342:  jump *label188 lessThanEq :_isMedian.3:i :_median.3:i
-  343:  op add :_isMedian.3:gt :_isMedian.3:gt 1
+  335:  jump *label188 lessThanEq :_isMedian.3:i :_median.3:i
+  336:  op add :_isMedian.3:gt :_isMedian.3:gt 1
         label *label188
-  344:  multijump *tmp192 0 0
+  337:  multijump *tmp192 0 0
         multilabel *label185
-  345:  op sub *tmp197 :_isMedian.3:gt :_isMedian.3:lt
-  346:  op abs :_isMedian.3:dif *tmp197 0
-  347:  set *tmp202 false
-  348:  op add *tmp199 :_isMedian.3:gt :_isMedian.3:lt
-  349:  jump *label191 lessThan *tmp199 5
-  350:  op equal *tmp202 :_isMedian.3:gt :_isMedian.3:lt
+  338:  op sub *tmp197 :_isMedian.3:gt :_isMedian.3:lt
+  339:  op abs :_isMedian.3:dif *tmp197 0
+  340:  set *tmp202 false
+  341:  op add *tmp199 :_isMedian.3:gt :_isMedian.3:lt
+  342:  jump *label191 lessThan *tmp199 5
+  343:  op equal *tmp202 :_isMedian.3:gt :_isMedian.3:lt
         label *label191
-  351:  jump *label192 equal *tmp202 false
-  352:  set *tmp189 :_median.3:i
-  353:  jump *label166 always 0 0
+  344:  jump *label192 equal *tmp202 false
+  345:  set *tmp189 :_median.3:i
+  346:  jump *label166 always 0 0
         label *label192
-  354:  jump *label194 greaterThanEq :_isMedian.3:dif :_median.3:bestDif
-  355:  set :_median.3:bestDif :_isMedian.3:dif
-  356:  set :_median.3:best :_median.3:i
-  357:  set :_median.3:count 1
-  358:  multijump *tmp190 0 0
+  347:  jump *label194 greaterThanEq :_isMedian.3:dif :_median.3:bestDif
+  348:  set :_median.3:bestDif :_isMedian.3:dif
+  349:  set :_median.3:best :_median.3:i
+  350:  set :_median.3:count 1
+  351:  multijump *tmp190 0 0
         label *label194
-  359:  jump *label196 greaterThan :_isMedian.3:dif :_median.3:bestDif
-  360:  op add :_median.3:best :_median.3:best :_median.3:i
-  361:  op add :_median.3:count :_median.3:count 1
+  352:  jump *label196 greaterThan :_isMedian.3:dif :_median.3:bestDif
+  353:  op add :_median.3:best :_median.3:best :_median.3:i
+  354:  op add :_median.3:count :_median.3:count 1
         label *label196
-  362:  multijump *tmp190 0 0
+  355:  multijump *tmp190 0 0
         multilabel *label175
-  363:  op div *tmp189 :_median.3:best :_median.3:count
+  356:  op div *tmp189 :_median.3:best :_median.3:count
         label *label166
-  364:  assertequals 3 *tmp189 "median(1,1,1,5,5,5)"
-  365:  set :_median.4:bestDif 10000000000
-  366:  set :_median.4:best null
-  367:  set :_median.4:count 1
-  368:  set :_median.4:i 1
-  369:  setaddr *tmp212 *label203
-  370:  jump *label200 always 0 0
+  357:  assertequals 3 *tmp189 "median(1,1,1,5,5,5)"
+  358:  set :_median.4:bestDif 10000000000
+  359:  set :_median.4:best null
+  360:  set :_median.4:count 1
+  361:  set :_median.4:i 1
+  362:  setaddr *tmp212 *label203
+  363:  jump *label200 always 0 0
         multilabel *label203
-  371:  set :_median.4:i 1
-  372:  setaddr *tmp212 *label204
-  373:  jump *label200 always 0 0
+  364:  set :_median.4:i 1
+  365:  setaddr *tmp212 *label204
+  366:  jump *label200 always 0 0
         multilabel *label204
-  374:  set :_median.4:i 5
-  375:  setaddr *tmp212 *label205
-  376:  jump *label200 always 0 0
+  367:  set :_median.4:i 5
+  368:  setaddr *tmp212 *label205
+  369:  jump *label200 always 0 0
         multilabel *label205
-  377:  set :_median.4:i 5
-  378:  setaddr *tmp212 *label206
-  379:  jump *label200 always 0 0
+  370:  set :_median.4:i 5
+  371:  setaddr *tmp212 *label206
+  372:  jump *label200 always 0 0
         multilabel *label206
-  380:  set :_median.4:i 5
-  381:  setaddr *tmp212 *label207
-  382:  jump *label200 always 0 0
+  373:  set :_median.4:i 5
+  374:  setaddr *tmp212 *label207
+  375:  jump *label200 always 0 0
         multilabel *label207
-  383:  set :_median.4:i 5
-  384:  setaddr *tmp212 *label208
+  376:  set :_median.4:i 5
+  377:  setaddr *tmp212 *label208
         label *label200
-  385:  set :_isMedian.4:lt 0
-  386:  set :_isMedian.4:gt 0
-  387:  set :_isMedian.4:i 1
-  388:  setaddr *tmp214 *label213
-  389:  jump *label210 always 0 0
+  378:  set :_isMedian.4:lt 0
+  379:  set :_isMedian.4:gt 0
+  380:  set :_isMedian.4:i 1
+  381:  setaddr *tmp214 *label213
+  382:  jump *label210 always 0 0
         multilabel *label213
-  390:  set :_isMedian.4:i 1
-  391:  setaddr *tmp214 *label214
-  392:  jump *label210 always 0 0
+  383:  set :_isMedian.4:i 1
+  384:  setaddr *tmp214 *label214
+  385:  jump *label210 always 0 0
         multilabel *label214
-  393:  set :_isMedian.4:i 5
-  394:  setaddr *tmp214 *label215
-  395:  jump *label210 always 0 0
+  386:  set :_isMedian.4:i 5
+  387:  setaddr *tmp214 *label215
+  388:  jump *label210 always 0 0
         multilabel *label215
-  396:  set :_isMedian.4:i 5
-  397:  setaddr *tmp214 *label216
-  398:  jump *label210 always 0 0
+  389:  set :_isMedian.4:i 5
+  390:  setaddr *tmp214 *label216
+  391:  jump *label210 always 0 0
         multilabel *label216
-  399:  set :_isMedian.4:i 5
-  400:  setaddr *tmp214 *label217
-  401:  jump *label210 always 0 0
+  392:  set :_isMedian.4:i 5
+  393:  setaddr *tmp214 *label217
+  394:  jump *label210 always 0 0
         multilabel *label217
-  402:  set :_isMedian.4:i 5
-  403:  setaddr *tmp214 *label218
+  395:  set :_isMedian.4:i 5
+  396:  setaddr *tmp214 *label218
         label *label210
-  404:  jump *label219 greaterThanEq :_isMedian.4:i :_median.4:i
-  405:  op add :_isMedian.4:lt :_isMedian.4:lt 1
-  406:  multijump *tmp214 0 0
+  397:  jump *label219 greaterThanEq :_isMedian.4:i :_median.4:i
+  398:  op add :_isMedian.4:lt :_isMedian.4:lt 1
+  399:  multijump *tmp214 0 0
         label *label219
-  407:  jump *label221 lessThanEq :_isMedian.4:i :_median.4:i
-  408:  op add :_isMedian.4:gt :_isMedian.4:gt 1
+  400:  jump *label221 lessThanEq :_isMedian.4:i :_median.4:i
+  401:  op add :_isMedian.4:gt :_isMedian.4:gt 1
         label *label221
-  409:  multijump *tmp214 0 0
+  402:  multijump *tmp214 0 0
         multilabel *label218
-  410:  op sub *tmp219 :_isMedian.4:gt :_isMedian.4:lt
-  411:  op abs :_isMedian.4:dif *tmp219 0
-  412:  set *tmp224 false
-  413:  op add *tmp221 :_isMedian.4:gt :_isMedian.4:lt
-  414:  jump *label224 lessThan *tmp221 5
-  415:  op equal *tmp224 :_isMedian.4:gt :_isMedian.4:lt
+  403:  op sub *tmp219 :_isMedian.4:gt :_isMedian.4:lt
+  404:  op abs :_isMedian.4:dif *tmp219 0
+  405:  set *tmp224 false
+  406:  op add *tmp221 :_isMedian.4:gt :_isMedian.4:lt
+  407:  jump *label224 lessThan *tmp221 5
+  408:  op equal *tmp224 :_isMedian.4:gt :_isMedian.4:lt
         label *label224
-  416:  jump *label225 equal *tmp224 false
-  417:  set *tmp211 :_median.4:i
-  418:  jump *label199 always 0 0
+  409:  jump *label225 equal *tmp224 false
+  410:  set *tmp211 :_median.4:i
+  411:  jump *label199 always 0 0
         label *label225
-  419:  jump *label227 greaterThanEq :_isMedian.4:dif :_median.4:bestDif
-  420:  set :_median.4:bestDif :_isMedian.4:dif
-  421:  set :_median.4:best :_median.4:i
-  422:  set :_median.4:count 1
-  423:  multijump *tmp212 0 0
+  412:  jump *label227 greaterThanEq :_isMedian.4:dif :_median.4:bestDif
+  413:  set :_median.4:bestDif :_isMedian.4:dif
+  414:  set :_median.4:best :_median.4:i
+  415:  set :_median.4:count 1
+  416:  multijump *tmp212 0 0
         label *label227
-  424:  jump *label229 greaterThan :_isMedian.4:dif :_median.4:bestDif
-  425:  op add :_median.4:best :_median.4:best :_median.4:i
-  426:  op add :_median.4:count :_median.4:count 1
+  417:  jump *label229 greaterThan :_isMedian.4:dif :_median.4:bestDif
+  418:  op add :_median.4:best :_median.4:best :_median.4:i
+  419:  op add :_median.4:count :_median.4:count 1
         label *label229
-  427:  multijump *tmp212 0 0
+  420:  multijump *tmp212 0 0
         multilabel *label208
-  428:  op div *tmp211 :_median.4:best :_median.4:count
+  421:  op div *tmp211 :_median.4:best :_median.4:count
         label *label199
-  429:  assertequals 5 *tmp211 "median(1,1,5,5,5,5)"
-  430:  set :_median.5:bestDif 10000000000
-  431:  set :_median.5:best null
-  432:  set :_median.5:count 1
-  433:  set :_median.5:i 1
-  434:  setaddr *tmp234 *label236
-  435:  jump *label233 always 0 0
+  422:  assertequals 5 *tmp211 "median(1,1,5,5,5,5)"
+  423:  set :_median.5:bestDif 10000000000
+  424:  set :_median.5:best null
+  425:  set :_median.5:count 1
+  426:  set :_median.5:i 1
+  427:  setaddr *tmp234 *label236
+  428:  jump *label233 always 0 0
         multilabel *label236
-  436:  set :_median.5:i 5
-  437:  setaddr *tmp234 *label237
-  438:  jump *label233 always 0 0
+  429:  set :_median.5:i 5
+  430:  setaddr *tmp234 *label237
+  431:  jump *label233 always 0 0
         multilabel *label237
-  439:  set :_median.5:i 5
-  440:  setaddr *tmp234 *label238
-  441:  jump *label233 always 0 0
+  432:  set :_median.5:i 5
+  433:  setaddr *tmp234 *label238
+  434:  jump *label233 always 0 0
         multilabel *label238
-  442:  set :_median.5:i 5
-  443:  setaddr *tmp234 *label239
-  444:  jump *label233 always 0 0
+  435:  set :_median.5:i 5
+  436:  setaddr *tmp234 *label239
+  437:  jump *label233 always 0 0
         multilabel *label239
-  445:  set :_median.5:i 5
-  446:  setaddr *tmp234 *label240
-  447:  jump *label233 always 0 0
+  438:  set :_median.5:i 5
+  439:  setaddr *tmp234 *label240
+  440:  jump *label233 always 0 0
         multilabel *label240
-  448:  set :_median.5:i 5
-  449:  setaddr *tmp234 *label241
+  441:  set :_median.5:i 5
+  442:  setaddr *tmp234 *label241
         label *label233
-  450:  set :_isMedian.5:lt 0
-  451:  set :_isMedian.5:gt 0
-  452:  set :_isMedian.5:i 1
-  453:  setaddr *tmp236 *label246
-  454:  jump *label243 always 0 0
+  443:  set :_isMedian.5:lt 0
+  444:  set :_isMedian.5:gt 0
+  445:  set :_isMedian.5:i 1
+  446:  setaddr *tmp236 *label246
+  447:  jump *label243 always 0 0
         multilabel *label246
-  455:  set :_isMedian.5:i 5
-  456:  setaddr *tmp236 *label247
-  457:  jump *label243 always 0 0
+  448:  set :_isMedian.5:i 5
+  449:  setaddr *tmp236 *label247
+  450:  jump *label243 always 0 0
         multilabel *label247
-  458:  set :_isMedian.5:i 5
-  459:  setaddr *tmp236 *label248
-  460:  jump *label243 always 0 0
+  451:  set :_isMedian.5:i 5
+  452:  setaddr *tmp236 *label248
+  453:  jump *label243 always 0 0
         multilabel *label248
-  461:  set :_isMedian.5:i 5
-  462:  setaddr *tmp236 *label249
-  463:  jump *label243 always 0 0
+  454:  set :_isMedian.5:i 5
+  455:  setaddr *tmp236 *label249
+  456:  jump *label243 always 0 0
         multilabel *label249
-  464:  set :_isMedian.5:i 5
-  465:  setaddr *tmp236 *label250
-  466:  jump *label243 always 0 0
+  457:  set :_isMedian.5:i 5
+  458:  setaddr *tmp236 *label250
+  459:  jump *label243 always 0 0
         multilabel *label250
-  467:  set :_isMedian.5:i 5
-  468:  setaddr *tmp236 *label251
+  460:  set :_isMedian.5:i 5
+  461:  setaddr *tmp236 *label251
         label *label243
-  469:  jump *label252 greaterThanEq :_isMedian.5:i :_median.5:i
-  470:  op add :_isMedian.5:lt :_isMedian.5:lt 1
-  471:  multijump *tmp236 0 0
+  462:  jump *label252 greaterThanEq :_isMedian.5:i :_median.5:i
+  463:  op add :_isMedian.5:lt :_isMedian.5:lt 1
+  464:  multijump *tmp236 0 0
         label *label252
-  472:  jump *label254 lessThanEq :_isMedian.5:i :_median.5:i
-  473:  op add :_isMedian.5:gt :_isMedian.5:gt 1
+  465:  jump *label254 lessThanEq :_isMedian.5:i :_median.5:i
+  466:  op add :_isMedian.5:gt :_isMedian.5:gt 1
         label *label254
-  474:  multijump *tmp236 0 0
+  467:  multijump *tmp236 0 0
         multilabel *label251
-  475:  op sub *tmp241 :_isMedian.5:gt :_isMedian.5:lt
-  476:  op abs :_isMedian.5:dif *tmp241 0
-  477:  set *tmp246 false
-  478:  op add *tmp243 :_isMedian.5:gt :_isMedian.5:lt
-  479:  jump *label257 lessThan *tmp243 5
-  480:  op equal *tmp246 :_isMedian.5:gt :_isMedian.5:lt
+  468:  op sub *tmp241 :_isMedian.5:gt :_isMedian.5:lt
+  469:  op abs :_isMedian.5:dif *tmp241 0
+  470:  set *tmp246 false
+  471:  op add *tmp243 :_isMedian.5:gt :_isMedian.5:lt
+  472:  jump *label257 lessThan *tmp243 5
+  473:  op equal *tmp246 :_isMedian.5:gt :_isMedian.5:lt
         label *label257
-  481:  jump *label258 equal *tmp246 false
-  482:  set *tmp233 :_median.5:i
-  483:  jump *label232 always 0 0
+  474:  jump *label258 equal *tmp246 false
+  475:  set *tmp233 :_median.5:i
+  476:  jump *label232 always 0 0
         label *label258
-  484:  jump *label260 greaterThanEq :_isMedian.5:dif :_median.5:bestDif
-  485:  set :_median.5:bestDif :_isMedian.5:dif
-  486:  set :_median.5:best :_median.5:i
-  487:  set :_median.5:count 1
-  488:  multijump *tmp234 0 0
+  477:  jump *label260 greaterThanEq :_isMedian.5:dif :_median.5:bestDif
+  478:  set :_median.5:bestDif :_isMedian.5:dif
+  479:  set :_median.5:best :_median.5:i
+  480:  set :_median.5:count 1
+  481:  multijump *tmp234 0 0
         label *label260
-  489:  jump *label262 greaterThan :_isMedian.5:dif :_median.5:bestDif
-  490:  op add :_median.5:best :_median.5:best :_median.5:i
-  491:  op add :_median.5:count :_median.5:count 1
+  482:  jump *label262 greaterThan :_isMedian.5:dif :_median.5:bestDif
+  483:  op add :_median.5:best :_median.5:best :_median.5:i
+  484:  op add :_median.5:count :_median.5:count 1
         label *label262
-  492:  multijump *tmp234 0 0
+  485:  multijump *tmp234 0 0
         multilabel *label241
-  493:  op div *tmp233 :_median.5:best :_median.5:count
+  486:  op div *tmp233 :_median.5:best :_median.5:count
         label *label232
-  494:  assertequals 5 *tmp233 "median(1,5,5,5,5,5)"
-  495:  set :_median.6:bestDif 10000000000
-  496:  set :_median.6:best null
-  497:  set :_median.6:count 1
-  498:  setaddr *tmp256 *label269
-  499:  jump *label291 always 0 0
+  487:  assertequals 5 *tmp233 "median(1,5,5,5,5,5)"
+  488:  set :_median.6:bestDif 10000000000
+  489:  set :_median.6:best null
+  490:  set :_median.6:count 1
+  491:  setaddr *tmp256 *label269
+  492:  jump *label291 always 0 0
         multilabel *label269
-  500:  setaddr *tmp256 *label270
-  501:  jump *label291 always 0 0
+  493:  setaddr *tmp256 *label270
+  494:  jump *label291 always 0 0
         multilabel *label270
-  502:  setaddr *tmp256 *label271
-  503:  jump *label291 always 0 0
+  495:  setaddr *tmp256 *label271
+  496:  jump *label291 always 0 0
         multilabel *label271
-  504:  setaddr *tmp256 *label272
-  505:  jump *label291 always 0 0
+  497:  setaddr *tmp256 *label272
+  498:  jump *label291 always 0 0
         multilabel *label272
-  506:  setaddr *tmp256 *label273
-  507:  jump *label291 always 0 0
+  499:  setaddr *tmp256 *label273
+  500:  jump *label291 always 0 0
         multilabel *label273
-  508:  setaddr *tmp256 *label274
+  501:  setaddr *tmp256 *label274
         label *label291
-  509:  jump *label293 greaterThanEq 0 :_median.6:bestDif
-  510:  set :_median.6:bestDif 0
-  511:  set :_median.6:best 5
-  512:  set :_median.6:count 1
-  513:  multijump *tmp256 0 0
+  502:  jump *label293 greaterThanEq 0 :_median.6:bestDif
+  503:  set :_median.6:bestDif 0
+  504:  set :_median.6:best 5
+  505:  set :_median.6:count 1
+  506:  multijump *tmp256 0 0
         label *label293
-  514:  jump *label295 greaterThan 0 :_median.6:bestDif
-  515:  op add :_median.6:best :_median.6:best 5
-  516:  op add :_median.6:count :_median.6:count 1
+  507:  jump *label295 greaterThan 0 :_median.6:bestDif
+  508:  op add :_median.6:best :_median.6:best 5
+  509:  op add :_median.6:count :_median.6:count 1
         label *label295
-  517:  multijump *tmp256 0 0
+  510:  multijump *tmp256 0 0
         multilabel *label274
-  518:  op div *tmp255 :_median.6:best :_median.6:count
-  519:  assertequals 5 *tmp255 "median(5,5,5,5,5,5)"
-  520:  set :_median.7:bestDif 10000000000
-  521:  set :_median.7:best null
-  522:  set :_median.7:count 1
-  523:  set :_median.7:i 1
-  524:  setaddr *tmp278 *label302
-  525:  jump *label299 always 0 0
+  511:  op div *tmp255 :_median.6:best :_median.6:count
+  512:  assertequals 5 *tmp255 "median(5,5,5,5,5,5)"
+  513:  set :_median.7:bestDif 10000000000
+  514:  set :_median.7:best null
+  515:  set :_median.7:count 1
+  516:  set :_median.7:i 1
+  517:  setaddr *tmp278 *label302
+  518:  jump *label299 always 0 0
         multilabel *label302
-  526:  set :_median.7:i 2
-  527:  setaddr *tmp278 *label303
-  528:  jump *label299 always 0 0
+  519:  set :_median.7:i 2
+  520:  setaddr *tmp278 *label303
+  521:  jump *label299 always 0 0
         multilabel *label303
-  529:  set :_median.7:i 3
-  530:  setaddr *tmp278 *label304
-  531:  jump *label299 always 0 0
+  522:  set :_median.7:i 3
+  523:  setaddr *tmp278 *label304
+  524:  jump *label299 always 0 0
         multilabel *label304
-  532:  set :_median.7:i 4
-  533:  setaddr *tmp278 *label305
-  534:  jump *label299 always 0 0
+  525:  set :_median.7:i 4
+  526:  setaddr *tmp278 *label305
+  527:  jump *label299 always 0 0
         multilabel *label305
-  535:  set :_median.7:i 5
-  536:  setaddr *tmp278 *label306
-  537:  jump *label299 always 0 0
+  528:  set :_median.7:i 5
+  529:  setaddr *tmp278 *label306
+  530:  jump *label299 always 0 0
         multilabel *label306
-  538:  set :_median.7:i 6
-  539:  setaddr *tmp278 *label307
-  540:  jump *label299 always 0 0
+  531:  set :_median.7:i 6
+  532:  setaddr *tmp278 *label307
+  533:  jump *label299 always 0 0
         multilabel *label307
-  541:  set :_median.7:i 7
-  542:  setaddr *tmp278 *label308
-  543:  jump *label299 always 0 0
+  534:  set :_median.7:i 7
+  535:  setaddr *tmp278 *label308
+  536:  jump *label299 always 0 0
         multilabel *label308
-  544:  set :_median.7:i 8
-  545:  setaddr *tmp278 *label309
-  546:  jump *label299 always 0 0
+  537:  set :_median.7:i 8
+  538:  setaddr *tmp278 *label309
+  539:  jump *label299 always 0 0
         multilabel *label309
-  547:  set :_median.7:i 9
-  548:  setaddr *tmp278 *label310
+  540:  set :_median.7:i 9
+  541:  setaddr *tmp278 *label310
         label *label299
-  549:  set :_isMedian.7:lt 0
-  550:  set :_isMedian.7:gt 0
-  551:  jump *label630 greaterThanEq 1 :_median.7:i
-  552:  set :_isMedian.7:lt 1
-  553:  jump *label633 always 0 0
+  542:  set :_isMedian.7:lt 0
+  543:  set :_isMedian.7:gt 0
+  544:  jump *label630 greaterThanEq 1 :_median.7:i
+  545:  set :_isMedian.7:lt 1
+  546:  jump *label633 always 0 0
         label *label630
-  554:  jump *label631 lessThanEq 1 :_median.7:i
-  555:  set :_isMedian.7:gt 1
-        label *label631
+  547:  select :_isMedian.7:gt greaterThan 1 :_median.7:i 1 0
         label *label633
-  556:  jump *label638 greaterThanEq 2 :_median.7:i
-  557:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  558:  jump *label641 always 0 0
+  548:  jump *label638 greaterThanEq 2 :_median.7:i
+  549:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  550:  jump *label641 always 0 0
         label *label638
-  559:  jump *label639 lessThanEq 2 :_median.7:i
-  560:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  551:  jump *label639 lessThanEq 2 :_median.7:i
+  552:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label639
         label *label641
-  561:  jump *label646 greaterThanEq 3 :_median.7:i
-  562:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  563:  jump *label649 always 0 0
+  553:  jump *label646 greaterThanEq 3 :_median.7:i
+  554:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  555:  jump *label649 always 0 0
         label *label646
-  564:  jump *label647 lessThanEq 3 :_median.7:i
-  565:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  556:  jump *label647 lessThanEq 3 :_median.7:i
+  557:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label647
         label *label649
-  566:  jump *label654 greaterThanEq 4 :_median.7:i
-  567:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  568:  jump *label657 always 0 0
+  558:  jump *label654 greaterThanEq 4 :_median.7:i
+  559:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  560:  jump *label657 always 0 0
         label *label654
-  569:  jump *label655 lessThanEq 4 :_median.7:i
-  570:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  561:  jump *label655 lessThanEq 4 :_median.7:i
+  562:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label655
         label *label657
-  571:  jump *label662 greaterThanEq 5 :_median.7:i
-  572:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  573:  jump *label665 always 0 0
+  563:  jump *label662 greaterThanEq 5 :_median.7:i
+  564:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  565:  jump *label665 always 0 0
         label *label662
-  574:  jump *label663 lessThanEq 5 :_median.7:i
-  575:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  566:  jump *label663 lessThanEq 5 :_median.7:i
+  567:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label663
         label *label665
-  576:  jump *label670 greaterThanEq 6 :_median.7:i
-  577:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  578:  jump *label673 always 0 0
+  568:  jump *label670 greaterThanEq 6 :_median.7:i
+  569:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  570:  jump *label673 always 0 0
         label *label670
-  579:  jump *label671 lessThanEq 6 :_median.7:i
-  580:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  571:  jump *label671 lessThanEq 6 :_median.7:i
+  572:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label671
         label *label673
-  581:  jump *label678 greaterThanEq 7 :_median.7:i
-  582:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  583:  jump *label681 always 0 0
+  573:  jump *label678 greaterThanEq 7 :_median.7:i
+  574:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  575:  jump *label681 always 0 0
         label *label678
-  584:  jump *label679 lessThanEq 7 :_median.7:i
-  585:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  576:  jump *label679 lessThanEq 7 :_median.7:i
+  577:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label679
         label *label681
-  586:  jump *label686 greaterThanEq 8 :_median.7:i
-  587:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  588:  jump *label689 always 0 0
+  578:  jump *label686 greaterThanEq 8 :_median.7:i
+  579:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  580:  jump *label689 always 0 0
         label *label686
-  589:  jump *label687 lessThanEq 8 :_median.7:i
-  590:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  581:  jump *label687 lessThanEq 8 :_median.7:i
+  582:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label687
         label *label689
-  591:  jump *label694 greaterThanEq 9 :_median.7:i
-  592:  op add :_isMedian.7:lt :_isMedian.7:lt 1
-  593:  jump *label697 always 0 0
+  583:  jump *label694 greaterThanEq 9 :_median.7:i
+  584:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  585:  jump *label697 always 0 0
         label *label694
-  594:  jump *label695 lessThanEq 9 :_median.7:i
-  595:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  586:  jump *label695 lessThanEq 9 :_median.7:i
+  587:  op add :_isMedian.7:gt :_isMedian.7:gt 1
         label *label695
         label *label697
-  596:  op sub *tmp285 :_isMedian.7:gt :_isMedian.7:lt
-  597:  op abs :_isMedian.7:dif *tmp285 0
-  598:  set *tmp290 false
-  599:  op add *tmp287 :_isMedian.7:gt :_isMedian.7:lt
-  600:  jump *label329 lessThan *tmp287 8
-  601:  op equal *tmp290 :_isMedian.7:gt :_isMedian.7:lt
+  588:  op sub *tmp285 :_isMedian.7:gt :_isMedian.7:lt
+  589:  op abs :_isMedian.7:dif *tmp285 0
+  590:  set *tmp290 false
+  591:  op add *tmp287 :_isMedian.7:gt :_isMedian.7:lt
+  592:  jump *label329 lessThan *tmp287 8
+  593:  op equal *tmp290 :_isMedian.7:gt :_isMedian.7:lt
         label *label329
-  602:  jump *label330 equal *tmp290 false
-  603:  set *tmp277 :_median.7:i
-  604:  jump *label298 always 0 0
+  594:  jump *label330 equal *tmp290 false
+  595:  set *tmp277 :_median.7:i
+  596:  jump *label298 always 0 0
         label *label330
-  605:  jump *label332 greaterThanEq :_isMedian.7:dif :_median.7:bestDif
-  606:  set :_median.7:bestDif :_isMedian.7:dif
-  607:  set :_median.7:best :_median.7:i
-  608:  set :_median.7:count 1
-  609:  multijump *tmp278 0 0
+  597:  jump *label332 greaterThanEq :_isMedian.7:dif :_median.7:bestDif
+  598:  set :_median.7:bestDif :_isMedian.7:dif
+  599:  set :_median.7:best :_median.7:i
+  600:  set :_median.7:count 1
+  601:  multijump *tmp278 0 0
         label *label332
-  610:  jump *label334 greaterThan :_isMedian.7:dif :_median.7:bestDif
-  611:  op add :_median.7:best :_median.7:best :_median.7:i
-  612:  op add :_median.7:count :_median.7:count 1
+  602:  jump *label334 greaterThan :_isMedian.7:dif :_median.7:bestDif
+  603:  op add :_median.7:best :_median.7:best :_median.7:i
+  604:  op add :_median.7:count :_median.7:count 1
         label *label334
-  613:  multijump *tmp278 0 0
+  605:  multijump *tmp278 0 0
         multilabel *label310
-  614:  op div *tmp277 :_median.7:best :_median.7:count
+  606:  op div *tmp277 :_median.7:best :_median.7:count
         label *label298
-  615:  assertequals 5 *tmp277 "median(1,2,3,4,5,6,7,8,9)"
-  616:  set :_median.8:bestDif 10000000000
-  617:  set :_median.8:best null
-  618:  set :_median.8:count 1
-  619:  set :_median.8:i 9
-  620:  setaddr *tmp300 *label341
-  621:  jump *label338 always 0 0
+  607:  assertequals 5 *tmp277 "median(1,2,3,4,5,6,7,8,9)"
+  608:  set :_median.8:bestDif 10000000000
+  609:  set :_median.8:best null
+  610:  set :_median.8:count 1
+  611:  set :_median.8:i 9
+  612:  setaddr *tmp300 *label341
+  613:  jump *label338 always 0 0
         multilabel *label341
-  622:  set :_median.8:i 8
-  623:  setaddr *tmp300 *label342
-  624:  jump *label338 always 0 0
+  614:  set :_median.8:i 8
+  615:  setaddr *tmp300 *label342
+  616:  jump *label338 always 0 0
         multilabel *label342
-  625:  set :_median.8:i 7
-  626:  setaddr *tmp300 *label343
-  627:  jump *label338 always 0 0
+  617:  set :_median.8:i 7
+  618:  setaddr *tmp300 *label343
+  619:  jump *label338 always 0 0
         multilabel *label343
-  628:  set :_median.8:i 6
-  629:  setaddr *tmp300 *label344
-  630:  jump *label338 always 0 0
+  620:  set :_median.8:i 6
+  621:  setaddr *tmp300 *label344
+  622:  jump *label338 always 0 0
         multilabel *label344
-  631:  set :_median.8:i 5
-  632:  setaddr *tmp300 *label345
-  633:  jump *label338 always 0 0
+  623:  set :_median.8:i 5
+  624:  setaddr *tmp300 *label345
+  625:  jump *label338 always 0 0
         multilabel *label345
-  634:  set :_median.8:i 4
-  635:  setaddr *tmp300 *label346
-  636:  jump *label338 always 0 0
+  626:  set :_median.8:i 4
+  627:  setaddr *tmp300 *label346
+  628:  jump *label338 always 0 0
         multilabel *label346
-  637:  set :_median.8:i 3
-  638:  setaddr *tmp300 *label347
-  639:  jump *label338 always 0 0
+  629:  set :_median.8:i 3
+  630:  setaddr *tmp300 *label347
+  631:  jump *label338 always 0 0
         multilabel *label347
-  640:  set :_median.8:i 2
-  641:  setaddr *tmp300 *label348
-  642:  jump *label338 always 0 0
+  632:  set :_median.8:i 2
+  633:  setaddr *tmp300 *label348
+  634:  jump *label338 always 0 0
         multilabel *label348
-  643:  set :_median.8:i 1
-  644:  setaddr *tmp300 *label349
+  635:  set :_median.8:i 1
+  636:  setaddr *tmp300 *label349
         label *label338
-  645:  set :_isMedian.8:lt 0
-  646:  set :_isMedian.8:gt 0
-  647:  set :_isMedian.8:i 9
-  648:  setaddr *tmp302 *label354
-  649:  jump *label351 always 0 0
-        multilabel *label354
-  650:  set :_isMedian.8:i 8
-  651:  setaddr *tmp302 *label355
-  652:  jump *label351 always 0 0
-        multilabel *label355
-  653:  set :_isMedian.8:i 7
-  654:  setaddr *tmp302 *label356
-  655:  jump *label351 always 0 0
-        multilabel *label356
-  656:  set :_isMedian.8:i 6
-  657:  setaddr *tmp302 *label357
-  658:  jump *label351 always 0 0
-        multilabel *label357
-  659:  set :_isMedian.8:i 5
-  660:  setaddr *tmp302 *label358
-  661:  jump *label351 always 0 0
-        multilabel *label358
-  662:  set :_isMedian.8:i 4
-  663:  setaddr *tmp302 *label359
-  664:  jump *label351 always 0 0
-        multilabel *label359
-  665:  set :_isMedian.8:i 3
-  666:  setaddr *tmp302 *label360
-  667:  jump *label351 always 0 0
-        multilabel *label360
-  668:  set :_isMedian.8:i 2
-  669:  setaddr *tmp302 *label361
-  670:  jump *label351 always 0 0
-        multilabel *label361
-  671:  set :_isMedian.8:i 1
-  672:  setaddr *tmp302 *label362
-        label *label351
-  673:  jump *label363 greaterThanEq :_isMedian.8:i :_median.8:i
+  637:  set :_isMedian.8:lt 0
+  638:  set :_isMedian.8:gt 0
+  639:  jump *label703 greaterThanEq 9 :_median.8:i
+  640:  set :_isMedian.8:lt 1
+  641:  jump *label706 always 0 0
+        label *label703
+  642:  select :_isMedian.8:gt greaterThan 9 :_median.8:i 1 0
+        label *label706
+  643:  jump *label711 greaterThanEq 8 :_median.8:i
+  644:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  645:  jump *label714 always 0 0
+        label *label711
+  646:  jump *label712 lessThanEq 8 :_median.8:i
+  647:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label712
+        label *label714
+  648:  jump *label719 greaterThanEq 7 :_median.8:i
+  649:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  650:  jump *label722 always 0 0
+        label *label719
+  651:  jump *label720 lessThanEq 7 :_median.8:i
+  652:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label720
+        label *label722
+  653:  jump *label727 greaterThanEq 6 :_median.8:i
+  654:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  655:  jump *label730 always 0 0
+        label *label727
+  656:  jump *label728 lessThanEq 6 :_median.8:i
+  657:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label728
+        label *label730
+  658:  jump *label735 greaterThanEq 5 :_median.8:i
+  659:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  660:  jump *label738 always 0 0
+        label *label735
+  661:  jump *label736 lessThanEq 5 :_median.8:i
+  662:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label736
+        label *label738
+  663:  jump *label743 greaterThanEq 4 :_median.8:i
+  664:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  665:  jump *label746 always 0 0
+        label *label743
+  666:  jump *label744 lessThanEq 4 :_median.8:i
+  667:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label744
+        label *label746
+  668:  jump *label751 greaterThanEq 3 :_median.8:i
+  669:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  670:  jump *label754 always 0 0
+        label *label751
+  671:  jump *label752 lessThanEq 3 :_median.8:i
+  672:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label752
+        label *label754
+  673:  jump *label759 greaterThanEq 2 :_median.8:i
   674:  op add :_isMedian.8:lt :_isMedian.8:lt 1
-  675:  multijump *tmp302 0 0
-        label *label363
-  676:  jump *label365 lessThanEq :_isMedian.8:i :_median.8:i
+  675:  jump *label762 always 0 0
+        label *label759
+  676:  jump *label760 lessThanEq 2 :_median.8:i
   677:  op add :_isMedian.8:gt :_isMedian.8:gt 1
-        label *label365
-  678:  multijump *tmp302 0 0
-        multilabel *label362
-  679:  op sub *tmp307 :_isMedian.8:gt :_isMedian.8:lt
-  680:  op abs :_isMedian.8:dif *tmp307 0
-  681:  set *tmp312 false
-  682:  op add *tmp309 :_isMedian.8:gt :_isMedian.8:lt
-  683:  jump *label368 lessThan *tmp309 8
-  684:  op equal *tmp312 :_isMedian.8:gt :_isMedian.8:lt
+        label *label760
+        label *label762
+  678:  jump *label767 greaterThanEq 1 :_median.8:i
+  679:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+  680:  jump *label770 always 0 0
+        label *label767
+  681:  jump *label768 lessThanEq 1 :_median.8:i
+  682:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+        label *label768
+        label *label770
+  683:  op sub *tmp307 :_isMedian.8:gt :_isMedian.8:lt
+  684:  op abs :_isMedian.8:dif *tmp307 0
+  685:  set *tmp312 false
+  686:  op add *tmp309 :_isMedian.8:gt :_isMedian.8:lt
+  687:  jump *label368 lessThan *tmp309 8
+  688:  op equal *tmp312 :_isMedian.8:gt :_isMedian.8:lt
         label *label368
-  685:  jump *label369 equal *tmp312 false
-  686:  set *tmp299 :_median.8:i
-  687:  jump *label337 always 0 0
+  689:  jump *label369 equal *tmp312 false
+  690:  set *tmp299 :_median.8:i
+  691:  jump *label337 always 0 0
         label *label369
-  688:  jump *label371 greaterThanEq :_isMedian.8:dif :_median.8:bestDif
-  689:  set :_median.8:bestDif :_isMedian.8:dif
-  690:  set :_median.8:best :_median.8:i
-  691:  set :_median.8:count 1
-  692:  multijump *tmp300 0 0
-        label *label371
-  693:  jump *label373 greaterThan :_isMedian.8:dif :_median.8:bestDif
-  694:  op add :_median.8:best :_median.8:best :_median.8:i
-  695:  op add :_median.8:count :_median.8:count 1
-        label *label373
+  692:  jump *label371 greaterThanEq :_isMedian.8:dif :_median.8:bestDif
+  693:  set :_median.8:bestDif :_isMedian.8:dif
+  694:  set :_median.8:best :_median.8:i
+  695:  set :_median.8:count 1
   696:  multijump *tmp300 0 0
+        label *label371
+  697:  jump *label373 greaterThan :_isMedian.8:dif :_median.8:bestDif
+  698:  op add :_median.8:best :_median.8:best :_median.8:i
+  699:  op add :_median.8:count :_median.8:count 1
+        label *label373
+  700:  multijump *tmp300 0 0
         multilabel *label349
-  697:  op div *tmp299 :_median.8:best :_median.8:count
+  701:  op div *tmp299 :_median.8:best :_median.8:count
         label *label337
-  698:  assertequals 5 *tmp299 "median(9,8,7,6,5,4,3,2,1)"
-  699:  set :_median.9:bestDif 10000000000
-  700:  set :_median.9:best null
-  701:  set :_median.9:count 1
-  702:  set :_median.9:i 1
-  703:  setaddr *tmp322 *label380
-  704:  jump *label377 always 0 0
+  702:  assertequals 5 *tmp299 "median(9,8,7,6,5,4,3,2,1)"
+  703:  set :_median.9:bestDif 10000000000
+  704:  set :_median.9:best null
+  705:  set :_median.9:count 1
+  706:  set :_median.9:i 1
+  707:  setaddr *tmp322 *label380
+  708:  jump *label377 always 0 0
         multilabel *label380
-  705:  set :_median.9:i 3
-  706:  setaddr *tmp322 *label381
-  707:  jump *label377 always 0 0
+  709:  set :_median.9:i 3
+  710:  setaddr *tmp322 *label381
+  711:  jump *label377 always 0 0
         multilabel *label381
-  708:  set :_median.9:i 5
-  709:  setaddr *tmp322 *label382
-  710:  jump *label377 always 0 0
+  712:  set :_median.9:i 5
+  713:  setaddr *tmp322 *label382
+  714:  jump *label377 always 0 0
         multilabel *label382
-  711:  set :_median.9:i 7
-  712:  setaddr *tmp322 *label383
-  713:  jump *label377 always 0 0
+  715:  set :_median.9:i 7
+  716:  setaddr *tmp322 *label383
+  717:  jump *label377 always 0 0
         multilabel *label383
-  714:  set :_median.9:i 9
-  715:  setaddr *tmp322 *label384
-  716:  jump *label377 always 0 0
+  718:  set :_median.9:i 9
+  719:  setaddr *tmp322 *label384
+  720:  jump *label377 always 0 0
         multilabel *label384
-  717:  set :_median.9:i 2
-  718:  setaddr *tmp322 *label385
-  719:  jump *label377 always 0 0
+  721:  set :_median.9:i 2
+  722:  setaddr *tmp322 *label385
+  723:  jump *label377 always 0 0
         multilabel *label385
-  720:  set :_median.9:i 4
-  721:  setaddr *tmp322 *label386
-  722:  jump *label377 always 0 0
+  724:  set :_median.9:i 4
+  725:  setaddr *tmp322 *label386
+  726:  jump *label377 always 0 0
         multilabel *label386
-  723:  set :_median.9:i 6
-  724:  setaddr *tmp322 *label387
-  725:  jump *label377 always 0 0
+  727:  set :_median.9:i 6
+  728:  setaddr *tmp322 *label387
+  729:  jump *label377 always 0 0
         multilabel *label387
-  726:  set :_median.9:i 8
-  727:  setaddr *tmp322 *label388
+  730:  set :_median.9:i 8
+  731:  setaddr *tmp322 *label388
         label *label377
-  728:  set :_isMedian.9:lt 0
-  729:  set :_isMedian.9:gt 0
-  730:  set :_isMedian.9:i 1
-  731:  setaddr *tmp324 *label393
-  732:  jump *label390 always 0 0
+  732:  set :_isMedian.9:lt 0
+  733:  set :_isMedian.9:gt 0
+  734:  set :_isMedian.9:i 1
+  735:  setaddr *tmp324 *label393
+  736:  jump *label390 always 0 0
         multilabel *label393
-  733:  set :_isMedian.9:i 3
-  734:  setaddr *tmp324 *label394
-  735:  jump *label390 always 0 0
+  737:  set :_isMedian.9:i 3
+  738:  setaddr *tmp324 *label394
+  739:  jump *label390 always 0 0
         multilabel *label394
-  736:  set :_isMedian.9:i 5
-  737:  setaddr *tmp324 *label395
-  738:  jump *label390 always 0 0
+  740:  set :_isMedian.9:i 5
+  741:  setaddr *tmp324 *label395
+  742:  jump *label390 always 0 0
         multilabel *label395
-  739:  set :_isMedian.9:i 7
-  740:  setaddr *tmp324 *label396
-  741:  jump *label390 always 0 0
+  743:  set :_isMedian.9:i 7
+  744:  setaddr *tmp324 *label396
+  745:  jump *label390 always 0 0
         multilabel *label396
-  742:  set :_isMedian.9:i 9
-  743:  setaddr *tmp324 *label397
-  744:  jump *label390 always 0 0
+  746:  set :_isMedian.9:i 9
+  747:  setaddr *tmp324 *label397
+  748:  jump *label390 always 0 0
         multilabel *label397
-  745:  set :_isMedian.9:i 2
-  746:  setaddr *tmp324 *label398
-  747:  jump *label390 always 0 0
+  749:  set :_isMedian.9:i 2
+  750:  setaddr *tmp324 *label398
+  751:  jump *label390 always 0 0
         multilabel *label398
-  748:  set :_isMedian.9:i 4
-  749:  setaddr *tmp324 *label399
-  750:  jump *label390 always 0 0
+  752:  set :_isMedian.9:i 4
+  753:  setaddr *tmp324 *label399
+  754:  jump *label390 always 0 0
         multilabel *label399
-  751:  set :_isMedian.9:i 6
-  752:  setaddr *tmp324 *label400
-  753:  jump *label390 always 0 0
+  755:  set :_isMedian.9:i 6
+  756:  setaddr *tmp324 *label400
+  757:  jump *label390 always 0 0
         multilabel *label400
-  754:  set :_isMedian.9:i 8
-  755:  setaddr *tmp324 *label401
+  758:  set :_isMedian.9:i 8
+  759:  setaddr *tmp324 *label401
         label *label390
-  756:  jump *label402 greaterThanEq :_isMedian.9:i :_median.9:i
-  757:  op add :_isMedian.9:lt :_isMedian.9:lt 1
-  758:  multijump *tmp324 0 0
+  760:  jump *label402 greaterThanEq :_isMedian.9:i :_median.9:i
+  761:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+  762:  multijump *tmp324 0 0
         label *label402
-  759:  jump *label404 lessThanEq :_isMedian.9:i :_median.9:i
-  760:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+  763:  jump *label404 lessThanEq :_isMedian.9:i :_median.9:i
+  764:  op add :_isMedian.9:gt :_isMedian.9:gt 1
         label *label404
-  761:  multijump *tmp324 0 0
+  765:  multijump *tmp324 0 0
         multilabel *label401
-  762:  op sub *tmp329 :_isMedian.9:gt :_isMedian.9:lt
-  763:  op abs :_isMedian.9:dif *tmp329 0
-  764:  set *tmp334 false
-  765:  op add *tmp331 :_isMedian.9:gt :_isMedian.9:lt
-  766:  jump *label407 lessThan *tmp331 8
-  767:  op equal *tmp334 :_isMedian.9:gt :_isMedian.9:lt
+  766:  op sub *tmp329 :_isMedian.9:gt :_isMedian.9:lt
+  767:  op abs :_isMedian.9:dif *tmp329 0
+  768:  set *tmp334 false
+  769:  op add *tmp331 :_isMedian.9:gt :_isMedian.9:lt
+  770:  jump *label407 lessThan *tmp331 8
+  771:  op equal *tmp334 :_isMedian.9:gt :_isMedian.9:lt
         label *label407
-  768:  jump *label408 equal *tmp334 false
-  769:  set *tmp321 :_median.9:i
-  770:  jump *label376 always 0 0
+  772:  jump *label408 equal *tmp334 false
+  773:  set *tmp321 :_median.9:i
+  774:  jump *label376 always 0 0
         label *label408
-  771:  jump *label410 greaterThanEq :_isMedian.9:dif :_median.9:bestDif
-  772:  set :_median.9:bestDif :_isMedian.9:dif
-  773:  set :_median.9:best :_median.9:i
-  774:  set :_median.9:count 1
-  775:  multijump *tmp322 0 0
-        label *label410
-  776:  jump *label412 greaterThan :_isMedian.9:dif :_median.9:bestDif
-  777:  op add :_median.9:best :_median.9:best :_median.9:i
-  778:  op add :_median.9:count :_median.9:count 1
-        label *label412
+  775:  jump *label410 greaterThanEq :_isMedian.9:dif :_median.9:bestDif
+  776:  set :_median.9:bestDif :_isMedian.9:dif
+  777:  set :_median.9:best :_median.9:i
+  778:  set :_median.9:count 1
   779:  multijump *tmp322 0 0
+        label *label410
+  780:  jump *label412 greaterThan :_isMedian.9:dif :_median.9:bestDif
+  781:  op add :_median.9:best :_median.9:best :_median.9:i
+  782:  op add :_median.9:count :_median.9:count 1
+        label *label412
+  783:  multijump *tmp322 0 0
         multilabel *label388
-  780:  op div *tmp321 :_median.9:best :_median.9:count
+  784:  op div *tmp321 :_median.9:best :_median.9:count
         label *label376
-  781:  assertequals 5 *tmp321 "median(1,3,5,7,9,2,4,6,8)"
-  782:  set :_median.10:bestDif 10000000000
-  783:  set :_median.10:best null
-  784:  set :_median.10:count 1
-  785:  set :_median.10:i 7
-  786:  setaddr *tmp344 *label419
-  787:  jump *label416 always 0 0
+  785:  assertequals 5 *tmp321 "median(1,3,5,7,9,2,4,6,8)"
+  786:  set :_median.10:bestDif 10000000000
+  787:  set :_median.10:best null
+  788:  set :_median.10:count 1
+  789:  set :_median.10:i 7
+  790:  setaddr *tmp344 *label419
+  791:  jump *label416 always 0 0
         multilabel *label419
-  788:  set :_median.10:i 4
-  789:  setaddr *tmp344 *label420
-  790:  jump *label416 always 0 0
+  792:  set :_median.10:i 4
+  793:  setaddr *tmp344 *label420
+  794:  jump *label416 always 0 0
         multilabel *label420
-  791:  set :_median.10:i 2
-  792:  setaddr *tmp344 *label421
-  793:  jump *label416 always 0 0
+  795:  set :_median.10:i 2
+  796:  setaddr *tmp344 *label421
+  797:  jump *label416 always 0 0
         multilabel *label421
-  794:  set :_median.10:i 8
-  795:  setaddr *tmp344 *label422
-  796:  jump *label416 always 0 0
+  798:  set :_median.10:i 8
+  799:  setaddr *tmp344 *label422
+  800:  jump *label416 always 0 0
         multilabel *label422
-  797:  set :_median.10:i 1
-  798:  setaddr *tmp344 *label423
-  799:  jump *label416 always 0 0
+  801:  set :_median.10:i 1
+  802:  setaddr *tmp344 *label423
+  803:  jump *label416 always 0 0
         multilabel *label423
-  800:  set :_median.10:i 5
-  801:  setaddr *tmp344 *label424
-  802:  jump *label416 always 0 0
+  804:  set :_median.10:i 5
+  805:  setaddr *tmp344 *label424
+  806:  jump *label416 always 0 0
         multilabel *label424
-  803:  set :_median.10:i 6
-  804:  setaddr *tmp344 *label425
-  805:  jump *label416 always 0 0
+  807:  set :_median.10:i 6
+  808:  setaddr *tmp344 *label425
+  809:  jump *label416 always 0 0
         multilabel *label425
-  806:  set :_median.10:i 9
-  807:  setaddr *tmp344 *label426
-  808:  jump *label416 always 0 0
+  810:  set :_median.10:i 9
+  811:  setaddr *tmp344 *label426
+  812:  jump *label416 always 0 0
         multilabel *label426
-  809:  set :_median.10:i 3
-  810:  setaddr *tmp344 *label427
+  813:  set :_median.10:i 3
+  814:  setaddr *tmp344 *label427
         label *label416
-  811:  set :_isMedian.10:lt 0
-  812:  set :_isMedian.10:gt 0
-  813:  set :_isMedian.10:i 7
-  814:  setaddr *tmp346 *label432
-  815:  jump *label429 always 0 0
+  815:  set :_isMedian.10:lt 0
+  816:  set :_isMedian.10:gt 0
+  817:  set :_isMedian.10:i 7
+  818:  setaddr *tmp346 *label432
+  819:  jump *label429 always 0 0
         multilabel *label432
-  816:  set :_isMedian.10:i 4
-  817:  setaddr *tmp346 *label433
-  818:  jump *label429 always 0 0
+  820:  set :_isMedian.10:i 4
+  821:  setaddr *tmp346 *label433
+  822:  jump *label429 always 0 0
         multilabel *label433
-  819:  set :_isMedian.10:i 2
-  820:  setaddr *tmp346 *label434
-  821:  jump *label429 always 0 0
+  823:  set :_isMedian.10:i 2
+  824:  setaddr *tmp346 *label434
+  825:  jump *label429 always 0 0
         multilabel *label434
-  822:  set :_isMedian.10:i 8
-  823:  setaddr *tmp346 *label435
-  824:  jump *label429 always 0 0
+  826:  set :_isMedian.10:i 8
+  827:  setaddr *tmp346 *label435
+  828:  jump *label429 always 0 0
         multilabel *label435
-  825:  set :_isMedian.10:i 1
-  826:  setaddr *tmp346 *label436
-  827:  jump *label429 always 0 0
+  829:  set :_isMedian.10:i 1
+  830:  setaddr *tmp346 *label436
+  831:  jump *label429 always 0 0
         multilabel *label436
-  828:  set :_isMedian.10:i 5
-  829:  setaddr *tmp346 *label437
-  830:  jump *label429 always 0 0
+  832:  set :_isMedian.10:i 5
+  833:  setaddr *tmp346 *label437
+  834:  jump *label429 always 0 0
         multilabel *label437
-  831:  set :_isMedian.10:i 6
-  832:  setaddr *tmp346 *label438
-  833:  jump *label429 always 0 0
+  835:  set :_isMedian.10:i 6
+  836:  setaddr *tmp346 *label438
+  837:  jump *label429 always 0 0
         multilabel *label438
-  834:  set :_isMedian.10:i 9
-  835:  setaddr *tmp346 *label439
-  836:  jump *label429 always 0 0
+  838:  set :_isMedian.10:i 9
+  839:  setaddr *tmp346 *label439
+  840:  jump *label429 always 0 0
         multilabel *label439
-  837:  set :_isMedian.10:i 3
-  838:  setaddr *tmp346 *label440
+  841:  set :_isMedian.10:i 3
+  842:  setaddr *tmp346 *label440
         label *label429
-  839:  jump *label441 greaterThanEq :_isMedian.10:i :_median.10:i
-  840:  op add :_isMedian.10:lt :_isMedian.10:lt 1
-  841:  multijump *tmp346 0 0
+  843:  jump *label441 greaterThanEq :_isMedian.10:i :_median.10:i
+  844:  op add :_isMedian.10:lt :_isMedian.10:lt 1
+  845:  multijump *tmp346 0 0
         label *label441
-  842:  jump *label443 lessThanEq :_isMedian.10:i :_median.10:i
-  843:  op add :_isMedian.10:gt :_isMedian.10:gt 1
+  846:  jump *label443 lessThanEq :_isMedian.10:i :_median.10:i
+  847:  op add :_isMedian.10:gt :_isMedian.10:gt 1
         label *label443
-  844:  multijump *tmp346 0 0
+  848:  multijump *tmp346 0 0
         multilabel *label440
-  845:  op sub *tmp351 :_isMedian.10:gt :_isMedian.10:lt
-  846:  op abs :_isMedian.10:dif *tmp351 0
-  847:  set *tmp356 false
-  848:  op add *tmp353 :_isMedian.10:gt :_isMedian.10:lt
-  849:  jump *label446 lessThan *tmp353 8
-  850:  op equal *tmp356 :_isMedian.10:gt :_isMedian.10:lt
+  849:  op sub *tmp351 :_isMedian.10:gt :_isMedian.10:lt
+  850:  op abs :_isMedian.10:dif *tmp351 0
+  851:  set *tmp356 false
+  852:  op add *tmp353 :_isMedian.10:gt :_isMedian.10:lt
+  853:  jump *label446 lessThan *tmp353 8
+  854:  op equal *tmp356 :_isMedian.10:gt :_isMedian.10:lt
         label *label446
-  851:  jump *label447 equal *tmp356 false
-  852:  set *tmp343 :_median.10:i
-  853:  jump *label415 always 0 0
+  855:  jump *label447 equal *tmp356 false
+  856:  set *tmp343 :_median.10:i
+  857:  jump *label415 always 0 0
         label *label447
-  854:  jump *label449 greaterThanEq :_isMedian.10:dif :_median.10:bestDif
-  855:  set :_median.10:bestDif :_isMedian.10:dif
-  856:  set :_median.10:best :_median.10:i
-  857:  set :_median.10:count 1
-  858:  multijump *tmp344 0 0
-        label *label449
-  859:  jump *label451 greaterThan :_isMedian.10:dif :_median.10:bestDif
-  860:  op add :_median.10:best :_median.10:best :_median.10:i
-  861:  op add :_median.10:count :_median.10:count 1
-        label *label451
+  858:  jump *label449 greaterThanEq :_isMedian.10:dif :_median.10:bestDif
+  859:  set :_median.10:bestDif :_isMedian.10:dif
+  860:  set :_median.10:best :_median.10:i
+  861:  set :_median.10:count 1
   862:  multijump *tmp344 0 0
+        label *label449
+  863:  jump *label451 greaterThan :_isMedian.10:dif :_median.10:bestDif
+  864:  op add :_median.10:best :_median.10:best :_median.10:i
+  865:  op add :_median.10:count :_median.10:count 1
+        label *label451
+  866:  multijump *tmp344 0 0
         multilabel *label427
-  863:  op div *tmp343 :_median.10:best :_median.10:count
+  867:  op div *tmp343 :_median.10:best :_median.10:count
         label *label415
-  864:  assertequals 5 *tmp343 "median(7,4,2,8,1,5,6,9,3)"
-  865:  set :_median.11:bestDif 10000000000
-  866:  set :_median.11:best null
-  867:  set :_median.11:count 1
-  868:  set :_median.11:i 1
-  869:  setaddr *tmp366 *label458
-  870:  jump *label455 always 0 0
+  868:  assertequals 5 *tmp343 "median(7,4,2,8,1,5,6,9,3)"
+  869:  set :_median.11:bestDif 10000000000
+  870:  set :_median.11:best null
+  871:  set :_median.11:count 1
+  872:  set :_median.11:i 1
+  873:  setaddr *tmp366 *label458
+  874:  jump *label455 always 0 0
         multilabel *label458
-  871:  set :_median.11:i 1
-  872:  setaddr *tmp366 *label459
-  873:  jump *label455 always 0 0
+  875:  set :_median.11:i 1
+  876:  setaddr *tmp366 *label459
+  877:  jump *label455 always 0 0
         multilabel *label459
-  874:  set :_median.11:i 1
-  875:  setaddr *tmp366 *label460
-  876:  jump *label455 always 0 0
+  878:  set :_median.11:i 1
+  879:  setaddr *tmp366 *label460
+  880:  jump *label455 always 0 0
         multilabel *label460
-  877:  set :_median.11:i 1
-  878:  setaddr *tmp366 *label461
-  879:  jump *label455 always 0 0
+  881:  set :_median.11:i 1
+  882:  setaddr *tmp366 *label461
+  883:  jump *label455 always 0 0
         multilabel *label461
-  880:  set :_median.11:i 9
-  881:  setaddr *tmp366 *label462
-  882:  jump *label455 always 0 0
+  884:  set :_median.11:i 9
+  885:  setaddr *tmp366 *label462
+  886:  jump *label455 always 0 0
         multilabel *label462
-  883:  set :_median.11:i 9
-  884:  setaddr *tmp366 *label463
-  885:  jump *label455 always 0 0
+  887:  set :_median.11:i 9
+  888:  setaddr *tmp366 *label463
+  889:  jump *label455 always 0 0
         multilabel *label463
-  886:  set :_median.11:i 9
-  887:  setaddr *tmp366 *label464
-  888:  jump *label455 always 0 0
+  890:  set :_median.11:i 9
+  891:  setaddr *tmp366 *label464
+  892:  jump *label455 always 0 0
         multilabel *label464
-  889:  set :_median.11:i 9
-  890:  setaddr *tmp366 *label465
-  891:  jump *label455 always 0 0
+  893:  set :_median.11:i 9
+  894:  setaddr *tmp366 *label465
+  895:  jump *label455 always 0 0
         multilabel *label465
-  892:  set :_median.11:i 5
-  893:  setaddr *tmp366 *label466
+  896:  set :_median.11:i 5
+  897:  setaddr *tmp366 *label466
         label *label455
-  894:  set :_isMedian.11:lt 0
-  895:  set :_isMedian.11:gt 0
-  896:  set :_isMedian.11:i 1
-  897:  setaddr *tmp368 *label471
-  898:  jump *label468 always 0 0
+  898:  set :_isMedian.11:lt 0
+  899:  set :_isMedian.11:gt 0
+  900:  set :_isMedian.11:i 1
+  901:  setaddr *tmp368 *label471
+  902:  jump *label468 always 0 0
         multilabel *label471
-  899:  set :_isMedian.11:i 1
-  900:  setaddr *tmp368 *label472
-  901:  jump *label468 always 0 0
+  903:  set :_isMedian.11:i 1
+  904:  setaddr *tmp368 *label472
+  905:  jump *label468 always 0 0
         multilabel *label472
-  902:  set :_isMedian.11:i 1
-  903:  setaddr *tmp368 *label473
-  904:  jump *label468 always 0 0
+  906:  set :_isMedian.11:i 1
+  907:  setaddr *tmp368 *label473
+  908:  jump *label468 always 0 0
         multilabel *label473
-  905:  set :_isMedian.11:i 1
-  906:  setaddr *tmp368 *label474
-  907:  jump *label468 always 0 0
+  909:  set :_isMedian.11:i 1
+  910:  setaddr *tmp368 *label474
+  911:  jump *label468 always 0 0
         multilabel *label474
-  908:  set :_isMedian.11:i 9
-  909:  setaddr *tmp368 *label475
-  910:  jump *label468 always 0 0
+  912:  set :_isMedian.11:i 9
+  913:  setaddr *tmp368 *label475
+  914:  jump *label468 always 0 0
         multilabel *label475
-  911:  set :_isMedian.11:i 9
-  912:  setaddr *tmp368 *label476
-  913:  jump *label468 always 0 0
+  915:  set :_isMedian.11:i 9
+  916:  setaddr *tmp368 *label476
+  917:  jump *label468 always 0 0
         multilabel *label476
-  914:  set :_isMedian.11:i 9
-  915:  setaddr *tmp368 *label477
-  916:  jump *label468 always 0 0
+  918:  set :_isMedian.11:i 9
+  919:  setaddr *tmp368 *label477
+  920:  jump *label468 always 0 0
         multilabel *label477
-  917:  set :_isMedian.11:i 9
-  918:  setaddr *tmp368 *label478
-  919:  jump *label468 always 0 0
+  921:  set :_isMedian.11:i 9
+  922:  setaddr *tmp368 *label478
+  923:  jump *label468 always 0 0
         multilabel *label478
-  920:  set :_isMedian.11:i 5
-  921:  setaddr *tmp368 *label479
+  924:  set :_isMedian.11:i 5
+  925:  setaddr *tmp368 *label479
         label *label468
-  922:  jump *label480 greaterThanEq :_isMedian.11:i :_median.11:i
-  923:  op add :_isMedian.11:lt :_isMedian.11:lt 1
-  924:  multijump *tmp368 0 0
+  926:  jump *label480 greaterThanEq :_isMedian.11:i :_median.11:i
+  927:  op add :_isMedian.11:lt :_isMedian.11:lt 1
+  928:  multijump *tmp368 0 0
         label *label480
-  925:  jump *label482 lessThanEq :_isMedian.11:i :_median.11:i
-  926:  op add :_isMedian.11:gt :_isMedian.11:gt 1
+  929:  jump *label482 lessThanEq :_isMedian.11:i :_median.11:i
+  930:  op add :_isMedian.11:gt :_isMedian.11:gt 1
         label *label482
-  927:  multijump *tmp368 0 0
+  931:  multijump *tmp368 0 0
         multilabel *label479
-  928:  op sub *tmp373 :_isMedian.11:gt :_isMedian.11:lt
-  929:  op abs :_isMedian.11:dif *tmp373 0
-  930:  set *tmp378 false
-  931:  op add *tmp375 :_isMedian.11:gt :_isMedian.11:lt
-  932:  jump *label485 lessThan *tmp375 8
-  933:  op equal *tmp378 :_isMedian.11:gt :_isMedian.11:lt
+  932:  op sub *tmp373 :_isMedian.11:gt :_isMedian.11:lt
+  933:  op abs :_isMedian.11:dif *tmp373 0
+  934:  set *tmp378 false
+  935:  op add *tmp375 :_isMedian.11:gt :_isMedian.11:lt
+  936:  jump *label485 lessThan *tmp375 8
+  937:  op equal *tmp378 :_isMedian.11:gt :_isMedian.11:lt
         label *label485
-  934:  jump *label486 equal *tmp378 false
-  935:  set *tmp365 :_median.11:i
-  936:  jump *label454 always 0 0
+  938:  jump *label486 equal *tmp378 false
+  939:  set *tmp365 :_median.11:i
+  940:  jump *label454 always 0 0
         label *label486
-  937:  jump *label488 greaterThanEq :_isMedian.11:dif :_median.11:bestDif
-  938:  set :_median.11:bestDif :_isMedian.11:dif
-  939:  set :_median.11:best :_median.11:i
-  940:  set :_median.11:count 1
-  941:  multijump *tmp366 0 0
-        label *label488
-  942:  jump *label490 greaterThan :_isMedian.11:dif :_median.11:bestDif
-  943:  op add :_median.11:best :_median.11:best :_median.11:i
-  944:  op add :_median.11:count :_median.11:count 1
-        label *label490
+  941:  jump *label488 greaterThanEq :_isMedian.11:dif :_median.11:bestDif
+  942:  set :_median.11:bestDif :_isMedian.11:dif
+  943:  set :_median.11:best :_median.11:i
+  944:  set :_median.11:count 1
   945:  multijump *tmp366 0 0
+        label *label488
+  946:  jump *label490 greaterThan :_isMedian.11:dif :_median.11:bestDif
+  947:  op add :_median.11:best :_median.11:best :_median.11:i
+  948:  op add :_median.11:count :_median.11:count 1
+        label *label490
+  949:  multijump *tmp366 0 0
         multilabel *label466
-  946:  op div *tmp365 :_median.11:best :_median.11:count
+  950:  op div *tmp365 :_median.11:best :_median.11:count
         label *label454
-  947:  assertequals 5 *tmp365 "median(1,1,1,1,9,9,9,9,5)"
-  948:  stop
-  949:  end
+  951:  assertequals 5 *tmp365 "median(1,1,1,1,9,9,9,9,5)"
+  952:  stop
+  953:  end
         label *label0
-  950:  set :signInexact*retval 0
-  951:  jump *label494 equal :signInexact:x 0
-  952:  set :signInexact*retval 1
-  953:  jump *label496 greaterThanEq :signInexact:x 0
-  954:  set :signInexact*retval -1
-        label *label496
+  954:  set :signInexact*retval 0
+  955:  jump *label494 equal :signInexact:x 0
+  956:  select :signInexact*retval lessThan :signInexact:x 0 -1 1
         label *label494
-  955:  return :signInexact*retaddr
+  957:  return :signInexact*retaddr
         label *label1
-  956:  op max :median:y2 :median:x1 :median:x2
-  957:  op min :median:y3 :median:x3 :median:x4
-  958:  jump *label498 greaterThan :median:y2 :median:y3
-  959:  op add *tmp394 :median:y2 :median:y3
-  960:  op div :median*retval *tmp394 2
-  961:  return :median*retaddr
+  958:  op max :median:y2 :median:x1 :median:x2
+  959:  op min :median:y3 :median:x3 :median:x4
+  960:  jump *label498 greaterThan :median:y2 :median:y3
+  961:  op add *tmp394 :median:y2 :median:y3
+  962:  op div :median*retval *tmp394 2
+  963:  return :median*retaddr
         label *label498
-  962:  op min :median:y1 :median:x1 :median:x2
-  963:  op max :median:y4 :median:x3 :median:x4
-  964:  jump *label500 lessThan :median:y1 :median:y4
-  965:  op add *tmp400 :median:y1 :median:y4
-  966:  op div :median*retval *tmp400 2
-  967:  return :median*retaddr
+  964:  op min :median:y1 :median:x1 :median:x2
+  965:  op max :median:y4 :median:x3 :median:x4
+  966:  jump *label500 lessThan :median:y1 :median:y4
+  967:  op add *tmp400 :median:y1 :median:y4
+  968:  op div :median*retval *tmp400 2
+  969:  return :median*retaddr
         label *label500
-  968:  op max *tmp402 :median:y1 :median:y3
-  969:  op min *tmp403 :median:y2 :median:y4
-  970:  op add *tmp404 *tmp402 *tmp403
-  971:  op div :median*retval *tmp404 2
-  972:  return :median*retaddr
+  970:  op max *tmp402 :median:y1 :median:y3
+  971:  op min *tmp403 :median:y2 :median:y4
+  972:  op add *tmp404 *tmp402 *tmp403
+  973:  op div :median*retval *tmp404 2
+  974:  return :median*retaddr
         label *label2
-  973:  op min :median.1:y1 :median.1:x1 :median.1:x2
-  974:  op max :median.1:y2 :median.1:x1 :median.1:x2
-  975:  op min :median.1:y4 :median.1:x4 :median.1:x5
-  976:  op max :median.1:y5 :median.1:x4 :median.1:x5
-  977:  jump *label503 greaterThanEq :median.1:y4 :median.1:y1
-  978:  set :median.1:y4 :median.1:y1
-  979:  set :_swap.1:t :median.1:y2
-  980:  set :median.1:y2 :median.1:y5
-  981:  set :median.1:y5 :_swap.1:t
+  975:  op min :median.1:y1 :median.1:x1 :median.1:x2
+  976:  op max :median.1:y2 :median.1:x1 :median.1:x2
+  977:  op min :median.1:y4 :median.1:x4 :median.1:x5
+  978:  op max :median.1:y5 :median.1:x4 :median.1:x5
+  979:  jump *label503 greaterThanEq :median.1:y4 :median.1:y1
+  980:  set :median.1:y4 :median.1:y1
+  981:  set :_swap.1:t :median.1:y2
+  982:  set :median.1:y2 :median.1:y5
+  983:  set :median.1:y5 :_swap.1:t
         label *label503
-  982:  jump *label507 lessThanEq :median.1:x3 :median.1:y2
-  983:  op min :median.1*retval :median.1:y2 :median.1:y5
-  984:  jump *label508 greaterThanEq :median.1:y2 :median.1:y4
-  985:  op min :median.1*retval :median.1:x3 :median.1:y4
-  986:  return :median.1*retaddr
+  984:  jump *label507 lessThanEq :median.1:x3 :median.1:y2
+  985:  op min :median.1*retval :median.1:y2 :median.1:y5
+  986:  jump *label508 greaterThanEq :median.1:y2 :median.1:y4
+  987:  op min :median.1*retval :median.1:x3 :median.1:y4
+  988:  return :median.1*retaddr
         label *label507
-  987:  op min :median.1*retval :median.1:y2 :median.1:y4
-  988:  jump *label512 lessThanEq :median.1:x3 :median.1:y4
-  989:  op min :median.1*retval :median.1:x3 :median.1:y5
+  989:  op min :median.1*retval :median.1:y2 :median.1:y4
+  990:  jump *label512 lessThanEq :median.1:x3 :median.1:y4
+  991:  op min :median.1*retval :median.1:x3 :median.1:y5
         label *label512
         label *label508
-  990:  return :median.1*retaddr
+  992:  return :median.1*retaddr
 
 
 stop instruction encountered, dumping variable values:
 *tmp123: 1.0
 *tmp124: 161.0
 *tmp145: 1.0
-*tmp146: 233.0
+*tmp146: 226.0
+*tmp148: 208.0
 *tmp153: -5.0
 *tmp155: 5.0
 *tmp158: 0.0
 *tmp167: 1.0
-*tmp168: 298.0
-*tmp170: 280.0
+*tmp168: 291.0
+*tmp170: 273.0
 *tmp175: -4.0
 *tmp177: 4.0
 *tmp180: 0.0
 *tmp189: 3.0
-*tmp190: 363.0
-*tmp192: 345.0
+*tmp190: 356.0
+*tmp192: 338.0
 *tmp197: -3.0
 *tmp199: 3.0
 *tmp202: 0.0
 *tmp211: 5.0
-*tmp212: 428.0
-*tmp214: 410.0
+*tmp212: 421.0
+*tmp214: 403.0
 *tmp219: -2.0
 *tmp221: 2.0
 *tmp224: 0.0
 *tmp233: 5.0
-*tmp234: 493.0
-*tmp236: 475.0
+*tmp234: 486.0
+*tmp236: 468.0
 *tmp241: -1.0
 *tmp243: 1.0
 *tmp246: 0.0
 *tmp255: 5.0
-*tmp256: 518.0
+*tmp256: 511.0
 *tmp277: 5.0
-*tmp278: 538.0
+*tmp278: 531.0
 *tmp285: 0.0
 *tmp287: 8.0
 *tmp290: 1.0
 *tmp299: 5.0
-*tmp300: 634.0
-*tmp302: 679.0
+*tmp300: 626.0
 *tmp307: 0.0
 *tmp309: 8.0
 *tmp312: 1.0
 *tmp321: 5.0
-*tmp322: 711.0
-*tmp324: 762.0
+*tmp322: 715.0
+*tmp324: 766.0
 *tmp329: 0.0
 *tmp331: 8.0
 *tmp334: 1.0
 *tmp343: 5.0
-*tmp344: 803.0
-*tmp346: 845.0
+*tmp344: 807.0
+*tmp346: 849.0
 *tmp351: 0.0
 *tmp353: 8.0
 *tmp356: 1.0
 *tmp365: 5.0
-*tmp366: 946.0
-*tmp368: 928.0
+*tmp366: 950.0
+*tmp368: 932.0
 *tmp373: 0.0
 *tmp375: 8.0
 *tmp378: 1.0
@@ -1824,6 +1865,7 @@ stop instruction encountered, dumping variable values:
 :_isMedian.11:lt: 4.0
 :_isMedian.1:dif: 5.0
 :_isMedian.1:gt: 0.0
+:_isMedian.1:i: 5.0
 :_isMedian.1:lt: 5.0
 :_isMedian.2:dif: 4.0
 :_isMedian.2:gt: 0.0
@@ -1846,7 +1888,6 @@ stop instruction encountered, dumping variable values:
 :_isMedian.7:lt: 4.0
 :_isMedian.8:dif: 0.0
 :_isMedian.8:gt: 4.0
-:_isMedian.8:i: 1.0
 :_isMedian.8:lt: 4.0
 :_isMedian.9:dif: 0.0
 :_isMedian.9:gt: 4.0
@@ -1928,4 +1969,4 @@ stop instruction encountered, dumping variable values:
 :signInexact*retaddr: 20.0
 :signInexact*retval: 1.0
 :signInexact:x: 1.0E-5
-@counter: 949.0
+@counter: 953.0

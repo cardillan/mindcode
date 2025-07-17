@@ -29,6 +29,7 @@ public enum Opcode {
     // OPERATIONS
     SET             ("set",             "Set", "Set a variable."),
     OP              ("op",              "Operation", "Perform an operation on one or two variables."),
+    SELECT          ("select",          "Select", "Select one of two values based on a condition"),
     LOOKUP          ("lookup",          "Lookup", "Look up an item/liquid/unit/block type by ID. Total counts of each type can be accessed with @unitCount, @itemCount, @liquidCount, @blockCount."),
     PACKCOLOR       ("packcolor",       "PackColor", "Pack [0, 1] RGBA components into a single number for drawing or rule-setting."),
     UNPACKCOLOR     ("unpackcolor",     "UnpackColor", "Unpack RGBA components from a color that was packed using Pack Color."),

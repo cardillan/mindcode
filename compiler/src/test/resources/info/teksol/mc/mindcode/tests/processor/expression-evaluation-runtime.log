@@ -1,14 +1,14 @@
    437 instructions before optimizations.
     75 instructions eliminated by Temp Variables Elimination (2 iterations).
-     2 instructions eliminated by Single Step Elimination (2 passes, 8 iterations).
-     2 instructions modified by Expression Optimization (4 iterations).
-     1 instructions eliminated by If Expression Optimization (2 passes, 4 iterations).
-   201 instructions eliminated by Data Flow Optimization (3 passes, 14 iterations).
-    11 instructions added by Function Inlining (5 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
+     1 instructions modified by Expression Optimization (3 iterations).
+     3 instructions eliminated by If Expression Optimization (3 iterations).
+   201 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
+    11 instructions added by Function Inlining (4 iterations).
      6 function calls inlined by Function Inlining.
-   169 instructions after optimizations.
+   168 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 797):
+Pass 1: speed optimization selection (cost limit 799):
   * Inline function 'assertEqualsRound' defined at line 3:1      size   +19, benefit       27.0, efficiency      1.421 (-31 instructions)
     Inline function call at line 87:1                            size    +4, benefit        4.5, efficiency      1.125
     Inline function call at line 88:1                            size    +4, benefit        4.5, efficiency      1.125
@@ -1855,23 +1855,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 5 (-1
    245 label *label74
    246 op sub :a 2 zero
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-3 instructions):
  
+   265 assertequals true :a "||="
    266 assertequals %ff0000ff %ff0000 "short color literals"
    267 assertequals %ffffffff %[white] "named color literals"
-   268 jump *label84 equal zero false
+-    * jump *label84 equal zero false
 -    * set *tmp209 null
-+  269 sensor *tmp210 null @id
-   270 jump *label85 always
-   271 label *label84
+-    * jump *label85 always
++  268 select *tmp209 notEqual zero false null @copper-wall
+   269 label *label84
 -    * set *tmp209 @copper-wall
-+  272 sensor *tmp210 @copper-wall @id
-   273 label *label85
-   274 label *label83
--    * sensor *tmp210 *tmp209 @id
-   275 assertequals 17 *tmp210 "Logic ID"
-   276 stop
-   277 end
+   270 label *label85
+   271 label *label83
+   272 sensor *tmp210 *tmp209 @id
 
 Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 instructions):
  
@@ -1963,9 +1960,9 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    251 op sub *tmp167 -8 zero
    252 assertequals -8 *tmp167 "unary minus"
  
-   305 assertequals 17 *tmp210 "Logic ID"
-   306 stop
-   307 end
+   303 assertequals 17 *tmp210 "Logic ID"
+   304 stop
+   305 end
 -    * label *label3
 -    * op mul :round.1:x :assertEqualsRound:actual 100000000
 -    * op add *tmp213 :round.1:x 0.5
@@ -2160,15 +2157,6 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
     54 label *label19
     55 op land *tmp47 1 *tmp45
     56 assertequals false *tmp47 "land 1"
- 
-   257 sensor *tmp210 null @id
-   258 jump *label85 always
-   259 label *label84
--    * sensor *tmp210 @copper-wall @id
-+  260 set *tmp210 17
-   261 label *label85
-   262 label *label83
-   263 assertequals 17 *tmp210 "Logic ID"
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -2236,33 +2224,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 2 (-1
     54 op land *tmp47 1 zero
     55 assertequals false *tmp47 "land 1"
 
-Modifications by Iterated phase, If Expression Optimization, pass 2, iteration 1:
- 
-   252 assertequals true :a "||="
-   253 assertequals %ff0000ff %ff0000 "short color literals"
-   254 assertequals %ffffffff %[white] "named color literals"
--    * jump *label84 equal zero false
-+  255 set *tmp210 17
-+  256 jump *label85 equal zero false
-   257 sensor *tmp210 null @id
-   258 jump *label85 always
--    * label *label84
--    * set *tmp210 17
-   259 label *label85
-   260 label *label83
-   261 assertequals 17 *tmp210 "Logic ID"
-
-Modifications by Iterated phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   255 set *tmp210 17
-   256 jump *label85 equal zero false
-   257 sensor *tmp210 null @id
--    * jump *label85 always
-   258 label *label85
-   259 label *label83
-   260 assertequals 17 *tmp210 "Logic ID"
-
-Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      0 set NULL null
      1 set zero 0
 -    * label *label4
@@ -2516,20 +2478,21 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
    159 op or *tmp207 0 *tmp6
    160 op notEqual :a *tmp207 false
    161 assertequals true :a "||="
- 
-   165 jump *label85 equal zero false
-   166 sensor *tmp210 null @id
-   167 label *label85
+   162 assertequals %ff0000ff %ff0000 "short color literals"
+   163 assertequals %ffffffff %[white] "named color literals"
+   164 select *tmp209 notEqual zero false null @copper-wall
+-    * label *label84
+-    * label *label85
 -    * label *label83
-   168 assertequals 17 *tmp210 "Logic ID"
-   169 stop
-   170 end
+   165 sensor *tmp210 *tmp209 @id
+   166 assertequals 17 *tmp210 "Logic ID"
+   167 stop
 
-Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   167 label *label85
-   168 assertequals 17 *tmp210 "Logic ID"
-   169 stop
+   165 sensor *tmp210 *tmp209 @id
+   166 assertequals 17 *tmp210 "Logic ID"
+   167 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -2698,9 +2661,7 @@ op notEqual :a *tmp207 false
 assertequals true :a "||="
 assertequals %ff0000ff %ff0000 "short color literals"
 assertequals %ffffffff %[white] "named color literals"
-set *tmp210 17
-jump *label85 equal zero false
-sensor *tmp210 null @id
-label *label85
+select *tmp209 notEqual zero false null @copper-wall
+sensor *tmp210 *tmp209 @id
 assertequals 17 *tmp210 "Logic ID"
 stop

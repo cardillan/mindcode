@@ -214,6 +214,13 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveTargetMinor() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        processDirective(profile, "target", "7.1");
+        assertEquals(ProcessorVersion.V7A, profile.getProcessorVersion());
+    }
+
+    @Test
     void processesDirectiveTargetGuard() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setTargetGuard(false);

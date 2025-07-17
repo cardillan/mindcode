@@ -107,7 +107,7 @@ Add an operation to the drawing buffer. Does not display anything until `drawflu
 |`linePoly(x, y, sides, radius, rotation)`|`draw linePoly x y sides radius rotation 0`|
 |`triangle(x, y, x2, y2, x3, y3)`|`draw triangle x y x2 y2 x3 y3`|
 |`image(x, y, image, size, rotation)`|`draw image x y image size rotation 0`|
-|`drawPrint(x, y, align)`<br/>`align` - one of `:center`, `:top`, `:bottom`, `:left`, `:right`, `:topLeft`, `:topRight`, `:bottomLeft`, `:bottomRight`.|`draw print x y align 0 0 0`|
+|`drawPrint(x, y, align)`<br/>`align` - accepts `left`, `bottomLeft`, `center`, `right`, `top`, `bottom`, `bottomRight`, `topLeft`, `topRight`.|`draw print x y align 0 0 0`|
 |`translate(x, y)`|`draw translate x y 0 0 0 0`|
 |`scale(x, y)`|`draw scale x y 0 0 0 0`|
 |`rotate(degrees)`|`draw rotate 0 0 degrees 0 0 0`|
@@ -214,7 +214,7 @@ Get data from a building or unit.
 
 |Function&nbsp;call&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|Generated&nbsp;instruction&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|
 |-------------|---------------------|
-|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferUsage`, `@operations`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@id`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
+|`result = object.sensor(property)`<br/>`property` - accepts `@totalItems`, `@firstItem`, `@totalLiquids`, `@totalPower`, `@itemCapacity`, `@liquidCapacity`, `@powerCapacity`, `@powerNetStored`, `@powerNetCapacity`, `@powerNetIn`, `@powerNetOut`, `@ammo`, `@ammoCapacity`, `@currentAmmoType`, `@memoryCapacity`, `@health`, `@maxHealth`, `@heat`, `@shield`, `@armor`, `@efficiency`, `@progress`, `@timescale`, `@rotation`, `@x`, `@y`, `@velocityX`, `@velocityY`, `@shootX`, `@shootY`, `@cameraX`, `@cameraY`, `@cameraWidth`, `@cameraHeight`, `@displayWidth`, `@displayHeight`, `@bufferSize`, `@operations`, `@size`, `@solid`, `@dead`, `@range`, `@shooting`, `@boosting`, `@mineX`, `@mineY`, `@mining`, `@speed`, `@team`, `@type`, `@flag`, `@controlled`, `@controller`, `@name`, `@payloadCount`, `@payloadType`, `@totalPayload`, `@payloadCapacity`, `@id`, `@enabled`, `@config`, `@color`.|`sensor result object property`|
 
 ## Instruction `Operation`
 
@@ -665,6 +665,8 @@ Set a property for a marker. The ID used must be the same as in the Make Marker 
 |`setmarker(:flushText, id, fetch)`|`setmarker flushText id fetch 0 0`|
 |`setmarker(:fontSize, id, size)`|`setmarker fontSize id size 0 0`|
 |`setmarker(:textHeight, id, height)`|`setmarker textHeight id height 0 0`|
+|`setmarker(:textAlign, id, alignment)`<br/>`alignment` - accepts `left`, `bottomLeft`, `center`, `right`, `top`, `bottom`, `bottomRight`, `topLeft`, `topRight`.|`setmarker textAlign id alignment 0 0`|
+|`setmarker(:lineAlign, id, alignment)`<br/>`alignment` - accepts `left`, `bottomLeft`, `center`, `right`, `top`, `bottom`, `bottomRight`, `topLeft`, `topRight`.|`setmarker lineAlign id alignment 0 0`|
 |`setmarker(:labelFlags, id, background, outline)`|`setmarker labelFlags id background outline 0`|
 |`setmarker(:texture, id, printFlush, name)`|`setmarker texture id printFlush name 0`|
 |`setmarker(:textureSize, id, width, height)`|`setmarker textureSize id width height 0`|

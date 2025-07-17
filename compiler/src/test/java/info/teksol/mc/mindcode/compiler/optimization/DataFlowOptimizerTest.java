@@ -121,12 +121,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             """,
                     createInstruction(SET, "FROM_INDEX", "0"),
                     createInstruction(SET, "OFFSET_Y", "2"),
-                    createInstruction(SET, var(1), "OFFSET_Y"),
-                    createInstruction(JUMP, var(1001), "notEqual", "FROM_INDEX", "0"),
-                    createInstruction(SET, var(1), "0"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(PRINT, var(1)),
-                    createInstruction(PRINT, var(1))
+                    createInstruction(SELECT, tmp(1), "equal", "FROM_INDEX", "0", "0", "OFFSET_Y"),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(PRINT, tmp(1))
             );
         }
 
@@ -333,10 +330,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(PRINT, q("\n")),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(SET, ":fib*retval", "1"),
-                    createInstruction(JUMP, label(4), "greaterThanEq", ":fib:n", "0"),
-                    createInstruction(SET, ":fib*retval", "0"),
-                    createInstruction(LABEL, label(4)),
+                    createInstruction(SELECT, ":fib*retval", "lessThan", ":fib:n", "0", "0", "1"),
                     createInstruction(RETURN, ":fib*retaddr")
             );
         }
@@ -1173,12 +1167,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             print(a);
                             """,
-                    createInstruction(SET, "a", "1"),
-                    createInstruction(SENSOR, var(0), "switch1", "@enabled"),
-                    createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                    createInstruction(SET, "a", "2"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(PRINT, "a")
+                    createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                    createInstruction(SELECT, ":a", "notEqual", tmp(0), "false", "2", "1"),
+                    createInstruction(PRINT, ":a")
             );
         }
 
@@ -1269,12 +1260,9 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             print(a, b);
                             """,
-                    createInstruction(SET, "a", "2"),
-                    createInstruction(SENSOR, var(0), "switch1", "@enabled"),
-                    createInstruction(JUMP, var(1001), "equal", var(0), "false"),
-                    createInstruction(SET, "a", "1"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(PRINT, "a"),
+                    createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                    createInstruction(SELECT, ":a", "notEqual", tmp(0), "false", "1", "2"),
+                    createInstruction(PRINT, ":a"),
                     createInstruction(PRINT, "1")
             );
         }

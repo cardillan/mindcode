@@ -7,8 +7,8 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableStates;
 import info.teksol.mc.mindcode.compiler.optimization.DataFlowVariableStates.VariableValue;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.instructions.ConditionalInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -178,11 +178,11 @@ class OptimizerExpressionEvaluator {
         return expressionValue.getLiteral(sourcePosition);
     }
 
-    public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
-        if (jump.isUnconditional()) {
+    public @Nullable LogicBoolean evaluateConditionalInstruction(ConditionalInstruction instruction) {
+        if (instruction.isUnconditional()) {
             return LogicBoolean.TRUE;
-        } else if (jump.getX().isConstant() && jump.getY().isConstant()) {
-            LogicLiteral literal = evaluate(jump.sourcePosition(), jump.getCondition().toOperation(), jump.getX(), jump.getY());
+        } else if (instruction.getX().isConstant() && instruction.getY().isConstant()) {
+            LogicLiteral literal = evaluate(instruction.sourcePosition(), instruction.getCondition().toOperation(), instruction.getX(), instruction.getY());
             return literal instanceof LogicBoolean b ? b : null;
         }
         return null;

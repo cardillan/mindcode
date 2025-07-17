@@ -31,8 +31,12 @@ import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 ///   - All instructions setting the variable to itself (e.g. `set x x`) are removed.
 @NullMarked
 class ExpressionOptimizer extends BaseOptimizer {
+
+    private final OptimizerExpressionEvaluator expressionEvaluator;
+
     public ExpressionOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.EXPRESSION_OPTIMIZATION, optimizationContext);
+        expressionEvaluator = new OptimizerExpressionEvaluator(instructionProcessor);
     }
 
     @Override
@@ -43,8 +47,9 @@ class ExpressionOptimizer extends BaseOptimizer {
                     case LookupInstruction ix     -> processLookupInstruction(it, ix);
                     case OpInstruction ix         -> processOpInstruction(it, ix);
                     case PackColorInstruction ix  -> processPackColorInstruction(it, ix);
-                    case SetInstruction ix        -> processSetInstruction(it, ix);
+                    case SelectInstruction ix     -> processSelectInstruction(it, ix);
                     case SensorInstruction ix     -> processSensorInstruction(it, ix);
+                    case SetInstruction ix        -> processSetInstruction(it, ix);
                     case ReadArrInstruction ix    -> processReadArrInstruction(it, ix);
                     case WriteArrInstruction ix   -> processWriteArrInstruction(it, ix);
                     default -> {}
@@ -249,10 +254,12 @@ class ExpressionOptimizer extends BaseOptimizer {
         }
     }
 
-    private void processSetInstruction(LogicIterator logicIterator, SetInstruction ix) {
-        if (ix.getResult().equals(ix.getValue())) {
-            logicIterator.set(createNoOp(ix.getAstContext()));
-            logicIterator.next();
+    private void processSelectInstruction(LogicIterator logicIterator, SelectInstruction ix) {
+        LogicBoolean condition = expressionEvaluator.evaluateConditionalInstruction(ix);
+        switch(condition) {
+            case null -> {}
+            case TRUE -> logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getTrueValue()));
+            case FALSE -> logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), ix.getFalseValue()));
         }
     }
 
@@ -271,6 +278,13 @@ class ExpressionOptimizer extends BaseOptimizer {
                             LogicNumber.create(ix.sourcePosition(), object.getObject().logicId())));
                 }
             }
+        }
+    }
+
+    private void processSetInstruction(LogicIterator logicIterator, SetInstruction ix) {
+        if (ix.getResult().equals(ix.getValue())) {
+            logicIterator.set(createNoOp(ix.getAstContext()));
+            logicIterator.next();
         }
     }
 

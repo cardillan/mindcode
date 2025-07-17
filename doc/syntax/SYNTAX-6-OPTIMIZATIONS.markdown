@@ -146,7 +146,8 @@ Note: this optimization does not affect jumps that are part of a larger structur
 
 This optimization looks for certain expressions that can be performed more efficiently. Currently, the following optimizations are available:
 
-* `floor` function called on a multiplication by a constant or a division. Combines the two operations into one integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the divisor in the `idiv` operation.
+* `floor` instruction applied to a result of a multiplication by a constant or a division. Combines the two operations into one integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the divisor in the `idiv` operation.
+* `select` instruction with constant condition is replaced by a `set` instruction directly.
 * `sensor var @this @x` and `sensor var @this @y` are replaced by `set var @thisx` and `set var @thisy` respectively. Data Flow Optimization may then apply [constant propagation](#constant-propagation) to the `@thisx`/`@thisy` built-in constants.
 * All set instructions assigning a variable to itself (e.g., `set x x`) are removed.
 * When both operands of the instruction are known to have the same value, some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
@@ -218,6 +219,23 @@ printflush message1
 
 This optimization consists of three types of modifications performed on blocks of code created by if/ternary expressions. All possible optimizations are done independently.
 
+### `select` optimization
+
+If expressions which assign a fixed value to a variable depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is 8.1 or higher. Example:
+
+```
+#set target = 8.1;
+print(rand(10) > 5 ? "low" : "high");
+```
+
+compiles to
+
+```
+op rand *tmp0 10 0
+select *tmp2 greaterThan *tmp0 5 "low" "high"
+print *tmp2
+```
+
 ### Value propagation
 
 The value of ternary expressions and if expressions is sometimes assigned to a user-defined variable. In these situations, the true and false branches of the if/ternary expression assign the value to a temporary variable, which is then assigned to the user variable. This optimization detects these situations and when possible, assigns the final value to the user variable directly in the true/false branches:
@@ -248,6 +266,9 @@ print *tmp1
 As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions having exactly one output parameter (based on instruction metadata) are handled.
 
 ### Instruction propagation
+
+> [!TIP]
+> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.  
 
 If the instruction immediately following the `if` expression isn't a `set` instruction, but another instruction taking the resulting value of the `if` expression, and the resulting value is stored using a `set` instruction, the `set` instruction will be replaced by the instruction actually consuming the value. The optimization targets these conditional expressions passed as a parameter into a function, for example `print(a > 0 ? "positive" : "negative");`, which produces:
 
@@ -292,6 +313,9 @@ print "thousands"
 ```
 
 ### Forward assignment
+
+> [!TIP]
+> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.  
 
 Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
 
@@ -372,6 +396,9 @@ print "alive"
 ```
 
 ### Chained if-else statements
+
+> [!TIP]
+> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.
 
 The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
 

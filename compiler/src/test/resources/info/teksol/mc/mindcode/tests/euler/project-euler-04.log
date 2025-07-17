@@ -3,19 +3,20 @@
      4 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Jump Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     1 instructions eliminated by If Expression Optimization (3 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
-    22 instructions after optimizations.
+    21 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 977):
-  ! Unroll loop at line 4:1                                      size +1421, benefit     4500.0, efficiency      3.167
+Pass 1: speed optimization selection (cost limit 978):
+  ! Unroll loop at line 4:1                                      size +1332, benefit     4500.0, efficiency      3.378
 
-Pass 2: speed optimization selection (cost limit 977):
-  ! Unroll loop at line 4:1                                      size +1421, benefit     4500.0, efficiency      3.167
+Pass 2: speed optimization selection (cost limit 978):
+  ! Unroll loop at line 4:1                                      size +1332, benefit     4500.0, efficiency      3.378
 
-Pass 3: speed optimization selection (cost limit 977):
-  ! Unroll loop at line 4:1                                      size +1421, benefit     4500.0, efficiency      3.167
+Pass 3: speed optimization selection (cost limit 978):
+  ! Unroll loop at line 4:1                                      size +1332, benefit     4500.0, efficiency      3.378
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
@@ -169,6 +170,18 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     37 assertequals 9009 :max "Project Euler 4"
     38 stop
 
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    20 jump *label16 greaterThan :revert:num 0
+    21 label *label11
+    22 label *label8
+-    * jump *label12 notEqual :num :revert:res
+-    * set :max :num
++   23 select :max equal :num :revert:res :num :max
+    24 label *label12
+    25 label *label13
+    26 label *label6
+
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
      3 label *label14
@@ -212,29 +225,28 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     16 jump *label16 greaterThan :revert:num 0
     17 label *label11
 -    * label *label8
-    18 jump *label12 notEqual :num :revert:res
-    19 set :max :num
-    20 label *label12
+    18 select :max equal :num :revert:res :num :max
+-    * label *label12
 -    * label *label13
-    21 label *label6
+    19 label *label6
 -    * label *label7
 -    * label *label4
-    22 op add :j :j 1
-    23 jump *label15 lessThan :j 100
-    24 label *label5
+    20 op add :j :j 1
+    21 jump *label15 lessThan :j 100
+    22 label *label5
 -    * label *label1
-    25 op add :i :i 1
-    26 jump *label14 lessThan :i 100
+    23 op add :i :i 1
+    24 jump *label14 lessThan :i 100
 -    * label *label2
-    27 assertequals 9009 :max "Project Euler 4"
-    28 stop
-    29 end
+    25 assertequals 9009 :max "Project Euler 4"
+    26 stop
+    27 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-    26 jump *label14 lessThan :i 100
-    27 assertequals 9009 :max "Project Euler 4"
-    28 stop
+    24 jump *label14 lessThan :i 100
+    25 assertequals 9009 :max "Project Euler 4"
+    26 stop
 -    * end
 
 Final code before resolving virtual instructions:
@@ -257,9 +269,7 @@ op add :revert:res *tmp5 *tmp6
 op idiv :revert:num :revert:num 10
 jump *label16 greaterThan :revert:num 0
 label *label11
-jump *label12 notEqual :num :revert:res
-set :max :num
-label *label12
+select :max equal :num :revert:res :num :max
 label *label6
 op add :j :j 1
 jump *label15 lessThan :j 100

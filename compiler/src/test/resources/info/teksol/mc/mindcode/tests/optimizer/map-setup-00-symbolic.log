@@ -7609,9 +7609,9 @@ Modifications by Inline function 'displayNumber' defined at line 65:1 (+8 instru
 +  711 draw col %[green]
 +  712 draw clear 0 0 0
 +  713 print :displayNumber:number
-+  714 draw print 0 2 center
++  714 draw print 0 2 @center
 +  715 print :displayNumber:number
-+  716 draw print 0.25 2 center
++  716 draw print 0.25 2 @center
 +  717 drawflush :displayNumber:display
 +  718 label *label936
    719 op sub *tmp101 :shrinkWall.3:x .center
@@ -7631,9 +7631,9 @@ Modifications by Inline function 'displayNumber' defined at line 65:1 (+8 instru
 +  732 draw col %[green]
 +  733 draw clear 0 0 0
 +  734 print :displayNumber:number
-+  735 draw print 0 2 center
++  735 draw print 0 2 @center
 +  736 print :displayNumber:number
-+  737 draw print 0.25 2 center
++  737 draw print 0.25 2 @center
 +  738 drawflush :displayNumber:display
 +  739 label *label938
    740 radar enemy any any distance @this 0 *tmp103
@@ -7655,9 +7655,9 @@ Modifications by Inline function 'displayNumber' defined at line 65:1 (+8 instru
 -    * draw col %[green]
 -    * draw clear 0 0 0
 -    * print :displayNumber:number
--    * draw print 0 2 center
+-    * draw print 0 2 @center
 -    * print :displayNumber:number
--    * draw print 0.25 2 center
+-    * draw print 0.25 2 @center
 -    * drawflush :displayNumber:display
 -    * label *label90
 -    * return :displayNumber*retaddr
@@ -7683,10 +7683,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    712 draw clear 0 0 0
 -    * print :displayNumber:number
 +  713 print *tmp100
-   714 draw print 0 2 center
+   714 draw print 0 2 @center
 -    * print :displayNumber:number
 +  715 print *tmp100
-   716 draw print 0.25 2 center
+   716 draw print 0.25 2 @center
 -    * drawflush :displayNumber:display
 +  717 drawflush display1
    718 label *label936
@@ -7708,10 +7708,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    733 draw clear 0 0 0
 -    * print :displayNumber:number
 +  734 print *tmp102
-   735 draw print 0 2 center
+   735 draw print 0 2 @center
 -    * print :displayNumber:number
 +  736 print *tmp102
-   737 draw print 0.25 2 center
+   737 draw print 0.25 2 @center
 -    * drawflush :displayNumber:display
 +  738 drawflush display2
    739 label *label938
@@ -8602,7 +8602,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    490 sensor *tmp114 display1 @displayWidth
  
    500 print *tmp100
-   501 draw print 0.25 2 center
+   501 draw print 0.25 2 @center
    502 drawflush display1
 -    * label *label936
    503 op sub *tmp101 :shrinkWall.3:x .center
@@ -8613,7 +8613,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    507 sensor *tmp114 display2 @displayWidth
  
    517 print *tmp102
-   518 draw print 0.25 2 center
+   518 draw print 0.25 2 @center
    519 drawflush display2
 -    * label *label938
    520 radar enemy any any distance @this 0 *tmp103
@@ -9774,7 +9774,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
    370 set :replaceBlock:from @air
    371 set :replaceBlock:to @shrubs
  
-   518 draw print 0.25 2 center
+   518 draw print 0.25 2 @center
    519 drawflush display2
    520 radar enemy any any distance @this 0 *tmp103
 -    * jump *label83 equal *tmp103 null
@@ -10561,9 +10561,9 @@ draw scale 3.8 3.8
 draw col %[green]
 draw clear 0 0 0
 print *tmp100
-draw print 0 2 center
+draw print 0 2 @center
 print *tmp100
-draw print 0.25 2 center
+draw print 0.25 2 @center
 drawflush display1
 op sub *tmp101 :shrinkWall.3:x .center
 op add *tmp102 *tmp101 0.5
@@ -10578,9 +10578,9 @@ draw scale 3.8 3.8
 draw col %[green]
 draw clear 0 0 0
 print *tmp102
-draw print 0 2 center
+draw print 0 2 @center
 print *tmp102
-draw print 0.25 2 center
+draw print 0.25 2 @center
 drawflush display2
 radar enemy any any distance @this 0 *tmp103
 jump *label8 equal *tmp103 null

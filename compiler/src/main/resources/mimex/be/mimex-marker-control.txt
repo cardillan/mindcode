@@ -17,6 +17,8 @@ arc
 flushText
 fontSize
 textHeight
+textAlign
+lineAlign
 labelFlags
 texture
 textureSize

@@ -184,6 +184,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case REMARK      -> new RemarkInstruction(astContext, arguments, params);
             case RETURN      -> new ReturnInstruction(astContext, arguments, params);
             case RETURNREC   -> new ReturnRecInstruction(astContext, arguments, params);
+            case SELECT      -> new SelectInstruction(astContext, arguments, params);
             case SENSOR      -> new SensorInstruction(astContext, arguments, params);
             case SET         -> new SetInstruction(astContext, arguments, params);
             case SETADDR     -> new SetAddressInstruction(astContext, arguments, params);

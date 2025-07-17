@@ -34,11 +34,9 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         str = x > 0 ? "positive" : "negative";
                         print(str);
                         """,
-                createInstruction(SET, "str", q("negative")),
-                createInstruction(JUMP, var(1001), "lessThanEq", "x", "0"),
-                createInstruction(SET, "str", q("positive")),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "str")
+                createInstruction(SELECT, tmp(1), "greaterThan", ":x", "0", q("positive"), q("negative")),
+                createInstruction(SET, ":str", tmp(1)),
+                createInstruction(PRINT, ":str")
         );
     }
 
@@ -48,12 +46,10 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         str = @unit.@dead === 0 ? "alive" : "dead";
                         print(str);
                         """,
-                createInstruction(SET, "str", q("alive")),
-                createInstruction(SENSOR, var(0), "@unit", "@dead"),
-                createInstruction(JUMP, var(1001), "strictEqual", var(0), "0"),
-                createInstruction(SET, "str", q("dead")),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "str")
+                createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
+                createInstruction(SELECT, tmp(2), "strictEqual", tmp(0), "0", q("alive"), q("dead")),
+                createInstruction(SET, ":str", tmp(2)),
+                createInstruction(PRINT, ":str")
         );
     }
 
@@ -215,14 +211,12 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         end;
                         print(y);
                         """,
-                createInstruction(SET, "y", q("negative")),
-                createInstruction(JUMP, var(1001), "lessThan", "x", "0"),
-                createInstruction(SET, "y", q("zero")),
-                createInstruction(JUMP, var(1003), "lessThanEq", "x", "0"),
-                createInstruction(SET, "y", q("positive")),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "y")
+                createInstruction(SET, ":y", q("negative")),
+                createInstruction(JUMP, label(1), "lessThan", ":x", "0"),
+                createInstruction(SELECT, tmp(3), "greaterThan", ":x", "0", q("positive"), q("zero")),
+                createInstruction(SET, ":y", tmp(3)),
+                createInstruction(LABEL, label(1)),
+                createInstruction(PRINT, ":y")
         );
     }
 
@@ -232,32 +226,29 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         a = b = rand(10) > 5 ? 1 : 2;
                         print(a, b);
                         """,
-                createInstruction(SET, "b", "2"),
-                createInstruction(OP, "rand", var(0), "10"),
-                createInstruction(JUMP, var(1001), "lessThanEq", var(0), "5"),
-                createInstruction(SET, "b", "1"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(SET, "a", "b"),
-                createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "b")
+                createInstruction(OP, "rand", tmp(0), "10"),
+                createInstruction(SELECT, tmp(2), "greaterThan", tmp(0), "5", "1", "2"),
+                createInstruction(SET, ":b", tmp(2)),
+                createInstruction(SET, ":a", ":b"),
+                createInstruction(PRINT, ":a"),
+                createInstruction(PRINT, ":b")
         );
     }
 
     @Test
     void optimizesChainedAssignments2() {
+        // TODO Run output tmp elimination once more?
         assertCompilesTo("""
                         a = print(b = rand(10) > 5 ? 1 : 2);
                         print(a, b);
                         """,
-                createInstruction(SET, "b", "2"),
-                createInstruction(OP, "rand", var(0), "10"),
-                createInstruction(JUMP, var(1001), "lessThanEq", var(0), "5"),
-                createInstruction(SET, "b", "1"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "b"),
-                createInstruction(SET, "a", "b"),
-                createInstruction(PRINT, "a"),
-                createInstruction(PRINT, "b")
+                createInstruction(OP, "rand", tmp(0), "10"),
+                createInstruction(SELECT, tmp(2), "greaterThan", tmp(0), "5", "1", "2"),
+                createInstruction(SET, ":b", tmp(2)),
+                createInstruction(PRINT, ":b"),
+                createInstruction(SET, ":a", ":b"),
+                createInstruction(PRINT, ":a"),
+                createInstruction(PRINT, ":b")
         );
     }
 
@@ -268,15 +259,11 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         i = i % 2 ? 5 : 6;
                         print(i);
                         """,
-                createInstruction(OP, "rand", "i", "10"),
-                createInstruction(OP, "mod", var(1), "i", "2"),
-                createInstruction(JUMP, var(1000), "equal", var(1), "false"),
-                createInstruction(SET, "i", "5"),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(SET, "i", "6"),
-                createInstruction(LABEL, var(1001)),
-                createInstruction(PRINT, "i")
+                createInstruction(OP, "rand", ":i", "10"),
+                createInstruction(OP, "mod", tmp(1), ":i", "2"),
+                createInstruction(SELECT, tmp(2), "notEqual", tmp(1), "false", "5", "6"),
+                createInstruction(SET, ":i", tmp(2)),
+                createInstruction(PRINT, ":i")
         );
     }
 
@@ -287,22 +274,18 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands");
                         """,
                 createInstruction(SET, "a", "5"),
-                createInstruction(JUMP, var(1000), "greaterThanEq", "a", "10"),
+                createInstruction(JUMP, label(0), "greaterThanEq", "a", "10"),
                 createInstruction(PRINT, q("units")),
-                createInstruction(JUMP, var(1001), "always"),
-                createInstruction(LABEL, var(1000)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "a", "100"),
+                createInstruction(JUMP, label(1), "always"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(JUMP, label(2), "greaterThanEq", "a", "100"),
                 createInstruction(PRINT, q("tens")),
-                createInstruction(JUMP, var(1003), "always"),
-                createInstruction(LABEL, var(1002)),
-                createInstruction(JUMP, var(1004), "greaterThanEq", "a", "1000"),
-                createInstruction(PRINT, q("hundreds")),
-                createInstruction(JUMP, var(1005), "always"),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(PRINT, q("thousands")),
-                createInstruction(LABEL, var(1005)),
-                createInstruction(LABEL, var(1003)),
-                createInstruction(LABEL, var(1001))
+                createInstruction(JUMP, label(3), "always"),
+                createInstruction(LABEL, label(2)),
+                createInstruction(SELECT, tmp(5), "lessThan", "a", "1000", q("hundreds"), q("thousands")),
+                createInstruction(PRINT, tmp(5)),
+                createInstruction(LABEL, label(3)),
+                createInstruction(LABEL, label(1))
         );
     }
 

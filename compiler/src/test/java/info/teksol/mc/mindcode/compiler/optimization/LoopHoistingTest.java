@@ -384,7 +384,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                         i = 0;
                         while i < 1000 do
                             i = i + 1;
-                            print(A ? "1" : "2");
+                            if A then print("1"); else print("2"); end;
                         end;
                         """,
                 createInstruction(SET, "A", "10"),
@@ -438,6 +438,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void handlesInvariantIf() {
         assertCompilesTo("""
+                        #set target = 7;
                         param A = 10;
                         for i in 1 ... A do
                             a = A < 0 ? 3 : 4;
@@ -464,6 +465,7 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     @Test
     void handlesInvariantIfInExpression() {
         assertCompilesTo("""
+                        #set target = 7;
                         param A = 10;
                         for i in 1 ... A do
                             a = 10 * (A < 0 ? 3 : 4);

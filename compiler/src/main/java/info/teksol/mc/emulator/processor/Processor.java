@@ -229,6 +229,7 @@ public class Processor extends AbstractMessageEmitter {
             case PRINTCHAR      -> executePrintChar((PrintCharInstruction) instruction);
             case PRINTFLUSH     -> executePrintflush((PrintflushInstruction) instruction);
             case READ           -> executeRead((ReadInstruction) instruction);
+            case SELECT         -> executeSelect((SelectInstruction) instruction);
             case SENSOR         -> executeSensor((SensorInstruction) instruction);
             case SET            -> executeSet((SetInstruction) instruction);
             case STOP           -> executeStop((StopInstruction) instruction);
@@ -477,6 +478,26 @@ public class Processor extends AbstractMessageEmitter {
 
     private double getChar(MindustryString str, int index) {
         return index >= 0 && index < str.value().length() ? str.value().charAt(index) : Double.NaN;
+    }
+
+    private boolean executeSelect(SelectInstruction ix) {
+        boolean condition;
+
+        if (ix.isUnconditional()) {
+            condition = true;
+        } else {
+            MindustryVariable a = getExistingVariable(ix.getX());
+            MindustryVariable b = getExistingVariable(ix.getY());
+            LogicCondition logicCondition = ConditionEvaluator.getCondition(ix.getCondition());
+            if (logicCondition == null) {
+                throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '%s'.", ix.getCondition());
+            }
+            condition = logicCondition.evaluate(a, b);
+        }
+        MindustryVariable target = getOrCreateVariable(ix.getResult());
+        MindustryVariable value = getExistingVariable(condition ? ix.getTrueValue() : ix.getFalseValue());
+        target.assign(value);
+        return true;
     }
 
     private boolean executeSensor(SensorInstruction ix) {

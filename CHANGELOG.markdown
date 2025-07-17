@@ -6,9 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.8.0-beta.2 - Unreleased
 
+### Fixed
+
+* Fixed the `target` directive not recognizing minor target versions.
+
 ### Added
 
-* Added target 8.1 matching the latest supported BE version. Target 8.0 now corresponds to Mindustry Logic v8 Build 149 Beta.  
+* Added target 8.1 matching the latest supported BE version. Target 8.0 now corresponds to Mindustry Logic v8 Build 149 Beta.
+* Added support for new instruction opcodes (`setmarker textAlign` and `setmarker lineAlign`).
+* Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions. 
+
+### Changed
+
+* Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
+* Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
+
+### Miscellaneous
+
+* Added a separate version of the metadata (v149) corresponding to the official Mindustry pre-release.
+* Updated the BE version metadata to the latest available BE build.
 
 ## 3.8.0-beta.1 - 2025-07-08
 

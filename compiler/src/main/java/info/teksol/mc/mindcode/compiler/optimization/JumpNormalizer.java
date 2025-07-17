@@ -25,7 +25,7 @@ class JumpNormalizer extends BaseOptimizer {
         try (LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 if (iterator.next() instanceof JumpInstruction jump && jump.isConditional()) {
-                    LogicBoolean result = expressionEvaluator.evaluateJumpInstruction(jump);
+                    LogicBoolean result = expressionEvaluator.evaluateConditionalInstruction(jump);
 
                     if (result == TRUE) {
                         iterator.set(createJumpUnconditional(jump.getAstContext(), jump.getTarget()));

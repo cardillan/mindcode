@@ -36,7 +36,7 @@ cameraWidth;32;false;true;false;false;
 cameraHeight;33;false;true;false;false;
 displayWidth;34;false;true;false;false;
 displayHeight;35;false;true;false;false;
-bufferUsage;36;false;true;false;false;
+bufferSize;36;false;true;false;false;
 operations;37;false;true;false;false;
 size;38;false;true;false;false;
 solid;39;false;true;false;false;

@@ -28,8 +28,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesCustomKeywordInFunctionCall() {
             assertCompiles("""
-                    #declare alignment :slightlyOffCenter;
-                    drawPrint(0, 0, :slightlyOffCenter);
+                    #declare blockGroup :logic;
+                    ulocate(:building, :logic, true);
                     """);
         }
 
@@ -52,8 +52,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsUnknownKeywords() {
             assertGeneratesMessageRegex(
-                    "Invalid value 'slightlyOffCenter' for keyword parameter: allowed values are.*",
-                    "drawPrint(0, 0, :slightlyOffCenter);");
+                    "Invalid value 'what' for keyword parameter: allowed values are.*",
+                    "ulocate(:what, :core, true);");
         }
 
         @Test
@@ -654,8 +654,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesCustomKeywordInFunctionCall() {
             assertCompiles("""
-                    #declare alignment :slightlyOffCenter;
-                    drawPrint(0, 0, :slightlyOffCenter);
+                    #declare blockGroup :fluffyBunny;
+                    ulocate(:building, :fluffyBunny, true);
                     """);
         }
 

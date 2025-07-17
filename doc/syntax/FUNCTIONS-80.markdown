@@ -106,7 +106,7 @@ Add an operation to the drawing buffer. Does not display anything until `drawflu
 |`linePoly(x, y, sides, radius, rotation)`|`draw linePoly x y sides radius rotation 0`|
 |`triangle(x, y, x2, y2, x3, y3)`|`draw triangle x y x2 y2 x3 y3`|
 |`image(x, y, image, size, rotation)`|`draw image x y image size rotation 0`|
-|`drawPrint(x, y, align)`<br/>`align` - one of `:center`, `:top`, `:bottom`, `:left`, `:right`, `:topLeft`, `:topRight`, `:bottomLeft`, `:bottomRight`.|`draw print x y align 0 0 0`|
+|`drawPrint(x, y, align)`<br/>`align` - accepts `center`, `top`, `bottom`, `left`, `right`, `topLeft`, `topRight`, `bottomLeft`, `bottomRight`.|`draw print x y align 0 0 0`|
 |`translate(x, y)`|`draw translate x y 0 0 0 0`|
 |`scale(x, y)`|`draw scale x y 0 0 0 0`|
 |`rotate(degrees)`|`draw rotate 0 0 degrees 0 0 0`|

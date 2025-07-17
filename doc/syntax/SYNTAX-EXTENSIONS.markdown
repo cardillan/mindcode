@@ -22,7 +22,6 @@ While mods probably cannot specify a new keyword, a custom Mindustry client coul
 
 | Category          | Meaning                                                           |
 |-------------------|-------------------------------------------------------------------|
-| alignment         | text alignment in the `draw print` instruction                    |
 | blockGroup        | group of blocks to look for in the `ulocate building` instruction |
 | lookupType        | the content type in the `lookup` instruction                      |
 | markerType        | type of marker to create in the `makemarker` instruction          |
@@ -38,19 +37,23 @@ Keywords are declared using `#declare` statement:
 #declare <category> keyword [, keyword ... ];
 ```
 
-Example: if the `draw print` instruction was extended to accept additional alignments, the new keywords could be declared like this:
+Example: if the `ulocate building` instruction was extended to accept additional block groups, the new keywords could be declared like this:
 
 ```Mindcode
 #set target = 8;
-#declare alignment :baselineBottom, :baselineTop;
+#declare blockGroup :conveyor, :processor;
 
-print("Hello, world!");
-drawPrint(30, 40, :baselineBottom);
+var x, y;
+var building = ulocate(:building, :conveyor, false, out x, out y);
+print($"Found $building at $x, $y.");
 ```
   
 ```mlog
-print "Hello, world!"
-draw print 30 40 baselineBottom 0 0 0
+ulocate building conveyor false @copper .x .y 0 .building
+print "Found {0} at {0}, {0}."
+format .building
+format .x
+format .y
 ```
 
 ## Declaring new built-in variables

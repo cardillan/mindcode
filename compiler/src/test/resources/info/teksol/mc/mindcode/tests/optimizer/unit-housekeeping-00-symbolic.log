@@ -6,12 +6,13 @@
      6 instructions eliminated by Jump Optimization (4 iterations).
     10 instructions eliminated by Single Step Elimination (5 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
+     1 instructions eliminated by If Expression Optimization (2 iterations).
      2 instructions eliminated by Data Flow Optimization (4 iterations).
      7 instructions eliminated by Jump Straightening (4 iterations).
      2 instructions updated by JumpThreading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      2 instructions eliminated by Print Merging.
-   101 instructions after optimizations.
+   100 instructions after optimizations.
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
  
@@ -563,6 +564,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
      2 set :index 1
      3 label *label0
 
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    59 sensor :items @unit @totalItems
+    60 sensor :item @unit @firstItem
+    61 sensor *tmp20 @unit @controller
+-    * jump *label20 notEqual *tmp20 @this
+-    * set :controlled 0
++   62 select :controlled equal *tmp20 @this 0 :controlled
+    63 label *label20
+    64 label *label21
+    65 op notEqual *tmp23 :flag 0
+
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
      4 sensor *tmp2 switch2 @enabled
@@ -605,66 +618,66 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     50 sensor :controlled @unit @controlled
     51 sensor :flag @unit @flag
     52 sensor :items @unit @totalItems
- 
-    55 jump *label20 notEqual *tmp20 @this
-    56 set :controlled 0
-    57 label *label20
+    53 sensor :item @unit @firstItem
+    54 sensor *tmp20 @unit @controller
+    55 select :controlled equal *tmp20 @this 0 :controlled
+-    * label *label20
 -    * label *label21
-    58 op notEqual *tmp23 :flag 0
-    59 op greaterThan *tmp24 :items 0
-    60 op or *tmp25 *tmp23 *tmp24
+    56 op notEqual *tmp23 :flag 0
+    57 op greaterThan *tmp24 :items 0
+    58 op or *tmp25 *tmp23 *tmp24
  
-    67 print "\n"
-    68 print :index
-    69 jump *label25 notEqual :controlled @ctrlProcessor
+    65 print "\n"
+    66 print :index
+    67 jump *label25 notEqual :controlled @ctrlProcessor
 -    * label *label26
-    70 sensor :controller @unit @controller
-    71 sensor *tmp35 :controller @x
-    72 op floor :x *tmp35
+    68 sensor :controller @unit @controller
+    69 sensor *tmp35 :controller @x
+    70 op floor :x *tmp35
  
-    79 jump *label24 always
-    80 label *label25
-    81 jump *label27 notEqual :controlled @ctrlPlayer
+    77 jump *label24 always
+    78 label *label25
+    79 jump *label27 notEqual :controlled @ctrlPlayer
 -    * label *label28
-    82 print ", player"
-    83 jump *label24 always
-    84 label *label27
-    85 jump *label29 notEqual :controlled @ctrlCommand
+    80 print ", player"
+    81 jump *label24 always
+    82 label *label27
+    83 jump *label29 notEqual :controlled @ctrlCommand
 -    * label *label30
-    86 print ", command"
-    87 label *label29
-    88 label *label24
+    84 print ", command"
+    85 label *label29
+    86 label *label24
  
-    90 print ", F"
-    91 print :flag
-    92 label *label31
+    88 print ", F"
+    89 print :flag
+    90 label *label31
 -    * label *label32
-    93 jump *label33 lessThanEq :items 0
-    94 print ", "
-    95 print :items
-    96 print " "
-    97 print :item
-    98 label *label33
+    91 jump *label33 lessThanEq :items 0
+    92 print ", "
+    93 print :items
+    94 print " "
+    95 print :item
+    96 label *label33
 -    * label *label34
-    99 label *label22
+    97 label *label22
 -    * label *label23
-   100 op equal *tmp43 :controlled 0
-   101 sensor *tmp44 switch1 @enabled
-   102 op land *tmp45 *tmp43 *tmp44
+    98 op equal *tmp43 :controlled 0
+    99 sensor *tmp44 switch1 @enabled
+   100 op land *tmp45 *tmp43 *tmp44
  
-   122 ucontrol approach @thisx @thisy 4
-   123 label *label44
-   124 label *label41
+   120 ucontrol approach @thisx @thisy 4
+   121 label *label44
+   122 label *label41
 -    * label *label42
-   125 label *label38
-   126 label *label35
+   123 label *label38
+   124 label *label35
 -    * label *label36
-   127 op add :index :index 1
-   128 label *label15
+   125 op add :index :index 1
+   126 label *label15
 -    * label *label1
-   129 jump *label0 always
+   127 jump *label0 always
 -    * label *label2
-   130 end
+   128 end
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
  
@@ -677,57 +690,57 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
     37 op strictEqual *tmp9 @unit :first_unit
     38 op strictEqual *tmp10 :first_unit null
  
-   107 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   108 jump *label39 equal *tmp51 false
-   109 ucontrol itemDrop .CORE :items
+   105 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   106 jump *label39 equal *tmp51 false
+   107 ucontrol itemDrop .CORE :items
 -    * jump *label40 always
-+  110 jump *label38 always
-   111 label *label39
-   112 ucontrol approach .CORE_X .CORE_Y 4
-   113 label *label40
++  108 jump *label38 always
+   109 label *label39
+   110 ucontrol approach .CORE_X .CORE_Y 4
+   111 label *label40
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   110 jump *label38 always
-   111 label *label39
-   112 ucontrol approach .CORE_X .CORE_Y 4
+   108 jump *label38 always
+   109 label *label39
+   110 ucontrol approach .CORE_X .CORE_Y 4
 -    * label *label40
-   113 jump *label38 always
-   114 label *label37
-   115 jump *label41 equal :flag 0
+   111 jump *label38 always
+   112 label *label37
+   113 jump *label41 equal :flag 0
  
-   124 label *label38
-   125 label *label35
-   126 op add :index :index 1
+   122 label *label38
+   123 label *label35
+   124 op add :index :index 1
 -    * label *label15
-   127 jump *label0 always
+   125 jump *label0 always
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
  
-    72 op floor :x *tmp35
-    73 sensor *tmp37 :controller @y
-    74 op floor :y *tmp37
+    70 op floor :x *tmp35
+    71 sensor *tmp37 :controller @y
+    72 op floor :y *tmp37
 -    * print ", "
 -    * print :x
 -    * print ";"
-+   75 print ", {0};"
-+   76 format :x
-    77 print :y
-    78 jump *label24 always
-    79 label *label25
++   73 print ", {0};"
++   74 format :x
+    75 print :y
+    76 jump *label24 always
+    77 label *label25
  
-    90 print :flag
-    91 label *label31
-    92 jump *label33 lessThanEq :items 0
+    88 print :flag
+    89 label *label31
+    90 jump *label33 lessThanEq :items 0
 -    * print ", "
 -    * print :items
 -    * print " "
-+   93 print ", {0} "
-+   94 format :items
-    95 print :item
-    96 label *label33
-    97 label *label22
++   91 print ", {0} "
++   92 format :items
+    93 print :item
+    94 label *label33
+    95 label *label22
 
 Final code before resolving virtual instructions:
 
@@ -786,9 +799,7 @@ sensor :flag @unit @flag
 sensor :items @unit @totalItems
 sensor :item @unit @firstItem
 sensor *tmp20 @unit @controller
-jump *label20 notEqual *tmp20 @this
-set :controlled 0
-label *label20
+select :controlled equal *tmp20 @this 0 :controlled
 op notEqual *tmp23 :flag 0
 op greaterThan *tmp24 :items 0
 op or *tmp25 *tmp23 *tmp24

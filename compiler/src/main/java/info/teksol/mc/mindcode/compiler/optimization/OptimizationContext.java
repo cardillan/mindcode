@@ -579,15 +579,15 @@ class OptimizationContext {
     }
 
     public @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump) {
-        return evaluateJumpInstruction(jump, variableStates.get(jump));
+        return evaluateConditionalInstruction(jump, variableStates.get(jump));
     }
 
     public @Nullable LogicBoolean evaluateLoopConditionJump(JumpInstruction jump, AstContext loopContext) {
-        return evaluateJumpInstruction(jump, loopVariables.get(loopContext));
+        return evaluateConditionalInstruction(jump, loopVariables.get(loopContext));
     }
 
 
-    private @Nullable LogicBoolean evaluateJumpInstruction(JumpInstruction jump, VariableStates vs) {
+    private @Nullable LogicBoolean evaluateConditionalInstruction(ConditionalInstruction jump, VariableStates vs) {
         if (jump.isUnconditional()) {
             return LogicBoolean.TRUE;
         }
@@ -1571,8 +1571,30 @@ class OptimizationContext {
             return get(0);
         }
 
+        public @Nullable LogicInstruction getFirstReal() {
+            for (int i = 0; i < size(); i++) {
+                LogicInstruction ix = instructions.get(i);
+                if (ix.isReal()) {
+                    return ix;
+                }
+            }
+
+            return null;
+        }
+
         public @Nullable LogicInstruction getLast() {
             return get(size() - 1);
+        }
+
+        public @Nullable LogicInstruction getLastReal() {
+            for (int i = size() - 1; i >= 0; i--) {
+                LogicInstruction ix = instructions.get(i);
+                if (ix.isReal()) {
+                    return ix;
+                }
+            }
+
+            return null;
         }
 
         public @Nullable LogicInstruction getFromEnd(int index) {

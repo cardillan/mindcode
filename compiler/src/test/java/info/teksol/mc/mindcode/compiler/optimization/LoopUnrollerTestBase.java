@@ -58,7 +58,11 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
         assertCompilesTo("""
                         i = 0;
                         while i < 10 do
-                            i = i + (i % 2 ? 1 : 2);
+                            if i % 2 then
+                                i += 1;
+                            else
+                                i += 2;
+                            end;
                             print(i);
                         end;
                         """,

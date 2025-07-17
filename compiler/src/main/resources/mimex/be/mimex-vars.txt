@@ -51,12 +51,15 @@ name;global;isobj;constant;numval
 @blue;global;true;true;0.0
 @bluemat;global;true;true;0.0
 @boosting;global;true;true;0.0
+@bottom;global;false;true;4.0
+@bottomLeft;global;false;true;12.0
+@bottomRight;global;false;true;20.0
 @boulder;global;true;true;0.0
 @breach;global;true;true;0.0
 @bridge-conduit;global;true;true;0.0
 @bridge-conveyor;global;true;true;0.0
 @bryde;global;true;true;0.0
-@bufferUsage;global;true;true;0.0
+@bufferSize;global;true;true;0.0
 @build-tower;global;true;true;0.0
 @build1;global;true;true;0.0
 @build10;global;true;true;0.0
@@ -87,6 +90,7 @@ name;global;isobj;constant;numval
 @carbon-stone;global;true;true;0.0
 @carbon-vent;global;true;true;0.0
 @carbon-wall;global;true;true;0.0
+@center;global;false;true;1.0
 @char;global;true;true;0.0
 @chemical-combustion-chamber;global;true;true;0.0
 @cleroi;global;true;true;0.0
@@ -305,6 +309,7 @@ name;global;isobj;constant;numval
 @latum;global;true;true;0.0
 @launch-pad;global;true;true;0.0
 @lead;global;true;true;0.0
+@left;global;false;true;8.0
 @liquid-container;global;true;true;0.0
 @liquid-junction;global;true;true;0.0
 @liquid-router;global;true;true;0.0
@@ -491,6 +496,7 @@ name;global;isobj;constant;numval
 @rhyolite-crater;global;true;true;0.0
 @rhyolite-vent;global;true;true;0.0
 @rhyolite-wall;global;true;true;0.0
+@right;global;false;true;16.0
 @ripple;global;true;true;0.0
 @risso;global;true;true;0.0
 @rotary-pump;global;true;true;0.0
@@ -717,6 +723,9 @@ name;global;isobj;constant;numval
 @titanium-conveyor;global;true;true;0.0
 @titanium-wall;global;true;true;0.0
 @titanium-wall-large;global;true;true;0.0
+@top;global;false;true;2.0
+@topLeft;global;false;true;10.0
+@topRight;global;false;true;18.0
 @totalItems;global;true;true;0.0
 @totalLiquids;global;true;true;0.0
 @totalPayload;global;true;true;0.0

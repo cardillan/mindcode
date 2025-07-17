@@ -1402,10 +1402,9 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
     class MindustryErrors {
         @Test
         void refusesWrongAlignment() {
-            assertGeneratesMessages(expectedMessages()
-                            .add("Invalid value 'fluffyBunny' for keyword parameter: allowed values are 'center'," +
-                                    " 'top', 'bottom', 'left', 'right', 'topLeft', 'topRight', 'bottomLeft', 'bottomRight'."),
-                    "drawPrint(10, 10, :fluffyBunny);");
+            assertGeneratesMessageRegex(
+                    "Invalid value 'fluffyBunny' for keyword parameter: allowed values are .*",
+                    "ulocate(:building, :fluffyBunny, true);");
         }
     }
 
@@ -1731,13 +1730,13 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesNewDrawInstructions() {
             assertCompilesTo("""
-                            drawPrint(10, 10, :topRight);
+                            drawPrint(10, 10, @topRight);
                             translate(3, 4);
                             scale(-1, 1);
                             rotate(90);
                             reset();
                             """,
-                    createInstruction(DRAW, "print", "10", "10", "topRight"),
+                    createInstruction(DRAW, "print", "10", "10", "@topRight"),
                     createInstruction(DRAW, "translate", "3", "4"),
                     createInstruction(DRAW, "scale", "-1", "1"),
                     createInstruction(DRAW, "rotate", "0", "0", "90"),

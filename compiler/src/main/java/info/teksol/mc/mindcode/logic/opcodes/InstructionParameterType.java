@@ -16,7 +16,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.KeywordCategory.*;
 @NullMarked
 public enum InstructionParameterType {
     /// Alignment for the `draw print` instruction.
-    ALIGNMENT       ("alignment", Flags.KEYWORD, MindustryMetadata::getAlignments, alignment),
+    ALIGNMENT       ("alignment", Flags.INPUT, MindustryMetadata::getAlignments, alignment),
 
     /// Mindcode's array - a ValueStore instance
     ARRAY           (Flags.SPECIAL),

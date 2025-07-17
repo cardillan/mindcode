@@ -4,6 +4,7 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      1 instructions eliminated by Jump Optimization (4 iterations).
      1 instructions eliminated by Single Step Elimination (5 iterations).
+     1 instructions eliminated by If Expression Optimization (2 iterations).
    526 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      2 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
@@ -11,13 +12,13 @@
      1 loops unrolled by Loop Unrolling.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
     20 instructions eliminated by Print Merging.
-   578 instructions after optimizations.
+   577 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 912):
+Pass 1: speed optimization selection (cost limit 913):
   * Replicate loop condition at line 74:5                        size    +3, benefit      625.0, efficiency    208.333 (+3 instructions)
     Unroll loop at line 8:1                                      size  +508, benefit    25600.0, efficiency     50.394
 
-Pass 1: speed optimization selection (cost limit 909):
+Pass 1: speed optimization selection (cost limit 910):
   * Unroll loop at line 8:1                                      size  +508, benefit    25600.0, efficiency     50.394 (+508 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
@@ -338,22 +339,34 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     11 set .ACCU_CONS 0
     12 set .ACCU_PROD 0
 
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    14 set :loops 0
+    15 set :wait @time
+    16 label *label3
+-    * jump *label6 notEqual :loops 0
+-    * set :wait @time
++   17 select :wait equal :loops 0 @time :wait
+    18 label *label6
+    19 label *label7
+    20 op add :wait :wait 150
+
 Modifications by Replicate loop condition at line 74:5 (+3 instructions):
  
-    85 op lessThan *tmp52 @time :wait
-    86 op land *tmp53 *tmp51 *tmp52
-    87 jump *label10 equal *tmp53 false
-+   88 label *label12
-    89 op add :loops :loops 1
-    90 label *label9
+    84 op lessThan *tmp52 @time :wait
+    85 op land *tmp53 *tmp51 *tmp52
+    86 jump *label10 equal *tmp53 false
++   87 label *label12
+    88 op add :loops :loops 1
+    89 label *label9
 -    * jump *label8 always
-+   91 op greaterThanEq *tmp51 @time :start
-+   92 op lessThan *tmp52 @time :wait
-+   93 op land *tmp53 *tmp51 *tmp52
-+   94 jump *label12 notEqual *tmp53 false
-    95 label *label10
-    96 print "\n"
-    97 print "[lightgray]Loops: "
++   90 op greaterThanEq *tmp51 @time :start
++   91 op lessThan *tmp52 @time :wait
++   92 op land *tmp53 *tmp51 *tmp52
++   93 jump *label12 notEqual *tmp53 false
+    94 label *label10
+    95 print "\n"
+    96 print "[lightgray]Loops: "
 
 Modifications by Unroll loop at line 8:1 (+1021 instructions):
      0 printflush message1
@@ -9106,49 +9119,50 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    516 set .ACCU_PROD 0
    517 set :index 0
  
-   521 jump *label6 notEqual :loops 0
-   522 set :wait @time
-   523 label *label6
+   519 set :wait @time
+   520 label *label3
+   521 select :wait equal :loops 0 @time :wait
+-    * label *label6
 -    * label *label7
-   524 op add :wait :wait 150
-   525 sensor :powerNetIn battery1 @powerNetIn
-   526 sensor :powerNetOut battery1 @powerNetOut
+   522 op add :wait :wait 150
+   523 sensor :powerNetIn battery1 @powerNetIn
+   524 sensor :powerNetOut battery1 @powerNetOut
  
-   583 print "]"
-   584 set :loops 0
-   585 set :start @time
+   581 print "]"
+   582 set :loops 0
+   583 set :start @time
 -    * label *label8
-   586 op greaterThanEq *tmp51 @time :start
-   587 op lessThan *tmp52 @time :wait
-   588 op land *tmp53 *tmp51 *tmp52
-   589 jump *label10 equal *tmp53 false
-   590 label *label12
-   591 op add :loops :loops 1
+   584 op greaterThanEq *tmp51 @time :start
+   585 op lessThan *tmp52 @time :wait
+   586 op land *tmp53 *tmp51 *tmp52
+   587 jump *label10 equal *tmp53 false
+   588 label *label12
+   589 op add :loops :loops 1
 -    * label *label9
-   592 op greaterThanEq *tmp51 @time :start
-   593 op lessThan *tmp52 @time :wait
-   594 op land *tmp53 *tmp51 *tmp52
+   590 op greaterThanEq *tmp51 @time :start
+   591 op lessThan *tmp52 @time :wait
+   592 op land *tmp53 *tmp51 *tmp52
  
-   598 print "[lightgray]Loops: "
-   599 print :loops
-   600 printflush message1
+   596 print "[lightgray]Loops: "
+   597 print :loops
+   598 printflush message1
 -    * label *label4
-   601 jump *label3 always
+   599 jump *label3 always
 -    * label *label5
-   602 end
+   600 end
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
  
-   599 print :loops
-   600 printflush message1
-   601 jump *label3 always
+   597 print :loops
+   598 printflush message1
+   599 jump *label3 always
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
  
-   557 write :battery_change bank1 511
-   558 op add *tmp48 :index 1
-   559 op mod :index *tmp48 40
+   555 write :battery_change bank1 511
+   556 op add *tmp48 :index 1
+   557 op mod :index *tmp48 40
 -    * print "Measured interval: [green]"
 -    * print 6
 -    * print "["
@@ -9173,24 +9187,24 @@ Modifications by Final phase, Print Merging, iteration 1 (-20 instructions):
 -    * print :battery_change
 -    * print "["
 -    * print "]"
-+  560 print "Measured interval: [green]6[] seconds\nConsumption: [green]{0}[]\nProduction: [green]{0}[]\nNet power: [green]{0}[]\nBattery change: [green]{0}[]"
-+  561 format :consumption
-+  562 format :production
-+  563 format :net_power
-+  564 format :battery_change
-   565 set :loops 0
-   566 set :start @time
-   567 op greaterThanEq *tmp51 @time :start
++  558 print "Measured interval: [green]6[] seconds\nConsumption: [green]{0}[]\nProduction: [green]{0}[]\nNet power: [green]{0}[]\nBattery change: [green]{0}[]"
++  559 format :consumption
++  560 format :production
++  561 format :net_power
++  562 format :battery_change
+   563 set :loops 0
+   564 set :start @time
+   565 op greaterThanEq *tmp51 @time :start
  
-   575 op land *tmp53 *tmp51 *tmp52
-   576 jump *label12 notEqual *tmp53 false
-   577 label *label10
+   573 op land *tmp53 *tmp51 *tmp52
+   574 jump *label12 notEqual *tmp53 false
+   575 label *label10
 -    * print "\n"
 -    * print "[lightgray]Loops: "
-+  578 print "\n[lightgray]Loops: "
-   579 print :loops
-   580 printflush message1
-   581 jump *label3 always
++  576 print "\n[lightgray]Loops: "
+   577 print :loops
+   578 printflush message1
+   579 jump *label3 always
 
 Final code before resolving virtual instructions:
 
@@ -9715,9 +9729,7 @@ set :index 0
 set :loops 0
 set :wait @time
 label *label3
-jump *label6 notEqual :loops 0
-set :wait @time
-label *label6
+select :wait equal :loops 0 @time :wait
 op add :wait :wait 150
 sensor :powerNetIn battery1 @powerNetIn
 sensor :powerNetOut battery1 @powerNetOut

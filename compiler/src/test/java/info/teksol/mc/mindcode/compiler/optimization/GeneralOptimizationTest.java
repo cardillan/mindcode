@@ -385,13 +385,9 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         
                         foo(rand(10) > 5 ? 10 : 5);
                         """,
-                createInstruction(LABEL, "__start__"),
                 createInstruction(OP, "rand", tmp(0), "10"),
-                createInstruction(JUMP, label(0), "lessThanEq", tmp(0), "5"),
-                customInstruction("foo", "10"),
-                createInstruction(JUMP, "__start__", "always"),
-                createInstruction(LABEL, label(0)),
-                customInstruction("foo", "5")
+                createInstruction(SELECT, tmp(2), "greaterThan", tmp(0), "5", "10", "5"),
+                customInstruction("foo", tmp(2))
         );
     }
 
@@ -473,11 +469,9 @@ class GeneralOptimizationTest extends AbstractOptimizerTest<Optimizer> {
                         print(b);
                         """,
                 createInstruction(SET, "a", "1"),
-                createInstruction(OP, "mul", "b", "2", "20"),
-                createInstruction(JUMP, label(1), "lessThanEq", "a", "0"),
-                createInstruction(OP, "mul", "b", "2", "10"),
-                createInstruction(LABEL, label(1)),
-                createInstruction(PRINT, "b")
+                createInstruction(SELECT, tmp(1), "greaterThan", "a", "0", "10", "20"),
+                createInstruction(OP, "mul", ":b", "2", tmp(1)),
+                createInstruction(PRINT, ":b")
         );
     }
 
