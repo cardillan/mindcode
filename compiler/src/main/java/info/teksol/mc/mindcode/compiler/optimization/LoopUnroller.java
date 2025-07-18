@@ -525,7 +525,7 @@ class LoopUnroller extends BaseOptimizer {
 
             return list.subList(0, list.size() - end);
         } else {
-            if (list.stream().allMatch(ix -> ix.getOpcode() == Opcode.NOOP)) return list.subList(0, 0);
+            if (list.stream().allMatch(ix -> ix.getOpcode() == Opcode.EMPTY)) return list.subList(0, 0);
 
             int end = list.getLast() instanceof JumpInstruction ? 1 : 0;
             if (!(list.getFromEnd(end) instanceof SetAddressInstruction)) err();

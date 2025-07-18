@@ -3,8 +3,8 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
+import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.util.CollectionUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -101,8 +101,8 @@ public class DiffDebugPrinter implements DebugPrinter {
     protected void printDiff(Consumer<String> messageConsumer, String title, List<LogicInstruction> before0,
             List<LogicInstruction> after0) {
 
-        List<LogicInstruction> before = before0.stream().filter(ix -> !(ix instanceof NoOpInstruction)).toList();
-        List<LogicInstruction> after  =  after0.stream().filter(ix -> !(ix instanceof NoOpInstruction)).toList();
+        List<LogicInstruction> before = before0.stream().filter(ix -> !(ix instanceof EmptyInstruction)).toList();
+        List<LogicInstruction> after  =  after0.stream().filter(ix -> !(ix instanceof EmptyInstruction)).toList();
 
         // Do not print steps that didn't change anything
         if (before.equals(after) && !printAll()) {

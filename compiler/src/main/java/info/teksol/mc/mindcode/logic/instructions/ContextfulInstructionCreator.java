@@ -65,6 +65,10 @@ public interface ContextfulInstructionCreator extends MessageEmitter {
         return (EndInstruction) createInstruction(END);
     }
 
+    default EmptyInstruction createEmpty() {
+        return (EmptyInstruction) createInstruction(EMPTY);
+    }
+
     default FormatInstruction createFormat(LogicValue what) {
         return (FormatInstruction) createInstruction(FORMAT, what);
     }
@@ -103,10 +107,6 @@ public interface ContextfulInstructionCreator extends MessageEmitter {
 
     default MultiLabelInstruction createMultiLabel(LogicLabel label, LogicLabel marker) {
         return (MultiLabelInstruction) createInstruction(MULTILABEL, label).setMarker(marker);
-    }
-
-    default NoOpInstruction createNoOp() {
-        return (NoOpInstruction) createInstruction(NOOP);
     }
 
     default OpInstruction createOp(Operation operation, LogicVariable target, LogicValue first) {

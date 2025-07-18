@@ -119,6 +119,14 @@ abstract class ActionHandler {
                 .type(Arguments.booleanType());
 
         createArgument(container, defaults,
+                CompilerProfile::isTextJumpTables,
+                (profile, arguments, name) -> profile.setTextJumpTables(arguments.getBoolean(name)),
+                "--text-jump-tables")
+                .help("when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
+                      "a single 'read' instruction to directly set the counter to the target address (target 8 or higher required)")
+                .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
                 CompilerProfile::getCaseOptimizationStrength,
                 (profile, arguments, name) -> profile.setCaseOptimizationStrength(arguments.getInt(name)),
                 "--case-optimization-strength")

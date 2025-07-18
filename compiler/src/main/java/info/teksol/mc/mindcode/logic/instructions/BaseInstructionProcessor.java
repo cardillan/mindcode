@@ -171,7 +171,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case MULTICALL   -> new MultiCallInstruction(astContext, arguments, params);
             case MULTIJUMP   -> new MultiJumpInstruction(astContext, arguments, params);
             case MULTILABEL  -> new MultiLabelInstruction(astContext, arguments, params);
-            case NOOP        -> new NoOpInstruction(astContext);
+            case EMPTY -> new EmptyInstruction(astContext);
             case OP          -> new OpInstruction(astContext, arguments, params);
             case PACKCOLOR   -> new PackColorInstruction(astContext, arguments, params);
             case POP         -> new PopInstruction(astContext, arguments, params);
@@ -238,7 +238,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         AstContext astContext = instruction.getAstContext();
 
         switch (instruction) {
-            case NoOpInstruction ix -> { }
+            case EmptyInstruction ix -> { }
             case MultiLabelInstruction ix -> { }
             case LabelInstruction ix -> { }
             case PushInstruction ix -> {
@@ -345,7 +345,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR,
-            UNPACKCOLOR, LOOKUP, NOOP, SETADDR);
+            UNPACKCOLOR, LOOKUP, EMPTY, SETADDR);
     private static final Set<String> CONSTANT_PROPERTIES = Set.of("@size", "@speed", "@type", "@id");
 
     @Override

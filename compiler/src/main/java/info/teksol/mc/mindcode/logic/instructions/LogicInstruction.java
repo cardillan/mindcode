@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.List;
 import java.util.Map;
 
 @NullMarked
@@ -130,5 +131,22 @@ public interface LogicInstruction extends MlogInstruction {
 
     default LogicInstruction setComment(String comment) {
         return setInfo(InstructionInfo.COMMENT, comment);
+    }
+
+    @SuppressWarnings("unchecked")
+    default List<LogicLabel> getJumpTable() {
+        return (List<LogicLabel>) getInfo(InstructionInfo.JUMP_TABLE);
+    }
+
+    default LogicInstruction setJumpTable(List<LogicLabel> jumpTable) {
+        return setInfo(InstructionInfo.JUMP_TABLE, jumpTable);
+    }
+
+    default boolean isJumpTarget() {
+        return (boolean) getInfo(InstructionInfo.JUMP_TARGET);
+    }
+
+    default LogicInstruction setJumpTarget() {
+        return setInfo(InstructionInfo.JUMP_TARGET, true);
     }
 }

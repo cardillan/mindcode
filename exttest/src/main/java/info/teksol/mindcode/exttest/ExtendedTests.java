@@ -31,7 +31,6 @@ public class ExtendedTests {
             return;
         }
 
-
         try (PrintWriter master = new PrintWriter("results.txt")) {
             List<TestConfiguration> testConfigurations = new CopyOnWriteArrayList<>();
 

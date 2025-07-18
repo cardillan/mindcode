@@ -5,13 +5,12 @@
      2 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions eliminated by Loop Optimization (2 iterations).
      1 loops improved by Loop Optimization.
-     5 instructions eliminated by Case Switching (3 iterations).
+    25 instructions eliminated by Case Switching (3 iterations).
      1 case expressions converted to switched jumps Case Switching.
-    41 instructions after optimizations.
+    21 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 54):
-  * Convert case at line 11:5 (segments: 17)                     size    -5, benefit      570.7, efficiency   Infinity (-5 instructions)
-  ! Convert case at line 11:5 (segments: 1)                      size  +235, benefit      591.2, efficiency      2.516
+  * Convert case at line 11:5 (segments: 1)                      size   -25, benefit      616.2, efficiency   Infinity (-25 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -222,7 +221,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
     53 print :hash
     54 assertequals 2727247113 :hash "Test selected blocks"
 
-Modifications by Convert case at line 11:5 (segments: 17) (-5 instructions):
+Modifications by Convert case at line 11:5 (segments: 1) (-25 instructions):
  
      3 label *label0
      4 label *label9
@@ -256,41 +255,20 @@ Modifications by Convert case at line 11:5 (segments: 17) (-5 instructions):
 -    * jump *label6 equal :block @tile-logic-display
 -    * jump *label5 always
 +    6 sensor *tmp9 :block @id
-+    7 jump *label12 greaterThanEq *tmp9 203
-+    8 jump *label10 greaterThanEq *tmp9 35
-+    9 jump *label13 greaterThanEq *tmp9 17
-+   10 jump *label10 greaterThanEq *tmp9 1
-+   11 jump *label11 always
-+   12 label *label13
-+   13 jump *label6 lessThan *tmp9 29
-+   14 jump *label6 greaterThanEq *tmp9 31
-+   15 jump *label10 always
-+   16 label *label12
-+   17 jump *label14 greaterThanEq *tmp9 234
-+   18 jump *label15 greaterThanEq *tmp9 220
-+   19 jump *label10 greaterThanEq *tmp9 208
-+   20 jump *label6 lessThan *tmp9 205
-+   21 jump *label6 greaterThanEq *tmp9 206
-+   22 jump *label10 always
-+   23 label *label15
-+   24 jump *label10 greaterThanEq *tmp9 226
-+   25 jump *label6 lessThan *tmp9 222
-+   26 jump *label10 lessThan *tmp9 225
-+   27 jump *label6 always
-+   28 label *label14
-+   29 jump *label6 lessThan *tmp9 235
-+   30 jump *label10 lessThan *tmp9 259
-+   31 jump *label6 always
-+   32 label *label11
-+   33 jump *label6 strictEqual *tmp9 null
-    34 label *label6
-    35 set *tmp2 true
-    36 jump *label4 always
-    37 label *label5
-+   38 label *label10
-    39 set *tmp2 false
-    40 label *label4
-    41 label *label3
++    7 multijump *tmp9 0 0 (m:*label12)
++    8 multilabel *label13 (m:*label12)
++    9 label *label11
++   10 jump *label6 strictEqual *tmp9 null
++   11 multilabel *label15 (m:*label12)
+    12 label *label6
+    13 set *tmp2 true
+    14 jump *label4 always
+    15 label *label5
++   16 multilabel *label14 (m:*label12)
++   17 label *label10
+    18 set *tmp2 false
+    19 label *label4
+    20 label *label3
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      0 assertequals 260 @blockCount "Verify block count"
@@ -300,29 +278,34 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
      3 label *label9
      4 lookup block :block :i
      5 sensor *tmp9 :block @id
- 
-    33 label *label6
-    34 set *tmp2 true
-    35 jump *label4 always
+     6 multijump *tmp9 0 0 (m:*label12)
+     7 multilabel *label13 (m:*label12)
+-    * label *label11
+     8 jump *label6 strictEqual *tmp9 null
+     9 multilabel *label15 (m:*label12)
+    10 label *label6
+    11 set *tmp2 true
+    12 jump *label4 always
 -    * label *label5
-    36 label *label10
-    37 set *tmp2 false
-    38 label *label4
+    13 multilabel *label14 (m:*label12)
+-    * label *label10
+    14 set *tmp2 false
+    15 label *label4
 -    * label *label3
-    39 jump *label7 equal *tmp2 false
-    40 op mul *tmp5 :hash 31
-    41 op add *tmp6 *tmp5 :i
+    16 jump *label7 equal *tmp2 false
+    17 op mul *tmp5 :hash 31
+    18 op add *tmp6 *tmp5 :i
  
-    44 jump *label8 always
-    45 label *label7
-    46 label *label8
+    21 jump *label8 always
+    22 label *label7
+    23 label *label8
 -    * label *label1
-    47 op add :i :i 1
-    48 jump *label9 lessThan :i @blockCount
+    24 op add :i :i 1
+    25 jump *label9 lessThan :i @blockCount
 -    * label *label2
-    49 print :hash
-    50 assertequals 2727247113 :hash "Test selected blocks"
-    51 end
+    26 print :hash
+    27 assertequals 2727247113 :hash "Test selected blocks"
+    28 end
 
 Final code before resolving virtual instructions:
 
@@ -332,37 +315,14 @@ set :i -1
 label *label9
 lookup block :block :i
 sensor *tmp9 :block @id
-jump *label12 greaterThanEq *tmp9 203
-jump *label10 greaterThanEq *tmp9 35
-jump *label13 greaterThanEq *tmp9 17
-jump *label10 greaterThanEq *tmp9 1
-jump *label11 always
-label *label13
-jump *label6 lessThan *tmp9 29
-jump *label6 greaterThanEq *tmp9 31
-jump *label10 always
-label *label12
-jump *label14 greaterThanEq *tmp9 234
-jump *label15 greaterThanEq *tmp9 220
-jump *label10 greaterThanEq *tmp9 208
-jump *label6 lessThan *tmp9 205
-jump *label6 greaterThanEq *tmp9 206
-jump *label10 always
-label *label15
-jump *label10 greaterThanEq *tmp9 226
-jump *label6 lessThan *tmp9 222
-jump *label10 lessThan *tmp9 225
-jump *label6 always
-label *label14
-jump *label6 lessThan *tmp9 235
-jump *label10 lessThan *tmp9 259
-jump *label6 always
-label *label11
+multijump *tmp9 0 0
+multilabel *label13
 jump *label6 strictEqual *tmp9 null
+multilabel *label15
 label *label6
 set *tmp2 true
 jump *label4 always
-label *label10
+multilabel *label14
 set *tmp2 false
 label *label4
 jump *label7 equal *tmp2 false

@@ -66,6 +66,7 @@ public class CompilerProfile {
     private BuiltinEvaluation builtinEvaluation = BuiltinEvaluation.COMPATIBLE;
     private boolean targetGuard = false;
     private boolean mlogBlockOptimization = false;
+    private boolean textJumpTables = true;
     private boolean unsafeCaseOptimization = false;
     private boolean shortCircuitEval = false;
     private boolean shortFunctionPrefix = false;
@@ -553,6 +554,15 @@ public class CompilerProfile {
         return this;
     }
 
+    public boolean isTextJumpTables() {
+        return textJumpTables;
+    }
+
+    public CompilerProfile setTextJumpTables(boolean textJumpTables) {
+        this.textJumpTables = textJumpTables;
+        return this;
+    }
+
     public boolean isWebApplication() {
         return webApplication;
     }
@@ -589,6 +599,9 @@ public class CompilerProfile {
         return this;
     }
 
+    public boolean useTextJumpTables() {
+        return textJumpTables && !symbolicLabels && processorVersion.atLeast(ProcessorVersion.V8A);
+    }
 
     @Override
     public boolean equals(Object o) {

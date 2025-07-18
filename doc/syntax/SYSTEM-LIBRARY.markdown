@@ -285,8 +285,8 @@ and repackaging them back.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  26 |                 26 |
-| Function body                  |                  27 |                 27 |
+| Inlined function               |                  26 |                 24 |
+| Function body                  |                  27 |                 25 |
 | Function call                  |                   7 |                  7 |
 
 Creates a packed color using the HSV color model. The individual components (hue, saturation, value, alpha)
@@ -970,8 +970,8 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  38 |                 37 |
-| Function body                  |                  39 |                 38 |
+| Inlined function               |                  38 |                 32 |
+| Function body                  |                  39 |                 33 |
 | Function call                  |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -997,8 +997,8 @@ Nulls are printed as zero values.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  39 |                 38 |
-| Function body                  |                  40 |                 39 |
+| Inlined function               |                  39 |                 34 |
+| Function body                  |                  40 |                 35 |
 | Function call                  |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.

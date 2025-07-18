@@ -17,7 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Added target 8.1 matching the latest supported BE version. Target 8.0 now corresponds to Mindustry Logic v8 Build 149 Beta.
 * Added support for new instruction opcodes (`setmarker textAlign` and `setmarker lineAlign`).
-* Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions. 
+* Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions.
+* Added preliminary support for generating [text-based jump tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
 
 ### Changed
 

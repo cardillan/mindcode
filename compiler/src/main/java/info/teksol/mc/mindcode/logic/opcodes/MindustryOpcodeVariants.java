@@ -39,6 +39,8 @@ public class MindustryOpcodeVariants {
 
     private List<OpcodeVariant> initialize() {
         List<OpcodeVariant> list = new ArrayList<>();
+        add(list, V6,  MAX, S, FUNC, Opcode.NOOP);
+
         add(list, V6,   V7A, S, NONE, Opcode.READ,       res("result"), block("cell1"), in("at"));
         add(list, V6,   V7A, S, NONE, Opcode.WRITE,      in("value"),   block("cell1"), in("at"));
         add(list, V8A,  MAX, S, PROP, Opcode.READ,       res("result"), block("processor1"), in("name"));
@@ -349,7 +351,7 @@ public class MindustryOpcodeVariants {
                 type("type"), in("multiple"), in("min"), cond("minOp"), in("value"), cond("maxOp"), in("max"), in("message"));
 
         // Virtual instructions
-        add(list, V6,  MAX, S, NONE, Opcode.NOOP);
+        add(list, V6,  MAX, S, NONE, Opcode.EMPTY);
         add(list, V6,  MAX, S, NONE, Opcode.LABEL,       label("label"));
         // §§§ retval is a side effect and needs to be handled as such
         add(list, V6,  MAX, S, NONE, Opcode.CALL,        label("callAddr"), out("retAddr"), out("retval"));

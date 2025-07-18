@@ -8,9 +8,9 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
 import info.teksol.mc.mindcode.logic.instructions.EndInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ReturnInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -109,7 +109,7 @@ class FunctionInliner extends BaseOptimizer {
         }
 
         int index = body.size() - 1;
-        while (index > 0 && (body.get(index) instanceof EndInstruction || body.get(index) instanceof NoOpInstruction)) {
+        while (index > 0 && (body.get(index) instanceof EndInstruction || body.get(index) instanceof EmptyInstruction)) {
             index--;
         }
 

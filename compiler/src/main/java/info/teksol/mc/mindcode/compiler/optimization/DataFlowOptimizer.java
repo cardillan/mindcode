@@ -895,7 +895,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         // Handle special cases
         switch (instruction) {
-            case NoOpInstruction ix     -> { return variableStates; }
+            case EmptyInstruction ix     -> { return variableStates; }
             case PushInstruction ix     -> { return variableStates.pushVariable(ix.getVariable()); }
             case PopInstruction ix      -> { return variableStates.popVariable(ix.getVariable()); }
             case LabeledInstruction ix  -> { return resolveLabel(variableStates, ix.getLabel()); }
@@ -1001,7 +1001,7 @@ class DataFlowOptimizer extends BaseOptimizer {
     }
 
     /// Determines whether it is possible to eliminate an assignment to a variable by given instruction. Elimination
-    /// is generally allowed except cases requiring special protection.
+    /// is generally allowed except in cases requiring special protection.
     ///
     /// @param instruction instruction setting the variable
     /// @param variable    variable being inspected

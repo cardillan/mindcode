@@ -245,6 +245,14 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveTextJumpTables() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setTextJumpTables(false);
+        processDirective(profile, "text-jump-tables", "false");
+        assertFalse(profile.isTextJumpTables());
+    }
+
+    @Test
     void refusesInvalidOption() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         ExpectedMessages.create()

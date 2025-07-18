@@ -59,7 +59,7 @@ class JumpStraightening extends BaseOptimizer {
                                     if (label.getLabel().equals(jump.getTarget())) {
                                         iterator.set(jump.invert().withTarget(next.getTarget()));
                                         AstContext astContext = iterator.next().getAstContext();
-                                        iterator.set(createNoOp(astContext));
+                                        iterator.set(createEmpty(astContext));
                                         break;
                                     }
                                 } else if (instruction.isReal()) {

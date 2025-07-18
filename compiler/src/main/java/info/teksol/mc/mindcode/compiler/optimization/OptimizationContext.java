@@ -515,7 +515,7 @@ class OptimizationContext {
                 switch (it.next()) {
                     case LabelInstruction l      when !l.getLabel().isRemote() && hasNoReferences(l.getLabel()) -> it.remove();
                     case MultiLabelInstruction g when hasNoReferences(g.getLabel()) && hasNoReferences(g.getMarker()) -> it.remove();
-                    case NoOpInstruction noop -> it.remove();
+                    case EmptyInstruction noop -> it.remove();
                     default -> { }
                 }
             }
@@ -813,7 +813,7 @@ class OptimizationContext {
             throw new MindcodeInternalError("Label not found in program.\nLabel: " + label);
         }
         return firstInstructionIndex(labelIndex + 1,
-                ix -> !(ix instanceof LabeledInstruction) && !(ix instanceof NoOpInstruction));
+                ix -> !(ix instanceof LabeledInstruction) && !(ix instanceof EmptyInstruction));
     }
 
     /// Starting at given index, find first instruction matching predicate. Return null if not found.
@@ -1426,11 +1426,11 @@ class OptimizationContext {
         return List.copyOf(result);
     }
 
-    protected <T> List<T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, T> action) {
+    protected <T> List<@NotNull T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
         return forEachContext(rootContext, matcher, action);
     }
 
-    protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
+    protected <T> List<@NotNull T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
             Function<AstContext, @Nullable T> action) {
         return forEachContext(rootContext, c -> c.matches(contextType, subcontextType), action);
     }
@@ -1512,7 +1512,7 @@ class OptimizationContext {
         int index = lastInstructionIndex(ix -> ix.belongsTo(astContext)) + 1;
         while (index < program.size()
                && (instructionAt(index) instanceof LabelInstruction ix && !isActive(ix.getLabel())
-               || instructionAt(index) instanceof NoOpInstruction)) {
+               || instructionAt(index) instanceof EmptyInstruction)) {
             index++;
         }
         return index < program.size() ? instructionAt(index) : null;

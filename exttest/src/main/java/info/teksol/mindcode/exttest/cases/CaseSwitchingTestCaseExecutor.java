@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.optimization.CaseSwitcher.ConvertCaseExp
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.compiler.optimization.cases.CaseSwitcherConfigurations;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mindcode.exttest.ErrorResult;
 import info.teksol.mindcode.exttest.TestProgress;
@@ -44,7 +45,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
-            int originalSteps = compiler.getEmulator().getSteps();
+            int originalSteps = compiler.getEmulator().getSteps() - compiler.getEmulator().getNoopSteps();
             int originalSize = compiler.getInstructions().size();
             String originalOutput = compiler.getEmulator().getTextBuffer().getFormattedOutput();
 
@@ -54,8 +55,8 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .setGoal(GenerationGoal.SPEED)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
-            int newSteps = compiler.getEmulator().getSteps();
-            int newSize = compiler.getInstructions().size();
+            int newSteps = compiler.getEmulator().getSteps() - compiler.getEmulator().getNoopSteps();
+            int newSize = (int) compiler.getInstructions().stream().filter(ix -> ix.getOpcode() != Opcode.NOOP).count();
             String newOutput = compiler.getEmulator().getTextBuffer().getFormattedOutput();
 
             List<CaseSwitcherConfigurations> configurationData = compiler.getDiagnosticData(CaseSwitcherConfigurations.class);
@@ -79,7 +80,10 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 int blockCount = compiler.metadata().getBlockCount();
                 int stepDifference = originalSteps - newSteps;
                 int expectedStepDifference = action.originalSteps() - action.executionSteps();
+                boolean success = true;
+
                 if (stepDifference != expectedStepDifference) {
+                    success = false;
                     progress.reportError(new ErrorResult(testCaseId,
                             compiler.globalCompilerProfile(), "", compiler.getExecutionException(),
                             String.format("Original steps: %d, new steps: %d, difference: %d (expected %d).",
@@ -89,16 +93,23 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 int sizeDifference = newSize - originalSize;
                 int expectedSizeDifference = action.cost();
                 if (sizeDifference != expectedSizeDifference) {
+                    success = false;
                     progress.reportError(new ErrorResult(testCaseId,
                             compiler.globalCompilerProfile(), "", compiler.getExecutionException(),
                             String.format("Original size: %d, new size: %d, difference: %d (expected %d)",
                                     originalSize, newSize, sizeDifference, expectedSizeDifference)));
                 }
 
-                if (stepDifference == expectedStepDifference && sizeDifference == expectedSizeDifference) {
+                if (compiler.getEmulator().getNoopSteps() > 1) {
+                    success = false;
+                    progress.reportError(new ErrorResult(testCaseId,
+                            compiler.globalCompilerProfile(), "", compiler.getExecutionException(),
+                            String.format("Unexpected noop executions: %d (expected at most 1).", compiler.getEmulator().getNoopSteps())));
+                }
+
+                if (success) {
                     progress.reportSuccess();
                 }
-//                progress.reportSuccess();
             }
         } catch (Exception e) {
             progress.reportError(new ErrorResult(testCaseId,

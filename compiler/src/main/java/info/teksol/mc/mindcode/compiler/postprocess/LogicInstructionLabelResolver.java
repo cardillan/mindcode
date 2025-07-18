@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
@@ -233,10 +234,18 @@ public class LogicInstructionLabelResolver {
         return result;
     }
 
+    private static final Set<Integer> invalidAddresses = Set.of(0, (int) '\r',  (int) '"', (int) '\\');
+
     private void calculateAddresses(List<LogicInstruction> program) {
+        boolean alignMultiLabes = profile.useTextJumpTables();
         int instructionPointer = 0;
         for (int i = 0; i < program.size(); i++) {
             final LogicInstruction instruction = program.get(i);
+            if (alignMultiLabes && instruction.isJumpTarget() && invalidAddresses.contains(instructionPointer)) {
+                program.add(i++, processor.createInstruction(instruction.getAstContext(), Opcode.NOOP));
+                instructionPointer++;
+            }
+
             instructionPointer += instruction.getRealSize(null);
             if (instruction instanceof LabeledInstruction ix) {
                 if (addresses.containsKey(ix.getLabel())) {
@@ -280,7 +289,20 @@ public class LogicInstructionLabelResolver {
                     throw new MindcodeInternalError("MultiCall target '%s' is not a label.", ix.getTarget());
                 }
             } else if (instruction instanceof MultiJumpInstruction ix) {
-                if (ix.getTarget() instanceof LogicVariable var) {
+                List<LogicLabel> jumpTable = ix.getJumpTable();
+                if (!jumpTable.isEmpty()) {
+                    // Build the string jump table
+                    StringBuilder sbr = new StringBuilder(jumpTable.size() + 1);
+                    int index = 0;
+                    for (LogicLabel label : jumpTable) {
+                        int address = ((LogicLabel) resolveLabel(label)).getAddress();
+                        sbr.append(address == 10 ? "\\n" : (char) address);
+                    }
+                    LogicString jumpTableString = LogicString.create(ix.sourcePosition(), sbr.toString());
+                    LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
+                            READ, LogicBuiltIn.COUNTER, jumpTableString, ix.getTarget());
+                    result.add(newInstruction);
+                } else if (ix.getTarget() instanceof LogicVariable var) {
                     LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
                             SET, LogicBuiltIn.COUNTER, var);
                     result.add(newInstruction);

@@ -17,6 +17,7 @@ import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -474,13 +475,13 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     protected void invalidateInstruction(int index) {
         LogicInstruction instruction = instructionAt(index);
-        if (instruction.getOpcode() != Opcode.NOOP) {
-            replaceInstruction(index, createNoOp(instruction.getAstContext()));
+        if (instruction.getOpcode() != Opcode.EMPTY) {
+            replaceInstruction(index, createEmpty(instruction.getAstContext()));
         }
     }
 
     protected void invalidateInstruction(LogicInstruction instruction) {
-        replaceInstruction(instruction, createNoOp(instruction.getAstContext()));
+        replaceInstruction(instruction, createEmpty(instruction.getAstContext()));
     }
 
     /// Inserts a new instruction before given, existing instruction. The new instruction must be assigned
@@ -630,11 +631,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         };
     }
 
-    protected <T> List<T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
+    protected <T> List<@NotNull T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
         return optimizationContext.forEachContext(matcher, action);
     }
 
-    protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
+    protected <T> List<@NotNull T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
             Function<AstContext, @Nullable T> action) {
         return optimizationContext.forEachContext(contextType, subcontextType, action);
     }

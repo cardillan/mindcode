@@ -166,6 +166,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void handlesCaseExpressions() {
             assertCompilesTo("""
+                            #set text-jump-tables = false;
                             a = case cell1[0]
                                 when 0, 1, 2 then 10;
                                 when 10 .. 20 then 20;

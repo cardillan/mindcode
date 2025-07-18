@@ -43,6 +43,10 @@ public interface ContextlessInstructionCreator {
         return (ControlInstruction) createInstruction(astContext, CONTROL, property, target, value);
     }
 
+    default EmptyInstruction createEmpty(AstContext astContext) {
+        return (EmptyInstruction) createInstruction(astContext, EMPTY);
+    }
+
     default EndInstruction createEnd(AstContext astContext) {
         return (EndInstruction) createInstruction(astContext, END);
     }
@@ -85,10 +89,6 @@ public interface ContextlessInstructionCreator {
 
     default MultiLabelInstruction createMultiLabel(AstContext astContext, LogicLabel label, LogicLabel marker) {
         return (MultiLabelInstruction) createInstruction(astContext, MULTILABEL, label).setMarker(marker);
-    }
-
-    default NoOpInstruction createNoOp(AstContext astContext) {
-        return (NoOpInstruction) createInstruction(astContext, NOOP);
     }
 
     default OpInstruction createOp(AstContext astContext, Operation operation, LogicVariable target, LogicValue first) {

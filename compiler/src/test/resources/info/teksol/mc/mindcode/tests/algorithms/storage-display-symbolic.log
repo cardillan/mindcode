@@ -6670,26 +6670,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
    224 op mod *tmp19 :displayItem:amount 10
    225 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label312 notEqual *tmp19 0
-+  226 multijump *label531 *tmp19 0 (m:*label541)
-+  227 multilabel *label531 (m:*label541)
++  226 multijump *label532 *tmp19 0 (m:*label531)
++  227 multilabel *label532 (m:*label531)
 +  228 jump *label311 always
-+  229 multilabel *label532 (m:*label541)
++  229 multilabel *label533 (m:*label531)
 +  230 jump *label313 always
-+  231 multilabel *label533 (m:*label541)
++  231 multilabel *label534 (m:*label531)
 +  232 jump *label315 always
-+  233 multilabel *label534 (m:*label541)
++  233 multilabel *label535 (m:*label531)
 +  234 jump *label317 always
-+  235 multilabel *label535 (m:*label541)
++  235 multilabel *label536 (m:*label531)
 +  236 jump *label319 always
-+  237 multilabel *label536 (m:*label541)
++  237 multilabel *label537 (m:*label531)
 +  238 jump *label321 always
-+  239 multilabel *label537 (m:*label541)
++  239 multilabel *label538 (m:*label531)
 +  240 jump *label323 always
-+  241 multilabel *label538 (m:*label541)
++  241 multilabel *label539 (m:*label531)
 +  242 jump *label325 always
-+  243 multilabel *label539 (m:*label541)
++  243 multilabel *label540 (m:*label531)
 +  244 jump *label327 always
-+  245 multilabel *label540 (m:*label541)
++  245 multilabel *label541 (m:*label531)
 +  246 jump *label329 always
    247 label *label311
    248 op sub *tmp26 :y 1
@@ -6776,26 +6776,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
    336 op mod *tmp19 :displayItem:amount 10
    337 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label338 notEqual *tmp19 0
-+  338 multijump *label543 *tmp19 0 (m:*label553)
-+  339 multilabel *label543 (m:*label553)
++  338 multijump *label544 *tmp19 0 (m:*label543)
++  339 multilabel *label544 (m:*label543)
 +  340 jump *label337 always
-+  341 multilabel *label544 (m:*label553)
++  341 multilabel *label545 (m:*label543)
 +  342 jump *label339 always
-+  343 multilabel *label545 (m:*label553)
++  343 multilabel *label546 (m:*label543)
 +  344 jump *label341 always
-+  345 multilabel *label546 (m:*label553)
++  345 multilabel *label547 (m:*label543)
 +  346 jump *label343 always
-+  347 multilabel *label547 (m:*label553)
++  347 multilabel *label548 (m:*label543)
 +  348 jump *label345 always
-+  349 multilabel *label548 (m:*label553)
++  349 multilabel *label549 (m:*label543)
 +  350 jump *label347 always
-+  351 multilabel *label549 (m:*label553)
++  351 multilabel *label550 (m:*label543)
 +  352 jump *label349 always
-+  353 multilabel *label550 (m:*label553)
++  353 multilabel *label551 (m:*label543)
 +  354 jump *label351 always
-+  355 multilabel *label551 (m:*label553)
++  355 multilabel *label552 (m:*label543)
 +  356 jump *label353 always
-+  357 multilabel *label552 (m:*label553)
++  357 multilabel *label553 (m:*label543)
 +  358 jump *label355 always
    359 label *label337
    360 op sub *tmp26 :y 1
@@ -6882,26 +6882,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
    448 op mod *tmp19 :displayItem:amount 10
    449 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label364 notEqual *tmp19 0
-+  450 multijump *label555 *tmp19 0 (m:*label565)
-+  451 multilabel *label555 (m:*label565)
++  450 multijump *label556 *tmp19 0 (m:*label555)
++  451 multilabel *label556 (m:*label555)
 +  452 jump *label363 always
-+  453 multilabel *label556 (m:*label565)
++  453 multilabel *label557 (m:*label555)
 +  454 jump *label365 always
-+  455 multilabel *label557 (m:*label565)
++  455 multilabel *label558 (m:*label555)
 +  456 jump *label367 always
-+  457 multilabel *label558 (m:*label565)
++  457 multilabel *label559 (m:*label555)
 +  458 jump *label369 always
-+  459 multilabel *label559 (m:*label565)
++  459 multilabel *label560 (m:*label555)
 +  460 jump *label371 always
-+  461 multilabel *label560 (m:*label565)
++  461 multilabel *label561 (m:*label555)
 +  462 jump *label373 always
-+  463 multilabel *label561 (m:*label565)
++  463 multilabel *label562 (m:*label555)
 +  464 jump *label375 always
-+  465 multilabel *label562 (m:*label565)
++  465 multilabel *label563 (m:*label555)
 +  466 jump *label377 always
-+  467 multilabel *label563 (m:*label565)
++  467 multilabel *label564 (m:*label555)
 +  468 jump *label379 always
-+  469 multilabel *label564 (m:*label565)
++  469 multilabel *label565 (m:*label555)
 +  470 jump *label381 always
    471 label *label363
    472 op sub *tmp26 :y 1
@@ -6988,26 +6988,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
    560 op mod *tmp19 :displayItem:amount 10
    561 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label390 notEqual *tmp19 0
-+  562 multijump *label567 *tmp19 0 (m:*label577)
-+  563 multilabel *label567 (m:*label577)
++  562 multijump *label568 *tmp19 0 (m:*label567)
++  563 multilabel *label568 (m:*label567)
 +  564 jump *label389 always
-+  565 multilabel *label568 (m:*label577)
++  565 multilabel *label569 (m:*label567)
 +  566 jump *label391 always
-+  567 multilabel *label569 (m:*label577)
++  567 multilabel *label570 (m:*label567)
 +  568 jump *label393 always
-+  569 multilabel *label570 (m:*label577)
++  569 multilabel *label571 (m:*label567)
 +  570 jump *label395 always
-+  571 multilabel *label571 (m:*label577)
++  571 multilabel *label572 (m:*label567)
 +  572 jump *label397 always
-+  573 multilabel *label572 (m:*label577)
++  573 multilabel *label573 (m:*label567)
 +  574 jump *label399 always
-+  575 multilabel *label573 (m:*label577)
++  575 multilabel *label574 (m:*label567)
 +  576 jump *label401 always
-+  577 multilabel *label574 (m:*label577)
++  577 multilabel *label575 (m:*label567)
 +  578 jump *label403 always
-+  579 multilabel *label575 (m:*label577)
++  579 multilabel *label576 (m:*label567)
 +  580 jump *label405 always
-+  581 multilabel *label576 (m:*label577)
++  581 multilabel *label577 (m:*label567)
 +  582 jump *label407 always
    583 label *label389
    584 op sub *tmp26 :y 1
@@ -7094,26 +7094,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
    696 op mod *tmp19 :displayItem:amount 10
    697 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label423 notEqual *tmp19 0
-+  698 multijump *label579 *tmp19 0 (m:*label589)
-+  699 multilabel *label579 (m:*label589)
++  698 multijump *label580 *tmp19 0 (m:*label579)
++  699 multilabel *label580 (m:*label579)
 +  700 jump *label422 always
-+  701 multilabel *label580 (m:*label589)
++  701 multilabel *label581 (m:*label579)
 +  702 jump *label424 always
-+  703 multilabel *label581 (m:*label589)
++  703 multilabel *label582 (m:*label579)
 +  704 jump *label426 always
-+  705 multilabel *label582 (m:*label589)
++  705 multilabel *label583 (m:*label579)
 +  706 jump *label428 always
-+  707 multilabel *label583 (m:*label589)
++  707 multilabel *label584 (m:*label579)
 +  708 jump *label430 always
-+  709 multilabel *label584 (m:*label589)
++  709 multilabel *label585 (m:*label579)
 +  710 jump *label432 always
-+  711 multilabel *label585 (m:*label589)
++  711 multilabel *label586 (m:*label579)
 +  712 jump *label434 always
-+  713 multilabel *label586 (m:*label589)
++  713 multilabel *label587 (m:*label579)
 +  714 jump *label436 always
-+  715 multilabel *label587 (m:*label589)
++  715 multilabel *label588 (m:*label579)
 +  716 jump *label438 always
-+  717 multilabel *label588 (m:*label589)
++  717 multilabel *label589 (m:*label579)
 +  718 jump *label440 always
    719 label *label422
    720 op sub *tmp26 :y 1
@@ -7200,26 +7200,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
    808 op mod *tmp19 :displayItem:amount 10
    809 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label449 notEqual *tmp19 0
-+  810 multijump *label591 *tmp19 0 (m:*label601)
-+  811 multilabel *label591 (m:*label601)
++  810 multijump *label592 *tmp19 0 (m:*label591)
++  811 multilabel *label592 (m:*label591)
 +  812 jump *label448 always
-+  813 multilabel *label592 (m:*label601)
++  813 multilabel *label593 (m:*label591)
 +  814 jump *label450 always
-+  815 multilabel *label593 (m:*label601)
++  815 multilabel *label594 (m:*label591)
 +  816 jump *label452 always
-+  817 multilabel *label594 (m:*label601)
++  817 multilabel *label595 (m:*label591)
 +  818 jump *label454 always
-+  819 multilabel *label595 (m:*label601)
++  819 multilabel *label596 (m:*label591)
 +  820 jump *label456 always
-+  821 multilabel *label596 (m:*label601)
++  821 multilabel *label597 (m:*label591)
 +  822 jump *label458 always
-+  823 multilabel *label597 (m:*label601)
++  823 multilabel *label598 (m:*label591)
 +  824 jump *label460 always
-+  825 multilabel *label598 (m:*label601)
++  825 multilabel *label599 (m:*label591)
 +  826 jump *label462 always
-+  827 multilabel *label599 (m:*label601)
++  827 multilabel *label600 (m:*label591)
 +  828 jump *label464 always
-+  829 multilabel *label600 (m:*label601)
++  829 multilabel *label601 (m:*label591)
 +  830 jump *label466 always
    831 label *label448
    832 op sub *tmp26 :y 1
@@ -7306,26 +7306,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
    920 op mod *tmp19 :displayItem:amount 10
    921 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label475 notEqual *tmp19 0
-+  922 multijump *label603 *tmp19 0 (m:*label613)
-+  923 multilabel *label603 (m:*label613)
++  922 multijump *label604 *tmp19 0 (m:*label603)
++  923 multilabel *label604 (m:*label603)
 +  924 jump *label474 always
-+  925 multilabel *label604 (m:*label613)
++  925 multilabel *label605 (m:*label603)
 +  926 jump *label476 always
-+  927 multilabel *label605 (m:*label613)
++  927 multilabel *label606 (m:*label603)
 +  928 jump *label478 always
-+  929 multilabel *label606 (m:*label613)
++  929 multilabel *label607 (m:*label603)
 +  930 jump *label480 always
-+  931 multilabel *label607 (m:*label613)
++  931 multilabel *label608 (m:*label603)
 +  932 jump *label482 always
-+  933 multilabel *label608 (m:*label613)
++  933 multilabel *label609 (m:*label603)
 +  934 jump *label484 always
-+  935 multilabel *label609 (m:*label613)
++  935 multilabel *label610 (m:*label603)
 +  936 jump *label486 always
-+  937 multilabel *label610 (m:*label613)
++  937 multilabel *label611 (m:*label603)
 +  938 jump *label488 always
-+  939 multilabel *label611 (m:*label613)
++  939 multilabel *label612 (m:*label603)
 +  940 jump *label490 always
-+  941 multilabel *label612 (m:*label613)
++  941 multilabel *label613 (m:*label603)
 +  942 jump *label492 always
    943 label *label474
    944 op sub *tmp26 :y 1
@@ -7412,26 +7412,26 @@ Modifications by Convert case at line 100:5 (segments: 1) (+1 instructions):
   1032 op mod *tmp19 :displayItem:amount 10
   1033 # "Function: def drawDigit(in x, in y, in digit)"
 -    * jump *label501 notEqual *tmp19 0
-+ 1034 multijump *label615 *tmp19 0 (m:*label625)
-+ 1035 multilabel *label615 (m:*label625)
++ 1034 multijump *label616 *tmp19 0 (m:*label615)
++ 1035 multilabel *label616 (m:*label615)
 + 1036 jump *label500 always
-+ 1037 multilabel *label616 (m:*label625)
++ 1037 multilabel *label617 (m:*label615)
 + 1038 jump *label502 always
-+ 1039 multilabel *label617 (m:*label625)
++ 1039 multilabel *label618 (m:*label615)
 + 1040 jump *label504 always
-+ 1041 multilabel *label618 (m:*label625)
++ 1041 multilabel *label619 (m:*label615)
 + 1042 jump *label506 always
-+ 1043 multilabel *label619 (m:*label625)
++ 1043 multilabel *label620 (m:*label615)
 + 1044 jump *label508 always
-+ 1045 multilabel *label620 (m:*label625)
++ 1045 multilabel *label621 (m:*label615)
 + 1046 jump *label510 always
-+ 1047 multilabel *label621 (m:*label625)
++ 1047 multilabel *label622 (m:*label615)
 + 1048 jump *label512 always
-+ 1049 multilabel *label622 (m:*label625)
++ 1049 multilabel *label623 (m:*label615)
 + 1050 jump *label514 always
-+ 1051 multilabel *label623 (m:*label625)
++ 1051 multilabel *label624 (m:*label615)
 + 1052 jump *label516 always
-+ 1053 multilabel *label624 (m:*label625)
++ 1053 multilabel *label625 (m:*label615)
 + 1054 jump *label518 always
   1055 label *label500
   1056 op sub *tmp26 :y 1
@@ -7837,7 +7837,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label310
    159 op mod *tmp19 :displayItem:amount 10
    160 # "Function: def drawDigit(in x, in y, in digit)"
-   161 multijump *label531 *tmp19 0 (m:*label541)
+   161 multijump *label532 *tmp19 0 (m:*label531)
  
    183 op sub *tmp26 :y 1
    184 draw lineRect 70 *tmp26 9 14
@@ -7921,7 +7921,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label336
    256 op mod *tmp19 :displayItem:amount 10
    257 # "Function: def drawDigit(in x, in y, in digit)"
-   258 multijump *label543 *tmp19 0 (m:*label553)
+   258 multijump *label544 *tmp19 0 (m:*label543)
  
    280 op sub *tmp26 :y 1
    281 draw lineRect 59 *tmp26 9 14
@@ -8005,7 +8005,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label362
    353 op mod *tmp19 :displayItem:amount 10
    354 # "Function: def drawDigit(in x, in y, in digit)"
-   355 multijump *label555 *tmp19 0 (m:*label565)
+   355 multijump *label556 *tmp19 0 (m:*label555)
  
    377 op sub *tmp26 :y 1
    378 draw lineRect 48 *tmp26 9 14
@@ -8089,7 +8089,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label388
    450 op mod *tmp19 :displayItem:amount 10
    451 # "Function: def drawDigit(in x, in y, in digit)"
-   452 multijump *label567 *tmp19 0 (m:*label577)
+   452 multijump *label568 *tmp19 0 (m:*label567)
  
    474 op sub *tmp26 :y 1
    475 draw lineRect 37 *tmp26 9 14
@@ -8190,7 +8190,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label421
    567 op mod *tmp19 :displayItem:amount 10
    568 # "Function: def drawDigit(in x, in y, in digit)"
-   569 multijump *label579 *tmp19 0 (m:*label589)
+   569 multijump *label580 *tmp19 0 (m:*label579)
  
    591 op sub *tmp26 :y 1
    592 draw lineRect 156 *tmp26 9 14
@@ -8274,7 +8274,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label447
    664 op mod *tmp19 :displayItem:amount 10
    665 # "Function: def drawDigit(in x, in y, in digit)"
-   666 multijump *label591 *tmp19 0 (m:*label601)
+   666 multijump *label592 *tmp19 0 (m:*label591)
  
    688 op sub *tmp26 :y 1
    689 draw lineRect 145 *tmp26 9 14
@@ -8358,7 +8358,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label473
    761 op mod *tmp19 :displayItem:amount 10
    762 # "Function: def drawDigit(in x, in y, in digit)"
-   763 multijump *label603 *tmp19 0 (m:*label613)
+   763 multijump *label604 *tmp19 0 (m:*label603)
  
    785 op sub *tmp26 :y 1
    786 draw lineRect 134 *tmp26 9 14
@@ -8442,7 +8442,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
 -    * label *label499
    858 op mod *tmp19 :displayItem:amount 10
    859 # "Function: def drawDigit(in x, in y, in digit)"
-   860 multijump *label615 *tmp19 0 (m:*label625)
+   860 multijump *label616 *tmp19 0 (m:*label615)
  
    882 op sub *tmp26 :y 1
    883 draw lineRect 123 *tmp26 9 14
@@ -8648,7 +8648,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label333
    254 op mod *tmp19 :displayItem:amount 10
    255 # "Function: def drawDigit(in x, in y, in digit)"
-   256 multijump *label543 *tmp19 0 (m:*label553)
+   256 multijump *label544 *tmp19 0 (m:*label543)
  
    346 label *label357
    347 op idiv :displayItem:amount :displayItem:amount 10
@@ -8656,7 +8656,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label359
    349 op mod *tmp19 :displayItem:amount 10
    350 # "Function: def drawDigit(in x, in y, in digit)"
-   351 multijump *label555 *tmp19 0 (m:*label565)
+   351 multijump *label556 *tmp19 0 (m:*label555)
  
    441 label *label383
    442 op idiv :displayItem:amount :displayItem:amount 10
@@ -8664,7 +8664,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label385
    444 op mod *tmp19 :displayItem:amount 10
    445 # "Function: def drawDigit(in x, in y, in digit)"
-   446 multijump *label567 *tmp19 0 (m:*label577)
+   446 multijump *label568 *tmp19 0 (m:*label567)
  
    536 label *label409
    537 op idiv :displayItem:amount :displayItem:amount 10
@@ -8680,7 +8680,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label444
    654 op mod *tmp19 :displayItem:amount 10
    655 # "Function: def drawDigit(in x, in y, in digit)"
-   656 multijump *label591 *tmp19 0 (m:*label601)
+   656 multijump *label592 *tmp19 0 (m:*label591)
  
    746 label *label468
    747 op idiv :displayItem:amount :displayItem:amount 10
@@ -8688,7 +8688,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label470
    749 op mod *tmp19 :displayItem:amount 10
    750 # "Function: def drawDigit(in x, in y, in digit)"
-   751 multijump *label603 *tmp19 0 (m:*label613)
+   751 multijump *label604 *tmp19 0 (m:*label603)
  
    841 label *label494
    842 op idiv :displayItem:amount :displayItem:amount 10
@@ -8696,7 +8696,7 @@ Modifications by Jumps phase, Jump Optimization, pass 4, iteration 1:
 -    * label *label496
    844 op mod *tmp19 :displayItem:amount 10
    845 # "Function: def drawDigit(in x, in y, in digit)"
-   846 multijump *label615 *tmp19 0 (m:*label625)
+   846 multijump *label616 *tmp19 0 (m:*label615)
  
    936 label *label520
    937 op idiv :displayItem:amount :displayItem:amount 10
@@ -8715,7 +8715,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +  253 jump *label48 equal :displayItem:amount 0
    254 op mod *tmp19 :displayItem:amount 10
    255 # "Function: def drawDigit(in x, in y, in digit)"
-   256 multijump *label543 *tmp19 0 (m:*label553)
+   256 multijump *label544 *tmp19 0 (m:*label543)
  
    345 draw line 60 *tmp104 67 *tmp104
    346 label *label357
@@ -8724,7 +8724,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +  348 jump *label48 equal :displayItem:amount 0
    349 op mod *tmp19 :displayItem:amount 10
    350 # "Function: def drawDigit(in x, in y, in digit)"
-   351 multijump *label555 *tmp19 0 (m:*label565)
+   351 multijump *label556 *tmp19 0 (m:*label555)
  
    440 draw line 49 *tmp104 56 *tmp104
    441 label *label383
@@ -8733,7 +8733,7 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +  443 jump *label48 equal :displayItem:amount 0
    444 op mod *tmp19 :displayItem:amount 10
    445 # "Function: def drawDigit(in x, in y, in digit)"
-   446 multijump *label567 *tmp19 0 (m:*label577)
+   446 multijump *label568 *tmp19 0 (m:*label567)
  
    535 draw line 38 *tmp104 45 *tmp104
    536 label *label409
@@ -9126,26 +9126,26 @@ op max :displayItem:amount AMOUNT 0
 draw color 0 255 0 255
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label531 *tmp19 0
-multilabel *label531
-jump *label311 always
+multijump *label532 *tmp19 0
 multilabel *label532
-jump *label313 always
+jump *label311 always
 multilabel *label533
-jump *label315 always
+jump *label313 always
 multilabel *label534
-jump *label317 always
+jump *label315 always
 multilabel *label535
-jump *label319 always
+jump *label317 always
 multilabel *label536
-jump *label321 always
+jump *label319 always
 multilabel *label537
-jump *label323 always
+jump *label321 always
 multilabel *label538
-jump *label325 always
+jump *label323 always
 multilabel *label539
-jump *label327 always
+jump *label325 always
 multilabel *label540
+jump *label327 always
+multilabel *label541
 jump *label329 always
 label *label311
 op sub *tmp26 :y 1
@@ -9221,26 +9221,26 @@ op idiv :displayItem:amount :displayItem:amount 10
 jump *label48 equal :displayItem:amount 0
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label543 *tmp19 0
-multilabel *label543
-jump *label337 always
+multijump *label544 *tmp19 0
 multilabel *label544
-jump *label339 always
+jump *label337 always
 multilabel *label545
-jump *label341 always
+jump *label339 always
 multilabel *label546
-jump *label343 always
+jump *label341 always
 multilabel *label547
-jump *label345 always
+jump *label343 always
 multilabel *label548
-jump *label347 always
+jump *label345 always
 multilabel *label549
-jump *label349 always
+jump *label347 always
 multilabel *label550
-jump *label351 always
+jump *label349 always
 multilabel *label551
-jump *label353 always
+jump *label351 always
 multilabel *label552
+jump *label353 always
+multilabel *label553
 jump *label355 always
 label *label337
 op sub *tmp26 :y 1
@@ -9316,26 +9316,26 @@ op idiv :displayItem:amount :displayItem:amount 10
 jump *label48 equal :displayItem:amount 0
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label555 *tmp19 0
-multilabel *label555
-jump *label363 always
+multijump *label556 *tmp19 0
 multilabel *label556
-jump *label365 always
+jump *label363 always
 multilabel *label557
-jump *label367 always
+jump *label365 always
 multilabel *label558
-jump *label369 always
+jump *label367 always
 multilabel *label559
-jump *label371 always
+jump *label369 always
 multilabel *label560
-jump *label373 always
+jump *label371 always
 multilabel *label561
-jump *label375 always
+jump *label373 always
 multilabel *label562
-jump *label377 always
+jump *label375 always
 multilabel *label563
-jump *label379 always
+jump *label377 always
 multilabel *label564
+jump *label379 always
+multilabel *label565
 jump *label381 always
 label *label363
 op sub *tmp26 :y 1
@@ -9411,26 +9411,26 @@ op idiv :displayItem:amount :displayItem:amount 10
 jump *label48 equal :displayItem:amount 0
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label567 *tmp19 0
-multilabel *label567
-jump *label389 always
+multijump *label568 *tmp19 0
 multilabel *label568
-jump *label391 always
+jump *label389 always
 multilabel *label569
-jump *label393 always
+jump *label391 always
 multilabel *label570
-jump *label395 always
+jump *label393 always
 multilabel *label571
-jump *label397 always
+jump *label395 always
 multilabel *label572
-jump *label399 always
+jump *label397 always
 multilabel *label573
-jump *label401 always
+jump *label399 always
 multilabel *label574
-jump *label403 always
+jump *label401 always
 multilabel *label575
-jump *label405 always
+jump *label403 always
 multilabel *label576
+jump *label405 always
+multilabel *label577
 jump *label407 always
 label *label389
 op sub *tmp26 :y 1
@@ -9524,26 +9524,26 @@ op max :displayItem:amount AMOUNT 0
 draw color 0 255 0 255
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label579 *tmp19 0
-multilabel *label579
-jump *label422 always
+multijump *label580 *tmp19 0
 multilabel *label580
-jump *label424 always
+jump *label422 always
 multilabel *label581
-jump *label426 always
+jump *label424 always
 multilabel *label582
-jump *label428 always
+jump *label426 always
 multilabel *label583
-jump *label430 always
+jump *label428 always
 multilabel *label584
-jump *label432 always
+jump *label430 always
 multilabel *label585
-jump *label434 always
+jump *label432 always
 multilabel *label586
-jump *label436 always
+jump *label434 always
 multilabel *label587
-jump *label438 always
+jump *label436 always
 multilabel *label588
+jump *label438 always
+multilabel *label589
 jump *label440 always
 label *label422
 op sub *tmp26 :y 1
@@ -9619,26 +9619,26 @@ op idiv :displayItem:amount :displayItem:amount 10
 jump *label529 equal :displayItem:amount 0
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label591 *tmp19 0
-multilabel *label591
-jump *label448 always
+multijump *label592 *tmp19 0
 multilabel *label592
-jump *label450 always
+jump *label448 always
 multilabel *label593
-jump *label452 always
+jump *label450 always
 multilabel *label594
-jump *label454 always
+jump *label452 always
 multilabel *label595
-jump *label456 always
+jump *label454 always
 multilabel *label596
-jump *label458 always
+jump *label456 always
 multilabel *label597
-jump *label460 always
+jump *label458 always
 multilabel *label598
-jump *label462 always
+jump *label460 always
 multilabel *label599
-jump *label464 always
+jump *label462 always
 multilabel *label600
+jump *label464 always
+multilabel *label601
 jump *label466 always
 label *label448
 op sub *tmp26 :y 1
@@ -9714,26 +9714,26 @@ op idiv :displayItem:amount :displayItem:amount 10
 jump *label529 equal :displayItem:amount 0
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label603 *tmp19 0
-multilabel *label603
-jump *label474 always
+multijump *label604 *tmp19 0
 multilabel *label604
-jump *label476 always
+jump *label474 always
 multilabel *label605
-jump *label478 always
+jump *label476 always
 multilabel *label606
-jump *label480 always
+jump *label478 always
 multilabel *label607
-jump *label482 always
+jump *label480 always
 multilabel *label608
-jump *label484 always
+jump *label482 always
 multilabel *label609
-jump *label486 always
+jump *label484 always
 multilabel *label610
-jump *label488 always
+jump *label486 always
 multilabel *label611
-jump *label490 always
+jump *label488 always
 multilabel *label612
+jump *label490 always
+multilabel *label613
 jump *label492 always
 label *label474
 op sub *tmp26 :y 1
@@ -9809,26 +9809,26 @@ op idiv :displayItem:amount :displayItem:amount 10
 jump *label529 equal :displayItem:amount 0
 op mod *tmp19 :displayItem:amount 10
 # "Function: def drawDigit(in x, in y, in digit)"
-multijump *label615 *tmp19 0
-multilabel *label615
-jump *label500 always
+multijump *label616 *tmp19 0
 multilabel *label616
-jump *label502 always
+jump *label500 always
 multilabel *label617
-jump *label504 always
+jump *label502 always
 multilabel *label618
-jump *label506 always
+jump *label504 always
 multilabel *label619
-jump *label508 always
+jump *label506 always
 multilabel *label620
-jump *label510 always
+jump *label508 always
 multilabel *label621
-jump *label512 always
+jump *label510 always
 multilabel *label622
-jump *label514 always
+jump *label512 always
 multilabel *label623
-jump *label516 always
+jump *label514 always
 multilabel *label624
+jump *label516 always
+multilabel *label625
 jump *label518 always
 label *label500
 op sub *tmp26 :y 1

@@ -1209,6 +1209,16 @@ When Mindustry content conversion occurs, `null` values in `when` clauses are su
 
 Mindcode arranges the code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, an optimized `case` expressions checking for `null` in `when` branches is typically more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
 
+### Text-based jump tables
+
+In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings, instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
+
+* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version 8 or higher,
+* The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive,
+* The [text-jump-tables](SYNTAX-5-OTHER.markdown#option-text-jump-tables) option must be active.
+
+When all these conditions are met, the case expression is always 
+
 ### Jump table compression
 
 Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations described here into account as well. To locate the segment handling a particular input value, a bisection search is used. 

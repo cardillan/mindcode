@@ -206,6 +206,7 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         map.put("syntax",                       this::setSyntax);
         map.put("target",                       this::setTarget);
         map.put("target-guard",                 (profile, node) -> setBooleanOption(node, profile::setTargetGuard));
+        map.put("text-jump-tables",             (profile, node) -> setBooleanOption(node, profile::setTextJumpTables));
         map.put("unsafe-case-optimization",     (profile, node) -> setBooleanOption(node, profile::setUnsafeCaseOptimization));
 
         for (Optimization optimization : Optimization.LIST) {

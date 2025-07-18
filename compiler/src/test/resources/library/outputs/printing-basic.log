@@ -67,6 +67,7 @@ Pass 1: speed optimization selection (cost limit 623):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
     Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
     Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -116,6 +117,7 @@ Pass 1: speed optimization selection (cost limit 628):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -164,6 +166,7 @@ Pass 1: speed optimization selection (cost limit 538):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -211,6 +214,7 @@ Pass 1: speed optimization selection (cost limit 500):
     Inline function call at line 37:38                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 38:39                           size   +24, benefit        3.5, efficiency      0.146
     Inline function call at line 39:40                           size   +24, benefit        3.5, efficiency      0.146
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -257,6 +261,7 @@ Pass 1: speed optimization selection (cost limit 447):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -302,6 +307,7 @@ Pass 1: speed optimization selection (cost limit 420):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -343,6 +349,7 @@ Pass 1: speed optimization selection (cost limit 403):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -376,6 +383,7 @@ Pass 1: speed optimization selection (cost limit 325):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       68.8, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       87.5, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit      100.0, efficiency   Infinity
 
@@ -404,12 +412,16 @@ Pass 1: speed optimization selection (cost limit 232):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -437,12 +449,16 @@ Pass 1: speed optimization selection (cost limit 254):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -469,12 +485,16 @@ Pass 1: speed optimization selection (cost limit 204):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -499,12 +519,16 @@ Pass 1: speed optimization selection (cost limit 155):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -528,12 +552,16 @@ Pass 1: speed optimization selection (cost limit 97):
     Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
     Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -556,12 +584,16 @@ Pass 1: speed optimization selection (cost limit 45):
   ! Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   * Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity (+0 instructions)
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -584,10 +616,13 @@ Pass 1: speed optimization selection (cost limit 45):
   ! Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   * Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity (+0 instructions)
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -610,8 +645,10 @@ Pass 1: speed optimization selection (cost limit 45):
   ! Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   * Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity (+0 instructions)
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity
 
@@ -634,6 +671,7 @@ Pass 1: speed optimization selection (cost limit 45):
   ! Inline function call at line 37:38                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 38:39                           size   +77, benefit        3.5, efficiency      0.045
   ! Inline function call at line 39:40                           size   +77, benefit        3.5, efficiency      0.045
+  o Convert case at *printing:172:9 (segments: 1)                size    -6, benefit       17.2, efficiency   Infinity
   o Convert case at *printing:172:9 (segments: 5)                size    -1, benefit       21.9, efficiency   Infinity
   * Convert case at *printing:172:9 (segments: 7)                size    +0, benefit       25.0, efficiency   Infinity (+0 instructions)
 

@@ -55,7 +55,7 @@ class SingleStepEliminator extends BaseOptimizer {
                         // An active label breaks sequential flow
                         sequential = false;
                     }
-                } else if (!(ix instanceof NoOpInstruction)) {
+                } else if (!(ix instanceof EmptyInstruction)) {
                     if (isJumpToNext && lastJump != null) {
                         // Removing jump targeting the next instruction
                         removableJumps.add(lastJump);

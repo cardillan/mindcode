@@ -3,6 +3,8 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
 /// Contains various classes of instruction information that can be tracked with the instruction
 @NullMarked
 public enum InstructionInfo {
@@ -30,7 +32,13 @@ public enum InstructionInfo {
 
     /// An instruction-specific comment
     /// Created, for example, within mlog blocks. Is emitted to the final output at the same line as the instruction
-    COMMENT("")
+    COMMENT(""),
+
+    /// A list of labels - targets of a string encoded jump table
+    JUMP_TABLE(List.of()),
+
+    /// MultiLabel target of a text-based jump table. Needs alignment handling
+    JUMP_TARGET(Boolean.FALSE),
     ;
 
     public final Object defaultValue;

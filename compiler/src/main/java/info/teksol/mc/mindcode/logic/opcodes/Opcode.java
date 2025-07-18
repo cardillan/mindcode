@@ -9,6 +9,9 @@ import java.util.stream.Stream;
 
 @NullMarked
 public enum Opcode {
+    // NOOP
+    NOOP            ("noop",            "Invalid", "No operation or invalid statement."),
+
     // INPUT & OUTPUT
     READ            ("read",            "Read", "Read a variable identified by a name from a linked processor."),
     WRITE           ("write",           "Write", "Write a number to a variable identified by a name in a linked processor."),
@@ -81,9 +84,9 @@ public enum Opcode {
 
     // Virtual instructions - resolved when the final code is generated
     
-    /// No operation. When removing instructions, they can be replaced by no-op to preserve the structure of the code.
+    /// Empty instruction. When removing instructions, they can be replaced by this opcode to preserve the structure of the code.
     /// They are removed from the final code.
-    NOOP            ("noop",            0),
+    EMPTY           ("empty",           0),
     
     /// A target for jump, set address or goto instructions. Removed from the final code. 
     LABEL           ("label",           0),

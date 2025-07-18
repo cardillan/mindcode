@@ -6,16 +6,22 @@
     12 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
      3 instructions eliminated by If Expression Optimization (3 iterations).
-    14 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+    14 instructions eliminated by Data Flow Optimization (2 passes, 8 iterations).
      5 instructions modified by Loop Optimization (3 iterations).
      5 loops improved by Loop Optimization.
+     3 instructions eliminated by Case Switching (5 iterations).
+     1 case expressions converted to switched jumps Case Switching.
      4 instructions eliminated by Jump Straightening (5 iterations).
      1 instructions updated by JumpThreading.
     14 instructions eliminated by Print Merging.
-   184 instructions after optimizations.
+   181 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 798):
   * Replicate loop condition at line 91:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
+  o Convert case at line 17:9 (segments: 1, padded low)          size    -3, benefit      312.5, efficiency   Infinity
+
+Pass 1: speed optimization selection (cost limit 797):
+  * Convert case at line 17:9 (segments: 1, padded low)          size    -3, benefit      312.5, efficiency   Infinity (-3 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
  
@@ -1263,50 +1269,89 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    189 getlink :driver :n
    190 sensor *tmp81 :driver @type
 
+Modifications by Convert case at line 17:9 (segments: 1, padded low) (-3 instructions):
+ 
+    18 print :block
+    19 print "\n"
+    20 sensor *tmp6 :block @type
+-    * jump *label7 notEqual *tmp6 @message
++   21 sensor *tmp118 *tmp6 @id
++   22 jump *label63 greaterThanEq *tmp118 146
++   23 multijump *tmp118 0 0 (m:*label64)
++   24 multilabel *label66 (m:*label64)
+    25 label *label8
+    26 set .MESSAGE :block
+    27 jump *label6 always
+    28 label *label7
+-    * jump *label9 notEqual *tmp6 @switch
++   29 multilabel *label67 (m:*label64)
+    30 label *label10
+    31 set .SWITCH :block
+    32 jump *label6 always
+    33 label *label9
+-    * jump *label12 equal *tmp6 @logic-display
+-    * jump *label11 notEqual *tmp6 @large-logic-display
++   34 multilabel *label69 (m:*label64)
+    35 label *label12
+    36 set .DISPLAY :block
+    37 jump *label6 always
+    38 label *label11
+-    * jump *label14 equal *tmp6 @memory-bank
+-    * jump *label13 notEqual *tmp6 @memory-cell
++   39 multilabel *label68 (m:*label64)
+    40 label *label14
+    41 set .MEMORY :block
+    42 label *label13
++   43 multilabel *label65 (m:*label64)
++   44 label *label63
+    45 label *label6
+    46 label *label4
+    47 jump *label59 greaterThan :n 0
+
 Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-4 instructions):
  
-    86 jump *label22 greaterThanEq TO_INDEX 8
-    87 op mul *tmp21 TO_INDEX 20
-    88 op add *tmp20 2 *tmp21
+    89 jump *label22 greaterThanEq TO_INDEX 8
+    90 op mul *tmp21 TO_INDEX 20
+    91 op add *tmp20 2 *tmp21
 -    * jump *label22 always
-    89 label *label22
-    90 op sub :clh *tmp20 *tmp16
-    91 set :crh :clh
+    92 label *label22
+    93 op sub :clh *tmp20 *tmp16
+    94 set :crh :clh
  
-   114 op mod *tmp39 TO_INDEX 8
-   115 op mul *tmp40 *tmp39 22
-   116 op add *tmp38 4 *tmp40
+   117 op mod *tmp39 TO_INDEX 8
+   118 op mul *tmp40 *tmp39 22
+   119 op add *tmp38 4 *tmp40
 -    * jump *label28 always
-   117 label *label28
-   118 op sub :clh *tmp38 *tmp33
-   119 set :crh :clh
+   120 label *label28
+   121 op sub :clh *tmp38 *tmp33
+   122 set :crh :clh
  
-   135 jump *label32 greaterThanEq TO_INDEX 8
-   136 op mul *tmp51 TO_INDEX 22
-   137 op add *tmp50 4 *tmp51
+   138 jump *label32 greaterThanEq TO_INDEX 8
+   139 op mul *tmp51 TO_INDEX 22
+   140 op add *tmp50 4 *tmp51
 -    * jump *label32 always
-   138 label *label32
-   139 op sub :clh *tmp50 *tmp46
-   140 set :crh :clh
+   141 label *label32
+   142 op sub :clh *tmp50 *tmp46
+   143 set :crh :clh
  
-   147 op mod *tmp63 TO_INDEX 8
-   148 op mul *tmp64 *tmp63 22
-   149 op add *tmp62 4 *tmp64
+   150 op mod *tmp63 TO_INDEX 8
+   151 op mul *tmp64 *tmp63 22
+   152 op add *tmp62 4 *tmp64
 -    * jump *label36 always
-   150 label *label36
-   151 op sub :crh *tmp62 0
-   152 label *label33
+   153 label *label36
+   154 op sub :crh *tmp62 0
+   155 label *label33
 
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
  
-   148 op mul *tmp64 *tmp63 22
-   149 op add *tmp62 4 *tmp64
-   150 label *label36
+   151 op mul *tmp64 *tmp63 22
+   152 op add *tmp62 4 *tmp64
+   153 label *label36
 -    * op sub :crh *tmp62 0
-+  151 set :crh *tmp62
-   152 label *label33
-   153 label *label34
-   154 label *label24
++  154 set :crh *tmp62
+   155 label *label33
+   156 label *label34
+   157 label *label24
 
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
@@ -1323,129 +1368,137 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     12 label *label59
     13 op sub :n :n 1
  
-    17 print "\n"
-    18 sensor *tmp6 :block @type
-    19 jump *label7 notEqual *tmp6 @message
+    20 jump *label63 greaterThanEq *tmp118 146
+    21 multijump *tmp118 0 0 (m:*label64)
+    22 multilabel *label66 (m:*label64)
 -    * label *label8
-    20 set .MESSAGE :block
-    21 jump *label6 always
-    22 label *label7
-    23 jump *label9 notEqual *tmp6 @switch
+    23 set .MESSAGE :block
+    24 jump *label6 always
+-    * label *label7
+    25 multilabel *label67 (m:*label64)
 -    * label *label10
-    24 set .SWITCH :block
-    25 jump *label6 always
-    26 label *label9
- 
-    36 set .MEMORY :block
-    37 label *label13
-    38 label *label6
+    26 set .SWITCH :block
+    27 jump *label6 always
+-    * label *label9
+    28 multilabel *label69 (m:*label64)
+-    * label *label12
+    29 set .DISPLAY :block
+    30 jump *label6 always
+-    * label *label11
+    31 multilabel *label68 (m:*label64)
+-    * label *label14
+    32 set .MEMORY :block
+-    * label *label13
+    33 multilabel *label65 (m:*label64)
+    34 label *label63
+    35 label *label6
 -    * label *label4
-    39 jump *label59 greaterThan :n 0
-    40 label *label5
-    41 print "Message: "
+    36 jump *label59 greaterThan :n 0
+    37 label *label5
+    38 print "Message: "
  
-    54 print "No display."
-    55 print "\n"
-    56 label *label15
+    51 print "No display."
+    52 print "\n"
+    53 label *label15
 -    * label *label16
-    57 printflush .MESSAGE
+    54 printflush .MESSAGE
 -    * label *label1
-    58 jump *label58 equal .DISPLAY null
+    55 jump *label58 equal .DISPLAY null
 -    * label *label2
-    59 sensor *tmp10 .DISPLAY @type
-    60 jump *label17 notEqual *tmp10 @logic-display
-    61 set .OFFSET_X 2
+    56 sensor *tmp10 .DISPLAY @type
+    57 jump *label17 notEqual *tmp10 @logic-display
+    58 set .OFFSET_X 2
  
-    68 set :crw 80
-    69 set *tmp16 0
-    70 jump *label20 equal FROM_INDEX 0
+    65 set :crw 80
+    66 set *tmp16 0
+    67 jump *label20 equal FROM_INDEX 0
 -    * label *label19
-    71 op mul *tmp17 FROM_INDEX 20
-    72 op add *tmp16 2 *tmp17
-    73 label *label20
+    68 op mul *tmp17 FROM_INDEX 20
+    69 op add *tmp16 2 *tmp17
+    70 label *label20
  
-    94 set *tmp33 0
-    95 op mod *tmp31 FROM_INDEX 8
-    96 jump *label26 equal *tmp31 0
+    91 set *tmp33 0
+    92 op mod *tmp31 FROM_INDEX 8
+    93 jump *label26 equal *tmp31 0
 -    * label *label25
-    97 op mul *tmp35 *tmp31 22
-    98 op add *tmp33 4 *tmp35
-    99 label *label26
+    94 op mul *tmp35 *tmp31 22
+    95 op add *tmp33 4 *tmp35
+    96 label *label26
  
-   115 set :crw 91
-   116 set *tmp46 0
-   117 jump *label30 equal FROM_INDEX 0
+   112 set :crw 91
+   113 set *tmp46 0
+   114 jump *label30 equal FROM_INDEX 0
 -    * label *label29
-   118 op mul *tmp47 FROM_INDEX 22
-   119 op add *tmp46 4 *tmp47
-   120 label *label30
+   115 op mul *tmp47 FROM_INDEX 22
+   116 op add *tmp46 4 *tmp47
+   117 label *label30
  
-   139 label *label36
-   140 set :crh *tmp62
-   141 label *label33
+   136 label *label36
+   137 set :crh *tmp62
+   138 label *label33
 -    * label *label34
-   142 label *label24
-   143 label *label18
-   144 set .MAX CAPACITY
-   145 op div .MUL 60 CAPACITY
-   146 jump *label37 equal .MEMORY null
-   147 set :n 0
+   139 label *label24
+   140 label *label18
+   141 set .MAX CAPACITY
+   142 op div .MUL 60 CAPACITY
+   143 jump *label37 equal .MEMORY null
+   144 set :n 0
 -    * label *label39
-   148 jump *label41 greaterThanEq 0 @links
-   149 label *label60
-   150 write 0 .MEMORY :n
+   145 jump *label41 greaterThanEq 0 @links
+   146 label *label60
+   147 write 0 .MEMORY :n
 -    * label *label40
-   151 op add :n :n 1
-   152 jump *label60 lessThan :n @links
-   153 label *label41
-   154 label *label37
+   148 op add :n :n 1
+   149 jump *label60 lessThan :n @links
+   150 label *label41
+   151 label *label37
 -    * label *label38
-   155 control enabled .SWITCH 0
+   152 control enabled .SWITCH 0
 -    * label *label42
-   156 sensor *tmp76 .SWITCH @enabled
-   157 jump *label44 notEqual *tmp76 0
-   158 label *label62
+   153 sensor *tmp76 .SWITCH @enabled
+   154 jump *label44 notEqual *tmp76 0
+   155 label *label62
  
-   163 draw stroke 2
-   164 set :index FROM_INDEX
-   165 set :n 0
+   160 draw stroke 2
+   161 set :index FROM_INDEX
+   162 set :n 0
 -    * label *label45
-   166 jump *label47 greaterThanEq 0 @links
-   167 label *label61
-   168 getlink :driver :n
+   163 jump *label47 greaterThanEq 0 @links
+   164 label *label61
+   165 getlink :driver :n
  
-   191 op mul .MAX 2 CAPACITY
-   192 op div .MUL 60 .MAX
-   193 label *label50
+   188 op mul .MAX 2 CAPACITY
+   189 op div .MUL 60 .MAX
+   190 label *label50
 -    * label *label51
-   194 jump *label52 greaterThan .MAX CAPACITY
-   195 draw color 0 128 0 255
-   196 jump *label53 always
+   191 jump *label52 greaterThan .MAX CAPACITY
+   192 draw color 0 128 0 255
+   193 jump *label53 always
  
-   204 op mul *tmp110 :maxx .MUL
-   205 draw lineRect :x :y *tmp110 14
-   206 label *label54
+   201 op mul *tmp110 :maxx .MUL
+   202 draw lineRect :x :y *tmp110 14
+   203 label *label54
 -    * label *label55
-   207 jump *label56 greaterThan .MAX CAPACITY
-   208 draw color 0 255 0 255
-   209 draw lineRect :x :y 60 14
+   204 jump *label56 greaterThan .MAX CAPACITY
+   205 draw color 0 255 0 255
+   206 draw lineRect :x :y 60 14
  
-   216 label *label57
-   217 op add :index :index 1
-   218 label *label48
+   213 label *label57
+   214 op add :index :index 1
+   215 label *label48
 -    * label *label49
 -    * label *label46
-   219 op add :n :n 1
-   220 jump *label61 lessThan :n @links
-   221 label *label47
+   216 op add :n :n 1
+   217 jump *label61 lessThan :n @links
+   218 label *label47
  
-   229 print " "
-   230 print "ms"
-   231 printflush .MESSAGE
+   226 print " "
+   227 print "ms"
+   228 printflush .MESSAGE
 -    * label *label43
-   232 sensor *tmp76 .SWITCH @enabled
-   233 jump *label62 equal *tmp76 0
-   234 label *label44
+   229 sensor *tmp76 .SWITCH @enabled
+   230 jump *label62 equal *tmp76 0
+   231 label *label44
 
 Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
@@ -1453,28 +1506,28 @@ Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
      2 set TO_INDEX 16
      3 set CAPACITY 120
  
-   155 label *label37
-   156 control enabled .SWITCH 0
-   157 sensor *tmp76 .SWITCH @enabled
+   152 label *label37
+   153 control enabled .SWITCH 0
+   154 sensor *tmp76 .SWITCH @enabled
 -    * jump *label44 notEqual *tmp76 0
-+  158 jump __start__ notEqual *tmp76 0
-   159 label *label62
-   160 set :start @time
-   161 draw color 0 0 80 255
++  155 jump __start__ notEqual *tmp76 0
+   156 label *label62
+   157 set :start @time
+   158 draw color 0 0 80 255
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
  
-   232 printflush .MESSAGE
-   233 sensor *tmp76 .SWITCH @enabled
-   234 jump *label62 equal *tmp76 0
+   229 printflush .MESSAGE
+   230 sensor *tmp76 .SWITCH @enabled
+   231 jump *label62 equal *tmp76 0
 -    * label *label44
-   235 end
+   232 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   232 printflush .MESSAGE
-   233 sensor *tmp76 .SWITCH @enabled
-   234 jump *label62 equal *tmp76 0
+   229 printflush .MESSAGE
+   230 sensor *tmp76 .SWITCH @enabled
+   231 jump *label62 equal *tmp76 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
@@ -1496,12 +1549,12 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 +   15 print "Found: {0}\n"
 +   16 format :block
     17 sensor *tmp6 :block @type
-    18 jump *label7 notEqual *tmp6 @message
-    19 set .MESSAGE :block
+    18 sensor *tmp118 *tmp6 @id
+    19 jump *label63 greaterThanEq *tmp118 146
  
-    37 label *label6
-    38 jump *label59 greaterThan :n 0
-    39 label *label5
+    34 label *label6
+    35 jump *label59 greaterThan :n 0
+    36 label *label5
 -    * print "Message: "
 -    * print .MESSAGE
 -    * print "\n"
@@ -1514,35 +1567,35 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 -    * print "Display: "
 -    * print .DISPLAY
 -    * print "\n"
-+   40 print "Message: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: {0}\n"
-+   41 format .MESSAGE
-+   42 format .SWITCH
-+   43 format .MEMORY
-+   44 format .DISPLAY
-    45 jump *label15 notEqual .DISPLAY null
++   37 print "Message: {0}\nSwitch: {0}\nMemory: {0}\nDisplay: {0}\n"
++   38 format .MESSAGE
++   39 format .SWITCH
++   40 format .MEMORY
++   41 format .DISPLAY
+    42 jump *label15 notEqual .DISPLAY null
 -    * print "No display."
 -    * print "\n"
-+   46 print "No display.\n"
-    47 label *label15
-    48 printflush .MESSAGE
-    49 jump *label58 equal .DISPLAY null
++   43 print "No display.\n"
+    44 label *label15
+    45 printflush .MESSAGE
+    46 jump *label58 equal .DISPLAY null
  
-   211 jump *label61 lessThan :n @links
-   212 label *label47
-   213 drawflush .DISPLAY
+   208 jump *label61 lessThan :n @links
+   209 label *label47
+   210 drawflush .DISPLAY
 -    * print "Mass Driver Monitor"
 -    * print "\n"
-+  214 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
-   215 op sub *tmp116 @time :start
-   216 op floor *tmp117 *tmp116
++  211 print "Mass Driver Monitor\n[lightgray]Draw time: {0} ms"
+   212 op sub *tmp116 @time :start
+   213 op floor *tmp117 *tmp116
 -    * print "[lightgray]Draw time: "
 -    * print *tmp117
 -    * print " "
 -    * print "ms"
-+  217 format *tmp117
-   218 printflush .MESSAGE
-   219 sensor *tmp76 .SWITCH @enabled
-   220 jump *label62 equal *tmp76 0
++  214 format *tmp117
+   215 printflush .MESSAGE
+   216 sensor *tmp76 .SWITCH @enabled
+   217 jump *label62 equal *tmp76 0
 
 Final code before resolving virtual instructions:
 
@@ -1564,25 +1617,22 @@ getlink :block :n
 print "Found: {0}\n"
 format :block
 sensor *tmp6 :block @type
-jump *label7 notEqual *tmp6 @message
+sensor *tmp118 *tmp6 @id
+jump *label63 greaterThanEq *tmp118 146
+multijump *tmp118 0 0
+multilabel *label66
 set .MESSAGE :block
 jump *label6 always
-label *label7
-jump *label9 notEqual *tmp6 @switch
+multilabel *label67
 set .SWITCH :block
 jump *label6 always
-label *label9
-jump *label12 equal *tmp6 @logic-display
-jump *label11 notEqual *tmp6 @large-logic-display
-label *label12
+multilabel *label69
 set .DISPLAY :block
 jump *label6 always
-label *label11
-jump *label14 equal *tmp6 @memory-bank
-jump *label13 notEqual *tmp6 @memory-cell
-label *label14
+multilabel *label68
 set .MEMORY :block
-label *label13
+multilabel *label65
+label *label63
 label *label6
 jump *label59 greaterThan :n 0
 label *label5

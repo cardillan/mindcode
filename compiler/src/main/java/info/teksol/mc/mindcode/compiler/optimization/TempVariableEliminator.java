@@ -2,8 +2,8 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIterator;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.PushOrPopInstruction;
 import info.teksol.mc.mindcode.logic.instructions.SetInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
@@ -50,7 +50,7 @@ class TempVariableEliminator extends BaseOptimizer {
         for (Map.Entry<LogicArgument, SortedSet<Integer>> entry : variableUses.entrySet()) {
             LogicArgument variable = entry.getKey();
             SortedSet<Integer> indices = entry.getValue();
-            if (indices.size() == 2 && program.subList(indices.getFirst() + 1, indices.getLast()).stream().allMatch(NoOpInstruction.class::isInstance)) {
+            if (indices.size() == 2 && program.subList(indices.getFirst() + 1, indices.getLast()).stream().allMatch(EmptyInstruction.class::isInstance)) {
                 // This temp variable is used by two consecutive instructions, designated 'first' and 'last'
                 LogicInstruction first = instructionAt(indices.getFirst());
                 LogicInstruction last = instructionAt(indices.getLast());
@@ -64,7 +64,7 @@ class TempVariableEliminator extends BaseOptimizer {
                     if (replaceInputArg) {
                         // The first instruction merely sets up a temp variable to be used by the last instruction
                         // Replacing those arguments with the value of the set instruction
-                        replaceInstruction(indices.getFirst(), createNoOp(first.getAstContext()));
+                        replaceInstruction(indices.getFirst(), createEmpty(first.getAstContext()));
                         replaceInstruction(indices.getLast(), replaceAllArgs(last, variable, set.getValue()).withContext(set.getAstContext()));
                         replaced = true;
                     }
@@ -78,7 +78,7 @@ class TempVariableEliminator extends BaseOptimizer {
                         // The last instruction merely transfers a value from the output argument of the first instruction
                         // Replacing those arguments with target of the set instruction
                         replaceInstruction(indices.getFirst(), replaceAllArgs(first, variable, set.getResult()).withContext(set.getAstContext()));
-                        replaceInstruction(indices.getLast(), createNoOp(last.getAstContext()));
+                        replaceInstruction(indices.getLast(), createEmpty(last.getAstContext()));
                         replaced = true;
                     }
                 }

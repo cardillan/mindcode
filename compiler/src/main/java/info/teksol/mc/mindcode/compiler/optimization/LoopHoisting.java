@@ -75,7 +75,7 @@ class LoopHoisting extends BaseOptimizer {
         // An instruction is invariant if none of its arguments (input, output) is a loop variable
         // Only move instructions from the direct children
         List<LogicInstruction> invariants = parts.stream().flatMap(child -> contextStream(child)
-                .filter(ix -> !(ix instanceof NoOpInstruction))
+                .filter(ix -> !(ix instanceof EmptyInstruction))
                 .filter(ix -> safeToMove(loop, ix))
                 .filter(ix -> ix.inputOutputArgumentsStream().noneMatch(loopVariables::contains))
         ).toList();
@@ -99,7 +99,7 @@ class LoopHoisting extends BaseOptimizer {
                 .toList();
 
         for (AstContext invariant : invariantIfs) {
-            if (!contextStream(invariant).allMatch(NoOpInstruction.class::isInstance)) {
+            if (!contextStream(invariant).allMatch(EmptyInstruction.class::isInstance)) {
                 assert invariant.node() != null;
                 AstContext bodyContext = getInitContext(loop).createChild(invariant.existingNode(), invariant.contextType());
                 LogicList original = contextInstructions(invariant);

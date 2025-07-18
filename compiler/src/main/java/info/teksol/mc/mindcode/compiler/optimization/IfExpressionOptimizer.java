@@ -119,7 +119,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
         LogicList flowControl = contextInstructions(ifExpression.child(2));
         if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()
-                || (falseSize == 0 && flowControl.getFirst() instanceof NoOpInstruction)) {
+                || (falseSize == 0 && flowControl.getFirst() instanceof EmptyInstruction)) {
             JumpInstruction invertedJump = negateCompoundCondition(condition);
             if (invertedJump != null) {
                 removeInstruction(instructionIndex(jump) - 1);

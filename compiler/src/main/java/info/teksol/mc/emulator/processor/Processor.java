@@ -40,6 +40,7 @@ public class Processor extends AbstractMessageEmitter {
     private int traceCount = 0;
     private int traceLimit = 0;
     private int steps = 0;
+    private int noopSteps = 0;
     private int[] profile = new int[0];
     private int instructions = 0;
     private final BitSet coverage = new BitSet();
@@ -88,6 +89,10 @@ public class Processor extends AbstractMessageEmitter {
         return steps;
     }
 
+    public int getNoopSteps() {
+        return noopSteps;
+    }
+
     public int[] getProfile() {
         return profile;
     }
@@ -121,6 +126,7 @@ public class Processor extends AbstractMessageEmitter {
     public void run(List<LogicInstruction> program, int stepLimit) throws ExecutionException {
         profile = new int[program.size()];
         steps = 0;
+        noopSteps = 0;
         textBuffer = new TextBuffer(TEXT_OUTPUT_LIMIT, TEXT_BUFFER_LIMIT,
                 getFlag(ERR_TEXT_BUFFER_OVERFLOW));
         graphicsBuffer = new GraphicsBuffer(GRAPHICS_BUFFER_LIMIT);
@@ -223,6 +229,7 @@ public class Processor extends AbstractMessageEmitter {
             case GETLINK        -> executeGetlink((GetlinkInstruction) instruction);
             case JUMP           -> executeJump((JumpInstruction) instruction);
             case LOOKUP         -> executeLookup((LookupInstruction) instruction);
+            case NOOP           -> { noopSteps++; yield true; }
             case OP             -> executeOp((OpInstruction) instruction);
             case PACKCOLOR      -> executePackColor((PackColorInstruction) instruction);
             case PRINT          -> executePrint((PrintInstruction) instruction);
@@ -464,7 +471,7 @@ public class Processor extends AbstractMessageEmitter {
     }
 
     private boolean executeRead(ReadInstruction ix) {
-        MindustryVariable target = getOrCreateVariable(ix.getResult());
+        MindustryVariable target = getOrCreateVariable(ix.getArg(0));
         MindustryVariable index = getExistingVariable(ix.getIndex());
         MindustryVariable object = getExistingVariable(ix.getMemory());
         if (object.getObject() instanceof MindustryString str) {

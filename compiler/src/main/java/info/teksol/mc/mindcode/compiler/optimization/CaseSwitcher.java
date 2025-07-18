@@ -10,10 +10,10 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicIt
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicList;
 import info.teksol.mc.mindcode.compiler.optimization.cases.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
 import info.teksol.mc.mindcode.logic.instructions.JumpInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.NoOpInstruction;
 import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.profile.BuiltinEvaluation;
@@ -55,7 +55,7 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 /// * Unless the range checking is suppressed, or the values are known to cover the minimum or maximum possible value,
 ///   a leading and trailing segment is created for values outside the expression's range.
 /// * The segment needs to handle all targets within its range, including the `else` values.
-/// * Code for choosing the correct segment for given input value is handled outside segments. Currently, bisection
+/// * Code for choosing the correct segment for a given input value is handled outside segments. Currently, bisection
 ///   search is used. The bisection routing is also responsible for handling the out-of-range values via the leading
 ///   and trailing segments (which represent values below and above the valid range, respectively).
 /// * When the range check is omitted (either due to the `unsafe-case-optimization` compiler option or when handling
@@ -154,7 +154,7 @@ public class CaseSwitcher extends BaseOptimizer {
     private @Nullable LogicLabel findNextLabel(AstContext context, LogicIterator iterator, JumpInstruction jump) {
         AstContext jumpAstContext = jump.getAstContext();
         AstContext flowContext = context.nextChild(jumpAstContext);
-        while (iterator.hasNext() && iterator.peek(0) instanceof NoOpInstruction noop && noop.belongsTo(jumpAstContext)) {
+        while (iterator.hasNext() && iterator.peek(0) instanceof EmptyInstruction noop && noop.belongsTo(jumpAstContext)) {
             // Skipping noops, nothing else may occur here
             iterator.next();
         }
@@ -200,7 +200,7 @@ public class CaseSwitcher extends BaseOptimizer {
                     bodySize = 0;
 
                     // Ignore these in conditions
-                    if (ix instanceof LabelInstruction || ix instanceof NoOpInstruction) continue;
+                    if (ix instanceof LabelInstruction || ix instanceof EmptyInstruction) continue;
 
                     if (!(ix instanceof JumpInstruction jump)) return;
                     jumps++;
@@ -297,7 +297,7 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         // Unsupported case expressions: no input variable, no branches, range too large or null and integers
-        if (variable == null || analyzer.contentType == null || targets.isEmpty() || targets.range() >MAX_CASE_RANGE
+        if (variable == null || analyzer.contentType == null || targets.isEmpty() || targets.range() > MAX_CASE_RANGE
                 || analyzer.hasNull && analyzer.contentType == ContentType.UNKNOWN) return;
 
         targets.computeElseValues(analyzer.contentType, metadata, getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL);
@@ -310,8 +310,11 @@ public class CaseSwitcher extends BaseOptimizer {
                 bodySizes, originalCost, originalSteps, analyzer.isMindustryContent(), removeRangeCheck,
                 getProfile().isSymbolicLabels(), targets.hasElseBranch() && targets.getElseValues() > 0);
 
+        boolean logicConversion = analyzer.contentType != ContentType.UNKNOWN;
+        int caseOptimizationStrength = getProfile().getCaseOptimizationStrength();
+
         SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(targets,
-                analyzer.contentType != ContentType.UNKNOWN, getProfile().getCaseOptimizationStrength());
+                logicConversion, caseOptimizationStrength);
 
         // When no range checking, don't bother trying to merge segments.
         Set<SegmentConfiguration> configurations = removeRangeCheck
@@ -862,17 +865,26 @@ public class CaseSwitcher extends BaseOptimizer {
             // Account for null handling on the else branch
             int nullHandling = segment.handleNulls() ? 1 : 0;
 
-            // When embedded, the last jump in the jump table will be avoided
-            int savedSize = segment.embedded() ? 1 : 0;
-            int savedTarget = segment.endLabel() == LogicLabel.EMPTY ? 0 : savedSize;
-            int savedElse = segment.endLabel() == LogicLabel.EMPTY ? savedSize : 0;
+            if (segment.from() == 0 && getProfile().useTextJumpTables()) {
+                return new SegmentStats(
+                        1,
+                        activeTargets,
+                        activeTargets,
+                        elseValues,
+                        elseValues + nullHandling);
+            } else {
+                // When embedded, the last jump in the jump table will be avoided
+                int savedSize = segment.embedded() ? 1 : 0;
+                int savedTarget = segment.endLabel() == LogicLabel.EMPTY ? 0 : savedSize;
+                int savedElse = segment.endLabel() == LogicLabel.EMPTY ? savedSize : 0;
 
-            return new SegmentStats(
-                    multiJump + tableSize - savedSize,
-                    activeTargets,
-                    activeTargets * (multiJump + 1) - savedTarget,
-                    elseValues,
-                    elseSteps + nullHandling - savedElse);
+                return new SegmentStats(
+                        multiJump + tableSize - savedSize,
+                        activeTargets,
+                        activeTargets * (multiJump + 1) - savedTarget,
+                        elseValues,
+                        elseSteps + nullHandling - savedElse);
+            }
         }
 
         // Generates a jump table
@@ -882,21 +894,43 @@ public class CaseSwitcher extends BaseOptimizer {
             assert newAstContext != null;
             assert caseVariable != null;
 
-            List<LogicLabel> labels = IntStream.range(segment.from(), segment.to()).mapToObj(i -> instructionProcessor.nextLabel()).toList();
             LogicLabel marker = instructionProcessor.nextLabel();
-            insertInstruction(createMultiJump(newAstContext, labels.getFirst(), caseVariable, LogicNumber.create(segment.from()), marker));
-            int end = labels.size() - (segment.embedded() ? 1 : 0);
 
-            for (int i = 0; i < end; i++) {
-                insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
-                LogicLabel target = param.targets.getOrDefault(segment.from() + i, finalLabel);
-                LogicLabel updatedTarget = segment.from() + i == 0 && target == finalLabel ? param.targets.getNullOrElseTarget() : target;
-                insertInstruction(createJumpUnconditional(newAstContext, updatedTarget));
-            }
+            if (segment.from() == 0 && getProfile().useTextJumpTables()) {
+                // The when bodies have normal labels now. We need multilabels.
+                // We keep the original labels since they might be in use elsewhere.
+                // Thus, we need to create new ones and maintain a map.
+                List<LogicLabel> labels = new ArrayList<>();
+                Map<LogicLabel, LogicLabel> labelMap = new HashMap<>();
+                for (int i = segment.from(); i < segment.to(); i++) {
+                    LogicLabel target = param.targets.getOrDefault(i, finalLabel);
+                    LogicLabel updatedTarget = i == 0 && target == finalLabel ? param.targets.getNullOrElseTarget() : target;
+                    if (!labelMap.containsKey(updatedTarget)) {
+                        LabelInstruction labelInstruction = optimizationContext.getLabelInstruction(updatedTarget);
+                        LogicLabel jumpLabel = instructionProcessor.nextLabel();
+                        labelMap.put(updatedTarget, jumpLabel);
+                        insertBefore(labelInstruction, createMultiLabel(labelInstruction.getAstContext(), jumpLabel, marker).setJumpTarget());
+                    }
+                    labels.add(labelMap.get(updatedTarget));
+                }
 
-            if (segment.embedded()) {
-                insertInstruction(createMultiLabel(newAstContext, labels.getLast(), marker));
-                moveBody(segment.endLabel());
+                insertInstruction(createMultiJump(newAstContext, caseVariable, marker).setJumpTable(labels));
+            } else {
+                List<LogicLabel> labels = IntStream.range(segment.from(), segment.to()).mapToObj(i -> instructionProcessor.nextLabel()).toList();
+                insertInstruction(createMultiJump(newAstContext, labels.getFirst(), caseVariable, LogicNumber.create(segment.from()), marker));
+                int end = labels.size() - (segment.embedded() ? 1 : 0);
+
+                for (int i = 0; i < end; i++) {
+                    insertInstruction(createMultiLabel(newAstContext, labels.get(i), marker));
+                    LogicLabel target = param.targets.getOrDefault(segment.from() + i, finalLabel);
+                    LogicLabel updatedTarget = segment.from() + i == 0 && target == finalLabel ? param.targets.getNullOrElseTarget() : target;
+                    insertInstruction(createJumpUnconditional(newAstContext, updatedTarget));
+                }
+
+                if (segment.embedded()) {
+                    insertInstruction(createMultiLabel(newAstContext, labels.getLast(), marker));
+                    moveBody(segment.endLabel());
+                }
             }
         }
 
@@ -913,7 +947,10 @@ public class CaseSwitcher extends BaseOptimizer {
 
                 AstContext labelContext = optimizationContext.instructionAt(startIndex).getAstContext();
                 LogicList labelInstructions = optimizationContext.contextInstructions(labelContext);
-                if (!labelContext.matches(AstContextType.CASE, FLOW_CONTROL) || (labelInstructions.size() != 1 && labelInstructions.size() != 3))
+                int multiLabels = (int) labelInstructions.stream().filter(LogicInstruction::isJumpTarget).count();
+                startIndex -= multiLabels;
+                int labelsSize = labelInstructions.size() - multiLabels;
+                if (!labelContext.matches(AstContextType.CASE, FLOW_CONTROL) || (labelsSize != 1 && labelsSize != 3))
                     throw new MindcodeInternalError("Unexpected context structure");
 
                 AstContext bodyContext = optimizationContext.instructionAt(startIndex + labelInstructions.size()).getAstContext();
@@ -955,6 +992,9 @@ public class CaseSwitcher extends BaseOptimizer {
 
             Map<LogicLabel, Segment> bestSegments = new HashMap<>();
             for (Segment segment : segments) {
+                // We won't embed a jump table segment in case of text-based jump tables
+                if (segment.type() == SegmentType.JUMP_TABLE && getProfile().useTextJumpTables()) continue;
+
                 LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.targets.getExisting(0) : segment.endLabel();
 
                 // We won't embed the else branch: we'd save a jump to the else branch,
@@ -978,7 +1018,7 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         // Returns true if the zero key can be retargeted:
-        // Either nulls cannot appear or the zero target is not shared with anything else.
+        // Either nulls cannot appear, or the zero target is not shared with anything else.
         private boolean canEmbedZero() {
             // No nulls
             if (!param.mindustryContent) return true;

@@ -165,9 +165,8 @@ case-switching-defaults:
 # A single file to be tested.
 # Unspecified settings are inherited from default.
 single-source:
-  - source: recursion.mnd
-    defaults: run-test
-    samples: 1200000
+  - source: case-variable.mnd
+    defaults: case-switching-defaults
 
 # List of all files to test
 all-sources:

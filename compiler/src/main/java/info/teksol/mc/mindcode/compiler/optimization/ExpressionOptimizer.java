@@ -197,7 +197,7 @@ class ExpressionOptimizer extends BaseOptimizer {
 
                 replaceInstruction(ox, createOp(ox.getAstContext(),
                         Operation.IDIV, ox.getResult(), ops.e1(), ops.e2()));
-                logicIterator.set(createNoOp(ix.getAstContext()));
+                logicIterator.set(createEmpty(ix.getAstContext()));
                 logicIterator.next();
             }
         }
@@ -283,7 +283,7 @@ class ExpressionOptimizer extends BaseOptimizer {
 
     private void processSetInstruction(LogicIterator logicIterator, SetInstruction ix) {
         if (ix.getResult().equals(ix.getValue())) {
-            logicIterator.set(createNoOp(ix.getAstContext()));
+            logicIterator.set(createEmpty(ix.getAstContext()));
             logicIterator.next();
         }
     }

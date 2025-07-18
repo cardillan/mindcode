@@ -62,6 +62,10 @@ public class Targets {
         return lookupMap == null ? targets.size() : lookupMap.size();
     }
 
+    public boolean contains(int value) {
+        return value >= targets.firstKey() && value <= targets.lastKey();
+    }
+
     public boolean hasElseBranch() {
         return hasElseBranch;
     }

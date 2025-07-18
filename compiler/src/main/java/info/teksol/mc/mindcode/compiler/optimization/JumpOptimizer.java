@@ -74,7 +74,7 @@ class JumpOptimizer extends BaseOptimizer {
                     if (optimizationContext.isActive(label.getLabel())) {
                         lastOp = null;
                     }
-                } else if (!(instruction instanceof NoOpInstruction)) {
+                } else if (!(instruction instanceof EmptyInstruction)) {
                     lastOp = null;
                 }
 

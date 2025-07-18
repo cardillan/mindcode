@@ -133,6 +133,13 @@ It is also possible to decrease the instruction limit if you wish so. The valid 
 > [!IMPORTANT]
 > Setting the limit to a very high value can have a severe impact on the performance of the compiler. High values of the instruction limit might cause the code compilation to take minutes or even hours to complete.
 
+## Option `mlog-block-optimization`
+
+Activates/deactivates a limited [Data Flow optimization](SYNTAX-6-OPTIMIZATIONS.markdown#data-flow-optimization) inside [mlog blocks](SYNTAX-EXTENSIONS.markdown#mlog-blocks). Possible values are:
+
+* `false` (the default value): no optimization is applied to the mlog blocks.
+* `true`: the Data Flow Optimization may replace input/output mlog variables used in instructions with different variables/values. 
+
 ## Option `mlog-indent`
 
 Allows setting the length of an indenting prefix (the number of spaces) applied to the generated mlog code. Allowed values are `0` to `8`, where `0` disables the indenting entirely. The indenting level is derived from the nesting level of the corresponding source-code construct. 
@@ -458,6 +465,15 @@ The guard code is always a single `jump` instruction which jumps back to itself 
 | 8, specific             | `jump 0 strictEqual %[red] null`   |
 
 The jump target (`0`) is replaced with proper instruction address when it's not the first in the compiled code.
+
+## Option `text-jump-tables`
+
+The Mindustry 8 Logic ability to [read values from strings](MINDUSTRY-8.markdown#reading-characters-from-strings) makes it possible to encode instruction addresses into a string. This option governs whether the compiler will use this possibility. Possible values are:
+
+* `false`: text-based jump tables won't be generated.
+* `true` (the default value): the compiler generates text-based jump tables where possible.
+
+Text-based jump tables allow very efficient encoding of jump tables, both in terms of program size and execution time. The functionality, however, requires storing unprintable characters in the string. If this poses a problem, the option can be set to `false` to disable text-based jump tables.
 
 ## Option `unsafe-case-optimization`
 
