@@ -337,10 +337,10 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void compilesGuardForTarget8Compatible() {
+        void compilesGuardForTarget80Compatible() {
             assertCompilesTo("""
                             #set target-guard = true;
-                            #set target = 8;
+                            #set target = 8.0;
                             
                             print("Hello");
                             """,
@@ -351,16 +351,45 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void compilesGuardForTarget8Specific() {
+        void compilesGuardForTarget80Specific() {
             assertCompilesTo("""
                             #set target-guard = true;
                             #set builtin-evaluation = full;
-                            #set target = 8;
+                            #set target = 8.0;
                             
                             print("Hello");
                             """,
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(0), "strictEqual", "%[red]", "null"),
+                    createInstruction(JUMP, label(0), "strictEqual", "@bufferUsage", "null"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget81Compatible() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set target = 8.1;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "strictEqual", "@bufferSize", "null"),
+                    createInstruction(PRINT, q("Hello"))
+            );
+        }
+
+        @Test
+        void compilesGuardForTarget81Specific() {
+            assertCompilesTo("""
+                            #set target-guard = true;
+                            #set builtin-evaluation = full;
+                            #set target = 8.1;
+                            
+                            print("Hello");
+                            """,
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(JUMP, label(0), "strictEqual", "@bufferSize", "null"),
                     createInstruction(PRINT, q("Hello"))
             );
         }

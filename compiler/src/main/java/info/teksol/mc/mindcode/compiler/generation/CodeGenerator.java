@@ -210,26 +210,34 @@ public class CodeGenerator extends AbstractMessageEmitter {
         switch (globalProfile.getProcessorVersion()) {
             case V6 -> {
                 if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
-                    // Full
+                    // V6 only
                     assembler.createJump(guardLabel, Condition.GREATER_THAN, new LogicToken("%FFFFFF"), LogicNumber.ZERO).setTargetGuard(true);
                 } else {
-                    // Compatible
+                    // V6 and above
                     // Do nothing. Everything is compatible with V6.
                 }
             }
             case V7, V7A -> {
                 if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
-                    // Full
+                    // V7 only
                     assembler.createJump(guardLabel, Condition.NOT_EQUAL, new LogicToken("@blockCount"), LogicNumber.create(254)).setTargetGuard(true);
                 } else {
-                    // Compatible
+                    // V7 and above
                     assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%FFFFFF"), LogicNull.NULL).setTargetGuard(true);
                 }
             }
-            // TODO Handle
-            case V8A, V8B -> {
+            case V8A -> {
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.FULL) {
+                    // V8A only
+                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferUsage"), LogicNull.NULL).setTargetGuard(true);
+                } else {
+                    // V8A and above
+                    assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%[red]"), LogicNull.NULL).setTargetGuard(true);
+                }
+            }
+            case V8B -> {
                 // No distinction between full and compatible: there are no other compatible versions besides V8
-                assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("%[red]"), LogicNull.NULL).setTargetGuard(true);
+                assembler.createJump(guardLabel, Condition.STRICT_EQUAL, new LogicToken("@bufferSize"), LogicNull.NULL).setTargetGuard(true);
             }
             default -> throw new MindcodeInternalError("Unhandled processor version " + globalProfile.getProcessorVersion());
         }
