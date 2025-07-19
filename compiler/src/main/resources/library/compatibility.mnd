@@ -32,12 +32,14 @@ linked message1;
  * Note: The Mindcode processor emulator currently isn't able to run this function.
  */
 inline void runCompatibilityTest()
-    if __TARGET_MAJOR__ == 6 then
+    if __MINDUSTRY_VERSION__ == "v126.2" then
         _compatibilityTest6();
-    elsif __TARGET_MAJOR__ == 7 then
+    elsif __MINDUSTRY_VERSION__ == "v146" then
         _compatibilityTest7();
+    elsif __MINDUSTRY_VERSION__ == "v149" then
+        _compatibilityTest80();
     else
-        _compatibilityTest8();
+        _compatibilityTest81();
     end;
 end;
 
@@ -879,7 +881,7 @@ inline void _compatibilityTest7()
     do while true;
 end;
 
-inline void _compatibilityTest8()
+inline void _compatibilityTest80()
     mlog {
         print "Testing..."
         printflush message1
@@ -1077,6 +1079,923 @@ inline void _compatibilityTest8()
         jump general notEqual @sfx-wind2 96
         jump general notEqual @sfx-wind3 97
         jump general notEqual @sfx-windhowl 98
+        sensor id @graphite-press @id
+        jump general notEqual id 0
+        sensor id @multi-press @id
+        jump general notEqual id 1
+        sensor id @silicon-smelter @id
+        jump general notEqual id 2
+        sensor id @silicon-crucible @id
+        jump general notEqual id 3
+        sensor id @kiln @id
+        jump general notEqual id 4
+        sensor id @plastanium-compressor @id
+        jump general notEqual id 5
+        sensor id @phase-weaver @id
+        jump general notEqual id 6
+        sensor id @cryofluid-mixer @id
+        jump general notEqual id 7
+        sensor id @pyratite-mixer @id
+        jump general notEqual id 8
+        sensor id @blast-mixer @id
+        jump general notEqual id 9
+        sensor id @melter @id
+        jump general notEqual id 10
+        sensor id @separator @id
+        jump general notEqual id 11
+        sensor id @disassembler @id
+        jump general notEqual id 12
+        sensor id @spore-press @id
+        jump general notEqual id 13
+        sensor id @pulverizer @id
+        jump general notEqual id 14
+        sensor id @coal-centrifuge @id
+        jump general notEqual id 15
+        sensor id @incinerator @id
+        jump general notEqual id 16
+        sensor id @copper-wall @id
+        jump general notEqual id 17
+        sensor id @copper-wall-large @id
+        jump general notEqual id 18
+        sensor id @titanium-wall @id
+        jump general notEqual id 19
+        sensor id @titanium-wall-large @id
+        jump general notEqual id 20
+        sensor id @plastanium-wall @id
+        jump general notEqual id 21
+        sensor id @plastanium-wall-large @id
+        jump general notEqual id 22
+        sensor id @thorium-wall @id
+        jump general notEqual id 23
+        sensor id @thorium-wall-large @id
+        jump general notEqual id 24
+        sensor id @phase-wall @id
+        jump general notEqual id 25
+        sensor id @phase-wall-large @id
+        jump general notEqual id 26
+        sensor id @surge-wall @id
+        jump general notEqual id 27
+        sensor id @surge-wall-large @id
+        jump general notEqual id 28
+        sensor id @door @id
+        jump general notEqual id 29
+        sensor id @door-large @id
+        jump general notEqual id 30
+        sensor id @scrap-wall @id
+        jump general notEqual id 31
+        sensor id @scrap-wall-large @id
+        jump general notEqual id 32
+        sensor id @scrap-wall-huge @id
+        jump general notEqual id 33
+        sensor id @scrap-wall-gigantic @id
+        jump general notEqual id 34
+        sensor id @mender @id
+        jump general notEqual id 35
+        sensor id @mend-projector @id
+        jump general notEqual id 36
+        sensor id @overdrive-projector @id
+        jump general notEqual id 37
+        sensor id @overdrive-dome @id
+        jump general notEqual id 38
+        sensor id @force-projector @id
+        jump general notEqual id 39
+        sensor id @shock-mine @id
+        jump general notEqual id 40
+        sensor id @conveyor @id
+        jump general notEqual id 41
+        sensor id @titanium-conveyor @id
+        jump general notEqual id 42
+        sensor id @plastanium-conveyor @id
+        jump general notEqual id 43
+        sensor id @armored-conveyor @id
+        jump general notEqual id 44
+        sensor id @junction @id
+        jump general notEqual id 45
+        sensor id @bridge-conveyor @id
+        jump general notEqual id 46
+        sensor id @phase-conveyor @id
+        jump general notEqual id 47
+        sensor id @sorter @id
+        jump general notEqual id 48
+        sensor id @inverted-sorter @id
+        jump general notEqual id 49
+        sensor id @router @id
+        jump general notEqual id 50
+        sensor id @distributor @id
+        jump general notEqual id 51
+        sensor id @overflow-gate @id
+        jump general notEqual id 52
+        sensor id @underflow-gate @id
+        jump general notEqual id 53
+        sensor id @mass-driver @id
+        jump general notEqual id 54
+        sensor id @duct @id
+        jump general notEqual id 55
+        sensor id @duct-router @id
+        jump general notEqual id 56
+        sensor id @duct-bridge @id
+        jump general notEqual id 57
+        sensor id @mechanical-pump @id
+        jump general notEqual id 58
+        sensor id @rotary-pump @id
+        jump general notEqual id 59
+        sensor id @conduit @id
+        jump general notEqual id 60
+        sensor id @pulse-conduit @id
+        jump general notEqual id 61
+        sensor id @plated-conduit @id
+        jump general notEqual id 62
+        sensor id @liquid-router @id
+        jump general notEqual id 63
+        sensor id @liquid-tank @id
+        jump general notEqual id 64
+        sensor id @liquid-junction @id
+        jump general notEqual id 65
+        sensor id @bridge-conduit @id
+        jump general notEqual id 66
+        sensor id @phase-conduit @id
+        jump general notEqual id 67
+        sensor id @power-node @id
+        jump general notEqual id 68
+        sensor id @power-node-large @id
+        jump general notEqual id 69
+        sensor id @surge-tower @id
+        jump general notEqual id 70
+        sensor id @diode @id
+        jump general notEqual id 71
+        sensor id @battery @id
+        jump general notEqual id 72
+        sensor id @battery-large @id
+        jump general notEqual id 73
+        sensor id @combustion-generator @id
+        jump general notEqual id 74
+        sensor id @thermal-generator @id
+        jump general notEqual id 75
+        sensor id @steam-generator @id
+        jump general notEqual id 76
+        sensor id @differential-generator @id
+        jump general notEqual id 77
+        sensor id @rtg-generator @id
+        jump general notEqual id 78
+        sensor id @solar-panel @id
+        jump general notEqual id 79
+        sensor id @solar-panel-large @id
+        jump general notEqual id 80
+        sensor id @thorium-reactor @id
+        jump general notEqual id 81
+        sensor id @impact-reactor @id
+        jump general notEqual id 82
+        sensor id @mechanical-drill @id
+        jump general notEqual id 83
+        sensor id @pneumatic-drill @id
+        jump general notEqual id 84
+        sensor id @laser-drill @id
+        jump general notEqual id 85
+        sensor id @blast-drill @id
+        jump general notEqual id 86
+        sensor id @water-extractor @id
+        jump general notEqual id 87
+        sensor id @cultivator @id
+        jump general notEqual id 88
+        sensor id @oil-extractor @id
+        jump general notEqual id 89
+        sensor id @core-shard @id
+        jump general notEqual id 90
+        sensor id @core-foundation @id
+        jump general notEqual id 91
+        sensor id @core-nucleus @id
+        jump general notEqual id 92
+        sensor id @vault @id
+        jump general notEqual id 93
+        sensor id @container @id
+        jump general notEqual id 94
+        sensor id @unloader @id
+        jump general notEqual id 95
+        sensor id @duo @id
+        jump general notEqual id 96
+        sensor id @scatter @id
+        jump general notEqual id 97
+        sensor id @scorch @id
+        jump general notEqual id 98
+        sensor id @hail @id
+        jump general notEqual id 99
+        sensor id @wave @id
+        jump general notEqual id 100
+        sensor id @lancer @id
+        jump general notEqual id 101
+        sensor id @arc @id
+        jump general notEqual id 102
+        sensor id @parallax @id
+        jump general notEqual id 103
+        sensor id @swarmer @id
+        jump general notEqual id 104
+        sensor id @salvo @id
+        jump general notEqual id 105
+        sensor id @segment @id
+        jump general notEqual id 106
+        sensor id @tsunami @id
+        jump general notEqual id 107
+        sensor id @fuse @id
+        jump general notEqual id 108
+        sensor id @ripple @id
+        jump general notEqual id 109
+        sensor id @cyclone @id
+        jump general notEqual id 110
+        sensor id @foreshadow @id
+        jump general notEqual id 111
+        sensor id @spectre @id
+        jump general notEqual id 112
+        sensor id @meltdown @id
+        jump general notEqual id 113
+        sensor id @ground-factory @id
+        jump general notEqual id 115
+        sensor id @air-factory @id
+        jump general notEqual id 116
+        sensor id @naval-factory @id
+        jump general notEqual id 117
+        sensor id @additive-reconstructor @id
+        jump general notEqual id 118
+        sensor id @multiplicative-reconstructor @id
+        jump general notEqual id 119
+        sensor id @exponential-reconstructor @id
+        jump general notEqual id 120
+        sensor id @tetrative-reconstructor @id
+        jump general notEqual id 121
+        sensor id @repair-point @id
+        jump general notEqual id 122
+        sensor id @repair-turret @id
+        jump general notEqual id 123
+        sensor id @payload-conveyor @id
+        jump general notEqual id 124
+        sensor id @payload-router @id
+        jump general notEqual id 125
+        sensor id @power-source @id
+        jump general notEqual id 126
+        sensor id @power-void @id
+        jump general notEqual id 127
+        sensor id @item-source @id
+        jump general notEqual id 128
+        sensor id @item-void @id
+        jump general notEqual id 129
+        sensor id @liquid-source @id
+        jump general notEqual id 130
+        sensor id @liquid-void @id
+        jump general notEqual id 131
+        sensor id @payload-void @id
+        jump general notEqual id 132
+        sensor id @payload-source @id
+        jump general notEqual id 133
+        sensor id @illuminator @id
+        jump general notEqual id 134
+        sensor id @launch-pad @id
+        jump general notEqual id 135
+        sensor id @interplanetary-accelerator @id
+        jump general notEqual id 136
+        sensor id @message @id
+        jump general notEqual id 137
+        sensor id @switch @id
+        jump general notEqual id 138
+        sensor id @micro-processor @id
+        jump general notEqual id 139
+        sensor id @logic-processor @id
+        jump general notEqual id 140
+        sensor id @hyper-processor @id
+        jump general notEqual id 141
+        sensor id @memory-cell @id
+        jump general notEqual id 142
+        sensor id @memory-bank @id
+        jump general notEqual id 143
+        sensor id @logic-display @id
+        jump general notEqual id 144
+        sensor id @large-logic-display @id
+        jump general notEqual id 145
+        sensor id @liquid-container @id
+        jump general notEqual id 146
+        sensor id @deconstructor @id
+        jump general notEqual id 147
+        sensor id @constructor @id
+        jump general notEqual id 148
+        sensor id @thruster @id
+        jump general notEqual id 149
+        sensor id @large-constructor @id
+        jump general notEqual id 150
+        sensor id @payload-loader @id
+        jump general notEqual id 151
+        sensor id @payload-unloader @id
+        jump general notEqual id 152
+        sensor id @silicon-arc-furnace @id
+        jump general notEqual id 153
+        sensor id @cliff-crusher @id
+        jump general notEqual id 154
+        sensor id @plasma-bore @id
+        jump general notEqual id 155
+        sensor id @reinforced-liquid-junction @id
+        jump general notEqual id 156
+        sensor id @breach @id
+        jump general notEqual id 157
+        sensor id @core-bastion @id
+        jump general notEqual id 158
+        sensor id @turbine-condenser @id
+        jump general notEqual id 159
+        sensor id @beam-node @id
+        jump general notEqual id 160
+        sensor id @beam-tower @id
+        jump general notEqual id 161
+        sensor id @build-tower @id
+        jump general notEqual id 162
+        sensor id @impact-drill @id
+        jump general notEqual id 163
+        sensor id @carbide-crucible @id
+        jump general notEqual id 164
+        sensor id @surge-conveyor @id
+        jump general notEqual id 165
+        sensor id @duct-unloader @id
+        jump general notEqual id 166
+        sensor id @surge-router @id
+        jump general notEqual id 167
+        sensor id @reinforced-conduit @id
+        jump general notEqual id 168
+        sensor id @reinforced-liquid-router @id
+        jump general notEqual id 169
+        sensor id @reinforced-liquid-container @id
+        jump general notEqual id 170
+        sensor id @reinforced-liquid-tank @id
+        jump general notEqual id 171
+        sensor id @reinforced-bridge-conduit @id
+        jump general notEqual id 172
+        sensor id @core-citadel @id
+        jump general notEqual id 173
+        sensor id @core-acropolis @id
+        jump general notEqual id 174
+        sensor id @heat-reactor @id
+        jump general notEqual id 175
+        sensor id @impulse-pump @id
+        jump general notEqual id 176
+        sensor id @reinforced-pump @id
+        jump general notEqual id 177
+        sensor id @electrolyzer @id
+        jump general notEqual id 178
+        sensor id @oxidation-chamber @id
+        jump general notEqual id 179
+        sensor id @surge-smelter @id
+        jump general notEqual id 180
+        sensor id @surge-crucible @id
+        jump general notEqual id 181
+        sensor id @overflow-duct @id
+        jump general notEqual id 182
+        sensor id @large-plasma-bore @id
+        jump general notEqual id 183
+        sensor id @cyanogen-synthesizer @id
+        jump general notEqual id 184
+        sensor id @slag-centrifuge @id
+        jump general notEqual id 185
+        sensor id @electric-heater @id
+        jump general notEqual id 186
+        sensor id @slag-incinerator @id
+        jump general notEqual id 187
+        sensor id @phase-synthesizer @id
+        jump general notEqual id 188
+        sensor id @sublimate @id
+        jump general notEqual id 189
+        sensor id @reinforced-container @id
+        jump general notEqual id 190
+        sensor id @reinforced-vault @id
+        jump general notEqual id 191
+        sensor id @atmospheric-concentrator @id
+        jump general notEqual id 192
+        sensor id @unit-cargo-loader @id
+        jump general notEqual id 193
+        sensor id @unit-cargo-unload-point @id
+        jump general notEqual id 194
+        sensor id @chemical-combustion-chamber @id
+        jump general notEqual id 195
+        sensor id @pyrolysis-generator @id
+        jump general notEqual id 196
+        sensor id @regen-projector @id
+        jump general notEqual id 197
+        sensor id @titan @id
+        jump general notEqual id 198
+        sensor id @small-deconstructor @id
+        jump general notEqual id 199
+        sensor id @vent-condenser @id
+        jump general notEqual id 200
+        sensor id @phase-heater @id
+        jump general notEqual id 201
+        sensor id @heat-redirector @id
+        jump general notEqual id 202
+        sensor id @tungsten-wall @id
+        jump general notEqual id 203
+        sensor id @tungsten-wall-large @id
+        jump general notEqual id 204
+        sensor id @tank-assembler @id
+        jump general notEqual id 205
+        sensor id @beryllium-wall @id
+        jump general notEqual id 206
+        sensor id @beryllium-wall-large @id
+        jump general notEqual id 207
+        sensor id @eruption-drill @id
+        jump general notEqual id 208
+        sensor id @ship-assembler @id
+        jump general notEqual id 209
+        sensor id @mech-assembler @id
+        jump general notEqual id 210
+        sensor id @shield-projector @id
+        jump general notEqual id 211
+        sensor id @beam-link @id
+        jump general notEqual id 212
+        sensor id @world-processor @id
+        jump general notEqual id 213
+        sensor id @reinforced-payload-conveyor @id
+        jump general notEqual id 214
+        sensor id @reinforced-payload-router @id
+        jump general notEqual id 215
+        sensor id @disperse @id
+        jump general notEqual id 216
+        sensor id @large-shield-projector @id
+        jump general notEqual id 217
+        sensor id @payload-mass-driver @id
+        jump general notEqual id 218
+        sensor id @world-cell @id
+        jump general notEqual id 219
+        sensor id @carbide-wall @id
+        jump general notEqual id 220
+        sensor id @carbide-wall-large @id
+        jump general notEqual id 221
+        sensor id @tank-fabricator @id
+        jump general notEqual id 222
+        sensor id @mech-fabricator @id
+        jump general notEqual id 223
+        sensor id @ship-fabricator @id
+        jump general notEqual id 224
+        sensor id @reinforced-surge-wall @id
+        jump general notEqual id 225
+        sensor id @radar @id
+        jump general notEqual id 226
+        sensor id @blast-door @id
+        jump general notEqual id 227
+        sensor id @canvas @id
+        jump general notEqual id 228
+        sensor id @armored-duct @id
+        jump general notEqual id 229
+        sensor id @unit-repair-tower @id
+        jump general notEqual id 230
+        sensor id @diffuse @id
+        jump general notEqual id 231
+        sensor id @prime-refabricator @id
+        jump general notEqual id 232
+        sensor id @basic-assembler-module @id
+        jump general notEqual id 233
+        sensor id @reinforced-surge-wall-large @id
+        jump general notEqual id 234
+        sensor id @tank-refabricator @id
+        jump general notEqual id 235
+        sensor id @mech-refabricator @id
+        jump general notEqual id 236
+        sensor id @ship-refabricator @id
+        jump general notEqual id 237
+        sensor id @slag-heater @id
+        jump general notEqual id 238
+        sensor id @afflict @id
+        jump general notEqual id 239
+        sensor id @shielded-wall @id
+        jump general notEqual id 240
+        sensor id @lustre @id
+        jump general notEqual id 241
+        sensor id @scathe @id
+        jump general notEqual id 242
+        sensor id @smite @id
+        jump general notEqual id 243
+        sensor id @underflow-duct @id
+        jump general notEqual id 244
+        sensor id @malign @id
+        jump general notEqual id 245
+        sensor id @shockwave-tower @id
+        jump general notEqual id 246
+        sensor id @heat-source @id
+        jump general notEqual id 247
+        sensor id @flux-reactor @id
+        jump general notEqual id 248
+        sensor id @neoplasia-reactor @id
+        jump general notEqual id 249
+        sensor id @heat-router @id
+        jump general notEqual id 250
+        sensor id @large-payload-mass-driver @id
+        jump general notEqual id 251
+        sensor id @reinforced-message @id
+        jump general notEqual id 252
+        sensor id @world-message @id
+        jump general notEqual id 253
+        sensor id @world-switch @id
+        jump general notEqual id 254
+        sensor id @small-heat-redirector @id
+        jump general notEqual id 255
+        sensor id @large-cliff-crusher @id
+        jump general notEqual id 256
+        sensor id @advanced-launch-pad @id
+        jump general notEqual id 257
+        sensor id @landing-pad @id
+        jump general notEqual id 258
+        sensor id @tile-logic-display @id
+        jump general notEqual id 259
+        sensor id @dagger @id
+        jump general notEqual id 0
+        sensor id @mace @id
+        jump general notEqual id 1
+        sensor id @fortress @id
+        jump general notEqual id 2
+        sensor id @scepter @id
+        jump general notEqual id 3
+        sensor id @reign @id
+        jump general notEqual id 4
+        sensor id @nova @id
+        jump general notEqual id 5
+        sensor id @pulsar @id
+        jump general notEqual id 6
+        sensor id @quasar @id
+        jump general notEqual id 7
+        sensor id @vela @id
+        jump general notEqual id 8
+        sensor id @corvus @id
+        jump general notEqual id 9
+        sensor id @crawler @id
+        jump general notEqual id 10
+        sensor id @atrax @id
+        jump general notEqual id 11
+        sensor id @spiroct @id
+        jump general notEqual id 12
+        sensor id @arkyid @id
+        jump general notEqual id 13
+        sensor id @toxopid @id
+        jump general notEqual id 14
+        sensor id @flare @id
+        jump general notEqual id 15
+        sensor id @horizon @id
+        jump general notEqual id 16
+        sensor id @zenith @id
+        jump general notEqual id 17
+        sensor id @antumbra @id
+        jump general notEqual id 18
+        sensor id @eclipse @id
+        jump general notEqual id 19
+        sensor id @mono @id
+        jump general notEqual id 20
+        sensor id @poly @id
+        jump general notEqual id 21
+        sensor id @mega @id
+        jump general notEqual id 22
+        sensor id @quad @id
+        jump general notEqual id 23
+        sensor id @oct @id
+        jump general notEqual id 24
+        sensor id @risso @id
+        jump general notEqual id 25
+        sensor id @minke @id
+        jump general notEqual id 26
+        sensor id @bryde @id
+        jump general notEqual id 27
+        sensor id @sei @id
+        jump general notEqual id 28
+        sensor id @omura @id
+        jump general notEqual id 29
+        sensor id @retusa @id
+        jump general notEqual id 30
+        sensor id @oxynoe @id
+        jump general notEqual id 31
+        sensor id @cyerce @id
+        jump general notEqual id 32
+        sensor id @aegires @id
+        jump general notEqual id 33
+        sensor id @navanax @id
+        jump general notEqual id 34
+        sensor id @alpha @id
+        jump general notEqual id 35
+        sensor id @beta @id
+        jump general notEqual id 36
+        sensor id @gamma @id
+        jump general notEqual id 37
+        sensor id @stell @id
+        jump general notEqual id 38
+        sensor id @locus @id
+        jump general notEqual id 39
+        sensor id @precept @id
+        jump general notEqual id 40
+        sensor id @vanquish @id
+        jump general notEqual id 41
+        sensor id @conquer @id
+        jump general notEqual id 42
+        sensor id @merui @id
+        jump general notEqual id 43
+        sensor id @cleroi @id
+        jump general notEqual id 44
+        sensor id @anthicus @id
+        jump general notEqual id 45
+        sensor id @tecta @id
+        jump general notEqual id 46
+        sensor id @collaris @id
+        jump general notEqual id 47
+        sensor id @elude @id
+        jump general notEqual id 48
+        sensor id @avert @id
+        jump general notEqual id 49
+        sensor id @obviate @id
+        jump general notEqual id 50
+        sensor id @quell @id
+        jump general notEqual id 51
+        sensor id @disrupt @id
+        jump general notEqual id 52
+        sensor id @evoke @id
+        jump general notEqual id 53
+        sensor id @incite @id
+        jump general notEqual id 54
+        sensor id @emanate @id
+        jump general notEqual id 55
+        sensor id @copper @id
+        jump general notEqual id 0
+        sensor id @lead @id
+        jump general notEqual id 1
+        sensor id @metaglass @id
+        jump general notEqual id 2
+        sensor id @graphite @id
+        jump general notEqual id 3
+        sensor id @sand @id
+        jump general notEqual id 4
+        sensor id @coal @id
+        jump general notEqual id 5
+        sensor id @titanium @id
+        jump general notEqual id 6
+        sensor id @thorium @id
+        jump general notEqual id 7
+        sensor id @scrap @id
+        jump general notEqual id 8
+        sensor id @silicon @id
+        jump general notEqual id 9
+        sensor id @plastanium @id
+        jump general notEqual id 10
+        sensor id @phase-fabric @id
+        jump general notEqual id 11
+        sensor id @surge-alloy @id
+        jump general notEqual id 12
+        sensor id @spore-pod @id
+        jump general notEqual id 13
+        sensor id @blast-compound @id
+        jump general notEqual id 14
+        sensor id @pyratite @id
+        jump general notEqual id 15
+        sensor id @beryllium @id
+        jump general notEqual id 16
+        sensor id @tungsten @id
+        jump general notEqual id 17
+        sensor id @oxide @id
+        jump general notEqual id 18
+        sensor id @carbide @id
+        jump general notEqual id 19
+        sensor id @water @id
+        jump general notEqual id 0
+        sensor id @slag @id
+        jump general notEqual id 1
+        sensor id @oil @id
+        jump general notEqual id 2
+        sensor id @cryofluid @id
+        jump general notEqual id 3
+        sensor id @neoplasm @id
+        jump general notEqual id 4
+        sensor id @hydrogen @id
+        jump general notEqual id 5
+        sensor id @ozone @id
+        jump general notEqual id 6
+        sensor id @cyanogen @id
+        jump general notEqual id 7
+        sensor id @gallium @id
+        jump general notEqual id 8
+        sensor id @nitrogen @id
+        jump general notEqual id 9
+        sensor id @arkycite @id
+        jump general notEqual id 10
+
+        jump specific notEqual @itemCount 20
+        jump specific notEqual @liquidCount 11
+        jump specific notEqual @unitCount 56
+
+        print $_MESSAGE_OK
+        jump finish always 0 0
+    general:
+        print $_MESSAGE_GENERAL
+        jump finish always 0 0
+    specific:
+        print $_MESSAGE_SPECIFIC
+    finish:
+        printflush message1;
+    }
+    do while true;
+end;
+
+inline void _compatibilityTest81()
+    mlog {
+        print "Testing..."
+        printflush message1
+
+        jump general notEqual @blockCount 260
+        jump general notEqual @bottom 4
+        jump general notEqual @bottomLeft 12
+        jump general notEqual @bottomRight 20
+        jump general notEqual @center 1
+        op strictEqual result @colorAccent %ffd37fff
+        jump general equal result false
+        op strictEqual result @colorAcid %7fff00ff
+        jump general equal result false
+        op strictEqual result @colorBlack %000000ff
+        jump general equal result false
+        op strictEqual result @colorBlue %4169e1ff
+        jump general equal result false
+        op strictEqual result @colorBrick %b22222ff
+        jump general equal result false
+        op strictEqual result @colorBrown %8b4513ff
+        jump general equal result false
+        op strictEqual result @colorCoral %ff7f50ff
+        jump general equal result false
+        op strictEqual result @colorCrimson %dc143cff
+        jump general equal result false
+        op strictEqual result @colorCyan %00ffffff
+        jump general equal result false
+        op strictEqual result @colorDarkgray %3f3f3fff
+        jump general equal result false
+        op strictEqual result @colorDarkgrey %3f3f3fff
+        jump general equal result false
+        op strictEqual result @colorForest %228b22ff
+        jump general equal result false
+        op strictEqual result @colorGold %ffd700ff
+        jump general equal result false
+        op strictEqual result @colorGoldenrod %daa520ff
+        jump general equal result false
+        op strictEqual result @colorGray %7f7f7fff
+        jump general equal result false
+        op strictEqual result @colorGreen %38d667ff
+        jump general equal result false
+        op strictEqual result @colorGrey %7f7f7fff
+        jump general equal result false
+        op strictEqual result @colorHighlight %ffe0a5ff
+        jump general equal result false
+        op strictEqual result @colorLightgray %bfbfbfff
+        jump general equal result false
+        op strictEqual result @colorLightgrey %bfbfbfff
+        jump general equal result false
+        op strictEqual result @colorLime %32cd32ff
+        jump general equal result false
+        op strictEqual result @colorMagenta %ff00ffff
+        jump general equal result false
+        op strictEqual result @colorMaroon %b03060ff
+        jump general equal result false
+        op strictEqual result @colorNavy %00007fff
+        jump general equal result false
+        op strictEqual result @colorNegstat %e55454ff
+        jump general equal result false
+        op strictEqual result @colorOlive %6b8e23ff
+        jump general equal result false
+        op strictEqual result @colorOrange %ffa500ff
+        jump general equal result false
+        op strictEqual result @colorPink %ff69b4ff
+        jump general equal result false
+        op strictEqual result @colorPurple %a020f0ff
+        jump general equal result false
+        op strictEqual result @colorRed %e55454ff
+        jump general equal result false
+        op strictEqual result @colorRoyal %4169e1ff
+        jump general equal result false
+        op strictEqual result @colorSalmon %fa8072ff
+        jump general equal result false
+        op strictEqual result @colorScarlet %ff341cff
+        jump general equal result false
+        op strictEqual result @colorSky %87ceebff
+        jump general equal result false
+        op strictEqual result @colorSlate %708090ff
+        jump general equal result false
+        op strictEqual result @colorStat %ffd37fff
+        jump general equal result false
+        op strictEqual result @colorTan %d2b48cff
+        jump general equal result false
+        op strictEqual result @colorTeal %007f7fff
+        jump general equal result false
+        op strictEqual result @colorUnlaunched %8982edff
+        jump general equal result false
+        op strictEqual result @colorViolet %ee82eeff
+        jump general equal result false
+        op strictEqual result @colorWhite %ffffffff
+        jump general equal result false
+        op strictEqual result @colorYellow %ffff00ff
+        jump general equal result false
+        jump general notEqual @ctrlCommand 3
+        jump general notEqual @ctrlPlayer 2
+        jump general notEqual @ctrlProcessor 1
+        op strictEqual result @degToRad 0.01745329238474369
+        jump general equal result false
+        op strictEqual result @e 2.7182817459106445
+        jump general equal result false
+        jump general notEqual @left 8
+        op strictEqual result @pi 3.1415927410125732
+        jump general equal result false
+        op strictEqual result @radToDeg 57.2957763671875
+        jump general equal result false
+        jump general notEqual @right 16
+        jump general notEqual @sfx-back 1
+        jump general notEqual @sfx-bang 2
+        jump general notEqual @sfx-beam 3
+        jump general notEqual @sfx-bigshot 4
+        jump general notEqual @sfx-bioLoop 5
+        jump general notEqual @sfx-blaster 6
+        jump general notEqual @sfx-bolt 7
+        jump general notEqual @sfx-boom 8
+        jump general notEqual @sfx-break 9
+        jump general notEqual @sfx-build 10
+        jump general notEqual @sfx-buttonClick 11
+        jump general notEqual @sfx-cannon 12
+        jump general notEqual @sfx-chatMessage 13
+        jump general notEqual @sfx-click 14
+        jump general notEqual @sfx-combustion 15
+        jump general notEqual @sfx-conveyor 16
+        jump general notEqual @sfx-corexplode 17
+        jump general notEqual @sfx-cutter 18
+        jump general notEqual @sfx-door 19
+        jump general notEqual @sfx-drill 20
+        jump general notEqual @sfx-drillCharge 21
+        jump general notEqual @sfx-drillImpact 22
+        jump general notEqual @sfx-dullExplosion 23
+        jump general notEqual @sfx-electricHum 24
+        jump general notEqual @sfx-explosion 25
+        jump general notEqual @sfx-explosionbig 26
+        jump general notEqual @sfx-extractLoop 27
+        jump general notEqual @sfx-fire 28
+        jump general notEqual @sfx-flame 29
+        jump general notEqual @sfx-flame2 30
+        jump general notEqual @sfx-flux 31
+        jump general notEqual @sfx-glow 32
+        jump general notEqual @sfx-grinding 33
+        jump general notEqual @sfx-hum 34
+        jump general notEqual @sfx-largeCannon 35
+        jump general notEqual @sfx-largeExplosion 36
+        jump general notEqual @sfx-laser 37
+        jump general notEqual @sfx-laserbeam 38
+        jump general notEqual @sfx-laserbig 39
+        jump general notEqual @sfx-laserblast 40
+        jump general notEqual @sfx-lasercharge 41
+        jump general notEqual @sfx-lasercharge2 42
+        jump general notEqual @sfx-lasershoot 43
+        jump general notEqual @sfx-machine 44
+        jump general notEqual @sfx-malignShoot 45
+        jump general notEqual @sfx-mediumCannon 46
+        jump general notEqual @sfx-message 47
+        jump general notEqual @sfx-mineDeploy 48
+        jump general notEqual @sfx-minebeam 49
+        jump general notEqual @sfx-missile 50
+        jump general notEqual @sfx-missileLarge 51
+        jump general notEqual @sfx-missileLaunch 52
+        jump general notEqual @sfx-missileSmall 53
+        jump general notEqual @sfx-missileTrail 54
+        jump general notEqual @sfx-mud 55
+        jump general notEqual @sfx-noammo 56
+        jump general notEqual @sfx-pew 57
+        jump general notEqual @sfx-place 58
+        jump general notEqual @sfx-plantBreak 59
+        jump general notEqual @sfx-plasmaboom 60
+        jump general notEqual @sfx-plasmadrop 61
+        jump general notEqual @sfx-press 62
+        jump general notEqual @sfx-pulse 63
+        jump general notEqual @sfx-pulseBlast 64
+        jump general notEqual @sfx-railgun 65
+        jump general notEqual @sfx-rain 66
+        jump general notEqual @sfx-release 67
+        jump general notEqual @sfx-respawn 68
+        jump general notEqual @sfx-respawning 69
+        jump general notEqual @sfx-rockBreak 70
+        jump general notEqual @sfx-sap 71
+        jump general notEqual @sfx-shield 72
+        jump general notEqual @sfx-shockBlast 73
+        jump general notEqual @sfx-shoot 74
+        jump general notEqual @sfx-shootAlt 75
+        jump general notEqual @sfx-shootAltLong 76
+        jump general notEqual @sfx-shootBig 77
+        jump general notEqual @sfx-shootSmite 78
+        jump general notEqual @sfx-shootSnap 79
+        jump general notEqual @sfx-shotgun 80
+        jump general notEqual @sfx-smelter 81
+        jump general notEqual @sfx-spark 82
+        jump general notEqual @sfx-spellLoop 83
+        jump general notEqual @sfx-splash 84
+        jump general notEqual @sfx-spray 85
+        jump general notEqual @sfx-steam 86
+        jump general notEqual @sfx-techloop 88
+        jump general notEqual @sfx-thruster 89
+        jump general notEqual @sfx-titanExplosion 90
+        jump general notEqual @sfx-torch 91
+        jump general notEqual @sfx-tractorbeam 92
+        jump general notEqual @sfx-unlock 93
+        jump general notEqual @sfx-wave 94
+        jump general notEqual @sfx-wind 95
+        jump general notEqual @sfx-wind2 96
+        jump general notEqual @sfx-wind3 97
+        jump general notEqual @sfx-windhowl 98
+        jump general notEqual @top 2
+        jump general notEqual @topLeft 10
+        jump general notEqual @topRight 18
         sensor id @graphite-press @id
         jump general notEqual id 0
         sensor id @multi-press @id

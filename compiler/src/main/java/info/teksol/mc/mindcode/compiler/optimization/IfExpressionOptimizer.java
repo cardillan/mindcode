@@ -19,13 +19,20 @@ import static java.util.Objects.requireNonNull;
 
 @NullMarked
 class IfExpressionOptimizer extends BaseOptimizer {
-
     public IfExpressionOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.IF_EXPRESSION_OPTIMIZATION, optimizationContext);
     }
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+        if (experimental() && getProfile().getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
+            boolean repeat;
+            do {
+                List<Boolean> result = forEachContext(IF, BASIC, this::applySelectOptimization);
+                repeat = result.stream().anyMatch(Boolean::booleanValue);
+            } while (repeat);
+        }
+
         forEachContext(IF, BASIC, returningNull(this::optimizeIfExpression));
         return false;
     }
@@ -74,72 +81,155 @@ class IfExpressionOptimizer extends BaseOptimizer {
         }
     }
 
-    private boolean optimizeUsingSelect(AstContext ifExpression, LogicList condition, JumpInstruction jump,
+    private record BranchContent(@Nullable LogicVariable result,
+                                 @Nullable LogicValue value,
+                                 List<SelectInstruction> generate,
+                                 List<LogicInstruction> remove) {
+        boolean isEmpty() {
+            return result == null;
+        }
+
+        LogicValue getValue(BranchContent other) {
+            return value == null ? requireNonNull(other.result) : value;
+        }
+    }
+
+    private @Nullable BranchContent analyzeBranchContent(LogicList branch) {
+        LogicVariable result = null;
+        LogicValue value = null;
+        List<SelectInstruction> generate = new ArrayList<>();
+        List<LogicInstruction> remove = new ArrayList<>();
+        SetInstruction set = null;
+
+        for (LogicInstruction ix : branch) {
+            if (ix.isReal()) {
+                // Set must be the only instruction in the branch
+                if (set != null) return null;
+
+                switch (ix) {
+                    case SelectInstruction s -> {
+                        remove.add(s);
+                        generate.add(s);
+                    }
+                    case SetInstruction s -> {
+                        // Set must be the only instruction in the branch
+                        if (!generate.isEmpty()) return null;
+                        result = s.getResult();
+                        value = s.getValue();
+                        remove.add(s);
+                        set = s;
+                    }
+                    default -> {
+                        return null;
+                    }
+                }
+            }
+        }
+
+        // We need to modify the last select
+        if (!generate.isEmpty()) {
+            SelectInstruction lastSelect = generate.removeLast();
+            result = lastSelect.getResult();
+            LogicVariable temp = instructionProcessor.nextTemp();
+            value = temp;
+            generate.add(lastSelect.withResult(temp));
+        }
+
+        return new BranchContent(result, value, generate, remove);
+    }
+
+    private void insertBefore(JumpInstruction jump, BranchContent content) {
+        LogicList logicList = buildLogicList(jump.getAstContext(),
+                content.generate.stream().map(ix -> (LogicInstruction) ix.withContext(jump.getAstContext())).toList());
+        insertBefore(jump, logicList);
+    }
+
+    private Boolean optimizeUsingSelect(AstContext ifExpression, LogicList condition, JumpInstruction jump,
             LogicList trueBranch, LogicList falseBranch) {
         // select optimization
 
-        int trueSize = trueBranch.realSize();
-        int falseSize = falseBranch.realSize();
+        BranchContent trueContent = analyzeBranchContent(trueBranch);
+        BranchContent falseContent = analyzeBranchContent(falseBranch);
+
+        // Branches aren't compatible with select optimization
+        if (trueContent == null || falseContent == null) return false;
+
+        LogicVariable result = trueContent.result != null ? trueContent.result : falseContent.result;
+
+        // Either the result is from a single branch only, or it must be the same
+        if (result == null || falseContent.result != null && !falseContent.result.equals(result)) return false;
+
         List<SetInstruction> replaced = new ArrayList<>();
 
-        LogicVariable result;
-        LogicValue trueValue, falseValue;
-        if (trueSize == 1 && falseSize == 1) {
-            if (trueBranch.getFirstReal() instanceof SetInstruction setTrue && falseBranch.getFirstReal() instanceof SetInstruction setFalse
-                && setTrue.getResult().equals(setFalse.getResult())) {
-                result = setTrue.getResult();
-                trueValue = setTrue.getValue();
-                falseValue = setFalse.getValue();
-                replaced.add(setTrue);
-                replaced.add(setFalse);
-            } else {
-                return false;
-            }
-        } else if (trueSize == 1 && falseSize == 0) {
-            if (trueBranch.getFirstReal() instanceof SetInstruction set) {
-                result = set.getResult();
-                trueValue = set.getValue();
-                falseValue = set.getResult();
-                replaced.add(set);
-            } else {
-                return false;
-            }
-        } else if (trueSize == 0 && falseSize == 1) {
-            if (falseBranch.getFirstReal() instanceof SetInstruction set) {
-                result = set.getResult();
-                trueValue = set.getResult();
-                falseValue = set.getValue();
-                replaced.add(set);
-            } else {
-                return false;
-            }
-        } else {
-            return false;
-        }
+//        LogicVariable result;
+//        LogicValue trueValue, falseValue;
+//        if (trueSize == 1 && falseSize == 1) {
+//            if (trueBranch.getFirstReal() instanceof SetInstruction setTrue && falseBranch.getFirstReal() instanceof SetInstruction setFalse
+//                && setTrue.getResult().equals(setFalse.getResult())) {
+//                result = setTrue.getResult();
+//                trueValue = setTrue.getValue();
+//                falseValue = setFalse.getValue();
+//                replaced.add(setTrue);
+//                replaced.add(setFalse);
+//            } else {
+//                return false;
+//            }
+//        } else if (trueSize == 1 && falseSize == 0) {
+//            if (trueBranch.getFirstReal() instanceof SetInstruction set) {
+//                result = set.getResult();
+//                trueValue = set.getValue();
+//                falseValue = set.getResult();
+//                replaced.add(set);
+//            } else {
+//                return false;
+//            }
+//        } else if (trueSize == 0 && falseSize == 1) {
+//            if (falseBranch.getFirstReal() instanceof SetInstruction set) {
+//                result = set.getResult();
+//                trueValue = set.getResult();
+//                falseValue = set.getValue();
+//                replaced.add(set);
+//            } else {
+//                return false;
+//            }
+//        } else {
+//            return false;
+//        }
 
         LogicList flowControl = contextInstructions(ifExpression.child(2));
         if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()
-                || (falseSize == 0 && flowControl.getFirst() instanceof EmptyInstruction)) {
+                || (falseContent.isEmpty() && flowControl.getFirst() instanceof EmptyInstruction)) {
             JumpInstruction invertedJump = negateCompoundCondition(condition);
             if (invertedJump != null) {
                 removeInstruction(instructionIndex(jump) - 1);
+                insertBefore(jump, trueContent);
+                insertBefore(jump, falseContent);
                 replaceInstruction(jump, createSelect(jump.getAstContext(), result,
                         invertedJump.getCondition(), invertedJump.getX(), invertedJump.getY(),
-                        trueValue, falseValue));
+                        trueContent.getValue(falseContent),
+                        falseContent.getValue(trueContent)));
             } else if (jump.getCondition().hasInverse()) {
                 // The compiler inverts the if condition because the jump leads to the false branch
                 // Here we invert it back, so true and false values remain the same
+                insertBefore(jump, trueContent);
+                insertBefore(jump, falseContent);
                 replaceInstruction(jump, createSelect(jump.getAstContext(), result,
                         jump.getCondition().inverse(),
-                        jump.getX(), jump.getY(), trueValue, falseValue));
-
+                        jump.getX(), jump.getY(),
+                        trueContent.getValue(falseContent),
+                        falseContent.getValue(trueContent)));
             } else {
                 // The compiler inverts the if condition because the jump leads to the false branch
                 // Here we cannot invert it back, so the true and false values are swapped
+                insertBefore(jump, trueContent);
+                insertBefore(jump, falseContent);
                 replaceInstruction(jump, createSelect(jump.getAstContext(), result, jump.getCondition(),
-                        jump.getX(), jump.getY(), falseValue, trueValue));
+                        jump.getX(), jump.getY(),
+                        trueContent.getValue(falseContent),
+                        falseContent.getValue(trueContent)));
             }
-            replaced.forEach(this::invalidateInstruction);
+            trueContent.remove.forEach(this::invalidateInstruction);
+            falseContent.remove.forEach(this::invalidateInstruction);
             invalidateInstruction(flowControl.getFirst());
             return true;
         }
@@ -147,24 +237,21 @@ class IfExpressionOptimizer extends BaseOptimizer {
         return false;
     }
 
-    private void optimizeSingleBranchedIfExpression(AstContext ifExpression) {
-        if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)) return;
+    private boolean applySelectOptimization(AstContext ifExpression) {
+        if (!hasSubcontexts(ifExpression, CONDITION, BODY, FLOW_CONTROL, BODY, FLOW_CONTROL)) return false;
 
         LogicList condition = contextInstructions(ifExpression.child(0));
         if (!(condition.getLast() instanceof JumpInstruction jump && jump.isConditional())) {
-            return;
+            return false;
         }
+
         LogicList trueBranch = contextInstructions(ifExpression.child(1));
         LogicList falseBranch = contextInstructions(ifExpression.child(3));
-
-        optimizeUsingSelect(ifExpression, condition, jump, trueBranch, falseBranch);
+        return optimizeUsingSelect(ifExpression, condition, jump, trueBranch, falseBranch);
     }
 
     private void optimizeIfExpression(AstContext ifExpression) {
         if (!isSupportedIfElseExpression(ifExpression)) {
-            if (experimental() && getProfile().getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
-                optimizeSingleBranchedIfExpression(ifExpression);
-            }
             return;
         }
 
@@ -176,11 +263,6 @@ class IfExpressionOptimizer extends BaseOptimizer {
         // See the expected subcontext structure above
         LogicList trueBranch = contextInstructions(ifExpression.child(1));
         LogicList falseBranch = contextInstructions(ifExpression.child(3));
-
-        if (experimental() && getProfile().getProcessorVersion().atLeast(ProcessorVersion.V8B)
-            && optimizeUsingSelect(ifExpression, condition, jump, trueBranch, falseBranch)) {
-            return;
-        }
 
         LogicInstruction lastTrue = getLastRealInstruction(trueBranch);
         LogicInstruction lastFalse = getLastRealInstruction(falseBranch);

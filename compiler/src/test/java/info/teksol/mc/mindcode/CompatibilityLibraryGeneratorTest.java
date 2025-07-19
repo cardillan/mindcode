@@ -55,12 +55,14 @@ public class CompatibilityLibraryGeneratorTest {
              * Note: The Mindcode processor emulator currently isn't able to run this function.
              */
             inline void runCompatibilityTest()
-                if __TARGET_MAJOR__ == 6 then
+                if __MINDUSTRY_VERSION__ == "v126.2" then
                     _compatibilityTest6();
-                elsif __TARGET_MAJOR__ == 7 then
+                elsif __MINDUSTRY_VERSION__ == "v146" then
                     _compatibilityTest7();
+                elsif __MINDUSTRY_VERSION__ == "v149" then
+                    _compatibilityTest80();
                 else
-                    _compatibilityTest8();
+                    _compatibilityTest81();
                 end;
             end;
             
@@ -82,7 +84,10 @@ public class CompatibilityLibraryGeneratorTest {
             inline void _compatibilityTest7()
             %send;
             
-            inline void _compatibilityTest8()
+            inline void _compatibilityTest80()
+            %send;
+            
+            inline void _compatibilityTest81()
             %send;
             """;
 
@@ -111,7 +116,8 @@ public class CompatibilityLibraryGeneratorTest {
         String text = String.format(MODULE,
                 formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V6)),
                 formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V7)),
-                formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V8A))
+                formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V8A)),
+                formatMethod(MindustryMetadata.forVersion(ProcessorVersion.V8B))
         );
 
         Files.writeString(Path.of(LIBRARY_DIRECTORY, TARGET_FILE), StringUtils.normalizeLineEndings(text));

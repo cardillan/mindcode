@@ -380,8 +380,7 @@ void printExactHex(n)
                     when 15 then print("F");
                 end;
             else
-                if digit >= 10 then digit += 'A' - 0xA - '0'; end;
-                printchar(digit + '0');
+                printchar(char("0123456789ABCDEF", digit));
             end;
         end;
     end;

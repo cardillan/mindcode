@@ -178,7 +178,7 @@ To use the Compatibility library, use the `require compatibility;` statement.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                 900 |                900 |
+| Inlined function               |                 909 |                909 |
 
 This function runs the compatibility test on a Mindustry Logic processor. The compatibility test verifies that the
 compiler's metadata corresponding to the current target are identical to the actual data in the Mindustry processor.
@@ -317,8 +317,8 @@ Clears the processor's graphics buffer without outputting the contents into any 
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   5 |                  5 |
-| Function body                  |                   6 |                  6 |
+| Inlined function               |                   3 |                  3 |
+| Function body                  |                   4 |                  4 |
 | Function call                  |                   4 |                  4 |
 
 Returns the actual display size based on the type of display passed in as an argument.
@@ -587,8 +587,8 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   4 |                  4 |
-| Function body                  |                   5 |                  5 |
+| Inlined function               |                   2 |                  2 |
+| Function body                  |                   3 |                  3 |
 | Function call                  |                   4 |                  4 |
 
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
@@ -864,8 +864,8 @@ Prints all arguments passed to it, each on a new line.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  15 |                 15 |
-| Function body                  |                  16 |                 16 |
+| Inlined function               |                  16 |                 16 |
+| Function body                  |                  17 |                 17 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -889,8 +889,8 @@ Nulls are printed as 0.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  16 |                 16 |
-| Function body                  |                  17 |                 17 |
+| Inlined function               |                  17 |                 17 |
+| Function body                  |                  18 |                 18 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -1103,8 +1103,8 @@ itself, except the conversion of the number from a `double` to a 64-bit integer 
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  96 |                 16 |
-| Function body                  |                  97 |                 17 |
+| Inlined function               |                  64 |                 14 |
+| Function body                  |                  65 |                 15 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistics is valid for

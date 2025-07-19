@@ -200,8 +200,31 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     }
 
     @Test
+    void optimizesChainedStatementsUsingSelect() {
+        assertCompilesTo("""
+                        #set target = 8;
+                        #set optimization = experimental;
+                        param x = 5;
+                        y = if x < 0 then
+                            "negative";
+                        elsif x > 0 then
+                            "positive";
+                        else
+                            "zero";
+                        end;
+                        print(y);
+                        """,
+                createInstruction(SET, "x", "5"),
+                createInstruction(SELECT, tmp(4), "greaterThan", "x", "0", q("positive"), q("zero")),
+                createInstruction(SELECT, tmp(1), "lessThan", "x", "0", q("negative"), tmp(4)),
+                createInstruction(PRINT, tmp(1))
+        );
+    }
+
+    @Test
     void optimizesChainedStatements() {
         assertCompilesTo("""
+                        #set target = 7;
                         y = if x < 0 then
                             "negative";
                         elsif x > 0 then
@@ -213,8 +236,10 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         """,
                 createInstruction(SET, ":y", q("negative")),
                 createInstruction(JUMP, label(1), "lessThan", ":x", "0"),
-                createInstruction(SELECT, tmp(3), "greaterThan", ":x", "0", q("positive"), q("zero")),
-                createInstruction(SET, ":y", tmp(3)),
+                createInstruction(SET, ":y", q("zero")),
+                createInstruction(JUMP, label(3), "lessThanEq", ":x", "0"),
+                createInstruction(SET, ":y", q("positive")),
+                createInstruction(LABEL, label(3)),
                 createInstruction(LABEL, label(1)),
                 createInstruction(PRINT, ":y")
         );
@@ -270,6 +295,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void pullsInstructionsIntoBranches() {
         assertCompilesTo("""
+                        #set target = 7;
                         param a = 5;
                         print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands");
                         """,
@@ -282,10 +308,31 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                 createInstruction(PRINT, q("tens")),
                 createInstruction(JUMP, label(3), "always"),
                 createInstruction(LABEL, label(2)),
-                createInstruction(SELECT, tmp(5), "lessThan", "a", "1000", q("hundreds"), q("thousands")),
-                createInstruction(PRINT, tmp(5)),
+                createInstruction(JUMP, label(4), "greaterThanEq", "a", "1000"),
+                createInstruction(PRINT, q("hundreds")),
+                createInstruction(JUMP, label(5), "always"),
+                createInstruction(LABEL, label(4)),
+                createInstruction(PRINT, q("thousands")),
+                createInstruction(LABEL, label(5)),
                 createInstruction(LABEL, label(3)),
                 createInstruction(LABEL, label(1))
+        );
+    }
+
+
+    @Test
+    void optimizesFunctionCallArgumentsUsingSelect() {
+        assertCompilesTo("""
+                        #set target = 8;
+                        #set optimization = experimental;
+                        param a = 5;
+                        print(a < 10 ? "units" : a < 100 ? "tens" : a < 1000 ? "hundreds" : "thousands");
+                        """,
+                createInstruction(SET, "a", "5"),
+                createInstruction(SELECT, tmp(6), "lessThan", "a", "1000", q("hundreds"), q("thousands")),
+                createInstruction(SELECT, tmp(7), "lessThan", "a", "100", q("tens"), tmp(6)),
+                createInstruction(SELECT, tmp(1), "lessThan", "a", "10", q("units"), tmp(7)),
+                createInstruction(PRINT, tmp(1))
         );
     }
 
