@@ -9,7 +9,7 @@
    310 instructions eliminated by Data Flow Optimization (6 passes, 24 iterations).
     35 instructions added by Loop Unrolling (10 iterations).
      6 loops unrolled by Loop Unrolling.
-    34 instructions updated by JumpThreading.
+    34 instructions updated by Jump Threading.
      5 instructions eliminated by Unreachable Code Elimination (2 iterations).
    991 instructions after optimizations.
 

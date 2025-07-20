@@ -88,9 +88,9 @@ Reverses the values in the array.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Five elements in the array     |                  74 |                 72 |
-| Ten elements in the array      |                 164 |                 97 |
-| Twenty elements in the array   |                 344 |                147 |
+| Five elements in the array     |                  74 |                 71 |
+| Ten elements in the array      |                 164 |                 96 |
+| Twenty elements in the array   |                 344 |                146 |
 
 Sorts the array.
 
@@ -101,9 +101,9 @@ Sorts the array.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Five elements in the array     |                  98 |                114 |
-| Ten elements in the array      |                 218 |                159 |
-| Twenty elements in the array   |                 458 |                249 |
+| Five elements in the array     |                  98 |                113 |
+| Ten elements in the array      |                 218 |                158 |
+| Twenty elements in the array   |                 458 |                248 |
 
 Sorts elements of two arrays in parallel. The `sortBy` array contains the sort keys, while the
 `values` array gets reordered to the same relative order as the `sortBy` array.

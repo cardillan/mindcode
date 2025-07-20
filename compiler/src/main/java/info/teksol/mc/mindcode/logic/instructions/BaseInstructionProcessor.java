@@ -291,7 +291,6 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    @SuppressWarnings("unchecked")
     public <T extends LogicInstruction> T replaceArgs(T instruction, List<LogicArgument> newArgs) {
         LogicInstruction result;
         if (instruction instanceof CustomInstruction ix) {
@@ -299,7 +298,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
         } else {
             result = createInstruction(instruction.getAstContext(), instruction.getOpcode(), newArgs);
         }
-        return (T) result.copyInfo(instruction);
+        return result.copyInfo(instruction);
     }
 
     @Override

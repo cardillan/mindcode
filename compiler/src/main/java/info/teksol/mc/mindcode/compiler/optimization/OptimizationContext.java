@@ -285,6 +285,11 @@ class OptimizationContext {
                     }
                 }
 
+                if (ix.getCallReturn() != LogicLabel.EMPTY) {
+                    heads.offer(findLabelIndex(ix.getCallReturn()));
+                    continue MainLoop;
+                }
+
                 index++;
             }
         }
@@ -530,6 +535,10 @@ class OptimizationContext {
     public boolean isActive(LogicLabel label) {
         List<LogicInstruction> references = labelReferences.get(label);
         return references != null && !references.isEmpty();
+    }
+
+    public List<LogicInstruction> getLabelReferences(LogicLabel label) {
+        return labelReferences.getOrDefault(label, List.of());
     }
 
     public Set<LogicVariable> getUninitializedVariables() {
@@ -816,7 +825,7 @@ class OptimizationContext {
                 ix -> !(ix instanceof LabeledInstruction) && !(ix instanceof EmptyInstruction));
     }
 
-    /// Starting at given index, find first instruction matching predicate. Return null if not found.
+    /// Starting at the given index, finds the first instruction matching the predicate. Return null if not found.
     ///
     /// @param startIndex index to start search from, inclusive
     /// @param matcher predicate matching sought instruction

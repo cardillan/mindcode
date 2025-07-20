@@ -12,7 +12,7 @@
      7 loops unrolled by Loop Unrolling.
     10 jump tables inlined by Array Optimization.
      2 instructions eliminated by Jump Straightening (7 iterations).
-    18 instructions updated by JumpThreading.
+    18 instructions updated by Jump Threading.
     18 instructions eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Print Merging.
    379 instructions after optimizations.

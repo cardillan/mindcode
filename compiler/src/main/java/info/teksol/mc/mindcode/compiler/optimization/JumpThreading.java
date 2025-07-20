@@ -18,6 +18,7 @@ class JumpThreading extends BaseOptimizer {
     private static final LogicLabel FIRST_LABEL = LogicLabel.symbolic("__start__");
     boolean hasStartLabel;
     int count = 0;
+    int callCount = 0;
 
     public JumpThreading(OptimizationContext optimizationContext) {
         super(Optimization.JUMP_THREADING, optimizationContext);
@@ -26,6 +27,9 @@ class JumpThreading extends BaseOptimizer {
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
         hasStartLabel = hasStartLabel();
+        LogicInstruction lastCall = null;
+        SetAddressInstruction setAddress = null;
+        boolean callThreadable = experimental() && !getProfile().isSymbolicLabels();
 
         try (LogicIterator it = createIterator()) {
             if (!it.hasNext()) return false;
@@ -41,11 +45,28 @@ class JumpThreading extends BaseOptimizer {
                     if (replaceAdvanced) {
                         it.set(target.withContext(jump.getAstContext()));
                         count++;
-                    } else if (!label.equals(jump.getTarget())){
-                        // Update target of the original jump
-                        it.set(jump.withTarget(label));
-                        count++;
+                    } else {
+                        if (jump.isUnconditional() && setAddress != null) {
+                            replaceInstruction(setAddress, setAddress.withLabel(label));
+                            lastCall.setCallReturn(label);
+                            setAddress = null;
+                            callCount++;
+                        }
+
+                        if (!label.equals(jump.getTarget())) {
+                            // Update the target of the original jump
+                            it.set(jump.withTarget(label));
+                            count++;
+                        }
                     }
+                } else if (callThreadable && instruction.getCallReturn() == LogicLabel.EMPTY &&
+                           (instruction instanceof CallInstruction || instruction instanceof MultiCallInstruction)) {
+                    setAddress = (SetAddressInstruction) optimizationContext.firstInstruction(
+                            ix -> ix instanceof SetAddressInstruction && ix.getHoistId().equals(instruction.getHoistId()));
+                    lastCall = instruction;
+                } else if (instruction.isReal()) {
+                    // Anything, even label, breaks the threading
+                    setAddress = null;
                 }
             }
         }
@@ -73,11 +94,14 @@ class JumpThreading extends BaseOptimizer {
     @Override
     public void generateFinalMessages() {
         if (count > 0) {
-            emitMessage(MessageLevel.INFO, "%6d instructions updated by %s.", count, getClass().getSimpleName());
+            emitMessage(MessageLevel.INFO, "%6d instructions updated by %s.", count, getName());
+        }
+        if (callCount > 0) {
+            emitMessage(MessageLevel.INFO, "%6d calls threaded by %s.", callCount, getName());
         }
     }
 
-    // Determines the final target of given jump
+    // Determines the final target of a given jump
     private LogicLabel findJumpRedirection(JumpInstruction firstJump) {
         LogicLabel label = firstJump.getTarget();
         Set<LogicLabel> labels = new HashSet<>();       // Cycle detection

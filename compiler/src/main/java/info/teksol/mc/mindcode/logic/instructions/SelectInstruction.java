@@ -31,7 +31,7 @@ public class SelectInstruction extends BaseResultInstruction implements Conditio
     @Override
     public SelectInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new SelectInstruction(astContext, List.of(result, getCondition(), getX(), getY(), getTrueValue(), getFalseValue()), getArgumentTypes());
+        return new SelectInstruction(astContext, List.of(result, getCondition(), getX(), getY(), getTrueValue(), getFalseValue()), getArgumentTypes()).copyInfo(this);
     }
 
     public final Condition getCondition() {

@@ -30,7 +30,7 @@ public class ReadInstruction extends BaseResultInstruction {
     @Override
     public ReadInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getArgumentTypes());
+        return new ReadInstruction(astContext, List.of(result, getMemory(), getIndex()), getArgumentTypes()).copyInfo(this);
     }
 
     public final LogicValue getMemory() {

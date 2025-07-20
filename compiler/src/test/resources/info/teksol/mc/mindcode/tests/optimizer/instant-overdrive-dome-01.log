@@ -11,7 +11,7 @@
    152 instructions added by Loop Unrolling (7 iterations).
      2 loops unrolled by Loop Unrolling.
     22 instructions eliminated by Jump Straightening (2 passes, 6 iterations).
-    24 instructions updated by JumpThreading.
+    24 instructions updated by Jump Threading.
     19 instructions eliminated by Unreachable Code Elimination (3 iterations).
     75 instructions eliminated by Print Merging.
    920 instructions after optimizations.

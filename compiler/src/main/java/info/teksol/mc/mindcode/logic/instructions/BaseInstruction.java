@@ -40,7 +40,7 @@ public class BaseInstruction extends AbstractInstruction {
 
     @Override
     public BaseInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new BaseInstruction(this, astContext);
+        return this.astContext == astContext ? this : new BaseInstruction(this, astContext).copyInfo(this);
     }
 
     @Override

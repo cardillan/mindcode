@@ -6,7 +6,7 @@
     14 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
      2 instructions eliminated by If Expression Optimization (3 iterations).
     23 instructions eliminated by Data Flow Optimization (6 iterations).
-     6 instructions updated by JumpThreading.
+     6 instructions updated by Jump Threading.
      7 instructions eliminated by Unreachable Code Elimination (2 iterations).
      8 instructions eliminated by Print Merging.
     79 instructions after optimizations.

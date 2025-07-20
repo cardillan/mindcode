@@ -41,10 +41,10 @@ public interface MlogInstruction {
     List<TypedArgument> getTypedArguments();
 
     /// @param index argument index
-    /// @return type of the argument at given position
+    /// @return type of the argument at a given position
     InstructionParameterType getArgumentType(int index);
 
-    /// @return list of arguments types
+    /// @return list of argument types
     @Nullable
     List<InstructionParameterType> getArgumentTypes();
 

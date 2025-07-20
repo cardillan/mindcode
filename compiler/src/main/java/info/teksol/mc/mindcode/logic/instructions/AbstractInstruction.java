@@ -55,13 +55,15 @@ public abstract class AbstractInstruction implements LogicInstruction {
     }
 
     @Override
-    public LogicInstruction copyInfo(LogicInstruction other) {
+    @SuppressWarnings("unchecked")
+    public <T extends LogicInstruction> T copyInfo(T other) {
         assert info.isEmpty();
+        assert getClass() == other.getClass();
         if (other instanceof AbstractInstruction ix && !ix.info.isEmpty()) {
             info.putAll(ix.info);
             updateInfo(info.keySet());
         }
-        return this;
+        return (T) this;
     }
 
     /// Called whenever info is updated

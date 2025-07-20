@@ -30,12 +30,12 @@ public class SetInstruction extends BaseResultInstruction {
     @Override
     public SetInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new SetInstruction(astContext, List.of(result, getValue()), getArgumentTypes());
+        return new SetInstruction(astContext, List.of(result, getValue()), getArgumentTypes()).copyInfo(this);
     }
 
     public SetInstruction withValue(LogicValue value) {
         assert getArgumentTypes() != null;
-        return new SetInstruction(astContext, List.of(getResult(), value), getArgumentTypes());
+        return new SetInstruction(astContext, List.of(getResult(), value), getArgumentTypes()).copyInfo(this);
     }
 
     public final LogicValue getValue() {

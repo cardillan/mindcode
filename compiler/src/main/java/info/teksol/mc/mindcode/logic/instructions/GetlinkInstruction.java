@@ -30,7 +30,7 @@ public class GetlinkInstruction extends BaseResultInstruction {
     @Override
     public GetlinkInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new GetlinkInstruction(astContext, List.of(result, getIndex()), getArgumentTypes());
+        return new GetlinkInstruction(astContext, List.of(result, getIndex()), getArgumentTypes()).copyInfo(this);
     }
 
     public final LogicValue getIndex() {

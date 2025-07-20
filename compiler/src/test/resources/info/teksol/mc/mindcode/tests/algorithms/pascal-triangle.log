@@ -6,7 +6,7 @@
      3 instructions modified by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
      7 jump tables inlined by Array Optimization.
-     9 instructions updated by JumpThreading.
+     9 instructions updated by Jump Threading.
    168 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 867):

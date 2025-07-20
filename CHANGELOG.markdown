@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * The code generation of list iteration loops with symbolic labels has been updated to avoid issues with assigning `null` to `@counter`.   
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
 * Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
+* Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to replace the return address of a call with the target of the following unconditional jump on the `experimental` level.
 * The compatibility testing (both in the `compatible` system library, and in code generated via the [`target-guard` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard)) were updated to distinguish targets 8.0 and 8.1.
 
 ### Miscellaneous

@@ -28,7 +28,7 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
 
     @Override
     public BaseResultInstruction withContext(AstContext astContext) {
-        return this.astContext == astContext ? this : new BaseResultInstruction(this, astContext);
+        return this.astContext == astContext ? this : new BaseResultInstruction(this, astContext).copyInfo(this);
     }
 
     @Override
@@ -45,6 +45,6 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
         List<LogicArgument> args = new ArrayList<>(getArgs());
         args.set(resultIndex, result);
         assert getArgumentTypes() != null;
-        return new BaseResultInstruction(astContext, getOpcode(), args, getArgumentTypes());
+        return new BaseResultInstruction(astContext, getOpcode(), args, getArgumentTypes()).copyInfo(this);
     }
 }

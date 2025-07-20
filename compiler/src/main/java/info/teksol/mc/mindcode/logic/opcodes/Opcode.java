@@ -91,7 +91,7 @@ public enum Opcode {
     /// A target for jump, set address or goto instructions. Removed from the final code. 
     LABEL           ("label",           0),
     
-    /// Simple call. Replaced by an unconditional jump in final code.
+    /// Simple call. Replaced by an unconditional jump in the final code.
     CALL            ("call",            1),
 
     /// Return from a simple call. Replaced by `set @counter return_address`.
@@ -103,10 +103,10 @@ public enum Opcode {
     /// Restores a variable from stack. Used by recursive functions
     POP             ("pop",             2),
 
-    /// Recursive call. Replaced by instructions which stores the return address on stack and then jumps to the target
+    /// Recursive call. Replaced by instructions that store the return address on the stack and then jump to the target
     CALLREC         ("callrec",         3),
 
-    /// Return from a recursive function. Replaced by instructions which retrieve the return address from stack
+    /// Return from a recursive function. Replaced by instructions which retrieve the return address from the stack
     /// and jump there (using `set @counter address`, since the target is dynamic).
     RETURNREC       ("returnrec",       3),
 
@@ -143,9 +143,9 @@ public enum Opcode {
     CUSTOM          ("",                1),
     ;
 
-    /// Safe instructions are instructions which do not have any output parameters (and therefore are assumed
+    /// Safe instructions are instructions that do not have any output parameters (and therefore are assumed
     /// to interact with the outside world), or have output parameters and do not interact with the outside world.
-    /// Instructions which do have output variables, but do interact with the outside world, are unsafe, and are
+    /// Instructions which do have output variables but do interact with the outside world are unsafe and are
     /// explicitly marked as such with this attribute.
     private final boolean safe;
     private final String opcode;

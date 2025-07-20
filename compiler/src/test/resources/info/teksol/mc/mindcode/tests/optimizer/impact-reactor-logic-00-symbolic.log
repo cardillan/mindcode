@@ -9,7 +9,7 @@
     83 instructions eliminated by Data Flow Optimization (9 passes, 30 iterations).
    536 instructions added by Function Inlining (11 iterations).
     17 function calls inlined by Function Inlining.
-    33 instructions updated by JumpThreading.
+    33 instructions updated by Jump Threading.
      8 instructions eliminated by Unreachable Code Elimination (2 iterations).
    131 instructions eliminated by Print Merging.
    802 instructions after optimizations.

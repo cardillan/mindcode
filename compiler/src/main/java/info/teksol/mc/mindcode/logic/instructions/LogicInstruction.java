@@ -30,7 +30,7 @@ public interface LogicInstruction extends MlogInstruction {
 
     LogicInstruction remapInfoLabels(Map<LogicLabel, LogicLabel> labelMap);
 
-    LogicInstruction copyInfo(LogicInstruction other);
+    <T extends LogicInstruction> T copyInfo(T other);
 
     boolean belongsTo(@Nullable AstContext astContext);
 
@@ -148,5 +148,13 @@ public interface LogicInstruction extends MlogInstruction {
 
     default LogicInstruction setJumpTarget() {
         return setInfo(InstructionInfo.JUMP_TARGET, true);
+    }
+
+    default LogicLabel getCallReturn() {
+        return (LogicLabel) getInfo(InstructionInfo.CALL_RETURN);
+    }
+
+    default LogicInstruction setCallReturn(LogicLabel callReturn) {
+        return setInfo(InstructionInfo.CALL_RETURN, callReturn);
     }
 }

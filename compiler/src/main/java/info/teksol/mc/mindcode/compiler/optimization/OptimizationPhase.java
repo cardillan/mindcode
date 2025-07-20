@@ -35,9 +35,9 @@ public enum OptimizationPhase {
             RETURN_OPTIMIZATION
     ),
 
-    /// Jump specific optimizations. Several passes might be needed to iron out all jump paths.
+    /// Jump-specific optimizations. Several passes might be needed to iron out all jump paths.
     /// These optimizers can make changes incompatible with the AST context structure in this phase,
-    /// therefore are separated from the previous phase.
+    /// therefore, are separated from the previous phase.
     JUMPS("Jumps",
             JUMP_NORMALIZATION,
             JUMP_STRAIGHTENING,

@@ -46,8 +46,8 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
     public JumpInstruction withTarget(LogicLabel target) {
         assert getArgumentTypes() != null;
         return isUnconditional()
-                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getArgumentTypes())
-                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getArgumentTypes());
+                ? new JumpInstruction(getAstContext(), List.of(target, Condition.ALWAYS), getArgumentTypes()).copyInfo(this)
+                : new JumpInstruction(getAstContext(),List.of(target, getCondition(), getX(), getY()), getArgumentTypes()).copyInfo(this);
     }
 
     public JumpInstruction invert() {
@@ -57,7 +57,7 @@ public class JumpInstruction extends BaseInstruction implements ConditionalInstr
 
         assert getArgumentTypes() != null;
         return new JumpInstruction(getAstContext(),
-                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getArgumentTypes());
+                List.of(getTarget(), getCondition().inverse(), getX(), getY()), getArgumentTypes()).copyInfo(this);
     }
 
     @Override

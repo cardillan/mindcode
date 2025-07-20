@@ -1430,10 +1430,11 @@ If a jump (conditional or unconditional) targets an unconditional jump, the targ
 * `end` instruction is handled identically to `jump 0 always`,
 * conditional jumps in the jump chain are followed if:
   * their condition is identical to the condition of the first jump in the chain, and
-  * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.).
-* unconditional jumps targeting an indirect jump (i.e., an instruction assigning value to `@counter`) are replaced with the indirect jump itself. 
-  
-No instructions are removed or added, but the execution of the code is faster.
+  * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.),
+* unconditional jumps targeting an indirect jump (i.e., an instruction assigning value to `@counter`) are replaced with the indirect jump itself, 
+* on the `experimental` level, this optimization also redirects the return address of a function call to the target of the following unconditional jump, when [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) aren't used. 
+
+No instructions are directly removed or added, but the execution of the code is faster; furthermore, some of the jumps in the jump chain may be removed later by the [Unreachable Code Elimination](#unreachable-code-elimination).
 
 ## Unreachable Code Elimination
 

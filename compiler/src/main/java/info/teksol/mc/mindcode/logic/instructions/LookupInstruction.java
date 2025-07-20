@@ -31,7 +31,7 @@ public class LookupInstruction extends BaseResultInstruction {
     @Override
     public LookupInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new LookupInstruction(astContext, List.of(getType(), result, getIndex()), getArgumentTypes());
+        return new LookupInstruction(astContext, List.of(getType(), result, getIndex()), getArgumentTypes()).copyInfo(this);
     }
 
     public final LogicKeyword getType() {

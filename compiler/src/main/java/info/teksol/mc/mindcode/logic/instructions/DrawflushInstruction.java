@@ -26,7 +26,6 @@ public class DrawflushInstruction extends BaseInstruction {
         return this.astContext == astContext ? this : new DrawflushInstruction(this, astContext);
     }
 
-
     public final LogicValue getDisplay() {
         return (LogicValue) getArg(0);
     }

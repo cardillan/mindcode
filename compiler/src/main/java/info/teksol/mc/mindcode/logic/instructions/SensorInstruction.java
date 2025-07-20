@@ -30,7 +30,7 @@ public class SensorInstruction extends BaseResultInstruction {
     @Override
     public SensorInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new SensorInstruction(astContext, List.of(result, getObject(), getProperty()), getArgumentTypes());
+        return new SensorInstruction(astContext, List.of(result, getObject(), getProperty()), getArgumentTypes()).copyInfo(this);
     }
 
     public final LogicValue getObject() {

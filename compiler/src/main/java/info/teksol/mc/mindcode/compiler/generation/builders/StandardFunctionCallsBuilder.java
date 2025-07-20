@@ -244,7 +244,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             // set function return address, it is set up separately by the previous instruction
             assembler.createCallStackless(function.getLabel(), LogicVariable.INVALID,function.getFnRetVal())
                     .setMarker(returnLabel).setHoistId(returnLabel);
-            // Mark position where the function must return
+            // Mark the position where the function must return
             assembler.createLabel(returnLabel);
         }
 

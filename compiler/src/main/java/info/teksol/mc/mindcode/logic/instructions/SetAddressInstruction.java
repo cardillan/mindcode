@@ -34,4 +34,13 @@ public class SetAddressInstruction extends BaseResultInstruction {
     public final LogicLabel getLabel() {
         return (LogicLabel) getArg(1);
     }
+
+    @Override
+    public SetAddressInstruction withResult(LogicVariable result) {
+        return new SetAddressInstruction(astContext, List.of(result, getLabel()), getArgumentTypes()).copyInfo(this);
+    }
+
+    public SetAddressInstruction withLabel(LogicLabel label) {
+        return new SetAddressInstruction(astContext, List.of(getResult(), label), getArgumentTypes()).copyInfo(this);
+    }
 }

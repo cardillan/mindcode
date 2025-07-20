@@ -11,7 +11,7 @@
      7 loops unrolled by Loop Unrolling.
     17 instructions added by Function Inlining (12 iterations).
      5 function calls inlined by Function Inlining.
-     8 instructions updated by JumpThreading.
+     8 instructions updated by Jump Threading.
      4 instructions eliminated by Unreachable Code Elimination (2 iterations).
    434 instructions after optimizations.
 

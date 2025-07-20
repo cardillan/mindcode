@@ -16,7 +16,7 @@
     16 function calls inlined by Function Inlining.
      2 case expressions converted to switched jumps Case Switching.
      6 instructions eliminated by Jump Straightening (7 iterations).
-   145 instructions updated by JumpThreading.
+   145 instructions updated by Jump Threading.
    332 instructions eliminated by Unreachable Code Elimination (2 iterations).
      5 instructions eliminated by Print Merging.
    578 instructions after optimizations.

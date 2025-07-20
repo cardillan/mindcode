@@ -39,6 +39,9 @@ public enum InstructionInfo {
 
     /// MultiLabel target of a text-based jump table. Needs alignment handling
     JUMP_TARGET(Boolean.FALSE),
+
+    /// A call instruction's return address that has been redirected via jump threading
+    CALL_RETURN(LogicLabel.EMPTY),
     ;
 
     public final Object defaultValue;

@@ -6,7 +6,7 @@
      1 instructions modified by Loop Optimization (3 iterations).
      1 loops improved by Loop Optimization.
      7 instructions eliminated by Jump Straightening (3 passes, 6 iterations).
-     1 instructions updated by JumpThreading.
+     1 instructions updated by Jump Threading.
      3 instructions eliminated by Unreachable Code Elimination (3 iterations).
     49 instructions after optimizations.
 

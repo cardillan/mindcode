@@ -33,20 +33,20 @@ public class OpInstruction extends BaseResultInstruction {
     public OpInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
         return hasSecondOperand()
-                ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getArgumentTypes())
-                : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getArgumentTypes());
+                ? new OpInstruction(astContext, List.of(getArg(0), result, getArg(2), getArg(3)), getArgumentTypes()).copyInfo(this)
+                : new OpInstruction(astContext, List.of(getArg(0), result, getArg(2)), getArgumentTypes()).copyInfo(this);
     }
 
     public OpInstruction withX(LogicValue x) {
         assert getArgumentTypes() != null;
         return hasSecondOperand()
-                ? new OpInstruction(astContext, List.of(getArg(0), getArg(1), x, getArg(3)), getArgumentTypes())
-                : new OpInstruction(astContext, List.of(getArg(0), getArg(1), x), getArgumentTypes());
+                ? new OpInstruction(astContext, List.of(getArg(0), getArg(1), x, getArg(3)), getArgumentTypes()).copyInfo(this)
+                : new OpInstruction(astContext, List.of(getArg(0), getArg(1), x), getArgumentTypes()).copyInfo(this);
     }
 
     public OpInstruction withY(LogicValue y) {
         assert getArgumentTypes() != null;
-        return new OpInstruction(astContext, List.of(getArg(0), getArg(1), getArg(2), y), getArgumentTypes());
+        return new OpInstruction(astContext, List.of(getArg(0), getArg(1), getArg(2), y), getArgumentTypes()).copyInfo(this);
     }
 
     public boolean hasSecondOperand() {

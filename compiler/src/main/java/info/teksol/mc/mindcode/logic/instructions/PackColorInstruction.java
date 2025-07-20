@@ -29,7 +29,7 @@ public class PackColorInstruction extends BaseResultInstruction {
     @Override
     public PackColorInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new PackColorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getArgumentTypes());
+        return new PackColorInstruction(astContext, List.of(result, getR(), getG(), getB(), getA()), getArgumentTypes()).copyInfo(this);
     }
 
     public final LogicValue getR() {

@@ -55,7 +55,7 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
     @Override
     public ReadArrInstruction withResult(LogicVariable result) {
         assert getArgumentTypes() != null;
-        return new ReadArrInstruction(astContext, List.of(result, getArray(), getIndex()), getArgumentTypes());
+        return new ReadArrInstruction(astContext, List.of(result, getArray(), getIndex()), getArgumentTypes()).copyInfo(this);
     }
 
     @Override
