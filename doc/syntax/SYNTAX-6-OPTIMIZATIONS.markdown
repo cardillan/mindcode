@@ -480,9 +480,10 @@ produces this code:
 
 ```mlog
 op rand .foo 10 0
-jump 5 notEqual .initialized 0
+jump 6 notEqual .initialized 0
 print "Initializing..."
 set .initialized 1
+set .foo 1
 end
 print "Doing actual work"
 print .initialized
@@ -1372,7 +1373,45 @@ Each element access gets converted to direct access of the single element.
 
 #### Arrays of length 2 and 3
 
-The jump table is replaced by a sequence of if/else statements. Arrays of length 2 are always optimized, while arrays of length 3 are only optimized if the jump table for the array access has been selected for inlining.  
+The jump table is replaced by a sequence of `select`s or if/else statements. Arrays of length 2 are always optimized, while arrays of length 3 are only optimized if the `select` optimization can be used, or the jump table for the array access has been selected for inlining.
+
+**The `select` optimization**
+
+The `select` optimization is applied when the optimization level is set to `experimental` and the `select` instruction is available.
+
+For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
+
+* `a[x] = b` gets converted to
+
+```
+select a[0] x equal 0 b a[0]
+select a[1] x equal 1 b a[1]
+```
+ 
+* `b = a[x]` gets converted to
+
+```
+select b x equal 0 a[0] a[1]
+```
+
+For arrays of length 3, the optimization can be described like this:
+
+* `a[x] = b` gets converted to
+
+```
+select a[0] x equal 0 b a[0]
+select a[1] x equal 1 b a[1]
+select a[2] x equal 2 b a[2]
+```
+
+* `b = a[x]` gets converted to
+
+```
+select b x equal 0 a[0] a[1]
+select b x equal 2 a[2] b
+```
+
+**The if/else optimization**
 
 For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
 

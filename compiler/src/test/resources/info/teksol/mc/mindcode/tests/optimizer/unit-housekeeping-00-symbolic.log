@@ -1,13 +1,13 @@
    173 instructions before optimizations.
     11 instructions eliminated by Temp Variables Elimination (2 iterations).
      2 instructions eliminated by Case Expression Optimization.
-    30 instructions eliminated by Dead Code Elimination (7 iterations).
+    32 instructions eliminated by Dead Code Elimination (2 passes, 8 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
      6 instructions eliminated by Jump Optimization (4 iterations).
     10 instructions eliminated by Single Step Elimination (5 iterations).
      2 instructions modified by Expression Optimization (2 iterations).
      1 instructions eliminated by If Expression Optimization (2 iterations).
-     2 instructions eliminated by Data Flow Optimization (4 iterations).
+     3 instructions modified by Data Flow Optimization (3 iterations).
      7 instructions eliminated by Jump Straightening (4 iterations).
      2 instructions updated by Jump Threading.
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
@@ -556,165 +556,165 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    140 label *label41
    141 label *label42
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
+ 
+    61 sensor :items @unit @totalItems
+    62 sensor :item @unit @firstItem
+    63 sensor *tmp20 @unit @controller
+-    * jump *label20 notEqual *tmp20 @this
+-    * set :controlled 0
++   64 select :controlled equal *tmp20 @this 0 :controlled
+    65 label *label20
+    66 label *label21
+    67 op notEqual *tmp23 :flag 0
+
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+ 
+     6 sensor *tmp2 switch2 @enabled
+     7 jump *label3 equal *tmp2 false
+     8 jump *label6 notEqual .UNIT @flare
+-    * label *label7
+     9 set *tmp4 @mono
+    10 jump *label5 always
+    11 label *label6
+    12 jump *label8 notEqual .UNIT @mono
+-    * label *label9
+    13 set *tmp4 @poly
+    14 jump *label5 always
+    15 label *label8
+    16 jump *label10 notEqual .UNIT @poly
+-    * label *label11
+    17 set *tmp4 @mega
+    18 jump *label5 always
+    19 label *label10
+    20 jump *label12 notEqual .UNIT @mega
+-    * label *label13
+    21 set *tmp4 @flare
+    22 jump *label5 always
+    23 label *label12
+ 
+    29 print *tmp4
+    30 print ": gathering information..."
+    31 label *label3
+-    * label *label4
+    32 ubind .UNIT
+    33 jump *label14 notEqual @unit null
+    34 print .UNIT
+ 
+    48 jump *label18 equal *tmp14 false
+    49 print " (cleanup active)"
+    50 label *label18
+-    * label *label19
+    51 label *label16
+-    * label *label17
+    52 sensor :controlled @unit @controlled
+    53 sensor :flag @unit @flag
+    54 sensor :items @unit @totalItems
+    55 sensor :item @unit @firstItem
+    56 sensor *tmp20 @unit @controller
+    57 select :controlled equal *tmp20 @this 0 :controlled
+-    * label *label20
+-    * label *label21
+    58 op notEqual *tmp23 :flag 0
+    59 op greaterThan *tmp24 :items 0
+    60 op or *tmp25 *tmp23 *tmp24
+ 
+    67 print "\n"
+    68 print :index
+    69 jump *label25 notEqual :controlled @ctrlProcessor
+-    * label *label26
+    70 sensor :controller @unit @controller
+    71 sensor *tmp35 :controller @x
+    72 op floor :x *tmp35
+ 
+    79 jump *label24 always
+    80 label *label25
+    81 jump *label27 notEqual :controlled @ctrlPlayer
+-    * label *label28
+    82 print ", player"
+    83 jump *label24 always
+    84 label *label27
+    85 jump *label29 notEqual :controlled @ctrlCommand
+-    * label *label30
+    86 print ", command"
+    87 label *label29
+    88 label *label24
+ 
+    90 print ", F"
+    91 print :flag
+    92 label *label31
+-    * label *label32
+    93 jump *label33 lessThanEq :items 0
+    94 print ", "
+    95 print :items
+    96 print " "
+    97 print :item
+    98 label *label33
+-    * label *label34
+    99 label *label22
+-    * label *label23
+   100 op equal *tmp43 :controlled 0
+   101 sensor *tmp44 switch1 @enabled
+   102 op land *tmp45 *tmp43 *tmp44
+ 
+   122 ucontrol approach @thisx @thisy 4
+   123 label *label44
+   124 label *label41
+-    * label *label42
+   125 label *label38
+   126 label *label35
+-    * label *label36
+   127 op add :index :index 1
+   128 label *label15
+-    * label *label1
+   129 jump *label0 always
+-    * label *label2
+   130 end
+
+Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
+ 
+    34 print .UNIT
+    35 print ": no active unit found."
+    36 printflush message1
+-    * jump *label15 always
++   37 jump *label0 always
+    38 label *label14
+    39 op strictEqual *tmp9 @unit :first_unit
+    40 op strictEqual *tmp10 :first_unit null
+ 
+   107 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   108 jump *label39 equal *tmp51 false
+   109 ucontrol itemDrop .CORE :items
+-    * jump *label40 always
++  110 jump *label38 always
+   111 label *label39
+   112 ucontrol approach .CORE_X .CORE_Y 4
+   113 label *label40
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+ 
+   110 jump *label38 always
+   111 label *label39
+   112 ucontrol approach .CORE_X .CORE_Y 4
+-    * label *label40
+   113 jump *label38 always
+   114 label *label37
+   115 jump *label41 equal :flag 0
+ 
+   124 label *label38
+   125 label *label35
+   126 op add :index :index 1
+-    * label *label15
+   127 jump *label0 always
+-    * end
+
+Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-2 instructions):
      0 set .UNIT @mega
 -    * set .THIS_X @thisx
 -    * set .THIS_Y @thisy
      1 set :first_unit null
      2 set :index 1
      3 label *label0
-
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
- 
-    59 sensor :items @unit @totalItems
-    60 sensor :item @unit @firstItem
-    61 sensor *tmp20 @unit @controller
--    * jump *label20 notEqual *tmp20 @this
--    * set :controlled 0
-+   62 select :controlled equal *tmp20 @this 0 :controlled
-    63 label *label20
-    64 label *label21
-    65 op notEqual *tmp23 :flag 0
-
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-     4 sensor *tmp2 switch2 @enabled
-     5 jump *label3 equal *tmp2 false
-     6 jump *label6 notEqual .UNIT @flare
--    * label *label7
-     7 set *tmp4 @mono
-     8 jump *label5 always
-     9 label *label6
-    10 jump *label8 notEqual .UNIT @mono
--    * label *label9
-    11 set *tmp4 @poly
-    12 jump *label5 always
-    13 label *label8
-    14 jump *label10 notEqual .UNIT @poly
--    * label *label11
-    15 set *tmp4 @mega
-    16 jump *label5 always
-    17 label *label10
-    18 jump *label12 notEqual .UNIT @mega
--    * label *label13
-    19 set *tmp4 @flare
-    20 jump *label5 always
-    21 label *label12
- 
-    27 print *tmp4
-    28 print ": gathering information..."
-    29 label *label3
--    * label *label4
-    30 ubind .UNIT
-    31 jump *label14 notEqual @unit null
-    32 print .UNIT
- 
-    46 jump *label18 equal *tmp14 false
-    47 print " (cleanup active)"
-    48 label *label18
--    * label *label19
-    49 label *label16
--    * label *label17
-    50 sensor :controlled @unit @controlled
-    51 sensor :flag @unit @flag
-    52 sensor :items @unit @totalItems
-    53 sensor :item @unit @firstItem
-    54 sensor *tmp20 @unit @controller
-    55 select :controlled equal *tmp20 @this 0 :controlled
--    * label *label20
--    * label *label21
-    56 op notEqual *tmp23 :flag 0
-    57 op greaterThan *tmp24 :items 0
-    58 op or *tmp25 *tmp23 *tmp24
- 
-    65 print "\n"
-    66 print :index
-    67 jump *label25 notEqual :controlled @ctrlProcessor
--    * label *label26
-    68 sensor :controller @unit @controller
-    69 sensor *tmp35 :controller @x
-    70 op floor :x *tmp35
- 
-    77 jump *label24 always
-    78 label *label25
-    79 jump *label27 notEqual :controlled @ctrlPlayer
--    * label *label28
-    80 print ", player"
-    81 jump *label24 always
-    82 label *label27
-    83 jump *label29 notEqual :controlled @ctrlCommand
--    * label *label30
-    84 print ", command"
-    85 label *label29
-    86 label *label24
- 
-    88 print ", F"
-    89 print :flag
-    90 label *label31
--    * label *label32
-    91 jump *label33 lessThanEq :items 0
-    92 print ", "
-    93 print :items
-    94 print " "
-    95 print :item
-    96 label *label33
--    * label *label34
-    97 label *label22
--    * label *label23
-    98 op equal *tmp43 :controlled 0
-    99 sensor *tmp44 switch1 @enabled
-   100 op land *tmp45 *tmp43 *tmp44
- 
-   120 ucontrol approach @thisx @thisy 4
-   121 label *label44
-   122 label *label41
--    * label *label42
-   123 label *label38
-   124 label *label35
--    * label *label36
-   125 op add :index :index 1
-   126 label *label15
--    * label *label1
-   127 jump *label0 always
--    * label *label2
-   128 end
-
-Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
- 
-    32 print .UNIT
-    33 print ": no active unit found."
-    34 printflush message1
--    * jump *label15 always
-+   35 jump *label0 always
-    36 label *label14
-    37 op strictEqual *tmp9 @unit :first_unit
-    38 op strictEqual *tmp10 :first_unit null
- 
-   105 ucontrol within .CORE_X .CORE_Y 8 *tmp51
-   106 jump *label39 equal *tmp51 false
-   107 ucontrol itemDrop .CORE :items
--    * jump *label40 always
-+  108 jump *label38 always
-   109 label *label39
-   110 ucontrol approach .CORE_X .CORE_Y 4
-   111 label *label40
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
- 
-   108 jump *label38 always
-   109 label *label39
-   110 ucontrol approach .CORE_X .CORE_Y 4
--    * label *label40
-   111 jump *label38 always
-   112 label *label37
-   113 jump *label41 equal :flag 0
- 
-   122 label *label38
-   123 label *label35
-   124 op add :index :index 1
--    * label *label15
-   125 jump *label0 always
--    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
  

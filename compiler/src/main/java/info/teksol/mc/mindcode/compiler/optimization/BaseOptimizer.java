@@ -50,6 +50,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         super(optimization, optimizationContext);
     }
 
+    protected boolean isTraceActive() {
+        return OptimizationCoordinator.TRACE_ALL;
+    }
+
     // Optimization logic
 
     /// Performs one iteration of the optimization. Return true to run another iteration, false when done.
@@ -57,6 +61,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     protected abstract boolean optimizeProgram(OptimizationPhase phase);
 
     protected int currentPass = 0;
+    protected int currentRun = 0;
 
     @Override
     public boolean optimize(OptimizationPhase phase, int pass) {
@@ -69,14 +74,19 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         boolean modified = false;
         int iteration = 1;
         do {
-            optimizationContext.prepare();
+            currentRun = optimizationContext.prepare();
 
-            final int thisIteration = iteration;
-            trace(() -> String.format("%n*** %s: PHASE %s, PASS %d, ITERATION %d ***%n", getName().toUpperCase(),
-                    phase, pass, thisIteration));
+            boolean wasTraceActive = optimizationContext.isTraceActive();
+            optimizationContext.setTraceActive(isTraceActive());
 
-            optimizationContext.debugPrintProgram(String.format("%n*** %s: PHASE %s, PASS %d, ITERATION %d ***%n",
-                    getName().toUpperCase(), phase, pass, thisIteration), false);
+
+            String runNumber = OptimizationCoordinator.TRACE ? "#" + currentRun + ": " : "";
+            String title = pass == 0
+                    ? "%s%s phase, %s, iteration %d".formatted(runNumber, phase.name, getName(), iteration)
+                    : "%s%s phase, %s, pass %d, iteration %d".formatted(runNumber, phase.name, getName(), pass, iteration);
+
+            trace("*** " + title + " ***");
+            optimizationContext.debugPrintProgram(title, false);
 
             repeat = optimizeProgram(phase);
             optimizationContext.finish();
@@ -86,13 +96,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
             deletions += optimizationContext.getDeletions();
             modified |= optimizationContext.isUpdated();
 
-            String title = pass == 0
-                    ? "%s phase, %s, iteration %d".formatted(phase.name, getName(), iteration)
-                    : "%s phase, %s, pass %d, iteration %d".formatted(phase.name, getName(), pass, iteration);
-
             debugPrinter.registerIteration(this, title, optimizationContext.getProgram());
             iteration++;
             iterations++;
+
+            optimizationContext.setTraceActive(wasTraceActive);
         } while (repeat);
 
         if (modified) {
@@ -111,7 +119,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     }
 
     protected OptimizationResult applyOptimization(Supplier<OptimizationResult> optimization, String title) {
-        optimizationContext.prepare();
+        currentRun = optimizationContext.prepare();
         OptimizationResult result = optimization.get();
         optimizationContext.finish();
 

@@ -78,8 +78,6 @@ program = """
     noinit var GROUP1, GROUP2;
     noinit var MSG;
 
-    var building, core;
-
     begin
         locateDomeAndCore();
 

@@ -11,7 +11,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed the `target` directive not recognizing minor target versions.
-* Fixed the compiler incorrectly refusing remote function parameters matching global variables or linked block names.     
+* Fixed the compiler incorrectly refusing remote function parameters matching global variables or linked block names.
+* Fixed The Data Flow optimization incorrectly eliminating writes to global variables ([#279](https://github.com/cardillan/mindcode/issues/279)).
+* Fixed the Loop Hoisting optimization incorrectly processing assignments to global variables ([#281](https://github.com/cardillan/mindcode/issues/281)).
 
 ### Added
 
@@ -23,6 +25,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * The code generation of list iteration loops with symbolic labels has been updated to avoid issues with assigning `null` to `@counter`.   
+* Changed the [Array Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#arrays-of-length-2-and-3) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
 * Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
 * Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to replace the return address of a call with the target of the following unconditional jump on the `experimental` level.

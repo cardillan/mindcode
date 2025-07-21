@@ -33,6 +33,8 @@ mindcode_source = """
     MESSAGE = container = sorter = maximum = measure = switch = null;
     CYCLES = 0;
     STATE = false;
+    ON = true;
+    ACTIVE_TEXT = "";
 
     do
         repeat = false;

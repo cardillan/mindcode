@@ -7,7 +7,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.function.Consumer;
 
-/// Collects instructions produced by optimizers from the entire pipeline, for later analysis of effects of
+/// Collects instructions produced by optimizers from the entire pipeline for later analysis of the
 /// optimizations made by individual optimizers.
 @NullMarked
 public interface DebugPrinter {

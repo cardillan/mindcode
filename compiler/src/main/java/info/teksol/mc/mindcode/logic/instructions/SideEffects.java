@@ -58,6 +58,11 @@ public record SideEffects(List<LogicVariable> reads, List<LogicVariable> writes,
         return new SideEffects(List.of(), variables, List.of());
     }
 
+    /// Creates a side effect which resets all variables from the list
+    public static SideEffects resets(List<LogicVariable> variables) {
+        return new SideEffects(List.of(), List.of(), variables);
+    }
+
     /// Creates a side effect with reads, writes and resets
     public static SideEffects of(List<LogicVariable> reads, List<LogicVariable> writes, List<LogicVariable> resets) {
         return new SideEffects(reads,writes,resets);

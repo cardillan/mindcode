@@ -87,6 +87,12 @@ class DataFlowOptimizer extends BaseOptimizer {
     }
 
     @Override
+    protected boolean isTraceActive() {
+        return super.isTraceActive();
+        // return currentRun == 31;
+    }
+
+    @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
         defines.clear();
         keep.clear();
@@ -168,6 +174,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 case SET, SETADDR, OP, PACKCOLOR, READ, READARR -> {
                     BaseResultInstruction ix = (BaseResultInstruction) instruction;
                     if (ix.getResult().isVolatile()) break;
+                    if (ix.getResult().isGlobalVariable()) break;
 
                     if (!keep.contains(instruction) || useless.contains(instruction)) {
                         int index = instructionIndex(instruction);
@@ -895,7 +902,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         // Handle special cases
         switch (instruction) {
-            case EmptyInstruction ix     -> { return variableStates; }
+            case EmptyInstruction ix    -> { return variableStates; }
             case PushInstruction ix     -> { return variableStates.pushVariable(ix.getVariable()); }
             case PopInstruction ix      -> { return variableStates.popVariable(ix.getVariable()); }
             case LabeledInstruction ix  -> { return resolveLabel(variableStates, ix.getLabel()); }

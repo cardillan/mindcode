@@ -59,8 +59,8 @@ class LoopHoisting extends BaseOptimizer {
 
         int conditions = (int) parts.stream().filter(c -> c.matches(CONDITION)).count();
         if (conditions == 0) {
-            // This looks like a list iteration loop. Remove all ITR_LEADING and ITR_TRAILING contexts; if none found, it wasn't
-            // a list iterator loop, we quit as we don't understand the structure.
+            // This looks like a list iteration loop. Remove all ITR_LEADING and ITR_TRAILING contexts;
+            // if none is found, it wasn't a list iterator loop, we quit as we don't understand the structure.
             if (!parts.removeIf(c -> c.matches(ITR_LEADING, ITR_TRAILING))) {
                 return;
             }
@@ -229,7 +229,10 @@ class LoopHoisting extends BaseOptimizer {
     }
 
     private boolean isMovable(LogicInstruction instruction) {
-        return  instructionProcessor.isDeterministic(instruction) && instruction.isSafe();
+        return  instructionProcessor.isDeterministic(instruction) && instruction.isSafe()
+                && instruction.outputArgumentsStream().noneMatch(LogicArgument::isGlobalVariable)
+                && instruction.getSideEffects().writes().stream().noneMatch(LogicArgument::isGlobalVariable)
+                && instruction.getSideEffects().resets().stream().noneMatch(LogicArgument::isGlobalVariable);
     }
 
     private boolean safeToMove(AstContext loop, LogicInstruction instruction) {

@@ -390,6 +390,7 @@ printflush(message1);
 which compiles to
 
 ```mlog
+set .i 0
 set address @counter
 set .i 1
 print 0

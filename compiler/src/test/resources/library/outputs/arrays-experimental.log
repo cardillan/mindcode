@@ -1,16 +1,16 @@
    390 instructions before optimizations.
     40 instructions eliminated by Temp Variables Elimination (2 iterations).
-    12 instructions eliminated by Dead Code Elimination (4 iterations).
+    17 instructions eliminated by Dead Code Elimination (2 passes, 5 iterations).
     10 instructions eliminated by Jump Normalization (2 passes, 7 iterations).
      9 instructions eliminated by Jump Optimization (2 passes, 7 iterations).
     19 instructions eliminated by Single Step Elimination (4 passes, 11 iterations).
-  1764 instructions eliminated by Expression Optimization (3 passes, 5 iterations).
-   207 instructions eliminated by Data Flow Optimization (11 passes, 54 iterations).
+  1747 instructions eliminated by Expression Optimization (3 passes, 5 iterations).
+   202 instructions eliminated by Data Flow Optimization (11 passes, 53 iterations).
      7 instructions eliminated by Loop Optimization (5 iterations).
      7 loops improved by Loop Optimization.
-  2000 instructions added by Loop Unrolling (20 iterations).
+  2000 instructions added by Loop Unrolling (19 iterations).
      7 loops unrolled by Loop Unrolling.
-    10 jump tables inlined by Array Optimization.
+     9 jump tables inlined by Array Optimization.
      2 instructions eliminated by Jump Straightening (7 iterations).
     18 instructions updated by Jump Threading.
     18 instructions eliminated by Unreachable Code Elimination (2 iterations).
@@ -573,7 +573,7 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
   ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
 
-Pass 2: speed optimization selection (cost limit 549):
+Pass 2: speed optimization selection (cost limit 544):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
     Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
     Unroll loop at *arrays:97:9                                  size  +144, benefit    11250.0, efficiency     78.125
@@ -594,7 +594,7 @@ Pass 2: speed optimization selection (cost limit 549):
     Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
 
-Pass 2: speed optimization selection (cost limit 535):
+Pass 2: speed optimization selection (cost limit 530):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
     Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
   * Unroll loop at *arrays:97:9                                  size  +263, benefit    11250.0, efficiency     42.776 (+667 instructions)
@@ -661,7 +661,7 @@ Pass 2: speed optimization selection (cost limit 0):
   ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
   ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
 
-Pass 3: speed optimization selection (cost limit 543):
+Pass 3: speed optimization selection (cost limit 538):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
     Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
     Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143
@@ -674,7 +674,7 @@ Pass 3: speed optimization selection (cost limit 543):
     Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
 
-Pass 3: speed optimization selection (cost limit 546):
+Pass 3: speed optimization selection (cost limit 541):
   * Unroll loop at line 12:5                                     size    +1, benefit      500.0, efficiency    500.000 (+231 instructions)
     Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
     Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143
@@ -685,7 +685,7 @@ Pass 3: speed optimization selection (cost limit 546):
     Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
 
-Pass 3: speed optimization selection (cost limit 315):
+Pass 3: speed optimization selection (cost limit 310):
     Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
   * Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143 (+14 instructions)
     Inline write jump table of array 'b'                         size  +184, benefit      120.0, efficiency      0.652
@@ -704,7 +704,7 @@ Pass 3: speed optimization selection (cost limit 315):
     Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
 
-Pass 3: speed optimization selection (cost limit 301):
+Pass 3: speed optimization selection (cost limit 296):
     Unroll loop at *arrays:33:5                                  size   +86, benefit      250.0, efficiency      2.907
     Inline write jump table of array 'b'                         size  +184, benefit      120.0, efficiency      0.652
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
@@ -720,7 +720,7 @@ Pass 3: speed optimization selection (cost limit 301):
   * Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941 (+17 instructions)
     Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
 
-Pass 3: speed optimization selection (cost limit 284):
+Pass 3: speed optimization selection (cost limit 279):
   * Unroll loop at *arrays:33:5                                  size   +69, benefit      250.0, efficiency      3.623 (+264 instructions)
     Inline write jump table of array 'b'                         size  +167, benefit       70.0, efficiency      0.419
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
@@ -735,26 +735,9 @@ Pass 3: speed optimization selection (cost limit 284):
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
 
-Pass 3: speed optimization selection (cost limit 20):
+Pass 3: speed optimization selection (cost limit 15):
   ! Inline write jump table of array 'b'                         size  +235, benefit       30.0, efficiency      0.128
-  * Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118 (+17 instructions)
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-
-Pass 3: speed optimization selection (cost limit 3):
-  ! Inline write jump table of array 'b'                         size  +218, benefit       28.0, efficiency      0.128
+  ! Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
   ! Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
   ! Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
   ! Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118

@@ -6,7 +6,6 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicLi
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -25,7 +24,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        if (experimental() && getProfile().getProcessorVersion().atLeast(ProcessorVersion.V8B)) {
+        if (experimental() && instructionProcessor.isSupported(Opcode.SELECT)) {
             boolean repeat;
             do {
                 List<Boolean> result = forEachContext(IF, BASIC, this::applySelectOptimization);

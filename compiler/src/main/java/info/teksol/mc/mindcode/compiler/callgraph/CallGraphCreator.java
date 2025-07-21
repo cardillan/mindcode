@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
@@ -49,7 +50,47 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         functions.forEach(this::validateFunction);
 
+        //functions.stream().filter(MindcodeFunction::isEntryPoint).forEach(this::printCallHierarchy);
+
         return new CallGraph(functionDefinitions);
+    }
+
+    void printCallHierarchy(MindcodeFunction function) {
+        info("\nCall hierarchy for %s", function.isMain() ? "main code block" : declarationAsString(function));
+        function.getDirectCalls().forEach(f -> printCallHierarchy(f, 1));
+        info("\n");
+        System.out.println(function.getName() + " -> " + function.getDirectCalls().stream().map(MindcodeFunction::getName).toList());
+    }
+
+    void printCallHierarchy(MindcodeFunction function, int depth) {
+        info("%s%s", "    ".repeat(depth), declarationAsString(function));
+        function.getDirectCalls().forEach(f -> printCallHierarchy(f, depth + 1));
+    }
+
+    private String declarationAsString(MindcodeFunction function) {
+        AstFunctionDeclaration declaration = function.getDeclaration();
+        StringBuilder sbr = new StringBuilder();
+        Objects.requireNonNull(declaration);
+        if (declaration.isInline()) sbr.append("inline ");
+        if (declaration.isNoinline()) sbr.append("noinline ");
+        sbr.append(declaration.getDataType() == DataType.VOID ? "void " : "def ");
+        sbr.append(declaration.getName());
+        sbr.append("(");
+        boolean first = true;
+        for (AstFunctionParameter parameter : declaration.getParameters()) {
+            if (first) {
+                first = false;
+            } else {
+                sbr.append(", ");
+            }
+            if (parameter.hasInModifier()) sbr.append("in ");
+            if (parameter.hasOutModifier()) sbr.append("out ");
+            sbr.append(parameter.getName().substring(parameter.getName().charAt(0) == '_' ? 1 : 0));
+            if (parameter.isVarargs()) sbr.append("...");
+        }
+        sbr.append(")");
+
+        return sbr.toString();
     }
 
     private void visitNode(AstMindcodeNode nodeToVisit) {

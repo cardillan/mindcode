@@ -73,10 +73,13 @@ class OptimizationContext {
     /// are removed from the program after each iteration finishes.
     private final Map<LogicLabel, List<LogicInstruction>> labelReferences = new HashMap<>();
 
+    private int currentRun = 0;
     private int modifications = 0;
     private int insertions = 0;
     private int deletions = 0;
     private boolean updated;
+
+    private boolean traceActive = OptimizationCoordinator.TRACE_ALL;
 
     OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile profile,
             InstructionProcessor instructionProcessor, OptimizerContext optimizerContext, List<LogicInstruction> program,
@@ -163,7 +166,7 @@ class OptimizationContext {
     }
 
     void debugPrintProgram(String title, boolean outputTitle) {
-        if (OptimizationCoordinator.DEBUG_PRINT) {
+        if (OptimizationCoordinator.DEBUG_PRINT && traceActive) {
             if (!OptimizationCoordinator.TRACE || outputTitle) {
                 traceFile.outputProgram(title);
             }
@@ -176,7 +179,7 @@ class OptimizationContext {
     }
 
     /// Prepares the instance for the next round of program modification/optimization.
-    public void prepare() {
+    public int prepare() {
         if (updated) {
             unreachableInstructions = null;
             functionDataFlow = null;
@@ -186,6 +189,8 @@ class OptimizationContext {
         insertions = 0;
         deletions = 0;
         updated = false;
+
+        return ++currentRun;
     }
 
     public void finish() {
@@ -1728,6 +1733,15 @@ class OptimizationContext {
     }
     //</editor-fold>
 
+
+    public boolean isTraceActive() {
+        return traceActive;
+    }
+
+    public void setTraceActive(boolean traceActive) {
+        this.traceActive = traceActive;
+    }
+
     public void indentInc() {
         traceFile.indentInc();
     }
@@ -1737,14 +1751,14 @@ class OptimizationContext {
     }
 
     void trace(Stream<String> text) {
-        traceFile.trace(text);
+        if (traceActive) traceFile.trace(text);
     }
 
     void trace(Supplier<String> text) {
-        traceFile.trace(text);
+        if (traceActive) traceFile.trace(text);
     }
 
     void trace(String text) {
-        traceFile.trace(text);
+        if (traceActive) traceFile.trace(text);
     }
 }
