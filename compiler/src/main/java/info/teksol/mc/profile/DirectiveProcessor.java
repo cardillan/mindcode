@@ -195,6 +195,7 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         map.put("instruction-limit",            (profile, node) -> setIntOption(node, profile::setInstructionLimit, 1, profile.getMaxInstructionLimit()));
         map.put("mlog-block-optimization",      (profile, node) -> setBooleanOption(node, profile::setMlogBlockOptimization));
         map.put("mlog-indent",                  (profile, node) -> setIntOption(node, profile::setMlogIndent, 0, CompilerProfile.MAX_MLOG_INDENT));
+        map.put("null-counter-is-noop",         (profile, node) -> setBooleanOption(node, profile::setNullCounterIsNoop));
         map.put("optimization",                 (profile, node) -> setEnumOption(node, OptimizationLevel::byName, profile::setAllOptimizationLevels, OptimizationLevel::allowedValues));
         map.put("output-profiling",             (profile, node) -> setBooleanOption(node, profile::setOutputProfiling));
         map.put("passes",                       (profile, node) -> setIntOption(node, profile::setOptimizationPasses, 1, profile.getMaxPasses()));

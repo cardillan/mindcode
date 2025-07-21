@@ -94,8 +94,9 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8.1,8.1w,8w}] [--builtin-evaluation {none,compatible,full}]
                 [--target-guard {true,false}] [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,neutral}]
                 [-e {1..1000}] [--unsafe-case-optimization {true,false}] [--text-jump-tables {true,false}]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
-                [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
+                [--case-optimization-strength {0..6}] [--null-counter-is-noop {true,false}]
+                [--mlog-block-optimization {true,false}] [-r {none,comments,passive,active}]
+                [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
@@ -177,6 +178,9 @@ compiler options:
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered,potentially producing a more efficient  code,  at the cost of longer compilation
                          time
+  --null-counter-is-noop {true,false}
+                         when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
+                         may produce code depending on this behavior
   --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
   -r, --remarks {none,comments,passive,active}
@@ -344,8 +348,9 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,u
                 [-t {6,6.0,7,7.0,7.0w,7.1,7.1w,7w,8,8.0,8.0w,8.1,8.1w,8w}] [--builtin-evaluation {none,compatible,full}]
                 [--target-guard {true,false}] [-y {strict,mixed,relaxed}] [-i {1..100000}] [-g {size,speed,neutral}]
                 [-e {1..1000}] [--unsafe-case-optimization {true,false}] [--text-jump-tables {true,false}]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}]
-                [-r {none,comments,passive,active}] [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
+                [--case-optimization-strength {0..6}] [--null-counter-is-noop {true,false}]
+                [--mlog-block-optimization {true,false}] [-r {none,comments,passive,active}]
+                [--symbolic-labels {true,false}] [--mlog-indent {0..8}]
                 [--boundary-checks {none,assert,minimal,simple,described}] [--function-prefix {short,long}]
                 [--no-signature] [--printflush {true,false}]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
@@ -405,6 +410,9 @@ compiler options:
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered,potentially producing a more efficient  code,  at the cost of longer compilation
                          time
+  --null-counter-is-noop {true,false}
+                         when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
+                         may produce code depending on this behavior
   --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
   -r, --remarks {none,comments,passive,active}

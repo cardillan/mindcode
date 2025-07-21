@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicLi
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -507,23 +508,36 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     private LogicList removeLeadingIteratorInstructions(LogicList list) {
-        if (getProfile().isSymbolicLabels()) {
-            if (!(list.getLast() instanceof JumpInstruction jump) || !jump.isUnconditional()) err();
-            int end;
-            if (list.getFromEnd(1) instanceof OpInstruction) {
-                end = 1;
+        CompilerProfile profile = list.getExistingAstContext().getProfile();
+        if (profile.isSymbolicLabels()) {
+            if (profile.isNullCounterIsNoop()) {
+                if (list.getLast() instanceof JumpInstruction jump) {
+                    if (!jump.isUnconditional() || !(list.getFromEnd(1) instanceof OpInstruction op)
+                        || op.getOperation() != Operation.ADD || !op.getX().equals(LogicBuiltIn.COUNTER)) err();
+                    return list.subList(0, list.size() - 2);
+                } else {
+                    // Last iteration
+                    if (!(list.getLast() instanceof SetInstruction set) || set.getValue() != LogicNull.NULL) err();
+                    return list.subList(0, list.size() - 1);
+                }
             } else {
-                // Last iteration: expect a multilabel and an unconditional jump
-                if (!(list.getFromEnd(1) instanceof MultiLabelInstruction
-                        || (!(list.getFromEnd(2) instanceof JumpInstruction jump) || !jump.isUnconditional()))) err();
-                end = 3;
-            }
+                if (!(list.getLast() instanceof JumpInstruction jump) || !jump.isUnconditional()) err();
+                int end;
+                if (list.getFromEnd(1) instanceof OpInstruction) {
+                    end = 1;
+                } else {
+                    // Last iteration: expect a multilabel and an unconditional jump
+                    if (!(list.getFromEnd(1) instanceof MultiLabelInstruction
+                          || (!(list.getFromEnd(2) instanceof JumpInstruction jump) || !jump.isUnconditional()))) err();
+                    end = 3;
+                }
 
-            if (!(list.getFromEnd(end) instanceof OpInstruction op)
+                if (!(list.getFromEnd(end) instanceof OpInstruction op)
                     || op.getOperation() != Operation.ADD
                     || !op.getX().equals(LogicBuiltIn.COUNTER)) err();
 
-            return list.subList(0, list.size() - end);
+                return list.subList(0, list.size() - end);
+            }
         } else {
             if (list.stream().allMatch(ix -> ix.getOpcode() == Opcode.EMPTY)) return list.subList(0, 0);
 

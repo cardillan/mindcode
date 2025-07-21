@@ -66,6 +66,7 @@ public class CompilerProfile {
     private BuiltinEvaluation builtinEvaluation = BuiltinEvaluation.COMPATIBLE;
     private boolean targetGuard = false;
     private boolean mlogBlockOptimization = false;
+    private boolean nullCounterIsNoop = true;
     private boolean textJumpTables = true;
     private boolean unsafeCaseOptimization = false;
     private boolean shortCircuitEval = false;
@@ -560,6 +561,15 @@ public class CompilerProfile {
 
     public CompilerProfile setTextJumpTables(boolean textJumpTables) {
         this.textJumpTables = textJumpTables;
+        return this;
+    }
+
+    public boolean isNullCounterIsNoop() {
+        return nullCounterIsNoop;
+    }
+
+    public CompilerProfile setNullCounterIsNoop(boolean nullCounterIsNoop) {
+        this.nullCounterIsNoop = nullCounterIsNoop;
         return this;
     }
 

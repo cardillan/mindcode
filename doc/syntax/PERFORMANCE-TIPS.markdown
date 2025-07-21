@@ -355,38 +355,35 @@ produces
     # List iteration loop (5 instructions per iteration)
     set :a .array*0
     op add *tmp0 @counter 1
-    jump label_14 always 0 0
+    jump label_12 always 0 0
     set :a .array*1
     op add *tmp0 @counter 1
-    jump label_14 always 0 0
+    jump label_12 always 0 0
     set :a .array*2
     op add *tmp0 @counter 1
-    jump label_14 always 0 0
+    jump label_12 always 0 0
     set :a .array*3
-    op add *tmp0 @counter 1
-    jump label_14 always 0 0
-    jump label_16 always 0 0
-    label_14:
+    set *tmp0 null
+    label_12:
         op add .x .x :a
         set @counter *tmp0
-label_16:
     set .y 0
     # Index-based access (7 instructions per iteration)
     set :i 0
-    label_18:
+    label_16:
         op mul *tmp3 :i 2
         op add @counter @counter *tmp3
         set *tmp2 .array*0
-        jump label_27 always 0 0
+        jump label_25 always 0 0
         set *tmp2 .array*1
-        jump label_27 always 0 0
+        jump label_25 always 0 0
         set *tmp2 .array*2
-        jump label_27 always 0 0
+        jump label_25 always 0 0
         set *tmp2 .array*3
-    label_27:
+    label_25:
         op add .y .y *tmp2
     op add :i :i 1
-    jump label_18 lessThan :i 4
+    jump label_16 lessThan :i 4
     print .x
     print .y
 ```
@@ -423,62 +420,59 @@ produces
     set :y .b*0
     set :z .c*0
     op add *tmp0 @counter 1
-    jump label_20 always 0 0
+    jump label_18 always 0 0
     set .a*0 :x
     set :y .b*1
     set :z .c*1
     op add *tmp0 @counter 1
-    jump label_20 always 0 0
+    jump label_18 always 0 0
     set .a*1 :x
     set :y .b*2
     set :z .c*2
     op add *tmp0 @counter 1
-    jump label_20 always 0 0
+    jump label_18 always 0 0
     set .a*2 :x
     set :y .b*3
     set :z .c*3
-    op add *tmp0 @counter 1
-    jump label_20 always 0 0
-    jump label_22 always 0 0
-    label_20:
+    set *tmp0 null
+    label_18:
         op add :x :y :z
         set @counter *tmp0
-label_22:
     set .a*3 :x
     # Index-based access (15 instructions per iteration)
     set :i 0
-    label_24:
+    label_22:
         op mul *tmp9 :i 2
         op add @counter @counter *tmp9
         set *tmp5 .b*0
-        jump label_33 always 0 0
+        jump label_31 always 0 0
         set *tmp5 .b*1
-        jump label_33 always 0 0
+        jump label_31 always 0 0
         set *tmp5 .b*2
-        jump label_33 always 0 0
+        jump label_31 always 0 0
         set *tmp5 .b*3
-    label_33:
+    label_31:
         op add @counter @counter *tmp9
         set *tmp7 .c*0
-        jump label_41 always 0 0
+        jump label_39 always 0 0
         set *tmp7 .c*1
-        jump label_41 always 0 0
+        jump label_39 always 0 0
         set *tmp7 .c*2
-        jump label_41 always 0 0
+        jump label_39 always 0 0
         set *tmp7 .c*3
-    label_41:
+    label_39:
         op add *tmp8 *tmp5 *tmp7
         op add @counter @counter *tmp9
         set .a*0 *tmp8
-        jump label_50 always 0 0
+        jump label_48 always 0 0
         set .a*1 *tmp8
-        jump label_50 always 0 0
+        jump label_48 always 0 0
         set .a*2 *tmp8
-        jump label_50 always 0 0
+        jump label_48 always 0 0
         set .a*3 *tmp8
-    label_50:
+    label_48:
     op add :i :i 1
-    jump label_24 lessThan :i 4
+    jump label_22 lessThan :i 4
     print .a*0
     print .a*1
     print .a*2
@@ -545,63 +539,58 @@ produces
 # You can safely add/remove instructions, in most parts of the program
 # Pay closer attention to sections of the program manipulating @counter
     # Looping through half of the array: break 
-label_0:
     set .i 0
     set :a .array*0
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*1
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*2
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*3
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*4
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*5
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*6
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*7
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*8
     op add *tmp0 @counter 1
-    jump label_32 always 0 0
+    jump label_30 always 0 0
     set :a .array*9
-    op add *tmp0 @counter 1
-    jump label_32 always 0 0
-    jump label_36 always 0 0
-    label_32:
+    set *tmp0 null
+    label_30:
         print :a
         op add .i .i 1
-        jump label_36 greaterThanEq .i 5
+        jump label_34 greaterThanEq .i 5
         set @counter *tmp0
     # Looping through half of the array: subarray
-label_36:
+label_34:
     set :a.1 .array*0
     op add *tmp3 @counter 1
-    jump label_52 always 0 0
+    jump label_48 always 0 0
     set :a.1 .array*1
     op add *tmp3 @counter 1
-    jump label_52 always 0 0
+    jump label_48 always 0 0
     set :a.1 .array*2
     op add *tmp3 @counter 1
-    jump label_52 always 0 0
+    jump label_48 always 0 0
     set :a.1 .array*3
     op add *tmp3 @counter 1
-    jump label_52 always 0 0
+    jump label_48 always 0 0
     set :a.1 .array*4
-    op add *tmp3 @counter 1
-    jump label_52 always 0 0
-    jump label_0 always 0 0
-    label_52:
+    set *tmp3 null
+    label_48:
         print :a.1
         set @counter *tmp3
 ```

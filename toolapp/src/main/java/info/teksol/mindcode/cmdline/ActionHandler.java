@@ -136,6 +136,14 @@ abstract class ActionHandler {
                 .choices(Arguments.range(0, CompilerProfile.MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE));
 
         createArgument(container, defaults,
+                CompilerProfile::isNullCounterIsNoop,
+                (profile, arguments, name) -> profile.setNullCounterIsNoop(arguments.getBoolean(name)),
+                "--null-counter-is-noop")
+                .help("when active, Mindcode assumes assigning a 'null' to '@counter' is ignored by the processor " +
+                        "and may produce code depending on this behavior")
+                .type(Arguments.booleanType());
+
+        createArgument(container, defaults,
                 CompilerProfile::isMlogBlockOptimization,
                 (profile, arguments, name) -> profile.setMlogBlockOptimization(arguments.getBoolean(name)),
                 "--mlog-block-optimization")

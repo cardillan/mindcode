@@ -148,6 +148,15 @@ Default value is `0` when `symbolic-labels` is set to `false`, and `4` when `sym
 
 For an example of an indented mlog code, see the [`symbolic-labels` option](#option-symbolic-labels).
 
+## Option `null-couner-is-noop`
+
+Informs Mindcode how operations assigning `null` to `@counter` are handled by the processor. Possible values are:
+
+* `false`: assigning `null` to `@counter` is interpreted by the processor (possibly by jumping to address #0).
+* `true` (the default value): assigning `null` to `@counter` is ignored by the processor. Mindcode may generate code depending on this behavior.
+
+In the past, Mindustry processor behavior has been inconsistent when assigning `null` to `@counter`. To allow Mindcode to produce correct code in case it gets changed again, this option has been added.
+
 ## Option `optimization`
 
 Use the `optimization` option to set the optimization level of the compiler:
@@ -255,7 +264,7 @@ When symbolic labels are produced, the compiler also uses mlog comments to mark 
  
 The following features are affected when activating symbolic labels:
 
-* List iteration loops: the number of instructions used to create a list iteration loop code is increased by two.
+* List iteration loops: if the `null-couner-is-noop` is set to false, the number of instructions used to create a list iteration loop code is increased by two.
 * Stackless function calls: instruction setting up a function return address cannot be hoisted.
 * Recursive function calls: the size and execution time of a recursive function call are increased by one.
 * Regular internal array element access (inlined array access is not affected):

@@ -44,9 +44,13 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private final LogicLabel marker = assembler.nextMarker();
         private final LogicVariable nextAddress = assembler.nextTemp();
         private final LoopLabels loopLabels;
+        private final boolean symbolicLabels;
+        private final boolean nullCounterNoop;
 
         public ForEachLoopBuilder(AbstractBuilder builder, AstForEachLoopStatement node) {
             super(builder, node);
+            symbolicLabels = node.getProfile().isSymbolicLabels();
+            nullCounterNoop = node.getProfile().isNullCounterIsNoop();
             iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
             loopLabels = enterLoop(node);
             allowContinue(node, false);
@@ -121,15 +125,19 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             // Continue is disallowed in a value list -> nextAddress can't be used before being set up.
             LogicLabel nextValueLabel = assembler.nextLabel();
 
-            if (node.getProfile().isSymbolicLabels()) {
-                assembler.createOp(Operation.ADD, nextAddress, LogicBuiltIn.COUNTER, LogicNumber.ONE);
+            if (symbolicLabels) {
+                if (lastIteration && nullCounterNoop) {
+                    assembler.createSet(nextAddress, LogicNull.NULL);
+                } else {
+                    assembler.createOp(Operation.ADD, nextAddress, LogicBuiltIn.COUNTER, LogicNumber.ONE);
+                }
             } else {
                 assembler.createSetAddress(nextAddress, nextValueLabel);
             }
 
             LogicLabel lastValueLabel = null;
             if (lastIteration) {
-                if (node.getProfile().isSymbolicLabels()) {
+                if (symbolicLabels && !nullCounterNoop) {
                     // In symbolic labels mode, the nextAddress leads here. We need to jump over the body.
                     assembler.createJumpUnconditional(bodyLabel);
                     assembler.createMultiLabel(assembler.nextLabel(), marker);

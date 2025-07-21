@@ -137,6 +137,15 @@ class DirectivePreprocessorTest {
     }
 
     @Test
+    void processesDirectiveNullCounterIsNoop() {
+        CompilerProfile profile = CompilerProfile.noOptimizations(false);
+        profile.setNullCounterIsNoop(false);
+        assertFalse(profile.isNullCounterIsNoop());
+        processDirective(profile, "null-counter-is-noop", "true");
+        assertTrue(profile.isNullCounterIsNoop());
+    }
+
+    @Test
     void processesDirectiveOptimization() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setAllOptimizationLevels(OptimizationLevel.NONE);

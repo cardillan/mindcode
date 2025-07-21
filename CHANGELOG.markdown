@@ -6,8 +6,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.8.0-beta.2 - Unreleased
 
-**Breaking:** in the latest Mindustry BE version, setting `null` to `@counter` is no longer ignored, but it sets the counter to the numeric part of the source variable. This breaks some optimizations made when compiling with symbolic labels. All code that might run on Mindustry 8 in the future and uses symbolic labels should be recompiled.    
-
 ### Fixed
 
 * Fixed the `target` directive not recognizing minor target versions.
@@ -18,6 +16,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added target 8.1 matching the latest supported BE version. Target 8.0 now corresponds to Mindustry Logic v8 Build 149 Beta.
+* Added a [`null-couner-is-noop` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-null-couner-is-noop). When active, Mindcode assumes assigning a `null` to `@counter` is ignored by the processor and may produce code depending on this behavior.
 * Added support for new instruction opcodes (`setmarker textAlign` and `setmarker lineAlign`).
 * Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions.
 * Added preliminary support for generating [text-based jump tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).

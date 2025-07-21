@@ -615,4 +615,190 @@ class ForEachLoopStatementsBuilderTest extends AbstractCodeGeneratorTest {
             );
         }
     }
+
+    @Nested
+    class SymbolicLinksNullCounter {
+        @Test
+        void compilesBasicForEachLoop() {
+            assertCompilesTo("""
+                            #set symbolic-labels = true;
+                            #set null-counter-is-noop = true;
+                            for i in 10, 20, 30 do
+                                j += i;
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "10"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(SET, ":i", "20"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SET, ":i", "30"),
+                    createInstruction(SET, tmp(0), "null"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", ":j", ":j", ":i"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesBasicForEachOutputLoop() {
+            assertCompilesTo("""
+                            #set symbolic-labels = true;
+                            #set null-counter-is-noop = true;
+                            for out i in a, b, c do
+                                ++i;
+                            end;
+                            """,
+                    createInstruction(SET, ":i", ":a"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(SET, ":a", ":i"),
+                    createInstruction(SET, ":i", ":b"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SET, ":b", ":i"),
+                    createInstruction(SET, ":i", ":c"),
+                    createInstruction(SET, tmp(0), "null"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(SET, ":c", ":i"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesBasicParallelIterations() {
+            assertCompilesTo("""
+                            #set symbolic-labels = true;
+                            #set null-counter-is-noop = true;
+                            for i in 1, 2; j in 3, 4 do print(i+j); end;
+                            """,
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":j", "3"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(SET, ":i", "2"),
+                    createInstruction(SET, ":j", "4"),
+                    createInstruction(SET, tmp(0), "null"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(1), ":i", ":j"),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+    }
+
+    @Nested
+    class SymbolicLinksNoNullCounter {
+        @Test
+        void compilesBasicForEachLoop() {
+            assertCompilesTo("""
+                            #set symbolic-labels = true;
+                            #set null-counter-is-noop = false;
+                            for i in 10, 20, 30 do
+                                j += i;
+                            end;
+                            """,
+                    createInstruction(SET, ":i", "10"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(SET, ":i", "20"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SET, ":i", "30"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(6)),
+                    createInstruction(JUMP, label(7), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", ":j", ":j", ":i"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesBasicForEachOutputLoop() {
+            assertCompilesTo("""
+                            #set symbolic-labels = true;
+                            #set null-counter-is-noop = false;
+                            for out i in a, b, c do
+                                ++i;
+                            end;
+                            """,
+                    createInstruction(SET, ":i", ":a"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(SET, ":a", ":i"),
+                    createInstruction(SET, ":i", ":b"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(SET, ":b", ":i"),
+                    createInstruction(SET, ":i", ":c"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(6)),
+                    createInstruction(JUMP, label(7), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", ":i", ":i", "1"),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(SET, ":c", ":i"),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+
+        @Test
+        void compilesBasicParallelIterations() {
+            assertCompilesTo("""
+                            #set symbolic-labels = true;
+                            #set null-counter-is-noop = false;
+                            for i in 1, 2; j in 3, 4 do print(i+j); end;
+                            """,
+                    createInstruction(SET, ":i", "1"),
+                    createInstruction(SET, ":j", "3"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(3)),
+                    createInstruction(SET, ":i", "2"),
+                    createInstruction(SET, ":j", "4"),
+                    createInstruction(OP, "add", tmp(0), "@counter", "1"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(JUMP, label(6), "always"),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(OP, "add", tmp(1), ":i", ":j"),
+                    createInstruction(PRINT, tmp(1)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(MULTIJUMP, tmp(0), "0", "0"),
+                    createInstruction(MULTILABEL, label(4)),
+                    createInstruction(LABEL, label(6)),
+                    createInstruction(LABEL, label(2))
+            );
+        }
+    }
 }

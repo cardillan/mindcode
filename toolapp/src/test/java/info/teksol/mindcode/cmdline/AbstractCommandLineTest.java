@@ -135,6 +135,21 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
+        class NullCounterIsNoopArgumentTest {
+            @Test
+            public void longArgumentTrue() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--null-counter-is-noop true");
+                assertTrue(profile.isNullCounterIsNoop());
+            }
+
+            @Test
+            public void longArgumentFalse() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--null-counter-is-noop false");
+                assertFalse(profile.isNullCounterIsNoop());
+            }
+        }
+
+        @Nested
         class SyntaxArgumentTest {
             @Test
             public void shortArgumentRelaxed() throws ArgumentParserException {
