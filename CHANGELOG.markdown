@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.8.0-beta.2 - Unreleased
 
+**Note:** this is a beta release. It's been released primarily to support the newest Mindustry Logic instructions (`select`), and as a preview of the newest optimization features (namely, text-based jump tables).
+
+The newly added features are fully functional. There's an unfinished support for the `#setlocal` directive. It doesn't have any effect at this time.
+
 ### Fixed
 
 * Fixed the `target` directive not recognizing minor target versions.
@@ -15,7 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added target 8.1 matching the latest supported BE version. Target 8.0 now corresponds to Mindustry Logic v8 Build 149 Beta.
+* Added target `8.1` matching the latest supported BE version. Target `8.0` now corresponds to Mindustry Logic v8 Build 149 Beta.
 * Added a [`null-couner-is-noop` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-null-couner-is-noop). When active, Mindcode assumes assigning a `null` to `@counter` is ignored by the processor and may produce code depending on this behavior.
 * Added support for new instruction opcodes (`setmarker textAlign` and `setmarker lineAlign`).
 * Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions.
@@ -24,15 +28,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * The code generation of list iteration loops with symbolic labels has been updated to avoid issues with assigning `null` to `@counter`.   
-* Changed the [Array Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#arrays-of-length-2-and-3) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
-* Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
-* Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target 8.1 or higher.
+* Changed the [Array Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#arrays-of-length-2-and-3) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
+* Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
+* Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
 * Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to replace the return address of a call with the target of the following unconditional jump on the `experimental` level.
-* The compatibility testing (both in the `compatible` system library, and in code generated via the [`target-guard` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard)) were updated to distinguish targets 8.0 and 8.1.
+* The compatibility testing (both in the `compatible` system library, and in code generated via the [`target-guard` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard)) were updated to distinguish targets `8.0` and `8.1`.
 
 ### Miscellaneous
 
-* Added a separate version of the metadata (v149) corresponding to the official Mindustry pre-release.
+* Added a separate version of the metadata (`v149`) corresponding to the official Mindustry pre-release.
 * Updated the BE version metadata to the latest available BE build.
 
 ## 3.8.0-beta.1 - 2025-07-08
@@ -73,7 +77,7 @@ The newly added features are fully functional. There's an unfinished support for
 ### Fixed
 
 * Mindcode incorrectly warned about possible loss of precision for integer literals larger than 2<sup>52</sup>-1. The correct maximum safe integer value is 2<sup>53</sup>-1.
-* Added missing `setrule` instruction variants (`canGameOver`, `dragMultiplier`, `ban`, `unban` and `unitMineSpeed`) for target 8. 
+* Added missing `setrule` instruction variants (`canGameOver`, `dragMultiplier`, `ban`, `unban` and `unitMineSpeed`) for target `8`.
 
 ### Added
 

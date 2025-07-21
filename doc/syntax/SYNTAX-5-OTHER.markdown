@@ -436,9 +436,8 @@ The target versions consist of a major and minor version number. As of now, thes
 |   6.0   | Mindustry Logic for the latest release of Mindustry 6.           |
 |   7.0   | Mindustry Logic for the latest release of Mindustry 7.           |
 |   7.1   | As above, with slightly revised syntax of some functions.        |
-|   8.0   | Mindustry Logic for the latest BE release of future Mindustry 8. |
-
-Version 8.0 will be the version corresponding to the official Mindustry 8 release. Future enhancements of Mindustry 8 Logic or, possibly, of the Mindcode language will be incorporated as separate versions with updated minor version number.
+|   8.0   | Mindustry Logic for the v8 Build 149 Beta Mindustry release.     |
+|   8.1   | Mindustry Logic for the latest BE release of future Mindustry 8. |
 
 The target can be set using either just a major or both major and minor version numbers. When specifying both numbers, the specified version is used. When specifying just the major version, the most recent minor version in the given major category is used. Example:
 

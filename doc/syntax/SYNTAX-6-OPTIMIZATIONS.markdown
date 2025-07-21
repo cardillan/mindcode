@@ -221,7 +221,7 @@ This optimization consists of three types of modifications performed on blocks o
 
 ### `select` optimization
 
-If expressions which assign a fixed value to a variable depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is 8.1 or higher. Example:
+If expressions which assign a fixed value to a variable depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is `8.1` or higher. Example:
 
 ```
 #set target = 8.1;
@@ -1214,7 +1214,7 @@ Mindcode arranges the code to only perform checks distinguishing between `null` 
 
 In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings, instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
 
-* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version 8 or higher,
+* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher,
 * The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive,
 * The [text-jump-tables](SYNTAX-5-OTHER.markdown#option-text-jump-tables) option must be active.
 

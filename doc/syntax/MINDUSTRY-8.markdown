@@ -121,7 +121,7 @@ Note: `formatNumber` and `printNumber` functions, identical to those above, are 
 
 ### Print merging optimization
 
-The [Print Merging optimization](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) was enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language target earlier than 8 compiles into
+The [Print Merging optimization](SYNTAX-6-OPTIMIZATIONS.markdown#print-merging) was enhanced to use the new formatting mechanism where possible. For example, `println($"Minimum: $min, middle: $mid, maximum: $max")` in language targets earlier than `8` compiles into
 
 ```
 print `Minimum: `

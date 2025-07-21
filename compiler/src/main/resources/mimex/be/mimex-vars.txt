@@ -92,6 +92,8 @@ name;global;isobj;constant;numval
 @carbon-wall;global;true;true;0.0
 @center;global;false;true;1.0
 @char;global;true;true;0.0
+@character-overlay;global;true;true;0.0
+@character-overlay-white;global;true;true;0.0
 @chemical-combustion-chamber;global;true;true;0.0
 @cleroi;global;true;true;0.0
 @client;global;false;true;0.0
@@ -149,6 +151,8 @@ name;global;isobj;constant;numval
 @colorViolet;global;false;true;1.9770324715E-314
 @colorWhite;global;false;true;2.1219957905E-314
 @colorYellow;global;false;true;2.121963538E-314
+@colored-floor;global;true;true;0.0
+@colored-wall;global;true;true;0.0
 @combustion-generator;global;true;true;0.0
 @conduit;global;true;true;0.0
 @config;global;true;true;0.0
@@ -353,6 +357,18 @@ name;global;isobj;constant;numval
 @metal-floor-4;global;true;true;0.0
 @metal-floor-5;global;true;true;0.0
 @metal-floor-damaged;global;true;true;0.0
+@metal-tiles-1;global;true;true;0.0
+@metal-tiles-10;global;true;true;0.0
+@metal-tiles-11;global;true;true;0.0
+@metal-tiles-12;global;true;true;0.0
+@metal-tiles-2;global;true;true;0.0
+@metal-tiles-3;global;true;true;0.0
+@metal-tiles-4;global;true;true;0.0
+@metal-tiles-5;global;true;true;0.0
+@metal-tiles-6;global;true;true;0.0
+@metal-tiles-7;global;true;true;0.0
+@metal-tiles-8;global;true;true;0.0
+@metal-tiles-9;global;true;true;0.0
 @micro-processor;global;true;true;0.0
 @mineX;global;true;true;0.0
 @mineY;global;true;true;0.0
