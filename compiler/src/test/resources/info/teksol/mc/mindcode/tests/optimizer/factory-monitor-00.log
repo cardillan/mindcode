@@ -1,5 +1,5 @@
    540 instructions before optimizations.
-    56 instructions eliminated by Temp Variables Elimination (2 iterations).
+    58 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Case Expression Optimization.
     43 instructions eliminated by Dead Code Elimination (6 iterations).
     20 instructions eliminated by Jump Optimization (5 iterations).
@@ -14,7 +14,7 @@
     11 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
      2 instructions updated by Jump Threading.
     22 instructions eliminated by Print Merging.
-   331 instructions after optimizations.
+   329 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 628):
   * Replicate loop condition at line 160:1                       size    +1, benefit       25.0, efficiency     25.000 (-5 instructions)
@@ -1878,9 +1878,9 @@ Modifications by Convert case at line 20:9 (segments: 1, padded low) (-8 instruc
     25 getlink :block :n
     26 sensor *tmp8 :block @type
 -    * jump *label7 notEqual *tmp8 @message
-+   27 sensor *tmp178 *tmp8 @id
-+   28 jump *label87 greaterThanEq *tmp178 146
-+   29 multijump *tmp178 0 0 (m:*label88)
++   27 sensor *tmp261 *tmp8 @id
++   28 jump *label87 greaterThanEq *tmp261 146
++   29 multijump *tmp261 0 0 (m:*label88)
 +   30 multilabel *label97 (m:*label88)
     31 label *label8
     32 set .MESSAGE :block
@@ -2013,6 +2013,21 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    266 label *label45
    267 set :crx 0
 
+Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-2 instructions):
+ 
+   398 label *label75
+   399 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
+   400 op land *tmp162 *tmp126 *tmp161
+-    * select *tmp163 notEqual *tmp162 false 0 255
+-    * set :red *tmp163
+-    * select *tmp165 greaterThan :minimum 33 255 0
+-    * set :green *tmp165
++  401 select :red notEqual *tmp162 false 0 255
++  402 select :green greaterThan :minimum 33 255 0
+   403 set :blue 0
+   404 label *label76
+   405 label *label74
+
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
     13 set .MUL2 null
@@ -2028,8 +2043,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     21 label *label84
     22 op sub :n :n 1
  
-    26 jump *label87 greaterThanEq *tmp178 146
-    27 multijump *tmp178 0 0 (m:*label88)
+    26 jump *label87 greaterThanEq *tmp261 146
+    27 multijump *tmp261 0 0 (m:*label88)
     28 multilabel *label97 (m:*label88)
 -    * label *label8
     29 set .MESSAGE :block
@@ -2202,30 +2217,30 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    293 op sub *tmp116 100 :output
    294 op lessThan *tmp117 *tmp116 :minimum
  
-   376 op max :blue 192 :blue
-   377 set :boost EXPECTED_BOOST
-   378 label *label81
+   374 op max :blue 192 :blue
+   375 set :boost EXPECTED_BOOST
+   376 label *label81
 -    * label *label82
-   379 op mul *tmp171 61 :boost
-   380 op idiv :length *tmp171 EXPECTED_BOOST
-   381 draw color :red :green :blue 128
+   377 op mul *tmp171 61 :boost
+   378 op idiv :length *tmp171 EXPECTED_BOOST
+   379 draw color :red :green :blue 128
  
-   386 draw lineRect :x :y :length 14
-   387 op add :index :index 1
-   388 label *label57
+   384 draw lineRect :x :y :length 14
+   385 op add :index :index 1
+   386 label *label57
 -    * label *label58
 -    * label *label53
-   389 op add :n :n 1
-   390 jump *label85 lessThan :n @links
-   391 label *label54
+   387 op add :n :n 1
+   388 jump *label85 lessThan :n @links
+   389 label *label54
  
-   396 print *tmp177
-   397 print " ms"
-   398 printflush .MESSAGE
+   394 print *tmp177
+   395 print " ms"
+   396 printflush .MESSAGE
 -    * label *label50
-   399 sensor *tmp89 .SWITCH @enabled
-   400 jump *label86 equal *tmp89 0
-   401 label *label51
+   397 sensor *tmp89 .SWITCH @enabled
+   398 jump *label86 equal *tmp89 0
+   399 label *label51
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
  
@@ -2283,17 +2298,17 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
    330 label *label69
    331 draw color 255 80 80 255
  
-   396 printflush .MESSAGE
-   397 sensor *tmp89 .SWITCH @enabled
-   398 jump *label86 equal *tmp89 0
+   394 printflush .MESSAGE
+   395 sensor *tmp89 .SWITCH @enabled
+   396 jump *label86 equal *tmp89 0
 -    * label *label51
-   399 end
+   397 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   396 printflush .MESSAGE
-   397 sensor *tmp89 .SWITCH @enabled
-   398 jump *label86 equal *tmp89 0
+   394 printflush .MESSAGE
+   395 sensor *tmp89 .SWITCH @enabled
+   396 jump *label86 equal *tmp89 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
@@ -2371,17 +2386,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
    234 draw color 0 0 80 255
    235 draw rect :clx :cly :clw :clh
  
-   369 drawflush .DISPLAY
-   370 op sub *tmp176 @time :start
-   371 op floor *tmp177 *tmp176
+   367 drawflush .DISPLAY
+   368 op sub *tmp176 @time :start
+   369 op floor *tmp177 *tmp176
 -    * print "\nDraw time: "
 -    * print *tmp177
 -    * print " ms"
-+  372 print "\nDraw time: {0} ms"
-+  373 format *tmp177
-   374 printflush .MESSAGE
-   375 sensor *tmp89 .SWITCH @enabled
-   376 jump *label86 equal *tmp89 0
++  370 print "\nDraw time: {0} ms"
++  371 format *tmp177
+   372 printflush .MESSAGE
+   373 sensor *tmp89 .SWITCH @enabled
+   374 jump *label86 equal *tmp89 0
 
 Final code before resolving virtual instructions:
 
@@ -2410,9 +2425,9 @@ label *label84
 op sub :n :n 1
 getlink :block :n
 sensor *tmp8 :block @type
-sensor *tmp178 *tmp8 @id
-jump *label87 greaterThanEq *tmp178 146
-multijump *tmp178 0 0
+sensor *tmp261 *tmp8 @id
+jump *label87 greaterThanEq *tmp261 146
+multijump *tmp261 0 0
 multilabel *label97
 set .MESSAGE :block
 jump *label6 always
@@ -2728,10 +2743,8 @@ jump *label76 always
 label *label75
 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
 op land *tmp162 *tmp126 *tmp161
-select *tmp163 notEqual *tmp162 false 0 255
-set :red *tmp163
-select *tmp165 greaterThan :minimum 33 255 0
-set :green *tmp165
+select :red notEqual *tmp162 false 0 255
+select :green greaterThan :minimum 33 255 0
 set :blue 0
 label *label76
 label *label74

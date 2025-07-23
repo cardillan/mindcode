@@ -34,8 +34,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         str = x > 0 ? "positive" : "negative";
                         print(str);
                         """,
-                createInstruction(SELECT, tmp(1), "greaterThan", ":x", "0", q("positive"), q("negative")),
-                createInstruction(SET, ":str", tmp(1)),
+                createInstruction(SELECT, ":str", "greaterThan", ":x", "0", q("positive"), q("negative")),
                 createInstruction(PRINT, ":str")
         );
     }
@@ -47,8 +46,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         print(str);
                         """,
                 createInstruction(SENSOR, tmp(0), "@unit", "@dead"),
-                createInstruction(SELECT, tmp(2), "strictEqual", tmp(0), "0", q("alive"), q("dead")),
-                createInstruction(SET, ":str", tmp(2)),
+                createInstruction(SELECT, ":str", "strictEqual", tmp(0), "0", q("alive"), q("dead")),
                 createInstruction(PRINT, ":str")
         );
     }
@@ -56,6 +54,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     @Test
     void optimizesTrueBranchInvertible() {
         assertCompilesTo("""
+                        #set target = 7;
                         str = if x >= 0 then
                             "positive";
                         else
@@ -252,8 +251,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         print(a, b);
                         """,
                 createInstruction(OP, "rand", tmp(0), "10"),
-                createInstruction(SELECT, tmp(2), "greaterThan", tmp(0), "5", "1", "2"),
-                createInstruction(SET, ":b", tmp(2)),
+                createInstruction(SELECT, ":b", "greaterThan", tmp(0), "5", "1", "2"),
                 createInstruction(SET, ":a", ":b"),
                 createInstruction(PRINT, ":a"),
                 createInstruction(PRINT, ":b")
@@ -268,8 +266,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         print(a, b);
                         """,
                 createInstruction(OP, "rand", tmp(0), "10"),
-                createInstruction(SELECT, tmp(2), "greaterThan", tmp(0), "5", "1", "2"),
-                createInstruction(SET, ":b", tmp(2)),
+                createInstruction(SELECT, ":b", "greaterThan", tmp(0), "5", "1", "2"),
                 createInstruction(PRINT, ":b"),
                 createInstruction(SET, ":a", ":b"),
                 createInstruction(PRINT, ":a"),
@@ -278,7 +275,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
     }
 
     @Test
-    void preservesDecisionVarialbe() {
+    void preservesDecisionVariable() {
         assertCompilesTo("""
                         i = rand(10);
                         i = i % 2 ? 5 : 6;
@@ -286,8 +283,7 @@ class IfExpressionOptimizerTest extends AbstractOptimizerTest<IfExpressionOptimi
                         """,
                 createInstruction(OP, "rand", ":i", "10"),
                 createInstruction(OP, "mod", tmp(1), ":i", "2"),
-                createInstruction(SELECT, tmp(2), "notEqual", tmp(1), "false", "5", "6"),
-                createInstruction(SET, ":i", tmp(2)),
+                createInstruction(SELECT, ":i", "notEqual", tmp(1), "false", "5", "6"),
                 createInstruction(PRINT, ":i")
         );
     }

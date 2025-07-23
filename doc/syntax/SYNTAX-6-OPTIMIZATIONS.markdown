@@ -221,19 +221,76 @@ This optimization consists of three types of modifications performed on blocks o
 
 ### `select` optimization
 
-If expressions which assign a fixed value to a variable depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is `8.1` or higher. Example:
+If expressions which assign a value to variables depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is `8.1` or higher. Example:
 
-```
+```Mindcode
 #set target = 8.1;
-print(rand(10) > 5 ? "low" : "high");
+print(rand(10) < 5 ? "low" : "high");
 ```
 
 compiles to
 
-```
+```mlog
 op rand *tmp0 10 0
-select *tmp2 greaterThan *tmp0 5 "low" "high"
+select *tmp2 lessThan *tmp0 5 "low" "high"
 print *tmp2
+```
+
+The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is not worsened by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
+
+```Mindcode
+#set target = 8;
+
+volatile var a, b, c;
+
+if switch1.enabled then
+    a = "on";
+    b = @coal;
+    c = 50;
+else
+    a = "off";
+end;
+
+if switch2.enabled then
+  a = 1;
+end;
+```
+
+compiles to:
+
+```mlog
+sensor *tmp0 switch1 @enabled
+select .a notEqual *tmp0 false "on" "off"
+select .b notEqual *tmp0 false @coal .b
+select .c notEqual *tmp0 false 50 .c
+sensor *tmp2 switch2 @enabled
+select .a notEqual *tmp2 false 1 .a
+```
+
+Even when the assignments modify both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can still be applied:
+
+```Mindcode
+#set target = 8;
+
+noinit var a, b;
+
+if a > b then
+    a = 10; b = 20;
+else
+    a = 20; b = 10;
+end;
+
+print(a > 0 ? packcolor(0, b, b, 1) : %[red]);
+```
+compiles to:
+
+```mlog
+set *tmp5 .a
+select .a greaterThan .a .b 10 20
+select .b greaterThan *tmp5 .b 20 10
+packcolor *tmp6 0 .b .b 1
+select *tmp3 greaterThan .a 0 *tmp6 %[red]
+print *tmp3
 ```
 
 ### Value propagation

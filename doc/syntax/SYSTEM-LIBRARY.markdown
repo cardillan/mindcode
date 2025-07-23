@@ -88,9 +88,9 @@ Reverses the values in the array.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Five elements in the array     |                  74 |                 71 |
-| Ten elements in the array      |                 164 |                 96 |
-| Twenty elements in the array   |                 344 |                146 |
+| Five elements in the array     |                  78 |                 73 |
+| Ten elements in the array      |                 173 |                 98 |
+| Twenty elements in the array   |                 363 |                148 |
 
 Sorts the array.
 
@@ -101,9 +101,9 @@ Sorts the array.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Five elements in the array     |                  98 |                113 |
-| Ten elements in the array      |                 218 |                158 |
-| Twenty elements in the array   |                 458 |                248 |
+| Five elements in the array     |                 102 |                115 |
+| Ten elements in the array      |                 227 |                160 |
+| Twenty elements in the array   |                 477 |                250 |
 
 Sorts elements of two arrays in parallel. The `sortBy` array contains the sort keys, while the
 `values` array gets reordered to the same relative order as the `sortBy` array.
@@ -121,9 +121,9 @@ To use the Blocks library, use the `require blocks;` statement.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Linking two blocks             |                  25 |                 25 |
-| Linking four blocks            |                  34 |                 34 |
-| Linking six blocks             |                  43 |                 43 |
+| Linking two blocks             |                  25 |                 27 |
+| Linking four blocks            |                  34 |                 40 |
+| Linking six blocks             |                  43 |                 53 |
 
 Searches blocks linked to the processor for blocks of requested types and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.
@@ -317,8 +317,8 @@ Clears the processor's graphics buffer without outputting the contents into any 
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   3 |                  3 |
-| Function body                  |                   4 |                  4 |
+| Inlined function               |                   3 |                  7 |
+| Function body                  |                   4 |                  8 |
 | Function call                  |                   4 |                  4 |
 
 Returns the actual display size based on the type of display passed in as an argument.
@@ -587,8 +587,8 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   2 |                  2 |
-| Function body                  |                   3 |                  3 |
+| Inlined function               |                   2 |                  6 |
+| Function body                  |                   3 |                  7 |
 | Function call                  |                   4 |                  4 |
 
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
@@ -820,9 +820,9 @@ Returns the median of five values.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Ten arguments in total         |                 683 |                 88 |
-| Fifteen arguments in total     |                 142 |                118 |
-| Twenty arguments in total      |                 182 |                148 |
+| Ten arguments in total         |                 643 |                 88 |
+| Fifteen arguments in total     |                 138 |                118 |
+| Twenty arguments in total      |                 178 |                148 |
 
 Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
 and is fairly slow as it doesn't modify the input array.
@@ -864,8 +864,8 @@ Prints all arguments passed to it, each on a new line.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  13 |                 13 |
-| Function body                  |                  14 |                 14 |
+| Inlined function               |                  13 |                 17 |
+| Function body                  |                  14 |                 18 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -889,8 +889,8 @@ Nulls are printed as 0.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  14 |                 14 |
-| Function body                  |                  15 |                 15 |
+| Inlined function               |                  14 |                 18 |
+| Function body                  |                  15 |                 19 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -1149,8 +1149,8 @@ but is slower. If you already control the current unit, use `within()` instead.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  15 |                 15 |
-| Function body                  |                  16 |                 16 |
+| Inlined function               |                  15 |                 16 |
+| Function body                  |                  16 |                 17 |
 | Function call                  |                   5 |                  5 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
@@ -1171,8 +1171,8 @@ The function doesn't use units that are controlled by a player or a different pr
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  30 |                 30 |
-| Function body                  |                  31 |                 31 |
+| Inlined function               |                  30 |                 31 |
+| Function body                  |                  31 |                 32 |
 | Function call                  |                   7 |                  7 |
 
 Searches for and binds a free unit of the given type closest to the coordinates on the map given.
@@ -1194,8 +1194,8 @@ The function doesn't use units that are controlled by a player or a different pr
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   6 |                  6 |
-| Function body                  |                   7 |                  7 |
+| Inlined function               |                   5 |                  5 |
+| Function body                  |                   6 |                  6 |
 | Function call                  |                   5 |                  5 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.
@@ -1215,8 +1215,8 @@ The function doesn't use units that are controlled by a player or a different pr
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  16 |                 16 |
-| Function body                  |                  17 |                 17 |
+| Inlined function               |                  15 |                 15 |
+| Function body                  |                  16 |                 16 |
 | Function call                  |                   7 |                  7 |
 
 Finds and binds a free unit of the given type. When such a unit is found, it is flagged by the given initial flag.

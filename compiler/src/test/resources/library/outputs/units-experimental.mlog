@@ -60,20 +60,18 @@ jump 57 equal @unit null
 sensor *tmp45 @unit @controlled
 jump 57 notEqual *tmp45 0
 ucontrol flag null 0 0 0 0
-set *tmp42 @unit
-print *tmp42
+print @unit
 print "\n"
 ubind null
-jump 70 notEqual @unit null
+jump 69 notEqual @unit null
 print "nullNo unit of type null found."
 printflush null
-jump 65 always 0 0
+jump 64 always 0 0
 sensor *tmp51 @unit @controlled
-jump 75 equal *tmp51 0
+jump 74 equal *tmp51 0
 print "nullLooking for a free null..."
 printflush null
-jump 65 always 0 0
+jump 64 always 0 0
 ucontrol flag null 0 0 0 0
-set *tmp48 @unit
-print *tmp48
+print @unit
 print "\n"

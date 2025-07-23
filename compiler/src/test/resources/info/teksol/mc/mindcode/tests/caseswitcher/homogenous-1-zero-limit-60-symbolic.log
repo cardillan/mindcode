@@ -1,5 +1,5 @@
     51 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (2 iterations).
+     2 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Data Flow Optimization (5 iterations).
@@ -245,33 +245,33 @@ Modifications by Convert case at line 11:5 (segments: 15) (-4 instructions):
 -    * jump *label6 equal :block @carbide-wall
 -    * jump *label6 equal :block @carbide-wall-large
 -    * jump *label5 always
-+    6 sensor *tmp9 :block @id
-+    7 jump *label12 greaterThanEq *tmp9 203
-+    8 jump *label10 greaterThanEq *tmp9 35
-+    9 jump *label13 greaterThanEq *tmp9 17
-+   10 jump *label10 greaterThanEq *tmp9 1
++    6 sensor *tmp13 :block @id
++    7 jump *label12 greaterThanEq *tmp13 203
++    8 jump *label10 greaterThanEq *tmp13 35
++    9 jump *label13 greaterThanEq *tmp13 17
++   10 jump *label10 greaterThanEq *tmp13 1
 +   11 jump *label11 always
 +   12 label *label13
-+   13 jump *label6 lessThan *tmp9 29
-+   14 jump *label6 greaterThanEq *tmp9 31
++   13 jump *label6 lessThan *tmp13 29
++   14 jump *label6 greaterThanEq *tmp13 31
 +   15 jump *label10 always
 +   16 label *label12
-+   17 jump *label14 greaterThanEq *tmp9 234
-+   18 jump *label15 greaterThanEq *tmp9 220
-+   19 jump *label10 greaterThanEq *tmp9 208
-+   20 jump *label6 lessThan *tmp9 205
-+   21 jump *label6 greaterThanEq *tmp9 206
++   17 jump *label14 greaterThanEq *tmp13 234
++   18 jump *label15 greaterThanEq *tmp13 220
++   19 jump *label10 greaterThanEq *tmp13 208
++   20 jump *label6 lessThan *tmp13 205
++   21 jump *label6 greaterThanEq *tmp13 206
 +   22 jump *label10 always
 +   23 label *label15
-+   24 jump *label10 greaterThanEq *tmp9 226
-+   25 jump *label6 lessThan *tmp9 222
-+   26 jump *label10 lessThan *tmp9 225
++   24 jump *label10 greaterThanEq *tmp13 226
++   25 jump *label6 lessThan *tmp13 222
++   26 jump *label10 lessThan *tmp13 225
 +   27 jump *label6 always
 +   28 label *label14
-+   29 jump *label10 greaterThanEq *tmp9 235
++   29 jump *label10 greaterThanEq *tmp13 235
 +   30 jump *label6 always
 +   31 label *label11
-+   32 jump *label10 strictEqual *tmp9 null
++   32 jump *label10 strictEqual *tmp13 null
     33 label *label6
     34 set *tmp2 true
     35 jump *label4 always
@@ -319,33 +319,33 @@ set :i -1
 label *label9
 lookup block :block :i
 # "Function: def isWall(in block)"
-sensor *tmp9 :block @id
-jump *label12 greaterThanEq *tmp9 203
-jump *label10 greaterThanEq *tmp9 35
-jump *label13 greaterThanEq *tmp9 17
-jump *label10 greaterThanEq *tmp9 1
+sensor *tmp13 :block @id
+jump *label12 greaterThanEq *tmp13 203
+jump *label10 greaterThanEq *tmp13 35
+jump *label13 greaterThanEq *tmp13 17
+jump *label10 greaterThanEq *tmp13 1
 jump *label11 always
 label *label13
-jump *label6 lessThan *tmp9 29
-jump *label6 greaterThanEq *tmp9 31
+jump *label6 lessThan *tmp13 29
+jump *label6 greaterThanEq *tmp13 31
 jump *label10 always
 label *label12
-jump *label14 greaterThanEq *tmp9 234
-jump *label15 greaterThanEq *tmp9 220
-jump *label10 greaterThanEq *tmp9 208
-jump *label6 lessThan *tmp9 205
-jump *label6 greaterThanEq *tmp9 206
+jump *label14 greaterThanEq *tmp13 234
+jump *label15 greaterThanEq *tmp13 220
+jump *label10 greaterThanEq *tmp13 208
+jump *label6 lessThan *tmp13 205
+jump *label6 greaterThanEq *tmp13 206
 jump *label10 always
 label *label15
-jump *label10 greaterThanEq *tmp9 226
-jump *label6 lessThan *tmp9 222
-jump *label10 lessThan *tmp9 225
+jump *label10 greaterThanEq *tmp13 226
+jump *label6 lessThan *tmp13 222
+jump *label10 lessThan *tmp13 225
 jump *label6 always
 label *label14
-jump *label10 greaterThanEq *tmp9 235
+jump *label10 greaterThanEq *tmp13 235
 jump *label6 always
 label *label11
-jump *label10 strictEqual *tmp9 null
+jump *label10 strictEqual *tmp13 null
 label *label6
 set *tmp2 true
 jump *label4 always

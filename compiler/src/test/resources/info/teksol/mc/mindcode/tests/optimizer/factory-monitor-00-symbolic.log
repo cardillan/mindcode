@@ -1,5 +1,5 @@
    540 instructions before optimizations.
-    56 instructions eliminated by Temp Variables Elimination (2 iterations).
+    58 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
      1 instructions eliminated by Case Expression Optimization.
     43 instructions eliminated by Dead Code Elimination (6 iterations).
     20 instructions eliminated by Jump Optimization (5 iterations).
@@ -14,7 +14,7 @@
     11 instructions eliminated by Jump Straightening (2 passes, 5 iterations).
      2 instructions updated by Jump Threading.
     22 instructions eliminated by Print Merging.
-   476 instructions after optimizations.
+   474 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 628):
   * Replicate loop condition at line 160:1                       size    +1, benefit       25.0, efficiency     25.000 (-5 instructions)
@@ -1882,9 +1882,9 @@ Modifications by Convert case at line 20:9 (segments: 1, padded low) (+137 instr
     25 getlink :block :n
     26 sensor *tmp8 :block @type
 -    * jump *label7 notEqual *tmp8 @message
-+   27 sensor *tmp178 *tmp8 @id
-+   28 jump *label87 greaterThanEq *tmp178 146
-+   29 multijump *label89 *tmp178 0 (m:*label88)
++   27 sensor *tmp261 *tmp8 @id
++   28 jump *label87 greaterThanEq *tmp261 146
++   29 multijump *label89 *tmp261 0 (m:*label88)
 +   30 multilabel *label89 (m:*label88)
 +   31 jump *label87 always
 +   32 multilabel *label90 (m:*label88)
@@ -2300,6 +2300,21 @@ Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1:
    546 label *label45
    547 set :crx 0
 
+Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-2 instructions):
+ 
+   678 label *label75
+   679 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
+   680 op land *tmp162 *tmp126 *tmp161
+-    * select *tmp163 notEqual *tmp162 false 0 255
+-    * set :red *tmp163
+-    * select *tmp165 greaterThan :minimum 33 255 0
+-    * set :green *tmp165
++  681 select :red notEqual *tmp162 false 0 255
++  682 select :green greaterThan :minimum 33 255 0
+   683 set :blue 0
+   684 label *label76
+   685 label *label74
+
 Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
  
     13 set .MUL2 null
@@ -2466,30 +2481,30 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    583 op sub *tmp116 100 :output
    584 op lessThan *tmp117 *tmp116 :minimum
  
-   666 op max :blue 192 :blue
-   667 set :boost EXPECTED_BOOST
-   668 label *label81
+   664 op max :blue 192 :blue
+   665 set :boost EXPECTED_BOOST
+   666 label *label81
 -    * label *label82
-   669 op mul *tmp171 61 :boost
-   670 op idiv :length *tmp171 EXPECTED_BOOST
-   671 draw color :red :green :blue 128
+   667 op mul *tmp171 61 :boost
+   668 op idiv :length *tmp171 EXPECTED_BOOST
+   669 draw color :red :green :blue 128
  
-   676 draw lineRect :x :y :length 14
-   677 op add :index :index 1
-   678 label *label57
+   674 draw lineRect :x :y :length 14
+   675 op add :index :index 1
+   676 label *label57
 -    * label *label58
 -    * label *label53
-   679 op add :n :n 1
-   680 jump *label85 lessThan :n @links
-   681 label *label54
+   677 op add :n :n 1
+   678 jump *label85 lessThan :n @links
+   679 label *label54
  
-   686 print *tmp177
-   687 print " ms"
-   688 printflush .MESSAGE
+   684 print *tmp177
+   685 print " ms"
+   686 printflush .MESSAGE
 -    * label *label50
-   689 sensor *tmp89 .SWITCH @enabled
-   690 jump *label86 equal *tmp89 0
-   691 label *label51
+   687 sensor *tmp89 .SWITCH @enabled
+   688 jump *label86 equal *tmp89 0
+   689 label *label51
 
 Modifications by Jumps phase, Jump Straightening, pass 4, iteration 1 (-1 instructions):
  
@@ -2547,17 +2562,17 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
    620 label *label69
    621 draw color 255 80 80 255
  
-   686 printflush .MESSAGE
-   687 sensor *tmp89 .SWITCH @enabled
-   688 jump *label86 equal *tmp89 0
+   684 printflush .MESSAGE
+   685 sensor *tmp89 .SWITCH @enabled
+   686 jump *label86 equal *tmp89 0
 -    * label *label51
-   689 end
+   687 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   686 printflush .MESSAGE
-   687 sensor *tmp89 .SWITCH @enabled
-   688 jump *label86 equal *tmp89 0
+   684 printflush .MESSAGE
+   685 sensor *tmp89 .SWITCH @enabled
+   686 jump *label86 equal *tmp89 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
@@ -2635,17 +2650,17 @@ Modifications by Final phase, Print Merging, iteration 1 (-22 instructions):
    524 draw color 0 0 80 255
    525 draw rect :clx :cly :clw :clh
  
-   659 drawflush .DISPLAY
-   660 op sub *tmp176 @time :start
-   661 op floor *tmp177 *tmp176
+   657 drawflush .DISPLAY
+   658 op sub *tmp176 @time :start
+   659 op floor *tmp177 *tmp176
 -    * print "\nDraw time: "
 -    * print *tmp177
 -    * print " ms"
-+  662 print "\nDraw time: {0} ms"
-+  663 format *tmp177
-   664 printflush .MESSAGE
-   665 sensor *tmp89 .SWITCH @enabled
-   666 jump *label86 equal *tmp89 0
++  660 print "\nDraw time: {0} ms"
++  661 format *tmp177
+   662 printflush .MESSAGE
+   663 sensor *tmp89 .SWITCH @enabled
+   664 jump *label86 equal *tmp89 0
 
 Final code before resolving virtual instructions:
 
@@ -2674,9 +2689,9 @@ label *label84
 op sub :n :n 1
 getlink :block :n
 sensor *tmp8 :block @type
-sensor *tmp178 *tmp8 @id
-jump *label87 greaterThanEq *tmp178 146
-multijump *label89 *tmp178 0
+sensor *tmp261 *tmp8 @id
+jump *label87 greaterThanEq *tmp261 146
+multijump *label89 *tmp261 0
 multilabel *label89
 jump *label87 always
 multilabel *label90
@@ -3282,10 +3297,8 @@ jump *label76 always
 label *label75
 op greaterThanEq *tmp161 :boost EXPECTED_BOOST
 op land *tmp162 *tmp126 *tmp161
-select *tmp163 notEqual *tmp162 false 0 255
-set :red *tmp163
-select *tmp165 greaterThan :minimum 33 255 0
-set :green *tmp165
+select :red notEqual *tmp162 false 0 255
+select :green greaterThan :minimum 33 255 0
 set :blue 0
 label *label76
 label *label74

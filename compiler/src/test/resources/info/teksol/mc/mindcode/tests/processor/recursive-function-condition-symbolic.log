@@ -1,5 +1,5 @@
     31 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (2 iterations).
+     2 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Jump Optimization (4 iterations).
      1 instructions eliminated by Data Flow Optimization (4 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).

@@ -6,12 +6,11 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicLi
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.profile.GenerationGoal;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.IF;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
@@ -79,41 +78,42 @@ class IfExpressionOptimizer extends BaseOptimizer {
         }
     }
 
-    private record BranchContent(@Nullable LogicVariable result,
-                                 @Nullable LogicValue value,
-                                 List<SelectInstruction> selects) {
+    private record BranchContent(Map<LogicVariable, LogicValue> assignments,
+                                 List<SelectInstruction> selects,
+                                 List<LogicResultInstruction> operations) {
         boolean isEmpty() {
-            return result == null;
-        }
-
-        LogicValue getValue(BranchContent other) {
-            return value == null ? requireNonNull(other.result) : value;
+            return assignments().isEmpty() && selects().isEmpty();
         }
     }
 
     private @Nullable BranchContent analyzeBranchContent(LogicList branch) {
-        LogicVariable result = null;
-        LogicValue value = null;
-        List<SelectInstruction> generate = new ArrayList<>();
-        SetInstruction set = null;
+        Map<LogicVariable, LogicValue> assignments = new HashMap<>();
+        List<LogicResultInstruction> operations = new ArrayList<>();
+        List<SelectInstruction> selects = new ArrayList<>();
 
         for (LogicInstruction ix : branch) {
             if (ix.isReal()) {
-                // Set must be the only instruction in the branch
-                if (set != null) return null;
-
                 switch (ix) {
                     case SelectInstruction s -> {
-                        generate.add(s);
+                        selects.add(s);
                     }
                     case SetInstruction s -> {
-                        // Set must be the only instruction in the branch
-                        if (generate.isEmpty()) {
-                            result = s.getResult();
-                            value = s.getValue();
-                            set = s;
-                        } else if (s.getValue().isTemporaryVariable() && generate.getLast().getResult().equals(s.getValue())) {
-                            generate.set(generate.size() - 1, generate.getLast().withResult(s.getResult()));
+                        if (!selects.isEmpty() && s.getValue().isTemporaryVariable() && selects.getLast().getResult().equals(s.getValue())) {
+                            // Handles the select-then-set construct also created by this optimization
+                            // Allows converting nested ifs into selects in consecutive runs
+                            selects.add(selects.removeLast().withResult(s.getResult()));
+                        } else {
+                            assignments.put(s.getResult(), s.getValue());
+                        }
+                    }
+                    case BaseResultInstruction s -> {
+                        if (s.isSelectOperation()) {
+                            operations.add(s);
+                        } else {
+                            LogicVariable result = s.getResult();
+                            LogicVariable temp = instructionProcessor.nextTemp();
+                            operations.add(s.withResult(temp));
+                            assignments.put(result, temp);
                         }
                     }
                     default -> {
@@ -124,15 +124,14 @@ class IfExpressionOptimizer extends BaseOptimizer {
         }
 
         // We need to modify the last select
-        if (!generate.isEmpty()) {
-            SelectInstruction lastSelect = generate.removeLast();
-            result = lastSelect.getResult();
+        if (!selects.isEmpty()) {
+            SelectInstruction lastSelect = selects.removeLast();
             LogicVariable temp = instructionProcessor.nextTemp();
-            value = temp;
-            generate.add(lastSelect.withResult(temp));
+            selects.add(lastSelect.withResult(temp));
+            assignments.put(lastSelect.getResult(), temp);
         }
 
-        return new BranchContent(result, value, generate);
+        return new BranchContent(assignments, selects, operations);
     }
 
     // Note: this optimization doesn't resolve negated strictEqual operation. There will be a separate optimization for that.
@@ -151,14 +150,27 @@ class IfExpressionOptimizer extends BaseOptimizer {
         BranchContent falseContent = analyzeBranchContent(falseBranch);
 
         // Branches aren't compatible with select optimization
-        if (trueContent == null || falseContent == null) return false;
+        // We can have at most one operation in the entire expression
+        if (trueContent == null || falseContent == null
+            || trueContent.operations.size() + falseContent.operations.size() > 1) return false;
 
-        LogicVariable result = trueContent.result != null ? trueContent.result : falseContent.result;
+        Set<LogicVariable> results = new LinkedHashSet<>(trueContent.assignments.keySet());
+        results.addAll(falseContent.assignments.keySet());
 
-        // Either the result is from a single branch only, or it must be the same
-        if (result == null || falseContent.result != null && !falseContent.result.equals(result)) return false;
+        int diff1 = results.size() - trueContent.assignments.size();
+        int diff2 = results.size() - falseContent.assignments.size();
 
-        List<SetInstruction> replaced = new ArrayList<>();
+        // The total jump overhead executing both alternatives
+        int jumpOverhead = trueContent.isEmpty() || falseContent.isEmpty() ? 2 : 3;
+
+        // Select overhead?
+        //noinspection SuspiciousMethodCalls
+        int selectOverhead = diff1 + diff2 +
+                (results.contains(jump.getX()) && results.contains(jump.getY()) ? 2 : 0) +
+                (trueContent.operations.isEmpty() && falseContent.operations.isEmpty() ? 0 : 2);
+
+        // Unless the goal is size, don't optimize expressions that have too high an overhead
+        if (ifExpression.getProfile().getGoal() == GenerationGoal.SIZE || selectOverhead >= jumpOverhead) return false;
 
         LogicList flowControl = contextInstructions(ifExpression.child(2));
         if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()
@@ -169,24 +181,21 @@ class IfExpressionOptimizer extends BaseOptimizer {
             JumpInstruction invertedJump = negateCompoundCondition(condition);
             if (invertedJump != null) {
                 instructions.removeLast();  // This is the op instruction
-                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, result,
+                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                         invertedJump.getCondition(), invertedJump.getX(), invertedJump.getY(),
-                        trueContent.getValue(falseContent),
-                        falseContent.getValue(trueContent));
+                        false);
             } else if (jump.getCondition().hasInverse()) {
                 // The compiler inverts the if condition because the jump leads to the false branch
                 // Here we invert it back, so true and false values remain the same
-                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, result,
+                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                         jump.getCondition().inverse(), jump.getX(), jump.getY(),
-                        trueContent.getValue(falseContent),
-                        falseContent.getValue(trueContent));
+                        false);
             } else {
                 // The compiler inverts the if condition because the jump leads to the false branch
                 // Here we cannot invert it back, so the true and false values are swapped
-                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, result,
+                replaceIfStatement(ifExpression, instructions, trueContent, falseContent, results,
                         jump.getCondition(), jump.getX(), jump.getY(),
-                        falseContent.getValue(trueContent),
-                        trueContent.getValue(falseContent));
+                        true);
             }
             return true;
         }
@@ -195,10 +204,33 @@ class IfExpressionOptimizer extends BaseOptimizer {
     }
 
     private void replaceIfStatement(AstContext ifExpression, LogicList instructions, BranchContent trueContent, BranchContent falseContent,
-            LogicVariable result, Condition condition, LogicValue x, LogicValue y, LogicValue valueIfTrue, LogicValue valueIfFalse) {
+            Set<LogicVariable> results, Condition condition, LogicValue x, LogicValue y, boolean swapValues) {
+        trueContent.operations.stream().map(LogicInstruction::setSelectOperation).forEach(instructions::addToContext);
         instructions.addToContext(trueContent.selects);
+        falseContent.operations.stream().map(LogicInstruction::setSelectOperation).forEach(instructions::addToContext);
         instructions.addToContext(falseContent.selects);
-        instructions.createSelect(result, condition, x, y, valueIfTrue, valueIfFalse);
+
+        // If the condition depends on one of the variables, that variable needs to be assigned last
+        LogicVariable resultX = x instanceof LogicVariable xx && results.remove(xx) ? xx : null;
+        LogicVariable resultY = y instanceof LogicVariable yy && results.remove(yy) ? yy : null;
+
+        ArrayList<LogicVariable> variables = new ArrayList<>(results);
+        if (resultX != null && resultY != null) {
+            LogicVariable t = instructionProcessor.nextTemp();
+            instructions.createSet(t, x);
+            x = t;
+        }
+        if (resultX != null) variables.add(resultX);
+        if (resultY != null) variables.add(resultY);
+
+        for (LogicVariable result : variables) {
+            LogicValue trueValue = trueContent.assignments.getOrDefault(result, result);
+            LogicValue falseValue = falseContent.assignments.getOrDefault(result, result);
+            instructions.createSelect(result, condition, x, y,
+                    swapValues ? falseValue : trueValue,
+                    swapValues ? trueValue : falseValue);
+        }
+
         insertInstructions(firstInstructionIndex(ifExpression), instructions);
         removeMatchingInstructions(ix -> ix.belongsTo(ifExpression));
     }

@@ -1,5 +1,5 @@
    222 instructions before optimizations.
-    16 instructions eliminated by Temp Variables Elimination (2 iterations).
+    16 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
     17 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
@@ -636,9 +636,9 @@ Modifications by Convert case at line 34:9 (segments: 1, padded low) (+136 instr
     27 print :block
     28 sensor *tmp5 :block @type
 -    * jump *label7 notEqual *tmp5 @message
-+   29 sensor *tmp52 *tmp5 @id
-+   30 jump *label40 greaterThanEq *tmp52 147
-+   31 multijump *label42 *tmp52 0 (m:*label41)
++   29 sensor *tmp54 *tmp5 @id
++   30 jump *label40 greaterThanEq *tmp54 147
++   31 multijump *label42 *tmp54 0 (m:*label41)
 +   32 multilabel *label42 (m:*label41)
 +   33 jump *label40 always
 +   34 multilabel *label43 (m:*label41)
@@ -1266,9 +1266,9 @@ getlink :block :n
 print "\nFound: "
 print :block
 sensor *tmp5 :block @type
-sensor *tmp52 *tmp5 @id
-jump *label40 greaterThanEq *tmp52 147
-multijump *label42 *tmp52 0
+sensor *tmp54 *tmp5 @id
+jump *label40 greaterThanEq *tmp54 147
+multijump *label42 *tmp54 0
 multilabel *label42
 jump *label40 always
 multilabel *label43

@@ -1,5 +1,5 @@
    182 instructions before optimizations.
-     5 instructions eliminated by Temp Variables Elimination (2 iterations).
+     7 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
     26 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Jump Normalization (5 iterations).
     15 instructions eliminated by Jump Optimization (5 iterations).
@@ -9,7 +9,7 @@
      6 instructions updated by Jump Threading.
      7 instructions eliminated by Unreachable Code Elimination (2 iterations).
      8 instructions eliminated by Print Merging.
-    79 instructions after optimizations.
+    77 instructions after optimizations.
 
 Final code before resolving virtual instructions:
 
@@ -87,23 +87,21 @@ Final code before resolving virtual instructions:
    59:  sensor *tmp45 @unit @controlled
    60:  jump *label31 notEqual *tmp45 0
    61:  ucontrol flag null 0 0 0 0
-   62:  set *tmp42 @unit
-   63:  print *tmp42
-   64:  print "\n"
+   62:  print @unit
+   63:  print "\n"
         label *label39
-   65:  ubind null
-   66:  jump *label42 notEqual @unit null
-   67:  print "nullNo unit of type null found."
-   68:  printflush null
-   69:  jump *label39 always 0 0
+   64:  ubind null
+   65:  jump *label42 notEqual @unit null
+   66:  print "nullNo unit of type null found."
+   67:  printflush null
+   68:  jump *label39 always 0 0
         label *label42
-   70:  sensor *tmp51 @unit @controlled
-   71:  jump *label44 equal *tmp51 0
-   72:  print "nullLooking for a free null..."
-   73:  printflush null
-   74:  jump *label39 always 0 0
+   69:  sensor *tmp51 @unit @controlled
+   70:  jump *label44 equal *tmp51 0
+   71:  print "nullLooking for a free null..."
+   72:  printflush null
+   73:  jump *label39 always 0 0
         label *label44
-   75:  ucontrol flag null 0 0 0 0
-   76:  set *tmp48 @unit
-   77:  print *tmp48
-   78:  print "\n"
+   74:  ucontrol flag null 0 0 0 0
+   75:  print @unit
+   76:  print "\n"

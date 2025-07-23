@@ -1,18 +1,18 @@
    296 instructions before optimizations.
-    38 instructions eliminated by Temp Variables Elimination (2 iterations).
+    40 instructions eliminated by Temp Variables Elimination (2 passes, 7 iterations).
     32 instructions eliminated by Dead Code Elimination (5 iterations).
-    15 instructions eliminated by Jump Optimization (4 iterations).
-    11 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     2 instructions eliminated by Expression Optimization (2 iterations).
-     8 instructions eliminated by If Expression Optimization (3 iterations).
-     1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
-     1 instructions added by Loop Optimization (2 iterations).
+    15 instructions eliminated by Jump Optimization (5 iterations).
+    11 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
+     2 instructions eliminated by Expression Optimization (3 iterations).
+    12 instructions eliminated by If Expression Optimization (4 iterations).
+     1 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+     1 instructions added by Loop Optimization (3 iterations).
      2 loops improved by Loop Optimization.
      2 instructions updated by Jump Threading.
     10 instructions eliminated by Print Merging.
-   180 instructions after optimizations.
+   174 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 810):
+Pass 1: speed optimization selection (cost limit 814):
   * Replicate loop condition at line 26:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-26 instructions):
@@ -723,23 +723,40 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
    228 drawflush display1
    229 op sub *tmp103 @time :start
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-8 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-12 instructions):
  
-   109 op sub *tmp49 21 :a
-   110 op lessThan *tmp50 *tmp49 :minimum
-   111 op land :showa *tmp48 *tmp50
+     1 set EXPECTED_BOOST 1.5
+     2 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
+     3 op idiv .EXPECTED_FLOW_STR .EXPECTED_FLOW 0.0002777777777777778
+-    * jump *label0 equal bank1 null
+-    * set .BAR_LENGTH 53
+-    * set .BAR_SPACE 74
+-    * jump *label1 always
+-    * label *label0
+-    * set .BAR_LENGTH 61
+-    * set .BAR_SPACE 88
+-    * label *label1
++    4 select .BAR_LENGTH notEqual bank1 null 53 61
++    5 select .BAR_SPACE notEqual bank1 null 74 88
+     6 set :lastRate null
+     7 set :icon null
+     8 set :flow_str null
+ 
+   103 op sub *tmp49 21 :a
+   104 op lessThan *tmp50 *tmp49 :minimum
+   105 op land :showa *tmp48 *tmp50
 -    * jump *label24 equal :showa false
 -    * set :icon @surge-alloy
 -    * label *label24
 -    * label *label25
-+  112 select :icon notEqual :showa false @surge-alloy :icon
-   113 op mod :column :index 2
-   114 op idiv :row :index 2
-   115 op mul *tmp55 :column .BAR_SPACE
++  106 select :icon notEqual :showa false @surge-alloy :icon
+   107 op mod :column :index 2
+   108 op idiv :row :index 2
+   109 op mul *tmp55 :column .BAR_SPACE
  
-   120 op sub :ym1 :y 1
-   121 draw color 0 0 80 255
-   122 draw rect :xm1 :ym1 .BAR_SPACE 16
+   114 op sub :ym1 :y 1
+   115 draw color 0 0 80 255
+   116 draw rect :xm1 :ym1 .BAR_SPACE 16
 -    * op greaterThan *tmp61 :minimum 16
 -    * op equal *tmp62 :showa 0
 -    * op land *tmp63 *tmp61 *tmp62
@@ -747,17 +764,17 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * set :icon @surge-smelter
 -    * label *label26
 -    * label *label27
-+  123 op greaterThan *tmp61 :minimum 16
-+  124 op equal *tmp62 :showa 0
-+  125 op land *tmp63 *tmp61 *tmp62
-+  126 select :icon notEqual *tmp63 false @surge-smelter :icon
-   127 draw color 255 255 255 255
-   128 jump *label28 equal :e false
-   129 jump *label30 lessThanEq :power 0
++  117 op greaterThan *tmp61 :minimum 16
++  118 op equal *tmp62 :showa 0
++  119 op land *tmp63 *tmp61 *tmp62
++  120 select :icon notEqual *tmp63 false @surge-smelter :icon
+   121 draw color 255 255 255 255
+   122 jump *label28 equal :e false
+   123 jump *label30 lessThanEq :power 0
  
-   177 set :minimum :a
-   178 jump *label35 always
-   179 label *label34
+   171 set :minimum :a
+   172 jump *label35 always
+   173 label *label34
 -    * op greaterThan *tmp86 :minimum 14
 -    * op greaterThanEq *tmp87 :boost EXPECTED_BOOST
 -    * op land *tmp88 *tmp86 *tmp87
@@ -767,183 +784,198 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * label *label36
 -    * set *tmp89 255
 -    * label *label37
-+  180 op greaterThan *tmp86 :minimum 14
-+  181 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
-+  182 op land *tmp88 *tmp86 *tmp87
-+  183 select *tmp89 notEqual *tmp88 false 0 255
-   184 set :red *tmp89
++  174 op greaterThan *tmp86 :minimum 14
++  175 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
++  176 op land *tmp88 *tmp86 *tmp87
++  177 select *tmp89 notEqual *tmp88 false 0 255
+   178 set :red *tmp89
 -    * jump *label38 lessThanEq :minimum 7
 -    * set *tmp91 255
 -    * jump *label39 always
 -    * label *label38
 -    * set *tmp91 0
 -    * label *label39
-+  185 select *tmp91 greaterThan :minimum 7 255 0
-   186 set :green *tmp91
-   187 set :blue 0
-   188 label *label35
++  179 select *tmp91 greaterThan :minimum 7 255 0
+   180 set :green *tmp91
+   181 set :blue 0
+   182 label *label35
 
 Modifications by Replicate loop condition at line 26:1 (+1 instructions):
  
-    16 label *label2
-    17 sensor *tmp7 switch1 @enabled
-    18 jump *label4 notEqual *tmp7 0
-+   19 label *label43
-    20 print "Surge Alloy Factory Monitor"
-    21 jump *label5 equal bank1 null
-    22 jump *label7 notEqual FROM_INDEX 0
+    10 label *label2
+    11 sensor *tmp7 switch1 @enabled
+    12 jump *label4 notEqual *tmp7 0
++   13 label *label43
+    14 print "Surge Alloy Factory Monitor"
+    15 jump *label5 equal bank1 null
+    16 jump *label7 notEqual FROM_INDEX 0
  
-   220 print "ms"
-   221 printflush message1
-   222 label *label3
+   214 print "ms"
+   215 printflush message1
+   216 label *label3
 -    * jump *label2 always
-+  223 sensor *tmp7 switch1 @enabled
-+  224 jump *label43 equal *tmp7 0
-   225 label *label4
-   226 end
++  217 sensor *tmp7 switch1 @enabled
++  218 jump *label43 equal *tmp7 0
+   219 label *label4
+   220 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
-    72 set :index FROM_INDEX
-    73 set :n 0
-    74 label *label11
+    66 set :index FROM_INDEX
+    67 set :n 0
+    68 label *label11
 -    * jump *label13 greaterThanEq :n @links
-+   75 jump *label13 greaterThanEq 0 @links
-    76 label *label42
-    77 getlink :smelter :n
-    78 sensor *tmp29 :smelter @type
++   69 jump *label13 greaterThanEq 0 @links
+    70 label *label42
+    71 getlink :smelter :n
+    72 sensor *tmp29 :smelter @type
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+Modifications by Iterated phase, Temp Variables Elimination, pass 2, iteration 1 (-2 instructions):
  
-    13 set :icon null
-    14 set :flow_str null
-    15 control enabled switch1 0
+   175 op greaterThan *tmp86 :minimum 14
+   176 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
+   177 op land *tmp88 *tmp86 *tmp87
+-    * select *tmp89 notEqual *tmp88 false 0 255
+-    * set :red *tmp89
+-    * select *tmp91 greaterThan :minimum 7 255 0
+-    * set :green *tmp91
++  178 select :red notEqual *tmp88 false 0 255
++  179 select :green greaterThan :minimum 7 255 0
+   180 set :blue 0
+   181 label *label35
+   182 label *label33
+
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+ 
+     7 set :icon null
+     8 set :flow_str null
+     9 control enabled switch1 0
 -    * label *label2
-    16 sensor *tmp7 switch1 @enabled
-    17 jump *label4 notEqual *tmp7 0
-    18 label *label43
+    10 sensor *tmp7 switch1 @enabled
+    11 jump *label4 notEqual *tmp7 0
+    12 label *label43
  
-    53 draw rect 0 0 156 176
-    54 label *label10
-    55 label *label7
+    47 draw rect 0 0 156 176
+    48 label *label10
+    49 label *label7
 -    * label *label8
-    56 print "\n"
-    57 print "Nominal production: "
-    58 print .EXPECTED_FLOW_STR
+    50 print "\n"
+    51 print "Nominal production: "
+    52 print .EXPECTED_FLOW_STR
  
-    64 print "/"
-    65 print "min"
-    66 label *label5
+    58 print "/"
+    59 print "min"
+    60 label *label5
 -    * label *label6
-    67 set :start @time
-    68 draw stroke 2
-    69 set :index FROM_INDEX
-    70 set :n 0
+    61 set :start @time
+    62 draw stroke 2
+    63 set :index FROM_INDEX
+    64 set :n 0
 -    * label *label11
-    71 jump *label13 greaterThanEq 0 @links
-    72 label *label42
-    73 getlink :smelter :n
+    65 jump *label13 greaterThanEq 0 @links
+    66 label *label42
+    67 getlink :smelter :n
  
-    86 set :minimum :l
-    87 set :icon @lead
-    88 label *label16
+    80 set :minimum :l
+    81 set :icon @lead
+    82 label *label16
 -    * label *label17
-    89 jump *label18 greaterThanEq :s :minimum
-    90 set :minimum :s
-    91 set :icon @silicon
-    92 label *label18
+    83 jump *label18 greaterThanEq :s :minimum
+    84 set :minimum :s
+    85 set :icon @silicon
+    86 label *label18
 -    * label *label19
-    93 jump *label20 greaterThanEq :c :minimum
-    94 set :minimum :c
-    95 set :icon @copper
-    96 label *label20
+    87 jump *label20 greaterThanEq :c :minimum
+    88 set :minimum :c
+    89 set :icon @copper
+    90 label *label20
 -    * label *label21
-    97 jump *label22 greaterThanEq :t :minimum
-    98 set :minimum :t
-    99 set :icon @titanium
-   100 label *label22
+    91 jump *label22 greaterThanEq :t :minimum
+    92 set :minimum :t
+    93 set :icon @titanium
+    94 label *label22
 -    * label *label23
-   101 op greaterThan *tmp48 :a 5
-   102 op sub *tmp49 21 :a
-   103 op lessThan *tmp50 *tmp49 :minimum
+    95 op greaterThan *tmp48 :a 5
+    96 op sub *tmp49 21 :a
+    97 op lessThan *tmp50 *tmp49 :minimum
  
-   186 op max :blue 192 :blue
-   187 set :boost EXPECTED_BOOST
-   188 label *label40
+   178 op max :blue 192 :blue
+   179 set :boost EXPECTED_BOOST
+   180 label *label40
 -    * label *label41
-   189 op mul *tmp97 .BAR_LENGTH :boost
-   190 op idiv :length *tmp97 EXPECTED_BOOST
-   191 draw color :red :green :blue 128
+   181 op mul *tmp97 .BAR_LENGTH :boost
+   182 op idiv :length *tmp97 EXPECTED_BOOST
+   183 draw color :red :green :blue 128
  
-   196 draw lineRect :x :y :length 14
-   197 op add :index :index 1
-   198 label *label14
+   188 draw lineRect :x :y :length 14
+   189 op add :index :index 1
+   190 label *label14
 -    * label *label15
 -    * label *label12
-   199 op add :n :n 1
-   200 jump *label42 lessThan :n @links
-   201 label *label13
+   191 op add :n :n 1
+   192 jump *label42 lessThan :n @links
+   193 label *label13
  
-   208 print " "
-   209 print "ms"
-   210 printflush message1
+   200 print " "
+   201 print "ms"
+   202 printflush message1
 -    * label *label3
-   211 sensor *tmp7 switch1 @enabled
-   212 jump *label43 equal *tmp7 0
-   213 label *label4
+   203 sensor *tmp7 switch1 @enabled
+   204 jump *label43 equal *tmp7 0
+   205 label *label4
 
-Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
+Modifications by Jumps phase, Jump Threading, pass 4, iteration 1:
 +    0 label __start__
      1 set FROM_INDEX 0
      2 set EXPECTED_BOOST 1.5
      3 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
  
-    15 set :flow_str null
-    16 control enabled switch1 0
-    17 sensor *tmp7 switch1 @enabled
+     9 set :flow_str null
+    10 control enabled switch1 0
+    11 sensor *tmp7 switch1 @enabled
 -    * jump *label4 notEqual *tmp7 0
-+   18 jump __start__ notEqual *tmp7 0
-    19 label *label43
-    20 print "Surge Alloy Factory Monitor"
-    21 jump *label5 equal bank1 null
++   12 jump __start__ notEqual *tmp7 0
+    13 label *label43
+    14 print "Surge Alloy Factory Monitor"
+    15 jump *label5 equal bank1 null
  
-   124 op add *tmp68 :x 7
-   125 op add *tmp69 :y 7
-   126 draw image *tmp68 *tmp69 :icon 16 0
+   118 op add *tmp68 :x 7
+   119 op add *tmp69 :y 7
+   120 draw image *tmp68 *tmp69 :icon 16 0
 -    * jump *label31 always
-+  127 jump *label29 always
-   128 label *label30
-   129 op add :x12 :x 12
-   130 op add :y3 :y 3
++  121 jump *label29 always
+   122 label *label30
+   123 op add :x12 :x 12
+   124 op add :y3 :y 3
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1:
  
-   141 op add *tmp75 :x 4
-   142 op add *tmp76 :y 6
-   143 draw rect *tmp75 *tmp76 2 2
+   135 op add *tmp75 :x 4
+   136 op add *tmp76 :y 6
+   137 draw rect *tmp75 *tmp76 2 2
 -    * label *label31
-   144 jump *label29 always
-   145 label *label28
-   146 op add :x2 :x 2
+   138 jump *label29 always
+   139 label *label28
+   140 op add :x2 :x 2
  
-   210 printflush message1
-   211 sensor *tmp7 switch1 @enabled
-   212 jump *label43 equal *tmp7 0
+   202 printflush message1
+   203 sensor *tmp7 switch1 @enabled
+   204 jump *label43 equal *tmp7 0
 -    * label *label4
-   213 end
+   205 end
 
-Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Jumps phase, Single Step Elimination, pass 4, iteration 1 (-1 instructions):
  
-   210 printflush message1
-   211 sensor *tmp7 switch1 @enabled
-   212 jump *label43 equal *tmp7 0
+   202 printflush message1
+   203 sensor *tmp7 switch1 @enabled
+   204 jump *label43 equal *tmp7 0
 -    * end
 
 Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
  
-    54 draw rect 0 0 156 176
-    55 label *label10
-    56 label *label7
+    48 draw rect 0 0 156 176
+    49 label *label10
+    50 label *label7
 -    * print "\n"
 -    * print "Nominal production: "
 -    * print .EXPECTED_FLOW_STR
@@ -954,26 +986,26 @@ Modifications by Final phase, Print Merging, iteration 1 (-10 instructions):
 -    * print :flow_str
 -    * print "/"
 -    * print "min"
-+   57 print "\nNominal production: {0}/min\nActual production: {0}/min"
-+   58 format .EXPECTED_FLOW_STR
-+   59 format :flow_str
-    60 label *label5
-    61 set :start @time
-    62 draw stroke 2
++   51 print "\nNominal production: {0}/min\nActual production: {0}/min"
++   52 format .EXPECTED_FLOW_STR
++   53 format :flow_str
+    54 label *label5
+    55 set :start @time
+    56 draw stroke 2
  
-   195 drawflush display1
-   196 op sub *tmp103 @time :start
-   197 op floor *tmp104 *tmp103
+   187 drawflush display1
+   188 op sub *tmp103 @time :start
+   189 op floor *tmp104 *tmp103
 -    * print "\n"
 -    * print "Update time: "
 -    * print *tmp104
 -    * print " "
 -    * print "ms"
-+  198 print "\nUpdate time: {0} ms"
-+  199 format *tmp104
-   200 printflush message1
-   201 sensor *tmp7 switch1 @enabled
-   202 jump *label43 equal *tmp7 0
++  190 print "\nUpdate time: {0} ms"
++  191 format *tmp104
+   192 printflush message1
+   193 sensor *tmp7 switch1 @enabled
+   194 jump *label43 equal *tmp7 0
 
 Final code before resolving virtual instructions:
 
@@ -982,14 +1014,8 @@ set FROM_INDEX 0
 set EXPECTED_BOOST 1.5
 op div .EXPECTED_FLOW EXPECTED_BOOST 4.6875
 op idiv .EXPECTED_FLOW_STR .EXPECTED_FLOW 0.0002777777777777778
-jump *label0 equal bank1 null
-set .BAR_LENGTH 53
-set .BAR_SPACE 74
-jump *label1 always
-label *label0
-set .BAR_LENGTH 61
-set .BAR_SPACE 88
-label *label1
+select .BAR_LENGTH notEqual bank1 null 53 61
+select .BAR_SPACE notEqual bank1 null 74 88
 set :lastRate null
 set :icon null
 set :flow_str null
@@ -1146,10 +1172,8 @@ label *label34
 op greaterThan *tmp86 :minimum 14
 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
 op land *tmp88 *tmp86 *tmp87
-select *tmp89 notEqual *tmp88 false 0 255
-set :red *tmp89
-select *tmp91 greaterThan :minimum 7 255 0
-set :green *tmp91
+select :red notEqual *tmp88 false 0 255
+select :green greaterThan :minimum 7 255 0
 set :blue 0
 label *label35
 label *label33

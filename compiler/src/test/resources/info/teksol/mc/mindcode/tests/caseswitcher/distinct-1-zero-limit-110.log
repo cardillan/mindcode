@@ -1,5 +1,5 @@
    121 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (2 iterations).
+     1 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      3 instructions eliminated by Data Flow Optimization (6 iterations).
@@ -476,8 +476,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-47 instr
      4 lookup block :block :i
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
-+    5 sensor *tmp6 :block @id
-+    6 multijump *tmp6 0 0 (m:*label60)
++    5 sensor *tmp8 :block @id
++    6 multijump *tmp8 0 0 (m:*label60)
      7 label *label6
      8 set *tmp2 0x00000001
      9 jump *label4 always
@@ -652,7 +652,7 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (-47 instr
    130 label *label53
 +  131 multilabel *label61 (m:*label60)
 +  132 label *label59
-+  133 jump *label6 strictEqual *tmp6 null
++  133 jump *label6 strictEqual *tmp8 null
 +  134 multilabel *label62 (m:*label60)
 +  135 label *label58
    136 set *tmp2 0
@@ -665,7 +665,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label0
      2 label *label57
      3 lookup block :block :i
-     4 sensor *tmp6 :block @id
+     4 sensor *tmp8 :block @id
  
      6 label *label6
      7 set *tmp2 0x00000001
@@ -793,7 +793,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label53
     81 multilabel *label61 (m:*label60)
 -    * label *label59
-    82 jump *label6 strictEqual *tmp6 null
+    82 jump *label6 strictEqual *tmp8 null
     83 multilabel *label62 (m:*label60)
 -    * label *label58
     84 set *tmp2 0
@@ -819,8 +819,8 @@ set :total 0
 set :i -1
 label *label57
 lookup block :block :i
-sensor *tmp6 :block @id
-multijump *tmp6 0 0
+sensor *tmp8 :block @id
+multijump *tmp8 0 0
 label *label6
 set *tmp2 0x00000001
 jump *label4 always
@@ -897,7 +897,7 @@ multilabel *label86
 set *tmp2 0x02000000
 jump *label4 always
 multilabel *label61
-jump *label6 strictEqual *tmp6 null
+jump *label6 strictEqual *tmp8 null
 multilabel *label62
 set *tmp2 0
 label *label4

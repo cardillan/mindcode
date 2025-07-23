@@ -41,7 +41,7 @@ public class BaseResultInstruction extends BaseInstruction implements LogicResul
     }
 
     @Override
-    public LogicResultInstruction withResult(LogicVariable result) {
+    public BaseResultInstruction withResult(LogicVariable result) {
         List<LogicArgument> args = new ArrayList<>(getArgs());
         args.set(resultIndex, result);
         assert getArgumentTypes() != null;

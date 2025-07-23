@@ -1,5 +1,5 @@
    117 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (2 iterations).
+     1 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      3 instructions eliminated by Data Flow Optimization (6 iterations).
@@ -465,8 +465,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+214 inst
      5 # "Function: def identifyBlock(in block)"
 -    * jump *label6 equal :block @copper-wall
 -    * jump *label5 always
-+    6 sensor *tmp6 :block @id
-+    7 multijump *label58 *tmp6 0 (m:*label57)
++    6 sensor *tmp8 :block @id
++    7 multijump *label58 *tmp8 0 (m:*label57)
 +    8 multilabel *label58 (m:*label57)
 +    9 jump *label56 always
 +   10 multilabel *label59 (m:*label57)
@@ -1263,8 +1263,8 @@ set :i -1
 label *label55
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp6 :block @id
-multijump *label58 *tmp6 0
+sensor *tmp8 :block @id
+multijump *label58 *tmp8 0
 multilabel *label58
 jump *label56 always
 multilabel *label59

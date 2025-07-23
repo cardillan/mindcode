@@ -37,9 +37,11 @@ class TempVariableEliminator extends BaseOptimizer {
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
         Set<LogicArgument> inputTempVariables = gatherInputTempVariables();
-        try (LogicIterator itCurr = createIterator()) {
-            while (itCurr.hasNext()) {
-                replaceUnusedOutputs(inputTempVariables, itCurr);
+        if (phase == OptimizationPhase.FINAL) {
+            try (LogicIterator itCurr = createIterator()) {
+                while (itCurr.hasNext()) {
+                    replaceUnusedOutputs(inputTempVariables, itCurr);
+                }
             }
         }
 

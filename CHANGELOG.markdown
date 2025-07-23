@@ -14,10 +14,12 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Fixed the Data Flow Optimization not optimizing global variables ([#280](https://github.com/cardillan/mindcode/issues/280)).
 * Fixed Loop Hoisting processing instructions that change variables already read by the loop ([#282](https://github.com/cardillan/mindcode/issues/282)). Loop Hoisting can process global variables again.
+* Fixed a bug in the `bubblesort` function in the `arrays` system library.
   
 ### Changed
 
 * Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to redirect jumps to a function call directly to the function. The optimization may currently only take place when `symbolic-labels` is set to `false`.
+* Improved the `select` optimization in the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization).
 
 ## 3.8.0-beta.2 - 2025-07-21
 

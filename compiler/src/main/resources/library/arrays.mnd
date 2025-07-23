@@ -47,7 +47,7 @@ end;
  */
 inline void bubblesort(ref array, in maxToMin)
     do
-        var flag = true;
+        var flag = false;
 
         // Increasing
         var a = array[0];
@@ -57,13 +57,13 @@ inline void bubblesort(ref array, in maxToMin)
             if condition then
                 array[i - 1] = b;
                 array[i] = a;
-                flag = false;
+                flag = true;
             else
                 a = b;
             end;
         end;
 
-        if flag then return; end;
+        if !flag then return; end;
 
         a = array[length(array) - 1];
         for var i in 0 ... length(array) - 1 descending do
@@ -77,7 +77,7 @@ inline void bubblesort(ref array, in maxToMin)
                 a = b;
             end;
         end;
-    while true;
+    while flag;
 end;
 
 /**
@@ -90,7 +90,7 @@ end;
  */
 inline void bubblesort(ref sortBy, ref values, in maxToMin)
     do
-        var flag = true;
+        var flag = false;
 
         // Increasing
         var a = sortBy[0];
@@ -103,13 +103,13 @@ inline void bubblesort(ref sortBy, ref values, in maxToMin)
                 var v = values[i - 1];
                 values[i - 1] = values[i];
                 values[i] = v;
-                flag = false;
+                flag = true;
             else
                 a = b;
             end;
         end;
 
-        if flag then return; end;
+        if !flag then return; end;
 
         a = sortBy[length(sortBy) - 1];
         for var i in 0 ... length(sortBy) - 1 descending do
@@ -126,5 +126,5 @@ inline void bubblesort(ref sortBy, ref values, in maxToMin)
                 a = b;
             end;
         end;
-    while true;
+    while flag;
 end;

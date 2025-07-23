@@ -1,5 +1,5 @@
   1446 instructions before optimizations.
-    43 instructions eliminated by Temp Variables Elimination (2 iterations).
+    43 instructions eliminated by Temp Variables Elimination (2 passes, 6 iterations).
    259 instructions eliminated by Dead Code Elimination (2 passes, 9 iterations).
      4 instructions eliminated by Jump Normalization (2 passes, 6 iterations).
     69 instructions eliminated by Jump Optimization (6 iterations).
@@ -1857,7 +1857,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-43 ins
   1500 jump *label334 equal *tmp521 false
 -    * ulocate building core false @copper *tmp524 *tmp525 *tmp526 *tmp523
 -    * set .CORE *tmp523
-+ 1501 ulocate building core false @copper 0 0 0 .CORE
++ 1501 ulocate building core false @copper *tmp524 *tmp525 *tmp526 .CORE
   1502 jump *label335 always
   1503 label *label334
   1504 label *label335
@@ -3072,7 +3072,7 @@ Modifications by Iterated phase, Single Step Elimination, pass 1, iteration 1 (-
  
   1348 op or *tmp521 *tmp518 *tmp520
   1349 jump *label334 equal *tmp521 false
-  1350 ulocate building core false @copper 0 0 0 .CORE
+  1350 ulocate building core false @copper *tmp524 *tmp525 *tmp526 .CORE
 -    * jump *label335 always
   1351 label *label334
   1352 label *label335
@@ -6332,7 +6332,7 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
   1268 label *label149
  
   1278 jump *label334 equal *tmp521 false
-  1279 ulocate building core false @copper 0 0 0 .CORE
+  1279 ulocate building core false @copper *tmp524 *tmp525 *tmp526 .CORE
   1280 label *label334
 -    * label *label335
   1281 set :locateCore*retval .CORE
@@ -7177,6 +7177,17 @@ Modifications by Jumps phase, Jump Straightening, pass 5, iteration 1 (-1 instru
     30 label *label1
     31 sensor .CORE_X .CORE @x
     32 sensor .CORE_Y .CORE @y
+
+Modifications by Final phase, Temp Variables Elimination, iteration 1:
+ 
+  1189 op equal *tmp520 *tmp519 @this
+  1190 op or *tmp521 *tmp518 *tmp520
+  1191 jump *label334 equal *tmp521 false
+-    * ulocate building core false @copper *tmp524 *tmp525 *tmp526 .CORE
++ 1192 ulocate building core false @copper 0 0 0 .CORE
+  1193 label *label334
+  1194 set :locateCore*retval .CORE
+  1195 return :locateCore*retaddr
 
 Modifications by Final phase, Print Merging, iteration 1 (-75 instructions):
  

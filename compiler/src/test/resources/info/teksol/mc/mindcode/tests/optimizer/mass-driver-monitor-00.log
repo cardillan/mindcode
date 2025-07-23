@@ -1,5 +1,5 @@
    318 instructions before optimizations.
-    39 instructions eliminated by Temp Variables Elimination (2 iterations).
+    39 instructions eliminated by Temp Variables Elimination (6 iterations).
      1 instructions eliminated by Case Expression Optimization.
     25 instructions eliminated by Dead Code Elimination (6 iterations).
     22 instructions eliminated by Jump Optimization (5 iterations).
@@ -1275,9 +1275,9 @@ Modifications by Convert case at line 17:9 (segments: 1, padded low) (-3 instruc
     19 print "\n"
     20 sensor *tmp6 :block @type
 -    * jump *label7 notEqual *tmp6 @message
-+   21 sensor *tmp118 *tmp6 @id
-+   22 jump *label63 greaterThanEq *tmp118 146
-+   23 multijump *tmp118 0 0 (m:*label64)
++   21 sensor *tmp149 *tmp6 @id
++   22 jump *label63 greaterThanEq *tmp149 146
++   23 multijump *tmp149 0 0 (m:*label64)
 +   24 multilabel *label66 (m:*label64)
     25 label *label8
     26 set .MESSAGE :block
@@ -1368,8 +1368,8 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
     12 label *label59
     13 op sub :n :n 1
  
-    20 jump *label63 greaterThanEq *tmp118 146
-    21 multijump *tmp118 0 0 (m:*label64)
+    20 jump *label63 greaterThanEq *tmp149 146
+    21 multijump *tmp149 0 0 (m:*label64)
     22 multilabel *label66 (m:*label64)
 -    * label *label8
     23 set .MESSAGE :block
@@ -1549,8 +1549,8 @@ Modifications by Final phase, Print Merging, iteration 1 (-14 instructions):
 +   15 print "Found: {0}\n"
 +   16 format :block
     17 sensor *tmp6 :block @type
-    18 sensor *tmp118 *tmp6 @id
-    19 jump *label63 greaterThanEq *tmp118 146
+    18 sensor *tmp149 *tmp6 @id
+    19 jump *label63 greaterThanEq *tmp149 146
  
     34 label *label6
     35 jump *label59 greaterThan :n 0
@@ -1617,9 +1617,9 @@ getlink :block :n
 print "Found: {0}\n"
 format :block
 sensor *tmp6 :block @type
-sensor *tmp118 *tmp6 @id
-jump *label63 greaterThanEq *tmp118 146
-multijump *tmp118 0 0
+sensor *tmp149 *tmp6 @id
+jump *label63 greaterThanEq *tmp149 146
+multijump *tmp149 0 0
 multilabel *label66
 set .MESSAGE :block
 jump *label6 always

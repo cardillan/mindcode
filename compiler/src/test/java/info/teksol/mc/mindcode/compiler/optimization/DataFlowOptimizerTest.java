@@ -217,8 +217,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             sort = case n when 1 then sorter1; end;
                             print(sort);
                             """,
-                    createInstruction(SET, var(0), "sorter1"),
-                    createInstruction(PRINT, var(0))
+                    createInstruction(PRINT, "sorter1")
             );
         }
     }
@@ -281,9 +280,8 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             """,
                     createInstruction(LABEL, "__start__"),
-                    createInstruction(JUMP, "__start__", "notEqual", "UNIT_S1", "null"),
-                    createInstruction(SET, var(2), "@unit"),
-                    createInstruction(SET, "UNIT_S1", var(2))
+                    createInstruction(JUMP, "__start__", "notEqual", ".UNIT_S1", "null"),
+                    createInstruction(SET, ".UNIT_S1", "@unit")
             );
         }
 
@@ -1094,15 +1092,11 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                             end;
                             print(a, b);
                             """,
-                    createInstruction(SENSOR, var(0), "switch1", "@enabled"),
-                    createInstruction(JUMP, var(1000), "equal", var(0), "false"),
-                    createInstruction(SET, "a", "1"),
-                    createInstruction(JUMP, var(1001), "always"),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, "b", "1"),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(PRINT, "a"),
-                    createInstruction(PRINT, "b")
+                    createInstruction(SENSOR, tmp(0), "switch1", "@enabled"),
+                    createInstruction(SELECT, ":a", "notEqual", tmp(0), "false", "1", ":a"),
+                    createInstruction(SELECT, ":b", "notEqual", tmp(0), "false", ":b", "1"),
+                    createInstruction(PRINT, ":a"),
+                    createInstruction(PRINT, ":b")
             );
         }
 

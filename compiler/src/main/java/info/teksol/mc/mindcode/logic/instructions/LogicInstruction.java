@@ -157,4 +157,13 @@ public interface LogicInstruction extends MlogInstruction {
     default LogicInstruction setCallReturn(LogicLabel callReturn) {
         return setInfo(InstructionInfo.CALL_RETURN, callReturn);
     }
+
+    default boolean isSelectOperation() {
+        return (boolean) getInfo(InstructionInfo.SELECT_OPERATION);
+    }
+
+    default LogicInstruction setSelectOperation() {
+        return setInfo(InstructionInfo.SELECT_OPERATION, true);
+    }
+
 }

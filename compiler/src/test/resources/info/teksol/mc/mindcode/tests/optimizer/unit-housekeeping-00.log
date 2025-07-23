@@ -1,5 +1,5 @@
    173 instructions before optimizations.
-    11 instructions eliminated by Temp Variables Elimination (2 iterations).
+    11 instructions eliminated by Temp Variables Elimination (2 passes, 5 iterations).
      2 instructions eliminated by Case Expression Optimization.
     30 instructions eliminated by Dead Code Elimination (7 iterations).
      1 instructions eliminated by Jump Normalization (4 iterations).
@@ -319,7 +319,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-11 ins
    142 ucontrol flag 1
 -    * ulocate building core false @copper .CORE_X .CORE_Y *tmp50 *tmp49
 -    * set .CORE *tmp49
-+  143 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
++  143 ulocate building core false @copper .CORE_X .CORE_Y *tmp50 .CORE
    144 ucontrol within .CORE_X .CORE_Y 8 *tmp51
    145 jump *label39 equal *tmp51 false
    146 ucontrol itemDrop .CORE :items
@@ -441,7 +441,7 @@ Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-6 inst
 -    * jump *label37 equal *tmp47 false
 +  128 jump *label37 lessThanEq :items 0
    129 ucontrol flag 1
-   130 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
+   130 ulocate building core false @copper .CORE_X .CORE_Y *tmp50 .CORE
    131 ucontrol within .CORE_X .CORE_Y 8 *tmp51
  
    137 label *label40
@@ -711,6 +711,17 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 
 -    * label *label15
    125 jump *label0 always
 -    * end
+
+Modifications by Final phase, Temp Variables Elimination, iteration 1:
+ 
+   101 jump *label35 equal *tmp45 false
+   102 jump *label37 lessThanEq :items 0
+   103 ucontrol flag 1
+-    * ulocate building core false @copper .CORE_X .CORE_Y *tmp50 .CORE
++  104 ulocate building core false @copper .CORE_X .CORE_Y 0 .CORE
+   105 ucontrol within .CORE_X .CORE_Y 8 *tmp51
+   106 jump *label39 equal *tmp51 false
+   107 ucontrol itemDrop .CORE :items
 
 Modifications by Final phase, Print Merging, iteration 1 (-2 instructions):
  

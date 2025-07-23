@@ -1,5 +1,5 @@
     50 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (2 iterations).
+     2 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Data Flow Optimization (5 iterations).
@@ -242,8 +242,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+237 inst
 -    * jump *label6 equal :block @carbide-wall
 -    * jump *label6 equal :block @carbide-wall-large
 -    * jump *label5 always
-+    6 sensor *tmp9 :block @id
-+    7 multijump *label12 *tmp9 0 (m:*label11)
++    6 sensor *tmp13 :block @id
++    7 multijump *label12 *tmp13 0 (m:*label11)
 +    8 multilabel *label12 (m:*label11)
 +    9 jump *label10 always
 +   10 multilabel *label13 (m:*label11)
@@ -811,8 +811,8 @@ set :i -1
 label *label9
 lookup block :block :i
 # "Function: def isWall(in block)"
-sensor *tmp9 :block @id
-multijump *label12 *tmp9 0
+sensor *tmp13 :block @id
+multijump *label12 *tmp13 0
 multilabel *label12
 jump *label10 always
 multilabel *label13

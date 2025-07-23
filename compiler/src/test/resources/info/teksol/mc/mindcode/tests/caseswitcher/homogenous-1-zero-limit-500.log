@@ -1,5 +1,5 @@
     51 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (2 iterations).
+     2 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Data Flow Optimization (5 iterations).
@@ -243,11 +243,11 @@ Modifications by Convert case at line 11:5 (segments: 1, padded high) (-23 instr
 -    * jump *label6 equal :block @carbide-wall
 -    * jump *label6 equal :block @carbide-wall-large
 -    * jump *label5 always
-+    5 sensor *tmp9 :block @id
-+    6 multijump *tmp9 0 0 (m:*label12)
++    5 sensor *tmp13 :block @id
++    6 multijump *tmp13 0 0 (m:*label12)
 +    7 multilabel *label13 (m:*label12)
 +    8 label *label11
-+    9 jump *label10 strictEqual *tmp9 null
++    9 jump *label10 strictEqual *tmp13 null
 +   10 multilabel *label15 (m:*label12)
     11 label *label6
     12 set *tmp2 true
@@ -265,11 +265,11 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
 -    * label *label0
      2 label *label9
      3 lookup block :block :i
-     4 sensor *tmp9 :block @id
-     5 multijump *tmp9 0 0 (m:*label12)
+     4 sensor *tmp13 :block @id
+     5 multijump *tmp13 0 0 (m:*label12)
      6 multilabel *label13 (m:*label12)
 -    * label *label11
-     7 jump *label10 strictEqual *tmp9 null
+     7 jump *label10 strictEqual *tmp13 null
      8 multilabel *label15 (m:*label12)
 -    * label *label6
      9 set *tmp2 true
@@ -301,10 +301,10 @@ set :hash 0
 set :i -1
 label *label9
 lookup block :block :i
-sensor *tmp9 :block @id
-multijump *tmp9 0 0
+sensor *tmp13 :block @id
+multijump *tmp13 0 0
 multilabel *label13
-jump *label10 strictEqual *tmp9 null
+jump *label10 strictEqual *tmp13 null
 multilabel *label15
 set *tmp2 true
 jump *label4 always

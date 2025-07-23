@@ -1,5 +1,5 @@
    117 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (2 iterations).
+     1 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      3 instructions eliminated by Data Flow Optimization (6 iterations).
@@ -465,10 +465,10 @@ Modifications by Convert case at line 11:5 (segments: 4, padded low) (+24 instru
      5 # "Function: def identifyBlock(in block)"
 -    * jump *label6 equal :block @copper-wall
 -    * jump *label5 always
-+    6 sensor *tmp6 :block @id
-+    7 jump *label57 greaterThanEq *tmp6 203
-+    8 jump *label56 greaterThanEq *tmp6 35
-+    9 multijump *label59 *tmp6 0 (m:*label58)
++    6 sensor *tmp8 :block @id
++    7 jump *label57 greaterThanEq *tmp8 203
++    8 jump *label56 greaterThanEq *tmp8 35
++    9 multijump *label59 *tmp8 0 (m:*label58)
 +   10 multilabel *label59 (m:*label58)
 +   11 jump *label56 always
 +   12 multilabel *label60 (m:*label58)
@@ -542,9 +542,9 @@ Modifications by Convert case at line 11:5 (segments: 4, padded low) (+24 instru
 +   80 set *tmp2 0x00020000
 +   81 jump *label4 always
 +   82 label *label57
-+   83 jump *label56 greaterThanEq *tmp6 235
-+   84 jump *label38 lessThan *tmp6 204
-+   85 multijump *label95 *tmp6 204 (m:*label94)
++   83 jump *label56 greaterThanEq *tmp8 235
++   84 jump *label38 lessThan *tmp8 204
++   85 multijump *label95 *tmp8 204 (m:*label94)
 +   86 multilabel *label95 (m:*label94)
 +   87 jump *label40 always
 +   88 multilabel *label96 (m:*label94)
@@ -893,10 +893,10 @@ set :i -1
 label *label55
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp6 :block @id
-jump *label57 greaterThanEq *tmp6 203
-jump *label56 greaterThanEq *tmp6 35
-multijump *label59 *tmp6 0
+sensor *tmp8 :block @id
+jump *label57 greaterThanEq *tmp8 203
+jump *label56 greaterThanEq *tmp8 35
+multijump *label59 *tmp8 0
 multilabel *label59
 jump *label56 always
 multilabel *label60
@@ -969,9 +969,9 @@ multilabel *label93
 set *tmp2 0x00020000
 jump *label4 always
 label *label57
-jump *label56 greaterThanEq *tmp6 235
-jump *label38 lessThan *tmp6 204
-multijump *label95 *tmp6 204
+jump *label56 greaterThanEq *tmp8 235
+jump *label38 lessThan *tmp8 204
+multijump *label95 *tmp8 204
 multilabel *label95
 jump *label40 always
 multilabel *label96

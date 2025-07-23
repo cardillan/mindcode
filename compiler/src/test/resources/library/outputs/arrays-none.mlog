@@ -5,8 +5,8 @@ jump 11 greaterThanEq :fill:i 5
 set *tmp0 :fill:i
 set .a*wret 9
 set .a*w :fill:value
-op mul *tmp83 *tmp0 2
-op add @counter 300 *tmp83
+op mul *tmp85 *tmp0 2
+op add @counter 302 *tmp85
 op add :fill:i :fill:i 1
 jump 3 always 0 0
 assertflush
@@ -22,14 +22,14 @@ set *tmp2 :i
 op add *tmp4 p :i
 set .b*wret 26
 set .b*w *tmp4
-op mul *tmp84 *tmp2 2
-op add @counter 332 *tmp84
+op mul *tmp86 *tmp2 2
+op add @counter 334 *tmp86
 set *tmp5 :i
 op add *tmp7 p :i
 set .c*wret 32
 set .c*w *tmp7
-op mul *tmp85 *tmp5 2
-op add @counter 374 *tmp85
+op mul *tmp87 *tmp5 2
+op add @counter 376 *tmp87
 op add :i :i 1
 jump 19 always 0 0
 set :reverse:i 0
@@ -38,25 +38,25 @@ op sub *tmp8 9 :reverse:i
 set :reverse:j *tmp8
 set *tmp9 :reverse:i
 set .b*rret 42
-op mul *tmp86 *tmp9 2
-op add @counter 311 *tmp86
+op mul *tmp88 *tmp9 2
+op add @counter 313 *tmp88
 set *tmp10 .b*r
 set :reverse:t *tmp10
 set *tmp11 :reverse:i
 set *tmp13 :reverse:j
 set .b*rret 49
-op mul *tmp87 *tmp13 2
-op add @counter 311 *tmp87
+op mul *tmp89 *tmp13 2
+op add @counter 313 *tmp89
 set *tmp14 .b*r
 set .b*wret 54
 set .b*w *tmp14
-op mul *tmp88 *tmp11 2
-op add @counter 332 *tmp88
+op mul *tmp90 *tmp11 2
+op add @counter 334 *tmp90
 set *tmp15 :reverse:j
 set .b*wret 59
 set .b*w :reverse:t
-op mul *tmp89 *tmp15 2
-op add @counter 332 *tmp89
+op mul *tmp91 *tmp15 2
+op add @counter 334 *tmp91
 op add :reverse:i :reverse:i 1
 jump 35 always 0 0
 assertflush
@@ -72,14 +72,14 @@ print .b*8
 print .b*9
 assertprints "9876543210" "Array reverse"
 set :bubblesort:maxToMin false
-set :bubblesort:flag true
+set :bubblesort:flag false
 set :bubblesort:a .b*0
 set :bubblesort:i 1
 jump 110 greaterThanEq :bubblesort:i 10
 set *tmp17 :bubblesort:i
 set .b*rret 82
-op mul *tmp90 *tmp17 2
-op add @counter 311 *tmp90
+op mul *tmp92 *tmp17 2
+op add @counter 313 *tmp92
 set *tmp18 .b*r
 set :bubblesort:b *tmp18
 jump 88 equal :bubblesort:maxToMin false
@@ -94,61 +94,62 @@ op sub *tmp23 :bubblesort:i 1
 set *tmp24 *tmp23
 set .b*wret 98
 set .b*w :bubblesort:b
-op mul *tmp91 *tmp24 2
-op add @counter 332 *tmp91
+op mul *tmp93 *tmp24 2
+op add @counter 334 *tmp93
 set *tmp26 :bubblesort:i
 set .b*wret 103
 set .b*w :bubblesort:a
-op mul *tmp92 *tmp26 2
-op add @counter 332 *tmp92
-set :bubblesort:flag false
+op mul *tmp94 *tmp26 2
+op add @counter 334 *tmp94
+set :bubblesort:flag true
 set *tmp22 :bubblesort:flag
 jump 108 always 0 0
 set :bubblesort:a :bubblesort:b
 set *tmp22 :bubblesort:a
 op add :bubblesort:i :bubblesort:i 1
 jump 77 always 0 0
-jump 114 equal :bubblesort:flag false
-jump 151 always 0 0
-set *tmp28 null
-jump 115 always 0 0
-set *tmp28 null
+op equal *tmp28 :bubblesort:flag false
+jump 115 equal *tmp28 false
+jump 152 always 0 0
+set *tmp29 null
+jump 116 always 0 0
+set *tmp29 null
 set :bubblesort:a .b*9
 op sub :bubblesort:i.1 9 1
-jump 150 lessThan :bubblesort:i.1 0
-set *tmp29 :bubblesort:i.1
-set .b*rret 122
-op mul *tmp93 *tmp29 2
-op add @counter 311 *tmp93
-set *tmp30 .b*r
-set :bubblesort:b.1 *tmp30
-jump 128 equal :bubblesort:maxToMin false
-op greaterThan *tmp32 :bubblesort:a :bubblesort:b.1
-set *tmp31 *tmp32
-jump 130 always 0 0
-op lessThan *tmp33 :bubblesort:a :bubblesort:b.1
-set *tmp31 *tmp33
-set :bubblesort:condition.1 *tmp31
-jump 146 equal :bubblesort:condition.1 false
-op add *tmp35 :bubblesort:i.1 1
-set *tmp36 *tmp35
-set .b*wret 138
+jump 151 lessThan :bubblesort:i.1 0
+set *tmp30 :bubblesort:i.1
+set .b*rret 123
+op mul *tmp95 *tmp30 2
+op add @counter 313 *tmp95
+set *tmp31 .b*r
+set :bubblesort:b.1 *tmp31
+jump 129 equal :bubblesort:maxToMin false
+op greaterThan *tmp33 :bubblesort:a :bubblesort:b.1
+set *tmp32 *tmp33
+jump 131 always 0 0
+op lessThan *tmp34 :bubblesort:a :bubblesort:b.1
+set *tmp32 *tmp34
+set :bubblesort:condition.1 *tmp32
+jump 147 equal :bubblesort:condition.1 false
+op add *tmp36 :bubblesort:i.1 1
+set *tmp37 *tmp36
+set .b*wret 139
 set .b*w :bubblesort:b.1
-op mul *tmp94 *tmp36 2
-op add @counter 332 *tmp94
-set *tmp38 :bubblesort:i.1
-set .b*wret 143
+op mul *tmp96 *tmp37 2
+op add @counter 334 *tmp96
+set *tmp39 :bubblesort:i.1
+set .b*wret 144
 set .b*w :bubblesort:a
-op mul *tmp95 *tmp38 2
-op add @counter 332 *tmp95
+op mul *tmp97 *tmp39 2
+op add @counter 334 *tmp97
 set :bubblesort:flag true
-set *tmp34 :bubblesort:flag
-jump 148 always 0 0
+set *tmp35 :bubblesort:flag
+jump 149 always 0 0
 set :bubblesort:a :bubblesort:b.1
-set *tmp34 :bubblesort:a
+set *tmp35 :bubblesort:a
 op sub :bubblesort:i.1 :bubblesort:i.1 1
-jump 117 always 0 0
-jump 74 notEqual true false
+jump 118 always 0 0
+jump 74 notEqual :bubblesort:flag false
 assertflush
 print .b*0
 print .b*1
@@ -162,129 +163,130 @@ print .b*8
 print .b*9
 assertprints "0123456789" "Array sort 1"
 set :bubblesort.1:maxToMin true
-set :bubblesort.1:flag true
+set :bubblesort.1:flag false
 set :bubblesort.1:a .b*0
 set :bubblesort.1:i 1
-jump 223 greaterThanEq :bubblesort.1:i 10
-set *tmp40 :bubblesort.1:i
-set .b*rret 172
-op mul *tmp96 *tmp40 2
-op add @counter 311 *tmp96
-set *tmp41 .b*r
-set :bubblesort.1:b *tmp41
-jump 178 equal :bubblesort.1:maxToMin false
-op lessThan *tmp43 :bubblesort.1:a :bubblesort.1:b
-set *tmp42 *tmp43
-jump 180 always 0 0
-op greaterThan *tmp44 :bubblesort.1:a :bubblesort.1:b
-set *tmp42 *tmp44
-set :bubblesort.1:condition *tmp42
-jump 219 equal :bubblesort.1:condition false
-op sub *tmp46 :bubblesort.1:i 1
-set *tmp47 *tmp46
-set .b*wret 188
+jump 224 greaterThanEq :bubblesort.1:i 10
+set *tmp41 :bubblesort.1:i
+set .b*rret 173
+op mul *tmp98 *tmp41 2
+op add @counter 313 *tmp98
+set *tmp42 .b*r
+set :bubblesort.1:b *tmp42
+jump 179 equal :bubblesort.1:maxToMin false
+op lessThan *tmp44 :bubblesort.1:a :bubblesort.1:b
+set *tmp43 *tmp44
+jump 181 always 0 0
+op greaterThan *tmp45 :bubblesort.1:a :bubblesort.1:b
+set *tmp43 *tmp45
+set :bubblesort.1:condition *tmp43
+jump 220 equal :bubblesort.1:condition false
+op sub *tmp47 :bubblesort.1:i 1
+set *tmp48 *tmp47
+set .b*wret 189
 set .b*w :bubblesort.1:b
-op mul *tmp97 *tmp47 2
-op add @counter 332 *tmp97
-set *tmp49 :bubblesort.1:i
-set .b*wret 193
+op mul *tmp99 *tmp48 2
+op add @counter 334 *tmp99
+set *tmp50 :bubblesort.1:i
+set .b*wret 194
 set .b*w :bubblesort.1:a
-op mul *tmp98 *tmp49 2
-op add @counter 332 *tmp98
-op sub *tmp51 :bubblesort.1:i 1
-set *tmp52 *tmp51
-set .c*rret 198
-op mul *tmp99 *tmp52 2
-op add @counter 353 *tmp99
-set *tmp53 .c*r
-set :bubblesort.1:v *tmp53
-op sub *tmp54 :bubblesort.1:i 1
-set *tmp55 *tmp54
-set *tmp57 :bubblesort.1:i
-set .c*rret 206
-op mul *tmp100 *tmp57 2
-op add @counter 353 *tmp100
-set *tmp58 .c*r
-set .c*wret 211
-set .c*w *tmp58
-op mul *tmp101 *tmp55 2
-op add @counter 374 *tmp101
-set *tmp59 :bubblesort.1:i
-set .c*wret 216
+op mul *tmp100 *tmp50 2
+op add @counter 334 *tmp100
+op sub *tmp52 :bubblesort.1:i 1
+set *tmp53 *tmp52
+set .c*rret 199
+op mul *tmp101 *tmp53 2
+op add @counter 355 *tmp101
+set *tmp54 .c*r
+set :bubblesort.1:v *tmp54
+op sub *tmp55 :bubblesort.1:i 1
+set *tmp56 *tmp55
+set *tmp58 :bubblesort.1:i
+set .c*rret 207
+op mul *tmp102 *tmp58 2
+op add @counter 355 *tmp102
+set *tmp59 .c*r
+set .c*wret 212
+set .c*w *tmp59
+op mul *tmp103 *tmp56 2
+op add @counter 376 *tmp103
+set *tmp60 :bubblesort.1:i
+set .c*wret 217
 set .c*w :bubblesort.1:v
-op mul *tmp102 *tmp59 2
-op add @counter 374 *tmp102
-set :bubblesort.1:flag false
-set *tmp45 :bubblesort.1:flag
-jump 221 always 0 0
+op mul *tmp104 *tmp60 2
+op add @counter 376 *tmp104
+set :bubblesort.1:flag true
+set *tmp46 :bubblesort.1:flag
+jump 222 always 0 0
 set :bubblesort.1:a :bubblesort.1:b
-set *tmp45 :bubblesort.1:a
+set *tmp46 :bubblesort.1:a
 op add :bubblesort.1:i :bubblesort.1:i 1
-jump 167 always 0 0
-jump 227 equal :bubblesort.1:flag false
-jump 287 always 0 0
-set *tmp61 null
-jump 228 always 0 0
-set *tmp61 null
+jump 168 always 0 0
+op equal *tmp62 :bubblesort.1:flag false
+jump 229 equal *tmp62 false
+jump 289 always 0 0
+set *tmp63 null
+jump 230 always 0 0
+set *tmp63 null
 set :bubblesort.1:a .b*9
 op sub :bubblesort.1:i.1 9 1
-jump 286 lessThan :bubblesort.1:i.1 0
-set *tmp62 :bubblesort.1:i.1
-set .b*rret 235
-op mul *tmp103 *tmp62 2
-op add @counter 311 *tmp103
-set *tmp63 .b*r
-set :bubblesort.1:b.1 *tmp63
-jump 241 equal :bubblesort.1:maxToMin false
-op greaterThan *tmp65 :bubblesort.1:a :bubblesort.1:b.1
-set *tmp64 *tmp65
-jump 243 always 0 0
-op lessThan *tmp66 :bubblesort.1:a :bubblesort.1:b.1
-set *tmp64 *tmp66
-set :bubblesort.1:condition.1 *tmp64
-jump 282 equal :bubblesort.1:condition.1 false
-op add *tmp68 :bubblesort.1:i.1 1
-set *tmp69 *tmp68
-set .b*wret 251
+jump 288 lessThan :bubblesort.1:i.1 0
+set *tmp64 :bubblesort.1:i.1
+set .b*rret 237
+op mul *tmp105 *tmp64 2
+op add @counter 313 *tmp105
+set *tmp65 .b*r
+set :bubblesort.1:b.1 *tmp65
+jump 243 equal :bubblesort.1:maxToMin false
+op greaterThan *tmp67 :bubblesort.1:a :bubblesort.1:b.1
+set *tmp66 *tmp67
+jump 245 always 0 0
+op lessThan *tmp68 :bubblesort.1:a :bubblesort.1:b.1
+set *tmp66 *tmp68
+set :bubblesort.1:condition.1 *tmp66
+jump 284 equal :bubblesort.1:condition.1 false
+op add *tmp70 :bubblesort.1:i.1 1
+set *tmp71 *tmp70
+set .b*wret 253
 set .b*w :bubblesort.1:b.1
-op mul *tmp104 *tmp69 2
-op add @counter 332 *tmp104
-set *tmp71 :bubblesort.1:i.1
-set .b*wret 256
+op mul *tmp106 *tmp71 2
+op add @counter 334 *tmp106
+set *tmp73 :bubblesort.1:i.1
+set .b*wret 258
 set .b*w :bubblesort.1:a
-op mul *tmp105 *tmp71 2
-op add @counter 332 *tmp105
-op add *tmp73 :bubblesort.1:i.1 1
-set *tmp74 *tmp73
-set .c*rret 261
-op mul *tmp106 *tmp74 2
-op add @counter 353 *tmp106
-set *tmp75 .c*r
-set :bubblesort.1:v.1 *tmp75
-op add *tmp76 :bubblesort.1:i.1 1
-set *tmp77 *tmp76
-set *tmp79 :bubblesort.1:i.1
-set .c*rret 269
-op mul *tmp107 *tmp79 2
-op add @counter 353 *tmp107
-set *tmp80 .c*r
-set .c*wret 274
-set .c*w *tmp80
-op mul *tmp108 *tmp77 2
-op add @counter 374 *tmp108
+op mul *tmp107 *tmp73 2
+op add @counter 334 *tmp107
+op add *tmp75 :bubblesort.1:i.1 1
+set *tmp76 *tmp75
+set .c*rret 263
+op mul *tmp108 *tmp76 2
+op add @counter 355 *tmp108
+set *tmp77 .c*r
+set :bubblesort.1:v.1 *tmp77
+op add *tmp78 :bubblesort.1:i.1 1
+set *tmp79 *tmp78
 set *tmp81 :bubblesort.1:i.1
-set .c*wret 279
-set .c*w :bubblesort.1:v.1
+set .c*rret 271
 op mul *tmp109 *tmp81 2
-op add @counter 374 *tmp109
+op add @counter 355 *tmp109
+set *tmp82 .c*r
+set .c*wret 276
+set .c*w *tmp82
+op mul *tmp110 *tmp79 2
+op add @counter 376 *tmp110
+set *tmp83 :bubblesort.1:i.1
+set .c*wret 281
+set .c*w :bubblesort.1:v.1
+op mul *tmp111 *tmp83 2
+op add @counter 376 *tmp111
 set :bubblesort.1:flag true
-set *tmp67 :bubblesort.1:flag
-jump 284 always 0 0
+set *tmp69 :bubblesort.1:flag
+jump 286 always 0 0
 set :bubblesort.1:a :bubblesort.1:b.1
-set *tmp67 :bubblesort.1:a
+set *tmp69 :bubblesort.1:a
 op sub :bubblesort.1:i.1 :bubblesort.1:i.1 1
-jump 230 always 0 0
-jump 164 notEqual true false
+jump 232 always 0 0
+jump 165 notEqual :bubblesort.1:flag false
 assertflush
 print .c*0
 print .c*1

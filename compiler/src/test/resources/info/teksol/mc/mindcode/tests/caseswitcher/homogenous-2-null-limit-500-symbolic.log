@@ -1,5 +1,5 @@
     51 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (2 iterations).
+     2 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      2 instructions eliminated by Data Flow Optimization (5 iterations).
@@ -247,8 +247,8 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+237 inst
 -    * jump *label6 equal :block @carbide-wall
 -    * jump *label6 equal :block @carbide-wall-large
 -    * jump *label5 always
-+    6 sensor *tmp9 :block @id
-+    7 multijump *label13 *tmp9 0 (m:*label12)
++    6 sensor *tmp13 :block @id
++    7 multijump *label13 *tmp13 0 (m:*label12)
 +    8 multilabel *label13 (m:*label12)
 +    9 jump *label11 always
 +   10 multilabel *label14 (m:*label12)
@@ -774,7 +774,7 @@ Modifications by Convert case at line 11:5 (segments: 1, padded both) (+237 inst
    530 jump *label4 always
    531 label *label5
 +  532 label *label11
-+  533 jump *label6 strictEqual *tmp9 null
++  533 jump *label6 strictEqual *tmp13 null
 +  534 label *label10
    535 set *tmp2 false
    536 label *label4
@@ -793,7 +793,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    529 jump *label4 always
 -    * label *label5
    530 label *label11
-   531 jump *label6 strictEqual *tmp9 null
+   531 jump *label6 strictEqual *tmp13 null
    532 label *label10
    533 set *tmp2 false
    534 label *label4
@@ -820,8 +820,8 @@ set :i -1
 label *label9
 lookup block :block :i
 # "Function: def isWall(in block)"
-sensor *tmp9 :block @id
-multijump *label13 *tmp9 0
+sensor *tmp13 :block @id
+multijump *label13 *tmp13 0
 multilabel *label13
 jump *label11 always
 multilabel *label14
@@ -1346,7 +1346,7 @@ label *label6
 set *tmp2 true
 jump *label4 always
 label *label11
-jump *label6 strictEqual *tmp9 null
+jump *label6 strictEqual *tmp13 null
 label *label10
 set *tmp2 false
 label *label4

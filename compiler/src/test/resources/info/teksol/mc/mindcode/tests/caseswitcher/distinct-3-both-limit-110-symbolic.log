@@ -1,5 +1,5 @@
    125 instructions before optimizations.
-     1 instructions eliminated by Temp Variables Elimination (2 iterations).
+     1 instructions eliminated by Temp Variables Elimination (5 iterations).
      1 instructions eliminated by Case Expression Optimization.
      2 instructions eliminated by Dead Code Elimination (3 iterations).
      3 instructions eliminated by Data Flow Optimization (6 iterations).
@@ -493,10 +493,10 @@ Modifications by Convert case at line 11:5 (segments: 6) (-2 instructions):
      5 # "Function: def identifyBlock(in block)"
 -    * jump *label6 strictEqual :block null
 -    * jump *label5 always
-+    6 sensor *tmp6 :block @id
-+    7 jump *label62 greaterThanEq *tmp6 203
-+    8 jump *label60 greaterThanEq *tmp6 35
-+    9 multijump *label64 *tmp6 0 (m:*label63)
++    6 sensor *tmp8 :block @id
++    7 jump *label62 greaterThanEq *tmp8 203
++    8 jump *label60 greaterThanEq *tmp8 35
++    9 multijump *label64 *tmp8 0 (m:*label63)
 +   10 multilabel *label64 (m:*label63)
 +   11 jump *label61 always
 +   12 multilabel *label65 (m:*label63)
@@ -570,22 +570,22 @@ Modifications by Convert case at line 11:5 (segments: 6) (-2 instructions):
 +   80 set *tmp2 0x00020000
 +   81 jump *label4 always
 +   82 label *label62
-+   83 jump *label99 greaterThanEq *tmp6 234
-+   84 jump *label100 greaterThanEq *tmp6 208
-+   85 jump *label42 lessThan *tmp6 204
-+   86 jump *label44 equal *tmp6 204
-+   87 jump *label60 equal *tmp6 205
-+   88 jump *label48 equal *tmp6 207
++   83 jump *label99 greaterThanEq *tmp8 234
++   84 jump *label100 greaterThanEq *tmp8 208
++   85 jump *label42 lessThan *tmp8 204
++   86 jump *label44 equal *tmp8 204
++   87 jump *label60 equal *tmp8 205
++   88 jump *label48 equal *tmp8 207
 +   89 label *label46
 +   90 set *tmp2 0x00100000
 +   91 jump *label4 always
 +   92 label *label100
-+   93 jump *label50 equal *tmp6 220
-+   94 jump *label52 equal *tmp6 221
-+   95 jump *label54 equal *tmp6 225
++   93 jump *label50 equal *tmp8 220
++   94 jump *label52 equal *tmp8 221
++   95 jump *label54 equal *tmp8 225
 +   96 jump *label60 always
 +   97 label *label99
-+   98 jump *label60 greaterThanEq *tmp6 235
++   98 jump *label60 greaterThanEq *tmp8 235
 +   99 label *label56
 +  100 set *tmp2 0x02000000
 +  101 jump *label4 always
@@ -596,7 +596,7 @@ Modifications by Convert case at line 11:5 (segments: 6) (-2 instructions):
 -    * jump *label8 equal :block @graphite-press
 -    * jump *label7 always
 +  106 label *label61
-+  107 jump *label6 strictEqual *tmp6 null
++  107 jump *label6 strictEqual *tmp8 null
    108 label *label8
    109 set *tmp2 0x00000002
    110 jump *label4 always
@@ -766,9 +766,9 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     79 jump *label4 always
     80 label *label62
  
-    84 jump *label44 equal *tmp6 204
-    85 jump *label60 equal *tmp6 205
-    86 jump *label48 equal *tmp6 207
+    84 jump *label44 equal *tmp8 204
+    85 jump *label60 equal *tmp8 205
+    86 jump *label48 equal *tmp8 207
 -    * label *label46
     87 set *tmp2 0x00100000
     88 jump *label4 always
@@ -776,7 +776,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
     93 jump *label60 always
     94 label *label99
-    95 jump *label60 greaterThanEq *tmp6 235
+    95 jump *label60 greaterThanEq *tmp8 235
 -    * label *label56
     96 set *tmp2 0x02000000
     97 jump *label4 always
@@ -785,7 +785,7 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    100 jump *label4 always
 -    * label *label5
    101 label *label61
-   102 jump *label6 strictEqual *tmp6 null
+   102 jump *label6 strictEqual *tmp8 null
 -    * label *label8
    103 set *tmp2 0x00000002
    104 jump *label4 always
@@ -902,10 +902,10 @@ set :i -1
 label *label59
 lookup block :block :i
 # "Function: def identifyBlock(in block)"
-sensor *tmp6 :block @id
-jump *label62 greaterThanEq *tmp6 203
-jump *label60 greaterThanEq *tmp6 35
-multijump *label64 *tmp6 0
+sensor *tmp8 :block @id
+jump *label62 greaterThanEq *tmp8 203
+jump *label60 greaterThanEq *tmp8 35
+multijump *label64 *tmp8 0
 multilabel *label64
 jump *label61 always
 multilabel *label65
@@ -978,28 +978,28 @@ multilabel *label98
 set *tmp2 0x00020000
 jump *label4 always
 label *label62
-jump *label99 greaterThanEq *tmp6 234
-jump *label100 greaterThanEq *tmp6 208
-jump *label42 lessThan *tmp6 204
-jump *label44 equal *tmp6 204
-jump *label60 equal *tmp6 205
-jump *label48 equal *tmp6 207
+jump *label99 greaterThanEq *tmp8 234
+jump *label100 greaterThanEq *tmp8 208
+jump *label42 lessThan *tmp8 204
+jump *label44 equal *tmp8 204
+jump *label60 equal *tmp8 205
+jump *label48 equal *tmp8 207
 set *tmp2 0x00100000
 jump *label4 always
 label *label100
-jump *label50 equal *tmp6 220
-jump *label52 equal *tmp6 221
-jump *label54 equal *tmp6 225
+jump *label50 equal *tmp8 220
+jump *label52 equal *tmp8 221
+jump *label54 equal *tmp8 225
 jump *label60 always
 label *label99
-jump *label60 greaterThanEq *tmp6 235
+jump *label60 greaterThanEq *tmp8 235
 set *tmp2 0x02000000
 jump *label4 always
 label *label6
 set *tmp2 0x00000001
 jump *label4 always
 label *label61
-jump *label6 strictEqual *tmp6 null
+jump *label6 strictEqual *tmp8 null
 set *tmp2 0x00000002
 jump *label4 always
 label *label10

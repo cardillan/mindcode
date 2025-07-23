@@ -42,6 +42,9 @@ public enum InstructionInfo {
 
     /// A call instruction's return address that has been redirected via jump threading
     CALL_RETURN(LogicLabel.EMPTY),
+
+    /// This operation instruction was already processed by a select optimization
+    SELECT_OPERATION(Boolean.FALSE),
     ;
 
     public final Object defaultValue;
