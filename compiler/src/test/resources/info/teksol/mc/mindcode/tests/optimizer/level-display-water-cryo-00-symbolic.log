@@ -1,10 +1,10 @@
    125 instructions before optimizations.
      9 instructions eliminated by Temp Variables Elimination (2 iterations).
      1 instructions eliminated by Case Expression Optimization.
-    10 instructions eliminated by Dead Code Elimination (2 passes, 5 iterations).
+     9 instructions eliminated by Dead Code Elimination (4 iterations).
      4 instructions eliminated by Jump Optimization (4 iterations).
      4 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     9 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
+    10 instructions eliminated by Data Flow Optimization (2 passes, 7 iterations).
      5 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
      4 instructions eliminated by Jump Straightening (4 iterations).
@@ -12,7 +12,7 @@
      6 instructions eliminated by Print Merging.
     83 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 905):
+Pass 1: speed optimization selection (cost limit 906):
   * Replicate loop condition at line 43:1                        size    +1, benefit       25.0, efficiency     25.000 (-4 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-1 instructions):
@@ -301,25 +301,33 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    100 print "Water and Cryofluid Level Meter"
    101 op mul *tmp35 100 :water
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-4 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5 instructions):
  
-    81 op add *tmp24 :pos 7
-    82 op sub *tmp25 :pos 7
-    83 draw triangle 6 *tmp24 14 :pos 6 *tmp25
+    62 label *label1
+    63 jump *label0 always
+    64 label *label2
+-    * set .MULTIPLIER 0.03666666666666667
+    65 control enabled .SWITCH 0
+    66 label *label19
+    67 sensor *tmp18 .SWITCH @enabled
+ 
+    80 op add *tmp24 :pos 7
+    81 op sub *tmp25 :pos 7
+    82 draw triangle 6 *tmp24 14 :pos 6 *tmp25
 -    * op add *tmp26 :pos 7
 -    * op sub *tmp27 :pos 7
-    84 draw triangle 34 *tmp24 26 :pos 34 *tmp25
-    85 draw color 110 200 230 255
-    86 draw rect 54 20 12 55
+    83 draw triangle 34 *tmp24 26 :pos 34 *tmp25
+    84 draw color 110 200 230 255
+    85 draw rect 54 20 12 55
  
-    91 op add *tmp31 :pos 7
-    92 op sub *tmp32 :pos 7
-    93 draw triangle 46 *tmp31 54 :pos 46 *tmp32
+    90 op add *tmp31 :pos 7
+    91 op sub *tmp32 :pos 7
+    92 draw triangle 46 *tmp31 54 :pos 46 *tmp32
 -    * op add *tmp33 :pos 7
 -    * op sub *tmp34 :pos 7
-    94 draw triangle 74 *tmp31 66 :pos 74 *tmp32
-    95 drawflush .DISPLAY
-    96 print "Water and Cryofluid Level Meter"
+    93 draw triangle 74 *tmp31 66 :pos 74 *tmp32
+    94 drawflush .DISPLAY
+    95 print "Water and Cryofluid Level Meter"
 
 Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (+4 instructions):
  
@@ -357,27 +365,27 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (+4 inst
 +   68 op or *tmp4 *tmp2 *tmp3
 +   69 jump *label22 notEqual *tmp4 false
     70 label *label2
-    71 set .MULTIPLIER 0.03666666666666667
-    72 control enabled .SWITCH 0
+    71 control enabled .SWITCH 0
+    72 label *label19
 
 Modifications by Replicate loop condition at line 43:1 (+1 instructions):
  
-    73 label *label19
-    74 sensor *tmp18 .SWITCH @enabled
-    75 jump *label21 notEqual *tmp18 0
-+   76 label *label24
-    77 set :start_time @time
-    78 draw clear 0 0 0
-    79 draw color 255 255 255 255
+    72 label *label19
+    73 sensor *tmp18 .SWITCH @enabled
+    74 jump *label21 notEqual *tmp18 0
++   75 label *label24
+    76 set :start_time @time
+    77 draw clear 0 0 0
+    78 draw color 255 255 255 255
  
-   114 print *tmp39
-   115 printflush .MESSAGE
-   116 label *label20
+   113 print *tmp39
+   114 printflush .MESSAGE
+   115 label *label20
 -    * jump *label19 always
-+  117 sensor *tmp18 .SWITCH @enabled
-+  118 jump *label24 equal *tmp18 0
-   119 label *label21
-   120 end
++  116 sensor *tmp18 .SWITCH @enabled
++  117 jump *label24 equal *tmp18 0
+   118 label *label21
+   119 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -471,20 +479,19 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     53 op or *tmp4 *tmp2 *tmp3
     54 jump *label22 notEqual *tmp4 false
 -    * label *label2
-    55 set .MULTIPLIER 0.03666666666666667
-    56 control enabled .SWITCH 0
+    55 control enabled .SWITCH 0
 -    * label *label19
-    57 sensor *tmp18 .SWITCH @enabled
-    58 jump *label21 notEqual *tmp18 0
-    59 label *label24
+    56 sensor *tmp18 .SWITCH @enabled
+    57 jump *label21 notEqual *tmp18 0
+    58 label *label24
  
-    96 print "\nElapsed: "
-    97 print *tmp39
-    98 printflush .MESSAGE
+    95 print "\nElapsed: "
+    96 print *tmp39
+    97 printflush .MESSAGE
 -    * label *label20
-    99 sensor *tmp18 .SWITCH @enabled
-   100 jump *label24 equal *tmp18 0
-   101 label *label21
+    98 sensor *tmp18 .SWITCH @enabled
+    99 jump *label24 equal *tmp18 0
+   100 label *label21
 
 Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
 +    0 label __start__
@@ -492,32 +499,22 @@ Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
      2 set .TANK_CRYO null
      3 set .MESSAGE null
  
-    56 set .MULTIPLIER 0.03666666666666667
-    57 control enabled .SWITCH 0
-    58 sensor *tmp18 .SWITCH @enabled
+    55 jump *label22 notEqual *tmp4 false
+    56 control enabled .SWITCH 0
+    57 sensor *tmp18 .SWITCH @enabled
 -    * jump *label21 notEqual *tmp18 0
-+   59 jump __start__ notEqual *tmp18 0
-    60 label *label24
-    61 set :start_time @time
-    62 draw clear 0 0 0
++   58 jump __start__ notEqual *tmp18 0
+    59 label *label24
+    60 set :start_time @time
+    61 draw clear 0 0 0
 
 Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
  
-    99 printflush .MESSAGE
-   100 sensor *tmp18 .SWITCH @enabled
-   101 jump *label24 equal *tmp18 0
+    98 printflush .MESSAGE
+    99 sensor *tmp18 .SWITCH @enabled
+   100 jump *label24 equal *tmp18 0
 -    * label *label21
-   102 end
-
-Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-1 instructions):
- 
-    53 op equal *tmp3 .DISPLAY null
-    54 op or *tmp4 *tmp2 *tmp3
-    55 jump *label22 notEqual *tmp4 false
--    * set .MULTIPLIER 0.03666666666666667
-    56 control enabled .SWITCH 0
-    57 sensor *tmp18 .SWITCH @enabled
-    58 jump __start__ notEqual *tmp18 0
+   101 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  

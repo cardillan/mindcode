@@ -278,13 +278,12 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(SET, ":i", "1"),
                 createInstruction(SETADDR, ":foo*retaddr", label(5)),
                 createInstruction(JUMP, "__start__", "greaterThan", "1", "count"),
-                createInstruction(LABEL, label(7)),
                 createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
                 createInstruction(LABEL, label(5)),
                 createInstruction(OP, "add", tmp(3), ":foo:x", ":foo:y"),
                 createInstruction(PRINT, tmp(3)),
                 createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(7), "lessThanEq", ":i", "count"),
+                createInstruction(JUMP, label(0), "lessThanEq", ":i", "count"),
                 createInstruction(END),
                 createInstruction(LABEL, label(0)),
                 createInstruction(OP, "rand", ":foo:x", "10"),
@@ -436,55 +435,46 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
     }
 
     @Test
-    void handlesInvariantIf() {
+    void handlesSelectInExpression() {
         assertCompilesTo("""
-                        #set target = 7;
                         param A = 10;
                         for i in 1 ... A do
-                            a = A < 0 ? 3 : 4;
-                            print(a);
+                            print(A < 0 ? 3 : 4);
                         end;
                         print("finish");
                         """,
                 createInstruction(SET, "A", "10"),
-                createInstruction(SET, "i", "1"),
-                createInstruction(SET, var(2), "4"),
-                createInstruction(JUMP, var(1006), "greaterThanEq", "A", "0"),
-                createInstruction(SET, var(2), "3"),
-                createInstruction(LABEL, var(1006)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
-                createInstruction(LABEL, var(1007)),
-                createInstruction(PRINT, var(2)),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1007), "lessThan", "i", "A"),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, ":i", "1"),
+                createInstruction(SELECT, tmp(1), "lessThan", "A", "0", "3", "4"),
+                createInstruction(JUMP, label(2), "greaterThanEq", "1", "A"),
+                createInstruction(LABEL, label(5)),
+                createInstruction(PRINT, tmp(1)),
+                createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(5), "lessThan", ":i", "A"),
+                createInstruction(LABEL, label(2)),
                 createInstruction(PRINT, q("finish"))
         );
     }
 
     @Test
-    void handlesInvariantIfInExpression() {
+    void handlesSelectsInExpression() {
         assertCompilesTo("""
-                        #set target = 7;
                         param A = 10;
                         for i in 1 ... A do
-                            a = 10 * (A < 0 ? 3 : 4);
-                            print(a);
+                            print(10 * (A < 0 ? 3 : 4));
                         end;
                         print("finish");
                         """,
                 createInstruction(SET, "A", "10"),
-                createInstruction(SET, "i", "1"),
-                createInstruction(OP, "mul", "a", "10", "4"),
-                createInstruction(JUMP, var(1006), "greaterThanEq", "A", "0"),
-                createInstruction(OP, "mul", "a", "10", "3"),
-                createInstruction(LABEL, var(1006)),
-                createInstruction(JUMP, var(1002), "greaterThanEq", "1", "A"),
-                createInstruction(LABEL, var(1007)),
-                createInstruction(PRINT, "a"),
-                createInstruction(OP, "add", "i", "i", "1"),
-                createInstruction(JUMP, var(1007), "lessThan", "i", "A"),
-                createInstruction(LABEL, var(1002)),
+                createInstruction(SET, ":i", "1"),
+                createInstruction(SELECT, tmp(1), "lessThan", "A", "0", "3", "4"),
+                createInstruction(OP, "mul", tmp(2), "10", tmp(1)),
+                createInstruction(JUMP, label(2), "greaterThanEq", "1", "A"),
+                createInstruction(LABEL, label(5)),
+                createInstruction(PRINT, tmp(2)),
+                createInstruction(OP, "add", ":i", ":i", "1"),
+                createInstruction(JUMP, label(5), "lessThan", ":i", "A"),
+                createInstruction(LABEL, label(2)),
                 createInstruction(PRINT, q("finish"))
         );
     }

@@ -20,7 +20,7 @@ public class DiffDebugPrinter implements DebugPrinter {
     protected static final String DELETE_PREFIX       = "-";
     protected static final String NO_CHANGE_PREFIX    = " ";
 
-    private int diffMargin = 3;
+    private int diffMargin = OptimizationCoordinator.TRACE ? 15 : 3;
     private final List<ProgramVersion> versions = new ArrayList<>();
     private final int level;
 

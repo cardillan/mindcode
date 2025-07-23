@@ -864,8 +864,8 @@ Prints all arguments passed to it, each on a new line.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  16 |                 16 |
-| Function body                  |                  17 |                 17 |
+| Inlined function               |                  13 |                 13 |
+| Function body                  |                  14 |                 14 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
@@ -889,8 +889,8 @@ Nulls are printed as 0.
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  17 |                 17 |
-| Function body                  |                  18 |                 18 |
+| Inlined function               |                  14 |                 14 |
+| Function body                  |                  15 |                 15 |
 | Function call                  |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.

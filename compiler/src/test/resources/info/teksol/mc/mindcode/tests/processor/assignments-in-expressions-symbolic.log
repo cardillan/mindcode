@@ -1,9 +1,9 @@
     23 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination (2 iterations).
-     5 instructions eliminated by Dead Code Elimination (2 passes, 5 iterations).
+     3 instructions eliminated by Dead Code Elimination (4 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by Data Flow Optimization (6 iterations).
-    14 instructions after optimizations.
+     4 instructions eliminated by Data Flow Optimization (6 iterations).
+    13 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-3 instructions):
  
@@ -55,77 +55,70 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      6 assertequals 4 *tmp0 "A + (A += 1)"
      7 op add .B .B 1
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2:
- 
-     4 op add .A a 1
-     5 op add *tmp0 .A .A
-     6 assertequals 4 *tmp0 "A + (A += 1)"
--    * op add .B .B 1
-+    7 op add .B a 1
-     8 op add *tmp1 .B .B
-     9 assertequals 4 *tmp1 "(B += 1) + B"
-    10 assertflush
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3:
- 
-     5 op add *tmp0 .A .A
-     6 assertequals 4 *tmp0 "A + (A += 1)"
-     7 op add .B a 1
--    * op add *tmp1 .B .B
--    * assertequals 4 *tmp1 "(B += 1) + B"
-+    8 op add *tmp1 .A .A
-+    9 assertequals 4 *tmp0 "(B += 1) + B"
-    10 assertflush
-    11 # "Function: def test()"
-    12 op lessThan :test:res a b
-
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-1 instructions):
- 
-     5 op add *tmp0 .A .A
-     6 assertequals 4 *tmp0 "A + (A += 1)"
-     7 op add .B a 1
--    * op add *tmp1 .A .A
-     8 assertequals 4 *tmp0 "(B += 1) + B"
-     9 assertflush
-    10 # "Function: def test()"
-
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-    12 jump *label1 equal :test:res false
-    13 print "yes"
-    14 label *label1
--    * label *label2
-    15 print :test:res
--    * label *label0
-    16 assertprints "yes1" "assignments in conditions"
-    17 stop
-    18 end
-
-Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-2 instructions):
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
      0 set a 1
      1 set b 2
-     2 set .A a
--    * set .B a
+-    * set .A a
+     2 set .B a
      3 op add .A a 1
      4 op add *tmp0 .A .A
      5 assertequals 4 *tmp0 "A + (A += 1)"
+-    * op add .B .B 1
++    6 op add .B a 1
+     7 op add *tmp1 .B .B
+     8 assertequals 4 *tmp1 "(B += 1) + B"
+     9 assertflush
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1 instructions):
+     0 set a 1
+     1 set b 2
+-    * set .B a
+     2 op add .A a 1
+     3 op add *tmp0 .A .A
+     4 assertequals 4 *tmp0 "A + (A += 1)"
+     5 op add .B a 1
+-    * op add *tmp1 .B .B
+-    * assertequals 4 *tmp1 "(B += 1) + B"
++    6 op add *tmp1 .A .A
++    7 assertequals 4 *tmp0 "(B += 1) + B"
+     8 assertflush
+     9 # "Function: def test()"
+    10 op lessThan :test:res a b
+
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 4 (-2 instructions):
+ 
+     2 op add .A a 1
+     3 op add *tmp0 .A .A
+     4 assertequals 4 *tmp0 "A + (A += 1)"
 -    * op add .B a 1
-     6 assertequals 4 *tmp0 "(B += 1) + B"
-     7 assertflush
-     8 # "Function: def test()"
+-    * op add *tmp1 .A .A
+     5 assertequals 4 *tmp0 "(B += 1) + B"
+     6 assertflush
+     7 # "Function: def test()"
+
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+ 
+     9 jump *label1 equal :test:res false
+    10 print "yes"
+    11 label *label1
+-    * label *label2
+    12 print :test:res
+-    * label *label0
+    13 assertprints "yes1" "assignments in conditions"
+    14 stop
+    15 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  
-    13 print :test:res
-    14 assertprints "yes1" "assignments in conditions"
-    15 stop
+    12 print :test:res
+    13 assertprints "yes1" "assignments in conditions"
+    14 stop
 -    * end
 
 Final code before resolving virtual instructions:
 
 set a 1
 set b 2
-set .A a
 op add .A a 1
 op add *tmp0 .A .A
 assertequals 4 *tmp0 "A + (A += 1)"

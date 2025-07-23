@@ -1,10 +1,10 @@
    171 instructions before optimizations.
     12 instructions eliminated by Temp Variables Elimination (2 iterations).
      2 instructions eliminated by Case Expression Optimization.
-    26 instructions eliminated by Dead Code Elimination (2 passes, 6 iterations).
+    10 instructions eliminated by Dead Code Elimination (5 iterations).
      2 instructions eliminated by Jump Optimization (4 iterations).
      2 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by Data Flow Optimization (6 iterations).
+    17 instructions eliminated by Data Flow Optimization (6 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
      1 instructions eliminated by Case Switching (4 iterations).
@@ -14,11 +14,11 @@
     26 instructions eliminated by Print Merging.
     92 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 865):
+Pass 1: speed optimization selection (cost limit 881):
   * Replicate loop condition at line 68:1                        size    +1, benefit       25.0, efficiency     25.000 (+1 instructions)
   o Convert case at line 17:9 (segments: 1, padded low)          size    -1, benefit      887.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 864):
+Pass 1: speed optimization selection (cost limit 880):
   * Convert case at line 17:9 (segments: 1, padded low)          size    -1, benefit      887.0, efficiency   Infinity (-1 instructions)
 
 Modifications by Initial phase, Case Expression Optimization, iteration 1 (-2 instructions):
@@ -412,256 +412,20 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
    154 print "Surge Alloy Factory Driver Monitor\nElapsed (ms): "
    155 op sub *tmp37 @time :start
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
-     0 set .EXPECTED_FLOW_STR null
--    * set :flow_str null
-     1 set .SWITCH null
-     2 set .DISPLAY null
--    * set .MESSAGE .SWITCH
-+    3 set .MESSAGE null
-     4 label *label0
-     5 set .TITANIUM null
-     6 set .SILICON null
-
-Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
- 
-    13 set :n @links
-    14 label *label3
-    15 jump *label5 lessThanEq :n 0
-+   16 label *label27
-    17 op sub :n :n 1
-    18 getlink :block :n
-    19 sensor *tmp5 :block @type
- 
-    72 print "/"
-    73 print "min"
-    74 label *label4
--    * jump *label3 always
-+   75 jump *label27 greaterThan :n 0
-    76 label *label5
-    77 print "Message: "
-    78 print .MESSAGE
-
-Modifications by Replicate loop condition at line 68:1 (+1 instructions):
- 
-   125 label *label24
-   126 sensor *tmp26 .SWITCH @enabled
-   127 jump *label26 notEqual *tmp26 0
-+  128 label *label28
-   129 set :start @time
-   130 draw clear 0 0 80
-   131 draw color 255 255 255 255
- 
-   158 print *tmp38
-   159 printflush .MESSAGE
-   160 label *label25
--    * jump *label24 always
-+  161 sensor *tmp26 .SWITCH @enabled
-+  162 jump *label28 equal *tmp26 0
-   163 label *label26
-   164 end
-
-Modifications by Convert case at line 17:9 (segments: 1, padded low) (-1 instructions):
- 
-    17 op sub :n :n 1
-    18 getlink :block :n
-    19 sensor *tmp5 :block @type
--    * jump *label7 notEqual *tmp5 @message
-+   20 sensor *tmp39 *tmp5 @id
-+   21 jump *label29 greaterThanEq *tmp39 145
-+   22 multijump *tmp39 0 0 (m:*label30)
-+   23 multilabel *label33 (m:*label30)
-    24 label *label8
-    25 set .MESSAGE :block
-    26 jump *label6 always
-    27 label *label7
--    * jump *label9 notEqual *tmp5 @switch
-+   28 multilabel *label34 (m:*label30)
-    29 label *label10
-    30 set .SWITCH :block
-    31 jump *label6 always
-    32 label *label9
--    * jump *label11 notEqual *tmp5 @mass-driver
-+   33 multilabel *label32 (m:*label30)
-    34 label *label12
-    35 sensor *tmp8 :block @firstItem
-    36 jump *label14 notEqual *tmp8 @titanium
- 
-    55 label *label13
-    56 jump *label6 always
-    57 label *label11
--    * jump *label22 notEqual *tmp5 @logic-display
-+   58 multilabel *label35 (m:*label30)
-    59 label *label23
-    60 set .DISPLAY :block
-    61 jump *label6 always
-    62 label *label22
-+   63 multilabel *label31 (m:*label30)
-+   64 label *label29
-    65 print "\n"
-    66 print :block
-    67 print " is not supported."
-
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
- 
-    11 print "Configuring..."
-    12 print "\n"
-    13 set :n @links
--    * label *label3
-    14 jump *label5 lessThanEq :n 0
-    15 label *label27
-    16 op sub :n :n 1
- 
-    20 jump *label29 greaterThanEq *tmp39 145
-    21 multijump *tmp39 0 0 (m:*label30)
-    22 multilabel *label33 (m:*label30)
--    * label *label8
-    23 set .MESSAGE :block
-    24 jump *label6 always
--    * label *label7
-    25 multilabel *label34 (m:*label30)
--    * label *label10
-    26 set .SWITCH :block
-    27 jump *label6 always
--    * label *label9
-    28 multilabel *label32 (m:*label30)
--    * label *label12
-    29 sensor *tmp8 :block @firstItem
-    30 jump *label14 notEqual *tmp8 @titanium
--    * label *label15
-    31 set .TITANIUM :block
-    32 jump *label13 always
-    33 label *label14
-    34 jump *label16 notEqual *tmp8 @silicon
--    * label *label17
-    35 set .SILICON :block
-    36 jump *label13 always
-    37 label *label16
-    38 jump *label18 notEqual *tmp8 @copper
--    * label *label19
-    39 set .COPPER :block
-    40 jump *label13 always
-    41 label *label18
-    42 jump *label20 notEqual *tmp8 @lead
--    * label *label21
-    43 set .LEAD :block
-    44 label *label20
-    45 label *label13
-    46 jump *label6 always
--    * label *label11
-    47 multilabel *label35 (m:*label30)
--    * label *label23
-    48 set .DISPLAY :block
-    49 jump *label6 always
--    * label *label22
-    50 multilabel *label31 (m:*label30)
-    51 label *label29
-    52 print "\n"
- 
-    63 print null
-    64 print "/"
-    65 print "min"
--    * label *label4
-    66 jump *label27 greaterThan :n 0
-    67 label *label5
-    68 print "Message: "
- 
-    87 print .LEAD
-    88 print "\n"
-    89 printflush .MESSAGE
--    * label *label1
-    90 op equal *tmp10 .TITANIUM null
-    91 op equal *tmp11 .SILICON null
-    92 op or *tmp12 *tmp10 *tmp11
- 
-    95 op equal *tmp15 .LEAD null
-    96 op or *tmp16 *tmp14 *tmp15
-    97 jump *label0 notEqual *tmp16 false
--    * label *label2
-    98 set .ROW_HEIGHT 19
-    99 set .BAR_HEIGHT 14
-   100 set .ICON_SIZE 16
- 
-   111 set .BAR_LENGTH 56
-   112 op div .MULTIPLICATOR 56 200
-   113 control enabled .SWITCH 0
--    * label *label24
-   114 sensor *tmp26 .SWITCH @enabled
-   115 jump *label26 notEqual *tmp26 0
-   116 label *label28
- 
-   145 op floor *tmp38 *tmp37
-   146 print *tmp38
-   147 printflush .MESSAGE
--    * label *label25
-   148 sensor *tmp26 .SWITCH @enabled
-   149 jump *label28 equal *tmp26 0
-   150 label *label26
-
-Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
-+    0 label __start__
-     1 set .EXPECTED_FLOW_STR null
-     2 set .SWITCH null
-     3 set .DISPLAY null
- 
-    30 sensor *tmp8 :block @firstItem
-    31 jump *label14 notEqual *tmp8 @titanium
-    32 set .TITANIUM :block
--    * jump *label13 always
-+   33 jump *label6 always
-    34 label *label14
-    35 jump *label16 notEqual *tmp8 @silicon
-    36 set .SILICON :block
--    * jump *label13 always
-+   37 jump *label6 always
-    38 label *label16
-    39 jump *label18 notEqual *tmp8 @copper
-    40 set .COPPER :block
--    * jump *label13 always
-+   41 jump *label6 always
-    42 label *label18
--    * jump *label20 notEqual *tmp8 @lead
-+   43 jump *label6 notEqual *tmp8 @lead
-    44 set .LEAD :block
-    45 label *label20
-    46 label *label13
- 
-   113 op div .MULTIPLICATOR 56 200
-   114 control enabled .SWITCH 0
-   115 sensor *tmp26 .SWITCH @enabled
--    * jump *label26 notEqual *tmp26 0
-+  116 jump __start__ notEqual *tmp26 0
-   117 label *label28
-   118 set :start @time
-   119 draw clear 0 0 80
-
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
- 
-    42 label *label18
-    43 jump *label6 notEqual *tmp8 @lead
-    44 set .LEAD :block
--    * label *label20
--    * label *label13
-    45 jump *label6 always
-    46 multilabel *label35 (m:*label30)
-    47 set .DISPLAY :block
- 
-   146 printflush .MESSAGE
-   147 sensor *tmp26 .SWITCH @enabled
-   148 jump *label28 equal *tmp26 0
--    * label *label26
-   149 end
-
-Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-16 instructions):
-     0 label __start__
+Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-17 instructions):
 -    * set .EXPECTED_FLOW_STR null
-     1 set .SWITCH null
-     2 set .DISPLAY null
-     3 set .MESSAGE null
+-    * set :flow_str null
+     0 set .SWITCH null
+     1 set .DISPLAY null
+-    * set .MESSAGE .SWITCH
++    2 set .MESSAGE null
+     3 label *label0
+     4 set .TITANIUM null
+     5 set .SILICON null
  
-    93 op equal *tmp15 .LEAD null
-    94 op or *tmp16 *tmp14 *tmp15
-    95 jump *label0 notEqual *tmp16 false
+   104 op or *tmp16 *tmp14 *tmp15
+   105 jump *label0 notEqual *tmp16 false
+   106 label *label2
 -    * set .ROW_HEIGHT 19
 -    * set .BAR_HEIGHT 14
 -    * set .ICON_SIZE 16
@@ -677,9 +441,232 @@ Modifications by Jumps phase, Dead Code Elimination, pass 3, iteration 1 (-16 in
 -    * op add .BAR_Y4 42 19
 -    * set .BAR_LENGTH 56
 -    * op div .MULTIPLICATOR 56 200
-    96 control enabled .SWITCH 0
-    97 sensor *tmp26 .SWITCH @enabled
-    98 jump __start__ notEqual *tmp26 0
+   107 control enabled .SWITCH 0
+   108 label *label24
+   109 sensor *tmp26 .SWITCH @enabled
+
+Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
+ 
+    12 set :n @links
+    13 label *label3
+    14 jump *label5 lessThanEq :n 0
++   15 label *label27
+    16 op sub :n :n 1
+    17 getlink :block :n
+    18 sensor *tmp5 :block @type
+ 
+    71 print "/"
+    72 print "min"
+    73 label *label4
+-    * jump *label3 always
++   74 jump *label27 greaterThan :n 0
+    75 label *label5
+    76 print "Message: "
+    77 print .MESSAGE
+
+Modifications by Replicate loop condition at line 68:1 (+1 instructions):
+ 
+   109 label *label24
+   110 sensor *tmp26 .SWITCH @enabled
+   111 jump *label26 notEqual *tmp26 0
++  112 label *label28
+   113 set :start @time
+   114 draw clear 0 0 80
+   115 draw color 255 255 255 255
+ 
+   142 print *tmp38
+   143 printflush .MESSAGE
+   144 label *label25
+-    * jump *label24 always
++  145 sensor *tmp26 .SWITCH @enabled
++  146 jump *label28 equal *tmp26 0
+   147 label *label26
+   148 end
+
+Modifications by Convert case at line 17:9 (segments: 1, padded low) (-1 instructions):
+ 
+    16 op sub :n :n 1
+    17 getlink :block :n
+    18 sensor *tmp5 :block @type
+-    * jump *label7 notEqual *tmp5 @message
++   19 sensor *tmp39 *tmp5 @id
++   20 jump *label29 greaterThanEq *tmp39 145
++   21 multijump *tmp39 0 0 (m:*label30)
++   22 multilabel *label33 (m:*label30)
+    23 label *label8
+    24 set .MESSAGE :block
+    25 jump *label6 always
+    26 label *label7
+-    * jump *label9 notEqual *tmp5 @switch
++   27 multilabel *label34 (m:*label30)
+    28 label *label10
+    29 set .SWITCH :block
+    30 jump *label6 always
+    31 label *label9
+-    * jump *label11 notEqual *tmp5 @mass-driver
++   32 multilabel *label32 (m:*label30)
+    33 label *label12
+    34 sensor *tmp8 :block @firstItem
+    35 jump *label14 notEqual *tmp8 @titanium
+ 
+    54 label *label13
+    55 jump *label6 always
+    56 label *label11
+-    * jump *label22 notEqual *tmp5 @logic-display
++   57 multilabel *label35 (m:*label30)
+    58 label *label23
+    59 set .DISPLAY :block
+    60 jump *label6 always
+    61 label *label22
++   62 multilabel *label31 (m:*label30)
++   63 label *label29
+    64 print "\n"
+    65 print :block
+    66 print " is not supported."
+
+Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+ 
+    10 print "Configuring..."
+    11 print "\n"
+    12 set :n @links
+-    * label *label3
+    13 jump *label5 lessThanEq :n 0
+    14 label *label27
+    15 op sub :n :n 1
+ 
+    19 jump *label29 greaterThanEq *tmp39 145
+    20 multijump *tmp39 0 0 (m:*label30)
+    21 multilabel *label33 (m:*label30)
+-    * label *label8
+    22 set .MESSAGE :block
+    23 jump *label6 always
+-    * label *label7
+    24 multilabel *label34 (m:*label30)
+-    * label *label10
+    25 set .SWITCH :block
+    26 jump *label6 always
+-    * label *label9
+    27 multilabel *label32 (m:*label30)
+-    * label *label12
+    28 sensor *tmp8 :block @firstItem
+    29 jump *label14 notEqual *tmp8 @titanium
+-    * label *label15
+    30 set .TITANIUM :block
+    31 jump *label13 always
+    32 label *label14
+    33 jump *label16 notEqual *tmp8 @silicon
+-    * label *label17
+    34 set .SILICON :block
+    35 jump *label13 always
+    36 label *label16
+    37 jump *label18 notEqual *tmp8 @copper
+-    * label *label19
+    38 set .COPPER :block
+    39 jump *label13 always
+    40 label *label18
+    41 jump *label20 notEqual *tmp8 @lead
+-    * label *label21
+    42 set .LEAD :block
+    43 label *label20
+    44 label *label13
+    45 jump *label6 always
+-    * label *label11
+    46 multilabel *label35 (m:*label30)
+-    * label *label23
+    47 set .DISPLAY :block
+    48 jump *label6 always
+-    * label *label22
+    49 multilabel *label31 (m:*label30)
+    50 label *label29
+    51 print "\n"
+ 
+    62 print null
+    63 print "/"
+    64 print "min"
+-    * label *label4
+    65 jump *label27 greaterThan :n 0
+    66 label *label5
+    67 print "Message: "
+ 
+    86 print .LEAD
+    87 print "\n"
+    88 printflush .MESSAGE
+-    * label *label1
+    89 op equal *tmp10 .TITANIUM null
+    90 op equal *tmp11 .SILICON null
+    91 op or *tmp12 *tmp10 *tmp11
+ 
+    94 op equal *tmp15 .LEAD null
+    95 op or *tmp16 *tmp14 *tmp15
+    96 jump *label0 notEqual *tmp16 false
+-    * label *label2
+    97 control enabled .SWITCH 0
+-    * label *label24
+    98 sensor *tmp26 .SWITCH @enabled
+    99 jump *label26 notEqual *tmp26 0
+   100 label *label28
+ 
+   129 op floor *tmp38 *tmp37
+   130 print *tmp38
+   131 printflush .MESSAGE
+-    * label *label25
+   132 sensor *tmp26 .SWITCH @enabled
+   133 jump *label28 equal *tmp26 0
+   134 label *label26
+
+Modifications by Jumps phase, Jump Threading, pass 3, iteration 1:
++    0 label __start__
+     1 set .SWITCH null
+     2 set .DISPLAY null
+     3 set .MESSAGE null
+ 
+    29 sensor *tmp8 :block @firstItem
+    30 jump *label14 notEqual *tmp8 @titanium
+    31 set .TITANIUM :block
+-    * jump *label13 always
++   32 jump *label6 always
+    33 label *label14
+    34 jump *label16 notEqual *tmp8 @silicon
+    35 set .SILICON :block
+-    * jump *label13 always
++   36 jump *label6 always
+    37 label *label16
+    38 jump *label18 notEqual *tmp8 @copper
+    39 set .COPPER :block
+-    * jump *label13 always
++   40 jump *label6 always
+    41 label *label18
+-    * jump *label20 notEqual *tmp8 @lead
++   42 jump *label6 notEqual *tmp8 @lead
+    43 set .LEAD :block
+    44 label *label20
+    45 label *label13
+ 
+    97 jump *label0 notEqual *tmp16 false
+    98 control enabled .SWITCH 0
+    99 sensor *tmp26 .SWITCH @enabled
+-    * jump *label26 notEqual *tmp26 0
++  100 jump __start__ notEqual *tmp26 0
+   101 label *label28
+   102 set :start @time
+   103 draw clear 0 0 80
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1:
+ 
+    41 label *label18
+    42 jump *label6 notEqual *tmp8 @lead
+    43 set .LEAD :block
+-    * label *label20
+-    * label *label13
+    44 jump *label6 always
+    45 multilabel *label35 (m:*label30)
+    46 set .DISPLAY :block
+ 
+   130 printflush .MESSAGE
+   131 sensor *tmp26 .SWITCH @enabled
+   132 jump *label28 equal *tmp26 0
+-    * label *label26
+   133 end
 
 Modifications by Jumps phase, Single Step Elimination, pass 3, iteration 1 (-1 instructions):
  

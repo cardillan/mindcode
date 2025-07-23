@@ -708,6 +708,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     //</editor-fold>
 
     protected LogicList buildLogicList(AstContext context, List<LogicInstruction> instructions) {
-        return optimizationContext.buildLogicList(context, List.copyOf(instructions));
+        return optimizationContext.buildLogicList(context, instructions);
+    }
+
+    protected LogicList createLogicList(AstContext context) {
+        return optimizationContext.createLogicList(context);
     }
 }

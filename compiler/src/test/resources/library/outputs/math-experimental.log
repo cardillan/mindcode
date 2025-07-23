@@ -5,8 +5,8 @@
     68 instructions eliminated by Jump Optimization (9 iterations).
     91 instructions eliminated by Single Step Elimination (3 passes, 14 iterations).
     14 instructions modified by Expression Optimization (3 passes, 7 iterations).
-    14 instructions eliminated by If Expression Optimization (5 passes, 7 iterations).
-   336 instructions eliminated by Data Flow Optimization (11 passes, 42 iterations).
+    15 instructions eliminated by If Expression Optimization (4 passes, 12 iterations).
+   335 instructions eliminated by Data Flow Optimization (11 passes, 41 iterations).
     70 instructions added by Loop Unrolling (16 iterations).
      8 loops unrolled by Loop Unrolling.
      4 instructions eliminated by Function Inlining (16 iterations).
@@ -42,12 +42,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -88,12 +88,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -133,12 +133,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -177,12 +177,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -220,12 +220,12 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'signInexact' defined at *math:47:1          size    +9, benefit       10.5, efficiency      1.167
+  ! Inline function 'signInexact' defined at *math:47:1          size    +3, benefit       10.5, efficiency      3.500
   ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
   ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 14:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 15:17                           size    +5, benefit        3.5, efficiency      0.700
-  ! Inline function call at line 16:17                           size    +5, benefit        3.5, efficiency      0.700
+  ! Inline function call at line 14:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 15:17                           size    +2, benefit        3.5, efficiency      1.750
+  ! Inline function call at line 16:17                           size    +2, benefit        3.5, efficiency      1.750
   ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
   ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
@@ -843,52 +843,52 @@ Final code before resolving virtual instructions:
         label *label101
   174:  set :_isMedian.1:lt 0
   175:  set :_isMedian.1:gt 0
-  176:  jump *label794 greaterThanEq 1 :_median.1:i
+  176:  jump *label782 greaterThanEq 1 :_median.1:i
   177:  set :_isMedian.1:lt 1
-  178:  jump *label797 always 0 0
-        label *label794
+  178:  jump *label785 always 0 0
+        label *label782
   179:  select :_isMedian.1:gt greaterThan 1 :_median.1:i 1 0
-        label *label797
-  180:  jump *label802 greaterThanEq 1 :_median.1:i
+        label *label785
+  180:  jump *label790 greaterThanEq 1 :_median.1:i
   181:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  182:  jump *label805 always 0 0
-        label *label802
-  183:  jump *label803 lessThanEq 1 :_median.1:i
+  182:  jump *label793 always 0 0
+        label *label790
+  183:  jump *label791 lessThanEq 1 :_median.1:i
   184:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label803
-        label *label805
-  185:  jump *label810 greaterThanEq 1 :_median.1:i
+        label *label791
+        label *label793
+  185:  jump *label798 greaterThanEq 1 :_median.1:i
   186:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  187:  jump *label813 always 0 0
-        label *label810
-  188:  jump *label811 lessThanEq 1 :_median.1:i
+  187:  jump *label801 always 0 0
+        label *label798
+  188:  jump *label799 lessThanEq 1 :_median.1:i
   189:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label811
-        label *label813
-  190:  jump *label818 greaterThanEq 1 :_median.1:i
+        label *label799
+        label *label801
+  190:  jump *label806 greaterThanEq 1 :_median.1:i
   191:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  192:  jump *label821 always 0 0
-        label *label818
-  193:  jump *label819 lessThanEq 1 :_median.1:i
+  192:  jump *label809 always 0 0
+        label *label806
+  193:  jump *label807 lessThanEq 1 :_median.1:i
   194:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label819
-        label *label821
-  195:  jump *label826 greaterThanEq 1 :_median.1:i
+        label *label807
+        label *label809
+  195:  jump *label814 greaterThanEq 1 :_median.1:i
   196:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  197:  jump *label829 always 0 0
-        label *label826
-  198:  jump *label827 lessThanEq 1 :_median.1:i
+  197:  jump *label817 always 0 0
+        label *label814
+  198:  jump *label815 lessThanEq 1 :_median.1:i
   199:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label827
-        label *label829
-  200:  jump *label834 greaterThanEq 5 :_median.1:i
+        label *label815
+        label *label817
+  200:  jump *label822 greaterThanEq 5 :_median.1:i
   201:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  202:  jump *label837 always 0 0
-        label *label834
-  203:  jump *label835 lessThanEq 5 :_median.1:i
+  202:  jump *label825 always 0 0
+        label *label822
+  203:  jump *label823 lessThanEq 5 :_median.1:i
   204:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-        label *label835
-        label *label837
+        label *label823
+        label *label825
   205:  op sub *tmp153 :_isMedian.1:gt :_isMedian.1:lt
   206:  op abs :_isMedian.1:dif *tmp153 0
   207:  set *tmp158 false
@@ -943,52 +943,52 @@ Final code before resolving virtual instructions:
         label *label134
   245:  set :_isMedian.2:lt 0
   246:  set :_isMedian.2:gt 0
-  247:  jump *label843 greaterThanEq 1 :_median.2:i
+  247:  jump *label831 greaterThanEq 1 :_median.2:i
   248:  set :_isMedian.2:lt 1
-  249:  jump *label846 always 0 0
-        label *label843
+  249:  jump *label834 always 0 0
+        label *label831
   250:  select :_isMedian.2:gt greaterThan 1 :_median.2:i 1 0
-        label *label846
-  251:  jump *label851 greaterThanEq 1 :_median.2:i
+        label *label834
+  251:  jump *label839 greaterThanEq 1 :_median.2:i
   252:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  253:  jump *label854 always 0 0
-        label *label851
-  254:  jump *label852 lessThanEq 1 :_median.2:i
+  253:  jump *label842 always 0 0
+        label *label839
+  254:  jump *label840 lessThanEq 1 :_median.2:i
   255:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label852
-        label *label854
-  256:  jump *label859 greaterThanEq 1 :_median.2:i
+        label *label840
+        label *label842
+  256:  jump *label847 greaterThanEq 1 :_median.2:i
   257:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  258:  jump *label862 always 0 0
-        label *label859
-  259:  jump *label860 lessThanEq 1 :_median.2:i
+  258:  jump *label850 always 0 0
+        label *label847
+  259:  jump *label848 lessThanEq 1 :_median.2:i
   260:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label860
-        label *label862
-  261:  jump *label867 greaterThanEq 1 :_median.2:i
+        label *label848
+        label *label850
+  261:  jump *label855 greaterThanEq 1 :_median.2:i
   262:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  263:  jump *label870 always 0 0
-        label *label867
-  264:  jump *label868 lessThanEq 1 :_median.2:i
+  263:  jump *label858 always 0 0
+        label *label855
+  264:  jump *label856 lessThanEq 1 :_median.2:i
   265:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label868
-        label *label870
-  266:  jump *label875 greaterThanEq 5 :_median.2:i
+        label *label856
+        label *label858
+  266:  jump *label863 greaterThanEq 5 :_median.2:i
   267:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  268:  jump *label878 always 0 0
-        label *label875
-  269:  jump *label876 lessThanEq 5 :_median.2:i
+  268:  jump *label866 always 0 0
+        label *label863
+  269:  jump *label864 lessThanEq 5 :_median.2:i
   270:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label876
-        label *label878
-  271:  jump *label883 greaterThanEq 5 :_median.2:i
+        label *label864
+        label *label866
+  271:  jump *label871 greaterThanEq 5 :_median.2:i
   272:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  273:  jump *label886 always 0 0
-        label *label883
-  274:  jump *label884 lessThanEq 5 :_median.2:i
+  273:  jump *label874 always 0 0
+        label *label871
+  274:  jump *label872 lessThanEq 5 :_median.2:i
   275:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-        label *label884
-        label *label886
+        label *label872
+        label *label874
   276:  op sub *tmp175 :_isMedian.2:gt :_isMedian.2:lt
   277:  op abs :_isMedian.2:dif *tmp175 0
   278:  set *tmp180 false

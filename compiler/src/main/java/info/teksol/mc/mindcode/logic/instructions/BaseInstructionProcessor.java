@@ -343,7 +343,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                 + opcode.getAdditionalPrintArguments();
     }
 
-    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SENSOR, SET, PACKCOLOR,
+    private static final EnumSet<Opcode> DETERMINISTIC_OPCODES = EnumSet.of(OP, SELECT, SENSOR, SET, PACKCOLOR,
             UNPACKCOLOR, LOOKUP, EMPTY, SETADDR);
     private static final Set<String> CONSTANT_PROPERTIES = Set.of("@size", "@speed", "@type", "@id");
 

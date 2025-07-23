@@ -3,7 +3,7 @@
      4 instructions eliminated by Dead Code Elimination (5 iterations).
      3 instructions eliminated by Jump Optimization (5 iterations).
      3 instructions eliminated by Single Step Elimination (2 passes, 7 iterations).
-     1 instructions eliminated by If Expression Optimization (3 iterations).
+     1 instructions eliminated by If Expression Optimization (4 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions eliminated by Loop Optimization (3 iterations).
      3 loops improved by Loop Optimization.
@@ -172,15 +172,43 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
 
 Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
-    20 jump *label16 greaterThan :revert:num 0
-    21 label *label11
-    22 label *label8
+     7 label *label15
+     8 op mul :num :i :j
+     9 jump *label6 lessThanEq :num :max
+-    * set :revert:num :num
+-    * set :revert:res 0
+-    * label *label9
+-    * jump *label11 lessThanEq :revert:num 0
+-    * label *label16
+-    * op mul *tmp5 10 :revert:res
+-    * op mod *tmp6 :revert:num 10
+-    * op add :revert:res *tmp5 *tmp6
+-    * op idiv :revert:num :revert:num 10
+-    * label *label10
+-    * jump *label16 greaterThan :revert:num 0
+-    * label *label11
+-    * label *label8
 -    * jump *label12 notEqual :num :revert:res
 -    * set :max :num
+-    * label *label12
+-    * label *label13
++   10 set :revert:num :num
++   11 set :revert:res 0
++   12 label *label17
++   13 jump *label20 lessThanEq :revert:num 0
++   14 label *label18
++   15 op mul *tmp5 10 :revert:res
++   16 op mod *tmp6 :revert:num 10
++   17 op add :revert:res *tmp5 *tmp6
++   18 op idiv :revert:num :revert:num 10
++   19 label *label19
++   20 jump *label18 greaterThan :revert:num 0
++   21 label *label20
++   22 label *label21
 +   23 select :max equal :num :revert:res :num :max
-    24 label *label12
-    25 label *label13
-    26 label *label6
+    24 label *label6
+    25 label *label7
+    26 label *label4
 
 Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
  
@@ -194,10 +222,10 @@ Modifications by Iterated phase, Data Flow Optimization, pass 2, iteration 1:
      9 jump *label6 lessThanEq :num :max
     10 set :revert:num :num
     11 set :revert:res 0
-    12 label *label9
--    * jump *label11 lessThanEq :revert:num 0
-+   13 jump *label11 lessThanEq :num 0
-    14 label *label16
+    12 label *label17
+-    * jump *label20 lessThanEq :revert:num 0
++   13 jump *label20 lessThanEq :num 0
+    14 label *label18
     15 op mul *tmp5 10 :revert:res
     16 op mod *tmp6 :revert:num 10
 
@@ -214,20 +242,18 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
      7 jump *label6 lessThanEq :num :max
      8 set :revert:num :num
      9 set :revert:res 0
--    * label *label9
-    10 jump *label11 lessThanEq :num 0
-    11 label *label16
+-    * label *label17
+    10 jump *label20 lessThanEq :num 0
+    11 label *label18
     12 op mul *tmp5 10 :revert:res
     13 op mod *tmp6 :revert:num 10
     14 op add :revert:res *tmp5 *tmp6
     15 op idiv :revert:num :revert:num 10
--    * label *label10
-    16 jump *label16 greaterThan :revert:num 0
-    17 label *label11
--    * label *label8
+-    * label *label19
+    16 jump *label18 greaterThan :revert:num 0
+    17 label *label20
+-    * label *label21
     18 select :max equal :num :revert:res :num :max
--    * label *label12
--    * label *label13
     19 label *label6
 -    * label *label7
 -    * label *label4
@@ -261,14 +287,14 @@ op mul :num :i :j
 jump *label6 lessThanEq :num :max
 set :revert:num :num
 set :revert:res 0
-jump *label11 lessThanEq :num 0
-label *label16
+jump *label20 lessThanEq :num 0
+label *label18
 op mul *tmp5 10 :revert:res
 op mod *tmp6 :revert:num 10
 op add :revert:res *tmp5 *tmp6
 op idiv :revert:num :revert:num 10
-jump *label16 greaterThan :revert:num 0
-label *label11
+jump *label18 greaterThan :revert:num 0
+label *label20
 select :max equal :num :revert:res :num :max
 label *label6
 op add :j :j 1

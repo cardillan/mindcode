@@ -5,7 +5,7 @@
      4 instructions eliminated by Jump Optimization (7 iterations).
      6 instructions eliminated by Single Step Elimination (3 passes, 10 iterations).
      7 instructions eliminated by Expression Optimization (2 passes, 5 iterations).
-     5 instructions eliminated by If Expression Optimization (2 passes, 5 iterations).
+     5 instructions eliminated by If Expression Optimization (2 passes, 7 iterations).
     68 instructions eliminated by Data Flow Optimization (5 passes, 18 iterations).
      1 instructions modified by Loop Optimization (5 iterations).
      1 loops improved by Loop Optimization.
@@ -46,10 +46,10 @@ Final code before resolving virtual instructions:
    13:  select :findLinkedBlocks:variable equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
    14:  set :display :findLinkedBlocks:variable
    15:  set :findLinkedBlocks:variable :message
-   16:  jump *label70 notEqual @message :findLinkedBlocks:type
+   16:  jump *label66 notEqual @message :findLinkedBlocks:type
    17:  set :findLinkedBlocks:variable :findLinkedBlocks:block
    18:  set :findLinkedBlocks:message :findLinkedBlocks:block
-        label *label70
+        label *label66
    19:  set :message :findLinkedBlocks:variable
    20:  select :findLinkedBlocks:variable equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
    21:  set :switch :findLinkedBlocks:variable

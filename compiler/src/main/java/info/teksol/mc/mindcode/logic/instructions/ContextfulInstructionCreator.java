@@ -1,6 +1,6 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
-import info.teksol.mc.messages.MessageEmitter;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
@@ -16,14 +16,16 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 /// The implementing class only needs to implement the non-specific instruction creation method. All the specific
 /// methods are inherited from the interface.
 @NullMarked
-public interface ContextfulInstructionCreator extends MessageEmitter {
+public interface ContextfulInstructionCreator {
 
     InstructionProcessor getProcessor();
 
     /// Allocates a new temporary variable.
     ///
     /// @return a new temporary variable
-    LogicVariable nextTemp();
+    default LogicVariable nextTemp() {
+        return getProcessor().nextTemp();
+    }
 
     /// Provides an unchanging representation of the given ValueStore at the moment this method is called.
     /// The returned value is guaranteed not to change. If `valueStore` is a literal, returns the literal
@@ -31,9 +33,19 @@ public interface ContextfulInstructionCreator extends MessageEmitter {
     ///
     /// @param valueStore the value to use
     /// @return a LogicValue capturing the current value of the valueStore
-    LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType);
+    default LogicValue defensiveCopy(ValueStore valueStore, ArgumentType argumentType) {
+        if (valueStore instanceof LogicValue value && value.isImmutable()) {
+            return value;
+        } else {
+            LogicVariable tmp = nextTemp().withType(argumentType);
+            createSet(tmp, valueStore.getValue(this));
+            return tmp;
+        }
+    }
 
-    void setInternalError();
+    default void setInternalError() {
+        throw new MindcodeInternalError("Internal error occurred.");
+    }
 
     LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);
 

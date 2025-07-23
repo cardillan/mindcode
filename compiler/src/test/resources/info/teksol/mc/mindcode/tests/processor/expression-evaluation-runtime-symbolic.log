@@ -2,7 +2,7 @@
     74 instructions eliminated by Temp Variables Elimination (2 iterations).
      1 instructions eliminated by Single Step Elimination (6 iterations).
      1 instructions modified by Expression Optimization (3 iterations).
-     3 instructions eliminated by If Expression Optimization (3 iterations).
+     3 instructions eliminated by If Expression Optimization (4 iterations).
    202 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
     11 instructions added by Function Inlining (4 iterations).
      6 function calls inlined by Function Inlining.
@@ -2135,12 +2135,13 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
 -    * jump *label78 equal zero false
 -    * set *tmp209 null
 -    * jump *label79 always
-+  330 select *tmp209 notEqual zero false null @copper-wall
-   331 label *label78
+-    * label *label78
 -    * set *tmp209 @copper-wall
-   332 label *label79
-   333 label *label77
-   334 sensor *tmp210 *tmp209 @id
+-    * label *label79
++  330 select *tmp209 notEqual zero false null @copper-wall
+   331 label *label77
+   332 sensor *tmp210 *tmp209 @id
+   333 assertequals 17 *tmp210 "Logic ID"
 
 Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 instructions):
  
@@ -2232,9 +2233,9 @@ Modifications by Inline function 'assertEqualsRound' defined at line 3:1 (+11 in
    317 label *label58
    318 op sub *tmp167 -8 zero
  
-   389 assertequals 17 *tmp210 "Logic ID"
-   390 stop
-   391 end
+   387 assertequals 17 *tmp210 "Logic ID"
+   388 stop
+   389 end
 -    * label *label3
 -    * # "Function: void assertEqualsRound(in expected, in actual, in title)"
 -    * op mul *tmp211 :assertEqualsRound:actual 100000000
@@ -2866,8 +2867,6 @@ Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
    248 assertequals %ffffffff %[white] "named color literals"
    249 # "Function: inline def o(in n)"
    250 select *tmp209 notEqual zero false null @copper-wall
--    * label *label78
--    * label *label79
 -    * label *label77
    251 sensor *tmp210 *tmp209 @id
    252 assertequals 17 *tmp210 "Logic ID"

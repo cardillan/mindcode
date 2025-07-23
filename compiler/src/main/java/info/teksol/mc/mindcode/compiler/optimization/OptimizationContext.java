@@ -373,6 +373,12 @@ class OptimizationContext {
                             .map(LogicVariable.class::cast)
                             .forEachOrdered(writes::add);
 
+                    if (ix.getSideEffects() != SideEffects.NONE) {
+                        reads.addAll(ix.getSideEffects().reads());
+                        writes.addAll(ix.getSideEffects().writes());
+                        writes.addAll(ix.getSideEffects().resets());
+                    }
+
                     if (ix instanceof EndInstruction) {
                         functionDataFlow.endingFunctions.add(context.function());
                     }
@@ -1538,19 +1544,59 @@ class OptimizationContext {
         return new LogicList(context, instructions);
     }
 
+    protected LogicList createLogicList(AstContext context) {
+        return new LogicList(context, List.of());
+    }
+
     private final LogicList EMPTY = new LogicList(null, java.util.List.of());
 
-    // TODO allow modifications to be done to the LogicList - a block of code could be created in LogicList
-    //      and then inserted into the program.
     /// Class for accessing context instructions in an organized manner.
     /// Is always created from a specific AST context.
-    protected class LogicList implements Iterable<LogicInstruction> {
+    protected class LogicList implements Iterable<LogicInstruction>, ContextfulInstructionCreator, ContextlessInstructionCreator {
         private final @Nullable AstContext astContext;
-        private final List<LogicInstruction> instructions;
+        private final ArrayList<LogicInstruction> instructions;
 
         private LogicList(@Nullable AstContext astContext, List<LogicInstruction> instructions) {
             this.astContext = astContext;
-            this.instructions = instructions;
+            this.instructions = new ArrayList<>(instructions);
+        }
+
+        @Override
+        public InstructionProcessor getProcessor() {
+            return instructionProcessor;
+        }
+
+        @Override
+        public LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments) {
+            return createInstruction(Objects.requireNonNull(astContext), opcode, arguments);
+        }
+
+        @Override
+        public LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
+            LogicInstruction instruction = instructionProcessor.createInstruction(astContext, opcode, arguments);
+            instructions.add(instruction);
+            return instruction;
+        }
+
+        public void addToContext(LogicInstruction instruction) {
+            instructions.add(instruction.withContext(Objects.requireNonNull(astContext)));
+        }
+
+        public void addToContext(List<? extends LogicInstruction> instructions) {
+            AstContext context = Objects.requireNonNull(astContext);
+            instructions.forEach(ix -> this.instructions.add(ix.withContext(context)));
+        }
+
+        public LogicInstruction remove(int index) {
+            return instructions.remove(index);
+        }
+
+        public LogicInstruction removeFirst() {
+            return instructions.removeFirst();
+        }
+
+        public LogicInstruction removeLast() {
+            return instructions.removeLast();
         }
 
         public @Nullable AstContext getAstContext() {
@@ -1573,7 +1619,7 @@ class OptimizationContext {
             return instructions.isEmpty();
         }
 
-        public @NonNull Iterator<LogicInstruction> iterator() {
+        public Iterator<LogicInstruction> iterator() {
             return instructions.iterator();
         }
 

@@ -5,7 +5,7 @@
     12 instructions eliminated by Jump Optimization (4 iterations).
      8 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      1 instructions eliminated by Expression Optimization (2 iterations).
-     2 instructions eliminated by If Expression Optimization (2 iterations).
+     2 instructions eliminated by If Expression Optimization (3 iterations).
      3 instructions modified by Data Flow Optimization (4 iterations).
      4 instructions modified by Loop Optimization (2 iterations).
      4 loops improved by Loop Optimization.
@@ -598,48 +598,52 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
    112 op sub :amount :curr :prev
    113 op sub :time :currTick :prevTick
 
-Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-2 instructions):
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
     50 label *label1
     51 jump *label40 equal .SOURCE_MEMORY null
     52 label *label2
 -    * jump *label15 notEqual .TARGET_MEMORY null
 -    * set .TARGET_MEMORY .SOURCE_MEMORY
+-    * label *label15
+-    * label *label16
 +   53 select .TARGET_MEMORY equal .TARGET_MEMORY null .SOURCE_MEMORY .TARGET_MEMORY
-    54 label *label15
-    55 label *label16
-    56 set :startIndex 0
+    54 set :startIndex 0
+    55 sensor *tmp13 .TARGET_MEMORY @type
+    56 jump *label18 notEqual *tmp13 @memory-cell
+
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 2 (-1 instructions):
  
-   110 label *label31
-   111 op sub :amount :curr :prev
-   112 op sub :time :currTick :prevTick
+   108 label *label31
+   109 op sub :amount :curr :prev
+   110 op sub :time :currTick :prevTick
 -    * jump *label36 notEqual :amount 0
-   113 set :rate 0
+   111 set :rate 0
 -    * jump *label37 always
-+  114 jump *label37 equal :amount 0
-   115 label *label36
-   116 op div *tmp42 :amount :time
-   117 op max :rate *tmp42 0
++  112 jump *label37 equal :amount 0
+   113 label *label36
+   114 op div *tmp42 :amount :time
+   115 op max :rate *tmp42 0
 
 Modifications by Replicate loop condition at line 57:1 (+1 instructions):
  
-    83 label *label24
-    84 sensor *tmp23 switch1 @enabled
-    85 jump *label26 notEqual *tmp23 0
-+   86 label *label43
-    87 op add :nextTick :nextTick TICKS
-    88 op add *tmp26 :nextTick TICKS
-    89 jump *label27 lessThanEq @tick *tmp26
+    81 label *label24
+    82 sensor *tmp23 switch1 @enabled
+    83 jump *label26 notEqual *tmp23 0
++   84 label *label43
+    85 op add :nextTick :nextTick TICKS
+    86 op add *tmp26 :nextTick TICKS
+    87 jump *label27 lessThanEq @tick *tmp26
  
-   156 set :prevTick :currTick
-   157 set :prev :curr
-   158 label *label25
+   154 set :prevTick :currTick
+   155 set :prev :curr
+   156 label *label25
 -    * jump *label24 always
-+  159 sensor *tmp23 switch1 @enabled
-+  160 jump *label43 equal *tmp23 0
-   161 label *label26
-   162 control enabled switch1 0
-   163 end
++  157 sensor *tmp23 switch1 @enabled
++  158 jump *label43 equal *tmp23 0
+   159 label *label26
+   160 control enabled switch1 0
+   161 end
 
 Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
  
@@ -685,8 +689,6 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
     44 jump *label40 equal .SOURCE_MEMORY null
 -    * label *label2
     45 select .TARGET_MEMORY equal .TARGET_MEMORY null .SOURCE_MEMORY .TARGET_MEMORY
--    * label *label15
--    * label *label16
     46 set :startIndex 0
     47 sensor *tmp13 .TARGET_MEMORY @type
     48 jump *label18 notEqual *tmp13 @memory-cell

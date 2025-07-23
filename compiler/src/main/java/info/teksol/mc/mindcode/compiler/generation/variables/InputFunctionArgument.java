@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -83,7 +84,7 @@ public class InputFunctionArgument implements FunctionArgument {
 
     @Override
     public void setValue(ContextfulInstructionCreator creator, LogicValue newValue) {
-        creator.error(argument, ERR.LVALUE_CANNOT_ASSIGN_TO_ARGUMENT);
+        MindcodeCompiler.getContext().error(argument, ERR.LVALUE_CANNOT_ASSIGN_TO_ARGUMENT);
     }
 
     @Override

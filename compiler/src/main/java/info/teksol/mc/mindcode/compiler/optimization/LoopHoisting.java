@@ -47,8 +47,6 @@ class LoopHoisting extends BaseOptimizer {
     }
 
     private void moveInvariants(AstContext loop) {
-        boolean improved = false;
-
         AstContext anchor;
         List<AstContext> parts = new ArrayList<>(loop.children());
         if (parts.getFirst().matches(INIT)) {
@@ -72,13 +70,33 @@ class LoopHoisting extends BaseOptimizer {
 
         Set<LogicArgument> loopVariables = findLoopVariables(loop, parts, null);
 
-        // An instruction is invariant if none of its arguments (input, output) is a loop variable
         // Only move instructions from the direct children
-        List<LogicInstruction> invariants = parts.stream().flatMap(child -> contextStream(child)
+        Set<LogicArgument> readVariables = new HashSet<>();
+        List<LogicInstruction> invariants = new ArrayList<>();
+
+        parts.stream()
+                .flatMap(this::contextStream)
                 .filter(ix -> !(ix instanceof EmptyInstruction))
-                .filter(ix -> safeToMove(loop, ix))
-                .filter(ix -> ix.inputOutputArgumentsStream().noneMatch(loopVariables::contains))
-        ).toList();
+                .forEach(ix -> {
+                    // An instruction can be hoisted if none of its arguments (input, output) is a loop variable,
+                    // and it doesn't modify a variable that has already been read by the loop
+                    if (safeToMove(loop, ix)
+                        && ix.inputOutputArgumentsStream().noneMatch(loopVariables::contains)
+                        && ix.outputArgumentsStream().noneMatch(readVariables::contains)
+                    ) {
+                        invariants.add(ix);
+                    }
+
+                    // As soon as a variable is read by the loop, it cannot be safely hoisted
+                    ix.inputArgumentsStream().filter(a -> a instanceof LogicVariable).forEach(readVariables::add);
+                    readVariables.addAll(ix.getSideEffects().reads());
+                    if (ix instanceof CallInstruction || ix instanceof CallRecInstruction) {
+                        MindcodeFunction function = ix.getAstContext().function();
+                        if (function != null) {
+                            readVariables.addAll(optimizationContext.getFunctionReads(function));
+                        }
+                    }
+                });
 
         if (!invariants.isEmpty()) {
             AstContext initContext = getInitContext(loop);
@@ -89,30 +107,8 @@ class LoopHoisting extends BaseOptimizer {
             int index = firstInstructionIndex(anchor);
             insertInstructions(index, instructions);
             invariants.forEach(this::invalidateInstruction);
-            improved = true;
+            count++;
         }
-
-        // Try to find invariant Ifs
-        List<AstContext> invariantIfs = parts.stream()
-                .flatMap(c -> c.children().stream())
-                .filter(c -> safeIfContext(loop, parts, c) && onlyLocalJumps(c))
-                .toList();
-
-        for (AstContext invariant : invariantIfs) {
-            if (!contextStream(invariant).allMatch(EmptyInstruction.class::isInstance)) {
-                assert invariant.node() != null;
-                AstContext bodyContext = getInitContext(loop).createChild(invariant.existingNode(), invariant.contextType());
-                LogicList original = contextInstructions(invariant);
-                LogicList duplicated = original.duplicateToContext(bodyContext);
-                duplicated.stream().filter(ix -> ix.getHoistId() != LogicLabel.EMPTY).forEach(ix -> ix.setHoisted(true));
-                int index = firstInstructionIndex(anchor);
-                insertInstructions(index, duplicated);
-                original.forEach(this::removeInstruction);
-                improved = true;
-            }
-        }
-
-        if (improved) count++;
     }
 
     private Set<LogicArgument> findLoopVariables(AstContext loop, List<AstContext> parts, @Nullable AstContext inspectedContext) {
@@ -197,7 +193,7 @@ class LoopHoisting extends BaseOptimizer {
                         }
                     });
         } else {
-            // This instruction isn't loop independent: it's unsafe, nondeterministic or nonlinear.
+            // This instruction isn't loop-independent: it's unsafe, nondeterministic or nonlinear.
             // Add output variables as depending on themselves, removing their invariant status
             instruction.outputArgumentsStream()
                     .filter(LogicVariable.class::isInstance)
@@ -229,10 +225,7 @@ class LoopHoisting extends BaseOptimizer {
     }
 
     private boolean isMovable(LogicInstruction instruction) {
-        return  instructionProcessor.isDeterministic(instruction) && instruction.isSafe()
-                && instruction.outputArgumentsStream().noneMatch(LogicArgument::isGlobalVariable)
-                && instruction.getSideEffects().writes().stream().noneMatch(LogicArgument::isGlobalVariable)
-                && instruction.getSideEffects().resets().stream().noneMatch(LogicArgument::isGlobalVariable);
+        return  instructionProcessor.isDeterministic(instruction) && instruction.isSafe();
     }
 
     private boolean safeToMove(AstContext loop, LogicInstruction instruction) {

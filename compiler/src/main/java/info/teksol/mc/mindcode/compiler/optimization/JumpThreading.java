@@ -129,7 +129,12 @@ class JumpThreading extends BaseOptimizer {
         // Redirect compatible jumps
         if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {
             return ix.getTarget();
-        } 
+        }
+
+        // Jump to call can get redirected
+        if (experimental() && !getProfile().isSymbolicLabels() && next instanceof CallInstruction call) {
+            return call.getCallAddr();
+        }
 
         // Handle end instruction only in advanced mode
         if (next == null || (next instanceof EndInstruction)) {

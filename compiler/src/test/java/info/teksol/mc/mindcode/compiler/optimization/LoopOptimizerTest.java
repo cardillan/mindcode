@@ -183,7 +183,6 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
     @Test
     void optimizesBitReadTest() {
         assertCompilesTo("""
-                        #set optimization = advanced;
                         def getBit(bitIndex)
                           bitIndex % 2;
                         end;
@@ -193,16 +192,12 @@ class LoopOptimizerTest extends AbstractOptimizerTest<LoopOptimizer> {
                         end;
                         """,
                 createInstruction(SET, ":i", "0"),
-                createInstruction(LABEL, var(1006)),
-                createInstruction(OP, "mod", var(0), ":i", "2"),
-                createInstruction(JUMP, var(1004), "equal", var(0), "false"),
-                createInstruction(PRINT, "1"),
-                createInstruction(JUMP, var(1005), "always"),
-                createInstruction(LABEL, var(1004)),
-                createInstruction(PRINT, "0"),
-                createInstruction(LABEL, var(1005)),
+                createInstruction(LABEL, label(6)),
+                createInstruction(OP, "mod", tmp(0), ":i", "2"),
+                createInstruction(SELECT, tmp(2), "notEqual", tmp(0), "false", "1", "0"),
+                createInstruction(PRINT, tmp(2)),
                 createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, var(1006), "lessThan", ":i", "1000")
+                createInstruction(JUMP, label(6), "lessThan", ":i", "1000")
         );
     }
 

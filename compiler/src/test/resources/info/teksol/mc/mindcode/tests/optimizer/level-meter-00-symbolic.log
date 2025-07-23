@@ -5,7 +5,7 @@
      1 instructions eliminated by Jump Normalization (4 iterations).
      6 instructions eliminated by Jump Optimization (4 iterations).
      6 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
-     1 instructions eliminated by If Expression Optimization (2 iterations).
+     1 instructions eliminated by If Expression Optimization (3 iterations).
     20 instructions modified by Data Flow Optimization (7 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      3 loops improved by Loop Optimization.
@@ -604,10 +604,12 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    177 op add :index :index 1
 -    * jump *label35 lessThanEq :index .END_INDEX
 -    * set :index .START_INDEX
+-    * label *label35
+-    * label *label36
 +  178 select :index greaterThan :index .END_INDEX .START_INDEX :index
-   179 label *label35
-   180 label *label36
-   181 write :index .MEMORY 0
+   179 write :index .MEMORY 0
+   180 write :scaled .MEMORY :index
+   181 op sub *tmp49 :index .SIZE
 
 Modifications by Replicate loop condition at line 122:1 (+1 instructions):
  
@@ -619,14 +621,14 @@ Modifications by Replicate loop condition at line 122:1 (+1 instructions):
    155 set :prevTick :nextTick
    156 op add :nextTick :nextTick TICKS
  
-   202 print "\n"
-   203 printflush .MESSAGE
-   204 label *label26
+   200 print "\n"
+   201 printflush .MESSAGE
+   202 label *label26
 -    * jump *label25 always
-+  205 sensor *tmp25 .SWITCH @enabled
-+  206 jump *label39 equal *tmp25 0
-   207 label *label27
-   208 end
++  203 sensor *tmp25 .SWITCH @enabled
++  204 jump *label39 equal *tmp25 0
+   205 label *label27
+   206 end
 
 Modifications by Convert case at line 34:9 (segments: 1, padded low) (+136 instructions):
  
@@ -1108,15 +1110,6 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    439 jump *label38 lessThan @tick :nextTick
    440 label *label32
    441 sensor :amount .CONTAINER .SENSOR
- 
-   445 op add :scaled 10 *tmp40
-   446 op add :index :index 1
-   447 select :index greaterThan :index .END_INDEX .START_INDEX :index
--    * label *label35
--    * label *label36
-   448 write :index .MEMORY 0
-   449 write :scaled .MEMORY :index
-   450 op sub *tmp49 :index .SIZE
  
    467 print *tmp51
    468 print "\n"

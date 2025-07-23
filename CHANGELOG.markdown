@@ -4,7 +4,22 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.8.0-beta.2 - Unreleased
+## 3.8.0-beta.3 - 2025-07-22
+
+**Note:** this is a beta release. It's been released primarily to support the newest Mindustry Logic instructions (`select`), and as a preview of the newest optimization features (namely, text-based jump tables).
+
+The newly added features are fully functional. There's an unfinished support for the `#setlocal` directive. It doesn't have any effect at this time.
+
+### Fixed
+
+* Fixed the Data Flow Optimization not optimizing global variables ([#280](https://github.com/cardillan/mindcode/issues/280)).
+* Fixed Loop Hoisting processing instructions that change variables already read by the loop ([#282](https://github.com/cardillan/mindcode/issues/282)). Loop Hoisting can process global variables again.
+  
+### Changed
+
+* Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to redirect jumps to a function call directly to the function. The optimization may currently only take place when `symbolic-labels` is set to `false`.
+
+## 3.8.0-beta.2 - 2025-07-21
 
 **Note:** this is a beta release. It's been released primarily to support the newest Mindustry Logic instructions (`select`), and as a preview of the newest optimization features (namely, text-based jump tables).
 
@@ -14,7 +29,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Fixed the `target` directive not recognizing minor target versions.
 * Fixed the compiler incorrectly refusing remote function parameters matching global variables or linked block names.
-* Fixed The Data Flow optimization incorrectly eliminating writes to global variables ([#279](https://github.com/cardillan/mindcode/issues/279)).
+* Fixed the Data Flow optimization incorrectly eliminating writes to global variables ([#279](https://github.com/cardillan/mindcode/issues/279)).
 * Fixed the Loop Hoisting optimization incorrectly processing assignments to global variables ([#281](https://github.com/cardillan/mindcode/issues/281)).
 
 ### Added

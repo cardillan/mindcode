@@ -11,10 +11,7 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
 import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
-import org.junit.jupiter.api.DynamicContainer;
-import org.junit.jupiter.api.DynamicNode;
-import org.junit.jupiter.api.DynamicTest;
-import org.junit.jupiter.api.TestFactory;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.parallel.Execution;
 import org.junit.jupiter.api.parallel.ExecutionMode;
 
@@ -49,10 +46,10 @@ public class SystemLibraryTest {
                 .setRun(true);
     }
 
-//    @Test
-//    void testOneLibrary() throws IOException {
-//        testLibrary("printing", OptimizationLevel.EXPERIMENTAL);
-//    }
+    @Test
+    void testOneLibrary() throws IOException {
+        testLibrary("printing", OptimizationLevel.EXPERIMENTAL);
+    }
 
     @TestFactory
     @Execution(ExecutionMode.CONCURRENT)

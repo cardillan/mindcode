@@ -44,7 +44,7 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
     @Test
     void processesAssertBounds() {
         // Array optimization will redirect all array writes to the single element
-        // Therefore the program will output 10.
+        // Therefore, the program will output 10.
         testCode(expectedMessages()
                         .add("Failed runtime check: 'position 4:1: index out of bounds (0 to 0)'."),
                 """
@@ -56,6 +56,29 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
                         stopProcessor();
                         """,
                 "10");
+    }
+
+    @Test
+    void processesGlobalVariableDataFlow() {
+        testCode("""
+                        var a;
+                        var b[4];
+                        const c[] = (1, 2, 3, 4);
+                        const d[] = (2, 4, 6, 8);
+                        param p = 0;
+                        
+                        begin
+                            a = "A"; b = c;
+                            foo();
+                            a = "B"; b = d;
+                            print(a, b[p]);
+                        end;
+                        
+                        noinline def foo()
+                            print(a, b[p]);
+                        end;
+                        """,
+                "A", "1", "B", "2");
     }
 
     @Test

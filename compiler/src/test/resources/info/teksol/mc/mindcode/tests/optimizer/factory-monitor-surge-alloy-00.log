@@ -4,7 +4,7 @@
     15 instructions eliminated by Jump Optimization (4 iterations).
     11 instructions eliminated by Single Step Elimination (2 passes, 6 iterations).
      2 instructions eliminated by Expression Optimization (2 iterations).
-     8 instructions eliminated by If Expression Optimization (2 iterations).
+     8 instructions eliminated by If Expression Optimization (3 iterations).
      1 instructions eliminated by Data Flow Optimization (2 passes, 6 iterations).
      1 instructions added by Loop Optimization (2 iterations).
      2 loops improved by Loop Optimization.
@@ -730,41 +730,58 @@ Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1
    111 op land :showa *tmp48 *tmp50
 -    * jump *label24 equal :showa false
 -    * set :icon @surge-alloy
+-    * label *label24
+-    * label *label25
 +  112 select :icon notEqual :showa false @surge-alloy :icon
-   113 label *label24
-   114 label *label25
-   115 op mod :column :index 2
+   113 op mod :column :index 2
+   114 op idiv :row :index 2
+   115 op mul *tmp55 :column .BAR_SPACE
  
-   125 op greaterThan *tmp61 :minimum 16
-   126 op equal *tmp62 :showa 0
-   127 op land *tmp63 *tmp61 *tmp62
+   120 op sub :ym1 :y 1
+   121 draw color 0 0 80 255
+   122 draw rect :xm1 :ym1 .BAR_SPACE 16
+-    * op greaterThan *tmp61 :minimum 16
+-    * op equal *tmp62 :showa 0
+-    * op land *tmp63 *tmp61 *tmp62
 -    * jump *label26 equal *tmp63 false
 -    * set :icon @surge-smelter
-+  128 select :icon notEqual *tmp63 false @surge-smelter :icon
-   129 label *label26
-   130 label *label27
-   131 draw color 255 255 255 255
+-    * label *label26
+-    * label *label27
++  123 op greaterThan *tmp61 :minimum 16
++  124 op equal *tmp62 :showa 0
++  125 op land *tmp63 *tmp61 *tmp62
++  126 select :icon notEqual *tmp63 false @surge-smelter :icon
+   127 draw color 255 255 255 255
+   128 jump *label28 equal :e false
+   129 jump *label30 lessThanEq :power 0
  
-   184 op greaterThan *tmp86 :minimum 14
-   185 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
-   186 op land *tmp88 *tmp86 *tmp87
+   177 set :minimum :a
+   178 jump *label35 always
+   179 label *label34
+-    * op greaterThan *tmp86 :minimum 14
+-    * op greaterThanEq *tmp87 :boost EXPECTED_BOOST
+-    * op land *tmp88 *tmp86 *tmp87
 -    * jump *label36 equal *tmp88 false
 -    * set *tmp89 0
 -    * jump *label37 always
-+  187 select *tmp89 notEqual *tmp88 false 0 255
-   188 label *label36
+-    * label *label36
 -    * set *tmp89 255
-   189 label *label37
-   190 set :red *tmp89
+-    * label *label37
++  180 op greaterThan *tmp86 :minimum 14
++  181 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
++  182 op land *tmp88 *tmp86 *tmp87
++  183 select *tmp89 notEqual *tmp88 false 0 255
+   184 set :red *tmp89
 -    * jump *label38 lessThanEq :minimum 7
 -    * set *tmp91 255
 -    * jump *label39 always
-+  191 select *tmp91 greaterThan :minimum 7 255 0
-   192 label *label38
+-    * label *label38
 -    * set *tmp91 0
-   193 label *label39
-   194 set :green *tmp91
-   195 set :blue 0
+-    * label *label39
++  185 select *tmp91 greaterThan :minimum 7 255 0
+   186 set :green *tmp91
+   187 set :blue 0
+   188 label *label35
 
 Modifications by Replicate loop condition at line 26:1 (+1 instructions):
  
@@ -776,14 +793,14 @@ Modifications by Replicate loop condition at line 26:1 (+1 instructions):
     21 jump *label5 equal bank1 null
     22 jump *label7 notEqual FROM_INDEX 0
  
-   228 print "ms"
-   229 printflush message1
-   230 label *label3
+   220 print "ms"
+   221 printflush message1
+   222 label *label3
 -    * jump *label2 always
-+  231 sensor *tmp7 switch1 @enabled
-+  232 jump *label43 equal *tmp7 0
-   233 label *label4
-   234 end
++  223 sensor *tmp7 switch1 @enabled
++  224 jump *label43 equal *tmp7 0
+   225 label *label4
+   226 end
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
  
@@ -849,35 +866,6 @@ Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
    101 op greaterThan *tmp48 :a 5
    102 op sub *tmp49 21 :a
    103 op lessThan *tmp50 *tmp49 :minimum
-   104 op land :showa *tmp48 *tmp50
-   105 select :icon notEqual :showa false @surge-alloy :icon
--    * label *label24
--    * label *label25
-   106 op mod :column :index 2
-   107 op idiv :row :index 2
-   108 op mul *tmp55 :column .BAR_SPACE
- 
-   117 op equal *tmp62 :showa 0
-   118 op land *tmp63 *tmp61 *tmp62
-   119 select :icon notEqual *tmp63 false @surge-smelter :icon
--    * label *label26
--    * label *label27
-   120 draw color 255 255 255 255
-   121 jump *label28 equal :e false
-   122 jump *label30 lessThanEq :power 0
- 
-   174 op greaterThanEq *tmp87 :boost EXPECTED_BOOST
-   175 op land *tmp88 *tmp86 *tmp87
-   176 select *tmp89 notEqual *tmp88 false 0 255
--    * label *label36
--    * label *label37
-   177 set :red *tmp89
-   178 select *tmp91 greaterThan :minimum 7 255 0
--    * label *label38
--    * label *label39
-   179 set :green *tmp91
-   180 set :blue 0
-   181 label *label35
  
    186 op max :blue 192 :blue
    187 set :boost EXPECTED_BOOST

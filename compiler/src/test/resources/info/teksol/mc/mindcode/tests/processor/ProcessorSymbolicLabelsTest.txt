@@ -1,5 +1,5 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
-assignments-in-expressions.mnd:                    14       14     100.0%   3E55A40DD17DEC43   EB522D4184714F1D
+assignments-in-expressions.mnd:                    13       13     100.0%   3E55A40DD17DEC43   6FCC40820CBC45B3
 complex-case-expression.mnd:                       49      295      97.9%   E6AA465B5328A02F   945A331408EFA54B
 equality-comparisons.mnd:                          69       69     100.0%   16DB5681427420C5   9D41079A475F92E2
 executes-sort-variables.mnd:                       13       12      92.3%   E98CEC750C65B106   54EA27A73D497847
@@ -14,6 +14,7 @@ prints-values.mnd:                                 42       42     100.0%   EA63
 processesAssertBounds:                              5        5     100.0%   442250AE1653638F   5ED4E258FEEC3347
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   295C15253DC5C1B9
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   30633B28AE9D9EDA
+processesGlobalVariableDataFlow:                   36       26      72.2%   A117AFBA99D093C8   38051C734B43EAAB
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   58A58482F10A4CAB
 recursive-calls.mnd:                              103      278      99.0%   9CB0965E0E62F089   5F9E144A611E59FF
 recursive-function-condition.mnd:                  22       26      95.4%   02C171DDB1F56F08   60A7D389E0880959
