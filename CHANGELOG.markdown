@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.8.0-beta.3 - 2025-07-22
+## 3.8.0-beta.3 - 2025-07-24
 
 **Note:** this is a beta release. It's been released primarily to support the newest Mindustry Logic instructions (`select`), and as a preview of the newest optimization features (namely, text-based jump tables).
 
@@ -19,7 +19,7 @@ The newly added features are fully functional. There's an unfinished support for
 ### Changed
 
 * Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to redirect jumps to a function call directly to the function. The optimization may currently only take place when `symbolic-labels` is set to `false`.
-* Improved the `select` optimization in the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization).
+* Improved the `select` optimization in the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to handle more cases as well as nested or chained conditional expressions.
 
 ## 3.8.0-beta.2 - 2025-07-21
 

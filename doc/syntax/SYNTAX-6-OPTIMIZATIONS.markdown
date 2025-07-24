@@ -236,7 +236,7 @@ select *tmp2 lessThan *tmp0 5 "low" "high"
 print *tmp2
 ```
 
-The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is not worsened by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
+The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is improved by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
 
 ```Mindcode
 #set target = 8;

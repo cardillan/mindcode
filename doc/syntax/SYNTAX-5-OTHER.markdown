@@ -92,6 +92,9 @@ printflush message1
 
 (Notice the difference—running the code on a processor different from the compilation target produces incorrect results.)
 
+> [!NOTE]
+> You can use the [`target-guard` option](#option-target-guard) to ensure your code will only run on the expected version of Mindustry.  
+
 ## Option `case-optimization-strength`
 
 This option affects the number of segment arrangements considered when the Case Switching optimization performs [jump table compression](SYNTAX-6-OPTIMIZATIONS.markdown#jump-table-compression). The higher the number, the more segment arrangements are considered, but the more time is needed for generating and evaluating them. The default value of this option is `2` for the web application, and `3` for the command-line tool. The maximal possible value is `4` for the web application, and `6` for the command-line tool. Values larger than `4` typically only bring additional benefits for case expressions with a very complex structure. Increasing the value by one significantly increases both the number of segment arrangements and the optimization time. 
