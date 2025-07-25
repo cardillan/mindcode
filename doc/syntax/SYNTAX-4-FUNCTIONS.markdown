@@ -506,8 +506,6 @@ op add :index :index 1
 jump 2 always 0 0
 ```
 
-
-
 ## The `strlen()` function
 
 The `strlen()` function returns the length of a string passed in as an argument. The function requires target `8` or higher.
@@ -528,6 +526,52 @@ print *tmp0
 print "\n"
 printflush message1
 ```
+
+## The `encode()` function
+
+The `encode()` function allows encoding numeric values into a string, so that they can be later retrieved through the `char()` function. Values encoded to a string can be stored in variables or internal arrays and passed around to functions or remote functions. The string value is created at compile-time, meaning all function arguments must be compile-time constants.
+
+The first argument to the function is an _offset_. The remaining arguments are the values to be encoded. The offset is added to each value before it is encoded. Using a nonzero offset makes it possible to encode values that cannot be represented in an mlog string. The offset needs to be subtracted from the values obtained by the `char()` function.
+
+The following integer values can be encoded into a string:
+
+* Integers in the range `1 .. 0xD7FF` (`1 .. 55295`), except 13 and 34 (note that `0` is not allowed either).
+* Integers in the range `0xE000 .. 0xFFFF` (`57344 .. 65535`).
+
+Furthermore, the encoded string must not contain the character sequence `\n` (`92` followed by `110`).
+
+When the function produces a string that cannot be encoded, a compilation error occurs.
+
+Example:
+
+```Mindcode
+#set target = 8;
+
+const offset = 35;
+const data = encode(offset, 0, 1, 2, 5, 10, 20, 50);
+
+for i in 0 ... strlen(data) do
+    println(char(data, i) - offset);
+end;
+```
+
+compiles into
+
+```mlog
+sensor *tmp1 "#$%(-7U" @size
+set :i 0
+jump 9 greaterThanEq 0 *tmp1
+read *tmp2 "#$%(-7U" :i
+op sub *tmp3 *tmp2 35
+print *tmp3
+print "\n"
+op add :i :i 1
+jump 3 lessThan :i *tmp1
+printflush message1
+```
+
+> [!NOTE]
+> Data encoded with the `encode()` function may not be easily readable in a text editor or the game interface. Some text editors may not be able to display the encoded data correctly, or may even damage the data when copying them to the clipboard. If you suspect this is happening, use the Mlog Watcher mod, or create schematics containing a processor with your code, to avoid the clipboard. 
 
 ## Remote calls
 

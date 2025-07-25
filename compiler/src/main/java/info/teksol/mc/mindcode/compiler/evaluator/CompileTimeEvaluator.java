@@ -14,6 +14,8 @@ import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
 import info.teksol.mc.mindcode.logic.arguments.LogicLiteral;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
@@ -87,6 +89,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
             case AstOperatorTernary n -> evaluateTernaryOp(n, local);
             case AstIfExpression n -> evaluateIfExpression(n, local);
             case AstParentheses n -> evaluateParentheses(n, local);
+            case AstPropertyAccess n -> evaluatePropertyAccess(n, local);
             case AstFunctionCall n when !n.hasObject() -> evaluateFunctionCall(n, local);
             default -> exp;
         });
@@ -234,6 +237,27 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         }
         // All `if` branch conditions evaluated to false: the result is the else branch.
         return evaluateBody(node.getElseBranch(), local);
+    }
+
+    private AstMindcodeNode evaluatePropertyAccess(AstPropertyAccess node, boolean local) {
+        BuiltinEvaluation evaluation = node.getProfile().getBuiltinEvaluation();
+        if (evaluation == BuiltinEvaluation.NONE) return node;
+
+        // We're only compile-time evaluating IDs
+        AstBuiltInIdentifier property = node.getProperty();
+        if (!property.getName().equals("@id")) return node;
+
+        AstMindcodeNode object = evaluateNode(node.getObject(), local);
+        if (!(object instanceof AstBuiltInIdentifier item)) return node;
+
+        MindustryMetadata metadata = processor.getMetadata();
+        MindustryContent namedContent = metadata.getNamedContent(item.getName());
+        if (namedContent == null) return node;
+
+        if (evaluation == BuiltinEvaluation.COMPATIBLE && !metadata.isStableBuiltin(item.getName())) return node;
+        if (namedContent.logicId() < 0) return node;
+
+        return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(namedContent.logicId()));
     }
 
     private AstMindcodeNode evaluateBody(List<AstMindcodeNode> body, boolean local) {

@@ -20,7 +20,7 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 public class LogicVariable extends AbstractArgument implements LogicValue, LogicAddress, FunctionParameter {
     // Looks like a variable but translates to 0 in mlog.
     private static final LogicVariable UNUSED_VARIABLE = new LogicVariable(EMPTY,
-            PRESERVED, ValueMutability.IMMUTABLE, "0");
+            PRESERVED, ValueMutability.IMMUTABLE, "0", "0");
 
     // This variable never makes it into a compiled file - it is only used to recover from compiler errors
     // When errors happen, the code is not given away. The name can be hard-coded
@@ -63,12 +63,13 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     // For block/parameter
-    protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability, String name) {
+    protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, ValueMutability mutability,
+            String name, String mlog) {
         super(argumentType, mutability);
         this.sourcePosition = sourcePosition;
         this.functionPrefix = "";
         this.name = Objects.requireNonNull(name);
-        this.mlog = name;
+        this.mlog = Objects.requireNonNull(mlog);
         this.fullName = name;
         this.isVolatile = false;
         this.noinit = false;
@@ -232,11 +233,15 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     // CREATION
 
     public static LogicVariable block(SourcePosition sourcePosition, String name) {
-        return new LogicVariable(sourcePosition, BLOCK, ValueMutability.IMMUTABLE, name);
+        return new LogicVariable(sourcePosition, BLOCK, ValueMutability.IMMUTABLE, name, name);
     }
 
     public static LogicVariable block(AstIdentifier identifier) {
-        return new LogicVariable(identifier.sourcePosition(), BLOCK, ValueMutability.IMMUTABLE, identifier.getName());
+        return new LogicVariable(identifier.sourcePosition(), BLOCK, ValueMutability.IMMUTABLE, identifier.getName(), identifier.getName());
+    }
+
+    public static LogicVariable block(AstIdentifier identifier, AstIdentifier linkedTo) {
+        return new LogicVariable(identifier.sourcePosition(), BLOCK, ValueMutability.IMMUTABLE, identifier.getName(), linkedTo.getName());
     }
 
     public static LogicVariable global(AstIdentifier identifier, String mlog) {
@@ -273,7 +278,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable temporary(String name) {
-        return new LogicVariable(EMPTY, TMP_VARIABLE, ValueMutability.MUTABLE, name);
+        return new LogicVariable(EMPTY, TMP_VARIABLE, ValueMutability.MUTABLE, name, name);
     }
 
     public static LogicVariable fnRetVal(MindcodeFunction function, String mlog) {
@@ -283,7 +288,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
-        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE, mlog);
+        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE, mlog, mlog);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {
@@ -293,11 +298,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable preserved(String name) {
-        return new LogicVariable(EMPTY, PRESERVED, ValueMutability.MUTABLE, name);
+        return new LogicVariable(EMPTY, PRESERVED, ValueMutability.MUTABLE, name, name);
     }
 
     public static LogicVariable globalPreserved(String name) {
-        return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE, name);
+        return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE, name, name);
     }
 
     public static LogicVariable arrayElement(AstIdentifier identifier, int index, String mlog, boolean isVolatile) {
@@ -324,7 +329,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     // TEST SUPPORT
 
     public static LogicVariable ast(String name) {
-        return new LogicVariable(EMPTY, AST_VARIABLE, ValueMutability.MUTABLE, name);
+        return new LogicVariable(EMPTY, AST_VARIABLE, ValueMutability.MUTABLE, name, name);
     }
 
     public static LogicVariable fnRetVal(String functionName, String functionPrefix) {

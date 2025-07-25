@@ -85,7 +85,7 @@ Main = """
     begin
         message("Initializing...");
         do
-            var unit = findUnit(null);
+            var unit = processor1.findUnit(null);
 
             // Needs to bind the unit, it is bound by the remote processor at this moment
             ubind(unit);
@@ -96,7 +96,7 @@ Main = """
         while core == null;
 
         // Start searching for a better unit
-        async(findUnit(@unit));
+        async(processor1.findUnit(@unit));
 
         while true do
             moveItems();
@@ -118,7 +118,7 @@ Main = """
                 end;
 
                 // Start looking again
-                async(findUnit(@unit));
+                async(processor1.findUnit(@unit));
             end;
         end;
     end;

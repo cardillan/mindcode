@@ -23,7 +23,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         
                         def localFoo(in a, out count)
                             print("Before foo");
-                            var result = foo(a, out count);
+                            var result = processor1.foo(a, out count);
                             print("After foo");
                             result;
                         end;
@@ -78,7 +78,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         void compilesSynchronousCall() {
             assertCompilesTo("""
                             require "remote.mnd" remote processor1;
-                            z = foo(10, out a);
+                            z = processor1.foo(10, out a);
                             print(z, a);
                             """,
                     createInstruction(LABEL, label(2)),
@@ -104,10 +104,10 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         void compilesAsynchronousCall() {
             assertCompilesTo("""
                             require "remote.mnd" remote processor1;
-                            async(foo(10));
-                            print(finished(foo));
-                            z = await(foo);
-                            print(z, foo.count);
+                            async(processor1.foo(10));
+                            print(finished(processor1.foo));
+                            z = await(processor1.foo);
+                            print(z, processor1.foo.count);
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(1), "processor1", q("*signature")),
@@ -133,9 +133,9 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         void compilesFinished() {
             assertCompilesTo("""
                             require "remote.mnd" remote processor1;
-                            async(foo(10));
-                            do while !finished(foo, out z);
-                            print(z, foo.count);
+                            async(processor1.foo(10));
+                            do while !finished(processor1.foo, out z);
+                            print(z, processor1.foo.count);
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(8), "processor1", q("*signature")),
@@ -162,8 +162,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             require "remote.mnd" remote processor1;
                             require "remote2.mnd" remote processor2;
-                            y = baz(10, 20, 30);
-                            z = foo(10, out a);
+                            y = processor2.baz(10, 20, 30);
+                            z = processor1.foo(10, out a);
                             print(y, z, a);
                             """,
                     createInstruction(LABEL, label(3)),
@@ -275,8 +275,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         void compilesNestedRemoteModule() {
             assertCompilesTo("""
                             require "local.mnd";
-                            x = localFoo(10, out a);
-                            print(x, a);
+                            processor1.x = localFoo(10, out a);
+                            print(processor1.x, a);
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(7), "processor1", q("*signature")),
@@ -309,11 +309,11 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         void compilesRemoteArrayAccess() {
             assertCompilesTo("""
                             require "remote2.mnd" remote processor1;
-                            for out i in array[0..2] do
+                            for out i in processor1.array[0..2] do
                                 i = rand(100);
                             end;
-                            array[floor(rand(10))]++;
-                            print(array[2..4]);
+                            processor1.array[floor(rand(10))]++;
+                            print(processor1.array[2..4]);
                             """,
                     createInstruction(LABEL, label(1)),
                     createInstruction(READ, tmp(10), "processor1", q("*signature")),
@@ -411,6 +411,30 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, tmp(35))
             );
         }
+
+        @Test
+        void compilesVariableAccessViaSynonym() {
+            assertCompilesTo("""
+                            linked p = processor1;
+                            require "remote.mnd" remote p;
+                            p.foo(10, out a);
+                            p.x = 10;
+                            """,
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(READ, tmp(5), "processor1", q("*signature")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(5), q("fe196785ecf7cd23:v1")),
+                    createInstruction(WRITE, "10", "processor1", q(":foo:a")),
+                    createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
+                    createInstruction(WRITE, "2", "processor1", q("@counter")),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(WAIT, "1e-15"),
+                    createInstruction(READ, tmp(8), "processor1", q(":foo*finished")),
+                    createInstruction(JUMP, label(3), "equal", tmp(8), "false"),
+                    createInstruction(READ, tmp(7), "processor1", q(":foo:count")),
+                    createInstruction(SET, ":a", tmp(7)),
+                    createInstruction(WRITE, "10", "processor1", q(".x"))
+            );
+        }
     }
 
     @Nested
@@ -438,7 +462,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     "Function or method 'async' cannot be called asynchronously.",
                     """
                             require "remote.mnd" remote processor1;
-                            async(async(foo(10)));"""
+                            async(async(processor1.foo(10)));"""
             );
         }
 
@@ -447,17 +471,6 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "The 'async' function requires a call of a remote function as an argument.",
                     "async(10);"
-            );
-        }
-
-        @Test
-        void refusesConflictingRequires() {
-            assertGeneratesMessage(
-                    "Multiple instantiations of file 'File remote.mnd'.",
-                    """
-                            require "remote.mnd" remote processor1;
-                            require "remote.mnd" remote processor2;
-                            """
             );
         }
 
@@ -501,9 +514,9 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     "Function 'foo': unknown output parameter 'bar'.",
                     """
                             require "remote.mnd" remote processor1;
-                            async(foo(10));
-                            await(foo);
-                            print(foo.bar);
+                            async(processor1.foo(10));
+                            await(processor1.foo);
+                            print(processor1.foo.bar);
                             """
             );
         }
@@ -552,24 +565,12 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesGlobalVariablesCollidingWithRemoteFunctions() {
-            assertGeneratesMessage(
-                    "Multiple declarations of 'foo'.",
-                    """
-                            require "remote.mnd" remote processor1;
-                            foo(10);
-                            var foo;
-                            """
-            );
-        }
-
-        @Test
         void refusesOutputParametersInAsyncCall() {
             assertGeneratesMessage(
                     "Function 'foo': asynchronous calls to remote function cannot take output arguments.",
                     """
                             require "remote.mnd" remote processor1;
-                            async(foo(10, out a));
+                            async(processor1.foo(10, out a));
                             """
             );
         }

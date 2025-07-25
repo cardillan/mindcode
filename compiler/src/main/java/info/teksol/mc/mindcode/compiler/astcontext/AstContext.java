@@ -305,8 +305,8 @@ public final class AstContext {
     }
 
     public String hierarchy() {
-        String text = subcontextType == AstSubcontextType.BASIC
-            ? contextType.text : contextType.text + "[" +  subcontextType.text + "]";
+        String text = "#" + id + ": " +
+                (subcontextType == AstSubcontextType.BASIC ? contextType.text : contextType.text + "[" +  subcontextType.text + "]");
 
         return parent == null ? text : parent.hierarchy() + "/" + text;
     }
@@ -315,6 +315,7 @@ public final class AstContext {
     public String toString() {
         return "AstContext{" +
                 "id=" + id +
+                ", parent id=" + (parent == null ? null : parent.id) +
                 ", level=" + level +
                 ", contextType=" + contextType +
                 ", subcontextType=" + subcontextType +

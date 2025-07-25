@@ -141,18 +141,23 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
 
         map.put("assertEquals",     call -> assertsBuilder.get().handleAssertEquals(call));
         map.put("assertPrints",     call -> assertsBuilder.get().handleAssertPrints(call));
+
         map.put("async",            this::handleAsync);
         map.put("await",            call -> callBuilder.get().handleAwait(call));
         map.put("finished",         call -> callBuilder.get().handleFinished(call));
         map.put("verifySignature",  call -> callBuilder.get().handleVerifySignature(call));
+
         map.put("length",           call -> varargsBuilder.get().handleLength(call));
         map.put("min",              call -> varargsBuilder.get().handleMinMax(call));
         map.put("max",              call -> varargsBuilder.get().handleMinMax(call));
+
         map.put("mlog",             call -> mlogBuilder.get().handleMlog(call, false, false));
         map.put("mlogSafe",         call -> mlogBuilder.get().handleMlog(call, true, false));
         map.put("mlogText",         call -> mlogBuilder.get().handleMlog(call, false, true));
+
         map.put("ascii",            call -> textBuilder.get().handleAscii(call));
         map.put("char",             call -> textBuilder.get().handleChar(call));
+        map.put("encode",           call -> textBuilder.get().handleEncode(call));
         map.put("printf",           call -> textBuilder.get().handlePrintf(call));
         map.put("print",            call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT));
         map.put("println",          call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN));

@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.8.0-beta.4 - Unreleased
+
+### Fixed
+
+* Fixed a possible internal compiler error when using the Temp Variable Elimination and the select optimization.  
+
+### Added
+
+* Added a new [`encode()` function](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-encode-function) for easier encoding of data into strings. 
+
+### Changed
+
+* **Breaking**: remote functions and variables/arrays must always be specified with a fully qualified name (e.g. `processor1.x` or `processor2.foo()`) when accessing or calling them from a main processor.
+* Removed restrictions on requiring the same source files from different modules. 
+
 ## 3.8.0-beta.3 - 2025-07-24
 
 **Note:** this is a beta release. It's been released primarily to support the newest Mindustry Logic instructions (`select`), and as a preview of the newest optimization features (namely, text-based jump tables).

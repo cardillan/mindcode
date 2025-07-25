@@ -159,8 +159,7 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
         assertCompilesTo("""
                         a = @lead.@id;
                         """,
-                createInstruction(SET, tmp(0), "1"),
-                createInstruction(SET, ":a", tmp(0))
+                createInstruction(SET, ":a", "1")
         );
     }
 

@@ -11,7 +11,7 @@ public class LogicParameter extends LogicVariable {
     private final LogicValue value;
 
     private LogicParameter(SourcePosition position, String name, LogicValue value) {
-        super(position, ArgumentType.PARAMETER, ValueMutability.IMMUTABLE, name);
+        super(position, ArgumentType.PARAMETER, ValueMutability.IMMUTABLE, name, name);
         this.value = Objects.requireNonNull(value);
     }
 

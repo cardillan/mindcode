@@ -79,9 +79,6 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private @Nullable CompileTimeEvaluator compileTimeEvaluator;
 
     // Intermediate and final results
-    private final Map<InputFile, SortedSet<AstIdentifier>> moduleProcessors = new HashMap<>();
-    private final Set<AstIdentifier> foundProcessors = new HashSet<>();
-
     private final Map<InputFile, CommonTokenStream> tokenStreams = new HashMap<>();
     private final Map<InputFile, AstModuleContext> parseTrees = new HashMap<>();
     private final Map<InputFile, AstModule> modules = new HashMap<>();
@@ -172,6 +169,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         Set<InputFile> processedFiles = new HashSet<>();
         List<AstModule> moduleList = new LinkedList<>();
         RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, profile, inputFiles);
+        Map<AstIdentifier, List<AstIdentifier>> foundProcessors = new HashMap<>();
 
         long parseTime = 0;
         // Process all input files including files discovered through the `require` directive.
@@ -203,31 +201,23 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                     // Requirements are added by the AstBuilder via AstBuilderContext
                     for (AstRequire requirement : requirements) {
                         InputFile inputFile = requirementsProcessor.loadFile(requirement);
+
+                        // Error (already reported) loading or resolving the file
                         if (inputFile == null) continue;
+
+                        if (!inputFilesInModule.add(inputFile)) {
+                            error(requirement, ERR.MULTIPLE_MODULE_REQUESTS, requirement.getName());
+                            continue;
+                        }
 
                         requiredFiles.put(requirement, inputFile);
 
-                        // A module may be included locally an unlimited number of times, or remotely just once.
-                        if (moduleProcessors.containsKey(inputFile)) {
-                            if (!requirement.getProcessors().isEmpty() || !moduleProcessors.get(inputFile).isEmpty()) {
-                                error(requirement, ERR.MULTIPLE_MODULE_INSTANTIATIONS, inputFile.getDistinctTitle());
-                            }
-                        } else {
-                            if (!inputFilesInModule.add(inputFile)) {
-                                error(requirement, ERR.MULTIPLE_MODULE_INSTANTIATIONS, inputFile.getDistinctTitle());
-                            }
+                        // Do not process requirements of modules representing remote processors
+                        if (input.remoteProcessors.isEmpty()) {
+                            inputs.add(new ModulePlacement(inputFile, requirement.getProcessors()));
 
-                            moduleProcessors.put(inputFile, input.remoteProcessors);
-
-                            // Do not process requirements of modules representing remote processors
-                            if (input.remoteProcessors.isEmpty()) {
-                                inputs.add(new ModulePlacement(inputFile, requirement.getProcessors()));
-                            }
-                        }
-
-                        for (AstIdentifier processor : requirement.getProcessors()) {
-                            if (!foundProcessors.add(processor)) {
-                                error(processor, ERR.MULTIPLE_PROCESSOR_BINDINGS, processor.getName());
+                            for (AstIdentifier processor : requirement.getProcessors()) {
+                                foundProcessors.computeIfAbsent(processor, k -> new ArrayList<>()).add(processor);
                             }
                         }
                     }
@@ -236,6 +226,11 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         } catch (ParserAbort ignored) {
             // The error has already been reported
         }
+
+        // Detect and report errors where the same processor is used with different modules
+        foundProcessors.values().stream().filter(l -> l.size() > 1)
+                .flatMap(Collection::stream)
+                .forEach(p -> error(p, ERR.MULTIPLE_PROCESSOR_BINDINGS, p.getName()));
 
         if (!modules.isEmpty()) {
             astProgram = new AstProgram(profile, new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);

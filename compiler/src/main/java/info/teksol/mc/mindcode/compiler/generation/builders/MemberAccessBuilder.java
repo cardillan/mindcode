@@ -40,13 +40,17 @@ public class MemberAccessBuilder extends AbstractBuilder implements
         String name = node.getMember().getName();
         if (target instanceof StructuredValueStore store) {
             ValueStore member = store.getMember(name);
-            if (member == null) {
+            if (member != null) return member;
+
+            if (store.getObject() == null) {
                 error(node.getMember(), ERR.REMOTE_UNKNOWN_PARAMETER, store.getName(), name);
                 return LogicVariable.INVALID;
             } else {
-                return member;
+                target = store.getObject();
             }
-        } else if (validateProperty(name)) {
+        }
+
+        if (validateProperty(name)) {
             return new Property(node.sourcePosition(),
                     assembler.defensiveCopy(target, ArgumentType.TMP_VARIABLE),
                     name,

@@ -17,7 +17,7 @@ You can download and install the pre-release version in the same way as an offic
 
 ## Running development versions of Mindustry
 
-How to run a development versions of Mindustry:
+How to run a development version of Mindustry:
 
 1. Download a Java installation package from https://github.com/Anuken/MindustryJreBuilds/releases/tag/v1.
 2. Extract the package into a directory on your computer.
@@ -75,7 +75,7 @@ format b
 format c
 ```
 
-The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally isn't possible to optimize the `format` instructions, even if their parameters get resolved to a constant value (this would mean manipulating the placeholders in instructions that produced the text buffer, which is not universally possible with statical analysis). The existing compile time formatting (e.g., `println($"Position: $x, $y");`) will optimize to better code better if some or all of the parameters resolve down to constant values.
+The upside is that `fmt` can be a variable and the formatting still works. The downside is that it generally isn't possible to optimize the `format` instructions, even when their parameters get resolved to a constant value. (This would mean manipulating the placeholders in instructions that produced the text buffer, which is not universally possible with a static analysis.) The existing compile time formatting (e.g., `println($"Position: $x, $y");`) will optimize to better code better if some or all of the parameters resolve down to constant values.
 
 Apart from the `printf()`, Mindcode supports new `format()` function, which just outputs the `format` instruction for each of its arguments.
 
@@ -209,6 +209,12 @@ printflush message1
 
 To make using the `printchar()` function easier, [character literals](SYNTAX.markdown#character-literals) were added to Mindcode. 
 
+## `select` instruction
+
+Since the **v8 Build 150 Beta** pre-release, Mindustry supports the `select` instruction facilitating conditional assignments.
+
+Mindcode doesn't provide direct access to the select instruction, but optimizes conditional expressions [to use the `select` instruction](SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) when possible. Using the ternary operator with simple values (`variable = condition ? trueValue : falseValue`) in Mindcode typically results in the `select` instruction being used.  
+
 ## `read` and `write` enhancements
 
 The `read` and `write` instructions were updated to support reading and writing data to other blocks and objects apart from memory blocks.
@@ -251,9 +257,27 @@ This functionality is accessible in Mindcode via the [`char()` function](SYNTAX-
 
 A length of a string can be obtained by sensing it's `@size` property. This functionality is accessible in Mindcode either using the `@size` property, `sensor` function or the specialized [`strlen()` function](SYNTAX-4-FUNCTIONS.markdown#the-strlen-function).
 
+#### Reading characters from message boxes
+
+Similarly to strings, it is possible to read characters from message blocks using the `read` instruction. The mechanics is the same as in the case of strings: both `char()` and `strlen()` functions can be used with message blocks:
+
+```Mindcode
+#set target = 8;
+
+print("ABCD");
+printflush(message1);
+println(strlen(message1));
+println(char(message1, 0));
+printflush(message2);
+```
+
+#### Data storage using strings 
+
+The ability to access individual characters of string values is a convenient way to store data. At this moment, Mindcode doesn't provide any means to easily encode data into strings but uses the functionality internally to implement [very space-efficient jump tables](SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
+
 ### Reading and writing canvas pixels
 
-Mindustry 8 allows reading and writing individual canvas pixels using `read` and `write`. Canvas is an Erekir-specific block, so this is only relevant when working with mixed tech or when creating world processors for Erekir maps. The indexes need to be in the `0 ... 64` range, and individual pixel values are in the `0 ... 8` range (there's only eight different colors supported by canvases).
+Mindustry 8 allows reading and writing individual canvas pixels using `read` and `write`. Canvas is an Erekir-specific block, so this is only relevant when working with mixed tech or when creating world processors for Erekir maps. The indexes need to be in the `0 ... 64` range, and individual pixel values are in the `0 ... 8` range (there are only eight different colors supported by canvases).
 
 ## Graphic output
 
@@ -263,7 +287,7 @@ This instruction prints the contents of the text buffer onto the display. So, in
 
 The new `draw print` instruction is represented by the `drawPrint()` function, as `print()` is already taken. 
 
-The text is drawn using monospace font. Each character being printed represents one graphical operation. The graphics buffer has a capacity of 256 operations, after which it doesn't accept new ones and must be applied using `drawflush`.
+The text is drawn using a monospace font. Each character being printed represents one graphical operation. The graphics buffer has a capacity of 256 operations, after which it doesn't accept new ones and must be applied using `drawflush`.
 
 ### Output transformations
 
@@ -289,7 +313,7 @@ Reverses the `packcolor` instruction. Prior to version 8, the same operation may
 
 ### `op emod`
 
-Positive modulo: like modulo, except when the divisor is positive and the dividend negative, still returns a positive number. The instruction is mapped to the `%%` operator.
+Positive modulo: like modulo, except when the divisor is positive and the dividend is negative, still returns a positive number. The instruction is mapped to the `%%` operator.
 
 ### `op ushr`
 
@@ -311,7 +335,7 @@ Rounds the argument to the closest integer. Prior to version 8, the same operati
 
 ### `weathersense`, `weatherset`
 
-Allows determining whether a given weather type is active, or activate/deactivate it. Supported weathers are `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog` and `@suspend-particles`
+Allows determining whether a given weather type is active or activate/deactivate it. Supported weathers are `@snowing`, `@rain`, `@sandstorm`, `@sporestorm`, `@fog` and `@suspend-particles`
 
 ### `message`
 

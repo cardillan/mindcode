@@ -199,7 +199,7 @@ public class Variables extends AbstractMessageEmitter {
             warn(linkedTo, WARN.LINKED_VARIABLE_NOT_RECOGNIZED, linkedTo.getName());
         }
 
-        LogicVariable result = LogicVariable.block(linkedTo);
+        LogicVariable result = LogicVariable.block(identifier, linkedTo);
         putVariableIfAbsent(identifier.getName(), result);
         return result;
     }

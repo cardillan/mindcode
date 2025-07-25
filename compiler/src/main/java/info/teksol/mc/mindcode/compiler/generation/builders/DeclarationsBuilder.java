@@ -253,26 +253,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
         List<LogicVariable> processors = node.getProcessors().stream().map(this::evaluateProcessor).toList();
 
-        // If there's exactly one remote processor, import functions and variables to the local namespace
-        if (processors.size() == 1 && processors.getFirst().getType() == BLOCK) {
-            createRemoteVariables(module, processors.getFirst(), false, true, null);
-            reportRemoteErrors = false;
-
-            // Initialize function parameters
-            // Create function output variables
-            callGraph.getFunctions().stream()
-                    .filter(f -> f.getModule() == module && f.isUsed())
-                    .forEach(function -> {
-                        function.setupRemoteParameters(assembler, processors.getFirst());
-                        Map<String, ValueStore> members = function.getParameters()
-                                .stream()
-                                .filter(FunctionParameter::isOutput)
-                                .collect(Collectors.toMap(FunctionParameter::getName, p -> p));
-                        StructuredValueStore variable = new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
-                        variables.registerRemoteCallStore(function.getDeclaration().getIdentifier(), variable);
-                    });
-        }
-
         // Remote signature
         String remoteSignature = createRemoteSignature(module);
 
@@ -287,7 +267,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             createRemoteVariables(module, processor, true, reportRemoteErrors, members);
             reportRemoteErrors = false;
 
-            StructuredValueStore processorStructure = new StructuredValueStore(identifier.sourcePosition(), identifier.getName(), members);
+            StructuredValueStore processorStructure = new StructuredValueStore(identifier.sourcePosition(), processor, identifier.getName(), members);
             variables.registerStructuredVariable(identifier, processorStructure);
 
             // Generate guard code for the processor
@@ -368,7 +348,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         Map<String, ValueStore> members = parameters.stream()
                 .filter(FunctionParameter::isOutput)
                 .collect(Collectors.toMap(FunctionParameter::getName, p -> p));
-        return new StructuredValueStore(function.getSourcePosition(), function.getName(), members);
+        return new StructuredValueStore(function.getSourcePosition(), null, function.getName(), members);
     }
 
     private void verifyLocalContextModifiers(AstVariableModifier element) {

@@ -13,6 +13,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 
 import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.IF;
+import static info.teksol.mc.mindcode.compiler.astcontext.AstContextType.OPERATOR;
 import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 import static java.util.Objects.requireNonNull;
 
@@ -175,7 +176,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
         LogicList flowControl = contextInstructions(ifExpression.child(2));
         if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()
                 || (falseContent.isEmpty() && flowControl.getFirst() instanceof EmptyInstruction)) {
-            AstContext targetContext = Objects.requireNonNull(ifExpression.parent());
+            AstContext targetContext = Objects.requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
             LogicList instructions = condition.subList(0, condition.size() - 1).duplicateToContext(targetContext);
 
             JumpInstruction invertedJump = negateCompoundCondition(condition);

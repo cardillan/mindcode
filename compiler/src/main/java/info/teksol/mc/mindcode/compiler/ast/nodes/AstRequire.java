@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.compiler.ast.nodes;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 import java.util.SortedSet;
@@ -29,10 +28,6 @@ public abstract class AstRequire extends AstDeclaration {
     @Override
     public AstNodeScope getScopeRestriction() {
         return AstNodeScope.NONE;
-    }
-
-    public @Nullable AstIdentifier getProcessor() {
-        return getProcessors().isEmpty() ? null : getProcessors().first();
     }
 
     @Override

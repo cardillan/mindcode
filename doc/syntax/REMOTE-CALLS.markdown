@@ -5,7 +5,7 @@ Mindcode supports accessing variables (including arrays) in linked processors an
 Calling functions stored in other processors is a feature which brings two main benefits to Mindcode:
 
 1. Possibility to break a large program into several pieces stored in multiple processors, effectively surpassing the 1000 instruction limit per program.
-2. Means to call remote functions asynchronously, resulting in parallel processing.
+2. Means to call remote functions asynchronously, resulting in seemingly parallel processing.
 
 ## Architecture
 
@@ -78,7 +78,7 @@ remote array1[10];
 
 Remote variables are available through remote access in code which imports the module. Remote variables/arrays may or may not be initialized. When some remote variables or array elements are unused within the module (and the corresponding mlog variables would therefore not be created when parsing the code by the logic processor), the missing variables are explicitly created using `draw triangle` instruction(s), so that they may be accessed remotely. These instructions are placed at the end of the generated code and are never executed.
 
-When a remote module is [instantiated multiple times](#multiple-instantiations-of-a-remote-module), the `@counter` array is created just once and is shared among all processors where the module is contained. This increases both the size and cost of array access by one instruction needed to set up the remote procesor. When the array access is inlined or otherwise optimized, this additional cost disappears.  
+When a remote module is [instantiated multiple times](#multiple-instantiations-of-a-remote-module), `@counter` arrays are created just once and are shared among all processors where the module is contained. This increases both the size and cost of array access by one instruction needed to set up the remote processor. When the array access is inlined or otherwise optimized, this additional cost disappears.  
 
 ### Remote functions
 
@@ -113,6 +113,9 @@ The background process must be contained in a function named `backgroundProcess`
 If a `backgroundProcess` function with these properties is found in the source code, it is used as the background process. If no such function exists, no background process is created.
 
 It is possible to call the `backgroundProcess()` function explicitly. In this case, the function is compiled normally and may even be inlined.
+
+> [!IMPORTANT]
+> Variables that are accessed from the background process as well as from a remote function must be declared `volatile`.
 
 Example of a module with a background process:
 
@@ -169,7 +172,7 @@ Modules imported remotely aren't compiled into the code, but remote variables an
 
 When at least one remote function is called from a processor, guard code for the processor is generated. The guard code waits for the processor to be created and its `*signature` variable initialized. If the signature found in the remote processor doesn't match the expected signature, the main processor remains stuck at the initialization.
 
-A module which is being requested for remote access may appear in only one `require` clause. Using it in two clauses, even if one of them is in a different module or is required locally, causes a compilation error.
+A module which is being requested for remote access may appear in only one `require` clause within a given source file.
 
 ### Multiple instantiations of a remote module
 
@@ -188,15 +191,11 @@ await(processor2.foo);
 await(processor3.foo);
 ```
 
-When a module is instantiated multiple times, its functions need to be called as methods on one of the bound processors. Calling a remote function within such a module without specifying the processor name causes a compilation error, since the compiler cannot figure out which processor to use for the call.  
-
 ### Remote variables
 
-All variables declared `remote` in remotely requested modules are accessible in the main processor. It's not required to declare the variable in the main processor again.
+All variables nd arrays declared `remote` in remotely requested modules are accessible to the main processor. The variables and array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random array access, jump tables are generated in the main processor code, meaning that random access to remote arrays has the same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
 
-An array declared `remote` in remotely imported modules is accessible in the main processor. The array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random access, jump tables are generated in the main processor code, meaning that random access to remote arrays has the same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
-
-When a remote module is instantiated multiple times, remote variables can be accessed as properties on bound processors, for example:
+Remote variables are accessed as properties on bound processors, for example:
 
 ```
 require "library.mnd" remote processor1, processor2;
@@ -207,16 +206,10 @@ processor2.array[10]++;
 
 ### Synchronous remote calls
 
-The syntax to call functions remotely is the same as for local function call:
+When calling a remote function, the processor on which the function resides must be specified. The synchronous remote call syntax is similar to a local function call:
 
 ```
-product = foo(10, 20, out sum);
-```
-
-For multiple instances of the remote module, a processor needs to be specified:
-
-```
-product = processor3.foo(10, 20, out sum);
+product = processor1.foo(10, 20, out sum);
 ```
 
 Execution of the code is paused until the remote function completes and returns. The effect of calling a remote function is the same as calling a local function: function return value and output variables are set up as usual.
@@ -228,25 +221,13 @@ When a remote function is called asynchronously, the main processor continues to
 Asynchronous calls are started using the built-in `async()` function:
 
 ```
-async(foo(10, 20));
-```
-
-For multiple instances of the remote module, a processor needs to be specified as usual:
-
-```
 async(processor1.foo(10, 20));
 async(processor2.foo(20, 30));
 ```
 
-The `out` modifiers are disallowed in asynchronous function calls, and output only arguments need to be completely omitted.
+The `out` modifiers are disallowed in asynchronous function calls, and output-only arguments need to be completely omitted.
 
-To check for completion, call the `finished()` function, passing the name of the remote function as an argument:
-
-```
-done = finished(foo);
-```
-
-For multiple instances of the remote module, a processor needs to be specified as usual:
+To check for completion, call the `finished()` function, passing the full name of the remote function as an argument:
 
 ```
 done = finished(processor1.foo);
@@ -257,7 +238,7 @@ The function returns `true` if the asynchronous call to the given remote functio
 The `finished()` function has an optional output parameter that receives the return value of the function when it successfully completes:
 
 ```
-if finished(foo, out value) then
+if finished(processor1.foo, out value) then
     println("The resulting value of foo is ", value);
 end;
 ```
@@ -265,17 +246,11 @@ end;
 Function return value may be obtained via the `await()` function (not to be confused with the `wait()` function mapped to the `wait` instruction):
 
 ```
-product = await(foo);
-sum = foo.z;
-```
-
-This call functions waits for `foo` completion, and then returns its return value. Other output parameters are available under their fully qualified names, e.g., `foo.z`. The output parameters may be queried as soon as `finished()` returned true. Calling `await()` is not necessary before starting another remote call on the same processor.
-
-For multiple instances of the remote module, a processor needs to be specified as usual:
-
-```
 product = await(processor1.foo);
+sum = processor1.foo.z;
 ```
+
+This call functions waits for `foo` completion, and then returns its return value. Other output parameters are available under their fully qualified names, e.g., `processor1.foo.z`. The output parameters may be queried as soon as `finished()` returned true. Calling `await()` is not necessary before starting another remote call on the same processor.
 
 ### Dynamic binding
 
@@ -288,11 +263,6 @@ A processor containing the remote code can also be located dynamically. In this 
 var proc;
 require "remote.mnd" remote proc;
 ```
-
-`proc` is the variable which provides access to the remote module.
-
-> [!NOTE]
-> When dynamic binding is used, remote functions and variables need to be referenced using the processor variable. 
 
 The compiler doesn't automatically generate code to verify the module signature for dynamically bound processors. It is possible to verify the signature using a `verifySignature()` built-in function. This function takes a processor as an argument, and returns `true` if the processor contains the expected module code.  
 
@@ -427,7 +397,7 @@ write @coal processor2 "bar"
 
 Sometimes you might want to use variables in remote processors which weren't declared in a module, possibly because the other processor's code was not compiled by Mindcode. Another use case is for the module to access the main processor's variables directly (although in this case, a reference to the main processor must be made available to the module in some way).
 
-To specify where the remote variable is located, and even what name it uses, include a _storage specification_ in the remote variable declaration:
+To specify where the remote variable is located and even what name it uses, include a _storage specification_ in the remote variable declaration:
 
 ```
 remote <processor> ["name"] [var] <variable1>;

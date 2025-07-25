@@ -65,6 +65,9 @@ public class ERR {
     public static final String DIRECTIVE_UNKNOWN = "Unknown compiler directive '%s'.";
     public static final String DIRECTIVE_UNKNOWN_WITH_SUGGESTION = "Unknown compiler directive '%s'. Did you mean '%s'?";
     public static final String DIRECTIVE_VALUE_OUT_OF_RANGE = "Invalid value '%s' of compiler directive '%s' (expected integer between %d and  %d).";
+    public static final String ENCODE_INVALID_ARGUMENT = "All arguments to the '%s' function must be compile-time integer constants.";
+    public static final String ENCODE_INVALID_CHARACTER = "The value %d cannot be encoded into an mlog string literal.";
+    public static final String ENCODE_INVALID_STRING = "The string value produced by the '%s' function contains a sequence of '\\n'; which annot be encoded into a string literal.";
     public static final String ENHANCED_COMMENTS_NO_PLACEHOLDERS = "Formattable placeholders not supported in enhanced comments.";
     public static final String EXPRESSION_NOT_CONSTANT_CONST = "Value assigned to constant '%s' is not a constant expression.";
     public static final String EXPRESSION_NOT_CONSTANT_PARAM = "Value assigned to parameter '%s' is not a constant expression.";
@@ -138,7 +141,7 @@ public class ERR {
     public static final String MLOG_UNSPECIFIED_ARGUMENT = "All arguments to the '%s' function need to be specified.";
     public static final String MLOG_VARIABLE_WITHOUT_MODIFIERS = "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.";
     public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
-    public static final String MULTIPLE_MODULE_INSTANTIATIONS = "Multiple instantiations of file '%s'.";
+    public static final String MULTIPLE_MODULE_REQUESTS = "Multiple requests for file or library '%s'.";
     public static final String MULTIPLE_PROCESSOR_BINDINGS = "Multiple bindings of processor '%s'.";
     public static final String OPERATOR_REQUIRES_SPECIFIC_TARGET = "The '%s' operator requires language target %s or higher.";
     public static final String PARAMETER_NAME_RESERVED_GLOBAL = "Parameter '%s' of function '%s' uses name reserved for global variables.";
