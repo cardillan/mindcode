@@ -18,7 +18,7 @@ import org.jspecify.annotations.Nullable;
 import java.util.*;
 import java.util.function.Supplier;
 
-/// This class resolves source code identifiers into variables represented by ValueStore interface,
+/// This class resolves source code identifiers into variables represented by the ValueStore interface
 /// and tracks temporary variables used within AST nodes for stack management.
 ///
 /// Types of source code identifiers:
@@ -173,7 +173,7 @@ public class Variables extends AbstractMessageEmitter {
 
     /// Registers a parameter. Reports possible name clashes.
     ///
-    /// Parameter is an mlog variable. The initialization of the variable must be done by the caller.
+    /// Parameter is an mlog variable. The caller must initialize the variable.
     ///
     /// @param parameter parameter declaration to process.
     /// @param value value assigned to the parameter
@@ -208,7 +208,7 @@ public class Variables extends AbstractMessageEmitter {
         return modifiers.get(Modifier.EXTERNAL) instanceof HeapTracker externalTracker ? externalTracker : heapTracker;
     }
 
-    /// Registers an external variable in given scope. Reports possible name clashes.
+    /// Registers an external variable in a given scope. Reports possible name clashes.
     ///
     /// @param identifier variable name
     /// @return ValueStore instance representing the created variable
@@ -245,7 +245,7 @@ public class Variables extends AbstractMessageEmitter {
         return result;
     }
 
-    /// Registers a standard variable in given scope. Reports possible name clashes.
+    /// Registers a standard variable in a given scope. Reports possible name clashes.
     ///
     /// @param local      true if the variable should be registered in local scope, false for global scope
     /// @param identifier variable name
@@ -354,7 +354,7 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     /// Indicates a new function is being processed. Function processing can become nested when
-    /// processing inline function calls. In this case, previous function context is stored on a stack
+    /// processing inline function calls. In this case, the previous function context is stored on a stack
     /// and restored when exiting the function processing. Non-inlined functions can't be nested.
     public void enterFunction(MindcodeFunction function, List<FunctionArgument> varargs) {
         contextStack.push(functionContext);
@@ -363,7 +363,7 @@ public class Variables extends AbstractMessageEmitter {
                 : new LocalContext(messageConsumer, nameCreator, function, varargs);
     }
 
-    /// Called when function processing is finished. Previous function context is restored from the stack.
+    /// Called when function processing is finished. The previous function context is restored from the stack.
     public void exitFunction(MindcodeFunction function) {
         if (function != functionContext.function()) {
             throw new MindcodeInternalError("Wrong exitFunction order.");
@@ -390,14 +390,14 @@ public class Variables extends AbstractMessageEmitter {
         functionContext.registerParentNodeVariable(variable);
     }
 
-    /// Encapsulates processing of given expression, by keeping temporary variable(s) created while evaluating
-    /// the expression out of current node context. Suitable when the generated temporary variables are known
+    /// Encapsulates processing of a given expression by keeping temporary variable(s) created while evaluating
+    /// the expression out of the current node context. Suitable when the generated temporary variables are known
     /// not to be used outside the context of the expression. A good example is the condition expression of the
-    /// if statement: the condition is evaluated and the result is used to choose the branch to execute, but
-    /// all this happens before either of the branches are executed and the temporary variable holding the condition
+    /// if statement: the condition is evaluated, and the result is used to choose the branch to execute, but
+    /// all this happens before either of the branches is executed and the temporary variable holding the condition
     /// value will not be used again.
     ///
-    /// Note: if x = a > b then ... else ... end; print(x) is not a problem, because x is a user variable and
+    /// Note: `if x = a > b then ... else ... end; print(x);` is not a problem, because x is a user variable and
     /// is registered separately.
     ///
     /// @param <T> type of return value
@@ -407,7 +407,7 @@ public class Variables extends AbstractMessageEmitter {
         return functionContext.excludeVariablesFromNode(expression);
     }
 
-    /// Encapsulates processing of given expression, by keeping temporary variable(s) created while evaluating
+    /// Encapsulates processing of a given expression by keeping temporary variable(s) created while evaluating
     /// the expression out of the current node context (see above). To be used on expressions that do not return value.
     public void excludeVariablesFromTracking(Runnable expression) {
         excludeVariablesFromTracking(() -> {

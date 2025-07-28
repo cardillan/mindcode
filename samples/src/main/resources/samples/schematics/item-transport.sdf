@@ -102,9 +102,9 @@ Main = """
             moveItems();
 
             // Try to see whether a better unit has been found
-            if finished(findUnit) then
+            if finished(processor1.findUnit) then
                 // Obtain the result of the remote call
-                var unit = await(findUnit);
+                var unit = await(processor1.findUnit);
 
                 // There might have been a delay: verify the unit is valid
                 if !unit.@dead and (unit.@controller == processor1 or !unit.@controlled) then

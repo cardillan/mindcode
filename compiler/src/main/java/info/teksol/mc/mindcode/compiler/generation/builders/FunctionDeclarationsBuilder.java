@@ -19,19 +19,37 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         super(codeGenerator, context);
     }
 
-    public void compileFunction(MindcodeFunction function) {
+    private boolean shouldCompileFunction(MindcodeFunction function) {
         // Do not compile functions from modules included remotely
-        if (!function.getModule().getRemoteProcessors().isEmpty()) return;
-
         // Unused functions are compiled to report syntax errors, except libraries
-        if (!function.isUsed() && function.getSourcePosition().isLibrary()) return;
+        // Do not compile inline functions that have been used
+        return function.getModule().getRemoteProcessors().isEmpty()
+               && (function.isUsed() || !function.getSourcePosition().isLibrary())
+               && !(function.isInline() && function.isUsed());
+    }
 
+    public void generateFunctions() {
+        while (true) {
+            // Find functions that have been called but not generated
+            List<MindcodeFunction> functions = callGraph.getFunctions().stream()
+                    .filter(f -> shouldCompileFunction(f) && f.isCalled() && !f.isGenerated())
+                    .toList();
+
+            if (functions.isEmpty()) break;
+            functions.forEach(this::compileFunction);
+        }
+
+        // Compile unused functions to check for syntax errors
+        List<MindcodeFunction> functions = callGraph.getFunctions().stream()
+                .filter(f -> shouldCompileFunction(f) && !f.isEvaluated() && !f.isGenerated())
+                .toList();
+
+        functions.forEach(this::compileFunction);
+    }
+
+    public void compileFunction(MindcodeFunction function) {
+        function.setGenerated();
         if (function.isInline()) {
-            if (function.isUsed()) {
-                // This function has been compiled elsewhere
-                return;
-            }
-
             generateCodeForFunction(function.prepareInlinedForCall(nameCreator));
         } else {
             generateCodeForFunction(function);
@@ -40,6 +58,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
     /// Used to compile a function body when the function is called implicitly
     public void placeFunctionBody(MindcodeFunction function) {
+        function.setGenerated();
         enterFunction(function, List.of());
         returnStack.enterFunction(processor.nextLabel(), LogicVoid.VOID);
         compileFunctionBody(function);

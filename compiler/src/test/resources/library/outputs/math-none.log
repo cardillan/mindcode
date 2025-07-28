@@ -1,2581 +1,2376 @@
 
 Final code before resolving virtual instructions:
 
-    0:  set :distance:x1 1
-    1:  set :distance:y1 1
-    2:  set :distance:x2 4
-    3:  set :distance:y2 5
-    4:  op sub *tmp1 :distance:x2 :distance:x1
-    5:  op sub *tmp2 :distance:y2 :distance:y1
-    6:  op len *tmp3 *tmp1 *tmp2
-    7:  set *tmp0 *tmp3
+    0:  assertequals 5 5 "distance(1,1,4,5)"
+    1:  assertequals 5 5 "distance(-1,-1,-4,-5)"
+    2:  assertequals 2 2 "round(1.5)"
+    3:  assertequals 2 2 "round(1.7)"
+    4:  assertequals 2 2 "round(2.1)"
+    5:  assertequals 3 3 "round(2.5)"
+    6:  assertequals -3 -3 "round(-3.5)"
+    7:  assertequals 0.5 0.5 "frac(3.5)"
+    8:  assertequals -0.5 -0.5 "frac(-1.5)"
+    9:  assertequals 0 0 "signInexact(0)"
+   10:  assertequals 0 0 "signInexact(1e-7)"
+   11:  assertequals 1 1 "signInexact(1e-5)"
+   12:  assertequals -1 -1 "sign(-5)"
+   13:  assertequals 0 0 "sign(0)"
+   14:  assertequals 1 1 "sign(1e-7)"
+   15:  assertequals -1 -1 "sign(-1e-7)"
+   16:  assertequals true true "isZero(0)"
+   17:  assertequals false false "isZero(1e-50)"
+   18:  assertequals false false "isZero(-1e-50)"
+   19:  assertequals false false "isZero(0.01,0.01)"
+   20:  set :nullToZero:x null
+   21:  op add :nullToZero:result :nullToZero:x 0
+   22:  set *tmp0 :nullToZero:result
         label *label3
-    8:  assertequals 5 *tmp0 "distance(1,1,4,5)"
-    9:  set :distance.1:x1 -1
-   10:  set :distance.1:y1 -1
-   11:  set :distance.1:x2 -4
-   12:  set :distance.1:y2 -5
-   13:  op sub *tmp5 :distance.1:x2 :distance.1:x1
-   14:  op sub *tmp6 :distance.1:y2 :distance.1:y1
-   15:  op len *tmp7 *tmp5 *tmp6
-   16:  set *tmp4 *tmp7
+   23:  assertequals 0 *tmp0 "nullToZero(null)"
+   24:  set :nullToZero.1:x 1
+   25:  op add :nullToZero.1:result :nullToZero.1:x 0
+   26:  set *tmp1 :nullToZero.1:result
         label *label4
-   17:  assertequals 5 *tmp4 "distance(-1,-1,-4,-5)"
-   18:  assertequals 2 2 "round(1.5)"
-   19:  assertequals 2 2 "round(1.7)"
-   20:  assertequals 2 2 "round(2.1)"
-   21:  assertequals 3 3 "round(2.5)"
-   22:  assertequals -3 -3 "round(-3.5)"
-   23:  set :frac:x 3.5
-   24:  op mod *tmp9 :frac:x 1
-   25:  set *tmp8 *tmp9
+   27:  assertequals 1 *tmp1 "nullToZero(1)"
+   28:  assertequals 0 false "boolean(0)"
+   29:  assertequals 1 true "boolean(100)"
+   30:  assertequals 1 true "boolean(-100)"
+   31:  assertequals 1 true "boolean(-0.001)"
+   32:  assertequals 0 false "boolean(0.0000001)"
+   33:  set :integer:x 0.9
+   34:  op or :integer:result :integer:x 0
+   35:  set *tmp2 :integer:result
         label *label5
-   26:  assertequals 0.5 *tmp8 "frac(3.5)"
-   27:  set :frac.1:x -1.5
-   28:  op mod *tmp11 :frac.1:x 1
-   29:  set *tmp10 *tmp11
+   36:  assertequals 0 *tmp2 "integer(0.9)"
+   37:  set :integer.1:x -5.9
+   38:  op or :integer.1:result :integer.1:x 0
+   39:  set *tmp3 :integer.1:result
         label *label6
-   30:  assertequals -0.5 *tmp10 "frac(-1.5)"
-   31:  set :signInexact:x 0
-   32:  setaddr :signInexact*retaddr *label7
-   33:  call *label0 *invalid :signInexact*retval
+   40:  assertequals -5 *tmp3 "integer(-5.9)"
+   41:  set :integer.2:x 100
+   42:  op or :integer.2:result :integer.2:x 0
+   43:  set *tmp4 :integer.2:result
         label *label7
-   34:  set *tmp12 :signInexact*retval
-   35:  assertequals 0 *tmp12 "signInexact(0)"
-   36:  set :signInexact:x 0.0000001
-   37:  setaddr :signInexact*retaddr *label8
-   38:  call *label0 *invalid :signInexact*retval
-        label *label8
-   39:  set *tmp13 :signInexact*retval
-   40:  assertequals 0 *tmp13 "signInexact(1e-7)"
-   41:  set :signInexact:x 0.00001
-   42:  setaddr :signInexact*retaddr *label9
-   43:  call *label0 *invalid :signInexact*retval
+   44:  assertequals 100 *tmp4 "integer(100)"
+   45:  assertequals 1 1 "sum(1)"
+   46:  set :sum:x1 1
+   47:  set :sum:x2 2
+   48:  op add *tmp6 :sum:x1 :sum:x2
+   49:  set :sum:sum *tmp6
+   50:  set :sum:i 3
+   51:  setaddr *tmp7 *label12
+   52:  jump *label9 always 0 0
+        multilabel *label12
+   53:  set :sum:i 4
+   54:  setaddr *tmp7 *label13
         label *label9
-   44:  set *tmp14 :signInexact*retval
-   45:  assertequals 1 *tmp14 "signInexact(1e-5)"
-   46:  assertequals -1 -1 "sign(-5)"
-   47:  assertequals 0 0 "sign(0)"
-   48:  assertequals 1 1 "sign(1e-7)"
-   49:  assertequals -1 -1 "sign(-1e-7)"
-   50:  set :isZero:x 0
-   51:  op abs *tmp16 :isZero:x 0
-   52:  op lessThanEq *tmp17 *tmp16 0
-   53:  set *tmp15 *tmp17
+   55:  op add :sum:sum :sum:sum :sum:i
         label *label10
-   54:  assertequals true *tmp15 "isZero(0)"
-   55:  set :isZero.1:x 1E-50
-   56:  op abs *tmp19 :isZero.1:x 0
-   57:  op lessThanEq *tmp20 *tmp19 0
-   58:  set *tmp18 *tmp20
+   56:  multijump *tmp7 0 0
+        multilabel *label13
         label *label11
-   59:  assertequals false *tmp18 "isZero(1e-50)"
-   60:  set :isZero.2:x -1E-50
-   61:  op abs *tmp22 :isZero.2:x 0
-   62:  op lessThanEq *tmp23 *tmp22 0
-   63:  set *tmp21 *tmp23
-        label *label12
-   64:  assertequals false *tmp21 "isZero(-1e-50)"
-   65:  set :isZero.3:x 0.01
-   66:  set :isZero.3:precision 0.01
-   67:  op abs *tmp25 :isZero.3:x 0
-   68:  op lessThan *tmp26 *tmp25 :isZero.3:precision
-   69:  set *tmp24 *tmp26
-        label *label13
-   70:  assertequals false *tmp24 "isZero(0.01,0.01)"
-   71:  set :nullToZero:x null
-   72:  op add :nullToZero:result :nullToZero:x 0
-   73:  set *tmp27 :nullToZero:result
-        label *label14
-   74:  assertequals 0 *tmp27 "nullToZero(null)"
-   75:  set :nullToZero.1:x 1
-   76:  op add :nullToZero.1:result :nullToZero.1:x 0
-   77:  set *tmp28 :nullToZero.1:result
+   57:  set *tmp5 :sum:sum
+        label *label8
+   58:  assertequals 10 *tmp5 "sum(1,2,3,4)"
+   59:  assertequals 1 1 "avg(1)"
+   60:  set :avg:x1 1
+   61:  set :avg:x2 2
+   62:  op add *tmp9 :avg:x1 :avg:x2
+   63:  set :avg:sum *tmp9
+   64:  set :avg:i 3
+   65:  setaddr *tmp10 *label18
+   66:  jump *label15 always 0 0
+        multilabel *label18
+   67:  set :avg:i 4
+   68:  setaddr *tmp10 *label19
         label *label15
-   78:  assertequals 1 *tmp28 "nullToZero(1)"
-   79:  set :boolean:x 0
-   80:  op notEqual *tmp30 :boolean:x 0
-   81:  set *tmp29 *tmp30
+   69:  op add :avg:sum :avg:sum :avg:i
         label *label16
-   82:  assertequals 0 *tmp29 "boolean(0)"
-   83:  set :boolean.1:x 100
-   84:  op notEqual *tmp32 :boolean.1:x 0
-   85:  set *tmp31 *tmp32
+   70:  multijump *tmp10 0 0
+        multilabel *label19
         label *label17
-   86:  assertequals 1 *tmp31 "boolean(100)"
-   87:  set :boolean.2:x -100
-   88:  op notEqual *tmp34 :boolean.2:x 0
-   89:  set *tmp33 *tmp34
-        label *label18
-   90:  assertequals 1 *tmp33 "boolean(-100)"
-   91:  set :boolean.3:x -0.001
-   92:  op notEqual *tmp36 :boolean.3:x 0
-   93:  set *tmp35 *tmp36
-        label *label19
-   94:  assertequals 1 *tmp35 "boolean(-0.001)"
-   95:  set :boolean.4:x 0.0000001
-   96:  op notEqual *tmp38 :boolean.4:x 0
-   97:  set *tmp37 *tmp38
+   71:  op add *tmp11 2 2
+   72:  op div *tmp12 :avg:sum *tmp11
+   73:  set *tmp8 *tmp12
+        label *label14
+   74:  assertequals 2.5 *tmp8 "avg(1,2,3,4)"
+   75:  set :logn:number 25
+   76:  set :logn:base 5
+   77:  op log *tmp14 :logn:number 0
+   78:  op log *tmp15 :logn:base 0
+   79:  op div *tmp16 *tmp14 *tmp15
+   80:  set *tmp13 *tmp16
         label *label20
-   98:  assertequals 0 *tmp37 "boolean(0.0000001)"
-   99:  set :integer:x 0.9
-  100:  op or :integer:result :integer:x 0
-  101:  set *tmp39 :integer:result
+   81:  assertequals 2 *tmp13 "logn(25, 5)"
+   82:  set :logn.1:number 10000
+   83:  set :logn.1:base 10
+   84:  op log *tmp18 :logn.1:number 0
+   85:  op log *tmp19 :logn.1:base 0
+   86:  op div *tmp20 *tmp18 *tmp19
+   87:  set *tmp17 *tmp20
         label *label21
-  102:  assertequals 0 *tmp39 "integer(0.9)"
-  103:  set :integer.1:x -5.9
-  104:  op or :integer.1:result :integer.1:x 0
-  105:  set *tmp40 :integer.1:result
-        label *label22
-  106:  assertequals -5 *tmp40 "integer(-5.9)"
-  107:  set :integer.2:x 100
-  108:  op or :integer.2:result :integer.2:x 0
-  109:  set *tmp41 :integer.2:result
+   88:  assertequals 4 *tmp17 "logn(10000, 10)"
+   89:  set :log2:number 16
+   90:  set :logn.2:number :log2:number
+   91:  set :logn.2:base 2
+   92:  op log *tmp23 :logn.2:number 0
+   93:  op log *tmp24 :logn.2:base 0
+   94:  op div *tmp25 *tmp23 *tmp24
+   95:  set *tmp22 *tmp25
         label *label23
-  110:  assertequals 100 *tmp41 "integer(100)"
-  111:  set :sum:x 1
-  112:  set *tmp42 :sum:x
-        label *label24
-  113:  assertequals 1 *tmp42 "sum(1)"
-  114:  set :sum.1:x1 1
-  115:  set :sum.1:x2 2
-  116:  op add *tmp44 :sum.1:x1 :sum.1:x2
-  117:  set :sum.1:sum *tmp44
-  118:  set :sum.1:i 3
-  119:  setaddr *tmp45 *label29
-  120:  jump *label26 always 0 0
-        multilabel *label29
-  121:  set :sum.1:i 4
-  122:  setaddr *tmp45 *label30
-        label *label26
-  123:  op add :sum.1:sum :sum.1:sum :sum.1:i
-        label *label27
-  124:  multijump *tmp45 0 0
-        multilabel *label30
-        label *label28
-  125:  set *tmp43 :sum.1:sum
+   96:  set *tmp21 *tmp22
+        label *label22
+   97:  assertequals 4 *tmp21 "log2(16)"
+   98:  set :log2.1:number 1073741824
+   99:  set :logn.3:number :log2.1:number
+  100:  set :logn.3:base 2
+  101:  op log *tmp28 :logn.3:number 0
+  102:  op log *tmp29 :logn.3:base 0
+  103:  op div *tmp30 *tmp28 *tmp29
+  104:  set *tmp27 *tmp30
         label *label25
-  126:  assertequals 10 *tmp43 "sum(1,2,3,4)"
-  127:  set :avg:x 1
-  128:  set *tmp46 :avg:x
+  105:  set *tmp26 *tmp27
+        label *label24
+  106:  assertequals 30 *tmp26 "log2(1 << 30)"
+  107:  assertequals 1 1 "lerp(1, 10, 0)"
+  108:  assertequals 10 10 "lerp(1, 10, 1)"
+  109:  assertequals 5.5 5.5 "lerp(1, 10, 0.5)"
+  110:  assertequals 1 1 "median(1)"
+  111:  assertequals 3 3 "median(2,4)"
+  112:  set :median.2:x1 1
+  113:  set :median.2:x2 3
+  114:  set :median.2:x3 5
+  115:  op max *tmp32 :median.2:x1 :median.2:x2
+  116:  op max *tmp33 :median.2:x1 :median.2:x3
+  117:  op max *tmp34 :median.2:x2 :median.2:x3
+  118:  op min *tmp35 *tmp32 *tmp33
+  119:  op min *tmp35 *tmp35 *tmp34
+  120:  set *tmp31 *tmp35
+        label *label26
+  121:  assertequals 3 *tmp31 "median(1,3,5)"
+  122:  set :median.3:x1 1
+  123:  set :median.3:x2 1
+  124:  set :median.3:x3 1
+  125:  op max *tmp37 :median.3:x1 :median.3:x2
+  126:  op max *tmp38 :median.3:x1 :median.3:x3
+  127:  op max *tmp39 :median.3:x2 :median.3:x3
+  128:  op min *tmp40 *tmp37 *tmp38
+  129:  op min *tmp40 *tmp40 *tmp39
+  130:  set *tmp36 *tmp40
+        label *label27
+  131:  assertequals 1 *tmp36 "median(1,1,1)"
+  132:  set :median.4:x1 1
+  133:  set :median.4:x2 1
+  134:  set :median.4:x3 3
+  135:  op max *tmp42 :median.4:x1 :median.4:x2
+  136:  op max *tmp43 :median.4:x1 :median.4:x3
+  137:  op max *tmp44 :median.4:x2 :median.4:x3
+  138:  op min *tmp45 *tmp42 *tmp43
+  139:  op min *tmp45 *tmp45 *tmp44
+  140:  set *tmp41 *tmp45
+        label *label28
+  141:  assertequals 1 *tmp41 "median(1,1,3)"
+  142:  set :median.5:x1 1
+  143:  set :median.5:x2 3
+  144:  set :median.5:x3 3
+  145:  op max *tmp47 :median.5:x1 :median.5:x2
+  146:  op max *tmp48 :median.5:x1 :median.5:x3
+  147:  op max *tmp49 :median.5:x2 :median.5:x3
+  148:  op min *tmp50 *tmp47 *tmp48
+  149:  op min *tmp50 *tmp50 *tmp49
+  150:  set *tmp46 *tmp50
+        label *label29
+  151:  assertequals 3 *tmp46 "median(1,3,3)"
+  152:  set :median:x1 2
+  153:  set :median:x2 4
+  154:  set :median:x3 6
+  155:  set :median:x4 8
+  156:  setaddr :median*retaddr *label30
+  157:  call *label1 *invalid :median*retval
+        label *label30
+  158:  set *tmp51 :median*retval
+  159:  assertequals 5 *tmp51 "median(2,4,6,8)"
+  160:  set :median:x1 8
+  161:  set :median:x2 6
+  162:  set :median:x3 4
+  163:  set :median:x4 2
+  164:  setaddr :median*retaddr *label31
+  165:  call *label1 *invalid :median*retval
         label *label31
-  129:  assertequals 1 *tmp46 "avg(1)"
-  130:  set :avg.1:x1 1
-  131:  set :avg.1:x2 2
-  132:  op add *tmp48 :avg.1:x1 :avg.1:x2
-  133:  set :avg.1:sum *tmp48
-  134:  set :avg.1:i 3
-  135:  setaddr *tmp49 *label36
-  136:  jump *label33 always 0 0
-        multilabel *label36
-  137:  set :avg.1:i 4
-  138:  setaddr *tmp49 *label37
-        label *label33
-  139:  op add :avg.1:sum :avg.1:sum :avg.1:i
-        label *label34
-  140:  multijump *tmp49 0 0
-        multilabel *label37
-        label *label35
-  141:  op add *tmp50 2 2
-  142:  op div *tmp51 :avg.1:sum *tmp50
-  143:  set *tmp47 *tmp51
+  166:  set *tmp52 :median*retval
+  167:  assertequals 5 *tmp52 "median(8,6,4,2)"
+  168:  set :median:x1 4
+  169:  set :median:x2 8
+  170:  set :median:x3 2
+  171:  set :median:x4 6
+  172:  setaddr :median*retaddr *label32
+  173:  call *label1 *invalid :median*retval
         label *label32
-  144:  assertequals 2.5 *tmp47 "avg(1,2,3,4)"
-  145:  set :logn:number 25
-  146:  set :logn:base 5
-  147:  op log *tmp53 :logn:number 0
-  148:  op log *tmp54 :logn:base 0
-  149:  op div *tmp55 *tmp53 *tmp54
-  150:  set *tmp52 *tmp55
+  174:  set *tmp53 :median*retval
+  175:  assertequals 5 *tmp53 "median(4,8,2,6)"
+  176:  set :median:x1 2
+  177:  set :median:x2 6
+  178:  set :median:x3 4
+  179:  set :median:x4 8
+  180:  setaddr :median*retaddr *label33
+  181:  call *label1 *invalid :median*retval
+        label *label33
+  182:  set *tmp54 :median*retval
+  183:  assertequals 5 *tmp54 "median(2,6,4,8)"
+  184:  set :median:x1 6
+  185:  set :median:x2 2
+  186:  set :median:x3 8
+  187:  set :median:x4 4
+  188:  setaddr :median*retaddr *label34
+  189:  call *label1 *invalid :median*retval
+        label *label34
+  190:  set *tmp55 :median*retval
+  191:  assertequals 5 *tmp55 "median(6,2,8,4)"
+  192:  set :median.1:x1 1
+  193:  set :median.1:x2 2
+  194:  set :median.1:x3 3
+  195:  set :median.1:x4 4
+  196:  set :median.1:x5 5
+  197:  setaddr :median.1*retaddr *label35
+  198:  call *label2 *invalid :median.1*retval
+        label *label35
+  199:  set *tmp56 :median.1*retval
+  200:  assertequals 3 *tmp56 "median(1,2,3,4,5)"
+  201:  set :median.1:x1 5
+  202:  set :median.1:x2 4
+  203:  set :median.1:x3 3
+  204:  set :median.1:x4 2
+  205:  set :median.1:x5 1
+  206:  setaddr :median.1*retaddr *label36
+  207:  call *label2 *invalid :median.1*retval
+        label *label36
+  208:  set *tmp57 :median.1*retval
+  209:  assertequals 3 *tmp57 "median(5,4,3,2,1)"
+  210:  set :median.1:x1 1
+  211:  set :median.1:x2 1
+  212:  set :median.1:x3 1
+  213:  set :median.1:x4 1
+  214:  set :median.1:x5 1
+  215:  setaddr :median.1*retaddr *label37
+  216:  call *label2 *invalid :median.1*retval
+        label *label37
+  217:  set *tmp58 :median.1*retval
+  218:  assertequals 1 *tmp58 "median(1,1,1,1,1)"
+  219:  set :median.1:x1 1
+  220:  set :median.1:x2 1
+  221:  set :median.1:x3 1
+  222:  set :median.1:x4 1
+  223:  set :median.1:x5 5
+  224:  setaddr :median.1*retaddr *label38
+  225:  call *label2 *invalid :median.1*retval
         label *label38
-  151:  assertequals 2 *tmp52 "logn(25, 5)"
-  152:  set :logn.1:number 10000
-  153:  set :logn.1:base 10
-  154:  op log *tmp57 :logn.1:number 0
-  155:  op log *tmp58 :logn.1:base 0
-  156:  op div *tmp59 *tmp57 *tmp58
-  157:  set *tmp56 *tmp59
+  226:  set *tmp59 :median.1*retval
+  227:  assertequals 1 *tmp59 "median(1,1,1,1,5)"
+  228:  set :median.1:x1 1
+  229:  set :median.1:x2 1
+  230:  set :median.1:x3 1
+  231:  set :median.1:x4 5
+  232:  set :median.1:x5 5
+  233:  setaddr :median.1*retaddr *label39
+  234:  call *label2 *invalid :median.1*retval
         label *label39
-  158:  assertequals 4 *tmp56 "logn(10000, 10)"
-  159:  set :log2:number 16
-  160:  set :logn.2:number :log2:number
-  161:  set :logn.2:base 2
-  162:  op log *tmp62 :logn.2:number 0
-  163:  op log *tmp63 :logn.2:base 0
-  164:  op div *tmp64 *tmp62 *tmp63
-  165:  set *tmp61 *tmp64
-        label *label41
-  166:  set *tmp60 *tmp61
+  235:  set *tmp60 :median.1*retval
+  236:  assertequals 1 *tmp60 "median(1,1,1,5,5)"
+  237:  set :median.1:x1 1
+  238:  set :median.1:x2 1
+  239:  set :median.1:x3 5
+  240:  set :median.1:x4 5
+  241:  set :median.1:x5 5
+  242:  setaddr :median.1*retaddr *label40
+  243:  call *label2 *invalid :median.1*retval
         label *label40
-  167:  assertequals 4 *tmp60 "log2(16)"
-  168:  set :log2.1:number 1073741824
-  169:  set :logn.3:number :log2.1:number
-  170:  set :logn.3:base 2
-  171:  op log *tmp67 :logn.3:number 0
-  172:  op log *tmp68 :logn.3:base 0
-  173:  op div *tmp69 *tmp67 *tmp68
-  174:  set *tmp66 *tmp69
-        label *label43
-  175:  set *tmp65 *tmp66
+  244:  set *tmp61 :median.1*retval
+  245:  assertequals 5 *tmp61 "median(1,1,5,5,5)"
+  246:  set :median.1:x1 1
+  247:  set :median.1:x2 5
+  248:  set :median.1:x3 5
+  249:  set :median.1:x4 5
+  250:  set :median.1:x5 5
+  251:  setaddr :median.1*retaddr *label41
+  252:  call *label2 *invalid :median.1*retval
+        label *label41
+  253:  set *tmp62 :median.1*retval
+  254:  assertequals 5 *tmp62 "median(1,5,5,5,5)"
+  255:  set :median.1:x1 5
+  256:  set :median.1:x2 5
+  257:  set :median.1:x3 5
+  258:  set :median.1:x4 5
+  259:  set :median.1:x5 5
+  260:  setaddr :median.1*retaddr *label42
+  261:  call *label2 *invalid :median.1*retval
         label *label42
-  176:  assertequals 30 *tmp65 "log2(1 << 30)"
-  177:  set :lerp:from 1
-  178:  set :lerp:to 10
-  179:  set :lerp:ratio 0
-  180:  op sub *tmp71 1 :lerp:ratio
-  181:  op mul *tmp72 *tmp71 :lerp:from
-  182:  op mul *tmp73 :lerp:ratio :lerp:to
-  183:  op add *tmp74 *tmp72 *tmp73
-  184:  set *tmp70 *tmp74
-        label *label44
-  185:  assertequals 1 *tmp70 "lerp(1, 10, 0)"
-  186:  set :lerp.1:from 1
-  187:  set :lerp.1:to 10
-  188:  set :lerp.1:ratio 1
-  189:  op sub *tmp76 1 :lerp.1:ratio
-  190:  op mul *tmp77 *tmp76 :lerp.1:from
-  191:  op mul *tmp78 :lerp.1:ratio :lerp.1:to
-  192:  op add *tmp79 *tmp77 *tmp78
-  193:  set *tmp75 *tmp79
+  262:  set *tmp63 :median.1*retval
+  263:  assertequals 5 *tmp63 "median(5,5,5,5,5)"
+  264:  set :_median:bestDif 10000000000
+  265:  set :_median:best null
+  266:  set :_median:count 1
+  267:  set :_median:i 1
+  268:  setaddr *tmp66 *label48
+  269:  jump *label45 always 0 0
+        multilabel *label48
+  270:  set :_median:i 1
+  271:  setaddr *tmp66 *label49
+  272:  jump *label45 always 0 0
+        multilabel *label49
+  273:  set :_median:i 1
+  274:  setaddr *tmp66 *label50
+  275:  jump *label45 always 0 0
+        multilabel *label50
+  276:  set :_median:i 1
+  277:  setaddr *tmp66 *label51
+  278:  jump *label45 always 0 0
+        multilabel *label51
+  279:  set :_median:i 1
+  280:  setaddr *tmp66 *label52
+  281:  jump *label45 always 0 0
+        multilabel *label52
+  282:  set :_median:i 1
+  283:  setaddr *tmp66 *label53
         label *label45
-  194:  assertequals 10 *tmp75 "lerp(1, 10, 1)"
-  195:  set :lerp.2:from 1
-  196:  set :lerp.2:to 10
-  197:  set :lerp.2:ratio 0.5
-  198:  op sub *tmp81 1 :lerp.2:ratio
-  199:  op mul *tmp82 *tmp81 :lerp.2:from
-  200:  op mul *tmp83 :lerp.2:ratio :lerp.2:to
-  201:  op add *tmp84 *tmp82 *tmp83
-  202:  set *tmp80 *tmp84
-        label *label46
-  203:  assertequals 5.5 *tmp80 "lerp(1, 10, 0.5)"
-  204:  set :median.2:x 1
-  205:  set *tmp85 :median.2:x
-        label *label47
-  206:  assertequals 1 *tmp85 "median(1)"
-  207:  set :median.3:x1 2
-  208:  set :median.3:x2 4
-  209:  op add *tmp87 :median.3:x1 :median.3:x2
-  210:  op div *tmp88 *tmp87 2
-  211:  set *tmp86 *tmp88
-        label *label48
-  212:  assertequals 3 *tmp86 "median(2,4)"
-  213:  set :median.4:x1 1
-  214:  set :median.4:x2 3
-  215:  set :median.4:x3 5
-  216:  op max *tmp90 :median.4:x1 :median.4:x2
-  217:  op max *tmp91 :median.4:x1 :median.4:x3
-  218:  op max *tmp92 :median.4:x2 :median.4:x3
-  219:  op min *tmp93 *tmp90 *tmp91
-  220:  op min *tmp93 *tmp93 *tmp92
-  221:  set *tmp89 *tmp93
-        label *label49
-  222:  assertequals 3 *tmp89 "median(1,3,5)"
-  223:  set :median.5:x1 1
-  224:  set :median.5:x2 1
-  225:  set :median.5:x3 1
-  226:  op max *tmp95 :median.5:x1 :median.5:x2
-  227:  op max *tmp96 :median.5:x1 :median.5:x3
-  228:  op max *tmp97 :median.5:x2 :median.5:x3
-  229:  op min *tmp98 *tmp95 *tmp96
-  230:  op min *tmp98 *tmp98 *tmp97
-  231:  set *tmp94 *tmp98
-        label *label50
-  232:  assertequals 1 *tmp94 "median(1,1,1)"
-  233:  set :median.6:x1 1
-  234:  set :median.6:x2 1
-  235:  set :median.6:x3 3
-  236:  op max *tmp100 :median.6:x1 :median.6:x2
-  237:  op max *tmp101 :median.6:x1 :median.6:x3
-  238:  op max *tmp102 :median.6:x2 :median.6:x3
-  239:  op min *tmp103 *tmp100 *tmp101
-  240:  op min *tmp103 *tmp103 *tmp102
-  241:  set *tmp99 *tmp103
-        label *label51
-  242:  assertequals 1 *tmp99 "median(1,1,3)"
-  243:  set :median.7:x1 1
-  244:  set :median.7:x2 3
-  245:  set :median.7:x3 3
-  246:  op max *tmp105 :median.7:x1 :median.7:x2
-  247:  op max *tmp106 :median.7:x1 :median.7:x3
-  248:  op max *tmp107 :median.7:x2 :median.7:x3
-  249:  op min *tmp108 *tmp105 *tmp106
-  250:  op min *tmp108 *tmp108 *tmp107
-  251:  set *tmp104 *tmp108
-        label *label52
-  252:  assertequals 3 *tmp104 "median(1,3,3)"
-  253:  set :median:x1 2
-  254:  set :median:x2 4
-  255:  set :median:x3 6
-  256:  set :median:x4 8
-  257:  setaddr :median*retaddr *label53
-  258:  call *label1 *invalid :median*retval
-        label *label53
-  259:  set *tmp109 :median*retval
-  260:  assertequals 5 *tmp109 "median(2,4,6,8)"
-  261:  set :median:x1 8
-  262:  set :median:x2 6
-  263:  set :median:x3 4
-  264:  set :median:x4 2
-  265:  setaddr :median*retaddr *label54
-  266:  call *label1 *invalid :median*retval
-        label *label54
-  267:  set *tmp110 :median*retval
-  268:  assertequals 5 *tmp110 "median(8,6,4,2)"
-  269:  set :median:x1 4
-  270:  set :median:x2 8
-  271:  set :median:x3 2
-  272:  set :median:x4 6
-  273:  setaddr :median*retaddr *label55
-  274:  call *label1 *invalid :median*retval
+  284:  set :_isMedian:n :_median:i
+  285:  set :_isMedian:lt 0
+  286:  set :_isMedian:gt 0
+  287:  set :_isMedian:i 1
+  288:  setaddr *tmp68 *label58
+  289:  jump *label55 always 0 0
+        multilabel *label58
+  290:  set :_isMedian:i 1
+  291:  setaddr *tmp68 *label59
+  292:  jump *label55 always 0 0
+        multilabel *label59
+  293:  set :_isMedian:i 1
+  294:  setaddr *tmp68 *label60
+  295:  jump *label55 always 0 0
+        multilabel *label60
+  296:  set :_isMedian:i 1
+  297:  setaddr *tmp68 *label61
+  298:  jump *label55 always 0 0
+        multilabel *label61
+  299:  set :_isMedian:i 1
+  300:  setaddr *tmp68 *label62
+  301:  jump *label55 always 0 0
+        multilabel *label62
+  302:  set :_isMedian:i 1
+  303:  setaddr *tmp68 *label63
         label *label55
-  275:  set *tmp111 :median*retval
-  276:  assertequals 5 *tmp111 "median(4,8,2,6)"
-  277:  set :median:x1 2
-  278:  set :median:x2 6
-  279:  set :median:x3 4
-  280:  set :median:x4 8
-  281:  setaddr :median*retaddr *label56
-  282:  call *label1 *invalid :median*retval
-        label *label56
-  283:  set *tmp112 :median*retval
-  284:  assertequals 5 *tmp112 "median(2,6,4,8)"
-  285:  set :median:x1 6
-  286:  set :median:x2 2
-  287:  set :median:x3 8
-  288:  set :median:x4 4
-  289:  setaddr :median*retaddr *label57
-  290:  call *label1 *invalid :median*retval
-        label *label57
-  291:  set *tmp113 :median*retval
-  292:  assertequals 5 *tmp113 "median(6,2,8,4)"
-  293:  set :median.1:x1 1
-  294:  set :median.1:x2 2
-  295:  set :median.1:x3 3
-  296:  set :median.1:x4 4
-  297:  set :median.1:x5 5
-  298:  setaddr :median.1*retaddr *label58
-  299:  call *label2 *invalid :median.1*retval
-        label *label58
-  300:  set *tmp114 :median.1*retval
-  301:  assertequals 3 *tmp114 "median(1,2,3,4,5)"
-  302:  set :median.1:x1 5
-  303:  set :median.1:x2 4
-  304:  set :median.1:x3 3
-  305:  set :median.1:x4 2
-  306:  set :median.1:x5 1
-  307:  setaddr :median.1*retaddr *label59
-  308:  call *label2 *invalid :median.1*retval
-        label *label59
-  309:  set *tmp115 :median.1*retval
-  310:  assertequals 3 *tmp115 "median(5,4,3,2,1)"
-  311:  set :median.1:x1 1
-  312:  set :median.1:x2 1
-  313:  set :median.1:x3 1
-  314:  set :median.1:x4 1
-  315:  set :median.1:x5 1
-  316:  setaddr :median.1*retaddr *label60
-  317:  call *label2 *invalid :median.1*retval
-        label *label60
-  318:  set *tmp116 :median.1*retval
-  319:  assertequals 1 *tmp116 "median(1,1,1,1,1)"
-  320:  set :median.1:x1 1
-  321:  set :median.1:x2 1
-  322:  set :median.1:x3 1
-  323:  set :median.1:x4 1
-  324:  set :median.1:x5 5
-  325:  setaddr :median.1*retaddr *label61
-  326:  call *label2 *invalid :median.1*retval
-        label *label61
-  327:  set *tmp117 :median.1*retval
-  328:  assertequals 1 *tmp117 "median(1,1,1,1,5)"
-  329:  set :median.1:x1 1
-  330:  set :median.1:x2 1
-  331:  set :median.1:x3 1
-  332:  set :median.1:x4 5
-  333:  set :median.1:x5 5
-  334:  setaddr :median.1*retaddr *label62
-  335:  call *label2 *invalid :median.1*retval
-        label *label62
-  336:  set *tmp118 :median.1*retval
-  337:  assertequals 1 *tmp118 "median(1,1,1,5,5)"
-  338:  set :median.1:x1 1
-  339:  set :median.1:x2 1
-  340:  set :median.1:x3 5
-  341:  set :median.1:x4 5
-  342:  set :median.1:x5 5
-  343:  setaddr :median.1*retaddr *label63
-  344:  call *label2 *invalid :median.1*retval
-        label *label63
-  345:  set *tmp119 :median.1*retval
-  346:  assertequals 5 *tmp119 "median(1,1,5,5,5)"
-  347:  set :median.1:x1 1
-  348:  set :median.1:x2 5
-  349:  set :median.1:x3 5
-  350:  set :median.1:x4 5
-  351:  set :median.1:x5 5
-  352:  setaddr :median.1*retaddr *label64
-  353:  call *label2 *invalid :median.1*retval
+  304:  op lessThan *tmp69 :_isMedian:i :_isMedian:n
+  305:  jump *label64 equal *tmp69 false
+  306:  op add :_isMedian:lt :_isMedian:lt 1
+  307:  set *tmp70 :_isMedian:lt
+  308:  jump *label65 always 0 0
         label *label64
-  354:  set *tmp120 :median.1*retval
-  355:  assertequals 5 *tmp120 "median(1,5,5,5,5)"
-  356:  set :median.1:x1 5
-  357:  set :median.1:x2 5
-  358:  set :median.1:x3 5
-  359:  set :median.1:x4 5
-  360:  set :median.1:x5 5
-  361:  setaddr :median.1*retaddr *label65
-  362:  call *label2 *invalid :median.1*retval
+  309:  op greaterThan *tmp71 :_isMedian:i :_isMedian:n
+  310:  jump *label66 equal *tmp71 false
+  311:  op add :_isMedian:gt :_isMedian:gt 1
+  312:  set *tmp72 :_isMedian:gt
+  313:  jump *label67 always 0 0
+        label *label66
+  314:  set *tmp72 null
+        label *label67
+  315:  set *tmp70 *tmp72
         label *label65
-  363:  set *tmp121 :median.1*retval
-  364:  assertequals 5 *tmp121 "median(5,5,5,5,5)"
-  365:  set :_median:bestDif 10000000000
-  366:  set :_median:best null
-  367:  set :_median:count 1
-  368:  set :_median:i 1
-  369:  setaddr *tmp124 *label71
-  370:  jump *label68 always 0 0
-        multilabel *label71
-  371:  set :_median:i 1
-  372:  setaddr *tmp124 *label72
-  373:  jump *label68 always 0 0
-        multilabel *label72
-  374:  set :_median:i 1
-  375:  setaddr *tmp124 *label73
-  376:  jump *label68 always 0 0
-        multilabel *label73
-  377:  set :_median:i 1
-  378:  setaddr *tmp124 *label74
-  379:  jump *label68 always 0 0
-        multilabel *label74
-  380:  set :_median:i 1
-  381:  setaddr *tmp124 *label75
-  382:  jump *label68 always 0 0
-        multilabel *label75
-  383:  set :_median:i 1
-  384:  setaddr *tmp124 *label76
+        label *label56
+  316:  multijump *tmp68 0 0
+        multilabel *label63
+        label *label57
+  317:  op sub *tmp73 :_isMedian:gt :_isMedian:lt
+  318:  op abs *tmp74 *tmp73 0
+  319:  set :_isMedian:dif *tmp74
+  320:  op add *tmp75 :_isMedian:gt :_isMedian:lt
+  321:  op sub *tmp76 6 1
+  322:  op greaterThanEq *tmp77 *tmp75 *tmp76
+  323:  jump *label68 equal *tmp77 false
+  324:  op equal *tmp79 :_isMedian:gt :_isMedian:lt
+  325:  set *tmp78 *tmp79
+  326:  jump *label69 always 0 0
         label *label68
-  385:  set :_isMedian:n :_median:i
-  386:  set :_isMedian:lt 0
-  387:  set :_isMedian:gt 0
-  388:  set :_isMedian:i 1
-  389:  setaddr *tmp126 *label81
-  390:  jump *label78 always 0 0
+  327:  set *tmp78 false
+        label *label69
+  328:  set *tmp67 *tmp78
+        label *label54
+  329:  set :_median:dif :_isMedian:dif
+  330:  jump *label70 equal *tmp67 false
+  331:  set *tmp65 :_median:i
+  332:  jump *label44 always 0 0
+  333:  set *tmp80 null
+  334:  jump *label71 always 0 0
+        label *label70
+  335:  set *tmp80 null
+        label *label71
+  336:  op lessThan *tmp81 :_median:dif :_median:bestDif
+  337:  jump *label72 equal *tmp81 false
+  338:  set :_median:bestDif :_median:dif
+  339:  set :_median:best :_median:i
+  340:  set :_median:count 1
+  341:  set *tmp82 :_median:count
+  342:  jump *label73 always 0 0
+        label *label72
+  343:  op lessThanEq *tmp83 :_median:dif :_median:bestDif
+  344:  jump *label74 equal *tmp83 false
+  345:  op add :_median:best :_median:best :_median:i
+  346:  op add :_median:count :_median:count 1
+  347:  set *tmp84 :_median:count
+  348:  jump *label75 always 0 0
+        label *label74
+  349:  set *tmp84 null
+        label *label75
+  350:  set *tmp82 *tmp84
+        label *label73
+        label *label46
+  351:  multijump *tmp66 0 0
+        multilabel *label53
+        label *label47
+  352:  op div *tmp85 :_median:best :_median:count
+  353:  set *tmp65 *tmp85
+        label *label44
+  354:  set *tmp64 *tmp65
+        label *label43
+  355:  assertequals 1 *tmp64 "median(1,1,1,1,1,1)"
+  356:  set :_median.1:bestDif 10000000000
+  357:  set :_median.1:best null
+  358:  set :_median.1:count 1
+  359:  set :_median.1:i 1
+  360:  setaddr *tmp88 *label81
+  361:  jump *label78 always 0 0
         multilabel *label81
-  391:  set :_isMedian:i 1
-  392:  setaddr *tmp126 *label82
-  393:  jump *label78 always 0 0
+  362:  set :_median.1:i 1
+  363:  setaddr *tmp88 *label82
+  364:  jump *label78 always 0 0
         multilabel *label82
-  394:  set :_isMedian:i 1
-  395:  setaddr *tmp126 *label83
-  396:  jump *label78 always 0 0
+  365:  set :_median.1:i 1
+  366:  setaddr *tmp88 *label83
+  367:  jump *label78 always 0 0
         multilabel *label83
-  397:  set :_isMedian:i 1
-  398:  setaddr *tmp126 *label84
-  399:  jump *label78 always 0 0
+  368:  set :_median.1:i 1
+  369:  setaddr *tmp88 *label84
+  370:  jump *label78 always 0 0
         multilabel *label84
-  400:  set :_isMedian:i 1
-  401:  setaddr *tmp126 *label85
-  402:  jump *label78 always 0 0
+  371:  set :_median.1:i 1
+  372:  setaddr *tmp88 *label85
+  373:  jump *label78 always 0 0
         multilabel *label85
-  403:  set :_isMedian:i 1
-  404:  setaddr *tmp126 *label86
+  374:  set :_median.1:i 5
+  375:  setaddr *tmp88 *label86
         label *label78
-  405:  op lessThan *tmp127 :_isMedian:i :_isMedian:n
-  406:  jump *label87 equal *tmp127 false
-  407:  op add :_isMedian:lt :_isMedian:lt 1
-  408:  set *tmp128 :_isMedian:lt
-  409:  jump *label88 always 0 0
-        label *label87
-  410:  op greaterThan *tmp129 :_isMedian:i :_isMedian:n
-  411:  jump *label89 equal *tmp129 false
-  412:  op add :_isMedian:gt :_isMedian:gt 1
-  413:  set *tmp130 :_isMedian:gt
-  414:  jump *label90 always 0 0
-        label *label89
-  415:  set *tmp130 null
-        label *label90
-  416:  set *tmp128 *tmp130
+  376:  set :_isMedian.1:n :_median.1:i
+  377:  set :_isMedian.1:lt 0
+  378:  set :_isMedian.1:gt 0
+  379:  set :_isMedian.1:i 1
+  380:  setaddr *tmp90 *label91
+  381:  jump *label88 always 0 0
+        multilabel *label91
+  382:  set :_isMedian.1:i 1
+  383:  setaddr *tmp90 *label92
+  384:  jump *label88 always 0 0
+        multilabel *label92
+  385:  set :_isMedian.1:i 1
+  386:  setaddr *tmp90 *label93
+  387:  jump *label88 always 0 0
+        multilabel *label93
+  388:  set :_isMedian.1:i 1
+  389:  setaddr *tmp90 *label94
+  390:  jump *label88 always 0 0
+        multilabel *label94
+  391:  set :_isMedian.1:i 1
+  392:  setaddr *tmp90 *label95
+  393:  jump *label88 always 0 0
+        multilabel *label95
+  394:  set :_isMedian.1:i 5
+  395:  setaddr *tmp90 *label96
         label *label88
+  396:  op lessThan *tmp91 :_isMedian.1:i :_isMedian.1:n
+  397:  jump *label97 equal *tmp91 false
+  398:  op add :_isMedian.1:lt :_isMedian.1:lt 1
+  399:  set *tmp92 :_isMedian.1:lt
+  400:  jump *label98 always 0 0
+        label *label97
+  401:  op greaterThan *tmp93 :_isMedian.1:i :_isMedian.1:n
+  402:  jump *label99 equal *tmp93 false
+  403:  op add :_isMedian.1:gt :_isMedian.1:gt 1
+  404:  set *tmp94 :_isMedian.1:gt
+  405:  jump *label100 always 0 0
+        label *label99
+  406:  set *tmp94 null
+        label *label100
+  407:  set *tmp92 *tmp94
+        label *label98
+        label *label89
+  408:  multijump *tmp90 0 0
+        multilabel *label96
+        label *label90
+  409:  op sub *tmp95 :_isMedian.1:gt :_isMedian.1:lt
+  410:  op abs *tmp96 *tmp95 0
+  411:  set :_isMedian.1:dif *tmp96
+  412:  op add *tmp97 :_isMedian.1:gt :_isMedian.1:lt
+  413:  op sub *tmp98 6 1
+  414:  op greaterThanEq *tmp99 *tmp97 *tmp98
+  415:  jump *label101 equal *tmp99 false
+  416:  op equal *tmp101 :_isMedian.1:gt :_isMedian.1:lt
+  417:  set *tmp100 *tmp101
+  418:  jump *label102 always 0 0
+        label *label101
+  419:  set *tmp100 false
+        label *label102
+  420:  set *tmp89 *tmp100
+        label *label87
+  421:  set :_median.1:dif :_isMedian.1:dif
+  422:  jump *label103 equal *tmp89 false
+  423:  set *tmp87 :_median.1:i
+  424:  jump *label77 always 0 0
+  425:  set *tmp102 null
+  426:  jump *label104 always 0 0
+        label *label103
+  427:  set *tmp102 null
+        label *label104
+  428:  op lessThan *tmp103 :_median.1:dif :_median.1:bestDif
+  429:  jump *label105 equal *tmp103 false
+  430:  set :_median.1:bestDif :_median.1:dif
+  431:  set :_median.1:best :_median.1:i
+  432:  set :_median.1:count 1
+  433:  set *tmp104 :_median.1:count
+  434:  jump *label106 always 0 0
+        label *label105
+  435:  op lessThanEq *tmp105 :_median.1:dif :_median.1:bestDif
+  436:  jump *label107 equal *tmp105 false
+  437:  op add :_median.1:best :_median.1:best :_median.1:i
+  438:  op add :_median.1:count :_median.1:count 1
+  439:  set *tmp106 :_median.1:count
+  440:  jump *label108 always 0 0
+        label *label107
+  441:  set *tmp106 null
+        label *label108
+  442:  set *tmp104 *tmp106
+        label *label106
         label *label79
-  417:  multijump *tmp126 0 0
+  443:  multijump *tmp88 0 0
         multilabel *label86
         label *label80
-  418:  op sub *tmp131 :_isMedian:gt :_isMedian:lt
-  419:  op abs *tmp132 *tmp131 0
-  420:  set :_isMedian:dif *tmp132
-  421:  op add *tmp133 :_isMedian:gt :_isMedian:lt
-  422:  op sub *tmp134 6 1
-  423:  op greaterThanEq *tmp135 *tmp133 *tmp134
-  424:  jump *label91 equal *tmp135 false
-  425:  op equal *tmp137 :_isMedian:gt :_isMedian:lt
-  426:  set *tmp136 *tmp137
-  427:  jump *label92 always 0 0
-        label *label91
-  428:  set *tmp136 false
-        label *label92
-  429:  set *tmp125 *tmp136
+  444:  op div *tmp107 :_median.1:best :_median.1:count
+  445:  set *tmp87 *tmp107
         label *label77
-  430:  set :_median:dif :_isMedian:dif
-  431:  jump *label93 equal *tmp125 false
-  432:  set *tmp123 :_median:i
-  433:  jump *label67 always 0 0
-  434:  set *tmp138 null
-  435:  jump *label94 always 0 0
-        label *label93
-  436:  set *tmp138 null
-        label *label94
-  437:  op lessThan *tmp139 :_median:dif :_median:bestDif
-  438:  jump *label95 equal *tmp139 false
-  439:  set :_median:bestDif :_median:dif
-  440:  set :_median:best :_median:i
-  441:  set :_median:count 1
-  442:  set *tmp140 :_median:count
-  443:  jump *label96 always 0 0
-        label *label95
-  444:  op lessThanEq *tmp141 :_median:dif :_median:bestDif
-  445:  jump *label97 equal *tmp141 false
-  446:  op add :_median:best :_median:best :_median:i
-  447:  op add :_median:count :_median:count 1
-  448:  set *tmp142 :_median:count
-  449:  jump *label98 always 0 0
-        label *label97
-  450:  set *tmp142 null
-        label *label98
-  451:  set *tmp140 *tmp142
-        label *label96
-        label *label69
-  452:  multijump *tmp124 0 0
-        multilabel *label76
-        label *label70
-  453:  op div *tmp143 :_median:best :_median:count
-  454:  set *tmp123 *tmp143
-        label *label67
-  455:  set *tmp122 *tmp123
-        label *label66
-  456:  assertequals 1 *tmp122 "median(1,1,1,1,1,1)"
-  457:  set :_median.1:bestDif 10000000000
-  458:  set :_median.1:best null
-  459:  set :_median.1:count 1
-  460:  set :_median.1:i 1
-  461:  setaddr *tmp146 *label104
-  462:  jump *label101 always 0 0
-        multilabel *label104
-  463:  set :_median.1:i 1
-  464:  setaddr *tmp146 *label105
-  465:  jump *label101 always 0 0
-        multilabel *label105
-  466:  set :_median.1:i 1
-  467:  setaddr *tmp146 *label106
-  468:  jump *label101 always 0 0
-        multilabel *label106
-  469:  set :_median.1:i 1
-  470:  setaddr *tmp146 *label107
-  471:  jump *label101 always 0 0
-        multilabel *label107
-  472:  set :_median.1:i 1
-  473:  setaddr *tmp146 *label108
-  474:  jump *label101 always 0 0
-        multilabel *label108
-  475:  set :_median.1:i 5
-  476:  setaddr *tmp146 *label109
-        label *label101
-  477:  set :_isMedian.1:n :_median.1:i
-  478:  set :_isMedian.1:lt 0
-  479:  set :_isMedian.1:gt 0
-  480:  set :_isMedian.1:i 1
-  481:  setaddr *tmp148 *label114
-  482:  jump *label111 always 0 0
+  446:  set *tmp86 *tmp87
+        label *label76
+  447:  assertequals 1 *tmp86 "median(1,1,1,1,1,5)"
+  448:  set :_median.2:bestDif 10000000000
+  449:  set :_median.2:best null
+  450:  set :_median.2:count 1
+  451:  set :_median.2:i 1
+  452:  setaddr *tmp110 *label114
+  453:  jump *label111 always 0 0
         multilabel *label114
-  483:  set :_isMedian.1:i 1
-  484:  setaddr *tmp148 *label115
-  485:  jump *label111 always 0 0
+  454:  set :_median.2:i 1
+  455:  setaddr *tmp110 *label115
+  456:  jump *label111 always 0 0
         multilabel *label115
-  486:  set :_isMedian.1:i 1
-  487:  setaddr *tmp148 *label116
-  488:  jump *label111 always 0 0
+  457:  set :_median.2:i 1
+  458:  setaddr *tmp110 *label116
+  459:  jump *label111 always 0 0
         multilabel *label116
-  489:  set :_isMedian.1:i 1
-  490:  setaddr *tmp148 *label117
-  491:  jump *label111 always 0 0
+  460:  set :_median.2:i 1
+  461:  setaddr *tmp110 *label117
+  462:  jump *label111 always 0 0
         multilabel *label117
-  492:  set :_isMedian.1:i 1
-  493:  setaddr *tmp148 *label118
-  494:  jump *label111 always 0 0
+  463:  set :_median.2:i 5
+  464:  setaddr *tmp110 *label118
+  465:  jump *label111 always 0 0
         multilabel *label118
-  495:  set :_isMedian.1:i 5
-  496:  setaddr *tmp148 *label119
+  466:  set :_median.2:i 5
+  467:  setaddr *tmp110 *label119
         label *label111
-  497:  op lessThan *tmp149 :_isMedian.1:i :_isMedian.1:n
-  498:  jump *label120 equal *tmp149 false
-  499:  op add :_isMedian.1:lt :_isMedian.1:lt 1
-  500:  set *tmp150 :_isMedian.1:lt
-  501:  jump *label121 always 0 0
-        label *label120
-  502:  op greaterThan *tmp151 :_isMedian.1:i :_isMedian.1:n
-  503:  jump *label122 equal *tmp151 false
-  504:  op add :_isMedian.1:gt :_isMedian.1:gt 1
-  505:  set *tmp152 :_isMedian.1:gt
-  506:  jump *label123 always 0 0
-        label *label122
-  507:  set *tmp152 null
-        label *label123
-  508:  set *tmp150 *tmp152
+  468:  set :_isMedian.2:n :_median.2:i
+  469:  set :_isMedian.2:lt 0
+  470:  set :_isMedian.2:gt 0
+  471:  set :_isMedian.2:i 1
+  472:  setaddr *tmp112 *label124
+  473:  jump *label121 always 0 0
+        multilabel *label124
+  474:  set :_isMedian.2:i 1
+  475:  setaddr *tmp112 *label125
+  476:  jump *label121 always 0 0
+        multilabel *label125
+  477:  set :_isMedian.2:i 1
+  478:  setaddr *tmp112 *label126
+  479:  jump *label121 always 0 0
+        multilabel *label126
+  480:  set :_isMedian.2:i 1
+  481:  setaddr *tmp112 *label127
+  482:  jump *label121 always 0 0
+        multilabel *label127
+  483:  set :_isMedian.2:i 5
+  484:  setaddr *tmp112 *label128
+  485:  jump *label121 always 0 0
+        multilabel *label128
+  486:  set :_isMedian.2:i 5
+  487:  setaddr *tmp112 *label129
         label *label121
+  488:  op lessThan *tmp113 :_isMedian.2:i :_isMedian.2:n
+  489:  jump *label130 equal *tmp113 false
+  490:  op add :_isMedian.2:lt :_isMedian.2:lt 1
+  491:  set *tmp114 :_isMedian.2:lt
+  492:  jump *label131 always 0 0
+        label *label130
+  493:  op greaterThan *tmp115 :_isMedian.2:i :_isMedian.2:n
+  494:  jump *label132 equal *tmp115 false
+  495:  op add :_isMedian.2:gt :_isMedian.2:gt 1
+  496:  set *tmp116 :_isMedian.2:gt
+  497:  jump *label133 always 0 0
+        label *label132
+  498:  set *tmp116 null
+        label *label133
+  499:  set *tmp114 *tmp116
+        label *label131
+        label *label122
+  500:  multijump *tmp112 0 0
+        multilabel *label129
+        label *label123
+  501:  op sub *tmp117 :_isMedian.2:gt :_isMedian.2:lt
+  502:  op abs *tmp118 *tmp117 0
+  503:  set :_isMedian.2:dif *tmp118
+  504:  op add *tmp119 :_isMedian.2:gt :_isMedian.2:lt
+  505:  op sub *tmp120 6 1
+  506:  op greaterThanEq *tmp121 *tmp119 *tmp120
+  507:  jump *label134 equal *tmp121 false
+  508:  op equal *tmp123 :_isMedian.2:gt :_isMedian.2:lt
+  509:  set *tmp122 *tmp123
+  510:  jump *label135 always 0 0
+        label *label134
+  511:  set *tmp122 false
+        label *label135
+  512:  set *tmp111 *tmp122
+        label *label120
+  513:  set :_median.2:dif :_isMedian.2:dif
+  514:  jump *label136 equal *tmp111 false
+  515:  set *tmp109 :_median.2:i
+  516:  jump *label110 always 0 0
+  517:  set *tmp124 null
+  518:  jump *label137 always 0 0
+        label *label136
+  519:  set *tmp124 null
+        label *label137
+  520:  op lessThan *tmp125 :_median.2:dif :_median.2:bestDif
+  521:  jump *label138 equal *tmp125 false
+  522:  set :_median.2:bestDif :_median.2:dif
+  523:  set :_median.2:best :_median.2:i
+  524:  set :_median.2:count 1
+  525:  set *tmp126 :_median.2:count
+  526:  jump *label139 always 0 0
+        label *label138
+  527:  op lessThanEq *tmp127 :_median.2:dif :_median.2:bestDif
+  528:  jump *label140 equal *tmp127 false
+  529:  op add :_median.2:best :_median.2:best :_median.2:i
+  530:  op add :_median.2:count :_median.2:count 1
+  531:  set *tmp128 :_median.2:count
+  532:  jump *label141 always 0 0
+        label *label140
+  533:  set *tmp128 null
+        label *label141
+  534:  set *tmp126 *tmp128
+        label *label139
         label *label112
-  509:  multijump *tmp148 0 0
+  535:  multijump *tmp110 0 0
         multilabel *label119
         label *label113
-  510:  op sub *tmp153 :_isMedian.1:gt :_isMedian.1:lt
-  511:  op abs *tmp154 *tmp153 0
-  512:  set :_isMedian.1:dif *tmp154
-  513:  op add *tmp155 :_isMedian.1:gt :_isMedian.1:lt
-  514:  op sub *tmp156 6 1
-  515:  op greaterThanEq *tmp157 *tmp155 *tmp156
-  516:  jump *label124 equal *tmp157 false
-  517:  op equal *tmp159 :_isMedian.1:gt :_isMedian.1:lt
-  518:  set *tmp158 *tmp159
-  519:  jump *label125 always 0 0
-        label *label124
-  520:  set *tmp158 false
-        label *label125
-  521:  set *tmp147 *tmp158
+  536:  op div *tmp129 :_median.2:best :_median.2:count
+  537:  set *tmp109 *tmp129
         label *label110
-  522:  set :_median.1:dif :_isMedian.1:dif
-  523:  jump *label126 equal *tmp147 false
-  524:  set *tmp145 :_median.1:i
-  525:  jump *label100 always 0 0
-  526:  set *tmp160 null
-  527:  jump *label127 always 0 0
-        label *label126
-  528:  set *tmp160 null
-        label *label127
-  529:  op lessThan *tmp161 :_median.1:dif :_median.1:bestDif
-  530:  jump *label128 equal *tmp161 false
-  531:  set :_median.1:bestDif :_median.1:dif
-  532:  set :_median.1:best :_median.1:i
-  533:  set :_median.1:count 1
-  534:  set *tmp162 :_median.1:count
-  535:  jump *label129 always 0 0
-        label *label128
-  536:  op lessThanEq *tmp163 :_median.1:dif :_median.1:bestDif
-  537:  jump *label130 equal *tmp163 false
-  538:  op add :_median.1:best :_median.1:best :_median.1:i
-  539:  op add :_median.1:count :_median.1:count 1
-  540:  set *tmp164 :_median.1:count
-  541:  jump *label131 always 0 0
-        label *label130
-  542:  set *tmp164 null
-        label *label131
-  543:  set *tmp162 *tmp164
-        label *label129
-        label *label102
-  544:  multijump *tmp146 0 0
-        multilabel *label109
-        label *label103
-  545:  op div *tmp165 :_median.1:best :_median.1:count
-  546:  set *tmp145 *tmp165
-        label *label100
-  547:  set *tmp144 *tmp145
-        label *label99
-  548:  assertequals 1 *tmp144 "median(1,1,1,1,1,5)"
-  549:  set :_median.2:bestDif 10000000000
-  550:  set :_median.2:best null
-  551:  set :_median.2:count 1
-  552:  set :_median.2:i 1
-  553:  setaddr *tmp168 *label137
-  554:  jump *label134 always 0 0
-        multilabel *label137
-  555:  set :_median.2:i 1
-  556:  setaddr *tmp168 *label138
-  557:  jump *label134 always 0 0
-        multilabel *label138
-  558:  set :_median.2:i 1
-  559:  setaddr *tmp168 *label139
-  560:  jump *label134 always 0 0
-        multilabel *label139
-  561:  set :_median.2:i 1
-  562:  setaddr *tmp168 *label140
-  563:  jump *label134 always 0 0
-        multilabel *label140
-  564:  set :_median.2:i 5
-  565:  setaddr *tmp168 *label141
-  566:  jump *label134 always 0 0
-        multilabel *label141
-  567:  set :_median.2:i 5
-  568:  setaddr *tmp168 *label142
-        label *label134
-  569:  set :_isMedian.2:n :_median.2:i
-  570:  set :_isMedian.2:lt 0
-  571:  set :_isMedian.2:gt 0
-  572:  set :_isMedian.2:i 1
-  573:  setaddr *tmp170 *label147
-  574:  jump *label144 always 0 0
+  538:  set *tmp108 *tmp109
+        label *label109
+  539:  assertequals 1 *tmp108 "median(1,1,1,1,5,5)"
+  540:  set :_median.3:bestDif 10000000000
+  541:  set :_median.3:best null
+  542:  set :_median.3:count 1
+  543:  set :_median.3:i 1
+  544:  setaddr *tmp132 *label147
+  545:  jump *label144 always 0 0
         multilabel *label147
-  575:  set :_isMedian.2:i 1
-  576:  setaddr *tmp170 *label148
-  577:  jump *label144 always 0 0
+  546:  set :_median.3:i 1
+  547:  setaddr *tmp132 *label148
+  548:  jump *label144 always 0 0
         multilabel *label148
-  578:  set :_isMedian.2:i 1
-  579:  setaddr *tmp170 *label149
-  580:  jump *label144 always 0 0
+  549:  set :_median.3:i 1
+  550:  setaddr *tmp132 *label149
+  551:  jump *label144 always 0 0
         multilabel *label149
-  581:  set :_isMedian.2:i 1
-  582:  setaddr *tmp170 *label150
-  583:  jump *label144 always 0 0
+  552:  set :_median.3:i 5
+  553:  setaddr *tmp132 *label150
+  554:  jump *label144 always 0 0
         multilabel *label150
-  584:  set :_isMedian.2:i 5
-  585:  setaddr *tmp170 *label151
-  586:  jump *label144 always 0 0
+  555:  set :_median.3:i 5
+  556:  setaddr *tmp132 *label151
+  557:  jump *label144 always 0 0
         multilabel *label151
-  587:  set :_isMedian.2:i 5
-  588:  setaddr *tmp170 *label152
+  558:  set :_median.3:i 5
+  559:  setaddr *tmp132 *label152
         label *label144
-  589:  op lessThan *tmp171 :_isMedian.2:i :_isMedian.2:n
-  590:  jump *label153 equal *tmp171 false
-  591:  op add :_isMedian.2:lt :_isMedian.2:lt 1
-  592:  set *tmp172 :_isMedian.2:lt
-  593:  jump *label154 always 0 0
-        label *label153
-  594:  op greaterThan *tmp173 :_isMedian.2:i :_isMedian.2:n
-  595:  jump *label155 equal *tmp173 false
-  596:  op add :_isMedian.2:gt :_isMedian.2:gt 1
-  597:  set *tmp174 :_isMedian.2:gt
-  598:  jump *label156 always 0 0
-        label *label155
-  599:  set *tmp174 null
-        label *label156
-  600:  set *tmp172 *tmp174
+  560:  set :_isMedian.3:n :_median.3:i
+  561:  set :_isMedian.3:lt 0
+  562:  set :_isMedian.3:gt 0
+  563:  set :_isMedian.3:i 1
+  564:  setaddr *tmp134 *label157
+  565:  jump *label154 always 0 0
+        multilabel *label157
+  566:  set :_isMedian.3:i 1
+  567:  setaddr *tmp134 *label158
+  568:  jump *label154 always 0 0
+        multilabel *label158
+  569:  set :_isMedian.3:i 1
+  570:  setaddr *tmp134 *label159
+  571:  jump *label154 always 0 0
+        multilabel *label159
+  572:  set :_isMedian.3:i 5
+  573:  setaddr *tmp134 *label160
+  574:  jump *label154 always 0 0
+        multilabel *label160
+  575:  set :_isMedian.3:i 5
+  576:  setaddr *tmp134 *label161
+  577:  jump *label154 always 0 0
+        multilabel *label161
+  578:  set :_isMedian.3:i 5
+  579:  setaddr *tmp134 *label162
         label *label154
+  580:  op lessThan *tmp135 :_isMedian.3:i :_isMedian.3:n
+  581:  jump *label163 equal *tmp135 false
+  582:  op add :_isMedian.3:lt :_isMedian.3:lt 1
+  583:  set *tmp136 :_isMedian.3:lt
+  584:  jump *label164 always 0 0
+        label *label163
+  585:  op greaterThan *tmp137 :_isMedian.3:i :_isMedian.3:n
+  586:  jump *label165 equal *tmp137 false
+  587:  op add :_isMedian.3:gt :_isMedian.3:gt 1
+  588:  set *tmp138 :_isMedian.3:gt
+  589:  jump *label166 always 0 0
+        label *label165
+  590:  set *tmp138 null
+        label *label166
+  591:  set *tmp136 *tmp138
+        label *label164
+        label *label155
+  592:  multijump *tmp134 0 0
+        multilabel *label162
+        label *label156
+  593:  op sub *tmp139 :_isMedian.3:gt :_isMedian.3:lt
+  594:  op abs *tmp140 *tmp139 0
+  595:  set :_isMedian.3:dif *tmp140
+  596:  op add *tmp141 :_isMedian.3:gt :_isMedian.3:lt
+  597:  op sub *tmp142 6 1
+  598:  op greaterThanEq *tmp143 *tmp141 *tmp142
+  599:  jump *label167 equal *tmp143 false
+  600:  op equal *tmp145 :_isMedian.3:gt :_isMedian.3:lt
+  601:  set *tmp144 *tmp145
+  602:  jump *label168 always 0 0
+        label *label167
+  603:  set *tmp144 false
+        label *label168
+  604:  set *tmp133 *tmp144
+        label *label153
+  605:  set :_median.3:dif :_isMedian.3:dif
+  606:  jump *label169 equal *tmp133 false
+  607:  set *tmp131 :_median.3:i
+  608:  jump *label143 always 0 0
+  609:  set *tmp146 null
+  610:  jump *label170 always 0 0
+        label *label169
+  611:  set *tmp146 null
+        label *label170
+  612:  op lessThan *tmp147 :_median.3:dif :_median.3:bestDif
+  613:  jump *label171 equal *tmp147 false
+  614:  set :_median.3:bestDif :_median.3:dif
+  615:  set :_median.3:best :_median.3:i
+  616:  set :_median.3:count 1
+  617:  set *tmp148 :_median.3:count
+  618:  jump *label172 always 0 0
+        label *label171
+  619:  op lessThanEq *tmp149 :_median.3:dif :_median.3:bestDif
+  620:  jump *label173 equal *tmp149 false
+  621:  op add :_median.3:best :_median.3:best :_median.3:i
+  622:  op add :_median.3:count :_median.3:count 1
+  623:  set *tmp150 :_median.3:count
+  624:  jump *label174 always 0 0
+        label *label173
+  625:  set *tmp150 null
+        label *label174
+  626:  set *tmp148 *tmp150
+        label *label172
         label *label145
-  601:  multijump *tmp170 0 0
+  627:  multijump *tmp132 0 0
         multilabel *label152
         label *label146
-  602:  op sub *tmp175 :_isMedian.2:gt :_isMedian.2:lt
-  603:  op abs *tmp176 *tmp175 0
-  604:  set :_isMedian.2:dif *tmp176
-  605:  op add *tmp177 :_isMedian.2:gt :_isMedian.2:lt
-  606:  op sub *tmp178 6 1
-  607:  op greaterThanEq *tmp179 *tmp177 *tmp178
-  608:  jump *label157 equal *tmp179 false
-  609:  op equal *tmp181 :_isMedian.2:gt :_isMedian.2:lt
-  610:  set *tmp180 *tmp181
-  611:  jump *label158 always 0 0
-        label *label157
-  612:  set *tmp180 false
-        label *label158
-  613:  set *tmp169 *tmp180
+  628:  op div *tmp151 :_median.3:best :_median.3:count
+  629:  set *tmp131 *tmp151
         label *label143
-  614:  set :_median.2:dif :_isMedian.2:dif
-  615:  jump *label159 equal *tmp169 false
-  616:  set *tmp167 :_median.2:i
-  617:  jump *label133 always 0 0
-  618:  set *tmp182 null
-  619:  jump *label160 always 0 0
-        label *label159
-  620:  set *tmp182 null
-        label *label160
-  621:  op lessThan *tmp183 :_median.2:dif :_median.2:bestDif
-  622:  jump *label161 equal *tmp183 false
-  623:  set :_median.2:bestDif :_median.2:dif
-  624:  set :_median.2:best :_median.2:i
-  625:  set :_median.2:count 1
-  626:  set *tmp184 :_median.2:count
-  627:  jump *label162 always 0 0
-        label *label161
-  628:  op lessThanEq *tmp185 :_median.2:dif :_median.2:bestDif
-  629:  jump *label163 equal *tmp185 false
-  630:  op add :_median.2:best :_median.2:best :_median.2:i
-  631:  op add :_median.2:count :_median.2:count 1
-  632:  set *tmp186 :_median.2:count
-  633:  jump *label164 always 0 0
-        label *label163
-  634:  set *tmp186 null
-        label *label164
-  635:  set *tmp184 *tmp186
-        label *label162
-        label *label135
-  636:  multijump *tmp168 0 0
-        multilabel *label142
-        label *label136
-  637:  op div *tmp187 :_median.2:best :_median.2:count
-  638:  set *tmp167 *tmp187
-        label *label133
-  639:  set *tmp166 *tmp167
-        label *label132
-  640:  assertequals 1 *tmp166 "median(1,1,1,1,5,5)"
-  641:  set :_median.3:bestDif 10000000000
-  642:  set :_median.3:best null
-  643:  set :_median.3:count 1
-  644:  set :_median.3:i 1
-  645:  setaddr *tmp190 *label170
-  646:  jump *label167 always 0 0
-        multilabel *label170
-  647:  set :_median.3:i 1
-  648:  setaddr *tmp190 *label171
-  649:  jump *label167 always 0 0
-        multilabel *label171
-  650:  set :_median.3:i 1
-  651:  setaddr *tmp190 *label172
-  652:  jump *label167 always 0 0
-        multilabel *label172
-  653:  set :_median.3:i 5
-  654:  setaddr *tmp190 *label173
-  655:  jump *label167 always 0 0
-        multilabel *label173
-  656:  set :_median.3:i 5
-  657:  setaddr *tmp190 *label174
-  658:  jump *label167 always 0 0
-        multilabel *label174
-  659:  set :_median.3:i 5
-  660:  setaddr *tmp190 *label175
-        label *label167
-  661:  set :_isMedian.3:n :_median.3:i
-  662:  set :_isMedian.3:lt 0
-  663:  set :_isMedian.3:gt 0
-  664:  set :_isMedian.3:i 1
-  665:  setaddr *tmp192 *label180
-  666:  jump *label177 always 0 0
+  630:  set *tmp130 *tmp131
+        label *label142
+  631:  assertequals 3 *tmp130 "median(1,1,1,5,5,5)"
+  632:  set :_median.4:bestDif 10000000000
+  633:  set :_median.4:best null
+  634:  set :_median.4:count 1
+  635:  set :_median.4:i 1
+  636:  setaddr *tmp154 *label180
+  637:  jump *label177 always 0 0
         multilabel *label180
-  667:  set :_isMedian.3:i 1
-  668:  setaddr *tmp192 *label181
-  669:  jump *label177 always 0 0
+  638:  set :_median.4:i 1
+  639:  setaddr *tmp154 *label181
+  640:  jump *label177 always 0 0
         multilabel *label181
-  670:  set :_isMedian.3:i 1
-  671:  setaddr *tmp192 *label182
-  672:  jump *label177 always 0 0
+  641:  set :_median.4:i 5
+  642:  setaddr *tmp154 *label182
+  643:  jump *label177 always 0 0
         multilabel *label182
-  673:  set :_isMedian.3:i 5
-  674:  setaddr *tmp192 *label183
-  675:  jump *label177 always 0 0
+  644:  set :_median.4:i 5
+  645:  setaddr *tmp154 *label183
+  646:  jump *label177 always 0 0
         multilabel *label183
-  676:  set :_isMedian.3:i 5
-  677:  setaddr *tmp192 *label184
-  678:  jump *label177 always 0 0
+  647:  set :_median.4:i 5
+  648:  setaddr *tmp154 *label184
+  649:  jump *label177 always 0 0
         multilabel *label184
-  679:  set :_isMedian.3:i 5
-  680:  setaddr *tmp192 *label185
+  650:  set :_median.4:i 5
+  651:  setaddr *tmp154 *label185
         label *label177
-  681:  op lessThan *tmp193 :_isMedian.3:i :_isMedian.3:n
-  682:  jump *label186 equal *tmp193 false
-  683:  op add :_isMedian.3:lt :_isMedian.3:lt 1
-  684:  set *tmp194 :_isMedian.3:lt
-  685:  jump *label187 always 0 0
-        label *label186
-  686:  op greaterThan *tmp195 :_isMedian.3:i :_isMedian.3:n
-  687:  jump *label188 equal *tmp195 false
-  688:  op add :_isMedian.3:gt :_isMedian.3:gt 1
-  689:  set *tmp196 :_isMedian.3:gt
-  690:  jump *label189 always 0 0
-        label *label188
-  691:  set *tmp196 null
-        label *label189
-  692:  set *tmp194 *tmp196
+  652:  set :_isMedian.4:n :_median.4:i
+  653:  set :_isMedian.4:lt 0
+  654:  set :_isMedian.4:gt 0
+  655:  set :_isMedian.4:i 1
+  656:  setaddr *tmp156 *label190
+  657:  jump *label187 always 0 0
+        multilabel *label190
+  658:  set :_isMedian.4:i 1
+  659:  setaddr *tmp156 *label191
+  660:  jump *label187 always 0 0
+        multilabel *label191
+  661:  set :_isMedian.4:i 5
+  662:  setaddr *tmp156 *label192
+  663:  jump *label187 always 0 0
+        multilabel *label192
+  664:  set :_isMedian.4:i 5
+  665:  setaddr *tmp156 *label193
+  666:  jump *label187 always 0 0
+        multilabel *label193
+  667:  set :_isMedian.4:i 5
+  668:  setaddr *tmp156 *label194
+  669:  jump *label187 always 0 0
+        multilabel *label194
+  670:  set :_isMedian.4:i 5
+  671:  setaddr *tmp156 *label195
         label *label187
+  672:  op lessThan *tmp157 :_isMedian.4:i :_isMedian.4:n
+  673:  jump *label196 equal *tmp157 false
+  674:  op add :_isMedian.4:lt :_isMedian.4:lt 1
+  675:  set *tmp158 :_isMedian.4:lt
+  676:  jump *label197 always 0 0
+        label *label196
+  677:  op greaterThan *tmp159 :_isMedian.4:i :_isMedian.4:n
+  678:  jump *label198 equal *tmp159 false
+  679:  op add :_isMedian.4:gt :_isMedian.4:gt 1
+  680:  set *tmp160 :_isMedian.4:gt
+  681:  jump *label199 always 0 0
+        label *label198
+  682:  set *tmp160 null
+        label *label199
+  683:  set *tmp158 *tmp160
+        label *label197
+        label *label188
+  684:  multijump *tmp156 0 0
+        multilabel *label195
+        label *label189
+  685:  op sub *tmp161 :_isMedian.4:gt :_isMedian.4:lt
+  686:  op abs *tmp162 *tmp161 0
+  687:  set :_isMedian.4:dif *tmp162
+  688:  op add *tmp163 :_isMedian.4:gt :_isMedian.4:lt
+  689:  op sub *tmp164 6 1
+  690:  op greaterThanEq *tmp165 *tmp163 *tmp164
+  691:  jump *label200 equal *tmp165 false
+  692:  op equal *tmp167 :_isMedian.4:gt :_isMedian.4:lt
+  693:  set *tmp166 *tmp167
+  694:  jump *label201 always 0 0
+        label *label200
+  695:  set *tmp166 false
+        label *label201
+  696:  set *tmp155 *tmp166
+        label *label186
+  697:  set :_median.4:dif :_isMedian.4:dif
+  698:  jump *label202 equal *tmp155 false
+  699:  set *tmp153 :_median.4:i
+  700:  jump *label176 always 0 0
+  701:  set *tmp168 null
+  702:  jump *label203 always 0 0
+        label *label202
+  703:  set *tmp168 null
+        label *label203
+  704:  op lessThan *tmp169 :_median.4:dif :_median.4:bestDif
+  705:  jump *label204 equal *tmp169 false
+  706:  set :_median.4:bestDif :_median.4:dif
+  707:  set :_median.4:best :_median.4:i
+  708:  set :_median.4:count 1
+  709:  set *tmp170 :_median.4:count
+  710:  jump *label205 always 0 0
+        label *label204
+  711:  op lessThanEq *tmp171 :_median.4:dif :_median.4:bestDif
+  712:  jump *label206 equal *tmp171 false
+  713:  op add :_median.4:best :_median.4:best :_median.4:i
+  714:  op add :_median.4:count :_median.4:count 1
+  715:  set *tmp172 :_median.4:count
+  716:  jump *label207 always 0 0
+        label *label206
+  717:  set *tmp172 null
+        label *label207
+  718:  set *tmp170 *tmp172
+        label *label205
         label *label178
-  693:  multijump *tmp192 0 0
+  719:  multijump *tmp154 0 0
         multilabel *label185
         label *label179
-  694:  op sub *tmp197 :_isMedian.3:gt :_isMedian.3:lt
-  695:  op abs *tmp198 *tmp197 0
-  696:  set :_isMedian.3:dif *tmp198
-  697:  op add *tmp199 :_isMedian.3:gt :_isMedian.3:lt
-  698:  op sub *tmp200 6 1
-  699:  op greaterThanEq *tmp201 *tmp199 *tmp200
-  700:  jump *label190 equal *tmp201 false
-  701:  op equal *tmp203 :_isMedian.3:gt :_isMedian.3:lt
-  702:  set *tmp202 *tmp203
-  703:  jump *label191 always 0 0
-        label *label190
-  704:  set *tmp202 false
-        label *label191
-  705:  set *tmp191 *tmp202
+  720:  op div *tmp173 :_median.4:best :_median.4:count
+  721:  set *tmp153 *tmp173
         label *label176
-  706:  set :_median.3:dif :_isMedian.3:dif
-  707:  jump *label192 equal *tmp191 false
-  708:  set *tmp189 :_median.3:i
-  709:  jump *label166 always 0 0
-  710:  set *tmp204 null
-  711:  jump *label193 always 0 0
-        label *label192
-  712:  set *tmp204 null
-        label *label193
-  713:  op lessThan *tmp205 :_median.3:dif :_median.3:bestDif
-  714:  jump *label194 equal *tmp205 false
-  715:  set :_median.3:bestDif :_median.3:dif
-  716:  set :_median.3:best :_median.3:i
-  717:  set :_median.3:count 1
-  718:  set *tmp206 :_median.3:count
-  719:  jump *label195 always 0 0
-        label *label194
-  720:  op lessThanEq *tmp207 :_median.3:dif :_median.3:bestDif
-  721:  jump *label196 equal *tmp207 false
-  722:  op add :_median.3:best :_median.3:best :_median.3:i
-  723:  op add :_median.3:count :_median.3:count 1
-  724:  set *tmp208 :_median.3:count
-  725:  jump *label197 always 0 0
-        label *label196
-  726:  set *tmp208 null
-        label *label197
-  727:  set *tmp206 *tmp208
-        label *label195
-        label *label168
-  728:  multijump *tmp190 0 0
-        multilabel *label175
-        label *label169
-  729:  op div *tmp209 :_median.3:best :_median.3:count
-  730:  set *tmp189 *tmp209
-        label *label166
-  731:  set *tmp188 *tmp189
-        label *label165
-  732:  assertequals 3 *tmp188 "median(1,1,1,5,5,5)"
-  733:  set :_median.4:bestDif 10000000000
-  734:  set :_median.4:best null
-  735:  set :_median.4:count 1
-  736:  set :_median.4:i 1
-  737:  setaddr *tmp212 *label203
-  738:  jump *label200 always 0 0
-        multilabel *label203
-  739:  set :_median.4:i 1
-  740:  setaddr *tmp212 *label204
-  741:  jump *label200 always 0 0
-        multilabel *label204
-  742:  set :_median.4:i 5
-  743:  setaddr *tmp212 *label205
-  744:  jump *label200 always 0 0
-        multilabel *label205
-  745:  set :_median.4:i 5
-  746:  setaddr *tmp212 *label206
-  747:  jump *label200 always 0 0
-        multilabel *label206
-  748:  set :_median.4:i 5
-  749:  setaddr *tmp212 *label207
-  750:  jump *label200 always 0 0
-        multilabel *label207
-  751:  set :_median.4:i 5
-  752:  setaddr *tmp212 *label208
-        label *label200
-  753:  set :_isMedian.4:n :_median.4:i
-  754:  set :_isMedian.4:lt 0
-  755:  set :_isMedian.4:gt 0
-  756:  set :_isMedian.4:i 1
-  757:  setaddr *tmp214 *label213
-  758:  jump *label210 always 0 0
+  722:  set *tmp152 *tmp153
+        label *label175
+  723:  assertequals 5 *tmp152 "median(1,1,5,5,5,5)"
+  724:  set :_median.5:bestDif 10000000000
+  725:  set :_median.5:best null
+  726:  set :_median.5:count 1
+  727:  set :_median.5:i 1
+  728:  setaddr *tmp176 *label213
+  729:  jump *label210 always 0 0
         multilabel *label213
-  759:  set :_isMedian.4:i 1
-  760:  setaddr *tmp214 *label214
-  761:  jump *label210 always 0 0
+  730:  set :_median.5:i 5
+  731:  setaddr *tmp176 *label214
+  732:  jump *label210 always 0 0
         multilabel *label214
-  762:  set :_isMedian.4:i 5
-  763:  setaddr *tmp214 *label215
-  764:  jump *label210 always 0 0
+  733:  set :_median.5:i 5
+  734:  setaddr *tmp176 *label215
+  735:  jump *label210 always 0 0
         multilabel *label215
-  765:  set :_isMedian.4:i 5
-  766:  setaddr *tmp214 *label216
-  767:  jump *label210 always 0 0
+  736:  set :_median.5:i 5
+  737:  setaddr *tmp176 *label216
+  738:  jump *label210 always 0 0
         multilabel *label216
-  768:  set :_isMedian.4:i 5
-  769:  setaddr *tmp214 *label217
-  770:  jump *label210 always 0 0
+  739:  set :_median.5:i 5
+  740:  setaddr *tmp176 *label217
+  741:  jump *label210 always 0 0
         multilabel *label217
-  771:  set :_isMedian.4:i 5
-  772:  setaddr *tmp214 *label218
+  742:  set :_median.5:i 5
+  743:  setaddr *tmp176 *label218
         label *label210
-  773:  op lessThan *tmp215 :_isMedian.4:i :_isMedian.4:n
-  774:  jump *label219 equal *tmp215 false
-  775:  op add :_isMedian.4:lt :_isMedian.4:lt 1
-  776:  set *tmp216 :_isMedian.4:lt
-  777:  jump *label220 always 0 0
-        label *label219
-  778:  op greaterThan *tmp217 :_isMedian.4:i :_isMedian.4:n
-  779:  jump *label221 equal *tmp217 false
-  780:  op add :_isMedian.4:gt :_isMedian.4:gt 1
-  781:  set *tmp218 :_isMedian.4:gt
-  782:  jump *label222 always 0 0
-        label *label221
-  783:  set *tmp218 null
-        label *label222
-  784:  set *tmp216 *tmp218
+  744:  set :_isMedian.5:n :_median.5:i
+  745:  set :_isMedian.5:lt 0
+  746:  set :_isMedian.5:gt 0
+  747:  set :_isMedian.5:i 1
+  748:  setaddr *tmp178 *label223
+  749:  jump *label220 always 0 0
+        multilabel *label223
+  750:  set :_isMedian.5:i 5
+  751:  setaddr *tmp178 *label224
+  752:  jump *label220 always 0 0
+        multilabel *label224
+  753:  set :_isMedian.5:i 5
+  754:  setaddr *tmp178 *label225
+  755:  jump *label220 always 0 0
+        multilabel *label225
+  756:  set :_isMedian.5:i 5
+  757:  setaddr *tmp178 *label226
+  758:  jump *label220 always 0 0
+        multilabel *label226
+  759:  set :_isMedian.5:i 5
+  760:  setaddr *tmp178 *label227
+  761:  jump *label220 always 0 0
+        multilabel *label227
+  762:  set :_isMedian.5:i 5
+  763:  setaddr *tmp178 *label228
         label *label220
+  764:  op lessThan *tmp179 :_isMedian.5:i :_isMedian.5:n
+  765:  jump *label229 equal *tmp179 false
+  766:  op add :_isMedian.5:lt :_isMedian.5:lt 1
+  767:  set *tmp180 :_isMedian.5:lt
+  768:  jump *label230 always 0 0
+        label *label229
+  769:  op greaterThan *tmp181 :_isMedian.5:i :_isMedian.5:n
+  770:  jump *label231 equal *tmp181 false
+  771:  op add :_isMedian.5:gt :_isMedian.5:gt 1
+  772:  set *tmp182 :_isMedian.5:gt
+  773:  jump *label232 always 0 0
+        label *label231
+  774:  set *tmp182 null
+        label *label232
+  775:  set *tmp180 *tmp182
+        label *label230
+        label *label221
+  776:  multijump *tmp178 0 0
+        multilabel *label228
+        label *label222
+  777:  op sub *tmp183 :_isMedian.5:gt :_isMedian.5:lt
+  778:  op abs *tmp184 *tmp183 0
+  779:  set :_isMedian.5:dif *tmp184
+  780:  op add *tmp185 :_isMedian.5:gt :_isMedian.5:lt
+  781:  op sub *tmp186 6 1
+  782:  op greaterThanEq *tmp187 *tmp185 *tmp186
+  783:  jump *label233 equal *tmp187 false
+  784:  op equal *tmp189 :_isMedian.5:gt :_isMedian.5:lt
+  785:  set *tmp188 *tmp189
+  786:  jump *label234 always 0 0
+        label *label233
+  787:  set *tmp188 false
+        label *label234
+  788:  set *tmp177 *tmp188
+        label *label219
+  789:  set :_median.5:dif :_isMedian.5:dif
+  790:  jump *label235 equal *tmp177 false
+  791:  set *tmp175 :_median.5:i
+  792:  jump *label209 always 0 0
+  793:  set *tmp190 null
+  794:  jump *label236 always 0 0
+        label *label235
+  795:  set *tmp190 null
+        label *label236
+  796:  op lessThan *tmp191 :_median.5:dif :_median.5:bestDif
+  797:  jump *label237 equal *tmp191 false
+  798:  set :_median.5:bestDif :_median.5:dif
+  799:  set :_median.5:best :_median.5:i
+  800:  set :_median.5:count 1
+  801:  set *tmp192 :_median.5:count
+  802:  jump *label238 always 0 0
+        label *label237
+  803:  op lessThanEq *tmp193 :_median.5:dif :_median.5:bestDif
+  804:  jump *label239 equal *tmp193 false
+  805:  op add :_median.5:best :_median.5:best :_median.5:i
+  806:  op add :_median.5:count :_median.5:count 1
+  807:  set *tmp194 :_median.5:count
+  808:  jump *label240 always 0 0
+        label *label239
+  809:  set *tmp194 null
+        label *label240
+  810:  set *tmp192 *tmp194
+        label *label238
         label *label211
-  785:  multijump *tmp214 0 0
+  811:  multijump *tmp176 0 0
         multilabel *label218
         label *label212
-  786:  op sub *tmp219 :_isMedian.4:gt :_isMedian.4:lt
-  787:  op abs *tmp220 *tmp219 0
-  788:  set :_isMedian.4:dif *tmp220
-  789:  op add *tmp221 :_isMedian.4:gt :_isMedian.4:lt
-  790:  op sub *tmp222 6 1
-  791:  op greaterThanEq *tmp223 *tmp221 *tmp222
-  792:  jump *label223 equal *tmp223 false
-  793:  op equal *tmp225 :_isMedian.4:gt :_isMedian.4:lt
-  794:  set *tmp224 *tmp225
-  795:  jump *label224 always 0 0
-        label *label223
-  796:  set *tmp224 false
-        label *label224
-  797:  set *tmp213 *tmp224
+  812:  op div *tmp195 :_median.5:best :_median.5:count
+  813:  set *tmp175 *tmp195
         label *label209
-  798:  set :_median.4:dif :_isMedian.4:dif
-  799:  jump *label225 equal *tmp213 false
-  800:  set *tmp211 :_median.4:i
-  801:  jump *label199 always 0 0
-  802:  set *tmp226 null
-  803:  jump *label226 always 0 0
-        label *label225
-  804:  set *tmp226 null
-        label *label226
-  805:  op lessThan *tmp227 :_median.4:dif :_median.4:bestDif
-  806:  jump *label227 equal *tmp227 false
-  807:  set :_median.4:bestDif :_median.4:dif
-  808:  set :_median.4:best :_median.4:i
-  809:  set :_median.4:count 1
-  810:  set *tmp228 :_median.4:count
-  811:  jump *label228 always 0 0
-        label *label227
-  812:  op lessThanEq *tmp229 :_median.4:dif :_median.4:bestDif
-  813:  jump *label229 equal *tmp229 false
-  814:  op add :_median.4:best :_median.4:best :_median.4:i
-  815:  op add :_median.4:count :_median.4:count 1
-  816:  set *tmp230 :_median.4:count
-  817:  jump *label230 always 0 0
-        label *label229
-  818:  set *tmp230 null
-        label *label230
-  819:  set *tmp228 *tmp230
-        label *label228
-        label *label201
-  820:  multijump *tmp212 0 0
-        multilabel *label208
-        label *label202
-  821:  op div *tmp231 :_median.4:best :_median.4:count
-  822:  set *tmp211 *tmp231
-        label *label199
-  823:  set *tmp210 *tmp211
-        label *label198
-  824:  assertequals 5 *tmp210 "median(1,1,5,5,5,5)"
-  825:  set :_median.5:bestDif 10000000000
-  826:  set :_median.5:best null
-  827:  set :_median.5:count 1
-  828:  set :_median.5:i 1
-  829:  setaddr *tmp234 *label236
-  830:  jump *label233 always 0 0
-        multilabel *label236
-  831:  set :_median.5:i 5
-  832:  setaddr *tmp234 *label237
-  833:  jump *label233 always 0 0
-        multilabel *label237
-  834:  set :_median.5:i 5
-  835:  setaddr *tmp234 *label238
-  836:  jump *label233 always 0 0
-        multilabel *label238
-  837:  set :_median.5:i 5
-  838:  setaddr *tmp234 *label239
-  839:  jump *label233 always 0 0
-        multilabel *label239
-  840:  set :_median.5:i 5
-  841:  setaddr *tmp234 *label240
-  842:  jump *label233 always 0 0
-        multilabel *label240
-  843:  set :_median.5:i 5
-  844:  setaddr *tmp234 *label241
-        label *label233
-  845:  set :_isMedian.5:n :_median.5:i
-  846:  set :_isMedian.5:lt 0
-  847:  set :_isMedian.5:gt 0
-  848:  set :_isMedian.5:i 1
-  849:  setaddr *tmp236 *label246
-  850:  jump *label243 always 0 0
+  814:  set *tmp174 *tmp175
+        label *label208
+  815:  assertequals 5 *tmp174 "median(1,5,5,5,5,5)"
+  816:  set :_median.6:bestDif 10000000000
+  817:  set :_median.6:best null
+  818:  set :_median.6:count 1
+  819:  set :_median.6:i 5
+  820:  setaddr *tmp198 *label246
+  821:  jump *label243 always 0 0
         multilabel *label246
-  851:  set :_isMedian.5:i 5
-  852:  setaddr *tmp236 *label247
-  853:  jump *label243 always 0 0
+  822:  set :_median.6:i 5
+  823:  setaddr *tmp198 *label247
+  824:  jump *label243 always 0 0
         multilabel *label247
-  854:  set :_isMedian.5:i 5
-  855:  setaddr *tmp236 *label248
-  856:  jump *label243 always 0 0
+  825:  set :_median.6:i 5
+  826:  setaddr *tmp198 *label248
+  827:  jump *label243 always 0 0
         multilabel *label248
-  857:  set :_isMedian.5:i 5
-  858:  setaddr *tmp236 *label249
-  859:  jump *label243 always 0 0
+  828:  set :_median.6:i 5
+  829:  setaddr *tmp198 *label249
+  830:  jump *label243 always 0 0
         multilabel *label249
-  860:  set :_isMedian.5:i 5
-  861:  setaddr *tmp236 *label250
-  862:  jump *label243 always 0 0
+  831:  set :_median.6:i 5
+  832:  setaddr *tmp198 *label250
+  833:  jump *label243 always 0 0
         multilabel *label250
-  863:  set :_isMedian.5:i 5
-  864:  setaddr *tmp236 *label251
+  834:  set :_median.6:i 5
+  835:  setaddr *tmp198 *label251
         label *label243
-  865:  op lessThan *tmp237 :_isMedian.5:i :_isMedian.5:n
-  866:  jump *label252 equal *tmp237 false
-  867:  op add :_isMedian.5:lt :_isMedian.5:lt 1
-  868:  set *tmp238 :_isMedian.5:lt
-  869:  jump *label253 always 0 0
-        label *label252
-  870:  op greaterThan *tmp239 :_isMedian.5:i :_isMedian.5:n
-  871:  jump *label254 equal *tmp239 false
-  872:  op add :_isMedian.5:gt :_isMedian.5:gt 1
-  873:  set *tmp240 :_isMedian.5:gt
-  874:  jump *label255 always 0 0
-        label *label254
-  875:  set *tmp240 null
-        label *label255
-  876:  set *tmp238 *tmp240
+  836:  set :_isMedian.6:n :_median.6:i
+  837:  set :_isMedian.6:lt 0
+  838:  set :_isMedian.6:gt 0
+  839:  set :_isMedian.6:i 5
+  840:  setaddr *tmp200 *label256
+  841:  jump *label253 always 0 0
+        multilabel *label256
+  842:  set :_isMedian.6:i 5
+  843:  setaddr *tmp200 *label257
+  844:  jump *label253 always 0 0
+        multilabel *label257
+  845:  set :_isMedian.6:i 5
+  846:  setaddr *tmp200 *label258
+  847:  jump *label253 always 0 0
+        multilabel *label258
+  848:  set :_isMedian.6:i 5
+  849:  setaddr *tmp200 *label259
+  850:  jump *label253 always 0 0
+        multilabel *label259
+  851:  set :_isMedian.6:i 5
+  852:  setaddr *tmp200 *label260
+  853:  jump *label253 always 0 0
+        multilabel *label260
+  854:  set :_isMedian.6:i 5
+  855:  setaddr *tmp200 *label261
         label *label253
+  856:  op lessThan *tmp201 :_isMedian.6:i :_isMedian.6:n
+  857:  jump *label262 equal *tmp201 false
+  858:  op add :_isMedian.6:lt :_isMedian.6:lt 1
+  859:  set *tmp202 :_isMedian.6:lt
+  860:  jump *label263 always 0 0
+        label *label262
+  861:  op greaterThan *tmp203 :_isMedian.6:i :_isMedian.6:n
+  862:  jump *label264 equal *tmp203 false
+  863:  op add :_isMedian.6:gt :_isMedian.6:gt 1
+  864:  set *tmp204 :_isMedian.6:gt
+  865:  jump *label265 always 0 0
+        label *label264
+  866:  set *tmp204 null
+        label *label265
+  867:  set *tmp202 *tmp204
+        label *label263
+        label *label254
+  868:  multijump *tmp200 0 0
+        multilabel *label261
+        label *label255
+  869:  op sub *tmp205 :_isMedian.6:gt :_isMedian.6:lt
+  870:  op abs *tmp206 *tmp205 0
+  871:  set :_isMedian.6:dif *tmp206
+  872:  op add *tmp207 :_isMedian.6:gt :_isMedian.6:lt
+  873:  op sub *tmp208 6 1
+  874:  op greaterThanEq *tmp209 *tmp207 *tmp208
+  875:  jump *label266 equal *tmp209 false
+  876:  op equal *tmp211 :_isMedian.6:gt :_isMedian.6:lt
+  877:  set *tmp210 *tmp211
+  878:  jump *label267 always 0 0
+        label *label266
+  879:  set *tmp210 false
+        label *label267
+  880:  set *tmp199 *tmp210
+        label *label252
+  881:  set :_median.6:dif :_isMedian.6:dif
+  882:  jump *label268 equal *tmp199 false
+  883:  set *tmp197 :_median.6:i
+  884:  jump *label242 always 0 0
+  885:  set *tmp212 null
+  886:  jump *label269 always 0 0
+        label *label268
+  887:  set *tmp212 null
+        label *label269
+  888:  op lessThan *tmp213 :_median.6:dif :_median.6:bestDif
+  889:  jump *label270 equal *tmp213 false
+  890:  set :_median.6:bestDif :_median.6:dif
+  891:  set :_median.6:best :_median.6:i
+  892:  set :_median.6:count 1
+  893:  set *tmp214 :_median.6:count
+  894:  jump *label271 always 0 0
+        label *label270
+  895:  op lessThanEq *tmp215 :_median.6:dif :_median.6:bestDif
+  896:  jump *label272 equal *tmp215 false
+  897:  op add :_median.6:best :_median.6:best :_median.6:i
+  898:  op add :_median.6:count :_median.6:count 1
+  899:  set *tmp216 :_median.6:count
+  900:  jump *label273 always 0 0
+        label *label272
+  901:  set *tmp216 null
+        label *label273
+  902:  set *tmp214 *tmp216
+        label *label271
         label *label244
-  877:  multijump *tmp236 0 0
+  903:  multijump *tmp198 0 0
         multilabel *label251
         label *label245
-  878:  op sub *tmp241 :_isMedian.5:gt :_isMedian.5:lt
-  879:  op abs *tmp242 *tmp241 0
-  880:  set :_isMedian.5:dif *tmp242
-  881:  op add *tmp243 :_isMedian.5:gt :_isMedian.5:lt
-  882:  op sub *tmp244 6 1
-  883:  op greaterThanEq *tmp245 *tmp243 *tmp244
-  884:  jump *label256 equal *tmp245 false
-  885:  op equal *tmp247 :_isMedian.5:gt :_isMedian.5:lt
-  886:  set *tmp246 *tmp247
-  887:  jump *label257 always 0 0
-        label *label256
-  888:  set *tmp246 false
-        label *label257
-  889:  set *tmp235 *tmp246
+  904:  op div *tmp217 :_median.6:best :_median.6:count
+  905:  set *tmp197 *tmp217
         label *label242
-  890:  set :_median.5:dif :_isMedian.5:dif
-  891:  jump *label258 equal *tmp235 false
-  892:  set *tmp233 :_median.5:i
-  893:  jump *label232 always 0 0
-  894:  set *tmp248 null
-  895:  jump *label259 always 0 0
-        label *label258
-  896:  set *tmp248 null
-        label *label259
-  897:  op lessThan *tmp249 :_median.5:dif :_median.5:bestDif
-  898:  jump *label260 equal *tmp249 false
-  899:  set :_median.5:bestDif :_median.5:dif
-  900:  set :_median.5:best :_median.5:i
-  901:  set :_median.5:count 1
-  902:  set *tmp250 :_median.5:count
-  903:  jump *label261 always 0 0
-        label *label260
-  904:  op lessThanEq *tmp251 :_median.5:dif :_median.5:bestDif
-  905:  jump *label262 equal *tmp251 false
-  906:  op add :_median.5:best :_median.5:best :_median.5:i
-  907:  op add :_median.5:count :_median.5:count 1
-  908:  set *tmp252 :_median.5:count
-  909:  jump *label263 always 0 0
-        label *label262
-  910:  set *tmp252 null
-        label *label263
-  911:  set *tmp250 *tmp252
-        label *label261
-        label *label234
-  912:  multijump *tmp234 0 0
-        multilabel *label241
-        label *label235
-  913:  op div *tmp253 :_median.5:best :_median.5:count
-  914:  set *tmp233 *tmp253
-        label *label232
-  915:  set *tmp232 *tmp233
-        label *label231
-  916:  assertequals 5 *tmp232 "median(1,5,5,5,5,5)"
-  917:  set :_median.6:bestDif 10000000000
-  918:  set :_median.6:best null
-  919:  set :_median.6:count 1
-  920:  set :_median.6:i 5
-  921:  setaddr *tmp256 *label269
-  922:  jump *label266 always 0 0
-        multilabel *label269
-  923:  set :_median.6:i 5
-  924:  setaddr *tmp256 *label270
-  925:  jump *label266 always 0 0
-        multilabel *label270
-  926:  set :_median.6:i 5
-  927:  setaddr *tmp256 *label271
-  928:  jump *label266 always 0 0
-        multilabel *label271
-  929:  set :_median.6:i 5
-  930:  setaddr *tmp256 *label272
-  931:  jump *label266 always 0 0
-        multilabel *label272
-  932:  set :_median.6:i 5
-  933:  setaddr *tmp256 *label273
-  934:  jump *label266 always 0 0
-        multilabel *label273
-  935:  set :_median.6:i 5
-  936:  setaddr *tmp256 *label274
-        label *label266
-  937:  set :_isMedian.6:n :_median.6:i
-  938:  set :_isMedian.6:lt 0
-  939:  set :_isMedian.6:gt 0
-  940:  set :_isMedian.6:i 5
-  941:  setaddr *tmp258 *label279
-  942:  jump *label276 always 0 0
+  906:  set *tmp196 *tmp197
+        label *label241
+  907:  assertequals 5 *tmp196 "median(5,5,5,5,5,5)"
+  908:  set :_median.7:bestDif 10000000000
+  909:  set :_median.7:best null
+  910:  set :_median.7:count 1
+  911:  set :_median.7:i 1
+  912:  setaddr *tmp220 *label279
+  913:  jump *label276 always 0 0
         multilabel *label279
-  943:  set :_isMedian.6:i 5
-  944:  setaddr *tmp258 *label280
-  945:  jump *label276 always 0 0
+  914:  set :_median.7:i 2
+  915:  setaddr *tmp220 *label280
+  916:  jump *label276 always 0 0
         multilabel *label280
-  946:  set :_isMedian.6:i 5
-  947:  setaddr *tmp258 *label281
-  948:  jump *label276 always 0 0
+  917:  set :_median.7:i 3
+  918:  setaddr *tmp220 *label281
+  919:  jump *label276 always 0 0
         multilabel *label281
-  949:  set :_isMedian.6:i 5
-  950:  setaddr *tmp258 *label282
-  951:  jump *label276 always 0 0
+  920:  set :_median.7:i 4
+  921:  setaddr *tmp220 *label282
+  922:  jump *label276 always 0 0
         multilabel *label282
-  952:  set :_isMedian.6:i 5
-  953:  setaddr *tmp258 *label283
-  954:  jump *label276 always 0 0
+  923:  set :_median.7:i 5
+  924:  setaddr *tmp220 *label283
+  925:  jump *label276 always 0 0
         multilabel *label283
-  955:  set :_isMedian.6:i 5
-  956:  setaddr *tmp258 *label284
-        label *label276
-  957:  op lessThan *tmp259 :_isMedian.6:i :_isMedian.6:n
-  958:  jump *label285 equal *tmp259 false
-  959:  op add :_isMedian.6:lt :_isMedian.6:lt 1
-  960:  set *tmp260 :_isMedian.6:lt
-  961:  jump *label286 always 0 0
-        label *label285
-  962:  op greaterThan *tmp261 :_isMedian.6:i :_isMedian.6:n
-  963:  jump *label287 equal *tmp261 false
-  964:  op add :_isMedian.6:gt :_isMedian.6:gt 1
-  965:  set *tmp262 :_isMedian.6:gt
-  966:  jump *label288 always 0 0
-        label *label287
-  967:  set *tmp262 null
-        label *label288
-  968:  set *tmp260 *tmp262
-        label *label286
-        label *label277
-  969:  multijump *tmp258 0 0
+  926:  set :_median.7:i 6
+  927:  setaddr *tmp220 *label284
+  928:  jump *label276 always 0 0
         multilabel *label284
-        label *label278
-  970:  op sub *tmp263 :_isMedian.6:gt :_isMedian.6:lt
-  971:  op abs *tmp264 *tmp263 0
-  972:  set :_isMedian.6:dif *tmp264
-  973:  op add *tmp265 :_isMedian.6:gt :_isMedian.6:lt
-  974:  op sub *tmp266 6 1
-  975:  op greaterThanEq *tmp267 *tmp265 *tmp266
-  976:  jump *label289 equal *tmp267 false
-  977:  op equal *tmp269 :_isMedian.6:gt :_isMedian.6:lt
-  978:  set *tmp268 *tmp269
-  979:  jump *label290 always 0 0
+  929:  set :_median.7:i 7
+  930:  setaddr *tmp220 *label285
+  931:  jump *label276 always 0 0
+        multilabel *label285
+  932:  set :_median.7:i 8
+  933:  setaddr *tmp220 *label286
+  934:  jump *label276 always 0 0
+        multilabel *label286
+  935:  set :_median.7:i 9
+  936:  setaddr *tmp220 *label287
+        label *label276
+  937:  set :_isMedian.7:n :_median.7:i
+  938:  set :_isMedian.7:lt 0
+  939:  set :_isMedian.7:gt 0
+  940:  set :_isMedian.7:i 1
+  941:  setaddr *tmp222 *label292
+  942:  jump *label289 always 0 0
+        multilabel *label292
+  943:  set :_isMedian.7:i 2
+  944:  setaddr *tmp222 *label293
+  945:  jump *label289 always 0 0
+        multilabel *label293
+  946:  set :_isMedian.7:i 3
+  947:  setaddr *tmp222 *label294
+  948:  jump *label289 always 0 0
+        multilabel *label294
+  949:  set :_isMedian.7:i 4
+  950:  setaddr *tmp222 *label295
+  951:  jump *label289 always 0 0
+        multilabel *label295
+  952:  set :_isMedian.7:i 5
+  953:  setaddr *tmp222 *label296
+  954:  jump *label289 always 0 0
+        multilabel *label296
+  955:  set :_isMedian.7:i 6
+  956:  setaddr *tmp222 *label297
+  957:  jump *label289 always 0 0
+        multilabel *label297
+  958:  set :_isMedian.7:i 7
+  959:  setaddr *tmp222 *label298
+  960:  jump *label289 always 0 0
+        multilabel *label298
+  961:  set :_isMedian.7:i 8
+  962:  setaddr *tmp222 *label299
+  963:  jump *label289 always 0 0
+        multilabel *label299
+  964:  set :_isMedian.7:i 9
+  965:  setaddr *tmp222 *label300
         label *label289
-  980:  set *tmp268 false
-        label *label290
-  981:  set *tmp257 *tmp268
-        label *label275
-  982:  set :_median.6:dif :_isMedian.6:dif
-  983:  jump *label291 equal *tmp257 false
-  984:  set *tmp255 :_median.6:i
-  985:  jump *label265 always 0 0
-  986:  set *tmp270 null
-  987:  jump *label292 always 0 0
-        label *label291
-  988:  set *tmp270 null
-        label *label292
-  989:  op lessThan *tmp271 :_median.6:dif :_median.6:bestDif
-  990:  jump *label293 equal *tmp271 false
-  991:  set :_median.6:bestDif :_median.6:dif
-  992:  set :_median.6:best :_median.6:i
-  993:  set :_median.6:count 1
-  994:  set *tmp272 :_median.6:count
-  995:  jump *label294 always 0 0
-        label *label293
-  996:  op lessThanEq *tmp273 :_median.6:dif :_median.6:bestDif
-  997:  jump *label295 equal *tmp273 false
-  998:  op add :_median.6:best :_median.6:best :_median.6:i
-  999:  op add :_median.6:count :_median.6:count 1
- 1000:  set *tmp274 :_median.6:count
- 1001:  jump *label296 always 0 0
-        label *label295
- 1002:  set *tmp274 null
-        label *label296
- 1003:  set *tmp272 *tmp274
-        label *label294
-        label *label267
- 1004:  multijump *tmp256 0 0
-        multilabel *label274
-        label *label268
- 1005:  op div *tmp275 :_median.6:best :_median.6:count
- 1006:  set *tmp255 *tmp275
-        label *label265
- 1007:  set *tmp254 *tmp255
-        label *label264
- 1008:  assertequals 5 *tmp254 "median(5,5,5,5,5,5)"
- 1009:  set :_median.7:bestDif 10000000000
- 1010:  set :_median.7:best null
- 1011:  set :_median.7:count 1
- 1012:  set :_median.7:i 1
- 1013:  setaddr *tmp278 *label302
- 1014:  jump *label299 always 0 0
-        multilabel *label302
- 1015:  set :_median.7:i 2
- 1016:  setaddr *tmp278 *label303
- 1017:  jump *label299 always 0 0
-        multilabel *label303
- 1018:  set :_median.7:i 3
- 1019:  setaddr *tmp278 *label304
- 1020:  jump *label299 always 0 0
-        multilabel *label304
- 1021:  set :_median.7:i 4
- 1022:  setaddr *tmp278 *label305
- 1023:  jump *label299 always 0 0
-        multilabel *label305
- 1024:  set :_median.7:i 5
- 1025:  setaddr *tmp278 *label306
- 1026:  jump *label299 always 0 0
-        multilabel *label306
- 1027:  set :_median.7:i 6
- 1028:  setaddr *tmp278 *label307
- 1029:  jump *label299 always 0 0
-        multilabel *label307
- 1030:  set :_median.7:i 7
- 1031:  setaddr *tmp278 *label308
- 1032:  jump *label299 always 0 0
-        multilabel *label308
- 1033:  set :_median.7:i 8
- 1034:  setaddr *tmp278 *label309
- 1035:  jump *label299 always 0 0
-        multilabel *label309
- 1036:  set :_median.7:i 9
- 1037:  setaddr *tmp278 *label310
-        label *label299
- 1038:  set :_isMedian.7:n :_median.7:i
- 1039:  set :_isMedian.7:lt 0
- 1040:  set :_isMedian.7:gt 0
- 1041:  set :_isMedian.7:i 1
- 1042:  setaddr *tmp280 *label315
- 1043:  jump *label312 always 0 0
-        multilabel *label315
- 1044:  set :_isMedian.7:i 2
- 1045:  setaddr *tmp280 *label316
- 1046:  jump *label312 always 0 0
-        multilabel *label316
- 1047:  set :_isMedian.7:i 3
- 1048:  setaddr *tmp280 *label317
- 1049:  jump *label312 always 0 0
-        multilabel *label317
- 1050:  set :_isMedian.7:i 4
- 1051:  setaddr *tmp280 *label318
- 1052:  jump *label312 always 0 0
-        multilabel *label318
- 1053:  set :_isMedian.7:i 5
- 1054:  setaddr *tmp280 *label319
- 1055:  jump *label312 always 0 0
-        multilabel *label319
- 1056:  set :_isMedian.7:i 6
- 1057:  setaddr *tmp280 *label320
- 1058:  jump *label312 always 0 0
-        multilabel *label320
- 1059:  set :_isMedian.7:i 7
- 1060:  setaddr *tmp280 *label321
- 1061:  jump *label312 always 0 0
-        multilabel *label321
- 1062:  set :_isMedian.7:i 8
- 1063:  setaddr *tmp280 *label322
- 1064:  jump *label312 always 0 0
-        multilabel *label322
- 1065:  set :_isMedian.7:i 9
- 1066:  setaddr *tmp280 *label323
-        label *label312
- 1067:  op lessThan *tmp281 :_isMedian.7:i :_isMedian.7:n
- 1068:  jump *label324 equal *tmp281 false
- 1069:  op add :_isMedian.7:lt :_isMedian.7:lt 1
- 1070:  set *tmp282 :_isMedian.7:lt
- 1071:  jump *label325 always 0 0
-        label *label324
- 1072:  op greaterThan *tmp283 :_isMedian.7:i :_isMedian.7:n
- 1073:  jump *label326 equal *tmp283 false
- 1074:  op add :_isMedian.7:gt :_isMedian.7:gt 1
- 1075:  set *tmp284 :_isMedian.7:gt
- 1076:  jump *label327 always 0 0
-        label *label326
- 1077:  set *tmp284 null
-        label *label327
- 1078:  set *tmp282 *tmp284
-        label *label325
-        label *label313
- 1079:  multijump *tmp280 0 0
-        multilabel *label323
-        label *label314
- 1080:  op sub *tmp285 :_isMedian.7:gt :_isMedian.7:lt
- 1081:  op abs *tmp286 *tmp285 0
- 1082:  set :_isMedian.7:dif *tmp286
- 1083:  op add *tmp287 :_isMedian.7:gt :_isMedian.7:lt
- 1084:  op sub *tmp288 9 1
- 1085:  op greaterThanEq *tmp289 *tmp287 *tmp288
- 1086:  jump *label328 equal *tmp289 false
- 1087:  op equal *tmp291 :_isMedian.7:gt :_isMedian.7:lt
- 1088:  set *tmp290 *tmp291
- 1089:  jump *label329 always 0 0
-        label *label328
- 1090:  set *tmp290 false
-        label *label329
- 1091:  set *tmp279 *tmp290
-        label *label311
- 1092:  set :_median.7:dif :_isMedian.7:dif
- 1093:  jump *label330 equal *tmp279 false
- 1094:  set *tmp277 :_median.7:i
- 1095:  jump *label298 always 0 0
- 1096:  set *tmp292 null
- 1097:  jump *label331 always 0 0
-        label *label330
- 1098:  set *tmp292 null
-        label *label331
- 1099:  op lessThan *tmp293 :_median.7:dif :_median.7:bestDif
- 1100:  jump *label332 equal *tmp293 false
- 1101:  set :_median.7:bestDif :_median.7:dif
- 1102:  set :_median.7:best :_median.7:i
- 1103:  set :_median.7:count 1
- 1104:  set *tmp294 :_median.7:count
- 1105:  jump *label333 always 0 0
-        label *label332
- 1106:  op lessThanEq *tmp295 :_median.7:dif :_median.7:bestDif
- 1107:  jump *label334 equal *tmp295 false
- 1108:  op add :_median.7:best :_median.7:best :_median.7:i
- 1109:  op add :_median.7:count :_median.7:count 1
- 1110:  set *tmp296 :_median.7:count
- 1111:  jump *label335 always 0 0
-        label *label334
- 1112:  set *tmp296 null
-        label *label335
- 1113:  set *tmp294 *tmp296
-        label *label333
-        label *label300
- 1114:  multijump *tmp278 0 0
-        multilabel *label310
+  966:  op lessThan *tmp223 :_isMedian.7:i :_isMedian.7:n
+  967:  jump *label301 equal *tmp223 false
+  968:  op add :_isMedian.7:lt :_isMedian.7:lt 1
+  969:  set *tmp224 :_isMedian.7:lt
+  970:  jump *label302 always 0 0
         label *label301
- 1115:  op div *tmp297 :_median.7:best :_median.7:count
- 1116:  set *tmp277 *tmp297
-        label *label298
- 1117:  set *tmp276 *tmp277
-        label *label297
- 1118:  assertequals 5 *tmp276 "median(1,2,3,4,5,6,7,8,9)"
- 1119:  set :_median.8:bestDif 10000000000
- 1120:  set :_median.8:best null
- 1121:  set :_median.8:count 1
- 1122:  set :_median.8:i 9
- 1123:  setaddr *tmp300 *label341
- 1124:  jump *label338 always 0 0
-        multilabel *label341
- 1125:  set :_median.8:i 8
- 1126:  setaddr *tmp300 *label342
- 1127:  jump *label338 always 0 0
-        multilabel *label342
- 1128:  set :_median.8:i 7
- 1129:  setaddr *tmp300 *label343
- 1130:  jump *label338 always 0 0
-        multilabel *label343
- 1131:  set :_median.8:i 6
- 1132:  setaddr *tmp300 *label344
- 1133:  jump *label338 always 0 0
-        multilabel *label344
- 1134:  set :_median.8:i 5
- 1135:  setaddr *tmp300 *label345
- 1136:  jump *label338 always 0 0
-        multilabel *label345
- 1137:  set :_median.8:i 4
- 1138:  setaddr *tmp300 *label346
- 1139:  jump *label338 always 0 0
-        multilabel *label346
- 1140:  set :_median.8:i 3
- 1141:  setaddr *tmp300 *label347
- 1142:  jump *label338 always 0 0
-        multilabel *label347
- 1143:  set :_median.8:i 2
- 1144:  setaddr *tmp300 *label348
- 1145:  jump *label338 always 0 0
-        multilabel *label348
- 1146:  set :_median.8:i 1
- 1147:  setaddr *tmp300 *label349
-        label *label338
- 1148:  set :_isMedian.8:n :_median.8:i
- 1149:  set :_isMedian.8:lt 0
- 1150:  set :_isMedian.8:gt 0
- 1151:  set :_isMedian.8:i 9
- 1152:  setaddr *tmp302 *label354
- 1153:  jump *label351 always 0 0
-        multilabel *label354
- 1154:  set :_isMedian.8:i 8
- 1155:  setaddr *tmp302 *label355
- 1156:  jump *label351 always 0 0
-        multilabel *label355
- 1157:  set :_isMedian.8:i 7
- 1158:  setaddr *tmp302 *label356
- 1159:  jump *label351 always 0 0
-        multilabel *label356
- 1160:  set :_isMedian.8:i 6
- 1161:  setaddr *tmp302 *label357
- 1162:  jump *label351 always 0 0
-        multilabel *label357
- 1163:  set :_isMedian.8:i 5
- 1164:  setaddr *tmp302 *label358
- 1165:  jump *label351 always 0 0
-        multilabel *label358
- 1166:  set :_isMedian.8:i 4
- 1167:  setaddr *tmp302 *label359
- 1168:  jump *label351 always 0 0
-        multilabel *label359
- 1169:  set :_isMedian.8:i 3
- 1170:  setaddr *tmp302 *label360
- 1171:  jump *label351 always 0 0
-        multilabel *label360
- 1172:  set :_isMedian.8:i 2
- 1173:  setaddr *tmp302 *label361
- 1174:  jump *label351 always 0 0
-        multilabel *label361
- 1175:  set :_isMedian.8:i 1
- 1176:  setaddr *tmp302 *label362
-        label *label351
- 1177:  op lessThan *tmp303 :_isMedian.8:i :_isMedian.8:n
- 1178:  jump *label363 equal *tmp303 false
- 1179:  op add :_isMedian.8:lt :_isMedian.8:lt 1
- 1180:  set *tmp304 :_isMedian.8:lt
- 1181:  jump *label364 always 0 0
-        label *label363
- 1182:  op greaterThan *tmp305 :_isMedian.8:i :_isMedian.8:n
- 1183:  jump *label365 equal *tmp305 false
- 1184:  op add :_isMedian.8:gt :_isMedian.8:gt 1
- 1185:  set *tmp306 :_isMedian.8:gt
- 1186:  jump *label366 always 0 0
-        label *label365
- 1187:  set *tmp306 null
-        label *label366
- 1188:  set *tmp304 *tmp306
-        label *label364
-        label *label352
- 1189:  multijump *tmp302 0 0
-        multilabel *label362
-        label *label353
- 1190:  op sub *tmp307 :_isMedian.8:gt :_isMedian.8:lt
- 1191:  op abs *tmp308 *tmp307 0
- 1192:  set :_isMedian.8:dif *tmp308
- 1193:  op add *tmp309 :_isMedian.8:gt :_isMedian.8:lt
- 1194:  op sub *tmp310 9 1
- 1195:  op greaterThanEq *tmp311 *tmp309 *tmp310
- 1196:  jump *label367 equal *tmp311 false
- 1197:  op equal *tmp313 :_isMedian.8:gt :_isMedian.8:lt
- 1198:  set *tmp312 *tmp313
- 1199:  jump *label368 always 0 0
-        label *label367
- 1200:  set *tmp312 false
-        label *label368
- 1201:  set *tmp301 *tmp312
-        label *label350
- 1202:  set :_median.8:dif :_isMedian.8:dif
- 1203:  jump *label369 equal *tmp301 false
- 1204:  set *tmp299 :_median.8:i
- 1205:  jump *label337 always 0 0
- 1206:  set *tmp314 null
- 1207:  jump *label370 always 0 0
-        label *label369
- 1208:  set *tmp314 null
-        label *label370
- 1209:  op lessThan *tmp315 :_median.8:dif :_median.8:bestDif
- 1210:  jump *label371 equal *tmp315 false
- 1211:  set :_median.8:bestDif :_median.8:dif
- 1212:  set :_median.8:best :_median.8:i
- 1213:  set :_median.8:count 1
- 1214:  set *tmp316 :_median.8:count
- 1215:  jump *label372 always 0 0
-        label *label371
- 1216:  op lessThanEq *tmp317 :_median.8:dif :_median.8:bestDif
- 1217:  jump *label373 equal *tmp317 false
- 1218:  op add :_median.8:best :_median.8:best :_median.8:i
- 1219:  op add :_median.8:count :_median.8:count 1
- 1220:  set *tmp318 :_median.8:count
- 1221:  jump *label374 always 0 0
-        label *label373
- 1222:  set *tmp318 null
-        label *label374
- 1223:  set *tmp316 *tmp318
-        label *label372
-        label *label339
- 1224:  multijump *tmp300 0 0
-        multilabel *label349
+  971:  op greaterThan *tmp225 :_isMedian.7:i :_isMedian.7:n
+  972:  jump *label303 equal *tmp225 false
+  973:  op add :_isMedian.7:gt :_isMedian.7:gt 1
+  974:  set *tmp226 :_isMedian.7:gt
+  975:  jump *label304 always 0 0
+        label *label303
+  976:  set *tmp226 null
+        label *label304
+  977:  set *tmp224 *tmp226
+        label *label302
+        label *label290
+  978:  multijump *tmp222 0 0
+        multilabel *label300
+        label *label291
+  979:  op sub *tmp227 :_isMedian.7:gt :_isMedian.7:lt
+  980:  op abs *tmp228 *tmp227 0
+  981:  set :_isMedian.7:dif *tmp228
+  982:  op add *tmp229 :_isMedian.7:gt :_isMedian.7:lt
+  983:  op sub *tmp230 9 1
+  984:  op greaterThanEq *tmp231 *tmp229 *tmp230
+  985:  jump *label305 equal *tmp231 false
+  986:  op equal *tmp233 :_isMedian.7:gt :_isMedian.7:lt
+  987:  set *tmp232 *tmp233
+  988:  jump *label306 always 0 0
+        label *label305
+  989:  set *tmp232 false
+        label *label306
+  990:  set *tmp221 *tmp232
+        label *label288
+  991:  set :_median.7:dif :_isMedian.7:dif
+  992:  jump *label307 equal *tmp221 false
+  993:  set *tmp219 :_median.7:i
+  994:  jump *label275 always 0 0
+  995:  set *tmp234 null
+  996:  jump *label308 always 0 0
+        label *label307
+  997:  set *tmp234 null
+        label *label308
+  998:  op lessThan *tmp235 :_median.7:dif :_median.7:bestDif
+  999:  jump *label309 equal *tmp235 false
+ 1000:  set :_median.7:bestDif :_median.7:dif
+ 1001:  set :_median.7:best :_median.7:i
+ 1002:  set :_median.7:count 1
+ 1003:  set *tmp236 :_median.7:count
+ 1004:  jump *label310 always 0 0
+        label *label309
+ 1005:  op lessThanEq *tmp237 :_median.7:dif :_median.7:bestDif
+ 1006:  jump *label311 equal *tmp237 false
+ 1007:  op add :_median.7:best :_median.7:best :_median.7:i
+ 1008:  op add :_median.7:count :_median.7:count 1
+ 1009:  set *tmp238 :_median.7:count
+ 1010:  jump *label312 always 0 0
+        label *label311
+ 1011:  set *tmp238 null
+        label *label312
+ 1012:  set *tmp236 *tmp238
+        label *label310
+        label *label277
+ 1013:  multijump *tmp220 0 0
+        multilabel *label287
+        label *label278
+ 1014:  op div *tmp239 :_median.7:best :_median.7:count
+ 1015:  set *tmp219 *tmp239
+        label *label275
+ 1016:  set *tmp218 *tmp219
+        label *label274
+ 1017:  assertequals 5 *tmp218 "median(1,2,3,4,5,6,7,8,9)"
+ 1018:  set :_median.8:bestDif 10000000000
+ 1019:  set :_median.8:best null
+ 1020:  set :_median.8:count 1
+ 1021:  set :_median.8:i 9
+ 1022:  setaddr *tmp242 *label318
+ 1023:  jump *label315 always 0 0
+        multilabel *label318
+ 1024:  set :_median.8:i 8
+ 1025:  setaddr *tmp242 *label319
+ 1026:  jump *label315 always 0 0
+        multilabel *label319
+ 1027:  set :_median.8:i 7
+ 1028:  setaddr *tmp242 *label320
+ 1029:  jump *label315 always 0 0
+        multilabel *label320
+ 1030:  set :_median.8:i 6
+ 1031:  setaddr *tmp242 *label321
+ 1032:  jump *label315 always 0 0
+        multilabel *label321
+ 1033:  set :_median.8:i 5
+ 1034:  setaddr *tmp242 *label322
+ 1035:  jump *label315 always 0 0
+        multilabel *label322
+ 1036:  set :_median.8:i 4
+ 1037:  setaddr *tmp242 *label323
+ 1038:  jump *label315 always 0 0
+        multilabel *label323
+ 1039:  set :_median.8:i 3
+ 1040:  setaddr *tmp242 *label324
+ 1041:  jump *label315 always 0 0
+        multilabel *label324
+ 1042:  set :_median.8:i 2
+ 1043:  setaddr *tmp242 *label325
+ 1044:  jump *label315 always 0 0
+        multilabel *label325
+ 1045:  set :_median.8:i 1
+ 1046:  setaddr *tmp242 *label326
+        label *label315
+ 1047:  set :_isMedian.8:n :_median.8:i
+ 1048:  set :_isMedian.8:lt 0
+ 1049:  set :_isMedian.8:gt 0
+ 1050:  set :_isMedian.8:i 9
+ 1051:  setaddr *tmp244 *label331
+ 1052:  jump *label328 always 0 0
+        multilabel *label331
+ 1053:  set :_isMedian.8:i 8
+ 1054:  setaddr *tmp244 *label332
+ 1055:  jump *label328 always 0 0
+        multilabel *label332
+ 1056:  set :_isMedian.8:i 7
+ 1057:  setaddr *tmp244 *label333
+ 1058:  jump *label328 always 0 0
+        multilabel *label333
+ 1059:  set :_isMedian.8:i 6
+ 1060:  setaddr *tmp244 *label334
+ 1061:  jump *label328 always 0 0
+        multilabel *label334
+ 1062:  set :_isMedian.8:i 5
+ 1063:  setaddr *tmp244 *label335
+ 1064:  jump *label328 always 0 0
+        multilabel *label335
+ 1065:  set :_isMedian.8:i 4
+ 1066:  setaddr *tmp244 *label336
+ 1067:  jump *label328 always 0 0
+        multilabel *label336
+ 1068:  set :_isMedian.8:i 3
+ 1069:  setaddr *tmp244 *label337
+ 1070:  jump *label328 always 0 0
+        multilabel *label337
+ 1071:  set :_isMedian.8:i 2
+ 1072:  setaddr *tmp244 *label338
+ 1073:  jump *label328 always 0 0
+        multilabel *label338
+ 1074:  set :_isMedian.8:i 1
+ 1075:  setaddr *tmp244 *label339
+        label *label328
+ 1076:  op lessThan *tmp245 :_isMedian.8:i :_isMedian.8:n
+ 1077:  jump *label340 equal *tmp245 false
+ 1078:  op add :_isMedian.8:lt :_isMedian.8:lt 1
+ 1079:  set *tmp246 :_isMedian.8:lt
+ 1080:  jump *label341 always 0 0
         label *label340
- 1225:  op div *tmp319 :_median.8:best :_median.8:count
- 1226:  set *tmp299 *tmp319
-        label *label337
- 1227:  set *tmp298 *tmp299
-        label *label336
- 1228:  assertequals 5 *tmp298 "median(9,8,7,6,5,4,3,2,1)"
- 1229:  set :_median.9:bestDif 10000000000
- 1230:  set :_median.9:best null
- 1231:  set :_median.9:count 1
- 1232:  set :_median.9:i 1
- 1233:  setaddr *tmp322 *label380
- 1234:  jump *label377 always 0 0
-        multilabel *label380
- 1235:  set :_median.9:i 3
- 1236:  setaddr *tmp322 *label381
- 1237:  jump *label377 always 0 0
-        multilabel *label381
- 1238:  set :_median.9:i 5
- 1239:  setaddr *tmp322 *label382
- 1240:  jump *label377 always 0 0
-        multilabel *label382
- 1241:  set :_median.9:i 7
- 1242:  setaddr *tmp322 *label383
- 1243:  jump *label377 always 0 0
-        multilabel *label383
- 1244:  set :_median.9:i 9
- 1245:  setaddr *tmp322 *label384
- 1246:  jump *label377 always 0 0
-        multilabel *label384
- 1247:  set :_median.9:i 2
- 1248:  setaddr *tmp322 *label385
- 1249:  jump *label377 always 0 0
-        multilabel *label385
- 1250:  set :_median.9:i 4
- 1251:  setaddr *tmp322 *label386
- 1252:  jump *label377 always 0 0
-        multilabel *label386
- 1253:  set :_median.9:i 6
- 1254:  setaddr *tmp322 *label387
- 1255:  jump *label377 always 0 0
-        multilabel *label387
- 1256:  set :_median.9:i 8
- 1257:  setaddr *tmp322 *label388
-        label *label377
- 1258:  set :_isMedian.9:n :_median.9:i
- 1259:  set :_isMedian.9:lt 0
- 1260:  set :_isMedian.9:gt 0
- 1261:  set :_isMedian.9:i 1
- 1262:  setaddr *tmp324 *label393
- 1263:  jump *label390 always 0 0
-        multilabel *label393
- 1264:  set :_isMedian.9:i 3
- 1265:  setaddr *tmp324 *label394
- 1266:  jump *label390 always 0 0
-        multilabel *label394
- 1267:  set :_isMedian.9:i 5
- 1268:  setaddr *tmp324 *label395
- 1269:  jump *label390 always 0 0
-        multilabel *label395
- 1270:  set :_isMedian.9:i 7
- 1271:  setaddr *tmp324 *label396
- 1272:  jump *label390 always 0 0
-        multilabel *label396
- 1273:  set :_isMedian.9:i 9
- 1274:  setaddr *tmp324 *label397
- 1275:  jump *label390 always 0 0
-        multilabel *label397
- 1276:  set :_isMedian.9:i 2
- 1277:  setaddr *tmp324 *label398
- 1278:  jump *label390 always 0 0
-        multilabel *label398
- 1279:  set :_isMedian.9:i 4
- 1280:  setaddr *tmp324 *label399
- 1281:  jump *label390 always 0 0
-        multilabel *label399
- 1282:  set :_isMedian.9:i 6
- 1283:  setaddr *tmp324 *label400
- 1284:  jump *label390 always 0 0
-        multilabel *label400
- 1285:  set :_isMedian.9:i 8
- 1286:  setaddr *tmp324 *label401
-        label *label390
- 1287:  op lessThan *tmp325 :_isMedian.9:i :_isMedian.9:n
- 1288:  jump *label402 equal *tmp325 false
- 1289:  op add :_isMedian.9:lt :_isMedian.9:lt 1
- 1290:  set *tmp326 :_isMedian.9:lt
- 1291:  jump *label403 always 0 0
-        label *label402
- 1292:  op greaterThan *tmp327 :_isMedian.9:i :_isMedian.9:n
- 1293:  jump *label404 equal *tmp327 false
- 1294:  op add :_isMedian.9:gt :_isMedian.9:gt 1
- 1295:  set *tmp328 :_isMedian.9:gt
- 1296:  jump *label405 always 0 0
-        label *label404
- 1297:  set *tmp328 null
-        label *label405
- 1298:  set *tmp326 *tmp328
-        label *label403
-        label *label391
- 1299:  multijump *tmp324 0 0
-        multilabel *label401
-        label *label392
- 1300:  op sub *tmp329 :_isMedian.9:gt :_isMedian.9:lt
- 1301:  op abs *tmp330 *tmp329 0
- 1302:  set :_isMedian.9:dif *tmp330
- 1303:  op add *tmp331 :_isMedian.9:gt :_isMedian.9:lt
- 1304:  op sub *tmp332 9 1
- 1305:  op greaterThanEq *tmp333 *tmp331 *tmp332
- 1306:  jump *label406 equal *tmp333 false
- 1307:  op equal *tmp335 :_isMedian.9:gt :_isMedian.9:lt
- 1308:  set *tmp334 *tmp335
- 1309:  jump *label407 always 0 0
-        label *label406
- 1310:  set *tmp334 false
-        label *label407
- 1311:  set *tmp323 *tmp334
-        label *label389
- 1312:  set :_median.9:dif :_isMedian.9:dif
- 1313:  jump *label408 equal *tmp323 false
- 1314:  set *tmp321 :_median.9:i
- 1315:  jump *label376 always 0 0
- 1316:  set *tmp336 null
- 1317:  jump *label409 always 0 0
-        label *label408
- 1318:  set *tmp336 null
-        label *label409
- 1319:  op lessThan *tmp337 :_median.9:dif :_median.9:bestDif
- 1320:  jump *label410 equal *tmp337 false
- 1321:  set :_median.9:bestDif :_median.9:dif
- 1322:  set :_median.9:best :_median.9:i
- 1323:  set :_median.9:count 1
- 1324:  set *tmp338 :_median.9:count
- 1325:  jump *label411 always 0 0
-        label *label410
- 1326:  op lessThanEq *tmp339 :_median.9:dif :_median.9:bestDif
- 1327:  jump *label412 equal *tmp339 false
- 1328:  op add :_median.9:best :_median.9:best :_median.9:i
- 1329:  op add :_median.9:count :_median.9:count 1
- 1330:  set *tmp340 :_median.9:count
- 1331:  jump *label413 always 0 0
-        label *label412
- 1332:  set *tmp340 null
-        label *label413
- 1333:  set *tmp338 *tmp340
-        label *label411
-        label *label378
- 1334:  multijump *tmp322 0 0
-        multilabel *label388
+ 1081:  op greaterThan *tmp247 :_isMedian.8:i :_isMedian.8:n
+ 1082:  jump *label342 equal *tmp247 false
+ 1083:  op add :_isMedian.8:gt :_isMedian.8:gt 1
+ 1084:  set *tmp248 :_isMedian.8:gt
+ 1085:  jump *label343 always 0 0
+        label *label342
+ 1086:  set *tmp248 null
+        label *label343
+ 1087:  set *tmp246 *tmp248
+        label *label341
+        label *label329
+ 1088:  multijump *tmp244 0 0
+        multilabel *label339
+        label *label330
+ 1089:  op sub *tmp249 :_isMedian.8:gt :_isMedian.8:lt
+ 1090:  op abs *tmp250 *tmp249 0
+ 1091:  set :_isMedian.8:dif *tmp250
+ 1092:  op add *tmp251 :_isMedian.8:gt :_isMedian.8:lt
+ 1093:  op sub *tmp252 9 1
+ 1094:  op greaterThanEq *tmp253 *tmp251 *tmp252
+ 1095:  jump *label344 equal *tmp253 false
+ 1096:  op equal *tmp255 :_isMedian.8:gt :_isMedian.8:lt
+ 1097:  set *tmp254 *tmp255
+ 1098:  jump *label345 always 0 0
+        label *label344
+ 1099:  set *tmp254 false
+        label *label345
+ 1100:  set *tmp243 *tmp254
+        label *label327
+ 1101:  set :_median.8:dif :_isMedian.8:dif
+ 1102:  jump *label346 equal *tmp243 false
+ 1103:  set *tmp241 :_median.8:i
+ 1104:  jump *label314 always 0 0
+ 1105:  set *tmp256 null
+ 1106:  jump *label347 always 0 0
+        label *label346
+ 1107:  set *tmp256 null
+        label *label347
+ 1108:  op lessThan *tmp257 :_median.8:dif :_median.8:bestDif
+ 1109:  jump *label348 equal *tmp257 false
+ 1110:  set :_median.8:bestDif :_median.8:dif
+ 1111:  set :_median.8:best :_median.8:i
+ 1112:  set :_median.8:count 1
+ 1113:  set *tmp258 :_median.8:count
+ 1114:  jump *label349 always 0 0
+        label *label348
+ 1115:  op lessThanEq *tmp259 :_median.8:dif :_median.8:bestDif
+ 1116:  jump *label350 equal *tmp259 false
+ 1117:  op add :_median.8:best :_median.8:best :_median.8:i
+ 1118:  op add :_median.8:count :_median.8:count 1
+ 1119:  set *tmp260 :_median.8:count
+ 1120:  jump *label351 always 0 0
+        label *label350
+ 1121:  set *tmp260 null
+        label *label351
+ 1122:  set *tmp258 *tmp260
+        label *label349
+        label *label316
+ 1123:  multijump *tmp242 0 0
+        multilabel *label326
+        label *label317
+ 1124:  op div *tmp261 :_median.8:best :_median.8:count
+ 1125:  set *tmp241 *tmp261
+        label *label314
+ 1126:  set *tmp240 *tmp241
+        label *label313
+ 1127:  assertequals 5 *tmp240 "median(9,8,7,6,5,4,3,2,1)"
+ 1128:  set :_median.9:bestDif 10000000000
+ 1129:  set :_median.9:best null
+ 1130:  set :_median.9:count 1
+ 1131:  set :_median.9:i 1
+ 1132:  setaddr *tmp264 *label357
+ 1133:  jump *label354 always 0 0
+        multilabel *label357
+ 1134:  set :_median.9:i 3
+ 1135:  setaddr *tmp264 *label358
+ 1136:  jump *label354 always 0 0
+        multilabel *label358
+ 1137:  set :_median.9:i 5
+ 1138:  setaddr *tmp264 *label359
+ 1139:  jump *label354 always 0 0
+        multilabel *label359
+ 1140:  set :_median.9:i 7
+ 1141:  setaddr *tmp264 *label360
+ 1142:  jump *label354 always 0 0
+        multilabel *label360
+ 1143:  set :_median.9:i 9
+ 1144:  setaddr *tmp264 *label361
+ 1145:  jump *label354 always 0 0
+        multilabel *label361
+ 1146:  set :_median.9:i 2
+ 1147:  setaddr *tmp264 *label362
+ 1148:  jump *label354 always 0 0
+        multilabel *label362
+ 1149:  set :_median.9:i 4
+ 1150:  setaddr *tmp264 *label363
+ 1151:  jump *label354 always 0 0
+        multilabel *label363
+ 1152:  set :_median.9:i 6
+ 1153:  setaddr *tmp264 *label364
+ 1154:  jump *label354 always 0 0
+        multilabel *label364
+ 1155:  set :_median.9:i 8
+ 1156:  setaddr *tmp264 *label365
+        label *label354
+ 1157:  set :_isMedian.9:n :_median.9:i
+ 1158:  set :_isMedian.9:lt 0
+ 1159:  set :_isMedian.9:gt 0
+ 1160:  set :_isMedian.9:i 1
+ 1161:  setaddr *tmp266 *label370
+ 1162:  jump *label367 always 0 0
+        multilabel *label370
+ 1163:  set :_isMedian.9:i 3
+ 1164:  setaddr *tmp266 *label371
+ 1165:  jump *label367 always 0 0
+        multilabel *label371
+ 1166:  set :_isMedian.9:i 5
+ 1167:  setaddr *tmp266 *label372
+ 1168:  jump *label367 always 0 0
+        multilabel *label372
+ 1169:  set :_isMedian.9:i 7
+ 1170:  setaddr *tmp266 *label373
+ 1171:  jump *label367 always 0 0
+        multilabel *label373
+ 1172:  set :_isMedian.9:i 9
+ 1173:  setaddr *tmp266 *label374
+ 1174:  jump *label367 always 0 0
+        multilabel *label374
+ 1175:  set :_isMedian.9:i 2
+ 1176:  setaddr *tmp266 *label375
+ 1177:  jump *label367 always 0 0
+        multilabel *label375
+ 1178:  set :_isMedian.9:i 4
+ 1179:  setaddr *tmp266 *label376
+ 1180:  jump *label367 always 0 0
+        multilabel *label376
+ 1181:  set :_isMedian.9:i 6
+ 1182:  setaddr *tmp266 *label377
+ 1183:  jump *label367 always 0 0
+        multilabel *label377
+ 1184:  set :_isMedian.9:i 8
+ 1185:  setaddr *tmp266 *label378
+        label *label367
+ 1186:  op lessThan *tmp267 :_isMedian.9:i :_isMedian.9:n
+ 1187:  jump *label379 equal *tmp267 false
+ 1188:  op add :_isMedian.9:lt :_isMedian.9:lt 1
+ 1189:  set *tmp268 :_isMedian.9:lt
+ 1190:  jump *label380 always 0 0
         label *label379
- 1335:  op div *tmp341 :_median.9:best :_median.9:count
- 1336:  set *tmp321 *tmp341
-        label *label376
- 1337:  set *tmp320 *tmp321
-        label *label375
- 1338:  assertequals 5 *tmp320 "median(1,3,5,7,9,2,4,6,8)"
- 1339:  set :_median.10:bestDif 10000000000
- 1340:  set :_median.10:best null
- 1341:  set :_median.10:count 1
- 1342:  set :_median.10:i 7
- 1343:  setaddr *tmp344 *label419
- 1344:  jump *label416 always 0 0
-        multilabel *label419
- 1345:  set :_median.10:i 4
- 1346:  setaddr *tmp344 *label420
- 1347:  jump *label416 always 0 0
-        multilabel *label420
- 1348:  set :_median.10:i 2
- 1349:  setaddr *tmp344 *label421
- 1350:  jump *label416 always 0 0
-        multilabel *label421
- 1351:  set :_median.10:i 8
- 1352:  setaddr *tmp344 *label422
- 1353:  jump *label416 always 0 0
-        multilabel *label422
- 1354:  set :_median.10:i 1
- 1355:  setaddr *tmp344 *label423
- 1356:  jump *label416 always 0 0
-        multilabel *label423
- 1357:  set :_median.10:i 5
- 1358:  setaddr *tmp344 *label424
- 1359:  jump *label416 always 0 0
-        multilabel *label424
- 1360:  set :_median.10:i 6
- 1361:  setaddr *tmp344 *label425
- 1362:  jump *label416 always 0 0
-        multilabel *label425
- 1363:  set :_median.10:i 9
- 1364:  setaddr *tmp344 *label426
- 1365:  jump *label416 always 0 0
-        multilabel *label426
- 1366:  set :_median.10:i 3
- 1367:  setaddr *tmp344 *label427
-        label *label416
- 1368:  set :_isMedian.10:n :_median.10:i
- 1369:  set :_isMedian.10:lt 0
- 1370:  set :_isMedian.10:gt 0
- 1371:  set :_isMedian.10:i 7
- 1372:  setaddr *tmp346 *label432
- 1373:  jump *label429 always 0 0
-        multilabel *label432
- 1374:  set :_isMedian.10:i 4
- 1375:  setaddr *tmp346 *label433
- 1376:  jump *label429 always 0 0
-        multilabel *label433
- 1377:  set :_isMedian.10:i 2
- 1378:  setaddr *tmp346 *label434
- 1379:  jump *label429 always 0 0
-        multilabel *label434
- 1380:  set :_isMedian.10:i 8
- 1381:  setaddr *tmp346 *label435
- 1382:  jump *label429 always 0 0
-        multilabel *label435
- 1383:  set :_isMedian.10:i 1
- 1384:  setaddr *tmp346 *label436
- 1385:  jump *label429 always 0 0
-        multilabel *label436
- 1386:  set :_isMedian.10:i 5
- 1387:  setaddr *tmp346 *label437
- 1388:  jump *label429 always 0 0
-        multilabel *label437
- 1389:  set :_isMedian.10:i 6
- 1390:  setaddr *tmp346 *label438
- 1391:  jump *label429 always 0 0
-        multilabel *label438
- 1392:  set :_isMedian.10:i 9
- 1393:  setaddr *tmp346 *label439
- 1394:  jump *label429 always 0 0
-        multilabel *label439
- 1395:  set :_isMedian.10:i 3
- 1396:  setaddr *tmp346 *label440
-        label *label429
- 1397:  op lessThan *tmp347 :_isMedian.10:i :_isMedian.10:n
- 1398:  jump *label441 equal *tmp347 false
- 1399:  op add :_isMedian.10:lt :_isMedian.10:lt 1
- 1400:  set *tmp348 :_isMedian.10:lt
- 1401:  jump *label442 always 0 0
-        label *label441
- 1402:  op greaterThan *tmp349 :_isMedian.10:i :_isMedian.10:n
- 1403:  jump *label443 equal *tmp349 false
- 1404:  op add :_isMedian.10:gt :_isMedian.10:gt 1
- 1405:  set *tmp350 :_isMedian.10:gt
- 1406:  jump *label444 always 0 0
-        label *label443
- 1407:  set *tmp350 null
-        label *label444
- 1408:  set *tmp348 *tmp350
-        label *label442
-        label *label430
- 1409:  multijump *tmp346 0 0
-        multilabel *label440
-        label *label431
- 1410:  op sub *tmp351 :_isMedian.10:gt :_isMedian.10:lt
- 1411:  op abs *tmp352 *tmp351 0
- 1412:  set :_isMedian.10:dif *tmp352
- 1413:  op add *tmp353 :_isMedian.10:gt :_isMedian.10:lt
- 1414:  op sub *tmp354 9 1
- 1415:  op greaterThanEq *tmp355 *tmp353 *tmp354
- 1416:  jump *label445 equal *tmp355 false
- 1417:  op equal *tmp357 :_isMedian.10:gt :_isMedian.10:lt
- 1418:  set *tmp356 *tmp357
- 1419:  jump *label446 always 0 0
-        label *label445
- 1420:  set *tmp356 false
-        label *label446
- 1421:  set *tmp345 *tmp356
-        label *label428
- 1422:  set :_median.10:dif :_isMedian.10:dif
- 1423:  jump *label447 equal *tmp345 false
- 1424:  set *tmp343 :_median.10:i
- 1425:  jump *label415 always 0 0
- 1426:  set *tmp358 null
- 1427:  jump *label448 always 0 0
-        label *label447
- 1428:  set *tmp358 null
-        label *label448
- 1429:  op lessThan *tmp359 :_median.10:dif :_median.10:bestDif
- 1430:  jump *label449 equal *tmp359 false
- 1431:  set :_median.10:bestDif :_median.10:dif
- 1432:  set :_median.10:best :_median.10:i
- 1433:  set :_median.10:count 1
- 1434:  set *tmp360 :_median.10:count
- 1435:  jump *label450 always 0 0
-        label *label449
- 1436:  op lessThanEq *tmp361 :_median.10:dif :_median.10:bestDif
- 1437:  jump *label451 equal *tmp361 false
- 1438:  op add :_median.10:best :_median.10:best :_median.10:i
- 1439:  op add :_median.10:count :_median.10:count 1
- 1440:  set *tmp362 :_median.10:count
- 1441:  jump *label452 always 0 0
-        label *label451
- 1442:  set *tmp362 null
-        label *label452
- 1443:  set *tmp360 *tmp362
-        label *label450
-        label *label417
- 1444:  multijump *tmp344 0 0
-        multilabel *label427
+ 1191:  op greaterThan *tmp269 :_isMedian.9:i :_isMedian.9:n
+ 1192:  jump *label381 equal *tmp269 false
+ 1193:  op add :_isMedian.9:gt :_isMedian.9:gt 1
+ 1194:  set *tmp270 :_isMedian.9:gt
+ 1195:  jump *label382 always 0 0
+        label *label381
+ 1196:  set *tmp270 null
+        label *label382
+ 1197:  set *tmp268 *tmp270
+        label *label380
+        label *label368
+ 1198:  multijump *tmp266 0 0
+        multilabel *label378
+        label *label369
+ 1199:  op sub *tmp271 :_isMedian.9:gt :_isMedian.9:lt
+ 1200:  op abs *tmp272 *tmp271 0
+ 1201:  set :_isMedian.9:dif *tmp272
+ 1202:  op add *tmp273 :_isMedian.9:gt :_isMedian.9:lt
+ 1203:  op sub *tmp274 9 1
+ 1204:  op greaterThanEq *tmp275 *tmp273 *tmp274
+ 1205:  jump *label383 equal *tmp275 false
+ 1206:  op equal *tmp277 :_isMedian.9:gt :_isMedian.9:lt
+ 1207:  set *tmp276 *tmp277
+ 1208:  jump *label384 always 0 0
+        label *label383
+ 1209:  set *tmp276 false
+        label *label384
+ 1210:  set *tmp265 *tmp276
+        label *label366
+ 1211:  set :_median.9:dif :_isMedian.9:dif
+ 1212:  jump *label385 equal *tmp265 false
+ 1213:  set *tmp263 :_median.9:i
+ 1214:  jump *label353 always 0 0
+ 1215:  set *tmp278 null
+ 1216:  jump *label386 always 0 0
+        label *label385
+ 1217:  set *tmp278 null
+        label *label386
+ 1218:  op lessThan *tmp279 :_median.9:dif :_median.9:bestDif
+ 1219:  jump *label387 equal *tmp279 false
+ 1220:  set :_median.9:bestDif :_median.9:dif
+ 1221:  set :_median.9:best :_median.9:i
+ 1222:  set :_median.9:count 1
+ 1223:  set *tmp280 :_median.9:count
+ 1224:  jump *label388 always 0 0
+        label *label387
+ 1225:  op lessThanEq *tmp281 :_median.9:dif :_median.9:bestDif
+ 1226:  jump *label389 equal *tmp281 false
+ 1227:  op add :_median.9:best :_median.9:best :_median.9:i
+ 1228:  op add :_median.9:count :_median.9:count 1
+ 1229:  set *tmp282 :_median.9:count
+ 1230:  jump *label390 always 0 0
+        label *label389
+ 1231:  set *tmp282 null
+        label *label390
+ 1232:  set *tmp280 *tmp282
+        label *label388
+        label *label355
+ 1233:  multijump *tmp264 0 0
+        multilabel *label365
+        label *label356
+ 1234:  op div *tmp283 :_median.9:best :_median.9:count
+ 1235:  set *tmp263 *tmp283
+        label *label353
+ 1236:  set *tmp262 *tmp263
+        label *label352
+ 1237:  assertequals 5 *tmp262 "median(1,3,5,7,9,2,4,6,8)"
+ 1238:  set :_median.10:bestDif 10000000000
+ 1239:  set :_median.10:best null
+ 1240:  set :_median.10:count 1
+ 1241:  set :_median.10:i 7
+ 1242:  setaddr *tmp286 *label396
+ 1243:  jump *label393 always 0 0
+        multilabel *label396
+ 1244:  set :_median.10:i 4
+ 1245:  setaddr *tmp286 *label397
+ 1246:  jump *label393 always 0 0
+        multilabel *label397
+ 1247:  set :_median.10:i 2
+ 1248:  setaddr *tmp286 *label398
+ 1249:  jump *label393 always 0 0
+        multilabel *label398
+ 1250:  set :_median.10:i 8
+ 1251:  setaddr *tmp286 *label399
+ 1252:  jump *label393 always 0 0
+        multilabel *label399
+ 1253:  set :_median.10:i 1
+ 1254:  setaddr *tmp286 *label400
+ 1255:  jump *label393 always 0 0
+        multilabel *label400
+ 1256:  set :_median.10:i 5
+ 1257:  setaddr *tmp286 *label401
+ 1258:  jump *label393 always 0 0
+        multilabel *label401
+ 1259:  set :_median.10:i 6
+ 1260:  setaddr *tmp286 *label402
+ 1261:  jump *label393 always 0 0
+        multilabel *label402
+ 1262:  set :_median.10:i 9
+ 1263:  setaddr *tmp286 *label403
+ 1264:  jump *label393 always 0 0
+        multilabel *label403
+ 1265:  set :_median.10:i 3
+ 1266:  setaddr *tmp286 *label404
+        label *label393
+ 1267:  set :_isMedian.10:n :_median.10:i
+ 1268:  set :_isMedian.10:lt 0
+ 1269:  set :_isMedian.10:gt 0
+ 1270:  set :_isMedian.10:i 7
+ 1271:  setaddr *tmp288 *label409
+ 1272:  jump *label406 always 0 0
+        multilabel *label409
+ 1273:  set :_isMedian.10:i 4
+ 1274:  setaddr *tmp288 *label410
+ 1275:  jump *label406 always 0 0
+        multilabel *label410
+ 1276:  set :_isMedian.10:i 2
+ 1277:  setaddr *tmp288 *label411
+ 1278:  jump *label406 always 0 0
+        multilabel *label411
+ 1279:  set :_isMedian.10:i 8
+ 1280:  setaddr *tmp288 *label412
+ 1281:  jump *label406 always 0 0
+        multilabel *label412
+ 1282:  set :_isMedian.10:i 1
+ 1283:  setaddr *tmp288 *label413
+ 1284:  jump *label406 always 0 0
+        multilabel *label413
+ 1285:  set :_isMedian.10:i 5
+ 1286:  setaddr *tmp288 *label414
+ 1287:  jump *label406 always 0 0
+        multilabel *label414
+ 1288:  set :_isMedian.10:i 6
+ 1289:  setaddr *tmp288 *label415
+ 1290:  jump *label406 always 0 0
+        multilabel *label415
+ 1291:  set :_isMedian.10:i 9
+ 1292:  setaddr *tmp288 *label416
+ 1293:  jump *label406 always 0 0
+        multilabel *label416
+ 1294:  set :_isMedian.10:i 3
+ 1295:  setaddr *tmp288 *label417
+        label *label406
+ 1296:  op lessThan *tmp289 :_isMedian.10:i :_isMedian.10:n
+ 1297:  jump *label418 equal *tmp289 false
+ 1298:  op add :_isMedian.10:lt :_isMedian.10:lt 1
+ 1299:  set *tmp290 :_isMedian.10:lt
+ 1300:  jump *label419 always 0 0
         label *label418
- 1445:  op div *tmp363 :_median.10:best :_median.10:count
- 1446:  set *tmp343 *tmp363
-        label *label415
- 1447:  set *tmp342 *tmp343
-        label *label414
- 1448:  assertequals 5 *tmp342 "median(7,4,2,8,1,5,6,9,3)"
- 1449:  set :_median.11:bestDif 10000000000
- 1450:  set :_median.11:best null
- 1451:  set :_median.11:count 1
- 1452:  set :_median.11:i 1
- 1453:  setaddr *tmp366 *label458
- 1454:  jump *label455 always 0 0
-        multilabel *label458
- 1455:  set :_median.11:i 1
- 1456:  setaddr *tmp366 *label459
- 1457:  jump *label455 always 0 0
-        multilabel *label459
- 1458:  set :_median.11:i 1
- 1459:  setaddr *tmp366 *label460
- 1460:  jump *label455 always 0 0
-        multilabel *label460
- 1461:  set :_median.11:i 1
- 1462:  setaddr *tmp366 *label461
- 1463:  jump *label455 always 0 0
-        multilabel *label461
- 1464:  set :_median.11:i 9
- 1465:  setaddr *tmp366 *label462
- 1466:  jump *label455 always 0 0
-        multilabel *label462
- 1467:  set :_median.11:i 9
- 1468:  setaddr *tmp366 *label463
- 1469:  jump *label455 always 0 0
-        multilabel *label463
- 1470:  set :_median.11:i 9
- 1471:  setaddr *tmp366 *label464
- 1472:  jump *label455 always 0 0
-        multilabel *label464
- 1473:  set :_median.11:i 9
- 1474:  setaddr *tmp366 *label465
- 1475:  jump *label455 always 0 0
-        multilabel *label465
- 1476:  set :_median.11:i 5
- 1477:  setaddr *tmp366 *label466
-        label *label455
- 1478:  set :_isMedian.11:n :_median.11:i
- 1479:  set :_isMedian.11:lt 0
- 1480:  set :_isMedian.11:gt 0
- 1481:  set :_isMedian.11:i 1
- 1482:  setaddr *tmp368 *label471
- 1483:  jump *label468 always 0 0
-        multilabel *label471
- 1484:  set :_isMedian.11:i 1
- 1485:  setaddr *tmp368 *label472
- 1486:  jump *label468 always 0 0
-        multilabel *label472
- 1487:  set :_isMedian.11:i 1
- 1488:  setaddr *tmp368 *label473
- 1489:  jump *label468 always 0 0
-        multilabel *label473
- 1490:  set :_isMedian.11:i 1
- 1491:  setaddr *tmp368 *label474
- 1492:  jump *label468 always 0 0
-        multilabel *label474
- 1493:  set :_isMedian.11:i 9
- 1494:  setaddr *tmp368 *label475
- 1495:  jump *label468 always 0 0
-        multilabel *label475
- 1496:  set :_isMedian.11:i 9
- 1497:  setaddr *tmp368 *label476
- 1498:  jump *label468 always 0 0
-        multilabel *label476
- 1499:  set :_isMedian.11:i 9
- 1500:  setaddr *tmp368 *label477
- 1501:  jump *label468 always 0 0
-        multilabel *label477
- 1502:  set :_isMedian.11:i 9
- 1503:  setaddr *tmp368 *label478
- 1504:  jump *label468 always 0 0
-        multilabel *label478
- 1505:  set :_isMedian.11:i 5
- 1506:  setaddr *tmp368 *label479
-        label *label468
- 1507:  op lessThan *tmp369 :_isMedian.11:i :_isMedian.11:n
- 1508:  jump *label480 equal *tmp369 false
- 1509:  op add :_isMedian.11:lt :_isMedian.11:lt 1
- 1510:  set *tmp370 :_isMedian.11:lt
- 1511:  jump *label481 always 0 0
-        label *label480
- 1512:  op greaterThan *tmp371 :_isMedian.11:i :_isMedian.11:n
- 1513:  jump *label482 equal *tmp371 false
- 1514:  op add :_isMedian.11:gt :_isMedian.11:gt 1
- 1515:  set *tmp372 :_isMedian.11:gt
- 1516:  jump *label483 always 0 0
-        label *label482
- 1517:  set *tmp372 null
-        label *label483
- 1518:  set *tmp370 *tmp372
-        label *label481
-        label *label469
- 1519:  multijump *tmp368 0 0
-        multilabel *label479
-        label *label470
- 1520:  op sub *tmp373 :_isMedian.11:gt :_isMedian.11:lt
- 1521:  op abs *tmp374 *tmp373 0
- 1522:  set :_isMedian.11:dif *tmp374
- 1523:  op add *tmp375 :_isMedian.11:gt :_isMedian.11:lt
- 1524:  op sub *tmp376 9 1
- 1525:  op greaterThanEq *tmp377 *tmp375 *tmp376
- 1526:  jump *label484 equal *tmp377 false
- 1527:  op equal *tmp379 :_isMedian.11:gt :_isMedian.11:lt
- 1528:  set *tmp378 *tmp379
- 1529:  jump *label485 always 0 0
-        label *label484
- 1530:  set *tmp378 false
-        label *label485
- 1531:  set *tmp367 *tmp378
-        label *label467
- 1532:  set :_median.11:dif :_isMedian.11:dif
- 1533:  jump *label486 equal *tmp367 false
- 1534:  set *tmp365 :_median.11:i
- 1535:  jump *label454 always 0 0
- 1536:  set *tmp380 null
- 1537:  jump *label487 always 0 0
-        label *label486
- 1538:  set *tmp380 null
-        label *label487
- 1539:  op lessThan *tmp381 :_median.11:dif :_median.11:bestDif
- 1540:  jump *label488 equal *tmp381 false
- 1541:  set :_median.11:bestDif :_median.11:dif
- 1542:  set :_median.11:best :_median.11:i
- 1543:  set :_median.11:count 1
- 1544:  set *tmp382 :_median.11:count
- 1545:  jump *label489 always 0 0
-        label *label488
- 1546:  op lessThanEq *tmp383 :_median.11:dif :_median.11:bestDif
- 1547:  jump *label490 equal *tmp383 false
- 1548:  op add :_median.11:best :_median.11:best :_median.11:i
- 1549:  op add :_median.11:count :_median.11:count 1
- 1550:  set *tmp384 :_median.11:count
- 1551:  jump *label491 always 0 0
-        label *label490
- 1552:  set *tmp384 null
-        label *label491
- 1553:  set *tmp382 *tmp384
-        label *label489
-        label *label456
- 1554:  multijump *tmp366 0 0
-        multilabel *label466
+ 1301:  op greaterThan *tmp291 :_isMedian.10:i :_isMedian.10:n
+ 1302:  jump *label420 equal *tmp291 false
+ 1303:  op add :_isMedian.10:gt :_isMedian.10:gt 1
+ 1304:  set *tmp292 :_isMedian.10:gt
+ 1305:  jump *label421 always 0 0
+        label *label420
+ 1306:  set *tmp292 null
+        label *label421
+ 1307:  set *tmp290 *tmp292
+        label *label419
+        label *label407
+ 1308:  multijump *tmp288 0 0
+        multilabel *label417
+        label *label408
+ 1309:  op sub *tmp293 :_isMedian.10:gt :_isMedian.10:lt
+ 1310:  op abs *tmp294 *tmp293 0
+ 1311:  set :_isMedian.10:dif *tmp294
+ 1312:  op add *tmp295 :_isMedian.10:gt :_isMedian.10:lt
+ 1313:  op sub *tmp296 9 1
+ 1314:  op greaterThanEq *tmp297 *tmp295 *tmp296
+ 1315:  jump *label422 equal *tmp297 false
+ 1316:  op equal *tmp299 :_isMedian.10:gt :_isMedian.10:lt
+ 1317:  set *tmp298 *tmp299
+ 1318:  jump *label423 always 0 0
+        label *label422
+ 1319:  set *tmp298 false
+        label *label423
+ 1320:  set *tmp287 *tmp298
+        label *label405
+ 1321:  set :_median.10:dif :_isMedian.10:dif
+ 1322:  jump *label424 equal *tmp287 false
+ 1323:  set *tmp285 :_median.10:i
+ 1324:  jump *label392 always 0 0
+ 1325:  set *tmp300 null
+ 1326:  jump *label425 always 0 0
+        label *label424
+ 1327:  set *tmp300 null
+        label *label425
+ 1328:  op lessThan *tmp301 :_median.10:dif :_median.10:bestDif
+ 1329:  jump *label426 equal *tmp301 false
+ 1330:  set :_median.10:bestDif :_median.10:dif
+ 1331:  set :_median.10:best :_median.10:i
+ 1332:  set :_median.10:count 1
+ 1333:  set *tmp302 :_median.10:count
+ 1334:  jump *label427 always 0 0
+        label *label426
+ 1335:  op lessThanEq *tmp303 :_median.10:dif :_median.10:bestDif
+ 1336:  jump *label428 equal *tmp303 false
+ 1337:  op add :_median.10:best :_median.10:best :_median.10:i
+ 1338:  op add :_median.10:count :_median.10:count 1
+ 1339:  set *tmp304 :_median.10:count
+ 1340:  jump *label429 always 0 0
+        label *label428
+ 1341:  set *tmp304 null
+        label *label429
+ 1342:  set *tmp302 *tmp304
+        label *label427
+        label *label394
+ 1343:  multijump *tmp286 0 0
+        multilabel *label404
+        label *label395
+ 1344:  op div *tmp305 :_median.10:best :_median.10:count
+ 1345:  set *tmp285 *tmp305
+        label *label392
+ 1346:  set *tmp284 *tmp285
+        label *label391
+ 1347:  assertequals 5 *tmp284 "median(7,4,2,8,1,5,6,9,3)"
+ 1348:  set :_median.11:bestDif 10000000000
+ 1349:  set :_median.11:best null
+ 1350:  set :_median.11:count 1
+ 1351:  set :_median.11:i 1
+ 1352:  setaddr *tmp308 *label435
+ 1353:  jump *label432 always 0 0
+        multilabel *label435
+ 1354:  set :_median.11:i 1
+ 1355:  setaddr *tmp308 *label436
+ 1356:  jump *label432 always 0 0
+        multilabel *label436
+ 1357:  set :_median.11:i 1
+ 1358:  setaddr *tmp308 *label437
+ 1359:  jump *label432 always 0 0
+        multilabel *label437
+ 1360:  set :_median.11:i 1
+ 1361:  setaddr *tmp308 *label438
+ 1362:  jump *label432 always 0 0
+        multilabel *label438
+ 1363:  set :_median.11:i 9
+ 1364:  setaddr *tmp308 *label439
+ 1365:  jump *label432 always 0 0
+        multilabel *label439
+ 1366:  set :_median.11:i 9
+ 1367:  setaddr *tmp308 *label440
+ 1368:  jump *label432 always 0 0
+        multilabel *label440
+ 1369:  set :_median.11:i 9
+ 1370:  setaddr *tmp308 *label441
+ 1371:  jump *label432 always 0 0
+        multilabel *label441
+ 1372:  set :_median.11:i 9
+ 1373:  setaddr *tmp308 *label442
+ 1374:  jump *label432 always 0 0
+        multilabel *label442
+ 1375:  set :_median.11:i 5
+ 1376:  setaddr *tmp308 *label443
+        label *label432
+ 1377:  set :_isMedian.11:n :_median.11:i
+ 1378:  set :_isMedian.11:lt 0
+ 1379:  set :_isMedian.11:gt 0
+ 1380:  set :_isMedian.11:i 1
+ 1381:  setaddr *tmp310 *label448
+ 1382:  jump *label445 always 0 0
+        multilabel *label448
+ 1383:  set :_isMedian.11:i 1
+ 1384:  setaddr *tmp310 *label449
+ 1385:  jump *label445 always 0 0
+        multilabel *label449
+ 1386:  set :_isMedian.11:i 1
+ 1387:  setaddr *tmp310 *label450
+ 1388:  jump *label445 always 0 0
+        multilabel *label450
+ 1389:  set :_isMedian.11:i 1
+ 1390:  setaddr *tmp310 *label451
+ 1391:  jump *label445 always 0 0
+        multilabel *label451
+ 1392:  set :_isMedian.11:i 9
+ 1393:  setaddr *tmp310 *label452
+ 1394:  jump *label445 always 0 0
+        multilabel *label452
+ 1395:  set :_isMedian.11:i 9
+ 1396:  setaddr *tmp310 *label453
+ 1397:  jump *label445 always 0 0
+        multilabel *label453
+ 1398:  set :_isMedian.11:i 9
+ 1399:  setaddr *tmp310 *label454
+ 1400:  jump *label445 always 0 0
+        multilabel *label454
+ 1401:  set :_isMedian.11:i 9
+ 1402:  setaddr *tmp310 *label455
+ 1403:  jump *label445 always 0 0
+        multilabel *label455
+ 1404:  set :_isMedian.11:i 5
+ 1405:  setaddr *tmp310 *label456
+        label *label445
+ 1406:  op lessThan *tmp311 :_isMedian.11:i :_isMedian.11:n
+ 1407:  jump *label457 equal *tmp311 false
+ 1408:  op add :_isMedian.11:lt :_isMedian.11:lt 1
+ 1409:  set *tmp312 :_isMedian.11:lt
+ 1410:  jump *label458 always 0 0
         label *label457
- 1555:  op div *tmp385 :_median.11:best :_median.11:count
- 1556:  set *tmp365 *tmp385
-        label *label454
- 1557:  set *tmp364 *tmp365
-        label *label453
- 1558:  assertequals 5 *tmp364 "median(1,1,1,1,9,9,9,9,5)"
- 1559:  stop
- 1560:  end
-        label *label0
- 1561:  op equal *tmp386 :signInexact:x 0
- 1562:  jump *label493 equal *tmp386 false
- 1563:  set *tmp387 0
- 1564:  jump *label494 always 0 0
-        label *label493
- 1565:  op lessThan *tmp388 :signInexact:x 0
- 1566:  jump *label495 equal *tmp388 false
- 1567:  set *tmp389 -1
- 1568:  jump *label496 always 0 0
-        label *label495
- 1569:  set *tmp389 1
-        label *label496
- 1570:  set *tmp387 *tmp389
-        label *label494
- 1571:  set :signInexact*retval *tmp387
-        label *label492
- 1572:  return :signInexact*retaddr
- 1573:  end
+ 1411:  op greaterThan *tmp313 :_isMedian.11:i :_isMedian.11:n
+ 1412:  jump *label459 equal *tmp313 false
+ 1413:  op add :_isMedian.11:gt :_isMedian.11:gt 1
+ 1414:  set *tmp314 :_isMedian.11:gt
+ 1415:  jump *label460 always 0 0
+        label *label459
+ 1416:  set *tmp314 null
+        label *label460
+ 1417:  set *tmp312 *tmp314
+        label *label458
+        label *label446
+ 1418:  multijump *tmp310 0 0
+        multilabel *label456
+        label *label447
+ 1419:  op sub *tmp315 :_isMedian.11:gt :_isMedian.11:lt
+ 1420:  op abs *tmp316 *tmp315 0
+ 1421:  set :_isMedian.11:dif *tmp316
+ 1422:  op add *tmp317 :_isMedian.11:gt :_isMedian.11:lt
+ 1423:  op sub *tmp318 9 1
+ 1424:  op greaterThanEq *tmp319 *tmp317 *tmp318
+ 1425:  jump *label461 equal *tmp319 false
+ 1426:  op equal *tmp321 :_isMedian.11:gt :_isMedian.11:lt
+ 1427:  set *tmp320 *tmp321
+ 1428:  jump *label462 always 0 0
+        label *label461
+ 1429:  set *tmp320 false
+        label *label462
+ 1430:  set *tmp309 *tmp320
+        label *label444
+ 1431:  set :_median.11:dif :_isMedian.11:dif
+ 1432:  jump *label463 equal *tmp309 false
+ 1433:  set *tmp307 :_median.11:i
+ 1434:  jump *label431 always 0 0
+ 1435:  set *tmp322 null
+ 1436:  jump *label464 always 0 0
+        label *label463
+ 1437:  set *tmp322 null
+        label *label464
+ 1438:  op lessThan *tmp323 :_median.11:dif :_median.11:bestDif
+ 1439:  jump *label465 equal *tmp323 false
+ 1440:  set :_median.11:bestDif :_median.11:dif
+ 1441:  set :_median.11:best :_median.11:i
+ 1442:  set :_median.11:count 1
+ 1443:  set *tmp324 :_median.11:count
+ 1444:  jump *label466 always 0 0
+        label *label465
+ 1445:  op lessThanEq *tmp325 :_median.11:dif :_median.11:bestDif
+ 1446:  jump *label467 equal *tmp325 false
+ 1447:  op add :_median.11:best :_median.11:best :_median.11:i
+ 1448:  op add :_median.11:count :_median.11:count 1
+ 1449:  set *tmp326 :_median.11:count
+ 1450:  jump *label468 always 0 0
+        label *label467
+ 1451:  set *tmp326 null
+        label *label468
+ 1452:  set *tmp324 *tmp326
+        label *label466
+        label *label433
+ 1453:  multijump *tmp308 0 0
+        multilabel *label443
+        label *label434
+ 1454:  op div *tmp327 :_median.11:best :_median.11:count
+ 1455:  set *tmp307 *tmp327
+        label *label431
+ 1456:  set *tmp306 *tmp307
+        label *label430
+ 1457:  assertequals 5 *tmp306 "median(1,1,1,1,9,9,9,9,5)"
+ 1458:  stop
+ 1459:  end
         label *label1
- 1574:  op max *tmp390 :median:x1 :median:x2
- 1575:  set :median:y2 *tmp390
- 1576:  op min *tmp391 :median:x3 :median:x4
- 1577:  set :median:y3 *tmp391
- 1578:  op lessThanEq *tmp392 :median:y2 :median:y3
- 1579:  jump *label498 equal *tmp392 false
- 1580:  op add *tmp394 :median:y2 :median:y3
- 1581:  op div *tmp395 *tmp394 2
- 1582:  set *tmp393 *tmp395
- 1583:  jump *label499 always 0 0
-        label *label498
- 1584:  op min *tmp396 :median:x1 :median:x2
- 1585:  set :median:y1 *tmp396
- 1586:  op max *tmp397 :median:x3 :median:x4
- 1587:  set :median:y4 *tmp397
- 1588:  op greaterThanEq *tmp398 :median:y1 :median:y4
- 1589:  jump *label500 equal *tmp398 false
- 1590:  op add *tmp400 :median:y1 :median:y4
- 1591:  op div *tmp401 *tmp400 2
- 1592:  set *tmp399 *tmp401
- 1593:  jump *label501 always 0 0
-        label *label500
- 1594:  op max *tmp402 :median:y1 :median:y3
- 1595:  op min *tmp403 :median:y2 :median:y4
- 1596:  op add *tmp404 *tmp402 *tmp403
- 1597:  op div *tmp405 *tmp404 2
- 1598:  set *tmp399 *tmp405
-        label *label501
- 1599:  set *tmp393 *tmp399
-        label *label499
- 1600:  set :median*retval *tmp393
-        label *label497
- 1601:  return :median*retaddr
- 1602:  end
+ 1460:  op max *tmp328 :median:x1 :median:x2
+ 1461:  set :median:y2 *tmp328
+ 1462:  op min *tmp329 :median:x3 :median:x4
+ 1463:  set :median:y3 *tmp329
+ 1464:  op lessThanEq *tmp330 :median:y2 :median:y3
+ 1465:  jump *label470 equal *tmp330 false
+ 1466:  op add *tmp332 :median:y2 :median:y3
+ 1467:  op div *tmp333 *tmp332 2
+ 1468:  set *tmp331 *tmp333
+ 1469:  jump *label471 always 0 0
+        label *label470
+ 1470:  op min *tmp334 :median:x1 :median:x2
+ 1471:  set :median:y1 *tmp334
+ 1472:  op max *tmp335 :median:x3 :median:x4
+ 1473:  set :median:y4 *tmp335
+ 1474:  op greaterThanEq *tmp336 :median:y1 :median:y4
+ 1475:  jump *label472 equal *tmp336 false
+ 1476:  op add *tmp338 :median:y1 :median:y4
+ 1477:  op div *tmp339 *tmp338 2
+ 1478:  set *tmp337 *tmp339
+ 1479:  jump *label473 always 0 0
+        label *label472
+ 1480:  op max *tmp340 :median:y1 :median:y3
+ 1481:  op min *tmp341 :median:y2 :median:y4
+ 1482:  op add *tmp342 *tmp340 *tmp341
+ 1483:  op div *tmp343 *tmp342 2
+ 1484:  set *tmp337 *tmp343
+        label *label473
+ 1485:  set *tmp331 *tmp337
+        label *label471
+ 1486:  set :median*retval *tmp331
+        label *label469
+ 1487:  return :median*retaddr
+ 1488:  end
         label *label2
- 1603:  op min *tmp406 :median.1:x1 :median.1:x2
- 1604:  set :median.1:y1 *tmp406
- 1605:  op max *tmp407 :median.1:x1 :median.1:x2
- 1606:  set :median.1:y2 *tmp407
- 1607:  op min *tmp408 :median.1:x4 :median.1:x5
- 1608:  set :median.1:y4 *tmp408
- 1609:  op max *tmp409 :median.1:x4 :median.1:x5
- 1610:  set :median.1:y5 *tmp409
- 1611:  op lessThan *tmp410 :median.1:y4 :median.1:y1
- 1612:  jump *label503 equal *tmp410 false
- 1613:  set :_swap:a :median.1:y1
- 1614:  set :_swap:b :median.1:y4
- 1615:  set :_swap:t :_swap:a
- 1616:  set :_swap:a :_swap:b
- 1617:  set :_swap:b :_swap:t
- 1618:  set *tmp412 :_swap:b
-        label *label505
- 1619:  set :median.1:y1 :_swap:a
- 1620:  set :median.1:y4 :_swap:b
- 1621:  set :_swap.1:a :median.1:y2
- 1622:  set :_swap.1:b :median.1:y5
- 1623:  set :_swap.1:t :_swap.1:a
- 1624:  set :_swap.1:a :_swap.1:b
- 1625:  set :_swap.1:b :_swap.1:t
- 1626:  set *tmp413 :_swap.1:b
-        label *label506
- 1627:  set :median.1:y2 :_swap.1:a
- 1628:  set :median.1:y5 :_swap.1:b
- 1629:  set *tmp411 *tmp413
- 1630:  jump *label504 always 0 0
-        label *label503
- 1631:  set *tmp411 null
-        label *label504
- 1632:  op greaterThan *tmp414 :median.1:x3 :median.1:y2
- 1633:  jump *label507 equal *tmp414 false
- 1634:  op lessThan *tmp416 :median.1:y2 :median.1:y4
- 1635:  jump *label509 equal *tmp416 false
- 1636:  op min *tmp418 :median.1:x3 :median.1:y4
- 1637:  set *tmp417 *tmp418
- 1638:  jump *label510 always 0 0
-        label *label509
- 1639:  op min *tmp419 :median.1:y2 :median.1:y5
- 1640:  set *tmp417 *tmp419
-        label *label510
- 1641:  set *tmp415 *tmp417
- 1642:  jump *label508 always 0 0
-        label *label507
- 1643:  op greaterThan *tmp420 :median.1:x3 :median.1:y4
- 1644:  jump *label511 equal *tmp420 false
- 1645:  op min *tmp422 :median.1:x3 :median.1:y5
- 1646:  set *tmp421 *tmp422
- 1647:  jump *label512 always 0 0
-        label *label511
- 1648:  op min *tmp423 :median.1:y2 :median.1:y4
- 1649:  set *tmp421 *tmp423
-        label *label512
- 1650:  set *tmp415 *tmp421
-        label *label508
- 1651:  set :median.1*retval *tmp415
-        label *label502
- 1652:  return :median.1*retaddr
- 1653:  end
+ 1489:  op min *tmp344 :median.1:x1 :median.1:x2
+ 1490:  set :median.1:y1 *tmp344
+ 1491:  op max *tmp345 :median.1:x1 :median.1:x2
+ 1492:  set :median.1:y2 *tmp345
+ 1493:  op min *tmp346 :median.1:x4 :median.1:x5
+ 1494:  set :median.1:y4 *tmp346
+ 1495:  op max *tmp347 :median.1:x4 :median.1:x5
+ 1496:  set :median.1:y5 *tmp347
+ 1497:  op lessThan *tmp348 :median.1:y4 :median.1:y1
+ 1498:  jump *label475 equal *tmp348 false
+ 1499:  set :_swap:a :median.1:y1
+ 1500:  set :_swap:b :median.1:y4
+ 1501:  set :_swap:t :_swap:a
+ 1502:  set :_swap:a :_swap:b
+ 1503:  set :_swap:b :_swap:t
+ 1504:  set *tmp350 :_swap:b
+        label *label477
+ 1505:  set :median.1:y1 :_swap:a
+ 1506:  set :median.1:y4 :_swap:b
+ 1507:  set :_swap.1:a :median.1:y2
+ 1508:  set :_swap.1:b :median.1:y5
+ 1509:  set :_swap.1:t :_swap.1:a
+ 1510:  set :_swap.1:a :_swap.1:b
+ 1511:  set :_swap.1:b :_swap.1:t
+ 1512:  set *tmp351 :_swap.1:b
+        label *label478
+ 1513:  set :median.1:y2 :_swap.1:a
+ 1514:  set :median.1:y5 :_swap.1:b
+ 1515:  set *tmp349 *tmp351
+ 1516:  jump *label476 always 0 0
+        label *label475
+ 1517:  set *tmp349 null
+        label *label476
+ 1518:  op greaterThan *tmp352 :median.1:x3 :median.1:y2
+ 1519:  jump *label479 equal *tmp352 false
+ 1520:  op lessThan *tmp354 :median.1:y2 :median.1:y4
+ 1521:  jump *label481 equal *tmp354 false
+ 1522:  op min *tmp356 :median.1:x3 :median.1:y4
+ 1523:  set *tmp355 *tmp356
+ 1524:  jump *label482 always 0 0
+        label *label481
+ 1525:  op min *tmp357 :median.1:y2 :median.1:y5
+ 1526:  set *tmp355 *tmp357
+        label *label482
+ 1527:  set *tmp353 *tmp355
+ 1528:  jump *label480 always 0 0
+        label *label479
+ 1529:  op greaterThan *tmp358 :median.1:x3 :median.1:y4
+ 1530:  jump *label483 equal *tmp358 false
+ 1531:  op min *tmp360 :median.1:x3 :median.1:y5
+ 1532:  set *tmp359 *tmp360
+ 1533:  jump *label484 always 0 0
+        label *label483
+ 1534:  op min *tmp361 :median.1:y2 :median.1:y4
+ 1535:  set *tmp359 *tmp361
+        label *label484
+ 1536:  set *tmp353 *tmp359
+        label *label480
+ 1537:  set :median.1*retval *tmp353
+        label *label474
+ 1538:  return :median.1*retaddr
+ 1539:  end
 
 
 stop instruction encountered, dumping variable values:
-*tmp0: 5.0
-*tmp1: 3.0
-*tmp10: -0.5
-*tmp100: 1.0
-*tmp101: 3.0
-*tmp102: 3.0
-*tmp103: 1.0
-*tmp104: 3.0
-*tmp105: 3.0
-*tmp106: 3.0
-*tmp107: 3.0
-*tmp108: 3.0
-*tmp109: 5.0
-*tmp11: -0.5
-*tmp110: 5.0
-*tmp111: 5.0
-*tmp112: 5.0
-*tmp113: 5.0
-*tmp114: 3.0
-*tmp115: 3.0
-*tmp116: 1.0
-*tmp117: 1.0
-*tmp118: 1.0
-*tmp119: 5.0
-*tmp12: 0.0
+*tmp0: 0.0
+*tmp1: 1.0
+*tmp10: 71.0
+*tmp100: 0.0
+*tmp101: 0.0
+*tmp102: null
+*tmp103: 0.0
+*tmp104: null
+*tmp105: 0.0
+*tmp106: null
+*tmp107: 1.0
+*tmp108: 1.0
+*tmp109: 1.0
+*tmp11: 4.0
+*tmp110: 536.0
+*tmp111: 0.0
+*tmp112: 501.0
+*tmp113: 0.0
+*tmp114: null
+*tmp115: 0.0
+*tmp116: null
+*tmp117: -4.0
+*tmp118: 4.0
+*tmp119: 4.0
+*tmp12: 2.5
 *tmp120: 5.0
-*tmp121: 5.0
-*tmp122: 1.0
-*tmp123: 1.0
-*tmp124: 453.0
+*tmp121: 0.0
+*tmp122: 0.0
+*tmp124: null
 *tmp125: 0.0
-*tmp126: 418.0
+*tmp126: null
 *tmp127: 0.0
 *tmp128: null
-*tmp129: 0.0
-*tmp13: 0.0
-*tmp130: null
-*tmp131: 0.0
-*tmp132: 0.0
+*tmp129: 1.0
+*tmp13: 2.0
+*tmp130: 3.0
+*tmp131: 3.0
+*tmp132: 628.0
 *tmp133: 0.0
-*tmp134: 5.0
+*tmp134: 593.0
 *tmp135: 0.0
-*tmp136: 0.0
+*tmp136: null
+*tmp137: 0.0
 *tmp138: null
-*tmp139: 0.0
-*tmp14: 1.0
-*tmp140: 6.0
-*tmp141: 1.0
-*tmp142: 6.0
-*tmp143: 1.0
-*tmp144: 1.0
-*tmp145: 1.0
-*tmp146: 545.0
+*tmp139: -3.0
+*tmp14: 3.2188758248682006
+*tmp140: 3.0
+*tmp141: 3.0
+*tmp142: 5.0
+*tmp143: 0.0
+*tmp144: 0.0
+*tmp146: null
 *tmp147: 0.0
-*tmp148: 510.0
-*tmp149: 0.0
-*tmp15: 1.0
-*tmp150: null
-*tmp151: 0.0
-*tmp152: null
-*tmp153: -5.0
-*tmp154: 5.0
-*tmp155: 5.0
-*tmp156: 5.0
-*tmp157: 1.0
-*tmp158: 0.0
+*tmp148: 6.0
+*tmp149: 1.0
+*tmp15: 1.6094379124341003
+*tmp150: 6.0
+*tmp151: 3.0
+*tmp152: 5.0
+*tmp153: 5.0
+*tmp154: 720.0
+*tmp155: 0.0
+*tmp156: 685.0
+*tmp157: 0.0
+*tmp158: null
 *tmp159: 0.0
-*tmp16: 0.0
+*tmp16: 2.0
 *tmp160: null
-*tmp161: 0.0
-*tmp162: null
-*tmp163: 0.0
-*tmp164: null
-*tmp165: 1.0
-*tmp166: 1.0
-*tmp167: 1.0
-*tmp168: 637.0
+*tmp161: -2.0
+*tmp162: 2.0
+*tmp163: 2.0
+*tmp164: 5.0
+*tmp165: 0.0
+*tmp166: 0.0
+*tmp168: null
 *tmp169: 0.0
-*tmp17: 1.0
-*tmp170: 602.0
-*tmp171: 0.0
-*tmp172: null
-*tmp173: 0.0
-*tmp174: null
-*tmp175: -4.0
-*tmp176: 4.0
-*tmp177: 4.0
-*tmp178: 5.0
+*tmp17: 4.0
+*tmp170: 4.0
+*tmp171: 1.0
+*tmp172: 4.0
+*tmp173: 5.0
+*tmp174: 5.0
+*tmp175: 5.0
+*tmp176: 812.0
+*tmp177: 0.0
+*tmp178: 777.0
 *tmp179: 0.0
-*tmp18: 0.0
-*tmp180: 0.0
+*tmp18: 9.210340371976184
+*tmp180: null
+*tmp181: 0.0
 *tmp182: null
-*tmp183: 0.0
-*tmp184: null
-*tmp185: 0.0
-*tmp186: null
-*tmp187: 1.0
-*tmp188: 3.0
-*tmp189: 3.0
-*tmp19: 1.0E-50
-*tmp190: 729.0
+*tmp183: -1.0
+*tmp184: 1.0
+*tmp185: 1.0
+*tmp186: 5.0
+*tmp187: 0.0
+*tmp188: 0.0
+*tmp189: 0.0
+*tmp19: 2.302585092994046
+*tmp190: null
 *tmp191: 0.0
-*tmp192: 694.0
-*tmp193: 0.0
-*tmp194: null
-*tmp195: 0.0
-*tmp196: null
-*tmp197: -3.0
-*tmp198: 3.0
-*tmp199: 3.0
-*tmp2: 4.0
-*tmp20: 0.0
-*tmp200: 5.0
+*tmp192: 5.0
+*tmp193: 1.0
+*tmp194: 5.0
+*tmp195: 5.0
+*tmp196: 5.0
+*tmp197: 5.0
+*tmp198: 904.0
+*tmp199: 0.0
+*tmp2: 0.0
+*tmp20: 4.0
+*tmp200: 869.0
 *tmp201: 0.0
-*tmp202: 0.0
+*tmp202: null
+*tmp203: 0.0
 *tmp204: null
 *tmp205: 0.0
-*tmp206: 6.0
-*tmp207: 1.0
-*tmp208: 6.0
-*tmp209: 3.0
-*tmp21: 0.0
-*tmp210: 5.0
-*tmp211: 5.0
-*tmp212: 821.0
+*tmp206: 0.0
+*tmp207: 0.0
+*tmp208: 5.0
+*tmp209: 0.0
+*tmp21: 4.0
+*tmp210: 0.0
+*tmp212: null
 *tmp213: 0.0
-*tmp214: 786.0
-*tmp215: 0.0
-*tmp216: null
-*tmp217: 0.0
-*tmp218: null
-*tmp219: -2.0
-*tmp22: 1.0E-50
-*tmp220: 2.0
-*tmp221: 2.0
-*tmp222: 5.0
+*tmp214: 6.0
+*tmp215: 1.0
+*tmp216: 6.0
+*tmp217: 5.0
+*tmp218: 5.0
+*tmp219: 5.0
+*tmp22: 4.0
+*tmp220: 926.0
+*tmp221: 1.0
+*tmp222: 979.0
 *tmp223: 0.0
-*tmp224: 0.0
-*tmp226: null
+*tmp224: 4.0
+*tmp225: 1.0
+*tmp226: 4.0
 *tmp227: 0.0
-*tmp228: 4.0
-*tmp229: 1.0
-*tmp23: 0.0
-*tmp230: 4.0
-*tmp231: 5.0
-*tmp232: 5.0
-*tmp233: 5.0
-*tmp234: 913.0
-*tmp235: 0.0
-*tmp236: 878.0
-*tmp237: 0.0
-*tmp238: null
-*tmp239: 0.0
-*tmp24: 0.0
-*tmp240: null
-*tmp241: -1.0
-*tmp242: 1.0
+*tmp228: 0.0
+*tmp229: 8.0
+*tmp23: 2.772588722239781
+*tmp230: 8.0
+*tmp231: 1.0
+*tmp232: 1.0
+*tmp233: 1.0
+*tmp234: null
+*tmp235: 1.0
+*tmp236: 1.0
+*tmp24: 0.6931471805599453
+*tmp240: 5.0
+*tmp241: 5.0
+*tmp242: 1036.0
 *tmp243: 1.0
-*tmp244: 5.0
-*tmp245: 0.0
-*tmp246: 0.0
+*tmp244: 1089.0
+*tmp245: 1.0
+*tmp246: 4.0
 *tmp247: 0.0
 *tmp248: null
 *tmp249: 0.0
-*tmp25: 0.01
-*tmp250: 5.0
-*tmp251: 1.0
-*tmp252: 5.0
-*tmp253: 5.0
-*tmp254: 5.0
-*tmp255: 5.0
-*tmp256: 1005.0
-*tmp257: 0.0
-*tmp258: 970.0
-*tmp259: 0.0
-*tmp26: 0.0
-*tmp260: null
-*tmp261: 0.0
-*tmp262: null
-*tmp263: 0.0
-*tmp264: 0.0
-*tmp265: 0.0
-*tmp266: 5.0
+*tmp25: 4.0
+*tmp250: 0.0
+*tmp251: 8.0
+*tmp252: 8.0
+*tmp253: 1.0
+*tmp254: 1.0
+*tmp255: 1.0
+*tmp256: null
+*tmp257: 1.0
+*tmp258: 1.0
+*tmp26: 30.0
+*tmp262: 5.0
+*tmp263: 5.0
+*tmp264: 1140.0
+*tmp265: 1.0
+*tmp266: 1199.0
 *tmp267: 0.0
-*tmp268: 0.0
-*tmp27: 0.0
-*tmp270: null
+*tmp268: 4.0
+*tmp269: 1.0
+*tmp27: 30.0
+*tmp270: 4.0
 *tmp271: 0.0
-*tmp272: 6.0
-*tmp273: 1.0
-*tmp274: 6.0
-*tmp275: 5.0
-*tmp276: 5.0
-*tmp277: 5.0
-*tmp278: 1027.0
+*tmp272: 0.0
+*tmp273: 8.0
+*tmp274: 8.0
+*tmp275: 1.0
+*tmp276: 1.0
+*tmp277: 1.0
+*tmp278: null
 *tmp279: 1.0
-*tmp28: 1.0
-*tmp280: 1080.0
-*tmp281: 0.0
-*tmp282: 4.0
-*tmp283: 1.0
-*tmp284: 4.0
-*tmp285: 0.0
-*tmp286: 0.0
-*tmp287: 8.0
-*tmp288: 8.0
+*tmp28: 20.79441541679836
+*tmp280: 1.0
+*tmp284: 5.0
+*tmp285: 5.0
+*tmp286: 1259.0
+*tmp287: 1.0
+*tmp288: 1309.0
 *tmp289: 1.0
-*tmp29: 0.0
-*tmp290: 1.0
+*tmp29: 0.6931471805599453
+*tmp290: 4.0
 *tmp291: 1.0
-*tmp292: null
-*tmp293: 1.0
-*tmp294: 1.0
-*tmp298: 5.0
-*tmp299: 5.0
-*tmp3: 5.0
-*tmp30: 0.0
-*tmp300: 1137.0
-*tmp301: 1.0
-*tmp302: 1190.0
-*tmp303: 1.0
-*tmp304: 4.0
-*tmp305: 0.0
-*tmp306: null
-*tmp307: 0.0
-*tmp308: 0.0
-*tmp309: 8.0
-*tmp31: 1.0
-*tmp310: 8.0
-*tmp311: 1.0
-*tmp312: 1.0
-*tmp313: 1.0
+*tmp292: 4.0
+*tmp293: 0.0
+*tmp294: 0.0
+*tmp295: 8.0
+*tmp296: 8.0
+*tmp297: 1.0
+*tmp298: 1.0
+*tmp299: 1.0
+*tmp3: -5.0
+*tmp30: 30.0
+*tmp300: null
+*tmp301: 0.0
+*tmp302: null
+*tmp303: 0.0
+*tmp304: null
+*tmp306: 5.0
+*tmp307: 5.0
+*tmp308: 1454.0
+*tmp309: 1.0
+*tmp31: 3.0
+*tmp310: 1419.0
+*tmp311: 0.0
+*tmp312: null
+*tmp313: 0.0
 *tmp314: null
-*tmp315: 1.0
-*tmp316: 1.0
-*tmp32: 1.0
-*tmp320: 5.0
-*tmp321: 5.0
-*tmp322: 1241.0
-*tmp323: 1.0
-*tmp324: 1300.0
-*tmp325: 0.0
-*tmp326: 4.0
-*tmp327: 1.0
-*tmp328: 4.0
-*tmp329: 0.0
-*tmp33: 1.0
+*tmp315: 0.0
+*tmp316: 0.0
+*tmp317: 8.0
+*tmp318: 8.0
+*tmp319: 1.0
+*tmp32: 3.0
+*tmp320: 1.0
+*tmp321: 1.0
+*tmp322: null
+*tmp323: 0.0
+*tmp324: 8.0
+*tmp325: 1.0
+*tmp326: 8.0
+*tmp328: 6.0
+*tmp329: 4.0
+*tmp33: 5.0
 *tmp330: 0.0
-*tmp331: 8.0
-*tmp332: 8.0
-*tmp333: 1.0
-*tmp334: 1.0
-*tmp335: 1.0
-*tmp336: null
-*tmp337: 1.0
-*tmp338: 1.0
-*tmp34: 1.0
-*tmp342: 5.0
+*tmp331: 5.0
+*tmp332: 10.0
+*tmp333: 5.0
+*tmp334: 2.0
+*tmp335: 8.0
+*tmp336: 0.0
+*tmp337: 5.0
+*tmp338: 10.0
+*tmp339: 5.0
+*tmp34: 5.0
+*tmp340: 4.0
+*tmp341: 6.0
+*tmp342: 10.0
 *tmp343: 5.0
-*tmp344: 1360.0
-*tmp345: 1.0
-*tmp346: 1410.0
-*tmp347: 1.0
-*tmp348: 4.0
-*tmp349: 1.0
-*tmp35: 1.0
+*tmp344: 5.0
+*tmp345: 5.0
+*tmp346: 5.0
+*tmp347: 5.0
+*tmp348: 0.0
+*tmp349: null
+*tmp35: 3.0
 *tmp350: 4.0
-*tmp351: 0.0
+*tmp351: 5.0
 *tmp352: 0.0
-*tmp353: 8.0
-*tmp354: 8.0
-*tmp355: 1.0
-*tmp356: 1.0
-*tmp357: 1.0
-*tmp358: null
-*tmp359: 0.0
+*tmp353: 5.0
+*tmp354: 1.0
+*tmp355: 5.0
+*tmp356: 5.0
+*tmp358: 0.0
+*tmp359: 5.0
 *tmp36: 1.0
-*tmp360: null
-*tmp361: 0.0
-*tmp362: null
-*tmp364: 5.0
-*tmp365: 5.0
-*tmp366: 1555.0
-*tmp367: 1.0
-*tmp368: 1520.0
-*tmp369: 0.0
-*tmp37: 0.0
-*tmp370: null
-*tmp371: 0.0
-*tmp372: null
-*tmp373: 0.0
-*tmp374: 0.0
-*tmp375: 8.0
-*tmp376: 8.0
-*tmp377: 1.0
-*tmp378: 1.0
-*tmp379: 1.0
-*tmp38: 0.0
-*tmp380: null
-*tmp381: 0.0
-*tmp382: 8.0
-*tmp383: 1.0
-*tmp384: 8.0
-*tmp386: 0.0
-*tmp387: 1.0
-*tmp388: 0.0
-*tmp389: 1.0
-*tmp39: 0.0
-*tmp390: 6.0
-*tmp391: 4.0
-*tmp392: 0.0
-*tmp393: 5.0
-*tmp394: 10.0
-*tmp395: 5.0
-*tmp396: 2.0
-*tmp397: 8.0
-*tmp398: 0.0
-*tmp399: 5.0
-*tmp4: 5.0
-*tmp40: -5.0
-*tmp400: 10.0
-*tmp401: 5.0
-*tmp402: 4.0
-*tmp403: 6.0
-*tmp404: 10.0
-*tmp405: 5.0
-*tmp406: 5.0
-*tmp407: 5.0
-*tmp408: 5.0
-*tmp409: 5.0
-*tmp41: 100.0
-*tmp410: 0.0
-*tmp411: null
-*tmp412: 4.0
-*tmp413: 5.0
-*tmp414: 0.0
-*tmp415: 5.0
-*tmp416: 1.0
-*tmp417: 5.0
-*tmp418: 5.0
+*tmp361: 5.0
+*tmp37: 1.0
+*tmp38: 1.0
+*tmp39: 1.0
+*tmp4: 100.0
+*tmp40: 1.0
+*tmp41: 1.0
 *tmp42: 1.0
-*tmp420: 0.0
-*tmp421: 5.0
-*tmp423: 5.0
-*tmp43: 10.0
+*tmp43: 3.0
 *tmp44: 3.0
-*tmp45: 125.0
-*tmp46: 1.0
-*tmp47: 2.5
+*tmp45: 1.0
+*tmp46: 3.0
+*tmp47: 3.0
 *tmp48: 3.0
-*tmp49: 141.0
-*tmp5: -3.0
-*tmp50: 4.0
-*tmp51: 2.5
-*tmp52: 2.0
-*tmp53: 3.2188758248682006
-*tmp54: 1.6094379124341003
-*tmp55: 2.0
-*tmp56: 4.0
-*tmp57: 9.210340371976184
-*tmp58: 2.302585092994046
-*tmp59: 4.0
-*tmp6: -4.0
-*tmp60: 4.0
-*tmp61: 4.0
-*tmp62: 2.772588722239781
-*tmp63: 0.6931471805599453
-*tmp64: 4.0
-*tmp65: 30.0
-*tmp66: 30.0
-*tmp67: 20.79441541679836
-*tmp68: 0.6931471805599453
-*tmp69: 30.0
-*tmp7: 5.0
-*tmp70: 1.0
-*tmp71: 1.0
-*tmp72: 1.0
+*tmp49: 3.0
+*tmp5: 10.0
+*tmp50: 3.0
+*tmp51: 5.0
+*tmp52: 5.0
+*tmp53: 5.0
+*tmp54: 5.0
+*tmp55: 5.0
+*tmp56: 3.0
+*tmp57: 3.0
+*tmp58: 1.0
+*tmp59: 1.0
+*tmp6: 3.0
+*tmp60: 1.0
+*tmp61: 5.0
+*tmp62: 5.0
+*tmp63: 5.0
+*tmp64: 1.0
+*tmp65: 1.0
+*tmp66: 352.0
+*tmp67: 0.0
+*tmp68: 317.0
+*tmp69: 0.0
+*tmp7: 57.0
+*tmp70: null
+*tmp71: 0.0
+*tmp72: null
 *tmp73: 0.0
-*tmp74: 1.0
-*tmp75: 10.0
-*tmp76: 0.0
+*tmp74: 0.0
+*tmp75: 0.0
+*tmp76: 5.0
 *tmp77: 0.0
-*tmp78: 10.0
-*tmp79: 10.0
-*tmp8: 0.5
-*tmp80: 5.5
-*tmp81: 0.5
-*tmp82: 0.5
-*tmp83: 5.0
-*tmp84: 5.5
+*tmp78: 0.0
+*tmp8: 2.5
+*tmp80: null
+*tmp81: 0.0
+*tmp82: 6.0
+*tmp83: 1.0
+*tmp84: 6.0
 *tmp85: 1.0
-*tmp86: 3.0
-*tmp87: 6.0
-*tmp88: 3.0
-*tmp89: 3.0
-*tmp9: 0.5
-*tmp90: 3.0
-*tmp91: 5.0
-*tmp92: 5.0
-*tmp93: 3.0
-*tmp94: 1.0
-*tmp95: 1.0
-*tmp96: 1.0
-*tmp97: 1.0
-*tmp98: 1.0
+*tmp86: 1.0
+*tmp87: 1.0
+*tmp88: 444.0
+*tmp89: 0.0
+*tmp9: 3.0
+*tmp90: 409.0
+*tmp91: 0.0
+*tmp92: null
+*tmp93: 0.0
+*tmp94: null
+*tmp95: -5.0
+*tmp96: 5.0
+*tmp97: 5.0
+*tmp98: 5.0
 *tmp99: 1.0
 :_isMedian.10:dif: 0.0
 :_isMedian.10:gt: 4.0
@@ -2703,46 +2498,16 @@ stop instruction encountered, dumping variable values:
 :_swap:a: 1.0
 :_swap:b: 4.0
 :_swap:t: 4.0
-:avg.1:i: 4.0
-:avg.1:sum: 10.0
-:avg.1:x1: 1.0
-:avg.1:x2: 2.0
-:avg:x: 1.0
-:boolean.1:x: 100.0
-:boolean.2:x: -100.0
-:boolean.3:x: -0.001
-:boolean.4:x: 1.0E-7
-:boolean:x: 0.0
-:distance.1:x1: -1.0
-:distance.1:x2: -4.0
-:distance.1:y1: -1.0
-:distance.1:y2: -5.0
-:distance:x1: 1.0
-:distance:x2: 4.0
-:distance:y1: 1.0
-:distance:y2: 5.0
-:frac.1:x: -1.5
-:frac:x: 3.5
+:avg:i: 4.0
+:avg:sum: 10.0
+:avg:x1: 1.0
+:avg:x2: 2.0
 :integer.1:result: -5.0
 :integer.1:x: -5.9
 :integer.2:result: 100.0
 :integer.2:x: 100.0
 :integer:result: 0.0
 :integer:x: 0.9
-:isZero.1:x: 1.0E-50
-:isZero.2:x: -1.0E-50
-:isZero.3:precision: 0.01
-:isZero.3:x: 0.01
-:isZero:x: 0.0
-:lerp.1:from: 1.0
-:lerp.1:ratio: 1.0
-:lerp.1:to: 10.0
-:lerp.2:from: 1.0
-:lerp.2:ratio: 0.5
-:lerp.2:to: 10.0
-:lerp:from: 1.0
-:lerp:ratio: 0.0
-:lerp:to: 10.0
 :log2.1:number: 1.073741824E9
 :log2:number: 16.0
 :logn.1:base: 10.0
@@ -2753,9 +2518,9 @@ stop instruction encountered, dumping variable values:
 :logn.3:number: 1.073741824E9
 :logn:base: 5.0
 :logn:number: 25.0
-:median*retaddr: 291.0
+:median*retaddr: 190.0
 :median*retval: 5.0
-:median.1*retaddr: 363.0
+:median.1*retaddr: 262.0
 :median.1*retval: 5.0
 :median.1:x1: 5.0
 :median.1:x2: 5.0
@@ -2766,21 +2531,18 @@ stop instruction encountered, dumping variable values:
 :median.1:y2: 5.0
 :median.1:y4: 5.0
 :median.1:y5: 5.0
-:median.2:x: 1.0
-:median.3:x1: 2.0
-:median.3:x2: 4.0
+:median.2:x1: 1.0
+:median.2:x2: 3.0
+:median.2:x3: 5.0
+:median.3:x1: 1.0
+:median.3:x2: 1.0
+:median.3:x3: 1.0
 :median.4:x1: 1.0
-:median.4:x2: 3.0
-:median.4:x3: 5.0
+:median.4:x2: 1.0
+:median.4:x3: 3.0
 :median.5:x1: 1.0
-:median.5:x2: 1.0
-:median.5:x3: 1.0
-:median.6:x1: 1.0
-:median.6:x2: 1.0
-:median.6:x3: 3.0
-:median.7:x1: 1.0
-:median.7:x2: 3.0
-:median.7:x3: 3.0
+:median.5:x2: 3.0
+:median.5:x3: 3.0
 :median:x1: 6.0
 :median:x2: 2.0
 :median:x3: 8.0
@@ -2793,12 +2555,8 @@ stop instruction encountered, dumping variable values:
 :nullToZero.1:x: 1.0
 :nullToZero:result: 0.0
 :nullToZero:x: null
-:signInexact*retaddr: 44.0
-:signInexact*retval: 1.0
-:signInexact:x: 1.0E-5
-:sum.1:i: 4.0
-:sum.1:sum: 10.0
-:sum.1:x1: 1.0
-:sum.1:x2: 2.0
-:sum:x: 1.0
-@counter: 1560.0
+:sum:i: 4.0
+:sum:sum: 10.0
+:sum:x1: 1.0
+:sum:x2: 2.0
+@counter: 1459.0

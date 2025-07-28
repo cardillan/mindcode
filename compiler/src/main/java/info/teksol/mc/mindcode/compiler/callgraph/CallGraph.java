@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
-import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.Comparator;
@@ -59,8 +58,8 @@ public final class CallGraph {
         return functions;
     }
 
-    public List<MindcodeFunction> getExactMatches(AstFunctionCall call, List<FunctionArgument> arguments) {
-        return functionDefinitions.getExactMatches(call, arguments.size());
+    public List<MindcodeFunction> getExactMatches(AstFunctionCall call, int callArgumentCount) {
+        return functionDefinitions.getExactMatches(call, callArgumentCount);
     }
 
     public List<MindcodeFunction> getLooseMatches(AstFunctionCall call) {

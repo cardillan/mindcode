@@ -44,7 +44,7 @@ public interface FunctionArgument extends ValueStore {
         if (!hasValue()) {
             messageConsumer.addMessage(CompilerMessage.error(sourcePosition(), ERR.ARGUMENT_UNNAMED_NOT_OPTIONAL));
         }
-        if (hasOutModifier()) {
+        if (hasOutModifier() || hasRefModifier()) {
             messageConsumer.addMessage(CompilerMessage.error(sourcePosition(), ERR.ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED));
         }
         return this;

@@ -57,7 +57,7 @@ public class AstFunctionArgument extends AstFragment {
     }
 
     public boolean isInput() {
-        return inModifier || !outModifier;
+        return !refModifier && (inModifier || !outModifier);
     }
 
     public boolean isOutput() {

@@ -420,6 +420,49 @@ end;
 
 the entire `if DEBUG then ... end` statement will be skipped and not included in the compiled code.
 
+### Constant expressions
+
+Expressions that have constant arguments and are deterministic (i.e., they give the same result for the same input) are constant expressions. This also applies to deterministic logic functions, such as `sin()` or `sqrt()`, and some built-in functions, such as `length()` and `encode()`.
+
+Furthermore, `@id` and `@name` properties can be used in constant expressions, assuming `builtin-evaluation` is set to `full` or `compatible`. When `builtin-evaluation` is set to `compatible`, only stable objects that have [stable logic IDs](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) are allowed in constant expressions.   
+
+User-defined functions can also be used in constant expressions. Currently, only functions meeting these criteria can be used as constant expressions:
+
+* the function isn't declared `noinline` or `remote`,
+* the function isn't recursive,
+* the function doesn't have a vararg parameter,
+* the function returns a value and doesn't have other output parameters,
+* the function consists of a single, constant expression (a `return` statement may or may not be used),
+* any global constants used in the function must be declared not only before the function itself, but also before the place where the function is used as a constant expression. 
+
+An example of a constant expression using a user-defined function:
+
+```Mindcode
+#set optimization = none;
+const OFFSET_X = 100;
+const OFFSET_Y = 200;
+
+def coords(x, y)
+    return 1000 * (x + OFFSET_X) + (y + OFFSET_Y);
+end;
+
+const COORD1 = coords(10, 20);
+const COORD2 = coords(55, 71);
+
+println(COORD1);
+println(COORD2);
+```
+
+compiles to:
+
+```mlog
+print 110220
+print "\n"
+print 155271
+print "\n"
+end
+```
+
 ### Constants representing built-in icons
 
 Mindustry has a set of built-in icons that are represented by specific Unicode characters and are properly rendered in all the user interface elements. While it is possible to enter a corresponding Unicode character into a String literal directly, it would be quite cumbersome. To provide access to these icons, Mindcode comes with a predefined set of constants that correspond to individual icons. The constants map the symbolic icon names onto a String literal containing their corresponding Unicode character.

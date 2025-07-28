@@ -164,16 +164,16 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "add", ":i", ":i", "1"),
                 createInstruction(JUMP, label(9), "lessThan", ":i", ".A"),
                 createInstruction(END),
-                createInstruction(LABEL, label(0)),
-                createInstruction(OP, "sub", ".A", ":bar:x", ".B"),
-                createInstruction(RETURN, ":bar*retaddr"),
                 createInstruction(LABEL, label(1)),
                 createInstruction(PRINT, ":foo:n"),
                 createInstruction(SET, ":bar:x", ":foo:n"),
-                createInstruction(SETADDR, ":bar*retaddr", label(8)),
+                createInstruction(SETADDR, ":bar*retaddr", label(7)),
                 createInstruction(CALL, label(0), "*invalid", ":bar*retval"),
-                createInstruction(LABEL, label(8)),
-                createInstruction(RETURN, ":foo*retaddr")
+                createInstruction(LABEL, label(7)),
+                createInstruction(RETURN, ":foo*retaddr"),
+                createInstruction(LABEL, label(0)),
+                createInstruction(OP, "sub", ".A", ":bar:x", ".B"),
+                createInstruction(RETURN, ":bar*retaddr")
         );
     }
 

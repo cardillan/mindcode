@@ -49,12 +49,48 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
+    void evaluatesEncode() {
+        assertCompilesTo("""
+                        const a = encode('A', 0, 1, 2, 3, @copper.@id, @graphite-press.@id, @mega.@id);
+                        print(a);
+                        """,
+                createInstruction(PRINT, q("ABCDAAW"))
+        );
+    }
+
+
+    @Test
+    void evaluatesEncodeInFunction() {
+        assertCompilesTo("""
+                        def foo(type, a, b)
+                            encode('A', type.@id, a + 10, b * 2) + " (" + type.@name + ")";
+                        end;
+                        
+                        const a = foo(@lead, 2, 4);
+                        print(a);
+                        """,
+                createInstruction(PRINT, q("BMI (lead)"))
+        );
+    }
+
+    @Test
     void acceptsStringConstants() {
         assertCompilesTo("""
                         const TEXT = "Hello";
                         print(TEXT);
                         """,
                 createInstruction(PRINT, q("Hello"))
+        );
+    }
+
+    @Test
+    void acceptsFunctionBasedConstant() {
+        assertCompilesTo("""
+                        def foo() 5; end;
+                        const A = foo();
+                        print(A);
+                        """,
+                createInstruction(PRINT, "5")
         );
     }
 
@@ -73,18 +109,6 @@ class CompileTimeEvaluatorTest extends AbstractCodeGeneratorTest {
                 expectedMessages()
                         .add("Value assigned to constant 'A' is not a constant expression."),
                 "const A = rand(10);"
-        );
-    }
-
-    @Test
-    void refusesFunctionBasedConstant() {
-        assertGeneratesMessages(
-                expectedMessages()
-                        .add("Value assigned to constant 'A' is not a constant expression."),
-                """
-                        def foo() 5; end;
-                        const A = foo();
-                        """
         );
     }
 

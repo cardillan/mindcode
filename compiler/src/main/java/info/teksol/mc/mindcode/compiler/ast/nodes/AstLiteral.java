@@ -44,4 +44,8 @@ public abstract class AstLiteral extends AstExpression {
     public abstract double getDoubleValue();
 
     public abstract long getLongValue();
+
+    public int getIntValue() {
+        return (int) getLongValue();
+    }
 }

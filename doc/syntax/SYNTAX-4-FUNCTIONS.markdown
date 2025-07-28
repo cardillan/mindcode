@@ -553,6 +553,8 @@ const data = encode(offset, 0, 1, 2, 5, 10, 20, 50);
 for i in 0 ... strlen(data) do
     println(char(data, i) - offset);
 end;
+
+printflush(message1);
 ```
 
 compiles into

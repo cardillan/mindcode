@@ -25,9 +25,9 @@ Mindcode can generate code for several Mindustry versions:
 * **6.0 Build 126.2**: use `#set target = 6;` to select it.
 * **7.0 Build 146** (the default one): use `#set target = 7;` to explicitly select it.  
 * **v8 Build 149 Beta**: use `#set target = 8.0;` to select it.
-* **v8 Build 150 Beta**: use `#set target = 8.1;` to select it.
+* **v8 Build 150 Beta**, **v8 Build 150.1 Beta**: use `#set target = 8.1;` to select it.
 
-At this moment, target `8.1` is also fully compatible with the latest Mindustry BE version (build 26122).
+At this moment, target `8.1` is also fully compatible with the latest Mindustry BE version (build 26149).
 
 [Here](/doc/syntax/MINDUSTRY-8.markdown#new-functionality-in-mindustry-8) is a summary of the new Logic content and corresponding Mindcode functionality in Mindustry 8.
 

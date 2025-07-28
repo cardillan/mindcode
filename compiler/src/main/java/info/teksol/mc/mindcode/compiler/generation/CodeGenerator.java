@@ -153,6 +153,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         if (!program.isMainProgram()) generateRemoteJumpTable();
         if (globalProfile.isTargetGuard()) generateTargetGuard();
 
+        callGraph.getMain().setGenerated();
         variables.enterFunction(callGraph.getMain(), List.of());
         assembler.enterAstNode(program);
         visit(program, false);
@@ -172,7 +173,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         nested++;
 
         // Create functions from function declarations
-        callGraph.getFunctions().stream().filter(f -> !f.isMain()).forEach(functionCompiler::compileFunction);
+        functionCompiler.generateFunctions();
 
         // Restore back just in case
         nested--;

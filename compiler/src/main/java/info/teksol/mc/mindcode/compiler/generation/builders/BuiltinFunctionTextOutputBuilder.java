@@ -1,7 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
 import info.teksol.mc.common.SourceElement;
-import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstEnhancedComment;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionCall;
@@ -16,9 +15,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.regex.Pattern;
 
@@ -77,55 +74,9 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         return result;
     }
 
-    private static final Set<Integer> invalidCharacters = Set.of(0, (int) '\r',  (int) '"');
-
     public ValueStore handleEncode(AstFunctionCall call) {
-        if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
-            error(call.getIdentifier(), FUNCTION_REQUIRES_TARGET_8, call.getFunctionName());
-            return LogicNull.NULL;
-        }
-
-        if (call.getArguments().size() < 2) {
-            error(call, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS,
-                    call.getFunctionName(), 2, call.getArguments().size());
-            return LogicVoid.VOID;
-        }
-
-        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
-        List<FunctionArgument> arguments = processArguments(call);
-        FunctionArgument.validateAsInput(messageConsumer(), arguments);
-        List<Integer> values = new ArrayList<>();
-
-        for (FunctionArgument argument : arguments) {
-            if (argument.unwrap() instanceof LogicNumber number && number.isInteger()) {
-                values.add(number.getIntValue());
-            } else {
-                error(argument, ERR.ENCODE_INVALID_ARGUMENT, call.getFunctionName());
-            }
-        }
-
-        int offset = values.removeFirst();
-        StringBuilder sbr = new StringBuilder(2 * values.size());
-        int index = 0;
-        for (int value : values) {
-            index++;
-            int charValue = value + offset;
-            if (charValue < 0 || charValue > 0xFFFF || (charValue >= 0xD800 && charValue <= 0xDFFF) || invalidCharacters.contains(charValue)) {
-                error(call.getArgument(index), ERR.ENCODE_INVALID_CHARACTER, charValue);
-            } else {
-                sbr.appendCodePoint(charValue);
-            }
-        }
-
-        String value = sbr.toString();
-        if (value.contains("\\n")) {
-            error(call.getArgument(index), ERR.ENCODE_INVALID_STRING, call.getFunctionName());
-        }
-
-        value = value.replace("\n", "\\n");
-
-        assembler.clearSubcontextType();
-        return LogicString.create(call.sourcePosition(), value);
+        // Encode is compile-time evaluated. If it gets there, it couldn't be evaluated, and the error has already been reported.
+        return LogicVariable.INVALID;
     }
 
     public ValueStore handleStrlen(AstFunctionCall call) {

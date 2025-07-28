@@ -60,6 +60,10 @@ public class AstFunctionDeclaration extends AstDeclaration {
         return callType;
     }
 
+    public boolean canEvaluate() {
+        return callType == CallType.NONE || callType == CallType.INLINE;
+    }
+
     public boolean isInline() {
         return callType == CallType.INLINE;
     }

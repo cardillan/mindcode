@@ -69,7 +69,7 @@ class FunctionInliner extends BaseOptimizer {
             int arguments = functionCall.getArguments().stream()
                     .mapToInt(arg -> arg.hasExpression() ? arg.isInput() && arg.isOutput() ? 2 : 1 : 0).sum();
 
-            // We assume that only half of the arguments will be successfully removed by the inlining.
+            // We assume that the inlining will successfully remove only half of the arguments.
             return call.totalWeight() * (3.0 + arguments / 2.0);
         } else {
             throw new MindcodeInternalError("Expected AstFunctionCall node, got " + call);

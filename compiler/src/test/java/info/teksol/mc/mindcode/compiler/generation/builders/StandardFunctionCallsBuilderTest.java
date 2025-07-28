@@ -501,29 +501,31 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesNestedFunctionCallsInline() {
             assertCompilesTo("""
+                            param p = 4;
                             inline def a(n) n + 1; end;
-                            print(a(a(a(4))));
+                            print(a(a(a(p))));
                             """,
-                    createInstruction(SET, ":fn0:n", "4"),
-                    createInstruction(OP, "add", var(1), ":fn0:n", "1"),
-                    createInstruction(SET, var(0), var(1)),
-                    createInstruction(LABEL, var(1000)),
-                    createInstruction(SET, ":fn1:n", var(0)),
-                    createInstruction(OP, "add", var(3), ":fn1:n", "1"),
-                    createInstruction(SET, var(2), var(3)),
-                    createInstruction(LABEL, var(1001)),
-                    createInstruction(SET, ":fn2:n", var(2)),
-                    createInstruction(OP, "add", var(5), ":fn2:n", "1"),
-                    createInstruction(SET, var(4), var(5)),
-                    createInstruction(LABEL, var(1002)),
-                    createInstruction(PRINT, var(4))
+                    createInstruction(SET, "p", "4"),
+                    createInstruction(SET, ":a:n", "p"),
+                    createInstruction(OP, "add", tmp(1), ":a:n", "1"),
+                    createInstruction(SET, tmp(0), tmp(1)),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SET, ":a.1:n", tmp(0)),
+                    createInstruction(OP, "add", tmp(3), ":a.1:n", "1"),
+                    createInstruction(SET, tmp(2), tmp(3)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":a.2:n", tmp(2)),
+                    createInstruction(OP, "add", tmp(5), ":a.2:n", "1"),
+                    createInstruction(SET, tmp(4), tmp(5)),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(PRINT, tmp(4))
             );
         }
 
         @Test
         void compilesNestedFunctionCallsStackless() {
             assertCompilesTo("""
-                            def a(n)
+                            noinline def a(n)
                                 n + 1;
                             end;
                             print(a(a(a(4))));
@@ -1033,31 +1035,31 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(SET, tmp(0), ":foo*retval"),
                     createInstruction(PRINT, tmp(0)),
                     createInstruction(END),
-                    // def bar
-                    createInstruction(LABEL, label(0)),
-                    // call foo
-                    createInstruction(PUSH, "bank1", ":bar:n"),
-                    createInstruction(SET, ":foo:n", ":bar:n"),
-                    createInstruction(CALLREC, "bank1", label(1), label(5), ":foo*retval"),
-                    createInstruction(LABEL, label(5)),
-                    createInstruction(POP, "bank1", ":bar:n"),
-                    createInstruction(SET, tmp(1), ":foo*retval"),
-                    createInstruction(OP, "sub", tmp(2), "1", tmp(1)),
-                    createInstruction(SET, ":bar*retval", tmp(2)),
-                    createInstruction(LABEL, label(4)),
-                    createInstruction(RETURNREC, "bank1"),
-                    createInstruction(END),
                     // def foo
                     createInstruction(LABEL, label(1)),
                     // call bar
                     createInstruction(PUSH, "bank1", ":foo:n"),
                     createInstruction(SET, ":bar:n", ":foo:n"),
-                    createInstruction(CALLREC, "bank1", label(0), label(7), ":bar*retval"),
-                    createInstruction(LABEL, label(7)),
+                    createInstruction(CALLREC, "bank1", label(0), label(5), ":bar*retval"),
+                    createInstruction(LABEL, label(5)),
                     createInstruction(POP, "bank1", ":foo:n"),
-                    createInstruction(SET, tmp(3), ":bar*retval"),
-                    createInstruction(OP, "add", tmp(4), "1", tmp(3)),
-                    createInstruction(SET, ":foo*retval", tmp(4)),
+                    createInstruction(SET, tmp(1), ":bar*retval"),
+                    createInstruction(OP, "add", tmp(2), "1", tmp(1)),
+                    createInstruction(SET, ":foo*retval", tmp(2)),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(RETURNREC, "bank1"),
+                    createInstruction(END),
+                    // def bar
+                    createInstruction(LABEL, label(0)),
+                    // call foo
+                    createInstruction(PUSH, "bank1", ":bar:n"),
+                    createInstruction(SET, ":foo:n", ":bar:n"),
+                    createInstruction(CALLREC, "bank1", label(1), label(7), ":foo*retval"),
+                    createInstruction(LABEL, label(7)),
+                    createInstruction(POP, "bank1", ":bar:n"),
+                    createInstruction(SET, tmp(3), ":foo*retval"),
+                    createInstruction(OP, "sub", tmp(4), "1", tmp(3)),
+                    createInstruction(SET, ":bar*retval", tmp(4)),
                     createInstruction(LABEL, label(6)),
                     createInstruction(RETURNREC, "bank1")
             );

@@ -46,7 +46,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
     private ValueStore processCall(AstFunctionCall call, List<FunctionArgument> arguments,
             @Nullable ValueStore target, boolean async) {
-        List<MindcodeFunction> exactMatches = callGraph.getExactMatches(call, arguments);
+        List<MindcodeFunction> exactMatches = callGraph.getExactMatches(call, arguments.size());
         if (!exactMatches.isEmpty() && (call.getProfile().isLibraryPrecedence()
                 || exactMatches.stream().noneMatch(f -> f.isLibrary() && !f.getParameters().isEmpty()))) {
             // There are user functions exactly matching the call. Process them.
@@ -89,8 +89,10 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         String functionName = call.getFunctionName();
         int parameterCount = function.getStandardParameterCount();
 
+        function.setCalled();
+
         // Make sure IdentifierFunctionArguments get evaluated now and not in a different context
-        // (in case of inline functions, they could get evaluated in the context of the function)
+        // (in the case of inline functions, they could get evaluated in the context of the function)
         arguments.forEach(FunctionArgument::unwrap);
 
         if (function.isRemote()) {

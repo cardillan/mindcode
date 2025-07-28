@@ -61,6 +61,18 @@ public class MindcodeFunction {
     /// Inlined for any reason: declaration, compiler or optimizer
     private boolean inlined = false;
 
+    /// Indicates the function has been successfully evaluated at compile-time.
+    /// A function which was successfully evaluated and hasn't been called doesn't need to be compiled
+    /// for syntax checking.
+    private boolean evaluated = false;
+
+    /// Indicates a call to an out-of-line function has been made.
+    /// When all function calls have been compile-time evaluated, there's no need to generate the function itself.
+    private boolean called = false;
+
+    /// Indicates the body of the function has been generated.
+    private boolean generated = false;
+
     /// Indicates this is a remote function statically bound to a single processor,
     /// therefore callable as a function as well as a method.
     private boolean staticallyBound = false;
@@ -397,6 +409,30 @@ public class MindcodeFunction {
 
     public void setInlined() {
         inlined = true;
+    }
+
+    public boolean isEvaluated() {
+        return evaluated;
+    }
+
+    public void setEvaluated() {
+        this.evaluated = true;
+    }
+
+    public boolean isCalled() {
+        return called;
+    }
+
+    public void setCalled() {
+        this.called = true;
+    }
+
+    public boolean isGenerated() {
+        return generated;
+    }
+
+    public void setGenerated() {
+        this.generated = true;
     }
 
     void createVariables(NameCreator nameCreator) {

@@ -12,7 +12,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added a new [`encode()` function](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-encode-function) for easier encoding of data into strings. 
+* Added a new [`encode()` function](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#the-encode-function) for easier encoding of data into strings.
+* Added support for using [user-defined functions in constant expressions](/doc/syntax/SYNTAX-1-VARIABLES.markdown#constant-expressions).
 
 ### Changed
 

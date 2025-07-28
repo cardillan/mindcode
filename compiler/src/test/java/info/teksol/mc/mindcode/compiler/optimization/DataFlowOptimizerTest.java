@@ -789,7 +789,7 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
         @Test
         void handlesFunctionArgumentSetup() {
             assertCompilesTo("""
-                            def getBit(bitIndex)
+                            noinline def getBit(bitIndex)
                               bitIndex * 2;
                             end;
                             

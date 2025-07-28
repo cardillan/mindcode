@@ -8,6 +8,8 @@ import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.Variables;
@@ -17,11 +19,17 @@ import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import static info.teksol.mc.messages.ERR.FUNCTION_REQUIRES_TARGET_8;
 
 /// The CompileTimeEvaluator class evaluates parts of an abstract syntax tree - represented by an AstMindcodeNode
 /// class - at compile-time. This allows optimization and replacement of constant or partially constant expressions
@@ -34,13 +42,17 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     private final BuiltinEvaluation builtinEvaluation;
     private final InstructionProcessor processor;
     private final Map<String, AstLiteral> constants = new HashMap<>();
-    private final IdentityHashMap<AstMindcodeNode, AstMindcodeNode> cache = new IdentityHashMap<>();
+    private final CallGraph callGraph;
     private final Variables variables;
+
+    private IdentityHashMap<AstMindcodeNode, AstMindcodeNode> cache = new IdentityHashMap<>();
+    private final List<Map<AstIdentifier, AstExpression>> functionVariables = new ArrayList<>();
 
     public CompileTimeEvaluator(CompileTimeEvaluatorContext context) {
         super(context.messageConsumer());
         builtinEvaluation = context.globalCompilerProfile().getBuiltinEvaluation();
         processor = context.instructionProcessor();
+        callGraph = context.callGraph();
         variables = context.variables();
     }
 
@@ -101,7 +113,9 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     }
 
     private AstMindcodeNode evaluateIdentifier(AstIdentifier node, boolean local) {
-        if (variables.resolveVariable(node, local, true) instanceof LogicLiteral literal) {
+        if (!functionVariables.isEmpty() && functionVariables.getLast().containsKey(node)) {
+            return functionVariables.getLast().get(node);
+        } else if (variables.resolveVariable(node, local, true) instanceof LogicLiteral literal) {
             return literal.asAstNode(node.sourcePosition());
         } else {
             return node;
@@ -239,13 +253,18 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         return evaluateBody(node.getElseBranch(), local);
     }
 
+    private static final Map<String, BiFunction<SourcePosition, MindustryContent, AstLiteral>> PROPERTY_MAPPER = Map.of(
+            "@id",(sp, c) -> new AstLiteralDecimal(sp, String.valueOf(c.logicId())),
+            "@name", (sp, c) -> new AstLiteralString(sp, c.contentName())
+    );
+
     private AstMindcodeNode evaluatePropertyAccess(AstPropertyAccess node, boolean local) {
         BuiltinEvaluation evaluation = node.getProfile().getBuiltinEvaluation();
         if (evaluation == BuiltinEvaluation.NONE) return node;
 
         // We're only compile-time evaluating IDs
         AstBuiltInIdentifier property = node.getProperty();
-        if (!property.getName().equals("@id")) return node;
+        if (!PROPERTY_MAPPER.containsKey(property.getName())) return node;
 
         AstMindcodeNode object = evaluateNode(node.getObject(), local);
         if (!(object instanceof AstBuiltInIdentifier item)) return node;
@@ -257,7 +276,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         if (evaluation == BuiltinEvaluation.COMPATIBLE && !metadata.isStableBuiltin(item.getName())) return node;
         if (namedContent.logicId() < 0) return node;
 
-        return new AstLiteralDecimal(node.sourcePosition(), String.valueOf(namedContent.logicId()));
+        return PROPERTY_MAPPER.get(property.getName()).apply(node.sourcePosition(), namedContent);
     }
 
     private AstMindcodeNode evaluateBody(List<AstMindcodeNode> body, boolean local) {
@@ -266,22 +285,56 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
     }
 
     private AstMindcodeNode evaluateFunctionCall(AstFunctionCall node, boolean local) {
-        if (node.getFunctionName().equals("packcolor") && processor.isSupported(Opcode.PACKCOLOR)) {
-            return evaluatePackColor(node, local);
-        }
-        if (node.getFunctionName().equals("length")) {
-            return evaluateLength(node, local);
+        switch (node.getFunctionName()) {
+            case "packcolor":   return processor.isSupported(Opcode.PACKCOLOR) ? evaluatePackColor(node, local) : node;
+            case "length":      return evaluateLength(node, local);
+            case "encode":      return evaluateEncode(node, local);
         }
 
         Operation operation = Operation.fromMindcode(node.getFunctionName());
-        if (operation == null || !processor.isSupported(Opcode.OP, List.of(operation))) {
-            return node;
+        if (operation != null && processor.isSupported(Opcode.OP, List.of(operation))) {
+            return evaluateOp(node, operation, local);
         }
 
+        IdentityHashMap<AstMindcodeNode, AstMindcodeNode> original = new IdentityHashMap<>(cache);
+
+        try {
+            List<AstExpression> evaluated = evaluateArguments(node, local, AstExpression.class);
+            if (evaluated.size() != node.getArguments().size()) return node;
+
+            List<MindcodeFunction> exactMatches = callGraph.getExactMatches(node, node.getArguments().size());
+            if (exactMatches.size() != 1) return node;
+
+            MindcodeFunction function = exactMatches.getFirst();
+            if (!function.getDeclaration().canEvaluate() || function.isVarargs() || function.isRecursive()
+                || function.isVoid() || function.getDeclaration().getBody().size() != 1) return node;
+
+            AstMindcodeNode body = function.getDeclaration().getBody().getFirst();
+            if (body instanceof AstReturnStatement n && n.getReturnValue() != null) body = n.getReturnValue();
+
+            Map<AstIdentifier, AstExpression> arguments = new HashMap<>();
+            for (int i = 0; i < evaluated.size(); i++) {
+                arguments.put(function.getDeclaration().getParameter(i).getIdentifier(), evaluated.get(i));
+            }
+
+            functionVariables.add(arguments);
+            AstMindcodeNode result = evaluateNode(body, true);
+            functionVariables.removeLast();
+
+            // We successfully evaluated a function call
+            if (result instanceof AstLiteral) function.setEvaluated();
+
+            return result instanceof AstLiteral ? result : node;
+        } finally {
+            cache = original;
+        }
+    }
+
+    private AstMindcodeNode evaluateOp(AstFunctionCall node, Operation operation, boolean local) {
         LogicOperation eval = ExpressionEvaluator.getOperation(operation);
         int numArgs = ExpressionEvaluator.getNumberOfArguments(operation);
         if (eval != null && numArgs == node.getArguments().size()) {
-            List<AstLiteral> evaluated = evaluateArguments(node, local);
+            List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
             if (evaluated.size() == numArgs) {
                 // All parameters are constants
                 // left and right are the same argument for unary functions
@@ -302,7 +355,7 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
 
     private AstMindcodeNode evaluatePackColor(AstFunctionCall node, boolean local) {
         if (node.getArguments().size() == 4) {
-            List<AstLiteral> evaluated = evaluateArguments(node, local);
+            List<AstLiteral> evaluated = evaluateArguments(node, local, AstLiteral.class);
             if (evaluated.size() == 4) {
                 String literal = Color.toColorLiteral(
                         evaluated.get(0).getDoubleValue(),
@@ -330,16 +383,79 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         return node;
     }
 
-    private List<AstLiteral> evaluateArguments(AstFunctionCall node, boolean local) {
+    private static final Set<Integer> invalidCharacters = Set.of(0, (int) '\r',  (int) '"');
+
+    private AstMindcodeNode evaluateEncode(AstFunctionCall node, boolean local) {
+        if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+            error(node.getIdentifier(), FUNCTION_REQUIRES_TARGET_8, node.getFunctionName());
+            return new AstLiteralString(node.sourcePosition(), "");
+        }
+
+        if (node.getArguments().size() < 2) {
+            error(node, ERR.FUNCTION_CALL_NOT_ENOUGH_ARGS,
+                    node.getFunctionName(), 2, node.getArguments().size());
+            return new AstLiteralString(node.sourcePosition(), "");
+        }
+
+        List<AstLiteral> literals = evaluateConstantArguments(node, local, l -> {
+            double value = l.getDoubleValue();
+            return l instanceof AstLiteralNumeric && value == (int) value;
+        }, f -> error(f, ERR.ENCODE_INVALID_ARGUMENT, node.getFunctionName()));
+
+        if (literals.size() != node.getArguments().size()) return new AstLiteralString(node.sourcePosition(), "");
+
+        int offset = literals.removeFirst().getIntValue();
+        StringBuilder sbr = new StringBuilder(2 * literals.size());
+        int index = 0;
+        for (AstLiteral literal : literals) {
+            int value = literal.getIntValue();
+            index++;
+            int charValue = value + offset;
+            if (charValue < 0 || charValue > 0xFFFF || (charValue >= 0xD800 && charValue <= 0xDFFF) || invalidCharacters.contains(charValue)) {
+                error(node.getArgument(index), ERR.ENCODE_INVALID_CHARACTER, charValue);
+            } else {
+                sbr.appendCodePoint(charValue);
+            }
+        }
+
+        String value = sbr.toString();
+        if (value.contains("\\n")) {
+            error(node.getArgument(index), ERR.ENCODE_INVALID_STRING, node.getFunctionName());
+            return new AstLiteralString(node.sourcePosition(), "");
+        }
+
+        value = value.replace("\n", "\\n");
+        return new AstLiteralString(node.sourcePosition(), value);
+    }
+
+    private <N extends AstMindcodeNode> List<N> evaluateArguments(AstFunctionCall node, boolean local, Class<N> requiredClass) {
         return node.getArguments().stream()
+                .filter(AstFunctionArgument::isInput)
                 .map(AstFunctionArgument::getExpression)
                 .filter(Objects::nonNull)
                 .map(n -> evaluateNode(n, local))
-                .filter(AstLiteral.class::isInstance)
-                .map(AstLiteral.class::cast)
+                .filter(requiredClass::isInstance)
+                .map(requiredClass::cast)
                 .toList();
     }
 
+    // Reports error on arguments that aren't constant
+    private List<AstLiteral> evaluateConstantArguments(AstFunctionCall node, boolean local, Predicate<AstLiteral> validator,
+            Consumer<AstFunctionArgument> errorReporter) {
+        List<AstLiteral> result = new ArrayList<>();
+
+        for (AstFunctionArgument argument : node.getArguments()) {
+            if (argument.isInput() && argument.getExpression() != null
+                && evaluateNode(argument.getExpression(), local) instanceof AstLiteralNumeric literal
+                && validator.test(literal)) {
+                result.add(literal);
+            } else {
+                errorReporter.accept(argument);
+            }
+        }
+
+        return result;
+    }
 
     private boolean isString(@Nullable LogicReadable variable) {
         return variable != null && variable.getObject() instanceof String;
