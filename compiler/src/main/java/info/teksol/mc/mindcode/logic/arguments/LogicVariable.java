@@ -249,9 +249,9 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 identifier.getName(), mlog, false, false, false);
     }
 
-    public static LogicVariable global(AstIdentifier identifier, String mlog, boolean volatileVar, boolean noinit) {
+    public static LogicVariable global(AstIdentifier identifier, String mlog, boolean volatileVar, boolean noinit, boolean optional) {
         return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName(), mlog, volatileVar, noinit, false);
+                identifier.getName(), mlog, volatileVar, noinit, optional);
     }
 
     @SuppressWarnings("ConfusingMainMethod")

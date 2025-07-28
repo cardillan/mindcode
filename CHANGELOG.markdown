@@ -18,7 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Changed
 
 * **Breaking**: remote functions and variables/arrays must always be specified with a fully qualified name (e.g. `processor1.x` or `processor2.foo()`) when accessing or calling them from a main processor.
-* Removed restrictions on requiring the same source files from different modules. 
+* Removed restrictions on requiring the same source files from different modules.
+* Remote variables are not reported as unused.
 
 ## 3.8.0-beta.3 - 2025-07-24
 
