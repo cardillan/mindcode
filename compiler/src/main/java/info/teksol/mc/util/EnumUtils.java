@@ -18,4 +18,18 @@ public class EnumUtils {
         }
         return result;
     }
+
+    public static <E extends Enum<E>> Map<String, E> createValueMap(Class<E> enumClass) {
+        Map<String, E> result = new HashMap<>();
+        for (E value : enumClass.getEnumConstants()) {
+            String name = value.name().toLowerCase(Locale.US);
+            result.put(name, value);
+            result.put(name.replace('_', '-'), value);
+        }
+        return result;
+    }
+
+    public static String toKebabCase(Enum<?> value) {
+        return value.name().toLowerCase(Locale.US).replace('_', '-');
+    }
 }

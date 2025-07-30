@@ -7,8 +7,10 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.PRINT;
 
 @NullMarked
 public class LoopUnrollerFullTest extends LoopUnrollerTestBase {
-    public LoopUnrollerFullTest() {
-        super(OptimizationLevel.EXPERIMENTAL);
+
+    @Override
+    protected OptimizationLevel getLoopUnrollingLevel() {
+        return OptimizationLevel.EXPERIMENTAL;
     }
 
     @Test

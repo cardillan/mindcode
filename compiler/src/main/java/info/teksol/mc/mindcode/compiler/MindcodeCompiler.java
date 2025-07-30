@@ -283,8 +283,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         // OPTIMIZE
         long optimizeStart = System.nanoTime();
         if (profile.optimizationsActive() && instructions.size() > 1) {
-            final DebugPrinter debugPrinter = profile.getDebugLevel() > 0 && profile.optimizationsActive()
-                    ? debugPrinterProvider.apply(profile.getDebugLevel()) : new NullDebugPrinter();
+            final DebugPrinter debugPrinter = profile.getDebugMessages() > 0 && profile.optimizationsActive()
+                    ? debugPrinterProvider.apply(profile.getDebugMessages()) : new NullDebugPrinter();
             OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer,
                     this, arrayExpander, !astProgram.isMainProgram());
             optimizer.setDebugPrinter(debugPrinter);

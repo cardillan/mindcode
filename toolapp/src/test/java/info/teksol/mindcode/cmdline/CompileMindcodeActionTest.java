@@ -230,31 +230,6 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
     public void createsCompilerProfileDefault() throws ArgumentParserException {
         CompilerProfile expected = CompilerProfile.fullOptimizations(false);
         CompilerProfile actual = parseToProfile("");
-
-        assertEquals(expected.isAutoPrintflush(), actual.isAutoPrintflush());
-        assertEquals(expected.getBoundaryChecks(), actual.getBoundaryChecks());
-        assertEquals(expected.getDebugLevel(), actual.getDebugLevel());
-        assertEquals(expected.getExecutionFlags(), actual.getExecutionFlags());
-        assertEquals(expected.getFileReferences(), actual.getFileReferences());
-        assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());
-        assertEquals(expected.getGoal(), actual.getGoal());
-        assertEquals(expected.getInstructionLimit(), actual.getInstructionLimit());
-        assertEquals(expected.getOptimizationLevels(), actual.getOptimizationLevels());
-        assertEquals(expected.getOptimizationPasses(), actual.getOptimizationPasses());
-        assertEquals(expected.getParseTreeLevel(), actual.getParseTreeLevel());
-        assertEquals(expected.isPrintStackTrace(), actual.isPrintStackTrace());
-        assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
-        assertEquals(expected.getProcessorVersion(), actual.getProcessorVersion());
-        assertEquals(expected.getRemarks(), actual.getRemarks());
-        assertEquals(expected.isShortFunctionPrefix(), actual.isShortFunctionPrefix());
-        assertEquals(expected.isSignature(), actual.isSignature());
-        assertEquals(expected.getSortVariables(), actual.getSortVariables());
-        assertEquals(expected.getSyntacticMode(), actual.getSyntacticMode());
-        assertEquals(expected.isRun(), actual.isRun());
-        assertEquals(expected.getStepLimit(), actual.getStepLimit());
-
-        assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
-
         assertEquals(expected, actual);
     }
 }

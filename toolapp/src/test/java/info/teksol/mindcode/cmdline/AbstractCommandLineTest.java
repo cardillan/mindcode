@@ -3,6 +3,7 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.*;
+import info.teksol.mc.profile.options.Target;
 import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
@@ -43,13 +44,13 @@ public abstract class AbstractCommandLineTest {
             @Test
             public void shortArgument6() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-t 6");
-                assertEquals("6", profile.getTarget());
+                assertEquals(new Target("6"), profile.getTarget());
             }
 
             @Test
             public void longArgument7_0W() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-t 7.0w");
-                assertEquals("7.0w", profile.getTarget());
+                assertEquals(new Target("7.0w"), profile.getTarget());
             }
         }
 
@@ -411,13 +412,13 @@ public abstract class AbstractCommandLineTest {
         class PrintflushArgumentTest {
             @Test
             public void longArgumentTrue() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--printflush true");
+                CompilerProfile profile = parseToProfile("--auto-printflush true");
                 assertTrue(profile.isAutoPrintflush());
             }
 
             @Test
             public void longArgumentFalse() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--printflush false");
+                CompilerProfile profile = parseToProfile("--auto-printflush false");
                 assertFalse(profile.isAutoPrintflush());
             }
         }
@@ -427,7 +428,7 @@ public abstract class AbstractCommandLineTest {
             @Test
             public void sortVariablesArgumentMissing() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("");
-                assertEquals(List.of(), profile.getSortVariables());
+                assertEquals(List.of(SortCategory.NONE), profile.getSortVariables());
             }
 
             @Test
@@ -445,29 +446,6 @@ public abstract class AbstractCommandLineTest {
 
         @Nested
         class OptimizationLevelsArgumentTest {
-            @Test
-            public void shortArgumentNone() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-O0");
-                assertEquals(OptimizationLevel.NONE, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
-            }
-
-            @Test
-            public void shortArgumentBasic() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-O1");
-                assertEquals(OptimizationLevel.BASIC, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
-            }
-
-            @Test
-            public void shortArgumentAdvanced() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-O2");
-                assertEquals(OptimizationLevel.ADVANCED, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
-            }
-
-            @Test
-            public void shortArgumentExperimental() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("-03");
-                assertEquals(OptimizationLevel.EXPERIMENTAL, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
-            }
             @Test
             public void longArgumentNone() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("--optimization none");
@@ -499,7 +477,7 @@ public abstract class AbstractCommandLineTest {
 
                 CompilerProfile profile = parseToProfile(cmdLine);
                 List<OptimizationLevel> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.NONE);
-                assertEquals(expected, List.copyOf(profile.getOptimizationLevels().values()));
+                assertTrue(Optimization.LIST.stream().map(profile::getOptimizationLevel).allMatch(OptimizationLevel.NONE::equals));
             }
 
             @Test
@@ -509,7 +487,7 @@ public abstract class AbstractCommandLineTest {
 
                 CompilerProfile profile = parseToProfile(cmdLine);
                 List<OptimizationLevel> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.BASIC);
-                assertEquals(expected, List.copyOf(profile.getOptimizationLevels().values()));
+                assertTrue(Optimization.LIST.stream().map(profile::getOptimizationLevel).allMatch(OptimizationLevel.BASIC::equals));
             }
         }
 
@@ -554,13 +532,13 @@ public abstract class AbstractCommandLineTest {
             @Test
             public void shortArgument() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("-d 1");
-                assertEquals(1, profile.getDebugLevel());
+                assertEquals(1, profile.getDebugMessages());
             }
 
             @Test
             public void longArgument() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("--debug-messages 1");
-                assertEquals(1, profile.getDebugLevel());
+                assertEquals(1, profile.getDebugMessages());
             }
         }
 

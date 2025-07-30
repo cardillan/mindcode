@@ -7,9 +7,13 @@ import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.options.*;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.*;
+import java.util.EnumSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /// Represents the configuration profile for a compiler/schematics builder/processor emulator, encapsulating various
@@ -26,71 +30,40 @@ import java.util.stream.Collectors;
 public class CompilerProfile {
     public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
 
-    public static final int DEFAULT_INSTRUCTIONS = 1000;
-    public static final int DEFAULT_PASSES_CMDLINE = 25;
-    public static final int DEFAULT_PASSES_WEBAPP = 5;
-    public static final int DEFAULT_STEP_LIMIT_CMDLINE = 10_000_000;
-    public static final int DEFAULT_STEP_LIMIT_WEBAPP = 1_000_000;
-    public static final int MAX_INSTRUCTIONS_CMDLINE = 100_000;
-    public static final int MAX_INSTRUCTIONS_WEBAPP = 1500;
-    public static final int MAX_MLOG_INDENT = 8;
-    public static final int MAX_PASSES_CMDLINE = 1000;
-    public static final int MAX_PASSES_WEBAPP = 25;
-
-    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 3;
-    public static final int DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 2;
-    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE = 6;
-    public static final int MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP = 4;
-
     private final boolean webApplication;
-
-    // Settable options
-    private final Map<Optimization, OptimizationLevel> levels;
-    private final EnumSet<ExecutionFlag> executionFlags = ExecutionFlag.getDefaultFlags();
-    private ProcessorVersion processorVersion = ProcessorVersion.V7A;
-    private ProcessorEdition processorEdition = ProcessorEdition.WORLD_PROCESSOR;
-    private boolean autoPrintflush = true;
-    private RuntimeChecks boundaryChecks = RuntimeChecks.NONE;
-    private int debugLevel = 0;
-    private FileReferences fileReferences = FileReferences.PATH;
-    private FinalCodeOutput finalCodeOutput = FinalCodeOutput.NONE;
-    private GenerationGoal goal = GenerationGoal.SPEED;
-    private int instructionLimit = 1000;
-    private int mlogIndent = -1;
-    private int optimizationPasses;
-    private int caseOptimizationStrength;
-    private int parseTreeLevel = 0;
-    private boolean printStackTrace = false;
-    private boolean outputProfiling = false;
-    private Remarks remarks = Remarks.PASSIVE;
-    private BuiltinEvaluation builtinEvaluation = BuiltinEvaluation.COMPATIBLE;
-    private boolean targetGuard = false;
-    private boolean mlogBlockOptimization = false;
-    private boolean nullCounterIsNoop = true;
-    private boolean textJumpTables = true;
-    private boolean unsafeCaseOptimization = false;
-    private boolean shortCircuitEval = false;
-    private boolean shortFunctionPrefix = false;
-    private boolean signature = true;
-    private List<SortCategory> sortVariables = List.of();
-    private boolean symbolicLabels = false;
-    private SyntacticMode syntacticMode = SyntacticMode.RELAXED;
+    private final Map<Enum<?>, CompilerOptionValue<?>> options;
 
     // System library functions take precedence over built-in mlog functions
     // Only used to generate library documentation
     private boolean libraryPrecedence = false;
 
-    // Compile and run
-    private boolean run = false;
-    private int stepLimit = DEFAULT_STEP_LIMIT_WEBAPP;
-
     // Schematics Builder
-    private List<String> additionalTags = List.of();
     private SourcePositionTranslator positionTranslator = p -> p;
-    
-    // Flags for debugging/testing purposes
-    private boolean debugOutput = false;
-    private int caseConfiguration = 0;
+
+    public Map<Enum<?>, CompilerOptionValue<?>> getOptions() {
+        return options;
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> CompilerOptionValue<T> getOption(Enum<?> option) {
+        return (CompilerOptionValue<T>) options.get(option);
+    }
+
+    private int getIntValue(Enum<?> option) {
+        return this.<Integer>getOption(option).getValue();
+    }
+
+    private boolean getBooleanValue(Enum<?> option) {
+        return this.<Boolean>getOption(option).getValue();
+    }
+
+    private String getStringValue(Enum<?> option) {
+        return this.<String>getOption(option).getValue();
+    }
+
+    private <T extends Enum<T>> T getEnumValue(Enum<?> option) {
+        return this.<T>getOption(option).getValue();
+    }
 
     /// Constructs a new instance of the CompilerProfile class.
     ///
@@ -100,10 +73,8 @@ public class CompilerProfile {
     /// @param level          the global optimization level to be applied across all optimization types.
     public CompilerProfile(boolean webApplication, OptimizationLevel level) {
         this.webApplication = webApplication;
-        this.optimizationPasses = webApplication ? DEFAULT_PASSES_WEBAPP : DEFAULT_PASSES_CMDLINE;
-        this.caseOptimizationStrength = webApplication ? DEFAULT_CASE_OPTIMIZATION_STRENGTH_WEBAPP : DEFAULT_CASE_OPTIMIZATION_STRENGTH_CMDLINE;
-        this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
-        this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o, o -> level));
+        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
+        setAllOptimizationLevels(level);
     }
 
     /// Constructs a new instance of the CompilerProfile class.
@@ -112,80 +83,57 @@ public class CompilerProfile {
     ///                        If true, the default settings for web applications are applied; otherwise,
     ///                        default settings for the command-line tool are used.
     /// @param optimizations   a varargs parameter containing a set of optimizations to be applied. Each optimization
-    ///                        is configured with an advanced level if specified.
+    ///                        is configured with an experimental level if specified.
     public CompilerProfile(boolean webApplication, Optimization... optimizations) {
         this.webApplication = webApplication;
-        this.optimizationPasses = webApplication ? DEFAULT_PASSES_WEBAPP : DEFAULT_PASSES_CMDLINE;
-        this.stepLimit = webApplication ? DEFAULT_STEP_LIMIT_WEBAPP : DEFAULT_STEP_LIMIT_CMDLINE;
+        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
         Set<Optimization> optimSet = Set.of(optimizations);
-        this.levels = Optimization.LIST.stream().collect(Collectors.toMap(o -> o,
-                o -> optimSet.contains(o) ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.NONE));
+        Optimization.LIST.forEach(o -> setOptimizationLevel(
+                o, optimSet.contains(o) ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.NONE));
     }
 
-    public CompilerProfile(CompilerProfile other, boolean includeSemantic) {
+    @SuppressWarnings("unchecked")
+    public CompilerProfile(CompilerProfile other, boolean includeUnstable) {
         this.webApplication = other.webApplication;
-        this.levels = new HashMap<>(other.levels);
-        this.executionFlags.addAll(other.executionFlags);
-        this.processorVersion = other.processorVersion;
-        this.processorEdition = other.processorEdition;
-        this.autoPrintflush = other.autoPrintflush;
-        this.boundaryChecks = other.boundaryChecks;
-        this.debugLevel = other.debugLevel;
-        this.fileReferences = other.fileReferences;
-        this.finalCodeOutput = other.finalCodeOutput;
-        this.goal = other.goal;
-        this.instructionLimit = other.instructionLimit;
-        this.mlogIndent = other.mlogIndent;
-        this.optimizationPasses = other.optimizationPasses;
-        this.caseOptimizationStrength = other.caseOptimizationStrength;
-        this.parseTreeLevel = other.parseTreeLevel;
-        this.printStackTrace = other.printStackTrace;
-        this.outputProfiling = other.outputProfiling;
-        this.remarks = other.remarks;
-        this.builtinEvaluation = other.builtinEvaluation;
-        this.targetGuard = other.targetGuard;
-        this.shortCircuitEval = other.shortCircuitEval;
-        this.shortFunctionPrefix = other.shortFunctionPrefix;
-        this.signature = other.signature;
-        this.sortVariables = new ArrayList<>(other.sortVariables);
-        this.symbolicLabels = other.symbolicLabels;
-        this.syntacticMode = other.syntacticMode;
-        this.libraryPrecedence = other.libraryPrecedence;
-        this.run = other.run;
-        this.stepLimit = other.stepLimit;
-        this.additionalTags = new ArrayList<>(other.additionalTags);
-        this.positionTranslator = other.positionTranslator;
-        this.debugOutput = other.debugOutput;
-        this.caseConfiguration = other.caseConfiguration;
-
-        if (includeSemantic) {
-            this.mlogBlockOptimization = other.mlogBlockOptimization;
-            this.unsafeCaseOptimization = other.unsafeCaseOptimization;
+        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
+        for (CompilerOptionValue<?> option : other.options.values()) {
+            if (includeUnstable || option.stability == SemanticStability.STABLE) {
+                getOption(option.option).setValues((List<Object>) option.getValues());
+            }
         }
     }
 
-    public CompilerProfile duplicate(boolean includeSemantic) {
-        return new CompilerProfile(this, includeSemantic);
+    public CompilerProfile duplicate(boolean includeUnstable) {
+        return new CompilerProfile(this, includeUnstable);
     }
 
-    public int getMaxPasses() {
-        return webApplication ? MAX_PASSES_WEBAPP : MAX_PASSES_CMDLINE;
+    public boolean isWebApplication() {
+        return webApplication;
     }
 
-    public int getMaxCaseOptimizationStrength() {
-        return webApplication ? MAX_CASE_OPTIMIZATION_STRENGTH_WEBAPP : MAX_CASE_OPTIMIZATION_STRENGTH_CMDLINE;
+    public boolean isLibraryPrecedence() {
+        return libraryPrecedence;
     }
 
-    public int getMaxInstructionLimit() {
-        return webApplication ? MAX_INSTRUCTIONS_WEBAPP : MAX_INSTRUCTIONS_CMDLINE;
-    }
-
-    public CompilerProfile clearExecutionFlags(ExecutionFlag... flags) {
-        Arrays.stream(flags).filter(f -> !f.isSettable())
-                .forEach(f -> { throw new MindcodeInternalError("Trying to clear unmodifiable flag %s", f); });
-
-        Arrays.asList(flags).forEach(executionFlags::remove);
+    public CompilerProfile setLibraryPrecedence(boolean libraryPrecedence) {
+        this.libraryPrecedence = libraryPrecedence;
         return this;
+    }
+
+    public SourcePositionTranslator getPositionTranslator() {
+        return positionTranslator;
+    }
+
+    public void setPositionTranslator(SourcePositionTranslator positionTranslator) {
+        this.positionTranslator = positionTranslator;
+    }
+
+    public int getTraceLimit() {
+        return webApplication ? 1000 : 10_000;
+    }
+
+    public boolean useTextJumpTables() {
+        return isTextJumpTables() && !isSymbolicLabels() && getProcessorVersion().atLeast(ProcessorVersion.V8A);
     }
 
     public CompilerProfile decode(String encoded) {
@@ -215,465 +163,364 @@ public class CompilerProfile {
         return Long.toString(value);
     }
 
-    public List<String> getAdditionalTags() {
-        return additionalTags;
-    }
-
-    public CompilerProfile setAdditionalTags(List<String> additionalTags) {
-        this.additionalTags = Objects.requireNonNull(additionalTags);
-        return this;
-    }
-
-    public RuntimeChecks getBoundaryChecks() {
-        return boundaryChecks;
-    }
-
-    public CompilerProfile setBoundaryChecks(RuntimeChecks boundaryChecks) {
-        this.boundaryChecks = boundaryChecks;
-        return this;
-    }
-
-    public int getCaseConfiguration() {
-        return caseConfiguration;
-    }
-
-    public CompilerProfile setCaseConfiguration(int caseConfiguration) {
-        this.caseConfiguration = caseConfiguration;
-        return this;
-    }
-
-    public int getCaseOptimizationStrength() {
-        return caseOptimizationStrength;
-    }
-
-    public CompilerProfile setCaseOptimizationStrength(int caseOptimizationStrength) {
-        this.caseOptimizationStrength = Math.min(Math.max(caseOptimizationStrength, 0), getMaxCaseOptimizationStrength());
-        return this;
-    }
-
-    public int getDebugLevel() {
-        return debugLevel;
-    }
-
-    public CompilerProfile setDebugLevel(int debugLevel) {
-        this.debugLevel = debugLevel;
-        return this;
-    }
-
-    public Set<ExecutionFlag> getExecutionFlags() {
-        return EnumSet.copyOf(executionFlags);
-    }
-
-    public CompilerProfile setExecutionFlags(ExecutionFlag... flags) {
-        executionFlags.addAll(Arrays.asList(flags));
-        return this;
-    }
-
-    public boolean isDebugOutput() {
-        return debugOutput;
-    }
-
-    public CompilerProfile setDebugOutput(boolean debugOutput) {
-        this.debugOutput = debugOutput;
-        return this;
-    }
-
+    //<editor-fold desc="Input/output options">
     public FileReferences getFileReferences() {
-        return fileReferences;
+        return getEnumValue(InputOutputOptions.FILE_REFERENCES);
     }
 
     public CompilerProfile setFileReferences(FileReferences fileReferences) {
-        this.fileReferences = fileReferences;
+        getOption(InputOutputOptions.FILE_REFERENCES).setValue(fileReferences);
         return this;
     }
+    //</editor-fold>
 
-    public FinalCodeOutput getFinalCodeOutput() {
-        return finalCodeOutput;
+    //<editor-fold desc="Schematics options">
+    public List<String> getAdditionalTags() {
+        return this.<String>getOption(SchematicsOptions.ADD_TAG).getValues();
     }
 
-    public CompilerProfile setFinalCodeOutput(FinalCodeOutput finalCodeOutput) {
-        this.finalCodeOutput = finalCodeOutput;
+    public CompilerProfile setAdditionalTags(List<String> additionalTags) {
+        this.<String>getOption(SchematicsOptions.ADD_TAG).setValues(additionalTags);
         return this;
     }
+    //</editor-fold>
 
-    public GenerationGoal getGoal() {
-        return goal;
-    }
-
-    public CompilerProfile setGoal(GenerationGoal goal) {
-        this.goal = goal;
-        return this;
-    }
-
-    public int getInstructionLimit() {
-        return instructionLimit;
-    }
-
-    public CompilerProfile setInstructionLimit(int instructionLimit) {
-        this.instructionLimit = Math.min(instructionLimit, getMaxInstructionLimit());
-        return this;
-    }
-
-    public boolean isLibraryPrecedence() {
-        return libraryPrecedence;
-    }
-
-    public CompilerProfile setLibraryPrecedence(boolean libraryPrecedence) {
-        this.libraryPrecedence = libraryPrecedence;
-        return this;
-    }
-
-    public int getMlogIndent() {
-        return mlogIndent >= 0 ? mlogIndent : symbolicLabels ? 4 : 0;
-    }
-
-    public CompilerProfile setMlogIndent(int mlogIndent) {
-        this.mlogIndent = mlogIndent;
-        return this;
-    }
-
-    public OptimizationLevel getOptimizationLevel(Optimization optimization) {
-        return levels.getOrDefault(optimization, OptimizationLevel.NONE);
-    }
-
-    public Map<Optimization, OptimizationLevel> getOptimizationLevels() {
-        return Map.copyOf(levels);
-    }
-
-    public int getOptimizationPasses() {
-        return optimizationPasses;
-    }
-
-    public CompilerProfile setOptimizationPasses(int optimizationPasses) {
-        this.optimizationPasses = Math.min(optimizationPasses, getMaxPasses());
-        return this;
-    }
-
-    public boolean isOutputProfiling() {
-        return outputProfiling;
-    }
-
-    public CompilerProfile setOutputProfiling(boolean outputProfiling) {
-        this.outputProfiling = outputProfiling;
-        return this;
-    }
-
-    public int getParseTreeLevel() {
-        return parseTreeLevel;
-    }
-
-    public CompilerProfile setParseTreeLevel(int parseTreeLevel) {
-        this.parseTreeLevel = parseTreeLevel;
-        return this;
-    }
-
-    public SourcePositionTranslator getPositionTranslator() {
-        return positionTranslator;
-    }
-
-    public void setPositionTranslator(SourcePositionTranslator positionTranslator) {
-        this.positionTranslator = positionTranslator;
-    }
-
-    public ProcessorEdition getProcessorEdition() {
-        return processorEdition;
-    }
-
-    public CompilerProfile setProcessorEdition(ProcessorEdition processorEdition) {
-        this.processorEdition = processorEdition;
-        return this;
-    }
-
-    public ProcessorVersion getProcessorVersion() {
-        return processorVersion;
-    }
-
-    public CompilerProfile setProcessorVersion(ProcessorVersion processorVersion) {
-        this.processorVersion = processorVersion;
-        return this;
-    }
-
-    public Remarks getRemarks() {
-        return remarks;
-    }
-
-    public CompilerProfile setRemarks(Remarks remarks) {
-        this.remarks = remarks;
-        return this;
-    }
-
-    public List<SortCategory> getSortVariables() {
-        return sortVariables;
-    }
-
-    public CompilerProfile setSortVariables(List<SortCategory> sortVariables) {
-        this.sortVariables = sortVariables;
-        return this;
-    }
-
-    public int getStepLimit() {
-        return stepLimit;
-    }
-
-    public CompilerProfile setStepLimit(int stepLimit) {
-        this.stepLimit = stepLimit;
-        return this;
-    }
-
-    public SyntacticMode getSyntacticMode() {
-        return syntacticMode;
-    }
-
-    public CompilerProfile setSyntacticMode(SyntacticMode syntacticMode) {
-        this.syntacticMode = syntacticMode;
-        return this;
-    }
-
-    public String getTarget() {
-        String suffix = processorEdition == ProcessorEdition.W ? "w" : "";
-        return switch (processorVersion) {
-            case V6 -> "6";
-            case V7 -> "7.0" + suffix;
-            case V7A -> "7" + suffix;
-            case V8A -> "8.0" + suffix;
-            case V8B -> "8" + suffix;
-            case MAX -> "8" + suffix;
-        };
-    }
-
-    public CompilerProfile setTarget(String target) {
-        String processor = target.endsWith("w") ? target.substring(0, target.length() - 1) : target;
-        ProcessorEdition edition = target.endsWith("w") ? ProcessorEdition.W : ProcessorEdition.S;
-        ProcessorVersion version = ProcessorVersion.byCode(processor);
-        if (version == null) {
-            throw new MindcodeInternalError("Unknown processor version: %s", processor);
-        }
-        setProcessorVersionEdition(version, edition);
-        return this;
-    }
-
-    public int getTraceLimit() {
-        return webApplication ? 1000 : 10_000;
-    }
-
-    public boolean isAutoPrintflush() {
-        return autoPrintflush;
-    }
-
-    public CompilerProfile setAutoPrintflush(boolean autoPrintflush) {
-        this.autoPrintflush = autoPrintflush;
-        return this;
-    }
-
-    public boolean isPrintStackTrace() {
-        return printStackTrace;
-    }
-
-    public CompilerProfile setPrintStackTrace(boolean printStackTrace) {
-        this.printStackTrace = printStackTrace;
-        return this;
-    }
-
-    public boolean isRun() {
-        return run;
-    }
-
-    public CompilerProfile setRun(boolean run) {
-        this.run = run;
-        return this;
-    }
-
-    public boolean isShortCircuitEval() {
-        return shortCircuitEval;
-    }
-
-    public CompilerProfile setShortCircuitEval(boolean shortCircuitEval) {
-        this.shortCircuitEval = shortCircuitEval;
-        return this;
-    }
-
-    public boolean isShortFunctionPrefix() {
-        return shortFunctionPrefix;
-    }
-
-    public CompilerProfile setShortFunctionPrefix(boolean shortFunctionPrefix) {
-        this.shortFunctionPrefix = shortFunctionPrefix;
-        return this;
-    }
-
-    public boolean isSignature() {
-        return signature;
-    }
-
-    public CompilerProfile setSignature(boolean signature) {
-        this.signature = signature;
-        return this;
-    }
-
-    public boolean isSymbolicLabels() {
-        return symbolicLabels;
-    }
-
-    public CompilerProfile setSymbolicLabels(boolean symbolicLabels) {
-        this.symbolicLabels = symbolicLabels;
-        return this;
-    }
-
+    //<editor-fold desc="Environment Options">
     public BuiltinEvaluation getBuiltinEvaluation() {
-        return builtinEvaluation;
+        return getEnumValue(EnvironmentOptions.BUILTIN_EVALUATION);
     }
 
     public CompilerProfile setBuiltinEvaluation(BuiltinEvaluation builtinEvaluation) {
-        this.builtinEvaluation = builtinEvaluation;
-        return this;
-    }
-
-    public boolean isTargetGuard() {
-        return targetGuard;
-    }
-
-    public CompilerProfile setTargetGuard(boolean targetGuard) {
-        this.targetGuard = targetGuard;
-        return this;
-    }
-
-    public boolean isUnsafeCaseOptimization() {
-        return unsafeCaseOptimization;
-    }
-
-    public CompilerProfile setUnsafeCaseOptimization(boolean unsafeCaseOptimization) {
-        this.unsafeCaseOptimization = unsafeCaseOptimization;
-        return this;
-    }
-
-    public boolean isMlogBlockOptimization() {
-        return mlogBlockOptimization;
-    }
-
-    public CompilerProfile setMlogBlockOptimization(boolean mlogBlockOptimization) {
-        this.mlogBlockOptimization = mlogBlockOptimization;
-        return this;
-    }
-
-    public boolean isTextJumpTables() {
-        return textJumpTables;
-    }
-
-    public CompilerProfile setTextJumpTables(boolean textJumpTables) {
-        this.textJumpTables = textJumpTables;
+        getOption(EnvironmentOptions.BUILTIN_EVALUATION).setValue(builtinEvaluation);
         return this;
     }
 
     public boolean isNullCounterIsNoop() {
-        return nullCounterIsNoop;
+        return getBooleanValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP);
     }
 
     public CompilerProfile setNullCounterIsNoop(boolean nullCounterIsNoop) {
-        this.nullCounterIsNoop = nullCounterIsNoop;
+        getOption(EnvironmentOptions.NULL_COUNTER_IS_NOOP).setValue(nullCounterIsNoop);
         return this;
     }
 
-    public boolean isWebApplication() {
-        return webApplication;
+    public ProcessorVersion getProcessorVersion() {
+        return this.<Target>getOption(EnvironmentOptions.TARGET).getValue().version();
     }
 
-    public boolean optimizationsActive() {
-        return levels.values().stream().anyMatch(l -> l != OptimizationLevel.NONE);
+    public ProcessorEdition getProcessorEdition() {
+        return this.<Target>getOption(EnvironmentOptions.TARGET).getValue().edition();
+    }
+
+    public Target getTarget() {
+        return this.<Target>getOption(EnvironmentOptions.TARGET).getValue();
+    }
+
+//    public CompilerProfile setProcessorVersion(ProcessorVersion version) {
+//        CompilerOptionValue<Target> option = getOption(EnvironmentOptions.TARGET);
+//        option.setValue(option.getValue().withVersion(version));
+//        return this;
+//    }
+//
+//    public CompilerProfile setProcessorEdition(ProcessorEdition edition) {
+//        CompilerOptionValue<Target> option = getOption(EnvironmentOptions.TARGET);
+//        option.setValue(option.getValue().withEdition(edition));
+//        return this;
+//    }
+
+    public CompilerProfile setTarget(ProcessorVersion version, ProcessorEdition edition) {
+        getOption(EnvironmentOptions.TARGET).setValue(new Target(version, edition));
+        return this;
+    }
+
+    public CompilerProfile setTarget(Target target) {
+        getOption(EnvironmentOptions.TARGET).setValue(target);
+        return this;
+    }
+
+    public boolean isTextJumpTables() {
+        return getBooleanValue(EnvironmentOptions.TEXT_JUMP_TABLES);
+    }
+
+    public CompilerProfile setTextJumpTables(boolean textJumpTables) {
+        getOption(EnvironmentOptions.TEXT_JUMP_TABLES).setValue(textJumpTables);
+        return this;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Mlog FormatOptions">
+    public int getMlogIndent() {
+        int mlogIndent = getIntValue(MlogFormatOptions.MLOG_INDENT);
+        boolean symbolicLabels = getBooleanValue(MlogFormatOptions.SYMBOLIC_LABELS);
+        return mlogIndent >= 0 ? mlogIndent : symbolicLabels ? 4 : 0;
+    }
+
+    public CompilerProfile setMlogIndent(int mlogIndent) {
+        getOption(MlogFormatOptions.MLOG_INDENT).setValue(mlogIndent);
+        return this;
+    }
+
+    public boolean isSignature() {
+        return getBooleanValue(MlogFormatOptions.SIGNATURE);
+    }
+
+    public CompilerProfile setSignature(boolean signature) {
+        getOption(MlogFormatOptions.SIGNATURE).setValue(signature);
+        return this;
+    }
+
+    public boolean isShortFunctionPrefix() {
+        return getBooleanValue(MlogFormatOptions.FUNCTION_PREFIX);
+    }
+
+    public CompilerProfile setShortFunctionPrefix(boolean shortFunctionPrefix) {
+        getOption(MlogFormatOptions.FUNCTION_PREFIX).setValue(shortFunctionPrefix);
+        return this;
+    }
+
+    public boolean isSymbolicLabels() {
+        return getBooleanValue(MlogFormatOptions.SYMBOLIC_LABELS);
+    }
+
+    public CompilerProfile setSymbolicLabels(boolean symbolicLabels) {
+        getOption(MlogFormatOptions.SYMBOLIC_LABELS).setValue(symbolicLabels);
+        return this;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Compiler Options">
+    public boolean isAutoPrintflush() {
+        return getBooleanValue(CompilerOptions.AUTO_PRINTFLUSH);
+    }
+
+    public CompilerProfile setAutoPrintflush(boolean autoPrintflush) {
+        getOption(CompilerOptions.AUTO_PRINTFLUSH).setValue(autoPrintflush);
+        return this;
+    }
+
+    public RuntimeChecks getBoundaryChecks() {
+        return getEnumValue(CompilerOptions.BOUNDARY_CHECKS);
+    }
+
+    public CompilerProfile setBoundaryChecks(RuntimeChecks boundaryChecks) {
+        getOption(CompilerOptions.BOUNDARY_CHECKS).setValue(boundaryChecks);
+        return this;
+    }
+
+    public Remarks getRemarks() {
+        return getEnumValue(CompilerOptions.REMARKS);
+    }
+
+    public CompilerProfile setRemarks(Remarks remarks) {
+        getOption(CompilerOptions.REMARKS).setValue(remarks);
+        return this;
+    }
+
+    public SyntacticMode getSyntacticMode() {
+        return getEnumValue(CompilerOptions.SYNTAX);
+    }
+
+    public CompilerProfile setSyntacticMode(SyntacticMode syntacticMode) {
+        getOption(CompilerOptions.SYNTAX).setValue(syntacticMode);
+        return this;
+    }
+
+    public boolean isTargetGuard() {
+        return getBooleanValue(CompilerOptions.TARGET_GUARD);
+
+    }
+
+    public CompilerProfile setTargetGuard(boolean targetGuard) {
+        getOption(CompilerOptions.TARGET_GUARD).setValue(targetGuard);
+        return this;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Optimizations Options">
+    public int getCaseOptimizationStrength() {
+        return getIntValue(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH);
+    }
+
+    public CompilerProfile setCaseOptimizationStrength(int caseOptimizationStrength) {
+        getOption(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH).setValue(caseOptimizationStrength);
+        return this;
+    }
+
+    public GenerationGoal getGoal() {
+        return getEnumValue(OptimizationOptions.GOAL);
+    }
+
+    public CompilerProfile setGoal(GenerationGoal goal) {
+        getOption(OptimizationOptions.GOAL).setValue(goal);
+        return this;
+    }
+
+    public int getInstructionLimit() {
+        return getIntValue(OptimizationOptions.INSTRUCTION_LIMIT);
+    }
+
+    public CompilerProfile setInstructionLimit(int instructionLimit) {
+        getOption(OptimizationOptions.INSTRUCTION_LIMIT).setValue(instructionLimit);
+        return this;
+    }
+
+    public boolean isMlogBlockOptimization() {
+        return getBooleanValue(OptimizationOptions.MLOG_BLOCK_OPTIMIZATION);
+    }
+
+    public CompilerProfile setMlogBlockOptimization(boolean mlogBlockOptimization) {
+        getOption(OptimizationOptions.MLOG_BLOCK_OPTIMIZATION).setValue(mlogBlockOptimization);
+        return this;
+    }
+
+    public int getOptimizationPasses() {
+        return getIntValue(OptimizationOptions.PASSES);
+    }
+
+    public CompilerProfile setOptimizationPasses(int optimizationPasses) {
+        getOption(OptimizationOptions.PASSES).setValue(optimizationPasses);
+        return this;
+    }
+
+    public boolean isUnsafeCaseOptimization() {
+        return getBooleanValue(OptimizationOptions.UNSAFE_CASE_OPTIMIZATION);
+    }
+
+    public CompilerProfile setUnsafeCaseOptimization(boolean unsafeCaseOptimization) {
+        getOption(OptimizationOptions.UNSAFE_CASE_OPTIMIZATION).setValue(unsafeCaseOptimization);
+        return this;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Optimization Levels">
+    public OptimizationLevel getOptimizationLevel(Optimization optimization) {
+        return getEnumValue(optimization);
+    }
+
+    public CompilerProfile setOptimizationLevel(Optimization optimization, OptimizationLevel level) {
+        getOption(optimization).setValue(level);
+        return this;
     }
 
     public CompilerProfile setAllOptimizationLevels(OptimizationLevel level) {
-        Optimization.LIST.forEach(o -> levels.put(o, level));
+        Optimization.LIST.forEach(o -> getOption(o).setValue(level));
         return this;
+    }
+
+    public boolean optimizationsActive() {
+        return Optimization.LIST.stream().anyMatch(o -> getEnumValue(o) != OptimizationLevel.NONE);
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Debugging Options">
+    public int getCaseConfiguration() {
+        return getIntValue(DebuggingOptions.CASE_CONFIGURATION);
+    }
+
+    public CompilerProfile setCaseConfiguration(int caseConfiguration) {
+        getOption(DebuggingOptions.CASE_CONFIGURATION).setValue(caseConfiguration);
+        return this;
+    }
+
+    public int getDebugMessages() {
+        return getIntValue(DebuggingOptions.DEBUG_MESSAGES);
+    }
+
+    public CompilerProfile setDebugMessages(int debugMessages) {
+        getOption(DebuggingOptions.DEBUG_MESSAGES).setValue(debugMessages);
+        return this;
+    }
+
+    public boolean isDebugOutput() {
+        return getBooleanValue(DebuggingOptions.DEBUG_OUTPUT);
+    }
+
+    public CompilerProfile setDebugOutput(boolean debugOutput) {
+        getOption(DebuggingOptions.DEBUG_OUTPUT).setValue(debugOutput);
+        return this;
+    }
+
+    public FinalCodeOutput getFinalCodeOutput() {
+        return getEnumValue(DebuggingOptions.PRINT_UNRESOLVED);
+    }
+
+    public CompilerProfile setFinalCodeOutput(FinalCodeOutput finalCodeOutput) {
+        getOption(DebuggingOptions.PRINT_UNRESOLVED).setValue(finalCodeOutput);
+        return this;
+    }
+
+    public int getParseTreeLevel() {
+        return getIntValue(DebuggingOptions.PARSE_TREE);
+    }
+
+    public CompilerProfile setParseTreeLevel(int parseTreeLevel) {
+        getOption(DebuggingOptions.PARSE_TREE).setValue(parseTreeLevel);
+        return this;
+    }
+
+    public boolean isPrintStackTrace() {
+        return getBooleanValue(DebuggingOptions.PRINT_STACKTRACE);
+    }
+
+    public CompilerProfile setPrintStackTrace(boolean printStackTrace) {
+        getOption(DebuggingOptions.PRINT_STACKTRACE).setValue(printStackTrace);
+        return this;
+    }
+
+    public List<SortCategory> getSortVariables() {
+        return this.<SortCategory>getOption(DebuggingOptions.SORT_VARIABLES).getValues();
+    }
+
+    public CompilerProfile setSortVariables(List<SortCategory> sortVariables) {
+        this.<SortCategory>getOption(DebuggingOptions.SORT_VARIABLES).setValues(sortVariables);
+        return this;
+    }
+    //</editor-fold>
+
+    //<editor-fold desc="Run Options">
+    public Set<ExecutionFlag> getExecutionFlags() {
+        EnumSet<ExecutionFlag> executionFlags = EnumSet.noneOf(ExecutionFlag.class);
+        for (ExecutionFlag flag : ExecutionFlag.LIST) {
+            if (this.<Boolean>getOption(flag).getValue()) executionFlags.add(flag);
+        }
+        return executionFlags;
     }
 
     public CompilerProfile setExecutionFlag(ExecutionFlag flag, boolean value) {
         if (!flag.isSettable()) {
             throw new MindcodeInternalError("Trying to update unmodifiable flag %s", flag);
         }
-        if (value) {
-            executionFlags.add(flag);
-        } else {
-            executionFlags.remove(flag);
-        }
+        getOption(flag).setValue(value);
         return this;
     }
 
-    public CompilerProfile setOptimizationLevel(Optimization optimization, OptimizationLevel level) {
-        this.levels.put(optimization, level);
+    public boolean isOutputProfiling() {
+        return getBooleanValue(RunOptions.OUTPUT_PROFILING);
+    }
+
+    public CompilerProfile setOutputProfiling(boolean outputProfiling) {
+        getOption(RunOptions.OUTPUT_PROFILING).setValue(outputProfiling);
         return this;
     }
 
-    public CompilerProfile setProcessorVersionEdition(ProcessorVersion processorVersion, ProcessorEdition processorEdition) {
-        this.processorVersion = processorVersion;
-        this.processorEdition = processorEdition;
+    public boolean isRun() {
+        return getBooleanValue(RunOptions.RUN);
+    }
+
+    public CompilerProfile setRun(boolean run) {
+        getOption(RunOptions.RUN).setValue(run);
         return this;
     }
 
-    public boolean useTextJumpTables() {
-        return textJumpTables && !symbolicLabels && processorVersion.atLeast(ProcessorVersion.V8A);
+    public int getStepLimit() {
+        return getIntValue(RunOptions.RUN_STEPS);
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (o == null || getClass() != o.getClass()) return false;
-
-        CompilerProfile profile = (CompilerProfile) o;
-        return webApplication == profile.webApplication
-               && instructionLimit == profile.instructionLimit
-               && optimizationPasses == profile.optimizationPasses
-               && symbolicLabels == profile.symbolicLabels
-               && shortFunctionPrefix == profile.shortFunctionPrefix
-               && shortCircuitEval == profile.shortCircuitEval
-               && autoPrintflush == profile.autoPrintflush
-               && parseTreeLevel == profile.parseTreeLevel
-               && debugLevel == profile.debugLevel
-               && printStackTrace == profile.printStackTrace
-               && signature == profile.signature
-               && run == profile.run
-               && stepLimit == profile.stepLimit
-               && levels.equals(profile.levels)
-               && processorVersion == profile.processorVersion
-               && processorEdition == profile.processorEdition
-               && fileReferences == profile.fileReferences
-               && syntacticMode == profile.syntacticMode
-               && goal == profile.goal
-               && boundaryChecks == profile.boundaryChecks
-               && remarks == profile.remarks
-               && finalCodeOutput == profile.finalCodeOutput
-               && sortVariables.equals(profile.sortVariables)
-               && executionFlags.equals(profile.executionFlags)
-               && additionalTags.equals(profile.additionalTags);
+    public CompilerProfile setStepLimit(int stepLimit) {
+        getOption(RunOptions.RUN_STEPS).setValue(stepLimit);
+        return this;
     }
-
-    @Override
-    public int hashCode() {
-        int result = Boolean.hashCode(webApplication);
-        result = 31 * result + levels.hashCode();
-        result = 31 * result + processorVersion.hashCode();
-        result = 31 * result + processorEdition.hashCode();
-        result = 31 * result + instructionLimit;
-        result = 31 * result + optimizationPasses;
-        result = 31 * result + fileReferences.hashCode();
-        result = 31 * result + syntacticMode.hashCode();
-        result = 31 * result + Boolean.hashCode(symbolicLabels);
-        result = 31 * result + Boolean.hashCode(shortFunctionPrefix);
-        result = 31 * result + goal.hashCode();
-        result = 31 * result + boundaryChecks.hashCode();
-        result = 31 * result + remarks.hashCode();
-        result = 31 * result + Boolean.hashCode(shortCircuitEval);
-        result = 31 * result + Boolean.hashCode(autoPrintflush);
-        result = 31 * result + finalCodeOutput.hashCode();
-        result = 31 * result + parseTreeLevel;
-        result = 31 * result + debugLevel;
-        result = 31 * result + Boolean.hashCode(printStackTrace);
-        result = 31 * result + sortVariables.hashCode();
-        result = 31 * result + Boolean.hashCode(signature);
-        result = 31 * result + Boolean.hashCode(run);
-        result = 31 * result + stepLimit;
-        result = 31 * result + executionFlags.hashCode();
-        result = 31 * result + additionalTags.hashCode();
-        return result;
-    }
+    //</editor-fold>
 
     /// Creates a [CompilerProfile] instance configured with full optimizations.
     ///
@@ -693,5 +540,28 @@ public class CompilerProfile {
     /// @return a [CompilerProfile] instance configured with no optimizations.
     public static CompilerProfile noOptimizations(boolean webApplication) {
         return new CompilerProfile(webApplication, OptimizationLevel.NONE);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+
+        CompilerProfile that = (CompilerProfile) o;
+        return webApplication == that.webApplication && libraryPrecedence == that.libraryPrecedence && options.equals(that.options) && positionTranslator.equals(that.positionTranslator);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Boolean.hashCode(webApplication);
+        result = 31 * result + options.hashCode();
+        result = 31 * result + Boolean.hashCode(libraryPrecedence);
+        result = 31 * result + positionTranslator.hashCode();
+        return result;
+    }
+
+    @Override
+    public String toString() {
+        return "CompilerProfile:\n" +
+               options.values().stream().map(CompilerOptionValue::toString).collect(Collectors.joining("\n"));
     }
 }

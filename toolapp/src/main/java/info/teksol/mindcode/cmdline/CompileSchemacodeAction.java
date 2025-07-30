@@ -5,6 +5,8 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.options.CompilerOptionValue;
+import info.teksol.mc.profile.options.OptionCategory;
 import info.teksol.mindcode.cmdline.Main.Action;
 import info.teksol.schemacode.SchemacodeCompiler;
 import net.sourceforge.argparse4j.impl.Arguments;
@@ -19,11 +21,14 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Base64;
 import java.util.List;
+import java.util.Map;
 
 public class CompileSchemacodeAction extends ActionHandler {
 
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
+        Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
+
         Subparser subparser = subparsers.addParser(Action.COMPILE_SCHEMA.getShortcut())
                 .aliases("compile-schema", "compile-schematic")
                 .description("Compile a schematic definition file into binary msch file.")
@@ -52,20 +57,17 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .type(Arguments.fileType().verifyCanCreate())
                 .setDefault(new File("-"));
 
-        addInputOutputOptions(files, defaults);
+        addCompilerOptions(subparser, options, OptionCategory.INPUT_OUTPUT);
 
-        ArgumentGroup schematics = subparser.addArgumentGroup("schematic creation");
-
-        createArgument(schematics, defaults,
-                CompilerProfile::getAdditionalTags,
-                (profile, arguments, name) -> profile.setAdditionalTags(arguments.get(name)),
-                "-a", "--add-tag")
-                .help("defines additional tag(s) to add to the schematic, plain text and symbolic icon names are supported")
-                .metavar("TAG")
-                .type(String.class)
-                .nargs("+");
-
-        addAllCompilerOptions(subparser, defaults);
+        addAllCompilerOptions(subparser, options,
+                OptionCategory.SCHEMATICS,
+                OptionCategory.ENVIRONMENT,
+                OptionCategory.MLOG_FORMAT,
+                OptionCategory.COMPILER,
+                OptionCategory.OPTIMIZATIONS,
+                OptionCategory.OPTIMIZATION_LEVELS,
+                OptionCategory.DEBUGGING,
+                OptionCategory.RUN);
 
         return subparser;
     }

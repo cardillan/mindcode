@@ -7,6 +7,7 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.AbstractAstBuilderTest;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
@@ -372,7 +373,7 @@ public class DocGeneratorTest {
             //System.out.println(code);
 
             CompilerProfile profile = createCompilerProfile()
-                    .setProcessorVersion(ProcessorVersion.MAX)
+                    .setTarget(ProcessorVersion.MAX, ProcessorEdition.W)
                     .setAllOptimizationLevels(OptimizationLevel.EXPERIMENTAL)
                     .setGoal(goal)
                     .setSignature(false)

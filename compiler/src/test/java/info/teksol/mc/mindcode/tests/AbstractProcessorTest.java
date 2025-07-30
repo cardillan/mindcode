@@ -59,7 +59,7 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
     @Override
     protected CompilerProfile createCompilerProfile() {
         return super.createCompilerProfile()
-                .setDebugLevel(3)
+                .setDebugMessages(3)
                 // Messes out code coverage otherwise
                 .setSignature(false)
                 // Do not remove end instructions

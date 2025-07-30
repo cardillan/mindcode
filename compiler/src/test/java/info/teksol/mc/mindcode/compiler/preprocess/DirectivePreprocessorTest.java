@@ -5,6 +5,7 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.*;
@@ -54,14 +55,6 @@ class DirectivePreprocessorTest {
         profile.setAutoPrintflush(false);
         processDirective(profile, "auto-printflush", "true");
         assertTrue(profile.isAutoPrintflush());
-    }
-
-    @Test
-    void processesDirectiveBooleanEval() {
-        CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        profile.setShortCircuitEval(false);
-        processDirective(profile, "boolean-eval", "short");
-        assertTrue(profile.isShortCircuitEval());
     }
 
     @Test
@@ -150,7 +143,7 @@ class DirectivePreprocessorTest {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setAllOptimizationLevels(OptimizationLevel.NONE);
         processDirective(profile, "optimization", "basic");
-        assertTrue(profile.getOptimizationLevels().values().stream().allMatch(l -> l == OptimizationLevel.BASIC));
+        assertTrue(Optimization.LIST.stream().map(profile::getOptimizationLevel).allMatch(l -> l == OptimizationLevel.BASIC));
     }
 
     @Test
@@ -273,7 +266,7 @@ class DirectivePreprocessorTest {
     void refusesInvalidValue() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         ExpectedMessages.create()
-                .add("Invalid value 'fluffyBunny' of compiler directive 'target'.")
+                .addRegex("Invalid value 'fluffyBunny' of compiler directive 'target'.*")
                 .validate(consumer -> processDirective(consumer, profile, "target", "fluffyBunny"));
     }
 }

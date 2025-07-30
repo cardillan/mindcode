@@ -67,6 +67,11 @@ public record SourcePosition(InputFile inputFile,
         public String getDistinctTitle() {
             return "";
         }
+
+        @Override
+        public String toString() {
+            return "EMPTY_INPUT_FILE";
+        }
     };
 
     public static SourcePosition EMPTY = new SourcePosition(EMPTY_INPUT_FILE, 1, 1);

@@ -1,5 +1,6 @@
 package info.teksol.mc.emulator.processor;
 
+import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumSet;
@@ -35,6 +36,7 @@ public enum ExecutionFlag {
     ERR_RUNTIME_CHECK_FAILED        ("stop execution when a runtime check fails.",true, true),
     ;
 
+    private final String optionName;
     private final String description;
     private final boolean settable;
     private final boolean active;
@@ -43,6 +45,7 @@ public enum ExecutionFlag {
         if (!settable && !active) {
             throw new IllegalArgumentException("always inactive flag");
         }
+        this.optionName = EnumUtils.toKebabCase(this);
         this.description = description;
         this.settable = settable;
         this.active = active;
@@ -57,7 +60,11 @@ public enum ExecutionFlag {
     }
 
     public String getOptionName() {
-        return name().toLowerCase().replace('_', '-');
+        return optionName;
+    }
+
+    public boolean getDefaultValue() {
+        return active;
     }
 
     public boolean isSettable() {

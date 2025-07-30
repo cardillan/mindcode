@@ -1,5 +1,6 @@
 package info.teksol.mindcode.exttest;
 
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.profile.CompilerProfile;
 import org.junit.jupiter.api.Test;
 
@@ -28,9 +29,9 @@ class ExtendedTestsTest {
     void printCompilerProfile() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.decode("3350291745793");
-        System.out.println(profile.getOptimizationLevels().entrySet().stream()
-                .sorted(Comparator.comparing(e -> e.getKey().getOptionName()))
-                .map(e -> e.getKey().getOptionName() + " = " + e.getValue().name().toLowerCase())
+        System.out.println(Optimization.LIST.stream()
+                .sorted(Comparator.comparing(Optimization::getOptionName))
+                .map(e -> e.getOptionName() + " = " + profile.getOptimizationLevel(e).name().toLowerCase())
                 .collect(Collectors.joining(";\n#set ", "Active optimizations:\n#set ", ";\n")));
     }
 }

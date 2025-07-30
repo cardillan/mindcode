@@ -106,14 +106,6 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
         Namespace arguments = parseCommandLine(Action.COMPILE_SCHEMA.getShortcut());
         CompilerProfile expected = CompilerProfile.fullOptimizations(false);
         CompilerProfile actual = new CompileSchemacodeAction().createCompilerProfile(arguments);
-
-        assertEquals(expected.getProcessorEdition(), actual.getProcessorEdition());
-        assertEquals(expected.getProcessorVersion(), actual.getProcessorVersion());
-        assertEquals(expected.getOptimizationLevels(), actual.getOptimizationLevels());
-        assertEquals(expected.getParseTreeLevel(), actual.getParseTreeLevel());
-        assertEquals(expected.getDebugLevel(), actual.getDebugLevel());
-        assertEquals(expected.getGoal(), actual.getGoal());
-        assertEquals(expected.getFinalCodeOutput(), actual.getFinalCodeOutput());
-        assertEquals(expected.isPrintStackTrace(), actual.isPrintStackTrace());
+        assertEquals(expected, actual);
     }
 }

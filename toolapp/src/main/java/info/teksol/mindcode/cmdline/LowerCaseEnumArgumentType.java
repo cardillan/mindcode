@@ -15,6 +15,15 @@ public class LowerCaseEnumArgumentType<T extends Enum<T>>
         return new LowerCaseEnumArgumentType<>(type);
     }
 
+    @SuppressWarnings({"unchecked", "rawtypes"})
+    public static LowerCaseEnumArgumentType<?> forClass(Class<?> type) {
+        if (!type.isEnum()) {
+            throw new IllegalArgumentException("Type must be an enum");
+        }
+        return new LowerCaseEnumArgumentType(type);
+    }
+
+
     @Override
     protected String toStringRepresentation(T t) {
         return t.name().toLowerCase(Locale.US).replace('_', '-');

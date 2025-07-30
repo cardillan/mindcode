@@ -2,10 +2,11 @@ package info.teksol.mindcode.cmdline;
 
 import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.common.PositionFormatter;
-import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.options.CompilerOptionValue;
+import info.teksol.mc.profile.options.OptionCategory;
 import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
@@ -18,11 +19,14 @@ import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 
 public class CompileMindcodeAction extends ActionHandler {
 
     @Override
     Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults) {
+        Map<Enum<?>, CompilerOptionValue<?>> options = defaults.getOptions();
+
         Subparser subparser = subparsers.addParser(Action.COMPILE_MINDCODE.getShortcut())
                 .aliases("compile-mindcode")
                 .description("Compile a Mindcode source file into text mlog file.")
@@ -76,7 +80,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("?")
                 .setDefault(new File("-"));
 
-        addInputOutputOptions(files, defaults);
+        addCompilerOptions(subparser, options, OptionCategory.INPUT_OUTPUT);
 
         files.addArgument("-a", "--append")
                 .help("Additional Mindcode source file to be compiled along with the input file. Such additional files may " +
@@ -86,54 +90,16 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("+")
                 .metavar("FILE");
 
-        addCompilerOptions(subparser, defaults);
-        addRunOptions(subparser, defaults);
-        addOptimizationOptions(subparser, defaults);
-        addDebugOptions(subparser, defaults);
+        addAllCompilerOptions(subparser, options,
+                OptionCategory.ENVIRONMENT,
+                OptionCategory.MLOG_FORMAT,
+                OptionCategory.COMPILER,
+                OptionCategory.OPTIMIZATIONS,
+                OptionCategory.OPTIMIZATION_LEVELS,
+                OptionCategory.DEBUGGING,
+                OptionCategory.RUN);
 
         return subparser;
-    }
-
-    void addRunOptions(Subparser subparser, CompilerProfile defaults) {
-        ArgumentGroup container = subparser.addArgumentGroup("run options")
-                .description("""
-                        Options to specify if and how to run the compiled code on an emulated processor. The emulated \
-                        processor is much faster than Mindustry processors, but can't run instructions which obtain information \
-                        from the Mindustry World. Sole exceptions are memory cells (cell1 to cell9) and memory banks \
-                        (bank1 to bank9), which can be read and written.""");
-
-        createArgument(container, defaults,
-                CompilerProfile::isRun,
-                (profile, arguments, name) -> profile.setRun(arguments.getBoolean(name)),
-                "--run")
-                .help("run the compiled code on an emulated processor.")
-                .action(Arguments.storeTrue());
-
-        createArgument(container, defaults,
-                CompilerProfile::getStepLimit,
-                (profile, arguments, name) -> profile.setStepLimit(arguments.getInt(name)),
-                "--run-steps")
-                .help("the maximum number of instruction executions to emulate, the execution stops when this limit is reached.")
-                .choices(Arguments.range(1, 1_000_000_000))
-                .type(Integer.class);
-
-        createArgument(container, defaults,
-                CompilerProfile::isOutputProfiling,
-                (profile, arguments, name) -> profile.setOutputProfiling(arguments.getBoolean(name)),
-                "--output-profiling")
-                .help("output the profiling data into the log file.")
-                .action(Arguments.storeTrue());
-
-        for (ExecutionFlag flag : ExecutionFlag.LIST) {
-            if (flag.isSettable()) {
-                createArgument(container, defaults,
-                        profile -> profile.getExecutionFlags().contains(flag),
-                        (profile, arguments, name) -> profile.setExecutionFlag(flag, arguments.getBoolean(name)),
-                        "--" + flag.getOptionName())
-                        .help(flag.getDescription())
-                        .type(Arguments.booleanType());
-            }
-        }
     }
 
     @Override

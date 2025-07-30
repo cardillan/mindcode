@@ -77,10 +77,9 @@ public abstract class AbstractTestBase {
 
     protected CompilerProfile createCompilerProfile() {
         return CompilerProfile.fullOptimizations(false)
-                .setProcessorVersion(getProcessorVersion())
-                .setProcessorEdition(getProcessorEdition())
+                .setTarget(getProcessorVersion(), getProcessorEdition())
                 .setAutoPrintflush(false)
-                .setDebugLevel(3)
+                .setDebugMessages(3)
                 .setPrintStackTrace(true)
                 .setRun(true);
 

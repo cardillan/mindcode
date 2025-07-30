@@ -46,7 +46,8 @@ public class LogicInstructionLabelResolver {
     }
 
     public List<LogicInstruction> sortVariables(List<LogicInstruction> program) {
-        if (profile.getSortVariables().isEmpty() || program.isEmpty()) {
+        List<SortCategory> categories = profile.getSortVariables();
+        if (categories.isEmpty() || categories.equals(List.of(SortCategory.NONE)) || program.isEmpty()) {
             return program;
         }
 
@@ -61,7 +62,7 @@ public class LogicInstructionLabelResolver {
                 .map(LogicVariable.class::cast)
                 .collect(Collectors.toCollection(HashSet::new));
 
-        List<LogicVariable> order = orderVariables(allVariables, profile.getSortVariables());
+        List<LogicVariable> order = orderVariables(allVariables, categories);
 
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
                 .createSubcontext(AstContextType.JUMPS, AstSubcontextType.BASIC, 1.0);
@@ -192,19 +193,19 @@ public class LogicInstructionLabelResolver {
     private List<LogicInstruction> resolveRemarksActive(List<LogicInstruction> program) {
         return program.stream()
                 .map(ix -> ix instanceof RemarkInstruction r ? processor.createPrint(r.getAstContext(), r.getValue()) : ix)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private List<LogicInstruction> resolveRemarksComment(List<LogicInstruction> program) {
         return program.stream()
                 .map(ix -> ix instanceof RemarkInstruction r ? processor.createComment(r.getAstContext(), r.getValue()) : ix)
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private List<LogicInstruction> resolveRemarksNone(List<LogicInstruction> program) {
         return program.stream()
                 .filter(ix -> !(ix instanceof RemarkInstruction))
-                .toList();
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private List<LogicInstruction> resolveRemarksPassive(List<LogicInstruction> program) {

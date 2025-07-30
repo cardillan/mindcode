@@ -160,6 +160,7 @@ The print function, which corresponds to the `print` instruction, is described i
 A `sync` instruction (available in Mindustry Logic since version 7.0 build 146) is mapped to a `sync()` function. The function has one parameter—a variable to be synchronized across the network (namely, from the server to all clients). A [volatile variable](SYNTAX-1-VARIABLES.markdown#regular-variables) must be passed as an argument to this function, otherwise a compilation error occurs.
 
 ```Mindcode
+#set target = 7w;
 volatile var synced;
 sync(synced);
 var before = synced;

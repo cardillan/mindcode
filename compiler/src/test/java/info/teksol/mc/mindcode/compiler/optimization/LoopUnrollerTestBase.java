@@ -14,11 +14,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> {
-    private final OptimizationLevel level;
-
-    protected LoopUnrollerTestBase(OptimizationLevel level) {
-        this.level = level;
-    }
+    protected abstract OptimizationLevel getLoopUnrollingLevel();
 
     protected static Predicate<LogicInstruction> excludeLabelInstructions() {
         return ix -> !(ix instanceof LabelInstruction);
@@ -27,7 +23,7 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Override
     protected CompilerProfile createCompilerProfile() {
         return super.createCompilerProfile()
-                .setOptimizationLevel(Optimization.LOOP_UNROLLING, level)
+                .setOptimizationLevel(Optimization.LOOP_UNROLLING, getLoopUnrollingLevel())
                 .setGoal(GenerationGoal.SPEED);
     }
 
