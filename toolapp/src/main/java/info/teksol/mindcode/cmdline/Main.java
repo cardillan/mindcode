@@ -7,10 +7,12 @@ import net.sourceforge.argparse4j.DefaultSettings;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.*;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumMap;
 import java.util.Map;
 
+@NullMarked
 public class Main {
 
     public static final Map<Action, Subparser> ACTION_PARSERS = new EnumMap<>(Action.class);

@@ -38,7 +38,7 @@ public class SystemLibraryTest {
     public static final String LIBRARY_OUTPUTS_DIRECTORY = "src/test/resources/library/outputs";
 
     private CompilerProfile createCompilerProfile() {
-        return new CompilerProfile(false, OptimizationLevel.EXPERIMENTAL)
+        return CompilerProfile.fullOptimizations(false)
                 .setTarget(new Target(ProcessorVersion.MAX, ProcessorEdition.W))
                 .setFinalCodeOutput(FinalCodeOutput.PLAIN)
                 .setAutoPrintflush(false)

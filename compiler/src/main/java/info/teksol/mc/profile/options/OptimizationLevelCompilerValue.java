@@ -2,7 +2,6 @@ package info.teksol.mc.profile.options;
 
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class OptimizationLevelCompilerValue extends EnumCompilerOptionValue<Opti
     }
 
     @Override
-    public void setValues(@Nullable List<OptimizationLevel> values) {
+    public void setValues(List<OptimizationLevel> values) {
         delegates.forEach(delegate -> delegate.setValues(values));
     }
 }

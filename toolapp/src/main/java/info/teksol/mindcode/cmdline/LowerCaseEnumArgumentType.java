@@ -1,9 +1,11 @@
 package info.teksol.mindcode.cmdline;
 
 import net.sourceforge.argparse4j.impl.type.CaseInsensitiveEnumArgumentType;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.Locale;
 
+@NullMarked
 public class LowerCaseEnumArgumentType<T extends Enum<T>>
         extends CaseInsensitiveEnumArgumentType<T> {
 

@@ -40,6 +40,33 @@ public class CompilerProfile {
     // Schematics Builder
     private SourcePositionTranslator positionTranslator = p -> p;
 
+    /// Constructs a new instance of the CompilerProfile class.
+    ///
+    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
+    ///                       If true, the default settings for web applications are applied; otherwise,
+    ///                       default settings for the command-line tool are used.
+    /// @param level          the global optimization level to be applied across all optimization types.
+    private CompilerProfile(boolean webApplication, OptimizationLevel level) {
+        this.webApplication = webApplication;
+        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
+        setAllOptimizationLevels(level);
+    }
+
+    @SuppressWarnings("unchecked")
+    private CompilerProfile(CompilerProfile other, boolean includeUnstable) {
+        this.webApplication = other.webApplication;
+        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
+        for (CompilerOptionValue<?> option : other.options.values()) {
+            if (option.option != OptimizationOptions.OPTIMIZATION && (includeUnstable || option.stability == SemanticStability.STABLE)) {
+                getOption(option.option).setValues((List<Object>) option.getValues());
+            }
+        }
+    }
+
+    public CompilerProfile duplicate(boolean includeUnstable) {
+        return new CompilerProfile(this, includeUnstable);
+    }
+
     public Map<Enum<?>, CompilerOptionValue<?>> getOptions() {
         return options;
     }
@@ -63,48 +90,6 @@ public class CompilerProfile {
 
     private <T extends Enum<T>> T getEnumValue(Enum<?> option) {
         return this.<T>getOption(option).getValue();
-    }
-
-    /// Constructs a new instance of the CompilerProfile class.
-    ///
-    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
-    ///                       If true, the default settings for web applications are applied; otherwise,
-    ///                       default settings for the command-line tool are used.
-    /// @param level          the global optimization level to be applied across all optimization types.
-    public CompilerProfile(boolean webApplication, OptimizationLevel level) {
-        this.webApplication = webApplication;
-        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
-        setAllOptimizationLevels(level);
-    }
-
-    /// Constructs a new instance of the CompilerProfile class.
-    ///
-    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
-    ///                        If true, the default settings for web applications are applied; otherwise,
-    ///                        default settings for the command-line tool are used.
-    /// @param optimizations   a varargs parameter containing a set of optimizations to be applied. Each optimization
-    ///                        is configured with an experimental level if specified.
-    public CompilerProfile(boolean webApplication, Optimization... optimizations) {
-        this.webApplication = webApplication;
-        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
-        Set<Optimization> optimSet = Set.of(optimizations);
-        Optimization.LIST.forEach(o -> setOptimizationLevel(
-                o, optimSet.contains(o) ? OptimizationLevel.EXPERIMENTAL : OptimizationLevel.NONE));
-    }
-
-    @SuppressWarnings("unchecked")
-    public CompilerProfile(CompilerProfile other, boolean includeUnstable) {
-        this.webApplication = other.webApplication;
-        this.options = CompilerOptionFactory.createCompilerOptions(webApplication);
-        for (CompilerOptionValue<?> option : other.options.values()) {
-            if (includeUnstable || option.stability == SemanticStability.STABLE) {
-                getOption(option.option).setValues((List<Object>) option.getValues());
-            }
-        }
-    }
-
-    public CompilerProfile duplicate(boolean includeUnstable) {
-        return new CompilerProfile(this, includeUnstable);
     }
 
     public boolean isWebApplication() {
@@ -176,11 +161,11 @@ public class CompilerProfile {
 
     //<editor-fold desc="Schematics options">
     public List<String> getAdditionalTags() {
-        return this.<String>getOption(SchematicsOptions.ADD_TAG).getValues();
+        return this.<String>getOption(SchematicOptions.ADD_TAG).getValues();
     }
 
     public CompilerProfile setAdditionalTags(List<String> additionalTags) {
-        this.<String>getOption(SchematicsOptions.ADD_TAG).setValues(additionalTags);
+        this.<String>getOption(SchematicOptions.ADD_TAG).setValues(additionalTags);
         return this;
     }
     //</editor-fold>
@@ -521,6 +506,17 @@ public class CompilerProfile {
         return this;
     }
     //</editor-fold>
+
+    /// Creates a [CompilerProfile] instance configured for given optimization level.
+    ///
+    /// @param webApplication a boolean indicating whether the profile is intended for a web application.
+    ///                       If true, it applies optimizations specific to web applications; otherwise,
+    ///                       it applies optimizations for general-purpose environments.
+    /// @param level          the optimization level to be applied across all optimizations.
+    /// @return a [CompilerProfile] instance configured with the advanced optimization level.
+    public static CompilerProfile forOptimizations(boolean webApplication, OptimizationLevel level) {
+        return new CompilerProfile(webApplication, level);
+    }
 
     /// Creates a [CompilerProfile] instance configured with full optimizations.
     ///

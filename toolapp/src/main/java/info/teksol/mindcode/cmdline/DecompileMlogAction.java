@@ -8,9 +8,11 @@ import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 
+@NullMarked
 public class DecompileMlogAction extends ActionHandler {
 
     @Override

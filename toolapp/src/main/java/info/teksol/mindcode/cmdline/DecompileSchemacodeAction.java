@@ -10,6 +10,7 @@ import info.teksol.schemacode.schematics.Schematic;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.*;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+@NullMarked
 public class DecompileSchemacodeAction extends ActionHandler {
     private final List<BiConsumer<Decompiler, Namespace>> optionSetters = new ArrayList<>();
 

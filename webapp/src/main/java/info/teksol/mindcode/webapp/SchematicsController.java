@@ -79,7 +79,7 @@ public class SchematicsController {
         final long start = System.nanoTime();
         final CompilerOutput<String> result = SchemacodeCompiler.compileAndEncode(
                 InputFiles.fromSource(sourceCode),
-                new CompilerProfile(true, level));
+                CompilerProfile.forOptimizations(true, level));
         final long end = System.nanoTime();
         logger.info("performance built_in={}ms", TimeUnit.NANOSECONDS.toMillis(end - start));
 

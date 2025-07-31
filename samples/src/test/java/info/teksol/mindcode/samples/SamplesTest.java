@@ -48,7 +48,7 @@ class SamplesTest {
 
     private void compileMindcode(Sample sample) {
         InputFiles inputFiles = InputFiles.fromSource(sample.source());
-        CompilerProfile profile = new CompilerProfile(true, OptimizationLevel.BASIC)
+        CompilerProfile profile = CompilerProfile.forOptimizations(true, OptimizationLevel.BASIC)
                 .setSyntacticMode(sample.relaxed() ? SyntacticMode.RELAXED : SyntacticMode.STRICT);
 
         MindcodeCompiler compiler = new MindcodeCompiler(s -> {}, profile, inputFiles);

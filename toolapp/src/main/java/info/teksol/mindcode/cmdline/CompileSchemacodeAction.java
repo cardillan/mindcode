@@ -15,6 +15,7 @@ import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -23,6 +24,7 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 public class CompileSchemacodeAction extends ActionHandler {
 
     @Override
@@ -38,7 +40,7 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .help("encode the created schematic into text representation and paste into clipboard")
                 .action(Arguments.storeTrue());
 
-        ArgumentGroup files = subparser.addArgumentGroup("input/output files");
+        ArgumentGroup files = subparser.addArgumentGroup("Input/output files");
 
         files.addArgument("input")
                 .help("Schematic definition file to be compiled into a binary msch file.")
@@ -57,7 +59,7 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .type(Arguments.fileType().verifyCanCreate())
                 .setDefault(new File("-"));
 
-        addCompilerOptions(subparser, options, OptionCategory.INPUT_OUTPUT);
+        addCompilerOptions(files, options, OptionCategory.INPUT_OUTPUT);
 
         addAllCompilerOptions(subparser, options,
                 OptionCategory.SCHEMATICS,

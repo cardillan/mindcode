@@ -12,13 +12,12 @@ class CompilerProfileTest {
 
     @Test
     void testEncodeDecode() {
-        String encoded = new CompilerProfile(false)
-                .setAllOptimizationLevels(OptimizationLevel.BASIC)
+        String encoded = CompilerProfile.forOptimizations(false, OptimizationLevel.BASIC)
                 .setGoal(GenerationGoal.SPEED)
                 .setOptimizationLevel(Optimization.CASE_EXPRESSION_OPTIMIZATION, OptimizationLevel.EXPERIMENTAL)
                 .encode();
 
-        CompilerProfile profile = new CompilerProfile(false).decode(encoded);
+        CompilerProfile profile = CompilerProfile.noOptimizations(false).decode(encoded);
 
         assertEquals(GenerationGoal.SPEED, profile.getGoal());
         for (Optimization optimization : Optimization.LIST) {

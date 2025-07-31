@@ -3,12 +3,14 @@ package info.teksol.mindcode.cmdline;
 import info.teksol.mc.messages.MessageLogger;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
+import org.jspecify.annotations.NullMarked;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
+@NullMarked
 public class MlogWatcherClient extends WebSocketClient {
     boolean errorReported;
     private final int port;

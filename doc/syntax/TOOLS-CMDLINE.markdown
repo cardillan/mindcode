@@ -95,9 +95,9 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}] [--symbolic-labels {true,false}]
                 [--mlog-indent {0..8}] [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
                 [--target-guard {true,false}] [--boundary-checks {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush [{true,false}]] [-i {1..100000}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-i {1..100000}]
                 [-g {size,speed,neutral}] [-e {1..1000}] [--unsafe-case-optimization {true,false}]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}] [--optimization LEVEL]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
@@ -132,7 +132,7 @@ named arguments:
   --watcher-timeout {0..3600000}
                          timeout in milliseconds when trying to establish a connection to Mlog Watcher
 
-input/output files:
+Input/output files:
   input                  Mindcode file to be compiled into an mlog file; uses stdin when not specified
   --excerpt [EXCERPT]    Allows to specify a portion  of  the  input  file  for  processing, parts outside the specified
                          excerpt are ignored. The excerpt needs  to be specified as 'line:column-line:column' (':column'
@@ -142,19 +142,17 @@ input/output files:
                          specified, or stdout when input is stdin. Use "-" to force stdout output.
   -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
                          specified.
+  --file-references {path,uri,windows-uri}
+                         specifies the format in which a reference to a  location  in a source file is output on console
+                         and into the log
   -a, --append FILE [FILE ...]
                          Additional Mindcode source file to  be  compiled  along  with  the  input file. Such additional
                          files may contain common functions. More  than  one  file  may  be  added this way. The excerpt
                          argument isn't applied to additional files.
 
-input/output options:
-  --file-references {path,uri,windows-uri}
-                         specifies the format in which a reference to a  location  in a source file is output on console
-                         and into the log
-
-environment options:
+Environment options:
   Options to specify the target environment for the  code  being  compiled. This includes the Mindustry version, as well
-  as some specific processor features that may or may not be used.
+  as prescribing which specific processor features may or may not be used.
 
   -t, --target {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
@@ -168,8 +166,8 @@ environment options:
                          when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
                          may produce code depending on this behavior
 
-mlog formatting options:
-  These options affect the way the mlog code is generated and formatted.
+Mlog formatting options:
+  Options determining how the mlog code is generated and formatted.
 
   --symbolic-labels {true,false}
                          generate symbolic labels for jump instructions where possible
@@ -180,8 +178,8 @@ mlog formatting options:
   --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
                          end of the final code
 
-compiler options:
-  Specifies options that affect the way the source code is compiled.
+Compiler options:
+  Options affecting the way the source code is compiled.
 
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
@@ -195,12 +193,13 @@ compiler options:
                          controls remarks propagation  to  the  compiled  code:  none  (remarks  are  removed), comments
                          (included as mlog comments), passive  (included  as  'print'  but  not not executed), or active
                          (included as 'print' and printed)
-  --auto-printflush [{true,false}]
+  --auto-printflush {true,false}
                          automatically add a 'printflush message1'  instruction  at  the  end  of  the program if one is
                          missing
 
-optimization options:
-  Options to affecting optimization of the compiled code, or activating/deactivating specific optimization actions.
+Optimization options:
+  Options guiding the overall  optimization  of  the  compiled  code,  or  activating/deactivating specific optimization
+  actions.
 
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
@@ -218,11 +217,11 @@ optimization options:
   --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
 
-optimization levels:
-  Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
+Optimization levels:
+  Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not
   explicitly set. Available optimization levels are {none,basic,advanced, experimental}.
 
-  --optimization LEVEL   sets global optimization level for all optimizers
+  -O {0..4}              sets global optimization level for all optimizers
   --temp-variables-elimination LEVEL
                          sets the optimization level of eliminating  temporary  variables created to extract values from
                          instructions
@@ -273,7 +272,7 @@ optimization levels:
                          sets the optimization level of optimizing variable storage on stack
   --print-merging LEVEL  sets the optimization level of merging consecutive print statements outputting text literals
 
-debugging options:
+Debugging options:
   Options to activate debugging features or additional output from the compiler.
 
   --sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]
@@ -291,10 +290,10 @@ debugging options:
                          (instruction numbers are included in the output)
   -s, --stacktrace       outputs a stack trace onto stderr when an unhandled exception occurs
 
-run options:
-  Options to specify if and how to  run  the  compiled  code  on  an  emulated processor. The emulated processor is much
+Run options:
+  Options to specify whether and how to run the compiled  code  on an emulated processor. The emulated processor is much
   faster than Mindustry processors, but can't run instructions  which  obtain information from the Mindustry World. Sole
-  exceptions are memory cells (cell1 to cell9) and memory banks (bank1 to bank9), which can be read and written.
+  exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
 
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}
@@ -370,9 +369,9 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,u
                 [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}] [--symbolic-labels {true,false}]
                 [--mlog-indent {0..8}] [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
                 [--target-guard {true,false}] [--boundary-checks {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush [{true,false}]] [-i {1..100000}]
+                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-i {1..100000}]
                 [-g {size,speed,neutral}] [-e {1..1000}] [--unsafe-case-optimization {true,false}]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}] [--optimization LEVEL]
+                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
@@ -401,24 +400,22 @@ named arguments:
   -h, --help             show this help message and exit
   -c, --clipboard        encode the created schematic into text representation and paste into clipboard
 
-input/output files:
+Input/output files:
   input                  Schematic definition file to be compiled into a binary msch file.
   -o, --output [OUTPUT]  Output file to receive the resulting binary Mindustry schematic file (.msch).
   -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
-
-input/output options:
   --file-references {path,uri,windows-uri}
                          specifies the format in which a reference to a  location  in a source file is output on console
                          and into the log
 
-schematic creation:
+Schematic creation:
   -a, --add-tag [TAG [TAG ...]]
                          defines additional tag(s) to add  to  the  schematic,  plain  text  and symbolic icon names are
                          supported
 
-environment options:
+Environment options:
   Options to specify the target environment for the  code  being  compiled. This includes the Mindustry version, as well
-  as some specific processor features that may or may not be used.
+  as prescribing which specific processor features may or may not be used.
 
   -t, --target {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
@@ -432,8 +429,8 @@ environment options:
                          when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
                          may produce code depending on this behavior
 
-mlog formatting options:
-  These options affect the way the mlog code is generated and formatted.
+Mlog formatting options:
+  Options determining how the mlog code is generated and formatted.
 
   --symbolic-labels {true,false}
                          generate symbolic labels for jump instructions where possible
@@ -444,8 +441,8 @@ mlog formatting options:
   --no-signature         prevents appending a signature 'Compiled  by  Mindcode  - github.com/cardillan/mindcode' at the
                          end of the final code
 
-compiler options:
-  Specifies options that affect the way the source code is compiled.
+Compiler options:
+  Options affecting the way the source code is compiled.
 
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
@@ -459,12 +456,13 @@ compiler options:
                          controls remarks propagation  to  the  compiled  code:  none  (remarks  are  removed), comments
                          (included as mlog comments), passive  (included  as  'print'  but  not not executed), or active
                          (included as 'print' and printed)
-  --auto-printflush [{true,false}]
+  --auto-printflush {true,false}
                          automatically add a 'printflush message1'  instruction  at  the  end  of  the program if one is
                          missing
 
-optimization options:
-  Options to affecting optimization of the compiled code, or activating/deactivating specific optimization actions.
+Optimization options:
+  Options guiding the overall  optimization  of  the  compiled  code,  or  activating/deactivating specific optimization
+  actions.
 
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
@@ -482,11 +480,11 @@ optimization options:
   --mlog-block-optimization {true,false}
                          allows (limited) optimization of code inside mlog blocks
 
-optimization levels:
-  Options to specify global  and  individual  optimization  levels.  Individual  optimizers  use  global  level when not
+Optimization levels:
+  Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not
   explicitly set. Available optimization levels are {none,basic,advanced, experimental}.
 
-  --optimization LEVEL   sets global optimization level for all optimizers
+  -O {0..4}              sets global optimization level for all optimizers
   --temp-variables-elimination LEVEL
                          sets the optimization level of eliminating  temporary  variables created to extract values from
                          instructions
@@ -537,7 +535,7 @@ optimization levels:
                          sets the optimization level of optimizing variable storage on stack
   --print-merging LEVEL  sets the optimization level of merging consecutive print statements outputting text literals
 
-debugging options:
+Debugging options:
   Options to activate debugging features or additional output from the compiler.
 
   --sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]
@@ -555,10 +553,10 @@ debugging options:
                          (instruction numbers are included in the output)
   -s, --stacktrace       outputs a stack trace onto stderr when an unhandled exception occurs
 
-run options:
-  Options to specify if and how to  run  the  compiled  code  on  an  emulated processor. The emulated processor is much
+Run options:
+  Options to specify whether and how to run the compiled  code  on an emulated processor. The emulated processor is much
   faster than Mindustry processors, but can't run instructions  which  obtain information from the Mindustry World. Sole
-  exceptions are memory cells (cell1 to cell9) and memory banks (bank1 to bank9), which can be read and written.
+  exceptions are memory cells ('cell1' to 'cell9') and memory banks ('bank1' to 'bank9'), which can be read and written.
 
   --run [{true,false}]   run the compiled code on an emulated processor
   --run-steps {0..1000000000}

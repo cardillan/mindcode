@@ -13,6 +13,8 @@ import info.teksol.mc.profile.options.OptionMultiplicity;
 import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.impl.type.FileArgumentType;
 import net.sourceforge.argparse4j.inf.*;
+import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
@@ -24,11 +26,12 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
+@NullMarked
 abstract class ActionHandler {
+    private static final Object NOTHING = new Object();
     private final List<BiConsumer<CompilerProfile, Namespace>> optionSetters = new ArrayList<>();
 
     abstract Subparser appendSubparser(Subparsers subparsers, FileArgumentType inputFileType, CompilerProfile defaults);
@@ -52,15 +55,11 @@ abstract class ActionHandler {
         Argument argument = container.addArgument(option.getNameOrFlag())
                 .dest(option.optionName)
                 .help(option.description)
-                .choices(new OptionChoice<>(option));
+                .choices(new OptionChoice<>(option))
+                .setDefault(NOTHING);
 
-        boolean optimizationLevel = option.getValueType() == OptimizationLevel.class;
-
-        if (optimizationLevel) {
-            // Default for optimization levels is null
+        if (option.getValueType() == OptimizationLevel.class) {
             argument.metavar("LEVEL");
-        } else {
-            argument.setDefault(option.getDefaultValue());
         }
 
         if (option instanceof BooleanCompilerOptionValue booleanOption) {
@@ -71,29 +70,41 @@ abstract class ActionHandler {
             argument.type(option.getValueType());
         }
 
+        if (option.multiplicity == OptionMultiplicity.ZERO) {
+            argument.setConst(option.getConstValue()).action(Arguments.storeConst());
+        } else if (option.multiplicity == OptionMultiplicity.ZERO_OR_ONCE) {
+            argument.setConst(option.getConstValue());
+        }
+
         if (!option.multiplicity.nargs.isEmpty()) {
             argument.nargs(option.multiplicity.nargs);
-        } else if (option.multiplicity == OptionMultiplicity.ZERO) {
-            argument.setConst(option.getConstValue()).action(Arguments.storeConst());
         }
 
         if (option.multiplicity.matchesMultiple()) {
-            optionSetters.add((profile, arguments) -> profile.getOption(option.option).setValues(arguments.getList(option.optionName)));
-        } else if (option.getValueType() == OptimizationLevel.class) {
             optionSetters.add((profile, arguments) -> {
                 Object value = arguments.get(option.optionName);
-                if (value != null) {
-                    profile.getOption(option.option).setValue(value);
+                if (value instanceof List<?>) {
+                    profile.getOption(option.option).setValues(arguments.getList(option.optionName));
                 }
             });
         } else {
             optionSetters.add((profile, arguments) -> {
-                Object value = Objects.requireNonNullElse(arguments.get(option.optionName), option.getConstValue());
-                profile.getOption(option.option).setValue(value);
+                Object value = arguments.get(option.optionName);
+                if (value != NOTHING) {
+                    profile.getOption(option.option).setValue(value);
+                }
             });
         }
 
         return argument;
+    }
+
+    void addCompilerOptions(ArgumentContainer container, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category) {
+        for (CompilerOptionValue<?> option : options.values()) {
+            if (option.getAvailability().isCommandline() && option.getCategory() == category) {
+                createArgument(container, option);
+            }
+        }
     }
 
     void addCompilerOptions(Subparser subparser, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory category) {
@@ -103,11 +114,7 @@ abstract class ActionHandler {
             container.description(description);
         }
 
-        for (CompilerOptionValue<?> option : options.values()) {
-            if (option.getAvailability().isCommandline() && option.getCategory() == category) {
-                createArgument(container, option);
-            }
-        }
+        addCompilerOptions(container, options, category);
     }
 
     void addAllCompilerOptions(Subparser subparser, Map<Enum<?>, CompilerOptionValue<?>> options, OptionCategory... categories) {
@@ -154,7 +161,7 @@ abstract class ActionHandler {
         inputFiles.registerFile(path, source);
     }
 
-    static void readFile(InputFiles inputFiles, File file, ExcerptSpecification excerpt) {
+    static void readFile(InputFiles inputFiles, File file, @Nullable ExcerptSpecification excerpt) {
         String source = readInput(file);
         Path path = isStdInOut(file) ? Path.of("") : file.toPath();
         inputFiles.registerFile(path, excerpt == null ? source : excerpt.apply(source));

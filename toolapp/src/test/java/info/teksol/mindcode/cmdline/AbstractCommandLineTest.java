@@ -9,6 +9,7 @@ import net.sourceforge.argparse4j.impl.Arguments;
 import net.sourceforge.argparse4j.inf.ArgumentParser;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@NullMarked
 public abstract class AbstractCommandLineTest {
     protected final Action action;
 
@@ -312,13 +314,19 @@ public abstract class AbstractCommandLineTest {
         @Nested
         class SymbolicLabelsArgumentTest {
             @Test
-            public void longArgumentShort() throws ArgumentParserException {
+            public void longArgument() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--symbolic-labels");
+                assertTrue(profile.isSymbolicLabels());
+            }
+
+            @Test
+            public void longArgumentTrue() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("--symbolic-labels true");
                 assertTrue(profile.isSymbolicLabels());
             }
 
             @Test
-            public void longArgumentLong() throws ArgumentParserException {
+            public void longArgumentFalse() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("--symbolic-labels false");
                 assertFalse(profile.isSymbolicLabels());
             }
@@ -447,26 +455,26 @@ public abstract class AbstractCommandLineTest {
         @Nested
         class OptimizationLevelsArgumentTest {
             @Test
-            public void longArgumentNone() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--optimization none");
+            public void shortArgumentNone() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("-O0");
                 assertEquals(OptimizationLevel.NONE, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
 
             @Test
-            public void longArgumentBasic() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--optimization basic");
+            public void shortArgumentBasic() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("-O1");
                 assertEquals(OptimizationLevel.BASIC, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
 
             @Test
-            public void longArgumentAdvanced() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--optimization advanced");
+            public void shortArgumentAdvanced() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("-O2");
                 assertEquals(OptimizationLevel.ADVANCED, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
 
             @Test
-            public void longArgumentExperimental() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--optimization experimental");
+            public void shortArgumentExperimental() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("-03");
                 assertEquals(OptimizationLevel.EXPERIMENTAL, profile.getOptimizationLevel(Optimization.JUMP_OPTIMIZATION));
             }
 

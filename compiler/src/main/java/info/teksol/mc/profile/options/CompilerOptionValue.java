@@ -130,11 +130,6 @@ public abstract class CompilerOptionValue<T> {
 
     public abstract @Nullable T convert(String value);
 
-    public void activate() {
-        values.clear();
-        values.addAll(constValues);
-    }
-
     public boolean accepts(T value) {
         return true;
     }
@@ -159,7 +154,7 @@ public abstract class CompilerOptionValue<T> {
         return List.copyOf(values);
     }
 
-    public void setValues(@Nullable List<T> values) {
+    public void setValues(List<T> values) {
         List<T> processed = listProcessor.apply(values);
         if (processed.stream().anyMatch(value -> !valueType.isInstance(value))) {
             throw new IllegalArgumentException("Value is not of type " + valueType.getName());

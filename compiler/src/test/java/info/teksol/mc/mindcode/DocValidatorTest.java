@@ -4,7 +4,6 @@ import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ListMessageLogger;
 import info.teksol.mc.messages.MindcodeMessage;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.FileReferences;
 import info.teksol.mc.profile.Remarks;
@@ -33,7 +32,7 @@ public class DocValidatorTest {
     private static final String SYNTAX_REL_PATH = ".." + File.separatorChar + "doc" + File.separatorChar + "syntax" + File.separatorChar;
 
     private CompilerProfile createCompilerProfile() {
-        return new CompilerProfile(false, OptimizationLevel.EXPERIMENTAL)
+        return CompilerProfile.fullOptimizations(false)
                 .setRemarks(Remarks.COMMENTS)
                 .setAutoPrintflush(false)
                 .setSignature(false)

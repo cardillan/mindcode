@@ -14,6 +14,7 @@ import net.sourceforge.argparse4j.inf.ArgumentGroup;
 import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
+import org.jspecify.annotations.NullMarked;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -21,6 +22,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 
+@NullMarked
 public class CompileMindcodeAction extends ActionHandler {
 
     @Override
@@ -52,7 +54,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .type(Integer.class)
                 .setDefault(500);
 
-        ArgumentGroup files = subparser.addArgumentGroup("input/output files");
+        ArgumentGroup files = subparser.addArgumentGroup("Input/output files");
 
         files.addArgument("input")
                 .help("Mindcode file to be compiled into an mlog file; uses stdin when not specified")
@@ -80,7 +82,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("?")
                 .setDefault(new File("-"));
 
-        addCompilerOptions(subparser, options, OptionCategory.INPUT_OUTPUT);
+        addCompilerOptions(files, options, OptionCategory.INPUT_OUTPUT);
 
         files.addArgument("-a", "--append")
                 .help("Additional Mindcode source file to be compiled along with the input file. Such additional files may " +

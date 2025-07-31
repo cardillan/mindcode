@@ -5,6 +5,7 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mindcode.cmdline.Main.Action;
 import net.sourceforge.argparse4j.inf.ArgumentParserException;
 import net.sourceforge.argparse4j.inf.Namespace;
+import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -15,6 +16,7 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@NullMarked
 public class CompileMindcodeActionTest extends AbstractCommandLineTest {
 
     public CompileMindcodeActionTest() {
@@ -170,6 +172,18 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
             public void longArgumentPresent() throws ArgumentParserException {
                 CompilerProfile profile = parseToProfile("--run");
                 assertTrue(profile.isRun());
+            }
+
+            @Test
+            public void longArgumentTrue() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--run true");
+                assertTrue(profile.isRun());
+            }
+
+            @Test
+            public void longArgumentFalse() throws ArgumentParserException {
+                CompilerProfile profile = parseToProfile("--run false");
+                assertFalse(profile.isRun());
             }
         }
 

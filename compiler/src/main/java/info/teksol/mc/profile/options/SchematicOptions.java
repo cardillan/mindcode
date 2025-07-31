@@ -1,5 +1,8 @@
 package info.teksol.mc.profile.options;
 
-public class SchematicOptions {
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
+public enum SchematicOptions {
+    ADD_TAG,
 }

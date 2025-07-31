@@ -1,7 +1,9 @@
 package info.teksol.mindcode.cmdline;
 
 import org.intellij.lang.annotations.PrintFormat;
+import org.jspecify.annotations.NullMarked;
 
+@NullMarked
 class ProcessingException extends RuntimeException {
 
     public ProcessingException(String message) {
