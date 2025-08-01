@@ -92,20 +92,20 @@ Actions:
 usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
                 [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [--builtin-evaluation {none,compatible,full}]
-                [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}] [--symbolic-labels {true,false}]
-                [--mlog-indent {0..8}] [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
-                [--target-guard {true,false}] [--boundary-checks {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-i {1..100000}]
-                [-g {size,speed,neutral}] [-e {1..1000}] [--unsafe-case-optimization {true,false}]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}] [-O {0..4}]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}]
+                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
+                [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
+                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--mlog-block-optimization [{true,false}]] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]]
                 [--run-steps {0..1000000000}] [--output-profiling [{true,false}]] [--trace-execution {true,false}]
@@ -169,7 +169,7 @@ Environment options:
 Mlog formatting options:
   Options determining how the mlog code is generated and formatted.
 
-  --symbolic-labels {true,false}
+  --symbolic-labels [{true,false}]
                          generate symbolic labels for jump instructions where possible
   --mlog-indent {0..8}   the amount of indenting applied to logical blocks in the compiled mlog code
   --function-prefix {short,long}
@@ -183,7 +183,7 @@ Compiler options:
 
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
-  --target-guard {true,false}
+  --target-guard [{true,false}]
                          generates guard code at  the  beginning  of  the  program  ensuring  the  processor runs in the
                          Mindustry version compatible with the 'target' and 'builtin-evaluation' options
   --boundary-checks {none,assert,minimal,simple,described}
@@ -208,13 +208,13 @@ Optimization options:
                          preference
   -e, --passes {1..1000}
                          sets the number of optimization passes to perform
-  --unsafe-case-optimization {true,false}
+  --unsafe-case-optimization [{true,false}]
                          omits range checking of case expressions without an else branch during optimization
   --case-optimization-strength {0..6}
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered, potentially producing a more efficient  code, at the cost of longer compilation
                          time
-  --mlog-block-optimization {true,false}
+  --mlog-block-optimization [{true,false}]
                          allows (limited) optimization of code inside mlog blocks
 
 Optimization levels:
@@ -366,20 +366,20 @@ named arguments:
 ```
 usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [--builtin-evaluation {none,compatible,full}]
-                [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}] [--symbolic-labels {true,false}]
-                [--mlog-indent {0..8}] [--function-prefix {short,long}] [--no-signature] [-y {strict,mixed,relaxed}]
-                [--target-guard {true,false}] [--boundary-checks {none,assert,minimal,simple,described}]
-                [-r {none,comments,passive,active}] [--auto-printflush {true,false}] [-i {1..100000}]
-                [-g {size,speed,neutral}] [-e {1..1000}] [--unsafe-case-optimization {true,false}]
-                [--case-optimization-strength {0..6}] [--mlog-block-optimization {true,false}] [-O {0..4}]
-                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
-                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
-                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
-                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
-                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
-                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
-                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
-                [--print-merging LEVEL]
+                [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}]
+                [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
+                [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
+                [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
+                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
+                [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
+                [--mlog-block-optimization [{true,false}]] [-O {0..4}] [--temp-variables-elimination LEVEL]
+                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
+                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
+                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
+                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
+                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
+                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
+                [--stack-optimization LEVEL] [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]]
                 [--run-steps {0..1000000000}] [--output-profiling [{true,false}]] [--trace-execution {true,false}]
@@ -432,7 +432,7 @@ Environment options:
 Mlog formatting options:
   Options determining how the mlog code is generated and formatted.
 
-  --symbolic-labels {true,false}
+  --symbolic-labels [{true,false}]
                          generate symbolic labels for jump instructions where possible
   --mlog-indent {0..8}   the amount of indenting applied to logical blocks in the compiled mlog code
   --function-prefix {short,long}
@@ -446,7 +446,7 @@ Compiler options:
 
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
-  --target-guard {true,false}
+  --target-guard [{true,false}]
                          generates guard code at  the  beginning  of  the  program  ensuring  the  processor runs in the
                          Mindustry version compatible with the 'target' and 'builtin-evaluation' options
   --boundary-checks {none,assert,minimal,simple,described}
@@ -471,13 +471,13 @@ Optimization options:
                          preference
   -e, --passes {1..1000}
                          sets the number of optimization passes to perform
-  --unsafe-case-optimization {true,false}
+  --unsafe-case-optimization [{true,false}]
                          omits range checking of case expressions without an else branch during optimization
   --case-optimization-strength {0..6}
                          sets the strength of case switching optimization:  higher number means more case configurations
                          are considered, potentially producing a more efficient  code, at the cost of longer compilation
                          time
-  --mlog-block-optimization {true,false}
+  --mlog-block-optimization [{true,false}]
                          allows (limited) optimization of code inside mlog blocks
 
 Optimization levels:

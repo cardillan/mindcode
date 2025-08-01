@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.8.0
+
+### Miscellaneous
+
+* Separated the mimex data into a [standalone repository](https://github.com/cardillan/mimex-data), which is now included as a git submodule at `compiler/src/main/resources/mimex`.
+
 ## 3.8.0-beta.4 - 2025-07-28
 
 **Note:** this is a beta release. It's been released primarily to support the newest Mindustry Logic instructions (`select`), and as a preview of the newest optimization features (namely, text-based jump tables).

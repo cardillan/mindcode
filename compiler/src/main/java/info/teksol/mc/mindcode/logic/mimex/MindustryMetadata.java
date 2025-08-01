@@ -20,6 +20,8 @@ import java.util.stream.Stream;
 
 @NullMarked
 public class MindustryMetadata {
+    public static final String MIMEX_DATA = "/mimex/data/";
+
     private final ProcessorVersion processorVersion;
 
     private MindustryMetadata(ProcessorVersion processorVersion) {
@@ -101,10 +103,10 @@ public class MindustryMetadata {
 
     Set<String> getStableBuiltins() {
         return cacheInstance(stableBuiltins, () -> {
-            try (InputStream input = Objects.requireNonNull(BlockTypeReader.class.getResourceAsStream("/mimex/stable-builtins.txt"))) {
+            try (InputStream input = Objects.requireNonNull(BlockTypeReader.class.getResourceAsStream(MIMEX_DATA + "stable-builtins.txt"))) {
                 return new BufferedReader(new InputStreamReader(input)).lines().collect(Collectors.toCollection(HashSet::new));
             } catch (IOException e) {
-                throw new RuntimeException("Cannot read resource /mimex/stable-builtins.txt", e);
+                throw new RuntimeException("Cannot read resource " + MIMEX_DATA + " stable-builtins.txt", e);
             }
         });
     }
@@ -483,7 +485,7 @@ public class MindustryMetadata {
         protected abstract void parseHeader();
 
         protected AbstractReader(String resource) {
-            this.resourceName = "/mimex/" + processorVersion.mimexVersion + "/" + resource;
+            this.resourceName = MIMEX_DATA + processorVersion.mimexVersion + "/" + resource;
 
             try (InputStream input = MindustryMetadata.class.getResourceAsStream(resourceName)) {
                 if (input == null) {

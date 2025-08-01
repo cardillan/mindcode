@@ -1,0 +1,3 @@
+[submodule "compiler/src/main/resources/mimex"]
+	path = compiler/src/main/resources/mimex
+	url = git@github.com:cardillan/mimex-data.git

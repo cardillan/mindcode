@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 
 @NullMarked
 class MindustryMetadataTest {
-    public static final String MIMEX_BASE_DIRECTORY = "src/main/resources/mimex/";
+    public static final String MIMEX_BASE_DIRECTORY = "src/main/resources" + MindustryMetadata.MIMEX_DATA;
 
     @Test
     void createStableIdList() {
