@@ -281,13 +281,13 @@ public class Variables extends AbstractMessageEmitter {
                         LogicVariable.global(identifier, storage.getName(),
                                 modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
                                 modifiers.containsKey(Modifier.NOINIT),
-                                modifiers.containsKey(Modifier.REMOTE)));
+                                modifiers.containsKey(Modifier.REMOTE) || modifiers.containsKey(Modifier.MLOG)));
             } else  {
                 return registerGlobalVariable(identifier,
                         LogicVariable.global(identifier,nameCreator.global(identifier.getName()),
                                 modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
                                 modifiers.containsKey(Modifier.NOINIT),
-                                modifiers.containsKey(Modifier.REMOTE)));
+                                modifiers.containsKey(Modifier.REMOTE) || modifiers.containsKey(Modifier.MLOG)));
             }
         }
     }
@@ -341,9 +341,9 @@ public class Variables extends AbstractMessageEmitter {
     ///
     /// @param identifier variable identifier
     /// @return ValueStore instance containing the variable
-    public @Nullable ValueStore findVariable(String name) {
+    public @Nullable ValueStore findVariable(String name, boolean allowLocal) {
         // Look for local variables first
-        if (functionContext.variables().containsKey(name)) {
+        if (allowLocal && functionContext.variables().containsKey(name)) {
             return Objects.requireNonNull(functionContext.variables().get(name));
         } else if (globalVariables.containsKey(name)) {
             return Objects.requireNonNull(globalVariables.get(name));

@@ -333,7 +333,7 @@ a[1 ... 10];            // All but the first element of an internal array
 Regular variables directly correspond to Mindustry Logic variables. They are the most basic all-purpose variables. Regular variables are declared using this syntax:
 
 ```
-[noinit] [volatile] [mlog "name"] var <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
+[noinit] [volatile] [mlog(name)] var <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
 ```
 
 When an initial value is provided, it is assigned to the variable at the moment of the declaration. Any expression can be used as the initial value, including function calls.
@@ -343,8 +343,10 @@ When declaring global variables, these additional modifiers can be used:
 * `noinit`: this modifier suppresses the "uninitialized variable" warning for the declared variable. Uninitialized global variables retain the last value assigned to them in the last iteration of the program. This modifier cannot be used if the variable is assigned an initial value.
 * `volatile`: the compiler assumes that volatile variables can be changed externally (for example, by other processors, or via the `sync` instruction) and handles them correspondingly.
 * `mlog`: by using the `mlog` modifier, it is possible to specify the mlog name of the variable. This is mainly useful if you want to create an mlog variable with a fixed name to be accessed by other processors.
-  * The `mlog` modifier must be used in global scope only, variables created this way are therefore always global. 
-  * When using the `mlog` modifier, only one variable can be specified per declaration (as multiple variables would share the same mlog name otherwise). Do not use the `mlog` modifier to create different variables with matching mlog name; otherwise the program behavior is undefined.  
+  * The `mlog` modifier must be used in global scope only, variables created this way are therefore always global.
+  * The mlog name must be a constant string expression enclosed in parentheses. 
+  * When using the `mlog` modifier, only one variable can be specified per declaration (as multiple variables would share the same mlog name otherwise). Do not use the `mlog` modifier to create different variables with matching mlog name; otherwise the program behavior is undefined.
+  * Volatile mlog variables are created in the processor even when not used directly in the code, as it is assumed these variables may also be accessed indirectly using just the name.  
 
 Modifiers can be specified in any order.
 

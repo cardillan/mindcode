@@ -34,6 +34,8 @@ public enum ArgumentType {
     GLOBAL_VARIABLE,                // Also array elements
     LOCAL_VARIABLE,
 
+    MLOG_VARIABLE,                  // Created from an mlog expression
+
     // Compiler variables
 
     GLOBAL_PRESERVED,               // A global variable, which must not be eliminated

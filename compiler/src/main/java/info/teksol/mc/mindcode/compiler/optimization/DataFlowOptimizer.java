@@ -1020,7 +1020,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (instruction.getAstContext().matches(AstContextType.MLOG) && !getProfile().isMlogBlockOptimization()) return false;
 
         return switch (variable.getType()) {
-            case PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PARAMETER -> false;
+            case MLOG_VARIABLE, PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PARAMETER -> false;
 
             case LOCAL_VARIABLE, FUNCTION_RETVAL -> {
                 if (variable.isPreserved()) yield false;

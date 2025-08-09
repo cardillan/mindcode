@@ -84,7 +84,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final Map<AstRequire, InputFile> requiredFiles = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
-    private final List<LogicVariable> remoteVariables = new ArrayList<>();
+    private final List<LogicVariable> forcedVariables = new ArrayList<>();
     private final ReturnStack returnStack;
     private final StackTracker stackTracker;
     private @Nullable AstProgram astProgram;
@@ -328,7 +328,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
 
         // Label resolving
-        instructions = resolver.resolveLabels(instructions, remoteVariables);
+        instructions = resolver.resolveLabels(instructions, forcedVariables);
         executableInstructions = instructions.stream().filter(ix -> !(ix instanceof CommentInstruction)).toList();
 
         // Set of all user variables in the program
@@ -579,8 +579,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     @Override
-    public void addRemoteVariable(LogicVariable variable) {
-        remoteVariables.add(variable);
+    public void addForcedVariable(LogicVariable variable) {
+        forcedVariables.add(variable);
     }
 
     public void addDiagnosticData(Object data) {

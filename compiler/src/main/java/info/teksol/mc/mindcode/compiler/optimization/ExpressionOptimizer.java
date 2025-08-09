@@ -50,6 +50,8 @@ class ExpressionOptimizer extends BaseOptimizer {
                     case SelectInstruction ix     -> processSelectInstruction(it, ix);
                     case SensorInstruction ix     -> processSensorInstruction(it, ix);
                     case SetInstruction ix        -> processSetInstruction(it, ix);
+                    case ReadInstruction ix       -> processReadInstruction(it, ix);
+                    case WriteInstruction ix      -> processWriteInstruction(it, ix);
                     case ReadArrInstruction ix    -> processReadArrInstruction(it, ix);
                     case WriteArrInstruction ix   -> processWriteArrInstruction(it, ix);
                     default -> {}
@@ -285,6 +287,18 @@ class ExpressionOptimizer extends BaseOptimizer {
         if (ix.getResult().equals(ix.getValue())) {
             logicIterator.set(createEmpty(ix.getAstContext()));
             logicIterator.next();
+        }
+    }
+
+    private void processReadInstruction(LogicIterator logicIterator, ReadInstruction ix) {
+        if (ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {
+            logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicVariable.mlogVariable(mlogName.getValue())));
+        }
+    }
+
+    private void processWriteInstruction(LogicIterator logicIterator, WriteInstruction ix) {
+        if (ix.getMemory().equals(LogicBuiltIn.THIS) && ix.getIndex() instanceof LogicString mlogName) {
+            logicIterator.set(createSet(ix.getAstContext(),LogicVariable.mlogVariable(mlogName.getValue()), ix.getValue()));
         }
     }
 

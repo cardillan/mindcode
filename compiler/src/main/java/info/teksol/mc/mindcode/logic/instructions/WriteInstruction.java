@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.logic.instructions;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
-import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -31,8 +30,8 @@ public class WriteInstruction extends BaseInstruction {
         return (LogicValue) getArg(0);
     }
 
-    public final LogicVariable getMemory() {
-        return (LogicVariable) getArg(1);
+    public final LogicValue getMemory() {
+        return (LogicValue) getArg(1);
     }
 
     public final LogicValue getIndex() {

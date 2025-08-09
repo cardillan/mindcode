@@ -13,6 +13,10 @@ public record ProcessorStorage(@Nullable LogicVariable processor, @Nullable Stri
         return Objects.requireNonNull(name);
     }
 
+    public boolean hasNameSpecification() {
+        return name != null;
+    }
+
     public LogicVariable getProcessor() {
         return Objects.requireNonNull(processor);
     }

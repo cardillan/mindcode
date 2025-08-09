@@ -400,10 +400,10 @@ Sometimes you might want to use variables in remote processors which weren't dec
 To specify where the remote variable is located and even what name it uses, include a _storage specification_ in the remote variable declaration:
 
 ```
-remote <processor> ["name"] [var] <variable1>;
+remote <processor> [(mlog_name)] [var] <variable1>;
 ```
 
-The _storage specification_ is included after the `remote` keyword. The storage clause consist of the name of the remote processor block (e.g., `processor1`, or a variable), and optionally an mlog name as a string literal. When the mlog name is not specified, it is derived from the name of the variable being declared this way using Mindcode's convention. All variables created this way are stored in the given remote processor.
+The _storage specification_ is included after the `remote` keyword. The storage clause consist of the name of the remote processor block (e.g., `processor1`, or a variable), and optionally an mlog name as a constant string expression, enclosed in parentheses. When the mlog name is not specified, it is derived from the name of the variable being declared this way using Mindcode's convention. All variables created this way are stored in the given remote processor.
 
 Note: the storage specification is very similar to the [storage specification of external variables](SYNTAX-1-VARIABLES.markdown#external-variables).
 
@@ -423,7 +423,7 @@ remote processor1 x, y;
 print(x, y);
 
 /// Remote variable named using the specified name
-remote processor1 "foo" z;       
+remote processor1("foo") z;       
 print(z);
 ```
 

@@ -222,7 +222,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         if (node.getVariables().size() > 1) {
             if (modifiers.containsKey(Modifier.MLOG)) {
                 error(node.getVariables().get(1), ERR.VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG);
-            } else if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage s && s.name() != null) {
+            } else if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage s && s.hasNameSpecification()) {
                 error(node.getVariables().get(1), ERR.VARIABLE_MULTIPLE_SPECIFICATIONS_REMOTE);
             }
         }
@@ -406,11 +406,12 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 array.getElements().get(i).setValue(assembler, initialValues.get(i).getValue(assembler));
             }
 
-            if (modifiers.containsKey(Modifier.REMOTE) && processor == null) {
+            if (modifiers.containsKey(Modifier.REMOTE) && processor == null
+                || modifiers.containsKey(Modifier.MLOG) && modifiers.containsKey(Modifier.VOLATILE)) {
                 array.getElements().stream()
                         .filter(LogicVariable.class::isInstance)
                         .map(LogicVariable.class::cast)
-                        .forEach(context::addRemoteVariable);
+                        .forEach(context::addForcedVariable);
             }
         }
     }
@@ -457,9 +458,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
 
         if (specification.getExpressions().isEmpty()) {
-            if (modifiers.get(Modifier.REMOTE) == EMPTY_PARAMETRIZATION) {
-                // A remote modified was used without processor specification
-                context.addRemoteVariable((LogicVariable) variable);
+            if (modifiers.get(Modifier.REMOTE) == EMPTY_PARAMETRIZATION
+                || modifiers.containsKey(Modifier.MLOG) && modifiers.containsKey(Modifier.VOLATILE)) {
+                // A remote modified was used without processor specification or an mlog name
+                context.addForcedVariable((LogicVariable) variable);
             }
 
             if (!modifiers.containsKey(Modifier.NOINIT)) {
@@ -567,10 +569,30 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     private Object createParametrization(@Nullable AstMindcodeNode node) {
         return switch (node) {
             case ExternalStorage externalStorage -> resolveExternalStorage(externalStorage).createTracker(context);
-            case AstRemoteParameters param -> new ProcessorStorage(resolveProcessor(param), param.getStringName());
-            case AstMlogParameters param -> new ProcessorStorage(null, param.getName().getValue());
+            case AstRemoteParameters param -> new ProcessorStorage(resolveProcessor(param), resolveMlogName(param.getMlog()));
+            case AstMlogParameters param -> new ProcessorStorage(null, resolveMlogName(param.getMlog()));
             case null, default -> EMPTY_PARAMETRIZATION;
         };
+    }
+
+    private @Nullable String resolveMlogName(@Nullable AstExpression mlog) {
+        if (mlog == null) return null;
+
+        ValueStore name = evaluate(mlog);
+
+        if (name instanceof LogicString str) {
+            String value = str.getValue();
+            if (value.matches(".*[\\s;#\"].*")) {
+                error(name, ERR.INVALID_MLOG_NAME);
+            }
+            return value;
+        } else {
+            error(mlog, ERR.CONSTANT_STRING_REQUIRED);
+            return "invalid";
+        }
+    }
+
+    private void validateMlogName(AstExpression mlog, String name) {
     }
 
     private SourceElement modifierElement(AstVariablesDeclaration node, Modifier modifier) {

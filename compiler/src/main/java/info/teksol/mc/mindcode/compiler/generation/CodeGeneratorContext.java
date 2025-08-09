@@ -33,5 +33,5 @@ public interface CodeGeneratorContext extends
     CallGraph callGraph();
     Variables variables();
 
-    void addRemoteVariable(LogicVariable variable);
+    void addForcedVariable(LogicVariable variable);
 }

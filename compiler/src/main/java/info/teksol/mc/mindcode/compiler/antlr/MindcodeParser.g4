@@ -144,9 +144,10 @@ declModifier
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
     | modifier = GUARDED
     | modifier = LINKED
-    | modifier = MLOG name = STRING
+    | modifier = MLOG LPAREN mlog = expression RPAREN
     | modifier = NOINIT
-    | modifier = REMOTE (processor = IDENTIFIER name = STRING?)?
+    | modifier = REMOTE processor = IDENTIFIER?
+    | modifier = REMOTE processor = IDENTIFIER LPAREN mlog = expression RPAREN
     | modifier = VOLATILE
     ;
 

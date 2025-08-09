@@ -7,15 +7,15 @@ import org.jspecify.annotations.NullMarked;
 @NullMarked
 @AstNode(printFlat = true)
 public class AstMlogParameters extends AstFragment {
-    private final AstLiteralString name;
+    private final AstExpression mlog;
 
-    public AstMlogParameters(SourcePosition sourcePosition, AstLiteralString name) {
-        super(sourcePosition, children(name));
-        this.name = name;
+    public AstMlogParameters(SourcePosition sourcePosition, AstExpression mlog) {
+        super(sourcePosition, children(mlog));
+        this.mlog = mlog;
     }
 
-    public AstLiteralString getName() {
-        return name;
+    public AstExpression getMlog() {
+        return mlog;
     }
 
     @Override
@@ -23,11 +23,11 @@ public class AstMlogParameters extends AstFragment {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstMlogParameters that = (AstMlogParameters) o;
-        return name.equals(that.name);
+        return mlog.equals(that.mlog);
     }
 
     @Override
     public int hashCode() {
-        return name.hashCode();
+        return mlog.hashCode();
     }
 }

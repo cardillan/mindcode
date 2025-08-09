@@ -165,7 +165,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public boolean isPreserved() {
-        return preserved || getType() == PRESERVED || getType() == GLOBAL_PRESERVED;
+        return preserved || getType() == PRESERVED || getType() == MLOG_VARIABLE || getType() == GLOBAL_PRESERVED;
     }
 
     @Override
@@ -301,8 +301,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(EMPTY, PRESERVED, ValueMutability.MUTABLE, name, name);
     }
 
-    public static LogicVariable globalPreserved(String name) {
-        return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE, name, name);
+    public static LogicVariable mlogVariable(String name) {
+        return new LogicVariable(EMPTY, MLOG_VARIABLE, name, name, true, true, false);
     }
 
     public static LogicVariable arrayElement(AstIdentifier identifier, int index, String mlog, boolean isVolatile) {

@@ -50,6 +50,7 @@ public class ERR {
     public static final String ASYNC_WRONG_ARGUMENT = "The '%s' function requires a call of a remote function as an argument.";
     public static final String BREAK_CONTINUE_OUTSIDE_LOOP = "'%s' statement outside of a do/while/for loop.";
     public static final String CANNOT_INVOKE_PROPERTIES = "Cannot invoke properties on this expression.";
+    public static final String CONSTANT_STRING_REQUIRED = "Constant string expression required.";
     public static final String CONTINUE_NOT_ALLOWED = "The 'continue' statement not allowed in this context.";
     public static final String DECLARE_BLOCK_NAME_EXPECTED = "A custom block name is expected.";
     public static final String DECLARE_BUILTIN_EXPECTED = "A custom built-in identifier is expected.";
@@ -106,6 +107,7 @@ public class ERR {
     public static final String INTERNAL_ERROR = "An internal error was encountered.";
     public static final String INTERNAL_ERROR_OPTIMIZER_ACTION = "Error applying dynamic optimization by %s. As a workaround, turn off the optimization by issuing '#set %s = none;'";
     public static final String INVALID_KEYWORD_USE = "Invalid use of mlog keyword.";
+    public static final String INVALID_MLOG_NAME = "The specified mlog name is invalid.";
     public static final String LABEL_ADDRESS_MISMATCH = "Error converting direct addresses to symbolic links. Please set 'symbolic-links' to 'false'.";
     public static final String LITERAL_COLOR_REQUIRES_TARGET_7 = "Color literals require language target 7 or higher.";
     public static final String LITERAL_INTEGER_TOO_LARGE = "Literal '%s' exceeds maximum possible value (%s).";

@@ -378,10 +378,9 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             return new AstExternalParameters(pos(ctx), identifier(ctx.memory),
                     visitAstRangeIfNonNull(ctx.astRange()), visitAstExpressionIfNonNull(ctx.index));
         } else if (modifier == Modifier.REMOTE && ctx.processor != null) {
-            return new AstRemoteParameters(pos(ctx), identifier(ctx.processor),
-                    literalStringIfNonNull(ctx.name));
+            return new AstRemoteParameters(pos(ctx), identifier(ctx.processor), visitAstExpressionIfNonNull(ctx.mlog));
         } else if (modifier == Modifier.MLOG) {
-            return new AstMlogParameters(pos(ctx), literalString(ctx.name));
+            return new AstMlogParameters(pos(ctx), visitAstExpression(ctx.mlog));
         } else {
             return null;
         }

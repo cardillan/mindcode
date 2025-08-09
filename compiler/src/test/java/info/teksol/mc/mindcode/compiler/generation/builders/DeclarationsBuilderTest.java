@@ -870,14 +870,16 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesMlogVariables() {
             assertCompilesTo("""
-                            mlog "abc" var x = 10;
-                            mlog "def" y = 2;
-                            noinit mlog "ghi" var z;
-                            volatile mlog "jkl" var w;
+                            mlog("abc") var x = 10;
+                            mlog("def") y = 2;
+                            noinit mlog("ghi") var z;
+                            volatile mlog("jkl") var w;
+                            mlog("mno" + "pqr") var v = 123;
                             print(z, w);
                             """,
                     createInstruction(SET, "abc", "10"),
                     createInstruction(SET, "def", "2"),
+                    createInstruction(SET, "mnopqr", "123"),
                     createInstruction(PRINT, "ghi"),
                     createInstruction(SET, tmp(0), "jkl"),
                     createInstruction(PRINT, tmp(0))
@@ -888,9 +890,9 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesRemoteVariables() {
             assertCompilesTo("""
                             remote processor1 a, x;
-                            remote processor1 "b" b;
+                            remote processor1("b") b;
                             remote processor1 var c, y;
-                            remote processor1 "d" var d;
+                            remote processor1("d") var d;
                             print(a, b, c, d);
                             """,
                     createInstruction(READ, tmp(0), "processor1", q(".a")),
@@ -1019,7 +1021,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Only one variable may be specified within an `mlog` declaration.",
                     """
-                            mlog "a" var a, b;
+                            mlog("a") var a, b;
                             """);
         }
 
@@ -1028,7 +1030,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Only one variable may be specified within a `remote` declaration with an mlog name specification.",
                     """
-                            remote proc "a" var a, b;
+                            remote proc("a") var a, b;
                             """);
         }
     }
@@ -1118,10 +1120,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void compilesMlogVariables() {
             assertCompilesTo("""
                             #set syntax = strict;
-                            mlog "abc" var x = 10;
-                            mlog "def" y = 2;
-                            noinit mlog "ghi" var z;
-                            volatile mlog "jkl" var w;
+                            mlog("abc") var x = 10;
+                            mlog("def") y = 2;
+                            noinit mlog("ghi") var z;
+                            volatile mlog("jkl") var w;
                             begin print(z, w); end;
                             """,
                     createInstruction(SET, "abc", "10"),
@@ -1138,9 +1140,9 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                             #set syntax = strict;
                             linked processor1;
                             remote processor1 a, x;
-                            remote processor1 "b" b;
+                            remote processor1("b") b;
                             remote processor1 var c, y;
-                            remote processor1 "d" var d;
+                            remote processor1("d" + "0") var d;
                             begin print(a, b, c, d); end;
                             """,
                     createInstruction(READ, tmp(0), "processor1", q(".a")),
@@ -1149,7 +1151,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, tmp(1)),
                     createInstruction(READ, tmp(2), "processor1", q(".c")),
                     createInstruction(PRINT, tmp(2)),
-                    createInstruction(READ, tmp(4), "processor1", q("d")),
+                    createInstruction(READ, tmp(4), "processor1", q("d0")),
                     createInstruction(PRINT, tmp(4))
             );
         }

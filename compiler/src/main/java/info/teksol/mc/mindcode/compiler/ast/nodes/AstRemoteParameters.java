@@ -11,24 +11,20 @@ import java.util.Objects;
 @AstNode(printFlat = true)
 public class AstRemoteParameters extends AstFragment {
     private final AstIdentifier processor;
-    private final @Nullable AstLiteralString name;
+    private final @Nullable AstExpression mlog;
 
-    public AstRemoteParameters(SourcePosition sourcePosition, AstIdentifier processor, @Nullable AstLiteralString name) {
-        super(sourcePosition, children(processor, name));
+    public AstRemoteParameters(SourcePosition sourcePosition, AstIdentifier processor, @Nullable AstExpression mlog) {
+        super(sourcePosition, children(processor, mlog));
         this.processor = processor;
-        this.name = name;
+        this.mlog = mlog;
     }
 
     public AstIdentifier getProcessor() {
         return processor;
     }
 
-    public @Nullable AstLiteralString getName() {
-        return name;
-    }
-
-    public @Nullable String getStringName() {
-        return name == null ? null : name.getValue();
+    public @Nullable AstExpression getMlog() {
+        return mlog;
     }
 
     @Override
@@ -36,13 +32,13 @@ public class AstRemoteParameters extends AstFragment {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstRemoteParameters that = (AstRemoteParameters) o;
-        return processor.equals(that.processor) && Objects.equals(name, that.name);
+        return processor.equals(that.processor) && Objects.equals(mlog, that.mlog);
     }
 
     @Override
     public int hashCode() {
         int result = processor.hashCode();
-        result = 31 * result + Objects.hashCode(name);
+        result = 31 * result + Objects.hashCode(mlog);
         return result;
     }
 }
