@@ -266,6 +266,8 @@ public class LogicInstructionLabelResolver {
         if (argument instanceof LogicLabel label) {
             if (!addresses.containsKey(label)) {
                 throw new MindcodeInternalError("Unknown jump label target: '%s' was not previously discovered in program.", label);
+//                System.out.println("Unknown label " + label);
+//                return LogicLabel.absolute(-1);
             }
             return addresses.get(label);
         } else {

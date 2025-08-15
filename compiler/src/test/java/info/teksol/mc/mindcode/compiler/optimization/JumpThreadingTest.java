@@ -173,4 +173,43 @@ class JumpThreadingTest extends AbstractOptimizerTest<JumpThreading> {
                 createInstruction(RETURN, ":foo*retaddr")
         );
     }
+
+    @Test
+    void correctlyRedirectsFunctionCalls() {
+        assertCompilesTo("""
+                        param a = true;
+                        param b = false;
+                        
+                        if a then do
+                            if b then end(); end;
+                            foo();
+                            print("bar");
+                        while true; end;
+                        
+                        noinline void foo()
+                            print("foo");
+                        end;
+                        """,
+                createInstruction(LABEL, "__start__"),
+                createInstruction(SET, "a", "true"),
+                createInstruction(SET, "b", "false"),
+                createInstruction(JUMP, "__start__", "equal", "a", "false"),
+                createInstruction(LABEL, label(3)),
+                createInstruction(JUMP, label(6), "equal", "b", "false"),
+                createInstruction(END),
+                createInstruction(JUMP, label(7), "always"),
+                createInstruction(LABEL, label(6)),
+                createInstruction(LABEL, label(7)),
+                createInstruction(SETADDR, ":foo*retaddr", label(8)),
+                createInstruction(CALL, label(0), "*invalid", ":foo*retval"),
+                createInstruction(LABEL, label(8)),
+                createInstruction(PRINT, q("bar")),
+                createInstruction(JUMP, label(3), "notEqual", "true", "false"),
+                createInstruction(JUMP, "__start__", "always"),
+                createInstruction(END),
+                createInstruction(LABEL, label(0)),
+                createInstruction(PRINT, q("foo")),
+                createInstruction(RETURN, ":foo*retaddr")
+        );
+    }
 }

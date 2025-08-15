@@ -807,10 +807,8 @@ set :i 0
 set :foo:x "Huzzah!"
 set :foo*retaddr 5
 jump 0 greaterThanEq 0 @links
-jump 8 always 0 0
+jump 6 always 0 0
 op add :i :i 1
-jump 8 lessThan :i @links
-end
 print :foo:x
 set @counter :foo*retaddr
 ```

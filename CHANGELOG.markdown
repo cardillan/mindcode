@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.8.0
 
+### Fixed
+
+* Fixed Jump Threading optimization causing internal error ([#283](https://github.com/cardillan/mindcode/issues/283)).
+
 ### Miscellaneous
 
 * Separated the mimex data into a [standalone repository](https://github.com/cardillan/mimex-data), which is now included as a git submodule at `compiler/src/main/resources/mimex`.

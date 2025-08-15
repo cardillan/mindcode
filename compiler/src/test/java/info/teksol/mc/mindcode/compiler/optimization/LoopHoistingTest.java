@@ -283,12 +283,11 @@ class LoopHoistingTest extends AbstractOptimizerTest<LoopHoisting> {
                 createInstruction(OP, "add", tmp(3), ":foo:x", ":foo:y"),
                 createInstruction(PRINT, tmp(3)),
                 createInstruction(OP, "add", ":i", ":i", "1"),
-                createInstruction(JUMP, label(0), "lessThanEq", ":i", "count"),
-                createInstruction(END),
                 createInstruction(LABEL, label(0)),
                 createInstruction(OP, "rand", ":foo:x", "10"),
                 createInstruction(OP, "rand", ":foo:y", "10"),
                 createInstruction(RETURN, ":foo*retaddr")
+
         );
     }
 

@@ -38,8 +38,8 @@ class JumpThreading extends BaseOptimizer {
                 LogicInstruction instruction = it.next();
                 if (instruction instanceof JumpInstruction jump) {
                     // Target of the jump
-                    LogicLabel label = findJumpRedirection(jump);
-                    LogicInstruction target = labeledInstruction(label);
+                    JumpRedirection redirection = findJumpRedirection(jump);
+                    LogicInstruction target = labeledInstruction(redirection.target);
                     boolean replaceAdvanced = jump.isUnconditional() && target != null && canMoveTarget(target);
 
                     if (replaceAdvanced) {
@@ -47,15 +47,19 @@ class JumpThreading extends BaseOptimizer {
                         count++;
                     } else {
                         if (jump.isUnconditional() && setAddress != null) {
-                            replaceInstruction(setAddress, setAddress.withLabel(label));
-                            lastCall.setCallReturn(label);
+                            replaceInstruction(setAddress, setAddress.withLabel(redirection.target));
+                            lastCall.setCallReturn(redirection.target);
                             setAddress = null;
                             callCount++;
                         }
 
-                        if (!label.equals(jump.getTarget())) {
+                        if (!redirection.target.equals(jump.getTarget())) {
                             // Update the target of the original jump
-                            it.set(jump.withTarget(label));
+                            JumpInstruction updated = jump.withTarget(redirection.target);
+                            if (redirection.callReturn != null) {
+                                updated.setCallReturn(redirection.callReturn);
+                            }
+                            it.set(updated);
                             count++;
                         }
                     }
@@ -102,21 +106,21 @@ class JumpThreading extends BaseOptimizer {
     }
 
     // Determines the final target of a given jump
-    private LogicLabel findJumpRedirection(JumpInstruction firstJump) {
-        LogicLabel label = firstJump.getTarget();
+    private JumpRedirection findJumpRedirection(JumpInstruction firstJump) {
+        JumpRedirection target = new JumpRedirection(firstJump.getTarget(), null);
         Set<LogicLabel> labels = new HashSet<>();       // Cycle detection
-        labels.add(label);
+        labels.add(target.target);
         while (true) {
-            LogicLabel redirected = evaluateJumpRedirection(firstJump, label);
-            if (redirected == null || !labels.add(redirected)) {
-                return label;
+            JumpRedirection redirected = evaluateJumpRedirection(firstJump, target.target);
+            if (redirected == null || !labels.add(redirected.target)) {
+                return target;
             }
-            label = redirected;
+            target = redirected;
         }
     }
     
     // Determines the jump redirection (one level only)
-    private @Nullable LogicLabel evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
+    private @Nullable JumpRedirection evaluateJumpRedirection(JumpInstruction firstJump, LogicLabel label) {
         int target = firstInstructionIndex(in -> in instanceof LabelInstruction ix && ix.getLabel().equals(label));
         if (target < 0) {
             throw new MindcodeInternalError("Could not find label " + label);
@@ -128,18 +132,18 @@ class JumpThreading extends BaseOptimizer {
         
         // Redirect compatible jumps
         if (next instanceof JumpInstruction ix && (ix.isUnconditional() || isIdenticalJump(firstJump, ix))) {
-            return ix.getTarget();
+            return new JumpRedirection(ix.getTarget(), null);
         }
 
         // Jump to call can get redirected
         if (experimental() && !getProfile().isSymbolicLabels() && next instanceof CallInstruction call) {
-            return call.getCallAddr();
+            return new JumpRedirection(call.getCallAddr(), call.getMarker());
         }
 
         // Handle end instruction only in advanced mode
         if (next == null || (next instanceof EndInstruction)) {
             createStartLabel();
-            return FIRST_LABEL;
+            return new JumpRedirection(FIRST_LABEL, null);
         }
 
         // Not an unconditional or compatible jump: no redirection
@@ -154,5 +158,8 @@ class JumpThreading extends BaseOptimizer {
         // Compare everything but labels; exclude volatile variables
         return args1.subList(1, args1.size()).equals(args2.subList(1, args2.size()))
                 && args1.stream().noneMatch(LogicArgument::isVolatile);
+    }
+
+    private record JumpRedirection(LogicLabel target, @Nullable LogicLabel callReturn) {
     }
 }
