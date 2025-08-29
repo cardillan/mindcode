@@ -8,7 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed Jump Threading optimization causing internal error ([#283](https://github.com/cardillan/mindcode/issues/283)).
+* Fixed Jump Threading optimization causing an internal error ([#283](https://github.com/cardillan/mindcode/issues/283)).
+
+### Added
+
+* Added support for calling remote functions locally.
 
 ### Miscellaneous
 

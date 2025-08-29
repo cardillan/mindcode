@@ -110,6 +110,7 @@ public enum Implementation {
     REPAIRTOWER,
     REPAIRTURRET,
     ROUTER,
+    RUNEOVERLAY,
     SEABUSH,
     SEAWEED,
     SEPARATOR,

@@ -304,6 +304,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         }
 
         VariableStates variableStates = dataFlowVariableStates.createVariableStates();
+        variableStates.markInitialized(LogicVariable.remoteWaitAddr());
         if (context.isFunction()) {
             MindcodeFunction function = context.function();
             assert function != null;

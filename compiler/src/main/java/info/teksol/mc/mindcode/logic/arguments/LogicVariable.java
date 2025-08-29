@@ -29,6 +29,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     private static final String RETURN_VALUE = "*retval";
     private static final String RETURN_ADDRESS = "*retaddr";
     private static final String FUNCTION_FINISHED = "*finished";
+    private static final String REMOTE_WAIT_ADDRESS = "*waitaddr";
 
     protected final SourcePosition sourcePosition;
     protected final String functionPrefix;
@@ -295,6 +296,10 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return new LogicVariable(EMPTY, GLOBAL_PRESERVED,
                 function.getName(), function.getPrefix(), function.getPrefix() + FUNCTION_FINISHED,
                 mlog,false, false, true, false, true);
+    }
+
+    public static LogicVariable remoteWaitAddr() {
+        return new LogicVariable(EMPTY, ADDRESS, ValueMutability.IMMUTABLE, REMOTE_WAIT_ADDRESS, REMOTE_WAIT_ADDRESS);
     }
 
     public static LogicVariable preserved(String name) {

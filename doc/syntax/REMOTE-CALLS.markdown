@@ -164,7 +164,7 @@ require "library.mnd" remote processor1;
 ```
 
 > [!NOTE]
-> A module containing remote functions can be also imported locally, through plain `require`. In this case, the remote variables are accessible locally, and the remote functions cannot be called.
+> A module containing remote functions can be also imported locally, through plain `require`. In this case, the remote variables are accessible locally.
 
 The required file (in this example stored in `library.mnd` file) must be a module, and the compiled code of this module must be stored in processor `processor1`. The processor can be specified using a linked block name, a parameter, or a global variable. Using variables in the `remote` clause allows [dynamic binding](#dynamic-binding) of remote processors.
 
@@ -314,7 +314,7 @@ p2.foo(10);
 
 This chapter briefly describes how synchronous and asynchronous calls are implemented.
 
-### Local side - synchronous call
+### Local side—synchronous call
 
 * The function parameters are set up in the remote processor.
 * `:functionName*finished` is set to `false` in the remote processor.
@@ -369,6 +369,12 @@ When the interval between remote calls is longer than a single tick, and the dur
 Code in a remote processor accrues execution quota when waiting for a remote call. Code in a main processor accrues execution quota when waiting for the return from a remote call during synchronous calls and when using the `await()` function on asynchronous calls.
 
 Note: the execution quota only increases when `wait` instruction are being executed. If there is a background process defined, no execution quota accrues while it is being run (unless the background process itself contains some `wait` instructions).
+
+## Local calls to remote functions 
+
+Remote function may be also called locally. Doing so incurs a slight penalty to remote calls of the function (one additional instruction per remote call). However, remote functions cannot be called recursively (either directly or indirectly).
+
+Local call of a remote function also sets the function's `:functionName*finished` flag to `true` (this also incurs a penalty of one instruction per local call, compared to calls of local functions). This should be harmless, as local and remote calls to the same function may not occur concurrently. However, if a remote function call was terminated without completion, and the function is later called locally (e.g., from a background process), the flag may be set to `true` even though the remote call never completed. The same is true for the case of overlapping remote calls to the same function, though.   
 
 # Arbitrary remote variable access
 

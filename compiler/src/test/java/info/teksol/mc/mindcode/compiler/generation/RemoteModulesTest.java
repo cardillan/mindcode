@@ -435,6 +435,35 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(WRITE, "10", "processor1", q(".x"))
             );
         }
+
+        @Test
+        void compilesLocalCallToRemoteFunction() {
+            assertCompilesTo("""
+                            module local;
+                            remote def foo() end;
+                            print(foo());
+                            """,
+                    createInstruction(JUMP, label(2), "always"),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(LABEL, label(2)),
+                    createInstruction(SETADDR, ":foo*retaddr", label(3)),
+                    createInstruction(CALL, label(1), "*invalid", ":foo*retval"),
+                    createInstruction(LABEL, label(3)),
+                    createInstruction(PRINT, ":foo*retval"),
+                    createInstruction(SET, "*signature", q("24370e1a1ef2bb23:v1")),
+                    createInstruction(LABEL, label(4)),
+                    createInstruction(WAIT, "1e12"),
+                    createInstruction(JUMP, label(4), "always"),
+                    createInstruction(END),
+                    createInstruction(LABEL, label(0)),
+                    createInstruction(SETADDR, ":foo*retaddr", label(4)),
+                    createInstruction(LABEL, label(1)),
+                    createInstruction(SET, ":foo*retval", "null"),
+                    createInstruction(LABEL, label(5)),
+                    createInstruction(SET, ":foo*finished", "true"),
+                    createInstruction(RETURN, ":foo*retaddr")
+            );
+        }
     }
 
     @Nested
@@ -481,17 +510,6 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     """
                             remote def foo() end;
                             remote def foo(a) end;
-                            """
-            );
-        }
-
-        @Test
-        void refusesLocalCallToRemoteFunction() {
-            assertGeneratesMessage(
-                    "Cannot call remote function 'foo' locally.",
-                    """
-                            remote def foo() end;
-                            print(foo());
                             """
             );
         }

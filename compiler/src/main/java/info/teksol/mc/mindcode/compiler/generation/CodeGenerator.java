@@ -199,7 +199,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         assembler.setContextType(program, AstContextType.JUMPS, AstSubcontextType.REMOTE_INIT);
         LogicLabel jumpTableEndLabel = assembler.nextLabel().withoutStateTransfer();
         assembler.createJumpUnconditional(jumpTableEndLabel);
-        remoteFunctions.stream().map(function -> Objects.requireNonNull(function.getLabel())).forEach(assembler::createJumpUnconditional);
+        remoteFunctions.stream().map(function -> Objects.requireNonNull(function.getRemoteLabel())).forEach(assembler::createJumpUnconditional);
         assembler.createLabel(jumpTableEndLabel);
         assembler.clearContextType(program);
     }
@@ -254,6 +254,9 @@ public class CodeGenerator extends AbstractMessageEmitter {
 
         assembler.setContextType(program, AstContextType.LOOP, AstSubcontextType.BASIC);
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
+        if (globalProfile.isSymbolicLabels()) {
+            assembler.createSet(LogicVariable.remoteWaitAddr(), LogicBuiltIn.COUNTER);
+        }
         remoteWaitLabel = assembler.nextLabel().withoutStateTransfer();
         assembler.createLabel(remoteWaitLabel);
         assembler.setSubcontextType(AstSubcontextType.BODY, 1.0);

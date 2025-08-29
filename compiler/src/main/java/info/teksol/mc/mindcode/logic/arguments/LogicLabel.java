@@ -45,7 +45,7 @@ public class LogicLabel extends AbstractArgument implements LogicAddress {
                 '}';
     }
 
-    public LogicLabel setRemote() {
+    public LogicLabel remote() {
         return new LogicLabel(label, address, stateTransfer, true);
     }
 

@@ -40,6 +40,7 @@ public class MindcodeFunction {
 
     private List<FunctionParameter> parameters = List.of();
     private @Nullable LogicLabel label;
+    private @Nullable LogicLabel remoteLabel;
     private String prefix = "";
     private int prefixIndex = 0;
     private LogicVariable fnRetVal = LogicVariable.INVALID;
@@ -50,8 +51,7 @@ public class MindcodeFunction {
     /// The dispatch table starts at index 1.
     private int remoteIndex = 0;
 
-    /// Number of times the function will be compiled into the code
-    /// At most 1 for non-inline function, any number for inlined functions
+    /// Number of times the function was called
     private int placementCount = 0;
 
     /// Indicates the function was visited while constructing the call tree.
@@ -362,6 +362,18 @@ public class MindcodeFunction {
         return label;
     }
 
+    /// @return the label allocated for the remote entry point of this function (null for non-remote functions)
+    public @Nullable LogicLabel getRemoteLabel() {
+        return remoteLabel;
+    }
+
+    /// @return the entry-point label (null if the function doesn't represent an entrypoint)
+    public @Nullable LogicLabel getEntryPointLabel() {
+        return isEntryPoint()
+                ? remoteLabel == null ? label : remoteLabel
+                : null;
+    }
+
     /// @return the local prefix allocated for local variables of this function
     public String getPrefix() {
         return prefix;
@@ -400,6 +412,10 @@ public class MindcodeFunction {
 
     public void setLabel(LogicLabel label) {
         this.label = label;
+    }
+
+    public void setRemoteLabel(LogicLabel remoteLabel) {
+        this.remoteLabel = remoteLabel.remote();
     }
 
     public void setPrefixAndIndex(String prefix, int prefixIndex) {

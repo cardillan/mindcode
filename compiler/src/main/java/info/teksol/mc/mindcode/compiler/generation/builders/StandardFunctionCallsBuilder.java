@@ -95,13 +95,8 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         // (in the case of inline functions, they could get evaluated in the context of the function)
         arguments.forEach(FunctionArgument::unwrap);
 
-        if (function.isRemote()) {
-            if (function.getModule().getRemoteProcessors().isEmpty()) {
-                error(call, ERR.FUNCTION_REMOTE_CALLED_LOCALLY, functionName);
-                return LogicVariable.INVALID;
-            }
-        } else if (target != null) {
-            throw new MindcodeInternalError("Target should be null for non-remote function calls.");
+        if (!function.isRemote() && target != null) {
+            throw new MindcodeInternalError("Target must be null for non-remote function calls.");
         }
 
         if (function.isVarargs()) {
@@ -119,7 +114,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
         validateUserFunctionArguments(function, arguments.subList(0, Math.min(parameterCount, arguments.size())));
 
-        if (function.isRemote()) {
+        if (function.isRemote() && !function.getModule().getRemoteProcessors().isEmpty()) {
             if (async && arguments.stream().filter(a -> !a.isInput()).anyMatch(FunctionArgument::hasValue)) {
                 error(call, ERR.ASYNC_OUTPUT_ARGUMENT, function.getName());
             }

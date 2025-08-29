@@ -161,6 +161,9 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     }
 
     private void setupOutOfLineFunction(MindcodeFunction function) {
+        if (function.isRemote()) {
+            function.setRemoteLabel(processor.nextLabel());
+        }
         function.setLabel(processor.nextLabel());
         nameCreator.setupFunctionPrefix(function);
         function.createVariables(nameCreator);
@@ -204,6 +207,10 @@ public class CallGraphCreator extends AbstractMessageEmitter {
     private void validateFunction(MindcodeFunction function) {
         if (function.getDeclaration().isInline() && function.isRecursive()) {
             error(function.getSourcePosition(), ERR.FUNCTION_RECURSIVE_INLINE, function.getName());
+        }
+
+        if (function.getDeclaration().isRemote() && function.isRecursive()) {
+            error(function.getSourcePosition(), ERR.FUNCTION_RECURSIVE_REMOTE, function.getName());
         }
 
         if (!function.getDeclaration().isInline() && function.isVarargs()) {

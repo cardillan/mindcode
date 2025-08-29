@@ -242,8 +242,8 @@ class OptimizationContext {
         Queue<Integer> heads = new ArrayDeque<>();
         heads.offer(0);
         callGraph.getFunctions().stream()
-                .filter(f -> f.isEntryPoint() && f.getLabel() != null)
-                .map(MindcodeFunction::getLabel)
+                .map(MindcodeFunction::getEntryPointLabel)
+                .filter(Objects::nonNull)
                 .map(label -> firstInstructionIndex(ix -> ix instanceof LabelInstruction l && l.getLabel().equals(label)))
                 .filter(i -> i >= 0)
                 .forEach(heads::offer);

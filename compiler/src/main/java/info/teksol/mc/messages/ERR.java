@@ -99,7 +99,7 @@ public class ERR {
     public static final String FUNCTION_CONFLICT_REMOTE = "Remote function '%s' conflicts with remote function '%s': names of remote functions must be unique.";
     public static final String FUNCTION_RECURSIVE_INLINE = "Recursive function '%s' declared 'inline'.";
     public static final String FUNCTION_RECURSIVE_NO_STACK = "Function '%s' is recursive and no stack was allocated.";
-    public static final String FUNCTION_REMOTE_CALLED_LOCALLY = "Cannot call remote function '%s' locally.";
+    public static final String FUNCTION_RECURSIVE_REMOTE = "Recursive function '%s' declared 'remote'.";
     public static final String FUNCTION_REQUIRES_TARGET_8 = "The '%s' function requires language target 8 or higher.";
     public static final String FUNCTION_VARARGS_NOT_INLINE = "Varargs function '%s' must be declared 'inline'.";
     public static final String IDENTIFIER_EXPECTED = "Identifier expected.";

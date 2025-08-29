@@ -38,6 +38,8 @@ public enum ArgumentType {
 
     // Compiler variables
 
+    ADDRESS,                        // For storing addresses. Is always initialized, may be eliminated when unused.
+
     GLOBAL_PRESERVED,               // A global variable, which must not be eliminated
     PRESERVED,                      // Must not be eliminated
 

@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVoid;
 import org.jspecify.annotations.NullMarked;
 
@@ -114,15 +115,33 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void appendRemoteFunctionDeclaration(MindcodeFunction function) {
-        assert function.getLabel() != null;
-        assembler.createLabel(function.getLabel().setRemote());
+        assert function.getRemoteLabel() != null;
+        assembler.createLabel(function.getRemoteLabel());
+
+        // The placement count is increased by one for entrypoints.
+        // As remote functions are entrypoints, placement counts over one indicate the function has been called locally.
+        if (function.getPlacementCount() > 1) {
+            if (context.globalCompilerProfile().isSymbolicLabels()) {
+                assembler.createSet(function.getFnRetAddr(), LogicVariable.remoteWaitAddr());
+            } else {
+                assembler.createSetAddress(function.getFnRetAddr(), getRemoteWaitLabel());
+            }
+
+            assert function.getLabel() != null;
+            assembler.createLabel(function.getLabel());
+        }
+
         compileFunctionBody(function);
 
         assembler.createSet(function.getFnFinished(), LogicBoolean.TRUE);
 
         // Jump to remote wait
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1.0);
-        assembler.createJumpUnconditional(getRemoteWaitLabel());
+        if (function.getPlacementCount() > 1) {
+            assembler.createReturn(function.getFnRetAddr());
+        } else {
+            assembler.createJumpUnconditional(getRemoteWaitLabel());
+        }
         assembler.clearSubcontextType();
     }
 
