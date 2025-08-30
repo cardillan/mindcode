@@ -50,6 +50,24 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     }
 
     @Test
+    void ignoresInaccessibleLoops() {
+        assertCompilesTo("""
+                        void foo()
+                            return;
+                        
+                            for bar in @coal, @lead do
+                                print(bar);
+                            end;
+                        end;
+                        
+                        foo();
+                        print(0);
+                        """,
+                createInstruction(PRINT, "0")
+        );
+    }
+
+    @Test
     void preservesBranchedIterations() {
         assertCompilesTo("""
                         i = 0;
@@ -511,24 +529,24 @@ abstract class LoopUnrollerTestBase extends AbstractOptimizerTest<LoopUnroller> 
     @Test
     void unrollsLoopsWithHoistedFunctionCalls() {
         assertCompiles("""
-                        noinline void foo(a) print(a); end;
-                        for i in 0 ... 3 do foo(i); end;
-                        for j in 0 ... 3 do foo(j); end;
-                        """
+                noinline void foo(a) print(a); end;
+                for i in 0 ... 3 do foo(i); end;
+                for j in 0 ... 3 do foo(j); end;
+                """
         );
     }
 
     @Test
     void unrollsLoopsWithReturn() {
         assertCompiles("""
-                        inline def foo()
-                            for bar in 0 do
-                                return bar;
-                            end;
-                        end;
-                        
-                        foo();
-                        """
+                inline def foo()
+                    for bar in 0 do
+                        return bar;
+                    end;
+                end;
+                
+                foo();
+                """
         );
     }
 }

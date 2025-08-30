@@ -73,6 +73,9 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     private boolean hasSupportedIterationStructure(AstContext loop) {
+        // If the first instruction is unreachable, the loop is not executed at all
+        if (optimizationContext.getUnreachableInstructions().get(firstInstructionIndex(loop))) return false;
+
         String structure = loop.children().stream().map(c -> SYMBOL_MAP.get(c.subcontextType())).collect(Collectors.joining());
         return structure.matches("l(tl)*bft");
     }

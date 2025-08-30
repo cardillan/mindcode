@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Fixed
 
 * Fixed Jump Threading optimization causing an internal error ([#283](https://github.com/cardillan/mindcode/issues/283)).
+* Fixed Compiler error unrolling an unreachable loop ([#285](https://github.com/cardillan/mindcode/issues/285)).
 
 ### Added
 

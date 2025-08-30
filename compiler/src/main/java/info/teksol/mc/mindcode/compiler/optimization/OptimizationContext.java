@@ -218,10 +218,10 @@ class OptimizationContext {
         private final Set<MindcodeFunction> endingFunctions = new HashSet<>();
     }
 
-    /// This method analyses the control flow of the program. It starts at the first instruction and visits
+    /// This method analyzes the control flow of the program. It starts at the first instruction and visits
     /// every instruction reachable from there, either by advancing to the next instruction, or by a jump/goto/call.
     /// Bits of visited instruction are cleared and aren't inspected again. When all code paths have reached an
-    /// end or an already visited instruction, the analysis stops and what is left are all unreachable instructions.
+    /// end or an already visited instruction, the analysis stops, and what is left are all unreachable instructions.
     ///
     /// @return a BitSet containing positions of unreachable instructions
     public BitSet getUnreachableInstructions() {
