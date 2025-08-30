@@ -291,6 +291,7 @@ public abstract class AbstractTestBase {
 
     protected static final LogicBuiltIn
             coal        = LogicBuiltIn.createForUnitTests("@coal",      false),
+            oreCoal     = LogicBuiltIn.createForUnitTests("@ore-coal",  false),
             lead        = LogicBuiltIn.createForUnitTests("@lead",      false),
             firstItem   = LogicBuiltIn.createForUnitTests("@firstItem", false),
             enabled     = LogicBuiltIn.createForUnitTests("@enabled",   false),
@@ -301,6 +302,7 @@ public abstract class AbstractTestBase {
             y           = LogicBuiltIn.createForUnitTests("@y",         false),
             thisx       = LogicBuiltIn.createForUnitTests("@thisx",     false),
             thisy       = LogicBuiltIn.createForUnitTests("@thisy",     false),
+            name        = LogicBuiltIn.createForUnitTests("@name",      false),
             id          = LogicBuiltIn.createForUnitTests("@id",        false);
 
     protected static final LogicKeyword

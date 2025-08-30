@@ -183,8 +183,9 @@ Some mlog operations are produced by different Mindcode operators. When the opti
 
 When the `builtin-evaluation` option is set to `compatible` or `full`, the following additional expressions are handled:
 
-* If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant, the Mindustry's ID of the objects is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
+* If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant with a defined logic ID, the Mindustry's ID of the object is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
 * If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block, or unit with given ID and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block, or unit literal.
+* If the `@constant` in a `sensor var @constant @name` instruction is a known item, liquid, block or unit constant, the Mindustry's content name of the object is looked up and the instruction is replaced by `set var <name>`, where `<name>` is a string literal. This optimization takes place even when `builtin-evaluation` is set to `none`.
 
 Some Mindustry content objects may have different logic IDs in different Mindustry versions (these objects are called "unstable"). For these objects, the above optimizations only happen when the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `full`:
 

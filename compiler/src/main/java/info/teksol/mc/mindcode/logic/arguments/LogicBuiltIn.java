@@ -19,6 +19,7 @@ public class LogicBuiltIn extends AbstractArgument implements LogicValue {
     public static final LogicBuiltIn UNIT = create("@unit", true);
     public static final LogicBuiltIn THIS = create("@this", false);
     public static final LogicBuiltIn WAIT = create("@wait", false);
+    public static final LogicBuiltIn NAME = create("@name", false);
     public static final LogicBuiltIn ID = create("@id", false);
     public static final LogicBuiltIn X = create("@x", false);
     public static final LogicBuiltIn Y = create("@y", false);

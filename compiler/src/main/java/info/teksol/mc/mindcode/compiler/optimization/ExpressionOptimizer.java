@@ -279,6 +279,9 @@ class ExpressionOptimizer extends BaseOptimizer {
                     logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
                             LogicNumber.create(ix.sourcePosition(), object.getObject().logicId())));
                 }
+            } else if (property.equals(LogicBuiltIn.NAME) && object.getObject() != null && object.getObject().contentName() != null) {
+                logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
+                        LogicString.create(ix.sourcePosition(), object.getObject().contentName())));
             }
         }
     }

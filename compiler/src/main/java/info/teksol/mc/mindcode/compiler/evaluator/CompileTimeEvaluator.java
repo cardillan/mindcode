@@ -260,7 +260,6 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
 
     private AstMindcodeNode evaluatePropertyAccess(AstPropertyAccess node, boolean local) {
         BuiltinEvaluation evaluation = node.getProfile().getBuiltinEvaluation();
-        if (evaluation == BuiltinEvaluation.NONE) return node;
 
         // We're only compile-time evaluating IDs
         AstBuiltInIdentifier property = node.getProperty();
@@ -273,8 +272,11 @@ public class CompileTimeEvaluator extends AbstractMessageEmitter {
         MindustryContent namedContent = metadata.getNamedContent(item.getName());
         if (namedContent == null) return node;
 
-        if (evaluation == BuiltinEvaluation.COMPATIBLE && !metadata.isStableBuiltin(item.getName())) return node;
-        if (namedContent.logicId() < 0) return node;
+        if ("@id".equals(property.getName())) {
+            if (evaluation == BuiltinEvaluation.NONE) return node;
+            if (evaluation == BuiltinEvaluation.COMPATIBLE && !metadata.isStableBuiltin(item.getName())) return node;
+            if (namedContent.logicId() < 0) return node;
+        }
 
         return PROPERTY_MAPPER.get(property.getName()).apply(node.sourcePosition(), namedContent);
     }

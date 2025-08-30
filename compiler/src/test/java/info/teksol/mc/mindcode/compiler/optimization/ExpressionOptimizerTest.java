@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicBoolean;
 import info.teksol.mc.mindcode.logic.arguments.LogicColor;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Test;
@@ -156,10 +157,17 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
 
     @Test
     void optimizesSensor() {
-        assertCompilesTo("""
-                        a = @lead.@id;
-                        """,
-                createInstruction(SET, ":a", "1")
+        assertOptimizesTo(
+                List.of(
+                        createInstruction(SENSOR, tmp0, lead, id),
+                        createInstruction(SENSOR, tmp1, oreCoal, name),
+                        createInstruction(END)
+                ),
+                List.of(
+                        createInstruction(SET, tmp0, P1),
+                        createInstruction(SET, tmp1, LogicString.create("ore-coal")),
+                        createInstruction(END)
+                )
         );
     }
 

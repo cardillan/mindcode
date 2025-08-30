@@ -13,14 +13,16 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added support for calling remote functions locally.
-
-### Miscellaneous
-
-* Separated the mimex data into a [standalone repository](https://github.com/cardillan/mimex-data), which is now included as a git submodule at `compiler/src/main/resources/mimex`.
+* Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) to compile-time evaluator. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option. 
+* Added support for evaluating the `@name` property to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
 
 ### Changed
 
 * **Breaking**: mlog variable name specified using the `mlog` and `remote` specifier must be enclosed in parentheses. Any constant string expression is supported.
+
+### Miscellaneous
+
+* Separated the mimex data into a [standalone repository](https://github.com/cardillan/mimex-data), which is now included as a git submodule at `compiler/src/main/resources/mimex`.
 
 ## 3.8.0-beta.4 - 2025-07-28
 
