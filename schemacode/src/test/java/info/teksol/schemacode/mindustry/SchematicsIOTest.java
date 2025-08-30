@@ -81,7 +81,7 @@ class SchematicsIOTest {
     }
 
     private void rewriteSchema(File schematicFile) throws IOException {
-        // Reads schematics and writes it again, expects to obtain identical result.
+        // Reads schematics and writes it again, expects to get an identical result.
         // Comparison done on uncompressed arrays (although processor configuration is compressed anyway)
         // The schematics were obtained from Mindustry itself.
         byte[] contents = Files.readAllBytes(schematicFile.toPath());
@@ -114,6 +114,16 @@ class SchematicsIOTest {
             }
             appendByte(sbr, b);
             index++;
+        }
+
+        return sbr.toString();
+    }
+
+    private String streamToString2(DataInputStream stream) throws IOException {
+        byte[] bytes = stream.readAllBytes();
+        StringBuilder sbr = new StringBuilder(bytes.length);
+        for (byte b : bytes) {
+            sbr.append((char) b);
         }
 
         return sbr.toString();

@@ -1,7 +1,7 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.*;
 import info.teksol.mc.util.Tuple2;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.SchematicsMetadata;
@@ -10,6 +10,10 @@ import info.teksol.schemacode.schematics.Block;
 import info.teksol.schemacode.schematics.BlockPositionMap;
 import info.teksol.schemacode.schematics.Schematic;
 
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
 import java.io.*;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -28,9 +32,9 @@ public class SchematicsIO {
         try (DataOutputStream stream = new DataOutputStream(new DeflaterOutputStream(output))) {
             stream.writeShort(schematic.width());
             stream.writeShort(schematic.height());
-            Map<String, String> tags = createTags(schematic);
-            stream.writeByte(tags.size());
-            for (var e : tags.entrySet()) {
+            Map<String, String> map = createMasterMap(schematic);
+            stream.writeByte(map.size());
+            for (var e : map.entrySet()) {
                 stream.writeUTF(e.getKey());
                 stream.writeUTF(e.getValue());
             }
@@ -54,14 +58,27 @@ public class SchematicsIO {
         return str == null ? "" : str;
     }
 
-    private static Map<String, String> createTags(Schematic schematic) {
-        Map<String, String> tags = new LinkedHashMap<>();
-        tags.put("name", strNull(schematic.name()));
-        tags.put("description", strNull(schematic.description()));
+    private static Map<String, String> createMasterMap(Schematic schematic) {
+        Map<String, String> map = new LinkedHashMap<>();
+        map.put("name", strNull(schematic.name()));
+        map.put("contentMap", createContentMap(schematic));
+        map.put("description", strNull(schematic.description()));
         if (!schematic.labels().isEmpty()) {
-            tags.put("labels", encodeLabels(schematic.labels()));
+            map.put("labels", encodeLabels(schematic.labels()));
         }
-        return tags;
+        return map;
+    }
+
+    private static String createContentMap(Schematic schematic) {
+        Map<Integer, Map<String, Integer>> map = new HashMap<>();
+        for (Block block : schematic.blocks()) {
+            if (block.configuration() instanceof ContentConfiguration cfg) {
+                Map<String, Integer> inner = map.computeIfAbsent(cfg.getContentType().id, k -> new HashMap<>());
+                inner.put(cfg.getContentName(), cfg.getId());
+            }
+        }
+
+        return contentMapToJson(map);
     }
 
     public static void write(Schematic build, OutputStream output) throws IOException {
@@ -95,14 +112,14 @@ public class SchematicsIO {
                 throw new IOException("Invalid schematic: Too large (max possible size is 128x128).");
             }
 
-            int tags = stream.readUnsignedByte();
-            Map<String, String> tagMap = new HashMap<>();
-            for (int i = 0; i < tags; i++) {
-                tagMap.put(stream.readUTF(), stream.readUTF());
+            int entries = stream.readUnsignedByte();
+            Map<String, String> map = new HashMap<>();
+            for (int i = 0; i < entries; i++) {
+                map.put(stream.readUTF(), stream.readUTF());
             }
 
-            // Tags are called "labels" inside schematics structure
-            List<String> labels = decodeLabels(tagMap.getOrDefault("labels", ""));
+            // Tags are called "labels" inside the schematic structure
+            List<String> labels = decodeLabels(map.getOrDefault("labels", ""));
 
             List<BlockType> typeMap = new ArrayList<>();
             byte length = stream.readByte();
@@ -121,11 +138,32 @@ public class SchematicsIO {
                 throw new IOException("Invalid schematic: Too many blocks.");
             }
 
+            final ContentMapper mapper;
+            if (map.containsKey("contentMap")) {
+                Map<Integer, Map<String, Integer>> nameMap = contentMapFromJson(map.get("contentMap"));
+                Map<Integer, Map<Integer, MindustryContent>> contentMap = new HashMap<>();
+                nameMap.forEach((key, value) -> {
+                    ContentType contentType = ContentType.byId(key);
+                    if (contentType == null || !contentType.hasLookup) return;
+
+                    Map<Integer, MindustryContent> inner = new HashMap<>();
+                    contentMap.put(key, inner);
+                    value.forEach((k, v) -> {
+                        MindustryContent content = SchematicsMetadata.metadata.getNamedContent(contentType, k);
+                        if (content == null) throw new SchematicsInternalError("Unknown content '%s' for type '%s'.", k, contentType.name());
+                        inner.put(v, content);
+                    });
+                });
+                mapper = (type, id) -> contentMap.getOrDefault(type.id, Map.of()).get(id);
+            } else {
+                mapper = SchematicsMetadata.metadata::getNamedContentById;
+            }
+
             List<Block> blocks = new ArrayList<>();
             for (int index = 0, i = 0; i < total; i++) {
                 BlockType blockType = typeMap.get(stream.readByte());
                 Position position = Position.unpack(stream.readInt());
-                Configuration raw = ver == 0 ? mapConfig(blockType, stream.readInt(), position) : readObject(stream);
+                Configuration raw = ver == 0 ? mapConfig(blockType, stream.readInt(), position) : readObject(stream, mapper);
                 Direction direction = Direction.convert(stream.readByte());
                 if (!"@air".equals(blockType.name())) {
                     Configuration config = convert(blockType, position, raw);
@@ -133,8 +171,8 @@ public class SchematicsIO {
                 }
             }
 
-            String name = tagMap.getOrDefault("name", "");
-            String description = tagMap.getOrDefault("description", "");
+            String name = map.getOrDefault("name", "");
+            String description = map.getOrDefault("description", "");
             return new Schematic(name, description, labels, width, height, blocks);
         }
     }
@@ -155,21 +193,21 @@ public class SchematicsIO {
 
         ConfigurationType configurationType = ConfigurationType.fromBlockType(blockType);
         return switch (configurationType) {
-            case NONE           -> raw.as(EmptyConfiguration.class);
-            case BOOLEAN        -> raw.as(BooleanConfiguration.class);
-            case COLOR          -> Color.decode(raw.as(IntConfiguration.class).value());
-            case CONNECTION     -> raw.as(Position.class).add(position);
-            case CONNECTIONS    -> raw.as(PositionArray.class).remap(position::add);
-            case INTEGER        -> raw.as(IntConfiguration.class);
-            case BLOCK          -> raw.as(BlockConfiguration.class);
-            case ITEM           -> raw.as(ItemConfiguration.class);
-            case LIQUID         -> raw.as(LiquidConfiguration.class);
-            case PROCESSOR      -> ProcessorConfiguration.decode(raw.as(ByteArray.class), position);
-            case TEXT           -> raw.as(TextConfiguration.class);
-            case UNIT           -> raw.as(UnitConfiguration.class);
-            case UNIT_COMMAND   -> raw.as(UnitCommandConfiguration.class);
-            case UNIT_OR_BLOCK  -> raw.as(UnitOrBlockConfiguration.class);
-            case UNIT_PLAN      -> selectUnitPlan(raw.as(IntConfiguration.class), blockType);
+            case NONE -> raw.as(EmptyConfiguration.class);
+            case BOOLEAN -> raw.as(BooleanConfiguration.class);
+            case COLOR -> Color.decode(raw.as(IntConfiguration.class).value());
+            case CONNECTION -> raw.as(Position.class).add(position);
+            case CONNECTIONS -> raw.as(PositionArray.class).remap(position::add);
+            case INTEGER -> raw.as(IntConfiguration.class);
+            case BLOCK -> raw.as(BlockConfiguration.class);
+            case ITEM -> raw.as(ItemConfiguration.class);
+            case LIQUID -> raw.as(LiquidConfiguration.class);
+            case PROCESSOR -> ProcessorConfiguration.decode(raw.as(ByteArray.class), position);
+            case TEXT -> raw.as(TextConfiguration.class);
+            case UNIT -> raw.as(UnitConfiguration.class);
+            case UNIT_COMMAND -> raw.as(UnitCommandConfiguration.class);
+            case UNIT_OR_BLOCK -> raw.as(UnitOrBlockConfiguration.class);
+            case UNIT_PLAN -> selectUnitPlan(raw.as(IntConfiguration.class), blockType);
             default -> throw new SchematicsInternalError("Unhandled configuration type %s.", configurationType);
         };
     }
@@ -189,15 +227,15 @@ public class SchematicsIO {
 
     private static Configuration mapConfig(BlockType block, int value, Position position) {
         return switch (Implementation.fromBlockType(block)) {
-            case SORTER, UNLOADER, ITEMSOURCE   -> ItemConfiguration.forId(value);
-            case LIQUIDSOURCE                   -> LiquidConfiguration.forId(value);
-            case MASSDRIVER, ITEMBRIDGE         -> Position.unpack(value).sub(position);
-            case LIGHTBLOCK                     -> new IntConfiguration(value);
-            default                             -> null;
+            case SORTER, UNLOADER, ITEMSOURCE -> ItemConfiguration.forId(value);
+            case LIQUIDSOURCE -> LiquidConfiguration.forId(value);
+            case MASSDRIVER, ITEMBRIDGE -> Position.unpack(value).sub(position);
+            case LIGHTBLOCK -> new IntConfiguration(value);
+            default -> null;
         };
     }
 
-    private static Configuration readObject(DataInputStream stream) throws IOException {
+    private static Configuration readObject(DataInputStream stream, ContentMapper mapper) throws IOException {
         byte b;
         byte type = stream.readByte();
         return switch (type) {
@@ -206,26 +244,45 @@ public class SchematicsIO {
             case 2 -> new LongConfiguration(stream.readLong());
             case 3 -> new FloatConfiguration(stream.readFloat());
             case 4 -> readString(stream);
-            case 5 -> switch (b = stream.readByte()) {
-                case 0 -> ItemConfiguration.forId(stream.readShort());
-                case 1 -> BlockConfiguration.forId(stream.readShort());
-                case 4 -> LiquidConfiguration.forId(stream.readShort());
-                case 6 -> UnitConfiguration.forId(stream.readShort());
-                default -> throw new UnsupportedOperationException("Unsupported item type " + b);
-            };
+            case 5 -> {
+                b = stream.readByte();
+                ContentType contentType = ContentType.byId(b);
+                if (contentType == null || !contentType.hasLookup) {
+                    throw new UnsupportedOperationException("Unsupported item type ID " + b);
+                }
+
+                int id = stream.readShort();
+                MindustryContent mindustryContent = mapper.get(contentType, id);
+                yield Objects.requireNonNull(switch (contentType) {
+                    case ITEM   -> ItemConfiguration.forItem((Item) mindustryContent);
+                    case BLOCK  -> BlockConfiguration.forBlockType((BlockType) mindustryContent);
+                    case LIQUID -> LiquidConfiguration.forLiquid((Liquid) mindustryContent);
+                    case UNIT   -> UnitConfiguration.forUnit((Unit) mindustryContent);
+                    default     -> throw new UnsupportedOperationException("Unsupported item type " + contentType);
+                });
+            }
             case 6 -> Array.create(Integer.class, stream.readShort(), stream::readInt);
             case 7 -> new Position(stream.readInt(), stream.readInt());
-            case 8 -> PositionArray.create(stream.readByte(), () -> Position.unpack(stream.readInt()));
+            case 8 ->
+                    PositionArray.create(stream.readByte(), () -> info.teksol.schemacode.mindustry.Position.unpack(stream.readInt()));
             case 9 -> new UnhandledItem("TechNode", "byte=" + stream.readByte() + ", short=" + stream.readShort());
             case 10 -> BooleanConfiguration.of(stream.readBoolean());
             case 11 -> new DoubleConfiguration(stream.readDouble());
             case 12 -> new UnhandledItem("BuildingBox ", "int=" + stream.readInt());
             case 13 -> new UnhandledItem("LAccess ", "short=" + stream.readShort());
-            case 14 -> { byte[] bts = new byte[stream.readInt()]; stream.readFully(bts); yield new ByteArray(bts); }
-            case 15 -> { stream.readByte(); yield EmptyConfiguration.EMPTY; } //unit command
+            case 14 -> {
+                byte[] bts = new byte[stream.readInt()];
+                stream.readFully(bts);
+                yield new ByteArray(bts);
+            }
+            case 15 -> {
+                stream.readByte();
+                yield EmptyConfiguration.EMPTY;
+            } //unit command
             case 16 -> Array.create(Boolean.class, stream.readInt(), stream::readBoolean);
             case 17 -> new UnhandledItem("Unit ", "int=" + stream.readInt());
-            case 18 -> Array.create(Vector.class, stream.readShort(), () -> new Vector(stream.readFloat(), stream.readFloat()));
+            case 18 ->
+                    Array.create(Vector.class, stream.readShort(), () -> new Vector(stream.readFloat(), stream.readFloat()));
             case 19 -> new Vector(stream.readFloat(), stream.readFloat());
             case 20 -> new UnhandledItem("Team ", "unsigned byte=" + stream.readUnsignedByte());
             case 23 -> UnitCommandConfiguration.forId(stream.readUnsignedShort());
@@ -296,7 +353,8 @@ public class SchematicsIO {
                             s.writeFloat(vector.y());
                         });
                     }
-                    default -> throw new SchematicsInternalError("Cannot store unhandled array of %s", a.dataClass().getSimpleName());
+                    default ->
+                            throw new SchematicsInternalError("Cannot store unhandled array of %s", a.dataClass().getSimpleName());
                 }
             }
             case Position c -> {
@@ -425,9 +483,9 @@ public class SchematicsIO {
                 }
 
                 switch (ch) {
-                    case '\\'   -> escape = true;
-                    case '"'    -> quotes = !quotes;
-                    case ','    -> {
+                    case '\\' -> escape = true;
+                    case '"' -> quotes = !quotes;
+                    case ',' -> {
                         if (quotes) {
                             accumulator.append(ch);
                         } else {
@@ -447,7 +505,7 @@ public class SchematicsIO {
     }
 
     static String encodeLabels(List<String> labels) {
-        return labels.stream().map(SchematicsIO::encodeLabel).collect(Collectors.joining(",","[","]"));
+        return labels.stream().map(SchematicsIO::encodeLabel).collect(Collectors.joining(",", "[", "]"));
     }
 
     static String encodeLabel(String label) {
@@ -462,5 +520,60 @@ public class SchematicsIO {
         } else {
             return label;
         }
+    }
+
+    /**
+     * Converter of an ID to a content instance.
+     */
+    private interface ContentMapper {
+        MindustryContent get(ContentType type, int id);
+    }
+
+    /**
+     * Deserialize JSON like { "0": {...}, "4": {...} }
+     * into a Map<Integer, Map<String, Integer>>.
+     */
+    public static Map<Integer, Map<String, Integer>> contentMapFromJson(String json) {
+        Map<Integer, Map<String, Integer>> result = new HashMap<>();
+        json = json.replaceAll("(?m)(?<=[{,])\\s*(?!\")([A-Za-z_][A-Za-z0-9_-]*)\\s*:", "\"$1\":");
+        json = json.replaceAll("(?m)(?<=[{,])\\s*(?!\")(-?\\d+)\\s*:", "\"$1\":");
+
+        try (JsonReader reader = Json.createReader(new StringReader(json))) {
+            JsonObject root = reader.readObject();
+
+            for (String key : root.keySet()) {
+                int outerKey = Integer.parseInt(key);
+                JsonObject innerObj = root.getJsonObject(key);
+
+                Map<String, Integer> innerMap = new HashMap<>();
+                for (String innerKey : innerObj.keySet()) {
+                    innerMap.put(innerKey, innerObj.getInt(innerKey));
+                }
+
+                result.put(outerKey, innerMap);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Serialize Map<Integer, Map<String, Integer>> into a JsonObject.
+     */
+    public static String contentMapToJson(Map<Integer, Map<String, Integer>> map) {
+        JsonObjectBuilder rootBuilder = Json.createObjectBuilder();
+
+        for (Map.Entry<Integer, Map<String, Integer>> outer : map.entrySet()) {
+            JsonObjectBuilder innerBuilder = Json.createObjectBuilder();
+            for (Map.Entry<String, Integer> inner : outer.getValue().entrySet()) {
+                innerBuilder.add(inner.getKey(), inner.getValue());
+            }
+            rootBuilder.add(String.valueOf(outer.getKey()), innerBuilder.build());
+        }
+
+        return rootBuilder.build().toString().replaceAll("\"", "");
+    }
+
+    public static void main(String[] argv) {
+
     }
 }

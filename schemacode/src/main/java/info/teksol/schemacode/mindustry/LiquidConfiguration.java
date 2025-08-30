@@ -1,27 +1,38 @@
 package info.teksol.schemacode.mindustry;
 
+import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.mc.mindcode.logic.mimex.Liquid;
 import info.teksol.schemacode.SchematicsMetadata;
-import info.teksol.schemacode.config.Configuration;
 
 import java.util.Objects;
 
-public final class LiquidConfiguration implements Configuration {
+public final class LiquidConfiguration implements ContentConfiguration {
     private final Liquid liquid;
 
     private LiquidConfiguration(Liquid liquid) {
         this.liquid = Objects.requireNonNull(liquid);
     }
 
+    @Override
+    public ContentType getContentType() {
+        return ContentType.LIQUID;
+    }
+
+    @Override
     public int getId() {
         return liquid.id();
+    }
+
+    @Override
+    public String getContentName() {
+        return liquid.contentName();
     }
 
     public String getName() {
         return liquid.name();
     }
 
-    private static LiquidConfiguration forLiquid(Liquid liquid) {
+    public static LiquidConfiguration forLiquid(Liquid liquid) {
         return liquid == null ? null : new LiquidConfiguration(liquid);
     }
 

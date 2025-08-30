@@ -1,8 +1,8 @@
 package info.teksol.schemacode.mindustry;
 
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
+import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.schemacode.SchematicsMetadata;
-import info.teksol.schemacode.config.UnitOrBlockConfiguration;
 
 import java.util.Objects;
 
@@ -13,15 +13,26 @@ public final class BlockConfiguration implements UnitOrBlockConfiguration {
         this.blockType = Objects.requireNonNull(blockType);
     }
 
+    @Override
+    public ContentType getContentType() {
+        return ContentType.BLOCK;
+    }
+
+    @Override
     public int getId() {
         return blockType.id();
+    }
+
+    @Override
+    public String getContentName() {
+        return blockType.contentName();
     }
 
     public String getName() {
         return blockType.name();
     }
 
-    private static BlockConfiguration forBlockType(BlockType blockType) {
+    public static BlockConfiguration forBlockType(BlockType blockType) {
         return blockType == null ? null : new BlockConfiguration(blockType);
     }
 

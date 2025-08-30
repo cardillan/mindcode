@@ -1,8 +1,8 @@
 package info.teksol.schemacode.mindustry;
 
+import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.mc.mindcode.logic.mimex.Unit;
 import info.teksol.schemacode.SchematicsMetadata;
-import info.teksol.schemacode.config.UnitOrBlockConfiguration;
 
 import java.util.Objects;
 
@@ -13,15 +13,26 @@ public final class UnitConfiguration implements UnitOrBlockConfiguration {
         this.unit = Objects.requireNonNull(unit);
     }
 
+    @Override
+    public ContentType getContentType() {
+        return ContentType.UNIT;
+    }
+
+    @Override
     public int getId() {
         return unit.id();
+    }
+
+    @Override
+    public String getContentName() {
+        return unit.contentName();
     }
 
     public String getName() {
         return unit.name();
     }
 
-    private static UnitConfiguration forUnit(Unit unit) {
+    public static UnitConfiguration forUnit(Unit unit) {
         return unit == null ? null : new UnitConfiguration(unit);
     }
 

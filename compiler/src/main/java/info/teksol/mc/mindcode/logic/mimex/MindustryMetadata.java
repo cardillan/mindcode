@@ -356,6 +356,27 @@ public class MindustryMetadata {
             default -> null;
         };
     }
+
+    public @Nullable MindustryContent getNamedContent(ContentType type, String name) {
+        name = "@" + name;
+        return switch (type) {
+            case BLOCK -> getBlockByName(name);
+            case ITEM -> getItemByName(name);
+            case LIQUID -> getLiquidByName(name);
+            case UNIT -> getUnitByName(name);
+            default -> null;
+        };
+    }
+
+    public @Nullable MindustryContent getNamedContentById(@Nullable ContentType type, int id) {
+        return switch (type) {
+            case BLOCK -> getBlockById(id);
+            case ITEM -> getItemById(id);
+            case LIQUID -> getLiquidById(id);
+            case UNIT -> getUnitById(id);
+            case null, default -> null;
+        };
+    }
     //</editor-fold>
 
     //<editor-fold desc="Block types">
