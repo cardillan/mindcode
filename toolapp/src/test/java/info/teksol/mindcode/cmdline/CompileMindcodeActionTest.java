@@ -86,22 +86,61 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
             @Test
             public void outputArgumentDefaultDefault() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("-");
-                File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
+                File output = resolveOutputFile(arguments, ".mlog");
                 assertEquals(new File("-"), output);
             }
 
             @Test
             public void outputArgumentDefaultFile() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd");
-                File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
+                File output = resolveOutputFile(arguments, ".mlog");
                 assertEquals(new File("input.mlog"), output);
             }
 
             @Test
             public void outputArgumentFile() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
-                File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
+                File output = resolveOutputFile(arguments, ".mlog");
                 assertEquals(output, arguments.get("output"));
+            }
+        }
+
+        @Nested
+        class OutputDirectoryArgumentsTest {
+
+            @Test
+            public void outputArgumentDefaultDefault() throws ArgumentParserException {
+                Namespace arguments = parseCommandLine("--output-directory C:\\temp -");
+                File output = resolveOutputFile(arguments, ".mlog");
+                assertEquals(new File("-"), output);
+            }
+
+            @Test
+            public void outputArgumentDefaultFile() throws ArgumentParserException {
+                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd");
+                File output = resolveOutputFile(arguments, ".mlog");
+                assertEquals(new File("C:\\temp\\input.mlog"), output);
+            }
+
+            @Test
+            public void outputArgumentFile() throws ArgumentParserException {
+                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd -o output.mlog");
+                File output = resolveOutputFile(arguments, ".mlog");
+                assertEquals(new File("C:\\temp\\output.mlog"), output);
+            }
+
+            @Test
+            public void logArgumentDefault() throws ArgumentParserException {
+                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd -o output.mlog -l");
+                File output = resolveLogFile(arguments, ".log");
+                assertEquals(new File("C:\\temp\\input.log"), output);
+            }
+
+            @Test
+            public void logArgumentFile() throws ArgumentParserException {
+                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd -o output.mlog -l log.log");
+                File output = resolveLogFile(arguments, ".log");
+                assertEquals(new File("C:\\temp\\log.log"), output);
             }
         }
 
@@ -110,21 +149,21 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
             @Test
             public void logArgumentNone() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd -o output.mlog");
-                File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+                File output = resolveLogFile(arguments, ".log");
                 assertEquals(new File("-"), output);
             }
 
             @Test
             public void logArgumentDefault() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd -o output.mlog -l");
-                File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+                File output = resolveLogFile(arguments, ".log");
                 assertEquals(new File("input.log"), output);
             }
 
             @Test
             public void logArgumentFile() throws ArgumentParserException {
                 Namespace arguments = parseCommandLine("input.mnd -o output.mlog -l log.log");
-                File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+                File output = resolveLogFile(arguments, ".log");
                 assertEquals(new File("log.log"), output);
             }
         }

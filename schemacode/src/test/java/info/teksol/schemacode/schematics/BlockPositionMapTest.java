@@ -63,7 +63,7 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematic expected = new Schematic("", "", List.of(), 5, 3,
+        Schematic expected = new Schematic("", "", "", List.of(), 5, 3,
                 List.of(
                         block(pos(2, 5), "@power-node", P0_0, Direction.EAST, pa(P2_0)),
                         block(pos(3, 5), "@battery-large", P2_0, Direction.EAST, EmptyConfiguration.EMPTY)
@@ -84,7 +84,7 @@ class BlockPositionMapTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematic expected = new Schematic("", "", List.of(), 5, 3,
+        Schematic expected = new Schematic("", "", "", List.of(), 5, 3,
                 List.of(
                         block(pos(2, 5), "@micro-processor", P0_0, Direction.EAST,
                                 new ProcessorConfiguration(List.of(new Link("battery1", 2, 0)), "")

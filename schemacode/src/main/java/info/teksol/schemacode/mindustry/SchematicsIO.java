@@ -84,7 +84,7 @@ public class SchematicsIO {
     public static void write(Schematic build, OutputStream output) throws IOException {
         BlockPositionMap<Block> map = BlockPositionMap.builderToMindustry(m -> {}, build.blocks());
         List<Block> blocks = build.blocks().stream().map(b -> b.remap(map::translate)).toList();
-        Schematic msch = new Schematic(build.name(), build.description(), build.labels(), build.width(), build.height(), blocks);
+        Schematic msch = new Schematic(build.name(), build.filename(), build.description(), build.labels(), build.width(), build.height(), blocks);
         writeMsch(msch, output);
     }
 
@@ -173,15 +173,15 @@ public class SchematicsIO {
 
             String name = map.getOrDefault("name", "");
             String description = map.getOrDefault("description", "");
-            return new Schematic(name, description, labels, width, height, blocks);
+            return new Schematic(name, "", description, labels, width, height, blocks);
         }
     }
 
-    public static Schematic read(InputStream input) throws IOException {
+    public static Schematic read(String filename, InputStream input) throws IOException {
         Schematic msch = readMsch(input);
         BlockPositionMap<Block> map = BlockPositionMap.mindustryToBuilder(m -> {}, msch.blocks());
         List<Block> blocks = msch.blocks().stream().map(b -> b.remap(map::translate)).toList();
-        return new Schematic(msch.name(), msch.description(), msch.labels(), msch.width(), msch.height(), blocks);
+        return new Schematic(msch.name(), filename, msch.description(), msch.labels(), msch.width(), msch.height(), blocks);
     }
 
     @SuppressWarnings("UnnecessaryDefault")

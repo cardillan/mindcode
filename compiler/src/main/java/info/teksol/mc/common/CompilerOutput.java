@@ -14,15 +14,20 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NullMarked
-public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, @Nullable ExecutionException executionException,
-                                List<Assertion> assertions, @Nullable TextBuffer textBuffer, int steps) {
+public record CompilerOutput<T>(@Nullable T output, String fileName, List<MindcodeMessage> messages,
+                                @Nullable ExecutionException executionException, List<Assertion> assertions,
+                                @Nullable TextBuffer textBuffer, int steps) {
 
     public <R> CompilerOutput<R> withOutput(R output) {
-        return new CompilerOutput<>(output, messages, executionException, assertions, textBuffer, steps);
+        return new CompilerOutput<>(output, fileName, messages, executionException, assertions, textBuffer, steps);
     }
 
-    public CompilerOutput(T output, List<MindcodeMessage> messages) {
-        this(output, messages, null, List.of(), null, 0);
+    public CompilerOutput(@Nullable T output, String fileName, List<MindcodeMessage> messages) {
+        this(output, fileName, messages, null, List.of(), null, 0);
+    }
+
+    public CompilerOutput(List<MindcodeMessage> messages) {
+        this(null, "", messages, null, List.of(), null, 0);
     }
 
     public void addMessage(MindcodeMessage message) {
@@ -45,15 +50,15 @@ public record CompilerOutput<T>(T output, List<MindcodeMessage> messages, @Nulla
         return formatMessages(m -> true, messageTransformer);
     }
 
-    public  <M> List<M> errors(Function<MindcodeMessage, M> messageTransformer) {
+    public <M> List<M> errors(Function<MindcodeMessage, M> messageTransformer) {
         return formatMessages(MindcodeMessage::isError, messageTransformer);
     }
 
-    public  <M> List<M> warnings(Function<MindcodeMessage, M> messageTransformer) {
+    public <M> List<M> warnings(Function<MindcodeMessage, M> messageTransformer) {
         return formatMessages(MindcodeMessage::isWarning, messageTransformer);
     }
 
-    public  <M> List<M> infos(Function<MindcodeMessage, M> messageTransformer) {
+    public <M> List<M> infos(Function<MindcodeMessage, M> messageTransformer) {
         return formatMessages(MindcodeMessage::isInfo, messageTransformer);
     }
 

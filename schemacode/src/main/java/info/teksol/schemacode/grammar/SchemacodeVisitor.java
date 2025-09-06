@@ -63,6 +63,13 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitSchemaTag(SchemacodeParser.SchemaTagContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code filename}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitFilename(SchemacodeParser.FilenameContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -294,4 +301,11 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitTextBlock(SchemacodeParser.TextBlockContext ctx);
+	/**
+	 * Visit a parse tree produced by the {@code simpleTextLine}
+	 * labeled alternative in {@link SchemacodeParser#simpleStringLiteral}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitSimpleTextLine(SchemacodeParser.SimpleTextLineContext ctx);
 }

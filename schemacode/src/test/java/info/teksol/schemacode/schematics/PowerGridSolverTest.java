@@ -71,7 +71,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematic expected = new Schematic("", "", List.of(), 7, 7,
+        Schematic expected = new Schematic("", "", "", List.of(), 7, 7,
                 List.of(
                         block(pos( 2, 5), "@power-source", P0_0, Direction.EAST, pa(
                                 p(0, 6), p(1, 6), p(2, 6), p(3, 5), p(4, 5), p(5, 3), p(5, 4), p(6, 0), p(6, 1), p(6, 2))
@@ -114,7 +114,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematic expected = new Schematic("", "", List.of(), 16, 16,
+        Schematic expected = new Schematic("", "", "", List.of(), 16, 16,
                 List.of(
                         block(pos( 2, 5), "@power-node-large", P0_0, Direction.EAST, pa(
                                 p(1, 15), p(6, 15), p(7, 14), p(8, 14), p(9, 13), p(10, 12), p(11, 12),
@@ -149,7 +149,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematic expected = new Schematic("", "", List.of(), 31, 31,
+        Schematic expected = new Schematic("", "", "", List.of(), 31, 31,
                 List.of(
                         block(pos(2, 5), "@surge-tower", P0_0, Direction.EAST, pa(p(29, 29))),
                         block(pos(3, 5), "@surge-tower", p(29, 29), Direction.EAST, pa(P0_0))
@@ -168,7 +168,7 @@ class PowerGridSolverTest extends AbstractSchematicsTest {
                 end
                 """);
 
-        Schematic expected = new Schematic("", "", List.of(), 29, 33,
+        Schematic expected = new Schematic("", "", "", List.of(), 29, 33,
                 List.of(
                         block(pos(2, 5), "@surge-tower", P0_0, Direction.EAST, pa(p(27, 31))),
                         block(pos(3, 5), "@surge-tower", p(27, 31), Direction.EAST, pa(P0_0))

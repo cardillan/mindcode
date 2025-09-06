@@ -21,7 +21,7 @@ going on with this documentation.
 
 # Whitespace and comments
 
-All tokes in Schemacode are separated by whitespace. End-of-line characters have no special meaning (except in text 
+Whitespace is used to separate all tokes in Schemacode. End-of-line characters have no special meaning (except in text 
 blocks, where they're preserved). There's no character (such as `;`) separating commands in Schemacode.
 
 Schemacode supports line comments using the `//` characters: everything after `//` is ignored.
@@ -95,6 +95,7 @@ The following attributes are recognized:
 
 * `name`: specifies the name of the schematic. The value of the attribute is String (a string text value, a string 
   literal, or a text block). Can be specified at most once.
+* `filename`: specifies the output file name for the schematic. The value of the attribute is String. Can be specified at most once.
 * `description`: specifies the description of the schematic. The value of the attribute is String (a string text 
   value, a string literal, or a text block). In the case of text block, single newline characters are removed; an empty
   line must be used to define a line break. Can be specified at most once.

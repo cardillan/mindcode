@@ -61,7 +61,7 @@ class SchematicsIOTest {
     }
 
     private void readSchema(File schema) {
-        assertDoesNotThrow(() -> SchematicsIO.read(new FileInputStream(schema)));
+        assertDoesNotThrow(() -> SchematicsIO.read("", new FileInputStream(schema)));
     }
 
     @TestFactory
@@ -85,7 +85,7 @@ class SchematicsIOTest {
         // Comparison done on uncompressed arrays (although processor configuration is compressed anyway)
         // The schematics were obtained from Mindustry itself.
         byte[] contents = Files.readAllBytes(schematicFile.toPath());
-        Schematic schematic = assertDoesNotThrow(() -> SchematicsIO.read(new ByteArrayInputStream(contents)));
+        Schematic schematic = assertDoesNotThrow(() -> SchematicsIO.read("", new ByteArrayInputStream(contents)));
         byte[] rewritten = assertDoesNotThrow(() -> {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             SchematicsIO.write(schematic, output);

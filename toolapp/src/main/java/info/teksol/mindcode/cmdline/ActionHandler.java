@@ -135,23 +135,21 @@ abstract class ActionHandler {
         return file.getPath().equals("-");
     }
 
-    static File resolveOutputFile(File inputFile, File outputFile, String extension) {
+    static File resolveOutputFile(File inputFile, File outputDirectory, File outputFile, String extension) {
         if (outputFile == null) {
             if (isStdInOut(inputFile)) {
                 return inputFile;
             } else {
                 String name = inputFile.getName();
                 int inputExt = name.lastIndexOf('.');
-                if (inputExt < 0) {
-                    return new File(inputFile.getPath() + extension);
-                } else {
-                    String path = inputFile.getPath();
-                    int outputExt = inputExt - name.length() + path.length();
-                    return new File(path.substring(0, outputExt) + extension);
-                }
+                File outputDir = outputDirectory != null ? outputDirectory : inputFile.getParentFile();
+                String fileName = (inputExt < 0 ? name : name.substring(0, inputExt)) + extension;
+                return new File(outputDir, fileName);
             }
         } else {
-            return outputFile;
+            return outputFile.getParent() == null && outputDirectory != null
+                    ? new File(outputDirectory, outputFile.getName())
+                    : outputFile;
         }
     }
 

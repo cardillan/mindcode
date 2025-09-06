@@ -119,6 +119,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         }
 
         String name = getStringAttribute("name", "");
+        String filename = getStringAttribute("filename", "");
         String description = unwrap(getStringAttribute("description", ""));
 
         List<String> schemaLabels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
@@ -131,7 +132,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         blocks = PowerGridSolver.solve(this, blocks);
         BridgeSolver.solve(this, blocks);
 
-        return createSchematic(name, description, labels, blocks);
+        return createSchematic(name, filename, description, labels, blocks);
     }
 
     private Position calculateOrigin(List<Block> blocks) {
@@ -154,7 +155,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         }
     }
 
-    private Schematic createSchematic(String name, String description, List<String> labels, List<Block> blocks) {
+    private Schematic createSchematic(String name, String filename, String description, List<String> labels, List<Block> blocks) {
         // Compensate for non-zero origin
         Position origin = calculateOrigin(blocks);
         List<Block> repositioned = origin.zero() ? blocks : blocks.stream().map(b -> b.remap(p -> p.sub(origin))).toList();
@@ -179,7 +180,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
             }
         }
 
-        Schematic schematic = new Schematic(name, description, labels, dim.x(), dim.y(), repositioned);
+        Schematic schematic = new Schematic(name, filename, description, labels, dim.x(), dim.y(), repositioned);
         info("Created schematic '%s' with dimensions %s.", name, dim.toStringAbsolute());
         return schematic;
     }

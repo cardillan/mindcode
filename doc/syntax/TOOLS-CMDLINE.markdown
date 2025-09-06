@@ -90,7 +90,8 @@ Actions:
 
 ```
 usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
-                [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
+                [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-l [LOG]]
+                [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [--builtin-evaluation {none,compatible,full}]
                 [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
@@ -140,6 +141,8 @@ Input/output files:
                          by a dash. The start position must precede the end position.
   -o, --output [OUTPUT]  Output file to receive compiled  mlog  code;  uses  input  file  with  .mlog extension when not
                          specified, or stdout when input is stdin. Use "-" to force stdout output.
+  --output-directory OUTPUT-DIRECTORY
+                         show program's version number and exit
   -l, --log [LOG]        Output file to receive compiler messages; uses input  file  with .log extension when no file is
                          specified.
   --file-references {path,uri,windows-uri}
@@ -348,7 +351,7 @@ Run options:
 ## Decompile Mlog action help
 
 ```
-usage: mindcode dm [-h] [-o [OUTPUT]] input
+usage: mindcode dm [-h] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] input
 
 Partially decompile a text mlog file into Mindcode source file.
 
@@ -359,12 +362,15 @@ named arguments:
   -h, --help             show this help message and exit
   -o, --output [OUTPUT]  Output file to receive decompiled Mindcode; uses  input  file  name with .dmnd extension if not
                          specified.
+  --output-directory OUTPUT-DIRECTORY
+                         show program's version number and exit
 ```
 
 ## Compile Schematic action help
 
 ```
-usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [-l [LOG]] [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
+usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-l [LOG]]
+                [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
                 [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [--builtin-evaluation {none,compatible,full}]
                 [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
@@ -403,6 +409,8 @@ named arguments:
 Input/output files:
   input                  Schematic definition file to be compiled into a binary msch file.
   -o, --output [OUTPUT]  Output file to receive the resulting binary Mindustry schematic file (.msch).
+  --output-directory OUTPUT-DIRECTORY
+                         show program's version number and exit
   -l, --log [LOG]        output file to receive compiler messages; uses stdout/stderr when not specified
   --file-references {path,uri,windows-uri}
                          specifies the format in which a reference to a  location  in a source file is output on console
@@ -611,8 +619,8 @@ Run options:
 ## Decompile Schematic action help
 
 ```
-usage: mindcode ds [-h] [-o [OUTPUT]] [-p] [-P] [-c] [-C] [-l] [-L] [-s {original,horizontal,vertical}]
-                [-d {rotatable,non-default,all}] input
+usage: mindcode ds [-h] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-p] [-P] [-c] [-C] [-l] [-L]
+                [-s {original,horizontal,vertical}] [-d {rotatable,non-default,all}] input
 
 Decompile a binary msch file into schematic definition file.
 
@@ -623,6 +631,8 @@ named arguments:
   -h, --help             show this help message and exit
   -o, --output [OUTPUT]  Output file to receive compiled mlog  code;  uses  input  file  name with .sdf extension if not
                          specified.
+  --output-directory OUTPUT-DIRECTORY
+                         show program's version number and exit
   -p, --relative-positions
                          use relative coordinates for block positions where possible
   -P, --absolute-positions

@@ -62,23 +62,23 @@ public class SchemacodeCompiler {
     public static CompilerOutput<byte[]> compile(InputFiles inputFiles, CompilerProfile compilerProfile) {
         InputFile inputFile = inputFiles.getMainInputFile();
         if (inputFile.getCode().isBlank()) {
-            return new CompilerOutput<>(new byte[0], List.of());
+            return new CompilerOutput<>(new byte[0], "", List.of());
         }
 
         List<MindcodeMessage> messages = new ArrayList<>();
         DefinitionsContext parseTree = parseSchematics(messages::add, inputFiles);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
+        if (hasErrors(messages)) return new CompilerOutput<>(messages);
 
         AstDefinitions astDefinitions = createDefinitions(inputFile, parseTree, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
+        if (hasErrors(messages)) return new CompilerOutput<>(messages);
 
         Schematic schematic = buildSchematic(inputFiles, astDefinitions, compilerProfile, messages::add);
-        if (hasErrors(messages)) return new CompilerOutput<>(null, messages);
+        if (hasErrors(messages)) return new CompilerOutput<>(messages);
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             SchematicsIO.write(schematic, output);
-            return new CompilerOutput<>(output.toByteArray(), messages);
+            return new CompilerOutput<>(output.toByteArray(), schematic.filename(), messages);
         } catch (IOException e) {
             throw new SchematicsInternalError(e, "Error converting schematics to binary representation.");
         }
@@ -92,7 +92,7 @@ public class SchemacodeCompiler {
                     ? Base64.getEncoder().encodeToString(binaryOutput.output()) : "";
             return binaryOutput.withOutput(encoded);
         } catch (Exception e) {
-            return new CompilerOutput<>("", List.of(ToolMessage.error(ERR.INTERNAL_ERROR)));
+            return new CompilerOutput<>(List.of(ToolMessage.error(ERR.INTERNAL_ERROR)));
         }
     }
 

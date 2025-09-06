@@ -38,46 +38,84 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
         @Test
         public void outputArgumentDefaultDefault() throws ArgumentParserException {
             Namespace arguments = parseCommandLine("-");
-            File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".msch");
+            File output = resolveOutputFile(arguments, ".msch");
             assertEquals(new File("-"), output);
         }
 
         @Test
         public void outputArgumentDefaultFile() throws ArgumentParserException {
             Namespace arguments = parseCommandLine("input.sdf");
-            File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".msch");
+            File output = resolveOutputFile(arguments, ".msch");
             assertEquals(new File("input.msch"), output);
         }
 
         @Test
         public void outputArgumentFile() throws ArgumentParserException {
             Namespace arguments = parseCommandLine("input.sdf -o output.msch");
-            File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("output"), ".msch");
+            File output = resolveOutputFile(arguments, ".msch");
             assertEquals(output, arguments.get("output"));
         }
 
         @Test
         public void logArgumentNone() throws ArgumentParserException {
             Namespace arguments = parseCommandLine("input.sdf -o output.msch");
-            File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+            File output = resolveLogFile(arguments, ".log");
             assertEquals(new File("-"), output);
         }
 
         @Test
         public void logArgumentDefault() throws ArgumentParserException {
             Namespace arguments = parseCommandLine("input.sdf -o output.msch -l");
-            File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+            File output = resolveLogFile(arguments, ".log");
             assertEquals(new File("input.log"), output);
         }
 
         @Test
         public void logArgumentFile() throws ArgumentParserException {
             Namespace arguments = parseCommandLine("input.sdf -o output.msch -l log.log");
-            File output = ActionHandler.resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+            File output = resolveLogFile(arguments, ".log");
             assertEquals(new File("log.log"), output);
         }
     }
 
+    @Nested
+    class OutputDirectoryArgumentsTest {
+
+        @Test
+        public void outputArgumentDefaultDefault() throws ArgumentParserException {
+            Namespace arguments = parseCommandLine("--output-directory C:\\temp -");
+            File output = resolveOutputFile(arguments, ".msch");
+            assertEquals(new File("-"), output);
+        }
+
+        @Test
+        public void outputArgumentDefaultFile() throws ArgumentParserException {
+            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf");
+            File output = resolveOutputFile(arguments, ".msch");
+            assertEquals(new File("C:\\temp\\input.msch"), output);
+        }
+
+        @Test
+        public void outputArgumentFile() throws ArgumentParserException {
+            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf -o output.msch");
+            File output = resolveOutputFile(arguments, ".msch");
+            assertEquals(new File("C:\\temp\\output.msch"), output);
+        }
+
+        @Test
+        public void logArgumentDefault() throws ArgumentParserException {
+            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf -o output.msch -l");
+            File output = resolveLogFile(arguments, ".log");
+            assertEquals(new File("C:\\temp\\input.log"), output);
+        }
+
+        @Test
+        public void logArgumentFile() throws ArgumentParserException {
+            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf -o output.msch -l log.log");
+            File output = resolveLogFile(arguments, ".log");
+            assertEquals(new File("C:\\temp\\log.log"), output);
+        }
+    }
 
     @Nested
     class CompileSchemacodeActionCompilerProfileTest {

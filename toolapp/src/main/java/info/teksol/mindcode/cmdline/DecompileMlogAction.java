@@ -31,14 +31,21 @@ public class DecompileMlogAction extends ActionHandler {
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
+        subparser.addArgument("--output-directory")
+                .dest("output-directory")
+                .help("show program's version number and exit")
+                .type(Arguments.fileType().verifyIsDirectory());
+
         return subparser;
     }
 
     @Override
     void handle(Namespace arguments) {
-        File input = arguments.get("input");
-        File output = resolveOutputFile(input, arguments.get("output"), ".dmnd");
-        String mlog = readInput(input);
+        final File inputFile = arguments.get("input");
+        final File outputDirectory = arguments.get("output-directory");
+        final File outputFile = arguments.get("output");
+        final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".dmnd");
+        String mlog = readInput(inputFile);
         String decompiled = MlogDecompiler.decompile(mlog);
         writeOutput(output, decompiled);
     }

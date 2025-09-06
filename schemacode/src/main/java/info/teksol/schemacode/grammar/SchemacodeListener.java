@@ -96,6 +96,18 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitSchemaTag(SchemacodeParser.SchemaTagContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code filename}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterFilename(SchemacodeParser.FilenameContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code filename}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitFilename(SchemacodeParser.FilenameContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 */
@@ -489,4 +501,16 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitTextBlock(SchemacodeParser.TextBlockContext ctx);
+	/**
+	 * Enter a parse tree produced by the {@code simpleTextLine}
+	 * labeled alternative in {@link SchemacodeParser#simpleStringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void enterSimpleTextLine(SchemacodeParser.SimpleTextLineContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code simpleTextLine}
+	 * labeled alternative in {@link SchemacodeParser#simpleStringLiteral}.
+	 * @param ctx the parse tree
+	 */
+	void exitSimpleTextLine(SchemacodeParser.SimpleTextLineContext ctx);
 }

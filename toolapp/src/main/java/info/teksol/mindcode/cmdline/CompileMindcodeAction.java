@@ -76,6 +76,11 @@ public class CompileMindcodeAction extends ActionHandler {
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
+        files.addArgument("--output-directory")
+                .dest("output-directory")
+                .help("show program's version number and exit")
+                .type(Arguments.fileType().verifyIsDirectory());
+
         files.addArgument("-l", "--log")
                 .help("Output file to receive compiler messages; uses input file with .log extension when no file is specified.")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate())
@@ -121,8 +126,13 @@ public class CompileMindcodeAction extends ActionHandler {
             others.forEach(file -> readFile(inputFiles, file));
         }
 
-        final File output = resolveOutputFile(arguments.get("input"), arguments.get("output"), ".mlog");
-        final File logFile = resolveOutputFile(arguments.get("input"), arguments.get("log"), ".log");
+        final File inputFile = arguments.get("input");
+        final File outputDirectory = arguments.get("output-directory");
+        final File outputFile = arguments.get("output");
+        final File outputFileLog = arguments.get("log");
+
+        final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".mlog");
+        final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
 
         ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);

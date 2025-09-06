@@ -467,7 +467,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
     public void refusesConnectedToRelativeTo() {
         parseSchematicsExpectingMessages(
                 ExpectedMessages.create()
-                        .add("Parse error: extraneous input '+' expecting {'description', 'dimensions', 'end', 'name', 'tag', Id, Ref}"),
+                        .addRegex("Parse error: extraneous input '\\+' expecting .*"),
                 """
                         schematic
                             @power-node at (0, 0) connected to block1 + (1, 1)

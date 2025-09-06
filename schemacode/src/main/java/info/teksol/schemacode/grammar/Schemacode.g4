@@ -17,10 +17,11 @@ schematicItem
     ;
 
 attribute
-    : Name Assign name=textDef                  # name
-    | Description Assign description=textDef    # description
-    | Dimensions Assign coordinates             # dimensions
-    | Tag Assign tag=textDef                    # schemaTag
+    : Name Assign name=textDef                      # name
+    | Description Assign description=textDef        # description
+    | Dimensions Assign coordinates                 # dimensions
+    | Tag Assign tag=textDef                        # schemaTag
+    | Filename Assign filename=simpleStringLiteral  # filename
     ;
 
 block
@@ -117,6 +118,10 @@ stringLiteral
     | ( TextBlock1 | TextBlock2 )   # textBlock
     ;
 
+simpleStringLiteral
+    : TextLine                      # simpleTextLine
+    ;
+
 As              : 'as';
 At              : 'at';
 Block           : 'block';
@@ -130,6 +135,7 @@ Enabled         : 'enabled';
 End             : 'end';
 Facing          : 'facing';
 File            : 'file';
+Filename        : 'filename';
 Item            : 'item';
 Links           : 'links';
 Liquid          : 'liquid';
@@ -150,6 +156,8 @@ Assign          : '=';
 Colon           : ':';
 Comma           : ',';
 Dot             : '.';
+Dot2            : '..';
+Dot3            : '...';
 Minus           : '-';
 Plus            : '+';
 

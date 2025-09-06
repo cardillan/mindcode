@@ -53,6 +53,11 @@ public class CompileSchemacodeAction extends ActionHandler {
                 .nargs("?")
                 .type(Arguments.fileType().verifyCanCreate());
 
+        files.addArgument("--output-directory")
+                .dest("output-directory")
+                .help("show program's version number and exit")
+                .type(Arguments.fileType().verifyIsDirectory());
+
         files.addArgument("-l", "--log")
                 .help("output file to receive compiler messages; uses stdout/stderr when not specified")
                 .nargs("?")
@@ -74,18 +79,26 @@ public class CompileSchemacodeAction extends ActionHandler {
         return subparser;
     }
 
+    private File resolveSdfOutputFile(File cmdLineFile, String sdfFile) {
+        return cmdLineFile != null ? cmdLineFile : sdfFile.isEmpty() ? null : new File(sdfFile);
+    }
+
     @Override
     void handle(Namespace arguments) {
         CompilerProfile compilerProfile = createCompilerProfile(arguments);
-        final File file = arguments.get("input");
-        final Path basePath = isStdInOut(file) ? Paths.get("") : file.toPath().toAbsolutePath().normalize().getParent();
+        final File inputFile = arguments.get("input");
+        final Path basePath = isStdInOut(inputFile) ? Paths.get("") : inputFile.toPath().toAbsolutePath().normalize().getParent();
         final InputFiles inputFiles = InputFiles.create(basePath);
-        readFile(inputFiles, file);
+        readFile(inputFiles, inputFile);
 
         final CompilerOutput<byte[]> result = SchemacodeCompiler.compile(inputFiles, compilerProfile);
 
-        final File output = resolveOutputFile(file, arguments.get("output"), ".msch");
-        final File logFile = resolveOutputFile(file, arguments.get("log"), ".log");
+        final File outputDirectory = arguments.get("output-directory");
+        final File outputFile = resolveSdfOutputFile(arguments.get("output"), result.fileName());
+        final File outputFileLog = arguments.get("log");
+
+        final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".msch");
+        final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
         final boolean mlogToStdErr = isStdInOut(output);
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
 

@@ -50,6 +50,11 @@ public class DecompileSchemacodeAction extends ActionHandler {
                 .nargs("?")
                 .type(Arguments.fileType().acceptSystemIn().verifyCanCreate());
 
+        subparser.addArgument("--output-directory")
+                .dest("output-directory")
+                .help("show program's version number and exit")
+                .type(Arguments.fileType().verifyIsDirectory());
+
         createArgument(subparser, "positions",
                 (decompiler, arguments, name) -> decompiler.setRelativePositions(arguments.getBoolean(name)),
                 "-p", "--relative-positions")
@@ -118,18 +123,20 @@ public class DecompileSchemacodeAction extends ActionHandler {
 
     @Override
     void handle(Namespace arguments) {
-        File input = arguments.get("input");
-        File output = resolveOutputFile(input, arguments.get("output"), ".sdf");
+        final File inputFile = arguments.get("input");
+        final File outputDirectory = arguments.get("output-directory");
+        final File outputFile = arguments.get("output");
+        final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".sdf");
 
-        try (FileInputStream fis = new FileInputStream(input)) {
-            Schematic schematic = SchematicsIO.read(fis);
+        try (FileInputStream fis = new FileInputStream(inputFile)) {
+            Schematic schematic = SchematicsIO.read(inputFile.getName(), fis);
             Decompiler decompiler = new Decompiler(schematic);
             configureDecompiler(decompiler, arguments);
             String schemaDefinition = decompiler.buildCode();
 
             writeOutput(output, schemaDefinition);
         } catch (IOException e) {
-            throw new info.teksol.mindcode.cmdline.ProcessingException(e, "Error reading file '%s': %s", input.getPath(), e.getMessage());
+            throw new info.teksol.mindcode.cmdline.ProcessingException(e, "Error reading file '%s': %s", inputFile.getPath(), e.getMessage());
         }
     }
 }

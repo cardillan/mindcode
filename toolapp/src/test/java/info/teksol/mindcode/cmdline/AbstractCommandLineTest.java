@@ -13,6 +13,7 @@ import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.io.File;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -36,6 +37,16 @@ public abstract class AbstractCommandLineTest {
     protected CompilerProfile parseToProfile(String commandLine) throws ArgumentParserException {
         Namespace arguments = parseCommandLine(commandLine);
         return action.createCompilerProfile(arguments);
+    }
+
+    protected File resolveOutputFile(Namespace arguments, String extension) {
+        return ActionHandler.resolveOutputFile(arguments.get("input"),
+                arguments.get("output-directory"), arguments.get("output"), extension);
+    }
+
+    protected File resolveLogFile(Namespace arguments, String extension) {
+        return ActionHandler.resolveOutputFile(arguments.get("input"),
+                arguments.get("output-directory"), arguments.get("log"), extension);
     }
 
     @Nested

@@ -17,6 +17,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) to compile-time evaluator. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option. 
 * Added support for evaluating the `@name` property to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
 * Added support for contentMap to schematics IO.
+* Added the `--output-directory` command-line option; if the output directory isn't specified as part of an explicit output file designation, the file will be placed in the output directory.  
+* Added new `filename` attribute to schematic definition, allowing to specify the name of the output file to use for the generated schematic.
 
 ### Changed
 

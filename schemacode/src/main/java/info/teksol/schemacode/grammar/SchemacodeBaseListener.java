@@ -113,6 +113,18 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterFilename(SchemacodeParser.FilenameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitFilename(SchemacodeParser.FilenameContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlock(SchemacodeParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -528,6 +540,18 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitTextBlock(SchemacodeParser.TextBlockContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterSimpleTextLine(SchemacodeParser.SimpleTextLineContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitSimpleTextLine(SchemacodeParser.SimpleTextLineContext ctx) { }
 
 	/**
 	 * {@inheritDoc}

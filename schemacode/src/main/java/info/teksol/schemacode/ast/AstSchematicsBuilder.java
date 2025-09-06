@@ -92,6 +92,11 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
         return new AstSchemaAttribute(pos(ctx.getStart()), "label", visit(ctx.tag));
     }
 
+    @Override
+    public AstSchemaItem visitFilename(FilenameContext ctx) {
+        return new AstSchemaAttribute(pos(ctx.getStart()), "filename", visit(ctx.filename));
+    }
+
     // Blocks
 
     @Override
@@ -309,6 +314,11 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
 
     @Override
     public AstStringLiteral visitTextLine(SchemacodeParser.TextLineContext ctx) {
+        return AstStringLiteral.fromTerminalNode(inputFile, ctx.TextLine());
+    }
+
+    @Override
+    public AstSchemaItem visitSimpleTextLine(SimpleTextLineContext ctx) {
         return AstStringLiteral.fromTerminalNode(inputFile, ctx.TextLine());
     }
 
