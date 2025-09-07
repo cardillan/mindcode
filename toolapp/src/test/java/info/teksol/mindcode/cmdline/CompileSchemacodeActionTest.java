@@ -7,8 +7,10 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -82,38 +84,43 @@ public class CompileSchemacodeActionTest extends AbstractCommandLineTest {
     class OutputDirectoryArgumentsTest {
 
         @Test
-        public void outputArgumentDefaultDefault() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("--output-directory C:\\temp -");
+        public void outputArgumentDefaultDefault(@TempDir Path tempDir) throws ArgumentParserException {
+            String tempDirPath = tempDir.toAbsolutePath().toString();
+            Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " -");
             File output = resolveOutputFile(arguments, ".msch");
             assertEquals(new File("-"), output);
         }
 
         @Test
-        public void outputArgumentDefaultFile() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf");
+        public void outputArgumentDefaultFile(@TempDir Path tempDir) throws ArgumentParserException {
+            String tempDirPath = tempDir.toAbsolutePath().toString();
+            Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.sdf");
             File output = resolveOutputFile(arguments, ".msch");
-            assertEquals(new File("C:\\temp\\input.msch"), output);
+            assertEquals(new File(tempDirPath, "input.msch"), output);
         }
 
         @Test
-        public void outputArgumentFile() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf -o output.msch");
+        public void outputArgumentFile(@TempDir Path tempDir) throws ArgumentParserException {
+            String tempDirPath = tempDir.toAbsolutePath().toString();
+            Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.sdf -o output.msch");
             File output = resolveOutputFile(arguments, ".msch");
-            assertEquals(new File("C:\\temp\\output.msch"), output);
+            assertEquals(new File(tempDirPath, "output.msch"), output);
         }
 
         @Test
-        public void logArgumentDefault() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf -o output.msch -l");
+        public void logArgumentDefault(@TempDir Path tempDir) throws ArgumentParserException {
+            String tempDirPath = tempDir.toAbsolutePath().toString();
+            Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.sdf -o output.msch -l");
             File output = resolveLogFile(arguments, ".log");
-            assertEquals(new File("C:\\temp\\input.log"), output);
+            assertEquals(new File(tempDirPath, "input.log"), output);
         }
 
         @Test
-        public void logArgumentFile() throws ArgumentParserException {
-            Namespace arguments = parseCommandLine("--output-directory C:\\temp input.sdf -o output.msch -l log.log");
+        public void logArgumentFile(@TempDir Path tempDir) throws ArgumentParserException {
+            String tempDirPath = tempDir.toAbsolutePath().toString();
+            Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.sdf -o output.msch -l log.log");
             File output = resolveLogFile(arguments, ".log");
-            assertEquals(new File("C:\\temp\\log.log"), output);
+            assertEquals(new File(tempDirPath, "log.log"), output);
         }
     }
 

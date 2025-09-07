@@ -8,8 +8,10 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -109,38 +111,43 @@ public class CompileMindcodeActionTest extends AbstractCommandLineTest {
         class OutputDirectoryArgumentsTest {
 
             @Test
-            public void outputArgumentDefaultDefault() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("--output-directory C:\\temp -");
+            public void outputArgumentDefaultDefault(@TempDir Path tempDir) throws ArgumentParserException {
+                String tempDirPath = tempDir.toAbsolutePath().toString();
+                Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " -");
                 File output = resolveOutputFile(arguments, ".mlog");
                 assertEquals(new File("-"), output);
             }
 
             @Test
-            public void outputArgumentDefaultFile() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd");
+            public void outputArgumentDefaultFile(@TempDir Path tempDir) throws ArgumentParserException {
+                String tempDirPath = tempDir.toAbsolutePath().toString();
+                Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.mnd");
                 File output = resolveOutputFile(arguments, ".mlog");
-                assertEquals(new File("C:\\temp\\input.mlog"), output);
+                assertEquals(new File(tempDirPath, "input.mlog"), output);
             }
 
             @Test
-            public void outputArgumentFile() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd -o output.mlog");
+            public void outputArgumentFile(@TempDir Path tempDir) throws ArgumentParserException {
+                String tempDirPath = tempDir.toAbsolutePath().toString();
+                Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.mnd -o output.mlog");
                 File output = resolveOutputFile(arguments, ".mlog");
-                assertEquals(new File("C:\\temp\\output.mlog"), output);
+                assertEquals(new File(tempDirPath, "output.mlog"), output);
             }
 
             @Test
-            public void logArgumentDefault() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd -o output.mlog -l");
+            public void logArgumentDefault(@TempDir Path tempDir) throws ArgumentParserException {
+                String tempDirPath = tempDir.toAbsolutePath().toString();
+                Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.mnd -o output.mlog -l");
                 File output = resolveLogFile(arguments, ".log");
-                assertEquals(new File("C:\\temp\\input.log"), output);
+                assertEquals(new File(tempDirPath, "input.log"), output);
             }
 
             @Test
-            public void logArgumentFile() throws ArgumentParserException {
-                Namespace arguments = parseCommandLine("--output-directory C:\\temp input.mnd -o output.mlog -l log.log");
+            public void logArgumentFile(@TempDir Path tempDir) throws ArgumentParserException {
+                String tempDirPath = tempDir.toAbsolutePath().toString();
+                Namespace arguments = parseCommandLine("--output-directory " + tempDirPath + " input.mnd -o output.mlog -l log.log");
                 File output = resolveLogFile(arguments, ".log");
-                assertEquals(new File("C:\\temp\\log.log"), output);
+                assertEquals(new File(tempDirPath, "log.log"), output);
             }
         }
 
