@@ -269,7 +269,7 @@ class SchematicsBuilderTest extends AbstractSchematicsTest {
                 """);
 
         Schematic expected = new Schematic("", "", "",
-                List.of(SchematicsMetadata.metadata.getIcons().translateIcon("ITEM-COAL")), 0, 0, List.of());
+                List.of(SchematicsMetadata.getMetadata().getIcons().translateIcon("ITEM-COAL")), 0, 0, List.of());
 
         assertAstEquals(expected, actual);
     }

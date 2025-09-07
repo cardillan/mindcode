@@ -201,18 +201,6 @@ public class CompilerProfile {
         return this.<Target>getOption(EnvironmentOptions.TARGET).getValue();
     }
 
-//    public CompilerProfile setProcessorVersion(ProcessorVersion version) {
-//        CompilerOptionValue<Target> option = getOption(EnvironmentOptions.TARGET);
-//        option.setValue(option.getValue().withVersion(version));
-//        return this;
-//    }
-//
-//    public CompilerProfile setProcessorEdition(ProcessorEdition edition) {
-//        CompilerOptionValue<Target> option = getOption(EnvironmentOptions.TARGET);
-//        option.setValue(option.getValue().withEdition(edition));
-//        return this;
-//    }
-
     public CompilerProfile setTarget(ProcessorVersion version, ProcessorEdition edition) {
         getOption(EnvironmentOptions.TARGET).setValue(new Target(version, edition));
         return this;

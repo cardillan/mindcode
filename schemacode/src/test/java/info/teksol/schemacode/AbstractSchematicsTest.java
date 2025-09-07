@@ -52,11 +52,11 @@ public abstract class AbstractSchematicsTest {
     private int index = 0;
 
     public Block block(SourcePosition pos, List<String> labels, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(pos, index++, labels, SchematicsMetadata.metadata.getBlockByName(blockType), position, direction, configuration);
+        return new Block(pos, index++, labels, SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
     }
 
     public Block block(SourcePosition pos, String blockType, Position position, Direction direction, Configuration configuration) {
-        return new Block(pos, index++, List.of(), SchematicsMetadata.metadata.getBlockByName(blockType), position, direction, configuration);
+        return new Block(pos, index++, List.of(), SchematicsMetadata.getMetadata().getBlockByName(blockType), position, direction, configuration);
     }
 
     /**

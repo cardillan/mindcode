@@ -97,6 +97,12 @@ public class AstSchematicsBuilder extends SchemacodeBaseVisitor<AstSchemaItem> {
         return new AstSchemaAttribute(pos(ctx.getStart()), "filename", visit(ctx.filename));
     }
 
+    @Override
+    public AstSchemaItem visitTarget(TargetContext ctx) {
+        return new AstSchemaAttribute(pos(ctx.getStart()), "target",
+                new AstStringLiteral(pos(ctx.version), ctx.version.getText()));
+    }
+
     // Blocks
 
     @Override

@@ -78,10 +78,10 @@ class BridgeSolverTest extends AbstractSchematicsTest {
     public List<DynamicTest> refusesOutOfRangeConnections() {
         final List<DynamicTest> result = new ArrayList<>();
         List<BlockType> blockTypes = List.of(
-                SchematicsMetadata.metadata.getExistingBlock("@bridge-conduit"),
-                SchematicsMetadata.metadata.getExistingBlock("@bridge-conveyor"),
-                SchematicsMetadata.metadata.getExistingBlock("@phase-conduit"),
-                SchematicsMetadata.metadata.getExistingBlock("@phase-conveyor"));
+                SchematicsMetadata.getMetadata().getExistingBlock("@bridge-conduit"),
+                SchematicsMetadata.getMetadata().getExistingBlock("@bridge-conveyor"),
+                SchematicsMetadata.getMetadata().getExistingBlock("@phase-conduit"),
+                SchematicsMetadata.getMetadata().getExistingBlock("@phase-conveyor"));
 
         for (final BlockType blockType : blockTypes) {
             result.add(DynamicTest.dynamicTest(blockType.name(), null, () -> refusesOutOfRangeConnection(blockType)));

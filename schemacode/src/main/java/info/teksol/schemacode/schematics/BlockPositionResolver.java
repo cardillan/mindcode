@@ -69,7 +69,7 @@ public class BlockPositionResolver {
 
     private record RelativeBlockPosition(int index, BlockType blockType, String reference, Position position) {
         public RelativeBlockPosition(int index, AstBlock astBlock, String lastBlock) {
-            this(index, SchematicsMetadata.metadata.getBlockByName(astBlock.type()),
+            this(index, SchematicsMetadata.getMetadata().getBlockByName(astBlock.type()),
                     astBlock.position().relative()
                             ? astBlock.position().getRelativeTo() == null ? lastBlock : astBlock.position().getRelativeTo()
                             : null,

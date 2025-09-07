@@ -108,6 +108,18 @@ public interface SchemacodeListener extends ParseTreeListener {
 	 */
 	void exitFilename(SchemacodeParser.FilenameContext ctx);
 	/**
+	 * Enter a parse tree produced by the {@code target}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void enterTarget(SchemacodeParser.TargetContext ctx);
+	/**
+	 * Exit a parse tree produced by the {@code target}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 */
+	void exitTarget(SchemacodeParser.TargetContext ctx);
+	/**
 	 * Enter a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 */

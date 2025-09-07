@@ -22,6 +22,7 @@ attribute
     | Dimensions Assign coordinates                 # dimensions
     | Tag Assign tag=textDef                        # schemaTag
     | Filename Assign filename=simpleStringLiteral  # filename
+    | Target Assign version=(Int | Version)         # target
     ;
 
 block
@@ -147,6 +148,7 @@ Processor       : 'processor';
 Rgba            : 'rgba';
 Schematic       : 'schematic';
 Tag             : 'tag';
+Target          : 'target';
 Text            : 'text';
 To              : 'to';
 Unit            : 'unit';
@@ -177,6 +179,7 @@ Int             : ( '+' | '-' )? [0-9]+;
 Id              : [_a-zA-Z] [-a-zA-Z_0-9]*;
 Ref             : '@' [_a-zA-Z] [-a-zA-Z_0-9]*;
 Pattern         : [_a-zA-Z*] [-a-zA-Z_0-9*]*;
+Version         : [0-9]+ [wW] | [0-9]+ '.' [0-9]+ ( [wW] )? ;
 
 Comment         : '/*' .*? '*/' -> skip;
 SLComment       : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;

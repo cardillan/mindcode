@@ -37,11 +37,11 @@ public final class LiquidConfiguration implements ContentConfiguration {
     }
 
     public static LiquidConfiguration forId(int id) {
-        return forLiquid(SchematicsMetadata.metadata.getLiquidById(id));
+        return forLiquid(SchematicsMetadata.getMetadata().getLiquidById(id));
     }
 
     public static LiquidConfiguration forName(String name) {
-        return forLiquid(SchematicsMetadata.metadata.getLiquidByName(name));
+        return forLiquid(SchematicsMetadata.getMetadata().getLiquidByName(name));
     }
 
     @Override

@@ -37,11 +37,11 @@ public final class BlockConfiguration implements UnitOrBlockConfiguration {
     }
 
     public static BlockConfiguration forId(int id) {
-        return forBlockType(SchematicsMetadata.metadata.getBlockById(id));
+        return forBlockType(SchematicsMetadata.getMetadata().getBlockById(id));
     }
 
     public static BlockConfiguration forName(String name) {
-        return forBlockType(SchematicsMetadata.metadata.getBlockByName(name));
+        return forBlockType(SchematicsMetadata.getMetadata().getBlockByName(name));
     }
 
     @Override

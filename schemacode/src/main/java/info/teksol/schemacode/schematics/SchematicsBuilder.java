@@ -7,7 +7,9 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.ToolMessage;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.Icons;
+import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.options.Target;
 import info.teksol.schemacode.SchematicsInternalError;
 import info.teksol.schemacode.SchematicsMetadata;
 import info.teksol.schemacode.ast.*;
@@ -82,6 +84,8 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
 
         astSchematic = schematicsList.getFirst();
 
+        processTarget();
+
         Map<String, Long> labelCounts = astSchematic.blocks().stream()
                 .filter(b -> b.labels() != null && !b.labels().isEmpty())
                 .flatMap(b -> b.labels().stream())
@@ -91,11 +95,11 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                 .filter(e -> e.getValue() > 1)
                 .forEachOrdered(c -> addMessage(ToolMessage.error("Multiple definitions of block label '%s'.", c.getKey())));
 
-        astSchematic.blocks().stream().filter(astBlock -> !SchematicsMetadata.metadata.isBlockNameValid(astBlock.type()))
+        astSchematic.blocks().stream().filter(astBlock -> !SchematicsMetadata.getMetadata().isBlockNameValid(astBlock.type()))
                 .forEachOrdered(astBlock -> error(astBlock, "Unknown block type '%s'.", astBlock.type()));
 
         List<AstBlock> astBlocks = astSchematic.blocks().stream()
-                .filter(astBlock -> SchematicsMetadata.metadata.isBlockNameValid(astBlock.type())).toList();
+                .filter(astBlock -> SchematicsMetadata.getMetadata().isBlockNameValid(astBlock.type())).toList();
 
         // Here are absolute positions of all blocks, stored as "#" + index
         // Labeled blocks are additionally stored under all their labels
@@ -109,7 +113,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         for (int index = 0; index < astBlocks.size(); index++) {
             AstBlock astBlock = astBlocks.get(index);
             BlockPosition blockPos = getBlockPosition(index);
-            BlockType type = SchematicsMetadata.metadata.getBlockByName(astBlock.type());
+            BlockType type = SchematicsMetadata.getMetadata().getBlockByName(astBlock.type());
             Direction direction = astBlock.direction() == null
                     ? Direction.EAST
                     : Direction.valueOf(astBlock.direction().direction().toUpperCase());
@@ -123,7 +127,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         String description = unwrap(getStringAttribute("description", ""));
 
         List<String> schemaLabels = getAttributes("label", AstText.class).stream().map(text -> text.getText(this)).toList();
-        Icons icons = SchematicsMetadata.metadata.getIcons();
+        Icons icons = SchematicsMetadata.getMetadata().getIcons();
         List<String> additionalLabels = compilerProfile.getAdditionalTags().stream().map(icons::translateIcon).toList();
         List<String> labels = Stream.concat(schemaLabels.stream(), additionalLabels.stream()).distinct().toList();
 
@@ -133,6 +137,22 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         BridgeSolver.solve(this, blocks);
 
         return createSchematic(name, filename, description, labels, blocks);
+    }
+
+    private void processTarget() {
+        AstStringLiteral attribute = getAttribute("target", AstStringLiteral.class);
+        if (attribute == null) return;
+
+        String strTarget = attribute.getText(this).trim();
+        if (strTarget.isBlank()) return;
+
+        try {
+            Target target = new Target(strTarget);
+            getCompilerProfile().setTarget(target);
+            SchematicsMetadata.setMetadata(MindustryMetadata.forVersion(target.version()));
+        } catch (IllegalArgumentException e) {
+            error(attribute, "Invalid version specification '%s'.", strTarget);
+        }
     }
 
     private Position calculateOrigin(List<Block> blocks) {
@@ -205,7 +225,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
                         e -> resolveConstant(astConstants, new HashSet<>(), e.getValue())));
 
         // Add all icon constants
-        SchematicsMetadata.metadata.getIcons().forEachIcon(
+        SchematicsMetadata.getMetadata().getIcons().forEachIcon(
                 (k, v) -> constants.put(k, AstStringLiteral.fromText(v.format(null))));
     }
 
@@ -242,18 +262,19 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
 
     private Configuration getConfiguration(BlockPosition blockPos, AstConfiguration astConfiguration) {
         return switch (astConfiguration) {
-            case AstBlockReference r        -> verifyConfiguration(r, blockPos, "block");
-            case AstBoolean b               -> BooleanConfiguration.of(b.value());
-            case AstConnection c            -> c.evaluate(this, blockPos.position());
-            case AstConnections c           -> new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
-            case AstItemReference r         -> verifyConfiguration(r, blockPos, "item");
-            case AstLiquidReference r       -> verifyConfiguration(r, blockPos, "liquid");
-            case AstProcessor p             -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
-            case AstRgbaValue rgb           -> convertToRgbValue(blockPos, rgb);
-            case AstText t                  -> new TextConfiguration(t.getText(this));
-            case AstUnitCommandReference r  -> verifyConfiguration(r, blockPos, "command");
-            case AstUnitReference r         -> decodeUnitConfiguration(blockPos, r);
-            case null, default              -> EmptyConfiguration.EMPTY;
+            case AstBlockReference r -> verifyConfiguration(r, blockPos, "block");
+            case AstBoolean b -> BooleanConfiguration.of(b.value());
+            case AstConnection c -> c.evaluate(this, blockPos.position());
+            case AstConnections c ->
+                    new PositionArray(c.connections().stream().map(p -> p.evaluate(this, blockPos.position())).toList());
+            case AstItemReference r -> verifyConfiguration(r, blockPos, "item");
+            case AstLiquidReference r -> verifyConfiguration(r, blockPos, "liquid");
+            case AstProcessor p -> ProcessorConfiguration.fromAstConfiguration(this, p, blockPos.position());
+            case AstRgbaValue rgb -> convertToRgbValue(blockPos, rgb);
+            case AstText t -> new TextConfiguration(t.getText(this));
+            case AstUnitCommandReference r -> verifyConfiguration(r, blockPos, "command");
+            case AstUnitReference r -> decodeUnitConfiguration(blockPos, r);
+            case null, default -> EmptyConfiguration.EMPTY;
         };
     }
 
@@ -377,8 +398,9 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
             return blockPosition;
         }
         error(element, "Unknown block label '%s'", name);
-        return new AstBlockPosition(0, SchematicsMetadata.metadata.getBlockByName("@air"), Position.INVALID);
+        return new AstBlockPosition(0, SchematicsMetadata.getMetadata().getBlockByName("@air"), Position.INVALID);
     }
+
     public Map<String, BlockPosition> getAstLabelMap() {
         return astLabelMap;
     }
@@ -397,7 +419,7 @@ public class SchematicsBuilder extends AbstractMessageEmitter {
         return positionMap;
     }
 
-    private static <T, E extends  Throwable> T requireNonNull(T object, Supplier<E> exception) throws E {
+    private static <T, E extends Throwable> T requireNonNull(T object, Supplier<E> exception) throws E {
         if (object == null) {
             throw exception.get();
         } else {

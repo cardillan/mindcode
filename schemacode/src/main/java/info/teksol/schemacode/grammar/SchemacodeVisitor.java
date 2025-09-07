@@ -70,6 +70,13 @@ public interface SchemacodeVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFilename(SchemacodeParser.FilenameContext ctx);
 	/**
+	 * Visit a parse tree produced by the {@code target}
+	 * labeled alternative in {@link SchemacodeParser#attribute}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitTarget(SchemacodeParser.TargetContext ctx);
+	/**
 	 * Visit a parse tree produced by {@link SchemacodeParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result

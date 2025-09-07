@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.8.0
+## 3.8.0-beta.5 - 2025-09-07
 
 ### Fixed
 
@@ -16,9 +16,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for calling remote functions locally.
 * Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) to compile-time evaluator. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option. 
 * Added support for evaluating the `@name` property to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
-* Added support for contentMap to schematics IO.
+* Added new [`filename` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the name of the output file to use for the generated schematic.
+* **Breaking** added new [`target` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the target version for the schematic. This might break existing schematics, as previously schematics were compiled using the latest metadata version only.
+* Added support for a content map in schematics, both when reading and when writing them. The content map is included in all schematic files, regardless of target (older Mindustry versions which do not support a content map will ignore them when reading schematics).
 * Added the `--output-directory` command-line option; if the output directory isn't specified as part of an explicit output file designation, the file will be placed in the output directory.  
-* Added new `filename` attribute to schematic definition, allowing to specify the name of the output file to use for the generated schematic.
 
 ### Changed
 
@@ -27,6 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Miscellaneous
 
 * Separated the mimex data into a [standalone repository](https://github.com/cardillan/mimex-data), which is now included as a git submodule at `compiler/src/main/resources/mimex`.
+* Updated the BE version metadata to the latest available BE build.
 
 ## 3.8.0-beta.4 - 2025-07-28
 

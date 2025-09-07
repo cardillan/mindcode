@@ -25,7 +25,7 @@ Mindcode can generate code for several Mindustry versions:
 * **6.0 Build 126.2**: use `#set target = 6;` to select it.
 * **7.0 Build 146** (the default one): use `#set target = 7;` to explicitly select it.  
 * **v8 Build 149 Beta**: use `#set target = 8.0;` to select it.
-* **v8 Build 150 Beta**, **v8 Build 150.1 Beta**: use `#set target = 8.1;` to select it.
+* **v8 Build 150 Beta** or later: use `#set target = 8.1;` to select it.
 
 At this moment, target `8.1` is also fully compatible with the latest Mindustry BE version (build 26149).
 
@@ -96,14 +96,6 @@ You can also get help on these Discord servers:
 
 * [Logic channel on the Mindustry server](https://discord.gg/YkMMPMYABE)
 * [Mindustry Logic server](https://discord.gg/WkFD3E8bXv)
-
-## Roadmap
-
-An overview of planned new functionalities is available [here](https://github.com/cardillan/mindcode/discussions/142).
-
-Actual progress of development is published in the [`#development` channel on Discord](https://discord.gg/wnWYC2BjAU).
-
-Comments and ideas are welcome at both places.
 
 ## Contributing
 

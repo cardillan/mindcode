@@ -116,7 +116,7 @@ public class Decompiler {
                 .mapMulti(this::extractLabelsAndIcons)
                 .filter(t -> !t.isBlank())
                 .distinct()
-                .forEach(t -> nl().append("tag = ").append(SchematicsMetadata.metadata.getIcons().decodeIcon(t)));
+                .forEach(t -> nl().append("tag = ").append(SchematicsMetadata.getMetadata().getIcons().decodeIcon(t)));
 
         sbr.append('\n');
 
@@ -147,7 +147,7 @@ public class Decompiler {
             char ch = label.charAt(i);
             if (ch >= 32768) {
                 String icon = String.valueOf(ch);
-                if (SchematicsMetadata.metadata.getIcons().isIconValue(icon)) {
+                if (SchematicsMetadata.getMetadata().getIcons().isIconValue(icon)) {
                     consumer.accept(icon);
                 }
             }

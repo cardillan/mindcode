@@ -125,6 +125,18 @@ public class SchemacodeBaseListener implements SchemacodeListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
+	@Override public void enterTarget(SchemacodeParser.TargetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitTarget(SchemacodeParser.TargetContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
 	@Override public void enterBlock(SchemacodeParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}

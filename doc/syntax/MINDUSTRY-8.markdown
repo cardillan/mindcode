@@ -1,8 +1,8 @@
 # Using unreleased versions of Mindustry
 
-[Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases/tag/v147) is now available. The new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to `8` either by command-line argument, or by the `#set target = 8;` directive.
+[Mindustry 8 pre-release](https://github.com/Anuken/Mindustry/releases) is now available. The new functionality of Mindustry Logic is already supported by Mindcode when setting the language target to `8` either by command-line argument, or by the `#set target = 8;` directive.
 
-The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown).
+The Mindustry Logic v8 instruction set and corresponding Mindcode functions are described in [Function reference for Mindustry Logic 8.1](FUNCTIONS-81.markdown).
 
 To run the code produced by Mindcode Logic 8, you need to use one of the pre-release versions, or one of the development versions of Mindustry (a "bleeding-edge" version).
 
@@ -273,7 +273,7 @@ printflush(message2);
 
 #### Data storage using strings 
 
-The ability to access individual characters of string values is a convenient way to store data. At this moment, Mindcode doesn't provide any means to easily encode data into strings but uses the functionality internally to implement [very space-efficient jump tables](SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
+The ability to access individual characters of string values is a convenient way to store data. Mindcode provides the [`encode()` function](SYNTAX-4-FUNCTIONS.markdown#the-encode-function) to easily encode data into strings, and also uses the functionality internally to implement [very space-efficient jump tables](SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
 
 ### Reading and writing canvas pixels
 

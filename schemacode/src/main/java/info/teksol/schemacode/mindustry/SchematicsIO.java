@@ -125,7 +125,7 @@ public class SchematicsIO {
             byte length = stream.readByte();
             for (int i = 0; i < length; i++) {
                 String name = stream.readUTF();
-                BlockType block = SchematicsMetadata.metadata.getBlockByName("@" + FALLBACK.getOrDefault(name, name));
+                BlockType block = SchematicsMetadata.getMetadata().getBlockByName("@" + FALLBACK.getOrDefault(name, name));
                 if (block == null) {
                     throw new IOException("Unknown block type '@" + name + "'.");
                 }
@@ -149,14 +149,14 @@ public class SchematicsIO {
                     Map<Integer, MindustryContent> inner = new HashMap<>();
                     contentMap.put(key, inner);
                     value.forEach((k, v) -> {
-                        MindustryContent content = SchematicsMetadata.metadata.getNamedContent(contentType, k);
+                        MindustryContent content = SchematicsMetadata.getMetadata().getNamedContent(contentType, k);
                         if (content == null) throw new SchematicsInternalError("Unknown content '%s' for type '%s'.", k, contentType.name());
                         inner.put(v, content);
                     });
                 });
                 mapper = (type, id) -> contentMap.getOrDefault(type.id, Map.of()).get(id);
             } else {
-                mapper = SchematicsMetadata.metadata::getNamedContentById;
+                mapper = SchematicsMetadata.getMetadata()::getNamedContentById;
             }
 
             List<Block> blocks = new ArrayList<>();

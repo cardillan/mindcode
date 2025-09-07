@@ -27,6 +27,12 @@ import java.util.List;
 
 public class SchemacodeCompiler {
 
+    private static final ThreadLocal<CompilerProfile> compilerProfile = new ThreadLocal<>();
+
+    static CompilerProfile getCompilerProfile() {
+        return compilerProfile.get();
+    }
+
     /**
      * Parses schemacode source into AST tree.
      *
@@ -60,6 +66,8 @@ public class SchemacodeCompiler {
     }
 
     public static CompilerOutput<byte[]> compile(InputFiles inputFiles, CompilerProfile compilerProfile) {
+        SchemacodeCompiler.compilerProfile.set(compilerProfile);
+
         InputFile inputFile = inputFiles.getMainInputFile();
         if (inputFile.getCode().isBlank()) {
             return new CompilerOutput<>(new byte[0], "", List.of());

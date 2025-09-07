@@ -26,11 +26,11 @@ public final class UnitCommandConfiguration implements Configuration {
     }
 
     public static UnitCommandConfiguration forId(int id) {
-        return forUnitCommand(SchematicsMetadata.metadata.getUnitCommandById(id));
+        return forUnitCommand(SchematicsMetadata.getMetadata().getUnitCommandById(id));
     }
 
     public static UnitCommandConfiguration forName(String name) {
-        return forUnitCommand(SchematicsMetadata.metadata.getUnitCommandByName(name));
+        return forUnitCommand(SchematicsMetadata.getMetadata().getUnitCommandByName(name));
     }
 
     @Override

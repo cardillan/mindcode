@@ -37,11 +37,11 @@ public final class UnitConfiguration implements UnitOrBlockConfiguration {
     }
 
     public static UnitConfiguration forId(int id) {
-        return forUnit(SchematicsMetadata.metadata.getUnitById(id));
+        return forUnit(SchematicsMetadata.getMetadata().getUnitById(id));
     }
 
     public static UnitConfiguration forName(String name) {
-        return forUnit(SchematicsMetadata.metadata.getUnitByName(name));
+        return forUnit(SchematicsMetadata.getMetadata().getUnitByName(name));
     }
 
     @Override

@@ -24,6 +24,7 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                 () -> parseSchematics(
                         InputFiles.fromSource("""
                                 schematic
+                                    target = 7.1
                                     name = "Reactor Control"
                                     dimensions = (16, 11)
                                     @bridge-conveyor      at ( 6,  0) facing north
@@ -197,6 +198,29 @@ class AstSchematicBuilderTest extends AbstractSchematicsTest {
                         new AstSchematic(pos(1, 1),
                                 List.of(
                                         new AstSchemaAttribute(pos(2, 5), "dimensions", new AstCoordinates(pos(2, 18), 4, 5))
+                                ),
+                                List.of()
+                        )
+                )
+        );
+
+        assertAstEquals(expected, actual);
+    }
+
+    @Test
+    public void parsesTarget() {
+        AstDefinitions actual = createDefinitions("""
+                schematic
+                    target = 7.1w
+                end
+                """
+        );
+
+        AstDefinitions expected = new AstDefinitions(pos(1, 1),
+                List.of(
+                        new AstSchematic(pos(1, 1),
+                                List.of(
+                                        new AstSchemaAttribute(pos(2, 5), "target", new AstStringLiteral(pos(2, 13), "7.1w"))
                                 ),
                                 List.of()
                         )

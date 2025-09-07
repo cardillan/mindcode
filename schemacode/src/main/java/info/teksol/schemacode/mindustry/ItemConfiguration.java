@@ -37,11 +37,11 @@ public final class ItemConfiguration implements ContentConfiguration {
     }
 
     public static ItemConfiguration forId(int id) {
-        return forItem(SchematicsMetadata.metadata.getItemById(id));
+        return forItem(SchematicsMetadata.getMetadata().getItemById(id));
     }
 
     public static ItemConfiguration forName(String name) {
-        return forItem(SchematicsMetadata.metadata.getItemByName(name));
+        return forItem(SchematicsMetadata.getMetadata().getItemByName(name));
     }
 
     @Override
