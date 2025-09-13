@@ -69,6 +69,21 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         end;
                         """);
 
+        inputFiles.addPackagedFile(
+                "relaxed1.mnd",
+                """
+                        module test;
+                        print("foo");
+                        """);
+
+        inputFiles.addPackagedFile(
+                "relaxed2.mnd",
+                """
+                        #set syntax = relaxed;
+                        module test;
+                        print("foo");
+                        """);
+
         return inputFiles;
     }
 
@@ -441,7 +456,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             module local;
                             remote def foo() end;
-                            print(foo());
+                            begin print(foo()); end;
                             """,
                     createInstruction(JUMP, label(2), "always"),
                     createInstruction(JUMP, label(0), "always"),
@@ -600,6 +615,55 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     """
                             require "remote.mnd" remote processor1;
                             async(processor2.foo(10));
+                            """
+            );
+        }
+
+        @Test
+        void requiresStrictModeForDirectModules() {
+            assertGeneratesMessage(
+                    "The 'strict' syntax mode is required for modules.",
+                    """
+                            #set syntax = relaxed;
+                            module test;
+                            remote var foo = 0;
+                            """
+            );
+        }
+
+        @Test
+        void requiresStrictModeForRequiredModules() {
+            assertGeneratesMessage(
+                    "Code outside a main code block or function.",
+                    """
+                            require "relaxed1.mnd";
+                            begin
+                                print(a);
+                            end;
+                            """
+            );
+        }
+
+        @Test
+        void defaultsToStrictModeForModules() {
+            assertGeneratesMessage(
+                    "Code outside a main code block or function.",
+                    """
+                            module test;
+                            print("foo");
+                            """
+            );
+        }
+
+        @Test
+        void defaultsToStrictModeForRequiredModules() {
+            assertGeneratesMessage(
+                    "The 'strict' syntax mode is required for modules.",
+                    """
+                            require "relaxed2.mnd";
+                            begin
+                                print(a);
+                            end;
                             """
             );
         }

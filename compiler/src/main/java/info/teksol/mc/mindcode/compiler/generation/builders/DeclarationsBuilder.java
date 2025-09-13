@@ -15,6 +15,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
+import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -161,6 +162,10 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
     @Override
     public ValueStore visitModuleDeclaration(AstModuleDeclaration node) {
+        if (node.getProfile().getSyntacticMode() != SyntacticMode.STRICT) {
+            error(node, ERR.MODULE_STRICT_MODE_REQUIRED);
+        }
+
         // Module declarations are processed out of line
         return LogicVoid.VOID;
     }

@@ -2,13 +2,11 @@ package info.teksol.mc.mindcode.compiler.preprocess;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstProgram;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.DirectiveScope;
+import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -30,16 +28,27 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
     }
 
     public static void processGlobalDirectives(PreprocessorContext context, CompilerProfile profile, AstModule module) {
+        if (containsModuleDeclaration(module)) {
+            profile.setSyntacticMode(SyntacticMode.STRICT);
+        }
         DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, DirectiveScope.GLOBAL);
         preprocessor.visitNode(module);
         module.setProfile(profile);
     }
 
     public static void processModuleDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstModule module) {
-        CompilerProfile profile = globalProfile.duplicate(false);
+        boolean isFullModule = containsModuleDeclaration(module);
+        CompilerProfile profile = globalProfile.duplicate(!isFullModule);
+        if (isFullModule) {
+            profile.setSyntacticMode(SyntacticMode.STRICT);
+        }
         DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, DirectiveScope.MODULE);
         preprocessor.visitNode(module);
         module.setProfile(profile);
+    }
+
+    private static boolean containsModuleDeclaration(AstMindcodeNode node) {
+        return node instanceof AstModuleDeclaration || node.getChildren().stream().anyMatch(DirectivePreprocessor::containsModuleDeclaration);
     }
 
     private void visitNode(AstMindcodeNode node) {
@@ -62,6 +71,12 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
     private @Nullable AstDirectiveSet lastLocalDirective = null;
 
     private void visitNodeLocal(AstMindcodeNode node) {
+        if (node instanceof AstModule module) {
+            // All nodes within a module need to inherit the module setting, not the global setting.
+            // This is to handle the syntax mode ("strict" by default for modules).
+            profile = node.getProfile();
+        }
+
         if (lastLocalDirective == null) {
             // Skip the push for any node following a local directive
             // The previous profile for this node has already been pushed by the first local directive in a sequence

@@ -91,28 +91,26 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         #set sort-variables = params, globals;
                         module test;
                         param MAX = 10;
-                        A = 20;
-                        i = 3;
-                        remote void foo()
+                        var A = 20;
+                        remote void foo(i)
                             print(MAX, A, i);
                         end;
                         """,
                 """
                         jump 3 always 0 0
-                        jump 10 always 0 0
+                        jump 9 always 0 0
                         draw triangle MAX .A 0 0 0 0
                         set MAX 10
                         set .A 20
-                        set :i 3
-                        set *signature "c571351e16473872:v1"
+                        set *signature "24ae3690e971351e:v1"
                         wait 1e12
-                        jump 7 always 0 0
+                        jump 6 always 0 0
                         end
                         print MAX
                         print .A
                         print :foo:i
                         set :foo*finished true
-                        jump 7 always 0 0
+                        jump 6 always 0 0
                         end
                         print "%s"
                         """.formatted(CompilerProfile.SIGNATURE)

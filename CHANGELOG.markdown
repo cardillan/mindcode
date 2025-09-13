@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.8.0 - Unreleased
+
+### Added
+
+* Added support for local compiler options.
+
+### Changed
+
+* **Breaking**: modules must now be compiled using the `strict` syntax mode. The `strict` mode is the default for any source file containing a `module` declaration, regardless of whether the module contains remote functionality or not. Modules that were using a `relaxed` or `mixed` syntax (either implicitly, or explicitly) need to be updated to strict syntax mode.
+
 ## 3.8.0-beta.5 - 2025-09-07
+
+Note: this is a beta release. It's been released to provide bugfixes and new enhancements to Mindcode and Schemacode.
+
+The newly added features are fully functional. There's an unfinished support for the `#setlocal` directive. It doesn't have any effect at this time.
 
 ### Fixed
 
@@ -14,12 +28,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 ### Added
 
 * Added support for calling remote functions locally.
-* Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) to compile-time evaluator. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option. 
+* Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) to compile-time evaluator. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
 * Added support for evaluating the `@name` property to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
 * Added new [`filename` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the name of the output file to use for the generated schematic.
 * **Breaking** added new [`target` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the target version for the schematic. This might break existing schematics, as previously schematics were compiled using the latest metadata version only.
 * Added support for a content map in schematics, both when reading and when writing them. The content map is included in all schematic files, regardless of target (older Mindustry versions which do not support a content map will ignore them when reading schematics).
-* Added the `--output-directory` command-line option; if the output directory isn't specified as part of an explicit output file designation, the file will be placed in the output directory.  
+* Added the `--output-directory` command-line option; if the output directory isn't specified as part of an explicit output file designation, the file will be placed in the output directory.
 
 ### Changed
 
