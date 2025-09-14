@@ -143,6 +143,7 @@ public class ERR {
     public static final String MLOG_UNSPECIFIED_ARGUMENT = "All arguments to the '%s' function need to be specified.";
     public static final String MLOG_VARIABLE_WITHOUT_MODIFIERS = "A variable passed to the '%s' function must use the 'in' and/or 'out' modifiers.";
     public static final String MODULE_STRICT_MODE_REQUIRED = "The 'strict' syntax mode is required for modules.";
+    public static final String MODULE_TARGET_INCOMPATIBLE = "Module target '%s' is incompatible with global target '%s'.";
     public static final String MULTIPLE_MODULE_DECLARATIONS = "Multiple module declarations in one source file are not allowed.";
     public static final String MULTIPLE_MODULE_REQUESTS = "Multiple requests for file or library '%s'.";
     public static final String MULTIPLE_PROCESSOR_BINDINGS = "Multiple bindings of processor '%s'.";

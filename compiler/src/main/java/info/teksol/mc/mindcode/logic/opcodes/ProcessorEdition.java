@@ -19,11 +19,15 @@ public enum ProcessorEdition {
         return title;
     }
 
-    public String getCode() {
+    public String editionName() {
         return switch (this) {
-            case STANDARD_PROCESSOR -> "S";
-            case WORLD_PROCESSOR -> "W";
+            case STANDARD_PROCESSOR -> "s";
+            case WORLD_PROCESSOR -> "w";
         };
+    }
+
+    public boolean isCompatibleWith(ProcessorEdition other) {
+        return ordinal() <= other.ordinal();
     }
 
     public static final ProcessorEdition S = ProcessorEdition.STANDARD_PROCESSOR;

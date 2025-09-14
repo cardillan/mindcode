@@ -179,7 +179,7 @@ Int             : ( '+' | '-' )? [0-9]+;
 Id              : [_a-zA-Z] [-a-zA-Z_0-9]*;
 Ref             : '@' [_a-zA-Z] [-a-zA-Z_0-9]*;
 Pattern         : [_a-zA-Z*] [-a-zA-Z_0-9*]*;
-Version         : [0-9]+ [wW] | [0-9]+ '.' [0-9]+ ( [wW] )? ;
+Version         : [0-9]+ [sSwW] | [0-9]+ '.' [0-9]+ ( [sSwW] )? ;
 
 Comment         : '/*' .*? '*/' -> skip;
 SLComment       : ('//' ~('\r' | '\n')* '\r'? '\n') -> skip;

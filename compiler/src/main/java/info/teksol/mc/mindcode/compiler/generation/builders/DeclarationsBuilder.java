@@ -16,6 +16,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.*;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
 import info.teksol.mc.profile.SyntacticMode;
+import info.teksol.mc.profile.options.Target;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -164,6 +165,12 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     public ValueStore visitModuleDeclaration(AstModuleDeclaration node) {
         if (node.getProfile().getSyntacticMode() != SyntacticMode.STRICT) {
             error(node, ERR.MODULE_STRICT_MODE_REQUIRED);
+        }
+
+        Target moduleTarget = node.getProfile().getTarget();
+        Target globalTarget = context.globalCompilerProfile().getTarget();
+        if (!moduleTarget.isCompatibleWith(globalTarget)) {
+            error(node, ERR.MODULE_TARGET_INCOMPATIBLE, moduleTarget.targetName(), globalTarget.targetName());
         }
 
         // Module declarations are processed out of line

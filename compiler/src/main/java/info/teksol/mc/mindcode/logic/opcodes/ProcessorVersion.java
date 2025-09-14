@@ -10,19 +10,23 @@ import java.util.Set;
 
 @NullMarked
 public enum ProcessorVersion {
-    V6      (6, 0, "v126.2"),
-    V7      (7, 0, "v146"),
-    V7A     (7, 1, "v146"),
-    V8A     (8, 0, "v149"),
-    V8B     (8, 1, "be"),
-    MAX     (8, 0, "be"),
+    V6      (0, 6, 0, "v126.2"),
+    V7      (0, 7, 0, "v146"),
+    V7A     (1, 7, 1, "v146"),
+    V8A     (1,8, 0, "v149"),
+    V8B     (1, 8, 1, "be"),
+    MAX     (1, 8, 0, "be"),
     ;
 
+    // A change in the generation number reflects differences in mappings from Mindcode to mlog.
+    // Two targets with different generations are always incompatible.
+    private final int generation;
     public final int major;
     public final int minor;
     public final String mimexVersion;
 
-    ProcessorVersion(int major, int minor, String mimexVersion) {
+    ProcessorVersion(int generation, int major, int minor, String mimexVersion) {
+        this.generation = generation;
         this.major = major;
         this.minor = minor;
         this.mimexVersion = mimexVersion;
@@ -36,6 +40,10 @@ public enum ProcessorVersion {
         return ordinal() <= max.ordinal();
     }
 
+    public boolean isCompatibleWith(ProcessorVersion other) {
+        return generation == other.generation && ordinal() <= other.ordinal();
+    }
+
     public boolean matches(ProcessorVersion min, ProcessorVersion max) {
         return ordinal() >= min.ordinal() && ordinal() <= max.ordinal();
     }
@@ -45,7 +53,7 @@ public enum ProcessorVersion {
     }
 
     public String versionName() {
-        return minor == 0 ? String.valueOf(major) : major + "." + minor;
+        return major + "." + minor;
     }
 
     private static final List<ProcessorVersion> ALL = List.of(values());

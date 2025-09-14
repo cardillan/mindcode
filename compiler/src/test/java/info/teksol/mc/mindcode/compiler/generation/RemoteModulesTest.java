@@ -84,6 +84,14 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         print("foo");
                         """);
 
+        inputFiles.addPackagedFile(
+                "target.mnd",
+                """
+                        #set target = 8.0w;
+                        module test;
+                        void foo() print("foo"); end;
+                        """);
+
         return inputFiles;
     }
 
@@ -241,7 +249,6 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, label(4))
             );
         }
-
 
         @Test
         void compilesMultipleInstantiations() {
@@ -479,6 +486,18 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(RETURN, ":foo*retaddr")
             );
         }
+
+        @Test
+        void compilesCompatibleTargets() {
+            assertCompilesTo("""
+                            #set target = 8w;
+                            require "target.mnd";
+                            foo();
+                            """,
+                    createInstruction(PRINT, q("foo")),
+                    createInstruction(LABEL, label(0))
+            );
+        }
     }
 
     @Nested
@@ -664,6 +683,28 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             begin
                                 print(a);
                             end;
+                            """
+            );
+        }
+
+        @Test
+        void reportsIncompatibleVersion() {
+            assertGeneratesMessage(
+                    "Module target '8.0w' is incompatible with global target '7.1w'.",
+                    """
+                            #set target = 7w;
+                            require "target.mnd";
+                            """
+            );
+        }
+
+        @Test
+        void reportsIncompatibleEdition() {
+            assertGeneratesMessage(
+                    "Module target '8.0w' is incompatible with global target '8.1s'.",
+                    """
+                            #set target = 8.1s;
+                            require "target.mnd";
                             """
             );
         }

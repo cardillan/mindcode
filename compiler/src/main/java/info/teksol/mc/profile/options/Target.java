@@ -46,6 +46,18 @@ public final class Target {
         return new Target(version, edition);
     }
 
+    /**
+     * A target is compatible with another target if code compiled under the target works the same when compiled
+     * under the other target. The relation is not reflexive: 7.1 is compatible with 8.0, but 8.0 is not compatible
+     * with 7.1. Also, 7 is compatible with 7w, but 7w is not compatible with 7.
+     *
+     * @return true if this target is compatible with the given target
+     */
+    public boolean isCompatibleWith(Target other) {
+        return version.isCompatibleWith(other.version) &&
+               edition.isCompatibleWith(other.edition);
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) return true;
@@ -58,6 +70,10 @@ public final class Target {
     @Override
     public int hashCode() {
         return Objects.hash(version, edition);
+    }
+
+    public String targetName() {
+        return version.versionName() + edition.editionName();
     }
 
     @Override

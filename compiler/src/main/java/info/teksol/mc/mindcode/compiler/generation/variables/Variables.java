@@ -55,7 +55,7 @@ public class Variables extends AbstractMessageEmitter {
         putVariable("__MINDUSTRY_VERSION__", LogicString.create(profile.getProcessorVersion().mimexVersion));
         putVariable("__TARGET_MAJOR__", LogicNumber.create(profile.getProcessorVersion().major));
         putVariable("__TARGET_MINOR__", LogicNumber.create(profile.getProcessorVersion().minor));
-        putVariable("__PROCESSOR_EDITION__", LogicString.create(profile.getProcessorEdition().getCode()));
+        putVariable("__PROCESSOR_EDITION__", LogicString.create(profile.getProcessorEdition().editionName()));
     }
 
     public NameCreator nameCreator() {
