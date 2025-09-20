@@ -6,7 +6,7 @@ import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -15,7 +15,7 @@ import java.util.*;
 
 @NullMarked
 public class CallGraphCreator extends AbstractMessageEmitter {
-    private final CompilerProfile globalProfile;
+    private final GlobalCompilerProfile globalProfile;
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
     private final AstProgram program;

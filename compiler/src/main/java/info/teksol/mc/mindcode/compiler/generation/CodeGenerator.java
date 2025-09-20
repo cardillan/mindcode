@@ -25,7 +25,7 @@ import info.teksol.mc.mindcode.logic.instructions.PrintingInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.BuiltinEvaluation;
-import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.util.CRC64;
 import org.jspecify.annotations.NullMarked;
@@ -46,7 +46,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
     // Stateless processing instances
     private final CodeGeneratorContext context;
     private final AstProgram program;
-    private final CompilerProfile globalProfile;
+    private final GlobalCompilerProfile globalProfile;
     private final CallGraph callGraph;
     private final CompileTimeEvaluator evaluator;
     private final CodeAssembler assembler;
@@ -104,7 +104,7 @@ public class CodeGenerator extends AbstractMessageEmitter {
         return variables.nameCreator();
     }
 
-    public CompilerProfile getGlobalProfile() {
+    public GlobalCompilerProfile getGlobalProfile() {
         return globalProfile;
     }
 

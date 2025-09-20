@@ -111,12 +111,12 @@ public class CompileMindcodeAction extends ActionHandler {
 
     @Override
     void handle(Namespace arguments) {
-        CompilerProfile compilerProfile = createCompilerProfile(arguments);
+        CompilerProfile globalProfile = createCompilerProfile(arguments);
         File baseFile = arguments.get("input");
         List<File> others = arguments.get("append");
         ExcerptSpecification excerpt = arguments.get("excerpt");
         if (excerpt != null) {
-            compilerProfile.setPositionTranslator(excerpt.toPositionTranslator());
+            globalProfile.setPositionTranslator(excerpt.toPositionTranslator());
         }
 
         final Path basePath = isStdInOut(baseFile) ? Paths.get("") : baseFile.toPath().toAbsolutePath().normalize().getParent();
@@ -133,10 +133,10 @@ public class CompileMindcodeAction extends ActionHandler {
 
         final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".mlog");
         final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
-        final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
+        final PositionFormatter positionFormatter = sp -> sp.formatForIde(globalProfile.getFileReferences());
 
         ConsoleMessageLogger messageLogger = createMessageLogger(output, logFile, positionFormatter);
-        MindcodeCompiler compiler = new MindcodeCompiler(messageLogger, compilerProfile, inputFiles);
+        MindcodeCompiler compiler = new MindcodeCompiler(messageLogger, globalProfile, inputFiles);
         compiler.compile();
 
         if (!messageLogger.hasErrors()) {
@@ -153,7 +153,7 @@ public class CompileMindcodeAction extends ActionHandler {
                 MlogWatcherClient.sendMlog(port, timeout, messageLogger, compiler.getOutput());
             }
 
-            if (compilerProfile.isRun()) {
+            if (globalProfile.isRun()) {
                 messageLogger.info("");
                 messageLogger.info("Program output (%,d steps):", compiler.getSteps());
                 if (!compiler.getTextBuffer().isEmpty()) {
@@ -169,7 +169,7 @@ public class CompileMindcodeAction extends ActionHandler {
                     messageLogger.error(compiler.getExecutionException().getMessage());
                 }
 
-                if (compilerProfile.isOutputProfiling()) {
+                if (globalProfile.isOutputProfiling()) {
                     int[] executionProfile = compiler.getExecutionProfile();
                     if (executionProfile.length >= compiler.getExecutableInstructions().size()) {
                         String profileResult = LogicInstructionPrinter.toStringWithProfiling(compiler.instructionProcessor(),

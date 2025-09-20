@@ -11,7 +11,7 @@ import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
-import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -51,7 +51,7 @@ public class Variables extends AbstractMessageEmitter {
         nameCreator = context.nameCreator();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
-        CompilerProfile profile = context.globalCompilerProfile();
+        GlobalCompilerProfile profile = context.globalCompilerProfile();
         putVariable("__MINDUSTRY_VERSION__", LogicString.create(profile.getProcessorVersion().mimexVersion));
         putVariable("__TARGET_MAJOR__", LogicNumber.create(profile.getProcessorVersion().major));
         putVariable("__TARGET_MINOR__", LogicNumber.create(profile.getProcessorVersion().minor));

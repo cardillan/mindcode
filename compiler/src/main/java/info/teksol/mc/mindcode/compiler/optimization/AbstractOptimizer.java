@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
@@ -33,7 +34,7 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         this.optimizationContext = optimizationContext;
         this.instructionProcessor = optimizationContext.getInstructionProcessor();
         this.metadata = instructionProcessor.getMetadata();
-        this.debugOutput = getProfile().isDebugOutput();
+        this.debugOutput = getGlobalProfile().isDebugOutput();
     }
 
     @Override
@@ -46,8 +47,12 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         return optimization.getName();
     }
 
-    public CompilerProfile getProfile() {
-        return optimizationContext.getProfile();
+    public GlobalCompilerProfile getGlobalProfile() {
+        return optimizationContext.getGlobalProfile();
+    }
+
+    public CompilerProfile getCompilerProfile() {
+        return optimizationContext.getGlobalProfile();
     }
 
     @Override
@@ -85,11 +90,25 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         return debugOutput;
     }
 
-    protected boolean advanced() {
+    protected boolean advanced(AstContext context) {
+        OptimizationLevel level = context.getLocalProfile().getOptimizationLevel(optimization);
         return level == OptimizationLevel.ADVANCED || level == OptimizationLevel.EXPERIMENTAL;
     }
 
-    protected boolean experimental() {
+    protected boolean advanced(LogicInstruction instruction) {
+        return advanced(instruction.getAstContext());
+    }
+
+    protected boolean experimental(AstContext context) {
+        OptimizationLevel level = context.getLocalProfile().getOptimizationLevel(optimization);
+        return level == OptimizationLevel.EXPERIMENTAL;
+    }
+
+    protected boolean experimental(LogicInstruction instruction) {
+        return experimental(instruction.getAstContext());
+    }
+
+    protected boolean experimentalGlobal() {
         return level == OptimizationLevel.EXPERIMENTAL;
     }
 

@@ -130,7 +130,7 @@ class PrintMerger extends BaseOptimizer {
             String str1 = printValue(prev);
             String str2 = printValue(current);
             // Do not merge strings if the combined length is over 34, unless advanced
-            if (str1 != null && str2 != null && (advanced() || str1.length() + str2.length() <= 34)) {
+            if (str1 != null && str2 != null && (advanced(previous) && advanced(current) || str1.length() + str2.length() <= 34)) {
                 PrintInstruction merged = createPrint(current.getAstContext(), LogicString.create(str1 + str2));
                 removeInstruction(this.previous);
                 iterator.set(merged);

@@ -5,8 +5,8 @@ import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
-import info.teksol.mc.profile.DirectiveScope;
 import info.teksol.mc.profile.SyntacticMode;
+import info.teksol.mc.profile.options.OptionScope;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -20,10 +20,10 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
     private final DirectiveProcessor directiveProcessor;
     private CompilerProfile profile;
 
-    private DirectivePreprocessor(PreprocessorContext context, CompilerProfile profile, DirectiveScope scope) {
+    private DirectivePreprocessor(PreprocessorContext context, CompilerProfile profile, OptionScope scope) {
         super(context.messageConsumer());
         this.directiveProcessor = context.directiveProcessor();
-        this.directiveProcessor.setScope(scope);
+        this.directiveProcessor.setScopeLimit(scope);
         this.profile = profile;
     }
 
@@ -31,7 +31,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
         if (containsModuleDeclaration(module)) {
             profile.setSyntacticMode(SyntacticMode.STRICT);
         }
-        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, DirectiveScope.GLOBAL);
+        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, OptionScope.GLOBAL);
         preprocessor.visitNode(module);
         module.setProfile(profile);
     }
@@ -42,7 +42,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
         if (isFullModule) {
             profile.setSyntacticMode(SyntacticMode.STRICT);
         }
-        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, DirectiveScope.MODULE);
+        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, profile, OptionScope.MODULE);
         preprocessor.visitNode(module);
         module.setProfile(profile);
     }
@@ -62,7 +62,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
     }
 
     public static void processLocalDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstProgram program) {
-        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, globalProfile, DirectiveScope.LOCAL);
+        DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, globalProfile, OptionScope.LOCAL);
         preprocessor.visitNodeLocal(program);
     }
 

@@ -37,7 +37,7 @@ import java.util.stream.Stream;
 
 @NullMarked
 class OptimizationContext {
-    private final CompilerProfile profile;
+    private final CompilerProfile globalProfile;
     private final MessageConsumer messageConsumer;
     private final OptimizerExpressionEvaluator expressionEvaluator;
     private final InstructionProcessor instructionProcessor;
@@ -81,12 +81,12 @@ class OptimizationContext {
 
     private boolean traceActive = OptimizationCoordinator.TRACE_ALL;
 
-    OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile profile,
+    OptimizationContext(TraceFile traceFile, MessageConsumer messageConsumer, CompilerProfile globalProfile,
             InstructionProcessor instructionProcessor, OptimizerContext optimizerContext, List<LogicInstruction> program,
             CallGraph callGraph, AstContext rootAstContext, boolean remoteLibrary) {
         this.traceFile = traceFile;
         this.messageConsumer = messageConsumer;
-        this.profile = profile;
+        this.globalProfile = globalProfile;
         this.instructionProcessor = instructionProcessor;
         this.optimizerContext = optimizerContext;
         this.program = program;
@@ -117,8 +117,8 @@ class OptimizationContext {
         return messageConsumer;
     }
 
-    public CompilerProfile getProfile() {
-        return profile;
+    public CompilerProfile getGlobalProfile() {
+        return globalProfile;
     }
 
     InstructionProcessor getInstructionProcessor() {
@@ -226,7 +226,7 @@ class OptimizationContext {
     /// @return a BitSet containing positions of unreachable instructions
     public BitSet getUnreachableInstructions() {
         if (unreachableInstructions == null) {
-            if (profile.getOptimizationLevel(Optimization.UNREACHABLE_CODE_ELIMINATION) == OptimizationLevel.NONE) {
+            if (globalProfile.getOptimizationLevel(Optimization.UNREACHABLE_CODE_ELIMINATION) == OptimizationLevel.NONE) {
                 unreachableInstructions = new BitSet(program.size());
             } else {
                 unreachableInstructions = computeUnreachableInstructions();

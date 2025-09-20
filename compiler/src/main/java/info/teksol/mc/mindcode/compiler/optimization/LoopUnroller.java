@@ -12,7 +12,7 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationContext.LogicLi
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -223,7 +223,7 @@ class LoopUnroller extends BaseOptimizer {
             LogicLiteral initLiteral, List<LogicInstruction> controlIxs, int loopLimit) {
 
         int result = findLoopCountBasic(loop, jump, loopControl, initLiteral, controlIxs);
-        return (result <= 0 && advanced())
+        return (result <= 0 && advanced(loop))
                 ? findLoopCountAdvanced(loop, jump, loopControl, initLiteral, controlIxs, loopLimit)
                 : result;
     }
@@ -511,7 +511,7 @@ class LoopUnroller extends BaseOptimizer {
     }
 
     private LogicList removeLeadingIteratorInstructions(LogicList list) {
-        CompilerProfile profile = list.getExistingAstContext().getProfile();
+        GlobalCompilerProfile profile = list.getExistingAstContext().getGlobalProfile();
         if (profile.isSymbolicLabels()) {
             if (profile.isNullCounterIsNoop()) {
                 if (list.getLast() instanceof JumpInstruction jump) {

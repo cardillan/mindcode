@@ -63,11 +63,12 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private void processLookupInstruction(LogicIterator logicIterator, LookupInstruction ix) {
-        if (getProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE && ix.getIndex().isNumericConstant() && ix.getIndex().isInteger()) {
+        BuiltinEvaluation builtinEvaluation = getGlobalProfile().getBuiltinEvaluation();
+        if (builtinEvaluation != BuiltinEvaluation.NONE && ix.getIndex().isNumericConstant() && ix.getIndex().isInteger()) {
             Map<Integer, ? extends MindustryContent> lookupMap = metadata.getLookupMap(ix.getType().getKeyword());
             if (lookupMap != null) {
                 MindustryContent object = lookupMap.get(ix.getIndex().getIntValue());
-                if (object != null && !object.legacy() && (getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(object.name()))) {
+                if (object != null && !object.legacy() && (builtinEvaluation == BuiltinEvaluation.FULL || metadata.isStableBuiltin(object.name()))) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.create(object, false)));
                 }
             }
@@ -94,7 +95,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                             // Division by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
                             return;
-                        } else if (advanced() && value == 0 && opers.e1() == ix.getX()) {
+                        } else if (advanced(ix) && value == 0 && opers.e1() == ix.getX()) {
                             // Zero divided by something
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
@@ -109,7 +110,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                             // Division by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNull.NULL));
                             return;
-                        } else if (advanced() && value == 0 && opers.e1() == ix.getX()) {
+                        } else if (advanced(ix) && value == 0 && opers.e1() == ix.getX()) {
                             // Zero divided by something
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicNumber.ZERO));
                             return;
@@ -122,13 +123,13 @@ class ExpressionOptimizer extends BaseOptimizer {
                         }
                     }
                     case ADD, BITWISE_XOR -> {
-                        if (value == 0 && (advanced() || ix.getOperation() != Operation.BITWISE_XOR)) {
+                        if (value == 0 && (advanced(ix) || ix.getOperation() != Operation.BITWISE_XOR)) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         }
                     }
                     case SHL, SHR -> {
-                        if (advanced() && (value == 0 && opers.e1() == ix.getY())) {
+                        if (advanced(ix) && (value == 0 && opers.e1() == ix.getY())) {
                             // Shift by zero
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), ix.getX()));
                             return;
@@ -139,7 +140,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                         }
                     }
                     case BITWISE_OR, BOOLEAN_OR, LOGICAL_OR -> {
-                        if (advanced() && value == 0 && ix.getOperation() != Operation.BOOLEAN_OR) {
+                        if (advanced(ix) && value == 0 && ix.getOperation() != Operation.BOOLEAN_OR) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                             return;
                         } else if (value != 0 && ix.getOperation() != Operation.BITWISE_OR) {
@@ -151,7 +152,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                         if (value == 0) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), LogicBoolean.FALSE));
                             return;
-                        } else if (advanced() && ix.getOperation() == Operation.LOGICAL_AND) {
+                        } else if (advanced(ix) && ix.getOperation() == Operation.LOGICAL_AND) {
                             logicIterator.set(createSet(ix.getAstContext(), ix.getResult(), opers.e2()));
                         }
                     }
@@ -273,9 +274,9 @@ class ExpressionOptimizer extends BaseOptimizer {
                 } else if (property.equals(LogicBuiltIn.Y)) {
                     logicIterator.set(createSet(ix.getAstContext(),ix.getResult(), LogicBuiltIn.THIS_Y));
                 }
-            } else if (getProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE && property.equals(LogicBuiltIn.ID)
-                    && object.getObject() != null && object.getObject().logicId() != -1 && !object.getObject().legacy()) {
-                if (getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(object.getObject().name())) {
+            } else if (getGlobalProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE && property.equals(LogicBuiltIn.ID)
+                       && object.getObject() != null && object.getObject().logicId() != -1 && !object.getObject().legacy()) {
+                if (getGlobalProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(object.getObject().name())) {
                     logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
                             LogicNumber.create(ix.sourcePosition(), object.getObject().logicId())));
                 }

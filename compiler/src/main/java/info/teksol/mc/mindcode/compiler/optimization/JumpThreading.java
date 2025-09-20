@@ -29,7 +29,6 @@ class JumpThreading extends BaseOptimizer {
         hasStartLabel = hasStartLabel();
         LogicInstruction lastCall = null;
         SetAddressInstruction setAddress = null;
-        boolean callThreadable = experimental() && !getProfile().isSymbolicLabels();
 
         try (LogicIterator it = createIterator()) {
             if (!it.hasNext()) return false;
@@ -63,8 +62,9 @@ class JumpThreading extends BaseOptimizer {
                             count++;
                         }
                     }
-                } else if (callThreadable && instruction.getCallReturn() == LogicLabel.EMPTY &&
-                           (instruction instanceof CallInstruction || instruction instanceof MultiCallInstruction)) {
+                } else if (experimental(instruction) && !getGlobalProfile().isSymbolicLabels()
+                           && instruction.getCallReturn() == LogicLabel.EMPTY
+                           && (instruction instanceof CallInstruction || instruction instanceof MultiCallInstruction)) {
                     setAddress = (SetAddressInstruction) optimizationContext.firstInstruction(
                             ix -> ix instanceof SetAddressInstruction && ix.getHoistId().equals(instruction.getHoistId()));
                     lastCall = instruction;
@@ -80,7 +80,7 @@ class JumpThreading extends BaseOptimizer {
 
     private boolean canMoveTarget(LogicInstruction target) {
         return target instanceof ReturnInstruction
-                || !getProfile().isSymbolicLabels()
+                || !getGlobalProfile().isSymbolicLabels()
                 && (target instanceof MultiJumpInstruction || target instanceof MultiCallInstruction);
     }
 
@@ -136,7 +136,7 @@ class JumpThreading extends BaseOptimizer {
         }
 
         // Jump to call can get redirected
-        if (experimental() && !getProfile().isSymbolicLabels() && next instanceof CallInstruction call) {
+        if (experimental(firstJump) && !getGlobalProfile().isSymbolicLabels() && next instanceof CallInstruction call) {
             return new JumpRedirection(call.getCallAddr(), call.getMarker());
         }
 

@@ -5,6 +5,8 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
+import info.teksol.mc.profile.LocalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -128,7 +130,15 @@ public final class AstContext {
         return map;
     }
 
-    public CompilerProfile getProfile() {
+    public LocalCompilerProfile getLocalProfile() {
+        return profile;
+    }
+
+    public GlobalCompilerProfile getGlobalProfile() {
+        return profile;
+    }
+
+    public CompilerProfile getCompilerProfile() {
         return profile;
     }
 

@@ -15,6 +15,7 @@ import info.teksol.mc.mindcode.logic.mimex.BlockType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.mindcode.logic.opcodes.*;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -234,8 +235,9 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public void resolve(CompilerProfile profile, LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
+    public void resolve(LogicInstruction instruction, Consumer<LogicInstruction> consumer) {
         AstContext astContext = instruction.getAstContext();
+        GlobalCompilerProfile profile = astContext.getGlobalProfile();
 
         switch (instruction) {
             case EmptyInstruction ix -> { }

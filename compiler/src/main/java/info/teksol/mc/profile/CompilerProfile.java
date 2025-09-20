@@ -10,10 +10,8 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
 import org.jspecify.annotations.NullMarked;
 
-import java.util.EnumSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /// Represents the configuration profile for a compiler/schematics builder/processor emulator, encapsulating various
@@ -27,7 +25,7 @@ import java.util.stream.Collectors;
 ///
 /// Variables holding instances of this interface should be named "profile".
 @NullMarked
-public class CompilerProfile {
+public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProfile {
     public static final String SIGNATURE = "Compiled by Mindcode - github.com/cardillan/mindcode";
 
     private final boolean webApplication;
@@ -76,19 +74,19 @@ public class CompilerProfile {
         return (CompilerOptionValue<T>) options.get(option);
     }
 
-    private int getIntValue(Enum<?> option) {
+    public int getIntValue(Enum<?> option) {
         return this.<Integer>getOption(option).getValue();
     }
 
-    private boolean getBooleanValue(Enum<?> option) {
+    public boolean getBooleanValue(Enum<?> option) {
         return this.<Boolean>getOption(option).getValue();
     }
 
-    private String getStringValue(Enum<?> option) {
+    public String getStringValue(Enum<?> option) {
         return this.<String>getOption(option).getValue();
     }
 
-    private <T extends Enum<T>> T getEnumValue(Enum<?> option) {
+    public <T extends Enum<T>> T getEnumValue(Enum<?> option) {
         return this.<T>getOption(option).getValue();
     }
 
@@ -149,10 +147,6 @@ public class CompilerProfile {
     }
 
     //<editor-fold desc="Input/output options">
-    public FileReferences getFileReferences() {
-        return getEnumValue(InputOutputOptions.FILE_REFERENCES);
-    }
-
     public CompilerProfile setFileReferences(FileReferences fileReferences) {
         getOption(InputOutputOptions.FILE_REFERENCES).setValue(fileReferences);
         return this;
@@ -160,10 +154,6 @@ public class CompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Schematics options">
-    public List<String> getAdditionalTags() {
-        return this.<String>getOption(SchematicOptions.ADD_TAG).getValues();
-    }
-
     public CompilerProfile setAdditionalTags(List<String> additionalTags) {
         this.<String>getOption(SchematicOptions.ADD_TAG).setValues(additionalTags);
         return this;
@@ -171,17 +161,9 @@ public class CompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Environment Options">
-    public BuiltinEvaluation getBuiltinEvaluation() {
-        return getEnumValue(EnvironmentOptions.BUILTIN_EVALUATION);
-    }
-
     public CompilerProfile setBuiltinEvaluation(BuiltinEvaluation builtinEvaluation) {
         getOption(EnvironmentOptions.BUILTIN_EVALUATION).setValue(builtinEvaluation);
         return this;
-    }
-
-    public boolean isNullCounterIsNoop() {
-        return getBooleanValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP);
     }
 
     public CompilerProfile setNullCounterIsNoop(boolean nullCounterIsNoop) {
@@ -211,10 +193,6 @@ public class CompilerProfile {
         return this;
     }
 
-    public boolean isTextJumpTables() {
-        return getBooleanValue(EnvironmentOptions.TEXT_JUMP_TABLES);
-    }
-
     public CompilerProfile setTextJumpTables(boolean textJumpTables) {
         getOption(EnvironmentOptions.TEXT_JUMP_TABLES).setValue(textJumpTables);
         return this;
@@ -222,19 +200,9 @@ public class CompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Mlog FormatOptions">
-    public int getMlogIndent() {
-        int mlogIndent = getIntValue(MlogFormatOptions.MLOG_INDENT);
-        boolean symbolicLabels = getBooleanValue(MlogFormatOptions.SYMBOLIC_LABELS);
-        return mlogIndent >= 0 ? mlogIndent : symbolicLabels ? 4 : 0;
-    }
-
     public CompilerProfile setMlogIndent(int mlogIndent) {
         getOption(MlogFormatOptions.MLOG_INDENT).setValue(mlogIndent);
         return this;
-    }
-
-    public boolean isSignature() {
-        return getBooleanValue(MlogFormatOptions.SIGNATURE);
     }
 
     public CompilerProfile setSignature(boolean signature) {
@@ -242,17 +210,9 @@ public class CompilerProfile {
         return this;
     }
 
-    public boolean isShortFunctionPrefix() {
-        return getBooleanValue(MlogFormatOptions.FUNCTION_PREFIX);
-    }
-
     public CompilerProfile setShortFunctionPrefix(boolean shortFunctionPrefix) {
         getOption(MlogFormatOptions.FUNCTION_PREFIX).setValue(shortFunctionPrefix);
         return this;
-    }
-
-    public boolean isSymbolicLabels() {
-        return getBooleanValue(MlogFormatOptions.SYMBOLIC_LABELS);
     }
 
     public CompilerProfile setSymbolicLabels(boolean symbolicLabels) {
@@ -262,26 +222,14 @@ public class CompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Compiler Options">
-    public boolean isAutoPrintflush() {
-        return getBooleanValue(CompilerOptions.AUTO_PRINTFLUSH);
-    }
-
     public CompilerProfile setAutoPrintflush(boolean autoPrintflush) {
         getOption(CompilerOptions.AUTO_PRINTFLUSH).setValue(autoPrintflush);
         return this;
     }
 
-    public RuntimeChecks getBoundaryChecks() {
-        return getEnumValue(CompilerOptions.BOUNDARY_CHECKS);
-    }
-
     public CompilerProfile setBoundaryChecks(RuntimeChecks boundaryChecks) {
         getOption(CompilerOptions.BOUNDARY_CHECKS).setValue(boundaryChecks);
         return this;
-    }
-
-    public Remarks getRemarks() {
-        return getEnumValue(CompilerOptions.REMARKS);
     }
 
     public CompilerProfile setRemarks(Remarks remarks) {
@@ -298,11 +246,6 @@ public class CompilerProfile {
         return this;
     }
 
-    public boolean isTargetGuard() {
-        return getBooleanValue(CompilerOptions.TARGET_GUARD);
-
-    }
-
     public CompilerProfile setTargetGuard(boolean targetGuard) {
         getOption(CompilerOptions.TARGET_GUARD).setValue(targetGuard);
         return this;
@@ -310,17 +253,9 @@ public class CompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Optimizations Options">
-    public int getCaseOptimizationStrength() {
-        return getIntValue(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH);
-    }
-
     public CompilerProfile setCaseOptimizationStrength(int caseOptimizationStrength) {
         getOption(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH).setValue(caseOptimizationStrength);
         return this;
-    }
-
-    public GenerationGoal getGoal() {
-        return getEnumValue(OptimizationOptions.GOAL);
     }
 
     public CompilerProfile setGoal(GenerationGoal goal) {
@@ -328,17 +263,9 @@ public class CompilerProfile {
         return this;
     }
 
-    public int getInstructionLimit() {
-        return getIntValue(OptimizationOptions.INSTRUCTION_LIMIT);
-    }
-
     public CompilerProfile setInstructionLimit(int instructionLimit) {
         getOption(OptimizationOptions.INSTRUCTION_LIMIT).setValue(instructionLimit);
         return this;
-    }
-
-    public boolean isMlogBlockOptimization() {
-        return getBooleanValue(OptimizationOptions.MLOG_BLOCK_OPTIMIZATION);
     }
 
     public CompilerProfile setMlogBlockOptimization(boolean mlogBlockOptimization) {
@@ -346,17 +273,9 @@ public class CompilerProfile {
         return this;
     }
 
-    public int getOptimizationPasses() {
-        return getIntValue(OptimizationOptions.PASSES);
-    }
-
     public CompilerProfile setOptimizationPasses(int optimizationPasses) {
         getOption(OptimizationOptions.PASSES).setValue(optimizationPasses);
         return this;
-    }
-
-    public boolean isUnsafeCaseOptimization() {
-        return getBooleanValue(OptimizationOptions.UNSAFE_CASE_OPTIMIZATION);
     }
 
     public CompilerProfile setUnsafeCaseOptimization(boolean unsafeCaseOptimization) {
@@ -386,17 +305,9 @@ public class CompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Debugging Options">
-    public int getCaseConfiguration() {
-        return getIntValue(DebuggingOptions.CASE_CONFIGURATION);
-    }
-
     public CompilerProfile setCaseConfiguration(int caseConfiguration) {
         getOption(DebuggingOptions.CASE_CONFIGURATION).setValue(caseConfiguration);
         return this;
-    }
-
-    public int getDebugMessages() {
-        return getIntValue(DebuggingOptions.DEBUG_MESSAGES);
     }
 
     public CompilerProfile setDebugMessages(int debugMessages) {
@@ -404,17 +315,9 @@ public class CompilerProfile {
         return this;
     }
 
-    public boolean isDebugOutput() {
-        return getBooleanValue(DebuggingOptions.DEBUG_OUTPUT);
-    }
-
     public CompilerProfile setDebugOutput(boolean debugOutput) {
         getOption(DebuggingOptions.DEBUG_OUTPUT).setValue(debugOutput);
         return this;
-    }
-
-    public FinalCodeOutput getFinalCodeOutput() {
-        return getEnumValue(DebuggingOptions.PRINT_UNRESOLVED);
     }
 
     public CompilerProfile setFinalCodeOutput(FinalCodeOutput finalCodeOutput) {
@@ -422,26 +325,14 @@ public class CompilerProfile {
         return this;
     }
 
-    public int getParseTreeLevel() {
-        return getIntValue(DebuggingOptions.PARSE_TREE);
-    }
-
     public CompilerProfile setParseTreeLevel(int parseTreeLevel) {
         getOption(DebuggingOptions.PARSE_TREE).setValue(parseTreeLevel);
         return this;
     }
 
-    public boolean isPrintStackTrace() {
-        return getBooleanValue(DebuggingOptions.PRINT_STACKTRACE);
-    }
-
     public CompilerProfile setPrintStackTrace(boolean printStackTrace) {
         getOption(DebuggingOptions.PRINT_STACKTRACE).setValue(printStackTrace);
         return this;
-    }
-
-    public List<SortCategory> getSortVariables() {
-        return this.<SortCategory>getOption(DebuggingOptions.SORT_VARIABLES).getValues();
     }
 
     public CompilerProfile setSortVariables(List<SortCategory> sortVariables) {
@@ -451,14 +342,6 @@ public class CompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Run Options">
-    public Set<ExecutionFlag> getExecutionFlags() {
-        EnumSet<ExecutionFlag> executionFlags = EnumSet.noneOf(ExecutionFlag.class);
-        for (ExecutionFlag flag : ExecutionFlag.LIST) {
-            if (this.<Boolean>getOption(flag).getValue()) executionFlags.add(flag);
-        }
-        return executionFlags;
-    }
-
     public CompilerProfile setExecutionFlag(ExecutionFlag flag, boolean value) {
         if (!flag.isSettable()) {
             throw new MindcodeInternalError("Trying to update unmodifiable flag %s", flag);
@@ -467,17 +350,9 @@ public class CompilerProfile {
         return this;
     }
 
-    public boolean isOutputProfiling() {
-        return getBooleanValue(RunOptions.OUTPUT_PROFILING);
-    }
-
     public CompilerProfile setOutputProfiling(boolean outputProfiling) {
         getOption(RunOptions.OUTPUT_PROFILING).setValue(outputProfiling);
         return this;
-    }
-
-    public boolean isRun() {
-        return getBooleanValue(RunOptions.RUN);
     }
 
     public CompilerProfile setRun(boolean run) {
@@ -485,17 +360,13 @@ public class CompilerProfile {
         return this;
     }
 
-    public int getStepLimit() {
-        return getIntValue(RunOptions.RUN_STEPS);
-    }
-
-    public CompilerProfile setStepLimit(int stepLimit) {
+    private CompilerProfile setStepLimit(int stepLimit) {
         getOption(RunOptions.RUN_STEPS).setValue(stepLimit);
         return this;
     }
     //</editor-fold>
 
-    /// Creates a [CompilerProfile] instance configured for given optimization level.
+    /// Creates a [CompilerProfile] instance configured for a given optimization level.
     ///
     /// @param webApplication a boolean indicating whether the profile is intended for a web application.
     ///                       If true, it applies optimizations specific to web applications; otherwise,

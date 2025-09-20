@@ -7,4 +7,9 @@ public enum OptionScope {
     GLOBAL,
     MODULE,
     LOCAL,
+    ;
+
+    public boolean isIncludedIn(OptionScope other) {
+        return ordinal() >= other.ordinal();
+    }
 }

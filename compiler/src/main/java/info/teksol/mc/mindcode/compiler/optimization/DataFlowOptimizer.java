@@ -115,7 +115,7 @@ class DataFlowOptimizer extends BaseOptimizer {
 
         getRootContext().children().forEach(this::processTopContext);
 
-        if (experimental() && currentPass > 1) {
+        if (experimentalGlobal() && currentPass > 1) {
             boolean updated = false;
             for (Definition definition : definitions) {
                 LogicVariable variable = definition.variable;
@@ -1018,7 +1018,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         if (variable.getType() == ArgumentType.FUNCTION_RETVAL
                 && (instruction.getOpcode() == Opcode.CALL || instruction.getOpcode() == Opcode.CALLREC)) return false;
 
-        if (instruction.getAstContext().matches(AstContextType.MLOG) && !getProfile().isMlogBlockOptimization()) return false;
+        if (instruction.getAstContext().matches(AstContextType.MLOG) && !instruction.getLocalProfile().isMlogBlockOptimization()) return false;
 
         return switch (variable.getType()) {
             case MLOG_VARIABLE, PRESERVED, GLOBAL_PRESERVED, FUNCTION_RETADDR, PARAMETER -> false;

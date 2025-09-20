@@ -50,7 +50,7 @@ public class MultiJumpInstruction extends BaseInstruction implements MultiTarget
 
     public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
         return super.getRealSize(sharedStructures) +
-                (astContext.getProfile().isSymbolicLabels()
+                (astContext.getGlobalProfile().isSymbolicLabels()
                         && getTarget() instanceof LogicLabel
                         && getOffset().getIntValue() != 0 ? 1 : 0);
     }

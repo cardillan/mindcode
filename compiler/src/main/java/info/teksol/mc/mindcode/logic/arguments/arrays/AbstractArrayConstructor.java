@@ -31,7 +31,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     public AbstractArrayConstructor(ArrayAccessInstruction instruction) {
         this.processor = MindcodeCompiler.getContext().instructionProcessor();
-        this.profile = instruction.getAstContext().getProfile();
+        this.profile = instruction.getAstContext().getCompilerProfile();
         this.instruction = instruction;
         this.arrayStore = instruction.getArray().getArrayStore();
     }

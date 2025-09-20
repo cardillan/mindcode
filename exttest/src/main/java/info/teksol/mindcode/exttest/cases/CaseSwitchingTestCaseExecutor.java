@@ -41,7 +41,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
     public void runTest(TestProgress progress) {
         MindcodeCompiler compiler = compilerSupplier.get();
         try {
-            compiler.globalCompilerProfile()
+            compiler.compilerProfile()
                     .setOptimizationLevel(Optimization.CASE_SWITCHING, OptimizationLevel.NONE)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
@@ -51,7 +51,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
 
             // Second round
             compiler = compilerSupplier.get();
-            compiler.globalCompilerProfile()
+            compiler.compilerProfile()
                     .setGoal(GenerationGoal.SPEED)
                     .setCaseOptimizationStrength(STRENGTH);
             if (!compile(compiler, progress)) return;
@@ -66,7 +66,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
 
             if (!Objects.equals(originalOutput, newOutput)) {
                 progress.reportError(new ErrorResult(testCaseId,
-                        compiler.globalCompilerProfile(), "", compiler.getExecutionException(),
+                        compiler.compilerProfile(), "", compiler.getExecutionException(),
                         "The original and optimized outputs differ:\n" + originalOutput + "\n" + newOutput));
             }
 
@@ -74,7 +74,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                     .stream().filter(ConvertCaseExpressionAction::applied).toList();
             if (diagnosticData.size() != 1) {
                 progress.reportError(new ErrorResult(testCaseId,
-                        compiler.globalCompilerProfile(), "", compiler.getExecutionException(), "No Case-Switching diagnostic information found."));
+                        compiler.compilerProfile(), "", compiler.getExecutionException(), "No Case-Switching diagnostic information found."));
             } else {
                 ConvertCaseExpressionAction action = diagnosticData.getFirst();
                 int blockCount = compiler.metadata().getBlockCount();
@@ -85,7 +85,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 if (stepDifference != expectedStepDifference) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId,
-                            compiler.globalCompilerProfile(), "", compiler.getExecutionException(),
+                            compiler.compilerProfile(), "", compiler.getExecutionException(),
                             String.format("Original steps: %d, new steps: %d, difference: %d (expected %d).",
                                     originalSteps, newSteps, stepDifference, expectedStepDifference)));
                 }
@@ -95,7 +95,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 if (sizeDifference != expectedSizeDifference) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId,
-                            compiler.globalCompilerProfile(), "", compiler.getExecutionException(),
+                            compiler.compilerProfile(), "", compiler.getExecutionException(),
                             String.format("Original size: %d, new size: %d, difference: %d (expected %d)",
                                     originalSize, newSize, sizeDifference, expectedSizeDifference)));
                 }
@@ -103,7 +103,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
                 if (compiler.getEmulator().getNoopSteps() > 1) {
                     success = false;
                     progress.reportError(new ErrorResult(testCaseId,
-                            compiler.globalCompilerProfile(), "", compiler.getExecutionException(),
+                            compiler.compilerProfile(), "", compiler.getExecutionException(),
                             String.format("Unexpected noop executions: %d (expected at most 1).", compiler.getEmulator().getNoopSteps())));
                 }
 
@@ -113,7 +113,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
             }
         } catch (Exception e) {
             progress.reportError(new ErrorResult(testCaseId,
-                    compiler.globalCompilerProfile(), "", null, "Exception: " + e));
+                    compiler.compilerProfile(), "", null, "Exception: " + e));
         }
     }
 
@@ -134,7 +134,7 @@ public class CaseSwitchingTestCaseExecutor implements TestCaseExecutor {
 
         if (!success) {
             progress.reportError(new ErrorResult(testCaseId,
-                    compiler.globalCompilerProfile(), unexpectedMessages, compiler.getExecutionException(), failedTests));
+                    compiler.compilerProfile(), unexpectedMessages, compiler.getExecutionException(), failedTests));
         }
 
         return success;

@@ -25,7 +25,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        if (experimental() && instructionProcessor.isSupported(Opcode.SELECT)) {
+        if (experimentalGlobal() && instructionProcessor.isSupported(Opcode.SELECT)) {
             List<AstContext> contexts = contexts(ctx -> ctx.matches(IF, BASIC));
             List<Boolean> result = contexts.stream().map(this::applySelectOptimization).toList();
             if (result.stream().anyMatch(Boolean::booleanValue)) return true;
@@ -171,7 +171,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
                 (trueContent.operations.isEmpty() && falseContent.operations.isEmpty() ? 0 : 2);
 
         // Unless the goal is size, don't optimize expressions that have too high an overhead
-        if (ifExpression.getProfile().getGoal() == GenerationGoal.SIZE || selectOverhead >= jumpOverhead) return false;
+        if (ifExpression.getLocalProfile().getGoal() == GenerationGoal.SIZE || selectOverhead >= jumpOverhead) return false;
 
         LogicList flowControl = contextInstructions(ifExpression.child(2));
         if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()

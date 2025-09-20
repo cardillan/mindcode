@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.profile.LocalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -166,4 +167,7 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.SELECT_OPERATION, true);
     }
 
+    default LocalCompilerProfile getLocalProfile() {
+        return getAstContext().getLocalProfile();
+    }
 }

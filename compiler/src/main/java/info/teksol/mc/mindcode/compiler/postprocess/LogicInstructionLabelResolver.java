@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
 
@@ -22,7 +23,7 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 public class LogicInstructionLabelResolver {
-    private final CompilerProfile profile;
+    private final GlobalCompilerProfile profile;
     private final InstructionProcessor processor;
     private final AstContext rootAstContext;
 
@@ -30,13 +31,13 @@ public class LogicInstructionLabelResolver {
     private final Map<LogicLabel, LogicLabel> addresses = new HashMap<>();
     private final Map<Integer, AstContext> addressContexts = new HashMap<>();
 
-    public LogicInstructionLabelResolver(CompilerProfile profile, InstructionProcessor processor, AstContext rootAstContext) {
+    public LogicInstructionLabelResolver(GlobalCompilerProfile profile, InstructionProcessor processor, AstContext rootAstContext) {
         this.processor = processor;
         this.profile = profile;
         this.rootAstContext = rootAstContext;
     }
     
-    public static List<LogicInstruction> resolve(CompilerProfile profile, InstructionProcessor processor,
+    public static List<LogicInstruction> resolve(GlobalCompilerProfile profile, InstructionProcessor processor,
             AstContext rootAstContext, List<LogicInstruction> program) {
         return new LogicInstructionLabelResolver(profile, processor, rootAstContext).resolve(program);
     }
@@ -182,43 +183,23 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
-        return switch (profile.getRemarks()) {
-            case ACTIVE     -> resolveRemarksActive(program);
-            case COMMENTS   -> resolveRemarksComment(program);
-            case NONE       -> resolveRemarksNone(program);
-            case PASSIVE    -> resolveRemarksPassive(program);
-        };
-    }
-
-    private List<LogicInstruction> resolveRemarksActive(List<LogicInstruction> program) {
-        return program.stream()
-                .map(ix -> ix instanceof RemarkInstruction r ? processor.createPrint(r.getAstContext(), r.getValue()) : ix)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private List<LogicInstruction> resolveRemarksComment(List<LogicInstruction> program) {
-        return program.stream()
-                .map(ix -> ix instanceof RemarkInstruction r ? processor.createComment(r.getAstContext(), r.getValue()) : ix)
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private List<LogicInstruction> resolveRemarksNone(List<LogicInstruction> program) {
-        return program.stream()
-                .filter(ix -> !(ix instanceof RemarkInstruction))
-                .collect(Collectors.toCollection(ArrayList::new));
-    }
-
-    private List<LogicInstruction> resolveRemarksPassive(List<LogicInstruction> program) {
         List<LogicInstruction> result = new ArrayList<>();
         LabelInstruction activeLabel = null;
         for (LogicInstruction ix : program) {
-            if (ix instanceof RemarkInstruction) {
-                if (activeLabel == null) {
-                    LogicLabel label = processor.nextLabel();
-                    activeLabel = processor.createLabel(ix.getAstContext(),label);
-                    result.add(processor.createJumpUnconditional(ix.getAstContext(), label));
+            if (ix instanceof RemarkInstruction r) {
+                switch (r.getAstContext().getLocalProfile().getRemarks()) {
+                    case NONE       -> { /* do nothing */ }
+                    case COMMENTS   -> result.add(processor.createComment(r.getAstContext(), r.getValue()));
+                    case ACTIVE     -> result.add(processor.createPrint(r.getAstContext(), r.getValue()));
+                    case PASSIVE    -> {
+                        if (activeLabel == null) {
+                            LogicLabel label = processor.nextLabel();
+                            activeLabel = processor.createLabel(r.getAstContext(),label);
+                            result.add(processor.createJumpUnconditional(r.getAstContext(), label));
+                        }
+                        result.add(processor.createPrint(r.getAstContext(), r.getValue()));
+                    }
                 }
-                result.add(processor.createPrint(ix.getAstContext(), ((RemarkInstruction) ix).getValue()));
             } else {
                 if (activeLabel != null) {
                     result.add(activeLabel);
@@ -238,11 +219,10 @@ public class LogicInstructionLabelResolver {
     private static final Set<Integer> invalidAddresses = Set.of(0, (int) '\r',  (int) '"', (int) '\\');
 
     private void calculateAddresses(List<LogicInstruction> program) {
-        boolean alignMultiLabes = profile.useTextJumpTables();
         int instructionPointer = 0;
         for (int i = 0; i < program.size(); i++) {
             final LogicInstruction instruction = program.get(i);
-            if (alignMultiLabes && instruction.isJumpTarget() && invalidAddresses.contains(instructionPointer)) {
+            if (instruction.isJumpTarget() && invalidAddresses.contains(instructionPointer)) {
                 program.add(i++, processor.createInstruction(instruction.getAstContext(), Opcode.NOOP));
                 instructionPointer++;
             }
@@ -358,8 +338,7 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {
-        return program.stream().mapMulti((LogicInstruction instruction, Consumer<LogicInstruction> consumer)
-                -> processor.resolve(profile, instruction, consumer)).toList();
+        return program.stream().mapMulti(processor::resolve).toList();
     }
 
     private List<LogicInstruction> createVariables(AstContext astContext, Collection<LogicVariable> variables) {

@@ -87,7 +87,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
     CaseSwitcher(OptimizationContext optimizationContext) {
         super(Optimization.CASE_SWITCHING, optimizationContext);
-        this.caseConfiguration = getProfile().getCaseConfiguration();
+        this.caseConfiguration = getGlobalProfile().getCaseConfiguration();
     }
 
     private int invocations = 0;
@@ -177,10 +177,10 @@ public class CaseSwitcher extends BaseOptimizer {
         ContextMatcher bodyMatcher = new ContextMatcher(bodies);
 
         boolean hasElseBranch = !(context.node() instanceof AstCaseExpression exp) || exp.isElseDefined();
-        boolean removeRangeCheck = getProfile().isUnsafeCaseOptimization() && !hasElseBranch;
+        boolean removeRangeCheck = context.getLocalProfile().isUnsafeCaseOptimization() && !hasElseBranch;
 
         Targets targets = new Targets(hasElseBranch);
-        WhenValueAnalyzer analyzer = new WhenValueAnalyzer();
+        WhenValueAnalyzer analyzer = new WhenValueAnalyzer(context);
         final Map<LogicLabel, Integer> bodySizes = new HashMap<>();
 
         // Used to compute the size and execution costs of the case expression
@@ -300,7 +300,7 @@ public class CaseSwitcher extends BaseOptimizer {
         if (variable == null || analyzer.contentType == null || targets.isEmpty() || targets.range() > MAX_CASE_RANGE
                 || analyzer.hasNull && analyzer.contentType == ContentType.UNKNOWN) return;
 
-        targets.computeElseValues(analyzer.contentType, metadata, getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL);
+        targets.computeElseValues(analyzer.contentType, metadata, getGlobalProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL);
 
         int originalCost = jumps;
         int originalSteps = jumps * values - savedSteps
@@ -308,10 +308,10 @@ public class CaseSwitcher extends BaseOptimizer {
 
         ConvertCaseActionParameters param = new ConvertCaseActionParameters(groupCount, context, variable, targets,
                 bodySizes, originalCost, originalSteps, analyzer.isMindustryContent(), removeRangeCheck,
-                getProfile().isSymbolicLabels(), targets.hasElseBranch() && targets.getElseValues() > 0);
+                getGlobalProfile().isSymbolicLabels(), targets.hasElseBranch() && targets.getElseValues() > 0);
 
         boolean logicConversion = analyzer.contentType != ContentType.UNKNOWN;
-        int caseOptimizationStrength = getProfile().getCaseOptimizationStrength();
+        int caseOptimizationStrength = context.getLocalProfile().getCaseOptimizationStrength();
 
         SegmentConfigurationGenerator segmentConfigurationGenerator = new CombinatorialSegmentConfigurationGenerator(targets,
                 logicConversion, caseOptimizationStrength);
@@ -386,7 +386,7 @@ public class CaseSwitcher extends BaseOptimizer {
     private void addOptimizationAction(List<ConvertCaseExpressionAction> actions, ConvertCaseActionParameters param,
             List<Segment> segments, String padding) {
         actions.add(new ConvertCaseExpressionAction(param, segments, padding, false));
-        if (experimental()) {
+        if (experimental(param.context)) {
             boolean canMoveMoreBodies = actions.getLast().segments.stream().anyMatch(s -> s.moveable() && !s.embedded());
             if (canMoveMoreBodies) {
                 actions.add(new ConvertCaseExpressionAction(param, segments, padding, true));
@@ -457,7 +457,7 @@ public class CaseSwitcher extends BaseOptimizer {
     private int findHighPadSegment(ConvertCaseActionParameters parameters, List<Segment> segments) {
         // Only high pad Mindustry content when full builtin evaluation is active.
         // When range checking is off, padding high makes no sense.
-        if (!parameters.mindustryContent || getProfile().getBuiltinEvaluation() != BuiltinEvaluation.FULL || parameters.removeRangeCheck) return -1;
+        if (!parameters.mindustryContent || getGlobalProfile().getBuiltinEvaluation() != BuiltinEvaluation.FULL || parameters.removeRangeCheck) return -1;
 
         // It can only be the very last segment
         int lastPossibleIndex = segments.getLast().type() == SegmentType.JUMP_TABLE ? segments.size() - 1 : segments.size() - 2;
@@ -865,7 +865,7 @@ public class CaseSwitcher extends BaseOptimizer {
             // Account for null handling on the else branch
             int nullHandling = segment.handleNulls() ? 1 : 0;
 
-            if (segment.from() == 0 && getProfile().useTextJumpTables()) {
+            if (segment.from() == 0 && param.context().getCompilerProfile().useTextJumpTables()) {
                 return new SegmentStats(
                         1,
                         activeTargets,
@@ -896,7 +896,7 @@ public class CaseSwitcher extends BaseOptimizer {
 
             LogicLabel marker = instructionProcessor.nextLabel();
 
-            if (segment.from() == 0 && getProfile().useTextJumpTables()) {
+            if (segment.from() == 0 && param.context().getLocalProfile().useTextJumpTables()) {
                 // The when bodies have normal labels now. We need multilabels.
                 // We keep the original labels since they might be in use elsewhere.
                 // Thus, we need to create new ones and maintain a map.
@@ -993,7 +993,7 @@ public class CaseSwitcher extends BaseOptimizer {
             Map<LogicLabel, Segment> bestSegments = new HashMap<>();
             for (Segment segment : segments) {
                 // We won't embed a jump table segment in case of text-based jump tables
-                if (segment.type() == SegmentType.JUMP_TABLE && getProfile().useTextJumpTables()) continue;
+                if (segment.type() == SegmentType.JUMP_TABLE && param.context.getLocalProfile().useTextJumpTables()) continue;
 
                 LogicLabel label = segment.endLabel() == LogicLabel.INVALID ? param.targets.getExisting(0) : segment.endLabel();
 
@@ -1228,10 +1228,15 @@ public class CaseSwitcher extends BaseOptimizer {
     }
 
     private class WhenValueAnalyzer {
+        private final AstContext context;
         private boolean first = true;
         private boolean hasNull = false;
         private @Nullable ContentType contentType;        // ContentType.UNKNOWN represents an integer
         private @Nullable Integer lastValue;
+
+        public WhenValueAnalyzer(AstContext context) {
+            this.context = context;
+        }
 
         public boolean analyze(LogicValue value) {
             if (value == LogicNull.NULL) {
@@ -1254,7 +1259,7 @@ public class CaseSwitcher extends BaseOptimizer {
             if (value.isNumericConstant() && value.isInteger()) {
                 lastValue = value.getIntValue();
                 return ContentType.UNKNOWN;
-            } else if (advanced() && value instanceof LogicBuiltIn builtIn && builtIn.getObject() != null && canConvert(builtIn)) {
+            } else if (advanced(context) && value instanceof LogicBuiltIn builtIn && builtIn.getObject() != null && canConvert(builtIn)) {
                 lastValue = builtIn.getObject().logicId();
                 return builtIn.getObject().contentType();
             }
@@ -1265,10 +1270,10 @@ public class CaseSwitcher extends BaseOptimizer {
         private boolean canConvert(LogicBuiltIn builtIn) {
             MindustryContent object = builtIn.getObject();
             return object != null
-                    && getProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE
-                    && object.contentType().hasLookup
-                    && object.logicId() >= 0
-                    && (getProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(builtIn.getName()));
+                   && getGlobalProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE
+                   && object.contentType().hasLookup
+                   && object.logicId() >= 0
+                   && (getGlobalProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL || metadata.isStableBuiltin(builtIn.getName()));
         }
 
         public @Nullable Integer getLastValue() {

@@ -8,6 +8,7 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mc.profile.options.CompilerOptionFactory;
 import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionMultiplicity;
+import info.teksol.mc.profile.options.OptionScope;
 import info.teksol.mc.util.StringSimilarity;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
@@ -22,7 +23,7 @@ import java.util.stream.Collectors;
 public class DirectiveProcessor extends AbstractMessageEmitter {
     private static final Map<String, Enum<?>> OPTION_MAP = createOptionMap();
 
-    private DirectiveScope scope = DirectiveScope.GLOBAL;
+    private OptionScope scopeLimit = OptionScope.GLOBAL;
 
     private interface OptionHandler {
         void handle(CompilerProfile profile, AstDirectiveSet directive);
@@ -32,8 +33,8 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         super(messageConsumer);
     }
 
-    public void setScope(DirectiveScope scope) {
-        this.scope = scope;
+    public void setScopeLimit(OptionScope scopeLimit) {
+        this.scopeLimit = scopeLimit;
     }
 
     private <T> List<T> convertValues(CompilerOptionValue<T> option, AstDirectiveSet node) {
@@ -50,6 +51,13 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
     }
 
     private <T> void setOptionValue(CompilerOptionValue<T> option, AstDirectiveSet node) {
+        if (!option.getScope().isIncludedIn(scopeLimit)) {
+            if (scopeLimit == OptionScope.LOCAL && node.isLocal()) {
+                error(node, ERR.DIRECTIVE_IS_NOT_LOCAL, option.getOptionName());
+            }
+            return;
+        }
+
         if (node.getValues().isEmpty() && !option.multiplicity.matchesMultiple()) {
             if (option.multiplicity.matchesNone()) {
                 option.setValue(option.getConstValue());
@@ -70,9 +78,6 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
     }
 
     public void processDirective(CompilerProfile profile, AstDirectiveSet directive) {
-        DirectiveScope previousScope = scope;
-        if (directive.isLocal()) scope = DirectiveScope.LOCAL;
-
         String directiveText = directive.getOption().getText();
         Enum<?> optionEnum = OPTION_MAP.get(directiveText);
         if (optionEnum == null) {
@@ -85,8 +90,6 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         } else {
             setOptionValue(profile.getOption(optionEnum), directive);
         }
-
-        scope = previousScope;
     }
         
     private void firstValueError(AstDirectiveSet node, @PrintFormat String format, Object... args) {

@@ -42,17 +42,17 @@ public class OptimizationCoordinator {
     private final OptimizerContext optimizerContext;
     private final LogicInstructionArrayExpander arrayExpander;
     private final boolean remoteLibrary;
-    private final CompilerProfile profile;
+    private final CompilerProfile globalProfile;
     private DebugPrinter debugPrinter = new NullDebugPrinter();
     private @Nullable OptimizationContext optimizationContext;
 
-    public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile profile,
+    public OptimizationCoordinator(InstructionProcessor instructionProcessor, CompilerProfile globalProfile,
             MessageConsumer messageConsumer, OptimizerContext optimizerContext, LogicInstructionArrayExpander arrayExpander,
             boolean remoteLibrary) {
         this.instructionProcessor = instructionProcessor;
         this.messageConsumer = messageConsumer;
         this.optimizerContext = optimizerContext;
-        this.profile = profile;
+        this.globalProfile = globalProfile;
         this.arrayExpander = arrayExpander;
         this.remoteLibrary = remoteLibrary;
     }
@@ -70,13 +70,13 @@ public class OptimizationCoordinator {
 
         Map<Optimization, Optimizer> result = new LinkedHashMap<>();
         for (Optimization optimization : Optimization.LIST) {
-            OptimizationLevel level = profile.getOptimizationLevel(optimization);
+            OptimizationLevel level = globalProfile.getOptimizationLevel(optimization);
             if (level != OptimizationLevel.NONE) {
                 Optimizer optimizer = optimization.getInstanceCreator().apply(optimizationContext);
                 optimizer.setDebugPrinter(debugPrinter);
 
                 optimizer.setLevel(level);
-                optimizer.setGoal(profile.getGoal());
+                optimizer.setGoal(globalProfile.getGoal());
 
                 result.put(optimization, optimizer);
             }
@@ -92,7 +92,7 @@ public class OptimizationCoordinator {
         boolean passesExceeded = false;
 
         try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
-            optimizationContext = new OptimizationContext(traceFile, messageConsumer, profile, instructionProcessor,
+            optimizationContext = new OptimizationContext(traceFile, messageConsumer, globalProfile, instructionProcessor,
                     optimizerContext, program, callGraph, rootAstContext, remoteLibrary);
 
             int count = codeSize();
@@ -108,7 +108,7 @@ public class OptimizationCoordinator {
             boolean modified = true;
 
             // We reserve one pass for the phase after the expansion
-            while (modified && pass < profile.getOptimizationPasses()) {
+            while (modified && pass < globalProfile.getOptimizationPasses()) {
                 modified = optimizePhase(ITERATED, optimizers, pass++);
             }
 
@@ -133,7 +133,7 @@ public class OptimizationCoordinator {
                 debugPrinter.registerIteration(null, "Virtual Instruction Expansion", List.copyOf(program));
             }
 
-            while (modified && pass <= profile.getOptimizationPasses()) {
+            while (modified && pass <= globalProfile.getOptimizationPasses()) {
                 modified = optimizePhase(ITERATED, optimizers, pass++);
             }
 
@@ -141,10 +141,10 @@ public class OptimizationCoordinator {
 
             do {
                 modified = optimizePhase(JUMPS, optimizers, pass++);
-            } while (modified && pass <= profile.getOptimizationPasses());
+            } while (modified && pass <= globalProfile.getOptimizationPasses());
 
             if (passesExceeded || modified) {
-                messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, profile.getOptimizationPasses()));
+                messageConsumer.accept(OptimizerMessage.warn(WARN.OPTIMIZATION_PASSES_LIMIT_REACHED, globalProfile.getOptimizationPasses()));
             }
 
             optimizePhase(FINAL, optimizers, 0);
@@ -182,7 +182,7 @@ public class OptimizationCoordinator {
             return modified;
         }
 
-        Predicate<OptimizationAction> actionFilter = switch (profile.getGoal()) {
+        Predicate<OptimizationAction> actionFilter = switch (globalProfile.getGoal()) {
             case SIZE    -> action -> action.cost() < 0;
             case NEUTRAL -> action -> action.cost() <= 0 && action.benefit() >= 0 && (action.cost() < 0 || action.benefit() > 0);
             case SPEED   -> action -> action.benefit() > 0;
@@ -190,8 +190,8 @@ public class OptimizationCoordinator {
 
         while (true) {
             int initialSize = codeSize();
-            int costLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, profile.getInstructionLimit() - initialSize);
-            int expandedCostLimit = profile.getGoal() == GenerationGoal.SIZE ? 0 : 500 + costLimit;
+            int costLimit = globalProfile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, globalProfile.getInstructionLimit() - initialSize);
+            int expandedCostLimit = globalProfile.getGoal() == GenerationGoal.SIZE ? 0 : 500 + costLimit;
 
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
@@ -230,7 +230,7 @@ public class OptimizationCoordinator {
 
             int difference = codeSize() - initialSize;
             optimizationStatistics.add(OptimizerMessage.debug(
-                    "\nPass %d: %s optimization selection (cost limit %d):", pass, profile.getGoal().toString().toLowerCase(), costLimit));
+                    "\nPass %d: %s optimization selection (cost limit %d):", pass, globalProfile.getGoal().toString().toLowerCase(), costLimit));
             possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
 
             if (selectedAction == null) {
@@ -243,7 +243,7 @@ public class OptimizationCoordinator {
 
     /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectAction(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
-        return switch (profile.getGoal()) {
+        return switch (globalProfile.getGoal()) {
             case SIZE -> selectActionForSize(possibleOptimizations);
             case NEUTRAL -> selectActionNeutral(possibleOptimizations, costLimit, considered);
             case SPEED -> selectActionForSpeed(possibleOptimizations, costLimit, considered);
@@ -306,7 +306,7 @@ public class OptimizationCoordinator {
 
     private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference,
             Set<OptimizationAction> considered) {
-        Function<OptimizationAction, Double> efficiency = switch (profile.getGoal()) {
+        Function<OptimizationAction, Double> efficiency = switch (globalProfile.getGoal()) {
             case SIZE -> OptimizationAction::sizeEfficiency;
             case NEUTRAL -> OptimizationAction::neutralEfficiency;
             case SPEED -> OptimizationAction::speedEfficiency;

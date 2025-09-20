@@ -45,6 +45,7 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.FinalCodeOutput;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.util.CollectionUtils;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.jspecify.annotations.NullMarked;
@@ -70,7 +71,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     // Inputs, configurations, and tools
     private final CompilationPhase targetPhase;
-    private final CompilerProfile profile;
+    private final CompilerProfile globalProfile;
     private final InputFiles inputFiles;
     private final DirectiveProcessor directiveProcessor;
     private @Nullable InstructionProcessor instructionProcessor;
@@ -118,17 +119,17 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     // Diagnostic data
     private final Map<Class<?>, List<Object>> diagnosticData = new HashMap<>();
 
-    public MindcodeCompiler(MessageConsumer messageConsumer, CompilerProfile profile, InputFiles inputFiles) {
-        this(CompilationPhase.ALL, messageConsumer, profile, inputFiles);
+    public MindcodeCompiler(MessageConsumer messageConsumer, CompilerProfile globalProfile, InputFiles inputFiles) {
+        this(CompilationPhase.ALL, messageConsumer, globalProfile, inputFiles);
     }
 
     public MindcodeCompiler(CompilationPhase targetPhase, MessageConsumer messageConsumer,
-            CompilerProfile profile, InputFiles inputFiles) {
+            CompilerProfile globalProfile, InputFiles inputFiles) {
         super(new ListMessageLogger(
-                new TranslatingMessageConsumer(messageConsumer, profile.getPositionTranslator())));
+                new TranslatingMessageConsumer(messageConsumer, globalProfile.getPositionTranslator())));
         this.messageLogger = (ListMessageLogger) super.messageConsumer();
         this.targetPhase = targetPhase;
-        this.profile = profile;
+        this.globalProfile = globalProfile;
         this.inputFiles = inputFiles;
         this.directiveProcessor = new DirectiveProcessor(messageConsumer);
         returnStack = new ReturnStack();
@@ -168,7 +169,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                 .collect(Collectors.toCollection(LinkedList::new));
         Set<InputFile> processedFiles = new HashSet<>();
         List<AstModule> moduleList = new LinkedList<>();
-        RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, profile, inputFiles);
+        RequirementsProcessor requirementsProcessor = new RequirementsProcessor(messageConsumer, globalProfile, inputFiles);
         Map<AstIdentifier, List<AstIdentifier>> foundProcessors = new HashMap<>();
 
         long parseTime = 0;
@@ -233,7 +234,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                 .forEach(p -> error(p, ERR.MULTIPLE_PROCESSOR_BINDINGS, p.getName()));
 
         if (!modules.isEmpty()) {
-            astProgram = new AstProgram(profile, new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
+            astProgram = new AstProgram(globalProfile, new SourcePosition(inputFiles.getMainInputFile(), 1, 1), moduleList);
         }
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.AST_BUILDER) <= 0) return;
 
@@ -241,7 +242,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
             throw new MindcodeInternalError("Program is empty.");
         }
 
-        if (profile.getParseTreeLevel() > 0) {
+        if (globalProfile.getParseTreeLevel() > 0) {
             debug("Parse tree:");
             debug(new AstIndentedPrinter().print(astProgram));
             debug("");
@@ -249,21 +250,21 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         long compileStart = System.nanoTime();
 
-        DirectivePreprocessor.processGlobalDirectives(this, profile, astProgram.getMainModule());
+        DirectivePreprocessor.processGlobalDirectives(this, globalProfile, astProgram.getMainModule());
         astProgram.getModules().stream().filter(m -> !m.isMain())
-                .forEach(module -> DirectivePreprocessor.processModuleDirectives(this, profile, module));
+                .forEach(module -> DirectivePreprocessor.processModuleDirectives(this, globalProfile, module));
 
-        DirectivePreprocessor.processLocalDirectives(this, profile, astProgram);
+        DirectivePreprocessor.processLocalDirectives(this, globalProfile, astProgram);
 
-        nameCreator = new StandardNameCreator(profile);
-        instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, nameCreator, profile);
+        nameCreator = new StandardNameCreator(globalProfile);
+        instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, nameCreator, globalProfile);
         metadata = instructionProcessor.getMetadata();
 
         callGraph = CallGraphCreator.createCallGraph(this, astProgram);
 
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.CALL_GRAPH) <= 0) return;
 
-        rootAstContext = AstContext.createRootNode(profile);
+        rootAstContext = AstContext.createRootNode(globalProfile);
         variables = new Variables(this);
         assembler = new CodeAssembler(this);
         compileTimeEvaluator = new CompileTimeEvaluator(this);
@@ -282,10 +283,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         // OPTIMIZE
         long optimizeStart = System.nanoTime();
-        if (profile.optimizationsActive() && instructions.size() > 1) {
-            final DebugPrinter debugPrinter = profile.getDebugMessages() > 0 && profile.optimizationsActive()
-                    ? debugPrinterProvider.apply(profile.getDebugMessages()) : new NullDebugPrinter();
-            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, profile, messageConsumer,
+        if (globalProfile.optimizationsActive() && instructions.size() > 1) {
+            final DebugPrinter debugPrinter = globalProfile.getDebugMessages() > 0 && globalProfile.optimizationsActive()
+                    ? debugPrinterProvider.apply(globalProfile.getDebugMessages()) : new NullDebugPrinter();
+            OptimizationCoordinator optimizer = new OptimizationCoordinator(instructionProcessor, globalProfile, messageConsumer,
                     this, arrayExpander, !astProgram.isMainProgram());
             optimizer.setDebugPrinter(debugPrinter);
             instructions = optimizer.optimize(callGraph, instructions, rootAstContext);
@@ -300,7 +301,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         instructions = arrayExpander.expandArrayInstructions(instructions);
 
         // Check there are no direct access instructions
-        if (profile.isSymbolicLabels()) {
+        if (globalProfile.isSymbolicLabels()) {
             boolean hasLabels = instructions.stream()
                     .filter(CollectionUtils.resultIn(LogicInstruction::getOpcode, JUMP, CALL, CALLREC, LABEL, MULTIJUMP, MULTILABEL).negate())
                     .flatMap(MlogInstruction::inputArgumentsStream)
@@ -318,13 +319,13 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
 
         // Sort variables
-        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(profile, instructionProcessor, rootAstContext);
+        LogicInstructionLabelResolver resolver = new LogicInstructionLabelResolver(globalProfile, instructionProcessor, rootAstContext);
         instructions = resolver.sortVariables(instructions);
 
         // Print unresolved code
-        if (profile.getFinalCodeOutput() != FinalCodeOutput.NONE) {
+        if (globalProfile.getFinalCodeOutput() != FinalCodeOutput.NONE) {
             debug("\nFinal code before resolving virtual instructions:\n");
-            debug(LogicInstructionPrinter.toString(profile.getFinalCodeOutput(), instructionProcessor, instructions));
+            debug(LogicInstructionPrinter.toString(globalProfile.getFinalCodeOutput(), instructionProcessor, instructions));
         }
 
         // Label resolving
@@ -335,13 +336,13 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         generateUnusedVolatileWarnings();
 
         output = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
-                profile.isSymbolicLabels(), profile.getMlogIndent());
+                globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent());
 
         if (hasErrors() || targetPhase.compareTo(CompilationPhase.PRINTER) <= 0) return;
 
         // RUN if requested
         // Timing output
-        if (profile.isRun()) {
+        if (globalProfile.isRun()) {
             long runStart = System.nanoTime();
             run(instructions);
             long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
@@ -370,7 +371,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         assert metadata != null;
 
         // All flags are already set as we want them to be
-        Processor processor = new Processor(instructionProcessor, messageConsumer, profile.getExecutionFlags(), profile.getTraceLimit());
+        Processor processor = new Processor(instructionProcessor, messageConsumer, globalProfile.getExecutionFlags(), globalProfile.getTraceLimit());
         addBlocks(processor, "cell", i -> Memory.createMemoryCell(metadata));
         addBlocks(processor, "bank", i -> Memory.createMemoryBank(metadata));
         addBlocks(processor, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5));
@@ -392,7 +393,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         emulatorInitializer.accept(emulator);
 
         try {
-            emulator.run(program, profile.getStepLimit());
+            emulator.run(program, globalProfile.getStepLimit());
         } catch (ExecutionException e) {
             executionException = e;
         }
@@ -505,8 +506,12 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     }
 
     @Override
-    public CompilerProfile globalCompilerProfile() {
-        return profile;
+    public GlobalCompilerProfile globalCompilerProfile() {
+        return globalProfile;
+    }
+
+    public CompilerProfile compilerProfile() {
+        return globalProfile;
     }
 
     @Override

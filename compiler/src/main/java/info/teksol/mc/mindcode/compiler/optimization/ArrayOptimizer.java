@@ -33,7 +33,7 @@ class ArrayOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        if (!experimental()) return false;
+        if (!experimentalGlobal()) return false;
 
         try (OptimizationContext.LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
@@ -57,7 +57,7 @@ class ArrayOptimizer extends BaseOptimizer {
         return switch (ix.getArray().getArrayStore().getSize()) {
             case 1 -> ArrayOrganization.INTERNAL_SIZE1;
             case 2 -> ArrayOrganization.INTERNAL_SIZE2;
-            case 3 -> experimental() && instructionProcessor.isSupported(Opcode.SELECT) ? ArrayOrganization.INTERNAL_SIZE3 : current;
+            case 3 -> experimental(ix) && instructionProcessor.isSupported(Opcode.SELECT) ? ArrayOrganization.INTERNAL_SIZE3 : current;
             default -> current;
         };
     }
@@ -96,7 +96,7 @@ class ArrayOptimizer extends BaseOptimizer {
         // Costs:
         int addedInstructions = k * (2 * n + 1);                    // k times [ size of jump table - 1 + 2 ]
         int removedInstructions =
-                2 * n + (getProfile().isSymbolicLabels() ? 1 : 0)   // Central jump table
+                2 * n + (getGlobalProfile().isSymbolicLabels() ? 1 : 0)   // Central jump table
                 + instructions.stream().mapToInt(ix -> ix.getRealSize(null)).sum();
         int cost = addedInstructions - removedInstructions;
 
