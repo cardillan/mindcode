@@ -166,6 +166,28 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
     }
 
     @Test
+    void resolvesRemarksWithLocalOptions() {
+        assertOutputs("""
+                        #set remarks = comments;
+                        remark("Start");
+                        #setlocal remarks = passive;    remark("Passive");
+                        #setlocal remarks = active;     remark("Active");
+                        #setlocal remarks = none;       remark("none");
+                        remark("Finish");
+                        """,
+                """
+                        # Start
+                        jump 2 always 0 0
+                        print "Passive"
+                        print "Active"
+                        # Finish
+                        end
+                        print "%s"
+                        """.formatted(CompilerProfile.SIGNATURE)
+        );
+    }
+
+    @Test
     void resolvesVirtualInstructions() {
         String expected = Stream.of(
                 createInstruction(JUMP, "11", "always"),

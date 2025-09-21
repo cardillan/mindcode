@@ -2,7 +2,10 @@ package info.teksol.mc.mindcode.compiler.preprocess;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstModuleDeclaration;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.SyntacticMode;
@@ -61,7 +64,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
         }
     }
 
-    public static void processLocalDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstProgram program) {
+    public static void processLocalDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstMindcodeNode program) {
         DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, globalProfile, OptionScope.LOCAL);
         preprocessor.visitNodeLocal(program);
     }

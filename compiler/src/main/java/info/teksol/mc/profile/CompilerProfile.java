@@ -65,6 +65,15 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return new CompilerProfile(this, includeUnstable);
     }
 
+    @SuppressWarnings("unchecked")
+    public void copyUnstableFrom(CompilerProfile other) {
+        for (CompilerOptionValue<?> option : other.options.values()) {
+            if (option.stability == SemanticStability.UNSTABLE) {
+                getOption(option.option).setValues((List<Object>) option.getValues());
+            }
+        }
+    }
+
     public Map<Enum<?>, CompilerOptionValue<?>> getOptions() {
         return options;
     }

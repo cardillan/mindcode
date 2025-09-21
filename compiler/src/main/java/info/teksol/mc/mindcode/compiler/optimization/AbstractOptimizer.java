@@ -25,7 +25,6 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     protected final MindustryMetadata metadata;
     protected final boolean debugOutput;
     protected OptimizationLevel level = OptimizationLevel.EXPERIMENTAL;
-    protected GenerationGoal goal = GenerationGoal.SIZE;
     protected DebugPrinter debugPrinter = new NullDebugPrinter();
 
     public AbstractOptimizer(Optimization optimization, OptimizationContext optimizationContext) {
@@ -63,11 +62,6 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     @Override
     public void setLevel(OptimizationLevel level) {
         this.level = level;
-    }
-
-    @Override
-    public void setGoal(GenerationGoal goal) {
-        this.goal = goal;
     }
 
     @Override
@@ -143,14 +137,21 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
 
     @NullMarked
     protected abstract class AbstractOptimizationAction implements OptimizationAction {
+        protected final GenerationGoal goal;
         protected final AstContext astContext;
         protected final int cost;
         protected final double benefit;
 
         public AbstractOptimizationAction(AstContext astContext, int cost, double benefit) {
+            this.goal = astContext.getLocalProfile().getGoal();
             this.astContext = astContext;
             this.cost = cost;
             this.benefit = benefit;
+        }
+
+        @Override
+        public GenerationGoal goal() {
+            return goal;
         }
 
         @Override

@@ -97,7 +97,7 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
                 [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
+                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,neutral,speed}] [-e {1..1000}]
                 [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization [{true,false}]] [-O {0..4}] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
@@ -206,7 +206,7 @@ Optimization options:
 
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
-  -g, --goal {size,speed,neutral}
+  -g, --goal {size,neutral,speed}
                          sets code generation  goal:  minimize  code  size,  minimize  execution  speed,  or no specific
                          preference
   -e, --passes {1..1000}
@@ -376,7 +376,7 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
                 [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,speed,neutral}] [-e {1..1000}]
+                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,neutral,speed}] [-e {1..1000}]
                 [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
                 [--mlog-block-optimization [{true,false}]] [-O {0..4}] [--temp-variables-elimination LEVEL]
                 [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
@@ -474,7 +474,7 @@ Optimization options:
 
   -i, --instruction-limit {1..100000}
                          sets the maximal number of instructions for the speed optimizations
-  -g, --goal {size,speed,neutral}
+  -g, --goal {size,neutral,speed}
                          sets code generation  goal:  minimize  code  size,  minimize  execution  speed,  or no specific
                          preference
   -e, --passes {1..1000}

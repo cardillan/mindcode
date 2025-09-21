@@ -10,8 +10,8 @@ import java.util.Map;
 @NullMarked
 public enum GenerationGoal {
     SIZE,
-    SPEED,
     NEUTRAL,
+    SPEED,
     ;
 
     private static final Map<String, GenerationGoal> VALUE_MAP = createValueMap();

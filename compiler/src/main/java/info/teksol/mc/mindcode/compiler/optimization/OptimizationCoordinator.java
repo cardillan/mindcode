@@ -23,7 +23,6 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.Predicate;
 
 import static info.teksol.mc.mindcode.compiler.optimization.OptimizationPhase.*;
 
@@ -74,10 +73,7 @@ public class OptimizationCoordinator {
             if (level != OptimizationLevel.NONE) {
                 Optimizer optimizer = optimization.getInstanceCreator().apply(optimizationContext);
                 optimizer.setDebugPrinter(debugPrinter);
-
                 optimizer.setLevel(level);
-                optimizer.setGoal(globalProfile.getGoal());
-
                 result.put(optimization, optimizer);
             }
         }
@@ -182,23 +178,17 @@ public class OptimizationCoordinator {
             return modified;
         }
 
-        Predicate<OptimizationAction> actionFilter = switch (globalProfile.getGoal()) {
-            case SIZE    -> action -> action.cost() < 0;
-            case NEUTRAL -> action -> action.cost() <= 0 && action.benefit() >= 0 && (action.cost() < 0 || action.benefit() > 0);
-            case SPEED   -> action -> action.benefit() > 0;
-        };
-
         while (true) {
             int initialSize = codeSize();
-            int costLimit = globalProfile.getGoal() == GenerationGoal.SIZE ? 0 : Math.max(0, globalProfile.getInstructionLimit() - initialSize);
-            int expandedCostLimit = globalProfile.getGoal() == GenerationGoal.SIZE ? 0 : 500 + costLimit;
+            int costLimit = Math.max(0, globalProfile.getInstructionLimit() - initialSize);
+            int expandedCostLimit = 500 + costLimit;
 
             optimizationContext.prepare();
             List<OptimizationAction> possibleOptimizations = phase.optimizations.stream()
                     .map(optimizers::get)
                     .filter(Objects::nonNull)
                     .flatMap(o -> o.getPossibleOptimizations(expandedCostLimit).stream())
-                    .filter(actionFilter)
+                    .filter(this::acceptOptimization)
                     .toList();
             optimizationContext.finish();
 
@@ -206,8 +196,10 @@ public class OptimizationCoordinator {
                 break;
             }
 
+            GenerationGoal goal = possibleOptimizations.stream().map(OptimizationAction::goal).min(Comparator.naturalOrder()).get();
+
             Set<OptimizationAction> considered = Collections.newSetFromMap(new IdentityHashMap<>());
-            OptimizationAction selectedAction = selectAction(possibleOptimizations, costLimit, considered);
+            OptimizationAction selectedAction = selectAction(goal, possibleOptimizations, costLimit, considered);
             if (selectedAction != null) {
                 optimizationContext.prepare();
                 optimizationContext.debugPrintProgram(String.format("%n*** Performing optimization %s ***%n", selectedAction), true);
@@ -230,7 +222,7 @@ public class OptimizationCoordinator {
 
             int difference = codeSize() - initialSize;
             optimizationStatistics.add(OptimizerMessage.debug(
-                    "\nPass %d: %s optimization selection (cost limit %d):", pass, globalProfile.getGoal().toString().toLowerCase(), costLimit));
+                    "\nPass %d: %s optimization selection (cost limit %d):", pass, goal.toString().toLowerCase(), costLimit));
             possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));
 
             if (selectedAction == null) {
@@ -241,11 +233,20 @@ public class OptimizationCoordinator {
         return modified;
     }
 
+    private boolean acceptOptimization(OptimizationAction action) {
+        return switch (action.goal()) {
+            case SIZE    -> action.cost() < 0;
+            case NEUTRAL -> action.cost() <= 0 && action.benefit() >= 0 && (action.cost() < 0 || action.benefit() > 0);
+            case SPEED   -> action.benefit() > 0;
+        };
+    }
+
     /// Selects an optimization action, taking action groups into account.
-    private @Nullable OptimizationAction selectAction(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
-        return switch (globalProfile.getGoal()) {
+    private @Nullable OptimizationAction selectAction(GenerationGoal goal, List<OptimizationAction> possibleOptimizations,
+            int costLimit, Set<OptimizationAction> considered) {
+        return switch (goal) {
             case SIZE -> selectActionForSize(possibleOptimizations);
-            case NEUTRAL -> selectActionNeutral(possibleOptimizations, costLimit, considered);
+            case NEUTRAL -> selectActionNeutral(possibleOptimizations);
             case SPEED -> selectActionForSpeed(possibleOptimizations, costLimit, considered);
         };
     }
@@ -256,7 +257,7 @@ public class OptimizationCoordinator {
 
     /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectActionForSize(List<OptimizationAction> possibleOptimizations) {
-        return possibleOptimizations.stream().min(SIZE_GOAL_COMPARATOR).orElse(null);
+        return possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.SIZE).min(SIZE_GOAL_COMPARATOR).orElse(null);
     }
 
     // We're maximizing the effect of the optimization: instructions saved times execution benefit.
@@ -264,8 +265,8 @@ public class OptimizationCoordinator {
             Comparator.comparingDouble(a -> -a.cost() * a.benefit());
 
     /// Selects an optimization action, taking action groups into account.
-    private @Nullable OptimizationAction selectActionNeutral(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
-        return possibleOptimizations.stream().max(NEUTRAL_GOAL_COMPARATOR).orElse(null);
+    private @Nullable OptimizationAction selectActionNeutral(List<OptimizationAction> possibleOptimizations) {
+        return possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.NEUTRAL).max(NEUTRAL_GOAL_COMPARATOR).orElse(null);
     }
 
     private static final Comparator<OptimizationAction> SPEED_GOAL_COMPARATOR =
@@ -274,7 +275,7 @@ public class OptimizationCoordinator {
 
     /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectActionForSpeed(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {
-        List<OptimizationAction> actions = possibleOptimizations.stream().sorted(SPEED_GOAL_COMPARATOR).toList();
+        List<OptimizationAction> actions = possibleOptimizations.stream().filter(a -> a.goal() == GenerationGoal.SPEED).sorted(SPEED_GOAL_COMPARATOR).toList();
 
         // Last considered action cost per group
         Map<String, Integer> actionCosts = new HashMap<>();
@@ -306,7 +307,7 @@ public class OptimizationCoordinator {
 
     private void outputPossibleOptimization(OptimizationAction opt, int costLimit, @Nullable OptimizationAction selected, int difference,
             Set<OptimizationAction> considered) {
-        Function<OptimizationAction, Double> efficiency = switch (globalProfile.getGoal()) {
+        Function<OptimizationAction, Double> efficiency = switch (opt.goal()) {
             case SIZE -> OptimizationAction::sizeEfficiency;
             case NEUTRAL -> OptimizationAction::neutralEfficiency;
             case SPEED -> OptimizationAction::speedEfficiency;

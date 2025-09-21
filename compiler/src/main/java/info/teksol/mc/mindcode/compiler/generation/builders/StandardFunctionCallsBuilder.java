@@ -10,7 +10,9 @@ import info.teksol.mc.mindcode.compiler.functions.FunctionMapper;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
 import info.teksol.mc.mindcode.compiler.generation.StackTracker;
 import info.teksol.mc.mindcode.compiler.generation.variables.*;
+import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
@@ -127,7 +129,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
 
         if (function.isInline()) {
-            return handleInlineFunctionCall(function, arguments);
+            return handleInlineFunctionCall(call.getProfile(), function, arguments);
         } else if (!function.isRecursive()) {
             return handleStacklessFunctionCall(function, arguments);
         } else {
@@ -186,9 +188,15 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         }
     }
 
-    private LogicValue handleInlineFunctionCall(MindcodeFunction inlineFunction, List<FunctionArgument> arguments) {
+    private LogicValue handleInlineFunctionCall(CompilerProfile callProfile, MindcodeFunction inlineFunction, List<FunctionArgument> arguments) {
         if (inlineFunction.getProfile().isSymbolicLabels()) {
             assembler.createComment("Function: " + inlineFunction.getDeclaration().toSourceCode());
+        }
+
+        if (inlineFunction.getDeclaration().isInline()) {
+            CompilerProfile functionProfile = callProfile.duplicate(true);
+            functionProfile.copyUnstableFrom(inlineFunction.getProfile());
+            DirectivePreprocessor.processLocalDirectives(context, functionProfile, inlineFunction.getDeclaration());
         }
 
         MindcodeFunction function = inlineFunction.prepareInlinedForCall(nameCreator);

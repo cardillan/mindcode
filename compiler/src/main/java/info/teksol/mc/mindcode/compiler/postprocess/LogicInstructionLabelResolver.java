@@ -14,6 +14,7 @@ import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import info.teksol.mc.profile.SortCategory;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Consumer;
@@ -183,37 +184,51 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
-        List<LogicInstruction> result = new ArrayList<>();
-        LabelInstruction activeLabel = null;
-        for (LogicInstruction ix : program) {
-            if (ix instanceof RemarkInstruction r) {
-                switch (r.getAstContext().getLocalProfile().getRemarks()) {
-                    case NONE       -> { /* do nothing */ }
-                    case COMMENTS   -> result.add(processor.createComment(r.getAstContext(), r.getValue()));
-                    case ACTIVE     -> result.add(processor.createPrint(r.getAstContext(), r.getValue()));
-                    case PASSIVE    -> {
-                        if (activeLabel == null) {
-                            LogicLabel label = processor.nextLabel();
-                            activeLabel = processor.createLabel(r.getAstContext(),label);
-                            result.add(processor.createJumpUnconditional(r.getAstContext(), label));
-                        }
-                        result.add(processor.createPrint(r.getAstContext(), r.getValue()));
+        return new RemarksResolver().resolveRemarks(program);
+    }
+
+    private class RemarksResolver {
+        private final List<LogicInstruction> result = new ArrayList<>();
+        private @Nullable LabelInstruction activeLabel;
+
+        private List<LogicInstruction> resolveRemarks(List<LogicInstruction> program) {
+            for (LogicInstruction ix : program) {
+                if (ix instanceof RemarkInstruction r) {
+                    switch (r.getAstContext().getLocalProfile().getRemarks()) {
+                        case NONE       -> { /* do nothing */ }
+                        case COMMENTS   -> add(processor.createComment(r.getAstContext(), r.getValue()), false);
+                        case PASSIVE    -> add(processor.createPrint(r.getAstContext(), r.getValue()),false);
+                        case ACTIVE     -> add(processor.createPrint(r.getAstContext(), r.getValue()),true);
                     }
+                } else {
+                    add(ix, true);
                 }
-            } else {
-                if (activeLabel != null) {
-                    result.add(activeLabel);
-                    activeLabel = null;
-                }
-                result.add(ix);
             }
+
+            if (activeLabel != null) {
+                result.add(activeLabel);
+                result.add(processor.createEnd(activeLabel.getAstContext()));
+            }
+
+            return result;
         }
 
-        if (activeLabel != null) {
-            result.add(activeLabel);
-            result.add(processor.createEnd(activeLabel.getAstContext()));
+        private void add(LogicInstruction instruction, boolean active) {
+            if (!(instruction instanceof CommentInstruction)) {
+                if (active) {
+                    if (activeLabel != null) {
+                        result.add(activeLabel);
+                        activeLabel = null;
+                    }
+                } else if (activeLabel == null) {
+                    LogicLabel label = processor.nextLabel();
+                    activeLabel = processor.createLabel(instruction.getAstContext(), label);
+                    result.add(processor.createJumpUnconditional(instruction.getAstContext(), label));
+                }
+            }
+
+            result.add(instruction);
         }
-        return result;
     }
 
     private static final Set<Integer> invalidAddresses = Set.of(0, (int) '\r',  (int) '"', (int) '\\');

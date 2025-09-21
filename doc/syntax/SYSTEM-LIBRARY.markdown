@@ -62,9 +62,9 @@ possibly leading to general (un-inlined) array jump tables being generated for s
 
 | Compiled code size when...     | optimized for speed | optimized for size |
 |--------------------------------|--------------------:|-------------------:|
-| Five elements in the array     |                   5 |                 19 |
-| Ten elements in the array      |                  10 |                 34 |
-| Twenty elements in the array   |                  20 |                 64 |
+| Five elements in the array     |                   5 |                  5 |
+| Ten elements in the array      |                  10 |                 10 |
+| Twenty elements in the array   |                  20 |                 20 |
 
 Fills the array with a given value.
 

@@ -358,4 +358,20 @@ class ExpressionOptimizerTest extends AbstractOptimizerTest<ExpressionOptimizer>
                 createInstruction(PRINT, ".a*2")
         );
     }
+
+    @Test
+    void observesLocalOptions() {
+        assertCompilesTo("""
+                        param a = 0;
+                        print(0 / a);
+                        #setlocal expression-optimization = basic;
+                        print(0 / b);
+                        """,
+                createInstruction(SET, "a", "0"),
+                createInstruction(SET, tmp(0), "0"),
+                createInstruction(PRINT, tmp(0)),
+                createInstruction(OP, "div", tmp(1), "0", ":b"),
+                createInstruction(PRINT, tmp(1))
+        );
+    }
 }

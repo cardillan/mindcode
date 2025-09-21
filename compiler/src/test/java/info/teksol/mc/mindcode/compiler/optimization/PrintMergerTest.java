@@ -175,4 +175,19 @@ class PrintMergerTest extends AbstractOptimizerTest<PrintMerger> {
                 createInstruction(RETURN, ":foo*retaddr")
         );
     }
+
+    @Test
+    void observesLocalOptions() {
+        // In target 8, print merging by format is active, which doesn't have the limit.
+        assertCompilesTo("""
+                        #set target = 7;
+                        println("This sentence is longer than 34 characters");
+                        #setlocal print-merging = basic;
+                        println("This sentence is also longer than 34 characters");
+                        """,
+                createInstruction(PRINT, q("This sentence is longer than 34 characters\n")),
+                createInstruction(PRINT, q("This sentence is also longer than 34 characters")),
+                createInstruction(PRINT, q("\n"))
+        );
+    }
 }

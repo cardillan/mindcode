@@ -17,6 +17,7 @@ import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.mimex.ContentType;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.profile.BuiltinEvaluation;
+import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.util.Indenter;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -509,6 +510,11 @@ public class CaseSwitcher extends BaseOptimizer {
             } else {
                 computeCostAndBenefit();
             }
+        }
+
+        @Override
+        public GenerationGoal goal() {
+            return param.context.getLocalProfile().getGoal();
         }
 
         @Override

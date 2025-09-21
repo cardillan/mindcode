@@ -35,7 +35,10 @@ At this moment, target `8.1` is also fully compatible with the latest Mindustry 
 
 Please refer to the [documentation](doc/syntax/SYNTAX.markdown) for a complete description of Mindcode syntax. You can also use the code examples in the web application to get familiar with Mindcode.  
 
-You can also visit [golem](https://github.com/cardillan/golem), a collection of more complex Mindcode and Schemacode scripts.
+Additionally, the following repositories contain Mindcode projects, which may also serve as an example of how to use Mindcode: 
+
+* [golem](https://github.com/cardillan/golem), a collection of more complex Mindcode and Schemacode scripts, maintained by the author.
+* [mindustry-mindcode-projects](https://github.com/50275/mindustry-mindcode-projects), an independent collection of Mindcode programs.
 
 ## Latest development
 
