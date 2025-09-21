@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.GenerationGoal;
+import info.teksol.mc.profile.options.*;
 import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -23,10 +24,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -457,5 +455,22 @@ public class DocGeneratorTest {
         }
 
         return count;
+    }
+
+    @Test
+    <T> void verifyOptionList() throws IOException {
+        Map<Enum<?>, CompilerOptionValue<?>> compilerOptions = CompilerOptionFactory.createCompilerOptions(false);
+        List<CompilerOption> list = compilerOptions.values().stream()
+                .map(CompilerOption.class::cast)
+                .filter(option -> option.getCategory() != OptionCategory.DEBUGGING)
+                .filter(option -> option.getAvailability() == OptionAvailability.UNIVERSAL || option.getAvailability() == OptionAvailability.DIRECTIVE)
+                .sorted(Comparator.comparing(CompilerOption::getOptionName))
+                .toList();
+
+        final String TEMPLATE = "| %-31s | %-6s | %-23s | %-18s |%n";
+        System.out.printf(TEMPLATE, "Option", "Scope", "Category", "Semantic stability");
+        System.out.printf("|---------------------------------|--------|-------------------------|--------------------|%n");
+        list.forEach(option -> System.out.printf(TEMPLATE, option.getOptionName(), option.getScope().name().toLowerCase(),
+                option.getCategory().title, option.getStability().name().toLowerCase()));
     }
 }

@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @NullMarked
-public abstract class CompilerOptionValue<T> {
+public abstract class CompilerOptionValue<T> implements CompilerOption{
     public final Enum<?> option;
     public final String optionName;
     public final String flag;
@@ -162,6 +162,11 @@ public abstract class CompilerOptionValue<T> {
         this.values.clear();
         this.values.addAll(processed);
         changeListener.forEach(listener -> listener.accept(processed));
+    }
+
+    public boolean setValues(List<T> values, OptionScope scope) {
+        setValues(values);
+        return true;
     }
 
     public Object getDefaultValue() {

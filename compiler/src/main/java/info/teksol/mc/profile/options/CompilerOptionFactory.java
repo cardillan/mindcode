@@ -61,7 +61,7 @@ public class CompilerOptionFactory {
                 "specifies the format in which a reference to a location in a source file is output on console and into the log",
                 FileReferences.class,
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
-                OptionAvailability.UNIVERSAL, category,
+                OptionAvailability.COMMAND_LINE, category,
                 FileReferences.PATH));
     }
 
@@ -72,7 +72,7 @@ public class CompilerOptionFactory {
                 "defines additional tag(s) to add to the schematic, plain text and symbolic icon names are supported",
                 "TAG",
                 OptionMultiplicity.ZERO_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
-                OptionAvailability.UNIVERSAL, category,
+                OptionAvailability.COMMAND_LINE, category,
                 List.of()));
     }
 
@@ -226,7 +226,7 @@ public class CompilerOptionFactory {
         List<CompilerOptionValue<OptimizationLevel>> optList = new ArrayList<>();
 
         for (Optimization optimization : Optimization.LIST) {
-            optList.add(new EnumCompilerOptionValue<>(optimization, optimization.getOptionName(), "",
+            optList.add(new OptimizationOptionValue(optimization, optimization.getOptionName(), "",
                     "sets the optimization level of " + optimization.getDescription(),
                     OptimizationLevel.class,
                     OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,

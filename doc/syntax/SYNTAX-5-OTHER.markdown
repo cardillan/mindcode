@@ -1,14 +1,121 @@
-# Compiler directives
+# Compiler options
 
-Mindcode allows you to alter some compiler options in the source code using special `#set` commands. The basic syntax is: 
+Mindcode allows you to alter some compiler options in the source code using special `#set` and `#setlocal` directives. The basic syntax is: 
 
 ```
 #set option = value;
 ```
+or
+```
+#setlocal option = value;
+```
 
-Some of these options can be alternatively specified as parameters of the command line compiler.
+Some of the compiler options can be also specified as parameters of the command line compiler. A compiler option specified in the source file using the `#set` directive takes precedence over the option specified as a parameter of the command line compiler. The `#set` directives can be placed anywhere in the source file. We suggest placing them at the very top of each file, before every other directive or statement.
 
-Supported compiler options are described below.
+When the same option is set multiple times (either on the command line, or in the source file), the last occurrence of the option is used.
+
+## Option scopes
+
+Each compiler option resides in a certain _scope_, which determines where the option values can be specified and how they are applied. 
+
+### Global scope
+
+Options in the global scope can be set on the command line or in the main source file using the `#set` directive. These options govern the entire compilation. The `#set` directives of global options inside a module imported through the `require` directive are ignored and are only processed when the module is compiled independently.
+
+### Module scope
+
+Options in the module scope can be set on the command line or using the `#set` directive. When used inside a module imported through the `require` directive, it sets the option at the module level. Modules imported via the `require` directive from another module inherit options from the global scope, not from the module that required them, to avoid conflicts in case a module gets imported from two different modules using different options.
+
+### Local scope
+
+Options in the local scope can be set on the command line or using the `#set` or `#setlocal` directives. The options are inherited by modules in the same way as options in the  `module` scope.   
+
+The `#setlocal` directives only apply to the next statement. Multiple `#setlocal` directives can precede a single statement, in which case all are applied. To apply the directive to more statements in succession, it is possible to use a code block (`begin ... end`). The `#setlocal` directive can precede a function declaration, in which case it sets the option for the entire function body.
+
+Trying to set a non-local compiler option using the `#setlocal` directive causes an error.
+
+## Inline functions
+
+When a function being called is declared `inline`, options set at the module level are replaced with options effective at the call site. Options set locally for the function declaration (by a `#setlocal` directive preceding the function declaration) are preserved.
+
+Functions not explicitly declared `inline` are always compiled using the options effective in the module containing the function declaration, or by the `#setlocal` directive preceding the function declaration. This is the case even when the function gets inlined later on either because it is called just once, or by the Function Inlining optimization.
+
+## Semantic stability
+
+Some compiler options may change the semantic of the affected code. For example, the `unsafe-case-optimization` is such an option: when set to `true`, unhandled case values may cause undefined behavior, when set to `false`, all unhandled case values are handled by the `else` branch. Such options are _semantically unstable_.
+
+Semantically unstable compiler options are handled specifically in these contexts:
+
+* The values of these options aren't inherited from the global scope for modules. Unless explicitly set within a module, the semantic-altering options have their default values.
+* When a function is declared `inline`, the semantically unstable options keep the values effective for the function declaration.
+
+# Option reference
+
+| Option                          | Scope  | Category                | Semantic stability |
+|---------------------------------|--------|-------------------------|--------------------|
+| array-optimization              | local  | Optimization levels     | stable             |
+| auto-printflush                 | global | Compiler options        | stable             |
+| boundary-checks                 | local  | Compiler options        | stable             |
+| builtin-evaluation              | global | Environment options     | stable             |
+| case-expression-optimization    | local  | Optimization levels     | stable             |
+| case-optimization-strength      | local  | Optimization options    | stable             |
+| case-switching                  | local  | Optimization levels     | stable             |
+| data-flow-optimization          | local  | Optimization levels     | stable             |
+| dead-code-elimination           | local  | Optimization levels     | stable             |
+| dump-variables-on-stop          | global | Run options             | stable             |
+| err-assignment-to-fixed-var     | global | Run options             | stable             |
+| err-graphics-buffer-overflow    | global | Run options             | stable             |
+| err-invalid-content             | global | Run options             | stable             |
+| err-invalid-counter             | global | Run options             | stable             |
+| err-invalid-format              | global | Run options             | stable             |
+| err-invalid-identifier          | global | Run options             | stable             |
+| err-invalid-link                | global | Run options             | stable             |
+| err-memory-access               | global | Run options             | stable             |
+| err-not-a-number                | global | Run options             | stable             |
+| err-not-an-object               | global | Run options             | stable             |
+| err-runtime-check-failed        | global | Run options             | stable             |
+| err-text-buffer-overflow        | global | Run options             | stable             |
+| err-uninitialized-var           | global | Run options             | stable             |
+| err-unknown-color               | global | Run options             | stable             |
+| err-unsupported-block-operation | global | Run options             | stable             |
+| err-unsupported-opcode          | global | Run options             | stable             |
+| expression-optimization         | local  | Optimization levels     | stable             |
+| function-inlining               | local  | Optimization levels     | stable             |
+| function-prefix                 | global | Mlog formatting options | stable             |
+| goal                            | local  | Optimization options    | stable             |
+| if-expression-optimization      | local  | Optimization levels     | stable             |
+| instruction-limit               | global | Optimization options    | stable             |
+| jump-normalization              | local  | Optimization levels     | stable             |
+| jump-optimization               | local  | Optimization levels     | stable             |
+| jump-straightening              | local  | Optimization levels     | stable             |
+| jump-threading                  | local  | Optimization levels     | stable             |
+| loop-hoisting                   | local  | Optimization levels     | stable             |
+| loop-optimization               | local  | Optimization levels     | stable             |
+| loop-unrolling                  | local  | Optimization levels     | stable             |
+| mlog-block-optimization         | local  | Optimization options    | stable             |
+| mlog-indent                     | global | Mlog formatting options | stable             |
+| null-counter-is-noop            | global | Environment options     | stable             |
+| optimization                    | local  | Optimization levels     | stable             |
+| output-profiling                | global | Run options             | stable             |
+| passes                          | global | Optimization options    | stable             |
+| print-merging                   | local  | Optimization levels     | stable             |
+| remarks                         | local  | Compiler options        | stable             |
+| return-optimization             | local  | Optimization levels     | stable             |
+| run                             | global | Run options             | stable             |
+| single-step-elimination         | local  | Optimization levels     | stable             |
+| stack-optimization              | local  | Optimization levels     | stable             |
+| stop-on-end-instruction         | global | Run options             | stable             |
+| stop-on-program-end             | global | Run options             | stable             |
+| stop-on-stop-instruction        | global | Run options             | stable             |
+| symbolic-labels                 | global | Mlog formatting options | stable             |
+| syntax                          | module | Compiler options        | stable             |
+| target                          | module | Environment options     | stable             |
+| target-guard                    | global | Compiler options        | stable             |
+| temp-variables-elimination      | local  | Optimization levels     | stable             |
+| text-jump-tables                | local  | Environment options     | stable             |
+| trace-execution                 | global | Run options             | stable             |
+| unreachable-code-elimination    | local  | Optimization levels     | stable             |
+| unsafe-case-optimization        | local  | Optimization options    | unstable           |
 
 ## Option `auto-printflush`
 
@@ -176,6 +283,15 @@ Possible values for this option are:
 * `experimental`: perform optimizations that are currently in the experimental phase.
 
 The default optimization level is `advanced`.
+
+It is also possible to set the optimization level of each optimizer individually.
+
+### Setting optimization level locally
+
+Optimization levels are handled specifically:
+
+* Activating/deactivating an optimizer is only allowed at a global level. For example, when `optimization` is set to `none` at the global level, no optimizations will happen regardless of module or local scope compiler directives. Similarly, it is not possible to turn of an optimization entirely by setting it to `none` at the local level: using `#setlocal` directive with a value of `none` causes an error.
+* At the local level, it is possible to switch between optimization levels (i.e. `basic`, `advanced` or `experimental`) if the given optimization is active.
 
 ## Option `output-profiling`
 
@@ -428,6 +544,9 @@ Chooses the [syntax mode](SYNTAX.markdown#syntax-modes) to be used for compilati
 * `strict`: useful for larger projects, as it enforces additional rules designed to make source code more maintainable.
 * `mixed`: designed to help with a transition of relaxed syntax code to the strict standard. In this mode, code is compiled using the relaxed syntax rules, but all violations of the strict syntax rules are reported as warnings.
 
+> [!NOTE]
+> All modules are implicitly compiled using the `strict` syntax. If the `syntax` option is used within a module, the only value that can be set is `strict`.
+
 ## Option `target`
 
 Use the `target` option to specify the Mindcode/Mindustry Logic version to be used by the compiler and processor emulator. Compiler will generate code compatible with the selected processor version and edition, and both compiler and processor emulator recognize Mindustry objects, built-in variables and other elements available in a given Mindustry Logic version.
@@ -457,6 +576,23 @@ To use a world-processor variant of Mindcode language, it is necessary to add `W
 ```
 
 The same names of version targets are used with the `-t` / `--target` command-line option.
+
+### Module targets
+
+Option `target`, when set within a module, specifies the target supported by the module. If the global `target` setting isn't compatible with the target specified by the module, a compilation error occurs with a message 'Module target \<target\> is incompatible with global target \<target\>.'
+
+Target compatibility matrix:
+
+| Target | Compatible targets |
+|--------|--------------------|
+| 6.0    | 6.0, 7.0           |
+| 7.0    | 7.0                |
+| 7.1    | 7.1 or higher      |
+| 8.0    | 8.0 or higher      |
+
+Note: the incompatibility between 7.0 and 7.1 is caused by different instruction mappings.
+
+Future targets will be compatible with all higher targets, unless a backwards-incompatible feature is introduced to Mindustry Logic or Mindcode.
 
 ## Option `target-guard`
 

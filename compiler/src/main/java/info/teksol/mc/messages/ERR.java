@@ -62,6 +62,7 @@ public class ERR {
     public static final String DIRECTIVE_INVALID_VALUE_WITH_VALUES = "Invalid value '%s' of compiler directive '%s'. Valid values are %s.";
     public static final String DIRECTIVE_INVALID_SYNTAX_FOR_MODULE = "Syntax mode within a module must be set to 'strict'.";
     public static final String DIRECTIVE_IS_NOT_LOCAL = "Option '%s' cannot be used with #setlocal.";
+    public static final String DIRECTIVE_VALUE_IS_NOT_LOCAL = "Value '%s' cannot be used with #setlocal.";
     public static final String DIRECTIVE_MULTIPLE_VALUES = "Multiple values specified for option '%s'.";
     public static final String DIRECTIVE_NO_VALUE = "No value specified for option '%s'.";
     public static final String DIRECTIVE_UNKNOWN = "Unknown compiler directive '%s'.";

@@ -72,7 +72,9 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
             }
 
             if (converted.size() == node.getValues().size()) {
-                option.setValues(converted);
+                if (!option.setValues(converted, scopeLimit)) {
+                    error(node.getOption(), ERR.DIRECTIVE_VALUE_IS_NOT_LOCAL, node.getValues().getFirst().getText());
+                }
             }
         }
     }

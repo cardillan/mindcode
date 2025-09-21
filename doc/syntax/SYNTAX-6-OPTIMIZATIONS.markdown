@@ -8,6 +8,8 @@ Mindcode provides the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) to sp
 * `neutral`: Mindcode applies dynamic optimizations making the code either smaller or faster (or both) than the original code.
 * `size`: Mindcode applies dynamic optimizations leading to the smallest code possible, even at the expense of execution speed.
 
+The `goal` option's scope is local, and it is possible to set the desired goal for individual functions, statements, or blocks of code. See [Option scopes](SYNTAX-5-OTHER.markdown#option-scopes).
+
 ## Optimization efficiency
 
 To decide which dynamic optimizations to apply given the optimization goal, three metrics are computed for each possible optimization:
