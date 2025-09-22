@@ -8,7 +8,7 @@ Mindcode provides the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) to sp
 * `neutral`: Mindcode applies dynamic optimizations making the code either smaller or faster (or both) than the original code.
 * `size`: Mindcode applies dynamic optimizations leading to the smallest code possible, even at the expense of execution speed.
 
-The `goal` option's scope is local, and it is possible to set the desired goal for individual functions, statements, or blocks of code. See [Option scopes](SYNTAX-5-OTHER.markdown#option-scopes).
+The `goal` option's scope is local, and it is possible to set the desired goal for individual functions, statements, or blocks of code. See [Option scopes](SYNTAX-5-OTHER.markdown#option-scope).
 
 ## Optimization efficiency
 
@@ -59,19 +59,85 @@ Code optimization runs on compiled (mlog) code. The compiled code is inspected f
 
 The information on compiler optimizations is a bit technical. It might be useful if you're trying to better understand how Mindcode generates the mlog code.
 
-## Temp Variables Elimination
+## Array Optimization
 
-The compiler sometimes creates temporary variables whose only function is to carry some value to another instruction. This optimization removes such temporary variables that only carry the value to an adjacent instruction. The `set` instruction is removed, while the adjacent instruction is updated to replace the temporary variable with the other variable used in the `set` instruction.
+The array optimization improves the performance of array operations in several ways. At this moment, all optimizations are only available on the `experimental` level.
 
-The optimization is performed only when the following conditions are met:
+Loop unrolling may replace random access to array elements with sequential code accessing individual elements directly, in which case no array optimization happens.
 
-* The `set` instruction assigns/reads a temporary variable.
-* The temporary variable is used in exactly one other instruction, adjacent to the `set` instruction.
-* All arguments of the other instruction referencing the temporary variable are either input ones (the `set` instruction precedes the other instruction) or output ones (the `set` instruction follows the other instruction).
+### Array access inlining
 
-An additional optimization is performed when an instruction has a temporary output variable which isn't read by any other instruction. In this case, the unused output variable is replaced by `0` (literal zero value). Such an instruction will be executed correctly by Mindustry Logic, but a new variable will be allocated for the replaced argument.   
+Array access inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
-`push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables are removed by the [Stack Optimization](#stack-optimization) down the line.
+To facilitate random array access, shared jump tables for read and write access are generated for each array. These jump tables are shared by all read/write random access of an individual array. This requires using a dedicated _array access variable_ for each access, and setting up return addresses for resuming the control flow after the array element has been processed.
+
+Array access inlining builds a dedicated jump table at each place an array access operation is performed, eliminating the need for array access variables and return addresses.
+
+Inlining a jump table in a general case reduces the number of steps required per element access from 6 to 4. When accessing an element of the array in a loop at most once for reading and once for writing, the usage of array access variables can be streamlined and return addresses setup can be hoisted out of the loop. This reduces a lot of the overhead of shared jump tables.
+
+### Short array optimizations
+
+This optimization is performed for arrays of up to three elements.
+
+Short array optimizations cause out-of-bounds indexes to always resolve to the last element. Using an out-of-bounds index can't derail the program execution. Nevertheless, runtime checks still get generated when prescribed by a compiler directive.
+
+#### Arrays of length 1
+
+Each element access gets converted to direct access of the single element.
+
+#### Arrays of length 2 and 3
+
+The jump table is replaced by a sequence of `select`s or if/else statements. Arrays of length 2 are always optimized, while arrays of length 3 are only optimized if the `select` optimization can be used, or the jump table for the array access has been selected for inlining.
+
+**The `select` optimization**
+
+The `select` optimization is applied when the optimization level is set to `experimental` and the `select` instruction is available.
+
+For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
+
+* `a[x] = b` gets converted to
+
+```
+select a[0] x equal 0 b a[0]
+select a[1] x equal 1 b a[1]
+```
+
+* `b = a[x]` gets converted to
+
+```
+select b x equal 0 a[0] a[1]
+```
+
+For arrays of length 3, the optimization can be described like this:
+
+* `a[x] = b` gets converted to
+
+```
+select a[0] x equal 0 b a[0]
+select a[1] x equal 1 b a[1]
+select a[2] x equal 2 b a[2]
+```
+
+* `b = a[x]` gets converted to
+
+```
+select b x equal 0 a[0] a[1]
+select b x equal 2 a[2] b
+```
+
+**The if/else optimization**
+
+For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
+
+* `a[x] = b;` gets converted to `if x == 0 then a[0] = b; else a[1] = b; end;`.
+* `b = a[x]` gets converted to  `if x == 0 then b = a[0]; else b = a[1]; end;`.
+
+For arrays of length 3, the optimization can be described like this:
+
+* `a[x] = b;` gets converted to `if x == 0 then a[0] = b; elsif x == 1 then a[1] = b; else a[2] = b end;`.
+* `b = a[x]` gets converted to  `if x == 0 then b = a[0]; elsif x == 1 then b = a[1]; else b = a[2] end;`.
+
+This optimization allows additional [If Expression optimizations](#if-expression-optimization) to take place.
 
 ## Case Expression Optimization
 
@@ -83,421 +149,225 @@ The optimization is performed only when the following conditions are met:
 * The set instruction is the first of all those using the temporary variable (the check is based on the absolute instruction sequence in the program, not on the actual program flow).
 * Each following instruction using the temporary variable conforms to the code generated by the compiler (i.e., has the form of `jump target <condition> *tmpX testValue`)
 
-## Dead Code Elimination
+## Case Switching
 
-This optimization inspects the entire code and removes all instructions that write to non-volatile variables if none of the variables written to are actually read anywhere in the code.
+Case Switching is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Case Switching optimization is, at this moment, unique in its ability to generate optimizations applicable to all three optimization goals.
 
-Dead Code Elimination also inspects your code and prints out suspicious variables:
-* _Unused variables_: those are the variables that are unused and possibly were eliminated.
-* _Uninitialized variables_: those are global variables that are read by the program but never written to. (The [Data Flow Optimization](#data-flow-optimization) detects uninitialized local and function variables.)
+Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates—on average—half of all existing conditions, assuming even distribution of the case expression input values. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
 
-Both cases deserve a closer inspection, as they might indicate a problem with your program.
+The Case Switching optimization improves case expressions which branch on integer values of the expression, or on Mindustry content objects.
 
-## Jump Normalization
+> [!WARNING]
+> It is assumed that a case statement branching exclusively on integer values always gets an integer value on input as well. If the input value of the case expression may take on non-integer values, this optimization will produce wrong code. At this moment Mindcode isn't able to recognize such a situation; if this is the case, you need to disable the Case Switching optimization manually.
 
-This optimization handles conditional jumps whose condition can be fully evaluated:
+The basic structure used by this optimization is a _jump table_.
 
-* constantly false conditional jumps are removed,
-* constantly true conditional jumps are converted to unconditional ones.
+### Jump tables
 
-A condition can be fully evaluated if both of its operands are literals or if they're variables whose values were determined to be constant by the [Data Flow Optimization](#data-flow-optimization). 
-
-The first case reduces the code size and speeds up execution. The second one in itself improves neither size nor speed but allows those jumps to be handled by other optimizations aimed at unconditional jumps.
-
-## Jump Optimization
-
-Conditional jumps are sometimes compiled into an `op` instruction evaluating a boolean expression, and a conditional jump acting on the value of the expression.
-
-This optimization turns the following sequence of instructions:
+A jump table replaces the sequence of conditional jumps by direct jumps to the corresponding `when` branch. The actual instructions used to build a jump table are
 
 ```
-op <comparison> var A B
-jump label equal/notEqual var false
+jump <else branch address> lessThan value minimal_when_value
+jump <else branch address> greaterThan value maximal_when_value
+op add @counter <start_of_jump_table - minimal_when_value> value
+start_of_jump_table:
+jump <when branch for minimal when value address>
+jump <when branch for minimal when value + 1 address>
+jump <when branch for minimal when value + 2 address>
+...
+jump <when branch for maximal when value address>
 ```
 
-into
+The jump table is put in front of the `when` branches. Original conditions in front of each processed `when` branch are removed. Each `when` branch jumps to the end of the case expression as usual. The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps. On `experimental` level, the bodies of `when` branches may be duplicated to several suitable places to avoid even more jumps at the cost of additional code size increase. This optimization usually only kicks in for small branch bodies, since for larger code increases, a better performing solution can be achieved by a different segment arrangement.
 
-```
-jump label <inverse of comparison>/<comparison> A B
-```
+To build the jump table, the minimum and maximum value of existing `when` branches are determined first. Values outside this range are handled by the `else` branch (if there isn't an explicit `else` branch in the case statement, the `else` branch just jumps to the end of the case expression). Values inside this range are mapped to a particular `when` branch, or, if the value doesn't correspond to any of the `when` branches, to the `else` branch.
 
-Prerequisites:
+The first two instructions in the example above (`jump lessThan`, `jump greaterThan`) handle the cases where the input value lies outside the range supported by the jump table. The `op add @counter` instruction then transfers the control to the corresponding specific jump in the jump table and consequently to the proper `when` branch.
 
-* `jump` is an `equal`/`notEqual` comparison to `false`,
-* `var` is a temporary variable,
-* `var` is not used anywhere in the program except these two instructions,
-* `<comparison>` has an inverse/`<comparison>` exists as a condition.
+A basic jump table executes at most four instructions on each case expression execution (less if the input value lies outside the supported range). We've mentioned above that the original case statement executes half of the conditional jumps on average. This means that converting the case expression to a jump table only makes sense when there are at least eight conditional jumps in the case expression.
 
-## Single Step Elimination
+Notes:
 
-This optimizer simplifies the following sequences of jumps that are a result of the code generation and various optimizations:
+* When evaluating execution speed, the optimizer computes and averages execution costs of each value present in a `when` clause. All of these values are deemed equally probable to occur, and values leading to an `else` branch are not considered at all. In an unoptimized `case` expression, values handled by the `else` branch take the longest time to handle, while in the optimized case expression, values completely outside the range of `when` values are executed faster than any other values. This is a side effect of the optimization.
+* As a consequence, if you put the more frequent values first in the case expression, and the value distribution is very skewed, converting the case expression to the jump table might actually worsen the average execution time. Mindcode has no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching optimization for your program.
+* For smaller case expressions, a full jump table might provide worse average performance than the original case expression. Mindcode might still optimize the case expression by applying the bisection search used in [Jump table compression](#jump-table-compression), providing both better average execution time of the entire case expression and more balanced execution time of individual branches.
 
-* A conditional or unconditional jump targeting the next instruction.
-* A conditional or unconditional jump is removed if there is an identical jump immediately following it. The second jump may be a target of another jump. 
-* The `end` and `jump 0 always` instructions at the very end of the program are removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway, saving execution of one instruction.
-* A jump is removed if there is an identical jump preceding it, and these conditions are met:
-  * the jump doesn't contain volatile variables,
-  * there are no instructions affecting control flow between the jumps, including landing points of other jumps,
-  * there are no instructions modifying the jump condition variables between the jumps. 
+**Preconditions:**
 
-The rationale behind the optimization described in the last point is that if any of the removed conditional jumps conditions were evaluated to `true`, so would be the condition of the first jump in the sequence, so the other jumps cannot fire, even though the value of the condition isn't known at the compile time. These sequences of jumps may appear as a result of unrolled loops.    
+The following conditions must be met for a case expression to be processed by this optimization:
 
-Note: this optimization does not affect jumps that are part of a larger structure (e.g., jump tables).
+* All values used in `when` clauses must be effectively constant.
+* All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)). Specifically, no `null` values may be used.
+* Values used in `when` clauses must be unique; when ranges are used, they must not overlap with other ranges or standalone values.
 
-## Expression Optimization
+### Range check elimination
 
-This optimization looks for certain expressions that can be performed more efficiently. Currently, the following optimizations are available:
+When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, you inform Mindcode that all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
 
-* `floor` instruction applied to a result of a multiplication by a constant or a division. Combines the two operations into one integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the divisor in the `idiv` operation.
-* `select` instruction with constant condition is replaced by a `set` instruction directly.
-* `sensor var @this @x` and `sensor var @this @y` are replaced by `set var @thisx` and `set var @thisy` respectively. Data Flow Optimization may then apply [constant propagation](#constant-propagation) to the `@thisx`/`@thisy` built-in constants.
-* All set instructions assigning a variable to itself (e.g., `set x x`) are removed.
-* When both operands of the instruction are known to have the same value, some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
-  * `equal`, `lessThanEq`, `greaterThanEq`, `strictEqual`: sets the result to `1` (true) 
-  * `notEqual`, `lessThan`, `greaterThan`: sets the result to `0` (false)
-  * `sub`, `xor`: sets the result to `0`
-  * `or`, `land`: sets the result directly to the first operand, if the instruction doesn't represent the boolean version of the operation (`||` or `&&`),
-  * `and`, `min` and `max`: sets the result directly to the first operand.
-* The result of some operations may be determined by a known value of one of its operands. In some cases, the result doesn't depend on the other operand (a multiplication by zero is always zero regardless of the other operand). In other cases, the result is equal to the other operand (a multiplication by one or a subtraction of zero). All the performed replacements are listed in this table:
+Putting an `else` branch into a case expression indicates not all input values are handled, and doing so disables the unsafe case optimization: the basic optimization may still happen, but the out-of-range checks will remain.
 
-| Operation      | Operator     | First operand | Second operand | Result |  Level   | Note        |
-|----------------|:-------------|:-------------:|:--------------:|:------:|:--------:|-------------|
-| mul            |              |      var      |       1        |  var   |  Basic   | Commutative |
-| mul            |              |      var      |       0        |   0    |  Basic   | Commutative |
-| div            |              |      var      |       1        |  var   |  Basic   |             |
-| div, idiv, mod |              |      var      |       0        |  null  |  Basic   |             |
-| div, idiv, mod |              |       0       |      var       |   0    | Advanced |             |
-| add, xor       |              |      var      |       0        |  var   |  Basic   | Commutative |
-| sub            |              |      var      |       0        |  var   |  Basic   |             |
-| shl, shr       |              |      var      |       0        |  var   | Advanced |             |
-| shl, shr       |              |       0       |      var       |   0    |  Basic   |             |
-| or             | `\|`, `or`   |      var      |       0        |  var   | Advanced | Commutative |
-| or             | `\|\|`, `or` |      var      |    nonzero     |   1    |  Basic   | Commutative |
-| and, land      |              |      var      |       0        |   0    |  Basic   | Commutative |
-| land           | `and`        |      var      |    nonzero     |  var   | Advanced | Commutative |
+If you activate the `unsafe-case-optimization` directive, and an unhandled input value is encountered, the behavior of the generated code is undefined.
 
-In the case of commutative operations, the result is the same if the first and second operands are swapped. `var` represents a variable with an arbitrary, unknown value.
+### Mindustry content conversion
 
-Some mlog operations are produced by different Mindcode operators. When the optimizations are only applied to operations corresponding to specific Mindcode operators, these operators are listed in the **Operator** column.  
+When all `when` branches in the case expression contain built-in constants representing Mindustry content of the same type (items, liquids, unit types, or block types) and the optimization level is set to `advanced`, this optimization converts these built-in constants to logic IDs, adds an instruction to convert the input value to a logic ID (using the `sensor` instruction with the `@id` property) and attempts to build a jump table over the resulting numeric values.
 
-> [!IMPORTANT]
-> Some optimizations applied to `or`, `and`, `land`, `xor`, `shl` and `shr` operations applied to non-integer or non-boolean values may produce different results from unoptimized code: unoptimized code would result into an integer value (or boolean value in case of `land`), while the optimized code may produce a non-integer value. Passing a non-integer/non-boolean value into these operators is unusual, but not impossible. These optimizations are therefore only performed on `advanced` level and can be turned off by setting the level to `basic`.
+The following preconditions need to be met to apply content conversion:
 
-When the `builtin-evaluation` option is set to `compatible` or `full`, the following additional expressions are handled:
+* The optimization level is set to `advanced`.
+* The `builtin-evaluation` option is set to `compatible` or `full`.
+* All values in `when` branches are either `null`, or built-in variables referencing Mindustry content of the same type (items, building types and so on).
+* Values used in `when` clauses are unique.
+* The logic ID is known to Mindcode for all `when` values.
+* All logic IDs are stable, or `builtin-evaluation` mode is set to `full`.
 
-* If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant with a defined logic ID, the Mindustry's ID of the object is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
-* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block, or unit with given ID and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block, or unit literal.
-* If the `@constant` in a `sensor var @constant @name` instruction is a known item, liquid, block or unit constant, the Mindustry's content name of the object is looked up and the instruction is replaced by `set var <name>`, where `<name>` is a string literal. This optimization takes place even when `builtin-evaluation` is set to `none`.
+> [!NOTE]
+> When `unsafe-case-optimization` is set to `true` and there's no `else` branch, the optimizer creates a jump table omitting the out-of-range checks. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g., item selected in a sorter), keep in mind the value obtained this way might be `null`.
 
-Some Mindustry content objects may have different logic IDs in different Mindustry versions (these objects are called "unstable"). For these objects, the above optimizations only happen when the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `full`:
+The range check is also partially or fully removed when the following conditions are met:
+
+* There is a `when` branch corresponding to the Mindustry content with a zero ID: in this case, Mindcode knows the minimum possible numerical value of the ID (that is, zero) is handled by the case expression and doesn't check for IDs less than zero.
+* There is a `when` branch corresponding to the Mindustry content with a maximum ID, and `builtin-evaluation` is set to `full`: in this case, Mindcode knows the maximum possible numerical value of the ID is handled by the case expression and doesn't check for IDs greater than the maximum value.
+
+#### Null values
+
+When Mindustry content conversion occurs, `null` values in `when` clauses are supported. When the `null` value is explicitly handled (i.e., there is a `when null` branch present), the corresponding branch is executed for `null` input values. In case the `when null` branch is missing, `null` input values are handled by the `else` branch, or skipped altogether if there is no else branch.
+
+Mindcode arranges the code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, an optimized `case` expressions checking for `null` in `when` branches is typically more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
+
+### Text-based jump tables
+
+In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings, instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
+
+* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher,
+* The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive,
+* The [text-jump-tables](SYNTAX-5-OTHER.markdown#option-text-jump-tables) option must be active.
+
+When all these conditions are met, the case expression is always
+
+### Jump table compression
+
+Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations described here into account as well. To locate the segment handling a particular input value, a bisection search is used.
+
+The total number of possible segment arrangements can be quite large. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
+
+Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both smaller and significantly faster than the unoptimized `case` expression.
+
+Jump table compression is particularly useful when using block types in case expressions, as, given the large dispersion of block type IDs, full jump tables tend to get quite large.
+
+Notes:
+
+* Jump table compression is not performed when range checks for the given case expression are eliminated via the `unsafe-case-optimization` option, or when the [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) option has been set to 0.
+* When a compressed jump table is smaller, but slower than a full, or a less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
+* Compressing a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the optimizer will select the smaller version over the faster version, even when there is plenty of instruction space.
+* Since the bisection search provides better execution time than a linear search, it may be applied even to case expressions too small for a full jump table optimization.
+
+### Jump table padding
+
+When the jump table starts at zero value, it is possible to generate a faster code due to these effects:
+
+* When the Mindustry content conversion is applied, the optimizer knows the logic IDs cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
+* When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation handling the non-zero offset can be omitted.
+
+Similarly, when the Mindustry content conversion is applied, the `builtin-evaluation` option is set to `full` and the jump table ends at the largest ID of the respective Mindustry content, a jump instruction handling values larger than the end of the table can be omitted, as the optimizer knows no larger values may occur.
+
+When the jump table doesn't start or end at these values naturally, Mindcode may pad the table at either end with additional jumps to the `else` branch. The optimizer considers the possibility of padding the table at the low end, high end, or both, and chooses the option that gives the best performance given the instruction space limit.
+
+### Example
+
+The example illustrates the following optimization aspects:
+
+* Case switching optimization in general
+* Mindustry content conversion
+* Handling of `null` values
+* Jump table compression
+* Jump table padding
+* Moving bodies of `when` branches
+
+The sample has been artificially constructed to demonstrate the above effects.
 
 ```Mindcode
 #set target = 7;
 #set builtin-evaluation = full;
-println(lookup(:item, 18));
-println(@tungsten.@id);
-printflush(message1);
-```
+#set symbolic-labels = true;
+#set instruction-limit = 150;
+#set case-optimization-strength = 4;
 
-compiles to 
-
-```mlog
-print "dormant-cyst\n19\n"
-printflush message1
-```
-
-When compiled with `builtin-evaluation` set to `compatible`, the code is 
-
-```mlog
-lookup item *tmp0 18
-print *tmp0
-print "\n"
-sensor *tmp1 @tungsten @id
-print *tmp1
-print "\n"
-printflush message1
-```
-
-## If Expression Optimization
-
-This optimization consists of three types of modifications performed on blocks of code created by if/ternary expressions. All possible optimizations are done independently.
-
-### `select` optimization
-
-If expressions which assign a value to variables depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is `8.1` or higher. Example:
-
-```Mindcode
-#set target = 8.1;
-print(rand(10) < 5 ? "low" : "high");
-```
-
-compiles to
-
-```mlog
-op rand *tmp0 10 0
-select *tmp2 lessThan *tmp0 5 "low" "high"
-print *tmp2
-```
-
-The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is improved by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
-
-```Mindcode
-#set target = 8;
-
-volatile var a, b, c;
-
-if switch1.enabled then
-    a = "on";
-    b = @coal;
-    c = 50;
-else
-    a = "off";
+text = case getlink(0).@type
+    when null then "none";
+    when @kiln, @phase-weaver, @pyratite-mixer, @melter, @disassembler then "A";
+    when @plastanium-compressor, @cryofluid-mixer, @blast-mixer, @separator, @spore-press then "B";
+    when @unit-repair-tower, @prime-refabricator, @mech-refabricator, @slag-heater, @scathe then "C";
+    when @diffuse, @tank-refabricator, @ship-refabricator, @lustre then "D";
+    else "E";
 end;
 
-if switch2.enabled then
-  a = 1;
-end;
+print(text);
 ```
 
-compiles to:
+The above case expression is transformed to this:
 
 ```mlog
-sensor *tmp0 switch1 @enabled
-select .a notEqual *tmp0 false "on" "off"
-select .b notEqual *tmp0 false @coal .b
-select .c notEqual *tmp0 false 50 .c
-sensor *tmp2 switch2 @enabled
-select .a notEqual *tmp2 false 1 .a
-```
-
-Even when the assignments modify both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can still be applied:
-
-```Mindcode
-#set target = 8;
-
-noinit var a, b;
-
-if a > b then
-    a = 10; b = 20;
-else
-    a = 20; b = 10;
-end;
-
-print(a > 0 ? packcolor(0, b, b, 1) : %[red]);
-```
-compiles to:
-
-```mlog
-set *tmp5 .a
-select .a greaterThan .a .b 10 20
-select .b greaterThan *tmp5 .b 20 10
-packcolor *tmp6 0 .b .b 1
-select *tmp3 greaterThan .a 0 *tmp6 %[red]
-print *tmp3
-```
-
-### Value propagation
-
-The value of ternary expressions and if expressions is sometimes assigned to a user-defined variable. In these situations, the true and false branches of the if/ternary expression assign the value to a temporary variable, which is then assigned to the user variable. This optimization detects these situations and when possible, assigns the final value to the user variable directly in the true/false branches:
-
-```Mindcode
-abs = if x < 0 then
-    negative += 1;
-    -x;
-else
-    positive += 1;
-    x;
-end;
-print(abs);
-```
-
-produces this code:
-
-```mlog
-jump 4 greaterThanEq :x 0
-op add :negative :negative 1
-op sub *tmp1 0 :x
-jump 6 always 0 0
-op add :positive :positive 1
-set *tmp1 :x
-print *tmp1
-```
-
-As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions having exactly one output parameter (based on instruction metadata) are handled.
-
-### Instruction propagation
-
-> [!TIP]
-> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.  
-
-If the instruction immediately following the `if` expression isn't a `set` instruction, but another instruction taking the resulting value of the `if` expression, and the resulting value is stored using a `set` instruction, the `set` instruction will be replaced by the instruction actually consuming the value. The optimization targets these conditional expressions passed as a parameter into a function, for example `print(a > 0 ? "positive" : "negative");`, which produces:
-
-```
-jump 3 lessThanEq :a 0
-print "positive"
-jump 0 always 0 0
-print "negative"
-```
-
-This saves the execution of one instruction storing the resulting value (`positive` or `negative`, in this case) before passing it into the `print` instruction.
-
-All kinds of instructions are supported, for example `approach(@thisx, @thisy, @unit.@type == @mega ? 8 : 12);` produces
-
-```
-sensor *tmp0 @unit @type
-jump 4 notEqual *tmp0 @mega
-ucontrol approach @thisx @thisy 8 0 0
-jump 5 always 0 0
-ucontrol approach @thisx @thisy 12 0 0
-```
-
-The optimization handles even nested `if` expressions, such as
-
-```Mindcode
-print(a < 100 ? a < 10 ? "units" : "tens" : a < 1000 ? "hundreds" : "thousands");
-```
-
-which produces 
-
-```mlog
-jump 6 greaterThanEq :a 100
-jump 4 greaterThanEq :a 10
-print "units"
-jump 0 always 0 0
-print "tens"
-jump 0 always 0 0
-jump 9 greaterThanEq :a 1000
-print "hundreds"
-jump 0 always 0 0
-print "thousands"
-```
-
-### Forward assignment
-
-> [!TIP]
-> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.  
-
-Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
-
-```Mindcode
-x = rand(10) - 5;
-text = x < 0 ? "negative" : "positive";
-print("Value is ", text);
-```
-
-Without If Expression Optimization, the produced code is
-
-```
-op rand *tmp0 10 0
-op sub :x *tmp0 5
-jump 5 greaterThanEq :x 0
-set *tmp3 "negative"
-jump 6 always 0 0
-set *tmp3 "positive"
-print "Value is "
-print *tmp3
-```
-
-Execution speed:
-* x is negative: four instructions (2, 3, 4) are executed,
-* x is positive: three instructions (2, 5) are executed.
-
-The If Expression Optimization turns the code into this:
-
-```
-op rand *tmp0 10 0
-op sub :x *tmp0 5
-set *tmp3 "positive"
-jump 5 greaterThanEq :x 0
-set *tmp3 "negative"
-print "Value is "
-print *tmp3
-```
-
-Execution speed:
-* x is negative: four instructions (2, 3, 4) are executed,
-* x is positive: three instructions (2, 3) are executed.
-
-The execution time is the same. However, one less instruction is generated.
-
-The forward assignment optimization is performed when these conditions are met:
-* both branches assign a value to the same variable (resulting variable) as the last statement,
-* the resulting variable is not global (global variables can be modified or used in function calls),
-* the resulting variable is not used in the condition in any way,
-* at least one branch consists of just one instruction which sets the resulting variable (this is the branch to be moved),
-* the other branch doesn't use the resulting variable anywhere except the last statement,
-* the last statement of the other branch doesn't depend on the resulting variable.
-
-Depending on the type of condition and the branch sizes, either the true branch or the false branch can get eliminated this way. The average execution time remains the same, although in some cases the number of executed instructions per branch may change by one.
-
-### Compound condition elimination
-
-The instruction generator always generates the true branch first. In some cases, the jump condition cannot be expressed as a single jump and requires additional instruction (this only happens with the strict equality operator `===`, which doesn't have an opposite operator in Mindustry Logic).
-
-The additional instruction can be avoided when the true and false branches in the code are swapped. When this
-optimizer detects such a situation, it does exactly that:
-
-```Mindcode
-if @unit.@dead === 0 then
-    print("alive");
-else
-    print("dead");
-end;
-```
-
-Notice the `print "dead"` occurs before `print "alive"` now:
-
-```mlog
-sensor *tmp0 @unit @dead
-jump 4 strictEqual *tmp0 0
-print "dead"
-jump 0 always 0 0
-print "alive"
-```
-
-### Chained if-else statements
-
-> [!TIP]
-> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.
-
-The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
-
-```Mindcode
-y = if x < 0 then
-    "negative";
-elsif x > 0 then
-    "positive";
-else
-    "zero";
-end;
-print("value is ", y);
-```
-
-produces
-
-```mlog
-set *tmp1 "negative"
-jump 5 lessThan :x 0
-set *tmp1 "zero"
-jump 5 lessThanEq :x 0
-set *tmp1 "positive"
-print "value is "
-print *tmp1
-```
-
-saving three instructions over the code without if statement optimization:
-
-```
-jump 3 greaterThanEq :x 0
-set *tmp1 "negative"
-jump 8 always 0 0
-jump 6 lessThanEq :x 0
-set *tmp3 "positive"
-jump 7 always 0 0
-set *tmp3 "zero"
-set *tmp1 *tmp3
-print "value is "
-print *tmp1
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+    getlink *tmp1 0
+    sensor *tmp2 *tmp1 @type
+    sensor *tmp4 *tmp2 @id
+        jump label_21 greaterThanEq *tmp4 230
+        jump label_45 greaterThanEq *tmp4 14
+        op add @counter @counter *tmp4
+        jump label_44 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
+        jump label_42 always 0 0
+        jump label_19 always 0 0
+        jump label_42 always 0 0
+        jump label_19 always 0 0
+        jump label_42 always 0 0
+        jump label_19 always 0 0
+        jump label_42 always 0 0
+        jump label_19 always 0 0
+        jump label_42 always 0 0
+    label_19:
+        set *tmp0 "B"
+        jump label_46 always 0 0
+    label_21:
+        jump label_45 greaterThanEq *tmp4 243
+        jump label_26 greaterThanEq *tmp4 232
+        jump label_38 lessThan *tmp4 231
+    label_24:
+        set *tmp0 "D"
+        jump label_46 always 0 0
+    label_26:
+        op sub *tmp5 *tmp4 232
+        op add @counter @counter *tmp5
+        jump label_38 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
+        jump label_24 always 0 0
+        jump label_38 always 0 0
+        jump label_24 always 0 0
+        jump label_38 always 0 0
+        jump label_45 always 0 0
+        jump label_45 always 0 0
+        jump label_24 always 0 0
+    label_38:
+        set *tmp0 "C"
+        jump label_46 always 0 0
+    label_40:
+        set *tmp0 "none"
+        jump label_46 always 0 0
+    label_42:
+        set *tmp0 "A"
+        jump label_46 always 0 0
+label_44:
+    jump label_40 strictEqual *tmp4 null
+label_45:
+    set *tmp0 "E"
+    label_46:
+    print *tmp0
 ```
 
 ## Data Flow Optimization
@@ -737,6 +607,469 @@ The data flow analysis, with some restrictions, is also applied to stackless and
 
 Data Flow Optimization gathers information about variables and the values they get assigned by the program. Apart from using this information for its own optimizations, it also provides it to the other optimizers. The other optimizers can then improve their own optimizations further (e.g., to determine that a conditional jump is always true or always false and act accordingly). Data Flow Optimization is therefore crucial for the best performance of some other optimizers as well. Some optimizations, such as [Loop Unrolling](#loop-unrolling), might outright require the Data Flow Optimization to be active for their own work.
 
+## Dead Code Elimination
+
+This optimization inspects the entire code and removes all instructions that write to non-volatile variables if none of the variables written to are actually read anywhere in the code.
+
+Dead Code Elimination also inspects your code and prints out suspicious variables:
+* _Unused variables_: those are the variables that are unused and possibly were eliminated.
+* _Uninitialized variables_: those are global variables that are read by the program but never written to. (The [Data Flow Optimization](#data-flow-optimization) detects uninitialized local and function variables.)
+
+Both cases deserve a closer inspection, as they might indicate a problem with your program.
+
+## Expression Optimization
+
+This optimization looks for certain expressions that can be performed more efficiently. Currently, the following optimizations are available:
+
+* `floor` instruction applied to a result of a multiplication by a constant or a division. Combines the two operations into one integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the divisor in the `idiv` operation.
+* `select` instruction with constant condition is replaced by a `set` instruction directly.
+* `sensor var @this @x` and `sensor var @this @y` are replaced by `set var @thisx` and `set var @thisy` respectively. Data Flow Optimization may then apply [constant propagation](#constant-propagation) to the `@thisx`/`@thisy` built-in constants.
+* All set instructions assigning a variable to itself (e.g., `set x x`) are removed.
+* When both operands of the instruction are known to have the same value, some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
+  * `equal`, `lessThanEq`, `greaterThanEq`, `strictEqual`: sets the result to `1` (true)
+  * `notEqual`, `lessThan`, `greaterThan`: sets the result to `0` (false)
+  * `sub`, `xor`: sets the result to `0`
+  * `or`, `land`: sets the result directly to the first operand, if the instruction doesn't represent the boolean version of the operation (`||` or `&&`),
+  * `and`, `min` and `max`: sets the result directly to the first operand.
+* The result of some operations may be determined by a known value of one of its operands. In some cases, the result doesn't depend on the other operand (a multiplication by zero is always zero regardless of the other operand). In other cases, the result is equal to the other operand (a multiplication by one or a subtraction of zero). All the performed replacements are listed in this table:
+
+| Operation      | Operator     | First operand | Second operand | Result |  Level   | Note        |
+|----------------|:-------------|:-------------:|:--------------:|:------:|:--------:|-------------|
+| mul            |              |      var      |       1        |  var   |  Basic   | Commutative |
+| mul            |              |      var      |       0        |   0    |  Basic   | Commutative |
+| div            |              |      var      |       1        |  var   |  Basic   |             |
+| div, idiv, mod |              |      var      |       0        |  null  |  Basic   |             |
+| div, idiv, mod |              |       0       |      var       |   0    | Advanced |             |
+| add, xor       |              |      var      |       0        |  var   |  Basic   | Commutative |
+| sub            |              |      var      |       0        |  var   |  Basic   |             |
+| shl, shr       |              |      var      |       0        |  var   | Advanced |             |
+| shl, shr       |              |       0       |      var       |   0    |  Basic   |             |
+| or             | `\|`, `or`   |      var      |       0        |  var   | Advanced | Commutative |
+| or             | `\|\|`, `or` |      var      |    nonzero     |   1    |  Basic   | Commutative |
+| and, land      |              |      var      |       0        |   0    |  Basic   | Commutative |
+| land           | `and`        |      var      |    nonzero     |  var   | Advanced | Commutative |
+
+In the case of commutative operations, the result is the same if the first and second operands are swapped. `var` represents a variable with an arbitrary, unknown value.
+
+Some mlog operations are produced by different Mindcode operators. When the optimizations are only applied to operations corresponding to specific Mindcode operators, these operators are listed in the **Operator** column.
+
+> [!IMPORTANT]
+> Some optimizations applied to `or`, `and`, `land`, `xor`, `shl` and `shr` operations applied to non-integer or non-boolean values may produce different results from unoptimized code: unoptimized code would result into an integer value (or boolean value in case of `land`), while the optimized code may produce a non-integer value. Passing a non-integer/non-boolean value into these operators is unusual, but not impossible. These optimizations are therefore only performed on `advanced` level and can be turned off by setting the level to `basic`.
+
+When the `builtin-evaluation` option is set to `compatible` or `full`, the following additional expressions are handled:
+
+* If the `@constant` in a `sensor var @constant @id` instruction is a known item, liquid, block or unit constant with a defined logic ID, the Mindustry's ID of the object is looked up and the instruction is replaced by `set var <id>`, where `<id>` is a numeric literal.
+* If the `id` in a `lookup <type> id` instruction is a constant, Mindcode searches for the appropriate item, liquid, block, or unit with given ID and if it finds one, the instruction is replaced by `set var <built-in>`, where `<built-in>` is an item, liquid, block, or unit literal.
+* If the `@constant` in a `sensor var @constant @name` instruction is a known item, liquid, block or unit constant, the Mindustry's content name of the object is looked up and the instruction is replaced by `set var <name>`, where `<name>` is a string literal. This optimization takes place even when `builtin-evaluation` is set to `none`.
+
+Some Mindustry content objects may have different logic IDs in different Mindustry versions (these objects are called "unstable"). For these objects, the above optimizations only happen when the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `full`:
+
+```Mindcode
+#set target = 7;
+#set builtin-evaluation = full;
+println(lookup(:item, 18));
+println(@tungsten.@id);
+printflush(message1);
+```
+
+compiles to
+
+```mlog
+print "dormant-cyst\n19\n"
+printflush message1
+```
+
+When compiled with `builtin-evaluation` set to `compatible`, the code is
+
+```mlog
+lookup item *tmp0 18
+print *tmp0
+print "\n"
+sensor *tmp1 @tungsten @id
+print *tmp1
+print "\n"
+printflush message1
+```
+
+## Function Inlining
+
+Function Inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+
+### The fundamentals of function inlining
+
+Function inlining converts out-of-line function calls into inline function calls. This conversion alone saves a few execution steps: storing the return address, jumping to the function body, and jumping back at the original address. However, additional optimizations might be available once a function is inlined, especially if the inlined function call is using constant argument values. In such a situation, many other powerful optimizations, such as constant folding or loop unrolling, may become available.
+
+User-defined, non-recursive function which is called just once in the entire program, is automatically inlined, and this cannot be prevented except by the `noinline` keyword: such code is always both faster and smaller. It is also possible to declare individual functions using the `inline` keyword, forcing all calls of such functions to be inlined.
+
+### Automatic function inlining
+
+This optimization can inline additional functions that aren't recursive and also aren't declared `inline` or `noinline` in the source code. If there's enough instruction space, all function calls may be inlined and the original function body removed from the program.
+
+When there isn't enough instruction space, only a single one or several specific function calls may be inlined; in this case, the original function body remains in the program and is used by the function calls that weren't inlined. If there are only the last two function calls remaining, either both of them or none of them will be inlined.
+
+It is therefore no longer necessary to use the `inline` keyword, except in cases when Mindcode's automatic inlining chooses function different from the one(s) you prefer to be inlined, or when using functions with variable number of parameters.
+
+## If Expression Optimization
+
+This optimization consists of three types of modifications performed on blocks of code created by if/ternary expressions. All possible optimizations are done independently.
+
+### `select` optimization
+
+If expressions which assign a value to variables depending on a condition are replaced by the `select` instruction, if the level is set to `experimental` and the target is `8.1` or higher. Example:
+
+```Mindcode
+#set target = 8.1;
+print(rand(10) < 5 ? "low" : "high");
+```
+
+compiles to
+
+```mlog
+op rand *tmp0 10 0
+select *tmp2 lessThan *tmp0 5 "low" "high"
+print *tmp2
+```
+
+The optimization can handle nested/chained if expressions as well as expressions assigning values to different variables in each branch. It is applied if the average execution time is improved by the optimization, unless the optimization goal is set to `size`, in which case the optimization is always applied. (The code size is always reduced thanks to avoiding any jumps.)
+
+```Mindcode
+#set target = 8;
+
+volatile var a, b, c;
+
+if switch1.enabled then
+    a = "on";
+    b = @coal;
+    c = 50;
+else
+    a = "off";
+end;
+
+if switch2.enabled then
+  a = 1;
+end;
+```
+
+compiles to:
+
+```mlog
+sensor *tmp0 switch1 @enabled
+select .a notEqual *tmp0 false "on" "off"
+select .b notEqual *tmp0 false @coal .b
+select .c notEqual *tmp0 false 50 .c
+sensor *tmp2 switch2 @enabled
+select .a notEqual *tmp2 false 1 .a
+```
+
+Even when the assignments modify both variables used in the branch condition, or a simple single expression is used in one of the branches, the `select` optimization can still be applied:
+
+```Mindcode
+#set target = 8;
+
+noinit var a, b;
+
+if a > b then
+    a = 10; b = 20;
+else
+    a = 20; b = 10;
+end;
+
+print(a > 0 ? packcolor(0, b, b, 1) : %[red]);
+```
+compiles to:
+
+```mlog
+set *tmp5 .a
+select .a greaterThan .a .b 10 20
+select .b greaterThan *tmp5 .b 20 10
+packcolor *tmp6 0 .b .b 1
+select *tmp3 greaterThan .a 0 *tmp6 %[red]
+print *tmp3
+```
+
+### Value propagation
+
+The value of ternary expressions and if expressions is sometimes assigned to a user-defined variable. In these situations, the true and false branches of the if/ternary expression assign the value to a temporary variable, which is then assigned to the user variable. This optimization detects these situations and when possible, assigns the final value to the user variable directly in the true/false branches:
+
+```Mindcode
+abs = if x < 0 then
+    negative += 1;
+    -x;
+else
+    positive += 1;
+    x;
+end;
+print(abs);
+```
+
+produces this code:
+
+```mlog
+jump 4 greaterThanEq :x 0
+op add :negative :negative 1
+op sub *tmp1 0 :x
+jump 6 always 0 0
+op add :positive :positive 1
+set *tmp1 :x
+print *tmp1
+```
+
+As the example demonstrates, value propagation works on more than just the `set` instruction. All instructions having exactly one output parameter (based on instruction metadata) are handled.
+
+### Instruction propagation
+
+> [!TIP]
+> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.
+
+If the instruction immediately following the `if` expression isn't a `set` instruction, but another instruction taking the resulting value of the `if` expression, and the resulting value is stored using a `set` instruction, the `set` instruction will be replaced by the instruction actually consuming the value. The optimization targets these conditional expressions passed as a parameter into a function, for example `print(a > 0 ? "positive" : "negative");`, which produces:
+
+```
+jump 3 lessThanEq :a 0
+print "positive"
+jump 0 always 0 0
+print "negative"
+```
+
+This saves the execution of one instruction storing the resulting value (`positive` or `negative`, in this case) before passing it into the `print` instruction.
+
+All kinds of instructions are supported, for example `approach(@thisx, @thisy, @unit.@type == @mega ? 8 : 12);` produces
+
+```
+sensor *tmp0 @unit @type
+jump 4 notEqual *tmp0 @mega
+ucontrol approach @thisx @thisy 8 0 0
+jump 5 always 0 0
+ucontrol approach @thisx @thisy 12 0 0
+```
+
+The optimization handles even nested `if` expressions, such as
+
+```Mindcode
+print(a < 100 ? a < 10 ? "units" : "tens" : a < 1000 ? "hundreds" : "thousands");
+```
+
+which produces
+
+```mlog
+jump 6 greaterThanEq :a 100
+jump 4 greaterThanEq :a 10
+print "units"
+jump 0 always 0 0
+print "tens"
+jump 0 always 0 0
+jump 9 greaterThanEq :a 1000
+print "hundreds"
+jump 0 always 0 0
+print "thousands"
+```
+
+### Forward assignment
+
+> [!TIP]
+> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.
+
+Some conditional expressions can be rearranged to save instructions while keeping execution time unchanged:
+
+```Mindcode
+x = rand(10) - 5;
+text = x < 0 ? "negative" : "positive";
+print("Value is ", text);
+```
+
+Without If Expression Optimization, the produced code is
+
+```
+op rand *tmp0 10 0
+op sub :x *tmp0 5
+jump 5 greaterThanEq :x 0
+set *tmp3 "negative"
+jump 6 always 0 0
+set *tmp3 "positive"
+print "Value is "
+print *tmp3
+```
+
+Execution speed:
+* x is negative: four instructions (2, 3, 4) are executed,
+* x is positive: three instructions (2, 5) are executed.
+
+The If Expression Optimization turns the code into this:
+
+```
+op rand *tmp0 10 0
+op sub :x *tmp0 5
+set *tmp3 "positive"
+jump 5 greaterThanEq :x 0
+set *tmp3 "negative"
+print "Value is "
+print *tmp3
+```
+
+Execution speed:
+* x is negative: four instructions (2, 3, 4) are executed,
+* x is positive: three instructions (2, 3) are executed.
+
+The execution time is the same. However, one less instruction is generated.
+
+The forward assignment optimization is performed when these conditions are met:
+* both branches assign a value to the same variable (resulting variable) as the last statement,
+* the resulting variable is not global (global variables can be modified or used in function calls),
+* the resulting variable is not used in the condition in any way,
+* at least one branch consists of just one instruction which sets the resulting variable (this is the branch to be moved),
+* the other branch doesn't use the resulting variable anywhere except the last statement,
+* the last statement of the other branch doesn't depend on the resulting variable.
+
+Depending on the type of condition and the branch sizes, either the true branch or the false branch can get eliminated this way. The average execution time remains the same, although in some cases the number of executed instructions per branch may change by one.
+
+### Compound condition elimination
+
+The instruction generator always generates the true branch first. In some cases, the jump condition cannot be expressed as a single jump and requires additional instruction (this only happens with the strict equality operator `===`, which doesn't have an opposite operator in Mindustry Logic).
+
+The additional instruction can be avoided when the true and false branches in the code are swapped. When this
+optimizer detects such a situation, it does exactly that:
+
+```Mindcode
+if @unit.@dead === 0 then
+    print("alive");
+else
+    print("dead");
+end;
+```
+
+Notice the `print "dead"` occurs before `print "alive"` now:
+
+```mlog
+sensor *tmp0 @unit @dead
+jump 4 strictEqual *tmp0 0
+print "dead"
+jump 0 always 0 0
+print "alive"
+```
+
+### Chained if-else statements
+
+> [!TIP]
+> This optimization only applies when the [`select` optimization](#select-optimization) is not available, or when the expression is too complex for the `select` optimization.
+
+The `elsif` statements are equivalent to nesting the elsif part in the `else` branch of the outer expression. Optimizations of these nested statements work as expected:
+
+```Mindcode
+y = if x < 0 then
+    "negative";
+elsif x > 0 then
+    "positive";
+else
+    "zero";
+end;
+print("value is ", y);
+```
+
+produces
+
+```mlog
+set *tmp1 "negative"
+jump 5 lessThan :x 0
+set *tmp1 "zero"
+jump 5 lessThanEq :x 0
+set *tmp1 "positive"
+print "value is "
+print *tmp1
+```
+
+saving three instructions over the code without if statement optimization:
+
+```
+jump 3 greaterThanEq :x 0
+set *tmp1 "negative"
+jump 8 always 0 0
+jump 6 lessThanEq :x 0
+set *tmp3 "positive"
+jump 7 always 0 0
+set *tmp3 "zero"
+set *tmp1 *tmp3
+print "value is "
+print *tmp1
+```
+
+## Jump Normalization
+
+This optimization handles conditional jumps whose condition can be fully evaluated:
+
+* constantly false conditional jumps are removed,
+* constantly true conditional jumps are converted to unconditional ones.
+
+A condition can be fully evaluated if both of its operands are literals or if they're variables whose values were determined to be constant by the [Data Flow Optimization](#data-flow-optimization).
+
+The first case reduces the code size and speeds up execution. The second one in itself improves neither size nor speed but allows those jumps to be handled by other optimizations aimed at unconditional jumps.
+
+## Jump Optimization
+
+Conditional jumps are sometimes compiled into an `op` instruction evaluating a boolean expression, and a conditional jump acting on the value of the expression.
+
+This optimization turns the following sequence of instructions:
+
+```
+op <comparison> var A B
+jump label equal/notEqual var false
+```
+
+into
+
+```
+jump label <inverse of comparison>/<comparison> A B
+```
+
+Prerequisites:
+
+* `jump` is an `equal`/`notEqual` comparison to `false`,
+* `var` is a temporary variable,
+* `var` is not used anywhere in the program except these two instructions,
+* `<comparison>` has an inverse/`<comparison>` exists as a condition.
+
+## Jump Straightening
+
+This optimization detects situations where a conditional jump skips a following, unconditional one and replaces it with a single conditional jump with a reversed condition and a target of the second jump. Example:
+
+```
+jump *label0 equal *tmp9 false
+jump *label1
+label *label0
+```
+
+will be turned to
+
+```
+jump *label1 notEqual *tmp9 false
+```
+
+Optimization won't be done if the condition does not have an inverse condition (`strictEqual`).
+
+These sequences of instructions may arise when using the `break` or `continue` statements:
+
+```
+while true do
+    ...
+    if not_alive then
+        break;
+    end;
+end;
+```
+
+## Jump Threading
+
+If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected to the target of the second jump, repeated until the end of a jump chain is reached. Moreover:
+
+* `end` instruction is handled identically to `jump 0 always`,
+* conditional jumps in the jump chain are followed if:
+  * their condition is identical to the condition of the first jump in the chain, and
+  * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.),
+* unconditional jumps targeting an indirect jump (i.e., an instruction assigning value to `@counter`) are replaced with the indirect jump itself,
+* on the `experimental` level, when symbolic labels aren't used, the following function-call-related optimizations are also available:
+  * the return address of a function call is redirected to the target of the following unconditional jump,
+  * a conditional or unconditional jump to a function call is redirected directly to the function.
+
+No instructions are directly removed or added, but the execution of the code is faster; furthermore, some jumps in the jump chain may be removed later by the [Unreachable Code Elimination](#unreachable-code-elimination).
+
 ## Loop Hoisting
 
 Loop hoisting is an optimization that tries to identify loop invariant code (i.e., code inside loops which executes identically in each loop iteration) and moves it in front of the loop. This way the code is executed only once, instead of on each loop iteration.
@@ -762,7 +1095,7 @@ op add :i :i 1
 jump 4 lessThan :i MAX
 ```
 
-A loop condition is processed as well as a loop body, and invariant code in nested loops is hoisted all the way to the top when possible: 
+A loop condition is processed as well as a loop body, and invariant code in nested loops is hoisted all the way to the top when possible:
 
 ```Mindcode
 param MAX = 10;
@@ -791,7 +1124,7 @@ op add :j :j 1
 jump 4 lessThan :j MAX
 ```
 
-The optimization affects even instructions setting up parameters or return addresses for stackless function calls and array access:   
+The optimization affects even instructions setting up parameters or return addresses for stackless function calls and array access:
 
 ```Mindcode
 noinline def foo(x)
@@ -853,15 +1186,15 @@ produces
 At this moment, the following limitations apply:
 
 * If the loop contains a stackless or recursive function call, global variables that might be modified by that function call are marked as loop dependent and expressions based on them aren't hoisted. The compiler must assume the value of the global variable may change inside these functions.
-* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested in a function call (such as `print(x < 0 ? "positive" : "negative");`), it won't be optimized.   
+* `if` expressions are hoisted only when part of simple expressions. Specifically, when the `if` expression is nested in a function call (such as `print(x < 0 ? "positive" : "negative");`), it won't be optimized.
 
 ## Loop Optimization
 
 The loop optimization improves loops with the condition at the beginning by performing these modifications:
 
 * If the loop jump condition is invertible, the unconditional jump at the end of the loop to the loop condition is replaced by a conditional jump with an inverted loop condition targeting the first instruction of the loop body. This doesn't affect the number of instructions but executes one less instruction per loop.
-  * If the loop condition isn't invertible (that is, the jump condition is `===`), the optimization isn't done, since the saved jump would be spent on inverting the condition, and the code size would increase for no benefit at all.  
-* If the previous optimization was done and the loop condition is known to be true before the first iteration of the loop, the optimizer removes the jump at the front of the loop. The Loop Optimizer uses information gathered by Data Flow Optimization to evaluate the initial loop condition.  
+  * If the loop condition isn't invertible (that is, the jump condition is `===`), the optimization isn't done, since the saved jump would be spent on inverting the condition, and the code size would increase for no benefit at all.
+* If the previous optimization was done and the loop condition is known to be true before the first iteration of the loop, the optimizer removes the jump at the front of the loop. The Loop Optimizer uses information gathered by Data Flow Optimization to evaluate the initial loop condition.
 * Loop conditions that are complex expressions spanning several instructions can still be replicated at the end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). As a result, the code size might actually increase after performing this kind of optimization. See [Dynamic optimizations](#dynamic-optimizations) for details on performing these optimizations.
 
 The result of the first two optimizations in the list can be seen here:
@@ -874,7 +1207,7 @@ end;
 print("Done.");
 ```
 
-produces 
+produces
 
 ```mlog
 set LIMIT 10
@@ -993,11 +1326,11 @@ Data Flow Optimization then evaluated all those expressions using the combinatio
 
 ### Loop unrolling preconditions
 
-A list iteration loop can always be unrolled if there's enough instruction space left. 
+A list iteration loop can always be unrolled if there's enough instruction space left.
 
 For other loops, unrolling can generally be performed when Mindcode can determine the loop has a certain fixed number of iterations and can infer other properties of the loop, such as a variable that controls the loop iterations. A loop should be eligible for the unrolling when the following conditions are met:
 
-* The loop is controlled by a single, local, or main variable: the loop condition must consist of a variable which is modified inside a loop, and a constant or an effectively constant variable. Loops based on global variables cannot be unrolled. 
+* The loop is controlled by a single, local, or main variable: the loop condition must consist of a variable which is modified inside a loop, and a constant or an effectively constant variable. Loops based on global variables cannot be unrolled.
 * The loop control variable is modified inside the loop only by `op` instructions which have the loop control variable as a first argument and a constant or an effectively constant variable as a second argument; the op instructions must be deterministic. Any other instruction that sets the value of a loop control variable precludes loop unrolling.
 * All modifications of the loop control variable happen directly in the loop body: the variable must not be modified in a nested loop or in an if statement, for example.
 * The loop has a nonzero number of iterations. The upper limit of the iteration count depends on available instruction space, but generally can never exceed 1000 iterations.
@@ -1155,8 +1488,8 @@ for i in 1 .. 5 do
 end;
 ```
 
-In this example, the outer loop is unrolled first, after which each copy of the inner loop can be unrolled 
-independently. Further optimizations (including Print Merging) then compact the entire computation into a single 
+In this example, the outer loop is unrolled first, after which each copy of the inner loop can be unrolled
+independently. Further optimizations (including Print Merging) then compact the entire computation into a single
 print instruction:
 
 ```mlog
@@ -1166,396 +1499,6 @@ print "11 12 13 14 15 22 23 24 25 33 34 35 44 45 55"
 ### List iteration loop with modifications
 
 For [list iteration loops with modifications](SYNTAX-3-STATEMENTS.markdown#modifications-of-variables-in-the-list), the output loop control variable is completely replaced with the variable assigned to it for the iteration. This helps in some more complicated cases where the Data Flow Optimization alone wasn't able to do the substitution on its own.
-
-## Function Inlining
-
-Function Inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
-
-### The fundamentals of function inlining
-
-Function inlining converts out-of-line function calls into inline function calls. This conversion alone saves a few execution steps: storing the return address, jumping to the function body, and jumping back at the original address. However, additional optimizations might be available once a function is inlined, especially if the inlined function call is using constant argument values. In such a situation, many other powerful optimizations, such as constant folding or loop unrolling, may become available.
-
-User-defined, non-recursive function which is called just once in the entire program, is automatically inlined, and this cannot be prevented except by the `noinline` keyword: such code is always both faster and smaller. It is also possible to declare individual functions using the `inline` keyword, forcing all calls of such functions to be inlined.
-
-### Automatic function inlining
-
-This optimization can inline additional functions that aren't recursive and also aren't declared `inline` or `noinline` in the source code. If there's enough instruction space, all function calls may be inlined and the original function body removed from the program. 
-
-When there isn't enough instruction space, only a single one or several specific function calls may be inlined; in this case, the original function body remains in the program and is used by the function calls that weren't inlined. If there are only the last two function calls remaining, either both of them or none of them will be inlined.    
-
-It is therefore no longer necessary to use the `inline` keyword, except in cases when Mindcode's automatic inlining chooses function different from the one(s) you prefer to be inlined, or when using functions with variable number of parameters.  
-
-## Case Switching
-
-Case Switching is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Case Switching optimization is, at this moment, unique in its ability to generate optimizations applicable to all three optimization goals. 
-
-Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates—on average—half of all existing conditions, assuming even distribution of the case expression input values. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
-
-The Case Switching optimization improves case expressions which branch on integer values of the expression, or on Mindustry content objects.
-
-> [!WARNING]
-> It is assumed that a case statement branching exclusively on integer values always gets an integer value on input as well. If the input value of the case expression may take on non-integer values, this optimization will produce wrong code. At this moment Mindcode isn't able to recognize such a situation; if this is the case, you need to disable the Case Switching optimization manually.
-
-The basic structure used by this optimization is a _jump table_.
-
-### Jump tables
-
-A jump table replaces the sequence of conditional jumps by direct jumps to the corresponding `when` branch. The actual instructions used to build a jump table are
-
-```
-jump <else branch address> lessThan value minimal_when_value
-jump <else branch address> greaterThan value maximal_when_value
-op add @counter <start_of_jump_table - minimal_when_value> value
-start_of_jump_table:
-jump <when branch for minimal when value address>
-jump <when branch for minimal when value + 1 address>
-jump <when branch for minimal when value + 2 address>
-...
-jump <when branch for maximal when value address>
-```
-
-The jump table is put in front of the `when` branches. Original conditions in front of each processed `when` branch are removed. Each `when` branch jumps to the end of the case expression as usual. The bodies of `when` branches are moved into correct places inside the case expression when possible, to avoid unnecessary jumps. On `experimental` level, the bodies of `when` branches may be duplicated to several suitable places to avoid even more jumps at the cost of additional code size increase. This optimization usually only kicks in for small branch bodies, since for larger code increases, a better performing solution can be achieved by a different segment arrangement.
-
-To build the jump table, the minimum and maximum value of existing `when` branches are determined first. Values outside this range are handled by the `else` branch (if there isn't an explicit `else` branch in the case statement, the `else` branch just jumps to the end of the case expression). Values inside this range are mapped to a particular `when` branch, or, if the value doesn't correspond to any of the `when` branches, to the `else` branch.
-
-The first two instructions in the example above (`jump lessThan`, `jump greaterThan`) handle the cases where the input value lies outside the range supported by the jump table. The `op add @counter` instruction then transfers the control to the corresponding specific jump in the jump table and consequently to the proper `when` branch.
-
-A basic jump table executes at most four instructions on each case expression execution (less if the input value lies outside the supported range). We've mentioned above that the original case statement executes half of the conditional jumps on average. This means that converting the case expression to a jump table only makes sense when there are at least eight conditional jumps in the case expression.
-
-Notes:
-
-* When evaluating execution speed, the optimizer computes and averages execution costs of each value present in a `when` clause. All of these values are deemed equally probable to occur, and values leading to an `else` branch are not considered at all. In an unoptimized `case` expression, values handled by the `else` branch take the longest time to handle, while in the optimized case expression, values completely outside the range of `when` values are executed faster than any other values. This is a side effect of the optimization.  
-* As a consequence, if you put the more frequent values first in the case expression, and the value distribution is very skewed, converting the case expression to the jump table might actually worsen the average execution time. Mindcode has no way to figure this on its own; if you encounter this situation, you might need to disable the Case Switching optimization for your program.
-* For smaller case expressions, a full jump table might provide worse average performance than the original case expression. Mindcode might still optimize the case expression by applying the bisection search used in [Jump table compression](#jump-table-compression), providing both better average execution time of the entire case expression and more balanced execution time of individual branches.
- 
-**Preconditions:**
-
-The following conditions must be met for a case expression to be processed by this optimization:
-
-* All values used in `when` clauses must be effectively constant.
-* All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)). Specifically, no `null` values may be used.
-* Values used in `when` clauses must be unique; when ranges are used, they must not overlap with other ranges or standalone values. 
-
-### Range check elimination
-
-When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, you inform Mindcode that all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
-
-Putting an `else` branch into a case expression indicates not all input values are handled, and doing so disables the unsafe case optimization: the basic optimization may still happen, but the out-of-range checks will remain.
-
-If you activate the `unsafe-case-optimization` directive, and an unhandled input value is encountered, the behavior of the generated code is undefined.
-
-### Mindustry content conversion
-
-When all `when` branches in the case expression contain built-in constants representing Mindustry content of the same type (items, liquids, unit types, or block types) and the optimization level is set to `advanced`, this optimization converts these built-in constants to logic IDs, adds an instruction to convert the input value to a logic ID (using the `sensor` instruction with the `@id` property) and attempts to build a jump table over the resulting numeric values.
-
-The following preconditions need to be met to apply content conversion:
-
-* The optimization level is set to `advanced`.
-* The `builtin-evaluation` option is set to `compatible` or `full`.
-* All values in `when` branches are either `null`, or built-in variables referencing Mindustry content of the same type (items, building types and so on).
-* Values used in `when` clauses are unique.
-* The logic ID is known to Mindcode for all `when` values. 
-* All logic IDs are stable, or `builtin-evaluation` mode is set to `full`.
-
-> [!NOTE]
-> When `unsafe-case-optimization` is set to `true` and there's no `else` branch, the optimizer creates a jump table omitting the out-of-range checks. Make sure that all possible input values are handled before removing the `else` branch or applying the `unsafe-case-optimization` directive. When the input value originates in the game (e.g., item selected in a sorter), keep in mind the value obtained this way might be `null`.  
-
-The range check is also partially or fully removed when the following conditions are met:
-
-* There is a `when` branch corresponding to the Mindustry content with a zero ID: in this case, Mindcode knows the minimum possible numerical value of the ID (that is, zero) is handled by the case expression and doesn't check for IDs less than zero.
-* There is a `when` branch corresponding to the Mindustry content with a maximum ID, and `builtin-evaluation` is set to `full`: in this case, Mindcode knows the maximum possible numerical value of the ID is handled by the case expression and doesn't check for IDs greater than the maximum value.
-
-#### Null values
-
-When Mindustry content conversion occurs, `null` values in `when` clauses are supported. When the `null` value is explicitly handled (i.e., there is a `when null` branch present), the corresponding branch is executed for `null` input values. In case the `when null` branch is missing, `null` input values are handled by the `else` branch, or skipped altogether if there is no else branch.
-
-Mindcode arranges the code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, an optimized `case` expressions checking for `null` in `when` branches is typically more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
-
-### Text-based jump tables
-
-In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings, instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
-
-* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher,
-* The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive,
-* The [text-jump-tables](SYNTAX-5-OTHER.markdown#option-text-jump-tables) option must be active.
-
-When all these conditions are met, the case expression is always 
-
-### Jump table compression
-
-Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations described here into account as well. To locate the segment handling a particular input value, a bisection search is used. 
-
-The total number of possible segment arrangements can be quite large. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
-
-Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both smaller and significantly faster than the unoptimized `case` expression.   
-
-Jump table compression is particularly useful when using block types in case expressions, as, given the large dispersion of block type IDs, full jump tables tend to get quite large.
-
-Notes:
-
-* Jump table compression is not performed when range checks for the given case expression are eliminated via the `unsafe-case-optimization` option, or when the [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) option has been set to 0.
-* When a compressed jump table is smaller, but slower than a full, or a less compressed jump table, it will only be selected when there isn't enough instruction space for the larger jump table.
-* Compressing a jump table may, under some circumstances, produce a code which is on average faster than a full jump table, while still being smaller. When this is the case, the optimizer will select the smaller version over the faster version, even when there is plenty of instruction space.
-* Since the bisection search provides better execution time than a linear search, it may be applied even to case expressions too small for a full jump table optimization.
-
-### Jump table padding
-
-When the jump table starts at zero value, it is possible to generate a faster code due to these effects:
-
-* When the Mindustry content conversion is applied, the optimizer knows the logic IDs cannot be less than zero. A jump instruction handling values smaller than the start of the jump table can therefore be omitted.
-* When the [`symbolic-labels` directive](SYNTAX-5-OTHER.markdown#option-symbolic-labels) is set to `true`, an additional operation handling the non-zero offset can be omitted.
-
-Similarly, when the Mindustry content conversion is applied, the `builtin-evaluation` option is set to `full` and the jump table ends at the largest ID of the respective Mindustry content, a jump instruction handling values larger than the end of the table can be omitted, as the optimizer knows no larger values may occur. 
-
-When the jump table doesn't start or end at these values naturally, Mindcode may pad the table at either end with additional jumps to the `else` branch. The optimizer considers the possibility of padding the table at the low end, high end, or both, and chooses the option that gives the best performance given the instruction space limit.
-
-### Example
-
-The example illustrates the following optimization aspects:
-
-* Case switching optimization in general
-* Mindustry content conversion
-* Handling of `null` values
-* Jump table compression
-* Jump table padding
-* Moving bodies of `when` branches
-
-The sample has been artificially constructed to demonstrate the above effects. 
-
-```Mindcode
-#set target = 7;
-#set builtin-evaluation = full;
-#set symbolic-labels = true;
-#set instruction-limit = 150;
-#set case-optimization-strength = 4;
-
-text = case getlink(0).@type
-    when null then "none";
-    when @kiln, @phase-weaver, @pyratite-mixer, @melter, @disassembler then "A";
-    when @plastanium-compressor, @cryofluid-mixer, @blast-mixer, @separator, @spore-press then "B";
-    when @unit-repair-tower, @prime-refabricator, @mech-refabricator, @slag-heater, @scathe then "C";
-    when @diffuse, @tank-refabricator, @ship-refabricator, @lustre then "D";
-    else "E";
-end;
-
-print(text);
-```
-
-The above case expression is transformed to this:
-
-```mlog
-# Mlog code compiled with support for symbolic labels
-# You can safely add/remove instructions, in most parts of the program
-# Pay closer attention to sections of the program manipulating @counter
-    getlink *tmp1 0
-    sensor *tmp2 *tmp1 @type
-    sensor *tmp4 *tmp2 @id
-        jump label_21 greaterThanEq *tmp4 230
-        jump label_45 greaterThanEq *tmp4 14
-        op add @counter @counter *tmp4
-        jump label_44 always 0 0
-        jump label_45 always 0 0
-        jump label_45 always 0 0
-        jump label_45 always 0 0
-        jump label_42 always 0 0
-        jump label_19 always 0 0
-        jump label_42 always 0 0
-        jump label_19 always 0 0
-        jump label_42 always 0 0
-        jump label_19 always 0 0
-        jump label_42 always 0 0
-        jump label_19 always 0 0
-        jump label_42 always 0 0
-    label_19:
-        set *tmp0 "B"
-        jump label_46 always 0 0
-    label_21:
-        jump label_45 greaterThanEq *tmp4 243
-        jump label_26 greaterThanEq *tmp4 232
-        jump label_38 lessThan *tmp4 231
-    label_24:
-        set *tmp0 "D"
-        jump label_46 always 0 0
-    label_26:
-        op sub *tmp5 *tmp4 232
-        op add @counter @counter *tmp5
-        jump label_38 always 0 0
-        jump label_45 always 0 0
-        jump label_45 always 0 0
-        jump label_24 always 0 0
-        jump label_38 always 0 0
-        jump label_24 always 0 0
-        jump label_38 always 0 0
-        jump label_45 always 0 0
-        jump label_45 always 0 0
-        jump label_24 always 0 0
-    label_38:
-        set *tmp0 "C"
-        jump label_46 always 0 0
-    label_40:
-        set *tmp0 "none"
-        jump label_46 always 0 0
-    label_42:
-        set *tmp0 "A"
-        jump label_46 always 0 0
-label_44:
-    jump label_40 strictEqual *tmp4 null
-label_45:
-    set *tmp0 "E"
-    label_46:
-    print *tmp0
-```
-
-## Array Optimization
-
-The array optimization improves the performance of array operations in several ways. At this moment, all optimizations are only available on the `experimental` level.
-
-Loop unrolling may replace random access to array elements with sequential code accessing individual elements directly, in which case no array optimization happens. 
-
-### Array access inlining
-
-Array access inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
-
-To facilitate random array access, shared jump tables for read and write access are generated for each array. These jump tables are shared by all read/write random access of an individual array. This requires using a dedicated _array access variable_ for each access, and setting up return addresses for resuming the control flow after the array element has been processed. 
-
-Array access inlining builds a dedicated jump table at each place an array access operation is performed, eliminating the need for array access variables and return addresses.
-
-Inlining a jump table in a general case reduces the number of steps required per element access from 6 to 4. When accessing an element of the array in a loop at most once for reading and once for writing, the usage of array access variables can be streamlined and return addresses setup can be hoisted out of the loop. This reduces a lot of the overhead of shared jump tables.  
-
-### Short array optimizations
-
-This optimization is performed for arrays of up to three elements.
-
-Short array optimizations cause out-of-bounds indexes to always resolve to the last element. Using an out-of-bounds index can't derail the program execution. Nevertheless, runtime checks still get generated when prescribed by a compiler directive.
-
-#### Arrays of length 1
-
-Each element access gets converted to direct access of the single element.
-
-#### Arrays of length 2 and 3
-
-The jump table is replaced by a sequence of `select`s or if/else statements. Arrays of length 2 are always optimized, while arrays of length 3 are only optimized if the `select` optimization can be used, or the jump table for the array access has been selected for inlining.
-
-**The `select` optimization**
-
-The `select` optimization is applied when the optimization level is set to `experimental` and the `select` instruction is available.
-
-For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
-
-* `a[x] = b` gets converted to
-
-```
-select a[0] x equal 0 b a[0]
-select a[1] x equal 1 b a[1]
-```
- 
-* `b = a[x]` gets converted to
-
-```
-select b x equal 0 a[0] a[1]
-```
-
-For arrays of length 3, the optimization can be described like this:
-
-* `a[x] = b` gets converted to
-
-```
-select a[0] x equal 0 b a[0]
-select a[1] x equal 1 b a[1]
-select a[2] x equal 2 b a[2]
-```
-
-* `b = a[x]` gets converted to
-
-```
-select b x equal 0 a[0] a[1]
-select b x equal 2 a[2] b
-```
-
-**The if/else optimization**
-
-For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
-
-* `a[x] = b;` gets converted to `if x == 0 then a[0] = b; else a[1] = b; end;`.
-* `b = a[x]` gets converted to  `if x == 0 then b = a[0]; else b = a[1]; end;`.
-
-For arrays of length 3, the optimization can be described like this:
-
-* `a[x] = b;` gets converted to `if x == 0 then a[0] = b; elsif x == 1 then a[1] = b; else a[2] = b end;`.
-* `b = a[x]` gets converted to  `if x == 0 then b = a[0]; elsif x == 1 then b = a[1]; else b = a[2] end;`.
-
-This optimization allows additional [If Expression optimizations](#if-expression-optimization) to take place.  
-
-## Return Optimization
-
-Return Optimization is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
-
-The Return Optimization is simple: whenever there's an unconditional jump to the final sequence of instructions representing a return from the call (which is always three instructions long), the jump is replaced by the entire return sequence. The jump execution is avoided at the price of two additional instructions.        
-
-The impact of this optimization is probably marginal. Recursive functions are of limited use by themselves, and this optimization only applies in a rather specific context.
-
-## Jump Straightening
-
-This optimization detects situations where a conditional jump skips a following, unconditional one and replaces it with a single conditional jump with a reversed condition and a target of the second jump. Example:
-
-```
-jump *label0 equal *tmp9 false
-jump *label1
-label *label0
-```
-
-will be turned to
-
-```
-jump *label1 notEqual *tmp9 false
-```
-
-Optimization won't be done if the condition does not have an inverse condition (`strictEqual`).
-
-These sequences of instructions may arise when using the `break` or `continue` statements:
-
-```
-while true do
-    ...
-    if not_alive then
-        break;
-    end;
-end;
-```
-
-## Jump Threading
-
-If a jump (conditional or unconditional) targets an unconditional jump, the target of the first jump is redirected to the target of the second jump, repeated until the end of a jump chain is reached. Moreover:
-
-* `end` instruction is handled identically to `jump 0 always`,
-* conditional jumps in the jump chain are followed if:
-  * their condition is identical to the condition of the first jump in the chain, and
-  * the condition arguments do not contain a volatile variable (`@time`, `@tick`, `@counter` etc.),
-* unconditional jumps targeting an indirect jump (i.e., an instruction assigning value to `@counter`) are replaced with the indirect jump itself, 
-* on the `experimental` level, when symbolic labels aren't used, the following function-call-related optimizations are also available:
-  * the return address of a function call is redirected to the target of the following unconditional jump,
-  * a conditional or unconditional jump to a function call is redirected directly to the function. 
-
-No instructions are directly removed or added, but the execution of the code is faster; furthermore, some jumps in the jump chain may be removed later by the [Unreachable Code Elimination](#unreachable-code-elimination).
-
-## Unreachable Code Elimination
-
-This optimizer removes instructions that are unreachable. There are several ways unreachable instructions might appear:
-
-1. Jump Threading can create unreachable jumps that are no longer targeted.
-2. User-created unreachable regions, such as `while false ... end`, or code following a `while true` loop.
-3. User-defined functions which are called from an unreachable region.
-
-Instruction removal is done by analyzing the control flow of the program and removing instructions that are never executed. When [Jump Normalization](#jump-normalization) is not active, some section of unreachable code may not be recognized.
-
-## Stack Optimization
-
-Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. The following optimizations are performed:
-
-* `push`/`pop` instruction elimination for function variables that are not used anywhere apart from the push/pop instructions. This happens when variables are eliminated by other optimizations. The optimization is done globally, in a single pass across the entire program.
-* `push`/`pop` instruction elimination for function variables that are read neither by any instruction between the call instruction and the end of the function nor by any instruction that is part of the same loop as the call instruction. Implicit reads by recursive calls to the same function with the value of the parameter unchanged are 
-  also detected.
-* `push`/`pop` instruction elimination for function parameters/variables that are never modified within the function.
 
 ## Print Merging
 
@@ -1669,6 +1612,63 @@ The print merging optimization will also merge `print` instructions generated by
 * All constant values are merged regardless of the resulting string length, even on the `basic` optimization level.
 
 If the print merging optimization is not active, instructions from `remark()` functions aren't merged.
+
+## Return Optimization
+
+Return Optimization is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+
+The Return Optimization is simple: whenever there's an unconditional jump to the final sequence of instructions representing a return from the call (which is always three instructions long), the jump is replaced by the entire return sequence. The jump execution is avoided at the price of two additional instructions.
+
+The impact of this optimization is probably marginal. Recursive functions are of limited use by themselves, and this optimization only applies in a rather specific context.
+
+## Single Step Elimination
+
+This optimizer simplifies the following sequences of jumps that are a result of the code generation and various optimizations:
+
+* A conditional or unconditional jump targeting the next instruction.
+* A conditional or unconditional jump is removed if there is an identical jump immediately following it. The second jump may be a target of another jump.
+* The `end` and `jump 0 always` instructions at the very end of the program are removed, as the processor will jump to the first instruction of the program upon reaching the end of the instruction list anyway, saving execution of one instruction.
+* A jump is removed if there is an identical jump preceding it, and these conditions are met:
+  * the jump doesn't contain volatile variables,
+  * there are no instructions affecting control flow between the jumps, including landing points of other jumps,
+  * there are no instructions modifying the jump condition variables between the jumps.
+
+The rationale behind the optimization described in the last point is that if any of the removed conditional jumps conditions were evaluated to `true`, so would be the condition of the first jump in the sequence, so the other jumps cannot fire, even though the value of the condition isn't known at the compile time. These sequences of jumps may appear as a result of unrolled loops.
+
+Note: this optimization does not affect jumps that are part of a larger structure (e.g., jump tables).
+
+## Stack Optimization
+
+Optimizes the stack usage -- eliminates `push`/`pop` instruction pairs determined to be unnecessary. The following optimizations are performed:
+
+* `push`/`pop` instruction elimination for function variables that are not used anywhere apart from the push/pop instructions. This happens when variables are eliminated by other optimizations. The optimization is done globally, in a single pass across the entire program.
+* `push`/`pop` instruction elimination for function variables that are read neither by any instruction between the call instruction and the end of the function nor by any instruction that is part of the same loop as the call instruction. Implicit reads by recursive calls to the same function with the value of the parameter unchanged are
+  also detected.
+* `push`/`pop` instruction elimination for function parameters/variables that are never modified within the function.
+
+## Temp Variables Elimination
+
+The compiler sometimes creates temporary variables whose only function is to carry some value to another instruction. This optimization removes such temporary variables that only carry the value to an adjacent instruction. The `set` instruction is removed, while the adjacent instruction is updated to replace the temporary variable with the other variable used in the `set` instruction.
+
+The optimization is performed only when the following conditions are met:
+
+* The `set` instruction assigns/reads a temporary variable.
+* The temporary variable is used in exactly one other instruction, adjacent to the `set` instruction.
+* All arguments of the other instruction referencing the temporary variable are either input ones (the `set` instruction precedes the other instruction) or output ones (the `set` instruction follows the other instruction).
+
+An additional optimization is performed when an instruction has a temporary output variable which isn't read by any other instruction. In this case, the unused output variable is replaced by `0` (literal zero value). Such an instruction will be executed correctly by Mindustry Logic, but a new variable will be allocated for the replaced argument.   
+
+`push` and `pop` instructions are ignored by the above algorithm. `push`/`pop` instructions of any eliminated variables are removed by the [Stack Optimization](#stack-optimization) down the line.
+
+## Unreachable Code Elimination
+
+This optimizer removes instructions that are unreachable. There are several ways unreachable instructions might appear:
+
+1. Jump Threading can create unreachable jumps that are no longer targeted.
+2. User-created unreachable regions, such as `while false ... end`, or code following a `while true` loop.
+3. User-defined functions which are called from an unreachable region.
+
+Instruction removal is done by analyzing the control flow of the program and removing instructions that are never executed. When [Jump Normalization](#jump-normalization) is not active, some section of unreachable code may not be recognized.
 
 ---
 
