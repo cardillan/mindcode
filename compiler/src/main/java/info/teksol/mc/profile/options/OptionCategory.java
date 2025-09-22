@@ -20,7 +20,7 @@ public enum OptionCategory {
             """),
 
     COMPILER("Compiler options", """
-            Options affecting the way the source code is compiled.
+            Options which affect the way the source code is compiled.
             """),
 
     OPTIMIZATIONS("Optimization options", """

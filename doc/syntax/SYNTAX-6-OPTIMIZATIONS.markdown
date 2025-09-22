@@ -59,7 +59,7 @@ Code optimization runs on compiled (mlog) code. The compiled code is inspected f
 
 The information on compiler optimizations is a bit technical. It might be useful if you're trying to better understand how Mindcode generates the mlog code.
 
-## Temporary Variables Elimination
+## Temp Variables Elimination
 
 The compiler sometimes creates temporary variables whose only function is to carry some value to another instruction. This optimization removes such temporary variables that only carry the value to an adjacent instruction. The `set` instruction is removed, while the adjacent instruction is updated to replace the temporary variable with the other variable used in the `set` instruction.
 

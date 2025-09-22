@@ -12,7 +12,7 @@ This documentation covers the basics of Mindcode syntax:
 
 The more advanced Mindcode features are described here:
 
-* [Compiler directives](SYNTAX-5-OTHER.markdown)
+* [Compiler options](SYNTAX-5-OTHER.markdown)
 * [Code optimization](SYNTAX-6-OPTIMIZATIONS.markdown)
 * [Extending Mindcode](SYNTAX-EXTENSIONS.markdown) 
 
@@ -106,7 +106,7 @@ In the command-line tool, using the `require` statement with external files is a
 
 ## Compilation and optimization
 
-Mindcode provides the web application and the command-line compiler for compiling Mindcode into mlog code. There are several [optimization levels](SYNTAX-5-OTHER.markdown#option-optimization) available:
+Mindcode provides the web application and the command-line compiler for compiling Mindcode into mlog code. There are several [optimization levels](SYNTAX-5-OTHER.markdown#optimization-levels) available:
 
 * `none`: completely switches off optimization. The only practical use is when you have a suspicion that there's a bug in Mindcode: switching off optimizations and running the resulting code might help pinpoint the problem. (In any case, if you suspect a bug in Mindcode, please don't hesitate to [open an issue](https://github.com/cardillan/mindcode/issues/new)-we'll have a look into it.)     
 * `basic`: at this level, most optimizations are performed, but some are avoided so that the structure of the compiled program is more understandable. Some optimizations (such as loop unrolling) will still modify the resulting mlog code a lot.  

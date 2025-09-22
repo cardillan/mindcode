@@ -1,11 +1,13 @@
 package info.teksol.mc.mindcode;
 
+import info.teksol.mc.emulator.processor.ExecutionFlag;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.AbstractAstBuilderTest;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
@@ -85,11 +87,13 @@ public class DocGeneratorTest {
             }
         }
 
-        @Nullable String libraryName;
+        @Nullable
+        String libraryName;
         List<AstFunctionDeclaration> functions = new ArrayList<>();
         List<AstVariablesDeclaration> constants = new ArrayList<>();
         List<AstParameter> parameters = new ArrayList<>();
-        @Nullable AstFunctionDeclaration declaration;
+        @Nullable
+        AstFunctionDeclaration declaration;
 
         private void processLibrary(Path file) throws IOException {
             String fileName = file.getFileName().toString();
@@ -458,19 +462,53 @@ public class DocGeneratorTest {
     }
 
     @Test
-    <T> void verifyOptionList() throws IOException {
+    <T> void verifyOptionList() {
+        for (OptionCategory optionCategory : OptionCategory.values()) {
+            verifyOptionListInCategory(optionCategory);
+        }
+    }
+
+    private void verifyOptionListInCategory(OptionCategory category) {
         Map<Enum<?>, CompilerOptionValue<?>> compilerOptions = CompilerOptionFactory.createCompilerOptions(false);
         List<CompilerOption> list = compilerOptions.values().stream()
                 .map(CompilerOption.class::cast)
-                .filter(option -> option.getCategory() != OptionCategory.DEBUGGING)
+                .filter(option -> option.getCategory() == category && !HIDDEN_OPTIONS.contains(option.getOption()))
                 .filter(option -> option.getAvailability() == OptionAvailability.UNIVERSAL || option.getAvailability() == OptionAvailability.DIRECTIVE)
-                .sorted(Comparator.comparing(CompilerOption::getOptionName))
+                .sorted(Comparator.comparingInt(this::getOptionPrecedence).thenComparing(CompilerOption::getOptionName))
                 .toList();
 
-        final String TEMPLATE = "| %-31s | %-6s | %-23s | %-18s |%n";
-        System.out.printf(TEMPLATE, "Option", "Scope", "Category", "Semantic stability");
-        System.out.printf("|---------------------------------|--------|-------------------------|--------------------|%n");
-        list.forEach(option -> System.out.printf(TEMPLATE, option.getOptionName(), option.getScope().name().toLowerCase(),
-                option.getCategory().title, option.getStability().name().toLowerCase()));
+        if (!list.isEmpty()) {
+            final String TEMPLATE = "| %-92s | %-6s | %-18s |%n";
+            System.out.println("## " + category.title);
+            System.out.println();
+            System.out.println(category.description);
+            System.out.printf(TEMPLATE, "Option", "Scope", "Semantic stability");
+            System.out.printf("|----------------------------------------------------------------------------------------------|--------|--------------------|%n");
+            list.forEach(option -> System.out.printf(TEMPLATE, getOptionLink(option),
+                    option.getScope().name().toLowerCase(), option.getStability().name().toLowerCase()));
+
+            System.out.println();
+        }
+    }
+
+    private String getOptionLink(CompilerOption option) {
+        return switch (option.getOption()) {
+            case Optimization o -> "[" + option.getOptionName() + "](" + "SYNTAX-6-OPTIMIZATIONS.markdown#" + option.getOptionName() + ")";
+//            case ExecutionFlag e -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
+            default -> "[" + option.getOptionName() + "](" + "#option-" + option.getOptionName() + ")";
+        };
+    }
+
+    private static final Set<Enum<?>> HIDDEN_OPTIONS = Set.of(
+            DebuggingOptions.CASE_CONFIGURATION,
+            DebuggingOptions.DEBUG_OUTPUT
+    );
+
+    private int getOptionPrecedence(CompilerOption option) {
+        return switch (option.getOption()) {
+            case Optimization o -> 1;
+            case ExecutionFlag e -> 1;
+            default ->0;
+        };
     }
 }

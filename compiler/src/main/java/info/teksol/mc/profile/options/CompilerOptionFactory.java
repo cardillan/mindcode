@@ -85,19 +85,18 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 new Target(ProcessorVersion.V7A, ProcessorEdition.S)));
 
+        list.add(new IntegerCompilerOptionValue(OptimizationOptions.INSTRUCTION_LIMIT, "i",
+                "sets the maximal number of instructions for the speed optimizations",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                1, webApp ? MAX_INSTRUCTIONS_WEBAPP : MAX_INSTRUCTIONS_CMDLINE, 1000));
+
         list.add(new EnumCompilerOptionValue<>(EnvironmentOptions.BUILTIN_EVALUATION, "",
                 "sets the level of compile-time evaluation of numeric builtin constants",
                 BuiltinEvaluation.class,
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
                 BuiltinEvaluation.COMPATIBLE));
-
-        list.add(new BooleanCompilerOptionValue(EnvironmentOptions.TEXT_JUMP_TABLES, "",
-                "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
-                "a single 'read' instruction to directly set the counter to the target address (target 8 or higher required)",
-                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
-                OptionAvailability.UNIVERSAL, category,
-                true));
 
         list.add(new BooleanCompilerOptionValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP, "",
                 "when active, Mindcode assumes assigning a 'null' to '@counter' is ignored by the processor " +
@@ -180,12 +179,6 @@ public class CompilerOptionFactory {
     private static void addOptimizationsOptions(List<CompilerOptionValue<?>> list, boolean webApp) {
         final OptionCategory category = OptionCategory.OPTIMIZATIONS;
 
-        list.add(new IntegerCompilerOptionValue(OptimizationOptions.INSTRUCTION_LIMIT, "i",
-                "sets the maximal number of instructions for the speed optimizations",
-                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
-                OptionAvailability.UNIVERSAL, category,
-                1, webApp ? MAX_INSTRUCTIONS_WEBAPP : MAX_INSTRUCTIONS_CMDLINE, 1000));
-
         list.add(new EnumCompilerOptionValue<>(OptimizationOptions.GOAL, "g",
                 "sets code generation goal: minimize code size, minimize execution speed, or no specific preference",
                 GenerationGoal.class,
@@ -219,6 +212,13 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ZERO_OR_ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
                 false).setConstValue(true));
+
+        list.add(new BooleanCompilerOptionValue(EnvironmentOptions.TEXT_JUMP_TABLES, "",
+                "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
+                "a single 'read' instruction to directly set the counter to the target address (target 8 or higher required)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
     }
 
     private static void addOptimizationLevels(List<CompilerOptionValue<?>> list, boolean webApp) {
