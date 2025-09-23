@@ -37,8 +37,10 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 @Order(5)
 public class DocGeneratorTest {
     private static final String PREFIX = "#generate";
+    private static final String DOC_DIRECTORY = "../doc/syntax/";
     private static final String SOURCE_FILE = "src/test/resources/library/doc/SYSTEM-LIBRARY_template.markdown";
-    private static final String TARGET_FILE = "../doc/syntax/SYSTEM-LIBRARY.markdown";
+    private static final String TARGET_FILE = "SYSTEM-LIBRARY.markdown";
+    private static final String TARGET_FILE_LIBRARY = "SYSTEM-LIBRARY-%s.markdown";
     private static final String LIBRARY_DIRECTORY = "src/main/resources/library";
     private static final String FOOTPRINT = "@footprint";
     private static final String FOOTPRINT2 = "@footprint2";
@@ -47,17 +49,20 @@ public class DocGeneratorTest {
     void generateLibraryDocumentation() throws IOException {
         Path path = Path.of(SOURCE_FILE);
 
-        try (final PrintWriter w = new PrintWriter(TARGET_FILE, StandardCharsets.UTF_8); Stream<String> lineStream = Files.lines(path)) {
+        try (final PrintWriter w = new PrintWriter(DOC_DIRECTORY + TARGET_FILE, StandardCharsets.UTF_8);
+             Stream<String> lineStream = Files.lines(path))
+        {
             DocGenerator docGenerator = new DocGenerator(w);
             lineStream.forEach(docGenerator::processTemplateLine);
         }
     }
 
     private static class DocGenerator extends AbstractAstBuilderTest {
-        private final PrintWriter writer;
+        private final PrintWriter mainWriter;
+        private @Nullable PrintWriter writer;
 
-        public DocGenerator(PrintWriter writer) {
-            this.writer = writer;
+        public DocGenerator(PrintWriter mainWriter) {
+            this.mainWriter = mainWriter;
         }
 
         protected CompilerProfile createCompilerProfile() {
@@ -68,7 +73,7 @@ public class DocGeneratorTest {
             if (line.startsWith(PREFIX)) {
                 processAllLibraries();
             } else {
-                writer.println(line);
+                mainWriter.println(line);
             }
         }
 
@@ -98,41 +103,47 @@ public class DocGeneratorTest {
         private void processLibrary(Path file) throws IOException {
             String fileName = file.getFileName().toString();
             libraryName = fileName.substring(0, fileName.lastIndexOf("."));
+            String libraryDocFile = String.format(TARGET_FILE_LIBRARY, libraryName.toUpperCase());
+            String libraryTitle = StringUtils.firstUpperCase(libraryName);
+            mainWriter.println("* [%s library](%s)".formatted(libraryTitle, libraryDocFile));
+
             String code = Files.readString(file);
+            try (PrintWriter w = new PrintWriter(DOC_DIRECTORY + libraryDocFile, StandardCharsets.UTF_8)) {
+                writer = w;
 
-            // Parse and process the module
-            functions.clear();
-            constants.clear();
-            parameters.clear();
+                // Parse and process the module
+                functions.clear();
+                constants.clear();
+                parameters.clear();
 
-            AstModule node = build(expectedMessages(), createInputFiles(code));
-            processNode(node);
+                AstModule node = build(expectedMessages(), createInputFiles(code));
+                processNode(node);
 
-            writer.println();
-            writer.println("# " + StringUtils.firstUpperCase(libraryName) + " library");
-            writer.println();
-            processModuleDoc(code);
-
-            if (!parameters.isEmpty()) {
+                writer.println("# " + libraryTitle + " library");
                 writer.println();
-                writer.println("## Program parameters");
-                parameters.stream().filter(parameter -> !parameter.getParameterName().startsWith("_")).forEach(this::processParameter);
-            }
+                processModuleDoc(code);
 
-            if (constants.stream().flatMap(d -> d.getVariables().stream()).anyMatch(specification -> !specification.getName().startsWith("_"))) {
-                writer.println();
-                writer.println("## Constants");
-                constants.forEach(
-                        declaration -> declaration.getVariables().stream()
-                                .filter(specification -> !specification.getName().startsWith("_"))
-                                .forEach(specification -> processConstant(declaration, specification))
-                );
-            }
+                if (!parameters.isEmpty()) {
+                    writer.println();
+                    writer.println("## Program parameters");
+                    parameters.stream().filter(parameter -> !parameter.getParameterName().startsWith("_")).forEach(this::processParameter);
+                }
 
-            if (!functions.isEmpty()) {
-                writer.println();
-                writer.println("## Functions");
-                functions.stream().filter(function -> !function.getName().startsWith("_")).forEach(this::processFunction);
+                if (constants.stream().flatMap(d -> d.getVariables().stream()).anyMatch(specification -> !specification.getName().startsWith("_"))) {
+                    writer.println();
+                    writer.println("## Constants");
+                    constants.forEach(
+                            declaration -> declaration.getVariables().stream()
+                                    .filter(specification -> !specification.getName().startsWith("_"))
+                                    .forEach(specification -> processConstant(declaration, specification))
+                    );
+                }
+
+                if (!functions.isEmpty()) {
+                    writer.println();
+                    writer.println("## Functions");
+                    functions.stream().filter(function -> !function.getName().startsWith("_")).forEach(this::processFunction);
+                }
             }
         }
 

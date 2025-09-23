@@ -1,4 +1,4 @@
-# Dynamic optimizations
+# Static and dynamic optimizations
 
 Most of the optimizations Mindcode performs are fairly simple: they're relatively small changes to the code that are known to improve the code size, the (average) execution time, or both, while also not making either of these two metrics worse. We call these optimizations _static optimizations_. A few of the optimizers are capable of performing more complex optimizations that may increase the code size to achieve a better performance or sacrifice some performance to decrease code size. These optimizations are called _dynamic optimizations_.
 
@@ -8,7 +8,7 @@ Mindcode provides the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal) to sp
 * `neutral`: Mindcode applies dynamic optimizations making the code either smaller or faster (or both) than the original code.
 * `size`: Mindcode applies dynamic optimizations leading to the smallest code possible, even at the expense of execution speed.
 
-The `goal` option's scope is local, and it is possible to set the desired goal for individual functions, statements, or blocks of code. See [Option scopes](SYNTAX-5-OTHER.markdown#option-scope).
+The `goal` option's scope is local, and it is possible to set the desired goal for individual functions, statements, or blocks of code (see [Option scopes](SYNTAX-5-OTHER.markdown#option-scope)). As a consequence, dynamic optimizations matching two or even all three goals may be available. The optimizer performs all possible `size` optimizations first, then all possible `neutral` optimizations, and finally all possible `speed` optimizations.
 
 ## Optimization efficiency
 
@@ -18,7 +18,7 @@ To decide which dynamic optimizations to apply given the optimization goal, thre
 * **Benefit**: a measure of execution improvement achieved by the optimization. The **Benefit** is negative when the optimization results in a slower code execution.
 * **Efficiency**: this measure gives the overall value of the optimization, which allows it to be compared with other optimizations. The **Efficiency** computation depends on the optimization goal:
   * `speed`: the **Efficiency** of the optimization is computed by dividing the **Benefit** by the **Size**, providing a measure of execution speed improvement per additional instruction of code. When the **Size** is zero or negative, the **Efficiency** is infinite.
-  * `neutral`: the **Efficiency** of the optimization is computed as a negative product of the **Size** and the **Benefit**.
+  * `neutral`: the **Efficiency** of the optimization is computed as a negative product of the **Size** and the **Benefit**. As **Size** is guaranteed to be non-positive, and **Benefit** is guaranteed to be non-negative, the **Efficiency** is always positive.
   * `size`: in this case, the optimizer always chooses the smallest code, so the **Efficiency** equals to the negative **Size** (i.e., code size savings) of the optimization.  
 
 ## Optimization benefit
@@ -45,17 +45,15 @@ When the optimization goal is `speed`, there is a constraint on the total code s
 
 Some optimizers (e.g., [Case Switching](#case-switching)) can produce several different ways to optimize the same portion of code, of which one needs to be selected. For the `speed` optimization goal, the entire group of mutually exclusive optimizations is evaluated against other possible optimizations, choosing the most effective optimization while respecting the total code size constraint. 
 
-Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further dynamic optimizations. Mindcode is unable to include the effects of these static optimizations when computing dynamic optimization effects, but uses the additional instruction space when applying remaining optimizations.     
+Oftentimes, after an optimization is applied, opportunities for further optimizations crop up. The additional static optimizations might even reduce the code size again, providing space for further speed optimizations. Mindcode is unable to include the effects of these static optimizations when computing dynamic optimization effects, but uses the additional instruction space when applying any remaining optimizations.     
 
-Mindcode writes the possible optimizations it considers to the log file. For better understanding, this includes optimizations exceeding the total code size constraint by a small margin. It is possible to let Mindcode perform additional optimizations by changing the value of the total code size constraint, using the  [`instruction-limit` option](SYNTAX-5-OTHER.markdown#option-instruction-limit). Sometimes, increasing the instruction limit a bit can produce a code which still fits into the total code size constraint. Here's a [demonstration](https://github.com/cardillan/mindcode/discussions/106) of this approach being applied to a real-life code example.  
+Mindcode writes the possible optimizations it considers to the log file. For better understanding, this includes optimizations exceeding the total code size constraint by a small margin. It is possible to let Mindcode perform additional optimizations by changing the value of the total code size constraint, using the  [`instruction-limit` option](SYNTAX-5-OTHER.markdown#option-instruction-limit). Sometimes, increasing the instruction limit a bit can produce a code which still fits into the total code size constraint, due to the optimizer being too pessimistic about the code size required to perform an optimization. Here's a [demonstration](https://github.com/cardillan/mindcode/discussions/106) of this approach being applied to a real-life code example.  
 
 ## Optimization for size and neutral optimization
 
 These two optimization goals do not increase code size and therefore aren't subject to the total code size constraint. In these cases, all possible optimizations are eventually applied. If there's a group of mutually exclusive optimizations, the best one according to the optimization goal is always selected. 
 
-# Individual Mindcode optimization
-
-Code optimization runs on compiled (mlog) code. The compiled code is inspected for sequences of instructions which can be removed or replaced by a functionally equivalent, but shorter and/or faster sequence of instructions. The new sequence might even be longer than the original one if it is executing faster (see the [`goal` option](SYNTAX-5-OTHER.markdown#option-goal)).
+# Individual Mindcode optimizations
 
 The information on compiler optimizations is a bit technical. It might be useful if you're trying to better understand how Mindcode generates the mlog code.
 
@@ -63,11 +61,11 @@ The information on compiler optimizations is a bit technical. It might be useful
 
 The array optimization improves the performance of array operations in several ways. At this moment, all optimizations are only available on the `experimental` level.
 
-Loop unrolling may replace random access to array elements with sequential code accessing individual elements directly, in which case no array optimization happens.
+[Loop unrolling](#loop-unrolling) may replace random access to array elements with sequential code accessing individual elements directly, in which case no array optimization happens.
 
 ### Array access inlining
 
-Array access inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+Array access inlining is a [dynamic optimization](#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
 To facilitate random array access, shared jump tables for read and write access are generated for each array. These jump tables are shared by all read/write random access of an individual array. This requires using a dedicated _array access variable_ for each access, and setting up return addresses for resuming the control flow after the array element has been processed.
 
@@ -127,7 +125,7 @@ select b x equal 2 a[2] b
 
 **The if/else optimization**
 
-For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
+When the `select` optimization is not available, access to elements of arrays of length 2 is replaced with if/else statements:
 
 * `a[x] = b;` gets converted to `if x == 0 then a[0] = b; else a[1] = b; end;`.
 * `b = a[x]` gets converted to  `if x == 0 then b = a[0]; else b = a[1]; end;`.
@@ -151,7 +149,7 @@ The optimization is performed only when the following conditions are met:
 
 ## Case Switching
 
-Case Switching is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Case Switching optimization is, at this moment, unique in its ability to generate optimizations applicable to all three optimization goals.
+Case Switching is a [dynamic optimization](#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
 Case expressions are normally compiled to a sequence of conditional jumps: for each `when` branch the entry condition(s) of that clause is evaluated; when it is `false`, the control is transferred to the next `when` branch, and eventually to the `else` branch or end of the expression. This means the case expression evaluates—on average—half of all existing conditions, assuming even distribution of the case expression input values. (If some input values of the case expressions are more frequent, it is possible to achieve better average execution times by placing those values first.)
 
@@ -200,6 +198,16 @@ The following conditions must be met for a case expression to be processed by th
 * All values used in `when` clauses must be integers, or must be convertible to integers (see [Mindustry content conversion](#mindustry-content-conversion)). Specifically, no `null` values may be used.
 * Values used in `when` clauses must be unique; when ranges are used, they must not overlap with other ranges or standalone values.
 
+#### Text-based jump tables
+
+In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings, instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
+
+* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher.
+* The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive.
+* The [text-jump-tables](SYNTAX-5-OTHER.markdown#option-text-jump-tables) option must be active.
+
+When all these conditions are met, the case expression is always converted to a text-based jump table. This is the most efficient implementation of the case expression possible, both in terms of execution speed and code size.
+
 ### Range check elimination
 
 When all possible input values in case expression are handled by one of the `when` branches, it is not necessary to use the two jumps in front of the jump table to handle out-of-range values. Mindcode is currently incapable of determining this is the case and keeps these jumps in place by default. By setting the `unsafe-case-optimization` compiler directive to `true`, you inform Mindcode that all input values are handled by case expressions. This prevents the out-of-range handling instructions from being generated, making the optimized case expression faster by two instructions per execution, and leads to the optimization being considered for case expressions with four branches or more.
@@ -235,25 +243,15 @@ When Mindustry content conversion occurs, `null` values in `when` clauses are su
 
 Mindcode arranges the code to only perform checks distinguishing between `null` and the zero value where both of these values can occur. When a code path is known not to possibly handle both `null` and `0`, these checks are eliminated. As a result, an optimized `case` expressions checking for `null` in `when` branches is typically more efficient than handling the `null` values in the `else` branch, or checking for them prior to the case expression itself.
 
-### Text-based jump tables
-
-In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings, instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
-
-* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher,
-* The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive,
-* The [text-jump-tables](SYNTAX-5-OTHER.markdown#option-text-jump-tables) option must be active.
-
-When all these conditions are met, the case expression is always
-
 ### Jump table compression
 
-Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations described here into account as well. To locate the segment handling a particular input value, a bisection search is used.
+When a text-based jump table cannot be used, a regular jump table is considered instead. Building a single jump table for the entire case expression often produces the fastest code, but the jump table might become huge. The optimizer therefore tries to break the table into smaller segments, handling these segments specifically. Some segments might contain a single value, or a single value with a few exceptions, and can be handled by only a few jump instructions. More diverse segments may be encoded as separate, smaller jump tables. The optimizer considers a number of such arrangements and selects those that give the best performance for a given code size, taking other possible optimizations described here into account as well. To locate the segment handling a particular input value, a bisection search is used.
 
 The total number of possible segment arrangements can be quite large. The more arrangements are considered, the better code may be generated. However, generating and evaluating these arrangements can take a long time. The [`case-optimization-strength` compiler directive](SYNTAX-5-OTHER.markdown#option-case-optimization-strength) can be used to control the number of considered arrangements. Setting this option to `0` disables jump table compression entirely.
 
 Typically, compressing the jump table produces smaller, but slightly slower code. For more complex `case` expressions, it is possible that the optimized code will be both smaller and significantly faster than the unoptimized `case` expression.
 
-Jump table compression is particularly useful when using block types in case expressions, as, given the large dispersion of block type IDs, full jump tables tend to get quite large.
+Jump table compression is, for example, particularly useful when using block types in case expressions: given the large dispersion of block type IDs, full jump tables tend to get quite large.
 
 Notes:
 
@@ -649,7 +647,7 @@ This optimization looks for certain expressions that can be performed more effic
 | and, land      |              |      var      |       0        |   0    |  Basic   | Commutative |
 | land           | `and`        |      var      |    nonzero     |  var   | Advanced | Commutative |
 
-In the case of commutative operations, the result is the same if the first and second operands are swapped. `var` represents a variable with an arbitrary, unknown value.
+`var` represents a variable with an arbitrary, unknown value. In the case of commutative operations, the optimization is applied also when the first and second operands, as given in the table, are swapped. 
 
 Some mlog operations are produced by different Mindcode operators. When the optimizations are only applied to operations corresponding to specific Mindcode operators, these operators are listed in the **Operator** column.
 
@@ -693,7 +691,7 @@ printflush message1
 
 ## Function Inlining
 
-Function Inlining is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+Function Inlining is a [dynamic optimization](#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
 ### The fundamentals of function inlining
 
@@ -1195,7 +1193,7 @@ The loop optimization improves loops with the condition at the beginning by perf
 * If the loop jump condition is invertible, the unconditional jump at the end of the loop to the loop condition is replaced by a conditional jump with an inverted loop condition targeting the first instruction of the loop body. This doesn't affect the number of instructions but executes one less instruction per loop.
   * If the loop condition isn't invertible (that is, the jump condition is `===`), the optimization isn't done, since the saved jump would be spent on inverting the condition, and the code size would increase for no benefit at all.
 * If the previous optimization was done and the loop condition is known to be true before the first iteration of the loop, the optimizer removes the jump at the front of the loop. The Loop Optimizer uses information gathered by Data Flow Optimization to evaluate the initial loop condition.
-* Loop conditions that are complex expressions spanning several instructions can still be replicated at the end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). As a result, the code size might actually increase after performing this kind of optimization. See [Dynamic optimizations](#dynamic-optimizations) for details on performing these optimizations.
+* Loop conditions that are complex expressions spanning several instructions can still be replicated at the end of the loop, if the code generation goal is set to `speed` (the default setting at the moment). As a result, the code size might actually increase after performing this kind of optimization. See [Dynamic optimizations](#static-and-dynamic-optimizations) for details on performing these optimizations.
 
 The result of the first two optimizations in the list can be seen here:
 
@@ -1247,7 +1245,7 @@ print "A switch has been reset."
 
 ## Loop Unrolling
 
-Loop unrolling is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Furthermore, loop unrolling depends on the [Data Flow optimization](#data-flow-optimization) and isn't functional when the Data Flow optimization is not active.
+Loop unrolling is a [dynamic optimization](#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal. Furthermore, loop unrolling depends on the [Data Flow optimization](#data-flow-optimization) and isn't functional when the Data Flow optimization is not active.
 
 ### The fundamentals of loop unrolling
 
@@ -1292,7 +1290,7 @@ write 0 cell1 9
 
 The size of the loop is now 10 instructions instead of 4, but it takes just these 10 instructions to execute, instead of the 31 in the previous case, executing three times as fast!
 
-The price for this speedup is the increased number of instructions themselves. Since there's a hard limit of 1000 instructions in a Mindustry Logic program, loops with a large number of iterations cannot be unrolled. See [Dynamic optimizations](#dynamic-optimizations) for an explanation of how Mindcode decides whether to unroll a loop.
+The price for this speedup is the increased number of instructions themselves. Since there's a hard limit of 1000 instructions in a Mindustry Logic program, loops with a large number of iterations cannot be unrolled. See [Dynamic optimizations](#static-and-dynamic-optimizations) for an explanation of how Mindcode decides whether to unroll a loop.
 
 Apart from removing the superfluous instructions, loop unrolling also replaces variables with constant values. This can make further optimization opportunities arise, especially for a Data Flow Optimizer and possibly for others. A not particularly practical, but nonetheless striking example is this program that computes the sum of numbers from 0 to 100:
 
@@ -1615,7 +1613,7 @@ If the print merging optimization is not active, instructions from `remark()` fu
 
 ## Return Optimization
 
-Return Optimization is a [dynamic optimization](#dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+Return Optimization is a [dynamic optimization](#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
 
 The Return Optimization is simple: whenever there's an unconditional jump to the final sequence of instructions representing a return from the call (which is always three instructions long), the jump is replaced by the entire return sequence. The jump execution is avoided at the price of two additional instructions.
 
@@ -1665,10 +1663,10 @@ An additional optimization is performed when an instruction has a temporary outp
 This optimizer removes instructions that are unreachable. There are several ways unreachable instructions might appear:
 
 1. Jump Threading can create unreachable jumps that are no longer targeted.
-2. User-created unreachable regions, such as `while false ... end`, or code following a `while true` loop.
+2. User-created unreachable regions, such as `while false ... end`, or a code following a `while true` loop.
 3. User-defined functions which are called from an unreachable region.
 
-Instruction removal is done by analyzing the control flow of the program and removing instructions that are never executed. When [Jump Normalization](#jump-normalization) is not active, some section of unreachable code may not be recognized.
+Instruction removal is done by analyzing the control flow of the program and removing instructions that are never executed. Since the analysis is static, it may miss sections of code unreachable due to the dynamic behavior of the program.  
 
 ---
 

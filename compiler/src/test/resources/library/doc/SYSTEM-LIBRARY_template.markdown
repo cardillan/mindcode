@@ -45,6 +45,8 @@ There are several factors that might cause the size of a function used in an act
 > [!NOTE]
 > The function sizes are measured separately for the `speed` and `size` optimization goals. In some cases, optimizing for speed may produce smaller code than optimizing for size. The reason for this primarily is that optimization for speed may unroll some loops resulting in linear code, which is much better suited for further optimizations.
 
+# Library modules
+
 #generate
  
 # Additional resources
