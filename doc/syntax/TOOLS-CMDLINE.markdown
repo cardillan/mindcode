@@ -99,7 +99,7 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
                 [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
                 [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization [{true,false}]] [--text-jump-tables {true,false}] [-O {0..4}]
+                [--mlog-block-optimization [{true,false}]] [--text-tables {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
@@ -200,7 +200,7 @@ Compiler options:
                          missing
 
 Optimization options:
-  Options guiding the overall  optimization  of  the  compiled  code,  or  activating/deactivating specific optimization
+  Options guiding the  overall  optimization  of  the  compiled  code  or  activating/deactivating specific optimization
   actions.
 
   -g, --goal {size,neutral,speed}
@@ -216,7 +216,7 @@ Optimization options:
                          time
   --mlog-block-optimization [{true,false}]
                          allows (limited) optimization of code inside mlog blocks
-  --text-jump-tables {true,false}
+  --text-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
                          value, and uses a single 'read' instruction to  directly  set the counter to the target address
                          (target 8 or higher required)
@@ -379,7 +379,7 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
                 [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
                 [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization [{true,false}]] [--text-jump-tables {true,false}] [-O {0..4}]
+                [--mlog-block-optimization [{true,false}]] [--text-tables {true,false}] [-O {0..4}]
                 [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
                 [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
                 [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
@@ -469,7 +469,7 @@ Compiler options:
                          missing
 
 Optimization options:
-  Options guiding the overall  optimization  of  the  compiled  code,  or  activating/deactivating specific optimization
+  Options guiding the  overall  optimization  of  the  compiled  code  or  activating/deactivating specific optimization
   actions.
 
   -g, --goal {size,neutral,speed}
@@ -485,7 +485,7 @@ Optimization options:
                          time
   --mlog-block-optimization [{true,false}]
                          allows (limited) optimization of code inside mlog blocks
-  --text-jump-tables {true,false}
+  --text-tables {true,false}
                          when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
                          value, and uses a single 'read' instruction to  directly  set the counter to the target address
                          (target 8 or higher required)

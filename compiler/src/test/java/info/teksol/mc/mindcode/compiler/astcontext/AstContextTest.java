@@ -43,7 +43,7 @@ class AstContextTest {
         function1 = functions.addFunctionDeclaration(functionDeclaration1, MAIN_MODULE, false);
         function2 = functions.addFunctionDeclaration(functionDeclaration2, MAIN_MODULE, false);
 
-        AstMindcodeNode node = new TestNode(profile, AstContextType.FUNCTION, AstSubcontextType.BODY);
+        AstMindcodeNode node = new TestNode(profile, AstContextType.FUNCTION_DEF, AstSubcontextType.BODY);
         context = root.createFunctionDeclaration(function1, node, node.getContextType(),1.0);
     }
 
@@ -73,13 +73,13 @@ class AstContextTest {
 
     @Test
     void createFunctionDeclaration() {
-        AstMindcodeNode node = new TestNode(profile, AstContextType.FUNCTION, AstSubcontextType.BODY);
+        AstMindcodeNode node = new TestNode(profile, AstContextType.FUNCTION_DEF, AstSubcontextType.BODY);
         AstContext child = context.createFunctionDeclaration(function2, node, node.getContextType(),2.0);
 
         assertEquals(function2, child.function());
         assertEquals(context.level() + 1, child.level());
         assertEquals(node, child.node());
-        assertEquals(AstContextType.FUNCTION, child.contextType());
+        assertEquals(AstContextType.FUNCTION_DEF, child.contextType());
         assertEquals(AstSubcontextType.BODY, child.subcontextType());
         assertEquals(2.0, child.weight());
     }

@@ -47,7 +47,7 @@ public final class AstContext {
         this.children = children;
     }
 
-    public AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, int level, @Nullable AstMindcodeNode node,
+    private AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, int level, @Nullable AstMindcodeNode node,
             AstContextType contextType, AstSubcontextType subcontextType, @Nullable AstContext parent, double weight) {
         this(profile, function, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
     }
@@ -63,7 +63,7 @@ public final class AstContext {
 
     public AstContext createChild(AstMindcodeNode node, AstContextType contextType) {
         AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, node.getSubcontextType(),
-                this, 1.0);
+                this, node.getProfile().getCodeWeight());
         children.add(child);
 
         return child;
@@ -71,7 +71,7 @@ public final class AstContext {
 
     public AstContext createChild(AstMindcodeNode node, AstContextType contextType, AstSubcontextType subcontextType) {
         AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, subcontextType,
-                this, 1.0);
+                this, node.getProfile().getCodeWeight());
         children.add(child);
 
         return child;

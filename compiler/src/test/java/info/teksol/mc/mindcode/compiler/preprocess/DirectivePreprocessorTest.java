@@ -250,7 +250,7 @@ class DirectivePreprocessorTest {
     void processesDirectiveTextJumpTables() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
         profile.setTextJumpTables(false);
-        processDirective(profile, "text-jump-tables", "false");
+        processDirective(profile, "text-tables", "false");
         assertFalse(profile.isTextJumpTables());
     }
 

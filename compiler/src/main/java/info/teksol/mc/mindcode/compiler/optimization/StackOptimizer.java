@@ -71,7 +71,7 @@ class StackOptimizer extends BaseOptimizer {
             while (it.hasNext()) {
                 if (it.next() instanceof CallRecInstruction call) {
                     // Obtain entire function
-                    AstContext functionContext = call.findContextOfType(AstContextType.FUNCTION);
+                    AstContext functionContext = call.findContextOfType(AstContextType.FUNCTION_DEF);
                     if (functionContext == null) {
                         continue;   // If there's no function context, we're in main body. Skip call.
                     }

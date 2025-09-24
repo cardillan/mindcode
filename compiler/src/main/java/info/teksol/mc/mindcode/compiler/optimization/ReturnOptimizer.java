@@ -42,7 +42,7 @@ class ReturnOptimizer extends BaseOptimizer {
     @Override
     public List<OptimizationAction> getPossibleOptimizations(int costLimit) {
         invocations++;
-        return forEachContext(AstContextType.FUNCTION, BODY, this::findReturnStatementOptimizations)
+        return forEachContext(AstContextType.FUNCTION_DEF, BODY, this::findReturnStatementOptimizations)
                 .stream()
                 .flatMap(List::stream)
                 .toList();

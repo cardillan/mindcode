@@ -8,11 +8,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for local compiler options.
+* Added support for [local compiler options](doc/syntax/SYNTAX-5-OTHER.markdown#local-scope).
+* Added the [`weight` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-weight).
 
 ### Changed
 
 * **Breaking**: modules must now be compiled using the `strict` syntax mode. The `strict` mode is the default for any source file containing a `module` declaration, regardless of whether the module contains remote functionality or not. Modules that were using a `relaxed` or `mixed` syntax (either implicitly, or explicitly) need to be updated to strict syntax mode.
+* **Breaking**: the `text-jump-tables` compiler option has been renamed to `text-tables`.
 
 ## 3.8.0-beta.5 - 2025-09-07
 
@@ -43,6 +45,9 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Separated the mimex data into a [standalone repository](https://github.com/cardillan/mimex-data), which is now included as a git submodule at `compiler/src/main/resources/mimex`.
 * Updated the BE version metadata to the latest available BE build.
+* Reorganized the [Compiler options documentation](doc/syntax/SYNTAX-5-OTHER.markdown).
+* Split the [System library documentation](doc/syntax/SYSTEM-LIBRARY.markdown) into separate files.
+* Updated the code size calculations for the System library documentation. The array jump tables are no longer included in the calculations.
 
 ## 3.8.0-beta.4 - 2025-07-28
 
@@ -98,7 +103,7 @@ The newly added features are fully functional. There's an unfinished support for
 ### Added
 
 * Added target `8.1` matching the latest supported BE version. Target `8.0` now corresponds to Mindustry Logic v8 Build 149 Beta.
-* Added a [`null-couner-is-noop` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-null-couner-is-noop). When active, Mindcode assumes assigning a `null` to `@counter` is ignored by the processor and may produce code depending on this behavior.
+* Added a [`null-counter-is-noop` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-null-counter-is-noop). When active, Mindcode assumes assigning a `null` to `@counter` is ignored by the processor and may produce code depending on this behavior.
 * Added support for new instruction opcodes (`setmarker textAlign` and `setmarker lineAlign`).
 * Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions.
 * Added preliminary support for generating [text-based jump tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
@@ -162,7 +167,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added support for the new `setmarker outline` instruction.
 * Added the new `@operations` property.
 * Added the [`target-guard` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-target-guard). When set, generates a guard code which verifies the code is run by a Mindustry version compatible with both the `target` and `builtin-evaluation` options.
-* Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#compatibility-library). The library provides a function that verifies Mindcode's compatibility with the Mindustry version in which it is run.   
+* Added a new [`compatibility` system library](/doc/syntax/SYSTEM-LIBRARY-COMPATIBILITY.markdown). The library provides a function that verifies Mindcode's compatibility with the Mindustry version in which it is run.   
 ### Changed
 
 * **Breaking:** the `target-optimization` compiler option has been replaced with the [`builtin-evaluation` option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-builtin-evaluation). Instead of `#set target-optimization = specific;` use `#set builtin-evaluation = full;`.
@@ -199,7 +204,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Added support for the [`>>>` (unsigned right shift) operator](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#shift-operators) to the compiler for targets preceding `8`. In these earlier targets, the operation is emulated by a sequence of up to seven instructions.   
 * Several [compiler-defined constants](/doc/syntax/SYNTAX-1-VARIABLES.markdown#compiler-defined-constants) were added.
-* The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#printing-library). The functions print all digits (64 or 16, respectively) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.
+* The `printExactBinary` and `printExactHex` functions were added to the [`printing` system library](/doc/syntax/SYSTEM-LIBRARY-PRINTING.markdown). The functions print all digits (64 or 16, respectively) of the input number, without a prefix. Negative numbers are printed without a minus sign, but with the sign bit set.
 * Added missing support for new Mindustry 8 blocks to Schemacode (e.g., `@landing-pad` including support for configuration, and `@tile-logic-display`).
 
 ### Changed
@@ -223,8 +228,8 @@ The newly added features are fully functional. There's an unfinished support for
 * Added the [`>>>` (unsigned right shift) operator](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#shift-operators) to the compiler and processor emulator. Only available for target `8` or higher.
 * Added the ability to declare new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
 * Added support for [constant arrays](/doc/syntax/SYNTAX-1-VARIABLES.markdown#internal-arrays-1). Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.
-* Added the [`scaleDisplay` function](/doc/syntax/SYSTEM-LIBRARY.markdown#scaledisplay) to the `graphics` system library. The function compensates for rounding errors in Mindustry Logic `draw scale` instruction. 
-* Added the [`noControlWithin` function](/doc/syntax/SYSTEM-LIBRARY.markdown#nocontrolwithin) to the `units` system library. The function determines whether the current unit lies within a given radius without taking control of the unit.
+* Added the [`scaleDisplay` function](/doc/syntax/SYSTEM-LIBRARY-GRAPHICS.markdown#scaledisplay) to the `graphics` system library. The function compensates for rounding errors in Mindustry Logic `draw scale` instruction. 
+* Added the [`noControlWithin` function](/doc/syntax/SYSTEM-LIBRARY-UNITS.markdown#nocontrolwithin) to the `units` system library. The function determines whether the current unit lies within a given radius without taking control of the unit.
 
 ### Changed
 
@@ -297,7 +302,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Added
 
-* Added new functions to the [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):
+* Added new functions to the [`graphics` library](doc/syntax/SYSTEM-LIBRARY-GRAPHICS.markdown):
   * Added `setAlpha()` function which takes a packed color as an argument (including e.g., named color literals) and returns a packed color with an updated alpha channel.
   * Added `packHsv()` function which creates a packed color value out of `hue`, `saturation`, `value` and `alpha` components.
 * Expanded the [Case Switching optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#case-switching):
@@ -405,7 +410,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added support for passing arguments to inline functions [by reference](/doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-parameters). It is possible to pass variables and arrays this way.
 * Added new `target-optimization` compiler directive/command line option. The `specific` option generates code for the specific compilation target only, the `compatible` option generates code intended for the compilation target and future versions of Mindustry Logic.    
 * Added [array-specific optimizations for speed](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) (available on `experimental` level).
-* Added new [`arrays` system library](/doc/syntax/SYSTEM-LIBRARY.markdown#arrays-library) with some basic array functions. The size calculations for the library functions are possibly incorrect, as new means for determining code size of functions taking an array as a ref argument needs to be developed.    
+* Added new [`arrays` system library](/doc/syntax/SYSTEM-LIBRARY-ARRAYS.markdown) with some basic array functions. The size calculations for the library functions are possibly incorrect, as new means for determining code size of functions taking an array as a ref argument needs to be developed.    
 * Added support for generating symbolic labels instead of instruction addresses in jump instructions, through the [`symbolic-labels` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
 * Added support for applying indenting to the generated mlog code based through the [`mlog-indent` compiler directive/command line option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-mlog-indent).
 
@@ -560,13 +565,13 @@ The newly added features are fully functional. There's an unfinished support for
 * Added support for using external variables and properties wherever "normal" variables can be used (e.g., as output arguments to function calls).
 * Added an ability to report errors and warnings in unused functions.
 * Added several new library functions
-  * [`graphics` library](doc/syntax/SYSTEM-LIBRARY.markdown#graphics-library):
+  * [`graphics` library](doc/syntax/SYSTEM-LIBRARY-GRAPHICS.markdown):
     * Added `drawflush()` function which empties the draw buffer
     * Added `unpackcolor()` function which decomposes a packed color into individual `r`/`g`/`b`/`a` components.
-  * [`printing` library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library):
+  * [`printing` library](doc/syntax/SYSTEM-LIBRARY-PRINTING.markdown):
     * Added `printflush()` function which empties the text buffer
     * Added functions for outputting numbers in binary and hexadecimal base: `formatBinaryNumber()`, `printBinaryNumber()`, `formatHexNumber()`, `printHexNumber()`.
-  * [`math` library](doc/syntax/SYSTEM-LIBRARY.markdown#math-library):
+  * [`math` library](doc/syntax/SYSTEM-LIBRARY-MATH.markdown):
     * Added `boolean()` function which converts a number to a boolean value (`0` if `null` or zero, `1` otherwise) 
     * Added `integer()` function which converts a number to an integer by truncating the fractional part
     * Added `log2()` function returning a base 2 logarithm of a number
@@ -679,9 +684,9 @@ The newly added features are fully functional. There's an unfinished support for
 #### Experimental features
 
 * Added a new `require` keyword for adding a system library or another external file (for command-line compilers) to the compiled code.
-* Added information about the compiled code size of individual functions to the [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#compiled-function-sizes).
-* Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY.markdown#printing-library) (`printExactFast` and `printExactSlow`).
-* Added new functions to the [`math` system library](doc/syntax/SYSTEM-LIBRARY.markdown#math-library) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `nullToZero`, `sum`, `avg`, `median`).
+* Added information about the compiled code size of individual functions to the [system library documentation](doc/syntax/SYSTEM-LIBRARY.markdown#size-of-library-functions).
+* Added new functions to the [`printing` system library](doc/syntax/SYSTEM-LIBRARY-PRINTING.markdown) (`printExactFast` and `printExactSlow`).
+* Added new functions to the [`math` system library](doc/syntax/SYSTEM-LIBRARY-MATH.markdown) (`round`, `frac`, `sign`, `isZero`, `isEqual`, `nullToZero`, `sum`, `avg`, `median`).
 * Added configurable [execution flags](doc/syntax/TOOLS-PROCESSOR-EMULATOR.markdown#execution-flags) governing the behavior of the processor emulator.
 
 ### Changed
@@ -719,7 +724,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added [vararg (variable arity) functions](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#vararg-functions).
 * Added [function overloading](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#function-overloading).
 * Added the possibility to specify custom instructions not known to Mindcode through the [`mlog()` function](doc/syntax/SYNTAX-EXTENSIONS.markdown#defining-new-mlog-instructions).
-* Added the [`findLinkedBlocks` function](doc/syntax/SYSTEM-LIBRARY.markdown#findlinkedblocks) to the system library.
+* Added the [`findLinkedBlocks` function](doc/syntax/SYSTEM-LIBRARY-BLOCKS.markdown#findlinkedblocks) to the system library.
 
 ### Changed
 
@@ -788,7 +793,7 @@ The newly added features are fully functional. There's an unfinished support for
 * **Breaking:** Changed the implementation of the `printf()` function under language target `ML8A`. Instead of compile-time formatting of passed parameters, the function uses `print` and `format` instructions for [run-time formatting](doc/syntax/SYNTAX-4-FUNCTIONS.markdown#run-time-formatting).
 * Changed the definition of the `&&` and `||` operators: they are guaranteed to [always evaluate to either `0` or `1`](doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#operators).
 * Changed the `min()` and `max()` functions to accept more than just two arguments.
-* Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temporary-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
+* Changed the [Temporary Variables Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#temp-variables-elimination) to replace unused output variables in instructions with `0`, to ensure no unnecessary variable will be created by the instruction, reducing clutter. Closes [#154](https://github.com/cardillan/mindcode/issues/154).
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#if-expression-optimization) to support value propagation for all instructions having one output parameter (based on instruction metadata), instead of just a subset of specifically handled instructions.
 * Changed—yet again—the way the [Single Step Elimination optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#single-step-elimination) removes the last instruction, which is a jump to the beginning of the program, so that it doesn't leave behind any jump that might have targeted the removed instruction. Such a jump was harmless, but unnecessary and looked strange in the mlog.
 * Changed the text buffer handling in the processor emulator to recognize identical outputs produced by consecutive `printflush` operations and avoid creating duplicate outputs.
@@ -1435,7 +1440,7 @@ Note: the bug fixed in this release only affects the command line tool. The web 
 ### Changed
 
 * **Breaking:** changed names of
-  [individual optimization options](doc/syntax/SYNTAX-5-OTHER.markdown#individual-optimization-options) from
+  [individual optimization options](doc/syntax/SYNTAX-5-OTHER.markdown#option-reference) from
   `camelCase` to `kebab-case`. The same option names are now used with the new command line tool as in the `#set` 
   directive.
 

@@ -1493,7 +1493,7 @@ class OptimizationContext {
     }
 
     protected List<AstContext> getOutOfLineFunctions() {
-        return contexts(c -> c.contextType() == AstContextType.FUNCTION);
+        return contexts(c -> c.contextType() == AstContextType.FUNCTION_DEF);
     }
     //</editor-fold>
 

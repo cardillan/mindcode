@@ -85,7 +85,7 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 new Target(ProcessorVersion.V7A, ProcessorEdition.S)));
 
-        list.add(new IntegerCompilerOptionValue(OptimizationOptions.INSTRUCTION_LIMIT, "i",
+        list.add(new IntegerCompilerOptionValue(EnvironmentOptions.INSTRUCTION_LIMIT, "i",
                 "sets the maximal number of instructions for the speed optimizations",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
@@ -186,6 +186,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 GenerationGoal.SPEED));
 
+        list.add(new DoubleCompilerOptionValue(OptimizationOptions.WEIGHT, "",
+                "alters the code weight by a given factor",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
+                OptionAvailability.DIRECTIVE, category,
+                1e-10, 1e10, 1.0));
+
         list.add(new IntegerCompilerOptionValue(OptimizationOptions.PASSES, "e",
                 "sets the number of optimization passes to perform",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
@@ -213,7 +219,7 @@ public class CompilerOptionFactory {
                 OptionAvailability.UNIVERSAL, category,
                 false).setConstValue(true));
 
-        list.add(new BooleanCompilerOptionValue(EnvironmentOptions.TEXT_JUMP_TABLES, "",
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.TEXT_TABLES, "",
                 "when active, generates jump tables by encoding instruction addresses into a single String value, and uses " +
                 "a single 'read' instruction to directly set the counter to the target address (target 8 or higher required)",
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,

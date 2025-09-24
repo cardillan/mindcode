@@ -130,7 +130,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
 
     @Override
     public AstContextType getContextType() {
-        return AstContextType.FUNCTION;
+        return AstContextType.FUNCTION_DEF;
     }
 
     @Override

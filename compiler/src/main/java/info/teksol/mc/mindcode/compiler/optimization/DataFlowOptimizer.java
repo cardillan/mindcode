@@ -1032,7 +1032,7 @@ class DataFlowOptimizer extends BaseOptimizer {
                 // Output values in remote functions aren't protected either, since output values get copied to the
                 // main processor within the function and aren't accessed elsewhere.
                 // If they aren't read at all in the entire program, they'll be removed by DeadCodeEliminator.
-                AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION);
+                AstContext functionCtx = instruction.getAstContext().findTopContextOfType(AstContextType.FUNCTION_DEF);
                 yield !variable.isOutput()
                       || functionCtx == null || functionCtx.function() == null                  // Not inside a function
                       || !variable.getFunctionPrefix().equals(functionCtx.functionPrefix())     // Different function

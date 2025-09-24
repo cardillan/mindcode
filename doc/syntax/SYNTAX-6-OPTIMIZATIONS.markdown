@@ -204,7 +204,7 @@ In Mindustry 8, it is possible to [read character values from a string](MINDUSTR
 
 * The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher.
 * The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive.
-* The [text-jump-tables](SYNTAX-5-OTHER.markdown#option-text-jump-tables) option must be active.
+* The [text-tables](SYNTAX-5-OTHER.markdown#option-text-tables) option must be active.
 
 When all these conditions are met, the case expression is always converted to a text-based jump table. This is the most efficient implementation of the case expression possible, both in terms of execution speed and code size.
 

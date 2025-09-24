@@ -87,6 +87,10 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this.<Integer>getOption(option).getValue();
     }
 
+    public double getDoubleValue(Enum<?> option) {
+        return this.<Double>getOption(option).getValue();
+    }
+
     public boolean getBooleanValue(Enum<?> option) {
         return this.<Boolean>getOption(option).getValue();
     }
@@ -203,7 +207,7 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
     }
 
     public CompilerProfile setTextJumpTables(boolean textJumpTables) {
-        getOption(EnvironmentOptions.TEXT_JUMP_TABLES).setValue(textJumpTables);
+        getOption(OptimizationOptions.TEXT_TABLES).setValue(textJumpTables);
         return this;
     }
     //</editor-fold>
@@ -267,13 +271,18 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
+    public CompilerProfile setCodeWeight(double codeWeight) {
+        getOption(OptimizationOptions.WEIGHT).setValue(codeWeight);
+        return this;
+    }
+
     public CompilerProfile setGoal(GenerationGoal goal) {
         getOption(OptimizationOptions.GOAL).setValue(goal);
         return this;
     }
 
     public CompilerProfile setInstructionLimit(int instructionLimit) {
-        getOption(OptimizationOptions.INSTRUCTION_LIMIT).setValue(instructionLimit);
+        getOption(EnvironmentOptions.INSTRUCTION_LIMIT).setValue(instructionLimit);
         return this;
     }
 

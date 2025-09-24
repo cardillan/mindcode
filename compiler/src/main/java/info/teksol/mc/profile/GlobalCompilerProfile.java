@@ -86,7 +86,7 @@ public interface GlobalCompilerProfile {
     //<editor-fold desc="Optimizations Options">
 
     default int getInstructionLimit() {
-        return getIntValue(OptimizationOptions.INSTRUCTION_LIMIT);
+        return getIntValue(EnvironmentOptions.INSTRUCTION_LIMIT);
     }
 
     default int getOptimizationPasses() {

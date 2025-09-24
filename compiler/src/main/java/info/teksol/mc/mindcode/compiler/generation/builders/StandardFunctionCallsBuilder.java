@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.builders;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.functions.BaseFunctionMapper;
@@ -214,10 +215,12 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final LogicLabel returnLabel = assembler.nextLabel();
         returnStack.enterFunction(returnLabel, returnValue);
 
+        assembler.enterAstNode(function.getDeclaration(), AstContextType.FUNCTION_BODY);
         ValueStore result = evaluateBody(function.getBody());
         if (!function.isVoid()) {
             returnValue.setValue(assembler, result.getValue(assembler));
         }
+        assembler.exitAstNode(function.getDeclaration());
 
         // Return statements write directly to returnValue. The return label is placed
         // after the code which sets the return value from the function body.

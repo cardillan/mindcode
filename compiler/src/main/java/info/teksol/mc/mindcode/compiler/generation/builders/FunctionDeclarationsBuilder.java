@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.AbstractBuilder;
@@ -95,6 +96,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
     }
 
     private void compileFunctionBody(MindcodeFunction function) {
+        assembler.enterAstNode(function.getDeclaration(), AstContextType.FUNCTION_BODY);
         if (function.getProfile().isSymbolicLabels()) {
             assembler.createComment("Function: " + function.getDeclaration().toSourceCode());
         }
@@ -107,6 +109,7 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
         }
 
         assembler.createLabel(returnStack.getReturnLabel());
+        assembler.exitAstNode(function.getDeclaration());
     }
 
     private void appendRecursiveFunctionDeclaration(MindcodeFunction function) {

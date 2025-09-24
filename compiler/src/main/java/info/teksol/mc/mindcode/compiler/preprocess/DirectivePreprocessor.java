@@ -119,6 +119,10 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
         }
 
         node.setProfile(profile);
+        if (profile.getCodeWeight() != 1.0) {
+            profile = profile.duplicate(true);
+            profile.setCodeWeight(1.0);
+        }
         node.getChildren().forEach(this::visitNodeLocal);
 
         checkUnusedSetLocals();

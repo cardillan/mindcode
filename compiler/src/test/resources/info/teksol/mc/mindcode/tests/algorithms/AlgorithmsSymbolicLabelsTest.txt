@@ -1,14 +1,14 @@
 Name                                     Instructions    Steps   Coverage   Source CRC         Compiled CRC    
 array-reversion.mnd:                                3        3     100.0%   38B9E303CEA00378   734AF6B0E8E9D264
-base64-decode.mnd:                                 62      384      85.4%   BDD246AE230D839E   4E207FA40DFBD493
-compute-recursive-fibonacci.mnd:                   34     2653      97.0%   BDE1C81A7769E0CB   CA65E59AFD8A95F1
-compute-sum-of-primes.mnd:                        434     1884      99.7%   B6615E97E02F94A9   3D4B25341C15DB23
-digit-counts.mnd:                                  74     2376     100.0%   4395C6D90051BC6D   80042370854AC3E2
+base64-decode.mnd:                                 62      384      85.4%   BDD246AE230D839E   0729F355D6293B2B
+compute-recursive-fibonacci.mnd:                   34     2653      97.0%   BDE1C81A7769E0CB   CE59781BBA2CFA1B
+compute-sum-of-primes.mnd:                        434     1884      99.7%   B6615E97E02F94A9   511576D80AC2F8CC
+digit-counts.mnd:                                  74     2376     100.0%   4395C6D90051BC6D   C00335A84FE570B7
 memory-read-write.mnd:                              4        4     100.0%   D9539CC21D8111B7   30633B28AE9D9EDA
 pascal-triangle.mnd:                              168     1435      94.6%   954D9E65ED4E6EF0   7F146D2F6C3CE61F
-sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1B1A6B8B97AF2   C1DB1E4DA0936803
-sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   0EBD9C10E4ECD0AB
+sorting with bubble-sort.mnd:                      26    15476     100.0%   09F1B1A6B8B97AF2   CC53ADFF56E58023
+sorting with heap-sort.mnd:                        53    64558     100.0%   0CEFC91051987EFB   20DDED62714A7FDC
 sorting with insert-sort.mnd:                      26    26063     100.0%   0AF6F57A5EBA45E2   D2DC0B4678879BD4
-sorting with quick-sort.mnd:                       68    49132      98.5%   24EED06D28A2DCC0   EC43BC1802F4F999
+sorting with quick-sort.mnd:                       68    49132      98.5%   24EED06D28A2DCC0   E03325F7761AE2DA
 sorting with select-sort.mnd:                      29    35152     100.0%   3F4EE1C8DB9B8B18   FCE9BA67CA6C2AD6
-storage-display.mnd:                              698     1057      28.2%   FD4E7E3F60CEF5E4   DA1303C4F0DBABB1
+storage-display.mnd:                              698     1057      28.2%   FD4E7E3F60CEF5E4   023AA29DDEA301C4

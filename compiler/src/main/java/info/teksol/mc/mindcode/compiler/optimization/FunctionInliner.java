@@ -55,7 +55,7 @@ class FunctionInliner extends BaseOptimizer {
         invocations++;
         List<OptimizationAction> actions = new ArrayList<>();
         if (this.optimizations < LIMIT) {
-            actions.addAll(forEachContext(AstContextType.FUNCTION, BODY,
+            actions.addAll(forEachContext(AstContextType.FUNCTION_DEF, BODY,
                     context -> findPossibleInlining(context, costLimit)));
             actions.addAll(forEachContext(c -> c.matches(OUT_OF_LINE_CALL),
                     context -> findPossibleCallInlining(context, costLimit)));
@@ -206,7 +206,7 @@ class FunctionInliner extends BaseOptimizer {
                 contextInstructions(
                         existingContext(
                                 c -> c.function() == call.function()
-                                     && c.matches(AstContextType.FUNCTION, BODY)
+                                     && c.matches(AstContextType.FUNCTION_DEF, BODY)
                         )
                 )
         );
@@ -230,7 +230,7 @@ class FunctionInliner extends BaseOptimizer {
         LogicList body = stripReturnInstructions(
                 contextInstructions(
                         existingContext(c -> c.function() == call.function()
-                                        && c.matches(AstContextType.FUNCTION, BODY)
+                                        && c.matches(AstContextType.FUNCTION_DEF, BODY)
                         )
                 )
         );

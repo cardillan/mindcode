@@ -4,13 +4,18 @@ import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
-import info.teksol.mc.profile.options.*;
+import info.teksol.mc.profile.options.CompilerOptionValue;
+import info.teksol.mc.profile.options.CompilerOptions;
+import info.teksol.mc.profile.options.OptimizationOptions;
+import info.teksol.mc.profile.options.Target;
 
 /// Provides access to module/local compiler options.
 public interface LocalCompilerProfile {
     <T> CompilerOptionValue<T> getOption(Enum<?> option);
 
     int getIntValue(Enum<?> option);
+
+    double getDoubleValue(Enum<?> option);
 
     boolean getBooleanValue(Enum<?> option);
 
@@ -20,7 +25,7 @@ public interface LocalCompilerProfile {
 
     //<editor-fold desc="Environment Options">
     default boolean isTextJumpTables() {
-        return getBooleanValue(EnvironmentOptions.TEXT_JUMP_TABLES);
+        return getBooleanValue(OptimizationOptions.TEXT_TABLES);
     }
 
     ProcessorVersion getProcessorVersion();
@@ -47,6 +52,10 @@ public interface LocalCompilerProfile {
     //<editor-fold desc="Optimizations Options">
     default int getCaseOptimizationStrength() {
         return getIntValue(OptimizationOptions.CASE_OPTIMIZATION_STRENGTH);
+    }
+
+    default double getCodeWeight() {
+        return getDoubleValue(OptimizationOptions.WEIGHT);
     }
 
     default GenerationGoal getGoal() {

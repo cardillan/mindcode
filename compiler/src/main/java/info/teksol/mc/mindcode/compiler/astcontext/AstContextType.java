@@ -9,7 +9,8 @@ public enum AstContextType {
     INIT            ("INIT"),
     BODY            ("BODY"),
     MLOG            ("MLOG"),
-    FUNCTION        ("FNDF"),
+    FUNCTION_DEF    ("FNDF"),
+    FUNCTION_BODY   ("FUNC"),
     CALL            ("CALL", true),
     RETURN          ("RETN", true),
 

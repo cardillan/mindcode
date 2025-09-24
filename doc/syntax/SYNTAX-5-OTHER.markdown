@@ -498,17 +498,18 @@ The jump target (`0`) is replaced with proper instruction address when it's not 
 
 ## Optimization options
 
-Options guiding the overall optimization of the compiled code, or activating/deactivating specific
+Options guiding the overall optimization of the compiled code or activating/deactivating specific
 optimization actions.
 
-| Option                                                                           | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------|--------|--------------------|
-| [case-optimization-strength](#option-case-optimization-strength)                 | local  | stable             |
-| [goal](#option-goal)                                                             | local  | stable             |
-| [mlog-block-optimization](#option-mlog-block-optimization)                       | local  | stable             |
-| [passes](#option-passes)                                                         | global | stable             |
-| [text-jump-tables](#option-text-jump-tables)                                     | local  | stable             |
-| [unsafe-case-optimization](#option-unsafe-case-optimization)                     | local  | unstable           |
+| Option                                                           | Scope  | Semantic stability |
+|------------------------------------------------------------------|--------|--------------------|
+| [case-optimization-strength](#option-case-optimization-strength) | local  | stable             |
+| [goal](#option-goal)                                             | local  | stable             |
+| [mlog-block-optimization](#option-mlog-block-optimization)       | local  | stable             |
+| [passes](#option-passes)                                         | global | stable             |
+| [text-tables](#option-text-tables)                               | local  | stable             |
+| [unsafe-case-optimization](#option-unsafe-case-optimization)     | local  | unstable           |
+| [weight](#option-weight)                                         | local  | stable             |
 
 ### Option `case-optimization-strength`
 
@@ -533,7 +534,7 @@ Use the `goal` option to specify whether Mindcode should prefer to generate smal
 * `neutral`: When an optimization making the code either smaller or faster than the original code can be found, it is applied. Otherwise, the original code is used. The optimized code should never be larger or slower than the original code.
 * `size`: Mindcode tries to generate the smallest code possible, even at the expense of execution speed.
 
-See [Dynamic optimizations](SYNTAX-6-OPTIMIZATIONS.markdown#dynamic-optimizations) for a detailed explanation of the optimization goals.
+See [Dynamic optimizations](SYNTAX-6-OPTIMIZATIONS.markdown#static-and-dynamic-optimizations) for a detailed explanation of the optimization goals.
 
 ### Option `mlog-block-optimization`
 
@@ -558,7 +559,7 @@ The default value is 5 for the web application and 25 for the command line tool.
 
 A more complex code can usually benefit from more optimization passes. On the other hand, each optimization pass can take some time to complete. Limiting the total number can prevent optimization from taking too much time or consuming too many resources.
 
-### Option `text-jump-tables`
+### Option `text-tables`
 
 **Option scope: [local](#local-scope)**
 
@@ -577,6 +578,14 @@ This option instructs the compiler to drop range checking when performing case e
 
 > [!NOTE]
 > The `unsafe-case-optimization` is _semantically unstable_: when applied to an unsuitable case expression, the compiler may generate incorrect code. It is recommended to always use the option locally, by using `#setlocal` immediately before the case expression on which it is meant to be applied. 
+
+### Option `weight`
+
+**Option scope: [local](#local-scope)**
+
+This option adjusts the weight of the next statement's code by multiplying it with the specified value. Values greater than `1` increase the weight of the next statement's code, while values less than `1` decrease it. Code with a greater weight is preferred when applying [optimizations for speed](SYNTAX-6-OPTIMIZATIONS.markdown#optimization-benefit).
+
+While it is possible to set the code weight globally using the `#set` directive, it doesn't make any sense to do so, as the same factor is applied to all generated code. The speed optimization considers code weight ratios, not absolute values, when selecting portions of code to optimize.
 
 ## Optimization levels
 

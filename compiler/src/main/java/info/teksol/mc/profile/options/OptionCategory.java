@@ -24,7 +24,7 @@ public enum OptionCategory {
             """),
 
     OPTIMIZATIONS("Optimization options", """
-            Options guiding the overall optimization of the compiled code, or activating/deactivating specific
+            Options guiding the overall optimization of the compiled code or activating/deactivating specific
             optimization actions.
             """),
 
