@@ -24,9 +24,16 @@ Function reference for individual [Mindcode targets](SYNTAX-5-OTHER.markdown#opt
 * [Function reference for Mindustry Logic 8.0](FUNCTIONS-80.markdown)
 * [Function reference for Mindustry Logic 8.1](FUNCTIONS-81.markdown)
 
-Mindcode comes with a built-in library of useful functions:
+Mindcode comes with several libraries containing useful functions:
 
-* [System Library](SYSTEM-LIBRARY.markdown)
+* [System Library](SYSTEM-LIBRARY.markdown), consisting of several separate modules:
+  * [Arrays](SYSTEM-LIBRARY-ARRAYS.markdown)
+  * [Blocks](SYSTEM-LIBRARY-BLOCKS.markdown)
+  * [Compatibility](SYSTEM-LIBRARY-COMPATIBILITY.markdown)
+  * [Graphics](SYSTEM-LIBRARY-GRAPHICS.markdown)
+  * [Math](SYSTEM-LIBRARY-MATH.markdown)
+  * [Printing](SYSTEM-LIBRARY-PRINTING.markdown)
+  * [Units](SYSTEM-LIBRARY-UNITS.markdown)
 
 For Mindustry Logic 8 and later, new mlog instructions are supported:
 

@@ -281,6 +281,10 @@ class AstContextTest {
         }
 
         @Override
+        public void setDocComment(@Nullable AstDocComment docComment) {
+        }
+
+        @Override
         public List<AstMindcodeNode> getChildren() {
             return List.of();
         }

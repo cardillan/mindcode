@@ -1,15 +1,6 @@
 # Graphics library
 
-To use the Graphics library, use the `require graphics;` statement. The Graphics library uses Mindustry Logic 8
-instructions and therefore also requires `#set target = 8;` statement.
-
-The provided library functions use transformations to rotate, invert or scale graphics output as needed
-for each display (large or small). Transformations are additive, so it is suggested to call `reset()`
-at the beginning of each program that uses transformations to clean up possible transformations from earlier runs.
-
-The parameters used for transformations must be adapted to the size of the output display being drawn.
-The transformation functions therefore exist in versions for both logic displays and large logic displays,
-plus a version which automatically detects the display type from a block passed in as a parameter.
+Additional graphics functions. Functions related to display transformations require the Mindustry Logic 8 instruction set.
 
 ## Constants
 
@@ -61,12 +52,10 @@ all four color channels.
 | Function body                  |                   5 |                  5 |
 | Function call                  |                   5 |                  5 |
 
-Allows redefining the alpha channel of an existing color. When used with constant value of alpha and a built-in
-color literal (e.g. `@colorSalmon`), the value will be compile-time evaluated. When a named color literal is used
-(e.g. `%[salmon]`), compile time evaluation is not possible.
+Allows redefining the alpha channel of an existing color.
 
-This function is significantly more efficient than unpacking the color into individual color channels
-and repackaging them back.
+When compiled for target 7, this function is significantly more efficient than unpacking the color into individual
+color channels and repackaging them back. When compiled for target 8, the unpack/pack route is more efficient.
 
 **Inputs and outputs:**
 
@@ -310,7 +299,11 @@ over the entire area of a small display.
 | Inlined function               |                   3 |                  3 |
 
 Applies scaling to the graphic output, trying to minimize rounding error caused by Mindustry Logic
-storing the scale parameters with a precision of 10 bits, and a scale of 0.05.
+storing the scale parameters with a precision of 10 bits and a scale of 0.05.
 
 Both `x` and `y` are increased by `1 / 40` (`0.025`), to compensate for the processor truncating the
 value of either parameter after dividing it by `1 / 20` (`0.05`).
+
+---
+
+[« Previous: Compatibility](SYSTEM-LIBRARY-COMPATIBILITY.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Math »](SYSTEM-LIBRARY-MATH.markdown)

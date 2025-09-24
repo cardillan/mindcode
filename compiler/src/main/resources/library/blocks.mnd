@@ -1,7 +1,7 @@
 // Mindcode system library
 // Blocks
 //
-//* To use the Blocks library, use the `require blocks;` statement.
+//* Block-related functions (just the `findLinkedBlocks` function at this moment).
 
 module blocks;
 

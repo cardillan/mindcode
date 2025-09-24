@@ -1,7 +1,6 @@
 # Printing library
 
-To use the Printing library, use the `require printing;` statement. Some of the Printing library functions use
-Mindustry Logic 8 instructions and therefore require the `#set target = 8;` statement.
+Functions for printing and formatting numbers. Some functions require the Mindustry Logic 8 instruction set.
 
 ## Functions
 
@@ -292,3 +291,7 @@ itself, except the conversion of the number from a `double` to a 64-bit integer 
 **Inputs and outputs:**
 
 - `n`: number to be printed
+
+---
+
+[« Previous: Math](SYSTEM-LIBRARY-MATH.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Units »](SYSTEM-LIBRARY-UNITS.markdown)

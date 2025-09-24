@@ -1,7 +1,7 @@
 // Mindcode system library for Mindustry Logic version 8
 // Arrays
 //
-//* To use the Arrays library, use the `require arrays;` statement.
+//* Functions for basic array manipulations.
 //*
 //* Functions in this library are designed for loop unrolling for the best performance.
 //* When instruction space doesn't allow loop unrolling, random array access is used,
@@ -12,9 +12,12 @@ module arrays;
 /**
  * Fills the array with a given value.
  *
- * @footprint2  Five elements in the array:      var a[5]; fill(ref a, prm_value); print(a);
- * @footprint2  Ten elements in the array:       var a[10]; fill(ref a, prm_value); print(a);
- * @footprint2  Twenty elements in the array:    var a[20]; fill(ref a, prm_value); print(a);
+ * @footprint2  Five elements in an internal array:      volatile var a[5]; fill(ref a, prm_value);
+ * @footprint2  Ten elements in an internal array:       volatile var a[10]; fill(ref a, prm_value);
+ * @footprint2  Twenty elements in an internal array:    volatile var a[20]; fill(ref a, prm_value);
+ * @footprint2  Five elements in an external array:      external cell1 var a[5]; fill(ref a, prm_value);
+ * @footprint2  Ten elements in an external array:       external cell1 var a[10]; fill(ref a, prm_value);
+ * @footprint2  Twenty elements in an external array:    external cell1 var a[20]; fill(ref a, prm_value);
  */
 inline void fill(ref array, value)
     for var i in 0 ... length(array) do
@@ -25,9 +28,12 @@ end;
 /**
  * Reverses the values in the array.
  *
- * @footprint2  Five elements in the array:      var a[5]; reverse(ref a); print(a);
- * @footprint2  Ten elements in the array:       var a[10]; reverse(ref a); print(a);
- * @footprint2  Twenty elements in the array:    var a[20]; reverse(ref a); print(a);
+ * @footprint2  Five elements in an internal array:      volatile var a[5]; reverse(ref a);
+ * @footprint2  Ten elements in an internal array:       volatile var a[10]; reverse(ref a);
+ * @footprint2  Twenty elements in an internal array:    volatile var a[20]; reverse(ref a);
+ * @footprint2  Five elements in an external array:      external cell1 var a[5]; reverse(ref a);
+ * @footprint2  Ten elements in an external array:       external cell1 var a[10]; reverse(ref a);
+ * @footprint2  Twenty elements in an external array:    external cell1 var a[20]; reverse(ref a);
  */
 inline void reverse(ref array)
     for var i in 0 ... length(array) \ 2 do
@@ -41,9 +47,12 @@ end;
 /**
  * Sorts the array.
  *
- * @footprint2  Five elements in the array:      var a[5]; bubblesort(ref a, prm_maxToMin); print(a);
- * @footprint2  Ten elements in the array:       var a[10]; bubblesort(ref a, prm_maxToMin); print(a);
- * @footprint2  Twenty elements in the array:    var a[20]; bubblesort(ref a, prm_maxToMin); print(a);
+ * @footprint2  Five elements in an internal array:      volatile var a[5]; bubblesort(ref a, prm_maxToMin);
+ * @footprint2  Ten elements in an internal array:       volatile var a[10]; bubblesort(ref a, prm_maxToMin);
+ * @footprint2  Twenty elements in an internal array:    volatile var a[20]; bubblesort(ref a, prm_maxToMin);
+ * @footprint2  Five elements in an external array:      external cell1 var a[5]; bubblesort(ref a, prm_maxToMin);
+ * @footprint2  Ten elements in an external array:       external cell1 var a[10]; bubblesort(ref a, prm_maxToMin);
+ * @footprint2  Twenty elements in an external array:    external cell1 var a[20]; bubblesort(ref a, prm_maxToMin);
  */
 inline void bubblesort(ref array, in maxToMin)
     do
@@ -84,9 +93,12 @@ end;
  * Sorts elements of two arrays in parallel. The `sortBy` array contains the sort keys, while the
  * `values` array gets reordered to the same relative order as the `sortBy` array.
  *
- * @footprint2  Five elements in the array:      var a[5], b[5]; bubblesort(ref a, ref b, prm_maxToMin); print(a);
- * @footprint2  Ten elements in the array:       var a[10], b[10]; bubblesort(ref a, ref b, prm_maxToMin); print(a);
- * @footprint2  Twenty elements in the array:    var a[20], b[20]; bubblesort(ref a, ref b, prm_maxToMin); print(a);
+ * @footprint2  Five elements in internal arrays:      volatile var a[5], b[5]; bubblesort(ref a, ref b, prm_maxToMin);
+ * @footprint2  Ten elements in internal arrays:       volatile var a[10], b[10]; bubblesort(ref a, ref b, prm_maxToMin);
+ * @footprint2  Twenty elements in internal arrays:    volatile var a[20], b[20]; bubblesort(ref a, ref b, prm_maxToMin);
+ * @footprint2  Five elements in external arrays:      external cell1 var a[5], b[5]; bubblesort(ref a, ref b, prm_maxToMin);
+ * @footprint2  Ten elements in external arrays:       external cell1 var a[10], b[10]; bubblesort(ref a, ref b, prm_maxToMin);
+ * @footprint2  Twenty elements in external arrays:    external cell1 var a[20], b[20]; bubblesort(ref a, ref b, prm_maxToMin);
  */
 inline void bubblesort(ref sortBy, ref values, in maxToMin)
     do

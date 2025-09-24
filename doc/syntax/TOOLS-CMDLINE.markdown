@@ -92,21 +92,22 @@ Actions:
 usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout {0..3600000}] [--excerpt [EXCERPT]]
                 [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-l [LOG]]
                 [--file-references {path,uri,windows-uri}] [-a FILE [FILE ...]]
-                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [--builtin-evaluation {none,compatible,full}]
-                [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}]
+                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
+                [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
                 [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,neutral,speed}] [-e {1..1000}]
+                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
                 [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization [{true,false}]] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
-                [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [--mlog-block-optimization [{true,false}]] [--text-jump-tables {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]]
                 [--run-steps {0..1000000000}] [--output-profiling [{true,false}]] [--trace-execution {true,false}]
@@ -159,12 +160,10 @@ Environment options:
 
   -t, --target {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
+  -i, --instruction-limit {1..100000}
+                         sets the maximal number of instructions for the speed optimizations
   --builtin-evaluation {none,compatible,full}
                          sets the level of compile-time evaluation of numeric builtin constants
-  --text-jump-tables {true,false}
-                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
-                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target 8 or higher required)
   --null-counter-is-noop {true,false}
                          when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
                          may produce code depending on this behavior
@@ -182,7 +181,7 @@ Mlog formatting options:
                          end of the final code
 
 Compiler options:
-  Options affecting the way the source code is compiled.
+  Options which affect the way the source code is compiled.
 
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
@@ -204,8 +203,6 @@ Optimization options:
   Options guiding the overall  optimization  of  the  compiled  code,  or  activating/deactivating specific optimization
   actions.
 
-  -i, --instruction-limit {1..100000}
-                         sets the maximal number of instructions for the speed optimizations
   -g, --goal {size,neutral,speed}
                          sets code generation  goal:  minimize  code  size,  minimize  execution  speed,  or no specific
                          preference
@@ -219,6 +216,10 @@ Optimization options:
                          time
   --mlog-block-optimization [{true,false}]
                          allows (limited) optimization of code inside mlog blocks
+  --text-jump-tables {true,false}
+                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
+                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
+                         (target 8 or higher required)
 
 Optimization levels:
   Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not
@@ -371,21 +372,22 @@ named arguments:
 ```
 usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY] [-l [LOG]]
                 [--file-references {path,uri,windows-uri}] [-a [TAG [TAG ...]]]
-                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [--builtin-evaluation {none,compatible,full}]
-                [--text-jump-tables {true,false}] [--null-counter-is-noop {true,false}]
+                [-t {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}] [-i {1..100000}]
+                [--builtin-evaluation {none,compatible,full}] [--null-counter-is-noop {true,false}]
                 [--symbolic-labels [{true,false}]] [--mlog-indent {0..8}] [--function-prefix {short,long}]
                 [--no-signature] [-y {strict,mixed,relaxed}] [--target-guard [{true,false}]]
                 [--boundary-checks {none,assert,minimal,simple,described}] [-r {none,comments,passive,active}]
-                [--auto-printflush {true,false}] [-i {1..100000}] [-g {size,neutral,speed}] [-e {1..1000}]
+                [--auto-printflush {true,false}] [-g {size,neutral,speed}] [-e {1..1000}]
                 [--unsafe-case-optimization [{true,false}]] [--case-optimization-strength {0..6}]
-                [--mlog-block-optimization [{true,false}]] [-O {0..4}] [--temp-variables-elimination LEVEL]
-                [--case-expression-optimization LEVEL] [--dead-code-elimination LEVEL] [--jump-normalization LEVEL]
-                [--jump-optimization LEVEL] [--single-step-elimination LEVEL] [--expression-optimization LEVEL]
-                [--if-expression-optimization LEVEL] [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL]
-                [--loop-optimization LEVEL] [--loop-unrolling LEVEL] [--function-inlining LEVEL]
-                [--array-optimization LEVEL] [--case-switching LEVEL] [--return-optimization LEVEL]
-                [--jump-straightening LEVEL] [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL]
-                [--stack-optimization LEVEL] [--print-merging LEVEL]
+                [--mlog-block-optimization [{true,false}]] [--text-jump-tables {true,false}] [-O {0..4}]
+                [--temp-variables-elimination LEVEL] [--case-expression-optimization LEVEL]
+                [--dead-code-elimination LEVEL] [--jump-normalization LEVEL] [--jump-optimization LEVEL]
+                [--single-step-elimination LEVEL] [--expression-optimization LEVEL] [--if-expression-optimization LEVEL]
+                [--data-flow-optimization LEVEL] [--loop-hoisting LEVEL] [--loop-optimization LEVEL]
+                [--loop-unrolling LEVEL] [--function-inlining LEVEL] [--array-optimization LEVEL]
+                [--case-switching LEVEL] [--return-optimization LEVEL] [--jump-straightening LEVEL]
+                [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
+                [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
                 [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]]
                 [--run-steps {0..1000000000}] [--output-profiling [{true,false}]] [--trace-execution {true,false}]
@@ -427,12 +429,10 @@ Environment options:
 
   -t, --target {6,6.0,7,7w,7.0,7.0w,7.1,7.1w,8,8w,8.0,8.0w,8.1,8.1w}
                          selects target processor version and edition (a 'w' suffix specifies the world processor)
+  -i, --instruction-limit {1..100000}
+                         sets the maximal number of instructions for the speed optimizations
   --builtin-evaluation {none,compatible,full}
                          sets the level of compile-time evaluation of numeric builtin constants
-  --text-jump-tables {true,false}
-                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
-                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
-                         (target 8 or higher required)
   --null-counter-is-noop {true,false}
                          when active, Mindcode assumes assigning a 'null' to  '@counter' is ignored by the processor and
                          may produce code depending on this behavior
@@ -450,7 +450,7 @@ Mlog formatting options:
                          end of the final code
 
 Compiler options:
-  Options affecting the way the source code is compiled.
+  Options which affect the way the source code is compiled.
 
   -y, --syntax {strict,mixed,relaxed}
                          specifies syntactic mode used to compile the source code
@@ -472,8 +472,6 @@ Optimization options:
   Options guiding the overall  optimization  of  the  compiled  code,  or  activating/deactivating specific optimization
   actions.
 
-  -i, --instruction-limit {1..100000}
-                         sets the maximal number of instructions for the speed optimizations
   -g, --goal {size,neutral,speed}
                          sets code generation  goal:  minimize  code  size,  minimize  execution  speed,  or no specific
                          preference
@@ -487,6 +485,10 @@ Optimization options:
                          time
   --mlog-block-optimization [{true,false}]
                          allows (limited) optimization of code inside mlog blocks
+  --text-jump-tables {true,false}
+                         when active, generates jump  tables  by  encoding  instruction  addresses  into a single String
+                         value, and uses a single 'read' instruction to  directly  set the counter to the target address
+                         (target 8 or higher required)
 
 Optimization levels:
   Options specifying the global and individual  optimization  levels.  Individual  optimizers  use global level when not

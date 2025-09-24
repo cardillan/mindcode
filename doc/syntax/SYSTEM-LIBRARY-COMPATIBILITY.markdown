@@ -1,6 +1,6 @@
 # Compatibility library
 
-To use the Compatibility library, use the `require compatibility;` statement.
+A special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
 
 ## Functions
 
@@ -34,3 +34,7 @@ suggested compiler options, Mindcode will generate code that should run correctl
 the test was performed, avoiding the compatibility issues.
 
 Note: The Mindcode processor emulator currently isn't able to run this function.
+
+---
+
+[« Previous: Blocks](SYSTEM-LIBRARY-BLOCKS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Graphics »](SYSTEM-LIBRARY-GRAPHICS.markdown)

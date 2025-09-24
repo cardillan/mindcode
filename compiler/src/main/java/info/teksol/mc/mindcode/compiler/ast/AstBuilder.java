@@ -289,9 +289,10 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
             AstDirectiveValueContext optionContext, @Nullable DirectiveValuesContext valueContext) {
         AstDirectiveValue option = new AstDirectiveValue(pos(ctx), optionContext.getText());
         if (valueContext == null) {
-            return new AstDirectiveSet(pos(ctx), local, option, List.of());
+            return new AstDirectiveSet(pos(ctx), findDocComment(ctx.getStart()), local, option, List.of());
         } else {
-            return new AstDirectiveSet(pos(ctx), local, option, processDirectiveValues(valueContext));
+            return new AstDirectiveSet(pos(ctx), findDocComment(ctx.getStart()), local, option,
+                    processDirectiveValues(valueContext));
         }
     }
     //</editor-fold>

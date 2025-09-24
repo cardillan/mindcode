@@ -1,6 +1,6 @@
 # Blocks library
 
-To use the Blocks library, use the `require blocks;` statement.
+Block-related functions (just the `findLinkedBlocks` function at this moment).
 
 ## Functions
 
@@ -54,3 +54,7 @@ When the function call ends, the `display` and `memory` variables are set to a l
 bank respectively. `message` and `switch` are set if corresponding blocks are linked to the processor,
 otherwise they're `null`.
 
+
+---
+
+[« Previous: Arrays](SYSTEM-LIBRARY-ARRAYS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Compatibility »](SYSTEM-LIBRARY-COMPATIBILITY.markdown)

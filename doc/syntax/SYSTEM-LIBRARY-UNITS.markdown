@@ -1,6 +1,6 @@
 # Units library
 
-To use the Units library, use the `require units;`
+Functions for searching and binding available units of a required type.
 
 ## Functions
 
@@ -110,3 +110,7 @@ information about the search onto a message block—one of two messages:
 - Returns the freshly bound unit.
 
 The function doesn't use units that are controlled by a player or a different processor.
+
+---
+
+[« Previous: Printing](SYSTEM-LIBRARY-PRINTING.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown)

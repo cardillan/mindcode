@@ -1,7 +1,7 @@
 // Mindcode system library
 // Math functions
 //
-//* To use the Math library, use the `require math;` statement.
+//* A math library.
 
 module math;
 

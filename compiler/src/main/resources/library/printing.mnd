@@ -1,8 +1,7 @@
 // Mindcode system library for Mindustry Logic version 8
 // Printing - numeric output
 //
-//* To use the Printing library, use the `require printing;` statement. Some of the Printing library functions use
-//* Mindustry Logic 8 instructions and therefore require the `#set target = 8;` statement.
+//* Functions for printing and formatting numbers. Some functions require the Mindustry Logic 8 instruction set.
 
 module printing;
 

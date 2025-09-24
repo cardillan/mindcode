@@ -1,7 +1,7 @@
 // Mindcode system library
 // Units
 //
-//* To use the Units library, use the `require units;`
+//* Functions for searching and binding available units of a required type.
 
 module units;
 

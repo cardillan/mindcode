@@ -12,7 +12,7 @@
     84 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 909):
-  * Inline function 'displaySize' defined at *graphics:105:1     size    +2, benefit        7.0, efficiency      3.500 (-6 instructions)
+  * Inline function 'displaySize' defined at *graphics:102:1     size    +2, benefit        7.0, efficiency      3.500 (-6 instructions)
     Inline function call at line 10:38                           size    +3, benefit        3.5, efficiency      1.167
     Inline function call at line 11:38                           size    +3, benefit        3.5, efficiency      1.167
 

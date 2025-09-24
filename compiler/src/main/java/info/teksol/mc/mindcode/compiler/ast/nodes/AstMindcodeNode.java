@@ -46,5 +46,7 @@ public interface AstMindcodeNode extends SourceElement {
 
     @Nullable AstDocComment getDocComment();
 
+    void setDocComment(@Nullable AstDocComment docComment);
+
     List<AstMindcodeNode> getChildren();
 }

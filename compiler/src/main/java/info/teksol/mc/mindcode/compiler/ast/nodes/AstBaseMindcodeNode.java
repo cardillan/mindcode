@@ -19,7 +19,7 @@ import java.util.stream.Stream;
 public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
     private final SourcePosition sourcePosition;
     private final List<AstMindcodeNode> children;
-    protected final @Nullable AstDocComment docComment;
+    protected @Nullable AstDocComment docComment;
     private @Nullable CompilerProfile profile;
 
     protected AstBaseMindcodeNode(SourcePosition sourcePosition) {
@@ -74,6 +74,10 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
 
     public @Nullable AstDocComment getDocComment() {
         return docComment;
+    }
+
+    public void setDocComment(@Nullable AstDocComment docComment) {
+        this.docComment = docComment;
     }
 
     @Override

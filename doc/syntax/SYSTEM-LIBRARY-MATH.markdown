@@ -1,6 +1,6 @@
 # Math library
 
-To use the Math library, use the `require math;` statement.
+A math library.
 
 ## Constants
 
@@ -305,3 +305,7 @@ Returns the median of five values.
 Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
 and is fairly slow as it doesn't modify the input array.
 
+
+---
+
+[« Previous: Graphics](SYSTEM-LIBRARY-GRAPHICS.markdown) &nbsp; | &nbsp; [Up: System library](SYSTEM-LIBRARY.markdown) &nbsp; | &nbsp; [Next: Printing »](SYSTEM-LIBRARY-PRINTING.markdown)

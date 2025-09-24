@@ -9,23 +9,25 @@ require units;    // and the 'units' library too
 
 The order in which system libraries are imported doesn't matter.
 
-System libraries contain functions and sometimes constants that can be used by a Mindcode program. The following system libraries are provided:
+System libraries contain functions and sometimes constants that can be used by a Mindcode program. The following library modules are provided:
 
-* `arrays`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
-* `blocks`: block-related functions (just the `findLinkedBlocks` function at this moment).
-* `compatibility`: a special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
-* `graphics`: additional graphics functions. Requires the Mindustry Logic 8 instruction set.
-* `math`: mathematical functions.
-* `printing`: functions for outputting formatted numbers. Some functions require the Mindustry Logic 8 instruction set.
-* `units`: functions for searching and binding available units of a required type.
+* [Module `arrays`](SYSTEM-LIBRARY-ARRAYS.markdown). Functions for basic array manipulations.
+* [Module `blocks`](SYSTEM-LIBRARY-BLOCKS.markdown). Block-related functions (just the `findLinkedBlocks` function at this moment).
+* [Module `compatibility`](SYSTEM-LIBRARY-COMPATIBILITY.markdown). A special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
+* [Module `graphics`](SYSTEM-LIBRARY-GRAPHICS.markdown). Additional graphics functions. Functions related to display transformations require the Mindustry Logic 8 instruction set.
+* [Module `math`](SYSTEM-LIBRARY-MATH.markdown). A math library.
+* [Module `printing`](SYSTEM-LIBRARY-PRINTING.markdown). Functions for printing and formatting numbers. Some functions require the Mindustry Logic 8 instruction set.
+* [Module `units`](SYSTEM-LIBRARY-UNITS.markdown). Functions for searching and binding available units of a required type.
 
-## Compiled function sizes
+## Size of library functions
 
-As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions may present an important consideration. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
+As Mindustry Logic limits the program size to 1,000 instructions, the compiled size of the library functions is an important consideration. The documentation of each function contains a table specifying the size of the resulting code under various conditions. The size is measured using these rules:
 
 - all input arguments are variables,
 - all output values provided by the function are used,
-- the optimization level is set to `advanced`.
+- the target is the latest supported target (might be different from a default target),
+- the optimization level is set to `experimental`,
+- for internal arrays, the array jump table is not included in the measurement. The size of the jump table corresponds to the number of elements in the array, and is not related to the function itself.
 
 If a function just returns its input parameter as the return value and does nothing else, it doesn't produce any instruction—its size is zero. The system libraries sometimes use these functions for consistency, for example, as a special case for a vararg function.  
 
@@ -45,16 +47,6 @@ There are several factors that might cause the size of a function used in an act
 > [!NOTE]
 > The function sizes are measured separately for the `speed` and `size` optimization goals. In some cases, optimizing for speed may produce smaller code than optimizing for size. The reason for this primarily is that optimization for speed may unroll some loops resulting in linear code, which is much better suited for further optimizations.
 
-# Library modules
-
-* [Arrays](SYSTEM-LIBRARY-ARRAYS.markdown)
-* [Blocks](SYSTEM-LIBRARY-BLOCKS.markdown)
-* [Compatibility](SYSTEM-LIBRARY-COMPATIBILITY.markdown)
-* [Graphics](SYSTEM-LIBRARY-GRAPHICS.markdown)
-* [Math](SYSTEM-LIBRARY-MATH.markdown)
-* [Printing](SYSTEM-LIBRARY-PRINTING.markdown)
-* [Units](SYSTEM-LIBRARY-UNITS.markdown)
- 
 # Additional resources
 
 The system library is integrated into the compiler and as such is available to both the command-line compiler and the web application. The current version of the library can be found [here](https://github.com/cardillan/mindcode/tree/main/compiler/src/main/resources/library).

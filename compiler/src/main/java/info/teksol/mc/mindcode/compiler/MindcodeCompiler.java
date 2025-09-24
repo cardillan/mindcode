@@ -256,6 +256,8 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         DirectivePreprocessor.processLocalDirectives(this, globalProfile, astProgram);
 
+        if (targetPhase.compareTo(CompilationPhase.PREPROCESSOR) <= 0) return;
+
         nameCreator = new StandardNameCreator(globalProfile);
         instructionProcessor = InstructionProcessorFactory.getInstructionProcessor(messageConsumer, nameCreator, globalProfile);
         metadata = instructionProcessor.getMetadata();

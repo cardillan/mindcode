@@ -7,6 +7,7 @@ public enum CompilationPhase {
     LEXER,
     PARSER,
     AST_BUILDER,
+    PREPROCESSOR,
     CALL_GRAPH,
     COMPILER,
     OPTIMIZER,

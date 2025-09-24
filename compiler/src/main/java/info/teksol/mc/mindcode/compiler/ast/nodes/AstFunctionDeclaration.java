@@ -11,6 +11,7 @@ import info.teksol.mc.util.IntRange;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @NullMarked
@@ -21,6 +22,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
     private final List<AstFunctionParameter> parameters;
     private final List<AstMindcodeNode> body;
     private final CallType callType;
+    private final List<AstDirectiveSet> directives = new ArrayList<>();
 
     public AstFunctionDeclaration(SourcePosition sourcePosition, @Nullable AstDocComment docComment, AstIdentifier identifier,
             DataType dataType, List<AstFunctionParameter> parameters, List<AstMindcodeNode> body, CallType callType) {
@@ -30,6 +32,14 @@ public class AstFunctionDeclaration extends AstDeclaration {
         this.parameters = parameters;
         this.body = body;
         this.callType = callType;
+    }
+
+    public void addDirectives(List<AstDirectiveSet> directives) {
+        this.directives.addAll(directives);
+    }
+
+    public List<AstDirectiveSet> getDirectives() {
+        return directives;
     }
 
     public AstIdentifier getIdentifier() {

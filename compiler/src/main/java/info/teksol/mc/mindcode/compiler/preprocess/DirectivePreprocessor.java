@@ -2,10 +2,7 @@ package info.teksol.mc.mindcode.compiler.preprocess;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
-import info.teksol.mc.mindcode.compiler.ast.nodes.AstModuleDeclaration;
+import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.DirectiveProcessor;
 import info.teksol.mc.profile.SyntacticMode;
@@ -14,7 +11,9 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.List;
 
 /// Processes compiler directives both global/module and local) in an AST node tree, modifying the given compiler
 /// profile accordingly.
@@ -64,14 +63,18 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
         }
     }
 
-    public static void processLocalDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstMindcodeNode program) {
+    public static void processLocalDirectives(PreprocessorContext context, CompilerProfile globalProfile, AstMindcodeNode node) {
         DirectivePreprocessor preprocessor = new DirectivePreprocessor(context, globalProfile, OptionScope.LOCAL);
-        preprocessor.visitNodeLocal(program);
+        if (node instanceof AstFunctionDeclaration declaration) {
+            declaration.getDirectives().forEach(preprocessor::visitNodeLocal);
+        }
+        preprocessor.visitNodeLocal(node);
     }
 
     // A stack of compiler profiles
-    Deque<CompilerProfile> profileStack = new ArrayDeque<>();
-    private @Nullable AstDirectiveSet lastLocalDirective = null;
+    private final Deque<CompilerProfile> profileStack = new ArrayDeque<>();
+    private final List<AstDirectiveSet> lastLocalDirectives = new ArrayList<>();
+    private @Nullable AstDocComment lastDocComment = null;
 
     private void visitNodeLocal(AstMindcodeNode node) {
         if (node instanceof AstModule module) {
@@ -80,7 +83,7 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
             profile = node.getProfile();
         }
 
-        if (lastLocalDirective == null) {
+        if (lastLocalDirectives.isEmpty()) {
             // Skip the push for any node following a local directive
             // The previous profile for this node has already been pushed by the first local directive in a sequence
             profileStack.push(profile);
@@ -88,11 +91,15 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
 
         if (node instanceof AstDirectiveSet directive && directive.isLocal()) {
             // Don't duplicate otherwise, as consequent local directives merge
-            if (lastLocalDirective == null) {
+            if (lastLocalDirectives.isEmpty()) {
                 profile = profile.duplicate(true);
             }
 
-            lastLocalDirective = directive;
+            lastLocalDirectives.add(directive);
+            if (directive.getDocComment() != null) {
+                lastDocComment = directive.getDocComment();
+            }
+
             directiveProcessor.processDirective(profile, directive);
 
             // By returning here, the profile is not restored from the stack, meaning the current
@@ -101,7 +108,15 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
             return;
         }
 
-        lastLocalDirective = null;
+        if (node instanceof AstFunctionDeclaration function) {
+            function.addDirectives(lastLocalDirectives);
+        }
+        lastLocalDirectives.clear();
+
+        if (lastDocComment != null) {
+            node.setDocComment(lastDocComment);
+            lastDocComment = null;
+        }
 
         node.setProfile(profile);
         node.getChildren().forEach(this::visitNodeLocal);
@@ -111,10 +126,10 @@ public class DirectivePreprocessor extends AbstractMessageEmitter {
     }
 
     private void checkUnusedSetLocals() {
-        if (lastLocalDirective != null) {
-            error(lastLocalDirective, ERR.SETLOCAL_NOT_USED);
+        if (!lastLocalDirectives.isEmpty()) {
+            lastLocalDirectives.forEach(directive -> error(directive, ERR.SETLOCAL_NOT_USED));
             profile = profileStack.pop();
-            lastLocalDirective = null;
+            lastLocalDirectives.clear();
         }
     }
 }

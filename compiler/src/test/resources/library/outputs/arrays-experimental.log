@@ -18,679 +18,679 @@
    386 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 690):
-    Unroll loop at *arrays:20:5                                  size    -2, benefit      250.0, efficiency   Infinity
+    Unroll loop at *arrays:23:5                                  size    -2, benefit      250.0, efficiency   Infinity
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-    Unroll loop at *arrays:54:9                                  size  +103, benefit    11250.0, efficiency    109.223
-    Unroll loop at *arrays:69:9                                  size  +103, benefit    11250.0, efficiency    109.223
-    Unroll loop at *arrays:97:9                                  size  +177, benefit    11250.0, efficiency     63.559
-    Unroll loop at *arrays:115:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:63:9                                  size  +103, benefit    11250.0, efficiency    109.223
+    Unroll loop at *arrays:78:9                                  size  +103, benefit    11250.0, efficiency    109.223
+    Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
   * Inline write jump table of array 'a'                         size    -3, benefit       50.0, efficiency   Infinity (-3 instructions)
     Inline read jump table of array 'b'                          size   +82, benefit     5100.0, efficiency     62.195
     Inline write jump table of array 'b'                         size  +167, benefit     5150.0, efficiency     30.838
     Inline read jump table of array 'c'                          size   +48, benefit     2500.0, efficiency     52.083
     Inline write jump table of array 'c'                         size   +65, benefit     2550.0, efficiency     39.231
-    Inline 'a' write access at *arrays:21:9                      size    +7, benefit       50.0, efficiency      7.143
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:98:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:116:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'a' write access at *arrays:24:9                      size    +7, benefit       50.0, efficiency      7.143
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:110:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:128:21                     size   +17, benefit     1250.0, efficiency     73.529
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:101:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:102:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:103:25                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:104:33                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:113:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:114:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:115:25                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:116:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:116:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:117:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 1: speed optimization selection (cost limit 693):
-  * Unroll loop at *arrays:20:5                                  size    -9, benefit      250.0, efficiency   Infinity (+41 instructions)
+  * Unroll loop at *arrays:23:5                                  size    -9, benefit      250.0, efficiency   Infinity (+41 instructions)
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-    Unroll loop at *arrays:54:9                                  size  +103, benefit    11250.0, efficiency    109.223
-    Unroll loop at *arrays:69:9                                  size  +103, benefit    11250.0, efficiency    109.223
-    Unroll loop at *arrays:97:9                                  size  +177, benefit    11250.0, efficiency     63.559
-    Unroll loop at *arrays:115:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:63:9                                  size  +103, benefit    11250.0, efficiency    109.223
+    Unroll loop at *arrays:78:9                                  size  +103, benefit    11250.0, efficiency    109.223
+    Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Inline read jump table of array 'b'                          size   +82, benefit     5100.0, efficiency     62.195
     Inline write jump table of array 'b'                         size  +167, benefit     5150.0, efficiency     30.838
     Inline read jump table of array 'c'                          size   +48, benefit     2500.0, efficiency     52.083
     Inline write jump table of array 'c'                         size   +65, benefit     2550.0, efficiency     39.231
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:98:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:116:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:110:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:128:21                     size   +17, benefit     1250.0, efficiency     73.529
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:101:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:102:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:103:25                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:104:33                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:113:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:114:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:115:25                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:116:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:116:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:117:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 1: speed optimization selection (cost limit 652):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-  * Unroll loop at *arrays:54:9                                  size  +103, benefit    11250.0, efficiency    109.223 (+147 instructions)
-    Unroll loop at *arrays:69:9                                  size  +103, benefit    11250.0, efficiency    109.223
-    Unroll loop at *arrays:97:9                                  size  +177, benefit    11250.0, efficiency     63.559
-    Unroll loop at *arrays:115:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+  * Unroll loop at *arrays:63:9                                  size  +103, benefit    11250.0, efficiency    109.223 (+147 instructions)
+    Unroll loop at *arrays:78:9                                  size  +103, benefit    11250.0, efficiency    109.223
+    Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Inline read jump table of array 'b'                          size   +82, benefit     5100.0, efficiency     62.195
     Inline write jump table of array 'b'                         size  +167, benefit     5150.0, efficiency     30.838
     Inline read jump table of array 'c'                          size   +48, benefit     2500.0, efficiency     52.083
     Inline write jump table of array 'c'                         size   +65, benefit     2550.0, efficiency     39.231
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:98:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:116:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:110:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:128:21                     size   +17, benefit     1250.0, efficiency     73.529
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:101:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:102:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:103:25                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:104:33                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:113:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:114:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:115:25                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:116:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:116:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:117:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 1: speed optimization selection (cost limit 505):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-  * Unroll loop at *arrays:69:9                                  size  +103, benefit    11250.0, efficiency    109.223 (+147 instructions)
-    Unroll loop at *arrays:97:9                                  size  +177, benefit    11250.0, efficiency     63.559
-    Unroll loop at *arrays:115:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+  * Unroll loop at *arrays:78:9                                  size  +103, benefit    11250.0, efficiency    109.223 (+147 instructions)
+    Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Inline read jump table of array 'b'                          size  +218, benefit     4300.0, efficiency     19.725
     Inline write jump table of array 'b'                         size  +439, benefit     4350.0, efficiency      9.909
     Inline read jump table of array 'c'                          size   +48, benefit     2500.0, efficiency     52.083
     Inline write jump table of array 'c'                         size   +65, benefit     2550.0, efficiency     39.231
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:98:21                      size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'b' read access at *arrays:116:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:110:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:128:21                     size   +17, benefit     1250.0, efficiency     73.529
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:101:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:102:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:103:25                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:104:33                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:113:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:114:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:115:25                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:116:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:116:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:117:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 1: speed optimization selection (cost limit 358):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-    Unroll loop at *arrays:97:9                                  size  +177, benefit    11250.0, efficiency     63.559
-    Unroll loop at *arrays:115:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Inline read jump table of array 'b'                          size  +354, benefit     3500.0, efficiency      9.887
   ! Inline write jump table of array 'b'                         size  +711, benefit     3550.0, efficiency      4.993
     Inline read jump table of array 'c'                          size   +48, benefit     2500.0, efficiency     52.083
     Inline write jump table of array 'c'                         size   +65, benefit     2550.0, efficiency     39.231
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  * Inline 'b' read access at *arrays:98:21                      size   +17, benefit     1250.0, efficiency     73.529 (+17 instructions)
-    Inline 'b' read access at *arrays:116:21                     size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  * Inline 'b' read access at *arrays:110:21                     size   +17, benefit     1250.0, efficiency     73.529 (+17 instructions)
+    Inline 'b' read access at *arrays:128:21                     size   +17, benefit     1250.0, efficiency     73.529
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:101:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:102:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:103:25                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:104:33                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:113:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:114:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:115:25                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:116:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:116:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:117:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 1: speed optimization selection (cost limit 341):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-    Unroll loop at *arrays:97:9                                  size  +160, benefit    11250.0, efficiency     70.313
-    Unroll loop at *arrays:115:9                                 size  +177, benefit    11250.0, efficiency     63.559
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:109:9                                 size  +160, benefit    11250.0, efficiency     70.313
+    Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Inline read jump table of array 'b'                          size  +337, benefit     2250.0, efficiency      6.677
   ! Inline write jump table of array 'b'                         size  +711, benefit     3550.0, efficiency      4.993
     Inline read jump table of array 'c'                          size   +48, benefit     2500.0, efficiency     52.083
     Inline write jump table of array 'c'                         size   +65, benefit     2550.0, efficiency     39.231
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  * Inline 'b' read access at *arrays:116:21                     size   +17, benefit     1250.0, efficiency     73.529 (+17 instructions)
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  * Inline 'b' read access at *arrays:128:21                     size   +17, benefit     1250.0, efficiency     73.529 (+17 instructions)
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:101:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:102:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:103:25                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:104:33                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:113:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:114:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:115:25                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:116:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:116:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:117:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 1: speed optimization selection (cost limit 324):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-  * Unroll loop at *arrays:97:9                                  size  +160, benefit    11250.0, efficiency     70.313 (+411 instructions)
-    Unroll loop at *arrays:115:9                                 size  +160, benefit    11250.0, efficiency     70.313
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+  * Unroll loop at *arrays:109:9                                 size  +160, benefit    11250.0, efficiency     70.313 (+411 instructions)
+    Unroll loop at *arrays:127:9                                 size  +160, benefit    11250.0, efficiency     70.313
     Inline read jump table of array 'b'                          size  +320, benefit     1000.0, efficiency      3.125
   ! Inline write jump table of array 'b'                         size  +711, benefit     3550.0, efficiency      4.993
     Inline read jump table of array 'c'                          size   +48, benefit     2500.0, efficiency     52.083
     Inline write jump table of array 'c'                         size   +65, benefit     2550.0, efficiency     39.231
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-    Inline 'b' write access at *arrays:101:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:102:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:103:25                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:104:33                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+    Inline 'b' write access at *arrays:113:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:114:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:115:25                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:116:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:104:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:105:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:116:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:117:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 1: speed optimization selection (cost limit 0):
   ! Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-  ! Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-  ! Unroll loop at *arrays:115:9                                 size  +160, benefit    11250.0, efficiency     70.313
+  ! Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+  ! Unroll loop at *arrays:127:9                                 size  +160, benefit    11250.0, efficiency     70.313
   ! Inline read jump table of array 'b'                          size  +320, benefit     1000.0, efficiency      3.125
   ! Inline read jump table of array 'c'                          size  +320, benefit     1700.0, efficiency      5.313
   ! Inline write jump table of array 'c'                         size  +337, benefit     1750.0, efficiency      5.193
-  ! Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:55:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:70:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:64:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:79:21                      size   +17, benefit       50.0, efficiency      2.941
   ! Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:58:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:59:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:73:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:74:17                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:101:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:102:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:103:25                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:104:33                     size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-  ! Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+  ! Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:67:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:68:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:82:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:83:17                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:113:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:114:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:115:25                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:116:33                     size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+  ! Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
   ! Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:104:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:105:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:116:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:117:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 2: speed optimization selection (cost limit 531):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-    Unroll loop at *arrays:115:9                                 size  +144, benefit    11250.0, efficiency     78.125
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:127:9                                 size  +144, benefit    11250.0, efficiency     78.125
     Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143
     Inline write jump table of array 'b'                         size   +65, benefit     1400.0, efficiency     21.538
   * Inline read jump table of array 'c'                          size   +14, benefit     1250.0, efficiency     89.286 (+14 instructions)
     Inline write jump table of array 'c'                         size   +31, benefit     1300.0, efficiency     41.935
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:121:17                     size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' read access at *arrays:122:33                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:133:17                     size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' read access at *arrays:134:33                     size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 2: speed optimization selection (cost limit 517):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
-  * Unroll loop at *arrays:115:9                                 size  +263, benefit    11250.0, efficiency     42.776 (+667 instructions)
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
+  * Unroll loop at *arrays:127:9                                 size  +263, benefit    11250.0, efficiency     42.776 (+667 instructions)
     Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143
     Inline write jump table of array 'b'                         size   +65, benefit     1400.0, efficiency     21.538
     Inline write jump table of array 'c'                         size   +31, benefit     1300.0, efficiency     41.935
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:119:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'b' write access at *arrays:120:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:131:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'b' write access at *arrays:132:17                    size   +17, benefit      625.0, efficiency     36.765
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'c' write access at *arrays:122:17                    size   +17, benefit      625.0, efficiency     36.765
-    Inline 'c' write access at *arrays:123:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:134:17                    size   +17, benefit      625.0, efficiency     36.765
+    Inline 'c' write access at *arrays:135:17                    size   +17, benefit      625.0, efficiency     36.765
 
 Pass 2: speed optimization selection (cost limit 0):
   ! Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-  ! Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
+  ! Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
   ! Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143
   ! Inline write jump table of array 'b'                         size  +337, benefit      600.0, efficiency      1.780
   ! Inline write jump table of array 'c'                         size  +303, benefit      500.0, efficiency      1.650
-  ! Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
   ! Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:119:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'b' write access at *arrays:120:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:131:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'b' write access at *arrays:132:17                    size   +17, benefit       25.0, efficiency      1.471
   ! Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:122:17                    size   +17, benefit       25.0, efficiency      1.471
-  ! Inline 'c' write access at *arrays:123:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:134:17                    size   +17, benefit       25.0, efficiency      1.471
+  ! Inline 'c' write access at *arrays:135:17                    size   +17, benefit       25.0, efficiency      1.471
 
 Pass 3: speed optimization selection (cost limit 525):
     Unroll loop at line 12:5                                     size   +18, benefit      500.0, efficiency     27.778
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
     Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143
     Inline write jump table of array 'b'                         size   +31, benefit      150.0, efficiency      4.839
   * Inline write jump table of array 'c'                         size    -3, benefit       50.0, efficiency   Infinity (-3 instructions)
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'c' write access at line 14:9                         size   +17, benefit       50.0, efficiency      2.941
 
 Pass 3: speed optimization selection (cost limit 528):
   * Unroll loop at line 12:5                                     size    +1, benefit      500.0, efficiency    500.000 (+231 instructions)
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
     Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143
     Inline write jump table of array 'b'                         size   +31, benefit      150.0, efficiency      4.839
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at line 13:9                         size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
 
 Pass 3: speed optimization selection (cost limit 297):
-    Unroll loop at *arrays:33:5                                  size   +35, benefit      250.0, efficiency      7.143
+    Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
   * Inline read jump table of array 'b'                          size   +14, benefit      100.0, efficiency      7.143 (+14 instructions)
     Inline write jump table of array 'b'                         size  +184, benefit      120.0, efficiency      0.652
-    Inline 'b' read access at *arrays:35:17                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' read access at *arrays:36:20                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:41:17                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' read access at *arrays:42:20                      size   +17, benefit       50.0, efficiency      2.941
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
@@ -701,11 +701,11 @@ Pass 3: speed optimization selection (cost limit 297):
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
 
 Pass 3: speed optimization selection (cost limit 283):
-    Unroll loop at *arrays:33:5                                  size   +86, benefit      250.0, efficiency      2.907
+    Unroll loop at *arrays:39:5                                  size   +86, benefit      250.0, efficiency      2.907
     Inline write jump table of array 'b'                         size  +184, benefit      120.0, efficiency      0.652
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
@@ -717,11 +717,11 @@ Pass 3: speed optimization selection (cost limit 283):
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-  * Inline 'b' write access at *arrays:36:9                      size   +17, benefit       50.0, efficiency      2.941 (+17 instructions)
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
+  * Inline 'b' write access at *arrays:42:9                      size   +17, benefit       50.0, efficiency      2.941 (+17 instructions)
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
 
 Pass 3: speed optimization selection (cost limit 266):
-  * Unroll loop at *arrays:33:5                                  size   +69, benefit      250.0, efficiency      3.623 (+264 instructions)
+  * Unroll loop at *arrays:39:5                                  size   +69, benefit      250.0, efficiency      3.623 (+264 instructions)
     Inline write jump table of array 'b'                         size  +167, benefit       70.0, efficiency      0.419
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
@@ -733,7 +733,7 @@ Pass 3: speed optimization selection (cost limit 266):
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
     Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-    Inline 'b' write access at *arrays:37:9                      size   +17, benefit       50.0, efficiency      2.941
+    Inline 'b' write access at *arrays:43:9                      size   +17, benefit       50.0, efficiency      2.941
 
 Pass 3: speed optimization selection (cost limit 2):
   ! Inline write jump table of array 'b'                         size  +235, benefit       30.0, efficiency      0.128
@@ -747,11 +747,11 @@ Pass 3: speed optimization selection (cost limit 2):
   ! Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
   ! Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
   ! Inline 'b' write access at line 13:9                         size   +17, benefit        2.0, efficiency      0.118
-  ! Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-  ! Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-  ! Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-  ! Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
-  ! Inline 'b' write access at *arrays:37:9                      size   +17, benefit        2.0, efficiency      0.118
+  ! Inline 'b' write access at *arrays:43:9                      size   +17, benefit        2.0, efficiency      0.118
+  ! Inline 'b' write access at *arrays:43:9                      size   +17, benefit        2.0, efficiency      0.118
+  ! Inline 'b' write access at *arrays:43:9                      size   +17, benefit        2.0, efficiency      0.118
+  ! Inline 'b' write access at *arrays:43:9                      size   +17, benefit        2.0, efficiency      0.118
+  ! Inline 'b' write access at *arrays:43:9                      size   +17, benefit        2.0, efficiency      0.118
 
 Final code before resolving virtual instructions:
 

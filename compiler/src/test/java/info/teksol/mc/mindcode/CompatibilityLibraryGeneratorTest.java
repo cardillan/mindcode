@@ -24,7 +24,7 @@ public class CompatibilityLibraryGeneratorTest {
             // Mindcode system library for Mindustry Logic version 8
             // System-generated library for compatibility testing purposes
             //
-            //* To use the Compatibility library, use the `require compatibility;` statement.
+            //* A special-purpose library for testing Mindcode's compatibility with a specific Mindustry version.
             
             module compatibility;
             
