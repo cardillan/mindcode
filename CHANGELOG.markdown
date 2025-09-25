@@ -16,6 +16,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * **Breaking**: modules must now be compiled using the `strict` syntax mode. The `strict` mode is the default for any source file containing a `module` declaration, regardless of whether the module contains remote functionality or not. Modules that were using a `relaxed` or `mixed` syntax (either implicitly, or explicitly) need to be updated to strict syntax mode.
 * **Breaking**: the `text-jump-tables` compiler option has been renamed to `text-tables`.
 
+### Miscellaneous
+
+* Reorganized the [Compiler options documentation](doc/syntax/SYNTAX-5-OTHER.markdown).
+* Split the [System library documentation](doc/syntax/SYSTEM-LIBRARY.markdown) into separate files.
+* Updated the code size calculations for the System library documentation. The array jump tables are no longer included in the calculations.
+
 ## 3.8.0-beta.5 - 2025-09-07
 
 Note: this is a beta release. It's been released to provide bugfixes and new enhancements to Mindcode and Schemacode.
@@ -45,9 +51,6 @@ The newly added features are fully functional. There's an unfinished support for
 
 * Separated the mimex data into a [standalone repository](https://github.com/cardillan/mimex-data), which is now included as a git submodule at `compiler/src/main/resources/mimex`.
 * Updated the BE version metadata to the latest available BE build.
-* Reorganized the [Compiler options documentation](doc/syntax/SYNTAX-5-OTHER.markdown).
-* Split the [System library documentation](doc/syntax/SYSTEM-LIBRARY.markdown) into separate files.
-* Updated the code size calculations for the System library documentation. The array jump tables are no longer included in the calculations.
 
 ## 3.8.0-beta.4 - 2025-07-28
 

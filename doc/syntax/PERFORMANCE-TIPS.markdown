@@ -169,6 +169,201 @@ jump 1 greaterThan :x 0
 printflush message1
 ```
 
+# Fast lookups
+
+Mindustry 8 allows reading a variable from a processor (including the current processor identified by `@this`) using a variable name. While general string manipulation is not supported by mlog, a specific string can be obtained by querying the `@name` property of a Mindustry object. It is therefore possible to get a string name of a Mindustry object and use that name to read or write a variable, replacing a more complex case statement.
+
+Mindcode now allows specifying mlog variable names when declaring variables, using constant expressions (not just string literals). A variable to be accessed indirectly by its name must be declared `volatile`, for example:
+
+```Mindcode
+#set target = 8;
+volatile mlog("foo") var foo = 10;
+param variable = "foo";
+@this.write(20, variable);
+print(@this.read("foo"));       // Mindcode resolves this to variable 'foo' 
+```
+
+compiles to
+
+```mlog
+set variable "foo"
+write 20 @this variable
+print foo
+```
+
+This mechanism can be used to build custom lookups, where the named variable holds the lookup value, for example:
+
+```Mindcode
+#set target = 8;
+#set remarks = comments;
+
+/// Initialization:
+volatile mlog(@copper.@name)    var oreCopper = @ore-copper;
+volatile mlog(@lead.@name)      var oreLead = @ore-lead;
+volatile mlog(@scrap.@name)     var oreScrap = @ore-scrap;
+volatile mlog(@coal.@name)      var oreCoal = @ore-coal;
+volatile mlog(@titanium.@name)  var oreTitanium = @ore-titanium;
+volatile mlog(@thorium.@name)   var oreThorium = @ore-thorium;
+volatile mlog(@sand.@name)      var oreSand = @sand-floor;
+
+/// Lookup:
+var ore = sorter1.@config;
+var floorOre = @this.read(ore.@name);
+print(floorOre);
+```
+
+compiles to
+
+```mlog
+# Initialization:
+set copper @ore-copper
+set lead @ore-lead
+set scrap @ore-scrap
+set coal @ore-coal
+set titanium @ore-titanium
+set thorium @ore-thorium
+set sand @sand-floor
+# Lookup:
+sensor .ore sorter1 @config
+sensor *tmp1 .ore @name
+read .floorOre @this *tmp1
+print .floorOre
+```
+
+There's a potential problem, though: sand can be mined on both `@sand-floor` and `@darksand`, so further processing might be needed to handle that case.
+
+Since the `@name` property is defined even for Mindustry content which doesn't have a logic ID assigned, a reverse lookup would also be possible:
+
+```Mindcode
+#set target = 8;
+#set remarks = comments;
+
+/// Initialization:
+volatile mlog(@ore-copper.@name)    var floorCopper = @copper;
+volatile mlog(@ore-lead.@name)      var floorLead = @lead;
+volatile mlog(@ore-scrap.@name)     var floorScrap = @scrap;
+volatile mlog(@ore-coal.@name)      var floorCoal = @coal;
+volatile mlog(@ore-titanium.@name)  var floorTitanium = @titanium;
+volatile mlog(@ore-thorium.@name)   var floorThorium = @thorium;
+volatile mlog(@sand-floor.@name)    var floorSand = @sand;
+volatile mlog(@darksand.@name)      var floorDarksand = @sand;
+
+/// Lookup:
+getBlock(10, 20, , out floor);
+var ore = @this.read(floor.@name);
+print(ore);
+```
+
+compiles to:
+
+```mlog
+# Initialization:
+set ore-copper @copper
+set ore-lead @lead
+set ore-scrap @scrap
+set ore-coal @coal
+set ore-titanium @titanium
+set ore-thorium @thorium
+set sand-floor @sand
+set darksand @sand
+# Lookup:
+ucontrol getBlock 10 20 0 0 :floor
+sensor *tmp2 :floor @name
+read .ore @this *tmp2
+print .ore
+```
+
+`ore` will be set to null if the floor type is not handled by the program.
+
+> [!TIP]
+> This technique is especially useful for Mindcode objects which don't have a logic ID assigned, as it is not possible to create efficient `case` expressions for them.
+
+As this technique depends on the values of variables with static names, each content type can be handled by at most one lookup table. It is, however, possible to create the variables in another processor. The remote processor needs to have the variables defined. A Mindcode remote module could be used for that:
+
+```Mindcode
+#set target = 8;
+
+module lookup;
+
+volatile mlog(@ore-copper.@name)    var floorCopper = @copper;
+volatile mlog(@ore-lead.@name)      var floorLead = @lead;
+volatile mlog(@ore-scrap.@name)     var floorScrap = @scrap;
+volatile mlog(@ore-coal.@name)      var floorCoal = @coal;
+volatile mlog(@ore-titanium.@name)  var floorTitanium = @titanium;
+volatile mlog(@ore-thorium.@name)   var floorThorium = @thorium;
+volatile mlog(@sand-floor.@name)    var floorSand = @sand;
+volatile mlog(@darksand.@name)      var floorDarksand = @sand;
+```
+
+compiles to:
+
+```mlog
+set ore-copper @copper
+set ore-lead @lead
+set ore-scrap @scrap
+set ore-coal @coal
+set ore-titanium @titanium
+set ore-thorium @thorium
+set sand-floor @sand
+set darksand @sand
+set *signature "0:v1"
+wait 1e12
+jump 9 always 0 0
+print "Compiled by Mindcode - github.com/cardillan/mindcode"
+```
+
+This module could be used in a program like this:
+
+```Mindcode
+#set target = 8;
+
+linked lookup = processor1;
+
+getBlock(10, 20, , out floor);
+var ore = lookup.read(floor.@name);
+print(ore);
+```
+
+compiles to:
+
+```mlog
+ucontrol getBlock 10 20 0 0 :floor
+sensor *tmp2 :floor @name
+read .ore processor1 *tmp2
+print .ore
+```
+
+# Encoding data
+
+
+A more complex use-case employed in the BaseBuilder is this:
+```
+const _Common_offset = 60 + 14;
+
+def packCfg(type, x, y, rotation, ind)
+    encode(_Common_offset, 'A' - _Common_offset, type.@id, round(2 * x), round(2 * y), rotation, ind) + "-" + type.@name + ind;
+end;
+
+const PRESS                 = packCfg(@graphite-press,                  -2.5, +1.5,   0,  0);
+const BATTERY1              = packCfg(@battery,                          0.0, +5.0,   0,  1);
+const BATTERY2              = packCfg(@battery,                         +1.0, +5.0,   0,  2);
+
+volatile noinit mlog(PRESS) var press;
+volatile noinit mlog(BATTERY1) var battery1;
+volatile noinit mlog(BATTERY2) var battery2;
+```
+The constants contain block types and positions, and are used as instructions to the block builder to build individual blocks. The block configuration is decoded from the string, and when the block is actually build, it is stored in the corresponding variable using `@this.write(cfg, block)` (it is actually written to several different processors this way). When the block is built, it is therefore immediately accessible via the corresponding variable.
+
+The type name and index are appended to the encoded configuration, which isn't used when decoding the configuration, but allows to identify the variable in the processor Vars screen. The actual variables look like this:
+```
+AJEMJJ-graphite-press0
+AJTJK-battery1
+ALTJL-battery2
+```
+(The last two ones contain an unprintable character which cannot be pasted here, but it works well in the app.)
+
+
+
 # Loop unrolling
 
 One of Mindcode's strongest optimization tools is loop unrolling. When a loop is unrolled, instructions manipulating the loop control variable are eliminated, as well as jumps, potentially saving a lot of execution time. For a loop to be unrolled, the following conditions must be met:
