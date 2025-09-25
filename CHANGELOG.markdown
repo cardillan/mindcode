@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.8.0 - Unreleased
+## 3.8.0 - 2025-09-25
 
 ### Fixed
 
@@ -13,7 +13,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for [local compiler options](doc/syntax/SYNTAX-5-OTHER.markdown#local-scope).
+* Added support for [local compiler options](doc/syntax/SYNTAX-5-OTHER.markdown#option-scope).
 * Added the [`weight` compiler option](doc/syntax/SYNTAX-5-OTHER.markdown#option-weight).
 
 ### Changed

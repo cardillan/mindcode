@@ -338,7 +338,7 @@ print .ore
 Mindustry 8 allows reading individual characters from a string, resulting in a UTF-16 value of the given character. This can be used to pack several different integer values into a string, which can then be passed around the program, and the information can be decoded when needed. Mindcode provides the [`encode()` function](SYNTAX-4-FUNCTIONS.markdown#the-encode-function) for this purpose.
 
 > [!NOTE]
-> Not every integer value can be encoded into a string. See the documentation of the `encode()` function for more details.`
+> Not every integer value can be encoded into a string. See the documentation of the `encode()` function for more details.
 
 To illustrate this technique, consider this excerpt from the [Base Builder project](https://github.com/cardillan/golem/tree/main/base-builder):
 
