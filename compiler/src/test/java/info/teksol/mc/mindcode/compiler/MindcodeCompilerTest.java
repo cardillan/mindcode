@@ -160,7 +160,7 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
     public void compilesMultipleFiles() {
         InputFiles inputFiles = InputFiles.create();
         InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "begin print(\"File1\"); end;");
-        InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "begin print(\"File2\"); end;");
+        InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "module foo; begin print(\"File2\"); end;");
 
         ListMessageLogger messageLogger = new ListMessageLogger();
         compile(expectedMessages().setLogger(messageLogger), inputFiles, compiler -> {
@@ -182,6 +182,14 @@ class MindcodeCompilerTest extends AbstractCodeGeneratorTest {
                         0:  print "File2File1"
                     """, message.message());
         });
+    }
+
+    @Test
+    public void requiresModuleDeclaration() {
+        InputFiles inputFiles = InputFiles.create();
+        InputFile file1 = inputFiles.registerFile(Path.of("file1.mnd"), "begin print(\"File1\"); end;");
+        InputFile file2 = inputFiles.registerFile(Path.of("file2.mnd"), "begin print(\"File2\"); end;");
+        compile(expectedMessages().add("Module declaration not found in source file."), inputFiles, c -> {});
     }
 
     @Test

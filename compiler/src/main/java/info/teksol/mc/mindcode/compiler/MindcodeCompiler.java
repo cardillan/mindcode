@@ -194,6 +194,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                     AstModule module = AstBuilder.build(this, input.inputFile, tokenStream, parseTree,
                             input.remoteProcessors, moduleList.isEmpty());
                     modules.put(input.inputFile, module);
+                    if (!module.isMain() && module.getDeclaration() == null) {
+                        error(new SourcePosition(input.inputFile, 1, 1), ERR.MISSING_MODULE_DECLARATION);
+                    }
                     moduleList.addFirst(module);
                     parseTime += TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - parseStart);
 

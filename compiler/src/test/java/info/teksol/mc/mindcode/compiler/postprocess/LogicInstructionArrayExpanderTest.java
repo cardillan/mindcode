@@ -233,7 +233,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
                     createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
                     createInstruction(JUMP, "12", "lessThan", tmp(5), "0"),
                     createInstruction(JUMP, "14", "lessThanEq", tmp(5), "4"),
-                    createInstruction(PRINT, q("position 9:12: index out of bounds (0 to 2)")),
+                    createInstruction(PRINT, q("position 9:5: index out of bounds (0 to 2)")),
                     createInstruction(STOP),
                     createInstruction(OP, "add", "@counter", "28", tmp(5)),
                     createInstruction(SET, ".a*w", ".a*r"),

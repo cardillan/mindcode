@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ## 3.8.0 - Unreleased
 
+### Fixed
+
+* Circular module dependencies get correctly identified and reported ([#226](https://github.com/cardillan/mindcode/issues/226)).
+* Fixed a possible internal compiler error when performing the Temp Variable Elimination optimization.
+
 ### Added
 
 * Added support for [local compiler options](doc/syntax/SYNTAX-5-OTHER.markdown#local-scope).
@@ -13,7 +18,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Changed
 
-* **Breaking**: modules must now be compiled using the `strict` syntax mode. The `strict` mode is the default for any source file containing a `module` declaration, regardless of whether the module contains remote functionality or not. Modules that were using a `relaxed` or `mixed` syntax (either implicitly, or explicitly) need to be updated to strict syntax mode.
+* **Breaking**: files included via the `require` directive or via the `-a` command-ine argument must contain a `module` declaration.
+* **Breaking**: modules must be compiled using the `strict` syntax mode. The `strict` mode is the default for any source file containing a `module` declaration, regardless of whether the module contains remote functionality or not.
 * **Breaking**: the `text-jump-tables` compiler option has been renamed to `text-tables`.
 
 ### Miscellaneous
@@ -21,6 +27,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Reorganized the [Compiler options documentation](doc/syntax/SYNTAX-5-OTHER.markdown).
 * Split the [System library documentation](doc/syntax/SYSTEM-LIBRARY.markdown) into separate files.
 * Updated the code size calculations for the System library documentation. The array jump tables are no longer included in the calculations.
+* Added a section on [Variable-based lookups](/doc/syntax/PERFORMANCE-TIPS.markdown#variable-based-lookups) and the [`encode()` function](/doc/syntax/PERFORMANCE-TIPS.markdown#efficient-static-data-representation) to the Performance tips documentation.
 
 ## 3.8.0-beta.5 - 2025-09-07
 
@@ -36,7 +43,7 @@ The newly added features are fully functional. There's an unfinished support for
 ### Added
 
 * Added support for calling remote functions locally.
-* Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) to compile-time evaluator. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
+* Added support for evaluating the `@name` property of all objects (not just objects with a logic ID) at compile time. The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
 * Added support for evaluating the `@name` property to the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization). The `@name` property is always compile-time evaluated when possible, regardless of the `builtin-evaluation` option.
 * Added new [`filename` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the name of the output file to use for the generated schematic.
 * **Breaking** added new [`target` attribute](doc/syntax/SCHEMACODE.markdown#attribute-definition) to schematic definition, allowing to specify the target version for the schematic. This might break existing schematics, as previously schematics were compiled using the latest metadata version only.

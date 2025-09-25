@@ -169,11 +169,11 @@ jump 1 greaterThan :x 0
 printflush message1
 ```
 
-# Fast lookups
+# Variable-based lookups
 
-Mindustry 8 allows reading a variable from a processor (including the current processor identified by `@this`) using a variable name. While general string manipulation is not supported by mlog, a specific string can be obtained by querying the `@name` property of a Mindustry object. It is therefore possible to get a string name of a Mindustry object and use that name to read or write a variable, replacing a more complex case statement.
+Mindustry 8 allows reading a variable from a processor (including the current processor identified by `@this`) using a variable name. While a general string manipulation is not supported by mlog, a specific string can be obtained by querying the `@name` property of a Mindustry object. It is therefore possible to get a string name of a Mindustry object and use that name to read or write a variable, replacing a more complex case statement.
 
-Mindcode now allows specifying mlog variable names when declaring variables, using constant expressions (not just string literals). A variable to be accessed indirectly by its name must be declared `volatile`, for example:
+Mindcode supports specifying mlog variable names when declaring variables, using constant expressions (not just string literals). A variable to be accessed indirectly by its name must be declared `volatile`, for example:
 
 ```Mindcode
 #set target = 8;
@@ -186,12 +186,13 @@ print(@this.read("foo"));       // Mindcode resolves this to variable 'foo'
 compiles to
 
 ```mlog
+set foo 10
 set variable "foo"
 write 20 @this variable
 print foo
 ```
 
-This mechanism can be used to build custom lookups, where the named variable holds the lookup value, for example:
+This mechanism can be used to build custom lookups, where the named variable holds the lookup value. At the same time, the `@name` property is compile-time evaluated and thus can be used to define the variable name:
 
 ```Mindcode
 #set target = 8;
@@ -273,7 +274,7 @@ read .ore @this *tmp2
 print .ore
 ```
 
-`ore` will be set to null if the floor type is not handled by the program.
+`ore` will be set to null if the floor type is not included among the lookup variables. 
 
 > [!TIP]
 > This technique is especially useful for Mindcode objects which don't have a logic ID assigned, as it is not possible to create efficient `case` expressions for them.
@@ -309,7 +310,6 @@ set darksand @sand
 set *signature "0:v1"
 wait 1e12
 jump 9 always 0 0
-print "Compiled by Mindcode - github.com/cardillan/mindcode"
 ```
 
 This module could be used in a program like this:
@@ -333,36 +333,124 @@ read .ore processor1 *tmp2
 print .ore
 ```
 
-# Encoding data
+# Efficient static data representation
 
+Mindustry 8 allows reading individual characters from a string, resulting in a UTF-16 value of the given character. This can be used to pack several different integer values into a string, which can then be passed around the program, and the information can be decoded when needed. Mindcode provides the [`encode()` function](SYNTAX-4-FUNCTIONS.markdown#the-encode-function) for this purpose.
 
-A more complex use-case employed in the BaseBuilder is this:
-```
-const _Common_offset = 60 + 14;
+> [!NOTE]
+> Not every integer value can be encoded into a string. See the documentation of the `encode()` function for more details.`
+
+To illustrate this technique, consider this excerpt from the [Base Builder project](https://github.com/cardillan/golem/tree/main/base-builder):
+
+```Mindcode
+#set target = 8;
+#set symbolic-labels = true;
+
+// The encoded values will be shifted by this offset to avoid unsupported characters in the resulting string
+const Common_offset = 74;
 
 def packCfg(type, x, y, rotation, ind)
-    encode(_Common_offset, 'A' - _Common_offset, type.@id, round(2 * x), round(2 * y), rotation, ind) + "-" + type.@name + ind;
+    // The `A` - Common_offset ensures the resulting string start with "A".
+    encode(Common_offset, 'A' - Common_offset, type.@id, round(2 * x), round(2 * y), rotation, ind) + "-" + type.@name + "-" + ind;
 end;
 
-const PRESS                 = packCfg(@graphite-press,                  -2.5, +1.5,   0,  0);
-const BATTERY1              = packCfg(@battery,                          0.0, +5.0,   0,  1);
-const BATTERY2              = packCfg(@battery,                         +1.0, +5.0,   0,  2);
+void unpackCfg(cfg, out type, out x, out y, out rotation, out ind)
+    var index = 1;
+    type = lookup(:block, char(cfg, index++) - Common_offset);
+    x = (char(cfg, index++) - Common_offset) / 2;
+    y = (char(cfg, index++) - Common_offset) / 2;
+    rotation = char(cfg, index++) - Common_offset;
+    ind = char(cfg, index++) - Common_offset;
+end;
 
+
+const PRESS     = packCfg(@graphite-press,  -2.5, +1.5, 0, 0);
+const BATTERY1  = packCfg(@battery,          0.0, +5.0, 0, 1);
+const BATTERY2  = packCfg(@battery,         +1.0, +5.0, 0, 2);
+
+// Since each encoded string is unique (this is also ensured by using a unique index),
+// it is possible to create variables whose mlog name is the encoded string
 volatile noinit mlog(PRESS) var press;
 volatile noinit mlog(BATTERY1) var battery1;
 volatile noinit mlog(BATTERY2) var battery2;
-```
-The constants contain block types and positions, and are used as instructions to the block builder to build individual blocks. The block configuration is decoded from the string, and when the block is actually build, it is stored in the corresponding variable using `@this.write(cfg, block)` (it is actually written to several different processors this way). When the block is built, it is therefore immediately accessible via the corresponding variable.
 
-The type name and index are appended to the encoded configuration, which isn't used when decoding the configuration, but allows to identify the variable in the processor Vars screen. The actual variables look like this:
-```
-AJEMJJ-graphite-press0
-AJTJK-battery1
-ALTJL-battery2
-```
-(The last two ones contain an unprintable character which cannot be pasted here, but it works well in the app.)
+// The encoded value can then be passed into a function and decoded there
+noinline void build(in cfg)
+    var type, x, y, rotation, ind;
+    unpackCfg(cfg, out type, out x, out y, out rotation);
+    // Do something with the decoded values...
+    var block = buildBlock(type, @thisx + x, @thisy + y, rotation);
+    @this.write(block, cfg);
+end;
 
+noinline def buildBlock(type, x, y, rotation)
+    // Builds and returns the block
+    print(type, x, y, rotation);
+    return null;
+end;
 
+// Process the configuration
+build(PRESS);
+build(BATTERY1);
+build(BATTERY2);
+```
+
+The compiled code is
+
+```mlog
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+    set :build:cfg "AJEMJJ-graphite-press-0"
+    op add :build*retaddr @counter 1
+    jump label_10 always 0 0
+    set :build:cfg "AJTJK-battery-1"
+    op add :build*retaddr @counter 1
+    jump label_10 always 0 0
+    set :build:cfg "ALTJL-battery-2"
+    op add :build*retaddr @counter 1
+    jump label_10 always 0 0
+end
+        # Function: noinline void build(in cfg)
+        # Function: void unpackCfg(in cfg, out type, out x, out y, out rotation, out ind)
+label_10:
+            read *tmp1 :build:cfg 1
+            op sub *tmp2 *tmp1 74
+            lookup block :buildBlock:type *tmp2
+            read *tmp5 :build:cfg 2
+            op sub *tmp6 *tmp5 74
+            op div :unpackCfg:x *tmp6 2
+            read *tmp9 :build:cfg 3
+            op sub *tmp10 *tmp9 74
+            op div :unpackCfg:y *tmp10 2
+            read *tmp13 :build:cfg 4
+            op sub :buildBlock:rotation *tmp13 74
+        op add :buildBlock:x @thisx :unpackCfg:x
+        op add :buildBlock:y @thisy :unpackCfg:y
+        op add :buildBlock*retaddr @counter 1
+        jump label_27 always 0 0
+        write :buildBlock*retval @this :build:cfg
+    set @counter :build*retaddr
+        # Function: noinline def buildBlock(in type, in x, in y, in rotation)
+label_27:
+        print :buildBlock:type
+        print :buildBlock:x
+        print :buildBlock:y
+        print :buildBlock:rotation
+        set :buildBlock*retval null
+    set @counter :buildBlock*retaddr
+draw triangle AJEMJJ-graphite-press-0 AJTJK-battery-1 ALTJL-battery-2 0 0 0
+```
+
+The constants contain block types and positions and are used as instructions to the block builder to build individual blocks. The block configuration is decoded from the string, and when the block is actually built it is stored in the corresponding variable using `@this.write(block, cfg)` (in the actual project it is actually written to several different processors this way). When the block is built, it is therefore immediately accessible via the corresponding variable.
+
+The type name and index are appended to the encoded configuration, which isn't used when decoding the configuration but allows identifying the variable in the processor **Vars** screen. The actual variables look like this:
+
+```
+AJEMJJ-graphite-press-0
+AJTJK-battery-1
+ALTJL-battery-2
+```
 
 # Loop unrolling
 

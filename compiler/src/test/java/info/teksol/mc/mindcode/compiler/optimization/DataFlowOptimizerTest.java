@@ -980,16 +980,12 @@ class DataFlowOptimizerTest extends AbstractOptimizerTest<DataFlowOptimizer> {
                     createInstruction(PRINT, ":foo*retval"),
                     createInstruction(END),
                     createInstruction(LABEL, label(0)),
-                    createInstruction(JUMP, label(3), "lessThanEq", ":foo:n", "0"),
+                    createInstruction(SET, ":foo*retval", "null"),
+                    createInstruction(JUMP, label(4), "lessThanEq", ":foo:n", "0"),
                     createInstruction(OP, "sub", ":foo:n", ":foo:n", "1"),
                     createInstruction(CALLREC, "bank1", label(0), label(5), ":foo*retval"),
                     createInstruction(LABEL, label(5)),
-                    createInstruction(SET, tmp(2), ":foo*retval"),
-                    createInstruction(JUMP, label(4), "always"),
-                    createInstruction(LABEL, label(3)),
-                    createInstruction(SET, tmp(2), "null"),
                     createInstruction(LABEL, label(4)),
-                    createInstruction(SET, ":foo*retval", tmp(2)),
                     createInstruction(RETURNREC, "bank1")
             );
         }

@@ -13,8 +13,8 @@ Pass 1: speed optimization selection (cost limit 863):
     Inline write jump table of array 'currentLine'               size   +13, benefit     1300.0, efficiency    100.000
     Inline read jump table of array 'previousLine'               size   +13, benefit     2500.0, efficiency    192.308
   * Inline write jump table of array 'previousLine'              size    -4, benefit     1250.0, efficiency   Infinity (-4 instructions)
-    Inline 'currentLine' read access at line 24:22               size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'currentLine' read access at line 25:31               size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1250.0, efficiency     73.529
     Inline 'currentLine' write access at line 18:13              size   +17, benefit     1250.0, efficiency     73.529
     Inline 'currentLine' write access at line 20:9               size   +17, benefit       50.0, efficiency      2.941
     Inline 'previousLine' read access at line 18:50              size   +17, benefit     1250.0, efficiency     73.529
@@ -25,8 +25,8 @@ Pass 1: speed optimization selection (cost limit 867):
   * Inline read jump table of array 'currentLine'                size   +13, benefit     2500.0, efficiency    192.308 (+13 instructions)
     Inline write jump table of array 'currentLine'               size   +13, benefit     1300.0, efficiency    100.000
     Inline read jump table of array 'previousLine'               size   +13, benefit     2500.0, efficiency    192.308
-    Inline 'currentLine' read access at line 24:22               size   +17, benefit     1250.0, efficiency     73.529
-    Inline 'currentLine' read access at line 25:31               size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1250.0, efficiency     73.529
+    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1250.0, efficiency     73.529
     Inline 'currentLine' write access at line 18:13              size   +17, benefit     1250.0, efficiency     73.529
     Inline 'currentLine' write access at line 20:9               size   +17, benefit       50.0, efficiency      2.941
     Inline 'previousLine' read access at line 18:50              size   +17, benefit     1250.0, efficiency     73.529

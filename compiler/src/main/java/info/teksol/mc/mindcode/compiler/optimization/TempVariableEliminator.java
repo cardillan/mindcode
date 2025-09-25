@@ -67,7 +67,7 @@ class TempVariableEliminator extends BaseOptimizer {
                         // The first instruction merely sets up a temp variable to be used by the last instruction
                         // Replacing those arguments with the value of the set instruction
                         replaceInstruction(indices.getFirst(), createEmpty(first.getAstContext()));
-                        replaceInstruction(indices.getLast(), replaceAllArgs(last, variable, set.getValue()).withContext(set.getAstContext()));
+                        replaceInstruction(indices.getLast(), replaceAllArgs(last, variable, set.getValue()).withContext(last.getAstContext()));
                         replaced = true;
                     }
                 } else if (last instanceof SetInstruction set && set.getValue().equals(variable)) {
@@ -78,7 +78,7 @@ class TempVariableEliminator extends BaseOptimizer {
 
                     if (replacesOutputArg) {
                         // The last instruction merely transfers a value from the output argument of the first instruction
-                        // Replacing those arguments with target of the set instruction
+                        // Replacing those arguments with the target of the set instruction
                         replaceInstruction(indices.getFirst(), replaceAllArgs(first, variable, set.getResult()).withContext(first.getAstContext()));
                         replaceInstruction(indices.getLast(), createEmpty(last.getAstContext()));
                         replaced = true;

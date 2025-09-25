@@ -1,10 +1,13 @@
     29 instructions before optimizations.
-     2 instructions eliminated by Temp Variables Elimination (5 iterations).
-     1 instructions eliminated by Jump Optimization (4 iterations).
-     1 instructions eliminated by Data Flow Optimization (4 iterations).
+     2 instructions eliminated by Temp Variables Elimination (6 iterations).
+     1 instructions eliminated by Jump Optimization (5 iterations).
+     1 instructions eliminated by Single Step Elimination (6 iterations).
+     1 instructions eliminated by Expression Optimization (3 iterations).
+     1 instructions eliminated by If Expression Optimization (3 iterations).
+     1 instructions eliminated by Data Flow Optimization (5 iterations).
      1 instructions eliminated by Unreachable Code Elimination (2 iterations).
      4 instructions eliminated by Stack Optimization.
-    20 instructions after optimizations.
+    17 instructions after optimizations.
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 instructions):
  
@@ -61,35 +64,78 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
     10 op sub :foo:n :foo:n 1
     11 callrec bank1 *label0 *label5 :foo*retval
 
-Modifications by Jumps phase, Jump Normalization, pass 3, iteration 1:
+Modifications by Iterated phase, If Expression Optimization, pass 1, iteration 1 (-1 instructions):
  
-    17 set *tmp2 10
-    18 label *label4
-    19 set :foo*retval *tmp2
--    * label *label2
-    20 returnrec bank1
-    21 end
+     5 stop
+     6 end
+     7 label *label0
+-    * jump *label3 lessThanEq :foo:n 0
++    8 set :foo*retval 10
++    9 jump *label4 lessThanEq :foo:n 0
+    10 push bank1 :foo:n
+    11 op sub :foo:n :foo:n 1
+    12 callrec bank1 *label0 *label5 :foo*retval
+    13 label *label5
+    14 pop bank1 :foo:n
+-    * set *tmp2 :foo*retval
++   15 set :foo*retval :foo*retval
+    16 jump *label4 always
+-    * label *label3
+-    * set *tmp2 10
+    17 label *label4
+-    * set :foo*retval *tmp2
+    18 label *label2
+    19 returnrec bank1
+    20 end
 
-Modifications by Jumps phase, Unreachable Code Elimination, pass 3, iteration 1 (-1 instructions):
+Modifications by Iterated phase, Single Step Elimination, pass 2, iteration 1 (-1 instructions):
  
-    18 label *label4
-    19 set :foo*retval *tmp2
-    20 returnrec bank1
+    13 label *label5
+    14 pop bank1 :foo:n
+    15 set :foo*retval :foo*retval
+-    * jump *label4 always
+    16 label *label4
+    17 label *label2
+    18 returnrec bank1
+
+Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-1 instructions):
+ 
+    12 callrec bank1 *label0 *label5 :foo*retval
+    13 label *label5
+    14 pop bank1 :foo:n
+-    * set :foo*retval :foo*retval
+    15 label *label4
+    16 label *label2
+    17 returnrec bank1
+
+Modifications by Jumps phase, Jump Normalization, pass 4, iteration 1:
+ 
+    13 label *label5
+    14 pop bank1 :foo:n
+    15 label *label4
+-    * label *label2
+    16 returnrec bank1
+    17 end
+
+Modifications by Jumps phase, Unreachable Code Elimination, pass 4, iteration 1 (-1 instructions):
+ 
+    14 pop bank1 :foo:n
+    15 label *label4
+    16 returnrec bank1
 -    * end
 
 Modifications by Final phase, Stack Optimization, iteration 1 (-4 instructions):
  
-     6 end
      7 label *label0
-     8 jump *label3 lessThanEq :foo:n 0
+     8 set :foo*retval 10
+     9 jump *label4 lessThanEq :foo:n 0
 -    * push bank1 :foo:n
-     9 op sub :foo:n :foo:n 1
-    10 callrec bank1 *label0 *label5 :foo*retval
-    11 label *label5
+    10 op sub :foo:n :foo:n 1
+    11 callrec bank1 *label0 *label5 :foo*retval
+    12 label *label5
 -    * pop bank1 :foo:n
-    12 set *tmp2 :foo*retval
-    13 jump *label4 always
-    14 label *label3
+    13 label *label4
+    14 returnrec bank1
 
 Final code before resolving virtual instructions:
 
@@ -101,14 +147,10 @@ assertequals 10 :foo*retval "recursive-function-condition"
 stop
 end
 label *label0
-jump *label3 lessThanEq :foo:n 0
+set :foo*retval 10
+jump *label4 lessThanEq :foo:n 0
 op sub :foo:n :foo:n 1
 callrec bank1 *label0 *label5 :foo*retval
 label *label5
-set *tmp2 :foo*retval
-jump *label4 always
-label *label3
-set *tmp2 10
 label *label4
-set :foo*retval *tmp2
 returnrec bank1

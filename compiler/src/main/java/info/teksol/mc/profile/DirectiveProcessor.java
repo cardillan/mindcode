@@ -83,6 +83,17 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         String directiveText = directive.getOption().getText();
         Enum<?> optionEnum = OPTION_MAP.get(directiveText);
         if (optionEnum == null) {
+            if (directiveText.equals("profile")) {
+                if (directive.getValues().isEmpty()) {
+                    error(directive.getOption(), ERR.DIRECTIVE_NO_VALUE, directiveText);
+                } else if (directive.getValues().size() > 1) {
+                    error(directive.getOption(), ERR.DIRECTIVE_MULTIPLE_VALUES, directiveText);
+                } else {
+                    profile.decode(directive.getValues().getFirst().getText());
+                }
+                return;
+            }
+
             Optional<String> alternative = StringSimilarity.findBestAlternative(directiveText, OPTION_MAP.keySet());
             if (alternative.isPresent()) {
                 error(directive.getOption(), ERR.DIRECTIVE_UNKNOWN_WITH_SUGGESTION, directiveText, alternative.get());

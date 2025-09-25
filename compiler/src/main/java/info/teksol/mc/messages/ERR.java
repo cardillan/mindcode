@@ -127,6 +127,7 @@ public class ERR {
     public static final String LVALUE_VARIABLE_EXPECTED = "Variable expected.";
     public static final String METHOD_CALL_UNDEFINED = "Unknown method '%s'.";
     public static final String METHOD_CALL_UNRESOLVED = "Cannot resolve method '%s'.";
+    public static final String MISSING_MODULE_DECLARATION = "Module declaration not found in source file.";
     public static final String MLOG_BLOCK_CONFLICTING_LABEL = "Label '%s' conflicts with a declared input or output variable.";
     public static final String MLOG_BLOCK_DUPLICATE_LABEL = "Label '%s' is already declared in this mlog block.";
     public static final String MLOG_BLOCK_INVALID_LABEL = "A label must contain only alphanumeric characters.";
