@@ -76,6 +76,7 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
             List<Path> files = stream
                     .filter(f -> f.toString().endsWith(".mnd"))
                     //.filter(f -> f.toString().endsWith("units.mnd"))
+                    .sorted()
                     .toList();
             assertFalse(files.isEmpty(), "Expected to find at least one script in " + LIBRARY_DIRECTORY + "; found none");
 
