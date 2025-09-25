@@ -52,15 +52,12 @@ The most important recent changes to Mindcode include:
   * New string/character-based instructions and character literals.
   * Support for named color literals: `%[red]`.
 * Language features
+  * Local compiler options
   * Support for `null` values in the `case` expression.
   * Improved optimization of `case` expressions, including `case` expression over block types, unit types, items or liquids.
   * Passing arguments (including arrays) to inline functions by reference.
-  * Specific syntax for [mlog keywords](doc/syntax/SYNTAX.markdown#mlog-keywords).
   * Support for passing mlog keywords as arguments to inline functions.
   * External and internal arrays (`@counter` arrays), including basic array optimizations.
-  * Expressions in string interpolation: `print($"Sum: ${a + b}.")`.
-  * Support for color literals: `%00ffff80`.
-  * Prefix/postfix increment/decrement operators: `i++`, `--j`.
 * Other functionality
   * Support for [symbolic labels and indentation in generated mlog code](/doc/syntax/SYNTAX-5-OTHER.markdown#option-symbolic-labels).
   * Using Mindustry Logic metadata corresponding to the target selected for compilation.
@@ -93,7 +90,7 @@ The [Mlog Assertions mod](https://github.com/cardillan/MlogAssertions), availabl
 
 To learn more about Mindustry Logic, you can find more information about it here:
 
-* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated May 2025)
+* Yruei's [Mlog Documentation](https://yrueii.github.io/MlogDocs/) (last updated September 2025)
 
 You can also get help on these Discord servers:
 
