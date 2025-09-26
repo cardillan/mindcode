@@ -93,7 +93,6 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
             boolean startGap = start == 0 || partitions.get(start - 1).to() != last.from();
             LogicLabel label = last.label();
             int size = last.size();
-            int lastSize = size;
             int count = 1;
             int exceptions = 0;
             int maxExceptions = label == LogicLabel.EMPTY ? MAX_EXCEPTIONS_ELSE : MAX_EXCEPTIONS_WHEN;
@@ -120,7 +119,6 @@ public class CombinatorialSegmentConfigurationGenerator extends AbstractSegmentC
                         // The merged segment may stop here
                         // Last never points at an impossible end segment
                         stop = j;
-                        lastSize = size;
                     }
                 }
 

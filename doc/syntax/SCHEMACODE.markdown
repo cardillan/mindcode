@@ -106,7 +106,7 @@ The following attributes are recognized:
 * `tag`: assigns a tag to the schematic. The tag can be either a String value or a predefined icon (see
   [Icons](SYNTAX-1-VARIABLES.markdown#constants-representing-built-in-icons)). `tag` attribute can be specified more than once; all 
   specified tags are attached to the schematic.
-* `target`: specifies the target of the schematic. The assigned value must match one of the [existing targets](SYNTAX-5-OTHER.markdown#option-target). Only blocks compatible with the given target can be used in the schematics. The target is also applied when compiling Mindcode assigned to processors (although it is possible to override the target within the Mindcode source code usign the `#set target` directive). Can be specified at most once.
+* `target`: specifies the target of the schematic. The assigned value must match one of the [existing targets](SYNTAX-5-OTHER.markdown#option-target). Only blocks compatible with the given target can be used in the schematics. The target is also applied when compiling Mindcode assigned to processors (although it is possible to override the target within the Mindcode source code using the `#set target` directive). Can be specified at most once.
 
 # Block definition
 

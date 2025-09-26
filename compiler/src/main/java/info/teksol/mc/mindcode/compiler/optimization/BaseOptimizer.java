@@ -17,7 +17,6 @@ import info.teksol.mc.mindcode.logic.instructions.LabelInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.OpInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -32,7 +31,7 @@ import java.util.stream.Stream;
 /// by the optimizer.
 ///
 /// **Note:** The methods for accessing instructions always return `null` when the instruction doesn't exist,
-/// regardless of the way the instruction is being accessed (via index, searching for properties etc.) It is assumed
+/// regardless of the way the instruction is being accessed (via index, searching for properties, etc.) It is assumed
 /// that accessed instructions are practically always tested using instanceof, which handles `null` values
 /// gracefully. Methods that won't handle invalid indexes gracefully are documented as such.
 ///
@@ -228,7 +227,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     //<editor-fold desc="Finding instructions by position">
 
-    /// Return the instruction at given position in the program.
+    /// Return the instruction at a given position in the program.
     ///
     /// @param index index of the instruction
     /// @return the instruction at given index
@@ -236,9 +235,9 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.instructionAt(index);
     }
 
-    /// Returns the instruction preceding the given instruction. If such instruction doesn't exist
+    /// Returns the instruction preceding the given instruction. If such an instruction doesn't exist
     /// (because the reference instruction is the first one), returns null. If the reference instruction
-    /// isn't found the program, an exception is thrown.
+    /// isn't found in the program, an exception is thrown.
     ///
     /// @param instruction instruction to find in the program
     /// @return instruction before the reference instruction
@@ -246,9 +245,9 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.instructionBefore(instruction);
     }
 
-    /// Returns the instruction following the given instruction. If such instruction doesn't exist
+    /// Returns the instruction following the given instruction. If such an instruction doesn't exist
     /// (because the reference instruction is the last one), returns null. If the reference instruction
-    /// isn't found the program, an exception is thrown.
+    /// isn't found in the program, an exception is thrown.
     ///
     /// @param instruction instruction to find in the program
     /// @return instruction after the reference instruction
@@ -256,8 +255,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.instructionAfter(instruction);
     }
 
-    /// Provides a sublist of the current program. Will fail when such sublist cannot be created.
-    /// Returned list won't reflect further changed to the program.
+    /// Provides a sublist of the current program. Will fail when such a sublist cannot be created.
+    /// The returned list won't reflect further changes to the program.
     ///
     /// @param fromIndex starting index
     /// @param toIndex ending index (exclusive)
@@ -266,8 +265,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.instructionSubList(fromIndex, toIndex);
     }
 
-    /// Provides a sublist of the current program. Will fail when such sublist cannot be created.
-    /// Returned list won't reflect further changed to the program.
+    /// Provides a sublist of the current program. Will fail when such a sublist cannot be created.
+    /// The returned list won't reflect further changes to the program.
     ///
     /// @param fromInstruction first instruction in the list
     /// @param toInstruction last instruction in the list (inclusive)
@@ -276,7 +275,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.instructionSubList(fromInstruction, toInstruction);
     }
 
-    /// Provides stream of all instructions in the program.
+    /// Provides a stream of all instructions in the program.
     ///
     /// @return an instruction stream
     protected Stream<LogicInstruction> instructionStream() {
@@ -292,7 +291,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.instructionIndex(instruction);
     }
 
-    /// Returns the index of given instruction. When the instruction isn't found, an exception is thrown.
+    /// Returns the index of a given instruction. When the instruction isn't found, an exception is thrown.
     protected int existingInstructionIndex(LogicInstruction instruction) {
         return optimizationContext.existingInstructionIndex(instruction);
     }
@@ -300,7 +299,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     //<editor-fold desc="Finding instructions by properties">
 
-    /// Starting at given index, finds the first instruction matching predicate.
+    /// Starting at the given index, finds the first instruction matching predicate.
     /// Returns the index or -1 if not found.
     ///
     /// @param startIndex index to start search from, inclusive
@@ -348,7 +347,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.labeledInstructionIndex(label);
     }
 
-    /// Starting at given index, find first instruction matching predicate. Return null if not found.
+    /// Starting at given index, find the first instruction matching the predicate. Return null if not found.
     ///
     /// @param startIndex index to start search from, inclusive
     /// @param matcher predicate matching sought instruction
@@ -400,7 +399,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     /// Return a list of indexes corresponding to instructions matching predicate.
     ///
     /// @param matcher predicate matching sought instructions
-    /// @return list of all predicate matching instructions indexes.
+    /// @return list of indexes of the predicate matching instructions.
     protected List<Integer> instructionIndexes(Predicate<LogicInstruction> matcher) {
         return optimizationContext.instructionIndexes(matcher);
     }
@@ -437,7 +436,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     //<editor-fold desc="Program modification">
 
-    /// Inserts a new instruction at given index. The instruction must be assigned an AST context suitable for its
+    /// Inserts a new instruction at the given index. The instruction must be assigned an AST context suitable for its
     /// position in the program. An instruction must not be placed into the program twice; when an instruction
     /// truly needs to be duplicated, an independent copy with proper AST context needs to be created.
     ///
@@ -448,7 +447,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         optimizationContext.insertInstruction(index, instruction);
     }
 
-    /// Inserts all instruction in the list to the program, starting at given index.
+    /// Inserts all instructions in the list to the program, starting at the given index.
     /// See [#insertInstruction(int,LogicInstruction)].
     ///
     /// @param index where to place the instructions
@@ -458,9 +457,8 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         optimizationContext.insertInstructions(index, instructions);
     }
 
-    /// Replaces an instruction at given index. The replaced instruction should either reuse the AST context
-    /// of the original instruction at this position, or use a new one specifically created for the purpose
-    /// of the replacement.
+    /// Replaces an instruction at a given index. The replaced instruction should either reuse the AST context
+    /// of the original instruction at this position or use a new one specifically created for the replacement.
     ///
     /// Replacing an instruction with the same instruction isn't supported and causes an OptimizationException
     /// to be thrown.
@@ -474,7 +472,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.replaceInstruction(index, replacement);
     }
 
-    /// Removes an instruction at given index.
+    /// Removes an instruction at a given index.
     ///
     /// @param index index of an instruction to be removed
     protected void removeInstruction(int index) {
@@ -530,8 +528,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
     }
 
     /// Replaces a given instruction with a new one. The new instruction should either reuse the AST context
-    /// of the original instruction at this position, or use a new one specifically created for the purpose
-    /// of the replacement.
+    /// of the original instruction at this position or use a new one specifically created for the replacement.
     ///
     /// If the original instruction isn't found in the program, an exception is thrown.
     ///
@@ -554,7 +551,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         optimizationContext.removeInstruction(instruction);
     }
 
-    /// Removes an instruction immediately preceding given instruction.
+    /// Removes an instruction immediately preceding the given instruction.
     /// If the given instruction isn't found, an exception is thrown.
     ///
     /// @param anchor the reference instruction
@@ -562,7 +559,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         optimizationContext.removePrevious(anchor);
     }
 
-    /// Removes an instruction immediately following given instruction.
+    /// Removes an instruction immediately following the given instruction.
     /// If the given instruction isn't found, an exception is thrown.
     ///
     /// @param anchor the reference instruction
@@ -570,7 +567,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         optimizationContext.removeFollowing(anchor);
     }
 
-    /// Removes all instructions matching given predicate.
+    /// Removes all instructions matching a given predicate.
     ///
     /// @param matcher predicate to match instructions to be removed
     protected void removeMatchingInstructions(Predicate<LogicInstruction> matcher) {
@@ -580,10 +577,10 @@ abstract class BaseOptimizer extends AbstractOptimizer {
 
     //<editor-fold desc="Program modification using contexts">
 
-    /// Returns a label at the very beginning of the given AST context. If such label doesn't exist, creates it.
-    /// Note that the label must belong directly to the given context to be reused, labels belonging to
-    /// child contexts aren't considered. Care needs to be taken to provide correct context; for nodes modelled
-    /// with subcontexts a subcontext should be always provided.
+    /// Returns a label at the very beginning of the given AST context. If such a label doesn't exist, creates it.
+    /// Note that the label must belong directly to the given context to be reused; labels belonging to
+    /// child contexts aren't considered. Care needs to be taken to provide the correct context; for nodes modeled
+    /// with subcontexts a subcontext should always be provided.
     protected LogicLabel obtainContextLabel(AstContext astContext) {
         return optimizationContext.obtainContextLabel(astContext);
     }
@@ -598,7 +595,7 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.createIterator();
     }
 
-    /// Creates a new LogicIterator positioned at given index.
+    /// Creates a new LogicIterator positioned at the given index.
     ///
     /// @param index initial position of the iterator
     /// @return a new LogicIterator instance
@@ -606,18 +603,18 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         return optimizationContext.createIteratorAtIndex(index);
     }
 
-    /// Creates a new LogicIterator positioned at given instruction.
+    /// Creates a new LogicIterator positioned at the given instruction.
     ///
     /// @param instruction target instruction
-    /// @return LogicIterator positioned at given instruction
+    /// @return LogicIterator positioned at the given instruction
     protected LogicIterator createIteratorAtInstruction(LogicInstruction instruction) {
         return optimizationContext.createIteratorAtInstruction(instruction);
     }
 
-    /// Creates a new LogicIterator positioned at the beginning of given context.
+    /// Creates a new LogicIterator positioned at the beginning of the given context.
     ///
     /// @param context target context
-    /// @return LogicIterator positioned at the beginning of given context
+    /// @return LogicIterator positioned at the beginning of the given context
     protected LogicIterator createIteratorAtContext(AstContext context) {
         return optimizationContext.createIteratorAtContext(context);
     }
@@ -639,11 +636,11 @@ abstract class BaseOptimizer extends AbstractOptimizer {
         };
     }
 
-    protected <T> List<@NotNull T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
+    protected <T> List<T> forEachContext(Predicate<AstContext> matcher, Function<AstContext, @Nullable T> action) {
         return optimizationContext.forEachContext(matcher, action);
     }
 
-    protected <T> List<@NotNull T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
+    protected <T> List<T> forEachContext(AstContextType contextType, AstSubcontextType subcontextType,
             Function<AstContext, @Nullable T> action) {
         return optimizationContext.forEachContext(contextType, subcontextType, action);
     }

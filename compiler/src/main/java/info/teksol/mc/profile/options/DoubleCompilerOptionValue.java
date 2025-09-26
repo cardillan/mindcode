@@ -1,8 +1,11 @@
 package info.teksol.mc.profile.options;
 
+import info.teksol.mc.messages.ERR;
 import info.teksol.mc.util.EnumUtils;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
+
+import java.util.function.Consumer;
 
 @NullMarked
 public class DoubleCompilerOptionValue extends CompilerOptionValue<Double> {
@@ -35,17 +38,13 @@ public class DoubleCompilerOptionValue extends CompilerOptionValue<Double> {
     }
 
     @Override
-    public void setValue(Double value) {
-        if (value == getDefaultValue()) {
-            super.setValue(value);
+    public boolean accepts(Double value, Consumer<String> errorReporter) {
+        if (value == getDefaultValue() || min <= value && value <= max) {
+            return true;
         } else {
-            super.setValue(Math.min(Math.max(value, min), max));
+            errorReporter.accept(String.format(ERR.DIRECTIVE_VALUE_DOUBLE_OUT_OF_RANGE, value, getOptionName(), min, max));
+            return false;
         }
-    }
-
-    @Override
-    public boolean accepts(Double value) {
-        return min <= value && value <= max;
     }
 
     @Override

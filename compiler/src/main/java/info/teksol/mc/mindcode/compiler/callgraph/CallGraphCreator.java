@@ -157,6 +157,7 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         // 2nd and other levels of indirection
         // Must end eventually, as there's a finite number of functions to add
+        //noinspection StatementWithEmptyBody
         while (propagateIndirectCalls()) ;
     }
 

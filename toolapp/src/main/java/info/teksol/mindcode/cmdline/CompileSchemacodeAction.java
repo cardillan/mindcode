@@ -16,6 +16,7 @@ import net.sourceforge.argparse4j.inf.Namespace;
 import net.sourceforge.argparse4j.inf.Subparser;
 import net.sourceforge.argparse4j.inf.Subparsers;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.io.File;
 import java.nio.file.Path;
@@ -79,7 +80,7 @@ public class CompileSchemacodeAction extends ActionHandler {
         return subparser;
     }
 
-    private File resolveSdfOutputFile(File cmdLineFile, String sdfFile) {
+    private @Nullable File resolveSdfOutputFile(@Nullable File cmdLineFile, String sdfFile) {
         return cmdLineFile != null ? cmdLineFile : sdfFile.isEmpty() ? null : new File(sdfFile);
     }
 
@@ -99,7 +100,6 @@ public class CompileSchemacodeAction extends ActionHandler {
 
         final File output = resolveOutputFile(inputFile, outputDirectory, outputFile, ".msch");
         final File logFile = resolveOutputFile(inputFile, outputDirectory, outputFileLog, ".log");
-        final boolean mlogToStdErr = isStdInOut(output);
         final PositionFormatter positionFormatter = sp -> sp.formatForIde(compilerProfile.getFileReferences());
 
         if (!result.hasErrors()) {

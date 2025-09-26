@@ -30,11 +30,6 @@ public enum AssertionType {
         this.objFunction = objFunction;
     }
 
-    @Override
-    public String toString() {
-        return super.toString();
-    }
-
     public interface AssertionTypeObjLambda {
         boolean get(@Nullable Object obj);
     }

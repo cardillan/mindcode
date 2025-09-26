@@ -81,8 +81,8 @@ public abstract class AbstractProcessorTest extends AbstractTestBase {
         /// Called to compare the actual results of running a code with an expected state.
         ///
         /// @param useAsserts if true, the evaluator should explicitly assert the equality, otherwise it just reports
-        ///                                     the result. Each evaluator will be called at lest once with useAsserts set to true.
-        /// @param compiler   MindcodeCompiler instance used to compile and run the code
+        ///                                     the result. Each evaluator will be called at least once with useAsserts set to true.
+        /// @param processor   processor emulator used to run the code
         /// @return true if the actual results output matches the expected one
         boolean asExpected(boolean useAsserts, Processor processor);
     }

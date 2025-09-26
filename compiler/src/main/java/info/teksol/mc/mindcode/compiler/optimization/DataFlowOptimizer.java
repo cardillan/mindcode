@@ -339,24 +339,6 @@ class DataFlowOptimizer extends BaseOptimizer {
             // Marking them as read now will preserve the last assigned value.
             List.copyOf(uninitialized).forEach(variableStates::valueRead);
             functionEndStates.forEach(vs -> List.copyOf(uninitialized).forEach(vs::valueRead));
-
-            // Deactivated
-//            if (!advanced()) {
-//                // On basic optimization level, provide limited protection to main variables.
-//                // Specifically, latest values assigned to main variables are preserved.
-//                // Variables that were part of unrolled loops are NOT preserved, regardless of their other use.
-//                // Uninitialized variables aren't reported, because these variables aren't actually read, we only want
-//                // to keep the instructions that produced them in the code.
-//                VariableStates finalVariableStates = variableStates;
-//                contextStream(context)
-//                        .flatMap(LogicInstruction::outputArgumentsStream)
-//                        .filter(LogicVariable.class::isInstance)
-//                        .map(LogicVariable.class::cast)
-//                        .filter(LogicVariable::isMainVariable)
-//                        .filter(variable -> !optimizationContext.isUnrolledVariable(variable))
-//                        .distinct()
-//                        .forEachOrdered(v -> finalVariableStates.valueRead(v, null, false, true));
-//            }
         }
 
         if (context.isFunction()) {

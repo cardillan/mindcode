@@ -29,13 +29,13 @@ $targetx = -1
 $targety = -1
 ```
 
-Each of the global variables above, flag, state, targetx and targety, are stored in the cell, each at a different address. Addresses are allocated in a first-come, first-serve basis. `$flag` is stored in `cell1[0]`, state in `cell1[1]` and so on. This is important to know since changing the order of declaration changes the meaning of your heap variables. Mindcode has no memory of what was stored where.
+Each of the global variables above, `flag`, `state`, `targetx` and `targety`, are stored in the cell, each at a different address. Addresses are allocated on a first-come, first-serve basis. `$flag` is stored in `cell1[0]`, state in `cell1[1]` and so on. This is important to know since changing the order of declaration changes the meaning of your heap variables.
 
 Since Mindcode knows the exact size of the heap, it can tell you if you try to use too many slots in your heap.
 
 ## Case / When Expressions
 
-Case / when expressions are merely a quality of life improvement for the script developer. Using nested if/else, it was already possible to write complex decision scripts, but case expressions are simply an easier way to do the same thing:
+Case / when expressions are merely a quality-of-life improvement for the script developer. Using nested if/else, it was already possible to write complex decision scripts, but case expressions are simply an easier way to do the same thing:
 
 ```
 print("current state: ", $state, ": "

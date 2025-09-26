@@ -14,7 +14,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @NullMarked
-public record CompilerOutput<T>(@Nullable T output, String fileName, List<MindcodeMessage> messages,
+public record CompilerOutput<T extends @Nullable Object>(T output, String fileName, List<MindcodeMessage> messages,
                                 @Nullable ExecutionException executionException, List<Assertion> assertions,
                                 @Nullable TextBuffer textBuffer, int steps) {
 
@@ -22,7 +22,7 @@ public record CompilerOutput<T>(@Nullable T output, String fileName, List<Mindco
         return new CompilerOutput<>(output, fileName, messages, executionException, assertions, textBuffer, steps);
     }
 
-    public CompilerOutput(@Nullable T output, String fileName, List<MindcodeMessage> messages) {
+    public CompilerOutput(T output, String fileName, List<MindcodeMessage> messages) {
         this(output, fileName, messages, null, List.of(), null, 0);
     }
 

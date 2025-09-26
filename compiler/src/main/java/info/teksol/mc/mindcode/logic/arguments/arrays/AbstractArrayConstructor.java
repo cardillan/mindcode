@@ -56,14 +56,6 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return result;
     }
 
-    protected List<LogicVariable> arrayElementsConcat(Stream<? extends LogicArgument> variables) {
-        return Stream.concat(variables,
-                        arrayStore.getElements().stream())
-                .filter(LogicVariable.class::isInstance)
-                .map(LogicVariable.class::cast)
-                .toList();
-    }
-
     protected List<LogicVariable> variables(LogicArgument... args) {
         return Stream.of(args).filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList();
     }
@@ -103,9 +95,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
         switch (boundaryChecks) {
             case ASSERT -> createAssertRuntimeChecks(astContext, consumer, index, max, multiple, errorMessage);
-            case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max, errorMessage);
-            case SIMPLE, DESCRIBED ->
-                    createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
+            case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max);
+            case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
         }
     }
 
@@ -117,7 +108,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     }
 
     private void createMinimalRuntimeCheck(AstContext astContext, Consumer<LogicInstruction> consumer,
-            LogicValue index, int max, String errorMessage) {
+            LogicValue index, int max) {
         AstContext ctx = astContext.createChild(instruction.getAstContext().existingNode(),
                 AstContextType.IF, AstSubcontextType.CONDITION);
 

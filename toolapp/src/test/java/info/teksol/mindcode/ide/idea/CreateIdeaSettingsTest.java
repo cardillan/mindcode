@@ -107,10 +107,10 @@ public class CreateIdeaSettingsTest {
 
         // Do not modify the files if the content didn't change
         if (zipFile.exists()) {
-            try (FileSystem zipfs = FileSystems.newFileSystem(zipFile.toPath())) {
+            try (FileSystem zipFS = FileSystems.newFileSystem(zipFile.toPath())) {
                 for (FileEntry entry : entries) {
-                    Path pathInZipfile = zipfs.getPath("/" + entry.fileName);
-                    if (!Files.exists(pathInZipfile) || !Files.readString(pathInZipfile).equals(entry.contents)) {
+                    Path pathInZipFile = zipFS.getPath("/" + entry.fileName);
+                    if (!Files.exists(pathInZipFile) || !Files.readString(pathInZipFile).equals(entry.contents)) {
                         modified = true;
                         break;
                     }

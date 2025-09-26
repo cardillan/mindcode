@@ -42,7 +42,7 @@ abstract class ActionHandler {
         @Override
         @SuppressWarnings("unchecked")
         public boolean contains(Object val) {
-            return option.valueType.isInstance(val) && option.accepts((T) val);
+            return option.valueType.isInstance(val) && option.accepts((T) val, _ -> {});
         }
 
         @Override
@@ -135,7 +135,7 @@ abstract class ActionHandler {
         return file.getPath().equals("-");
     }
 
-    static File resolveOutputFile(File inputFile, File outputDirectory, File outputFile, String extension) {
+    static File resolveOutputFile(File inputFile, @Nullable File outputDirectory, @Nullable File outputFile, String extension) {
         if (outputFile == null) {
             if (isStdInOut(inputFile)) {
                 return inputFile;

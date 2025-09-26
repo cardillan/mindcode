@@ -13,7 +13,6 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.GlobalCompilerProfile;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -166,7 +165,7 @@ class LoopUnroller extends BaseOptimizer {
         List<LogicList> iterationContexts = iterationInstructionContexts(loop);
         LogicList condition = contextInstructions(loop.findLastSubcontext(CONDITION));
 
-        // Last jump in condition should contain loop control variable
+        // The last jump in condition should contain a loop control variable
         if (condition.getLast() instanceof JumpInstruction jump) {
             LogicVariable controlVariable = findLoopControl(loop, init, jump);
             var variables = optimizationContext.getLoopVariables(loop);
@@ -269,7 +268,7 @@ class LoopUnroller extends BaseOptimizer {
                 //     in this case, strong inequality means one additional iteration
                 boolean additionalLoop = weakInequality ^ !hasExitCondition(loop);
 
-                // Number of steps to reach end
+                // Number of steps to reach the end
                 return (Math.abs(intDiff) + Math.abs(intStep) - 1) / Math.abs(intStep) + ((additionalLoop && (intDiff % intStep == 0)) ? 1 : 0);
             }
         }
@@ -349,7 +348,7 @@ class LoopUnroller extends BaseOptimizer {
         return result;
     }
 
-    private @NonNull ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, @Nullable AstContext init, LogicVariable variable) {
+    private ArrayList<LogicInstruction> getControlVariableUpdates(AstContext loop, @Nullable AstContext init, LogicVariable variable) {
         return contextStream(loop)
                 .filter(ix -> !ix.getAstContext().belongsTo(init))
                 .filter(ix -> ix.usesAsOutput(variable))

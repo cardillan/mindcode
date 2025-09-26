@@ -211,7 +211,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         List<Token> docTokens = Objects.requireNonNullElse(
                 tokenStream.getHiddenTokensToLeft(tokenIndex, Token.HIDDEN_CHANNEL), List.of());
 
-        // Note: the reduce trick to get the last item on the stream is not very effective, but we don't expect
+        // Note: the "reduce" trick to get the last item on the stream is not very efficient, but we don't expect
         // the token list to be long. The length should be at most 1 in practically all cases.
         return docTokens.stream()
                 .reduce((first, second) -> second)
@@ -932,7 +932,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstLiteralString visitFormattableText(MindcodeParser.FormattableTextContext ctx) {
         // Can't use createLiteralString here
-        // We're parsing inside a formattable string and there aren't double quotes around the token
+        // We're parsing inside a formattable string, and there aren't double quotes around the token
         return new AstLiteralString(pos(ctx.TEXT()), ctx.TEXT().getText());
     }
 
@@ -984,7 +984,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
         );
     }
 
-    private List<AstMlogVariable> processMlogVariables(MlogVariableListContext ctx) {
+    private List<AstMlogVariable> processMlogVariables(@Nullable MlogVariableListContext ctx) {
         return ctx != null
                 ? ctx.astMlogVariable().stream().map(this::visitAstMlogVariable).toList()
                 : List.of();
@@ -998,7 +998,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
                 ctx.modifier_out != null);
     }
 
-    private List<AstMlogStatement> processMlogStatements(List<MlogStatementContext> ctx) {
+    private List<AstMlogStatement> processMlogStatements(@Nullable List<MlogStatementContext> ctx) {
         return ctx != null
                 ? ctx.stream().map(this::visit).map(AstMlogStatement.class::cast).toList()
                 : List.of();

@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
-/// Processes compiler directives both global/module and local) in an AST node tree, modifying the given compiler
+/// Processes compiler directives (both global/module and local) in an AST node tree, modifying the given compiler
 /// profile accordingly.
 @NullMarked
 public class DirectivePreprocessor extends AbstractMessageEmitter {

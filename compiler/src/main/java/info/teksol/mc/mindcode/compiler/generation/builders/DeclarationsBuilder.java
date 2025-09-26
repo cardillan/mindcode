@@ -604,9 +604,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
     }
 
-    private void validateMlogName(AstExpression mlog, String name) {
-    }
-
     private SourceElement modifierElement(AstVariablesDeclaration node, Modifier modifier) {
         return node.getModifiers().stream()
                 .filter(m -> m.getModifier() == modifier)

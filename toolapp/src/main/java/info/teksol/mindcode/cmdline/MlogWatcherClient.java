@@ -60,7 +60,6 @@ public class MlogWatcherClient extends WebSocketClient {
     public static void sendMlog(int port, long timeout, MessageLogger messageLogger, String mlog) {
         MlogWatcherClient client = null;
         try {
-            URI uri = new URI("ws://localhost:" + port);
             client = new MlogWatcherClient(port, messageLogger);
             client.connectBlocking(timeout, TimeUnit.MILLISECONDS);
             client.send(mlog);

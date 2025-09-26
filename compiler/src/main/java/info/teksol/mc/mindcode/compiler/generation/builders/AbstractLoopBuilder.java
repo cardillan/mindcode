@@ -21,7 +21,6 @@ public abstract class AbstractLoopBuilder extends AbstractBuilder {
     protected LoopLabels enterLoop(AstLabeledStatement loopNode) {
         final LogicLabel continueLabel = assembler.nextLabel();
         final LogicLabel breakLabel = assembler.nextLabel();
-        final String loopLabel = loopNode.getLabel() == null ? "" : loopNode.getLabel().getName();
         return variables.getLoopStack().enterLoop(loopNode.getLabel(), breakLabel, continueLabel);
     }
 
@@ -33,11 +32,11 @@ public abstract class AbstractLoopBuilder extends AbstractBuilder {
         return variables.getLoopStack().getContinueLabel(loopNode);
     }
 
-    protected void exitLoop(AstLabeledStatement loopNode, LoopLabels loopLabels) {
+    protected void exitLoop(LoopLabels loopLabels) {
         variables.getLoopStack().exitLoop(loopLabels);
     }
 
-    protected void allowContinue(AstLabeledStatement loopNode, boolean allowed) {
+    protected void allowContinue(boolean allowed) {
         variables.getLoopStack().allowContinue(allowed);
     }
 }

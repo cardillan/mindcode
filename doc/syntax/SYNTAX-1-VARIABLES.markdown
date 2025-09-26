@@ -1163,7 +1163,7 @@ end;
 
 ### Guard code for linked variables
 
-When declaring a linked variable usign the `guarded` modifier, Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
+When declaring a linked variable using the `guarded` modifier, Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
 
 ```Mindcode
 /// A guard code: loops until message1 is not null

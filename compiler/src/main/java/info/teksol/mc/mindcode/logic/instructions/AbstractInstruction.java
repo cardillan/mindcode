@@ -58,8 +58,8 @@ public abstract class AbstractInstruction implements LogicInstruction {
     @SuppressWarnings("unchecked")
     public <T extends LogicInstruction> T copyInfo(T other) {
         assert info.isEmpty();
-        assert getClass() == other.getClass();
-        if (other instanceof AbstractInstruction ix && !ix.info.isEmpty()) {
+        AbstractInstruction ix = (AbstractInstruction) other;
+        if (!ix.info.isEmpty()) {
             info.putAll(ix.info);
             updateInfo(info.keySet());
         }

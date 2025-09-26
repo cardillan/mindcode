@@ -10,7 +10,6 @@ import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.OptionMultiplicity;
 import info.teksol.mc.profile.options.OptionScope;
 import info.teksol.mc.util.StringSimilarity;
-import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -43,7 +42,7 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
             T converted = option.convert(value.getText());
             if (converted == null) {
                 reportWrongOptionValue(node, value, option.acceptedValues());
-            } else {
+            } else if (option.accepts(converted, s -> error(value, "%s", s))) {
                 result.add(converted);
             }
         }
@@ -84,11 +83,7 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         Enum<?> optionEnum = OPTION_MAP.get(directiveText);
         if (optionEnum == null) {
             if (directiveText.equals("profile")) {
-                if (directive.getValues().isEmpty()) {
-                    error(directive.getOption(), ERR.DIRECTIVE_NO_VALUE, directiveText);
-                } else if (directive.getValues().size() > 1) {
-                    error(directive.getOption(), ERR.DIRECTIVE_MULTIPLE_VALUES, directiveText);
-                } else {
+                if (validateSingleValue(directive)) {
                     profile.decode(directive.getValues().getFirst().getText());
                 }
                 return;
@@ -105,10 +100,6 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
         }
     }
         
-    private void firstValueError(AstDirectiveSet node, @PrintFormat String format, Object... args) {
-        error(node.getValues().getFirst().sourcePosition(), format, args);
-    }
-
     private boolean validateSingleValue(AstDirectiveSet node) {
         if (node.getValues().isEmpty()) {
             error(node.getOption(), ERR.DIRECTIVE_NO_VALUE, node.getOption().getText());

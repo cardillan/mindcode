@@ -53,7 +53,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             nullCounterNoop = node.getProfile().isNullCounterIsNoop();
             iterationGroups = node.getIteratorGroups().stream().map(this::processIteratorGroup).toList();
             loopLabels = enterLoop(node);
-            allowContinue(node, false);
+            allowContinue(false);
         }
 
         private IterationGroup processIteratorGroup(AstIteratorsValuesGroup group) {
@@ -104,7 +104,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             if (iterations > 0) {
                 assembler.clearSubcontextType();
             }
-            exitLoop(node, loopLabels);
+            exitLoop(loopLabels);
 
             iterationGroups.forEach(IterationGroup::generateMessage);
         }
@@ -168,7 +168,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         private void createBody() {
-            allowContinue(node, true);
+            allowContinue(true);
 
             // This is the last iteration. We'll output the loop body directly here.
             assembler.setSubcontextType(AstSubcontextType.BODY, LOOP_REPETITIONS);
@@ -185,7 +185,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
             assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, LOOP_REPETITIONS);
             assembler.createMultiJump(nextAddress, marker);
 
-            allowContinue(node, false);
+            allowContinue(false);
         }
     }
 

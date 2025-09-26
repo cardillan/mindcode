@@ -8,11 +8,11 @@ Block-related functions (just the `findLinkedBlocks` function at this moment).
 
 **Definition:** `inline void findLinkedBlocks(title, message, linkMap...)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Linking two blocks             |                  25 |                 27 |
-| Linking four blocks            |                  34 |                 40 |
-| Linking six blocks             |                  43 |                 53 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Linking two blocks                       |                  25 |                 27 |
+| Linking four blocks                      |                  34 |                 40 |
+| Linking six blocks                       |                  43 |                 53 |
 
 Searches blocks linked to the processor for blocks of requested types and assigns them to given variables if found.
 The function tries to locate blocks repeatedly until all required blocks are found.

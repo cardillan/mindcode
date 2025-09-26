@@ -237,7 +237,7 @@ class ExpressionOptimizer extends BaseOptimizer {
     }
 
     private @Nullable Tuple2<LogicValue, LogicValue> invertMultiplicand(LogicValue variable, LogicValue literal) {
-        // We know literal is a NumericLiteral
+        // We know the literal is a NumericLiteral
         double multiplicand = literal.getDoubleValue();
         double divisor = 1.0d / multiplicand;
         Optional<LogicLiteral> inverted = instructionProcessor.createLiteral(SourcePosition.EMPTY, divisor, false);
@@ -280,7 +280,7 @@ class ExpressionOptimizer extends BaseOptimizer {
                     logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
                             LogicNumber.create(ix.sourcePosition(), object.getObject().logicId())));
                 }
-            } else if (property.equals(LogicBuiltIn.NAME) && object.getObject() != null && object.getObject().contentName() != null) {
+            } else if (property.equals(LogicBuiltIn.NAME) && object.getObject() != null) {
                 logicIterator.set(createSet(ix.getAstContext(), ix.getResult(),
                         LogicString.create(ix.sourcePosition(), object.getObject().contentName())));
             }

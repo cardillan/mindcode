@@ -7,8 +7,6 @@ import org.jspecify.annotations.NullMarked;
 import java.util.List;
 
 /// Represents an array (internal or external). Provides means for accessing array elements statically or dynamically.
-///
-/// @param <E> precise type representing the element of the array
 @NullMarked
 public abstract class AbstractArrayStore extends CompoundValueStore implements ArrayStore {
     protected final String name;

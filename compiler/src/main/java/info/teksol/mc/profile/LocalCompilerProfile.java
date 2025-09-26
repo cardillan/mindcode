@@ -8,8 +8,10 @@ import info.teksol.mc.profile.options.CompilerOptionValue;
 import info.teksol.mc.profile.options.CompilerOptions;
 import info.teksol.mc.profile.options.OptimizationOptions;
 import info.teksol.mc.profile.options.Target;
+import org.jspecify.annotations.NullMarked;
 
 /// Provides access to module/local compiler options.
+@NullMarked
 public interface LocalCompilerProfile {
     <T> CompilerOptionValue<T> getOption(Enum<?> option);
 

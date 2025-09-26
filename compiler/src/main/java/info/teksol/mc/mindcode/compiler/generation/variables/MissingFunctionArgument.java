@@ -95,10 +95,4 @@ public class MissingFunctionArgument implements FunctionArgument {
     public LogicVariable getWriteVariable(ContextfulInstructionCreator creator) {
         return LogicVariable.INVALID;
     }
-
-    /// Creates code to store output value after instruction call is finished.
-    @Override
-    public void storeValue(ContextfulInstructionCreator creator) {
-        // Do nothing - this instance represents an unspecified output argument
-    }
 }

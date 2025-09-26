@@ -31,7 +31,7 @@ public enum InstructionParameterType {
     BOOL            (Flags.INPUT),
 
     /// True/false to set/clear status in `status` instruction.
-    CLEAR           (Flags.SELECTOR | Flags.FUNCTION, m -> Set.of("true", "false")),
+    CLEAR           (Flags.SELECTOR | Flags.FUNCTION, _ -> Set.of("true", "false")),
 
     /// Selector for the `jump` instruction.
     CONDITION       (Flags.SELECTOR, MindustryMetadata::getConditions),
@@ -66,7 +66,7 @@ public enum InstructionParameterType {
     /// Layer in the `getblock` instruction.
     LAYER           ("layer", Flags.KEYWORD, MindustryMetadata::getTileLayers, tileLayer),
 
-    /// Selector for the `ulocate` instruction. No Flags.FUNCTION!
+    /// Selector for the `ulocate` instruction. No `Flags.FUNCTION`!
     LOCATE          ("locate", Flags.SELECTOR, MindustryMetadata::getLocateTypes),
 
     /// Specifies lookup category.
@@ -81,10 +81,10 @@ public enum InstructionParameterType {
     /// Selector for the `op` instruction.
     OPERATION       (Flags.SELECTOR | Flags.FUNCTION, MindustryMetadata::getOperations),
 
-    /// Input parameter accepting ore type. 
+    /// Input parameter accepting an ore type.
     ORE             ("oreType", Flags.INPUT, MindustryMetadata::getItemNames),
 
-    /// Output parameter. Sets a value of a variable in parameter list. 
+    /// Output parameter. Sets a value of a variable in a parameter list.
     OUTPUT          (Flags.OUTPUT),
 
     /// A const parameter. Specifies properties of units searchable by radar. 
@@ -100,7 +100,7 @@ public enum InstructionParameterType {
     RULE            (Flags.SELECTOR, MindustryMetadata::getLogicRules),
 
     /// Scope for the `playsound` instruction: true=positional, false=global
-    SCOPE           (Flags.SELECTOR, m -> Set.of("true", "false")),
+    SCOPE           (Flags.SELECTOR, _ -> Set.of("true", "false")),
 
     /// Input parameter accepting property id. 
     SENSOR          ("property", Flags.INPUT, MindustryMetadata::getLAccessNames),
@@ -121,7 +121,7 @@ public enum InstructionParameterType {
     STATUS          ("status", Flags.KEYWORD, MindustryMetadata::getStatusEffects, statusEffect),
 
     /// Expected type of value
-    TYPE            ("valueType", Flags.KEYWORD, m -> List.of("any", "notNull", "decimal", "integer", "multiple")),
+    TYPE            ("valueType", Flags.KEYWORD, _ -> List.of("any", "notNull", "decimal", "integer", "multiple")),
 
     /// Input parameter accepting unit type.
     UNIT            ("unitType", Flags.INPUT, MindustryMetadata::getUnitTypes),
@@ -135,7 +135,7 @@ public enum InstructionParameterType {
     /// An unused input parameter. Ignored by given opcode variant. 
     UNUSED          (Flags.UNUSED),
 
-    /// An unused output parameter. Ignored by given opcode variant, output in some other opcode variant. 
+    /// An unused output parameter. Ignored by the given opcode variant, output in some other opcode variant.
     UNUSED_OUTPUT   (Flags.OUTPUT | Flags.UNUSED),
 
     WEATHER         ("weather", Flags.INPUT, MindustryMetadata::getWeathers),
@@ -149,13 +149,6 @@ public enum InstructionParameterType {
 
     InstructionParameterType(int flags) {
         this.typeName = name();
-        this.flags = flags;
-        this.keywordsSupplier = null;
-        this.keywordCategory = null;
-    }
-
-    InstructionParameterType(String typeName, int flags) {
-        this.typeName = typeName;
         this.flags = flags;
         this.keywordsSupplier = null;
         this.keywordCategory = null;

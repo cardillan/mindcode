@@ -86,13 +86,11 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         }
     }
 
-    @Nullable
-    String libraryFile;
-    List<AstFunctionDeclaration> functions = new ArrayList<>();
-    List<AstVariablesDeclaration> constants = new ArrayList<>();
-    List<AstParameter> parameters = new ArrayList<>();
-    @Nullable
-    AstFunctionDeclaration declaration;
+    @Nullable String libraryFile;
+    @Nullable AstFunctionDeclaration declaration;
+    final List<AstFunctionDeclaration> functions = new ArrayList<>();
+    final List<AstVariablesDeclaration> constants = new ArrayList<>();
+    final List<AstParameter> parameters = new ArrayList<>();
 
     private String libraryFile(Path file) {
         String fileName = file.getFileName().toString();
@@ -251,8 +249,8 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         writeFunction(writer);
 
         writer.println();
-        writer.printf("| %-30s | %19s | %18s |%n", "Compiled code size when...", "optimized for speed", "optimized for size");
-        writer.printf("|-%-30s-|-%19s:|-%18s:|%n", dashes(30), dashes(19), dashes(18));
+        writer.printf("| %-40s | %19s | %18s |%n", "Compiled code size when...", "optimized for speed", "optimized for size");
+        writer.printf("|-%-40s-|-%19s:|-%18s:|%n", dashes(40), dashes(19), dashes(18));
 
         AstDocComment docComment = declaration.getDocComment();
         if (declaration.isVarargs() || docComment != null && docComment.getComment().contains(FOOTPRINT2)) {
@@ -260,13 +258,13 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
             footprintConfigs.forEach(footprintConfig -> {
                 int speed = measureFootprint(footprintConfig, GenerationGoal.SPEED);
                 int size = measureFootprint(footprintConfig, GenerationGoal.SIZE);
-                writer.printf("| %-30s | %19s | %18s |%n", footprintConfig.title, speed, size);
+                writer.printf("| %-40s | %19s | %18s |%n", footprintConfig.title, speed, size);
             });
         } else {
             int speed = measureFootprint(null, GenerationGoal.SPEED);
             int size = measureFootprint(null, GenerationGoal.SIZE);
             if (!declaration.isNoinline()) {
-                writer.printf("| %-30s | %19s | %18s |%n", "Inlined function", speed, size);
+                writer.printf("| %-40s | %19s | %18s |%n", "Inlined function", speed, size);
             } else {
                 // Implement if noinline function is ever added to the library
                 throw new UnsupportedOperationException("Size calculation for noinline functions is not supported");
@@ -274,8 +272,8 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
             if (!declaration.isInline()) {
                 int callSize = declaration.computeCallSize();
                 // +1 for the return from the function call
-                writer.printf("| %-30s | %19s | %18s |%n", "Function body", speed + 1, size + 1);
-                writer.printf("| %-30s | %19s | %18s |%n", "Function call", callSize, callSize);
+                writer.printf("| %-40s | %19s | %18s |%n", "Function body", speed + 1, size + 1);
+                writer.printf("| %-40s | %19s | %18s |%n", "Function call", callSize, callSize);
             }
         }
 

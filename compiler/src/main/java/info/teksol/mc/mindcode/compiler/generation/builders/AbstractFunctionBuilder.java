@@ -60,7 +60,6 @@ public abstract class AbstractFunctionBuilder extends AbstractBuilder {
             }
         } else if (argument.hasRefModifier()) {
             if (argument.getExpression() instanceof AstIdentifier identifier) {
-                ValueStore valueStore = variables.findVariable(identifier.getName(), true);
                 consumer.accept(new IdentifierFunctionArgument(() -> evaluate(identifier), identifier, true));
             } else {
                 error(argument, ERR.ARGUMENT_REF_IDENTIFIER_REQUESTED);

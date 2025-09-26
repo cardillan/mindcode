@@ -8,9 +8,9 @@ Functions for printing and formatting numbers. Some functions require the Mindus
 
 **Definition:** `inline void printflush()`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   1 |                  1 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   1 |                  1 |
 
 Clears the processor's text buffer without outputting the contents into any message block. Equivalent to
 `printflush(null);`.
@@ -19,11 +19,11 @@ Clears the processor's text buffer without outputting the contents into any mess
 
 **Definition:** `inline void printLines(lines...)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Five arguments in total        |                   6 |                  6 |
-| Ten arguments in total         |                  11 |                 11 |
-| Twenty arguments in total      |                  21 |                 21 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Five arguments in total                  |                   6 |                  6 |
+| Ten arguments in total                   |                  11 |                 11 |
+| Twenty arguments in total                |                  21 |                 21 |
 
 Prints all arguments passed to it, each on a new line.
 
@@ -31,11 +31,11 @@ Prints all arguments passed to it, each on a new line.
 
 **Definition:** `void formatNumber(number)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  13 |                 17 |
-| Function body                  |                  14 |                 18 |
-| Function call                  |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  13 |                 17 |
+| Function body                            |                  14 |                 18 |
+| Function call                            |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -56,11 +56,11 @@ Nulls are printed as 0.
 
 **Definition:** `void printNumber(number)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  14 |                 18 |
-| Function body                  |                  15 |                 19 |
-| Function call                  |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  14 |                 18 |
+| Function body                            |                  15 |                 19 |
+| Function call                            |                   4 |                  4 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -82,11 +82,11 @@ See also [`formatNumber`](#formatnumber)
 
 **Definition:** `void formatBinaryNumber(number, digits)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  17 |                 17 |
-| Function body                  |                  18 |                 18 |
-| Function call                  |                   5 |                  5 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  17 |                 17 |
+| Function body                            |                  18 |                 18 |
+| Function call                            |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -109,11 +109,11 @@ Nulls are printed as zero values.
 
 **Definition:** `void printBinaryNumber(number, digits)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  18 |                 18 |
-| Function body                  |                  19 |                 19 |
-| Function call                  |                   5 |                  5 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  18 |                 18 |
+| Function body                            |                  19 |                 19 |
+| Function call                            |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -137,11 +137,11 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 **Definition:** `void formatHexNumber(number, digits)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  38 |                 32 |
-| Function body                  |                  39 |                 33 |
-| Function call                  |                   5 |                  5 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  38 |                 32 |
+| Function body                            |                  39 |                 33 |
+| Function call                            |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -164,11 +164,11 @@ Nulls are printed as zero values.
 
 **Definition:** `void printHexNumber(number, digits)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  39 |                 34 |
-| Function body                  |                  40 |                 35 |
-| Function call                  |                   5 |                  5 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  39 |                 34 |
+| Function body                            |                  40 |                 35 |
+| Function call                            |                   5 |                  5 |
 
 **Note:** Function requires Mindustry Logic version 8 or later.
 
@@ -192,11 +192,11 @@ See also [`formatBinaryNumber`](#formatbinarynumber)
 
 **Definition:** `void printExactFast(n)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  74 |                 47 |
-| Function body                  |                  75 |                 48 |
-| Function call                  |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  74 |                 47 |
+| Function body                            |                  75 |                 48 |
+| Function call                            |                   4 |                  4 |
 
 Prints the value into the text buffer without rounding to the nearest integer value.
 The function is primarily useful for debugging purposes to determine the actual value of variables.
@@ -225,11 +225,11 @@ is used, which can take around 50 steps to output the entire number.
 
 **Definition:** `void printExactSlow(n)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  79 |                 26 |
-| Function body                  |                  80 |                 27 |
-| Function call                  |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  79 |                 26 |
+| Function body                            |                  80 |                 27 |
+| Function call                            |                   4 |                  4 |
 
 Prints the value into the text buffer without rounding to the nearest integer value.
 The function is primarily useful for debugging purposes to determine the actual value of variables.
@@ -247,11 +247,11 @@ See also [`printExactFast`](#printexactfast)
 
 **Definition:** `void printExactBinary(n)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                 192 |                 12 |
-| Function body                  |                 193 |                 13 |
-| Function call                  |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                 192 |                 12 |
+| Function body                            |                 193 |                 13 |
+| Function call                            |                   4 |                  4 |
 
 Prints the number passed in as a parameter into the text buffer in a binary base, always outputting 64 binary digits.
 No prefix (i.e., `0b`) is printed.
@@ -270,11 +270,11 @@ itself, except the conversion of the number from a `double` to a 64-bit integer 
 
 **Definition:** `void printExactHex(n)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  64 |                 14 |
-| Function body                  |                  65 |                 15 |
-| Function call                  |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  64 |                 14 |
+| Function body                            |                  65 |                 15 |
+| Function call                            |                   4 |                  4 |
 
 **Note:** Function can be compiled for all Mindustry Logic versions. The displayed statistics is valid for
 target 8, for earlier targets the code size may be higher.

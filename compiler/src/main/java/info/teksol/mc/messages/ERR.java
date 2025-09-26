@@ -22,7 +22,6 @@ public class ERR {
     public static final String ARGUMENT_UNNAMED_OUT_MODIFIER_REQUESTED = "Parameter corresponding to this argument isn't output, 'out' modifier cannot be used.";
     public static final String ARGUMENT_VOLATILE_VARIABLE_REQUIRED = "A 'volatile' variable is required in a call to '%s'.";
     public static final String ARGUMENT_WAIT_OUT_NOT_ALLOWED = "'out' modifier not allowed with special value '%s'.";
-    public static final String ARGUMENT_WRITE_TO_INPUT = "Parameter '%s' is output and 'out' modifier was not used.";
     public static final String ARRAY_ASSIGNMENT_SIZE_MISMATCH = "The arrays in the array expression have different sizes: %s[%d] versus %s[%d].";
     public static final String ARRAY_CACHED = "Arrays cannot be declared 'cached'.";
     public static final String ARRAY_CANNOT_ASSIGN_TO_CONST_ARRAY = "Assignment to an element of a constant array not allowed.";
@@ -60,14 +59,14 @@ public class ERR {
     public static final String DIRECTIVE_INVALID_VALUE = "Invalid value '%s' of compiler directive '%s'.";
     public static final String DIRECTIVE_INVALID_VALUE_WITH_SUGGESTION = "Invalid value '%s' of compiler directive '%s'. Did you mean '%s'?";
     public static final String DIRECTIVE_INVALID_VALUE_WITH_VALUES = "Invalid value '%s' of compiler directive '%s'. Valid values are %s.";
-    public static final String DIRECTIVE_INVALID_SYNTAX_FOR_MODULE = "Syntax mode within a module must be set to 'strict'.";
     public static final String DIRECTIVE_IS_NOT_LOCAL = "Option '%s' cannot be used with #setlocal.";
     public static final String DIRECTIVE_VALUE_IS_NOT_LOCAL = "Value '%s' cannot be used with #setlocal.";
     public static final String DIRECTIVE_MULTIPLE_VALUES = "Multiple values specified for option '%s'.";
     public static final String DIRECTIVE_NO_VALUE = "No value specified for option '%s'.";
     public static final String DIRECTIVE_UNKNOWN = "Unknown compiler directive '%s'.";
     public static final String DIRECTIVE_UNKNOWN_WITH_SUGGESTION = "Unknown compiler directive '%s'. Did you mean '%s'?";
-    public static final String DIRECTIVE_VALUE_OUT_OF_RANGE = "Invalid value '%s' of compiler directive '%s' (expected integer between %d and  %d).";
+    public static final String DIRECTIVE_VALUE_INTEGER_OUT_OF_RANGE = "Invalid value '%s' of compiler directive '%s' (expected an integer value between %d and %d).";
+    public static final String DIRECTIVE_VALUE_DOUBLE_OUT_OF_RANGE = "Invalid value '%s' of compiler directive '%s' (expected a number between %s and %s).";
     public static final String ENCODE_INVALID_ARGUMENT = "All arguments to the '%s' function must be compile-time integer constants.";
     public static final String ENCODE_INVALID_CHARACTER = "The value %d cannot be encoded into an mlog string literal.";
     public static final String ENCODE_INVALID_STRING = "The string value produced by the '%s' function contains a sequence of '\\n'; which annot be encoded into a string literal.";
@@ -89,7 +88,6 @@ public class ERR {
     public static final String FORMATTABLE_FORBIDDEN = "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.";
     public static final String FORMATTABLE_NOT_ENOUGH_ARGS = "Not enough arguments for formattable placeholders.";
     public static final String FORMATTABLE_TOO_MANY_ARGS = "Too many arguments for formattable placeholders.";
-    public static final String FOR_EACH_ITERATORS_VALUES_MISMATCH = "Number of iterator specifications (%d) doesn't match number of value lists (%d).";
     public static final String FOR_EACH_UNBALANCED_GROUPS = "Not enough values to supply this iterator group (provided: %d, required: %d).";
     public static final String FOR_EACH_WRONG_NUMBER_OF_VALUES = "The number of values in the list (%d) must be an integer multiple of the number of iterators (%d).";
     public static final String FUNCTION_CALL_ASYNC_UNSUPPORTED = "Function or method '%s' cannot be called asynchronously.";

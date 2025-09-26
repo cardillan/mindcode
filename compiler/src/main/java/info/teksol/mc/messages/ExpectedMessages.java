@@ -58,9 +58,9 @@ public class ExpectedMessages implements MessageConsumer {
         return new ExpectedMessages();
     }
 
-    /// Adds a message at certain level or lower.
+    /// Adds a matcher for messages at the given level or weaker.
     ///
-    /// @param message message to be expected (trimmed for comparison)
+    /// @param level level to match
     /// @return this instance
     public ExpectedMessages addLevelsUpTo(MessageLevel level) {
         matchers.add(new MatchCounter(new LevelMessageMatcher(level)));

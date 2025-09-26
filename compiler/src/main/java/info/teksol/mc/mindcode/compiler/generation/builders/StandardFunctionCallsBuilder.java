@@ -15,7 +15,6 @@ import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.util.Tuple2;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -175,7 +174,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
                         if (argument.hasInModifier()) {
                             error(argument, ERR.ARGUMENT_IN_MODIFIER_NOT_ALLOWED, parameter.getName());
                         } else if (argument.hasValue() && !argument.hasOutModifier()) {
-                            // Out modifier needs to be used
+                            // `out` modifier needs to be used
                             error(argument, ERR.ARGUMENT_OUT_MODIFIER_REQUESTED, parameter.getName());
                         }
                     }
@@ -289,7 +288,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         List<LogicVariable> variables = recursiveCall ? getStackVariables(function, arguments) : List.of();
 
         if (recursiveCall) {
-            // Store all local variables (both user defined and temporary) on the stack
+            // Store all local variables (both user-defined and temporary) on the stack
             variables.forEach(v -> assembler.createPush(stack, v));
         }
 
@@ -303,7 +302,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         retrieveFunctionParameters(function, function.getParameters(), arguments, recursiveCall);
 
         if (recursiveCall) {
-            // Restore all local variables (both user defined and temporary) from the stack
+            // Restore all local variables (both user-defined and temporary) from the stack
             Collections.reverse(variables);
             variables.forEach(v -> assembler.createPop(stack, v));
         }
@@ -413,7 +412,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             return LogicVariable.INVALID;
         }
 
-        // Find module using callGraph.
+        // Find a module using callGraph.
         // This is very convoluted, but essentially a temporary solution until types get introduced
         Optional<AstModule> module = callGraph.getFunctions().stream()
                 .filter(f -> f.isRemote() && f.getModule().matchesProcessor(remoteProcessorId.getName()))
@@ -488,7 +487,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     ///
     /// @param function function being called
     /// @param argument argument being processed
-    /// @param parameter parameter corresponding to this argument
+    /// @param functionParameter function parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced input argument
     private boolean misplacedInput(MindcodeFunction function, FunctionArgument argument, FunctionParameter functionParameter) {
         return functionParameter.isInput()
@@ -500,7 +499,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     private void setupFunctionParameters(MindcodeFunction function, List<FunctionParameter> parameters,
             List<FunctionArgument> arguments, boolean recursiveCall) {
         // List of values to be passed to parameters
-        Queue<@NonNull ValueStore> argumentValues = new ArrayDeque<>(arguments.size());
+        Queue<ValueStore> argumentValues = new ArrayDeque<>(arguments.size());
         int limit = Math.min(arguments.size(), function.getDeclaredParameters().size());
 
         for (int index = 0; index < limit; index++) {
@@ -552,7 +551,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
     ///
     /// @param function function being called
     /// @param argument argument being processed
-    /// @param parameter parameter corresponding to this argument
+    /// @param functionParameter function parameter corresponding to this argument
     /// @return `true` if the argument is a misplaced output argument
     private boolean misplacedOutput(MindcodeFunction function, FunctionArgument argument, FunctionParameter functionParameter) {
         return argument.isOutput()
