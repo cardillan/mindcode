@@ -11,7 +11,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @NullMarked
-public abstract class CompilerOptionValue<T> implements CompilerOption{
+public abstract class CompilerOptionValue<T> implements CompilerOption {
     public final Enum<?> option;
     public final String optionName;
     public final String flag;
@@ -26,9 +26,7 @@ public abstract class CompilerOptionValue<T> implements CompilerOption{
     private final List<T> values = new ArrayList<>();
     private final List<T> constValues = new ArrayList<>();
 
-    private Function<@Nullable List<T>, List<T>> listProcessor = list -> list == null ? List.of() : list;
-
-    private final List<Consumer<List<T>>> changeListener = new ArrayList<>();
+    private Function<@Nullable List<T>, List<T>> valueProcessor = list -> list == null ? List.of() : list;
 
     public CompilerOptionValue(Enum<?> option, String optionName, String flag, String description, Class<T> valueType,
             OptionMultiplicity multiplicity, SemanticStability stability, OptionScope scope, OptionAvailability availability,
@@ -118,19 +116,14 @@ public abstract class CompilerOptionValue<T> implements CompilerOption{
         return this;
     }
 
-    public CompilerOptionValue<T> setListProcessor(Function<@Nullable List<T>, List<T>> listProcessor) {
-        this.listProcessor = listProcessor;
-        return this;
-    }
-
-    public CompilerOptionValue<T> addChangeListener(Consumer<List<T>> listener) {
-        changeListener.add(listener);
+    public CompilerOptionValue<T> setValueProcessor(Function<@Nullable List<T>, List<T>> valueProcessor) {
+        this.valueProcessor = valueProcessor;
         return this;
     }
 
     public abstract @Nullable T convert(String value);
 
-    public boolean accepts(T value) {
+    public boolean accepts(T value, Consumer<String> errorReporter) {
         return true;
     }
 
@@ -146,7 +139,7 @@ public abstract class CompilerOptionValue<T> implements CompilerOption{
         return values.getFirst();
     }
 
-    public void setValue(T value) {
+    public final void setValue(T value) {
         setValues(List.of(value));
     }
 
@@ -155,13 +148,15 @@ public abstract class CompilerOptionValue<T> implements CompilerOption{
     }
 
     public void setValues(List<T> values) {
-        List<T> processed = listProcessor.apply(values);
+        List<T> processed = valueProcessor.apply(values);
         if (processed.stream().anyMatch(value -> !valueType.isInstance(value))) {
             throw new IllegalArgumentException("Value is not of type " + valueType.getName());
         }
+        processed.forEach(value -> accepts(value, _ -> {
+            throw new IllegalArgumentException("Trying to set unacceptable value " + value);
+        }));
         this.values.clear();
         this.values.addAll(processed);
-        changeListener.forEach(listener -> listener.accept(processed));
     }
 
     public boolean setValues(List<T> values, OptionScope scope) {

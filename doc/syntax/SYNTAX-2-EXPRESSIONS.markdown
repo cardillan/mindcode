@@ -100,7 +100,7 @@ When a value is close to an integer value (i.e., the difference between the valu
 
 Therefore, when a variable value is displayed as an integer by Mindustry, it is necessary to keep in mind that the actual value of the variable might be different, and that the relational operators (`<`, `<=`, `>`, `>=`) operate over the actual value, not the displayed value of the variable.
 
-To display a value of a variable without rounding, it is possible to use the [`printExactFast()`](SYSTEM-LIBRARY.markdown#printexactfast) or [`printExactSlow()`](SYSTEM-LIBRARY.markdown#printexactslow) functions from the [`printing` system library](SYSTEM-LIBRARY.markdown#printing-library): `printExactSlow(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.
+To display a value of a variable without rounding, it is possible to use the [`printExactFast()`](SYSTEM-LIBRARY-PRINTING.markdown#printexactfast) or [`printExactSlow()`](SYSTEM-LIBRARY-PRINTING.markdown#printexactslow) functions from the [`printing` system library](SYSTEM-LIBRARY-PRINTING.markdown): `printExactSlow(1.2345e-15);` outputs `1.2345000000000002e-15`. Note that it takes several instructions to print the exact value, and also that the manipulations used to produce the output may introduce some numerical error into the value being outputted.
 
 > [!NOTE]
 > Mindustry 7 doesn't apply the above transformation to values that are slightly smaller than an integer value: `print(0.99999999);` outputs `0.99999999` and not `1`. In Mindustry 8 this is fixed, and both slightly smaller and slightly larger values are rounded to integers for display. Mindcode compile-time evaluation and emulator match the actual behavior depending on the language target. 
@@ -219,7 +219,7 @@ Exponentiation works as usual: `2**4` is `2 * 2 * 2 * 2`, or 16.
 * `/` (floating point division),
 * `\` (integer division: `3 \ 2` gives `1`)
 * `%` (modulo): remainder after division; `10 % 7` gives `3`. Defined both for integers and floating point numbers,
-* `%%` (positive modulo): like modulo, except when the divisor is positive and the dividend negative, still returns a positive number.
+* `%%` (positive modulo): modulo which preserves the sign of the divisor: when the divisor is positive and the dividend is negative, it still returns a positive number.
 
 Note: the positive modulo operator (`%%`) is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into three instructions.  
 
@@ -286,7 +286,7 @@ prints `-1` and `15`.
 
 Notes on the unsigned right-shift operator (`>>>`):
 
-* The operator is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into a sequence of up to 7 instructions.
+* The operator is natively supported in Mindustry Logic 8 or higher. For targets preceding `8`, the operator is compiled into a sequence of up to seven instructions.
 * Right-shifting a negative number by at least one will produce a positive number. It is possible that the positive number will be outside the safe integer range, even though the original number was initially within the safe integer range. Example:
 
 ```Mindcode
@@ -307,7 +307,7 @@ FFFFFFFFFFFFFFFF
 4000000000000000
 ```
 
-The exact result, without precision loss, would be `7FFFFFFFFFFFFFFF` and `3FFFFFFFFFFFFFFF` respectively. In the first case, only the lower bits are affected. In the second case, the double conversion, while introducing a difference small in terms of absolute value, changes the binary representation dramatically. 
+The exact result, without precision loss, would be `7FFFFFFFFFFFFFFF` and `3FFFFFFFFFFFFFFF` respectively. In the first case, only the lower bits are affected. In the second case, the double conversion, while introducing a small difference in terms of absolute value, changes the binary representation dramatically. 
 
 ## Bitwise AND, OR, XOR operators
 
@@ -548,7 +548,7 @@ Not strictly equal to zero
 ```
 
 > [!TIP]
-> To compare numbers using different precision, you can use the `isZero` or `isEqual` functions from the [`math` system library](SYSTEM-LIBRARY.markdown#math-library): `println(isZero(b) ? "equal to zero" : "not equal to zero");` outputs `not equal to zero`.
+> To compare numbers using different precision, you can use the `isZero` or `isEqual` functions from the [`math` system library](SYSTEM-LIBRARY-MATH.markdown): `println(isZero(b) ? "equal to zero" : "not equal to zero");` outputs `not equal to zero`.
 
 > [!IMPORTANT]
 > As has been shown above, `x <= 0` may evaluate to `false`, even though `x == 0` evaluates to `true`. This is especially important to consider if you use these operators in loop conditions where the loop control variable is updated using floating point operations: the number of loop iterations may be different from what would be expected if all numerical operations were absolutely precise.

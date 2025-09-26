@@ -105,7 +105,7 @@ public class Main {
                 }
             }
 
-            throw new IllegalArgumentException("Unknwon shortcut value " + shortcut);
+            throw new IllegalArgumentException("Unknown shortcut value " + shortcut);
         }
     }
 }

@@ -5,6 +5,7 @@ import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveSet;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstDirectiveValue;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
+import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.mindcode.compiler.optimization.Optimization;
 import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
@@ -16,11 +17,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
 
-import static info.teksol.mc.common.SourcePosition.EMPTY;
 import static org.junit.jupiter.api.Assertions.*;
 
 @NullMarked
-class DirectivePreprocessorTest {
+class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
 
     private AstModule directive(String option, String... values) {
         return new AstModule(EMPTY,
@@ -268,5 +268,24 @@ class DirectivePreprocessorTest {
         ExpectedMessages.create()
                 .addRegex("Invalid value 'fluffyBunny' of compiler directive 'target'.*")
                 .validate(consumer -> processDirective(consumer, profile, "target", "fluffyBunny"));
+    }
+
+    @Test
+    void refusesIntegerValueOutOfBounds() {
+        assertGeneratesMessage(
+                "Invalid value '-5' of compiler directive 'passes' (expected an integer value between 1 and 1000).",
+                """
+                        #set passes = -5;
+                        """);
+    }
+
+
+    @Test
+    void refusesDoubleValueOutOfBounds() {
+        assertGeneratesMessage(
+                "Invalid value '-5.0' of compiler directive 'weight' (expected a number between 1.0E-10 and 1.0E10).",
+                """
+                        #set weight = -5;
+                        """);
     }
 }

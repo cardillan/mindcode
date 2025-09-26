@@ -54,7 +54,7 @@ public class BooleanCompilerOptionValue extends CompilerOptionValue<Boolean> {
     public @Nullable Boolean convert(String value) {
         if (trueValue.equalsIgnoreCase(value)) {
             return true;
-        } else if (falseValue != null && falseValue.equalsIgnoreCase(value)) {
+        } else if (falseValue.equalsIgnoreCase(value)) {
             return false;
         } else {
             return null;

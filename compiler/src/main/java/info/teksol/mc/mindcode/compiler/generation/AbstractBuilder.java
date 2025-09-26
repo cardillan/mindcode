@@ -177,7 +177,7 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
 
     /// Visits a body of statements, disregarding the resulting values of all nodes.
     ///
-    /// @return `LogicVoid.VOID`
+    /// @return LogicVoid.VOID
     protected ValueStore visitBody(List<? extends AstMindcodeNode> body) {
         // §§§ Move to codeGenerator, fail when there's unused setLocal directive.
         body.forEach(this::compile);
@@ -244,8 +244,8 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
             } else {
                 switch (target) {
                     case LogicVariable v -> reportVariableError(targetNode, v);
-                    case InternalArray.ConstantArrayElement e -> error(targetNode, ERR.ARRAY_CANNOT_ASSIGN_TO_CONST_ARRAY);
-                    case LogicLiteral l -> error(targetNode, ERR.LVALUE_VARIABLE_EXPECTED);
+                    case InternalArray.ConstantArrayElement _ -> error(targetNode, ERR.ARRAY_CANNOT_ASSIGN_TO_CONST_ARRAY);
+                    case LogicLiteral _ -> error(targetNode, ERR.LVALUE_VARIABLE_EXPECTED);
                     default -> error(targetNode, ERR.LVALUE_CANNOT_ASSIGN_TO_EXPRESSION);
                 }
             }

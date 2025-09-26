@@ -57,7 +57,7 @@ public class IteratedForLoopStatementsBuilder extends AbstractLoopBuilder implem
         // Exit
         assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
-        exitLoop(node, loopLabels);
+        exitLoop(loopLabels);
 
         return LogicVoid.VOID;
     }

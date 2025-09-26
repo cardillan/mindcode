@@ -47,7 +47,6 @@ public abstract class AbstractInterceptorTest extends AbstractProcessorTest {
         private final MindcodeCompiler compiler;
         private @Nullable ProgramVersion previous;
         private @Nullable ProgramVersion errant;
-        private @Nullable String title;
 
         public InterceptingDebugPrinter(MindcodeCompiler compiler) {
             super(3);

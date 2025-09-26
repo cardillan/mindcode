@@ -157,7 +157,7 @@ public class BaseFunctionMapper extends AbstractMessageEmitter implements Functi
             throw new InvalidMetadataException("Output argument not marked as RESULT in opcode " + opcodeVariant);
         }
 
-        // Subtract one more for target
+        // Subtract one more for the target
         int numArgs = arguments.size() - results - (selector.isPresent() ? 1 : 0) - unused - 1;
         String name = selector.map(NamedParameter::name).orElseGet(() -> opcodeVariant.opcode().toString());
         return new StandardPropertyHandler(this, name, opcodeVariant, numArgs, results > 0);

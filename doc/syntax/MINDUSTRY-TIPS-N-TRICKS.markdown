@@ -160,12 +160,12 @@ Mindcode provides the `printExactFast` and `printExactSlow` functions in the `pr
 
 ## Using units
 
-Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately noticeable what needs to be done or what went wrong with your code if it doesn't work as expected. Note that this chapter contains just the very basic information, you'll need to build upon these techniques in your own way to create a truly robust solution.
+Mindustry allows your processors to control existing units. Among other things, you can use units to mine, attack, build, heal or move things around. Using units isn't that complicated, but it isn't always immediately noticeable what needs to be done or what went wrong with your code if it doesn't work as expected. Note that this chapter contains just the very basic information; you'll need to build upon these techniques in your own way to create a truly robust solution.
 
 Here are the basic principles governing units:
 
 * Each processor can control at most one unit at a time; this unit is acquired through `ubind()` an is available as the `@unit` variable.
-* The `ubind()` function, when run repeatedly, returns units of the given type one by one, after cycling through all units, it starts again from the first one. 
+* The `ubind()` function, when run repeatedly, returns units of the given type one by one; after cycling through all units, it starts again from the first one. 
 * It is possible to store a bound unit in a variable and bind it again later: `savedUnit = @unit; ...; ubind(savedUnit);`. This way, several units can be stored in variables (or an [internal array](SYNTAX-1-VARIABLES.markdown#internal-arrays)).
 * On the other hand, it is not possible to store units in memory cells and memory banks.
 * Binding a unit doesn't make that unit controlled by the processor. This only happens after using one of unit-related instructions: [`ucontrol`](FUNCTIONS-80.markdown#instruction-unit-control), [`ulocate`](FUNCTIONS-80.markdown#instruction-unit-locate) or [`uradar`](FUNCTIONS-80.markdown#instruction-unit-radar).
@@ -173,12 +173,12 @@ Here are the basic principles governing units:
   * Sensing unit's properties, such as `@x`, `@y`, `@dead` or `@controller` doesn't make the unit controlled by the processor.
 * Binding a unit to a processor doesn't make the unit exclusive to that processor: other processors might bind the same unit, or a player might take over the unit and control it manually, "stealing" it.
 * A unit controlled by the processor (or stored in a variable) may die. To detect the unit is dead, sense its `@dead` property (e.g., `@unit.@dead`).
-* When a command is issued to a unit using `ucontrol`, the processor doesn't wait for the unit to complete the command. Explicit checks to see the unit has finished the command are sometimes necessary.
+* When a command is issued to a unit using `ucontrol`, the processor doesn't wait for the unit to complete the command. Explicit checks to see if the unit has finished the command are sometimes necessary.
 
 ### Binding units
 
 > [!TIP]
-> The `units` system library contains functions you can use to search for and bind free units. For more information, see [System library](SYSTEM-LIBRARY.markdown#units-library).
+> The `units` system library contains functions you can use to search for and bind free units. For more information, see [System library](SYSTEM-LIBRARY-UNITS.markdown).
 >
 > The unit functions in the system library are based on the principles described here.
 
@@ -326,7 +326,7 @@ end;
 
 ### Commanding units
 
-Once a unit is bound to the processor, it can be issued commands using the [`ucontrol` instruction](FUNCTIONS-80.markdown#instruction-unit-control). There's a caveat, though: the processor doesn't wait for the unit to complete the command you've given to it, but continues executing your program. If another command is issued to the unit before the previous command has been finished, the unit will abandon the previous command and will start executing the new one. For example:
+Once a unit is bound to the processor, it can be issued commands using the [`ucontrol` instruction](FUNCTIONS-80.markdown#instruction-unit-control). There's a concern, though: the processor doesn't wait for the unit to complete the command you've given to it but continues executing your program. If another command is issued to the unit before the previous command has been finished, the unit will abandon the previous command and will start executing the new one. For example:
 
 ```Mindcode
 require units;
@@ -340,7 +340,7 @@ end;
 
 It might appear that this program will bind a single unit (mono) and will make it patrol between coordinates (10, 10) and (20, 20). What will actually happen is that the mono will travel close to the coordinates given. However, then it will stay practically in one place, as the commands to move to one point and to the other point will alternate too fast.
 
-The solution to this problem is to detect whether the unit has completed the command, and only when it did, issue another command. In case of movements, you need to verify the unit has arrived to the destination before issuing a new command:
+The solution to this problem is to detect whether the unit has completed the command, and only when it did, issue another command. In case of movements, you need to verify the unit has arrived at the destination before issuing a new command:
 
 ```Mindcode
 require units;
@@ -359,7 +359,7 @@ while true do
 end;
 ```
 
-The above program keeps issuing the `move` command, until the unit is within one tile from the intended destination. Issuing the command repeatedly, instead of just waiting, might be important in some cases, as it you don't issue a command to a unit for ten seconds, the unit becomes   
+The above program keeps issuing the `move` command, until the unit is within one tile from the intended destination. Issuing the command repeatedly, instead of just waiting is important: if you don't issue a command to a unit for ten seconds, the unit stops executing the last logic-issued action and becomes AI-controlled instead.   
 
 ### Discarding unwanted items
 
@@ -403,7 +403,7 @@ which will tell you how bad your silicone situation is.
 
 ### Obtaining buildings
 
-You can collect building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! `getBlock` retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
+You can collect building and block information with the `getBlock` command. Do not confuse with the `getblock` command for world processors with only lowercase letters! The `getBlock` command retrieves the building, floor type or block type at the given coordinates if the unit is within the radius of the position (unit range).
 
 ```Mindcode
 building = getBlock(x, y, out type, out floor);

@@ -14,7 +14,6 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -495,7 +494,6 @@ public abstract class AbstractCommandLineTest {
                         .collect(Collectors.joining(" "));
 
                 CompilerProfile profile = parseToProfile(cmdLine);
-                List<OptimizationLevel> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.NONE);
                 assertTrue(Optimization.LIST.stream().map(profile::getOptimizationLevel).allMatch(OptimizationLevel.NONE::equals));
             }
 
@@ -505,7 +503,6 @@ public abstract class AbstractCommandLineTest {
                         .collect(Collectors.joining(" "));
 
                 CompilerProfile profile = parseToProfile(cmdLine);
-                List<OptimizationLevel> expected = Collections.nCopies(Optimization.LIST.size(), OptimizationLevel.BASIC);
                 assertTrue(Optimization.LIST.stream().map(profile::getOptimizationLevel).allMatch(OptimizationLevel.BASIC::equals));
             }
         }

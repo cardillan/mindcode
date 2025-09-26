@@ -231,7 +231,7 @@ Mindcode supports embedding larger pieces of mlog code, potentially containing c
 
 ### Mlog block declaration
 
-An mlog block represents executable code, and may be placed wherever normal Mindcode code can be placed. The block may access Mindcode variables which are declared in the mlog block header:  
+An mlog block represents executable code and may be placed wherever normal Mindcode code can be placed. The block may access Mindcode variables which are declared in the mlog block header:  
 
 ```
 mlog (in input, out output, in out inputOutput) {

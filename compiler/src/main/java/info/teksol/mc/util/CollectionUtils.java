@@ -1,6 +1,5 @@
 package info.teksol.mc.util;
 
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -113,7 +112,7 @@ public class CollectionUtils {
         return index < 0 ? null : list.remove(index);
     }
 
-    public static <E> @NonNull List<E> createList(E firstItem, List<E> otherItems) {
+    public static <E> List<E> createList(E firstItem, List<E> otherItems) {
         if (otherItems.isEmpty()) {
             return List.of(firstItem);
         } else {
@@ -123,7 +122,7 @@ public class CollectionUtils {
         }
     }
 
-    public static <E> @NonNull List<E> createList(List<E> otherItems, E lastItem) {
+    public static <E> List<E> createList(List<E> otherItems, E lastItem) {
         if (otherItems.isEmpty()) {
             return List.of(lastItem);
         } else {
@@ -133,7 +132,7 @@ public class CollectionUtils {
         }
     }
 
-    public static <E> @NonNull List<E> mergeLists(List<E> list1, List<E> list2) {
+    public static <E> List<E> mergeLists(List<E> list1, List<E> list2) {
         if (list1.isEmpty()) {
             return list2;
         } else if (list2.isEmpty()) {

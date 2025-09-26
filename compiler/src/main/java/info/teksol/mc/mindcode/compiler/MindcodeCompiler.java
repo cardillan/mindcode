@@ -67,7 +67,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
 
     // MindcodeCompiler serves as a compiler context too
-    private static final ThreadLocal<MindcodeCompiler> context = new ThreadLocal<>();
+    private static final ThreadLocal<@Nullable MindcodeCompiler> context = new ThreadLocal<>();
 
     // Inputs, configurations, and tools
     private final CompilationPhase targetPhase;
@@ -412,10 +412,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         return messageLogger.hasErrors();
     }
 
-    // Root method for obtaining compiler contexts
+    // Root method for getting compiler contexts
     // Allows finding all out-of-line usages of compiler context through call hierarchy.
     public static MindcodeCompiler getContext() {
-        return context.get();
+        return Objects.requireNonNull(context.get());
     }
 
     public static CompileTimeEvaluatorContext getCompileTimeEvaluatorContext() {

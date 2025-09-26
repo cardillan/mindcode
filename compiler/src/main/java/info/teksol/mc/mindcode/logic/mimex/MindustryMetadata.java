@@ -34,56 +34,56 @@ public class MindustryMetadata {
         return cache.computeIfAbsent(processorVersion.mimexVersion, _ -> new MindustryMetadata(processorVersion));
     }
 
-    private final AtomicReference<Set<String>> stableBuiltins = new AtomicReference<>();
-    private final AtomicReference<Icons> icons = new AtomicReference<>();
-    private final AtomicReference<Map<String, NamedColor>> colors = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> stableBuiltins = new AtomicReference<>();
+    private final AtomicReference<@Nullable Icons> icons = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, NamedColor>> colors = new AtomicReference<>();
 
-    private final AtomicReference<Map<String, BlockType>> blockMap = new AtomicReference<>();
-    private final AtomicReference<Map<String, Item>> itemMap = new AtomicReference<>();
-    private final AtomicReference<Map<String, Liquid>> liquidMap = new AtomicReference<>();
-    private final AtomicReference<Map<String, Unit>> unitMap = new AtomicReference<>();
-    private final AtomicReference<Map<String, UnitCommand>> unitCommandMap = new AtomicReference<>();
-    private final AtomicReference<Map<String, LAccess>> lAccessMap = new AtomicReference<>();
-    private final AtomicReference<Map<String, LVar>> lVarMap = new AtomicReference<>();
-    private final AtomicReference<Map<String, Weather>> weatherMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, BlockType>> blockMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, Item>> itemMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, Liquid>> liquidMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, Unit>> unitMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, UnitCommand>> unitCommandMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, LAccess>> lAccessMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, LVar>> lVarMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, Weather>> weatherMap = new AtomicReference<>();
 
-    private final AtomicReference<Map<Integer, BlockType>> blockIdMap = new AtomicReference<>();
-    private final AtomicReference<Map<Integer, Item>> itemIdMap = new AtomicReference<>();
-    private final AtomicReference<Map<Integer, Liquid>> liquidIdMap = new AtomicReference<>();
-    private final AtomicReference<Map<Integer, Unit>> unitIdMap = new AtomicReference<>();
-    private final AtomicReference<Map<Integer, UnitCommand>> unitCommandIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, BlockType>> blockIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Item>> itemIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Liquid>> liquidIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Unit>> unitIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, UnitCommand>> unitCommandIdMap = new AtomicReference<>();
 
-    private final AtomicReference<Map<Integer, BlockType>> blockLogicIdMap = new AtomicReference<>();
-    private final AtomicReference<Map<Integer, Item>> itemLogicIdMap = new AtomicReference<>();
-    private final AtomicReference<Map<Integer, Liquid>> liquidLogicIdMap = new AtomicReference<>();
-    private final AtomicReference<Map<Integer, Unit>> unitLogicIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, BlockType>> blockLogicIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Item>> itemLogicIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Liquid>> liquidLogicIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Unit>> unitLogicIdMap = new AtomicReference<>();
 
-    private final AtomicReference<Map<String, MindustryContent>> allConstants = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, MindustryContent>> allConstants = new AtomicReference<>();
 
-    private final AtomicReference<Set<String>> alignments = new AtomicReference<>();
-    private final AtomicReference<Set<String>> blockFlags = new AtomicReference<>();
-    private final AtomicReference<Set<String>> conditions = new AtomicReference<>();
-    private final AtomicReference<Set<String>> cutsceneActions = new AtomicReference<>();
-    private final AtomicReference<Set<String>> effects = new AtomicReference<>();
-    private final AtomicReference<Set<String>> fetchTypes = new AtomicReference<>();
-    private final AtomicReference<Set<String>> graphicsTypes = new AtomicReference<>();
-    private final AtomicReference<Set<String>> lAccessNames = new AtomicReference<>();
-    private final AtomicReference<Set<String>> lAccessControllable = new AtomicReference<>();
-    private final AtomicReference<Set<String>> lAccessSettable = new AtomicReference<>();
-    private final AtomicReference<Set<String>> locateTypes = new AtomicReference<>();
-    private final AtomicReference<Set<String>> logicRules = new AtomicReference<>();
-    private final AtomicReference<Set<String>> lookableContents = new AtomicReference<>();
-    private final AtomicReference<Set<String>> markerControls = new AtomicReference<>();
-    private final AtomicReference<Set<String>> markerTypes = new AtomicReference<>();
-    private final AtomicReference<Set<String>> messageTypes = new AtomicReference<>();
-    private final AtomicReference<Set<String>> operations = new AtomicReference<>();
-    private final AtomicReference<Set<String>> radarSorts = new AtomicReference<>();
-    private final AtomicReference<Set<String>> radarTargets = new AtomicReference<>();
-    private final AtomicReference<Set<String>> soundNames = new AtomicReference<>();
-    private final AtomicReference<Set<String>> statusEffects = new AtomicReference<>();
-    private final AtomicReference<Set<String>> tileLayers = new AtomicReference<>();
-    private final AtomicReference<Set<String>> tileLayersSettable = new AtomicReference<>();
-    private final AtomicReference<Set<String>> unitControls = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> alignments = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> blockFlags = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> conditions = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> cutsceneActions = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> effects = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> fetchTypes = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> graphicsTypes = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> lAccessNames = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> lAccessControllable = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> lAccessSettable = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> locateTypes = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> logicRules = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> lookableContents = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> markerControls = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> markerTypes = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> messageTypes = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> operations = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> radarSorts = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> radarTargets = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> soundNames = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> statusEffects = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> tileLayers = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> tileLayersSettable = new AtomicReference<>();
+    private final AtomicReference<@Nullable Set<String>> unitControls = new AtomicReference<>();
 
     public static MindustryMetadata getLatest() {
         return forVersion(ProcessorVersion.MAX);
@@ -92,7 +92,7 @@ public class MindustryMetadata {
     //<editor-fold desc="Lazy initialization">
 
     // Lazy initialization via AtomicReference
-    private static <T> T cacheInstance(AtomicReference<T> reference, Supplier<T> supplier) {
+    private static <T> T cacheInstance(AtomicReference<@Nullable T> reference, Supplier<T> supplier) {
         T value = reference.get();
         if (value == null) {
             value = supplier.get();
@@ -213,14 +213,14 @@ public class MindustryMetadata {
 
     // All constants
     private Map<String, MindustryContent> getAllConstants() {
-        // Note: in version 6, the block map contains entries conflicting with other content (e.g. water)
+        // Note: in version 6, the block map contains entries conflicting with other content (e.g., water)
         // The block map is processed last and any conflicting items are discarded
         return cacheInstance(allConstants, () ->
                 Stream.of(getItemMap(), getLiquidMap(), getUnitMap(), getUnitCommandMap(), getBlockMap())
                         .flatMap(m -> m.values().stream())
                         .filter(o -> !o.legacy())
                         .collect(Collectors.toMap(MindustryContent::name, t -> t,
-                                (a, b) -> a, HashMap::new)));
+                                (a, _) -> a, HashMap::new)));
     }
 
     // String metadata
@@ -563,7 +563,7 @@ public class MindustryMetadata {
                     list.add(create(columns));
                 }
                 Map<String, T> result = list.stream().filter(Objects::nonNull).collect(Collectors.toMap(T::name,
-                        t -> t, (a, b) -> a, LinkedHashMap::new));
+                        t -> t, (a, _) -> a, LinkedHashMap::new));
                 createUnregistered().forEach(t -> result.putIfAbsent(t.name(), t));
 
                 return Collections.unmodifiableMap(result);
@@ -750,7 +750,7 @@ public class MindustryMetadata {
         public NamedReader(String resource) {
             super(resource);
             filterColumn = 0;
-            filter = s -> true;
+            filter = _ -> true;
             decorator = s -> s;
         }
 
@@ -767,7 +767,7 @@ public class MindustryMetadata {
         public NamedReader(String resource, Function<String, String> decorator) {
             super(resource);
             this.filterColumn = 0;
-            this.filter = s -> true;
+            this.filter = _ -> true;
             this.decorator = decorator;
         }
 

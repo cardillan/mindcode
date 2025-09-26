@@ -1,6 +1,5 @@
 package info.teksol.mc.common;
 
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
@@ -34,7 +33,7 @@ public record TextFilePosition(int line, int column) implements Comparable<TextF
 
 
     @Override
-    public int compareTo(@NotNull TextFilePosition o) {
+    public int compareTo(TextFilePosition o) {
         return (line != o.line) ? Integer.compare(line, o.line) : Integer.compare(column, o.column);
     }
 }

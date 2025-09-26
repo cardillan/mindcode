@@ -54,7 +54,7 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         assembler.setSubcontextType(AstSubcontextType.FLOW_CONTROL, 1);
         assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
-        exitLoop(node, loopLabels);
+        exitLoop(loopLabels);
     }
 
     private void createWhileLoop(AstWhileLoopStatement node) {
@@ -84,6 +84,6 @@ public class WhileLoopStatementsBuilder extends AbstractLoopBuilder implements A
         // Exit
         assembler.createLabel(loopLabels.breakLabel());
         assembler.clearSubcontextType();
-        exitLoop(node, loopLabels);
+        exitLoop(loopLabels);
     }
 }

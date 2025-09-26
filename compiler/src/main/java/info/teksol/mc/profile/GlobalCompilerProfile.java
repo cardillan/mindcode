@@ -6,12 +6,14 @@ import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.options.*;
+import org.jspecify.annotations.NullMarked;
 
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
 /// Provides access to global/module compiler options.
+@NullMarked
 public interface GlobalCompilerProfile {
     <T> CompilerOptionValue<T> getOption(Enum<?> option);
 

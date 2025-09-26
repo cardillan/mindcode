@@ -1,7 +1,7 @@
 package info.teksol.mc.mindcode.compiler.optimization.cases;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
-import org.jetbrains.annotations.NotNull;
+import info.teksol.mc.util.Tuple2;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.List;
@@ -118,26 +118,29 @@ public final class Segment implements Comparable<Segment> {
                 return new Segment(type, first.from(), last.to(), middle.label(), middle.size(), endLabel, endLabelWeight);
             }
         } else {
-            Map<LogicLabel, Integer> sizes = partitions.stream()
-                    .collect(Collectors.groupingBy(Partition::label, Collectors.summingInt(Partition::size)));
-
-            LogicLabel majorityLabel = sizes.entrySet().stream()
-                    .filter(e -> e.getKey() != LogicLabel.INVALID)
-                    .max(Map.Entry.comparingByValue())
-                    .map(Map.Entry::getKey)
-                    .orElse(LogicLabel.EMPTY);
-
-            int majoritySize = sizes.getOrDefault(majorityLabel, 0);
+            Tuple2<LogicLabel, Integer> majorityLabelAndSize = findMajorityLabelAndSize(partitions);
 
             // For mixed segment, the end label is the majority label; for jump table, it is the last partition's label by definition
-            LogicLabel endLabel = type == MIXED ? majorityLabel : partitions.getLast().label();
+            LogicLabel endLabel = type == MIXED ? majorityLabelAndSize.e1() : partitions.getLast().label();
             // For mixed segment, the end weight is the majority weight; for jump table, it is always 1
-            int endLabelWeight = type == MIXED ? majoritySize : 1;
-            return new Segment(type, partitions.getFirst().from(), partitions.getLast().to(), majorityLabel, majoritySize, endLabel, endLabelWeight);
+            int endLabelWeight = type == MIXED ? majorityLabelAndSize.e2() : 1;
+            return new Segment(type, partitions.getFirst().from(), partitions.getLast().to(),
+                    majorityLabelAndSize.e1(), majorityLabelAndSize.e2(), endLabel, endLabelWeight);
         }
     }
 
     public static Segment jumpTable(List<Partition> partitions) {
+        Tuple2<LogicLabel, Integer> majorityLabelAndSize = findMajorityLabelAndSize(partitions);
+
+        // For mixed segment, the end label is the majority label; for jump table, it is the last partition's label by definition
+        LogicLabel endLabel = partitions.getLast().label();
+        // For mixed segment, the end weight is the majority weight; for jump table, it is always 1
+        int endLabelWeight = 1;
+        return new Segment(JUMP_TABLE, partitions.getFirst().from(), partitions.getLast().to(),
+                majorityLabelAndSize.e1(), majorityLabelAndSize.e2(), endLabel, endLabelWeight);
+    }
+
+    private static Tuple2<LogicLabel, Integer> findMajorityLabelAndSize(List<Partition> partitions) {
         Map<LogicLabel, Integer> sizes = partitions.stream()
                 .collect(Collectors.groupingBy(Partition::label, Collectors.summingInt(Partition::size)));
 
@@ -147,13 +150,7 @@ public final class Segment implements Comparable<Segment> {
                 .map(Map.Entry::getKey)
                 .orElse(LogicLabel.EMPTY);
 
-        int majoritySize = sizes.getOrDefault(majorityLabel, 0);
-
-        // For mixed segment, the end label is the majority label; for jump table, it is the last partition's label by definition
-        LogicLabel endLabel = partitions.getLast().label();
-        // For mixed segment, the end weight is the majority weight; for jump table, it is always 1
-        int endLabelWeight = 1;
-        return new Segment(JUMP_TABLE, partitions.getFirst().from(), partitions.getLast().to(), majorityLabel, majoritySize, endLabel, endLabelWeight);
+        return Tuple2.of(majorityLabel, sizes.getOrDefault(majorityLabel, 0));
     }
 
     public Segment convertToMixed() {
@@ -201,7 +198,7 @@ public final class Segment implements Comparable<Segment> {
     }
 
     @Override
-    public int compareTo(@NotNull Segment o) {
+    public int compareTo(Segment o) {
         return Integer.compare(from, o.from);
     }
 

@@ -5,7 +5,6 @@ import info.teksol.mc.generated.ast.AstNodeToString;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.profile.CompilerProfile;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -42,7 +41,7 @@ public abstract class AstBaseMindcodeNode implements AstMindcodeNode {
     }
 
     protected static List<AstMindcodeNode> children(Stream<? extends @Nullable AstMindcodeNode> nodes) {
-        return nodes.filter(Objects::nonNull).<@NonNull AstMindcodeNode>map(Objects::requireNonNull).toList();
+        return nodes.filter(Objects::nonNull).<AstMindcodeNode>map(Objects::requireNonNull).toList();
     }
 
     protected static List<AstMindcodeNode> children(@Nullable AstMindcodeNode... nodes) {

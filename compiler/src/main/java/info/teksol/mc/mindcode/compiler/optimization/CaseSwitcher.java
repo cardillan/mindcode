@@ -68,7 +68,7 @@ import static info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType.*;
 /// * SINGLE: the segment represents a continuous region of a single target. There's no logic involved, the SINGLE
 ///   segment is realized by a jump to the target body. When possible, this jump is inlined into the bisection table.
 /// * MIXED: the segments represent a continuous region having a single majority target and a few exceptions. The
-///   segment is realized by explicitly handling the targets first, and then jumping to the majority target.
+///   segment is realized by explicitly handling the targets first and then jumping to the majority target.
 /// * JUMP_TABLE: the segments represent a continuous region having a variety of targets. The segment is realized as
 ///   a jump table, or alternatively, as a selection table when the size of the segment is low.
 ///
@@ -229,7 +229,7 @@ public class CaseSwitcher extends BaseOptimizer {
                             if (jump.getCondition() == Condition.EQUAL || jump.getCondition() == Condition.STRICT_EQUAL) {
                                 target = jump.getTarget();
                             } else {
-                                // NOT_EQUAL might have been created by jump over jump optimization
+                                // NOT_EQUAL might have been created by the jump over jump optimization
                                 target = findNextLabel(context, iterator, jump);
                                 if (target == null) return;
                             }
@@ -257,7 +257,7 @@ public class CaseSwitcher extends BaseOptimizer {
                                     // The original jump modified by the jump over jump optimization
                                     target = findNextLabel(context, iterator, jump);
                                     if (target == null) return;
-                                    // When condition is met, the value doesn't belong to the range
+                                    // When the condition is met, the value doesn't belong to the range
                                     rangeHighValue = value.getIntValue() + (jump.getCondition() == Condition.GREATER_THAN ? 1 : 0);
                                 }
 
@@ -456,7 +456,7 @@ public class CaseSwitcher extends BaseOptimizer {
     }
 
     private int findHighPadSegment(ConvertCaseActionParameters parameters, List<Segment> segments) {
-        // Only high pad Mindustry content when full builtin evaluation is active.
+        // Only high-pad Mindustry content when full builtin evaluation is active.
         // When range checking is off, padding high makes no sense.
         if (!parameters.mindustryContent || getGlobalProfile().getBuiltinEvaluation() != BuiltinEvaluation.FULL || parameters.removeRangeCheck) return -1;
 
@@ -817,7 +817,7 @@ public class CaseSwitcher extends BaseOptimizer {
                 // Compute execution through the select table by majority targets and else values
                 activeSteps += size * majorityTargets;
 
-                // The final jump to majority target (not present for embedded segments)
+                // The final jump to the majority target (not present for embedded segments)
                 if (!segment.embedded()) {
                     size++;
                     activeSteps += majorityTargets;
@@ -908,7 +908,7 @@ public class CaseSwitcher extends BaseOptimizer {
                 // Thus, we need to create new ones and maintain a map.
                 List<LogicLabel> labels = new ArrayList<>();
                 Map<LogicLabel, LogicLabel> labelMap = new HashMap<>();
-                for (int i = segment.from(); i < segment.to(); i++) {
+                for (int i = 0; i < segment.to(); i++) {
                     LogicLabel target = param.targets.getOrDefault(i, finalLabel);
                     LogicLabel updatedTarget = i == 0 && target == finalLabel ? param.targets.getNullOrElseTarget() : target;
                     if (!labelMap.containsKey(updatedTarget)) {
@@ -1155,7 +1155,7 @@ public class CaseSwitcher extends BaseOptimizer {
         }
 
         private int size(Segment segment) {
-            // Empty segments have zero steps when `else` path is not considered
+            // Empty segments have zero steps when the ` else ` path is not considered
             return segment.empty() && !param.considerElse ? 0 : segment.size();
         }
 
@@ -1309,7 +1309,7 @@ public class CaseSwitcher extends BaseOptimizer {
     ///                   target value are counted.
     /// @param elseValues The total number of else values handled by this segment. Those values that actually land
     ///                   on the else branch are counted.
-    /// @param elseSteps  The total number of steps needed for all else values handled by this segment to resolve.
+    /// @param elseSteps  The total number of steps needed for all `else` values handled by this segment to resolve.
     ///                   Only the else values that actually land on the else branch are included.
     record SegmentStats(int size, int values, int steps, int elseValues, int elseSteps) {
     }

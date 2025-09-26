@@ -6,11 +6,10 @@ import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.LVar;
 import info.teksol.mc.profile.BuiltinEvaluation;
-import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-/// The ExpressionValue class holds an immutable value that can be passed to expression evaluator.
+/// The ExpressionValue class holds an immutable value that can be passed to the expression evaluator.
 /// Only nulls, numeric values and String objects are supported, and strings are contained as a plain
 /// string, not wrapped into `MindustryString` instance.
 ///
@@ -29,7 +28,7 @@ class ExpressionValue implements LogicReadable {
      * @param node the abstract syntax tree node holding the value of the expression.
      * @return an ExpressionValue instance representing the value of the given node.
      */
-    public static @NonNull ExpressionValue create(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor, AstMindcodeNode node) {
+    public static ExpressionValue create(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor, AstMindcodeNode node) {
         try {
             return switch (node) {
                 case AstLiteralNull n -> new ExpressionValue(processor, null, null);
@@ -54,7 +53,7 @@ class ExpressionValue implements LogicReadable {
         }
     }
 
-    private static @NonNull ExpressionValue evaluateBuiltin(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor,
+    private static ExpressionValue evaluateBuiltin(BuiltinEvaluation builtinEvaluation, InstructionProcessor processor,
             AstBuiltInIdentifier b) {
         if (builtinEvaluation != BuiltinEvaluation.NONE) {
             LVar var = processor.getMetadata().getLVar(b.getName());
@@ -66,11 +65,11 @@ class ExpressionValue implements LogicReadable {
         }
     }
 
-    public static @NonNull ExpressionValue zero(InstructionProcessor processor) {
+    public static ExpressionValue zero(InstructionProcessor processor) {
         return new ExpressionValue(processor, null, 0);
     }
 
-    public static @NonNull ExpressionValue fromLiteral(InstructionProcessor processor, String literal) {
+    public static ExpressionValue fromLiteral(InstructionProcessor processor, String literal) {
         return new ExpressionValue(processor, null, processor.parseNumber(literal));
     }
 

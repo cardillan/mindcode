@@ -6,7 +6,6 @@ import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
-import org.jetbrains.annotations.NotNull;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -52,7 +51,7 @@ class ArrayOptimizer extends BaseOptimizer {
         return false;
     }
 
-    private @NotNull ArrayOrganization computeArrayOrganization(ArrayAccessInstruction ix) {
+    private ArrayOrganization computeArrayOrganization(ArrayAccessInstruction ix) {
         ArrayOrganization current = ix.getArrayOrganization();
         return switch (ix.getArray().getArrayStore().getSize()) {
             case 1 -> ArrayOrganization.INTERNAL_SIZE1;

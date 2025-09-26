@@ -224,7 +224,6 @@ public class Variables extends AbstractMessageEmitter {
 
     /// Registers an array. Scope is always global.
     ///
-    /// @param variable variable specification
     /// @return ValueStore instance representing the created variable
     public ArrayStore createArray(AstIdentifier identifier, int size, Map<Modifier, @Nullable Object> modifiers,
             List<ValueStore> initialValues, @Nullable LogicVariable processor, boolean shared) {
@@ -339,7 +338,8 @@ public class Variables extends AbstractMessageEmitter {
 
     /// Tries to find a variable among declared variables (local, then global). Returns null when not found.
     ///
-    /// @param identifier variable identifier
+    /// @param name name of variable to find
+    /// @param allowLocal `true` to search in the local scope first
     /// @return ValueStore instance containing the variable
     public @Nullable ValueStore findVariable(String name, boolean allowLocal) {
         // Look for local variables first

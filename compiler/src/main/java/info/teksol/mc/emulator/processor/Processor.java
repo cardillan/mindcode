@@ -37,8 +37,8 @@ public class Processor extends AbstractMessageEmitter {
     private final Map<String, MindustryBlock> blockMap = new LinkedHashMap<>();
     private List<MindustryBlock> blocks = List.of();
     private final MindustryVariable counter;
+    private final int traceLimit;
     private int traceCount = 0;
-    private int traceLimit = 0;
     private int steps = 0;
     private int noopSteps = 0;
     private int[] profile = new int[0];
@@ -381,6 +381,7 @@ public class Processor extends AbstractMessageEmitter {
             MindustryVariable a = getExistingVariable(ix.getX());
             MindustryVariable b = getExistingVariable(ix.getY());
             LogicCondition logicCondition = ConditionEvaluator.getCondition(ix.getCondition());
+            //noinspection ConstantValue
             if (logicCondition == null) {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '%s'.", ix.getCondition());
             }
@@ -496,6 +497,7 @@ public class Processor extends AbstractMessageEmitter {
             MindustryVariable a = getExistingVariable(ix.getX());
             MindustryVariable b = getExistingVariable(ix.getY());
             LogicCondition logicCondition = ConditionEvaluator.getCondition(ix.getCondition());
+            //noinspection ConstantValue
             if (logicCondition == null) {
                 throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Invalid jump condition '%s'.", ix.getCondition());
             }

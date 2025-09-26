@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
+## 3.8.1 - Unreleased
+
+### Fixed
+
+* Fixed the compiler not rejecting integer and double option values outside the allowed range. 
+
 ## 3.8.0 - 2025-09-25
 
 ### Fixed

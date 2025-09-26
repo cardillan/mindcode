@@ -85,7 +85,7 @@ public class OptimizationCoordinator {
 
     public List<LogicInstruction> optimize(CallGraph callGraph, List<LogicInstruction> instructions, AstContext rootAstContext) {
         program.addAll(instructions);
-        boolean passesExceeded = false;
+        boolean passesExceeded;
 
         try (TraceFile traceFile = TraceFile.createTraceFile(TRACE, DEBUG_PRINT, SYSTEM_OUT)) {
             optimizationContext = new OptimizationContext(traceFile, messageConsumer, globalProfile, instructionProcessor,

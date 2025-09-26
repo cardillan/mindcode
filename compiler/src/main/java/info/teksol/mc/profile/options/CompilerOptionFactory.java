@@ -266,7 +266,7 @@ public class CompilerOptionFactory {
                 SortCategory.class,
                 OptionMultiplicity.ZERO_OR_MORE, SemanticStability.STABLE, OptionScope.GLOBAL,
                 OptionAvailability.UNIVERSAL, category,
-                SortCategory.NONE).setListProcessor(CompilerOptionFactory::normalizeSortVariables));
+                SortCategory.NONE).setValueProcessor(CompilerOptionFactory::normalizeSortVariables));
 
         list.add(new IntegerCompilerOptionValue(DebuggingOptions.PARSE_TREE, "p",
                 "sets the detail level of parse tree output into the log file, 0 = off",

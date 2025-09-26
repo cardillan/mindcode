@@ -30,9 +30,9 @@ Constant by which to multiply an angular value in radians to obtain an angular v
 
 **Definition:** `inline def distance(x1, y1, x2, y2)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   3 |                  3 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   3 |                  3 |
 
 Computes the distance between points (`x1`, `y1`) and (`x2`, `y2`).
 Uses the `len` instruction for efficient hypotenuse calculation.
@@ -41,9 +41,9 @@ Uses the `len` instruction for efficient hypotenuse calculation.
 
 **Definition:** `inline def round(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   2 |                  2 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   2 |                  2 |
 
 Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gives '2` and `round(-1.5)` gives `1`.
 
@@ -53,9 +53,9 @@ Rounds the number to the closest integer. Halves are rounded up: `round(1.5)' gi
 
 **Definition:** `inline def frac(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   1 |                  1 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   1 |                  1 |
 
 Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
@@ -63,11 +63,11 @@ Returns the fractional part of the number. `frac(1.5)` gives `0.5`.
 
 **Definition:** `def signInexact(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   2 |                  6 |
-| Function body                  |                   3 |                  7 |
-| Function call                  |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   2 |                  6 |
+| Function body                            |                   3 |                  7 |
+| Function call                            |                   4 |                  4 |
 
 Returns the sign of the number. The return value is `0` precisely when `x == 0`
 (using the Mindustry Logic native comparison precision).
@@ -76,9 +76,9 @@ Returns the sign of the number. The return value is `0` precisely when `x == 0`
 
 **Definition:** `inline def sign(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   3 |                  3 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   3 |                  3 |
 
 Returns the sign of the number. The return value is `0` when `x` is null or exactly zero.
 
@@ -88,9 +88,9 @@ Returns the sign of the number. The return value is `0` when `x` is null or exac
 
 **Definition:** `inline def isZero(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   2 |                  2 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   2 |                  2 |
 
 Returns `true` when `x` is null or precisely zero.
 
@@ -98,9 +98,9 @@ Returns `true` when `x` is null or precisely zero.
 
 **Definition:** `inline def isZero(x, precision)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   2 |                  2 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   2 |                  2 |
 
 Returns `true` when `x` is null or its absolute value is less than `precision`.
 
@@ -108,9 +108,9 @@ Returns `true` when `x` is null or its absolute value is less than `precision`.
 
 **Definition:** `inline def isEqual(a, b, precision)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   3 |                  3 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   3 |                  3 |
 
 Returns `true` if the two values differ by less than `precision`.
 
@@ -123,9 +123,9 @@ Returns `true` if the two values differ by less than `precision`.
 
 **Definition:** `inline def nullToZero(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   1 |                  1 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   1 |                  1 |
 
 Converts the value of `x` to zero if it was `null`. Uses a single instruction for the conversion,
 and makes sure it won't be removed by the optimizer.
@@ -134,9 +134,9 @@ and makes sure it won't be removed by the optimizer.
 
 **Definition:** `inline def boolean(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   1 |                  1 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   1 |                  1 |
 
 Converts the value of `x` to boolean values (`0` or `1`). The returning value will be `0`
 if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
@@ -145,9 +145,9 @@ if `x` is equal to `0` using Mindustry equality operator, `1` otherwise.
 
 **Definition:** `inline def integer(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   1 |                  1 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   1 |                  1 |
 
 Converts the value of `x` to an integer in the same way Mindustry Logic converts operands of bitwise operations
 (`and`, `or`, `xor`, `shl`, `shr`, `not`) from real numbers to integer numbers.
@@ -157,9 +157,9 @@ Uses a single instruction for the conversion and makes sure it won't be removed 
 
 **Definition:** `inline def sum(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   0 |                  0 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   0 |                  0 |
 
 Returns `x`. The function is a fallback case for the generic `sum` function taking a variable number of arguments.
 
@@ -167,11 +167,11 @@ Returns `x`. The function is a fallback case for the generic `sum` function taki
 
 **Definition:** `inline def sum(x1, x2, x...)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Five arguments in total        |                   4 |                  4 |
-| Ten arguments in total         |                   9 |                  9 |
-| Twenty arguments in total      |                  19 |                 19 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Five arguments in total                  |                   4 |                  4 |
+| Ten arguments in total                   |                   9 |                  9 |
+| Twenty arguments in total                |                  19 |                 19 |
 
 Returns the sum of all given arguments.
 
@@ -179,9 +179,9 @@ Returns the sum of all given arguments.
 
 **Definition:** `inline def avg(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   0 |                  0 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   0 |                  0 |
 
 Returns `x`. The function is a fallback case for the generic `avg` function taking a variable number of arguments.
 
@@ -189,11 +189,11 @@ Returns `x`. The function is a fallback case for the generic `avg` function taki
 
 **Definition:** `inline def avg(x1, x2, x...)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Five arguments in total        |                   5 |                  5 |
-| Ten arguments in total         |                  10 |                 10 |
-| Twenty arguments in total      |                  20 |                 20 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Five arguments in total                  |                   5 |                  5 |
+| Ten arguments in total                   |                  10 |                 10 |
+| Twenty arguments in total                |                  20 |                 20 |
 
 Returns the average of all given arguments.
 
@@ -201,9 +201,9 @@ Returns the average of all given arguments.
 
 **Definition:** `inline def logn(number, base)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   3 |                  3 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   3 |                  3 |
 
 Returns the logarithm of the number in the given base.
 
@@ -213,9 +213,9 @@ Returns the logarithm of the number in the given base.
 
 **Definition:** `inline def log2(number)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   2 |                  2 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   2 |                  2 |
 
 Returns the logarithm of the number in base 2.
 
@@ -225,9 +225,9 @@ Returns the logarithm of the number in base 2.
 
 **Definition:** `inline def lerp(from, to, ratio)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   4 |                  4 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   4 |                  4 |
 
 Perform linear interpolation between two values.
 
@@ -242,9 +242,9 @@ Perform linear interpolation between two values.
 
 **Definition:** `inline def median(x)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   0 |                  0 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   0 |                  0 |
 
 Returns `x`. The function is a fallback case for the generic `median` function taking a variable number of arguments.
 
@@ -252,9 +252,9 @@ Returns `x`. The function is a fallback case for the generic `median` function t
 
 **Definition:** `inline def median(x1, x2)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   2 |                  2 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   2 |                  2 |
 
 Returns the median of two values.
 
@@ -262,9 +262,9 @@ Returns the median of two values.
 
 **Definition:** `inline def median(x1, x2, x3)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                   5 |                  5 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                   5 |                  5 |
 
 Returns the median of three values.
 
@@ -272,11 +272,11 @@ Returns the median of three values.
 
 **Definition:** `def median(x1, x2, x3, x4)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  16 |                 16 |
-| Function body                  |                  17 |                 17 |
-| Function call                  |                   7 |                  7 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  16 |                 16 |
+| Function body                            |                  17 |                 17 |
+| Function call                            |                   7 |                  7 |
 
 Returns the median of four values.
 
@@ -284,11 +284,11 @@ Returns the median of four values.
 
 **Definition:** `def median(x1, x2, x3, x4, x5)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Inlined function               |                  18 |                 18 |
-| Function body                  |                  19 |                 19 |
-| Function call                  |                   8 |                  8 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Inlined function                         |                  18 |                 18 |
+| Function body                            |                  19 |                 19 |
+| Function call                            |                   8 |                  8 |
 
 Returns the median of five values.
 
@@ -296,11 +296,11 @@ Returns the median of five values.
 
 **Definition:** `inline def median(x...)`
 
-| Compiled code size when...     | optimized for speed | optimized for size |
-|--------------------------------|--------------------:|-------------------:|
-| Ten arguments in total         |                 643 |                 88 |
-| Fifteen arguments in total     |                 138 |                118 |
-| Twenty arguments in total      |                 178 |                148 |
+| Compiled code size when...               | optimized for speed | optimized for size |
+|------------------------------------------|--------------------:|-------------------:|
+| Ten arguments in total                   |                 643 |                 88 |
+| Fifteen arguments in total               |                 138 |                118 |
+| Twenty arguments in total                |                 178 |                148 |
 
 Computes the median of the given arguments using a generic algorithm. The algorithm generates quite a large code
 and is fairly slow as it doesn't modify the input array.
