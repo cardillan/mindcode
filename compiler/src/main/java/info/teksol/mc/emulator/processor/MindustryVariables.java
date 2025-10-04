@@ -83,6 +83,10 @@ public class MindustryVariables {
                 : variables.computeIfAbsent(value.toMlog(), this::createConstant);
     }
 
+    public MindustryVariable getVariableByName(String name) {
+        return variables.computeIfAbsent(name, this::createVariable);
+    }
+
     private MindustryVariable createVariable(String value) {
         if (VARIABLE_NAME_PATTERN.matcher(value).matches()) {
             return MindustryVariable.createVar(value);

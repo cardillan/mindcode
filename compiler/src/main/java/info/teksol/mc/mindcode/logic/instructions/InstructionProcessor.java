@@ -23,12 +23,16 @@ import java.util.function.Consumer;
 /// instructions to ensure compatibility, safety, and determinism. This interface forms the foundation for translating
 /// and working with Mindustry Logic operations.
 ///
-/// The existing implementations are tailored to different Mindustry Logic versions. Correct implementation is chosen
-/// based on the compiler profile, and only generates mlog instructions compatible with the chosen target.
+/// The existing implementations are tailored to different Mindustry Logic versions. The correct implementation
+/// is chosen based on the compiler profile and only generates mlog instructions compatible with the chosen target.
 ///
 /// Variables holding instances of this interface should be named "processor".
 @NullMarked
 public interface InstructionProcessor extends ContextlessInstructionCreator, MessageEmitter {
+
+    default InstructionProcessor getProcessor() {
+        return this;
+    }
 
     ProcessorVersion getProcessorVersion();
 
@@ -61,7 +65,10 @@ public interface InstructionProcessor extends ContextlessInstructionCreator, Mes
 
     Collection<String> getParameterValues(InstructionParameterType type);
 
-    /// Creates a sample logic instruction from given opcode variant.
+    /// Determines a proper initial array organization for a given array
+    void setupArrayAccessInstruction(ArrayAccessInstruction instruction);
+
+    /// Creates a sample logic instruction from a given opcode variant.
     ///
     /// @param opcodeVariant opcode variant to use
     /// @return instruction having all arguments set to opcode variant defaults

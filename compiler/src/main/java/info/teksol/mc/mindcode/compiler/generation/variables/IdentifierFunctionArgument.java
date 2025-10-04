@@ -3,6 +3,7 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
@@ -75,6 +76,11 @@ public class IdentifierFunctionArgument implements FunctionArgument {
     @Override
     public boolean isOutput() {
         return false;
+    }
+
+    @Override
+    public LogicString getMlogVariableName() {
+        return unwrap().getMlogVariableName();
     }
 
     @Override

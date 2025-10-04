@@ -182,7 +182,8 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
         return fullName;
     }
 
-    public LogicString getMlogString() {
+    @Override
+    public LogicString getMlogVariableName() {
         return LogicString.create(sourcePosition, mlog);
     }
 
@@ -289,7 +290,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     public static LogicVariable fnRetAddr(MindcodeFunction function, String mlog) {
-        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE, mlog, mlog);
+        return new LogicVariable(function.getSourcePosition(), FUNCTION_RETADDR, ValueMutability.MUTABLE, function.getPrefix() + RETURN_ADDRESS, mlog);
     }
 
     public static LogicVariable fnFinished(MindcodeFunction function, String mlog) {

@@ -477,6 +477,9 @@ public class Processor extends AbstractMessageEmitter {
         MindustryVariable object = getExistingVariable(ix.getMemory());
         if (object.getObject() instanceof MindustryString str) {
             target.setDoubleValue(getChar(str, index.getIntValue()));
+        } else if (object.getName().equals("@this")) {
+            MindustryVariable variable = getVariableByName(index.getStringValue());
+            target.assign(variable);
         } else {
             blockOperation("read", ix.getMemory(), Memory.class,
                     memory -> target.setDoubleValue(memory.read(index.getIntValue())));
@@ -561,8 +564,14 @@ public class Processor extends AbstractMessageEmitter {
     private boolean executeWrite(WriteInstruction ix) {
         MindustryVariable source = getExistingVariable(ix.getArg(0));
         MindustryVariable index = getExistingVariable(ix.getIndex());
-        blockOperation("write", ix.getMemory(), Memory.class,
-                memory -> memory.write(index.getIntValue(), source.getDoubleValue()));
+        MindustryVariable object = getExistingVariable(ix.getMemory());
+        if (object.getName().equals("@this")) {
+            MindustryVariable variable = getVariableByName(index.getStringValue());
+            variable.assign(source);
+        } else {
+            blockOperation("write", ix.getMemory(), Memory.class,
+                    memory -> memory.write(index.getIntValue(), source.getDoubleValue()));
+        }
         return true;
     }
 
@@ -572,5 +581,9 @@ public class Processor extends AbstractMessageEmitter {
 
     private MindustryVariable getExistingVariable(LogicArgument value) {
         return variables.getExistingVariable(value);
+    }
+
+    public MindustryVariable getVariableByName(String name) {
+        return variables.getVariableByName(name);
     }
 }

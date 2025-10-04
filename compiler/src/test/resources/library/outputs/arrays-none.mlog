@@ -3,10 +3,10 @@ set :fill:value "x"
 set :fill:i 0
 jump 11 greaterThanEq :fill:i 5
 set *tmp0 :fill:i
-set .a*wret 9
-set .a*w :fill:value
+set .a*ret 8
 op mul *tmp85 *tmp0 2
 op add @counter 302 *tmp85
+write :fill:value @this .a*elem
 op add :fill:i :fill:i 1
 jump 3 always 0 0
 assertflush
@@ -20,16 +20,16 @@ set :i 0
 jump 34 greaterThanEq :i 10
 set *tmp2 :i
 op add *tmp4 p :i
-set .b*wret 26
-set .b*w *tmp4
+set .b*ret 25
 op mul *tmp86 *tmp2 2
-op add @counter 334 *tmp86
+op add @counter 313 *tmp86
+write *tmp4 @this .b*elem
 set *tmp5 :i
 op add *tmp7 p :i
-set .c*wret 32
-set .c*w *tmp7
+set .c*ret 31
 op mul *tmp87 *tmp5 2
-op add @counter 376 *tmp87
+op add @counter 334 *tmp87
+write *tmp7 @this .c*elem
 op add :i :i 1
 jump 19 always 0 0
 set :reverse:i 0
@@ -37,26 +37,26 @@ jump 61 greaterThanEq :reverse:i 5
 op sub *tmp8 9 :reverse:i
 set :reverse:j *tmp8
 set *tmp9 :reverse:i
-set .b*rret 42
+set .b*ret 42
 op mul *tmp88 *tmp9 2
 op add @counter 313 *tmp88
-set *tmp10 .b*r
+read *tmp10 @this .b*elem
 set :reverse:t *tmp10
 set *tmp11 :reverse:i
 set *tmp13 :reverse:j
-set .b*rret 49
+set .b*ret 49
 op mul *tmp89 *tmp13 2
 op add @counter 313 *tmp89
-set *tmp14 .b*r
-set .b*wret 54
-set .b*w *tmp14
+read *tmp14 @this .b*elem
+set .b*ret 53
 op mul *tmp90 *tmp11 2
-op add @counter 334 *tmp90
+op add @counter 313 *tmp90
+write *tmp14 @this .b*elem
 set *tmp15 :reverse:j
-set .b*wret 59
-set .b*w :reverse:t
+set .b*ret 58
 op mul *tmp91 *tmp15 2
-op add @counter 334 *tmp91
+op add @counter 313 *tmp91
+write :reverse:t @this .b*elem
 op add :reverse:i :reverse:i 1
 jump 35 always 0 0
 assertflush
@@ -77,10 +77,10 @@ set :bubblesort:a .b*0
 set :bubblesort:i 1
 jump 110 greaterThanEq :bubblesort:i 10
 set *tmp17 :bubblesort:i
-set .b*rret 82
+set .b*ret 82
 op mul *tmp92 *tmp17 2
 op add @counter 313 *tmp92
-set *tmp18 .b*r
+read *tmp18 @this .b*elem
 set :bubblesort:b *tmp18
 jump 88 equal :bubblesort:maxToMin false
 op lessThan *tmp20 :bubblesort:a :bubblesort:b
@@ -92,15 +92,15 @@ set :bubblesort:condition *tmp19
 jump 106 equal :bubblesort:condition false
 op sub *tmp23 :bubblesort:i 1
 set *tmp24 *tmp23
-set .b*wret 98
-set .b*w :bubblesort:b
+set .b*ret 97
 op mul *tmp93 *tmp24 2
-op add @counter 334 *tmp93
+op add @counter 313 *tmp93
+write :bubblesort:b @this .b*elem
 set *tmp26 :bubblesort:i
-set .b*wret 103
-set .b*w :bubblesort:a
+set .b*ret 102
 op mul *tmp94 *tmp26 2
-op add @counter 334 *tmp94
+op add @counter 313 *tmp94
+write :bubblesort:a @this .b*elem
 set :bubblesort:flag true
 set *tmp22 :bubblesort:flag
 jump 108 always 0 0
@@ -118,10 +118,10 @@ set :bubblesort:a .b*9
 op sub :bubblesort:i.1 9 1
 jump 151 lessThan :bubblesort:i.1 0
 set *tmp30 :bubblesort:i.1
-set .b*rret 123
+set .b*ret 123
 op mul *tmp95 *tmp30 2
 op add @counter 313 *tmp95
-set *tmp31 .b*r
+read *tmp31 @this .b*elem
 set :bubblesort:b.1 *tmp31
 jump 129 equal :bubblesort:maxToMin false
 op greaterThan *tmp33 :bubblesort:a :bubblesort:b.1
@@ -133,15 +133,15 @@ set :bubblesort:condition.1 *tmp32
 jump 147 equal :bubblesort:condition.1 false
 op add *tmp36 :bubblesort:i.1 1
 set *tmp37 *tmp36
-set .b*wret 139
-set .b*w :bubblesort:b.1
+set .b*ret 138
 op mul *tmp96 *tmp37 2
-op add @counter 334 *tmp96
+op add @counter 313 *tmp96
+write :bubblesort:b.1 @this .b*elem
 set *tmp39 :bubblesort:i.1
-set .b*wret 144
-set .b*w :bubblesort:a
+set .b*ret 143
 op mul *tmp97 *tmp39 2
-op add @counter 334 *tmp97
+op add @counter 313 *tmp97
+write :bubblesort:a @this .b*elem
 set :bubblesort:flag true
 set *tmp35 :bubblesort:flag
 jump 149 always 0 0
@@ -168,10 +168,10 @@ set :bubblesort.1:a .b*0
 set :bubblesort.1:i 1
 jump 224 greaterThanEq :bubblesort.1:i 10
 set *tmp41 :bubblesort.1:i
-set .b*rret 173
+set .b*ret 173
 op mul *tmp98 *tmp41 2
 op add @counter 313 *tmp98
-set *tmp42 .b*r
+read *tmp42 @this .b*elem
 set :bubblesort.1:b *tmp42
 jump 179 equal :bubblesort.1:maxToMin false
 op lessThan *tmp44 :bubblesort.1:a :bubblesort.1:b
@@ -183,38 +183,38 @@ set :bubblesort.1:condition *tmp43
 jump 220 equal :bubblesort.1:condition false
 op sub *tmp47 :bubblesort.1:i 1
 set *tmp48 *tmp47
-set .b*wret 189
-set .b*w :bubblesort.1:b
+set .b*ret 188
 op mul *tmp99 *tmp48 2
-op add @counter 334 *tmp99
+op add @counter 313 *tmp99
+write :bubblesort.1:b @this .b*elem
 set *tmp50 :bubblesort.1:i
-set .b*wret 194
-set .b*w :bubblesort.1:a
+set .b*ret 193
 op mul *tmp100 *tmp50 2
-op add @counter 334 *tmp100
+op add @counter 313 *tmp100
+write :bubblesort.1:a @this .b*elem
 op sub *tmp52 :bubblesort.1:i 1
 set *tmp53 *tmp52
-set .c*rret 199
+set .c*ret 199
 op mul *tmp101 *tmp53 2
-op add @counter 355 *tmp101
-set *tmp54 .c*r
+op add @counter 334 *tmp101
+read *tmp54 @this .c*elem
 set :bubblesort.1:v *tmp54
 op sub *tmp55 :bubblesort.1:i 1
 set *tmp56 *tmp55
 set *tmp58 :bubblesort.1:i
-set .c*rret 207
+set .c*ret 207
 op mul *tmp102 *tmp58 2
-op add @counter 355 *tmp102
-set *tmp59 .c*r
-set .c*wret 212
-set .c*w *tmp59
+op add @counter 334 *tmp102
+read *tmp59 @this .c*elem
+set .c*ret 211
 op mul *tmp103 *tmp56 2
-op add @counter 376 *tmp103
+op add @counter 334 *tmp103
+write *tmp59 @this .c*elem
 set *tmp60 :bubblesort.1:i
-set .c*wret 217
-set .c*w :bubblesort.1:v
+set .c*ret 216
 op mul *tmp104 *tmp60 2
-op add @counter 376 *tmp104
+op add @counter 334 *tmp104
+write :bubblesort.1:v @this .c*elem
 set :bubblesort.1:flag true
 set *tmp46 :bubblesort.1:flag
 jump 222 always 0 0
@@ -232,10 +232,10 @@ set :bubblesort.1:a .b*9
 op sub :bubblesort.1:i.1 9 1
 jump 288 lessThan :bubblesort.1:i.1 0
 set *tmp64 :bubblesort.1:i.1
-set .b*rret 237
+set .b*ret 237
 op mul *tmp105 *tmp64 2
 op add @counter 313 *tmp105
-set *tmp65 .b*r
+read *tmp65 @this .b*elem
 set :bubblesort.1:b.1 *tmp65
 jump 243 equal :bubblesort.1:maxToMin false
 op greaterThan *tmp67 :bubblesort.1:a :bubblesort.1:b.1
@@ -247,38 +247,38 @@ set :bubblesort.1:condition.1 *tmp66
 jump 284 equal :bubblesort.1:condition.1 false
 op add *tmp70 :bubblesort.1:i.1 1
 set *tmp71 *tmp70
-set .b*wret 253
-set .b*w :bubblesort.1:b.1
+set .b*ret 252
 op mul *tmp106 *tmp71 2
-op add @counter 334 *tmp106
+op add @counter 313 *tmp106
+write :bubblesort.1:b.1 @this .b*elem
 set *tmp73 :bubblesort.1:i.1
-set .b*wret 258
-set .b*w :bubblesort.1:a
+set .b*ret 257
 op mul *tmp107 *tmp73 2
-op add @counter 334 *tmp107
+op add @counter 313 *tmp107
+write :bubblesort.1:a @this .b*elem
 op add *tmp75 :bubblesort.1:i.1 1
 set *tmp76 *tmp75
-set .c*rret 263
+set .c*ret 263
 op mul *tmp108 *tmp76 2
-op add @counter 355 *tmp108
-set *tmp77 .c*r
+op add @counter 334 *tmp108
+read *tmp77 @this .c*elem
 set :bubblesort.1:v.1 *tmp77
 op add *tmp78 :bubblesort.1:i.1 1
 set *tmp79 *tmp78
 set *tmp81 :bubblesort.1:i.1
-set .c*rret 271
+set .c*ret 271
 op mul *tmp109 *tmp81 2
-op add @counter 355 *tmp109
-set *tmp82 .c*r
-set .c*wret 276
-set .c*w *tmp82
+op add @counter 334 *tmp109
+read *tmp82 @this .c*elem
+set .c*ret 275
 op mul *tmp110 *tmp79 2
-op add @counter 376 *tmp110
+op add @counter 334 *tmp110
+write *tmp82 @this .c*elem
 set *tmp83 :bubblesort.1:i.1
-set .c*wret 281
-set .c*w :bubblesort.1:v.1
+set .c*ret 280
 op mul *tmp111 *tmp83 2
-op add @counter 376 *tmp111
+op add @counter 334 *tmp111
+write :bubblesort.1:v.1 @this .c*elem
 set :bubblesort.1:flag true
 set *tmp69 :bubblesort.1:flag
 jump 286 always 0 0
@@ -300,98 +300,56 @@ print .c*8
 print .c*9
 assertprints "9876543210" "Array sort 2"
 end
-set .a*0 .a*w
-set @counter .a*wret
-set .a*1 .a*w
-set @counter .a*wret
-set .a*2 .a*w
-set @counter .a*wret
-set .a*3 .a*w
-set @counter .a*wret
-set .a*4 .a*w
-set @counter .a*wret
+set .a*elem ".a*0"
+set @counter .a*ret
+set .a*elem ".a*1"
+set @counter .a*ret
+set .a*elem ".a*2"
+set @counter .a*ret
+set .a*elem ".a*3"
+set @counter .a*ret
+set .a*elem ".a*4"
+set @counter .a*ret
 end
-set .b*r .b*0
-set @counter .b*rret
-set .b*r .b*1
-set @counter .b*rret
-set .b*r .b*2
-set @counter .b*rret
-set .b*r .b*3
-set @counter .b*rret
-set .b*r .b*4
-set @counter .b*rret
-set .b*r .b*5
-set @counter .b*rret
-set .b*r .b*6
-set @counter .b*rret
-set .b*r .b*7
-set @counter .b*rret
-set .b*r .b*8
-set @counter .b*rret
-set .b*r .b*9
-set @counter .b*rret
+set .b*elem ".b*0"
+set @counter .b*ret
+set .b*elem ".b*1"
+set @counter .b*ret
+set .b*elem ".b*2"
+set @counter .b*ret
+set .b*elem ".b*3"
+set @counter .b*ret
+set .b*elem ".b*4"
+set @counter .b*ret
+set .b*elem ".b*5"
+set @counter .b*ret
+set .b*elem ".b*6"
+set @counter .b*ret
+set .b*elem ".b*7"
+set @counter .b*ret
+set .b*elem ".b*8"
+set @counter .b*ret
+set .b*elem ".b*9"
+set @counter .b*ret
 end
-set .b*0 .b*w
-set @counter .b*wret
-set .b*1 .b*w
-set @counter .b*wret
-set .b*2 .b*w
-set @counter .b*wret
-set .b*3 .b*w
-set @counter .b*wret
-set .b*4 .b*w
-set @counter .b*wret
-set .b*5 .b*w
-set @counter .b*wret
-set .b*6 .b*w
-set @counter .b*wret
-set .b*7 .b*w
-set @counter .b*wret
-set .b*8 .b*w
-set @counter .b*wret
-set .b*9 .b*w
-set @counter .b*wret
-end
-set .c*r .c*0
-set @counter .c*rret
-set .c*r .c*1
-set @counter .c*rret
-set .c*r .c*2
-set @counter .c*rret
-set .c*r .c*3
-set @counter .c*rret
-set .c*r .c*4
-set @counter .c*rret
-set .c*r .c*5
-set @counter .c*rret
-set .c*r .c*6
-set @counter .c*rret
-set .c*r .c*7
-set @counter .c*rret
-set .c*r .c*8
-set @counter .c*rret
-set .c*r .c*9
-set @counter .c*rret
-end
-set .c*0 .c*w
-set @counter .c*wret
-set .c*1 .c*w
-set @counter .c*wret
-set .c*2 .c*w
-set @counter .c*wret
-set .c*3 .c*w
-set @counter .c*wret
-set .c*4 .c*w
-set @counter .c*wret
-set .c*5 .c*w
-set @counter .c*wret
-set .c*6 .c*w
-set @counter .c*wret
-set .c*7 .c*w
-set @counter .c*wret
-set .c*8 .c*w
-set @counter .c*wret
-set .c*9 .c*w
-set @counter .c*wret
+set .c*elem ".c*0"
+set @counter .c*ret
+set .c*elem ".c*1"
+set @counter .c*ret
+set .c*elem ".c*2"
+set @counter .c*ret
+set .c*elem ".c*3"
+set @counter .c*ret
+set .c*elem ".c*4"
+set @counter .c*ret
+set .c*elem ".c*5"
+set @counter .c*ret
+set .c*elem ".c*6"
+set @counter .c*ret
+set .c*elem ".c*7"
+set @counter .c*ret
+set .c*elem ".c*8"
+set @counter .c*ret
+set .c*elem ".c*9"
+set @counter .c*ret
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

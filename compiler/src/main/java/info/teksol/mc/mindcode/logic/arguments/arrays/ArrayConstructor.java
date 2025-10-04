@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import org.jspecify.annotations.NullMarked;
@@ -21,6 +22,11 @@ public interface ArrayConstructor {
     void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables);
 
     void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables);
+
+    /// Only for compact array constructors: returns the name of the element variable.
+    default LogicVariable getElementNameVariable() {
+        throw new UnsupportedOperationException("Not supported for class " + getClass().getName());
+    }
 
     enum AccessType {
         READ, WRITE

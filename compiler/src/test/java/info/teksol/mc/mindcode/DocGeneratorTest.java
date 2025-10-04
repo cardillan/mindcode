@@ -432,8 +432,14 @@ public class DocGeneratorTest extends AbstractAstBuilderTest {
         compiler.compile();
 
         int size = (int) compiler.getInstructions().stream()
-                .filter(i -> i.getAstContext().contextType() != AstContextType.JUMPS)
+                .filter(i -> i.getAstContext().contextType() != AstContextType.JUMPS && i.getAstContext().contextType() != AstContextType.CREATE_VARS)
                 .count();
+
+//        System.out.println();
+//        System.out.println(footprintConfig + " with goal " + goal);
+//        compiler.getInstructions().stream()
+//                .filter(i -> i.getAstContext().contextType() != AstContextType.JUMPS && i.getAstContext().contextType() != AstContextType.CREATE_VARS)
+//                .forEach(System.out::println);
 
         return size
                - (declaration.getDataType() == DataType.VOID ? 0 : 1)

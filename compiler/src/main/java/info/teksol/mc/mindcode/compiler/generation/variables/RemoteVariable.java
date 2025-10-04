@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
@@ -16,12 +17,12 @@ public class RemoteVariable implements FunctionParameter {
     private final SourcePosition sourcePosition;
     private final LogicVariable processor;
     private final String name;
-    private final LogicValue remoteName;
+    private final LogicString remoteName;
     private final LogicVariable transferVariable;
     private final boolean input;
     private final boolean output;
 
-    public RemoteVariable(SourcePosition sourcePosition, LogicVariable processor, String name, LogicValue remoteName, LogicVariable transferVariable,
+    public RemoteVariable(SourcePosition sourcePosition, LogicVariable processor, String name, LogicString remoteName, LogicVariable transferVariable,
             boolean input, boolean output) {
         this.sourcePosition = sourcePosition;
         this.processor = processor;
@@ -58,6 +59,11 @@ public class RemoteVariable implements FunctionParameter {
     @Override
     public SourcePosition sourcePosition() {
         return sourcePosition;
+    }
+
+    @Override
+    public LogicString getMlogVariableName() {
+        return remoteName;
     }
 
     @Override

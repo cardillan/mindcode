@@ -5,7 +5,10 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.variables.*;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
+import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
+import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -62,7 +65,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private SideEffects createWriteSideEffects() {
-        List<LogicVariable> reads = arrayElementsPlus(writeVal,
+        List<LogicVariable> reads = variables(writeVal,
                 profile.isSymbolicLabels() ? writeInd : null,
                 arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null
         );
@@ -90,14 +93,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        if (sharedStructures != null) {
-            int size = arrayStore.getSize() * 2 + (profile.isSymbolicLabels() ? 1 : 0);
-            String key = arrayStore.getName() + getJumpTableId(accessType);
-            if (!sharedStructures.containsKey(key) || sharedStructures.get(key) < size) {
-                sharedStructures.put(key, size);
-            }
-        }
-
+        computeSharedJumpTableSize(accessType, sharedStructures);
         int checkSize = profile.getBoundaryChecks().getSize();
         return checkSize + 4 + (arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? 1 : 0);
     }
@@ -123,7 +119,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
                 ? e -> ((RemoteVariable)e).withProcessor(proc)
                 : e -> e;
         Runnable createExit = () -> creator.createReturn(accessType == AccessType.READ ? readRet : writeRet);
-        generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createExit);
+        generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createArrayAccessCreator(accessType), createExit, false);
         return result;
     }
 
@@ -142,9 +138,8 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
         boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
-        LogicVariable remoteProcessor = shared ? ((InternalArray)arrayStore).getProcessor() : null;
+        LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
         LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
-        LogicLabel returnLabel = processor.nextLabel();
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
@@ -173,13 +168,12 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
         boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
-        LogicVariable remoteProcessor = shared ? ((InternalArray)arrayStore).getProcessor() : null;
+        LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
         LogicVariable temp = creator.nextTemp();
         LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
         LogicLabel marker2 = processor.nextMarker();
         LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
-
 
         switch (instruction) {
             case ReadArrInstruction rix -> {

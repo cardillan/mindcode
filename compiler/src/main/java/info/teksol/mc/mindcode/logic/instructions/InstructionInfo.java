@@ -17,6 +17,16 @@ public enum InstructionInfo {
     /// Array organization for ReadArr/WriteArr instructions
     ARRAY_ORGANIZATION(ArrayOrganization.NONE),
 
+    /// Array construction for ReadArr/WriteArr instructions
+    ARRAY_CONSTRUCTION(ArrayConstruction.COMPACT),
+
+    /// This instruction is a compact-array access instruction, setting up the element variable name
+    COMPACT_ACCESS_SOURCE(Boolean.FALSE),
+
+    /// This instruction is a compact-array access instruction, using the previously set name of the
+    /// element variable. Element name lookup can be skipped.
+    COMPACT_ACCESS_TARGET(Boolean.FALSE),
+
     /// Identifier pairing SETADDR and CALL instruction to facilitate hoisting reversion.
     HOIST_ID(LogicLabel.EMPTY),
 

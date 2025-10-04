@@ -42,6 +42,11 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     }
 
     @Override
+    public InstructionProcessor getProcessor() {
+        return instructionProcessor;
+    }
+
+    @Override
     public String getName() {
         return optimization.getName();
     }

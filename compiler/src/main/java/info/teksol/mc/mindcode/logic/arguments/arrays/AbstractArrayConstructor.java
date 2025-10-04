@@ -17,6 +17,8 @@ import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -56,7 +58,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return result;
     }
 
-    protected List<LogicVariable> variables(LogicArgument... args) {
+    protected List<LogicVariable> variables(@Nullable LogicArgument... args) {
         return Stream.of(args).filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList();
     }
 
@@ -68,20 +70,40 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return "";
     }
 
+    protected void computeSharedJumpTableSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
+        if (sharedStructures != null) {
+            int size = arrayStore.getSize() * 2 + (profile.isSymbolicLabels() ? 1 : 0);
+            String key = arrayStore.getName() + getJumpTableId(accessType);
+            if (!sharedStructures.containsKey(key) || sharedStructures.get(key) < size) {
+                sharedStructures.put(key, size);
+            }
+        }
+    }
+
+    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator(AccessType accessType) {
+        return switch (accessType) {
+            case READ -> (creator, element) -> element.readValue(creator, (LogicVariable) transferVariable(AccessType.READ));
+            case WRITE -> (creator, element) -> element.setValue(creator, transferVariable(AccessType.WRITE));
+        };
+    }
+
     protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            Function<ValueStore, ValueStore> arrayElementProcessor, Runnable createExit) {
+            Function<ValueStore, ValueStore> arrayElementProcessor, BiConsumer<LocalContextfulInstructionsCreator, ValueStore> arrayAccessCreator,
+            Runnable createExit, boolean skipLastExit) {
         LogicLabel nextLabel = firstLabel;
 
-        for (ValueStore arrayElement : arrayStore.getElements()) {
+        List<ValueStore> elements = arrayStore.getElements();
+        for (int i = 0; i < elements.size(); i++) {
+            ValueStore arrayElement = elements.get(i);
             ValueStore element = arrayElementProcessor.apply(arrayElement);
             creator.createMultiLabel(nextLabel, marker);
-            switch (instruction) {
-                case ReadArrInstruction rix -> element.readValue(creator, (LogicVariable) transferVariable(AccessType.READ));
-                case WriteArrInstruction wix -> element.setValue(creator, transferVariable(AccessType.WRITE));
-                default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
+            arrayAccessCreator.accept(creator, element);
+            if (i < elements.size() - 1) {
+                createExit.run();
+                nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
+            } else if (!skipLastExit) {
+                createExit.run();
             }
-            createExit.run();
-            nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
         }
     }
 
@@ -135,5 +157,16 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         }
         consumer.accept(processor.createStop(ctx));
         consumer.accept(processor.createLabel(ctx, logicLabelRun));
+    }
+
+    protected void createCompactAccessInstruction(LocalContextfulInstructionsCreator creator, LogicValue storageProcessor,
+            LogicVariable arrayElem) {
+        switch (instruction) {
+            case ReadArrInstruction rix -> creator.createRead(rix.getResult(), storageProcessor, arrayElem)
+                    .setSideEffects(SideEffects.reads(arrayElements()));
+            case WriteArrInstruction wix -> creator.createWrite(wix.getValue(), storageProcessor, arrayElem)
+                    .setSideEffects(SideEffects.resets(arrayElements()));
+            default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
+        }
     }
 }

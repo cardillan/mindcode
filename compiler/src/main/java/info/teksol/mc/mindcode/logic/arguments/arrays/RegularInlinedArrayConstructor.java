@@ -14,9 +14,9 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @NullMarked
-public class InlinedArrayConstructor extends AbstractArrayConstructor {
+public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
 
-    public InlinedArrayConstructor(ArrayAccessInstruction instruction) {
+    public RegularInlinedArrayConstructor(ArrayAccessInstruction instruction) {
         super(instruction);
     }
 
@@ -51,12 +51,11 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
 
     public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
         int checkSize = profile.getBoundaryChecks().getSize();
-        return checkSize + 1 + 2 * arrayStore.getSize();
+        return checkSize + 2 + (2 * arrayStore.getSize() - 1);
     }
 
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
-        AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
 
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
@@ -71,7 +70,7 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
         creator.pushContext(AstContextType.JUMPS, AstSubcontextType.BASIC);
         creator.setSubcontextType(AstSubcontextType.ARRAY, 1.0);
 
-        SideEffects sideEffects =  switch (instruction) {
+        SideEffects sideEffects = switch (instruction) {
             case ReadArrInstruction rix -> SideEffects.of(arrayElementsPlus(tmp),
                     variables(rix.getResult()), List.of());
             case WriteArrInstruction wix -> SideEffects.of(variables(wix.getValue(), tmp),
@@ -80,7 +79,8 @@ public class InlinedArrayConstructor extends AbstractArrayConstructor {
         };
 
         creator.createMultiJump(firstLabel,tmp, LogicNumber.ZERO, marker).setSideEffects(sideEffects);
-        generateJumpTable(creator, firstLabel, marker, e -> e, () -> creator.createJumpUnconditional(finalLabel));
+        generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(instruction.getAccessType()),
+                () -> creator.createJumpUnconditional(finalLabel), true);
         creator.createLabel(finalLabel);
         creator.popContext();
     }

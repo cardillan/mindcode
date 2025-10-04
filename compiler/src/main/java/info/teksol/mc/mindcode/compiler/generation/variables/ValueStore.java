@@ -2,6 +2,8 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
+import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
@@ -34,6 +36,11 @@ public interface ValueStore extends SourceElement {
     /// or a keyword) cannot be represented.
     default boolean isMlogRepresentable() {
         return true;
+    }
+
+    /// Returns the mlog name of the variable if the value store is mlog representable.
+    default LogicString getMlogVariableName() {
+        throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
     }
 
     /// Indicates the value is complex, i.e., doesn't represent a simple mlog variable. This means specific code

@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 
@@ -22,15 +23,20 @@ public interface ArrayStore extends ValueStore {
 
     ValueStore getElement(ContextfulInstructionCreator creator, AstExpression node, ValueStore index);
 
-    /// Returns true if this array store benefits from replacing a random element access with direct access
+    /// Returns true if this array store benefits from replacing a random-element-access with direct access
     /// External arrays do not benefit, but internal and remote ones do
     default boolean optimizeElementAccess() {
         return getArrayType() != ArrayType.EXTERNAL;
     }
 
-    default ArrayStore topArray() {
-        return this;
+    default boolean isRemote() {
+        return getArrayType() == ArrayType.REMOTE || getArrayType() == ArrayType.REMOTE_SHARED;
     }
+
+    default LogicVariable getProcessor() {
+        throw new UnsupportedOperationException("Not supported for class " + getClass().getSimpleName());
+    }
+
 
     /// Provides a start offset against the backing store. For internal arrays, it is always 0. For internal subarrays,
     /// it is the offset inside the backing array. For external arrays, it is always the offset inside the external
@@ -39,6 +45,7 @@ public interface ArrayStore extends ValueStore {
 
     enum ArrayType {
         INTERNAL,
+        CONSTANT,
         EXTERNAL,
         REMOTE,
         REMOTE_SHARED,

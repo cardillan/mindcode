@@ -18,11 +18,11 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @NullMarked
-public class ArraySize2Or3Constructor extends AbstractArrayConstructor {
+public class RegularArraySize2Or3Constructor extends AbstractArrayConstructor {
     private final int arraySize;
     private final boolean useSelects;
 
-    public ArraySize2Or3Constructor(ArrayAccessInstruction instruction) {
+    public RegularArraySize2Or3Constructor(ArrayAccessInstruction instruction) {
         super(instruction);
         arraySize = arrayStore.getSize();
         if (arraySize != 2 && arraySize != 3) throw new MindcodeInternalError("Expected array of size 2 or 3");
@@ -41,7 +41,8 @@ public class ArraySize2Or3Constructor extends AbstractArrayConstructor {
     @Override
     public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
         if (useSelects) {
-            return profile.getBoundaryChecks().getSize() + arraySize - (accessType == AccessType.READ ? 1 : 0);
+            return profile.getBoundaryChecks().getSize() + arraySize - (accessType == AccessType.READ ? 1 : 0)
+                    + (instruction.getArray().getArrayStore().isRemote() ? 1 : 0);
         } else {
             return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 4 : 7);
         }
@@ -56,22 +57,44 @@ public class ArraySize2Or3Constructor extends AbstractArrayConstructor {
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
 
+        AstContextType contextType = useSelects ? AstContextType.BODY :  AstContextType.IF;
         AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
-                AstContextType.IF, AstSubcontextType.BASIC);
+                contextType, AstSubcontextType.BASIC);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        if (useSelects) {
-            switch (instruction) {
-                case ReadArrInstruction rix -> createReadSelect(creator, rix);
-                case WriteArrInstruction wix -> createWriteSelect(creator, wix);
-                default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
-            }
-        } else {
+        if (!useSelects) {
             switch (instruction) {
                 case ReadArrInstruction rix -> expandAccess(creator, element -> element.readValue(creator, rix.getResult()));
                 case WriteArrInstruction wix -> expandAccess(creator, element -> element.setValue(creator, wix.getValue()));
                 default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
             }
+        } else if (arrayStore.isRemote()) {
+            LogicVariable tmp = creator.nextTemp();
+            createNameSelect(creator, tmp);
+            switch (instruction) {
+                case ReadArrInstruction rix -> creator.createRead(rix.getResult(),arrayStore.getProcessor(), tmp);
+                case WriteArrInstruction wix -> creator.createWrite(wix.getValue(),arrayStore.getProcessor(), tmp);
+                default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
+            }
+        } else {
+            switch (instruction) {
+                case ReadArrInstruction rix -> createReadSelect(creator, rix);
+                case WriteArrInstruction wix -> createWriteSelect(creator, wix);
+                default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
+            }
+        }
+    }
+
+    protected void createNameSelect(LocalContextfulInstructionsCreator creator, LogicVariable arrayElem) {
+        creator.setSubcontextType(AstSubcontextType.BODY, 1.0);
+
+        creator.createSelect(arrayElem, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO,
+                arrayStore.getElements().get(0).getMlogVariableName(),
+                arrayStore.getElements().get(1).getMlogVariableName());
+
+        if (arraySize == 3) {
+            creator.createSelect(arrayElem, Condition.EQUAL, instruction.getIndex(), LogicNumber.TWO,
+                    arrayStore.getElements().get(2).getMlogVariableName(), arrayElem);
         }
     }
 
@@ -100,7 +123,7 @@ public class ArraySize2Or3Constructor extends AbstractArrayConstructor {
         }
     }
 
-    private void expandAccess(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> operation) {
+    protected void expandAccess(LocalContextfulInstructionsCreator creator, Consumer<ValueStore> operation) {
         createIfElse(creator, operation, 0, arraySize - 1);
     }
 

@@ -29,8 +29,9 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
 
     @Override
     protected void updateInfo(Set<InstructionInfo> types) {
-        if (types.contains(InstructionInfo.ARRAY_ORGANIZATION) && !astContext.matches(AstSubcontextType.MOCK)) {
-            arrayConstructor = getArrayOrganization().getExpander(this);
+        if (types.contains(InstructionInfo.ARRAY_ORGANIZATION) || types.contains(InstructionInfo.ARRAY_CONSTRUCTION)
+               && !astContext.matches(AstSubcontextType.MOCK)) {
+            arrayConstructor = getArrayOrganization().getConstructor(this);
             // Changing array organization alters side effects
             setSideEffects(arrayConstructor.createSideEffects(getAccessType()));
         }

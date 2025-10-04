@@ -57,7 +57,7 @@ public abstract class AbstractInstruction implements LogicInstruction {
     @Override
     @SuppressWarnings("unchecked")
     public <T extends LogicInstruction> T copyInfo(T other) {
-        assert info.isEmpty();
+        info.clear();
         AbstractInstruction ix = (AbstractInstruction) other;
         if (!ix.info.isEmpty()) {
             info.putAll(ix.info);

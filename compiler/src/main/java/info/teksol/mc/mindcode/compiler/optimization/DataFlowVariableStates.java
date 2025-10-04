@@ -269,6 +269,46 @@ class DataFlowVariableStates {
                 return;
             }
 
+            if (instruction instanceof ArrayAccessInstruction thisIx) {
+                if (thisIx.getArrayConstruction() == ArrayConstruction.COMPACT) {
+                    LogicVariable elementVariable = thisIx.getArrayConstructor().getElementNameVariable();
+                    if (elementVariable.equals(variable)) {
+                        Definition definition = definitions.get(variable);
+                        if (definition != null && definition.instructions.size() == 1) {
+                            trace(() -> "+++ Repeated compact array access by variable: " + elementVariable.toMlog());
+                            if (definition.instructions.getFirst() instanceof ArrayAccessInstruction prevIx
+                                && prevIx.getArrayConstruction() == ArrayConstruction.COMPACT
+                                && prevIx.getArrayConstructor().getElementNameVariable().equals(variable)
+                                && thisIx.getIndex() instanceof LogicVariable thisIndex && prevIx.getIndex() instanceof LogicVariable prevIndex
+                            ) {
+                                boolean matchingIndex = false;
+                                if (thisIndex.equals(prevIndex)) {
+                                    if (definitions.get(thisIndex) instanceof Definition indexDefinition) {
+                                        matchingIndex = indexDefinition.counter <= definition.counter;
+                                    }
+                                } else {
+                                    for (LogicVariable eq = equivalences.get(thisIndex); eq != null; eq = equivalences.get(eq)) {
+                                        if (prevIndex.equals(eq)) {
+                                            matchingIndex = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (matchingIndex) {
+                                    if (!prevIx.isCompactAccessTarget()) {
+                                        prevIx.setCompactAccessSource();
+                                    }
+                                    if (!thisIx.isCompactAccessSource()) {
+                                        thisIx.setCompactAccessTarget();
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
             trace(() -> "Value set: " + variable.toMlog());
             trace(() -> printInstruction(instruction));
 

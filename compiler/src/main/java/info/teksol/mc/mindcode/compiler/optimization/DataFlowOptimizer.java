@@ -106,6 +106,7 @@ class DataFlowOptimizer extends BaseOptimizer {
         functionEndStates.clear();
 
         clearVariableStates();
+        optimizationContext.getProgram().forEach(LogicInstruction::resetCompactAccess);
 
         if (currentPass <= 1) {
             trace("!!! Skipping backpropagation optimization on first pass.\n\n");
@@ -775,9 +776,9 @@ class DataFlowOptimizer extends BaseOptimizer {
         return result;
     }
 
-    /// Processes instructions inside a given context. Jumps outside local context are processed by associating
-    /// current variable state with target label. Local context might be the context being processed, or a parent
-    /// context when jumps within that context are handled specifically (such as by processIfContext).
+    /// Processes instructions inside a given context. Jumps outside the local context are processed by associating
+    /// the current variable state with the target label. Local context might be the context being processed,
+    /// or a parent context when jumps within that context are handled specifically (such as by processIfContext).
     ///
     /// @param localContext       context which is considered local
     /// @param context            context to process

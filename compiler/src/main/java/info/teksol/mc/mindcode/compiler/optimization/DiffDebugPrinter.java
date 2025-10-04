@@ -105,7 +105,7 @@ public class DiffDebugPrinter implements DebugPrinter {
         List<LogicInstruction> after  =  after0.stream().filter(ix -> !(ix instanceof EmptyInstruction)).toList();
 
         // Do not print steps that didn't change anything
-        if (before.equals(after) && !printAll()) {
+        if (!printAll() && identityEquals(before, after)) {
             return;
         }
 
@@ -173,6 +173,14 @@ public class DiffDebugPrinter implements DebugPrinter {
         }
     }
 
+    private boolean identityEquals(List<LogicInstruction> list1, List<LogicInstruction> list2) {
+        if (list1.size() != list2.size()) return false;
+        for (int i = 0; i < list1.size(); i++) {
+            if (list1.get(i) != list2.get(i)) return false;
+        }
+        return true;
+    }
+
     protected int findInstructionIndex(List<LogicInstruction> program, int index, LogicInstruction instruction) {
         return CollectionUtils.indexOf(program, index, ix -> ix == instruction);
     }
@@ -189,7 +197,11 @@ public class DiffDebugPrinter implements DebugPrinter {
         }
         str.append(instruction.getMlogOpcode());
         if (instruction.getArrayOrganization() != ArrayOrganization.NONE) {
-            str.append('<').append(instruction.getArrayOrganization().getName()).append('>');
+            str.append('<').append(instruction.getArrayOrganization().getName())
+                    .append(':').append(instruction.getArrayConstruction().getName());
+            if (instruction.isCompactAccessSource()) str.append(":src");
+            if (instruction.isCompactAccessTarget()) str.append(":dst");
+            str.append('>');
         }
         instruction.getArgs().forEach(arg -> str.append(" ").append(arg.toMlog()));
         if (instruction.getMarker() != LogicLabel.EMPTY) {

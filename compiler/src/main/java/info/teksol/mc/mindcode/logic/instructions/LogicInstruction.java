@@ -72,13 +72,40 @@ public interface LogicInstruction extends MlogInstruction {
         return getOpcode().getSize();
     }
 
-    /// Provides side effects of this instruction
     default ArrayOrganization getArrayOrganization() {
         return (ArrayOrganization) getInfo(InstructionInfo.ARRAY_ORGANIZATION);
     }
 
     default LogicInstruction setArrayOrganization(ArrayOrganization arrayOrganization) {
         return setInfo(InstructionInfo.ARRAY_ORGANIZATION, arrayOrganization);
+    }
+
+    default ArrayConstruction getArrayConstruction() {
+        return (ArrayConstruction) getInfo(InstructionInfo.ARRAY_CONSTRUCTION);
+    }
+
+    default LogicInstruction setArrayConstruction(ArrayConstruction arrayConstruction) {
+        return setInfo(InstructionInfo.ARRAY_CONSTRUCTION, arrayConstruction);
+    }
+
+    default boolean isCompactAccessSource() {
+        return (boolean) getInfo(InstructionInfo.COMPACT_ACCESS_SOURCE);
+    }
+
+    default LogicInstruction setCompactAccessSource() {
+        return setInfo(InstructionInfo.COMPACT_ACCESS_SOURCE, true);
+    }
+
+    default boolean isCompactAccessTarget() {
+        return (boolean) getInfo(InstructionInfo.COMPACT_ACCESS_TARGET);
+    }
+
+    default LogicInstruction setCompactAccessTarget() {
+        return setInfo(InstructionInfo.COMPACT_ACCESS_TARGET, true);
+    }
+
+    default LogicInstruction resetCompactAccess() {
+        return resetInfo(InstructionInfo.COMPACT_ACCESS_SOURCE).resetInfo(InstructionInfo.COMPACT_ACCESS_TARGET);
     }
 
     default LogicLabel getMarker() {

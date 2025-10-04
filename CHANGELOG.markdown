@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 * Fixed the compiler not rejecting integer and double option values outside the allowed range. 
 
+### Added
+
+* Added support for compact arrays.
+
 ## 3.8.0 - 2025-09-25
 
 ### Fixed

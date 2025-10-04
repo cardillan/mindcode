@@ -10,7 +10,6 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
-import static info.teksol.mc.mindcode.logic.instructions.ArrayOrganization.EXTERNAL_ARRAY;
 
 @NullMarked
 public class ExternalArray extends AbstractArrayStore {
@@ -86,18 +85,18 @@ public class ExternalArray extends AbstractArrayStore {
 
         @Override
         public LogicValue getValue(ContextfulInstructionCreator creator) {
-            creator.createReadArr(transferVariable, logicArray, index, EXTERNAL_ARRAY);
+            creator.createReadArr(transferVariable, logicArray, index);
             return transferVariable;
         }
 
         @Override
         public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-            creator.createReadArr(target, logicArray, index, EXTERNAL_ARRAY);
+            creator.createReadArr(target, logicArray, index);
         }
 
         @Override
         public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
-            creator.createWriteArr(value, logicArray, index, EXTERNAL_ARRAY);
+            creator.createWriteArr(value, logicArray, index);
         }
 
         @Override
@@ -108,7 +107,7 @@ public class ExternalArray extends AbstractArrayStore {
         @Override
         public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
             valueSetter.accept(transferVariable);
-            creator.createWriteArr(transferVariable, logicArray, index, EXTERNAL_ARRAY);
+            creator.createWriteArr(transferVariable, logicArray, index);
         }
 
         @Override
@@ -118,7 +117,7 @@ public class ExternalArray extends AbstractArrayStore {
 
         @Override
         public void storeValue(ContextfulInstructionCreator creator) {
-            creator.createWriteArr(transferVariable, logicArray, index, EXTERNAL_ARRAY);
+            creator.createWriteArr(transferVariable, logicArray, index);
         }
     }
 }

@@ -17,6 +17,8 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 @NullMarked
 public interface ContextlessInstructionCreator {
 
+    InstructionProcessor getProcessor();
+
     LogicInstruction createInstruction(AstContext astContext, Opcode opcode, List<LogicArgument> arguments);
 
     default LogicInstruction createInstruction(AstContext astContext, Opcode opcode, LogicArgument... arguments) {
@@ -123,8 +125,10 @@ public interface ContextlessInstructionCreator {
         return (ReadInstruction) createInstruction(astContext, READ, result, memory, index);
     }
 
-    default ReadArrInstruction createReadArr(AstContext astContext, LogicVariable result, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
-        return (ReadArrInstruction) createInstruction(astContext, READARR, result, array, index).setArrayOrganization(arrayOrganization);
+    default ReadArrInstruction createReadArr(AstContext astContext, LogicVariable result, LogicArray array, LogicValue index) {
+        ReadArrInstruction instruction = (ReadArrInstruction) createInstruction(astContext, READARR, result, array, index);
+        getProcessor().setupArrayAccessInstruction(instruction);
+        return instruction;
     }
 
     default RemarkInstruction createRemark(AstContext astContext, LogicValue what) {
@@ -167,7 +171,9 @@ public interface ContextlessInstructionCreator {
         return (WriteInstruction) createInstruction(astContext, WRITE, value, memory, index);
     }
 
-    default WriteArrInstruction createWriteArr(AstContext astContext, LogicValue value, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
-        return (WriteArrInstruction) createInstruction(astContext, WRITEARR, value, array, index).setArrayOrganization(arrayOrganization);
+    default WriteArrInstruction createWriteArr(AstContext astContext, LogicValue value, LogicArray array, LogicValue index) {
+        WriteArrInstruction instruction = (WriteArrInstruction) createInstruction(astContext, WRITEARR, value, array, index);
+        getProcessor().setupArrayAccessInstruction(instruction);
+        return instruction;
     }
 }

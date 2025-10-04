@@ -31,7 +31,7 @@ public interface FunctionArgument extends ValueStore {
     /// @return `true` if the argument is effectively output
     boolean isOutput();
 
-    /// Determines that the argument has only the in modifier, meaning it is passed as input-only
+    /// Determines that the argument has only the in modifier, meaning it is passed as an input-only
     /// argument to an input-output function parameter. No other combination of modifiers can achieve that.
     ///
     /// @return `true` if the argument is input only argument to an input-output parameter

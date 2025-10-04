@@ -20,32 +20,28 @@ import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
-import static info.teksol.mc.mindcode.logic.instructions.ArrayOrganization.INTERNAL_REGULAR;
 
 @NullMarked
 public class InternalArray extends AbstractArrayStore {
-    private final boolean remote;
-    private final boolean shared;
+    private final ArrayType arrayType;
     private final int startOffset;
     private final @Nullable LogicVariable processor;      // Actual processor in case of shared arrays
     private final LogicArray logicArray;
 
     private InternalArray(SourcePosition sourcePosition, String name, @Nullable LogicVariable processor,
-            List<ValueStore> elements, boolean remote, boolean shared) {
+            List<ValueStore> elements, ArrayType arrayType) {
         super(sourcePosition, name, elements);
         this.processor = processor;
-        this.remote = remote;
-        this.shared = shared;
+        this.arrayType = arrayType;
         startOffset = 0;
         logicArray = LogicArray.create(this);
     }
 
     private InternalArray(SourcePosition sourcePosition, String name, @Nullable LogicVariable processor, int offset,
-            List<ValueStore> elements, boolean remote, boolean shared) {
+            List<ValueStore> elements, ArrayType arrayType) {
         super(sourcePosition, name, elements);
         this.processor = processor;
-        this.remote = remote;
-        this.shared = shared;
+        this.arrayType = arrayType;
         startOffset = offset;
         logicArray = LogicArray.create(this, offset, offset + elements.size());
     }
@@ -55,19 +51,20 @@ public class InternalArray extends AbstractArrayStore {
         if (processor != null) {
             CodeAssembler assembler = MindcodeCompiler.getContext().assembler();
             return new InternalArray(identifier.sourcePosition(),
-                    nameCreator.arrayBase(shared ? "" : processor.getName(), identifier.getName()),
-                    shared ? processor : null,
+                    nameCreator.arrayBase(shared ? "" : processor.getName(), identifier.getName()), processor,
                     IntStream.range(0, size)
                             .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
                                     processor.getName() + "." + identifier.getName() + "[" + index + "]",
                                     LogicString.create(nameCreator.remoteArrayElement(identifier.getName(), index)),
-                                    assembler.nextTemp(), false, false)).toList(), true, shared);
+                                    assembler.nextTemp(), false, false)).toList(),
+                    shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE);
         } else {
             return new InternalArray(identifier.sourcePosition(),
                     nameCreator.arrayBase("", identifier.getName()), null,
                     IntStream.range(0, size)
                             .mapToObj(index -> (ValueStore) LogicVariable.arrayElement(identifier, index,
-                                    nameCreator.arrayElement(identifier.getName(), index), isVolatile)).toList(), false, false);
+                                    nameCreator.arrayElement(identifier.getName(), index), isVolatile)).toList(),
+                    ArrayType.INTERNAL);
         }
     }
 
@@ -75,13 +72,13 @@ public class InternalArray extends AbstractArrayStore {
         List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
         return new InternalArray(identifier.sourcePosition(),
                 nameCreator.arrayBase("", identifier.getName()),
-                null, wrappedElements, false, false);
+                null, wrappedElements, ArrayType.CONSTANT);
     }
 
     public static InternalArray createInvalid(NameCreator nameCreator, AstIdentifier identifier, int size) {
         return new InternalArray(identifier.sourcePosition(),
                 nameCreator.arrayBase("", identifier.getName()), null,
-                IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), false, false);
+                IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), ArrayType.INTERNAL);
     }
 
     public LogicArray getLogicArray() {
@@ -90,7 +87,7 @@ public class InternalArray extends AbstractArrayStore {
 
     @Override
     public ArrayType getArrayType() {
-        return remote ? shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE : ArrayType.INTERNAL;
+        return arrayType;
     }
 
     @Override
@@ -100,7 +97,8 @@ public class InternalArray extends AbstractArrayStore {
 
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        return new InternalArray(sourcePosition, name, processor, startOffset + start, elements.subList(start, end), remote, shared);
+        return new InternalArray(sourcePosition, name, processor, startOffset + start,
+                elements.subList(start, end), arrayType);
     }
 
     public LogicVariable getProcessor() {
@@ -115,7 +113,7 @@ public class InternalArray extends AbstractArrayStore {
 
     @Override
     public InternalArray withSourcePosition(SourcePosition sourcePosition) {
-        return new InternalArray(sourcePosition, name, processor, elements, remote, shared);
+        return new InternalArray(sourcePosition, name, processor, elements, arrayType);
     }
 
     public class InternalArrayElement implements ValueStore {
@@ -145,7 +143,7 @@ public class InternalArray extends AbstractArrayStore {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
 
-            creator.createReadArr(transferVariable, logicArray, index, INTERNAL_REGULAR);
+            creator.createReadArr(transferVariable, logicArray, index);
             return transferVariable;
         }
 
@@ -154,7 +152,7 @@ public class InternalArray extends AbstractArrayStore {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            creator.createReadArr(target, logicArray, index, INTERNAL_REGULAR);
+            creator.createReadArr(target, logicArray, index);
         }
 
         @Override
@@ -162,7 +160,7 @@ public class InternalArray extends AbstractArrayStore {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            creator.createWriteArr(value, logicArray, index, INTERNAL_REGULAR);
+            creator.createWriteArr(value, logicArray, index);
         }
 
         @Override
@@ -176,7 +174,7 @@ public class InternalArray extends AbstractArrayStore {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
             valueSetter.accept(transferVariable);
-            creator.createWriteArr(transferVariable, logicArray, index, INTERNAL_REGULAR);
+            creator.createWriteArr(transferVariable, logicArray, index);
         }
 
         @Override
@@ -189,7 +187,7 @@ public class InternalArray extends AbstractArrayStore {
             if (startOffset != 0) {
                 throw new MindcodeInternalError("Internal subarray random access is not supported");
             }
-            creator.createWriteArr(transferVariable, logicArray, index, INTERNAL_REGULAR);
+            creator.createWriteArr(transferVariable, logicArray, index);
         }
     }
 

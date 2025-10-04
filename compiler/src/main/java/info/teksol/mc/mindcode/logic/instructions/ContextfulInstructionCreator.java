@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -45,6 +46,10 @@ public interface ContextfulInstructionCreator {
 
     default void setInternalError() {
         throw new MindcodeInternalError("Internal error occurred.");
+    }
+
+    default void addForcedVariable(LogicVariable variable) {
+        MindcodeCompiler.getContext().addForcedVariable(variable);
     }
 
     LogicInstruction createInstruction(Opcode opcode, List<LogicArgument> arguments);
@@ -153,8 +158,10 @@ public interface ContextfulInstructionCreator {
         return (ReadInstruction) createInstruction(READ, result, memory, index);
     }
 
-    default ReadArrInstruction createReadArr(LogicVariable result, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
-        return (ReadArrInstruction) createInstruction(READARR, result, array, index).setArrayOrganization(arrayOrganization);
+    default ReadArrInstruction createReadArr(LogicVariable result, LogicArray array, LogicValue index) {
+        ReadArrInstruction instruction = (ReadArrInstruction) createInstruction(READARR, result, array, index);
+        getProcessor().setupArrayAccessInstruction(instruction);
+        return instruction;
     }
 
     default RemarkInstruction createRemark(LogicValue what) {
@@ -193,11 +200,13 @@ public interface ContextfulInstructionCreator {
         return (StopInstruction) createInstruction(STOP);
     }
 
-    default WriteInstruction createWrite(LogicValue value, LogicVariable memory, LogicValue index) {
+    default WriteInstruction createWrite(LogicValue value, LogicValue memory, LogicValue index) {
         return (WriteInstruction) createInstruction(WRITE, value, memory, index);
     }
 
-    default WriteArrInstruction createWriteArr(LogicValue value, LogicArray array, LogicValue index, ArrayOrganization arrayOrganization) {
-        return (WriteArrInstruction) createInstruction(WRITEARR, value, array, index).setArrayOrganization(arrayOrganization);
+    default WriteArrInstruction createWriteArr(LogicValue value, LogicArray array, LogicValue index) {
+        WriteArrInstruction instruction = (WriteArrInstruction) createInstruction(WRITEARR, value, array, index);
+        getProcessor().setupArrayAccessInstruction(instruction);
+        return instruction;
     }
 }

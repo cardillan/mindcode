@@ -200,11 +200,13 @@ public class OptimizationCoordinator {
 
             Set<OptimizationAction> considered = Collections.newSetFromMap(new IdentityHashMap<>());
             OptimizationAction selectedAction = selectAction(goal, possibleOptimizations, costLimit, considered);
+            int firstPhaseSize = 0;
             if (selectedAction != null) {
                 optimizationContext.prepare();
                 optimizationContext.debugPrintProgram(String.format("%n*** Performing optimization %s ***%n", selectedAction), true);
                 OptimizationResult result = selectedAction.apply(costLimit);
                 optimizationContext.finish();
+                firstPhaseSize = codeSize();
 
                 if (result == OptimizationResult.REALIZED) {
                     optimizationContext.debugPrintProgram(String.format("%n*** Performing Data Flow optimization after %s ***%n", selectedAction), true);
@@ -221,6 +223,7 @@ public class OptimizationCoordinator {
             }
 
             int difference = codeSize() - initialSize;
+            //int difference = firstPhaseSize - initialSize;
             optimizationStatistics.add(OptimizerMessage.debug(
                     "\nPass %d: %s optimization selection (cost limit %d):", pass, goal.toString().toLowerCase(), costLimit));
             possibleOptimizations.forEach(t -> outputPossibleOptimization(t, costLimit, selectedAction, difference, considered));

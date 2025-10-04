@@ -25,12 +25,12 @@ public enum OptimizationPhase {
             SINGLE_STEP_ELIMINATION,
             EXPRESSION_OPTIMIZATION,
             DATA_FLOW_OPTIMIZATION,
+            ARRAY_OPTIMIZATION,
             TEMP_VARIABLES_ELIMINATION,
             LOOP_HOISTING,
             LOOP_OPTIMIZATION,
             LOOP_UNROLLING,
             FUNCTION_INLINING,
-            ARRAY_OPTIMIZATION,
             IF_EXPRESSION_OPTIMIZATION,
             CASE_SWITCHING,
             RETURN_OPTIMIZATION

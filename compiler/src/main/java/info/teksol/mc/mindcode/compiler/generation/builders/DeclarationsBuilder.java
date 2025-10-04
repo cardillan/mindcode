@@ -276,7 +276,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             Map<String, ValueStore> members = callGraph.getFunctions().stream()
                     .filter(f -> f.getModule() == module)
                     .collect(Collectors.toMap(MindcodeFunction::getName, f -> createFunctionOutputs(f, processor)));
-            createRemoteVariables(module, processor, true, reportRemoteErrors, members);
+            createRemoteVariables(module, processor, node.getProcessors().size() > 1, reportRemoteErrors, members);
             reportRemoteErrors = false;
 
             StructuredValueStore processorStructure = new StructuredValueStore(identifier.sourcePosition(), processor, identifier.getName(), members);

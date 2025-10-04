@@ -333,7 +333,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         assembler.setSubcontextType(function, AstSubcontextType.PARAMETERS);
         setupFunctionParameters(function, parameters, arguments, false);
 
-        LogicString mlogFinished = function.getFnFinished().getMlogString();
+        LogicString mlogFinished = function.getFnFinished().getMlogVariableName();
         assembler.setSubcontextType(function, AstSubcontextType.REMOTE_CALL);
         assembler.createWrite(LogicBoolean.FALSE, processor, mlogFinished);
         assembler.createWrite(LogicNumber.create(function.getRemoteIndex()), processor, LogicString.create("@counter"));
@@ -446,10 +446,10 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         assembler.setSubcontextType(remote.function, AstSubcontextType.REMOTE_CALL);
         LogicVariable result = assembler.nextNodeResultTemp();
-        assembler.createRead(result, remote.processor, remote.function.getFnFinished().getMlogString());
+        assembler.createRead(result, remote.processor, remote.function.getFnFinished().getMlogVariableName());
         if (arguments.size() > 1) {
             LogicVariable tmp = assembler.nextTemp();
-            assembler.createRead(tmp, remote.processor, remote.function.getFnRetVal().getMlogString());
+            assembler.createRead(tmp, remote.processor, remote.function.getFnRetVal().getMlogVariableName());
             arguments.get(1).setValue(assembler, tmp);
         }
         assembler.clearSubcontextType();
@@ -465,12 +465,12 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         LogicLabel label = assembler.createNextLabel();
         assembler.createYieldExecution();
         LogicVariable tmp = assembler.nextTemp();
-        assembler.createRead(tmp, remote.processor, remote.function.getFnFinished().getMlogString());
+        assembler.createRead(tmp, remote.processor, remote.function.getFnFinished().getMlogVariableName());
         assembler.createJump(label, Condition.EQUAL, tmp, LogicBoolean.FALSE);
         assembler.clearSubcontextType();
 
         return new RemoteVariable(remote.function.getSourcePosition(), remote.processor, remote.function.getName() + "()",
-                remote.function.getFnRetVal().getMlogString(),
+                remote.function.getFnRetVal().getMlogVariableName(),
                 assembler.nextTemp(), false, false);
     }
 
@@ -595,7 +595,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             final LogicVariable resultVariable = assembler.nextNodeResultTemp();
             assembler.setSubcontextType(function, AstSubcontextType.RETURN_VALUE);
             if (processor != null) {
-                assembler.createRead(resultVariable, processor, function.getFnRetVal().getMlogString());
+                assembler.createRead(resultVariable, processor, function.getFnRetVal().getMlogVariableName());
             } else {
                 assembler.createSet(resultVariable, function.getFnRetVal());
             }
@@ -605,7 +605,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             // within this function's call tree
             return processor != null
                     ? new RemoteVariable(function.getSourcePosition(), processor, function.getName() + "()",
-                    function.getFnRetVal().getMlogString(),assembler.nextTemp(),
+                    function.getFnRetVal().getMlogVariableName(),assembler.nextTemp(),
                         false, false)
                     :   function.getFnRetVal();
         }

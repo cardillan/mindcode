@@ -219,6 +219,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         }
 
         @Override
+        public LogicString getMlogVariableName() {
+            return value().getMlogVariableName();
+        }
+
+        @Override
         public boolean isComplex() {
             return value().isComplex();
         }
@@ -369,6 +374,11 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         @Override
         public SourcePosition sourcePosition() {
             return SourcePosition.EMPTY;
+        }
+
+        @Override
+        public LogicString getMlogVariableName() {
+            return LogicVariable.INVALID.getMlogVariableName();
         }
 
         @Override

@@ -4,6 +4,7 @@ import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionArgument;
+import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
@@ -60,6 +61,11 @@ public class InputFunctionArgument implements FunctionArgument {
     @Override
     public boolean isOutput() {
         return argument.isOutput();
+    }
+
+    @Override
+    public LogicString getMlogVariableName() {
+        return value.getMlogVariableName();
     }
 
     @Override

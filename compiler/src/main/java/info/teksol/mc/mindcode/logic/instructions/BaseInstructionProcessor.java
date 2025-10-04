@@ -50,23 +50,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     private int labelIndex = 0;
     private int markerIndex = 0;
 
-    static class InstructionProcessorParameters {
-        public final MessageConsumer messageConsumer;
-        public final ProcessorVersion version;
-        public final ProcessorEdition edition;
-        public final NameCreator nameCreator;
-        public final boolean instructionValidation;
-        public final List<OpcodeVariant> opcodeVariants;
-
-        public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version,
-                ProcessorEdition edition, NameCreator nameCreator, boolean instructionValidation, List<OpcodeVariant> opcodeVariants) {
-            this.messageConsumer = messageConsumer;
-            this.version = version;
-            this.edition = edition;
-            this.nameCreator = nameCreator;
-            this.instructionValidation = instructionValidation;
-            this.opcodeVariants = opcodeVariants;
-        }
+    record InstructionProcessorParameters(
+            MessageConsumer messageConsumer,
+            ProcessorVersion version,
+            ProcessorEdition edition,
+            NameCreator nameCreator,
+            boolean instructionValidation,
+            List<OpcodeVariant> opcodeVariants) {
 
         public InstructionProcessorParameters(MessageConsumer messageConsumer, ProcessorVersion version, ProcessorEdition edition,
                 NameCreator nameCreator, boolean instructionValidation) {
@@ -153,48 +143,63 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     }
 
     @Override
-    public LogicInstruction createInstructionUnchecked(AstContext astContext, Opcode opcode, List<LogicArgument> arguments) {
-        List<InstructionParameterType> params = getParameters(opcode, arguments);
+    public LogicInstruction createInstructionUnchecked(AstContext astContext, Opcode opcode, List<LogicArgument> args) {
+        List<InstructionParameterType> params = getParameters(opcode, args);
 
         return switch (opcode) {
-            case CALL        -> new CallInstruction(astContext, arguments, params);
-            case CALLREC     -> new CallRecInstruction(astContext, arguments, params);
-            case COMMENT     -> new CommentInstruction(astContext, arguments, params);
-            case CONTROL     -> new ControlInstruction(astContext, arguments, params);
-            case DRAW        -> new DrawInstruction(astContext, arguments, params);
-            case DRAWFLUSH   -> new DrawflushInstruction(astContext, arguments, params);
+            case CALL        -> new CallInstruction(astContext, args, params);
+            case CALLREC     -> new CallRecInstruction(astContext, args, params);
+            case COMMENT     -> new CommentInstruction(astContext, args, params);
+            case CONTROL     -> new ControlInstruction(astContext, args, params);
+            case DRAW        -> new DrawInstruction(astContext, args, params);
+            case DRAWFLUSH   -> new DrawflushInstruction(astContext, args, params);
             case END         -> new EndInstruction(astContext);
-            case FORMAT      -> new FormatInstruction(astContext, arguments, params);
-            case GETLINK     -> new GetlinkInstruction(astContext, arguments, params);
-            case JUMP        -> new JumpInstruction(astContext, arguments, params);
-            case LABEL       -> new LabelInstruction(astContext, arguments, params);
-            case LOOKUP      -> new LookupInstruction(astContext, arguments, params);
-            case MULTICALL   -> new MultiCallInstruction(astContext, arguments, params);
-            case MULTIJUMP   -> new MultiJumpInstruction(astContext, arguments, params);
-            case MULTILABEL  -> new MultiLabelInstruction(astContext, arguments, params);
-            case EMPTY -> new EmptyInstruction(astContext);
-            case OP          -> new OpInstruction(astContext, arguments, params);
-            case PACKCOLOR   -> new PackColorInstruction(astContext, arguments, params);
-            case POP         -> new PopInstruction(astContext, arguments, params);
-            case PRINT       -> new PrintInstruction(astContext, arguments, params);
-            case PRINTCHAR   -> new PrintCharInstruction(astContext, arguments, params);
-            case PRINTFLUSH  -> new PrintflushInstruction(astContext, arguments, params);
-            case PUSH        -> new PushInstruction(astContext, arguments, params);
-            case READ        -> new ReadInstruction(astContext, arguments, params);
-            case READARR     -> new ReadArrInstruction(astContext, arguments, params);
-            case REMARK      -> new RemarkInstruction(astContext, arguments, params);
-            case RETURN      -> new ReturnInstruction(astContext, arguments, params);
-            case RETURNREC   -> new ReturnRecInstruction(astContext, arguments, params);
-            case SELECT      -> new SelectInstruction(astContext, arguments, params);
-            case SENSOR      -> new SensorInstruction(astContext, arguments, params);
-            case SET         -> new SetInstruction(astContext, arguments, params);
-            case SETADDR     -> new SetAddressInstruction(astContext, arguments, params);
+            case FORMAT      -> new FormatInstruction(astContext, args, params);
+            case GETLINK     -> new GetlinkInstruction(astContext, args, params);
+            case JUMP        -> new JumpInstruction(astContext, args, params);
+            case LABEL       -> new LabelInstruction(astContext, args, params);
+            case LOOKUP      -> new LookupInstruction(astContext, args, params);
+            case MULTICALL   -> new MultiCallInstruction(astContext, args, params);
+            case MULTIJUMP   -> new MultiJumpInstruction(astContext, args, params);
+            case MULTILABEL  -> new MultiLabelInstruction(astContext, args, params);
+            case EMPTY       -> new EmptyInstruction(astContext);
+            case OP          -> new OpInstruction(astContext, args, params);
+            case PACKCOLOR   -> new PackColorInstruction(astContext, args, params);
+            case POP         -> new PopInstruction(astContext, args, params);
+            case PRINT       -> new PrintInstruction(astContext, args, params);
+            case PRINTCHAR   -> new PrintCharInstruction(astContext, args, params);
+            case PRINTFLUSH  -> new PrintflushInstruction(astContext, args, params);
+            case PUSH        -> new PushInstruction(astContext, args, params);
+            case READ        -> new ReadInstruction(astContext, args, params);
+            case READARR     -> new ReadArrInstruction(astContext, args, params);
+            case REMARK      -> new RemarkInstruction(astContext, args, params);
+            case RETURN      -> new ReturnInstruction(astContext, args, params);
+            case RETURNREC   -> new ReturnRecInstruction(astContext, args, params);
+            case SELECT      -> new SelectInstruction(astContext, args, params);
+            case SENSOR      -> new SensorInstruction(astContext, args, params);
+            case SET         -> new SetInstruction(astContext, args, params);
+            case SETADDR     -> new SetAddressInstruction(astContext, args, params);
             case STOP        -> new StopInstruction(astContext);
-            case UNPACKCOLOR -> new UnpackColorInstruction(astContext, arguments, params);
-            case WRITE       -> new WriteInstruction(astContext, arguments, params);
-            case WRITEARR    -> new WriteArrInstruction(astContext, arguments, params);
-            default          ->  createGenericInstruction(astContext, opcode, arguments, params);
+            case UNPACKCOLOR -> new UnpackColorInstruction(astContext, args, params);
+            case WRITE       -> new WriteInstruction(astContext, args, params);
+            case WRITEARR    -> new WriteArrInstruction(astContext, args, params);
+            default          ->  createGenericInstruction(astContext, opcode, args, params);
         };
+    }
+
+    @Override
+    public void setupArrayAccessInstruction(ArrayAccessInstruction instruction) {
+        switch (instruction.getArray().getArrayStore().getArrayType()) {
+            case EXTERNAL -> instruction.setArrayOrganization(ArrayOrganization.EXTERNAL).setArrayConstruction(ArrayConstruction.REGULAR);
+            case CONSTANT -> instruction.setArrayOrganization(ArrayOrganization.INTERNAL).setArrayConstruction(ArrayConstruction.REGULAR);
+            default -> {
+                if (getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL).setArrayConstruction(ArrayConstruction.COMPACT);
+                } else {
+                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL).setArrayConstruction(ArrayConstruction.REGULAR);
+                }
+            }
+        }
     }
 
     @Override
@@ -415,10 +420,10 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     /// instruction is determined by inspecting its arguments.
     ///
     /// @param opcode opcode of the instruction
-    /// @param arguments arguments to the instruction
+    /// @param args arguments to the instruction
     /// @return list of types of given arguments
-    public @Nullable List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> arguments) {
-        OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, arguments);
+    public @Nullable List<InstructionParameterType> getParameters(Opcode opcode, List<? extends LogicArgument> args) {
+        OpcodeVariant opcodeVariant = getOpcodeVariant(opcode, args);
         return opcodeVariant == null ? null : opcodeVariant.parameterTypes();
     }
 

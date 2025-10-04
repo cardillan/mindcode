@@ -42,7 +42,7 @@ public class InstructionProcessorFactory {
     }
 
     private static InstructionProcessor create(InstructionProcessorParameters parameters) {
-        return switch (parameters.version) {
+        return switch (parameters.version()) {
             case V6, V7, V7A    -> new MindustryInstructionProcessor7(parameters);
             case V8A, V8B, MAX  -> new MindustryInstructionProcessor8(parameters);
         };

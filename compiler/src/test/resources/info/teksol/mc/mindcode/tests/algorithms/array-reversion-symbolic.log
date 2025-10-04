@@ -1,32 +1,36 @@
-   115 instructions before optimizations.
+   116 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
      5 instructions eliminated by Jump Normalization (6 iterations).
      1 instructions eliminated by Jump Optimization (6 iterations).
     17 instructions eliminated by Single Step Elimination (3 passes, 18 iterations).
    200 instructions eliminated by Expression Optimization (4 iterations).
-    75 instructions eliminated by Data Flow Optimization (4 passes, 34 iterations).
+    75 instructions eliminated by Data Flow Optimization (4 passes, 35 iterations).
      1 instructions eliminated by Loop Optimization (4 iterations).
      1 loops improved by Loop Optimization.
-   204 instructions added by Loop Unrolling (7 iterations).
+   213 instructions added by Loop Unrolling (8 iterations).
      2 loops unrolled by Loop Unrolling.
-     1 jump tables inlined by Array Optimization.
+     7 instructions added by Array Optimization (8 iterations).
+    11 jump tables inlined by Array Optimization.
      9 instructions eliminated by Print Merging.
      3 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 895):
-    Unroll loop at line 6:5                                      size    +3, benefit      500.0, efficiency    166.667
+Pass 1: speed optimization selection (cost limit 894):
+    Inline compact jump table of array 'array'                   size    -3, benefit       52.5, efficiency   Infinity
+    Inline 'array' write access at line 7:9                      size   +17, benefit       52.5, efficiency      3.088
+    Unroll loop at line 6:5                                      size    +2, benefit      500.0, efficiency    250.000
   * Unroll iteration loop at line 18:5                           size   -39, benefit       69.0, efficiency   Infinity (-29 instructions)
-    Inline write jump table of array 'array'                     size    -4, benefit       50.0, efficiency   Infinity
-    Inline 'array' write access at line 7:9                      size   +17, benefit       50.0, efficiency      2.941
 
-Pass 1: speed optimization selection (cost limit 924):
-    Unroll loop at line 6:5                                      size    +3, benefit      500.0, efficiency    166.667
-  * Inline write jump table of array 'array'                     size    -4, benefit       50.0, efficiency   Infinity (-4 instructions)
-    Inline 'array' write access at line 7:9                      size   +17, benefit       50.0, efficiency      2.941
+Pass 1: speed optimization selection (cost limit 923):
+  * Inline compact jump table of array 'array'                   size    -3, benefit       52.5, efficiency   Infinity (-4 instructions)
+    Inline 'array' write access at line 7:9                      size   +17, benefit       52.5, efficiency      3.088
+    Unroll loop at line 6:5                                      size    +2, benefit      500.0, efficiency    250.000
 
-Pass 1: speed optimization selection (cost limit 928):
-  * Unroll loop at line 6:5                                      size   -14, benefit      500.0, efficiency   Infinity (+186 instructions)
+Pass 1: speed optimization selection (cost limit 927):
+  * Unroll loop at line 6:5                                      size   -15, benefit      500.0, efficiency   Infinity (+195 instructions)
+
+Pass 1: speed optimization selection (cost limit 732):
+  * Promote compact array 'array'                                size   -10, benefit       10.0, efficiency   Infinity (-10 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-2 instructions):
  
@@ -46,8 +50,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
      1 label *label0
      2 jump *label2 greaterThanEq :i 10
 -    * set *tmp0 :i
--    * writearr<regular> :i .array[] *tmp0
-+    3 writearr<regular> :i .array[] :i
+-    * writearr<internal:compact> :i .array[] *tmp0
++    3 writearr<internal:compact:src> :i .array[] :i
      4 label *label1
      5 op add :i :i 1
      6 jump *label0 always
@@ -369,7 +373,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1 (-1 inst
      1 label *label0
 -    * jump *label2 greaterThanEq :i 10
 +    2 label *label19
-     3 writearr<regular> :i .array[] :i
+     3 writearr<internal:compact:src> :i .array[] :i
      4 label *label1
      5 op add :i :i 1
 -    * jump *label0 always
@@ -852,21 +856,21 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
     94 print .array*7
     95 print .array*8
 
-Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-4 instructions):
+Modifications by Inline compact jump table of array 'array' (-4 instructions):
      0 set :i 0
      1 label *label0
      2 label *label19
--    * writearr<regular> :i .array[] :i
-+    3 writearr<inlined> :i .array[] :i
+-    * writearr<internal:compact:src> :i .array[] :i
++    3 writearr<inlined:compact:src> :i .array[] :i
      4 label *label1
      5 op add :i :i 1
      6 jump *label19 lessThan :i 10
 
-Modifications by Unroll loop at line 6:5 (+197 instructions):
+Modifications by Unroll loop at line 6:5 (+206 instructions):
 -    * set :i 0
 -    * label *label0
 -    * label *label19
--    * writearr<inlined> :i .array[] :i
+-    * writearr<inlined:compact:src> :i .array[] :i
 -    * label *label1
 -    * op add :i :i 1
 -    * jump *label19 lessThan :i 10
@@ -874,43 +878,43 @@ Modifications by Unroll loop at line 6:5 (+197 instructions):
 +    0 set :i 0
 +    1 label *label81
 +    2 label *label82
-+    3 writearr<inlined> :i .array[] :i
++    3 writearr<inlined:compact> :i .array[] :i
 +    4 label *label83
 +    5 op add :i :i 1
 +    6 label *label84
-+    7 writearr<inlined> :i .array[] :i
++    7 writearr<inlined:compact> :i .array[] :i
 +    8 label *label85
 +    9 op add :i :i 1
 +   10 label *label86
-+   11 writearr<inlined> :i .array[] :i
++   11 writearr<inlined:compact> :i .array[] :i
 +   12 label *label87
 +   13 op add :i :i 1
 +   14 label *label88
-+   15 writearr<inlined> :i .array[] :i
++   15 writearr<inlined:compact> :i .array[] :i
 +   16 label *label89
 +   17 op add :i :i 1
 +   18 label *label90
-+   19 writearr<inlined> :i .array[] :i
++   19 writearr<inlined:compact> :i .array[] :i
 +   20 label *label91
 +   21 op add :i :i 1
 +   22 label *label92
-+   23 writearr<inlined> :i .array[] :i
++   23 writearr<inlined:compact> :i .array[] :i
 +   24 label *label93
 +   25 op add :i :i 1
 +   26 label *label94
-+   27 writearr<inlined> :i .array[] :i
++   27 writearr<inlined:compact> :i .array[] :i
 +   28 label *label95
 +   29 op add :i :i 1
 +   30 label *label96
-+   31 writearr<inlined> :i .array[] :i
++   31 writearr<inlined:compact> :i .array[] :i
 +   32 label *label97
 +   33 op add :i :i 1
 +   34 label *label98
-+   35 writearr<inlined> :i .array[] :i
++   35 writearr<inlined:compact> :i .array[] :i
 +   36 label *label99
 +   37 op add :i :i 1
 +   38 label *label100
-+   39 writearr<inlined> :i .array[] :i
++   39 writearr<inlined:compact> :i .array[] :i
 +   40 label *label101
 +   41 op add :i :i 1
 +   42 label *label2
@@ -922,62 +926,62 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
      0 set :i 0
      1 label *label81
      2 label *label82
--    * writearr<inlined> :i .array[] :i
-+    3 writearr<inlined> 0 .array[] 0
+-    * writearr<inlined:compact> :i .array[] :i
++    3 writearr<inlined:compact> 0 .array[] 0
      4 label *label83
 -    * op add :i :i 1
 +    5 op add :i 0 1
      6 label *label84
--    * writearr<inlined> :i .array[] :i
-+    7 writearr<inlined> 1 .array[] 1
+-    * writearr<inlined:compact> :i .array[] :i
++    7 writearr<inlined:compact> 1 .array[] 1
      8 label *label85
 -    * op add :i :i 1
 +    9 op add :i 1 1
     10 label *label86
--    * writearr<inlined> :i .array[] :i
-+   11 writearr<inlined> 2 .array[] 2
+-    * writearr<inlined:compact> :i .array[] :i
++   11 writearr<inlined:compact> 2 .array[] 2
     12 label *label87
 -    * op add :i :i 1
 +   13 op add :i 2 1
     14 label *label88
--    * writearr<inlined> :i .array[] :i
-+   15 writearr<inlined> 3 .array[] 3
+-    * writearr<inlined:compact> :i .array[] :i
++   15 writearr<inlined:compact> 3 .array[] 3
     16 label *label89
 -    * op add :i :i 1
 +   17 op add :i 3 1
     18 label *label90
--    * writearr<inlined> :i .array[] :i
-+   19 writearr<inlined> 4 .array[] 4
+-    * writearr<inlined:compact> :i .array[] :i
++   19 writearr<inlined:compact> 4 .array[] 4
     20 label *label91
 -    * op add :i :i 1
 +   21 op add :i 4 1
     22 label *label92
--    * writearr<inlined> :i .array[] :i
-+   23 writearr<inlined> 5 .array[] 5
+-    * writearr<inlined:compact> :i .array[] :i
++   23 writearr<inlined:compact> 5 .array[] 5
     24 label *label93
 -    * op add :i :i 1
 +   25 op add :i 5 1
     26 label *label94
--    * writearr<inlined> :i .array[] :i
-+   27 writearr<inlined> 6 .array[] 6
+-    * writearr<inlined:compact> :i .array[] :i
++   27 writearr<inlined:compact> 6 .array[] 6
     28 label *label95
 -    * op add :i :i 1
 +   29 op add :i 6 1
     30 label *label96
--    * writearr<inlined> :i .array[] :i
-+   31 writearr<inlined> 7 .array[] 7
+-    * writearr<inlined:compact> :i .array[] :i
++   31 writearr<inlined:compact> 7 .array[] 7
     32 label *label97
 -    * op add :i :i 1
 +   33 op add :i 7 1
     34 label *label98
--    * writearr<inlined> :i .array[] :i
-+   35 writearr<inlined> 8 .array[] 8
+-    * writearr<inlined:compact> :i .array[] :i
++   35 writearr<inlined:compact> 8 .array[] 8
     36 label *label99
 -    * op add :i :i 1
 +   37 op add :i 8 1
     38 label *label100
--    * writearr<inlined> :i .array[] :i
-+   39 writearr<inlined> 9 .array[] 9
+-    * writearr<inlined:compact> :i .array[] :i
++   39 writearr<inlined:compact> 9 .array[] 9
     40 label *label101
 -    * op add :i :i 1
 +   41 op add :i 9 1
@@ -989,48 +993,93 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
 -    * set :i 0
      0 label *label81
      1 label *label82
-     2 writearr<inlined> 0 .array[] 0
+     2 writearr<inlined:compact> 0 .array[] 0
      3 label *label83
 -    * op add :i 0 1
      4 label *label84
-     5 writearr<inlined> 1 .array[] 1
+     5 writearr<inlined:compact> 1 .array[] 1
      6 label *label85
 -    * op add :i 1 1
      7 label *label86
-     8 writearr<inlined> 2 .array[] 2
+     8 writearr<inlined:compact> 2 .array[] 2
      9 label *label87
 -    * op add :i 2 1
     10 label *label88
-    11 writearr<inlined> 3 .array[] 3
+    11 writearr<inlined:compact> 3 .array[] 3
     12 label *label89
 -    * op add :i 3 1
     13 label *label90
-    14 writearr<inlined> 4 .array[] 4
+    14 writearr<inlined:compact> 4 .array[] 4
     15 label *label91
 -    * op add :i 4 1
     16 label *label92
-    17 writearr<inlined> 5 .array[] 5
+    17 writearr<inlined:compact> 5 .array[] 5
     18 label *label93
 -    * op add :i 5 1
     19 label *label94
-    20 writearr<inlined> 6 .array[] 6
+    20 writearr<inlined:compact> 6 .array[] 6
     21 label *label95
 -    * op add :i 6 1
     22 label *label96
-    23 writearr<inlined> 7 .array[] 7
+    23 writearr<inlined:compact> 7 .array[] 7
     24 label *label97
 -    * op add :i 7 1
     25 label *label98
-    26 writearr<inlined> 8 .array[] 8
+    26 writearr<inlined:compact> 8 .array[] 8
     27 label *label99
 -    * op add :i 8 1
     28 label *label100
-    29 writearr<inlined> 9 .array[] 9
+    29 writearr<inlined:compact> 9 .array[] 9
     30 label *label101
 -    * op add :i 9 1
     31 label *label2
     32 # "Function: inline void reverse(in array...)"
     33 set :reverse:i .array*0
+
+Modifications by Promote compact array 'array' (-10 instructions):
+     0 label *label81
+     1 label *label82
+-    * writearr<inlined:compact> 0 .array[] 0
++    2 writearr<inlined:regular> 0 .array[] 0
+     3 label *label83
+     4 label *label84
+-    * writearr<inlined:compact> 1 .array[] 1
++    5 writearr<inlined:regular> 1 .array[] 1
+     6 label *label85
+     7 label *label86
+-    * writearr<inlined:compact> 2 .array[] 2
++    8 writearr<inlined:regular> 2 .array[] 2
+     9 label *label87
+    10 label *label88
+-    * writearr<inlined:compact> 3 .array[] 3
++   11 writearr<inlined:regular> 3 .array[] 3
+    12 label *label89
+    13 label *label90
+-    * writearr<inlined:compact> 4 .array[] 4
++   14 writearr<inlined:regular> 4 .array[] 4
+    15 label *label91
+    16 label *label92
+-    * writearr<inlined:compact> 5 .array[] 5
++   17 writearr<inlined:regular> 5 .array[] 5
+    18 label *label93
+    19 label *label94
+-    * writearr<inlined:compact> 6 .array[] 6
++   20 writearr<inlined:regular> 6 .array[] 6
+    21 label *label95
+    22 label *label96
+-    * writearr<inlined:compact> 7 .array[] 7
++   23 writearr<inlined:regular> 7 .array[] 7
+    24 label *label97
+    25 label *label98
+-    * writearr<inlined:compact> 8 .array[] 8
++   26 writearr<inlined:regular> 8 .array[] 8
+    27 label *label99
+    28 label *label100
+-    * writearr<inlined:compact> 9 .array[] 9
++   29 writearr<inlined:regular> 9 .array[] 9
+    30 label *label101
+    31 label *label2
+    32 # "Function: inline void reverse(in array...)"
 
 Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-5 instructions):
  
@@ -1114,43 +1163,43 @@ Modifications by Iterated phase, Jump Normalization, pass 2, iteration 1 (-5 ins
 Modifications by Iterated phase, Expression Optimization, pass 2, iteration 1 (-200 instructions):
      0 label *label81
      1 label *label82
--    * writearr<inlined> 0 .array[] 0
+-    * writearr<inlined:regular> 0 .array[] 0
 +    2 set .array*0 0
      3 label *label83
      4 label *label84
--    * writearr<inlined> 1 .array[] 1
+-    * writearr<inlined:regular> 1 .array[] 1
 +    5 set .array*1 1
      6 label *label85
      7 label *label86
--    * writearr<inlined> 2 .array[] 2
+-    * writearr<inlined:regular> 2 .array[] 2
 +    8 set .array*2 2
      9 label *label87
     10 label *label88
--    * writearr<inlined> 3 .array[] 3
+-    * writearr<inlined:regular> 3 .array[] 3
 +   11 set .array*3 3
     12 label *label89
     13 label *label90
--    * writearr<inlined> 4 .array[] 4
+-    * writearr<inlined:regular> 4 .array[] 4
 +   14 set .array*4 4
     15 label *label91
     16 label *label92
--    * writearr<inlined> 5 .array[] 5
+-    * writearr<inlined:regular> 5 .array[] 5
 +   17 set .array*5 5
     18 label *label93
     19 label *label94
--    * writearr<inlined> 6 .array[] 6
+-    * writearr<inlined:regular> 6 .array[] 6
 +   20 set .array*6 6
     21 label *label95
     22 label *label96
--    * writearr<inlined> 7 .array[] 7
+-    * writearr<inlined:regular> 7 .array[] 7
 +   23 set .array*7 7
     24 label *label97
     25 label *label98
--    * writearr<inlined> 8 .array[] 8
+-    * writearr<inlined:regular> 8 .array[] 8
 +   26 set .array*8 8
     27 label *label99
     28 label *label100
--    * writearr<inlined> 9 .array[] 9
+-    * writearr<inlined:regular> 9 .array[] 9
 +   29 set .array*9 9
     30 label *label101
     31 label *label2
