@@ -61,81 +61,111 @@ The information on compiler optimizations is a bit technical. It might be useful
 
 The array optimization improves the performance of array operations in several ways. At this moment, all optimizations are only available on the `experimental` level.
 
-[Loop unrolling](#loop-unrolling) may replace random access to array elements with sequential code accessing individual elements directly, in which case no array optimization happens.
+Some optimizations, such as constant propagation, constant folding, or loop unrolling, may resolve an array index represented by an expression to a constant value. When this happens, the index-based array access is eliminated and replaced with the array element itself.
 
-### Array access inlining
+This optimizer inspects the index-based array access optimizations that remain and tries to find an alternative which is compatible with the optimization goal. All existing alternatives are described here.  
 
-Array access inlining is a [dynamic optimization](#static-and-dynamic-optimizations) and is only applied when it is compatible with the optimization goal.
+### Types of arrays
 
-To facilitate random array access, shared jump tables for read and write access are generated for each array. These jump tables are shared by all read/write random access of an individual array. This requires using a dedicated _array access variable_ for each access, and setting up return addresses for resuming the control flow after the array element has been processed.
+Mindcode supports the following types of arrays:
 
-Array access inlining builds a dedicated jump table at each place an array access operation is performed, eliminating the need for array access variables and return addresses.
+* Internal arrays: backed by processor variables, and index-based access is provided by the compiler.
+* Remote arrays: backed by variables residing in a remote processor. Index-based access is provided by the compiler on the current processor.
+* Multiplexed arrays: similar to remote arrays, but several copies of these arrays may exist in different processors. Index-based access is provided by the compiler on the current processor.
+* Constant arrays: individual elements of the array are constant. Index-based read-only access is provided by the compiler.
+* External arrays: backed by a memory bank or a memory cell. Index-based access is provided directly by mlog instructions (`read` and `write`).
 
-Inlining a jump table in a general case reduces the number of steps required per element access from 6 to 4. When accessing an element of the array in a loop at most once for reading and once for writing, the usage of array access variables can be streamlined and return addresses setup can be hoisted out of the loop. This reduces a lot of the overhead of shared jump tables.
+### Array Implementations
 
-### Short array optimizations
+The basic mechanism for providing index-based access to array elements is known as [`@counter` arrays](https://yrueii.github.io/MlogDocs/#counter-array): a separate branch for accessing each variable is created in mlog, and the array access is implemented by jumping to the desired branch using the element index and `@counter` manipulation. To distinguish arrays as a language feature from the `@counter` arrays implementation in mlog, here we call a set of branches implementing an array a `@counter` table.
 
-This optimization is performed for arrays of up to three elements.
+A branch in a `@counter` table consists of an access instruction, which ensures reading or writing of the variable corresponding to the array element, and a jump to the place where the program execution should continue. This makes internal arrays rather expensive in terms of code size.  
 
-Short array optimizations cause out-of-bounds indexes to always resolve to the last element. Using an out-of-bounds index can't derail the program execution. Nevertheless, runtime checks still get generated when prescribed by a compiler directive.
+Mindcode supports several implementations of `@counter` tables. Some are only available when compiling the code for a specific target. Individual implementations are described here.
 
-#### Arrays of length 1
+### Regular `@counter` tables
 
-Each element access gets converted to direct access of the single element.
+Available for every target. Generally, two `@counter` tables are needed: one for reading, one for writing. When index-based access is not used to read or write a given array, the corresponding `@counter` table is not created. A `@counter` table supporting a regular array may be used by several separate places in the code (similarly to an out-of-line function). As two `@counter` tables are needed for an array in the general case, four instructions are required per a single array element just for the `@counter` tables.
 
-#### Arrays of length 2 and 3
+When the program needs to read or write an array element at a given index, a call into the `@counter` table is made. For this, the address of the branch is computed, and the value of the element variable is either read into a transfer variable or updated from a transfer variable. The call sets up several arguments: the index to be accessed, the transfer variable (either as input or as output), the return address as an implicit argument, and, in case of multiplexed arrays, the actual processor being accessed. Several instructions are therefore executed to access an array element.
 
-The jump table is replaced by a sequence of `select`s or if/else statements. Arrays of length 2 are always optimized, while arrays of length 3 are only optimized if the `select` optimization can be used, or the jump table for the array access has been selected for inlining.
+Constant arrays are also implemented using regular `@counter` tables. Here, the `@counter` table provides the (constant) element value directly, and since the array cannot be modified, no `@counter` table for writees is required or generated.
 
-**The `select` optimization**
+### Compact `@counter` tables
 
-The `select` optimization is applied when the optimization level is set to `experimental` and the `select` instruction is available.
+Available for targets `8` and higher. Implemented as a single `@counter` table which provides the name of the variable corresponding to a given array element. The `read` and `write` instructions are then used to access the variable. The compact array can be used with both internal, remote, and multiplexed arrays. It is equally efficient for all these types of arrays, as the array element is read or written indirectly in all three cases using a single additional instruction. Due to this additional instruction requirement, the compact `@counter` table is in most cases less efficient than a regular one.  
 
-For arrays of length 2, the optimization effectively replaces the jump table with these constructs:
+However, if an array element at the same index is accessed multiple times (say, a read-update-write pattern, e.g. `a[i]++`), Mindcode might be able to recognize this and for the second and later accesses use the name of the variable obtained through the `@counter` table for the first access, providing considerable savings in both code-size and execution time. In these cases, a compact array is more efficient than a regular array and is preferred by the compiler.  
 
-* `a[x] = b` gets converted to
+Since a compact `counter` table doesn't access the array element variables directly, but accesses them through their mlog names, the variables aren't created in the processor by the `@counter table` itself (unlike regular arrays). Array elements which aren't accessed directly by the program must be explicitly created by a `draw triangle` instruction. Up to six variables can be created by a single instruction, meaning that an array implemented as a compact array may require approx. 2.17 instructions per array element for `@counter` tables. 
 
-```
-select a[0] x equal 0 b a[0]
-select a[1] x equal 1 b a[1]
-```
+### Folded `@counter` tables
 
-* `b = a[x]` gets converted to
+TBD
 
-```
-select b x equal 0 a[0] a[1]
-```
+### Inlined `@counter` tables
 
-For arrays of length 3, the optimization can be described like this:
+Initially, only one copy of a `@counter` table is generated by the compiler for a given array, which is then used as an out-of-line function wherever index-based access is required. However, calls to `@counter` tables can be inlined in the same way as calls to out-of-line functions. This means the `@counter` table is duplicated at the call site, increasing the code size, but all parameters to the call are injected into the inlined `@counter` table, saving one or more instruction executions. When all calls to a specific `@counter` table get inlined, the original `@counter` table is removed from the program.
 
-* `a[x] = b` gets converted to
+Inlining is possible for both compact and regular `@counter` tables. As compact and regular tables have the same space requirements when inlined, the compact representation is only used for repeated access to the same array element. Each inlined `@counter` table is evaluated independently.
 
-```
-select a[0] x equal 0 b a[0]
-select a[1] x equal 1 b a[1]
-select a[2] x equal 2 b a[2]
-```
+### Avoiding `@counter` tables for short arrays
 
-* `b = a[x]` gets converted to
+For short arrays, the `@counter` tables can be avoided entirely:
+* When the array has just one element, all index-based array access is resolved to that one element directly.
+* For other short arrays up to four elements, the array access is replaced with a sequence of `select`s or if/else statements, depending on whether the `select` instruction is available in the given target (target 8.1 or higher is required for a `select` instruction).
 
-```
-select b x equal 0 a[0] a[1]
-select b x equal 2 a[2] b
-```
+This replacement is available for both compact and regular `@counter` tables. The compact version is used when the same element is accessed multiple times.
 
-**The if/else optimization**
+#### Array access using an if / else statement
 
-When the `select` optimization is not available, access to elements of arrays of length 2 is replaced with if/else statements:
+When a `select` instruction is not available, access to elements of arrays of length 2 is replaced with if/else statements:
 
 * `a[x] = b;` gets converted to `if x == 0 then a[0] = b; else a[1] = b; end;`.
 * `b = a[x]` gets converted to  `if x == 0 then b = a[0]; else b = a[1]; end;`.
 
-For arrays of length 3, the optimization can be described like this:
+For arrays of length 3, this code is used:
 
 * `a[x] = b;` gets converted to `if x == 0 then a[0] = b; elsif x == 1 then a[1] = b; else a[2] = b end;`.
 * `b = a[x]` gets converted to  `if x == 0 then b = a[0]; elsif x == 1 then b = a[1]; else b = a[2] end;`.
 
 This optimization allows additional [If Expression optimizations](#if-expression-optimization) to take place.
+
+#### Array access using a `select` instruction
+
+When a `select` instruction is available - in target 8.1 or higher, `select` instructions are used to replace array access.
+
+For read access, including compact tables, the `select` instruction is used to access the array element variable.
+
+Two-element arrays:
+
+```
+select result index equal 0 element*0 element*1
+```
+
+Three-element arrays:
+
+```
+select result index equal 0 element*0 element*1
+select result index equal 2 element*2 result
+```
+
+Four-element arrays:
+
+```
+select *tmp1 index equal 0 element*0 element*1
+select *tmp2 index equal 2 element*2 element*3
+select result index lessThan 2 *tmp1 *tmp2
+```
+
+Write access is realized by a linear sequence of `select` instructions, where each instruction matches an array element and only updates it when the index matches:   
+
+```
+select element*0 index equal 0 value element*0
+select element*1 index equal 1 value element*1
+select element*2 index equal 2 value element*2
+# etc
+```
 
 ## Case Expression Optimization
 
@@ -224,7 +254,7 @@ The following preconditions need to be met to apply content conversion:
 
 * The optimization level is set to `advanced`.
 * The `builtin-evaluation` option is set to `compatible` or `full`.
-* All values in `when` branches are either `null`, or built-in variables referencing Mindustry content of the same type (items, building types and so on).
+* All values in `when` branches are either `null`, or built-in variables referencing Mindustry content of the same type (items, building types, and so on).
 * Values used in `when` clauses are unique.
 * The logic ID is known to Mindcode for all `when` values.
 * All logic IDs are stable, or `builtin-evaluation` mode is set to `full`.
