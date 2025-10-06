@@ -106,7 +106,9 @@ class DataFlowOptimizer extends BaseOptimizer {
         functionEndStates.clear();
 
         clearVariableStates();
-        optimizationContext.getProgram().forEach(LogicInstruction::resetCompactAccess);
+        optimizationContext.getProgram().forEach(ix -> {
+            if (ix instanceof ArrayAccessInstruction aix) aix.resetCompactAccess();
+        });
 
         if (currentPass <= 1) {
             trace("!!! Skipping backpropagation optimization on first pass.\n\n");

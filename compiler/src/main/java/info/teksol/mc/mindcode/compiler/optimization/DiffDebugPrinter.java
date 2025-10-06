@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
 import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -196,11 +197,11 @@ public class DiffDebugPrinter implements DebugPrinter {
             str.append("    * ");       // Deleted line -- no number
         }
         str.append(instruction.getMlogOpcode());
-        if (instruction.getArrayOrganization() != ArrayOrganization.NONE) {
-            str.append('<').append(instruction.getArrayOrganization().getName())
-                    .append(':').append(instruction.getArrayConstruction().getName());
-            if (instruction.isCompactAccessSource()) str.append(":src");
-            if (instruction.isCompactAccessTarget()) str.append(":dst");
+        if (instruction instanceof ArrayAccessInstruction aai && aai.getArrayOrganization() != ArrayOrganization.NONE) {
+            str.append('<').append(aai.getArrayOrganization().getName())
+                    .append(':').append(aai.getArrayConstruction().getName());
+            if (aai.isCompactAccessSource()) str.append(":src");
+            if (aai.isCompactAccessTarget()) str.append(":dst");
             str.append('>');
         }
         instruction.getArgs().forEach(arg -> str.append(" ").append(arg.toMlog()));
