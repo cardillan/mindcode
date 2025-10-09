@@ -20,8 +20,18 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
         super(instruction);
     }
 
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        return profile.getBoundaryChecks().getSize() + 2 + (2 * arrayStore.getSize() - 1);
+    }
+
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public double getExecutionSteps() {
+        // The last jump in the jump table is eliminated
+        return profile.getBoundaryChecks().getExecutionSteps() + 4 - 1.0 / arrayStore.getSize();
+    }
+
+    @Override
+    public SideEffects createSideEffects() {
         return switch (accessType) {
             case READ -> createReadSideEffects();
             case WRITE -> createWriteSideEffects();
@@ -37,7 +47,7 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    protected LogicValue transferVariable(AccessType accessType) {
+    protected LogicValue transferVariable() {
         return switch (accessType) {
             case READ -> ((ReadArrInstruction)instruction).getResult();
             case WRITE -> ((WriteArrInstruction)instruction).getValue();
@@ -45,13 +55,8 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
+    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
         // No shared jump tables
-    }
-
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        int checkSize = profile.getBoundaryChecks().getSize();
-        return checkSize + 2 + (2 * arrayStore.getSize() - 1);
     }
 
     @Override
@@ -79,7 +84,7 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
         };
 
         creator.createMultiJump(firstLabel,tmp, LogicNumber.ZERO, marker).setSideEffects(sideEffects);
-        generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(instruction.getAccessType()),
+        generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(),
                 () -> creator.createJumpUnconditional(finalLabel), true);
         creator.createLabel(finalLabel);
         creator.popContext();

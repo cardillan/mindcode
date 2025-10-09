@@ -59,13 +59,9 @@ The information on compiler optimizations is a bit technical. It might be useful
 
 ## Array Optimization
 
-The array optimization improves the performance of array operations in several ways. At this moment, all optimizations are only available on the `experimental` level.
+The array optimization improves the performance of array operations in several ways. Some array optimizations are [dynamic optimizations](#static-and-dynamic-optimizations) and are only applied when compatible with the optimization goal.
 
-Some optimizations, such as constant propagation, constant folding, or loop unrolling, may resolve an array index represented by an expression to a constant value. When this happens, the index-based array access is eliminated and replaced with the array element itself.
-
-This optimizer inspects the index-based array access optimizations that remain and tries to find an alternative which is compatible with the optimization goal. All existing alternatives are described here.  
-
-### Types of arrays
+**Types of arrays**
 
 Mindcode supports the following types of arrays:
 
@@ -75,21 +71,25 @@ Mindcode supports the following types of arrays:
 * Constant arrays: individual elements of the array are constant. Index-based read-only access is provided by the compiler.
 * External arrays: backed by a memory bank or a memory cell. Index-based access is provided directly by mlog instructions (`read` and `write`).
 
-### Array Implementations
+**Array Implementations**
 
 The basic mechanism for providing index-based access to array elements is known as [`@counter` arrays](https://yrueii.github.io/MlogDocs/#counter-array): a separate branch for accessing each variable is created in mlog, and the array access is implemented by jumping to the desired branch using the element index and `@counter` manipulation. To distinguish arrays as a language feature from the `@counter` arrays implementation in mlog, here we call a set of branches implementing an array a `@counter` table.
 
 A branch in a `@counter` table consists of an access instruction, which ensures reading or writing of the variable corresponding to the array element, and a jump to the place where the program execution should continue. This makes internal arrays rather expensive in terms of code size.  
 
-Mindcode supports several implementations of `@counter` tables. Some are only available when compiling the code for a specific target. Individual implementations are described here.
+Mindcode supports several implementations of `@counter` tables. Some are only available when compiling the code for a specific target. This optimization tries to choose the most efficient implementation for the given array type, the way it is used in the program, and the target. 
+
+Individual implementations are described here.
 
 ### Regular `@counter` tables
 
-Available for every target. Generally, two `@counter` tables are needed: one for reading, one for writing. When index-based access is not used to read or write a given array, the corresponding `@counter` table is not created. A `@counter` table supporting a regular array may be used by several separate places in the code (similarly to an out-of-line function). As two `@counter` tables are needed for an array in the general case, four instructions are required per a single array element just for the `@counter` tables.
+Available for every target. Generally, two `@counter` tables are needed: one for reading, one for writing. When index-based access is not used to read or write a given array, the corresponding `@counter` table is not created. A `@counter` table supporting a regular array may be used by several separate places in the code (similarly to an out-of-line function).
+
+All `@counter` tables take up instruction space proportional to the array size. As two regular `@counter` tables are needed for an array in the general case, four instructions are generated per a single array element just for the `@counter` tables.
 
 When the program needs to read or write an array element at a given index, a call into the `@counter` table is made. For this, the address of the branch is computed, and the value of the element variable is either read into a transfer variable or updated from a transfer variable. The call sets up several arguments: the index to be accessed, the transfer variable (either as input or as output), the return address as an implicit argument, and, in case of multiplexed arrays, the actual processor being accessed. Several instructions are therefore executed to access an array element.
 
-Constant arrays are also implemented using regular `@counter` tables. Here, the `@counter` table provides the (constant) element value directly, and since the array cannot be modified, no `@counter` table for writees is required or generated.
+Constant arrays are also implemented using regular `@counter` tables. Here, the `@counter` table provides the (constant) element value directly, and since the array cannot be modified, no `@counter` table for writes is required or generated.
 
 ### Compact `@counter` tables
 
@@ -101,21 +101,21 @@ Since a compact `counter` table doesn't access the array element variables direc
 
 ### Folded `@counter` tables
 
-TBD
+Not implemented yet.
 
 ### Inlined `@counter` tables
 
 Initially, only one copy of a `@counter` table is generated by the compiler for a given array, which is then used as an out-of-line function wherever index-based access is required. However, calls to `@counter` tables can be inlined in the same way as calls to out-of-line functions. This means the `@counter` table is duplicated at the call site, increasing the code size, but all parameters to the call are injected into the inlined `@counter` table, saving one or more instruction executions. When all calls to a specific `@counter` table get inlined, the original `@counter` table is removed from the program.
 
-Inlining is possible for both compact and regular `@counter` tables. As compact and regular tables have the same space requirements when inlined, the compact representation is only used for repeated access to the same array element. Each inlined `@counter` table is evaluated independently.
+Inlining is possible for both compact and regular `@counter` tables. As compact and regular tables have the same space requirements when inlined, the compact representation is only used for repeated access to the same array element, where it is more efficient both space-wise and execution-wise. Each inlined `@counter` table is evaluated independently.
 
 ### Avoiding `@counter` tables for short arrays
 
 For short arrays, the `@counter` tables can be avoided entirely:
 * When the array has just one element, all index-based array access is resolved to that one element directly.
-* For other short arrays up to four elements, the array access is replaced with a sequence of `select`s or if/else statements, depending on whether the `select` instruction is available in the given target (target 8.1 or higher is required for a `select` instruction).
+* For other short arrays up to three or four elements, the array access is replaced with a sequence of `select`s or if/else statements, depending on whether the `select` instruction is available in the given target (target 8.1 or higher is required for a `select` instruction).
 
-This replacement is available for both compact and regular `@counter` tables. The compact version is used when the same element is accessed multiple times.
+This replacement is available for both compact and regular `@counter` tables. The compact version is used when the same element is accessed multiple times, similarly to inlined arrays.
 
 #### Array access using an if / else statement
 
@@ -647,13 +647,16 @@ Both cases deserve a closer inspection, as they might indicate a problem with yo
 
 ## Expression Optimization
 
-This optimization looks for certain expressions that can be performed more efficiently. Currently, the following optimizations are available:
+This optimization looks for certain expressions that can be performed more efficiently. Many optimizations for different instructions are available.
 
 * `floor` instruction applied to a result of a multiplication by a constant or a division. Combines the two operations into one integer division (`idiv`) operation. In the case of multiplication, the constant operand is inverted to become the divisor in the `idiv` operation.
 * `select` instruction with constant condition is replaced by a `set` instruction directly.
+* `packcolor` instruction is replaced with the resulting value when all parameters are constant.
 * `sensor var @this @x` and `sensor var @this @y` are replaced by `set var @thisx` and `set var @thisy` respectively. Data Flow Optimization may then apply [constant propagation](#constant-propagation) to the `@thisx`/`@thisy` built-in constants.
+* `read` and `write` instructions accessing variables in current processor using a constant name are replaced with a `set` instruction accessing the processor variable directly.
+* `readarr` and `writearr` instructions using a constant index are replaced with a `set` instruction accessing the array element directly. If the index happens to fall out of the array's range, a compile-time error is generated. 
 * All set instructions assigning a variable to itself (e.g., `set x x`) are removed.
-* When both operands of the instruction are known to have the same value, some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
+* When both operands of the `op` instruction are known to have the same value, some operations always produce a fixed value. If this is the case, the operation is replaced by a `set` instruction setting the target variable to the fixed value:
   * `equal`, `lessThanEq`, `greaterThanEq`, `strictEqual`: sets the result to `1` (true)
   * `notEqual`, `lessThan`, `greaterThan`: sets the result to `0` (false)
   * `sub`, `xor`: sets the result to `0`
@@ -802,7 +805,7 @@ else
     a = 20; b = 10;
 end;
 
-print(a > 0 ? packcolor(0, b, b, 1) : %[red]);
+col(a > 0 ? packcolor(0, b, b, 1) : %[red]);
 ```
 compiles to:
 
@@ -812,7 +815,7 @@ select .a greaterThan .a .b 10 20
 select .b greaterThan *tmp5 .b 20 10
 packcolor *tmp6 0 .b .b 1
 select *tmp3 greaterThan .a 0 *tmp6 %[red]
-print *tmp3
+draw col *tmp3 0 0 0 0 0
 ```
 
 ### Value propagation

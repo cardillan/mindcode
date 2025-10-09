@@ -33,13 +33,28 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
         storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
     }
 
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        if (instruction.isCompactAccessTarget()) return 1;
+
+        int checkSize = profile.getBoundaryChecks().getSize();
+        return checkSize + 3 + (2 * arrayStore.getSize() - 1);
+    }
+
+    @Override
+    public double getExecutionSteps() {
+        if (instruction.isCompactAccessTarget()) return 1;
+
+        // The last jump in the jump table is eliminated
+        return profile.getBoundaryChecks().getExecutionSteps() + 5 - 1.0 / arrayStore.getSize();
+    }
+
     @Override
     public LogicVariable getElementNameVariable() {
         return arrayElem;
     }
 
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public SideEffects createSideEffects() {
         return switch (accessType) {
             case READ -> createReadSideEffects();
             case WRITE -> createWriteSideEffects();
@@ -55,20 +70,13 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    protected LogicValue transferVariable(AccessType accessType) {
+    protected LogicValue transferVariable() {
         return arrayElem;
     }
 
     @Override
-    public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
+    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
         // No shared jump tables
-    }
-
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        if (instruction.isCompactAccessTarget()) return 1;
-
-        int checkSize = profile.getBoundaryChecks().getSize();
-        return checkSize + 3 + (2 * arrayStore.getSize() - 1);
     }
 
     protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator() {

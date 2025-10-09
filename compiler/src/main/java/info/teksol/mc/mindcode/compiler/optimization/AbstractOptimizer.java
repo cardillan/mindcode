@@ -154,6 +154,10 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
             this.benefit = benefit;
         }
 
+        public AbstractOptimizationAction(AstContext astContext, OptimizationEffect effect) {
+            this(astContext, effect.cost, effect.benefit);
+        }
+
         @Override
         public GenerationGoal goal() {
             return goal;
@@ -180,5 +184,15 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         }
 
         public abstract String toString();
+    }
+
+    protected record OptimizationEffect(int cost, double benefit) {
+        OptimizationEffect(int cost) {
+            this(cost, 0);
+        }
+
+        public OptimizationEffect sum(OptimizationEffect other) {
+            return new OptimizationEffect(this.cost + other.cost, this.benefit + other.benefit);
+        }
     }
 }

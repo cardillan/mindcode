@@ -190,13 +190,13 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     @Override
     public void setupArrayAccessInstruction(ArrayAccessInstruction instruction) {
         switch (instruction.getArray().getArrayStore().getArrayType()) {
-            case EXTERNAL -> instruction.setArrayOrganization(ArrayOrganization.EXTERNAL).setArrayConstruction(ArrayConstruction.REGULAR);
-            case CONSTANT -> instruction.setArrayOrganization(ArrayOrganization.INTERNAL).setArrayConstruction(ArrayConstruction.REGULAR);
+            case EXTERNAL -> instruction.setArrayOrganization(ArrayOrganization.EXTERNAL, ArrayConstruction.REGULAR);
+            case CONSTANT -> instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR);
             default -> {
                 if (getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
-                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL).setArrayConstruction(ArrayConstruction.COMPACT);
+                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.COMPACT);
                 } else {
-                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL).setArrayConstruction(ArrayConstruction.REGULAR);
+                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR);
                 }
             }
         }

@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction.AccessType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
 import info.teksol.mc.profile.RuntimeChecks;
@@ -28,12 +29,14 @@ import java.util.stream.Stream;
 public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected final InstructionProcessor processor;
     protected final CompilerProfile profile;
+    protected final AccessType accessType;
     protected final ArrayAccessInstruction instruction;
     protected final ArrayStore arrayStore;
 
     public AbstractArrayConstructor(ArrayAccessInstruction instruction) {
         this.processor = MindcodeCompiler.getContext().instructionProcessor();
         this.profile = instruction.getAstContext().getCompilerProfile();
+        this.accessType = instruction.getAccessType();
         this.instruction = instruction;
         this.arrayStore = instruction.getArray().getArrayStore();
     }
@@ -62,28 +65,29 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return Stream.of(args).filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList();
     }
 
-    protected LogicValue transferVariable(AccessType accessType) {
+    protected LogicValue transferVariable() {
         return LogicVariable.INVALID;
     }
 
-    public String getJumpTableId(AccessType accessType) {
+    @Override
+    public String getJumpTableId() {
         return "";
     }
 
-    protected void computeSharedJumpTableSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
+    protected void computeSharedJumpTableSize(@Nullable Map<String, Integer> sharedStructures) {
         if (sharedStructures != null) {
-            int size = arrayStore.getSize() * 2 + (profile.isSymbolicLabels() ? 1 : 0);
-            String key = arrayStore.getName() + getJumpTableId(accessType);
+            int size = arrayStore.getSize() * 2 + b(profile.isSymbolicLabels());
+            String key = arrayStore.getName() + getJumpTableId();
             if (!sharedStructures.containsKey(key) || sharedStructures.get(key) < size) {
                 sharedStructures.put(key, size);
             }
         }
     }
 
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator(AccessType accessType) {
+    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator() {
         return switch (accessType) {
-            case READ -> (creator, element) -> element.readValue(creator, (LogicVariable) transferVariable(AccessType.READ));
-            case WRITE -> (creator, element) -> element.setValue(creator, transferVariable(AccessType.WRITE));
+            case READ -> (creator, element) -> element.readValue(creator, (LogicVariable) transferVariable());
+            case WRITE -> (creator, element) -> element.setValue(creator, transferVariable());
         };
     }
 
@@ -168,5 +172,9 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
                     .setSideEffects(SideEffects.resets(arrayElements()));
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         }
+    }
+
+    protected int b(boolean flag) {
+        return flag ? 1 : 0;
     }
 }

@@ -12,9 +12,8 @@ public enum ArrayOrganization {
     NONE        ("none"),
     INTERNAL    ("internal", CompactArrayConstructor::new, RegularArrayConstructor::new),
     INLINED     ("inlined", CompactInlinedArrayConstructor::new, RegularInlinedArrayConstructor::new),
-    SIZE1       ("short", ArraySize1Constructor::new),
-    SIZE2       ("short", CompactArraySize2Or3Constructor::new, RegularArraySize2Or3Constructor::new),
-    SIZE3       ("short", CompactArraySize2Or3Constructor::new, RegularArraySize2Or3Constructor::new),
+    SINGLE      ("single", ArraySingleConstructor::new),
+    SHORT       ("short", CompactShortArrayConstructor::new, RegularShortArrayConstructor::new),
     EXTERNAL    ("external",ExternalArrayConstructor::new),
     ;
 
@@ -54,7 +53,7 @@ public enum ArrayOrganization {
 
     public boolean isInlined() {
         return switch(this) {
-            case INLINED, SIZE1, SIZE2, SIZE3 -> true;
+            case INLINED, SINGLE, SHORT -> true;
             default -> false;
         };
     }

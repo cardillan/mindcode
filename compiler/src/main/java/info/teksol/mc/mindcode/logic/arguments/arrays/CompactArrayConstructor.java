@@ -37,13 +37,25 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
     }
 
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        computeSharedJumpTableSize(sharedStructures);
+        return instruction.isCompactAccessTarget() ? 1 : profile.getBoundaryChecks().getSize() + 4;
+    }
+
+    @Override
+    public double getExecutionSteps() {
+        return instruction.isCompactAccessTarget()
+                ? 1
+                : profile.getBoundaryChecks().getSize() + 6 + b(profile.isSymbolicLabels());
+    }
+
     @Override
     public LogicVariable getElementNameVariable() {
         return arrayElem;
     }
 
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public SideEffects createSideEffects() {
         return switch (accessType) {
             case READ -> createReadSideEffects();
             case WRITE -> createWriteSideEffects();
@@ -72,26 +84,17 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    protected LogicVariable transferVariable(AccessType accessType) {
+    protected LogicVariable transferVariable() {
         return arrayElem;
     }
 
-    public String getJumpTableId(AccessType accessType) {
+    public String getJumpTableId() {
         return arrayStore.getName() + "-e";
     }
 
     @Override
-    public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
-        jumpTables.computeIfAbsent(getJumpTableId(accessType), this::buildJumpTable);
-    }
-
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        computeSharedJumpTableSize(accessType, sharedStructures);
-
-        if (instruction.isCompactAccessTarget()) return 1;
-
-        int checkSize = profile.getBoundaryChecks().getSize();
-        return checkSize + 5 + (arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? 1 : 0);
+    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
+        jumpTables.computeIfAbsent(getJumpTableId(), this::buildJumpTable);
     }
 
     protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator() {
@@ -131,14 +134,13 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
     }
 
     private void expandInstructionSymbolicLabels(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
-        AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
         LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
 
         if (!instruction.isCompactAccessTarget()) {
-            LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
+            LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
             creator.createOp(Operation.MUL, arrayInd, instruction.getIndex(), LogicNumber.TWO);
             generateBoundsCheck(astContext, consumer, arrayInd, 2);
             creator.createCallStackless(address, arrayRet, LogicVariable.INVALID).setSideEffects(createCallSideEffects());
@@ -148,7 +150,6 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
     }
 
     private void expandInstructionDirectAddress(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
-        AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
@@ -156,9 +157,9 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
 
         if (!instruction.isCompactAccessTarget()) {
             LogicVariable temp = creator.nextTemp();
-            LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
+            LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId()).get(1).getMarker());
             LogicLabel marker2 = processor.nextMarker();
-            LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
+            LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
             LogicLabel returnLabel = processor.nextLabel();
 
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);

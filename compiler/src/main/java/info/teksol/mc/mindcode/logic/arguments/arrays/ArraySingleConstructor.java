@@ -12,13 +12,13 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @NullMarked
-public class ArraySize1Constructor extends AbstractArrayConstructor {
-    public ArraySize1Constructor(ArrayAccessInstruction instruction) {
+public class ArraySingleConstructor extends AbstractArrayConstructor {
+    public ArraySingleConstructor(ArrayAccessInstruction instruction) {
         super(instruction);
     }
 
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public SideEffects createSideEffects() {
         return switch (accessType) {
             case READ -> SideEffects.reads(arrayElements());
             case WRITE -> SideEffects.writes(arrayElements());
@@ -26,12 +26,17 @@ public class ArraySize1Constructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         return profile.getBoundaryChecks().getSize() + 1;
     }
 
     @Override
-    public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
+    public double getExecutionSteps() {
+        return profile.getBoundaryChecks().getExecutionSteps() + 1;
+    }
+
+    @Override
+    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
         // No jump tables
     }
 

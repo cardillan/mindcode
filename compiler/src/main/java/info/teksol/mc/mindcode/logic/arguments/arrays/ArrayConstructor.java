@@ -13,22 +13,20 @@ import java.util.function.Consumer;
 @NullMarked
 public interface ArrayConstructor {
 
-    SideEffects createSideEffects(AccessType accessType);
+    SideEffects createSideEffects();
 
-    int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures);
+    int getInstructionSize(@Nullable Map<String, Integer> sharedStructures);
 
-    String getJumpTableId(AccessType accessType);
+    double getExecutionSteps();
 
-    void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables);
+    String getJumpTableId();
+
+    void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables);
 
     void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables);
 
     /// Only for compact array constructors: returns the name of the element variable.
     default LogicVariable getElementNameVariable() {
         throw new UnsupportedOperationException("Not supported for class " + getClass().getName());
-    }
-
-    enum AccessType {
-        READ, WRITE
     }
 }

@@ -299,7 +299,7 @@ class ArrayOptimizerTest {
         @Test
         void inlinesRegularArrays() {
             assertCompilesTo("""
-                            var array[4];
+                            var array[5];
                             param p = 0;
                             
                             ++array[p];
@@ -319,6 +319,9 @@ class ArrayOptimizerTest {
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(MULTILABEL, label(4)),
                     createInstruction(SET, ".array*elem", q(".array*3")),
+                    createInstruction(JUMP, label(0), "always"),
+                    createInstruction(MULTILABEL, label(5)),
+                    createInstruction(SET, ".array*elem", q(".array*4")),
                     createInstruction(LABEL, label(0)),
                     createInstruction(READ, tmp(0), "@this", ".array*elem"),
                     createInstruction(OP, "add", tmp(1), tmp(0), "1"),
@@ -326,7 +329,8 @@ class ArrayOptimizerTest {
                     createInstruction(PRINT, ".array*0"),
                     createInstruction(PRINT, ".array*1"),
                     createInstruction(PRINT, ".array*2"),
-                    createInstruction(PRINT, ".array*3")
+                    createInstruction(PRINT, ".array*3"),
+                    createInstruction(PRINT, ".array*4")
             );
         }
 

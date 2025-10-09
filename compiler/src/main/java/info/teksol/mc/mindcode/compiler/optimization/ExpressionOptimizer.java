@@ -20,15 +20,6 @@ import java.util.Optional;
 
 import static info.teksol.mc.evaluator.ExpressionEvaluator.clamp01;
 
-/// This optimizer improves and streamlines expressions.
-///   - Mul/div + floor optimization:
-///     <br>
-///     `op mul __tmp variable1 constant; op floor variable2 __tmp`<br>
-///     is replaced by
-///     <br>
-///     `op idiv variable2 variable1 (1 / constant)`<br>
-///     where 1 / constant is evaluated here. If the instruction is div instead of mul, the inverse isn't taken.
-///   - All instructions setting the variable to itself (e.g. `set x x`) are removed.
 @NullMarked
 class ExpressionOptimizer extends BaseOptimizer {
 

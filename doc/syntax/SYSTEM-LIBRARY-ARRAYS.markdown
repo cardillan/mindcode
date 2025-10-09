@@ -64,7 +64,7 @@ Sorts the array.
 |------------------------------------------|--------------------:|-------------------:|
 | Five elements in internal arrays         |                 113 |                 74 |
 | Ten elements in internal arrays          |                 253 |                 74 |
-| Twenty elements in internal arrays       |                 533 |                 74 |
+| Twenty elements in internal arrays       |                 282 |                 74 |
 | Five elements in external arrays         |                 113 |                 45 |
 | Ten elements in external arrays          |                 253 |                 45 |
 | Twenty elements in external arrays       |                 533 |                 45 |

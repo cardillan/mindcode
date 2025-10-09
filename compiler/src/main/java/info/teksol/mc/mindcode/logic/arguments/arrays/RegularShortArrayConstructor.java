@@ -5,10 +5,9 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.compiler.optimization.Optimization;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction.AccessType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -16,22 +15,43 @@ import org.jspecify.annotations.Nullable;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 @NullMarked
-public class RegularArraySize2Or3Constructor extends AbstractArrayConstructor {
+public class RegularShortArrayConstructor extends AbstractArrayConstructor {
     private final int arraySize;
     private final boolean useSelects;
 
-    public RegularArraySize2Or3Constructor(ArrayAccessInstruction instruction) {
+    public RegularShortArrayConstructor(ArrayAccessInstruction instruction) {
         super(instruction);
         arraySize = arrayStore.getSize();
-        if (arraySize != 2 && arraySize != 3) throw new MindcodeInternalError("Expected array of size 2 or 3");
-        useSelects = processor.isSupported(Opcode.SELECT)
-                     && profile.getOptimizationLevel(Optimization.ARRAY_OPTIMIZATION) == OptimizationLevel.EXPERIMENTAL;
+        useSelects = processor.isSupported(Opcode.SELECT);
+        int limit = useSelects ? 4 : 3;
+        if (arraySize < 2 || arraySize > limit) throw new MindcodeInternalError("Expected array of size 2 to " + limit);
     }
 
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        if (useSelects) {
+            // If the array is not remote, we save one instruction on read
+            return profile.getBoundaryChecks().getSize() + arraySize - b(!arrayStore.isRemote() && accessType == AccessType.READ);
+        } else {
+            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 4 : 7);
+        }
+    }
+
+    @Override
+    public double getExecutionSteps() {
+        if (useSelects) {
+            // If the array is not remote, we save one instruction on read
+            return profile.getBoundaryChecks().getExecutionSteps() + arraySize - b(!arrayStore.isRemote() && accessType == AccessType.READ);
+        } else {
+            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 2.5 : (3 + 4 + 3) / 3.0);
+        }
+    }
+
+    @Override
+    public SideEffects createSideEffects() {
         return switch (accessType) {
             case READ -> SideEffects.reads(arrayElements());
             case WRITE -> SideEffects.resets(arrayElements());
@@ -39,17 +59,7 @@ public class RegularArraySize2Or3Constructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        if (useSelects) {
-            return profile.getBoundaryChecks().getSize() + arraySize - (accessType == AccessType.READ ? 1 : 0)
-                    + (instruction.getArray().getArrayStore().isRemote() ? 1 : 0);
-        } else {
-            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 4 : 7);
-        }
-    }
-
-    @Override
-    public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
+    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
         // No jump tables
     }
 
@@ -85,31 +95,45 @@ public class RegularArraySize2Or3Constructor extends AbstractArrayConstructor {
         }
     }
 
-    protected void createNameSelect(LocalContextfulInstructionsCreator creator, LogicVariable arrayElem) {
+    private void createSelect(LocalContextfulInstructionsCreator creator, LogicVariable result,
+            Function<ValueStore, LogicValue> valueExtractor) {
         creator.setSubcontextType(AstSubcontextType.BODY, 1.0);
 
-        creator.createSelect(arrayElem, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO,
-                arrayStore.getElements().get(0).getMlogVariableName(),
-                arrayStore.getElements().get(1).getMlogVariableName());
+        if (arraySize == 4) {
+            LogicVariable tmp0 = creator.nextTemp();
+            creator.createSelect(tmp0, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO,
+                    valueExtractor.apply(arrayStore.getElements().get(0)),
+                    valueExtractor.apply(arrayStore.getElements().get(1)));
 
-        if (arraySize == 3) {
-            creator.createSelect(arrayElem, Condition.EQUAL, instruction.getIndex(), LogicNumber.TWO,
-                    arrayStore.getElements().get(2).getMlogVariableName(), arrayElem);
+
+            LogicVariable tmp1 = creator.nextTemp();
+            creator.createSelect(tmp1, Condition.EQUAL, instruction.getIndex(), LogicNumber.TWO,
+                    valueExtractor.apply(arrayStore.getElements().get(2)),
+                    valueExtractor.apply(arrayStore.getElements().get(3)));
+
+            creator.createSelect(result, Condition.LESS_THAN, instruction.getIndex(), LogicNumber.TWO,
+                    tmp0, tmp1);
+        } else {
+            creator.createSelect(result, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO,
+                    valueExtractor.apply(arrayStore.getElements().get(0)),
+                    valueExtractor.apply(arrayStore.getElements().get(1)));
+
+            if (arraySize == 3) {
+                creator.createSelect(result, Condition.EQUAL, instruction.getIndex(), LogicNumber.TWO,
+                        valueExtractor.apply(arrayStore.getElements().get(2)), result);
+            }
         }
+    }
+
+    protected void createNameSelect(LocalContextfulInstructionsCreator creator, LogicVariable arrayElem) {
+        creator.setSubcontextType(AstSubcontextType.BODY, 1.0);
+        createSelect(creator, arrayElem, ValueStore::getMlogVariableName);
     }
 
     private void createReadSelect(LocalContextfulInstructionsCreator creator, ReadArrInstruction rix) {
         creator.setSubcontextType(AstSubcontextType.BODY, 1.0);
         LogicVariable result = rix.getResult();
-
-        creator.createSelect(result, Condition.EQUAL, instruction.getIndex(), LogicNumber.ZERO,
-                arrayStore.getElements().get(0).getValue(creator),
-                arrayStore.getElements().get(1).getValue(creator));
-
-        if (arraySize == 3) {
-            creator.createSelect(result, Condition.EQUAL, instruction.getIndex(), LogicNumber.TWO,
-                    arrayStore.getElements().get(2).getValue(creator), result);
-        }
+        createSelect(creator, result, element -> element.getValue(creator));
     }
 
     private void createWriteSelect(LocalContextfulInstructionsCreator creator, WriteArrInstruction wix) {

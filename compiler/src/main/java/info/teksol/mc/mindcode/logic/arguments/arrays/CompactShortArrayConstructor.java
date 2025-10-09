@@ -6,8 +6,6 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
-import info.teksol.mc.mindcode.compiler.optimization.Optimization;
-import info.teksol.mc.mindcode.compiler.optimization.OptimizationLevel;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -21,21 +19,41 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @NullMarked
-public class CompactArraySize2Or3Constructor extends RegularArraySize2Or3Constructor {
+public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
     private final int arraySize;
     private final boolean useSelects;
     private final LogicVariable arrayElem;
 
-    public CompactArraySize2Or3Constructor(ArrayAccessInstruction instruction) {
+    public CompactShortArrayConstructor(ArrayAccessInstruction instruction) {
         super(instruction);
 
         NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
         String baseName = arrayStore.getName();
         arraySize = arrayStore.getSize();
-        if (arraySize != 2 && arraySize != 3) throw new MindcodeInternalError("Expected array of size 2 or 3");
-        useSelects = processor.isSupported(Opcode.SELECT)
-                     && profile.getOptimizationLevel(Optimization.ARRAY_OPTIMIZATION) == OptimizationLevel.EXPERIMENTAL;
+        useSelects = processor.isSupported(Opcode.SELECT);
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
+
+        int limit = useSelects ? 4 : 3;
+        if (arraySize < 2 || arraySize > limit) throw new MindcodeInternalError("Expected array of size 2 to " + limit);
+    }
+
+    @Override
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        if (useSelects) {
+            // It's always a "read" select list, plus one instruction for actual variable access
+            return profile.getBoundaryChecks().getSize() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+        } else {
+            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 5 : 8);
+        }
+    }
+
+    @Override
+    public double getExecutionSteps() {
+        if (useSelects) {
+            return profile.getBoundaryChecks().getExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+        } else {
+            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 3.5 : (4 + 5 + 4) / 3.0);
+        }
     }
 
     @Override
@@ -44,20 +62,11 @@ public class CompactArraySize2Or3Constructor extends RegularArraySize2Or3Constru
     }
 
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public SideEffects createSideEffects() {
         return switch (accessType) {
             case READ -> SideEffects.of(arrayElements(), List.of(arrayElem), List.of());
             case WRITE -> SideEffects.of(List.of(), List.of(arrayElem), arrayElements());
         };
-    }
-
-    @Override
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        if (useSelects) {
-            return profile.getBoundaryChecks().getSize() + arraySize + 1 - (accessType == AccessType.READ ? 1 : 0);
-        } else {
-            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 5 : 8);
-        }
     }
 
     @Override

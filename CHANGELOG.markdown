@@ -8,11 +8,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed the compiler not rejecting integer and double option values outside the allowed range. 
+* Fixed the compiler not rejecting integer and double compiler option values outside the allowed range. 
 
 ### Added
 
-* Added support for compact arrays.
+* Added support for implementing arrays using [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-counter-tables).
 
 ## 3.8.0 - 2025-09-25
 
@@ -131,7 +131,7 @@ The newly added features are fully functional. There's an unfinished support for
 ### Changed
 
 * The code generation of list iteration loops with symbolic labels has been updated to avoid issues with assigning `null` to `@counter`.   
-* Changed the [Array Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#arrays-of-length-2-and-3) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
+* Changed the [Array Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#array-access-using-a-select-instruction) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
 * Changed the [If Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#select-optimization) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
 * Changed the [Expression Optimization](doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#expression-optimization) to use the new `select` instruction on the `experimetnal` level for target `8.1` or higher.
 * Changed the [Jump Threading optimization](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#jump-threading) to replace the return address of a call with the target of the following unconditional jump on the `experimental` level.

@@ -46,7 +46,7 @@ public class LogicInstructionArrayExpander {
         boolean found = false;
         for (LogicInstruction instruction : program) {
             if (instruction instanceof ArrayAccessInstruction ix) {
-                ix.getArrayConstructor().generateJumpTable(ix.getAccessType(), jumpTables);
+                ix.getArrayConstructor().generateJumpTable(jumpTables);
                 found = true;
             }
         }

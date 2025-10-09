@@ -26,6 +26,10 @@ public enum RuntimeChecks {
         return size;
     }
 
+    public int getExecutionSteps() {
+        return Math.min(size, 2);
+    }
+
     private static final Map<String, RuntimeChecks> VALUE_MAP = createValueMap();
 
     private static Map<String, RuntimeChecks> createValueMap() {

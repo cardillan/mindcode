@@ -14,6 +14,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction.AccessType;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -48,8 +49,24 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         writeRet = LogicVariable.arrayReturn(baseName, "*wret", nameCreator.arrayAccess(baseName, "wret"));
     }
 
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        computeSharedJumpTableSize(sharedStructures);
+        return profile.getBoundaryChecks().getSize() + 4 + b(arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED);
+    }
+
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public double getExecutionSteps() {
+        // There is a possibility that further optimization will eliminate the transfer variable,
+        // saving at least one instruction and execution step. We can't discount the instruction size safely,
+        // but we can at least discount the execution step; this will also cause the regular array to be preferred
+        // over a compact array, if there's enough instruction space left.
+        return profile.getBoundaryChecks().getExecutionSteps() + 6
+               + b(arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED)
+               + b(profile.isSymbolicLabels()) - 0.2;
+    }
+
+    @Override
+    public SideEffects createSideEffects() {
         return switch (accessType) {
             case READ -> createReadSideEffects();
             case WRITE -> createWriteSideEffects();
@@ -73,14 +90,14 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    protected LogicVariable transferVariable(AccessType accessType) {
+    protected LogicVariable transferVariable() {
         return switch (accessType) {
             case READ -> readVal;
             case WRITE -> writeVal;
         };
     }
 
-    public String getJumpTableId(AccessType accessType) {
+    public String getJumpTableId() {
         return switch (accessType) {
             case READ -> arrayStore.getName() + "-r";
             case WRITE -> arrayStore.getName() + "-w";
@@ -88,17 +105,11 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
-        jumpTables.computeIfAbsent(getJumpTableId(accessType),  _ -> buildJumpTable(accessType));
+    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
+        jumpTables.computeIfAbsent(getJumpTableId(),  _ -> buildJumpTable());
     }
 
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
-        computeSharedJumpTableSize(accessType, sharedStructures);
-        int checkSize = profile.getBoundaryChecks().getSize();
-        return checkSize + 4 + (arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? 1 : 0);
-    }
-
-    private List<LogicInstruction> buildJumpTable(AccessType accessType) {
+    private List<LogicInstruction> buildJumpTable() {
         List<LogicInstruction> result = new ArrayList<>();
 
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
@@ -112,14 +123,14 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         if (profile.isSymbolicLabels()) {
             LogicLabel startLabel = processor.nextLabel();
             creator.createLabel(startLabel).setMarker(startLabel);
-            creator.createMultiJump(firstLabel,accessType == AccessType.READ ? readInd : writeInd,LogicNumber.ZERO, marker);
+            creator.createMultiJump(firstLabel, accessType == AccessType.READ ? readInd : writeInd,LogicNumber.ZERO, marker);
         }
 
         Function<ValueStore, ValueStore> arrayElementProcessor = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED
                 ? e -> ((RemoteVariable)e).withProcessor(proc)
                 : e -> e;
         Runnable createExit = () -> creator.createReturn(accessType == AccessType.READ ? readRet : writeRet);
-        generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createArrayAccessCreator(accessType), createExit, false);
+        generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createArrayAccessCreator(), createExit, false);
         return result;
     }
 
@@ -133,13 +144,12 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private void expandInstructionSymbolicLabels(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
-        AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
         boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
         LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
-        LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
+        LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
@@ -163,16 +173,15 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private void expandInstructionDirectAddress(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
-        AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
         boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
         LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
         LogicVariable temp = creator.nextTemp();
-        LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId(accessType)).get(1).getMarker());
+        LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId()).get(1).getMarker());
         LogicLabel marker2 = processor.nextMarker();
-        LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId(accessType)).get(1)).getLabel();
+        LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
         switch (instruction) {

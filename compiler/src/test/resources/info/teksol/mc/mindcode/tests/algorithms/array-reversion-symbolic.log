@@ -1,4 +1,4 @@
-   116 instructions before optimizations.
+   115 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
      5 instructions eliminated by Jump Normalization (6 iterations).
@@ -10,21 +10,21 @@
      1 loops improved by Loop Optimization.
    213 instructions added by Loop Unrolling (8 iterations).
      2 loops unrolled by Loop Unrolling.
-     7 instructions added by Array Optimization (8 iterations).
+     8 instructions added by Array Optimization (8 iterations).
     11 jump tables inlined by Array Optimization.
      9 instructions eliminated by Print Merging.
      3 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 894):
-    Inline compact jump table of array 'array'                   size    -3, benefit       52.5, efficiency   Infinity
-    Inline 'array' write access at line 7:9                      size   +17, benefit       52.5, efficiency      3.088
-    Unroll loop at line 6:5                                      size    +2, benefit      500.0, efficiency    250.000
+Pass 1: speed optimization selection (cost limit 895):
+    Inline compact jump table of array 'array'                   size    -2, benefit       52.5, efficiency   Infinity
+    Inline 'array' write access at line 7:9                      size   +18, benefit       52.5, efficiency      2.917
+    Unroll loop at line 6:5                                      size    +3, benefit      500.0, efficiency    166.667
   * Unroll iteration loop at line 18:5                           size   -39, benefit       69.0, efficiency   Infinity (-29 instructions)
 
-Pass 1: speed optimization selection (cost limit 923):
-  * Inline compact jump table of array 'array'                   size    -3, benefit       52.5, efficiency   Infinity (-4 instructions)
-    Inline 'array' write access at line 7:9                      size   +17, benefit       52.5, efficiency      3.088
-    Unroll loop at line 6:5                                      size    +2, benefit      500.0, efficiency    250.000
+Pass 1: speed optimization selection (cost limit 924):
+  * Inline compact jump table of array 'array'                   size    -2, benefit       52.5, efficiency   Infinity (-3 instructions)
+    Inline 'array' write access at line 7:9                      size   +18, benefit       52.5, efficiency      2.917
+    Unroll loop at line 6:5                                      size    +3, benefit      500.0, efficiency    166.667
 
 Pass 1: speed optimization selection (cost limit 927):
   * Unroll loop at line 6:5                                      size   -15, benefit      500.0, efficiency   Infinity (+195 instructions)
@@ -856,7 +856,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 3 (-1
     94 print .array*7
     95 print .array*8
 
-Modifications by Inline compact jump table of array 'array' (-4 instructions):
+Modifications by Inline compact jump table of array 'array' (-3 instructions):
      0 set :i 0
      1 label *label0
      2 label *label19

@@ -5,7 +5,6 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor;
-import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor.AccessType;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -28,12 +27,20 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
     }
 
     @Override
+    public  ArrayAccessInstruction setArrayOrganization(ArrayOrganization arrayOrganization, ArrayConstruction arrayConstruction) {
+        info.put(InstructionInfo.ARRAY_ORGANIZATION, arrayOrganization);
+        info.put(InstructionInfo.ARRAY_CONSTRUCTION, arrayConstruction);
+        updateInfo(Set.of(InstructionInfo.ARRAY_ORGANIZATION, InstructionInfo.ARRAY_CONSTRUCTION));
+        return this;
+    }
+
+    @Override
     protected void updateInfo(Set<InstructionInfo> types) {
         if (types.contains(InstructionInfo.ARRAY_ORGANIZATION) || types.contains(InstructionInfo.ARRAY_CONSTRUCTION)
                 && !astContext.matches(AstSubcontextType.MOCK)) {
             arrayConstructor = getArrayOrganization().getConstructor(this);
             // Changing array organization alters side effects
-            setSideEffects(arrayConstructor.createSideEffects(getAccessType()));
+            setSideEffects(arrayConstructor.createSideEffects());
         }
     }
 
@@ -62,6 +69,6 @@ public class ReadArrInstruction extends BaseResultInstruction implements ArrayAc
     @Override
     public int getRealSize(@Nullable Map<String, Integer> sharedStructures) {
         assert arrayConstructor != null;
-        return arrayConstructor.getInstructionSize(getAccessType(), sharedStructures);
+        return arrayConstructor.getInstructionSize(sharedStructures);
     }
 }

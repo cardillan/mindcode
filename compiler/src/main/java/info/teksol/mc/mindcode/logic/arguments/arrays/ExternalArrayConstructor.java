@@ -22,23 +22,27 @@ public class ExternalArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public SideEffects createSideEffects(AccessType accessType) {
+    public SideEffects createSideEffects() {
         return SideEffects.NONE;
     }
 
     @Override
-    public int getInstructionSize(AccessType accessType, @Nullable Map<String, Integer> sharedStructures) {
+    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         return profile.getBoundaryChecks().getSize() + 1;
     }
 
     @Override
-    public void generateJumpTable(AccessType accessType, Map<String, List<LogicInstruction>> jumpTables) {
+    public double getExecutionSteps() {
+        return profile.getBoundaryChecks().getExecutionSteps() + 1;
+    }
+
+    @Override
+    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
         // Do nothing
     }
 
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
-        AccessType accessType = instruction.getAccessType();
         AstContext astContext = instruction.getAstContext();
         generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1 );
         switch (instruction) {

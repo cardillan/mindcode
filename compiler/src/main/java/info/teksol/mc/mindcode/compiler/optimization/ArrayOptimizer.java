@@ -2,11 +2,12 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor.AccessType;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction.AccessType;
 import info.teksol.mc.mindcode.logic.instructions.ArrayConstruction;
 import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -33,8 +34,6 @@ class ArrayOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
-        if (!experimentalGlobal()) return false;
-
         try (OptimizationContext.LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 LogicInstruction instruction = iterator.next();
@@ -43,8 +42,11 @@ class ArrayOptimizer extends BaseOptimizer {
                     ArrayOrganization organization = computeArrayOrganization(ix);
                     if (ix.getArrayConstruction() != construction || ix.getArrayOrganization() != organization) {
                         ArrayAccessInstruction copy = instructionProcessor.copy(ix);
-                        copy.setArrayConstruction(construction).setArrayOrganization(organization);
-                        iterator.set(copy);
+                        copy.setArrayOrganization(organization, construction);
+                        if (copy.getRealSize(null) <= ix.getRealSize(null)
+                            && copy.getExecutionSteps() <= ix.getExecutionSteps()) {
+                            iterator.set(copy);
+                        }
                     }
                 }
             }
@@ -64,10 +66,9 @@ class ArrayOptimizer extends BaseOptimizer {
         ArrayOrganization current = ix.getArrayOrganization();
 
         return switch (ix.getArray().getArrayStore().getSize()) {
-            case 1 -> ArrayOrganization.SIZE1;
-            case 2 -> ArrayOrganization.SIZE2;
-            case 3 -> ArrayOrganization.SIZE3;
-            //case 3 -> experimental(ix) && instructionProcessor.isSupported(Opcode.SELECT) ? ArrayOrganization.SIZE3 : current;
+            case 1 -> ArrayOrganization.SINGLE;
+            case 2, 3 -> ArrayOrganization.SHORT;
+            case 4 -> instructionProcessor.isSupported(Opcode.SELECT) ? ArrayOrganization.SHORT : current;
             default -> current;
         };
     }
@@ -81,7 +82,7 @@ class ArrayOptimizer extends BaseOptimizer {
                 .map(ArrayAccessInstruction.class::cast)
                 .toList();
 
-        // Excludes inlined jump tables
+        // Excludes inlined instructions, as these have no shared jump tables
         Map<String, List<ArrayAccessInstruction>> jumpTables = arrayAccesses.stream()
                 .filter(ix -> !ix.getJumpTableId().isEmpty())
                 .collect(Collectors.groupingBy(ArrayAccessInstruction::getJumpTableId, TreeMap::new, Collectors.toList()));
@@ -116,57 +117,36 @@ class ArrayOptimizer extends BaseOptimizer {
     private void findPossibleFullPromotions(List<ArrayAccessInstruction> instructions, List<OptimizationAction> actions,
             int costLimit) {
         ArrayStore arrayStore = instructions.getFirst().getArray().getArrayStore();
-        List<ArrayAccessInstruction> compact = instructions.stream()
+        List<ArrayAccessInstruction> candidates = instructions.stream()
                 .filter(ix -> ix.getArrayConstruction() == ArrayConstruction.COMPACT)
                 .filter(ix -> !ix.isCompactAccessSource() && !ix.isCompactAccessTarget())
                 .toList();
-        List<ArrayAccessInstruction> fixed = instructions.stream()
+        List<ArrayAccessInstruction> compact = instructions.stream()
                 .filter(ix -> ix.getArrayConstruction() == ArrayConstruction.COMPACT)
                 .filter(ix -> ix.isCompactAccessSource() || ix.isCompactAccessTarget())
                 .toList();
         List<ArrayAccessInstruction> regular = instructions.stream().filter(ix -> ix.getArrayConstruction() == ArrayConstruction.REGULAR).toList();
 
         // Only process non-inlined compact representations
-        if (compact.isEmpty()) return;
-
-        boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
+        if (candidates.isEmpty()) return;
 
         // Find how many read and write accesses would get promoted
-        Map<AccessType, List<ArrayAccessInstruction>> byAccessType = compact.stream()
+        Map<AccessType, List<ArrayAccessInstruction>> access = candidates.stream()
                 .collect(Collectors.groupingBy(ArrayAccessInstruction::getAccessType));
 
-        boolean needsReadTable = byAccessType.containsKey(AccessType.READ) && regular.stream().noneMatch(ix -> ix.getAccessType() == AccessType.READ);
-        boolean needsWriteTable = byAccessType.containsKey(AccessType.WRITE) && regular.stream().noneMatch(ix -> ix.getAccessType() == AccessType.WRITE);
+        boolean needsReadTable = access.containsKey(AccessType.READ) && regular.stream().noneMatch(ix -> ix.getAccessType() == AccessType.READ);
+        boolean needsWriteTable = access.containsKey(AccessType.WRITE) && regular.stream().noneMatch(ix -> ix.getAccessType() == AccessType.WRITE);
 
-        int saved = shared ? 0 : 1;
-        int callSize = b(getGlobalProfile().isSymbolicLabels());
-        int droppedCompactTables = fixed.isEmpty() ? 1 : 0;
-        int jumpTableSize = arrayStore.getSize() * 2 + callSize;
-        int cost = (b(needsReadTable) + b(needsWriteTable) - droppedCompactTables) * jumpTableSize - compact.size() * saved;
-        double benefit = instructions.stream().mapToDouble(ix -> ix.getAstContext().totalWeight()).sum() * saved;
+        int jumpTableSize = arrayStore.getSize() * 2 + b(getGlobalProfile().isSymbolicLabels());
+        int jumpTableCost = jumpTableSize * (b(needsReadTable) + b(needsWriteTable) - b(compact.isEmpty()));
 
-        if (cost <= costLimit) {
-            actions.add(new PromoteArrayAction(compact, cost, benefit));
+        OptimizationEffect effect = candidates.stream()
+                .map(this::promotionEffect)
+                .reduce(new OptimizationEffect(jumpTableCost), OptimizationEffect::sum);
+
+        if (effect.cost() <= costLimit) {
+            actions.add(new PromoteArrayAction(candidates, effect));
         }
-    }
-
-    // Computes savings from inlining an instruction (disregarding inlined jump table size)
-    // Is therefore also equal to the number of instruction executions avoided
-    private int inlineSavings(ArrayAccessInstruction instruction) {
-        int n = instruction.getArray().getSize();           // Array size
-
-        // If the array is shared and the instruction is regular, we'll save one instruction
-        int saveFromShared = b(instruction.getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED
-                && instruction.getArrayConstruction() == ArrayConstruction.REGULAR);
-
-        // Can promote compact to regular
-        int saveFromCompact = b(instruction.getArrayConstruction() == ArrayConstruction.COMPACT
-                && !instruction.isCompactAccessSource() && !instruction.isCompactAccessTarget());
-
-        // Savings from inlining
-        // Savings from shared
-        // Savings from promoting compact to regular
-        return 2 + saveFromShared + saveFromCompact;
     }
 
     // Inlines all instructions using the same out-of-line jump table, which is therefore removed
@@ -175,37 +155,25 @@ class ArrayOptimizer extends BaseOptimizer {
         int k = instructions.size();                            // Number of instructions
         int n = instructions.getFirst().getArray().getSize();   // Array size
 
-        // Jump table costs
-        int addedInstructions = k * (2 * n - 1);
         int removedInstructions = 2 * n;
-        int cost = addedInstructions - removedInstructions;
-        double benefit = 0;
 
-        for (ArrayAccessInstruction instruction : instructions) {
-            int savings = inlineSavings(instruction);
-            cost -= savings;
-            // 1/n: we also save the return when accessing the last element of the array
-            benefit += instruction.getAstContext().totalWeight() * (1.0 / n + savings);
-        }
+        OptimizationEffect effect = instructions.stream()
+                .map(this::inliningEffect)
+                .reduce(new OptimizationEffect(-removedInstructions), OptimizationEffect::sum);
 
-        return cost <= costLimit ? new InlineJumpTableAction(instructions, cost, benefit) : null;
+        return effect.cost() <= costLimit ? new InlineJumpTableAction(instructions, effect) : null;
     }
 
     private @Nullable OptimizationAction findPossibleArrayAccessInlining(ArrayAccessInstruction instruction, int costLimit) {
-        int n = instruction.getArray().getSize();   // Array size
-        int savings = inlineSavings(instruction);
-        int cost = 2 * n - 1 - savings;
-        // 1/n: we also save the return when accessing the last element of the array
-        double benefit = instruction.getAstContext().totalWeight() * (1.0 / n + savings);
-
-        return cost <= costLimit ? new InlineArrayAccessAction(instruction, cost, benefit) : null;
+        OptimizationEffect effect = inliningEffect(instruction);
+        return effect.cost() <= costLimit ? new InlineArrayAccessAction(instruction, effect) : null;
     }
 
     private class PromoteArrayAction extends AbstractOptimizationAction {
         private final List<ArrayAccessInstruction> instructions;
 
-        public PromoteArrayAction(List<ArrayAccessInstruction> instructions, int cost, double benefit) {
-            super(instructions.getFirst().getAstContext(), cost, benefit);
+        public PromoteArrayAction(List<ArrayAccessInstruction> instructions, OptimizationEffect effect) {
+            super(instructions.getFirst().getAstContext(), effect);
             this.instructions = instructions;
         }
 
@@ -250,8 +218,8 @@ class ArrayOptimizer extends BaseOptimizer {
     private class InlineJumpTableAction extends AbstractOptimizationAction {
         private final List<ArrayAccessInstruction> instructions;
 
-        public InlineJumpTableAction(List<ArrayAccessInstruction> instructions, int cost, double benefit) {
-            super(instructions.getFirst().getAstContext(), cost, benefit);
+        public InlineJumpTableAction(List<ArrayAccessInstruction> instructions, OptimizationEffect effect) {
+            super(instructions.getFirst().getAstContext(), effect);
             this.instructions = instructions;
         }
 
@@ -292,8 +260,8 @@ class ArrayOptimizer extends BaseOptimizer {
     private class InlineArrayAccessAction extends AbstractOptimizationAction {
         private final ArrayAccessInstruction instruction;
 
-        public InlineArrayAccessAction(ArrayAccessInstruction instruction, int cost, double benefit) {
-            super(instruction.getAstContext(), cost, benefit);
+        public InlineArrayAccessAction(ArrayAccessInstruction instruction, OptimizationEffect effect) {
+            super(instruction.getAstContext(), effect);
             this.instruction = instruction;
         }
 
@@ -321,5 +289,29 @@ class ArrayOptimizer extends BaseOptimizer {
                     instruction.getAccessType().toString().toLowerCase(),
                     astContext.node().sourcePosition().formatForLog());
         }
+    }
+
+    private OptimizationEffect promotionEffect(ArrayAccessInstruction original) {
+        ArrayAccessInstruction optimized = instructionProcessor.copy(original);
+        optimized.setArrayConstruction(ArrayConstruction.REGULAR);
+        return fromComparison(original, optimized);
+    }
+
+    private OptimizationEffect inliningEffect(ArrayAccessInstruction original) {
+        ArrayAccessInstruction optimized = instructionProcessor.copy(original);
+        optimized.setArrayOrganization(ArrayOrganization.INLINED);
+        return fromComparison(original, optimized);
+    }
+
+    private OptimizationEffect fromComparison(ArrayAccessInstruction original, ArrayAccessInstruction optimized) {
+        int originalSize = original.getRealSize(null);
+        double originalSteps = original.getExecutionSteps();
+
+        int optimizedSize = optimized.getRealSize(null);
+        double optimizedSteps = optimized.getExecutionSteps();
+
+        double weight = original.getAstContext().totalWeight();
+
+        return new OptimizationEffect(optimizedSize - originalSize, weight * (originalSteps - optimizedSteps));
     }
 }

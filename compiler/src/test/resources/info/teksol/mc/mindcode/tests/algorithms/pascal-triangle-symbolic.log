@@ -1,62 +1,43 @@
-   112 instructions before optimizations.
+   105 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Single Step Elimination (7 iterations).
-     7 instructions eliminated by Data Flow Optimization (3 passes, 15 iterations).
+     7 instructions eliminated by Data Flow Optimization (3 passes, 13 iterations).
      3 instructions modified by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
-    97 instructions added by Array Optimization (10 iterations).
+   103 instructions added by Array Optimization (8 iterations).
     12 jump tables inlined by Array Optimization.
    150 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 902):
-    Promote compact array 'currentLine'                          size   +19, benefit     1900.0, efficiency    100.000
-    Promote compact array 'previousLine'                         size   +18, benefit     1875.0, efficiency    104.167
-    Inline compact jump table of array 'currentLine'             size   +46, benefit     4640.0, efficiency    100.870
-  * Inline compact jump table of array 'previousLine'            size   +28, benefit     5812.5, efficiency    207.589 (+30 instructions)
-    Inline 'currentLine' write access at line 18:13              size   +16, benefit     1937.5, efficiency    121.094
-    Inline 'currentLine' write access at line 20:9               size   +16, benefit       77.5, efficiency      4.844
-    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'previousLine' read access at line 18:50              size   +16, benefit     1937.5, efficiency    121.094
-    Inline 'previousLine' read access at line 18:50              size   +16, benefit     1937.5, efficiency    121.094
-    Inline 'previousLine' write access at line 25:13             size   +16, benefit     1937.5, efficiency    121.094
+Pass 1: speed optimization selection (cost limit 908):
+    Promote compact array 'currentLine'                          size   +21, benefit      130.0, efficiency      6.190
+    Promote compact array 'previousLine'                         size   +21, benefit      375.0, efficiency     17.857
+    Inline compact jump table of array 'currentLine'             size   +34, benefit     2677.5, efficiency     78.750
+  * Inline compact jump table of array 'previousLine'            size   +34, benefit     3937.5, efficiency    115.809 (+33 instructions)
+    Inline 'currentLine' write access at line 18:13              size   +18, benefit     1312.5, efficiency     72.917
+    Inline 'currentLine' write access at line 20:9               size   +18, benefit       52.5, efficiency      2.917
+    Inline 'currentLine' read access at line 24:13               size   +18, benefit     1312.5, efficiency     72.917
+    Inline 'previousLine' read access at line 18:50              size   +18, benefit     1312.5, efficiency     72.917
+    Inline 'previousLine' read access at line 18:50              size   +18, benefit     1312.5, efficiency     72.917
+    Inline 'previousLine' write access at line 25:13             size   +18, benefit     1312.5, efficiency     72.917
 
-Pass 1: speed optimization selection (cost limit 872):
-    Promote compact array 'currentLine'                          size   +19, benefit     1900.0, efficiency    100.000
-    Promote compact array 'previousLine'                         size   +18, benefit     1875.0, efficiency    104.167
-    Inline compact jump table of array 'currentLine'             size   +46, benefit     4640.0, efficiency    100.870
-  * Inline 'currentLine' write access at line 18:13              size   +16, benefit     1937.5, efficiency    121.094 (+17 instructions)
-    Inline 'currentLine' write access at line 20:9               size   +16, benefit       77.5, efficiency      4.844
-    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1312.5, efficiency     77.206
-
-Pass 1: speed optimization selection (cost limit 855):
-    Promote compact array 'currentLine'                          size   +19, benefit     1900.0, efficiency    100.000
+Pass 1: speed optimization selection (cost limit 875):
+    Promote compact array 'currentLine'                          size   +21, benefit      130.0, efficiency      6.190
   * Promote compact array 'previousLine'                         size   +18, benefit     1875.0, efficiency    104.167 (-3 instructions)
-    Inline compact jump table of array 'currentLine'             size   +30, benefit     2702.5, efficiency     90.083
-    Inline 'currentLine' write access at line 20:9               size   +16, benefit       77.5, efficiency      4.844
-    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1312.5, efficiency     77.206
+    Inline compact jump table of array 'currentLine'             size   +34, benefit     2677.5, efficiency     78.750
+    Inline 'currentLine' write access at line 18:13              size   +18, benefit     1312.5, efficiency     72.917
+    Inline 'currentLine' write access at line 20:9               size   +18, benefit       52.5, efficiency      2.917
+    Inline 'currentLine' read access at line 24:13               size   +18, benefit     1312.5, efficiency     72.917
 
-Pass 1: speed optimization selection (cost limit 858):
-  * Promote compact array 'currentLine'                          size   +19, benefit     1900.0, efficiency    100.000 (+19 instructions)
-    Inline compact jump table of array 'currentLine'             size   +30, benefit     2702.5, efficiency     90.083
-    Inline 'currentLine' write access at line 20:9               size   +16, benefit       77.5, efficiency      4.844
-    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1312.5, efficiency     77.206
+Pass 1: speed optimization selection (cost limit 878):
+    Promote compact array 'currentLine'                          size   +21, benefit      130.0, efficiency      6.190
+  * Inline compact jump table of array 'currentLine'             size   +34, benefit     2677.5, efficiency     78.750 (+33 instructions)
+    Inline 'currentLine' write access at line 18:13              size   +18, benefit     1312.5, efficiency     72.917
+    Inline 'currentLine' write access at line 20:9               size   +18, benefit       52.5, efficiency      2.917
+    Inline 'currentLine' read access at line 24:13               size   +18, benefit     1312.5, efficiency     72.917
 
-Pass 1: speed optimization selection (cost limit 839):
-    Inline compact jump table of array 'currentLine'             size   +14, benefit     2625.0, efficiency    187.500
-  * Inline write jump table of array 'currentLine'               size    -3, benefit       52.5, efficiency   Infinity (-4 instructions)
-    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'currentLine' write access at line 20:9               size   +17, benefit       52.5, efficiency      3.088
-
-Pass 1: speed optimization selection (cost limit 843):
-  * Inline compact jump table of array 'currentLine'             size   +14, benefit     2625.0, efficiency    187.500 (-4 instructions)
-    Inline 'currentLine' read access at line 24:13               size   +17, benefit     1312.5, efficiency     77.206
-    Inline 'currentLine' read access at line 25:13               size   +17, benefit     1312.5, efficiency     77.206
+Pass 1: speed optimization selection (cost limit 845):
+  * Promote compact array 'currentLine'                          size   +19, benefit      650.0, efficiency     34.211 (-2 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  
@@ -68,7 +49,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
     28 set *tmp12 :lineLength
     29 set :c 0
 
-Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-8 instructions):
+Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 instructions):
  
     11 label *label3
     12 jump *label5 greaterThan :j *tmp0
@@ -212,7 +193,7 @@ Modifications by Iterated phase, Loop Optimization, pass 1, iteration 1:
     41 assertequals 1023 :total "Sum of Pascal triangle"
     42 stop
 
-Modifications by Inline compact jump table of array 'previousLine' (+30 instructions):
+Modifications by Inline compact jump table of array 'previousLine' (+33 instructions):
  
     12 jump *label5 greaterThan :j :lineLength
     13 label *label10
@@ -260,17 +241,6 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     29 readarr<internal:compact:src> *tmp14 .currentLine[] :c
     30 op add :total :total *tmp14
 
-Modifications by Inline 'currentLine' write access at line 18:13 (+17 instructions):
- 
-    15 readarr<inlined:compact> *tmp5 .previousLine[] *tmp4
-    16 readarr<inlined:compact> *tmp7 .previousLine[] :j
-    17 op add *tmp8 *tmp5 *tmp7
--    * writearr<internal:compact> *tmp8 .currentLine[] :j
-+   18 writearr<inlined:compact> *tmp8 .currentLine[] :j
-    19 label *label4
-    20 op add :j :j 1
-    21 jump *label10 lessThanEq :j :lineLength
-
 Modifications by Promote compact array 'previousLine' (-3 instructions):
  
     12 jump *label5 greaterThan 1 :lineLength
@@ -281,7 +251,7 @@ Modifications by Promote compact array 'previousLine' (-3 instructions):
 +   15 readarr<inlined:regular> *tmp5 .previousLine[] *tmp4
 +   16 readarr<inlined:regular> *tmp7 .previousLine[] :j
     17 op add *tmp8 *tmp5 *tmp7
-    18 writearr<inlined:compact> *tmp8 .currentLine[] :j
+    18 writearr<internal:compact> *tmp8 .currentLine[] :j
     19 label *label4
  
     29 readarr<internal:compact:src> *tmp14 .currentLine[] :c
@@ -293,36 +263,21 @@ Modifications by Promote compact array 'previousLine' (-3 instructions):
     34 op add :c :c 1
     35 jump *label11 lessThan :c :lineLength
 
-Modifications by Promote compact array 'currentLine' (+19 instructions):
+Modifications by Inline compact jump table of array 'currentLine' (+33 instructions):
  
     15 readarr<inlined:regular> *tmp5 .previousLine[] *tmp4
     16 readarr<inlined:regular> *tmp7 .previousLine[] :j
     17 op add *tmp8 *tmp5 *tmp7
--    * writearr<inlined:compact> *tmp8 .currentLine[] :j
-+   18 writearr<inlined:regular> *tmp8 .currentLine[] :j
+-    * writearr<internal:compact> *tmp8 .currentLine[] :j
++   18 writearr<inlined:compact> *tmp8 .currentLine[] :j
     19 label *label4
     20 op add :j :j 1
     21 jump *label10 lessThanEq :j :lineLength
     22 label *label5
 -    * writearr<internal:compact> 1 .currentLine[] :lineLength
-+   23 writearr<internal:regular> 1 .currentLine[] :lineLength
++   23 writearr<inlined:compact> 1 .currentLine[] :lineLength
     24 op add :lineLength :lineLength 1
     25 set :c 0
-    26 label *label6
-
-Modifications by Inline write jump table of array 'currentLine' (-4 instructions):
- 
-    20 op add :j :j 1
-    21 jump *label10 lessThanEq :j :lineLength
-    22 label *label5
--    * writearr<internal:regular> 1 .currentLine[] :lineLength
-+   23 writearr<inlined:regular> 1 .currentLine[] :lineLength
-    24 op add :lineLength :lineLength 1
-    25 set :c 0
-    26 label *label6
-
-Modifications by Inline compact jump table of array 'currentLine' (-4 instructions):
- 
     26 label *label6
     27 jump *label8 greaterThanEq 0 :lineLength
     28 label *label11
@@ -334,6 +289,23 @@ Modifications by Inline compact jump table of array 'currentLine' (-4 instructio
     32 writearr<inlined:regular> *tmp18 .previousLine[] :c
     33 label *label7
     34 op add :c :c 1
+
+Modifications by Promote compact array 'currentLine' (-2 instructions):
+ 
+    15 readarr<inlined:regular> *tmp5 .previousLine[] *tmp4
+    16 readarr<inlined:regular> *tmp7 .previousLine[] :j
+    17 op add *tmp8 *tmp5 *tmp7
+-    * writearr<inlined:compact> *tmp8 .currentLine[] :j
++   18 writearr<inlined:regular> *tmp8 .currentLine[] :j
+    19 label *label4
+    20 op add :j :j 1
+    21 jump *label10 lessThanEq :j :lineLength
+    22 label *label5
+-    * writearr<inlined:compact> 1 .currentLine[] :lineLength
++   23 writearr<inlined:regular> 1 .currentLine[] :lineLength
+    24 op add :lineLength :lineLength 1
+    25 set :c 0
+    26 label *label6
 
 Modifications by Virtual Instruction Expansion:
  
