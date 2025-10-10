@@ -17,6 +17,9 @@ public interface ArrayStore extends ValueStore {
 
     int getSize();
 
+    /// True when declared remote, even if the actual array type is INTERNAL
+    boolean isDeclaredRemote();
+
     List<ValueStore> getElements();
 
     ArrayStore subarray(SourcePosition sourcePosition, int start, int end);
@@ -44,10 +47,20 @@ public interface ArrayStore extends ValueStore {
     int getStartOffset();
 
     enum ArrayType {
+        /// Residing in the current processor.
+        /// Even arrays declared `remote` are internal within the current module
         INTERNAL,
+
+        /// Constant array elements, no variables involved
         CONSTANT,
+
+        /// Residing in a memory cell or memory bank
         EXTERNAL,
+
+        /// Residing in a remote processor
         REMOTE,
+
+        /// Residing in remote processors, multiplexed
         REMOTE_SHARED,
     }
 }

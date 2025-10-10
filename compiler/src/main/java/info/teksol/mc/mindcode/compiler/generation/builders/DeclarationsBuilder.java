@@ -337,7 +337,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
                 if (structureMembers != null) {
                     int arraySize = getArraySize(modifiers, specification, reportArrayErrors);
-                    InternalArray array = InternalArray.create(nameCreator, identifier, arraySize, true, processor, shared);
+                    InternalArray array = InternalArray.create(nameCreator, identifier, arraySize, true,
+                            true, processor, shared);
                     structureMembers.put(name, array);
                 } else {
                     processArray(modifiers, specification, reportArrayErrors, processor, shared);

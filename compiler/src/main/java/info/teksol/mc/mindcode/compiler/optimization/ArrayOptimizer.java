@@ -2,20 +2,27 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
-import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
+import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction.AccessType;
-import info.teksol.mc.mindcode.logic.instructions.ArrayConstruction;
-import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static info.teksol.mc.mindcode.logic.arguments.LogicKeyword.*;
+
 @NullMarked
 class ArrayOptimizer extends BaseOptimizer {
+    public static final int MIN_LOOKUP_CAPACITY = 3;
+
     private int invocations = 0;
     private int count = 0;
 
@@ -34,6 +41,11 @@ class ArrayOptimizer extends BaseOptimizer {
 
     @Override
     protected boolean optimizeProgram(OptimizationPhase phase) {
+        if (experimentalGlobal() && getGlobalProfile().getBuiltinEvaluation() != BuiltinEvaluation.NONE
+            && getGlobalProfile().getTarget().atLeast(ProcessorVersion.V8A)) {
+            selectLookupArrays();
+        }
+
         try (OptimizationContext.LogicIterator iterator = createIterator()) {
             while (iterator.hasNext()) {
                 LogicInstruction instruction = iterator.next();
@@ -53,6 +65,98 @@ class ArrayOptimizer extends BaseOptimizer {
         }
 
         return false;
+    }
+
+    private int lookupCapacity(LogicKeyword lookupType, Set<String> usedVariables) {
+        boolean full = getGlobalProfile().getBuiltinEvaluation() == BuiltinEvaluation.FULL;
+        Map<Integer, ? extends MindustryContent> lookupMap = Objects.requireNonNull(metadata.getLookupMap(lookupType.getKeyword()));
+        int index = 0;
+        while (index < lookupMap.size()) {
+            MindustryContent content = lookupMap.get(index);
+            if (content == null) break;
+            if (content.name().contains("#")) break;
+            if (!full && !metadata.isStableBuiltin(content.name())) break;
+            if (usedVariables.contains(content.contentName())) break;
+            index++;
+        }
+
+        return index;
+    }
+
+    private Map<LogicKeyword, Integer> inspectAvailableLookups() {
+        // Create a set of all variables
+        Set<String> usedVariables = instructionStream().flatMap(MlogInstruction::typedArgumentsStream)
+                .map(TypedArgument::argument)
+                .filter(LogicVariable.class::isInstance)
+                .map(LogicVariable.class::cast)
+                .map(LogicVariable::toMlog)
+                .collect(Collectors.toSet());
+
+        Map<LogicKeyword, Integer> map = new HashMap<>();
+        for (LogicKeyword l : List.of(BLOCK, UNIT, ITEM, LIQUID, TEAM)) {
+            int capacity = lookupCapacity(l, usedVariables);
+            if (capacity >= MIN_LOOKUP_CAPACITY) {
+                map.put(l, capacity);
+            }
+        }
+        return map;
+    }
+
+    private LogicKeyword findSmallestLookupType(Map<LogicKeyword, Integer> type) {
+        return type.entrySet().stream()
+                .min(Comparator.comparingInt(Map.Entry::getValue))
+                .map(Map.Entry::getKey)
+                .orElseThrow();
+    }
+
+    private void selectLookupArrays() {
+        List<ArrayAccessInstruction> arrayInstructions = instructionStream()
+                .filter(ArrayAccessInstruction.class::isInstance)
+                .map(ArrayAccessInstruction.class::cast)
+                .filter(ix -> ix.getArrayOrganization().supportsLookup() && !ix.getArray().isDeclaredRemote())
+                .toList();
+
+        if (arrayInstructions.isEmpty()) return;
+
+        Map<LogicKeyword, Integer> lookupCapacity = inspectAvailableLookups();
+        if (lookupCapacity.isEmpty()) return;
+
+        Map<String, List<ArrayAccessInstruction>> arrays = arrayInstructions.stream()
+                .collect(Collectors.groupingBy(ix -> ix.getArray().getArrayStore().getName(),
+                        HashMap::new, Collectors.toList()));
+
+        // Remove arrays that have already been assigned a lookup type from both maps
+        for (String arrayName : Set.copyOf(arrays.keySet())) {
+            if (lookupCapacity.remove(arrays.get(arrayName).getFirst().getArrayLookupType()) != null) {
+                arrays.remove(arrayName);
+            }
+        }
+
+        Map<String, Double> arrayWeights = arrays.entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey,
+                e -> e.getValue().stream().mapToDouble(ix -> ix.getAstContext().totalWeight()).sum()));
+
+        while (!lookupCapacity.isEmpty() && !arrays.isEmpty()) {
+            // Starting with the smallest lookup type, try to find arrays that fit
+            LogicKeyword lookupType = findSmallestLookupType(lookupCapacity);
+            int capacity = lookupCapacity.remove(lookupType);
+
+            String selected = arrays.entrySet().stream()
+                    .filter(e -> e.getValue().getFirst().getArray().getArrayStore().getSize() <= capacity)
+                    .max(Comparator.comparingInt(
+                            (Map.Entry<String, List<ArrayAccessInstruction>> e) -> e.getValue().getFirst().getArray().getSize())
+                            .thenComparingDouble(e -> arrayWeights.get(e.getKey())))
+                    .map(Map.Entry::getKey)
+                    .orElse(null);
+
+            if (selected != null) {
+                List<ArrayAccessInstruction> instructions = arrays.remove(selected);
+                for (var ix : instructions) {
+                    replaceInstruction(instructionIndex(ix), instructionProcessor.copy(ix)
+                            .setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
+                            .setArrayLookupType(lookupType));
+                }
+            }
+        }
     }
 
     private ArrayConstruction computeArrayConstruction(ArrayAccessInstruction ix) {
@@ -103,6 +207,7 @@ class ArrayOptimizer extends BaseOptimizer {
 
         jumpTables.values().stream()
                 .flatMap(Collection::stream)
+                .filter(ix -> !ix.getArrayOrganization().isInlined() && ix.getArrayOrganization() != ArrayOrganization.LOOKUP)
                 .map(instruction -> findPossibleArrayAccessInlining(instruction, costLimit))
                 .filter(Objects::nonNull)
                 .forEach(actions::add);
@@ -158,6 +263,7 @@ class ArrayOptimizer extends BaseOptimizer {
         int removedInstructions = 2 * n;
 
         OptimizationEffect effect = instructions.stream()
+                .filter(ix -> !ix.getArrayOrganization().isInlined() && ix.getArrayOrganization() != ArrayOrganization.LOOKUP)
                 .map(this::inliningEffect)
                 .reduce(new OptimizationEffect(-removedInstructions), OptimizationEffect::sum);
 

@@ -14,6 +14,7 @@ public enum ArrayOrganization {
     INLINED     ("inlined", CompactInlinedArrayConstructor::new, RegularInlinedArrayConstructor::new),
     SINGLE      ("single", ArraySingleConstructor::new),
     SHORT       ("short", CompactShortArrayConstructor::new, RegularShortArrayConstructor::new),
+    LOOKUP      ("lookup", LookupArrayConstructor::new),
     EXTERNAL    ("external",ExternalArrayConstructor::new),
     ;
 
@@ -51,9 +52,16 @@ public enum ArrayOrganization {
         return this == INTERNAL;
     }
 
+    public boolean supportsLookup() {
+        return switch(this) {
+            case INTERNAL, INLINED, SINGLE, SHORT, LOOKUP -> true;
+            default -> false;
+        };
+    }
+
     public boolean isInlined() {
         return switch(this) {
-            case INLINED, SINGLE, SHORT -> true;
+            case INLINED, SINGLE, SHORT, LOOKUP -> true;
             default -> false;
         };
     }

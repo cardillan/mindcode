@@ -15,8 +15,8 @@ possibly leading to general (un-inlined) array jump tables being generated for s
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
 | Five elements in an internal array       |                   5 |                  5 |
-| Ten elements in an internal array        |                  10 |                 10 |
-| Twenty elements in an internal array     |                  20 |                 20 |
+| Ten elements in an internal array        |                  10 |                  7 |
+| Twenty elements in an internal array     |                  20 |                  7 |
 | Five elements in an external array       |                   5 |                  4 |
 | Ten elements in an external array        |                  10 |                  4 |
 | Twenty elements in an external array     |                  20 |                  4 |
@@ -30,9 +30,9 @@ Fills the array with a given value.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Five elements in an internal array       |                   6 |                 19 |
-| Ten elements in an internal array        |                  15 |                 19 |
-| Twenty elements in an internal array     |                  30 |                 19 |
+| Five elements in an internal array       |                   6 |                 17 |
+| Ten elements in an internal array        |                  15 |                 17 |
+| Twenty elements in an internal array     |                  30 |                 17 |
 | Five elements in an external array       |                   8 |                  8 |
 | Ten elements in an external array        |                  20 |                  8 |
 | Twenty elements in an external array     |                  40 |                  8 |
@@ -46,9 +46,9 @@ Reverses the values in the array.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Five elements in an internal array       |                  81 |                 50 |
-| Ten elements in an internal array        |                 181 |                 50 |
-| Twenty elements in an internal array     |                 381 |                 50 |
+| Five elements in an internal array       |                  81 |                 46 |
+| Ten elements in an internal array        |                 181 |                 46 |
+| Twenty elements in an internal array     |                 381 |                 46 |
 | Five elements in an external array       |                  81 |                 33 |
 | Ten elements in an external array        |                 181 |                 33 |
 | Twenty elements in an external array     |                 381 |                 33 |
@@ -62,9 +62,9 @@ Sorts the array.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Five elements in internal arrays         |                 113 |                 74 |
-| Ten elements in internal arrays          |                 253 |                 74 |
-| Twenty elements in internal arrays       |                 282 |                 74 |
+| Five elements in internal arrays         |                 113 |                 70 |
+| Ten elements in internal arrays          |                 253 |                 70 |
+| Twenty elements in internal arrays       |                 533 |                 70 |
 | Five elements in external arrays         |                 113 |                 45 |
 | Ten elements in external arrays          |                 253 |                 45 |
 | Twenty elements in external arrays       |                 533 |                 45 |

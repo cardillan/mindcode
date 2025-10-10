@@ -82,7 +82,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
     }
 
     // Global/main
-    private LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog,
+    protected LogicVariable(SourcePosition sourcePosition, ArgumentType argumentType, String name, String mlog,
             boolean isVolatile, boolean noinit, boolean optional) {
         super(argumentType, isVolatile ? ValueMutability.VOLATILE : ValueMutability.MUTABLE);
         this.sourcePosition = sourcePosition;
@@ -184,7 +184,7 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     @Override
     public LogicString getMlogVariableName() {
-        return LogicString.create(sourcePosition, mlog);
+        return LogicString.create(sourcePosition, toMlog());
     }
 
     /// @return true if the parameter is effectively input
@@ -309,11 +309,6 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
 
     public static LogicVariable mlogVariable(String name) {
         return new LogicVariable(EMPTY, MLOG_VARIABLE, name, name, true, true, false);
-    }
-
-    public static LogicVariable arrayElement(AstIdentifier identifier, int index, String mlog, boolean isVolatile) {
-        return new LogicVariable(identifier.sourcePosition(), GLOBAL_VARIABLE,
-                identifier.getName() + "[" + index + "]", mlog, isVolatile, true, false);
     }
 
     public static LogicVariable arrayAccess(String arrayName, String suffix, String mlog) {

@@ -98,6 +98,10 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
         return advanced(instruction.getAstContext());
     }
 
+    protected boolean advancedGlobal() {
+        return level == OptimizationLevel.ADVANCED || level == OptimizationLevel.EXPERIMENTAL;
+    }
+
     protected boolean experimental(AstContext context) {
         OptimizationLevel level = context.getLocalProfile().getOptimizationLevel(optimization);
         return level == OptimizationLevel.EXPERIMENTAL;

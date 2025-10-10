@@ -299,6 +299,7 @@ class ArrayOptimizerTest {
         @Test
         void inlinesRegularArrays() {
             assertCompilesTo("""
+                            #set builtin-evaluation = none;
                             var array[5];
                             param p = 0;
                             
@@ -338,6 +339,7 @@ class ArrayOptimizerTest {
         void inlinesSingleJumpTable() {
             assertCompilesTo("""
                             #set instruction-limit = 42;
+                            #set builtin-evaluation = none;
                             var array[5] = (1, 2, 3, 4, 5);
                             param p = 0;
                             
@@ -397,6 +399,98 @@ class ArrayOptimizerTest {
                     createInstruction(MULTILABEL, label(4)),
                     createInstruction(SET, ".array*r", ".array*4"),
                     createInstruction(RETURN, ".array*rret")
+            );
+        }
+
+        @Test
+        void convertsToLookupArrays() {
+            assertCompilesTo("""
+                            var array[5];
+                            param p = 0;
+                            
+                            ++array[p];
+                            print(array);
+                            """,
+                    createInstruction(SET, "p", "0"),
+                    createInstruction(LOOKUP, "liquid", tmp(2), "p"),
+                    createInstruction(SENSOR, ".array*elem", tmp(2), "@name"),
+                    createInstruction(READ, tmp(0), "@this", ".array*elem"),
+                    createInstruction(OP, "add", tmp(1), tmp(0), "1"),
+                    createInstruction(WRITE, tmp(1), "@this", ".array*elem"),
+                    createInstruction(PRINT, "water"),
+                    createInstruction(PRINT, "slag"),
+                    createInstruction(PRINT, "oil"),
+                    createInstruction(PRINT, "cryofluid"),
+                    createInstruction(PRINT, "neoplasm")
+            );
+        }
+
+        @Test
+        void convertsFourLookupArrays() {
+            assertCompilesTo("""
+                            var a[5], b[5], c[5], d[5];
+                            param p = 0;
+                            
+                            ++a[p];
+                            ++b[p];
+                            ++c[p];
+                            ++d[p];
+                            print(a[0], b[0], c[0], d[0]);
+                            """,
+                    createInstruction(SET, "p", "0"),
+                    createInstruction(LOOKUP, "liquid", tmp(8), "p"),
+                    createInstruction(SENSOR, ".a*elem", tmp(8), "@name"),
+                    createInstruction(READ, tmp(0), "@this", ".a*elem"),
+                    createInstruction(OP, "add", tmp(1), tmp(0), "1"),
+                    createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
+                    createInstruction(LOOKUP, "item", tmp(10), "p"),
+                    createInstruction(SENSOR, ".b*elem", tmp(10), "@name"),
+                    createInstruction(READ, tmp(2), "@this", ".b*elem"),
+                    createInstruction(OP, "add", tmp(3), tmp(2), "1"),
+                    createInstruction(WRITE, tmp(3), "@this", ".b*elem"),
+                    createInstruction(LOOKUP, "unit", tmp(12), "p"),
+                    createInstruction(SENSOR, ".c*elem", tmp(12), "@name"),
+                    createInstruction(READ, tmp(4), "@this", ".c*elem"),
+                    createInstruction(OP, "add", tmp(5), tmp(4), "1"),
+                    createInstruction(WRITE, tmp(5), "@this", ".c*elem"),
+                    createInstruction(LOOKUP, "block", tmp(14), "p"),
+                    createInstruction(SENSOR, ".d*elem", tmp(14), "@name"),
+                    createInstruction(READ, tmp(6), "@this", ".d*elem"),
+                    createInstruction(OP, "add", tmp(7), tmp(6), "1"),
+                    createInstruction(WRITE, tmp(7), "@this", ".d*elem"),
+                    createInstruction(PRINT, "water"),
+                    createInstruction(PRINT, "copper"),
+                    createInstruction(PRINT, "dagger"),
+                    createInstruction(PRINT, "graphite-press")
+            );
+        }
+
+        @Test
+        void detectsLookupNameConflicts() {
+            assertCompilesTo("""
+                            const SIZE = 4;
+                            var a[SIZE];
+                            volatile mlog("crux") a1 = 0;
+                            volatile mlog("oil") a2 = 0;
+                            volatile mlog("lead") a3 = 0;
+                            volatile mlog("mace") a4 = 0;
+                            volatile mlog("multi-press") a5 = 0;
+                            param p = 0;
+                            print(++a[p]);
+                            """,
+                    createInstruction(SET, "crux", "0"),
+                    createInstruction(SET, "oil", "0"),
+                    createInstruction(SET, "lead", "0"),
+                    createInstruction(SET, "mace", "0"),
+                    createInstruction(SET, "multi-press", "0"),
+                    createInstruction(SET, "p", "0"),
+                    createInstruction(SELECT, tmp(2), "equal", "p", "0", q(".a*0"), q(".a*1")),
+                    createInstruction(SELECT, tmp(3), "equal", "p", "2", q(".a*2"), q(".a*3")),
+                    createInstruction(SELECT, ".a*elem", "lessThan", "p", "2", tmp(2), tmp(3)),
+                    createInstruction(READ, tmp(0), "@this", ".a*elem"),
+                    createInstruction(OP, "add", tmp(1), tmp(0), "1"),
+                    createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
+                    createInstruction(PRINT, tmp(1))
             );
         }
     }

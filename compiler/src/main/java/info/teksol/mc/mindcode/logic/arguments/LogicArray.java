@@ -35,6 +35,10 @@ public class LogicArray extends AbstractArgument {
         return array.getSize();
     }
 
+    public boolean isDeclaredRemote() {
+        return array.isDeclaredRemote();
+    }
+
     public static LogicArray create(ArrayStore array) {
         return new LogicArray(array, "[]");
     }

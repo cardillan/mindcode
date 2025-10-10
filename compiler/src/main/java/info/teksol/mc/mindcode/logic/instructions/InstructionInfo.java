@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
+import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import org.jspecify.annotations.NullMarked;
 
@@ -16,6 +17,9 @@ public enum InstructionInfo {
 
     /// Array organization for ReadArr/WriteArr instructions
     ARRAY_ORGANIZATION(ArrayOrganization.NONE),
+
+    /// Type of lookup for lookup arrays
+    ARRAY_LOOKUP_TYPE(LogicKeyword.INVALID),
 
     /// Array construction for ReadArr/WriteArr instructions
     ARRAY_CONSTRUCTION(ArrayConstruction.COMPACT),

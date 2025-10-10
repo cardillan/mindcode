@@ -414,8 +414,8 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     @Override
     public AstMindcodeNode visitVariableDeclaration(VariableDeclarationContext ctx) {
         List<AstVariableModifier> modifiers = ctx.declModifier().stream().map(this::createVariableModifier).toList();
-        List<AstVariableSpecification> variables = ctx.variables.variableSpecification().stream()
-                .map(this::createVariableSpecification).toList();
+        List<AstVariableSpecification> variables = ctx.variables == null ? List.of()
+                : ctx.variables.variableSpecification().stream().map(this::createVariableSpecification).toList();
         return new AstVariablesDeclaration(pos(ctx), findDocComment(ctx.getStart()), modifiers, variables);
     }
 

@@ -174,6 +174,12 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         }
     }
 
+    protected void createElementVariables(LocalContextfulInstructionsCreator creator) {
+        if (!arrayStore.isRemote()) {
+            arrayElements().forEach(creator::addForcedVariable);
+        }
+    }
+
     protected int b(boolean flag) {
         return flag ? 1 : 0;
     }

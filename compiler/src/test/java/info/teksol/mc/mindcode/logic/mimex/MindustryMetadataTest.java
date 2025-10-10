@@ -37,6 +37,7 @@ class MindustryMetadataTest {
         findStableIds(stableIds, metadataList, MindustryMetadata::getUnitMap);
         findStableIds(stableIds, metadataList, MindustryMetadata::getItemMap);
         findStableIds(stableIds, metadataList, MindustryMetadata::getLiquidMap);
+        findStableIds(stableIds, metadataList, MindustryMetadata::getTeamMap);
         findStableValues(stableIds, metadataList);
 
         Assertions.assertFalse(stableIds.isEmpty(), "No stable IDs found");

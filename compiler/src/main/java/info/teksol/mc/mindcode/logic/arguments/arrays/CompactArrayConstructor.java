@@ -120,7 +120,7 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
 
         Runnable createExit = () -> creator.createReturn(arrayRet);
         generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(), createExit, false);
-        arrayElements().forEach(creator::addForcedVariable);
+        createElementVariables(creator);
         return result;
     }
 

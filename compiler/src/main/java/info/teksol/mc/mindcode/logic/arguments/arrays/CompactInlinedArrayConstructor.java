@@ -106,7 +106,7 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
             creator.createLabel(finalLabel);
             creator.popContext();
 
-            arrayElements().forEach(creator::addForcedVariable);
+            createElementVariables(creator);
         }
 
         LocalContextfulInstructionsCreator creator2 = new LocalContextfulInstructionsCreator(processor, instruction.getAstContext(), consumer);

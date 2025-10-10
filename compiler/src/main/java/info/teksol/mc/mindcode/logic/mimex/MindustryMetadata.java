@@ -41,6 +41,7 @@ public class MindustryMetadata {
     private final AtomicReference<@Nullable Map<String, BlockType>> blockMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, Item>> itemMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, Liquid>> liquidMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<String, Team>> teamMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, Unit>> unitMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, UnitCommand>> unitCommandMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<String, LAccess>> lAccessMap = new AtomicReference<>();
@@ -50,12 +51,14 @@ public class MindustryMetadata {
     private final AtomicReference<@Nullable Map<Integer, BlockType>> blockIdMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<Integer, Item>> itemIdMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<Integer, Liquid>> liquidIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Team>> teamIdMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<Integer, Unit>> unitIdMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<Integer, UnitCommand>> unitCommandIdMap = new AtomicReference<>();
 
     private final AtomicReference<@Nullable Map<Integer, BlockType>> blockLogicIdMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<Integer, Item>> itemLogicIdMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<Integer, Liquid>> liquidLogicIdMap = new AtomicReference<>();
+    private final AtomicReference<@Nullable Map<Integer, Team>> teamLogicIdMap = new AtomicReference<>();
     private final AtomicReference<@Nullable Map<Integer, Unit>> unitLogicIdMap = new AtomicReference<>();
 
     private final AtomicReference<@Nullable Map<String, MindustryContent>> allConstants = new AtomicReference<>();
@@ -139,6 +142,10 @@ public class MindustryMetadata {
         return cacheInstance(liquidMap, () -> new SimpleReader<>("mimex-liquids.txt", Liquid::new).createFromResource());
     }
 
+    Map<String, Team> getTeamMap() {
+        return cacheInstance(teamMap, () -> new SimpleReader<>("mimex-teams.txt", Team::new).createFromResource());
+    }
+
     Map<String, Unit> getUnitMap() {
         return cacheInstance(unitMap, () -> new SimpleReader<>("mimex-units.txt", Unit::new).createFromResource());
     }
@@ -180,6 +187,10 @@ public class MindustryMetadata {
         return cacheInstance(liquidIdMap, () -> createIdMap(getLiquidMap()));
     }
 
+    private Map<Integer, Team> getTeamIdMap() {
+        return cacheInstance(teamIdMap, () -> createIdMap(getTeamMap()));
+    }
+
     private Map<Integer, Unit> getUnitIdMap() {
         return cacheInstance(unitIdMap, () -> createIdMap(getUnitMap()));
     }
@@ -205,6 +216,10 @@ public class MindustryMetadata {
 
     private Map<Integer, Liquid> getLiquidLogicIdMap() {
         return cacheInstance(liquidLogicIdMap, () -> createLogicIdMap(getLiquidMap()));
+    }
+
+    private Map<Integer, Team> getTeamLogicIdMap() {
+        return cacheInstance(teamLogicIdMap, () -> createLogicIdMap(getTeamMap()));
     }
 
     private Map<Integer, Unit> getUnitLogicIdMap() {
@@ -350,8 +365,9 @@ public class MindustryMetadata {
     public @Nullable Map<Integer, ? extends MindustryContent> getLookupMap(String type) {
         return switch (type) {
             case "block" -> getBlockLogicIdMap();
-            case "liquid" -> getLiquidLogicIdMap();
             case "item" -> getItemLogicIdMap();
+            case "liquid" -> getLiquidLogicIdMap();
+            case "team" -> getTeamLogicIdMap();
             case "unit" -> getUnitLogicIdMap();
             default -> null;
         };
@@ -454,7 +470,25 @@ public class MindustryMetadata {
         return getLiquidMap().values();
     }
     //</editor-fold>
-    
+
+    //<editor-fold desc="Teams">
+    public int getTeamCount() {
+        return getTeamLogicIdMap().size();
+    }
+
+    public @Nullable Team getTeamByName(String name) {
+        return getTeamMap().get(name);
+    }
+
+    public @Nullable Team getTeamById(int id) {
+        return getTeamIdMap().get(id);
+    }
+
+    public Collection<Team> getAllTeams() {
+        return getTeamMap().values();
+    }
+    //</editor-fold>
+
     //<editor-fold desc="Units">
     public int getUnitCount() {
         return getUnitLogicIdMap().size();

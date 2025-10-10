@@ -236,8 +236,9 @@ public class Variables extends AbstractMessageEmitter {
         } else if (modifiers.containsKey(Modifier.EXTERNAL)) {
             result = getHeapTracker(modifiers).createArray(identifier, size);
         } else {
-            boolean isVolatile = modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE);
-            result = InternalArray.create(nameCreator, identifier, size, isVolatile, processor, shared);
+            boolean declaredRemote = modifiers.containsKey(Modifier.REMOTE);
+            boolean isVolatile = modifiers.containsKey(Modifier.VOLATILE) || declaredRemote;
+            result = InternalArray.create(nameCreator, identifier, size, isVolatile, declaredRemote, processor, shared);
         }
 
         putVariableIfAbsent(identifier.getName(), result);

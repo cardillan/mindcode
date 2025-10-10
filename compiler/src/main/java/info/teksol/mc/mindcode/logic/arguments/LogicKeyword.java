@@ -13,6 +13,13 @@ import java.util.function.Consumer;
 
 @NullMarked
 public class LogicKeyword extends AbstractArgument implements ValueStore {
+    public static final LogicKeyword BLOCK = create("block");
+    public static final LogicKeyword ITEM = create("item");
+    public static final LogicKeyword LIQUID = create("liquid");
+    public static final LogicKeyword TEAM = create("team");
+    public static final LogicKeyword UNIT = create("unit");
+    public static final LogicKeyword INVALID = create("");
+
     private final SourcePosition sourcePosition;
     private final String keyword;
 
@@ -50,8 +57,6 @@ public class LogicKeyword extends AbstractArgument implements ValueStore {
     public static LogicKeyword create(String keyword) {
         return new LogicKeyword(SourcePosition.EMPTY, keyword);
     }
-
-    public static final LogicKeyword INVALID = create("");
 
     @Override
     public boolean isMlogRepresentable() {

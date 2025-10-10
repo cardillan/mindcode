@@ -38,12 +38,16 @@ public final class Target {
         return edition;
     }
 
-    public Target withVersion(ProcessorVersion version) {
-        return new Target(version, edition);
+    public boolean atLeast(ProcessorVersion min) {
+        return version.atLeast(min);
     }
 
-    public Target withEdition(ProcessorEdition edition) {
-        return new Target(version, edition);
+    public boolean atMost(ProcessorVersion max) {
+        return version.atMost(max);
+    }
+
+    public boolean matches(ProcessorVersion min, ProcessorVersion max) {
+        return version.matches(min, max);
     }
 
     /**

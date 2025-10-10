@@ -3,7 +3,6 @@ package info.teksol.mc.mindcode.compiler.optimization;
 import info.teksol.mc.mindcode.compiler.InstructionCounter;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
-import info.teksol.mc.mindcode.logic.instructions.ArrayOrganization;
 import info.teksol.mc.mindcode.logic.instructions.EmptyInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.util.CollectionUtils;
@@ -197,12 +196,18 @@ public class DiffDebugPrinter implements DebugPrinter {
             str.append("    * ");       // Deleted line -- no number
         }
         str.append(instruction.getMlogOpcode());
-        if (instruction instanceof ArrayAccessInstruction aai && aai.getArrayOrganization() != ArrayOrganization.NONE) {
-            str.append('<').append(aai.getArrayOrganization().getName())
-                    .append(':').append(aai.getArrayConstruction().getName());
-            if (aai.isCompactAccessSource()) str.append(":src");
-            if (aai.isCompactAccessTarget()) str.append(":dst");
-            str.append('>');
+        if (instruction instanceof ArrayAccessInstruction aai) {
+            switch (aai.getArrayOrganization()) {
+                case NONE -> {}
+                case LOOKUP -> str.append("<lookup:").append(aai.getArrayLookupType().getKeyword()).append('>');
+                default -> {
+                    str.append('<').append(aai.getArrayOrganization().getName())
+                            .append(':').append(aai.getArrayConstruction().getName());
+                    if (aai.isCompactAccessSource()) str.append(":src");
+                    if (aai.isCompactAccessTarget()) str.append(":dst");
+                    str.append('>');
+                }
+            }
         }
         instruction.getArgs().forEach(arg -> str.append(" ").append(arg.toMlog()));
         if (instruction.getMarker() != LogicLabel.EMPTY) {

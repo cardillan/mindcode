@@ -1,6 +1,7 @@
 package info.teksol.mc.mindcode.logic.instructions;
 
 import info.teksol.mc.mindcode.logic.arguments.LogicArray;
+import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor;
 import org.jspecify.annotations.NullMarked;
@@ -42,6 +43,14 @@ public interface ArrayAccessInstruction extends LogicInstruction {
 
     default ArrayAccessInstruction setArrayConstruction(ArrayConstruction arrayConstruction) {
         return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_CONSTRUCTION, arrayConstruction);
+    }
+
+    default LogicKeyword getArrayLookupType() {
+        return (LogicKeyword) getInfo(InstructionInfo.ARRAY_LOOKUP_TYPE);
+    }
+
+    default ArrayAccessInstruction setArrayLookupType(LogicKeyword arrayLookupType) {
+        return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_LOOKUP_TYPE, arrayLookupType);
     }
 
     ArrayAccessInstruction setArrayOrganization(ArrayOrganization arrayOrganization, ArrayConstruction arrayConstruction);

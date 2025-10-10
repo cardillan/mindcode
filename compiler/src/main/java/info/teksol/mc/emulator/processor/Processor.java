@@ -539,6 +539,14 @@ public class Processor extends AbstractMessageEmitter {
 
                 return true;
             }
+            case "@name" -> {
+                if (inner instanceof MindustryContent content) {
+                    target.setObject(new MindustryString(content.contentName()));
+                } else {
+                    target.setNull();
+                }
+                return true;
+            }
         }
 
         throw new ExecutionException(ERR_UNSUPPORTED_OPCODE, "Instruction not supported by Mindcode emulator.");
