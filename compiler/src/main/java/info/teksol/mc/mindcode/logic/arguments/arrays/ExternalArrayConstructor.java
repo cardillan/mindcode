@@ -37,11 +37,6 @@ public class ExternalArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
-        // Do nothing
-    }
-
-    @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         AstContext astContext = instruction.getAstContext();
         generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1 );

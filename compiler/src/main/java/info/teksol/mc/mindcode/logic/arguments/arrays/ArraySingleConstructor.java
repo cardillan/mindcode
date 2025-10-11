@@ -36,11 +36,6 @@ public class ArraySingleConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
-        // No jump tables
-    }
-
-    @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         AstContext astContext = instruction.getAstContext();
         generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1 );

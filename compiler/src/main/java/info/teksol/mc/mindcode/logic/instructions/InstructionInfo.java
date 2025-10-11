@@ -15,6 +15,9 @@ public enum InstructionInfo {
     /// Instruction side effects
     SIDE_EFFECTS(SideEffects.NONE),
 
+    /// Indirect variables accessed by the instruction
+    INDIRECT_VARIABLES(List.of()),
+
     /// Array organization for ReadArr/WriteArr instructions
     ARRAY_ORGANIZATION(ArrayOrganization.NONE),
 

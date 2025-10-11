@@ -35,6 +35,8 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
         arrayInd = LogicVariable.arrayAccess(baseName, "*ind", nameCreator.arrayAccess(baseName, "ind"));
         arrayRet = LogicVariable.arrayReturn(baseName, "*ret", nameCreator.arrayAccess(baseName, "ret"));
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
+
+        instruction.setIndirectVariables(arrayElements());
     }
 
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
@@ -120,7 +122,6 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
 
         Runnable createExit = () -> creator.createReturn(arrayRet);
         generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(), createExit, false);
-        createElementVariables(creator);
         return result;
     }
 

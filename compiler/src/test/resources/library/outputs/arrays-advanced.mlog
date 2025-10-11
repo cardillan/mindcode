@@ -301,90 +301,81 @@ set :bubblesort.1:v .c*8
 set .c*8 .c*9
 set .c*9 :bubblesort.1:v
 set :bubblesort.1:flag true
-jump 394 equal :bubblesort.1:flag false
+jump 385 equal :bubblesort.1:flag false
 set :bubblesort.1:a .b*9
-op greaterThan *tmp66 .b*9 .b*8
-jump 314 equal *tmp66 false
+jump 313 lessThanEq .b*9 .b*8
 set .b*9 .b*8
 set .b*8 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*9
 set .c*9 .c*8
 set .c*8 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 315 always 0 0
+jump 314 always 0 0
 set :bubblesort.1:a .b*8
-op greaterThan *tmp66 :bubblesort.1:a .b*7
-jump 324 equal *tmp66 false
+jump 322 lessThanEq :bubblesort.1:a .b*7
 set .b*8 .b*7
 set .b*7 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*8
 set .c*8 .c*7
 set .c*7 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 325 always 0 0
+jump 323 always 0 0
 set :bubblesort.1:a .b*7
-op greaterThan *tmp66 :bubblesort.1:a .b*6
-jump 334 equal *tmp66 false
+jump 331 lessThanEq :bubblesort.1:a .b*6
 set .b*7 .b*6
 set .b*6 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*7
 set .c*7 .c*6
 set .c*6 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 335 always 0 0
+jump 332 always 0 0
 set :bubblesort.1:a .b*6
-op greaterThan *tmp66 :bubblesort.1:a .b*5
-jump 344 equal *tmp66 false
+jump 340 lessThanEq :bubblesort.1:a .b*5
 set .b*6 .b*5
 set .b*5 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*6
 set .c*6 .c*5
 set .c*5 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 345 always 0 0
+jump 341 always 0 0
 set :bubblesort.1:a .b*5
-op greaterThan *tmp66 :bubblesort.1:a .b*4
-jump 354 equal *tmp66 false
+jump 349 lessThanEq :bubblesort.1:a .b*4
 set .b*5 .b*4
 set .b*4 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*5
 set .c*5 .c*4
 set .c*4 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 355 always 0 0
+jump 350 always 0 0
 set :bubblesort.1:a .b*4
-op greaterThan *tmp66 :bubblesort.1:a .b*3
-jump 364 equal *tmp66 false
+jump 358 lessThanEq :bubblesort.1:a .b*3
 set .b*4 .b*3
 set .b*3 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*4
 set .c*4 .c*3
 set .c*3 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 365 always 0 0
+jump 359 always 0 0
 set :bubblesort.1:a .b*3
-op greaterThan *tmp66 :bubblesort.1:a .b*2
-jump 374 equal *tmp66 false
+jump 367 lessThanEq :bubblesort.1:a .b*2
 set .b*3 .b*2
 set .b*2 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*3
 set .c*3 .c*2
 set .c*2 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 375 always 0 0
+jump 368 always 0 0
 set :bubblesort.1:a .b*2
-op greaterThan *tmp66 :bubblesort.1:a .b*1
-jump 384 equal *tmp66 false
+jump 376 lessThanEq :bubblesort.1:a .b*1
 set .b*2 .b*1
 set .b*1 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*2
 set .c*2 .c*1
 set .c*1 :bubblesort.1:v.1
 set :bubblesort.1:flag true
-jump 385 always 0 0
+jump 377 always 0 0
 set :bubblesort.1:a .b*1
-op greaterThan *tmp66 :bubblesort.1:a .b*0
-jump 393 equal *tmp66 false
+jump 384 lessThanEq :bubblesort.1:a .b*0
 set .b*1 .b*0
 set .b*0 :bubblesort.1:a
 set :bubblesort.1:v.1 .c*1

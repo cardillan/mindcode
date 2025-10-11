@@ -59,11 +59,6 @@ public class RegularShortArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
-        // No jump tables
-    }
-
-    @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
         generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
 

@@ -38,6 +38,8 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
 
         int limit = useSelects ? 4 : 3;
         if (arraySize < 2 || arraySize > limit) throw new MindcodeInternalError("Expected array of size 2 to " + limit);
+
+        instruction.setIndirectVariables(arrayElements());
     }
 
     @Override
@@ -88,7 +90,6 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
                 expandAccess(creator, element -> creator.createSet(arrayElem, element.getMlogVariableName()));
             }
         }
-        createElementVariables(creator);
 
         LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
         createCompactAccessInstruction(creator, storageProcessor, arrayElem);

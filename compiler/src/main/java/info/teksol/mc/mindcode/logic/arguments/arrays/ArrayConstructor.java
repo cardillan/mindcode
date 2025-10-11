@@ -21,9 +21,11 @@ public interface ArrayConstructor {
 
     String getJumpTableId();
 
-    void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables);
-
     void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables);
+
+    default void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
+        // Most implementations don't need a jump table.
+    }
 
     /// Only for compact array constructors: returns the name of the element variable.
     default LogicVariable getElementNameVariable() {

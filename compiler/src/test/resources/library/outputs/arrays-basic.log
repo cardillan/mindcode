@@ -1,4 +1,4 @@
-   352 instructions before optimizations.
+   353 instructions before optimizations.
     40 instructions eliminated by Temp Variables Elimination (8 iterations).
     12 instructions eliminated by Dead Code Elimination (4 iterations).
     10 instructions eliminated by Jump Normalization (7 iterations).
@@ -18,7 +18,7 @@
      4 instructions eliminated by Print Merging.
    397 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 730):
+Pass 1: speed optimization selection (cost limit 729):
     Promote compact array 'b'                                    size   +40, benefit     1020.0, efficiency     25.500
     Promote compact array 'c'                                    size   +40, benefit      500.0, efficiency     12.500
   * Inline compact jump table of array 'a'                       size    -2, benefit       30.0, efficiency   Infinity (-2 instructions)
@@ -59,7 +59,7 @@ Pass 1: speed optimization selection (cost limit 730):
     Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
 
-Pass 1: speed optimization selection (cost limit 732):
+Pass 1: speed optimization selection (cost limit 731):
     Promote compact array 'b'                                    size   +40, benefit     1020.0, efficiency     25.500
     Promote compact array 'c'                                    size   +40, benefit      500.0, efficiency     12.500
     Inline compact jump table of array 'b'                       size  +286, benefit     5637.5, efficiency     19.712
@@ -98,7 +98,7 @@ Pass 1: speed optimization selection (cost limit 732):
     Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
 
-Pass 1: speed optimization selection (cost limit 687):
+Pass 1: speed optimization selection (cost limit 686):
   * Promote compact array 'a'                                    size    -5, benefit        5.0, efficiency   Infinity (-5 instructions)
     Promote compact array 'b'                                    size   +40, benefit     1020.0, efficiency     25.500
     Promote compact array 'c'                                    size   +40, benefit      500.0, efficiency     12.500
@@ -137,7 +137,7 @@ Pass 1: speed optimization selection (cost limit 687):
     Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
 
-Pass 1: speed optimization selection (cost limit 692):
+Pass 1: speed optimization selection (cost limit 691):
     Promote compact array 'b'                                    size   +40, benefit     1020.0, efficiency     25.500
     Promote compact array 'c'                                    size   +40, benefit      500.0, efficiency     12.500
     Inline compact jump table of array 'b'                       size  +286, benefit     5637.5, efficiency     19.712
@@ -175,7 +175,7 @@ Pass 1: speed optimization selection (cost limit 692):
     Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
 
-Pass 1: speed optimization selection (cost limit 545):
+Pass 1: speed optimization selection (cost limit 544):
     Promote compact array 'b'                                    size   +40, benefit      860.0, efficiency     21.500
     Promote compact array 'c'                                    size   +40, benefit      500.0, efficiency     12.500
   ! Inline compact jump table of array 'b'                       size  +718, benefit     4757.5, efficiency      6.626
@@ -236,7 +236,7 @@ Pass 1: speed optimization selection (cost limit 545):
     Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559
     Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
 
-Pass 1: speed optimization selection (cost limit 398):
+Pass 1: speed optimization selection (cost limit 397):
     Promote compact array 'b'                                    size   +40, benefit      700.0, efficiency     17.500
     Promote compact array 'c'                                    size   +40, benefit      500.0, efficiency     12.500
     Inline compact jump table of array 'c'                       size  +142, benefit     2777.5, efficiency     19.560
@@ -319,7 +319,7 @@ Pass 1: speed optimization selection (cost limit 398):
   * Unroll loop at *arrays:109:9                                 size  +177, benefit    11250.0, efficiency     63.559 (+275 instructions)
     Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
 
-Pass 1: speed optimization selection (cost limit 123):
+Pass 1: speed optimization selection (cost limit 122):
     Promote compact array 'b'                                    size   +40, benefit      540.0, efficiency     13.500
     Promote compact array 'c'                                    size   +40, benefit      340.0, efficiency      8.500
     Inline 'b' write access at line 13:9                         size   +18, benefit       27.5, efficiency      1.528
@@ -456,7 +456,7 @@ Pass 1: speed optimization selection (cost limit 123):
     Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
   ! Unroll loop at *arrays:127:9                                 size  +177, benefit    11250.0, efficiency     63.559
 
-Pass 1: speed optimization selection (cost limit 105):
+Pass 1: speed optimization selection (cost limit 104):
     Promote compact array 'b'                                    size   +39, benefit     1040.0, efficiency     26.667
     Promote compact array 'c'                                    size   +40, benefit      340.0, efficiency      8.500
     Inline 'b' write access at line 13:9                         size   +18, benefit       27.5, efficiency      1.528
@@ -592,7 +592,7 @@ Pass 1: speed optimization selection (cost limit 105):
     Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
   ! Unroll loop at *arrays:127:9                                 size  +159, benefit    11250.0, efficiency     70.755
 
-Pass 1: speed optimization selection (cost limit 27):
+Pass 1: speed optimization selection (cost limit 26):
   * Promote compact array 'b'                                    size   +19, benefit     1042.0, efficiency     54.842 (+19 instructions)
     Promote compact array 'c'                                    size   +20, benefit      342.0, efficiency     17.100
     Inline 'b' write access at line 13:9                         size   +18, benefit        1.1, efficiency      0.061
@@ -745,7 +745,7 @@ Pass 1: speed optimization selection (cost limit 27):
   ! Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
   ! Unroll loop at *arrays:127:9                                 size  +159, benefit    11250.0, efficiency     70.755
 
-Pass 1: speed optimization selection (cost limit 8):
+Pass 1: speed optimization selection (cost limit 7):
   ! Promote compact array 'c'                                    size   +20, benefit      342.0, efficiency     17.100
   ! Inline read jump table of array 'b'                          size  +473, benefit     1377.5, efficiency      2.912
   ! Inline 'b' read access at *arrays:41:9                       size   +17, benefit       47.5, efficiency      2.794
@@ -898,7 +898,7 @@ Pass 1: speed optimization selection (cost limit 8):
   ! Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
   ! Unroll loop at *arrays:127:9                                 size  +160, benefit    11250.0, efficiency     70.313
 
-Pass 2: speed optimization selection (cost limit 534):
+Pass 2: speed optimization selection (cost limit 533):
     Promote compact array 'c'                                    size   +20, benefit      250.0, efficiency     12.500
     Inline read jump table of array 'b'                          size   +14, benefit       95.0, efficiency      6.786
     Inline write jump table of array 'b'                         size   +48, benefit     1282.5, efficiency     26.719
@@ -916,7 +916,7 @@ Pass 2: speed optimization selection (cost limit 534):
     Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143
   * Unroll loop at *arrays:127:9                                 size  +144, benefit    11250.0, efficiency     78.125 (+395 instructions)
 
-Pass 2: speed optimization selection (cost limit 139):
+Pass 2: speed optimization selection (cost limit 138):
     Promote compact array 'c'                                    size   +20, benefit       90.0, efficiency      4.500
     Inline read jump table of array 'b'                          size   +14, benefit       95.0, efficiency      6.786
   ! Inline write jump table of array 'b'                         size  +320, benefit      522.5, efficiency      1.633
@@ -981,8 +981,8 @@ Pass 2: speed optimization selection (cost limit 139):
     Inline 'c' write access at *arrays:135:17                    size   +18, benefit       13.7, efficiency      0.764
   * Unroll loop at *arrays:39:5                                  size   +35, benefit      250.0, efficiency      7.143 (+60 instructions)
 
-Pass 2: speed optimization selection (cost limit 79):
-  * Promote compact array 'c'                                    size   +20, benefit       90.0, efficiency      4.500 (+20 instructions)
+Pass 2: speed optimization selection (cost limit 78):
+  * Promote compact array 'c'                                    size   +20, benefit       90.0, efficiency      4.500 (+19 instructions)
   ! Inline read jump table of array 'b'                          size  +150, benefit       19.0, efficiency      0.127
   ! Inline write jump table of array 'b'                         size  +456, benefit      446.5, efficiency      0.979
     Inline 'b' read access at *arrays:41:9                       size   +17, benefit        1.9, efficiency      0.112

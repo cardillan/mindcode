@@ -17,7 +17,6 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
@@ -44,7 +43,7 @@ public class LogicInstructionLabelResolver {
     }
 
     private List<LogicInstruction> resolve(List<LogicInstruction> program) {
-        return sortVariables(resolveLabels(program, List.of()));
+        return sortVariables(resolveLabels(program, Set.of()));
     }
 
     public List<LogicInstruction> sortVariables(List<LogicInstruction> program) {
@@ -140,12 +139,12 @@ public class LogicInstructionLabelResolver {
         };
     }
 
-    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, List<LogicVariable> initVariables) {
+    public List<LogicInstruction> resolveLabels(List<LogicInstruction> program, Set<LogicVariable> forcedVariables) {
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
                 .createSubcontext(AstContextType.CREATE_VARS, AstSubcontextType.BASIC, 1.0);
 
         if (program.isEmpty()) {
-            return createVariables(astContext, initVariables);
+            return createVariables(astContext, forcedVariables);
         }
 
         // Save the last instruction before it is resolved
@@ -155,20 +154,19 @@ public class LogicInstructionLabelResolver {
         calculateAddresses(program);
         program = resolveAddresses(resolveVirtualInstructions(program));
 
+        Set<LogicVariable> missingVariables = new LinkedHashSet<>(forcedVariables);
+        program.forEach(ix -> missingVariables.addAll(ix.getIndirectVariables()));
+
         boolean addSignature;
-        if (!initVariables.isEmpty()) {
+        if (!missingVariables.isEmpty()) {
             if (!last.endsCodePath()) {
                 program.add(processor.createEnd(last.getAstContext()));
             }
-
-            Set<LogicVariable> missingVariables = new LinkedHashSet<>(initVariables);
-            program.stream()
-                    .mapMulti((LogicInstruction instruction, Consumer<LogicVariable> consumer)
-                            -> instruction.inputOutputArgumentsStream()
-                            .filter(LogicVariable.class::isInstance)
-                            .map(LogicVariable.class::cast)
-                            .forEach(consumer))
-                    .forEach(missingVariables::remove);
+            program.forEach(ix -> ix.getTypedArguments().forEach(a -> {
+                if (a.argument() instanceof LogicVariable variable) {
+                    missingVariables.remove(variable);
+                }
+            }));
 
             program.addAll(createVariables(astContext, missingVariables));
             addSignature = true;

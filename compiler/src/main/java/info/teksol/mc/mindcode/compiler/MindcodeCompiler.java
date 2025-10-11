@@ -85,7 +85,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private final Map<InputFile, AstModule> modules = new HashMap<>();
     private final Map<AstRequire, InputFile> requiredFiles = new HashMap<>();
     private final List<AstRequire> requirements = new ArrayList<>();
-    private final List<LogicVariable> forcedVariables = new ArrayList<>();
+    private final Set<LogicVariable> forcedVariables = new LinkedHashSet<>();
     private final ReturnStack returnStack;
     private final StackTracker stackTracker;
     private @Nullable AstProgram astProgram;
@@ -104,7 +104,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
     private Function<Integer, DebugPrinter> debugPrinterProvider = DiffDebugPrinter::new;
 
     // Run output
-    private Consumer<Processor> emulatorInitializer = emulator -> {};
+    private Consumer<Processor> emulatorInitializer = _ -> {};
     private @Nullable Processor emulator;
     private @Nullable ExecutionException executionException;
     private List<Assertion> assertions = List.of();
@@ -221,7 +221,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
                             inputs.add(new ModulePlacement(inputFile, requirement.getProcessors()));
 
                             for (AstIdentifier processor : requirement.getProcessors()) {
-                                foundProcessors.computeIfAbsent(processor, k -> new ArrayList<>()).add(processor);
+                                foundProcessors.computeIfAbsent(processor, _ -> new ArrayList<>()).add(processor);
                             }
                         }
                     }
@@ -349,7 +349,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         // Timing output
         if (globalProfile.isRun()) {
             long runStart = System.nanoTime();
-            run(instructions);
+            run();
             long runTime = TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - runStart);
             timing("\nPerformance: parsed in %,d ms, compiled in %,d ms, optimized in %,d ms, run in %,d ms.",
                     parseTime, compileTime, optimizeTime, runTime);
@@ -377,10 +377,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
         // All flags are already set as we want them to be
         Processor processor = new Processor(instructionProcessor, messageConsumer, globalProfile.getExecutionFlags(), globalProfile.getTraceLimit());
-        addBlocks(processor, "cell", i -> Memory.createMemoryCell(metadata));
-        addBlocks(processor, "bank", i -> Memory.createMemoryBank(metadata));
+        addBlocks(processor, "cell", _ -> Memory.createMemoryCell(metadata));
+        addBlocks(processor, "bank", _ -> Memory.createMemoryBank(metadata));
         addBlocks(processor, "display", i -> LogicDisplay.createLogicDisplay(metadata, i < 5));
-        addBlocks(processor, "message", i -> MessageBlock.createMessage(metadata));
+        addBlocks(processor, "message", _ -> MessageBlock.createMessage(metadata));
         return processor;
     }
 
@@ -390,7 +390,7 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
     }
 
-    private void run(List<LogicInstruction> instructions) {
+    private void run() {
         List<LogicInstruction> program = executableInstructions.stream()
                 .map(instructionProcessor()::convertCustomInstruction)
                 .toList();
@@ -593,12 +593,16 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         forcedVariables.add(variable);
     }
 
+    public Set<LogicVariable> getForcedVariables() {
+        return forcedVariables;
+    }
+
     public void addDiagnosticData(Object data) {
-        diagnosticData.computeIfAbsent(data.getClass(), k -> new ArrayList<>()).add(data);
+        diagnosticData.computeIfAbsent(data.getClass(), _ -> new ArrayList<>()).add(data);
     }
 
     public <T> void addDiagnosticData(Class<T> dataClass, List<T> data) {
-        diagnosticData.computeIfAbsent(dataClass, k -> new ArrayList<>()).addAll(data);
+        diagnosticData.computeIfAbsent(dataClass, _ -> new ArrayList<>()).addAll(data);
     }
 
     @SuppressWarnings("unchecked")

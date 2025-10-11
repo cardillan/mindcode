@@ -151,9 +151,10 @@ class ArrayOptimizer extends BaseOptimizer {
             if (selected != null) {
                 List<ArrayAccessInstruction> instructions = arrays.remove(selected);
                 for (var ix : instructions) {
-                    replaceInstruction(instructionIndex(ix), instructionProcessor.copy(ix)
+                    ArrayAccessInstruction copy = instructionProcessor.copy(ix)
                             .setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
-                            .setArrayLookupType(lookupType));
+                            .setArrayLookupType(lookupType);
+                    replaceInstruction(instructionIndex(ix), copy);
                 }
             }
         }

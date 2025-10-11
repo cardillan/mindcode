@@ -1,5 +1,6 @@
 package info.teksol.mc.mindcode.compiler.optimization;
 
+import info.teksol.mc.common.InputFiles;
 import info.teksol.mc.messages.ExpectedMessages;
 import info.teksol.mc.messages.MessageConsumer;
 import info.teksol.mc.messages.MessageLevel;
@@ -55,6 +56,7 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         // This method cannot be used to test optimizers that rely on AST context structure, because
         // at this moment the AST context is not built for manually created instructions
         List<MindcodeMessage> messages = new ArrayList<>();
+        new MindcodeCompiler(messages::add, createCompilerProfile(), InputFiles.create());
         List<LogicInstruction> actual = optimizeInstructions(messages::add, instructions);
         assertAll(
                 () -> evaluateResults(expected, actual, messages),
@@ -62,19 +64,8 @@ public abstract class AbstractOptimizerTest<T extends Optimizer> extends Abstrac
         );
     }
 
-    protected void assertOptimizesTo(CompilerProfile profile, List<LogicInstruction> instructions, List<LogicInstruction> expected) {
-        throw new UnsupportedOperationException();
-        //assertOptimizesTo(profile, instructions, expected, expectedMessages());
-    }
-
     protected void assertOptimizesTo(List<LogicInstruction> instructions, List<LogicInstruction> expected) {
         assertOptimizesTo(instructions, expected, expectedMessages());
-    }
-
-    protected void assertDoesNotOptimize(CompilerProfile profile, LogicInstruction... instructions) {
-        throw new UnsupportedOperationException();
-        //List<LogicInstruction> list = List.of(instructions);
-        //assertOptimizesTo(profile, list, list);
     }
 
     protected void assertDoesNotOptimize(LogicInstruction... instructions) {

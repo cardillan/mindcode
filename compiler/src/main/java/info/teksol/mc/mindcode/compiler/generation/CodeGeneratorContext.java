@@ -15,6 +15,8 @@ import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.Set;
+
 @NullMarked
 public interface CodeGeneratorContext extends
         PreprocessorContext,
@@ -34,4 +36,5 @@ public interface CodeGeneratorContext extends
     Variables variables();
 
     void addForcedVariable(LogicVariable variable);
+    Set<LogicVariable> getForcedVariables();
 }

@@ -108,6 +108,19 @@ public interface LogicInstruction extends MlogInstruction {
     default LogicInstruction setSideEffects(SideEffects sideEffects) {
         return setInfo(InstructionInfo.SIDE_EFFECTS, sideEffects);
     }
+    
+    @SuppressWarnings("unchecked")
+    default List<LogicVariable> getIndirectVariables() {
+        return (List<LogicVariable>) getInfo(InstructionInfo.INDIRECT_VARIABLES);
+    }
+
+    default LogicInstruction setIndirectVariables(List<LogicVariable> indirectVariables) {
+        return setInfo(InstructionInfo.INDIRECT_VARIABLES, indirectVariables);
+    }
+
+    default LogicInstruction resetIndirectVariables() {
+        return resetInfo(InstructionInfo.INDIRECT_VARIABLES);
+    }
 
     default boolean isTargetGuard() {
         return (boolean) getInfo(InstructionInfo.TARGET_GUARD);

@@ -31,6 +31,8 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
         String baseName = arrayStore.getName();
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
         storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
+
+        instruction.setIndirectVariables(arrayElements());
     }
 
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
@@ -74,11 +76,6 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
         return arrayElem;
     }
 
-    @Override
-    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
-        // No shared jump tables
-    }
-
     protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator() {
         return (creator, element) -> creator.createSet(arrayElem, element.getMlogVariableName());
     }
@@ -105,8 +102,6 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
                     () -> creator.createJumpUnconditional(finalLabel), true);
             creator.createLabel(finalLabel);
             creator.popContext();
-
-            createElementVariables(creator);
         }
 
         LocalContextfulInstructionsCreator creator2 = new LocalContextfulInstructionsCreator(processor, instruction.getAstContext(), consumer);

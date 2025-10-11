@@ -1,4 +1,4 @@
-   352 instructions before optimizations.
+   353 instructions before optimizations.
     40 instructions eliminated by Temp Variables Elimination (6 iterations).
     12 instructions eliminated by Dead Code Elimination (4 iterations).
     18 instructions eliminated by Jump Normalization (5 iterations).
@@ -17,7 +17,7 @@
      4 instructions eliminated by Print Merging.
    395 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 807):
+Pass 1: speed optimization selection (cost limit 806):
   * Unroll loop at *arrays:23:5                                  size    -1, benefit      250.0, efficiency   Infinity (+9 instructions)
     Unroll loop at line 12:5                                     size   +20, benefit      500.0, efficiency     25.000
     Unroll loop at *arrays:39:5                                  size   +29, benefit      250.0, efficiency      8.621
@@ -26,7 +26,7 @@ Pass 1: speed optimization selection (cost limit 807):
     Unroll loop at *arrays:109:9                                 size  +157, benefit    11250.0, efficiency     71.656
     Unroll loop at *arrays:127:9                                 size  +157, benefit    11250.0, efficiency     71.656
 
-Pass 1: speed optimization selection (cost limit 798):
+Pass 1: speed optimization selection (cost limit 797):
     Unroll loop at line 12:5                                     size   +20, benefit      500.0, efficiency     25.000
     Unroll loop at *arrays:39:5                                  size   +29, benefit      250.0, efficiency      8.621
   * Unroll loop at *arrays:63:9                                  size   +97, benefit    11250.0, efficiency    115.979 (+123 instructions)
@@ -34,29 +34,29 @@ Pass 1: speed optimization selection (cost limit 798):
     Unroll loop at *arrays:109:9                                 size  +157, benefit    11250.0, efficiency     71.656
     Unroll loop at *arrays:127:9                                 size  +157, benefit    11250.0, efficiency     71.656
 
-Pass 1: speed optimization selection (cost limit 675):
+Pass 1: speed optimization selection (cost limit 674):
     Unroll loop at line 12:5                                     size   +20, benefit      500.0, efficiency     25.000
     Unroll loop at *arrays:39:5                                  size   +29, benefit      250.0, efficiency      8.621
   * Unroll loop at *arrays:78:9                                  size   +97, benefit    11250.0, efficiency    115.979 (+123 instructions)
     Unroll loop at *arrays:109:9                                 size  +157, benefit    11250.0, efficiency     71.656
     Unroll loop at *arrays:127:9                                 size  +157, benefit    11250.0, efficiency     71.656
 
-Pass 1: speed optimization selection (cost limit 552):
+Pass 1: speed optimization selection (cost limit 551):
     Unroll loop at line 12:5                                     size   +20, benefit      500.0, efficiency     25.000
     Unroll loop at *arrays:39:5                                  size   +29, benefit      250.0, efficiency      8.621
   * Unroll loop at *arrays:109:9                                 size  +157, benefit    11250.0, efficiency     71.656 (+219 instructions)
     Unroll loop at *arrays:127:9                                 size  +157, benefit    11250.0, efficiency     71.656
 
-Pass 1: speed optimization selection (cost limit 333):
+Pass 1: speed optimization selection (cost limit 332):
     Unroll loop at line 12:5                                     size   +20, benefit      500.0, efficiency     25.000
     Unroll loop at *arrays:39:5                                  size   +29, benefit      250.0, efficiency      8.621
   * Unroll loop at *arrays:127:9                                 size  +157, benefit    11250.0, efficiency     71.656 (+219 instructions)
 
-Pass 1: speed optimization selection (cost limit 114):
+Pass 1: speed optimization selection (cost limit 113):
   * Unroll loop at line 12:5                                     size   +20, benefit      500.0, efficiency     25.000 (+60 instructions)
     Unroll loop at *arrays:39:5                                  size   +29, benefit      250.0, efficiency      8.621
 
-Pass 1: speed optimization selection (cost limit 54):
+Pass 1: speed optimization selection (cost limit 53):
   * Unroll loop at *arrays:39:5                                  size   +29, benefit      250.0, efficiency      8.621 (+44 instructions)
 
 Final code before resolving virtual instructions:

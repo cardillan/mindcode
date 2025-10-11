@@ -29,6 +29,8 @@ public class LookupArrayConstructor extends AbstractArrayConstructor {
         NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
         String baseName = arrayStore.getName();
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
+
+        instruction.setIndirectVariables(arrayElements());
     }
 
     @Override
@@ -39,11 +41,6 @@ public class LookupArrayConstructor extends AbstractArrayConstructor {
     @Override
     public double getExecutionSteps() {
         return profile.getBoundaryChecks().getExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : 3);
-    }
-
-    @Override
-    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
-        // No jump tables
     }
 
     @Override
@@ -86,7 +83,5 @@ public class LookupArrayConstructor extends AbstractArrayConstructor {
         for (int i = 0; i < elements.size(); i++) {
             ((LogicArrayElement)elements.get(i)).setElementName(lookupMap.get(i).contentName());
         }
-
-        createElementVariables(creator);
     }
 }

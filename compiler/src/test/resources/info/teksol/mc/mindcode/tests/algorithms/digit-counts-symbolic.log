@@ -1,4 +1,4 @@
-    98 instructions before optimizations.
+    99 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Optimization (6 iterations).
@@ -11,13 +11,13 @@
      2 loops unrolled by Loop Unrolling.
      2 instructions eliminated by Array Optimization (6 iterations).
      8 instructions eliminated by Print Merging.
-    37 instructions after optimizations.
+    38 instructions after optimizations.
 
-Pass 1: speed optimization selection (cost limit 944):
+Pass 1: speed optimization selection (cost limit 943):
   * Unroll iteration loop at line 7:5                            size   -49, benefit       49.0, efficiency   Infinity (-20 instructions)
     Unroll loop at line 25:5                                     size   +19, benefit      450.0, efficiency     23.684
 
-Pass 1: speed optimization selection (cost limit 964):
+Pass 1: speed optimization selection (cost limit 963):
   * Unroll loop at line 25:5                                     size   +19, benefit      450.0, efficiency     23.684 (+37 instructions)
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):

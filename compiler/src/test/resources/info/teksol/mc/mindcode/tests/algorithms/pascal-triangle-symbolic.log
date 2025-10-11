@@ -1,4 +1,4 @@
-   105 instructions before optimizations.
+   109 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Single Step Elimination (7 iterations).
@@ -6,7 +6,7 @@
      3 instructions modified by Loop Optimization (4 iterations).
      3 loops improved by Loop Optimization.
      6 instructions eliminated by Array Optimization (4 iterations).
-    43 instructions after optimizations.
+    47 instructions after optimizations.
 
 Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructions):
  

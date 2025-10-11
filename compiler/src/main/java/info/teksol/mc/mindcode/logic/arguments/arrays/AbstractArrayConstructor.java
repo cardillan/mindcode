@@ -39,6 +39,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         this.accessType = instruction.getAccessType();
         this.instruction = instruction;
         this.arrayStore = instruction.getArray().getArrayStore();
+
+        instruction.resetIndirectVariables();
     }
 
     protected List<LogicVariable> arrayElements() {
@@ -167,16 +169,14 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
             LogicVariable arrayElem) {
         switch (instruction) {
             case ReadArrInstruction rix -> creator.createRead(rix.getResult(), storageProcessor, arrayElem)
-                    .setSideEffects(SideEffects.reads(arrayElements()));
-            case WriteArrInstruction wix -> creator.createWrite(wix.getValue(), storageProcessor, arrayElem)
-                    .setSideEffects(SideEffects.resets(arrayElements()));
-            default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
-        }
-    }
+                    .setSideEffects(SideEffects.reads(arrayElements()))
+                    .setIndirectVariables(arrayElements());
 
-    protected void createElementVariables(LocalContextfulInstructionsCreator creator) {
-        if (!arrayStore.isRemote()) {
-            arrayElements().forEach(creator::addForcedVariable);
+            case WriteArrInstruction wix -> creator.createWrite(wix.getValue(), storageProcessor, arrayElem)
+                    .setSideEffects(SideEffects.resets(arrayElements()))
+                    .setIndirectVariables(arrayElements());
+
+            default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         }
     }
 
