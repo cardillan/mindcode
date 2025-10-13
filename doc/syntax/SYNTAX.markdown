@@ -277,7 +277,57 @@ Mindustry Logic provides variables and constants that start with `@`. They can b
 Built-in variables and constants can be used as-is in Mindcode, e.g., `@time` or `@titanium-conveyor`. The leading `@` is always present.
 
 > [!TIP]
-> Mindcode has a list of built-in variables and handles some of them specifically, but any unknown built-in values in the source code are compiled in as-is. When Mindustry Logic introduces a new built-in variable, it can be used right away without waiting for a new version of Mindcode to be released, as long as the new built-in variable doesn't need some special handling by the compiler.    
+> Mindcode has a list of built-in variables and handles some of them specifically, but any unknown built-in values in the source code are compiled in as-is. When Mindustry Logic introduces a new built-in variable, it can be used right away without waiting for a new version of Mindcode to be released, unless the new built-in variable needs some special handling by the compiler.
+
+Some built-in variables represent a constant numerical value, such as `@pi` or `@blockCount`. The actual numerical value is either _stable_, meaning it is the same in all released versions of Mindustry since the first one in which it appeared (e.g., `@pi`), or _unstable_, meaning the value depends on the actual version of Mindustry used (e.g., `@blockCount`).
+
+When the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `compatible` (which is the default value), Mindcode evaluates expressions involving stable numerical built-in variables at compile time, including string conversion for printing. However, when the original value is not affected by expression evaluation, it is written using the symbolic name into mlog:
+
+```Mindcode
+print(@pi);             // No evaluation
+printflush(message1);
+print(2 * @pi);         // Numeric evaluation
+printflush(message2);
+println(@pi);           // Conversion to string
+printflush(message3);
+```
+
+compiles to
+
+```mlog
+print @pi
+printflush message1
+print 6.2831854820251465
+printflush message2
+print "3.1415927410125732\n"
+printflush message3
+```
+
+The unstable built-in variables are compile-time evaluated when the `builtin-evaluation` option is set to `full`. This setting is useful when the program is meant to be only run in the version of Mindustry selected by the `target` option, and not on later versions.
+
+All other built-in constants and variables (that is, those that aren't numerical constants) are compiled into mlog code as is, although Mindcode emits a warning when an unknown built-in variable is encountered as protection against mistyped identifiers. Valid built-in variables unknown to Mindcode (provided by a mod, for example) can be declared using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-built-in-variables) to eliminate the warning.
+
+> [!NOTE]
+> Assignments to built-in variables aren't supported.
+
+### Selected built-in variables
+
+The most common built-in variables are:
+
+* `@counter`: address of the next instruction to be executed
+* `@this`, `@thisx`, `@thisy`: processor executing current code and its coordinates
+* `@mapw`, `@maph`: dimensions of the map
+* `@time`, `@tick`, `@second`, `@minute`: current game time expressed in milliseconds, ticks, seconds, or minutes (all values are fractional).
+* `@links`: number of blocks linked to the processor
+* `@ipt`: instructions per tick executed by this processor (not affected by overdrive projector/dome boost)
+* `@unit`: currently bound unit
+* `@unitCount`, `@itemCount`, `@liquidCount`, `@blockCount`: number of elements of the respective type; can be used with the `lookup` function.
+
+> [!TIP]
+> `@unit` is a special variable which always contains the unit currently controlled by the processor. The only way to assign a new unit to this variable is to use the `ubind()` function. All unit control commands are sent to this unit. See also [Using units](MINDUSTRY-TIPS-N-TRICKS.markdown#using-units).
+
+> [!TIP]
+> The value of time variables (`@tick`, `@time` and so on) may actually decrease, compared to a previously obtained value, when loading a game from a save file. Take it into account, especially when programming loops that should terminate at some predetermined time.
 
 ## Mlog keywords
 

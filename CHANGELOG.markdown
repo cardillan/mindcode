@@ -15,6 +15,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added support for implementing arrays using [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-counter-tables).
 * Added support for [lookup arrays](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays).
 
+### Changed
+
+* The `mlog` modifier accepts multiple expressions, allowing to specify names for individual array elements.
+* The `mlog` modifier also accepts one of the lookup keywords (`:block`, `:unit`, `:item`, `:liquid` or `:team`) in array declarations, allowing to specify the lookup type used by the array.
+* **Breaking**: specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
+* The `cached` and `noinit cached` modifiers can be used with variables declared `remote`, with the same effect as in case of variables declared `external`.  
+
+### Deprecated
+
+* Using the `remote` modifier to mark functions and variables to be accessible remotely is deprecated. Use the `export` keyword instead.
+* Using parameters with the [`external`](doc/syntax/SYNTAX-1-VARIABLES.markdown#external-variables) or [`remote` modifiers](doc/syntax/SYNTAX-1-VARIABLES.markdown#remote-variables) without parentheses is deprecated.
+
+### Removed
+
+* The `loop` keyword, deprecated earlier and optional in the `do while` loop syntax, has been removed.
+
 ## 3.8.0 - 2025-09-25
 
 ### Fixed
@@ -168,7 +184,7 @@ The newly added features are fully functional. There's an unfinished support for
 ### Added
 
 * Added [mlog blocks](/doc/syntax/SYNTAX-EXTENSIONS.markdown#mlog-blocks) for embedding complex mlog logic into Mindcode sources.
-* Added a [storage specification clause](/doc/syntax/REMOTE-CALLS.markdown#remote-variables-with-storage-specification) to remote variables.
+* Added a [storage specification clause](/doc/syntax/SYNTAX-1-VARIABLES.markdown#remote-variables) to remote variables.
 * Added an [mlog clause](/doc/syntax/SYNTAX-1-VARIABLES.markdown#regular-variables) to regular variables, allowing to specify an mlog name for the variable to use.
 
 ### Changed
@@ -242,13 +258,13 @@ The newly added features are fully functional. There's an unfinished support for
 
 ### Added
 
-* **Breaking:** added new [`guarded` keyword](/doc/syntax/SYNTAX-1-VARIABLES.markdown#guard-code-for-linked-variables). The keyword is a variable declaration modifier that ensures the generation of the guard code for linked variables.
+* **Breaking:** added new [`guarded` keyword](/doc/syntax/SYNTAX-1-VARIABLES.markdown#guarded-modifier). The keyword is a variable declaration modifier that ensures the generation of the guard code for linked variables.
 * Added support for the new `op logn` Mindustry BE instruction to the compiler and processor emulator.
 * Added the `logn()` function to the `math` system library. This function corresponds to the Mindustry Logic 8 instruction `op logn`, and when target `8` is selected, the instruction is used instead of the library implementation.
 * Added the [`%%` (positive modulo) operator](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#multiplicative-operators) to the compiler and processor emulator. When target `8` is selected, the native Mindustry Logic instruction is used; for lower targets, the operation is emulated by a sequence of three instructions.
 * Added the [`>>>` (unsigned right shift) operator](/doc/syntax/SYNTAX-2-EXPRESSIONS.markdown#shift-operators) to the compiler and processor emulator. Only available for target `8` or higher.
 * Added the ability to declare new keywords, built-in variables, and linked block names through the [`#declare` directive](/doc/syntax/SYNTAX-EXTENSIONS.markdown).
-* Added support for [constant arrays](/doc/syntax/SYNTAX-1-VARIABLES.markdown#internal-arrays-1). Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.
+* Added support for [constant arrays](/doc/syntax/SYNTAX-1-VARIABLES.markdown#constant-arrays). Elements of a constant array aren't stored in processor variables but are used directly in the generated mlog program.
 * Added the [`scaleDisplay` function](/doc/syntax/SYSTEM-LIBRARY-GRAPHICS.markdown#scaledisplay) to the `graphics` system library. The function compensates for rounding errors in Mindustry Logic `draw scale` instruction. 
 * Added the [`noControlWithin` function](/doc/syntax/SYSTEM-LIBRARY-UNITS.markdown#nocontrolwithin) to the `units` system library. The function determines whether the current unit lies within a given radius without taking control of the unit.
 
@@ -490,7 +506,7 @@ The newly added features are fully functional. There's an unfinished support for
 
 * **Breaking:** new keywords were added to the language: `descending`, `module` and `remote`. Code that uses any of these keywords as a function or variable name will not compile, and the variable or function will have to be renamed.
 * All reads from and writes to variables declared `volatile` are preserved now. Volatile variables can be accessed from a remote processor safely.
-* Prefixes for local variables are created from the function name by default. Use [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes.
+* Prefixes for local variables are created from the function name by default. Use the [function-prefix](doc/syntax/SYNTAX-5-OTHER.markdown#option-function-prefix) option or command-line argument to generate shorter prefixes.
 * Changed the `sort-variables` option to use `draw triangle` instructions to create variables in a defined order.
 
 ### Deprecated

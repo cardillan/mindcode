@@ -83,7 +83,7 @@ public class AstFunctionDeclaration extends AstDeclaration {
     }
 
     public boolean isRemote() {
-        return callType == CallType.REMOTE;
+        return callType == CallType.EXPORT || callType == CallType.REMOTE;
     }
 
     public boolean isVarargs() {

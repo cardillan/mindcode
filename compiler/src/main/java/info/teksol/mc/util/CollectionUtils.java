@@ -3,16 +3,29 @@ package info.teksol.mc.util;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 @NullMarked
 public class CollectionUtils {
     private static final Object NULL = new Object();
+
+    @SafeVarargs
+    public static <T extends @Nullable Object> boolean containsAny(Set<? extends T> set, T... values) {
+        for (T value : values) {
+            if (set.contains(value)) return true;
+        }
+        return false;
+    }
+
+    @SafeVarargs
+    public static <T extends @Nullable Object> boolean containsAnyKey(Map<? extends T, ?> set, T... values) {
+        for (T value : values) {
+            if (set.containsKey(value)) return true;
+        }
+        return false;
+    }
 
     @SafeVarargs
     public static <T extends @Nullable Object> Predicate<T> in(T... values) {

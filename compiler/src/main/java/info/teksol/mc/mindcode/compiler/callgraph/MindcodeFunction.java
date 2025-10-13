@@ -480,7 +480,7 @@ public class MindcodeFunction {
         NameCreator nameCreator = assembler.nameCreator();
         return new RemoteVariable(parameter.sourcePosition(), processor, parameter.getName(),
                 nameCreator.remoteParameter(this, parameter),
-                assembler.nextTemp(), parameter.isInput(), parameter.isOutput());
+                assembler.nextTemp(), parameter.isInput(), parameter.isOutput(), false);
     }
 
     @Override

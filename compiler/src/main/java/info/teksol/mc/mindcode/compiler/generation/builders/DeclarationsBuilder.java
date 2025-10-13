@@ -1,9 +1,9 @@
 package info.teksol.mc.mindcode.compiler.generation.builders;
 
-import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.evaluator.LogicReadable;
 import info.teksol.mc.generated.ast.visitors.*;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
@@ -17,12 +17,13 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.opcodes.KeywordCategory;
 import info.teksol.mc.profile.SyntacticMode;
 import info.teksol.mc.profile.options.Target;
+import info.teksol.mc.util.StringUtils;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static info.teksol.mc.mindcode.compiler.Modifier.*;
 import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.*;
 
 @NullMarked
@@ -57,8 +58,6 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             BLOCK);
 
     private final Set<String> guardedBlockNames = new HashSet<>();
-
-    private static final Object EMPTY_PARAMETRIZATION = new Object();
 
     public DeclarationsBuilder(CodeGenerator codeGenerator, CodeGeneratorContext context) {
         super(codeGenerator, context);
@@ -221,34 +220,30 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return LogicVoid.VOID;
     }
 
-    // Note: remote modules are not processed by code generator. Any variables declared `remote` encountered here
+    // Note: remote modules are not processed by code generator. Any variables declared `export` encountered here
     //       are compiled as part of a remote processor code and are created as volatile variables.
     @Override
     public ValueStore visitVariablesDeclaration(AstVariablesDeclaration node) {
-        Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
+        Modifiers modifiers = getEffectiveModifiers(node);
 
         if (isLocalContext()) {
-            node.getModifiers().forEach(this::verifyLocalContextModifiers);
+            node.getModifiers().forEach(this::validateLocalContextModifiers);
         }
 
-        if (node.getVariables().size() > 1) {
-            if (modifiers.containsKey(Modifier.MLOG)) {
-                error(node.getVariables().get(1), ERR.VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG);
-            } else if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage s && s.hasNameSpecification()) {
-                error(node.getVariables().get(1), ERR.VARIABLE_MULTIPLE_SPECIFICATIONS_REMOTE);
-            }
+        if (modifiers.contains(MLOG) && node.getVariables().size() > 1) {
+            error(node.getVariables().get(1), ERR.VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG);
         }
 
         for (AstVariableSpecification specification : node.getVariables()) {
             if (specification.isArray()) {
-                node.getModifiers().forEach(this::verifyArrayModifiers);
+                node.getModifiers().forEach(this::validateArrayModifiers);
                 if (isLocalContext()) {
                     error(specification, ERR.ARRAY_LOCAL);
                 }
 
-                processArray(modifiers, specification, true, null, false);
+                processArray(specification, modifiers);
             } else {
-                processVariable(modifiers, specification);
+                processVariable(specification, modifiers);
             }
         }
 
@@ -308,21 +303,20 @@ public class DeclarationsBuilder extends AbstractBuilder implements
     }
 
     private void createRemoteVariables(AstModule module, LogicVariable processor, boolean shared,
-            boolean reportArrayErrors, @Nullable Map<String, ValueStore> structureMembers) {
+            boolean reportArrayErrors, Map<String, ValueStore> structureMembers) {
         module.getChildren().stream()
                 .filter(AstVariablesDeclaration.class::isInstance)
                 .map(AstVariablesDeclaration.class::cast)
-                .filter(n -> n.getModifiers().stream().anyMatch(
-                        m -> m.getModifier() == Modifier.REMOTE && m.getParametrization() == null))
+                .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == EXPORT))
                 .forEach(n -> visitRemoteVariablesDeclaration(module, n, processor, shared, reportArrayErrors, structureMembers));
     }
 
     public void visitRemoteVariablesDeclaration(AstModule module, AstVariablesDeclaration node, LogicVariable processor,
-            boolean shared, boolean reportArrayErrors, @Nullable Map<String, ValueStore> structureMembers) {
-        Map<Modifier, Object> modifiers = getEffectiveModifiers(node);
+            boolean shared, boolean reportArrayErrors, Map<String, ValueStore> structureMembers) {
+        Modifiers modifiers = getEffectiveModifiers(node);
 
         if (isLocalContext()) {
-            node.getModifiers().forEach(this::verifyLocalContextModifiers);
+            node.getModifiers().forEach(this::validateLocalContextModifiers);
         }
 
         for (AstVariableSpecification specification : node.getVariables()) {
@@ -330,28 +324,21 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             String name = identifier.getName();
 
             if (specification.isArray()) {
-                node.getModifiers().forEach(this::verifyArrayModifiers);
+                node.getModifiers().forEach(this::validateArrayModifiers);
                 if (isLocalContext()) {
                     error(specification, ERR.ARRAY_LOCAL);
                 }
 
-                if (structureMembers != null) {
-                    int arraySize = getArraySize(modifiers, specification, reportArrayErrors);
-                    InternalArray array = InternalArray.create(nameCreator, identifier, arraySize, true,
-                            true, processor, shared);
-                    structureMembers.put(name, array);
-                } else {
-                    processArray(modifiers, specification, reportArrayErrors, processor, shared);
-                }
+                int arraySize = getArraySize(specification, modifiers, reportArrayErrors);
+                ArrayNameCreator arrayNameCreator = variables.processArrayMlogModifier(modifiers, arraySize, nameCreator);
+                InternalArray array = InternalArray.create(arrayNameCreator, identifier, arraySize, true,
+                        true, processor, shared);
+                structureMembers.put(name, array);
             } else {
                 RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), processor, name,
-                        nameCreator.remote(identifier), assembler.nextTemp(), false, false);
+                        nameCreator.remote(identifier), assembler.nextTemp(), false, false, false);
 
-                if (structureMembers != null) {
-                    structureMembers.put(name, variable);
-                } else {
-                    variables.registerRemoteVariable(identifier, variable);
-                }
+                structureMembers.put(name, variable);
             }
         }
     }
@@ -364,18 +351,15 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return new StructuredValueStore(function.getSourcePosition(), null, function.getName(), members);
     }
 
-    private void verifyLocalContextModifiers(AstVariableModifier element) {
+    private void validateLocalContextModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
-            case EXTERNAL -> error(element, ERR.SCOPE_EXTERNAL_NOT_GLOBAL);
-            case GUARDED, LINKED -> error(element, ERR.SCOPE_LINKED_NOT_GLOBAL);
-            case MLOG -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_MLOG);
-            case REMOTE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_REMOTE);
-            case VOLATILE -> error(element, ERR.VARIABLE_LOCAL_CANNOT_BE_VOLATILE);
+            case EXPORT, EXTERNAL, GUARDED, LINKED, MLOG, REMOTE, VOLATILE -> error(element,
+                    ERR.MODIFIER_REQUIRES_GLOBAL_SCOPE, element.getModifier().keyword());
         }
     }
 
-    private int getArraySize(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification, boolean reportArrayErrors) {
-        int declaredSize = getDeclaredArraySize(modifiers, specification);
+    private int getArraySize(AstVariableSpecification specification, Modifiers modifiers, boolean reportArrayErrors) {
+        int declaredSize = getDeclaredArraySize(specification, modifiers);
         int initialSize = specification.getExpressions().size();
 
         if (declaredSize > 0 && initialSize > 0) {
@@ -394,16 +378,15 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return declaredSize;
     }
 
-    private void processArray(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification,
-            boolean reportArrayErrors, @Nullable LogicVariable processor, boolean shared) {
-        int declaredSize = getArraySize(modifiers, specification, reportArrayErrors);
+    private void processArray(AstVariableSpecification specification, Modifiers modifiers) {
+        int declaredSize = getArraySize(specification, modifiers, true);
         int initialSize = specification.getExpressions().size();
 
         List<ValueStore> initialValues = specification.getExpressions().stream()
                 .map(node -> processInLocalScope(() -> evaluate(node)))
                 .toList();
 
-        if (modifiers.containsKey(Modifier.CONST)) {
+        if (modifiers.contains(CONST)) {
             if (initialValues.isEmpty()) {
                 error(specification, ERR.ARRAY_CONST_NOT_INITIALIZED);
             }
@@ -412,15 +395,14 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                     .forEach(v -> error(v, ERR.ARRAY_CONST_NOT_CONSTANT));
         }
 
-        ArrayStore array = variables.createArray(specification.getIdentifier(), declaredSize, modifiers, initialValues, processor, shared);
+        ArrayStore array = variables.createArray(specification.getIdentifier(), modifiers, declaredSize, initialValues);
 
-        if (!modifiers.containsKey(Modifier.CONST)) {
+        if (!modifiers.contains(CONST)) {
             for (int i = 0; i < initialSize; i++) {
                 array.getElements().get(i).setValue(assembler, initialValues.get(i).getValue(assembler));
             }
 
-            if (modifiers.containsKey(Modifier.REMOTE) && processor == null
-                || modifiers.containsKey(Modifier.MLOG) && modifiers.containsKey(Modifier.VOLATILE)) {
+            if (modifiers.containsAny(EXPORT, VOLATILE)) {
                 array.getElements().stream()
                         .filter(LogicVariable.class::isInstance)
                         .map(LogicVariable.class::cast)
@@ -429,20 +411,17 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
     }
 
-    private void verifyArrayModifiers(AstVariableModifier element) {
+    private void validateArrayModifiers(AstVariableModifier element) {
         switch (element.getModifier()) {
-            case CACHED -> error(element, ERR.ARRAY_CACHED);
-            case GUARDED -> error(element, ERR.ARRAY_GUARDED);
-            case LINKED -> error(element, ERR.ARRAY_LINKED);
-            case MLOG -> error(element, ERR.ARRAY_MLOG);
-            case NOINIT -> error(element, ERR.ARRAY_NOINIT);
+            case CACHED, GUARDED, LINKED, NOINIT -> error(element,
+                    ERR.ARRAY_UNSUPPORTED_MODIFIER, element.getModifier().keyword());
         }
     }
 
-    private int getDeclaredArraySize(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
+    private int getDeclaredArraySize(AstVariableSpecification specification, Modifiers modifiers) {
         AstExpression arraySize = specification.getArraySize();
         if (arraySize == null) return -1;
-        int maxSize = modifiers.containsKey(Modifier.EXTERNAL) ? MAX_EXTERNAL_ARRAY_SIZE : MAX_INTERNAL_ARRAY_SIZE;
+        int maxSize = modifiers.contains(EXTERNAL) ? MAX_EXTERNAL_ARRAY_SIZE : MAX_INTERNAL_ARRAY_SIZE;
 
         ValueStore size = processInLocalScope(() -> evaluate(arraySize));
         if (!(size instanceof LogicReadable number && number.isNumericConstant())) {
@@ -462,22 +441,21 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         return 0;
     }
 
-    private void processVariable(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
-        ValueStore variable = modifiers.containsKey(Modifier.CONST) ? LogicVoid.VOID : createVariable(modifiers, specification);
+    private void processVariable(AstVariableSpecification specification, Modifiers modifiers) {
+        ValueStore variable = createVariable(specification, modifiers);
 
-        if (modifiers.containsKey(Modifier.GUARDED) || modifiers.containsKey(Modifier.LINKED)) {
+        if (modifiers.getMain() == LINKED) {
             // Linked variables are initialized at creation
             return;
         }
 
-        if (specification.getExpressions().isEmpty()) {
-            if (modifiers.get(Modifier.REMOTE) == EMPTY_PARAMETRIZATION
-                || modifiers.containsKey(Modifier.MLOG) && modifiers.containsKey(Modifier.VOLATILE)) {
-                // A remote modified was used without processor specification or an mlog name
-                context.addForcedVariable((LogicVariable) variable);
-            }
+        if (variable instanceof LogicVariable logicVariable && modifiers.containsAny(EXPORT, VOLATILE)) {
+            // Ensure to explicitly create all remote variables
+            context.addForcedVariable(logicVariable);
+        }
 
-            if (!modifiers.containsKey(Modifier.NOINIT)) {
+        if (specification.getExpressions().isEmpty()) {
+            if (!modifiers.contains(NOINIT)) {
                 // Initializes external cached variables by reading the value from the memory block
                 variable.initialize(assembler);
             }
@@ -487,10 +465,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
                 throw new MindcodeInternalError("Unexpected number of expressions: " + specification.getExpressions().size());
             }
 
-            if (modifiers.containsKey(Modifier.NOINIT)) {
+            if (modifiers.contains(NOINIT)) {
                 error(specification, ERR.VARIABLE_NOINIT_CANNOT_BE_INITIALIZED);
-            } else if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage) {
-                error(specification, ERR.VARIABLE_REMOTE_CANNOT_BE_INITIALIZED);
             }
 
             AstExpression expression = specification.getExpressions().getFirst();
@@ -500,8 +476,9 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             // in the local scope, as all executable code must be placed there.
             ValueStore valueStore = processInLocalScope(() -> evaluate(expression));
 
-            if (modifiers.containsKey(Modifier.CONST)) {
-                if (valueStore instanceof LogicValue value && isNonvolatileConstant(value) || valueStore instanceof FormattableContent
+            if (modifiers.contains(CONST)) {
+                if (valueStore instanceof LogicValue value && isNonvolatileConstant(value)
+                        || valueStore instanceof FormattableContent
                         || valueStore instanceof LogicKeyword) {
                     variables.createConstant(specification, valueStore);
                 } else {
@@ -516,23 +493,23 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         }
     }
 
-    private ValueStore createVariable(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
-        if (modifiers.containsKey(Modifier.EXTERNAL) || modifiers.containsKey(Modifier.CACHED)) {
-            return variables.createExternalVariable(specification.getIdentifier(), modifiers);
-        } else if (modifiers.containsKey(Modifier.GUARDED) || modifiers.containsKey(Modifier.LINKED)) {
-            return createLinkedVariable(modifiers, specification);
-        } else if (modifiers.isEmpty() || modifiers.containsKey(Modifier.NOINIT) || modifiers.containsKey(Modifier.MLOG)
-                || modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE)) {
+    private ValueStore createVariable(AstVariableSpecification specification, Modifiers modifiers) {
+        return switch (modifiers.getMain()) {
+            // No variable is created for CONST
+            case CONST -> LogicVoid.VOID;
+            case LINKED -> createLinkedVariable(specification, modifiers);
+            case EXTERNAL -> variables.createExternalVariable(specification.getIdentifier(), modifiers);
+
             // Local variables need to be created within the parent node, as the current node is the
             // AstVariablesDeclaration node. If the variable was created within the current node, it
             // would fall out of scope when AstVariablesDeclaration node processing finishes.
-            return variables.createVariable(isLocalContext(), specification.getIdentifier(), VariableScope.PARENT_NODE, modifiers);
-        } else {
-            throw new MindcodeInternalError("Unhandled combination of modifiers: " + modifiers);
-        }
+            case NONE, EXPORT, REMOTE -> variables.createVariable(isLocalContext(), specification.getIdentifier(), VariableScope.PARENT_NODE, modifiers);
+
+            default -> { throw new MindcodeInternalError("Unhandled combination of modifiers: " + modifiers); }
+        };
     }
 
-    private LogicVariable createLinkedVariable(Map<Modifier, @Nullable Object> modifiers, AstVariableSpecification specification) {
+    private LogicVariable createLinkedVariable(AstVariableSpecification specification, Modifiers modifiers) {
         LogicVariable variable;
 
         if (specification.getExpressions().isEmpty()) {
@@ -549,68 +526,101 @@ public class DeclarationsBuilder extends AbstractBuilder implements
             throw new MindcodeInternalError("Unexpected number of expressions: " + specification.getExpressions().size());
         }
 
-        generateLinkGuard(variable, modifiers.containsKey(Modifier.GUARDED));
+        generateLinkGuard(variable, modifiers.contains(GUARDED));
         return variable;
     }
 
-    private Map<Modifier, Object> getEffectiveModifiers(AstVariablesDeclaration node) {
-        Map<Modifier, Object> modifiers = new EnumMap<>(Modifier.class);
+    private Modifiers getEffectiveModifiers(AstVariablesDeclaration node) {
+        Map<Modifier, ModifierParametrization<?>> modifiers = new EnumMap<>(Modifier.class);
 
+        EnumSet<Modifier> primaryModifiers = getPrimarySet();
+        Modifier firstPrimary = NONE;
         for (AstVariableModifier astModifier : node.getModifiers()) {
             Modifier modifier = astModifier.getModifier();
 
+            if (firstPrimary == NONE && primaryModifiers.contains(modifier)) {
+                firstPrimary = modifier;
+            }
+
             if (modifiers.containsKey(modifier)) {
-                error(astModifier, ERR.VARIABLE_REPEATED_MODIFIER, modifier.name().toLowerCase());
-            } else if (modifier.isCompatibleWith(modifiers.keySet())) {
-                if (modifier == Modifier.REMOTE) {
-                    verifyMinimalRemoteTarget(astModifier);
-                }
-                modifiers.put(modifier, this.processInLocalScope(() -> createParametrization(astModifier.getParametrization())));
+                error(astModifier, ERR.VARIABLE_REPEATED_MODIFIER, modifier.keyword());
             } else {
-                error(astModifier, ERR.VARIABLE_INCOMPATIBLE_MODIFIER, modifier.name().toLowerCase());
+                modifiers.put(modifier, this.processInLocalScope(() -> createParametrization(astModifier)));
             }
         }
 
-        if (modifiers.containsKey(Modifier.CACHED) && !modifiers.containsKey(Modifier.EXTERNAL)) {
-            error(modifierElement(node, Modifier.CACHED), ERR.VARIABLE_MISSING_MODIFIER,
-                    Modifier.CACHED.name().toLowerCase(), Modifier.EXTERNAL.name().toLowerCase());
+        if (firstPrimary == REMOTE || firstPrimary == EXPORT) {
+            verifyMinimalRemoteTarget(modifiers.get(firstPrimary).node());
         }
 
-        return modifiers;
+        if (firstPrimary == REMOTE && modifiers.get(REMOTE).parametrization() == null) {
+            warn(modifiers.get(REMOTE).node(), WARN.DEPRECATED_USE_OF_REMOTE);
+            if (!modifiers.containsKey(EXPORT)) modifiers.put(EXPORT, modifiers.remove(REMOTE));
+            firstPrimary = EXPORT;
+        }
+
+        primaryModifiers.retainAll(modifiers.keySet());
+        if (primaryModifiers.size() > 1) {
+            List<String> parts = primaryModifiers.stream().map(s -> "'" + s.keyword() + "'").toList();
+            String keywords = StringUtils.joinUsingAnd(parts);
+
+            for (Modifier modifier : primaryModifiers) {
+                error(modifiers.get(modifier).node(), ERR.VARIABLE_INCOMPATIBLE_MODIFIERS, keywords);
+            }
+        }
+
+        final Modifier mainModifier = firstPrimary;
+        if (mainModifier == NONE) {
+            modifiers.keySet().stream()
+                    .filter(m -> !primaryModifiers.contains(m))
+                    .filter(m -> !m.getRequirements().contains(mainModifier))
+                    .forEach(m -> error(modifiers.get(m).node(), ERR.VARIABLE_MISSING_MODIFIER, m.keyword(),
+                            StringUtils.joinUsingOr(m.getRequirements().stream().filter(k -> k != NONE)
+                                    .map(k -> "'" + k.keyword() + "'").toList())));
+        } else {
+            modifiers.keySet().stream()
+                    .filter(m -> !primaryModifiers.contains(m))
+                    .filter(m -> !m.getRequirements().contains(mainModifier))
+                    .forEach(m -> error(modifiers.get(m).node(), ERR.VARIABLE_INCOMPATIBLE_MODIFIER,
+                            m.keyword(), mainModifier.keyword()));
+        }
+
+        if (firstPrimary == NONE && modifiers.containsKey(GUARDED)) {
+            firstPrimary = LINKED;
+            modifiers.put(LINKED, modifiers.get(GUARDED));
+        }
+
+        return new Modifiers(firstPrimary, modifiers);
     }
 
-    private Object createParametrization(@Nullable AstMindcodeNode node) {
-        return switch (node) {
-            case ExternalStorage externalStorage -> resolveExternalStorage(externalStorage).createTracker(context);
-            case AstRemoteParameters param -> new ProcessorStorage(resolveProcessor(param), resolveMlogName(param.getMlog()));
-            case AstMlogParameters param -> new ProcessorStorage(null, resolveMlogName(param.getMlog()));
-            case null, default -> EMPTY_PARAMETRIZATION;
+    private ModifierParametrization<?> createParametrization(AstVariableModifier modifier) {
+        return switch (modifier.getParametrization()) {
+            case ExternalStorage externalStorage -> new ModifierParametrization<>(modifier,
+                    resolveExternalStorage(externalStorage).createTracker(context));
+
+            case AstRemoteParameters param -> new ModifierParametrization<>(modifier,
+                    resolveProcessor(param));
+
+            case AstMlogParameters param -> new ModifierParametrization<>(modifier,
+                    new MlogSpecification(resolveMlogNames(param.getMlogNames())));
+
+            case null, default ->  new ModifierParametrization<>(modifier, null);
         };
     }
 
-    private @Nullable String resolveMlogName(@Nullable AstExpression mlog) {
-        if (mlog == null) return null;
-
-        ValueStore name = evaluate(mlog);
-
-        if (name instanceof LogicString str) {
-            String value = str.getValue();
-            if (value.matches(".*[\\s;#\"].*")) {
-                error(name, ERR.INVALID_MLOG_NAME);
+    private List<LogicArgument> resolveMlogNames(List<AstExpression> mlogNames) {
+        List<LogicArgument> arguments = new ArrayList<>(mlogNames.size());
+        for (AstExpression mlogName : mlogNames) {
+            switch (evaluate(mlogName)) {
+                case LogicString str -> arguments.add(str);
+                case LogicKeyword kw -> arguments.add(kw);
+                default -> {
+                    error(mlogName, ERR.CONSTANT_STRING_OR_KEYWORD_REQUIRED);
+                    arguments.add(LogicString.create(mlogName.sourcePosition(),""));
+                }
             }
-            return value;
-        } else {
-            error(mlog, ERR.CONSTANT_STRING_REQUIRED);
-            return "invalid";
         }
-    }
-
-    private SourceElement modifierElement(AstVariablesDeclaration node, Modifier modifier) {
-        return node.getModifiers().stream()
-                .filter(m -> m.getModifier() == modifier)
-                .findFirst()
-                .map(SourceElement.class::cast)
-                .orElse(node);
+        return arguments;
     }
 
     private void generateLinkGuard(LogicVariable variable, boolean guarded) {

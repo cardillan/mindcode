@@ -35,7 +35,7 @@ UnitMonitor = """
 
     module UnitMonitor;
 
-    linked noinit message1;
+    linked message1;
 
     require units;
 
@@ -46,7 +46,7 @@ UnitMonitor = """
     // Tries to find a unit better than the one currently held (use null when no unit is held)
     // Returns when a unit is found.
     // Never returns if the best unit is already held.
-    remote def findUnit(currentUnit)
+    export def findUnit(currentUnit)
         var currentType = currentUnit.@type;
         print("Trying to find unit better than ", currentUnit);
         printflush(message1);

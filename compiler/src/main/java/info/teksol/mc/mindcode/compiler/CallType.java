@@ -14,6 +14,7 @@ public enum CallType {
     NONE            (-1),
     INLINE          (MindcodeLexer.INLINE),
     NOINLINE        (MindcodeLexer.NOINLINE),
+    EXPORT          (MindcodeLexer.EXPORT),
     REMOTE          (MindcodeLexer.REMOTE),
     ;
 

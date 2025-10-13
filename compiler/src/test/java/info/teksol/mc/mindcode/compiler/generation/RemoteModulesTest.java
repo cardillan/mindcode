@@ -35,14 +35,14 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                         module test;
                         
                         var cnt = 0;
-                        remote var x = 0;
+                        export var x = 0;
                         
-                        remote def foo(in a, out count)
+                        export def foo(in a, out count)
                             count = ++cnt;
                             return a + x;
                         end;
                         
-                        remote void bar(in a, out b)
+                        export void bar(in a, out b)
                             b = sin(a);
                         end;
                         """);
@@ -52,9 +52,9 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                 """
                         module test2;
                         
-                        remote array[10];
+                        export array[10];
                         
-                        remote def baz(a, b, c)
+                        export def baz(a, b, c)
                             return len(len(a * a + b * b), c * c);
                         end;
                         """);
@@ -64,7 +64,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                 """
                         module test2;
                         
-                        remote def foo()
+                        export def foo()
                             print("Hey!");
                         end;
                         """);
@@ -106,7 +106,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(1), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(2), "notEqual", tmp(1), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(1), q("361567e89c3ad027:v1")),
                     createInstruction(WRITE, "10", "processor1", q(":foo:a")),
                     createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
                     createInstruction(WRITE, "2", "processor1", q("@counter")),
@@ -134,7 +134,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(1), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(2), "notEqual", tmp(1), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(1), q("361567e89c3ad027:v1")),
                     createInstruction(WRITE, "10", "processor1", q(":foo:a")),
                     createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
                     createInstruction(WRITE, "2", "processor1", q("@counter")),
@@ -162,7 +162,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(8), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(2), "notEqual", tmp(8), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(8), q("361567e89c3ad027:v1")),
                     createInstruction(WRITE, "10", "processor1", q(":foo:a")),
                     createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
                     createInstruction(WRITE, "2", "processor1", q("@counter")),
@@ -191,10 +191,10 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(3)),
                     createInstruction(READ, tmp(11), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(3), "notEqual", tmp(11), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(3), "notEqual", tmp(11), q("361567e89c3ad027:v1")),
                     createInstruction(LABEL, label(4)),
                     createInstruction(READ, tmp(14), "processor2", q("*signature")),
-                    createInstruction(JUMP, label(4), "notEqual", tmp(14), q("32deff56ad045d71:v1")),
+                    createInstruction(JUMP, label(4), "notEqual", tmp(14), q("ccc0ff41cc7e907b:v1")),
                     createInstruction(WRITE, "10", "processor2", q(":baz:a")),
                     createInstruction(WRITE, "20", "processor2", q(":baz:b")),
                     createInstruction(WRITE, "30", "processor2", q(":baz:c")),
@@ -237,7 +237,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(7), ".proc", q("*signature")),
                     createInstruction(JUMP, label(2), "equal", tmp(7), "null"),
-                    createInstruction(OP, "equal", tmp(8), tmp(7), q("fe196785ecf7cd23:v1")),
+                    createInstruction(OP, "equal", tmp(8), tmp(7), q("361567e89c3ad027:v1")),
                     createInstruction(JUMP, label(3), "equal", tmp(8), "false"),
                     createInstruction(WRITE, "10", ".proc", q(":foo:a")),
                     createInstruction(WRITE, "false", ".proc", q(":foo*finished")),
@@ -260,10 +260,10 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(5), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(2), "notEqual", tmp(5), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(5), q("361567e89c3ad027:v1")),
                     createInstruction(LABEL, label(3)),
                     createInstruction(READ, tmp(11), "processor2", q("*signature")),
-                    createInstruction(JUMP, label(3), "notEqual", tmp(11), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(3), "notEqual", tmp(11), q("361567e89c3ad027:v1")),
                     createInstruction(WRITE, "10", "processor1", q(":foo:a")),
                     createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
                     createInstruction(WRITE, "2", "processor1", q("@counter")),
@@ -302,7 +302,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(7), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(2), "notEqual", tmp(7), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(7), q("361567e89c3ad027:v1")),
                     createInstruction(SET, ":localFoo:a", "10"),
                     createInstruction(PRINT, q("Before foo")),
                     createInstruction(WRITE, ":localFoo:a", "processor1", q(":foo:a")),
@@ -339,7 +339,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(1)),
                     createInstruction(READ, tmp(10), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(1), "notEqual", tmp(10), q("32deff56ad045d71:v1")),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(10), q("ccc0ff41cc7e907b:v1")),
                     createInstruction(READ, tmp(0), "processor1", q(".array*0")),
                     createInstruction(SET, ":i", tmp(0)),
                     createInstruction(SETADDR, tmp(11), label(5)),
@@ -391,10 +391,10 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(1)),
                     createInstruction(READ, tmp(13), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(1), "notEqual", tmp(13), q("32deff56ad045d71:v1")),
+                    createInstruction(JUMP, label(1), "notEqual", tmp(13), q("ccc0ff41cc7e907b:v1")),
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(27), "processor2", q("*signature")),
-                    createInstruction(JUMP, label(2), "notEqual", tmp(27), q("32deff56ad045d71:v1")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(27), q("ccc0ff41cc7e907b:v1")),
                     createInstruction(READ, tmp(3), "processor1", q(".array*0")),
                     createInstruction(SET, ":i", tmp(3)),
                     createInstruction(SETADDR, tmp(28), label(6)),
@@ -444,7 +444,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                             """,
                     createInstruction(LABEL, label(2)),
                     createInstruction(READ, tmp(5), "processor1", q("*signature")),
-                    createInstruction(JUMP, label(2), "notEqual", tmp(5), q("fe196785ecf7cd23:v1")),
+                    createInstruction(JUMP, label(2), "notEqual", tmp(5), q("361567e89c3ad027:v1")),
                     createInstruction(WRITE, "10", "processor1", q(":foo:a")),
                     createInstruction(WRITE, "false", "processor1", q(":foo*finished")),
                     createInstruction(WRITE, "2", "processor1", q("@counter")),
@@ -462,7 +462,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         void compilesLocalCallToRemoteFunction() {
             assertCompilesTo("""
                             module local;
-                            remote def foo() end;
+                            export def foo() end;
                             begin print(foo()); end;
                             """,
                     createInstruction(JUMP, label(2), "always"),
@@ -472,7 +472,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     createInstruction(CALL, label(1), "*invalid", ":foo*retval"),
                     createInstruction(LABEL, label(3)),
                     createInstruction(PRINT, ":foo*retval"),
-                    createInstruction(SET, "*signature", q("24370e1a1ef2bb23:v1")),
+                    createInstruction(SET, "*signature", q("f3671b0880e88818:v1")),
                     createInstruction(LABEL, label(4)),
                     createInstruction(WAIT, "1e12"),
                     createInstruction(JUMP, label(4), "always"),
@@ -542,8 +542,8 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
             assertGeneratesMessage(
                     "Remote function 'foo(a)' conflicts with remote function 'foo()': names of remote functions must be unique.",
                     """
-                            remote def foo() end;
-                            remote def foo(a) end;
+                            export def foo() end;
+                            export def foo(a) end;
                             """
             );
         }
@@ -605,12 +605,12 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
         }
 
         @Test
-        void refusesRemoteVariablesInLocalScope() {
+        void refusesVariablesInLocalScope() {
             assertGeneratesMessage(
-                    "Local variable cannot be declared 'remote'.",
+                    "The 'remote' modifier cannot be used to declare local variables.",
                     """
                             begin
-                                remote x = 10;
+                                remote(processor1) x = 10;
                             end;
                             """
             );
@@ -645,7 +645,7 @@ public class RemoteModulesTest extends AbstractCodeGeneratorTest {
                     """
                             #set syntax = relaxed;
                             module test;
-                            remote var foo = 0;
+                            export var foo = 0;
                             """
             );
         }

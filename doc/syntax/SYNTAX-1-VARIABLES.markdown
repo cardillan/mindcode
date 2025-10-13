@@ -29,7 +29,7 @@ All numeric values, both integer and floating-point, are stored as `double`, a 6
 >
 > While `long` values are able to keep 64 bits, `double` values only hold 53 significant bits of precision. Processor variables are therefore limited to 53 significant bits after integer conversion. When an integer operation produces a number between 2<sup>53</sup> and 2<sup>63</sup>-1, the result is rounded to the closest double representation for storage in a processor variable. This rounding during a _double conversion_ on a number exceeding the safe integer range (i.e., outside the -2<sup>53</sup> to 2<sup>53</sup> range) may destroy information stored in individual bits of the number's integer representation.
 >
-> Every intermediate result during expression evaluation is stored in a processor variable, so the integer/double conversion happens at every step of computation in mlog.
+> Every intermediate result during expression evaluation is stored in a processor variable, so the integer/double conversion may happen at every step of computation in mlog.
 
 Producing integer numbers this large would be somewhat unusual in a typical Mindustry Logic program, except using bitwise operations to manipulate individual bits. In these cases, make sure to use at most 53 bits of each variable. Using 54 bits is not safe, because performing bitwise complement (operation inverting all bits) on values larger than 2<sup>53</sup>-1 may lead to loss of precision as well.
  
@@ -167,7 +167,7 @@ Since linked blocks are present as special processor variables, Mindcode makes s
 </details>
 
 > [!IMPORTANT]
-> When building a schematic, it is possible that the processor will be built before some other parts of the schematics. In this case, its code will be executed before all linked blocks expected by the schematics are finished and linked. Code that depends on the linked blocks defined by the schematics to be available may therefore execute incorrectly, possibly resulting into a state which can only be fixed by restarting the processor or even rebuilding the schematics.
+> When building a schematic, it is possible that the processor will be built before some other parts of the schematics. In this case, its code will be executed before all linked blocks expected by the schematics are finished and linked. Code that depends on the linked blocks defined by the schematics to be available may therefore execute incorrectly, possibly resulting in a state which can only be fixed by restarting the processor or even rebuilding the schematics.
 > 
  > To help avoid this situation, Mindcode provides means to generate code ("guard code") that will pause the execution of the program until required linked blocks become available.  
 
@@ -185,27 +185,6 @@ Values written to the elements of these blocks are available to all processors t
 
 Only numeric values are supported by memory block elements. When the program attempts to write a non-numeric value to an element, the value actually written is 0 (for `null`) or 1 (for all other non-null objects).
 
-## Mindustry Logic built-in variables
-
-Mindustry Logic processors have several built-in variables. Their names start with the `@` sign. The most common ones are:
-* `@counter`: address of the next instruction to be executed
-* `@this`, `@thisx`, `@thisy`: processor executing current code and its coordinates
-* `@mapw`, `@maph`: dimensions of the map
-* `@time`, `@tick`, `@second`, `@minute`: current game time expressed in various units
-* `@links`: number of blocks linked to the processor
-* `@ipt`: instructions per tick executed by this processor
-* `@unit`: currently bound unit
-* `@unitCount`, `@itemCount`, `@liquidCount`, `@blockCount`: number of elements of the respective type; can be used with the `lookup` function.
-
-Mindcode allows you to read these variables and, in some special cases, assign a new value to them. Some of them are constant during the lifetime of the processor, but others do (or at least may) change, e.g., `@time`, `@counter` or `@links`.
-
-`@unit` is a special variable which always contains the unit currently controlled by the processor. The only way to assign a new unit to this variable is to use the `ubind()` function. All unit control commands are sent to this unit. See also [Using units](MINDUSTRY-TIPS-N-TRICKS.markdown#using-units).
-
-Apart from built-in variables whose value may change, Mindustry also has built-in constants representing various in-game objects, such as unit types (`@flare`), block types (`@micro-processor`), items (`@coal`), liquids (`@cryofluid`) or object properties (`@totalItems`).
-
-> [!NOTE]
-> The value of time variables (`@tick`, `@time` and so on) may actually decrease, compared to a previously obtained value, when loading a game from a save file. Take it into account especially when programming loops that should terminate at some predetermined time.
-
 # Mindcode variables
 
 Depending on the [syntax mode](SYNTAX.markdown#syntax-modes), variables are created either through explicit variable declarations or through using them in the source code.
@@ -216,7 +195,7 @@ Depending on the [syntax mode](SYNTAX.markdown#syntax-modes), variables are crea
 Detailed information on individual kinds of variables and means of their declaration are described later in this chapter.
 
 > [!IMPORTANT]
-> While compiling the source code, Mindcode may perform various optimizations which replace variables (implicit and explicit ones) with different user or computer-generated variables or with constant values, or remove unused variables altogether, while upholding the semantics of the compiled program. This may make it quite difficult to see how the compiled code relates to the source code.
+> While compiling the source code, Mindcode may perform various optimizations which replace variables (both the implicit and explicit ones) with different user or computer-generated variables or with constant values, or remove unused variables altogether, while upholding the semantics of the compiled program. This may make it quite difficult to see how the compiled code relates to the source code.
 
 Example:
 
@@ -236,7 +215,7 @@ printflush message1
 
 Variable `a` in the above example was removed, because it is possible to use the value assigned to it (`10`) directly later in the program. Variable `b` was removed, as it is not used in any following computation at all. 
 
-The only exceptions to this rule are [program parameters](#program-parameters), which are preserved unless they are not used in the program at all.
+[Program parameters](#program-parameters) and some specifically declared variables may be preserved in the program even if they could be replaced by constant values or are not used at all.
 
 ## Variable scope
 
@@ -252,7 +231,7 @@ Variables are limited to a certain scope and are considered nonexistent outside 
 Implicit variables are only supported in the [`relaxed` syntax](SYNTAX.markdown#syntax-modes) , and are created when first encountered in the code. The kind and scope of the variable is determined by the name of the variable:
 
 * **Linked variables**: if the variable name corresponds to a known linked block, it is automatically regarded as a linked variable referring to that block, and its scope is global (e.g., `cell1` or `switch2`). To use a linked block not recognized by Mindcode (e.g., a block provided by a mod extension), an explicit declaration is required. 
-* **External variables**: if the variable name starts with the `$` prefix, the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global (e.g., `$Total`). See [External variables](#external-variables) for information on heap declaration.
+* **External variables**: if the variable name starts with the `$` prefix, the variable is external, residing in a common external memory pool (a _heap_). Scope of external variables is global (e.g., `$Total`). See [Heap](#heap) for information on heap declaration.
 * **Global variables**: if the variable name doesn't contain lowercase characters, it is a regular variable in the global scope (e.g., `COUNT`).
 * **Main/local variables**: if the variable name contains at least one lowercase character, it is a regular variable in either the main (if used outside a function) or local (if used within a function) scope (e.g., `unitType`).
 
@@ -286,6 +265,32 @@ There are no name restrictions on explicitly declared variables, except the `$` 
 
 When a main or local variable has the same name as a global variable, the global variable is said to be _shadowed_ and cannot be accessed in the corresponding code block.
 
+## Heap
+
+Heap provides default storage for external variables and needs to be declared before an external variable without explicit storage specification is declared or implicitly created. Heap is declared using this syntax:
+
+```
+allocate heap in <memory>[<range>];
+```
+
+for example:
+
+```Mindcode
+allocate heap in cell4[50 ... 64];
+```
+
+> [!NOTE]
+> The range specification is optional. When no range is specified and the memory block is resolved to a memory bank (i.e., its name starts with 'bank'), range `0 ... 512` is assumed. Otherwise, range `0 ... 64` is assumed.
+
+This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 for external variables (note the exclusive range). If you create more external variables than you have allocated space for, a compilation error will occur. In that case, allocate more space for the heap in the cell, or possibly switch to a memory bank to get even more space.
+
+A linked block or variable, a constant, a parameter or a global variable can be used as a memory in the heap declaration. This way (by using a global variable) it is even possible to choose a memory block for heap dynamically. It is up to the user to ensure that:
+
+1. The linked block or variable was initialized before external variables are accessed for read or write.
+2. The value of a global variable used to hold the memory doesn't change once initialized.
+
+The first requirement may be satisfied by using a guarded linked block as the initial value of the variable. In more complex cases, assigning a value to the variable via function call might be necessary.
+
 # Arrays
 
 Arrays consist of elements which can be accessed via an integer index. The index is specified in square brackets: `a[5]` accesses an element of array `a` at the position `5`. The first element has an index of 0, therefore `a[1]` refers to the **second** element, and `a[9]` refers to the last element of a ten-element array. 
@@ -293,6 +298,22 @@ Arrays consist of elements which can be accessed via an integer index. The index
 ## Implicit arrays
 
 All [memory blocks](#external-memory) can be accessed as an array in Mindcode. These arrays do not need to be declared and are used by referencing the memory block directly: `cell1[0] = 10;` writes the value of `10` to the first element of the `cell1` memory cell. It is possible to access an implicit array even when the reference to the memory block is stored in another variable: `memory = bank1; print(memory[8]);`. The array size depends on the memory block used, and Mindcode doesn't check bounds when accessing implicit arrays in any way.
+
+It is also possible to store statically or dynamically linked blocks in regular variables or to pass them to non-recursive functions:
+
+```Mindcode
+linked bank1, bank2;
+
+def copy(source, target, size)
+    for var i in 0 ... size do
+        target[i] = source[i];
+    end;
+end;
+
+begin
+    copy(bank1, bank2, 512);
+end;
+```
 
 As implicit arrays are stored in memory blocks, they can only hold numeric values.
 
@@ -304,13 +325,15 @@ As external arrays are stored in memory blocks, they can only hold numeric value
 
 ## Internal arrays
 
-Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _@counter arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings and so on.
+Mindustry Logic doesn't provide a specialized mechanism for creating arrays out of internal variables. However, it is possible to create a reasonably efficient implementation of random access arrays using _`@counter` arrays_, named as such since accessing an element of such arrays involves manipulating the `@counter` variable. Individual elements of such arrays are stored in processor variables (one variable per array element), and therefore can hold non-numerical values as well, such as unit or block references, items, liquids, strings and so on.
 
-Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for jump tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, providing performance which can be even better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the jump tables might be eliminated entirely, keeping only the individual element variables in the resulting code. 
+Accessing individual elements of internal arrays is slower than accessing elements of external arrays and consumes additional instruction space for `@counter` tables. However, when Mindcode is able to resolve the index during compilation to a numeric value, the variable corresponding to the element is accessed directly, providing performance which can be even better than that of external arrays. When Mindcode is able to resolve all index-based array accesses (e.g., when unrolling all loops in the program), the `@counter` tables might be eliminated entirely, keeping only the individual element variables in the resulting code.
+
+Several different implementations of internal arrays are available in target 8 or higher, some of them may perform better than normal `@counter` tables available in Mindustry 7. The [Array Optimization](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) chooses the most efficient implementation for each array or individual array access. 
 
 ## Remote arrays
 
-Remote arrays are internal arrays accessible from another processor. For more details, see [remote variables and arrays](REMOTE-CALLS.markdown#remote-variables).
+Remote arrays are internal arrays stored in another processor. They are implemented similarly to internal arrays, but the mechanism to access individual elements reads the values from the remote processor. In many situations, remote arrays can be as fast as internal arrays, or they may need an additional instruction to read or write the value from/to the remote processor. 
 
 ## Subarrays
 
@@ -328,27 +351,178 @@ a[1 ... 10];            // All but the first element of an internal array
 
 # Variable declarations
 
+**Variables** are declared using the `var` keyword. The syntax for declaring a variable is:
+
+```
+[modifier [modifier ... ]] var <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
+```
+
+The initial value is assigned directly to the variable at the moment of the declaration. Any expression can be used as the initial value, including function calls.
+
+**Arrays** are declared using the `var` keyword in the same way, but the `[]` brackets are used to specify the array size. The syntax for declaring an array is:
+
+```
+[modifier [modifier ... ]] var <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
+```
+
+`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e., the number of elements in the array. When initial values for the array are specified, their number must be equal to the size of the array, or the size specification may be omitted (`var a[] = (1, 2, 3);`).
+
+Modifiers specify the kind of the variable to be created. When a modifier is used, the `var` keyword is optional. Modifiers can be specified in any order.
+
+Variables and arrays may be declared in the same declaration.
+
+Examples of variable declarations:
+
+```
+var a, b[10], c = rand(10), d[3] = ("x", "y", "z"); 
+```
+
+Variable modifiers are used to provide additional information of the variable. There are two kinds of variable modifiers:
+
+* **Storage modifiers**: determine how the variable is stored or handled by Mindcode.
+* **Other modifiers**: provide additional specification or parametrization of the variable.
+
+Some modifiers accept additional parameters, which are specified in parentheses after the modifier name. For example:
+
+```
+external(cell1) var foo[4];
+```
+
+## Storage modifiers
+
+The following storage modifiers are available:
+
+* `const`: the variable represents a [constant value](#constants).
+* `linked`: the variable is a [linked variable](#linked-variables).
+* `external`: the variable is an [external variable](#external-variables).
+* `export`: the variable is an [exported variable](#exported-variables): stored in the current processor, but made available to other processors. 
+* `remote`: the variable is a [remote variable](#remote-variables) stored in another processor.
+
+Storage modifiers are only allowed in the global scope. At most one of the storage modifiers can be specified in a declaration. When no storage modifier is specified, the declaration creates [regular variables](#regular-variables) stored in the current processor.
+
+## Other modifiers
+
+Other modifiers are compatible only with specific storage modifiers. This table specifies which modifiers are compatible with which storage modifiers and scopes:
+
+| Modifier   | Compatible with                        | Scope           |
+|------------|----------------------------------------|-----------------|
+| `cached`   | `external`, `remote`                   | global          |
+| `guarded`  | `linked` or none                       | global          |
+| `mlog`     | `export`, `remote` or none             | global          |
+| `noinit`   | `export`, `external`, `remote` or none | global or local |
+| `volatile` | `export` or none                       | global          |
+
+### `cached` modifier
+
+Can be used with the `external` and `remote` modifiers. This modifier cannot be used when declaring arrays.
+
+The value of a cached variable is read from the external memory or processor just once at the variable creation and is kept in a dedicated processor variable (a _cache variable_). When reading a cached variable, Variable reads are served using the cache variable. Writes update the cache variable and also write the new value to the memory/processor.
+
+If an initial value was specified in the declaration, the external/remote value is not read at all, and the initial value is written to the memory or processor. 
+
+Cached variables are useful in situations where you want to store the latest value of the variable in an external memory to be read from when the processor is reset.
+
+> [!IMPORTANT]
+> Using the `cached` modifier while using a variable to represent the external memory or remote processor may lead to unexpected results. Only the external memory or remote processor currently referenced by the variable is updated when the variable is written to.
+
+### `guarded` modifier
+
+Can be used with the `linked` modifier or without a storage modifier, in which case the `linked` modifier is implied. Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
+
+```Mindcode
+/// A guard code: loops until message1 is not null
+guarded output = message1;
+print("Here we are");
+printflush(output);
+stopProcessor();
+```
+
+compiles to
+
+```mlog
+# A guard code: loops until message1 is not null
+jump 0 equal message1 null
+print "Here we are"
+printflush message1
+stop
+```
+
+### `mlog` modifier
+
+Can be used with the `export` or `remote` modifier, or without a storage modifier.
+
+By using the `mlog` modifier, it is possible to specify the mlog name of the variable or array elements, as stored in the current or remote processor. The name(s) must be specified as a list of constant string expressions enclosed in parentheses, or as a single specification of a lookup type (in case of arrays). 
+
+Specifying an mlog name is useful when accessing the variable indirectly, by the current or other processors.
+
+> [!NOTE]
+> In most cases, indirect access also requires the variable to be declared `volatile`.
+
+When using the `mlog` modifier, only one variable or array can be specified per declaration (as multiple variables would share the same mlog name otherwise). Examples of declarations using the `mlog` modifier:
+
+```
+mlog("foo") var foo;
+mlog("a", "b", "c") var bar[3];
+mlog(:liquid) var baz[10];
+mlog(@coal.@name) var coal;
+```
+
+* When declaring a variable, a single constant string expression must be specified.
+* When declaring an array, there are two possibilities:
+  * A name as a constant string expression is specified for each array element. The number of names must be equal to the array size.
+  * A single lookup type is specified, creating a [lookup array](SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays). Lookup arrays require target 8 or higher. The following lookup types are available:  `:block`, `:unit`, `:item`, `:liquid` or `:team`.
+
+#### Lookup variables
+
+When compiling code for Mindustry 8, the `mlog` modifier allows you to create variables to be used as _lookup variables_: variables whose content is accessed indirectly, typically by using names of Mindustry content objects. These lookups may be faster even than optimized `case` statements, especially when the Mindustry content used for lookup doesn't have logic IDs assigned.
+
+Example:
+
+```Mindcode
+#set target = 8;
+
+volatile mlog(@ore-copper.@name)  ore_copper = @copper;
+volatile mlog(@ore-lead.@name)    ore_lead = @lead;
+volatile mlog(@ore-coal.@name)    ore_coal = @coal;
+
+// Find floor type at given coordinates
+getBlock(x, y, , out floor);
+
+// Convert the floor type to item that can be mined there
+ore = @this.read(floor.@name);
+print(ore);
+```
+
+The variables are declared `volatile`, as this ensures they will be available for indirect access. 
+
+### `noinit` modifier
+
+Can be used with the `export`, `external` or `remote` modifier, or without a storage modifier. This modifier cannot be used for declaring arrays or when the declared variable is assigned an initial value.
+
+The `noinit` modifier can be used for two purposes:
+
+* To suppress the "uninitialized variable" warning for the declared variable. Uninitialized global variables retain the last value assigned to them in the last iteration of the program.
+* When used with the `cached` modifier, the initial value of the variable is not read from the external memory or remote processor at all; the variable only allows writing new values to the memory/processor.
+
+Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors in situations where the variable is also read locally, and is read more often then it is written to. The variable is read without any performance penalty, but all the writes are automatically propagated to the external memory.
+
+### `volatile` modifier
+
+Can be used with the `export` modifier, or without a storage modifier. Variables declared `export` are automatically volatile, so this modifier has no effect on `export` variables.
+
+The compiler assumes that volatile variables or array can be changed externally (for example, by other processors, or via the `sync` instruction) or indirectly (via the `read` or `write` using `@this` as the processor) and handles them accordingly. A volatile variable is guaranteed to exist in the processor (and can be accessed remotely or indirectly), even if it is not directly accessed by an mlog instruction.
+
+# Types of variables
+
 ## Regular variables
 
-Regular variables directly correspond to Mindustry Logic variables. They are the most basic all-purpose variables. Regular variables are declared using this syntax:
+Regular variables and arrays directly correspond to Mindustry Logic variables. They are the most basic all-purpose variables. Regular variables are declared without any storage modifier.
 
-```
-[noinit] [volatile] [mlog(name)] var <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
-```
+When declaring regular variables, these additional modifiers can be used:
 
-When an initial value is provided, it is assigned to the variable at the moment of the declaration. Any expression can be used as the initial value, including function calls.
-
-When declaring global variables, these additional modifiers can be used:
-
-* `noinit`: this modifier suppresses the "uninitialized variable" warning for the declared variable. Uninitialized global variables retain the last value assigned to them in the last iteration of the program. This modifier cannot be used if the variable is assigned an initial value.
-* `volatile`: the compiler assumes that volatile variables can be changed externally (for example, by other processors, or via the `sync` instruction) and handles them correspondingly.
-* `mlog`: by using the `mlog` modifier, it is possible to specify the mlog name of the variable. This is mainly useful if you want to create an mlog variable with a fixed name to be accessed by other processors.
-  * The `mlog` modifier must be used in global scope only, variables created this way are therefore always global.
-  * The mlog name must be a constant string expression enclosed in parentheses. 
-  * When using the `mlog` modifier, only one variable can be specified per declaration (as multiple variables would share the same mlog name otherwise). Do not use the `mlog` modifier to create different variables with matching mlog name; otherwise the program behavior is undefined.
-  * Volatile mlog variables are created in the processor even when not used directly in the code, as it is assumed these variables may also be accessed indirectly using just the name.  
-
-Modifiers can be specified in any order.
+* [`mlog`](#mlog-modifier)
+* [`noinit`](#noinit-modifier)
+* [`volatile`](#volatile-modifier) 
 
 Example
 
@@ -376,21 +550,22 @@ end;
 
 Constants are unmodifiable variables that can hold values evaluated at compile time. Mindcode doesn't store constant values in processor variables but places the value of the constant directly into the compiled code when the constant is used. Storing a value in a constant allows easily changing the value at a single place in the source code. Unlike program parameters, changes to constants aren't possible in the compiled code.
 
-Constants are declared using this syntax:
+Constants are declared using the [`const` storage modifier](#storage-modifiers). No other modifiers are supported.
 
-```
-const [var] <constant> = <value>;
-```
+A constant declaration must specify an initial value for the variable/array. The following types of values can be assigned to constants:
 
-`const` is a modifier, and the `var` keyword is optional when `const` is used. Constants must be declared in global scope and are therefore always global. The following types of values can be assigned to constants:
-
-* literals of any kind (including formattable string literals),
+* literals of any kind except formattable string literals and mlog keywords,
 * other constants and constant expressions,
-* string values obtained by concatenating strings using the `+` operator,
 * linked variables,
 * linked blocks (only in relaxed syntax mode),
-* built-in variables, except built-in variables known not to be constant,
-* mlog keywords.
+* built-in variables, except built-in variables known not to be constant.
+
+The following values can be assigned to constant variables, but not to arrays:
+
+* formattable string literals (mlog-incompatible),
+* mlog keywords (mlog-incompatible).
+
+These constants can be passed to inline functions but cannot be stored in variables or passed to out-of-line or recursive functions.
 
 Example:
 
@@ -400,7 +575,11 @@ const HIGH_SPEED = 50;
 const LOW_SPEED = HIGH_SPEED / 2;
 const RATIO = sqrt(2);
 const message = DEBUG ? "Debug" : "Release";
-const FORMAT = $"Position: $x, $y"; 
+const FORMAT = $"Position: $x, $y";
+
+// Array of switches - linked blocks
+linked switch1, switch2, switch3;
+const links[] = (switch1, switch2, switch3); 
 ```
 
 Compile-time evaluation uses the same rules as Mindustry Logic, i.e., `const ERROR = 1 / 0` is a valid constant declaration which creates a constant `ERROR` with a value of `null`.
@@ -426,16 +605,16 @@ the entire `if DEBUG then ... end` statement will be skipped and not included in
 
 Expressions that have constant arguments and are deterministic (i.e., they give the same result for the same input) are constant expressions. This also applies to deterministic logic functions, such as `sin()` or `sqrt()`, and some built-in functions, such as `length()` and `encode()`.
 
-Furthermore, `@id` and `@name` properties can be used in constant expressions, assuming `builtin-evaluation` is set to `full` or `compatible`. When `builtin-evaluation` is set to `compatible`, only stable objects that have [stable logic IDs](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) are allowed in constant expressions.   
+Furthermore, `@id` and `@name` properties can be used in constant expressions, assuming `builtin-evaluation` is set to `full` or `compatible`. When `builtin-evaluation` is set to `compatible`, only stable objects that have [stable logic IDs](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) are allowed in constant expressions.
 
 User-defined functions can also be used in constant expressions. Currently, only functions meeting these criteria can be used as constant expressions:
 
-* the function isn't declared `noinline` or `remote`,
+* the function isn't declared `noinline` or `export`,
 * the function isn't recursive,
 * the function doesn't have a vararg parameter,
 * the function returns a value and doesn't have other output parameters,
 * the function consists of a single, constant expression (a `return` statement may or may not be used),
-* any global constants used in the function must be declared not only before the function itself, but also before the place where the function is used as a constant expression. 
+* any global constants used in the function must be declared not only before the function itself, but also before the place where the function is used as a constant expression.
 
 An example of a constant expression using a user-defined function:
 
@@ -463,6 +642,39 @@ print "\n"
 print 155271
 print "\n"
 end
+```
+
+### Constant arrays
+
+By specifying the `const` modifier it is possible to create a constant array. A constant array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for constant array elements; the constant values are used instead.
+
+```Mindcode
+var array[3] = (rand(4), rand(4), rand(4));
+const colors[] = ("[red]", "[green]", "[blue]", "[crimson]");
+print(colors[floor(array[0])]);
+print(array);
+```
+
+compiles into
+
+```mlog
+op rand *tmp0 4 0
+op rand *tmp1 4 0
+op rand *tmp2 4 0
+op floor *tmp4 *tmp0 0
+op mul *tmp7 *tmp4 2
+op add @counter *tmp7 6
+set *tmp6 "[red]"
+jump 13 always 0 0
+set *tmp6 "[green]"
+jump 13 always 0 0
+set *tmp6 "[blue]"
+jump 13 always 0 0
+set *tmp6 "[crimson]"
+print *tmp6
+print *tmp0
+print *tmp1
+print *tmp2
 ```
 
 ### Constants representing built-in icons
@@ -1127,19 +1339,15 @@ end;
 > [!NOTE]
 > Blocks linked to Mindustry processors are called _linked blocks_. Mindcode variables representing linked blocks are called _linked variables_. In relaxed syntax mode, these terms can be used interchangeably, as using a linked block name in the source code creates a linked variable with the same name. In strict syntax, the distinction between linked blocks and linked variables is important: linked variables are created for specific linked blocks through an explicit declaration. 
 
-Linked variables represent blocks directly linked to the processor. A guard code may be created for linked variables. Linked variables are declared using this syntax: 
+Linked variables represent blocks directly linked to the processor. A guard code may be created for linked variables. Linked variables are declared using the [`linked` or `guarded` storage modifiers](#storage-modifiers).
 
-```
-[guarded] linked [var] <variable1> [= <linked block>] [, <variable2> [= <linked block>] ... ];
-```
+When an initial value is not assigned to a linked variable, the variable identifier is the name of the linked block: `linked cell1;` declares a `cell1` variable representing the `cell1` block linked to the processor. When an initial value is assigned to the variable, the assigned value must be a name of the linked block, while the variable identifier will be used to represent the variable in the program: `linked up = switch1, down = switch2;`. This is useful to assign meaningful names to linked blocks.
 
-Linked variables must be declared in global scope and are therefore always global. When an initial value is not assigned to the variable, the variable identifier is the name of the linked block: `linked cell1;` declares a `cell1` variable representing the `cell1` block linked to the processor. When an initial value is assigned to the variable, the assigned value must be a name of the linked block, while the variable identifier will be used to represent the variable in the program: `linked up = switch1, down = switch2;`. This is useful to assign symbolic names to linked blocks.
+A warning is generated if the name of the linked block used in the linked variable declaration is not recognized, however, the linked variable is nevertheless created. This way, it is possible to use linked blocks unrecognized by Mindcode, for example, blocks provided by a mod. (The warning can be suppressed using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-linked-block-names)). 
 
-A warning is generated if the name of the linked block used in the linked variable declaration is not recognized, however, the linked variable is nevertheless created. This way, it is possible to use linked blocks unrecognized by Mindcode (e.g., blocks from a mod).
+When declaring linked variables, these additional modifiers can be used:
 
-`linked` is a modifier, and the `var` keyword is optional when `linked` is used. Modifiers can be specified in any order. When declaring external variables, these additional modifiers can be used:
-
-* `guarded`: this modifier ensures the generation of the guard code. When the `guarded` modifier is used, the `linked` modifier can be omitted.
+* [`guarded`](#guarded-modifier)
 
 Example:
 
@@ -1161,94 +1369,56 @@ end;
 > 
 > When a linked block is stored in a regular variable or program parameter, the variable will always refer to the same instance of the block that was assigned to it. When such a block gets destroyed, it still appears to be present (doesn't become `null`), and can only be recognized as missing by querying the `@dead` property.
 
-### Guard code for linked variables
-
-When declaring a linked variable using the `guarded` modifier, Mindcode generates a guard code (one instruction per declared variable) which pauses the program execution until a block is linked to the processor under the expected name:
-
-```Mindcode
-/// A guard code: loops until message1 is not null
-guarded output = message1;
-print("Here we are");
-printflush(output);
-stopProcessor();
-```
-
-compiles to
-
-```mlog
-# A guard code: loops until message1 is not null
-jump 0 equal message1 null
-print "Here we are"
-printflush message1
-stop
-```
-
-## Heap
-
-Heap provides default storage for external variables and needs to be declared before an external variable without explicit storage specification is declared or implicitly created. Heap is declared using this syntax:
-
-```
-allocate heap in <memory>[<range>];
-```
-
-for example:
-
-```Mindcode
-allocate heap in cell4[50 ... 64];
-```
-
-> [!NOTE]
-> The range specification is optional. When no range is specified and the memory block is resolved to a memory bank (i.e., its name starts with 'bank'), range `0 ... 512` is assumed. Otherwise, range `0 ... 64` is assumed.
-
-This statement allocates a heap, stored in `cell4`, and uses memory locations 50, 51, 52, ..., 62, and 63 for external variables (note the exclusive range). If you create more external variables than you have allocated space for, a compilation error will occur. In that case, allocate more space for the heap in the cell, or possibly switch to a memory bank to get even more space.
-
-A linked block or variable, a constant, a parameter or a global variable can be used as a memory in the heap declaration. This way (by using a global variable) it is even possible to choose a memory block for heap dynamically. It is up to the user to ensure that:
-
-1. The linked block or variable was initialized before external variables are accessed for read or write.
-2. The value of a global variable used to hold the memory doesn't change once initialized. 
-
-The first requirement may be satisfied by using a guarded linked block as the initial value of the variable. In more complex cases, assigning a value to the variable via function call might be necessary. 
-
 ## External variables
 
-External variables represent cells in a memory block. When created implicitly or declared without storage specification, external variables are assigned storage from the heap, which needs to be allocated first. The cells are assigned to variables in the order in which the variables appear in the source code. They don't subsequently change (explicit declaration of all external variables is the easiest way to specify fixed allocation order of external variables). External variables are declared using this syntax:
+External variables and arrays represent cells in a memory block. They are declared using the [`external` storage modifier](#storage-modifiers).
 
-```
-[noinit] [cached] external [memory [index|range]] [var] <variable1> [= <initial value>] [, <variable2> [= <initial value>] ... ];
-```
-
-External variables must be declared in global scope and are therefore always global. Declared external variables can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
-
-When an initial value is provided, it is assigned to the variable and written to the memory cell at the moment of the declaration.
-
-`external` is a modifier, and the `var` keyword is optional when `external` is used. Modifiers can be specified in any order. When declaring external variables, these additional modifiers can be used:
-
-* `cached`: the value of the variable is read from the external memory just once at the variable creation and is kept in a processor variable (or, if an initial value was specified in the declaration, the initial value is written to the memory and the variable). Variable reads are served using the processor variable. Writes update the processor variable and also write the new value to the memory.
-* `noinit`: this modifier is only meaningful with the `cached` modifier. When used, the initial value of the variable is not read from the memory slot at all; the variable only allows writing new values to the memory slot. This modifier cannot be used if the variable is assigned an initial value.
-
-Cached variables are useful in situations where you want to store the latest values in a memory to be reused when the processor is reset. Cached `noinit` variables are useful for a sending side of a unidirectional communication between processors. In both cases, you can read from the variables without any performance penalty, but all the writes are automatically propagated to the external memory.
-
-A _storage specification_ can be included after the `external` keyword. The storage clause consist of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the `external` keyword are allocated in given memory block, starting at the given index/range. If more space than provided by given range is required for variables, an error is reported.
-
-When no storage clause is specified, the external variable is placed in the heap.
-
-> [!IMPORTANT]
-> Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory. 
+The `external` modifier can optionally specify storage for the declared variables or arrays. The storage specification consist of the name of the memory block (e.g., `cell1`, `bank2`, or a variable), and optionally an index or range in square brackets. When no index or range is specified, index `0` is assumed. When a storage clause is specified, all variables declared after the `external` keyword are allocated in given memory block, starting at the given index/range. If more space than provided by a given range is required for variables, an error is reported.
 
 Examples:
 
 ```Mindcode
+allocate heap in cell1[32 ... 64];
+external var foo;
+external(cell1) bar;
+external(cell1[10 ... 20]) var a, b, c[8];   
+```
+
+When no storage clause is specified, the declared variables are placed in the heap, which needs to be allocated first. The cells are assigned to variables in the order in which the variables appear in the source code. Explicit declaration of all external variables is the easiest way to specify fixed allocation order of external variables on the heap.
+
+Declared external variables can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
+
+When an initial value is provided, it is assigned to the variable and written to the memory cell at the moment of the declaration.
+
+When declaring external variables, these additional modifiers can be used:
+
+* [`cached`](#cached-modifier)
+* [`noinit`](#noinit-modifier)
+
+> [!IMPORTANT]
+> Since external variables are stored in [external memory](#external-memory), they only support numeric values. At this moment, Mindcode is incapable of detecting situations when unsupported values are being written to external memory.
+
+> [!NOTE]
+> External arrays stored in memory cells or memory banks starting at an index different from `0` incur small performance penalty when accessing the array elements, since the offset needs to be added to the index to access the correct memory cell.
+
+Example of code using external variables:
+
+```Mindcode
+#set remarks = comments;
 allocate heap in cell4[32 ... 64];
 
-// Implicitly created varaibles
+// Implicitly created variables
 $dx = 1; 
 $dy = 1;
 
 // Explicity declared varaibles
-cached external a, b = 90;        
-noinit cached external c;
+cached external a, b = 10;        
+noinit cached external(bank1) c;
+external(bank1[256 ... 512]) d[256];
 c = a + b;
 print(c);
+/// Here's the additional instruction for computing the array offset 
+d[c] = 10; 
 ```
 
 The above will compile to:
@@ -1257,99 +1427,80 @@ The above will compile to:
 write 1 cell4 32
 write 1 cell4 33
 read .a cell4 34
-write 90 cell4 35
-op add .c .a 90
-write .c cell4 36
+write 10 cell4 35
+op add .c .a 10
+write .c bank1 0
 print .c
+# Here's the additional instruction for computing the array offset 
+op add *tmp260 .c 256
+write 10 bank1 *tmp260
 ```
 
-## External arrays
+## Exported variables
 
-It is possible to allocate an array of a fixed length from the heap or another storage. An external array consists of a fixed number of elements. Individual array elements are governed by the same rules as external variables. External arrays are declared using this syntax:
+Target 8 or higher is required to use exported variables. 
 
-```
-external [memory [index|range]] [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
-```
+Exported variables are created in the current processor and are available through remote access in code which imports the module. Exported variables/arrays may or may not be initialized. When some exported variables or array elements are unused within the module (and the corresponding mlog variables would therefore not be created when parsing the code by the logic processor), the missing variables are explicitly created using `draw triangle` instruction(s), so that they may be accessed remotely. These instructions are placed at the end of the generated code and are never executed. See the [`require remote` statement](REMOTE-CALLS.markdown#main-processor-code).
 
-> [!TIP]
-> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g., `external var x[10];`.
+Exported variables and arrays are declared using the [`export` storage modifier](#storage-modifiers). When declaring exported variables, these additional modifiers can be used:
 
-`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e., the number of elements in the array. When initial values for the array are specified, their number must be equal to the size of the array:
+* [`mlog`](#mlog-modifier)
+* [`noinit`](#noinit-modifier)
+* [`volatile`](#volatile-modifier)
+
+All exported variables are implicitly `volatile`, so the `volatile` modifier is superfluous, but can be used for better clarity. The only difference between `export` and `volatile` is that `volatile` variables aren't imported to modules which require the current module. 
+
+> [!NOTE]
+> Element names of an exported array are part of the module contract, and therefore cannot be changed by the optimizer. To use a lookup implementation of an exported array, the lookup type must be specified explicitly using the `mlog` modifier.
+
+Example:
 
 ```Mindcode
-allocate heap in cell1[32 .. 64];
-external $array[3] = (10, 20, 30);
-external bank1[10] d = 10;
+#set target = 8;
+
+// Exported variables, a unitialized, b initialized
+export a, b = 10;
+
+// Exported arrays: initialized and uninitialized
+export array2[5] = (1, 2, 3, 4, 5);
+export mlog(:liquid) array1[10];
 ```
 
-compiles into
+## Remote variables
 
-```mlog
-write 10 cell1 32
-write 20 cell1 33
-write 30 cell1 34
-write 10 bank1 10
-```
+Target 8 or higher is required to use remote variables.
 
-External arrays must be declared in global scope and are therefore always global. Declared external arrays can optionally use the `$` prefix, which, if used, is part of the variable name: `$ext` is different from `ext`.
-
-When initial values are provided, they are written to corresponding memory slots at the moment of the declaration.
-
-`external` is a modifier, and the `var` keyword is optional when `external` is used. When declaring external arrays, the `noinit` and `cached` modifiers cannot be used.
-
-A _storage specification_ can be included after the `external` keyword, as described above.
-
-## Internal arrays
-
-[Internal arrays](#internal-arrays) are declared using this syntax:
-
-```
-[const] [var] <variable1>[size] [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
-```
-
-> [!TIP]
-> The square brackets around `size` do not represent an optional element, but are actually part of the declaration, e.g., `var x[10];`.
-
-`size` must be a constant expression evaluating to a positive integer, which specifies the array size, i.e., the number of elements in the array. When initial values for the array are specified, their number must be equal to the size of the array. The initial values are assigned directly to array element variables:
-
-When declaring arrays, these additional modifiers can be used:
-
-* `const`: declares a constant array. A constant array must be initialized, and its elements cannot be modified after initialization. Processor variables are not allocated for constant array elements, the constant values are used instead.
+External variables and arrays are stored in another processor. They are declared using the [`remote` storage modifier](#storage-modifiers). The `remote` modifier specifies the processor the variable is stored in, and it may be specified as a linked variable, linked block or a regular variable:
 
 ```Mindcode
-var array[3] = (rand(4), rand(4), rand(4));
-const colors[] = ("[red]", "[green]", "[blue]", "[crimson]");
-print(colors[floor(array[0])]);
-print(array);
+#set target = 8;
+linked processor1, processor2;
+var proc;
+
+remote(processor1) a;
+remote(processor2) b;
+remote(proc) c[10];
+
+proc = a > b ? processor1 : processor2;
+print(a, b, c[0]);
 ```
 
-compiles into
+When declaring remote variables, these additional modifiers can be used:
 
-```mlog
-op rand *tmp0 4 0
-op rand *tmp1 4 0
-op rand *tmp2 4 0
-op floor *tmp4 *tmp0 0
-op mul *tmp7 *tmp4 2
-op add @counter *tmp7 6
-set *tmp6 "[red]"
-jump 13 always 0 0
-set *tmp6 "[green]"
-jump 13 always 0 0
-set *tmp6 "[blue]"
-jump 13 always 0 0
-set *tmp6 "[crimson]"
-print *tmp6
-print *tmp0
-print *tmp1
-print *tmp2
-```
+* [`cached`](#cached-modifier)
+* [`mlog`](#mlog-modifier)
+* [`noinit`](#noinit-modifier)
 
-Internal arrays must be declared in global scope and are therefore always global.
+> [!NOTE]
+> Unlike [remotely accessed exported variables](REMOTE-CALLS.markdown#exported-variables), remote variables are specified by their name only in Mindcode, not as a property on the processor they are stored in.
 
-## Remote variables and arrays
+Using the `mlog` modifier allows specifying the mlog name of the remote variable. This is useful in two cases:
 
-Remote variables must be declared in remote modules. For more details, see [remote variables and arrays](REMOTE-CALLS.markdown#remote-variables).
+* The code in the remote processor wasn't created by Mindcode. In this case, the naming convention used for variables is probably different from the one used by Mindcode, and you need to use the `mlog` modifier to specify the correct name. Note that unless the remote code supports writing to the variable remotely, it might stop working correctly when changing the value of the variable.
+* The remote variable was itself created by Mindcode using the `mlog` modifier. The same mlog name must be specified in the remote variable declaration.    
+
+> [!IMPORTANT]
+> Mindcode variables to be accessed remotely from different processor must be declared as `volatile` variables. 
 
 ## Program parameters
 
@@ -1370,8 +1521,8 @@ param <parameter> = <initial value>;
 
 Program parameters must be declared in global scope and are therefore always global. The following values can be assigned to program parameters:
 
-* literals of any kind except formattable string literals,
-* constants and constant expressions,
+* literals of any kind except formattable string literals and mlog keywords,
+* other constants and constant expressions,
 * linked variables,
 * linked blocks,
 * built-in variables, except built-in variables known not to be constant.
@@ -1382,7 +1533,7 @@ If a numeric value is assigned to a parameter, and it isn't possible to [encode 
 > Even in strict syntax mode, linked blocks can be assigned to a program parameter without prior declaration.
 
 > [!NOTE]
-> Using a guarded linked variable as a value for a program parameter is discouraged. The purpose of the program parameter is to allow making changes to the compiled code, however a change just to the program parameter's value would not mean the guard code would protect the new block.
+> Using a guarded linked variable as a value for a program parameter is discouraged. The purpose of the program parameter is to allow making changes to the compiled code, however, a change just to the program parameter's value would not mean the guard code would protect the new block.
 
 Example (the optimization is turned off to prevent removing unused parameters):
 
@@ -1428,42 +1579,7 @@ op max .cutoffPct *tmp0 0
 print .cutoffPct
 ```
 
-An additional benefit is that, upon closer inspection, the expected range of the parameter value becomes apparent from the compiled code itself. 
-
-## Built-in variables
-
-[Mindustry built-in variables](#mindustry-logic-built-in-variables) are available in Mindcode directly by their name, including the `@` prefix (e.g., `var n = @links;`). A declaration is never required to use them.
-
-Some built-in variables represent a constant numerical value, such as `@pi` or `@blockCount`. The actual numerical value is either _stable_, meaning it is the same in all released versions of Mindustry (e.g., `@pi`) since the first one in which it appeared, or _unstable_, meaning the value depends on the actual version of Mindustry used (e.g., `@blockCount`).
-
-When the [`builtin-evaluation` option](SYNTAX-5-OTHER.markdown#option-builtin-evaluation) is set to `compatible` (which is the default value), Mindcode evaluates expressions involving stable numerical built-in variables at compile time, including string conversion for printing. However, when the original value is not affected by expression evaluation, it is written using the symbolic name into mlog:
-
-```Mindcode
-print(@pi);         // No evaluation
-printflush(message1);
-print(2 * @pi);     // Numeric evaluation
-printflush(message2);
-println(@pi);       // Conversion to string
-printflush(message3);
-```
-
-compiles to
-
-```mlog
-print @pi
-printflush message1
-print 6.2831854820251465
-printflush message2
-print "3.1415927410125732\n"
-printflush message3
-```
-
-The unstable built-in variables are compile-time evaluated when the `builtin-evaluation` option is set to `full`. This setting is useful when the program is meant to be only run in the version of Mindustry selected by the `target` option, and not on later versions.
-
-All other built-in constants and variables (that is, those that aren't numerical constants) are compiled into mlog code as is, although Mindcode emits a warning when an unknown built-in variable is encountered as protection against mistyped identifiers. Valid built-in variables unknown to Mindcode (provided by a mod, for example) can be declared using the [`#declare` directive](SYNTAX-EXTENSIONS.markdown#declaring-new-built-in-variables) to eliminate the warning.
-
-> [!TIP]
-> Assignments to built-in variables aren't supported. As far as we know, there exists only one built-in variable that can be assigned a new value: `@counter`. Allowing direct assignments to it would make Mindcode unsafe.       
+An additional benefit is that, upon closer inspection, the expected range of the parameter value becomes noticeable from the compiled code itself. 
 
 ## Function parameters
 
@@ -1493,36 +1609,6 @@ def findMessage()
 end;
 ```
 
-# General access to memory blocks
-
-Mindcode provides a way to manipulate the contents of memory blocks directly through linked variables or dynamically linked blocks using the array access syntax:
-
-```Mindcode
-linked cell1, cell2;
-
-for var i in 0 .. 63 do
-    cell2[i] = cell1[i];
-end;
-```
-
-This code copies the entire contents of memory cell `cell1` to `cell2`.
-
-It is also possible to pass statically or dynamically linked blocks to (non-recursive) functions:
-
-```Mindcode
-linked bank1, bank2;
-
-def copy(source, target, size)
-    for var i in 0 ... size do
-        target[i] = source[i];
-    end;
-end;
-
-begin
-    copy(bank1, bank2, 512);
-end;
-```
-
 # Mlog variable name generation
 
 Implicit and explicit variable names used in source code are translated to mlog using these rules:
@@ -1535,11 +1621,10 @@ Implicit and explicit variable names used in source code are translated to mlog 
 * temporary variables: `*tmpX` (`*tmp` + counter)
 * function return address/value: `:fnX*retaddr`/`:fnX*retval`
 * stack pointer: `*sp`
-* main processor: `*mainProcessor`
 * remote function parameters: `:function:parameter` (using actual function and parameter name)
 * remote function internal variables (e.g., address or finished flag): `:function*variable`
 
-In short, global variables start with `.`, local variables start with `:` and compiler-generated variables start with or contain `*`.
+In short, global variables start with `.`, function names and local variables start with `:` and compiler-generated variables start with or contain `*`.
 
 If the same main or local variable is declared multiple times in the same function (in different, non-overlapping code blocks), they actually represent different variables within a program. In this case, a unique numeric suffix is appended to variables created in the second and further declarations, separated by `.` (a dot):
 

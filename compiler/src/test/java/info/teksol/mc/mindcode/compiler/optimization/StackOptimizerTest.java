@@ -213,7 +213,7 @@ class StackOptimizerTest extends AbstractOptimizerTest<StackOptimizer> {
     void removesUnmodifiedVariables() {
         // For the first call, y isn't read in the loop, but is read after the loop
         assertCompilesTo("""
-                        guarded bank1;
+                        guarded linked bank1;
                         allocate stack in bank1[0...512];
                         def foo(m, n)
                             for i in 1 .. n do

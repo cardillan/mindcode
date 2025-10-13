@@ -35,7 +35,7 @@ public class ReturnStack {
         return stack.isEmpty() ? LogicLabel.INVALID : Objects.requireNonNull(stack.peek()).label();
     }
 
-    // TODO returnValue will be ValueStore
+    // TODO value will be ValueStore when data types are introduced
     public record ReturnRecord(LogicLabel label, LogicValue value) {
         public ReturnRecord {
             Objects.requireNonNull(label);

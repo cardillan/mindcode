@@ -12,6 +12,7 @@ import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.Modifiers;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -19,7 +20,10 @@ import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -69,7 +73,7 @@ public class ForEachLoopStatementsBuilder extends AbstractLoopBuilder implements
         private Iterator processIterator(AstIteratorsValuesGroup group, AstIterator iterator) {
             if (group.hasDeclaration()) {
                 if (iterator.getIterator() instanceof AstIdentifier identifier) {
-                    variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Map.of());
+                    variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Modifiers.EMPTY);
                 } else {
                     // Probably can't happen due to grammar
                     error(iterator.getIterator(), ERR.IDENTIFIER_EXPECTED);

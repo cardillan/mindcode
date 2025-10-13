@@ -276,8 +276,8 @@ class MindcodeParserTest extends AbstractParserTest {
                     mlog("abc") var abc;
                     mlog("abc" + "def") var abc_def;
                     remote a = 10;
-                    remote p1 var b;
-                    remote p1("c") var d;
+                    external p1 var b;
+                    external p1 mlog("c") var d;
                     linked cell1, message1;
                     
                     allocate stack in cell1;

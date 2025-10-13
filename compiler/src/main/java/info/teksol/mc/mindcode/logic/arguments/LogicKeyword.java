@@ -34,6 +34,10 @@ public class LogicKeyword extends AbstractArgument implements ValueStore {
         return sourcePosition;
     }
 
+    public String getKeywordLiteral() {
+        return ":" + keyword;
+    }
+
     public String getKeyword() {
         return keyword;
     }

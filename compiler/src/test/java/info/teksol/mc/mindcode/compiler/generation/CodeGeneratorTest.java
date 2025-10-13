@@ -190,11 +190,11 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             module test;
                             
-                            remote void foo(in a, out b)
+                            export void foo(in a, out b)
                                 b = 2 * a;
                             end;
                             
-                            remote def bar(in x)
+                            export def bar(in x)
                                 sin(x) * 2;
                             end;
                             """,
@@ -202,7 +202,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                     createInstruction(JUMP, label(1), "always"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(2)),
-                    createInstruction(SET, "*signature", q("8275dc9ca6c8f234:v1")),
+                    createInstruction(SET, "*signature", q("9790ee70085c2eb3:v1")),
                     createInstruction(LABEL, label(3)),
                     createInstruction(WAIT, "1e12"),
                     createInstruction(JUMP, label(3), "always"),
@@ -231,11 +231,11 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                             
                             var invocations = -1;
                             
-                            remote void foo(in a, out b)
+                            export void foo(in a, out b)
                                 b = 2 * a;
                             end;
                             
-                            remote def bar(in x)
+                            export def bar(in x)
                                 sin(x) * 2;
                             end;
                             
@@ -249,7 +249,7 @@ class CodeGeneratorTest extends AbstractCodeGeneratorTest {
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(3)),
                     createInstruction(SET, ".invocations", "-1"),
-                    createInstruction(SET, "*signature", q("8275dc9ca6c8f234:v1")),
+                    createInstruction(SET, "*signature", q("9790ee70085c2eb3:v1")),
                     createInstruction(LABEL, label(4)),
                     createInstruction(OP, "add", ".invocations", ".invocations", "1"),
                     createInstruction(PRINT, q("Number of invocations: ")),

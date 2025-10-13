@@ -493,5 +493,57 @@ class ArrayOptimizerTest {
                     createInstruction(PRINT, tmp(1))
             );
         }
+
+        @Test
+        void processesLookupDeclarations1() {
+            assertCompilesTo("""
+                            mlog(:team) var a[5];
+                            var b[5];
+                            param p = 0;
+                            a[p] = b[p];
+                            print(a[p], b[p]);
+                            """,
+                    createInstruction(SET, "p", "0"),
+                    createInstruction(LOOKUP, "liquid", tmp(5), "p"),
+                    createInstruction(SENSOR, ".b*elem", tmp(5), "@name"),
+                    createInstruction(READ, tmp(1), "@this", ".b*elem"),
+                    createInstruction(LOOKUP, "team", tmp(6), "p"),
+                    createInstruction(SENSOR, ".a*elem", tmp(6), "@name"),
+                    createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
+                    createInstruction(READ, tmp(2), "@this", ".a*elem"),
+                    createInstruction(PRINT, tmp(2)),
+                    createInstruction(READ, tmp(4), "@this", ".b*elem"),
+                    createInstruction(PRINT, tmp(4))
+            );
+        }
+
+        @Test
+        void processesLookupDeclarations2() {
+            assertCompilesTo("""
+                            mlog(:team) var a[5];
+                            var b[5];
+                            param p = 0;
+                            a[p] = b[p];
+                            print(a, b);
+                            """,
+                    createInstruction(SET, "p", "0"),
+                    createInstruction(LOOKUP, "liquid", tmp(2), "p"),
+                    createInstruction(SENSOR, ".b*elem", tmp(2), "@name"),
+                    createInstruction(READ, tmp(1), "@this", ".b*elem"),
+                    createInstruction(LOOKUP, "team", tmp(3), "p"),
+                    createInstruction(SENSOR, ".a*elem", tmp(3), "@name"),
+                    createInstruction(WRITE, tmp(1), "@this", ".a*elem"),
+                    createInstruction(PRINT, "derelict"),
+                    createInstruction(PRINT, "sharded"),
+                    createInstruction(PRINT, "crux"),
+                    createInstruction(PRINT, "malis"),
+                    createInstruction(PRINT, "green"),
+                    createInstruction(PRINT, "water"),
+                    createInstruction(PRINT, "slag"),
+                    createInstruction(PRINT, "oil"),
+                    createInstruction(PRINT, "cryofluid"),
+                    createInstruction(PRINT, "neoplasm")
+            );
+        }
     }
 }

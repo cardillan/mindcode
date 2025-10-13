@@ -780,11 +780,11 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         }
 
         @Test
-        void buildsRemoteVariables() {
+        void buildsExportVariables() {
             AstModuleDeclaration declaration = new AstModuleDeclaration(EMPTY, id("test"));
             assertBuildsTo("""
                             module test;
-                            remote var a = 1;
+                            export var a = 1;
                             """,
                     new AstModule(EMPTY,
                             declaration,
@@ -792,7 +792,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     declaration,
                                     new AstVariablesDeclaration(EMPTY, null,
                                             List.of(
-                                                    new AstVariableModifier(EMPTY, Modifier.REMOTE, null)
+                                                    new AstVariableModifier(EMPTY, Modifier.EXPORT, null)
                                             ),
                                             List.of(
                                                     new AstVariableSpecification(EMPTY, a, l1)
@@ -889,9 +889,9 @@ class AstBuilderTest extends AbstractAstBuilderTest {
         void buildsExternalVariablesWithMemory() {
             AstIdentifier memory = id("cell1");
             assertBuildsTo("""
-                            external cell1 $a = 0;
-                            external cell1[1] $b = 0;
-                            external cell1[0 ... 1] $c = 0;
+                            external(cell1) $a = 0;
+                            external(cell1[1]) $b = 0;
+                            external(cell1[0 ... 1]) $c = 0;
                             """,
                     List.of(
                             new AstVariablesDeclaration(EMPTY, null,
@@ -1643,7 +1643,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                             /** Comment3 */
                             inline def b(ref a, b...) b; end;
                             noinline void c(in a, out b, in out c, out in d) a + b; end;
-                            remote def d() end;
+                            export def d() end;
                             """,
                     List.of(
                             new AstFunctionDeclaration(EMPTY,
@@ -1681,7 +1681,7 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     DataType.VAR,
                                     List.of(),
                                     List.of(),
-                                    CallType.REMOTE)
+                                    CallType.EXPORT)
                     )
             );
         }
@@ -2421,18 +2421,6 @@ class AstBuilderTest extends AbstractAstBuilderTest {
                                     false
                             )
                     )
-            );
-        }
-
-        @Test
-        void reportsDoWhileLoopDeprecation() {
-            assertGeneratesMessage(3, 1,
-                    "The 'loop' keyword is deprecated. Use 'while' instead of 'loop while'.",
-                    """
-                            do
-                                print(a);
-                            loop while true;
-                            """
             );
         }
 

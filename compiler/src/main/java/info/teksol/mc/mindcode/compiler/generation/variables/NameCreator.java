@@ -7,7 +7,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicString;
 import org.jspecify.annotations.NullMarked;
 
 @NullMarked
-public interface NameCreator {
+public interface NameCreator extends ArrayNameCreator {
     MindcodeFunction setupFunctionPrefix(MindcodeFunction function);
 
     String global(String name);
@@ -18,13 +18,10 @@ public interface NameCreator {
     String retaddr(MindcodeFunction function);
     String finished(MindcodeFunction function);
 
-    String arrayBase(String processorName, String arrayName);
-    String arrayElement(String arrayName, int index);
     String arrayAccess(String baseName, String suffix);
 
     String remote(String name);
     String remoteParameter(MindcodeFunction function, String parameterName);
-    String remoteArrayElement(String arrayName, int index);
 
     String temp(int index);
     String stackPointer();

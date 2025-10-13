@@ -2,6 +2,8 @@ package info.teksol.mc.mindcode.compiler.callgraph;
 
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
+import info.teksol.mc.messages.WARN;
+import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
@@ -216,6 +218,10 @@ public class CallGraphCreator extends AbstractMessageEmitter {
 
         if (!function.getDeclaration().isInline() && function.isVarargs()) {
             error(function.getSourcePosition(), ERR.FUNCTION_VARARGS_NOT_INLINE, function.getName());
+        }
+
+        if (function.getDeclaration().getCallType() == CallType.REMOTE) {
+            warn(function.getSourcePosition(), WARN.DEPRECATED_USE_OF_REMOTE);
         }
 
         List<AstFunctionParameter> params = function.getDeclaredParameters();

@@ -6,7 +6,9 @@ import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
+import java.util.Objects;
 import java.util.function.Consumer;
 
 /// ValueStore representation of a remote variable.
@@ -21,9 +23,11 @@ public class RemoteVariable implements FunctionParameter {
     private final LogicVariable transferVariable;
     private final boolean input;
     private final boolean output;
+    private final boolean cached;
+    private @Nullable LogicString remoteNameOverride;
 
     public RemoteVariable(SourcePosition sourcePosition, LogicVariable processor, String name, LogicString remoteName, LogicVariable transferVariable,
-            boolean input, boolean output) {
+            boolean input, boolean output, boolean cached) {
         this.sourcePosition = sourcePosition;
         this.processor = processor;
         this.name = name;
@@ -31,14 +35,11 @@ public class RemoteVariable implements FunctionParameter {
         this.transferVariable = transferVariable;
         this.input = input;
         this.output = output;
+        this.cached = cached;
     }
 
     public LogicVariable getProcessor() {
         return processor;
-    }
-
-    public LogicValue getRemoteName() {
-        return remoteName;
     }
 
     @Override
@@ -63,7 +64,7 @@ public class RemoteVariable implements FunctionParameter {
 
     @Override
     public LogicString getMlogVariableName() {
-        return remoteName;
+        return Objects.requireNonNullElse(remoteNameOverride, remoteName);
     }
 
     @Override
@@ -78,24 +79,42 @@ public class RemoteVariable implements FunctionParameter {
 
     @Override
     public LogicValue getValue(ContextfulInstructionCreator creator) {
-        creator.createRead(transferVariable, processor, remoteName);
+        if (!cached) {
+            creator.createRead(transferVariable, processor, getMlogVariableName());
+        }
         return transferVariable;
     }
 
     @Override
     public void readValue(ContextfulInstructionCreator creator, LogicVariable target) {
-        creator.createRead(target, processor, remoteName);
+        if (cached) {
+            creator.createSet(target, transferVariable);
+        } else {
+            creator.createRead(target, processor, getMlogVariableName());
+        }
+    }
+
+    @Override
+    public void initialize(ContextfulInstructionCreator creator) {
+        if (cached) {
+            creator.createRead(transferVariable, processor, getMlogVariableName());
+        }
     }
 
     @Override
     public void setValue(ContextfulInstructionCreator creator, LogicValue value) {
-        creator.createWrite(value, processor, remoteName);
+        if (cached) {
+            transferVariable.setValue(creator, value);
+            creator.createWrite(transferVariable, processor, getMlogVariableName());
+        } else {
+            creator.createWrite(value, processor, getMlogVariableName());
+        }
     }
 
     @Override
     public void writeValue(ContextfulInstructionCreator creator, Consumer<LogicVariable> valueSetter) {
         valueSetter.accept(transferVariable);
-        creator.createWrite(transferVariable, processor, remoteName);
+        creator.createWrite(transferVariable, processor, getMlogVariableName());
     }
 
     @Override
@@ -105,10 +124,15 @@ public class RemoteVariable implements FunctionParameter {
 
     @Override
     public void storeValue(ContextfulInstructionCreator creator) {
-        creator.createWrite(transferVariable, processor, remoteName);
+        creator.createWrite(transferVariable, processor, getMlogVariableName());
     }
 
     public RemoteVariable withProcessor(LogicVariable processor) {
-        return new RemoteVariable(sourcePosition, processor, name, remoteName, transferVariable, input, output);
+        return new RemoteVariable(sourcePosition, processor, name, getMlogVariableName(), transferVariable, input, output, cached);
+    }
+
+    @Override
+    public void setArrayElementName(String elementName) {
+        this.remoteNameOverride = LogicString.create(elementName);
     }
 }

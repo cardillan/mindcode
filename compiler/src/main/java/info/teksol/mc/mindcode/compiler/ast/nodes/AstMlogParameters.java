@@ -4,18 +4,20 @@ import info.teksol.annotations.AstNode;
 import info.teksol.mc.common.SourcePosition;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.List;
+
 @NullMarked
 @AstNode(printFlat = true)
 public class AstMlogParameters extends AstFragment {
-    private final AstExpression mlog;
+    private final List<AstExpression> mlogNames;
 
-    public AstMlogParameters(SourcePosition sourcePosition, AstExpression mlog) {
-        super(sourcePosition, children(mlog));
-        this.mlog = mlog;
+    public AstMlogParameters(SourcePosition sourcePosition, List<AstExpression> mlogNames) {
+        super(sourcePosition, children(mlogNames));
+        this.mlogNames = mlogNames;
     }
 
-    public AstExpression getMlog() {
-        return mlog;
+    public List<AstExpression> getMlogNames() {
+        return mlogNames;
     }
 
     @Override
@@ -23,11 +25,11 @@ public class AstMlogParameters extends AstFragment {
         if (o == null || getClass() != o.getClass()) return false;
 
         AstMlogParameters that = (AstMlogParameters) o;
-        return mlog.equals(that.mlog);
+        return mlogNames.equals(that.mlogNames);
     }
 
     @Override
     public int hashCode() {
-        return mlog.hashCode();
+        return mlogNames.hashCode();
     }
 }

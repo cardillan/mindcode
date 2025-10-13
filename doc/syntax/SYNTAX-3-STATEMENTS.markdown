@@ -165,7 +165,7 @@ When an array or subarray is used in the value list (external or internal), the 
 
 ```Mindcode
 var a[] = (1, 2, 3, 4, 5);
-external cell1 b[] = (6, 7, 8, 9);
+external(cell1) b[] = (6, 7, 8, 9);
 
 // Prints 1234506789
 for var i in a, 0, b do

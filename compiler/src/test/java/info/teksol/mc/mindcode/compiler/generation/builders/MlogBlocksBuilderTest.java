@@ -245,13 +245,13 @@ class MlogBlocksBuilderTest extends AbstractCodeGeneratorTest {
     void refusesDeclaredComplexVariables() {
         assertGeneratesMessage(
                 "Variable 'foo' is not a plain mlog variable and cannot be accessed in an mlog block.",
-                "external cell1[0] foo; mlog (in foo) { print bar }");
+                "external(cell1[0]) foo; mlog (in foo) { print bar }");
     }
 
     @Test
     void refusesUndeclaredComplexVariables() {
         assertGeneratesMessage(
                 "Variable 'foo' is not a plain mlog variable and cannot be accessed in an mlog block.",
-                "external cell1[0] foo; mlog { print $foo }");
+                "external(cell1[0]) foo; mlog { print $foo }");
     }
 }

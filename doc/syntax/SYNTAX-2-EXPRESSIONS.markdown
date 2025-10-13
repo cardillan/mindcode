@@ -442,7 +442,7 @@ x = x + y;
 It is possible to assign arrays using the assignment operator, assuming both arrays have the same size. Assignments can be chained. Assignments between external, internal and remote arrays are supported, as well as subarrays. Examples:
 
 ```Mindcode
-external cell1 a[10];
+external(cell1) a[10];
 var b[10];
 var c[20];
 

@@ -9,7 +9,7 @@ Calling functions stored in other processors is a feature which brings two main 
 
 ## Architecture
 
-The processor which accesses another processor's variables or functions is called _main processor_. The processor which contains these variables and functions is called _remote processor_. A main processor can use multiple remote processors, but each remote processor can be used by at most one main processor. Furthermore, a remote processor can act as a main processor towards another remote processor. Processors can therefore be arranged into an oriented graph—a tree (in the sense of graph theory: the root is the main processor, which starts and controls the execution over the entire processor tree). We call the code stored in the topmost main processor a _program_, and the code stored in a remote processor a _module_.
+The processor which accesses another processor's variables or functions is called _main processor_. The processor which contains these variables and functions is called _remote processor_. A main processor can use multiple remote processors, but each remote processor should be used by at most one main processor, unless special care is taken to avoid destructive concurrent access from different processors. Furthermore, a remote processor can act as a main processor towards another remote processor. Processors can therefore be arranged into an oriented graph—a tree (in the sense of graph theory: the root is the main processor, which starts and controls the execution over the entire processor tree). We call the code stored in the topmost main processor a _program_, and the code stored in a remote processor a _module_.
 
 The execution of the entire distributed program starts with the topmost main processor (there's always just one), while the other remote processors wait until a remote call is initiated from their respective main processor. Both the main processor and the remote processors wait until their respective remote processors are initialized.
 
@@ -19,11 +19,13 @@ Code for each processor in a distributed system is compiled separately from a st
 
 ## Module signatures
 
-During compilation, a CRC64 value, based on all remote function declarations, is computed for each module. Function name, call type, return type, parameter names, types, and modifiers are included in the calculation. Additionally, the version number of the remote call protocol used by the compiler is appended to the text representation of the CRC64 value.
+The `export` keyword is used to mark functions, arrays, and variables that should be accessible from the main processor.
 
-A remote processor is successfully initialized only when the signature stored in the remote processor matches the signature expected by its main processor. This ensures that the remote code won't be called if it is not compatible with the main processor. If any remote method's signature is altered, or remote methods are added or removed from the module, the signature changes, and the code in the processor that binds to the remote processor needs to be recompiled too. Similarly, if a new Mindcode version which uses a different remote call protocol is used to recompile some processor's code, all processors related to the altered one through the remote call mechanism need to be recompiled too.
+During compilation, a CRC64 value, based on all exported function declarations, is computed for each module. Function name, call type, return type, parameter names, types, and modifiers are included in the calculation. Additionally, the version number of the remote call protocol used by the compiler is appended to the text representation of the CRC64 value.
 
-Remote variables are not included in module signatures. If a variable used by the main processor gets removed from the remote module, and the remote processor's code is updated with the new code, access to the remote variable from the main processor will be broken (writes to the removed variable will be ignored, while reads from the removed variable will always return `null`).    
+A remote processor is successfully initialized only when the signature stored in the remote processor matches the signature expected by its main processor. This ensures that the remote code won't be called if it is not compatible with the main processor. The signature changes when any function's signature is altered, or exported functions are added or removed from the module. In this case the code in the processor that binds to the remote processor needs to be recompiled too. Similarly, if a new Mindcode version which uses a different remote call protocol is used to recompile some processor's code, all processors related to the altered one through the remote call mechanism need to be recompiled too.
+
+Exported variables and arrays are not included in module signatures. If a variable used by the main processor gets removed from the remote module, and the remote processor's code is updated with the new code, access to the exported variable from the main processor will be broken (writes to the removed variable will be ignored, while reads from the removed variable will always return `null`).    
 
 ## Remote processors code
 
@@ -37,9 +39,9 @@ When compiling a module, the compiler generates a dispatch table and an initiali
 
 ### Dispatch table
 
-A dispatch table is a jump table that contains a jump to each remote function. All remote functions are sorted by name and assigned indexes starting at 1. An instruction at the given index of the dispatch table contains a jump to the start of the actual function (index 0 is reserved for a jump to the initialization code). Since any change affecting the order of functions would alter the module signature, matching module signature ensures the dispatch table contains the function entry points at expected indexes.
+A dispatch table is a jump table that contains a jump to each exported function. All exported functions are sorted by name and assigned indexes starting at 1. An instruction at the given index of the dispatch table contains a jump to the start of the actual function (index 0 is reserved for a jump to the initialization code). Since any change affecting the order of functions would alter the module signature, matching module signature ensures the dispatch table contains the function entry points at expected indexes.
 
-When making remote calls, the main processor sets the `@counter` in the remote processor to the remote function index. This allows the code in the remote processor to be recompiled without having to reinitialize (restart) the main processor. However, recompiling the remote processor may terminate pending remote calls and cause the main processor to never receive the results of these remote calls.
+When making remote calls, the main processor sets the `@counter` in the remote processor to the exported function index. This allows the code in the remote processor to be recompiled without having to reinitialize (restart) the main processor. However, recompiling the remote processor may terminate pending remote calls and cause the main processor to never receive the results of these remote calls. It also resets the state of the processor by resetting all variables.
 
 ### Initialization code
 
@@ -47,61 +49,32 @@ If the module contains any code outside functions (i.e., a main code block, or g
 
 Only when the initialization code completes and the signature is set, the processor is ready to accept remote calls. The main processor's initialization waits for all remote processor initializations to complete, so it is crucial for the initialization code to be fast. If the initialization code contains an endless loop, the main processor execution will be blocked forever.
 
-### Remote variables
+### Exported variables
 
-It is possible to declare a remote variable or array in a module using the `remote` keyword:
+Variables to be accessed remotely must be declared using the [`export` keyword](SYNTAX-1-VARIABLES.markdown#exported-variables).
 
-```
-[noinit] [volatile] remote [var] <variable1> [= <initial value>];
-[volatile] remote [var] <variable1>'['size']' [= (<initial values>)] [, <variable2> [= (<initial values>)] ... ];
-```
+### Exported functions
 
-Remote variables must be declared in global scope and are therefore always global. When an initial value is provided, it is assigned to the variable at the moment of the declaration. Any expression can be used as the initial value, including function calls.
-
-When declaring remote variables, these additional modifiers can be used:
-
-* `noinit`: this modifier suppresses the "uninitialized variable" warning for the declared variable. This modifier cannot be used if the variable is assigned an initial value.
-* `volatile`: remote variables are volatile by default, because they may be read or written by other processors. It is possible to specify the `volatile` modifier explicitly for better clarity.
-
-Modifiers can be specified in any order.
+Function to be called remotely must be declared using the `export` keyword:
 
 ```Mindcode
 #set target = 8;
 
-// Remote variables, a unitialized, b initialized
-remote a, b = 10;
-
-// Remote arrays: initialized and uninitialized
-remote array2[5] = (1, 2, 3, 4, 5);
-remote array1[10];
-```
-
-Remote variables are available through remote access in code which imports the module. Remote variables/arrays may or may not be initialized. When some remote variables or array elements are unused within the module (and the corresponding mlog variables would therefore not be created when parsing the code by the logic processor), the missing variables are explicitly created using `draw triangle` instruction(s), so that they may be accessed remotely. These instructions are placed at the end of the generated code and are never executed.
-
-When a remote module is [instantiated multiple times](#multiple-instantiations-of-a-remote-module), `@counter` arrays are created just once and are shared among all processors where the module is contained. This increases both the size and cost of array access by one instruction needed to set up the remote processor. When the array access is inlined or otherwise optimized, this additional cost disappears.  
-
-### Remote functions
-
-Function to be called remotely must be declared using the `remote` keyword:
-
-```Mindcode
-#set target = 8;
-
-remote def foo(x, y, out z)
+export def foo(x, y, out z)
     z = x + y;
     return x * y;
 end;
 ```
 
-Function parameters may be input or output (as usual). A remote function is never inlined and can be declared neither `inline` nor `noinline`. Varags and `ref` parameters aren't supported. Remote functions cannot be overloaded, although it is possible to overload a remote function with non-remote ones. Remote functions must not be called from the module which declares them, meaning they also can't be recursive. It is possible to call a recursive function from within a remote function, though.
+Function parameters may be input or output (as usual). An exported function is never inlined and can be declared neither `inline` nor `noinline`. Varags and `ref` parameters aren't supported. Exported functions cannot be overloaded, although it is possible to overload an exported function with non-exported ones. Exported functions must not be recursive, but otherwise can be directly called by other functions in the same module, with only a very slight overhead over the standard out-of-line function call.
 
-All remote functions are active entry points for the compiler and thus are always included in the compiled code.
+All exported functions are active entry points for the compiler and thus are always included in the compiled code.
 
 ### Background process
 
 When waiting for a remote call, the remote processor is by default idle. It is possible to define a function to be executed while waiting for a remote call. This function is executed after the remote module initializes, and subsequently whenever a remote call finishes. If the background function ever terminates (or if it is not defined at all), a `wait` instruction is used to wait for the next remote call.
 
-When a remote call occurs while the background function still executes, the background process is terminated and the remote function starts executing immediately. There's no cleanup process, it is up to the programmer to make sure the background function can be safely terminated at any time, and reentered when the next remote call ends.
+When a remote call occurs while the background function still executes, the background process is terminated and the remote function starts executing immediately. There's no cleanup process, it is up to the programmer to make sure the background function can be safely terminated at any time and reentered when the next remote call ends.
 
 The background process must be contained in a function named `backgroundProcess`. The function declaration needs to have these properties:
 
@@ -115,7 +88,7 @@ If a `backgroundProcess` function with these properties is found in the source c
 It is possible to call the `backgroundProcess()` function explicitly. In this case, the function is compiled normally and may even be inlined.
 
 > [!IMPORTANT]
-> Variables that are accessed from the background process as well as from a remote function must be declared `volatile`.
+> Variables that are accessed from the background process as well as from exported function(s) must be declared `volatile`.
 
 Example of a module with a background process:
 
@@ -132,7 +105,7 @@ void backgroundProcess()
     printflush(message1);
 end;
 
-remote void foo(in a, out b)
+export void foo(in a, out b)
     b = 2 * a;
 end;
 ```
@@ -143,7 +116,7 @@ The above module compiles into this mlog:
 jump 2 always 0 0
 jump 10 always 0 0
 set .invocations -1
-set *signature "974935c9f6b9c503:v1"
+set *signature "7633f8c34aded96b:v1"
 op add .invocations .invocations 1
 print "Number of method calls: "
 print .invocations
@@ -157,22 +130,35 @@ jump 4 always 0 0
 
 ## Main processor code
 
-All remote modules must be declared in the main processor code using the `require ... remote` statement. This declaration specifies which remote processor contains remote functions:
+All remote modules must be declared in the main processor code using the `require ... remote` statement. This declaration specifies which remote processor contains the module's functions and variables:
 
 ```
 require "library.mnd" remote processor1;
 ```
 
 > [!NOTE]
-> A module containing remote functions can be also imported locally, through plain `require`. In this case, the remote variables are accessible locally.
+> A module containing exported functions or variables can be also imported locally, through plain `require`. In this case, the exported variables and functions are accessible locally.
 
 The required file (in this example stored in `library.mnd` file) must be a module, and the compiled code of this module must be stored in processor `processor1`. The processor can be specified using a linked block name, a parameter, or a global variable. Using variables in the `remote` clause allows [dynamic binding](#dynamic-binding) of remote processors.
 
-Modules imported remotely aren't compiled into the code, but remote variables and functions declared in them are available to the main processor.
+Modules imported remotely aren't compiled into the code, exported variables and functions declared in them are available to the main processor.
 
 When at least one remote function is called from a processor, guard code for the processor is generated. The guard code waits for the processor to be created and its `*signature` variable initialized. If the signature found in the remote processor doesn't match the expected signature, the main processor remains stuck at the initialization.
 
 A module which is being requested for remote access may appear in only one `require` clause within a given source file.
+
+### Accessing exported variables
+
+All variables and arrays [declared as `export`](SYNTAX-1-VARIABLES.markdown#exported-variables) in remotely requested modules are accessible to the main processor. The variables and array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random array access, the access mechanism is generated in the main processor code, meaning that random access to remote arrays has almost the same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
+
+Exported variables are accessed as properties on bound processors, for example:
+
+```
+require "library.mnd" remote processor1, processor2;
+
+print(processor1.variable);
+processor2.array[10]++;
+```
 
 ### Multiple instantiations of a remote module
 
@@ -191,22 +177,11 @@ await(processor2.foo);
 await(processor3.foo);
 ```
 
-### Remote variables
-
-All variables nd arrays declared `remote` in remotely requested modules are accessible to the main processor. The variables and array elements are stored in the remote processor. Access to individual elements happens through the `read` and `write` instructions, not through remote calls. For random array access, jump tables are generated in the main processor code, meaning that random access to remote arrays has the same performance as random access to local arrays. Direct access to remote array elements gets resolved to remote variable access, which is as fast as external variable access (except it supports non-numerical values).
-
-Remote variables are accessed as properties on bound processors, for example:
-
-```
-require "library.mnd" remote processor1, processor2;
-
-print(processor1.variable);
-processor2.array[10]++;
-```
+When a remote module is instantiated multiple times, [multiplexed arrays](SYNTAX-6-OPTIMIZATIONS.markdown#array-optimization) are used by default. This increases both the size and cost of array access by one instruction needed to set up the remote processor. When the array access is inlined or otherwise optimized, this additional cost may disappear.
 
 ### Synchronous remote calls
 
-When calling a remote function, the processor on which the function resides must be specified. The synchronous remote call syntax is similar to a local function call:
+When calling a remote function, the processor in which the function resides must be specified. The synchronous remote call syntax is similar to a local function call:
 
 ```
 product = processor1.foo(10, 20, out sum);
@@ -257,7 +232,7 @@ This call functions waits for `foo` completion, and then returns its return valu
 A processor containing the remote code can also be located dynamically. In this case, the `remote` clause in the `require` directive contains a variable, not a linked block reference.
 
 > [!NOTE]
-> Variable which holds the reference to a dynamically bound processor needs to be global. The best way to ensure this is to declare the variable before the `require` clause, which works in both strict and relaxed syntax modes. It is possible to use an implicitly declared global variable in relaxed syntax mode, in which case the variable needs to be named in upper case. The recommended solution is to explicitly declare the variable regardless of the syntax mode.   
+> Variable which holds the reference to a dynamically bound processor needs to be global. The best way to ensure this is to declare the variable before the `require` clause, which works in both strict and relaxed syntax modes. It is possible to use an implicitly declared global variable in relaxed syntax mode, in which case the variable needs to be named in the upper case. The recommended solution is to explicitly declare the variable regardless of the syntax mode.   
 
 ```
 var proc;
@@ -356,11 +331,11 @@ It is also possible to start an asynchronous remote call and use remote variable
 Instructions in Mindustry Logic processors aren't really executed in parallel. Instead, in each tick all processors are visited sequentially, and a number of instructions corresponding to the given processor's _instructions per tick_ rate are executed. This means that when a synchronous remote call is made, even if the call returned immediately, the call will always take at least a full tick. Performing many short calls to remote functions might, therefore, be very detrimental to the performance of your program.
 
 > [!IMPORTANT]
-> The faster the processor, the more instructions get executed in a single tick, and the bigger the impact from the delay of a remote call. Unboosted micro-processor executes two instructions per tick, and the overhead of even short remote calls is almost negligible (at most one instruction execution will be lost on each call). Fully boosted hyper-processor executes 62.5 instructions per seconds, and frequent short remote calls could reduce the effectivity of the hyper-processor by 90% or more. World processors with instruction rates at several hundred IPTs could be affected even more.
+> The faster the processor, the more instructions get executed in a single tick, and the bigger the impact from the delay of a remote call. Unboosted micro-processor executes two instructions per tick, and the overhead of even short remote calls is almost negligible (at most one instruction execution will be lost on each call). Fully boosted hyper-processor executes 62.5 instructions per second, and frequent short remote calls could reduce the effectivity of the hyper-processor by 90% or more. World processors with instruction rates at several hundred IPTs could be affected even more.
 >
 > An additional factor is the frame rate: processor updates aren't driven by ticks but by frame updates. A frame rate higher than 60 FPS means there are fewer instructions wasted per remote call, while lower frame rates mean more instructions wasted. Even code which performs well when the game runs at 60 FPS might develop performance problems when the frame rate drops.
 
-### Managing the execution quota
+### Understanding the execution quota
 
 Code generated by Mindcode uses the `wait` instruction when waiting for a remote procedure call to finish, and when the remote module waits for another call to serve. The `wait` instruction terminates the processor's execution in the current frame, saving up unspent execution quota. Up to four ticks of unspent instructions can be accumulated this way. When normal execution resumes, the unspent quota is spread over several ticks to provide a boost to the processor execution (a half of the remaining unspent execution quota is used up in each following tick that doesn't contain a `wait` or another yielding instruction - the others are `stop` and `message`).
 
@@ -376,9 +351,7 @@ Remote function may be also called locally. Doing so incurs a slight penalty to 
 
 Local call of a remote function also sets the function's `:functionName*finished` flag to `true` (this also incurs a penalty of one instruction per local call, compared to calls of local functions). This should be harmless, as local and remote calls to the same function may not occur concurrently. However, if a remote function call was terminated without completion, and the function is later called locally (e.g., from a background process), the flag may be set to `true` even though the remote call never completed. The same is true for the case of overlapping remote calls to the same function, though.   
 
-# Arbitrary remote variable access
-
-## Arbitrary access to remote variables
+# Arbitrary access to remote variables
 
 To access arbitrary remote processor variables using the `read` and `write` instructions., `read(variable)`  and `write(value, variable)` methods must be used, to be called on processors:
 
@@ -397,16 +370,16 @@ write @coal processor2 "bar"
 ```
 
 > [!NOTE] 
-> The variable names need to be specified as they appear in mlog. This feature is therefore meant for interfacing with processors containing mlog code not compiled by Mindcode. To access Mindcode variables, the `remote` variable declaration is preferred, as it automatically uses the mlog variable name generated by Mindcode.     
+> The variable names need to be specified as they appear in mlog. To access Mindcode variables, the `remote` and `export` variable declarations are preferred, as it automatically uses the mlog variable name generated by Mindcode.     
 
-## Remote variables with storage specification
+## Explicitly declared remote variables
 
-Sometimes you might want to use variables in remote processors which weren't declared in a module, possibly because the other processor's code was not compiled by Mindcode. Another use case is for the module to access the main processor's variables directly (although in this case, a reference to the main processor must be made available to the module in some way).
+Sometimes you might want to use variables in remote processors which weren't exported by the remote module, possibly because the other processor's code was not compiled by Mindcode. Another use case is for the module to access the main processor's variables directly (although in this case, a reference to the main processor must be made available to the module in some way).
 
-To specify where the remote variable is located and even what name it uses, include a _storage specification_ in the remote variable declaration:
+To specify where the remote variable is located and even what name it uses, use the `remote` keyword followed by the processor's name (or variable) in the variable declaration:
 
 ```
-remote <processor> [(mlog_name)] [var] <variable1>;
+remote <processor> [var] <variable1>;
 ```
 
 The _storage specification_ is included after the `remote` keyword. The storage clause consist of the name of the remote processor block (e.g., `processor1`, or a variable), and optionally an mlog name as a constant string expression, enclosed in parentheses. When the mlog name is not specified, it is derived from the name of the variable being declared this way using Mindcode's convention. All variables created this way are stored in the given remote processor.
@@ -425,11 +398,11 @@ The following restrictions apply to remote variables declared with storage speci
 #set remarks = comments;
 
 /// Remote variables named using Mindcode's naming convention
-remote processor1 x, y;         
+remote(processor1) x, y;         
 print(x, y);
 
 /// Remote variable named using the specified name
-remote processor1("foo") z;       
+remote(processor1) mlog("foo") z;       
 print(z);
 ```
 
@@ -453,6 +426,7 @@ All [string values](SCHEMACODE.markdown#string-value-definition) defined in a Sc
 ```
 schematic
     name = "Parallel processing"
+    target = 8;
 
 a-message1:
     @message            at  (0, 0)
@@ -464,7 +438,6 @@ b-processor1:
 end
 
 Main = """
-    #set target = 8;
     require "RemoteTest" remote processor1;
 
     greeting = name(out another);
@@ -473,21 +446,19 @@ Main = """
     """
 
 RemoteTest = """
-    #set target = 8;
     module RemoteTest;
     require "RemoteTest2" remote processor1;
 
-    remote def name(out another)
+    export def name(out another)
         another = anotherName();
         return "Dolly";
     end;
     """
 
 RemoteTest2 = """
-    #set target = 8;
     module RemoteTest2;
 
-    remote def anotherName()
+    export def anotherName()
         return "and Polly";
     end;
     """

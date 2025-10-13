@@ -28,7 +28,8 @@ public class LogicArrayElement extends LogicVariable {
         return Objects.requireNonNullElse(elementName, mlog);
     }
 
-    public void setElementName(String elementName) {
+    @Override
+    public void setArrayElementName(String elementName) {
         this.elementName = elementName;
     }
 }

@@ -115,7 +115,7 @@ public interface ValueStore extends SourceElement {
         return getValue(creator);
     }
 
-    /// Performs the second phase of two-phase writing. In the first phase, the variable provided by
+    /// Performs the second phase of two-phase writing. In the first phase, the variable provided by the
     /// `writeValue` method was set to the desired value. In the second phase, the value is transferred to the
     /// final location. If the final location is identical with the written variable, the implementation
     /// of this method may be empty.
@@ -129,9 +129,13 @@ public interface ValueStore extends SourceElement {
     default void storeValue(ContextfulInstructionCreator creator) {
     }
 
-    /// Returns an instance with updated source position. Only implementations that report errors
+    /// Returns an instance with an updated source position. Only implementations that report errors
     /// from calls to internal methods need to implement this method.
     default ValueStore withSourcePosition(SourcePosition sourcePosition) {
         return this;
+    }
+
+    default void setArrayElementName(String elementName) {
+        throw new MindcodeInternalError("Unsupported for " + getClass().getSimpleName());
     }
 }

@@ -3,7 +3,7 @@ package info.teksol.mc.common;
 import org.jspecify.annotations.NullMarked;
 
 /// An instance which can be tied to a particular position in the source file. Typically, AST tree
-/// nodes are instances of source element, but some other classes can also implement this interface
+/// nodes are instances of the source element, but some other classes can also implement this interface
 /// to provide the source position.
 @NullMarked
 public interface SourceElement {

@@ -13,4 +13,8 @@ public interface ExternalStorage extends AstMindcodeNode {
     default @Nullable AstExpression getStartIndex() {
         return null;
     }
+
+    default boolean hasRangeOrIndex() {
+        return getRange() != null || getStartIndex() != null;
+    }
 }

@@ -28,8 +28,8 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
     void initializesRemoteVariables() {
         assertOutputs("""
                         module foo;
-                        remote v;
-                        remote a[10];
+                        export v;
+                        export a[10];
                         """,
                 """
                         set *signature "0:v1"
@@ -92,7 +92,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         module test;
                         param MAX = 10;
                         var A = 20;
-                        remote void foo(i)
+                        export void foo(i)
                             print(MAX, A, i);
                         end;
                         """,
@@ -102,7 +102,7 @@ class LogicInstructionLabelResolverTest extends AbstractCodeOutputTest {
                         draw triangle MAX .A 0 0 0 0
                         set MAX 10
                         set .A 20
-                        set *signature "24ae3690e971351e:v1"
+                        set *signature "3c05035f1bf6650b:v1"
                         wait 1e12
                         jump 6 always 0 0
                         end

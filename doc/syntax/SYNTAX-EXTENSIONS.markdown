@@ -239,7 +239,7 @@ mlog (in input, out output, in out inputOutput) {
 }
 ```
 
-The variable declaration is similar to the declaration of function parameters, but all variables must refer to an existing variable (a non-existing variable is implicitly created in the relaxed syntax mode). The variables may be a global, main, local or linked variable or a constant. Complex variables (such as external variables or array elements) aren't allowed.
+The variable declaration is similar to the declaration of function parameters, but all variables must refer to an existing variable (a non-existing variable is implicitly created in the relaxed syntax mode). The variables may be a global, main, local, or linked variable or a constant. Complex variables (such as external variables or array elements) aren't allowed.
 
 Variables declared with the `in` keyword may be read by the mlog block instructions (the `in` keyword may be omitted). Variables declared with the `out` keyword are expected to be written to by the mlog block, and variables declared `in out` may be both read and written.      
 
@@ -249,7 +249,7 @@ When no input or output variables are declared for the mlog block, the parenthes
 
 The mlog code is placed within the curly braces. The code consists of labels and instructions. Individual instructions and labels must be separated by newlines or semicolons. 
 
-A label consists of a single token, which must start with a letter and may contain alphanumerical characters, and ends with a colon. A label name must be different from the names of declared input/output variables.
+A label consists of a single token, which must start with a letter and may contain alphanumerical characters and ends with a colon. A label name must be different from the names of declared input/output variables.
 
 An instruction consists of one or more tokens, separated by one or more tabs or spaces. There are several types of tokens:
 
@@ -266,13 +266,13 @@ An instruction consists of one or more tokens, separated by one or more tabs or 
 
 3. A [built-in variable](SYNTAX.markdown#built-in-variables-and-constants). Built-in variables are written to mlog as is, but warnings are generated if the variable is not recognized by Mindcode. Warnings are not generated for unknown built-in variables declared using the [#declare keyword](#declaring-new-built-in-variables).
 
-4. A Mindcode variable. A Mindcode variable token can be entered in two ways: either by specifying the name of the variable declared in the mlog block header, or by prepending the variable name with a `$` (e.g., `$index`). In the second case, the variable must be an input variable; it is not possible to specify an input/output or output variable this way. A variable accessed via the `$` prefix needs to be created or declared outside the mlog block, even in relaxed syntax mode. If the variable is not found, or doesn't represent a local processor variable (e.g., external variable), an error occurs. Variables are written to the compiled code using their mlog name, which is typically different from Mindcode name. Constants are encoded using their value.
+4. A Mindcode variable. A Mindcode variable token can be entered in two ways: either by specifying the name of the variable declared in the mlog block header, or by prepending the variable name with a `$` (e.g., `$index`). In the second case, the variable must be an input variable; it is not possible to specify an input/output or output variable this way. A variable accessed via the `$` prefix needs to be created or declared outside the mlog block, even in relaxed syntax mode. If the variable is not found or doesn't represent a local processor variable (e.g., external variable), an error occurs. Variables are written to the compiled code using their mlog name, which is typically different from Mindcode name. Constants are encoded using their value.
 
-5. A label reference: a token matching an existing label defined in the current mlog block. Mindcode adds a unique, mlog-block specific prefix to label references as well as labels.
+5. A label reference: a token matching an existing label defined in the current mlog block. Mindcode adds a unique, mlog-block-specific prefix to label references as well as labels.
 
 6. A _raw token_. Any token starting with a `:` (just like [mlog keywords in Mindcode](SYNTAX.markdown#mlog-keywords)) is written into the mlog exactly as it is after stripping the leading colon. This allows encoding those tokens into mlog that would otherwise be interpreted by Mindcode, such as `:1.5e3` or `:$index`, or which couldn't be encoded, such as tokens ending with a `}`. If the desired token itself starts with a colon, it can be also encoded this way by prepending an additional colon (e.g., `::token`). All tokens valid in pure mlog may be entered as a raw token.
 
-7. An ordinary token. Any sequence of characters not matching any of the above token types is encoded into mlog as is. Even tokens that would produce an error in Mindcode source (such as `1ee10`) are accepted as ordinary tokens. The only exception is that ordinary tokens may not contain single or double quotes (`'` or `"`), and must not end with a right brace (`}`). However, even those tokens may be encoded into mlog as raw tokens, e.g. `:{}`. 
+7. An ordinary token. Any sequence of characters not matching any of the above token types is encoded into mlog as is. Even tokens that would produce an error in Mindcode source code (such as `1ee10`) are accepted as ordinary tokens. The only exception is that ordinary tokens may not contain single or double quotes (`'` or `"`), and must not end with a right brace (`}`). However, even those tokens may be encoded into mlog as raw tokens, e.g. `:{}`. 
 
 Tokens that would be invalid in pure mlog, such as unclosed string literals (`"text`), or string literals not followed by a space (`"abc"def`) cause compilation errors in Mindcode too.
 
@@ -296,7 +296,7 @@ Any variables used in the mlog block are used as-is. It is possible to use the s
 > [!TIP]
 > While it is not possible to use any expressions, even constant ones, in an mlog block, it is possible to create constants for these expressions outside the mlog block and use these constants as variable tokens. This might be especially useful when creating long text values, which may be split across several lines in Mindcode, but not in the mlog block.
 
-It is the responsibility of the user to use the variables in an mlog block in a way compatible with the declaration. Mindcode currently doesn't even attempt to verify that known instructions use the variables in accordance with the declaration, and can't do so in case of unknown instructions in principle. The following actions therefore lead to undefined behavior:
+It is the responsibility of the user to use the variables in an mlog block in a way compatible with the declaration. Mindcode currently doesn't even attempt to verify that known instructions use the variables in accordance with the declaration and can't do so in case of unknown instructions in principle. The following actions therefore lead to undefined behavior:
 * Reading a value from a variable not declared as input.
 * Writing to a variable not declared as output (this includes changing values of [program parameters](SYNTAX-1-VARIABLES.markdown#program-parameters), which cannot be declared as output variables at all).
 * Accessing Mindcode's variables using their mlog names, bypassing the standard mechanism for accessing variables entirely. 

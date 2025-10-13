@@ -101,7 +101,7 @@ statement
     | PARAM name = IDENTIFIER ASSIGN value = expression                                 # astParameter
     | REQUIRE file = STRING (REMOTE processors = identifierList)?                       # astRequireFile
     | REQUIRE library = IDENTIFIER (REMOTE processors = identifierList)?                # astRequireLibrary
-    | callType = (INLINE | NOINLINE | REMOTE)? type = (VOID | DEF) name = IDENTIFIER
+    | callType = (INLINE | NOINLINE | EXPORT | REMOTE)? type = (VOID | DEF) name = IDENTIFIER
         params = parameterList body = astStatementList? END                             # astFunctionDeclaration
     | (label = IDENTIFIER COLON)? FOR iterators = iteratorsValuesGroups
         DO body = astStatementList? END                                                 # astForEachLoopStatement
@@ -113,7 +113,7 @@ statement
     | (label = IDENTIFIER COLON)?
         WHILE condition = expression DO body = astStatementList? END                    # astWhileLoopStatement
     | (label = IDENTIFIER COLON)?
-        DO body = astStatementList? loop = LOOP? WHILE condition = expression           # astDoWhileLoopStatement
+        DO body = astStatementList? WHILE condition = expression                        # astDoWhileLoopStatement
     | BREAK label = IDENTIFIER?                                                         # astBreakStatement
     | CONTINUE label = IDENTIFIER?                                                      # astContinueStatement
     | RETURN value = expression?                                                        # astReturnStatement
@@ -139,15 +139,19 @@ variableDeclaration
 declModifier
     : modifier = CONST
     | modifier = CACHED
+    | modifier = EXPORT
     | modifier = EXTERNAL memory = IDENTIFIER?
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET index = expression RBRACKET
     | modifier = EXTERNAL memory = IDENTIFIER LBRACKET range = astRange RBRACKET
+    | modifier = EXTERNAL LPAREN memory = IDENTIFIER? RPAREN
+    | modifier = EXTERNAL LPAREN memory = IDENTIFIER LBRACKET index = expression RBRACKET RPAREN
+    | modifier = EXTERNAL LPAREN memory = IDENTIFIER LBRACKET range = astRange RBRACKET RPAREN
     | modifier = GUARDED
     | modifier = LINKED
-    | modifier = MLOG LPAREN mlog = expression RPAREN
+    | modifier = MLOG LPAREN mlog = expressionList RPAREN
     | modifier = NOINIT
     | modifier = REMOTE processor = IDENTIFIER?
-    | modifier = REMOTE processor = IDENTIFIER LPAREN mlog = expression RPAREN
+    | modifier = REMOTE LPAREN processor = IDENTIFIER? RPAREN
     | modifier = VOLATILE
     ;
 

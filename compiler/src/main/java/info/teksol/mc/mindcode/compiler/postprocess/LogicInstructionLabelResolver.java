@@ -157,21 +157,21 @@ public class LogicInstructionLabelResolver {
         Set<LogicVariable> missingVariables = new LinkedHashSet<>(forcedVariables);
         program.forEach(ix -> missingVariables.addAll(ix.getIndirectVariables()));
 
-        boolean addSignature;
+        boolean addSignature = last.endsCodePath();
         if (!missingVariables.isEmpty()) {
-            if (!last.endsCodePath()) {
-                program.add(processor.createEnd(last.getAstContext()));
-            }
             program.forEach(ix -> ix.getTypedArguments().forEach(a -> {
                 if (a.argument() instanceof LogicVariable variable) {
                     missingVariables.remove(variable);
                 }
             }));
 
-            program.addAll(createVariables(astContext, missingVariables));
-            addSignature = true;
-        } else {
-            addSignature = last.endsCodePath();
+            if (!missingVariables.isEmpty()) {
+                if (!last.endsCodePath()) {
+                    program.add(processor.createEnd(last.getAstContext()));
+                }
+                program.addAll(createVariables(astContext, missingVariables));
+                addSignature = true;
+            }
         }
 
         if (addSignature && profile.isSignature() && program.size() < profile.getInstructionLimit()) {

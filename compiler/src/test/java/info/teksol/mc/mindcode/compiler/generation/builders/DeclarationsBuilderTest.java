@@ -52,7 +52,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsUnknownKeywords() {
             assertGeneratesMessageRegex(
-                    "Invalid value 'what' for keyword parameter: allowed values are.*",
+                    "Invalid value ':what' for keyword parameter: allowed values are.*",
                     "ulocate(:what, :core, true);");
         }
 
@@ -286,7 +286,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesInitializedArrayDeclarationsNoSizeExternalStorage() {
             assertCompilesTo("""
-                            external cell1 a[] = (1, 2, 3);
+                            external(cell1) a[] = (1, 2, 3);
                             """,
                     createInstruction(WRITE, "1", "cell1", "0"),
                     createInstruction(WRITE, "2", "cell1", "1"),
@@ -346,7 +346,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesLocalArray() {
             assertGeneratesMessages(expectedMessages()
-                            .add("External variables must be declared in the global scope.")
+                            .add("The 'external' modifier cannot be used to declare local variables.")
                             .add("Arrays must be declared in the global scope.")
                             .add("No heap allocated for external variables."),
                     """
@@ -623,7 +623,7 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesCachedArray() {
             assertGeneratesMessages(expectedMessages()
                             .add("Arrays cannot be declared 'cached'.")
-                            .add("Modifier 'cached' used without 'external'."),
+                            .add("Modifier 'cached' requires the 'external' or 'remote' modifier."),
                     "cached a[10];");
         }
     }
@@ -801,8 +801,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesExternalVariableDeclarations() {
             assertCompilesTo("""
-                            external cell1[0] a;
-                            external cell1[1] b = a;
+                            external(cell1[0]) a;
+                            external(cell1[1]) b = a;
                             print(b);
                             """,
                     createInstruction(READ, tmp(0), "cell1", "0"),
@@ -889,10 +889,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void compilesRemoteVariables() {
             assertCompilesTo("""
-                            remote processor1 a, x;
-                            remote processor1("b") b;
-                            remote processor1 var c, y;
-                            remote processor1("d") var d;
+                            remote(processor1) a, x;
+                            remote(processor1) mlog("b") b;
+                            remote(processor1) var c, y;
+                            remote(processor1) mlog("d") var d;
                             print(a, b, c, d);
                             """,
                     createInstruction(READ, tmp(0), "processor1", q(".a")),
@@ -903,6 +903,41 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     createInstruction(PRINT, tmp(2)),
                     createInstruction(READ, tmp(4), "processor1", q("d")),
                     createInstruction(PRINT, tmp(4))
+            );
+        }
+
+        @Test
+        void compilesCachedRemoteVariables() {
+            assertCompilesTo("""
+                            cached remote(processor1) a, b = 1;
+                            a++;
+                            b++;
+                            """,
+                    createInstruction(READ, ".a", "processor1", q(".a")),
+                    createInstruction(SET, ".b", "1"),
+                    createInstruction(WRITE, ".b", "processor1", q(".b")),
+                    createInstruction(SET, tmp(0), ".a"),
+                    createInstruction(OP, "add", ".a", ".a", "1"),
+                    createInstruction(WRITE, ".a", "processor1", q(".a")),
+                    createInstruction(SET, tmp(1), ".b"),
+                    createInstruction(OP, "add", ".b", ".b", "1"),
+                    createInstruction(WRITE, ".b", "processor1", q(".b"))
+            );
+        }
+
+        @Test
+        void compilesCachedNoinitRemoteVariables() {
+            assertCompilesTo("""
+                            cached noinit remote(processor1) a;
+                            a = 2;
+                            print(a++);
+                            """,
+                    createInstruction(SET, ".a", "2"),
+                    createInstruction(WRITE, ".a", "processor1", q(".a")),
+                    createInstruction(SET, tmp(0), ".a"),
+                    createInstruction(OP, "add", ".a", ".a", "1"),
+                    createInstruction(WRITE, ".a", "processor1", q(".a")),
+                    createInstruction(PRINT, tmp(0))
             );
         }
 
@@ -1006,14 +1041,14 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         void refusesTooSmallExternalSpace() {
             assertGeneratesMessage(
                     "Not enough capacity in external storage for 'c'.",
-                    "external cell1[0 .. 1] a, b, c;");
+                    "external(cell1[0 .. 1]) a, b, c;");
         }
 
         @Test
         void refusesConflictingModifiers() {
-            assertGeneratesMessage(
-                    "Modifier 'cached' is incompatible with previous modifiers.",
-                    "remote cached var a = 10;");
+            assertGeneratesMessages(expectedMessages()
+                            .add("Modifiers 'external' and 'export' are mutually exclusive.").repeat(2),
+                    "export external(cell1) var a = 10;");
         }
 
         @Test
@@ -1022,15 +1057,6 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
                     "Only one variable may be specified within an `mlog` declaration.",
                     """
                             mlog("a") var a, b;
-                            """);
-        }
-
-        @Test
-        void refusesMultipleRemoteNamedVariableSpecifications() {
-            assertGeneratesMessage(
-                    "Only one variable may be specified within a `remote` declaration with an mlog name specification.",
-                    """
-                            remote proc("a") var a, b;
                             """);
         }
     }
@@ -1043,8 +1069,8 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             #set syntax = strict;
                             linked cell1;
-                            external cell1[0] a;
-                            external cell1[1] b = a;
+                            external(cell1[0]) a;
+                            external(cell1[1]) b = a;
                             begin print(b); end;
                             """,
                     createInstruction(READ, tmp(0), "cell1", "0"),
@@ -1139,10 +1165,10 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             #set syntax = strict;
                             linked processor1;
-                            remote processor1 a, x;
-                            remote processor1("b") b;
-                            remote processor1 var c, y;
-                            remote processor1("d" + "0") var d;
+                            remote(processor1) a, x;
+                            remote(processor1) mlog("b") b;
+                            remote(processor1) var c, y;
+                            remote(processor1) mlog("d" + "0") var d;
                             begin print(a, b, c, d); end;
                             """,
                     createInstruction(READ, tmp(0), "processor1", q(".a")),

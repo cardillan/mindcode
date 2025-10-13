@@ -10,12 +10,11 @@ import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGenerator;
 import info.teksol.mc.mindcode.compiler.generation.CodeGeneratorContext;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack.LoopLabels;
+import info.teksol.mc.mindcode.compiler.generation.variables.Modifiers;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.VariableScope;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import org.jspecify.annotations.NullMarked;
-
-import java.util.Map;
 
 @NullMarked
 public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implements AstRangedForLoopStatementVisitor<ValueStore> {
@@ -45,7 +44,7 @@ public class RangedForLoopStatementsBuilder extends AbstractLoopBuilder implemen
 
         if (node.hasDeclaration()) {
             if (node.getVariable() instanceof AstIdentifier identifier) {
-                variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Map.of());
+                variables.createVariable(isLocalContext(), identifier, VariableScope.NODE, Modifiers.EMPTY);
             } else {
                 error(node.getVariable(), ERR.IDENTIFIER_EXPECTED);
             }

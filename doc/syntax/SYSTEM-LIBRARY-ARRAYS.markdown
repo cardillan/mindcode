@@ -30,7 +30,7 @@ Fills the array with a given value.
 
 | Compiled code size when...               | optimized for speed | optimized for size |
 |------------------------------------------|--------------------:|-------------------:|
-| Five elements in an internal array       |                   6 |                 17 |
+| Five elements in an internal array       |                   7 |                 17 |
 | Ten elements in an internal array        |                  15 |                 17 |
 | Twenty elements in an internal array     |                  30 |                 17 |
 | Five elements in an external array       |                   8 |                  8 |

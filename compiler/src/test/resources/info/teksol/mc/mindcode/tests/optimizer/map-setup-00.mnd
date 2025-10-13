@@ -8,17 +8,17 @@ const wall = @shrubs;
 const minWidth = 0;         // Min path width
 const maxShrunk = 150;      // Max wall distance from center
 
-linked noinit decLeft = switch1;
-linked noinit incLeft = switch2;
-linked noinit decRight = switch3;
-linked noinit incRight = switch4;
-linked noinit decLeft10 = switch5;
-linked noinit incLeft10 = switch6;
-linked noinit decRight10 = switch7;
-linked noinit incRight10 = switch8;
+linked decLeft = switch1;
+linked incLeft = switch2;
+linked decRight = switch3;
+linked incRight = switch4;
+linked decLeft10 = switch5;
+linked incLeft10 = switch6;
+linked decRight10 = switch7;
+linked incRight10 = switch8;
 
-linked noinit displayLeft = display1;
-linked noinit displayRight = display2;
+linked displayLeft = display1;
+linked displayRight = display2;
 
 var center = @mapw / 2 - 0.5;
 

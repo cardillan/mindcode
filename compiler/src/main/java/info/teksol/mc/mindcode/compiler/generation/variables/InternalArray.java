@@ -20,15 +20,17 @@ import static info.teksol.mc.mindcode.logic.arguments.ArgumentType.TMP_VARIABLE;
 
 @NullMarked
 public class InternalArray extends AbstractArrayStore {
+    private final LogicKeyword lookupType;
     private final ArrayType arrayType;
     private final int startOffset;
     private final boolean declaredRemote;
     private final @Nullable LogicVariable processor;      // Actual processor in case of shared arrays
     private final LogicArray logicArray;
 
-    private InternalArray(SourcePosition sourcePosition, String name, boolean declaredRemote,
-            @Nullable LogicVariable processor, List<ValueStore> elements, ArrayType arrayType) {
+    private InternalArray(SourcePosition sourcePosition, LogicKeyword lookupType, String name,
+            boolean declaredRemote, @Nullable LogicVariable processor, List<ValueStore> elements, ArrayType arrayType) {
         super(sourcePosition, name, elements);
+        this.lookupType = lookupType;
         this.declaredRemote = declaredRemote;
         this.processor = processor;
         this.arrayType = arrayType;
@@ -36,9 +38,10 @@ public class InternalArray extends AbstractArrayStore {
         logicArray = LogicArray.create(this);
     }
 
-    private InternalArray(SourcePosition sourcePosition, String name, boolean declaredRemote,
+    private InternalArray(SourcePosition sourcePosition, LogicKeyword lookupType, String name, boolean declaredRemote,
             @Nullable LogicVariable processor, int offset, List<ValueStore> elements, ArrayType arrayType) {
         super(sourcePosition, name, elements);
+        this.lookupType = lookupType;
         this.processor = processor;
         this.declaredRemote = declaredRemote;
         this.arrayType = arrayType;
@@ -46,21 +49,21 @@ public class InternalArray extends AbstractArrayStore {
         logicArray = LogicArray.create(this, offset, offset + elements.size());
     }
 
-    public static InternalArray create(NameCreator nameCreator, AstIdentifier identifier, int size, boolean isVolatile,
+    public static InternalArray create(ArrayNameCreator nameCreator, AstIdentifier identifier, int size, boolean isVolatile,
             boolean declaredRemote, @Nullable LogicVariable processor, boolean shared) {
         if (processor != null) {
             CodeAssembler assembler = MindcodeCompiler.getContext().assembler();
-            return new InternalArray(identifier.sourcePosition(),
+            return new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),
                     nameCreator.arrayBase(shared ? "" : processor.getName(), identifier.getName()),
                     declaredRemote, processor,
                     IntStream.range(0, size)
                             .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
                                     processor.getName() + "." + identifier.getName() + "[" + index + "]",
                                     LogicString.create(nameCreator.remoteArrayElement(identifier.getName(), index)),
-                                    assembler.nextTemp(), false, false)).toList(),
+                                    assembler.nextTemp(), false, false, false)).toList(),
                     shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE);
         } else {
-            return new InternalArray(identifier.sourcePosition(),
+            return new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),
                     nameCreator.arrayBase("", identifier.getName()),
                     declaredRemote, null,
                     IntStream.range(0, size)
@@ -72,15 +75,19 @@ public class InternalArray extends AbstractArrayStore {
 
     public static InternalArray createConst(NameCreator nameCreator, AstIdentifier identifier, int size, List<ValueStore> elements) {
         List<ValueStore> wrappedElements = elements.stream().map(InternalArray::constantWrap).toList();
-        return new InternalArray(identifier.sourcePosition(),
+        return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
                 nameCreator.arrayBase("", identifier.getName()),
                 false, null, wrappedElements, ArrayType.CONSTANT);
     }
 
     public static InternalArray createInvalid(NameCreator nameCreator, AstIdentifier identifier, int size) {
-        return new InternalArray(identifier.sourcePosition(),
+        return new InternalArray(identifier.sourcePosition(), LogicKeyword.INVALID,
                 nameCreator.arrayBase("", identifier.getName()), false, null,
                 IntStream.of(size).mapToObj(index -> (ValueStore) LogicVariable.INVALID).toList(), ArrayType.INTERNAL);
+    }
+
+    public LogicKeyword getLookupType() {
+        return lookupType;
     }
 
     @Override
@@ -100,7 +107,7 @@ public class InternalArray extends AbstractArrayStore {
 
     @Override
     public ArrayStore subarray(SourcePosition sourcePosition, int start, int end) {
-        return new InternalArray(sourcePosition, name, declaredRemote, processor, startOffset + start,
+        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, processor, startOffset + start,
                 elements.subList(start, end), arrayType);
     }
 
@@ -116,7 +123,7 @@ public class InternalArray extends AbstractArrayStore {
 
     @Override
     public InternalArray withSourcePosition(SourcePosition sourcePosition) {
-        return new InternalArray(sourcePosition, name, declaredRemote, processor, elements, arrayType);
+        return new InternalArray(sourcePosition, lookupType, name, declaredRemote, processor, elements, arrayType);
     }
 
     public class InternalArrayElement implements ValueStore {

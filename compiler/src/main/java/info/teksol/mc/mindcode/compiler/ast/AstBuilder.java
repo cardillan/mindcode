@@ -256,6 +256,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstDirectiveDeclare visitAstDirectiveDeclare(AstDirectiveDeclareContext ctx) {
+        @SuppressWarnings("NullableProblems")
         List<AstMindcodeNode> list = ctx.elements.astKeywordOrBuiltin().stream()
                 .map(this::visit)
                 .filter(Objects::nonNull)
@@ -376,12 +377,18 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     private @Nullable AstMindcodeNode createModifierParametrization(Modifier modifier, DeclModifierContext ctx) {
         if (modifier == Modifier.EXTERNAL && ctx.memory != null) {
+            if (ctx.LPAREN() == null) {
+                context.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
+            }
             return new AstExternalParameters(pos(ctx), identifier(ctx.memory),
                     visitAstRangeIfNonNull(ctx.astRange()), visitAstExpressionIfNonNull(ctx.index));
         } else if (modifier == Modifier.REMOTE && ctx.processor != null) {
-            return new AstRemoteParameters(pos(ctx), identifier(ctx.processor), visitAstExpressionIfNonNull(ctx.mlog));
+            if (ctx.LPAREN() == null) {
+                context.warn(pos(ctx), WARN.MISSING_MODIFIER_PARENS, ctx.modifier.getText());
+            }
+            return new AstRemoteParameters(pos(ctx), identifier(ctx.processor));
         } else if (modifier == Modifier.MLOG) {
-            return new AstMlogParameters(pos(ctx), visitAstExpression(ctx.mlog));
+            return new AstMlogParameters(pos(ctx), processExpressionList(ctx.mlog));
         } else {
             return null;
         }
@@ -505,10 +512,6 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
 
     @Override
     public AstWhileLoopStatement visitAstDoWhileLoopStatement(MindcodeParser.AstDoWhileLoopStatementContext ctx) {
-        if (ctx.loop != null) {
-            context.warn(pos(ctx.loop), WARN.LOOP_KEYWORD_DEPRECATED);
-        }
-
         return new AstWhileLoopStatement(pos(ctx),
                 identifierIfNonNull(ctx.label),
                 visitAstExpression(ctx.condition),
@@ -704,6 +707,7 @@ public class AstBuilder extends MindcodeParserBaseVisitor<AstMindcodeNode> {
     //<editor-fold desc="Rules: expressions/literals">
     @Override
     public AstFormattableLiteral visitAstFormattableLiteral(MindcodeParser.AstFormattableLiteralContext ctx) {
+        @SuppressWarnings("NullableProblems")
         List<AstExpression> parts = ctx.children.stream().map(this::visitAstExpressionNullable).filter(Objects::nonNull).toList();
         return new AstFormattableLiteral(pos(ctx), parts);
     }

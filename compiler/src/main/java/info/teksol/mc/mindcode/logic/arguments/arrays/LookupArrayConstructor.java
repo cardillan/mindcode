@@ -6,7 +6,10 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
-import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
+import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
+import info.teksol.mc.mindcode.logic.arguments.LogicValue;
+import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -81,7 +84,7 @@ public class LookupArrayConstructor extends AbstractArrayConstructor {
         assert lookupMap != null;
 
         for (int i = 0; i < elements.size(); i++) {
-            ((LogicArrayElement)elements.get(i)).setElementName(lookupMap.get(i).contentName());
+            elements.get(i).setArrayElementName(lookupMap.get(i).contentName());
         }
     }
 }

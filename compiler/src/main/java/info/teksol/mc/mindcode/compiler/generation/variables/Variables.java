@@ -1,22 +1,26 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
+import info.teksol.mc.common.SourceElement;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.ERR;
 import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.Modifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.*;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.generation.LoopStack;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
+import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
+import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.function.Supplier;
+
+import static info.teksol.mc.mindcode.compiler.Modifier.*;
 
 /// This class resolves source code identifiers into variables represented by the ValueStore interface
 /// and tracks temporary variables used within AST nodes for stack management.
@@ -152,7 +156,7 @@ public class Variables extends AbstractMessageEmitter {
     /// @return ValueStore instance representing the variable
     private ValueStore createImplicitVariable(AstIdentifier identifier) {
         if (identifier.isExternal()) {
-            return registerGlobalVariable(identifier, heapTracker.createVariable(identifier, Map.of()));
+            return registerGlobalVariable(identifier, heapTracker.createVariable(identifier, Modifiers.EMPTY));
         } else if (isLinkedVariable(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.block(identifier));
         } else if (isGlobalVariable(identifier)) {
@@ -204,15 +208,15 @@ public class Variables extends AbstractMessageEmitter {
         return result;
     }
 
-    private HeapTracker getHeapTracker(Map<Modifier, @Nullable Object> modifiers) {
-        return modifiers.get(Modifier.EXTERNAL) instanceof HeapTracker externalTracker ? externalTracker : heapTracker;
+    private HeapTracker getHeapTracker(Modifiers modifiers) {
+        return modifiers.getParameters(EXTERNAL) instanceof HeapTracker externalTracker ? externalTracker : heapTracker;
     }
 
     /// Registers an external variable in a given scope. Reports possible name clashes.
     ///
     /// @param identifier variable name
     /// @return ValueStore instance representing the created variable
-    public ValueStore createExternalVariable(AstIdentifier identifier, Map<Modifier, @Nullable Object> modifiers) {
+    public ValueStore createExternalVariable(AstIdentifier identifier, Modifiers modifiers) {
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             return LogicVariable.INVALID;
         }
@@ -225,20 +229,21 @@ public class Variables extends AbstractMessageEmitter {
     /// Registers an array. Scope is always global.
     ///
     /// @return ValueStore instance representing the created variable
-    public ArrayStore createArray(AstIdentifier identifier, int size, Map<Modifier, @Nullable Object> modifiers,
-            List<ValueStore> initialValues, @Nullable LogicVariable processor, boolean shared) {
+    public ArrayStore createArray(AstIdentifier identifier, Modifiers modifiers, int size, List<ValueStore> initialValues) {
         ArrayStore result;
 
         if (!verifyGlobalDeclaration(identifier, identifier)) {
             result = InternalArray.createInvalid(nameCreator, identifier, size);
-        } else if (modifiers.containsKey(Modifier.CONST)) {
+        } else if (modifiers.contains(CONST)) {
             result = InternalArray.createConst(nameCreator, identifier, size, initialValues);
-        } else if (modifiers.containsKey(Modifier.EXTERNAL)) {
+        } else if (modifiers.contains(EXTERNAL)) {
             result = getHeapTracker(modifiers).createArray(identifier, size);
         } else {
-            boolean declaredRemote = modifiers.containsKey(Modifier.REMOTE);
-            boolean isVolatile = modifiers.containsKey(Modifier.VOLATILE) || declaredRemote;
-            result = InternalArray.create(nameCreator, identifier, size, isVolatile, declaredRemote, processor, shared);
+            boolean declaredRemote = modifiers.containsAny(REMOTE, EXPORT);
+            boolean isVolatile = modifiers.contains(VOLATILE) || declaredRemote;
+            LogicVariable storageProcessor = modifiers.getParameters(REMOTE) instanceof LogicVariable p ? p : null;
+            ArrayNameCreator arrayNameCreator = processArrayMlogModifier(modifiers, size, nameCreator);
+            result = InternalArray.create(arrayNameCreator, identifier, size, isVolatile, declaredRemote, storageProcessor, false);
         }
 
         putVariableIfAbsent(identifier.getName(), result);
@@ -247,12 +252,12 @@ public class Variables extends AbstractMessageEmitter {
 
     /// Registers a standard variable in a given scope. Reports possible name clashes.
     ///
-    /// @param local      true if the variable should be registered in local scope, false for global scope
+    /// @param local      true if the variable should be registered in a local scope, false for the global scope
     /// @param identifier variable name
     /// @param scope      scope of the variable
     /// @param modifiers  declaration modifiers
     /// @return ValueStore instance representing the created variable
-    public ValueStore createVariable(boolean local, AstIdentifier identifier, VariableScope scope, Map<Modifier, @Nullable Object> modifiers) {
+    public ValueStore createVariable(boolean local, AstIdentifier identifier, VariableScope scope, Modifiers modifiers) {
         String name = identifier.getName();
 
         if (local) {
@@ -261,33 +266,35 @@ public class Variables extends AbstractMessageEmitter {
                 return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
             }
             return functionContext.registerFunctionVariable(identifier, scope,
-                    modifiers.containsKey(Modifier.NOINIT), false);
+                    modifiers.contains(NOINIT), false);
         } else {
             if (globalVariables.containsKey(name)) {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
                 return Objects.requireNonNull(globalVariables.get(identifier.getName()));
             }
 
-            if (modifiers.get(Modifier.REMOTE) instanceof ProcessorStorage(LogicVariable storageProcessor, String storageName)) {
-                if (storageProcessor == null) throw new MindcodeInternalError("No processor specification in the 'remote' clause.");
+            String mlogName = processVariableMlogModifier(modifiers);
 
-                LogicString remoteName = storageName != null ? LogicString.create(storageName) : nameCreator.remote(identifier);
+            if (modifiers.getParameters(REMOTE) instanceof LogicVariable storageProcessor) {
+                LogicVariable transferVariable = modifiers.contains(CACHED)
+                        ? LogicVariable.global(identifier, nameCreator.global(identifier.getName()))
+                        : this.processor.nextTemp();
+                LogicString remoteName = mlogName == null ? nameCreator.remote(identifier)
+                        : LogicString.create(modifiers.getNode(REMOTE).sourcePosition(), mlogName);
                 RemoteVariable variable = new RemoteVariable(identifier.sourcePosition(), storageProcessor,
-                        name, remoteName, this.processor.nextTemp(), false, false);
+                        name, remoteName, transferVariable, false, false,
+                        modifiers.contains(CACHED));
 
                 return registerRemoteVariable(identifier, variable);
-            } else if (modifiers.get(Modifier.MLOG) instanceof ProcessorStorage storage) {
-                return registerGlobalVariable(identifier,
-                        LogicVariable.global(identifier, storage.getName(),
-                                modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
-                                modifiers.containsKey(Modifier.NOINIT),
-                                modifiers.containsKey(Modifier.REMOTE) || modifiers.containsKey(Modifier.MLOG)));
             } else  {
                 return registerGlobalVariable(identifier,
-                        LogicVariable.global(identifier,nameCreator.global(identifier.getName()),
-                                modifiers.containsKey(Modifier.VOLATILE) || modifiers.containsKey(Modifier.REMOTE),
-                                modifiers.containsKey(Modifier.NOINIT),
-                                modifiers.containsKey(Modifier.REMOTE) || modifiers.containsKey(Modifier.MLOG)));
+                        LogicVariable.global(identifier,
+                                mlogName == null ? nameCreator.global(identifier.getName()) : mlogName,
+                                modifiers.containsAny(EXPORT, VOLATILE),
+                                modifiers.contains(NOINIT),
+                                modifiers.containsAny(EXPORT, MLOG)
+                        )
+                );
             }
         }
     }
@@ -417,5 +424,118 @@ public class Variables extends AbstractMessageEmitter {
             expression.run();
             return Void.TYPE;
         });
+    }
+
+    private @Nullable String processVariableMlogModifier(Modifiers modifiers) {
+        if (modifiers.getParameters(MLOG) instanceof MlogSpecification(List<LogicArgument> mlogNames)) {
+            if (mlogNames.isEmpty()) {
+                throw new MindcodeInternalError("Mising name in mlog specification.");
+            }
+
+            if (mlogNames.size() > 1) {
+                if (mlogNames.get(1) instanceof SourceElement element && !element.sourcePosition().isEmpty()) {
+                    error(element, ERR.MODIFIER_MLOG_TOO_MAY_VALUES);
+                } else {
+                    error(modifiers.getNode(MLOG), ERR.MODIFIER_MLOG_TOO_MAY_VALUES);
+                }
+            }
+
+            switch (mlogNames.getFirst()) {
+                case LogicString s -> { return s.getValue();}
+                case LogicKeyword kw -> {
+                    error(modifiers.getNode(MLOG), ERR.INVALID_MLOG_KEYWORD);
+                    return null;
+                }
+                case LogicVariable l -> { return null; }
+                default -> throw new MindcodeInternalError("Unexpected mlog name " + mlogNames.getFirst());
+            }
+        } else if (modifiers.contains(MLOG)) {
+            throw new MindcodeInternalError("Unexpected modifier parametrization: " + modifiers.getParameters(MLOG));
+        } else {
+            return null;
+        }
+    }
+
+    public ArrayNameCreator processArrayMlogModifier(Modifiers modifiers, int arraySize, NameCreator standardNameCreator) {
+        if (!modifiers.contains(MLOG)) return standardNameCreator;
+
+        if (modifiers.getParameters(MLOG) instanceof MlogSpecification(List<LogicArgument> mlogNames)) {
+            if (mlogNames.isEmpty()) {
+                throw new MindcodeInternalError("Mising name in mlog specification.");
+            }
+            SourceElement sourceElement = modifiers.getNode(MLOG);
+
+            if (mlogNames.getFirst() instanceof LogicKeyword keyword) {
+                if (mlogNames.size() > 1) {
+                    error(sourceElement, ERR.MODIFIER_MLOG_TOO_MAY_VALUES);
+                }
+                if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+                    error(sourceElement, ERR.LOOKUP_REQUIRES_TARGET_8);
+                }
+
+                Map<Integer, ? extends MindustryContent> lookupMap = processor.getMetadata().getLookupMap(keyword.getKeyword());
+
+                if (lookupMap == null) {
+                    error(sourceElement, ERR.MODIFIER_MLOG_UNKNOWN_LOOKUP_TYPE, keyword.getKeyword());
+                    return standardNameCreator;
+                }
+
+                if (lookupMap.size() < arraySize) {
+                    error(sourceElement, ERR.MODIFIER_MLOG_LOOKUP_TOO_SMALL, keyword.getKeyword(),
+                            lookupMap.size(), arraySize);
+                    return standardNameCreator;
+                }
+
+                return new ArrayNameCreator() {
+                    @Override
+                    public String arrayBase(String processorName, String arrayName) {
+                        return standardNameCreator.arrayBase(processorName, arrayName);
+                    }
+
+                    @Override
+                    public String arrayElement(String arrayName, int index) {
+                        return lookupMap.get(index).contentName();
+                    }
+
+                    @Override
+                    public String remoteArrayElement(String arrayName, int index) {
+                        return arrayElement(arrayName, index);
+                    }
+
+                    @Override
+                    public LogicKeyword arrayLookupType() {
+                        return keyword;
+                    }
+                };
+            } else {
+                if (mlogNames.size() != arraySize) {
+                    error(sourceElement, ERR.MODIFIER_MLOG_SIZE_MISMATCH, mlogNames.size(), arraySize);
+                }
+
+                mlogNames.stream().filter(LogicKeyword.class::isInstance)
+                        .forEach(_ -> error(sourceElement, ERR.INVALID_MLOG_KEYWORD));
+
+                return new ArrayNameCreator() {
+                    @Override
+                    public String arrayBase(String processorName, String arrayName) {
+                        return standardNameCreator.arrayBase(processorName, arrayName);
+                    }
+
+                    @Override
+                    public String arrayElement(String arrayName, int index) {
+                        return index >= mlogNames.size() ? "invalid"
+                                : mlogNames.get(index) instanceof LogicString str ? str.getValue()
+                                : standardNameCreator.arrayElement(arrayName, index);
+                    }
+
+                    @Override
+                    public String remoteArrayElement(String arrayName, int index) {
+                        return arrayElement(arrayName, index);
+                    }
+                };
+            }
+        } else {
+            throw new MindcodeInternalError("Unexpected modifier parametrization: " + modifiers.getParameters(MLOG));
+        }
     }
 }

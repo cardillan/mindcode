@@ -179,7 +179,6 @@ public abstract class AbstractBuilder extends AbstractMessageEmitter {
     ///
     /// @return LogicVoid.VOID
     protected ValueStore visitBody(List<? extends AstMindcodeNode> body) {
-        // §§§ Move to codeGenerator, fail when there's unused setLocal directive.
         body.forEach(this::compile);
         return LogicVoid.VOID;
     }

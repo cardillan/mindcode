@@ -65,11 +65,11 @@ The array optimization improves the performance of array operations in several w
 
 Mindcode supports the following types of arrays:
 
-* Internal arrays: backed by processor variables, and index-based access is provided by the compiler.
-* Remote arrays: backed by variables residing in a remote processor. Index-based access is provided by the compiler on the current processor.
-* Multiplexed arrays: similar to remote arrays, but several copies of these arrays may exist in different processors. Index-based access is provided by the compiler on the current processor.
-* Constant arrays: individual elements of the array are constant. Index-based read-only access is provided by the compiler.
-* External arrays: backed by a memory bank or a memory cell. Index-based access is provided directly by mlog instructions (`read` and `write`).
+* **Internal arrays:** backed by processor variables, and index-based access is provided by the compiler.
+* **Remote arrays:** backed by variables residing in a remote processor. Index-based access is provided by the compiler on the current processor.
+* **Multiplexed arrays:** similar to remote arrays, but several copies of these arrays may exist in different processors. Index-based access is provided by the compiler on the current processor.
+* **Constant arrays:** individual elements of the array are constant. Index-based read-only access is provided by the compiler.
+* **External arrays:** backed by a memory bank or a memory cell. Index-based access is provided directly by mlog instructions (`read` and `write`).
 
 **Array Implementations**
 
@@ -266,7 +266,6 @@ format cyanogen
 format gallium
 print nitrogen
 printflush message1
-end
 ```
 
 ## Case Expression Optimization

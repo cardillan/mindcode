@@ -471,7 +471,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
 
         return new RemoteVariable(remote.function.getSourcePosition(), remote.processor, remote.function.getName() + "()",
                 remote.function.getFnRetVal().getMlogVariableName(),
-                assembler.nextTemp(), false, false);
+                assembler.nextTemp(), false, false, false);
     }
 
     /// Returns a predicate which detects misplaced input arguments. Such arguments need to be handled specifically
@@ -606,7 +606,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
             return processor != null
                     ? new RemoteVariable(function.getSourcePosition(), processor, function.getName() + "()",
                     function.getFnRetVal().getMlogVariableName(),assembler.nextTemp(),
-                        false, false)
+                        false, false, false)
                     :   function.getFnRetVal();
         }
     }

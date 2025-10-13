@@ -170,8 +170,8 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
         LogicKeyword keyword = toKeyword(argument, requireValidKeyword);
         if (!keyword.getKeyword().isEmpty()) {
             if (!parameterValues.contains(keyword.getKeyword())) {
-                error(argument, ERR.ARGUMENT_KEYWORD_INVALID_VALUE, keyword.getKeyword(),
-                        String.join("', '", parameterValues));
+                error(argument, ERR.ARGUMENT_KEYWORD_INVALID_VALUE, keyword.getKeywordLiteral(),
+                        ":" + String.join("', ':", parameterValues));
                 // Fill in one of the valid keywords to avoid further errors
                 return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
                         parameterValues.iterator().next()) : LogicKeyword.INVALID;
@@ -180,7 +180,7 @@ public abstract class AbstractHandler extends AbstractMessageEmitter implements 
             return keyword;
         } else {
             error(argument, ERR.ARGUMENT_KEYWORD_UNSPECIFIED_VALUE,
-                    String.join("', '", parameterValues));
+                    ":" + String.join("', ':", parameterValues));
             // Fill in one of the valid keywords to avoid further errors
             return requireValidKeyword ? LogicKeyword.create(SourcePosition.EMPTY,
                     parameterValues.iterator().next()) : LogicKeyword.INVALID;

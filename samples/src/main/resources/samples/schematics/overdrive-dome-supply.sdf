@@ -46,7 +46,7 @@ program = """
     #set syntax = strict;
     #set instruction-limit  = 1100;
 
-    noinit linked dome1, switch1, message1;
+    linked dome1, switch1, message1;
 
     /// This is the preferred unit type to use for bringing in supplies.
     /// If no units of this type exist, we'll try using other types.

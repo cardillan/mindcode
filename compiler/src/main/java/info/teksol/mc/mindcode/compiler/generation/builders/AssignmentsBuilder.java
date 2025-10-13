@@ -93,7 +93,7 @@ public class AssignmentsBuilder extends AbstractBuilder implements AstAssignment
         LogicValue result;
 
         if (operation == null) {
-            // In direct assignment, prior value of the target is unavailable
+            // In direct assignment, the prior value of the target is unavailable
             target.setValue(assembler, rvalue);
 
             // Use the variable we've just assigned to as the result, unless it is volatile - in that case,

@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
+import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -127,7 +128,9 @@ class ArrayOptimizer extends BaseOptimizer {
 
         // Remove arrays that have already been assigned a lookup type from both maps
         for (String arrayName : Set.copyOf(arrays.keySet())) {
-            if (lookupCapacity.remove(arrays.get(arrayName).getFirst().getArrayLookupType()) != null) {
+            LogicKeyword lookupType = arrays.get(arrayName).getFirst().getArrayLookupType();
+            if (lookupType != INVALID) {
+                lookupCapacity.remove(lookupType);
                 arrays.remove(arrayName);
             }
         }
@@ -157,6 +160,14 @@ class ArrayOptimizer extends BaseOptimizer {
                     replaceInstruction(instructionIndex(ix), copy);
                 }
             }
+        }
+    }
+
+    private LogicKeyword getArrayLookupType(ArrayAccessInstruction instruction) {
+        if (instruction.getArray().getArrayStore() instanceof InternalArray array && array.getLookupType() != INVALID) {
+            return array.getLookupType();
+        } else {
+            return instruction.getArrayLookupType();
         }
     }
 

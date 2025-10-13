@@ -1222,14 +1222,14 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             module test;
                             
-                            remote void foo(in a, out b)
+                            export void foo(in a, out b)
                                 b = 2 * a;
                             end;
                             """,
                     createInstruction(JUMP, label(1), "always"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(1)),
-                    createInstruction(SET, "*signature", q("974935c9f6b9c503:v1")),
+                    createInstruction(SET, "*signature", q("7633f8c34aded96b:v1")),
                     createInstruction(LABEL, label(2)),
                     createInstruction(WAIT, "1e12"),
                     createInstruction(JUMP, label(2), "always"),
@@ -1248,14 +1248,14 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
             assertCompilesTo("""
                             module test;
                             
-                            remote def foo(in out a)
+                            export def foo(in out a)
                                 return a++ / 2;
                             end;
                             """,
                     createInstruction(JUMP, label(1), "always"),
                     createInstruction(JUMP, label(0), "always"),
                     createInstruction(LABEL, label(1)),
-                    createInstruction(SET, "*signature", q("c2c29e7275993c36:v1")),
+                    createInstruction(SET, "*signature", q("1ea5821adeacf3c4:v1")),
                     createInstruction(LABEL, label(2)),
                     createInstruction(WAIT, "1e12"),
                     createInstruction(JUMP, label(2), "always"),
@@ -1280,8 +1280,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
                     """
                             module test;
                             
-                            remote def foo(a) end;
-                            remote void foo() end;
+                            export def foo(a) end;
+                            export void foo() end;
                             """
             );
         }
@@ -1405,7 +1405,7 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void refusesWrongAlignment() {
             assertGeneratesMessageRegex(
-                    "Invalid value 'fluffyBunny' for keyword parameter: allowed values are .*",
+                    "Invalid value ':fluffyBunny' for keyword parameter: allowed values are .*",
                     "ulocate(:building, :fluffyBunny, true);");
         }
     }
@@ -1485,8 +1485,8 @@ class StandardFunctionCallsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsWrongKeywords() {
             assertGeneratesMessage(
-                    "Invalid value 'building' for keyword parameter: allowed values are 'floor', 'ore', 'block'.",
-                    "setblock(building, @core-nucleus, x, y, 0, 0);"
+                    "Invalid value ':building' for keyword parameter: allowed values are ':floor', ':ore', ':block'.",
+                    "setblock(:building, @core-nucleus, x, y, 0, 0);"
             );
         }
     }

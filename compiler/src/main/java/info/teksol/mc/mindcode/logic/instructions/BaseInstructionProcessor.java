@@ -9,6 +9,7 @@ import info.teksol.mc.messages.WARN;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.generation.variables.InternalArray;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.mimex.BlockType;
@@ -193,7 +194,11 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
             case EXTERNAL -> instruction.setArrayOrganization(ArrayOrganization.EXTERNAL, ArrayConstruction.REGULAR);
             case CONSTANT -> instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR);
             default -> {
-                if (getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+                if (instruction.getArray().getArrayStore() instanceof InternalArray array && array.getLookupType() != LogicKeyword.INVALID) {
+                    instruction.setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
+                            .setArrayLookupType(array.getLookupType());
+                }
+                else if (getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
                     instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.COMPACT);
                 } else {
                     instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR);
