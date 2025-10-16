@@ -270,14 +270,14 @@ class DataFlowVariableStates {
             }
 
             if (instruction instanceof ArrayAccessInstruction thisIx) {
-                if (thisIx.getArrayConstruction() == ArrayConstruction.COMPACT) {
+                if (thisIx.getArrayConstruction().accessByName()) {
                     LogicVariable elementVariable = thisIx.getArrayConstructor().getElementNameVariable();
                     if (elementVariable.equals(variable)) {
                         Definition definition = definitions.get(variable);
                         if (definition != null && definition.instructions.size() == 1) {
                             trace(() -> "+++ Repeated compact array access by variable: " + elementVariable.toMlog());
                             if (definition.instructions.getFirst() instanceof ArrayAccessInstruction prevIx
-                                && prevIx.getArrayConstruction() == ArrayConstruction.COMPACT
+                                && prevIx.getArrayConstruction().accessByName()
                                 && prevIx.getArrayConstructor().getElementNameVariable().equals(variable)
                                 && thisIx.getIndex() instanceof LogicVariable thisIndex && prevIx.getIndex() instanceof LogicVariable prevIndex
                             ) {

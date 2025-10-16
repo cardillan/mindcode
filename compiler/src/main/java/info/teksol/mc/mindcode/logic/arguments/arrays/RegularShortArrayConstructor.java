@@ -34,7 +34,7 @@ public class RegularShortArrayConstructor extends AbstractArrayConstructor {
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         if (useSelects) {
             // If the array is not remote, we save one instruction on read
-            return profile.getBoundaryChecks().getSize() + arraySize - b(!arrayStore.isRemote() && accessType == AccessType.READ);
+            return profile.getBoundaryChecks().getSize() + arraySize - flag(!arrayStore.isRemote() && accessType == AccessType.READ);
         } else {
             return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 4 : 7);
         }
@@ -44,7 +44,7 @@ public class RegularShortArrayConstructor extends AbstractArrayConstructor {
     public double getExecutionSteps() {
         if (useSelects) {
             // If the array is not remote, we save one instruction on read
-            return profile.getBoundaryChecks().getExecutionSteps() + arraySize - b(!arrayStore.isRemote() && accessType == AccessType.READ);
+            return profile.getBoundaryChecks().getExecutionSteps() + arraySize - flag(!arrayStore.isRemote() && accessType == AccessType.READ);
         } else {
             return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 2.5 : (3 + 4 + 3) / 3.0);
         }

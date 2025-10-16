@@ -78,11 +78,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     protected void computeSharedJumpTableSize(@Nullable Map<String, Integer> sharedStructures) {
         if (sharedStructures != null) {
-            int size = arrayStore.getSize() * 2 + b(profile.isSymbolicLabels());
             String key = arrayStore.getName() + getJumpTableId();
-            if (!sharedStructures.containsKey(key) || sharedStructures.get(key) < size) {
-                sharedStructures.put(key, size);
-            }
+            sharedStructures.computeIfAbsent(key, _ -> tableSize());
         }
     }
 
@@ -108,6 +105,33 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
                 createExit.run();
                 nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
             } else if (!skipLastExit) {
+                createExit.run();
+            }
+        }
+    }
+
+    protected void generateFoldedJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
+            Function<ValueStore, LogicValue> arrayElementProcessor, LogicValue index, LogicValue limit, LogicVariable target,
+            Runnable createExit, boolean inlined) {
+        LogicLabel nextLabel = firstLabel;
+
+        List<ValueStore> elements = arrayStore.getElements();
+        int count = (elements.size() + 1) / 2;
+
+        for (int i = 0; i < count; i++) {
+            creator.createMultiLabel(nextLabel, marker);
+            LogicValue element1 = arrayElementProcessor.apply(elements.get(i));
+            if (i + count < elements.size()) {
+                LogicValue element2 = arrayElementProcessor.apply(elements.get(i + count));
+                creator.createSelect(target, Condition.LESS_THAN, index, limit, element1, element2);
+            } else {
+                creator.createSet(target, element1);
+            }
+
+            if (i < count - 1) {
+                createExit.run();
+                nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
+            } else if (!inlined) {
                 createExit.run();
             }
         }
@@ -180,7 +204,31 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         }
     }
 
-    protected int b(boolean flag) {
+    protected boolean folded() {
+        return instruction.isArrayFolded();
+    }
+
+    protected final int flag(boolean flag) {
         return flag ? 1 : 0;
+    }
+
+    protected final int roundUpToEven(int value) {
+        return (value + 1) / 2 * 2;
+    }
+
+    protected final int tableSize() {
+        return folded()
+                ? roundUpToEven(arrayStore.getSize()) + 2 * flag(profile.isSymbolicLabels())
+                : 2 * arrayStore.getSize() + flag(profile.isSymbolicLabels());
+    }
+
+    protected final int inlinedTableSize() {
+        return (folded() ? roundUpToEven(arrayStore.getSize()) : 2 * arrayStore.getSize()) - 1;
+    }
+
+    protected final double inlinedTableStepsSavings() {
+        // The last jump in an inlined jump table is eliminated
+        // Hit twice as often for even-sized folded arrays
+        return (folded() && arrayStore.getSize() % 2 == 0 ? 2.0 : 1.0) / arrayStore.getSize();
     }
 }

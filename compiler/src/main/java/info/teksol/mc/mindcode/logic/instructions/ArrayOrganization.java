@@ -30,12 +30,12 @@ public enum ArrayOrganization {
         this(name, constructor, constructor);
     }
 
-    ArrayOrganization(String name, Function<ArrayAccessInstruction, ArrayConstructor> compactConstructor,
-            Function<ArrayAccessInstruction, ArrayConstructor> regularConstructor) {
+    ArrayOrganization(String name, Function<ArrayAccessInstruction, ArrayConstructor> compact,
+            Function<ArrayAccessInstruction, ArrayConstructor> regular) {
         this.name = name;
         constructors = Map.of(
-                ArrayConstruction.COMPACT, compactConstructor,
-                ArrayConstruction.REGULAR, regularConstructor
+                ArrayConstruction.COMPACT, compact,
+                ArrayConstruction.REGULAR, regular
         );
     }
 

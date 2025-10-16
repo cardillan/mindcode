@@ -4,7 +4,6 @@ import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
-import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
@@ -21,7 +20,6 @@ import java.util.function.Consumer;
 
 @NullMarked
 public class CompactArrayConstructor extends AbstractArrayConstructor {
-    private final LogicVariable proc;
     private final LogicVariable arrayInd;
     private final LogicVariable arrayRet;
     private final LogicVariable arrayElem;
@@ -31,7 +29,6 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
 
         NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
         String baseName = arrayStore.getName();
-        proc = LogicVariable.arrayAccess(baseName, "*proc", nameCreator.arrayAccess(baseName, "proc"));
         arrayInd = LogicVariable.arrayAccess(baseName, "*ind", nameCreator.arrayAccess(baseName, "ind"));
         arrayRet = LogicVariable.arrayReturn(baseName, "*ret", nameCreator.arrayAccess(baseName, "ret"));
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
@@ -41,14 +38,16 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
 
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         computeSharedJumpTableSize(sharedStructures);
-        return instruction.isCompactAccessTarget() ? 1 : profile.getBoundaryChecks().getSize() + 4;
+        return instruction.isCompactAccessTarget()
+                ? 1
+                : profile.getBoundaryChecks().getSize() + 4 + flag(folded() && !profile.isSymbolicLabels());
     }
 
     @Override
     public double getExecutionSteps() {
         return instruction.isCompactAccessTarget()
                 ? 1
-                : profile.getBoundaryChecks().getSize() + 6 + b(profile.isSymbolicLabels());
+                : profile.getBoundaryChecks().getSize() + 6 + flag(folded()) + flag(profile.isSymbolicLabels());
     }
 
     @Override
@@ -65,23 +64,17 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
     }
 
     private SideEffects createReadSideEffects() {
-        List<LogicVariable> reads = arrayElementsPlus(
-                profile.isSymbolicLabels() ? arrayInd : null,
-                arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null
-        );
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? arrayElementsPlus(arrayInd) : arrayElements();
         return SideEffects.of(reads, List.of(arrayElem), List.of());
     }
 
     private SideEffects createWriteSideEffects() {
-        List<LogicVariable> reads = variables(
-                profile.isSymbolicLabels() ? arrayInd : null,
-                arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null
-        );
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? List.of(arrayInd) : List.of();
         return SideEffects.of(reads, List.of(arrayElem), arrayElements());
     }
 
     private SideEffects createCallSideEffects() {
-        List<LogicVariable> reads = profile.isSymbolicLabels() ? List.of(arrayInd) : List.of();
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? List.of(arrayInd) : List.of();
         return SideEffects.of(reads, List.of(arrayElem), List.of());
     }
 
@@ -91,7 +84,7 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
     }
 
     public String getJumpTableId() {
-        return arrayStore.getName() + "-e";
+        return arrayStore.getName() + (folded() ? "-fe" : "-e");
     }
 
     @Override
@@ -104,6 +97,7 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
     }
 
     private List<LogicInstruction> buildJumpTable(String jumpTableId) {
+        boolean folded = folded();
         List<LogicInstruction> result = new ArrayList<>();
 
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
@@ -117,11 +111,22 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
         if (profile.isSymbolicLabels()) {
             LogicLabel startLabel = processor.nextLabel();
             creator.createLabel(startLabel).setMarker(startLabel);
-            creator.createMultiJump(firstLabel, arrayInd,LogicNumber.ZERO, marker);
+            LogicVariable jumpValue = folded ? processor.nextTemp() : arrayInd;
+            if (folded) {
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                creator.createOp(Operation.MOD, jumpValue, arrayInd, modulo);
+            }
+            creator.createMultiJump(firstLabel, jumpValue,LogicNumber.ZERO, marker);
         }
 
         Runnable createExit = () -> creator.createReturn(arrayRet);
-        generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(), createExit, false);
+        if (folded) {
+            LogicNumber limit = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+            generateFoldedJumpTable(creator, firstLabel, marker, ValueStore::getMlogVariableName,
+                    arrayInd, limit, arrayElem, createExit, false);
+        } else {
+            generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(), createExit, false);
+        }
         return result;
     }
 
@@ -157,16 +162,21 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
         LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
 
         if (!instruction.isCompactAccessTarget()) {
-            LogicVariable temp = creator.nextTemp();
             LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId()).get(1).getMarker());
             LogicLabel marker2 = processor.nextMarker();
             LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
             LogicLabel returnLabel = processor.nextLabel();
 
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
-            creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
-            generateBoundsCheck(astContext, consumer, temp, 2);
-            creator.createMultiCall(target, temp, marker).setSideEffects(createCallSideEffects()).setHoistId(marker2);
+            LogicVariable index = folded() ? arrayInd : processor.nextTemp(); //Symbolic labels not handled here
+            creator.createOp(Operation.MUL, index, instruction.getIndex(), LogicNumber.TWO);
+            generateBoundsCheck(astContext, consumer, index, 2);
+            LogicVariable branch = folded() ? creator.nextTemp() : index;
+            if (folded()) {
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                creator.createOp(Operation.MOD, branch, index, modulo);
+            }
+            creator.createMultiCall(target, branch, marker).setSideEffects(createCallSideEffects()).setHoistId(marker2);
             creator.createLabel(returnLabel);
         }
 

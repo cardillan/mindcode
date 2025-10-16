@@ -15,4 +15,7 @@ public enum ArrayConstruction {
         return name;
     }
 
+    public boolean accessByName() {
+        return this == COMPACT;
+    }
 }

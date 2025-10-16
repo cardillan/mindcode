@@ -192,14 +192,16 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
     public void setupArrayAccessInstruction(ArrayAccessInstruction instruction) {
         switch (instruction.getArray().getArrayStore().getArrayType()) {
             case EXTERNAL -> instruction.setArrayOrganization(ArrayOrganization.EXTERNAL, ArrayConstruction.REGULAR);
-            case CONSTANT -> instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR);
+            case CONSTANT -> instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR)
+                    .setArrayFolded(isSupported(SELECT));
+
             default -> {
                 if (instruction.getArray().getArrayStore() instanceof InternalArray array && array.getLookupType() != LogicKeyword.INVALID) {
                     instruction.setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
                             .setArrayLookupType(array.getLookupType());
-                }
-                else if (getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
-                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.COMPACT);
+                } else if (getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
+                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.COMPACT)
+                            .setArrayFolded(isSupported(SELECT));
                 } else {
                     instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR);
                 }

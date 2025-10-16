@@ -20,14 +20,20 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
         super(instruction);
     }
 
+    @Override
+    protected boolean folded() {
+        return accessType == ArrayAccessInstruction.AccessType.READ && !arrayStore.isRemote() && instruction.isArrayFolded();
+    }
+
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        return profile.getBoundaryChecks().getSize() + 2 + (2 * arrayStore.getSize() - 1);
+        int checkSize = profile.getBoundaryChecks().getSize();
+        return checkSize + 1 + inlinedTableSize() + flag(folded());
     }
 
     @Override
     public double getExecutionSteps() {
-        // The last jump in the jump table is eliminated
-        return profile.getBoundaryChecks().getExecutionSteps() + 4 - 1.0 / arrayStore.getSize();
+        int checkSteps = profile.getBoundaryChecks().getExecutionSteps();
+        return checkSteps + 4 + flag(folded()) - inlinedTableStepsSavings();
     }
 
     @Override
@@ -56,6 +62,7 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
 
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+        boolean folded = folded() && instruction instanceof ReadArrInstruction;
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
 
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
@@ -63,24 +70,40 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
         LogicLabel finalLabel = processor.nextLabel();
         LogicLabel firstLabel = processor.nextLabel();
         LogicLabel marker = processor.nextMarker();
-        LogicVariable tmp = creator.nextTemp();
-        creator.createOp(Operation.MUL, tmp, instruction.getIndex(), LogicNumber.TWO);
-        generateBoundsCheck(astContext, consumer, tmp, 2);
+        LogicVariable tmp;
+        if (folded) {
+            LogicVariable tmp0 = creator.nextTemp();
+            creator.createOp(Operation.MUL, tmp0, instruction.getIndex(), LogicNumber.TWO);
+            generateBoundsCheck(astContext, consumer, tmp0, 2);
+            tmp = creator.nextTemp();
+            LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+            creator.createOp(Operation.MOD, tmp, tmp0, modulo);
+        } else {
+            tmp = creator.nextTemp();
+            creator.createOp(Operation.MUL, tmp, instruction.getIndex(), LogicNumber.TWO);
+            generateBoundsCheck(astContext, consumer, tmp, 2);
+        }
 
         creator.pushContext(AstContextType.JUMPS, AstSubcontextType.BASIC);
         creator.setSubcontextType(AstSubcontextType.ARRAY, 1.0);
 
         SideEffects sideEffects = switch (instruction) {
-            case ReadArrInstruction rix -> SideEffects.of(arrayElementsPlus(tmp),
-                    variables(rix.getResult()), List.of());
-            case WriteArrInstruction wix -> SideEffects.of(variables(wix.getValue(), tmp),
-                    List.of(), arrayElements());
+            case ReadArrInstruction rix -> SideEffects.of(arrayElements(), variables(rix.getResult()), List.of());
+            case WriteArrInstruction wix -> SideEffects.of(variables(wix.getValue()), List.of(), arrayElements());
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         };
-
         creator.createMultiJump(firstLabel,tmp, LogicNumber.ZERO, marker).setSideEffects(sideEffects);
-        generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(),
-                () -> creator.createJumpUnconditional(finalLabel), true);
+
+        if (folded) {
+            ReadArrInstruction rix = (ReadArrInstruction) instruction;
+            LogicNumber limit = LogicNumber.create((arrayStore.getSize() + 1) / 2);
+            generateFoldedJumpTable(creator, firstLabel, marker, e -> e.getValue(creator),
+                    instruction.getIndex(), limit, rix.getResult(), () -> creator.createJumpUnconditional(finalLabel), true);
+        } else {
+            generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(),
+                    () -> creator.createJumpUnconditional(finalLabel), true);
+        }
+
         creator.createLabel(finalLabel);
         creator.popContext();
     }

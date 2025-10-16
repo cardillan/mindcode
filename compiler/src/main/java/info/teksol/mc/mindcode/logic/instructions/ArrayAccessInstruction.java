@@ -53,6 +53,14 @@ public interface ArrayAccessInstruction extends LogicInstruction {
         return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_LOOKUP_TYPE, arrayLookupType);
     }
 
+    default boolean isArrayFolded() {
+        return (boolean) getInfo(InstructionInfo.ARRAY_FOLDED);
+    }
+
+    default ArrayAccessInstruction setArrayFolded(boolean folded) {
+        return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_FOLDED, folded);
+    }
+
     ArrayAccessInstruction setArrayOrganization(ArrayOrganization arrayOrganization, ArrayConstruction arrayConstruction);
 
     default boolean isCompactAccessSource() {

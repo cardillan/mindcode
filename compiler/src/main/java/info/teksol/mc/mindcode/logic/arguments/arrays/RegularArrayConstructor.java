@@ -49,9 +49,16 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         writeRet = LogicVariable.arrayReturn(baseName, "*wret", nameCreator.arrayAccess(baseName, "wret"));
     }
 
+    @Override
+    protected boolean folded() {
+        return accessType == AccessType.READ && !arrayStore.isRemote() && instruction.isArrayFolded();
+    }
+
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         computeSharedJumpTableSize(sharedStructures);
-        return profile.getBoundaryChecks().getSize() + 4 + b(arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED);
+        return profile.getBoundaryChecks().getSize() + 4
+               + flag(folded() && !profile.isSymbolicLabels())
+               + flag(arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED);
     }
 
     @Override
@@ -61,8 +68,8 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         // but we can at least discount the execution step; this will also cause the regular array to be preferred
         // over a compact array, if there's enough instruction space left.
         return profile.getBoundaryChecks().getExecutionSteps() + 6
-               + b(arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED)
-               + b(profile.isSymbolicLabels()) - 0.2;
+               + flag(folded() || arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED)
+               + flag(profile.isSymbolicLabels()) - 0.2;
     }
 
     @Override
@@ -74,18 +81,16 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private SideEffects createReadSideEffects() {
-        List<LogicVariable> reads = arrayElementsPlus(
-                profile.isSymbolicLabels() ? readInd : null,
-                arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null
-        );
+        LogicVariable sharedProc = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null;
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? arrayElementsPlus(readInd, sharedProc)
+                : arrayElementsPlus(sharedProc);
         return SideEffects.of(reads, List.of(), List.of(readVal));
     }
 
     private SideEffects createWriteSideEffects() {
-        List<LogicVariable> reads = variables(writeVal,
-                profile.isSymbolicLabels() ? writeInd : null,
-                arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null
-        );
+        LogicVariable sharedProc = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED ? proc : null;
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? variables(writeInd, sharedProc)
+                : variables(writeVal, sharedProc);
         return SideEffects.of(reads, List.of(), arrayElements());
     }
 
@@ -99,7 +104,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
 
     public String getJumpTableId() {
         return switch (accessType) {
-            case READ -> arrayStore.getName() + "-r";
+            case READ -> arrayStore.getName() + (folded() ? "-fr" : "-r");
             case WRITE -> arrayStore.getName() + "-w";
         };
     }
@@ -110,6 +115,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     private List<LogicInstruction> buildJumpTable() {
+        boolean folded = folded();
         List<LogicInstruction> result = new ArrayList<>();
 
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
@@ -123,14 +129,26 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         if (profile.isSymbolicLabels()) {
             LogicLabel startLabel = processor.nextLabel();
             creator.createLabel(startLabel).setMarker(startLabel);
-            creator.createMultiJump(firstLabel, accessType == AccessType.READ ? readInd : writeInd,LogicNumber.ZERO, marker);
+            LogicVariable jumpValue = folded ? processor.nextTemp() : accessType == AccessType.READ ? readInd : writeInd;
+            if (folded) {
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                creator.createOp(Operation.MOD, jumpValue, readInd, modulo);
+            }
+            creator.createMultiJump(firstLabel, jumpValue,LogicNumber.ZERO, marker);
         }
 
         Function<ValueStore, ValueStore> arrayElementProcessor = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED
                 ? e -> ((RemoteVariable)e).withProcessor(proc)
                 : e -> e;
         Runnable createExit = () -> creator.createReturn(accessType == AccessType.READ ? readRet : writeRet);
-        generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createArrayAccessCreator(), createExit, false);
+        if (folded()) {
+            // Implies local (= not remote) read access
+            LogicNumber limit = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+            generateFoldedJumpTable(creator, firstLabel, marker, e -> e.getValue(creator),
+                    readInd, limit, readVal, createExit, false);
+        } else {
+            generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createArrayAccessCreator(), createExit, false);
+        }
         return result;
     }
 
@@ -178,7 +196,6 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
 
         boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
         LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
-        LogicVariable temp = creator.nextTemp();
         LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId()).get(1).getMarker());
         LogicLabel marker2 = processor.nextMarker();
         LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
@@ -188,9 +205,15 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
             case ReadArrInstruction rix -> {
                 if (shared) creator.createSet(proc, remoteProcessor);
                 creator.createSetAddress(readRet, returnLabel).setHoistId(marker2);
-                creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
-                generateBoundsCheck(astContext, consumer, temp, 2);
-                creator.createMultiCall(target, temp, marker).setSideEffects(rix.getSideEffects()).setHoistId(marker2);
+                LogicVariable index = folded() ? readInd : processor.nextTemp(); //Symbolic labels not handled here
+                creator.createOp(Operation.MUL, index, instruction.getIndex(), LogicNumber.TWO);
+                generateBoundsCheck(astContext, consumer, index, 2);
+                LogicVariable branch = folded() ? creator.nextTemp() : index;
+                if (folded()) {
+                    LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                    creator.createOp(Operation.MOD, branch, index, modulo);
+                }
+                creator.createMultiCall(target, branch, marker).setSideEffects(rix.getSideEffects()).setHoistId(marker2);
                 creator.createLabel(returnLabel);
                 creator.createSet(rix.getResult(), readVal);
             }
@@ -199,9 +222,10 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
                 if (shared) creator.createSet(proc, remoteProcessor);
                 creator.createSetAddress(writeRet, returnLabel).setHoistId(marker2);
                 creator.createSet(writeVal, wix.getValue());
-                creator.createOp(Operation.MUL, temp, instruction.getIndex(), LogicNumber.TWO);
-                generateBoundsCheck(astContext, consumer, temp, 2);
-                creator.createMultiCall(target, temp, marker).setSideEffects(wix.getSideEffects()).setHoistId(marker2);
+                LogicVariable index = processor.nextTemp(); //Symbolic labels not handled here
+                creator.createOp(Operation.MUL, index, instruction.getIndex(), LogicNumber.TWO);
+                generateBoundsCheck(astContext, consumer, index, 2);
+                creator.createMultiCall(target, index, marker).setSideEffects(wix.getSideEffects()).setHoistId(marker2);
                 creator.createLabel(returnLabel);
             }
 

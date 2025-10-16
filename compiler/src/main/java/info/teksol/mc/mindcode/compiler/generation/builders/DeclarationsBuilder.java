@@ -39,7 +39,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         AstRequireFileVisitor<ValueStore>,
         AstRequireLibraryVisitor<ValueStore>,
         AstVariablesDeclarationVisitor<ValueStore> {
-    public static final int MAX_INTERNAL_ARRAY_SIZE = 250;
+    public static final int MAX_INTERNAL_ARRAY_SIZE = 1000;
     public static final int MAX_EXTERNAL_ARRAY_SIZE = 2048;
 
     private static final Set<ArgumentType> constantExpressionTypes = Set.of(

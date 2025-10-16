@@ -27,6 +27,9 @@ public enum InstructionInfo {
     /// Array construction for ReadArr/WriteArr instructions
     ARRAY_CONSTRUCTION(ArrayConstruction.COMPACT),
 
+    /// Fold @counter table of the array (if possible)
+    ARRAY_FOLDED(Boolean.FALSE),
+
     /// This instruction is a compact-array access instruction, setting up the element variable name
     COMPACT_ACCESS_SOURCE(Boolean.FALSE),
 

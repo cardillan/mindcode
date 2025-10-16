@@ -227,7 +227,7 @@ class ArrayOptimizer extends BaseOptimizer {
         return actions;
     }
 
-    private int b(boolean flag) {
+    private int flag(boolean flag) {
         return flag ? 1 : 0;
     }
 
@@ -235,11 +235,11 @@ class ArrayOptimizer extends BaseOptimizer {
             int costLimit) {
         ArrayStore arrayStore = instructions.getFirst().getArray().getArrayStore();
         List<ArrayAccessInstruction> candidates = instructions.stream()
-                .filter(ix -> ix.getArrayConstruction() == ArrayConstruction.COMPACT)
+                .filter(ix -> ix.getArrayConstruction().accessByName())
                 .filter(ix -> !ix.isCompactAccessSource() && !ix.isCompactAccessTarget())
                 .toList();
         List<ArrayAccessInstruction> compact = instructions.stream()
-                .filter(ix -> ix.getArrayConstruction() == ArrayConstruction.COMPACT)
+                .filter(ix -> ix.getArrayConstruction().accessByName())
                 .filter(ix -> ix.isCompactAccessSource() || ix.isCompactAccessTarget())
                 .toList();
         List<ArrayAccessInstruction> regular = instructions.stream().filter(ix -> ix.getArrayConstruction() == ArrayConstruction.REGULAR).toList();
@@ -254,8 +254,8 @@ class ArrayOptimizer extends BaseOptimizer {
         boolean needsReadTable = access.containsKey(AccessType.READ) && regular.stream().noneMatch(ix -> ix.getAccessType() == AccessType.READ);
         boolean needsWriteTable = access.containsKey(AccessType.WRITE) && regular.stream().noneMatch(ix -> ix.getAccessType() == AccessType.WRITE);
 
-        int jumpTableSize = arrayStore.getSize() * 2 + b(getGlobalProfile().isSymbolicLabels());
-        int jumpTableCost = jumpTableSize * (b(needsReadTable) + b(needsWriteTable) - b(compact.isEmpty()));
+        int jumpTableSize = arrayStore.getSize() * 2 + flag(getGlobalProfile().isSymbolicLabels());
+        int jumpTableCost = jumpTableSize * (flag(needsReadTable) + flag(needsWriteTable) - flag(compact.isEmpty()));
 
         OptimizationEffect effect = candidates.stream()
                 .map(this::promotionEffect)
@@ -370,7 +370,8 @@ class ArrayOptimizer extends BaseOptimizer {
             String tableType = instruction.getArrayConstruction() == ArrayConstruction.COMPACT ? "compact"
                     : instruction.getAccessType().toString().toLowerCase();
 
-            return String.format("Inline %s jump table of array '%s'", tableType,
+            return String.format("Inline %s%s jump table of array '%s'",
+                    instruction.isArrayFolded() ? "folded " : "", tableType,
                     instruction.getArray().getArrayStore().getName().substring(1));
         }
     }

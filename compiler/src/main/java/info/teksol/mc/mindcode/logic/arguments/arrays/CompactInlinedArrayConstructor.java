@@ -39,15 +39,15 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
         if (instruction.isCompactAccessTarget()) return 1;
 
         int checkSize = profile.getBoundaryChecks().getSize();
-        return checkSize + 3 + (2 * arrayStore.getSize() - 1);
+        return checkSize + 2 + inlinedTableSize() + flag(folded());
     }
 
     @Override
     public double getExecutionSteps() {
         if (instruction.isCompactAccessTarget()) return 1;
 
-        // The last jump in the jump table is eliminated
-        return profile.getBoundaryChecks().getExecutionSteps() + 5 - 1.0 / arrayStore.getSize();
+        int checkSteps = profile.getBoundaryChecks().getExecutionSteps();
+        return checkSteps + 5 + flag(folded()) - inlinedTableStepsSavings();
     }
 
     @Override
@@ -89,17 +89,33 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
             LogicLabel finalLabel = processor.nextLabel();
             LogicLabel firstLabel = processor.nextLabel();
             LogicLabel marker = processor.nextMarker();
-            LogicVariable tmp = creator.nextTemp();
-            creator.createOp(Operation.MUL, tmp, instruction.getIndex(), LogicNumber.TWO);
-            generateBoundsCheck(astContext, consumer, tmp, 2);
+            LogicVariable tmp;
+            if (folded()) {
+                LogicVariable tmp0 = creator.nextTemp();
+                creator.createOp(Operation.MUL, tmp0, instruction.getIndex(), LogicNumber.TWO);
+                generateBoundsCheck(astContext, consumer, tmp0, 2);
+                tmp = creator.nextTemp();
+                LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+                creator.createOp(Operation.MOD, tmp, tmp0, modulo);
+            } else {
+                tmp = creator.nextTemp();
+                creator.createOp(Operation.MUL, tmp, instruction.getIndex(), LogicNumber.TWO);
+                generateBoundsCheck(astContext, consumer, tmp, 2);
+            }
 
             creator.pushContext(AstContextType.JUMPS, AstSubcontextType.BASIC);
             creator.setSubcontextType(AstSubcontextType.ARRAY, 1.0);
-
             creator.createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker)
                     .setSideEffects(SideEffects.writes(List.of(arrayElem)));
-            generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(),
-                    () -> creator.createJumpUnconditional(finalLabel), true);
+
+            if (folded()) {
+                LogicNumber limit = LogicNumber.create((arrayStore.getSize() + 1) / 2);
+                generateFoldedJumpTable(creator, firstLabel, marker, ValueStore::getMlogVariableName,
+                        instruction.getIndex(), limit, arrayElem, () -> creator.createJumpUnconditional(finalLabel), true);
+            } else {
+                generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(),
+                        () -> creator.createJumpUnconditional(finalLabel), true);
+            }
             creator.createLabel(finalLabel);
             creator.popContext();
         }
