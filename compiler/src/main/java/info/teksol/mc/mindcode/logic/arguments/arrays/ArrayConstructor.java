@@ -1,12 +1,12 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
+import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -21,9 +21,9 @@ public interface ArrayConstructor {
 
     String getJumpTableId();
 
-    void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables);
+    void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables);
 
-    default void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
+    default void generateJumpTable(Map<String, JumpTable> jumpTables) {
         // Most implementations don't need a jump table.
     }
 

@@ -9,6 +9,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -21,7 +22,6 @@ import org.jspecify.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -110,64 +110,75 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void generateJumpTable(Map<String, List<LogicInstruction>> jumpTables) {
-        jumpTables.computeIfAbsent(getJumpTableId(),  _ -> buildJumpTable());
+    public void generateJumpTable(Map<String, JumpTable> jumpTables) {
+        String tableId = getJumpTableId();
+        JumpTable jumpTable = jumpTables.get(tableId);
+        if (jumpTable == null || useTextTables && !jumpTable.usesTextTable()) {
+            jumpTables.put(tableId, buildJumpTable(tableId));
+        }
     }
 
-    private List<LogicInstruction> buildJumpTable() {
+    private JumpTable buildJumpTable(String tableId) {
         boolean folded = folded();
-        List<LogicInstruction> result = new ArrayList<>();
+        List<LogicInstruction> instructions = new ArrayList<>();
 
         AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
                 .createSubcontext(AstContextType.JUMPS, AstSubcontextType.BASIC, 1.0);
-        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, result::add);
+        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, instructions::add);
 
         creator.createEnd();
-        LogicLabel firstLabel = processor.nextLabel();
+        LogicLabel startLabel = processor.nextLabel();
+        LogicLabel firstLabel = profile.isSymbolicLabels() ? processor.nextLabel() : startLabel;
         LogicLabel marker = processor.nextMarker();
 
         if (profile.isSymbolicLabels()) {
-            LogicLabel startLabel = processor.nextLabel();
             creator.createLabel(startLabel).setMarker(startLabel);
             LogicVariable jumpValue = folded ? processor.nextTemp() : accessType == AccessType.READ ? readInd : writeInd;
             if (folded) {
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
                 creator.createOp(Operation.MOD, jumpValue, readInd, modulo);
             }
-            creator.createMultiJump(firstLabel, jumpValue,LogicNumber.ZERO, marker);
+            creator.createMultiJump(firstLabel, jumpValue, LogicNumber.ZERO, marker);
         }
 
         Function<ValueStore, ValueStore> arrayElementProcessor = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED
                 ? e -> ((RemoteVariable)e).withProcessor(proc)
                 : e -> e;
         Runnable createExit = () -> creator.createReturn(accessType == AccessType.READ ? readRet : writeRet);
-        if (folded()) {
+        List<LogicLabel> branchLabels = new ArrayList<>();
+        if (folded) {
             // Implies local (= not remote) read access
-            LogicNumber limit = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
+            LogicNumber limit = useTextTables
+                    ? LogicNumber.create((arrayStore.getSize() + 1) / 2)
+                    : LogicNumber.create(roundUpToEven(arrayStore.getSize()));
             generateFoldedJumpTable(creator, firstLabel, marker, e -> e.getValue(creator),
-                    readInd, limit, readVal, createExit, false);
+                    readInd, limit, readVal, createExit, false, useTextTables, branchLabels);
         } else {
-            generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createArrayAccessCreator(), createExit, false);
+            generateJumpTable(creator, firstLabel, marker, arrayElementProcessor, createArrayAccessCreator(), createExit,
+                    false, branchLabels);
         }
-        return result;
+        return new JumpTable(tableId, useTextTables, startLabel, marker, instructions, branchLabels);
     }
 
     @Override
-    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
-        if (profile.isSymbolicLabels()) {
-            expandInstructionSymbolicLabels(consumer, jumpTables);
+    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
+        JumpTable jumpTable = jumpTables.get(getJumpTableId());
+        if (useTextTables) {
+            expandInstructionTextTable(consumer, jumpTable);
+        } else if (profile.isSymbolicLabels()) {
+            expandInstructionSymbolicLabels(consumer, jumpTable);
         } else {
-            expandInstructionDirectAddress(consumer, jumpTables);
+            expandInstructionDirectAddress(consumer, jumpTable);
         }
     }
 
-    private void expandInstructionSymbolicLabels(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+    private void expandInstructionSymbolicLabels(Consumer<LogicInstruction> consumer, JumpTable jumpTable) {
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
         boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
         LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
-        LogicLabel address = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
+        LogicLabel address = jumpTable.label();
 
         switch (instruction) {
             case ReadArrInstruction rix -> {
@@ -190,15 +201,13 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
         }
     }
 
-    private void expandInstructionDirectAddress(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+    private void expandInstructionDirectAddress(Consumer<LogicInstruction> consumer, JumpTable jumpTable) {
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
         boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
         LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
-        LogicLabel marker = Objects.requireNonNull(jumpTables.get(getJumpTableId()).get(1).getMarker());
         LogicLabel marker2 = processor.nextMarker();
-        LogicLabel target = ((LabeledInstruction) jumpTables.get(getJumpTableId()).get(1)).getLabel();
         LogicLabel returnLabel = processor.nextLabel();
 
         switch (instruction) {
@@ -213,7 +222,7 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
                     LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
                     creator.createOp(Operation.MOD, branch, index, modulo);
                 }
-                creator.createMultiCall(target, branch, marker).setSideEffects(rix.getSideEffects()).setHoistId(marker2);
+                creator.createMultiCall(jumpTable.label(), branch, jumpTable.marker()).setSideEffects(rix.getSideEffects()).setHoistId(marker2);
                 creator.createLabel(returnLabel);
                 creator.createSet(rix.getResult(), readVal);
             }
@@ -225,7 +234,43 @@ public class RegularArrayConstructor extends AbstractArrayConstructor {
                 LogicVariable index = processor.nextTemp(); //Symbolic labels not handled here
                 creator.createOp(Operation.MUL, index, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, index, 2);
-                creator.createMultiCall(target, index, marker).setSideEffects(wix.getSideEffects()).setHoistId(marker2);
+                creator.createMultiCall(jumpTable.label(), index, jumpTable.marker()).setSideEffects(wix.getSideEffects()).setHoistId(marker2);
+                creator.createLabel(returnLabel);
+            }
+
+            default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
+        }
+    }
+
+    private void expandInstructionTextTable(Consumer<LogicInstruction> consumer, JumpTable jumpTable) {
+        AstContext astContext = instruction.getAstContext();
+        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+
+        boolean shared = arrayStore.getArrayType() == ArrayStore.ArrayType.REMOTE_SHARED;
+        LogicVariable remoteProcessor = shared ? arrayStore.getProcessor() : null;
+        LogicLabel marker2 = processor.nextMarker();
+        LogicLabel returnLabel = processor.nextLabel();
+
+        switch (instruction) {
+            case ReadArrInstruction rix -> {
+                if (shared) creator.createSet(proc, remoteProcessor);
+                creator.createSetAddress(readRet, returnLabel).setHoistId(marker2);
+                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                if (folded()) creator.createSet(readInd, instruction.getIndex());
+                creator.createMultiCall(instruction.getIndex(), jumpTable.marker()).setSideEffects(rix.getSideEffects())
+                        .setHoistId(marker2).setJumpTable(jumpTable.branchLabels());
+                creator.createLabel(returnLabel);
+                creator.createSet(rix.getResult(), readVal);
+            }
+
+            case WriteArrInstruction wix -> {
+                if (shared) creator.createSet(proc, remoteProcessor);
+                creator.createSetAddress(writeRet, returnLabel).setHoistId(marker2);
+                creator.createSet(writeVal, wix.getValue());
+                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                if (folded()) creator.createSet(writeInd, instruction.getIndex());
+                creator.createMultiCall(instruction.getIndex(), jumpTable.marker()).setSideEffects(wix.getSideEffects())
+                        .setHoistId(marker2).setJumpTable(jumpTable.branchLabels());
                 creator.createLabel(returnLabel);
             }
 

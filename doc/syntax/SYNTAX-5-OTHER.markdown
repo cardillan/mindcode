@@ -568,7 +568,7 @@ The Mindustry 8 Logic ability to [read values from strings](MINDUSTRY-8.markdown
 * `false`: text-based jump tables won't be generated.
 * `true` (the default value): the compiler generates text-based jump tables where possible.
 
-Text-based jump tables allow very efficient encoding of jump tables, both in terms of program size and execution time. The functionality, however, requires storing unprintable characters in the string. If this poses a problem, the option can be set to `false` to disable text-based jump tables.
+Text-based jump tables allow very efficient encoding of jump tables, both in terms of program size and execution time. The functionality, however, often requires storing unprintable characters in the string. If this poses a problem, the option can be set to `false` to disable text-based jump tables.
 
 ### Option `unsafe-case-optimization`
 

@@ -114,11 +114,15 @@ public interface ContextfulInstructionCreator {
         return (MultiCallInstruction) createInstruction(MULTICALL, target, offset).setMarker(marker);
     }
 
+    default MultiCallInstruction createMultiCall(LogicValue target, LogicLabel marker) {
+        return (MultiCallInstruction) createInstruction(MULTICALL, target, LogicNumber.ZERO).setMarker(marker);
+    }
+
     default MultiJumpInstruction createMultiJump(LogicLabel target, LogicVariable value, LogicNumber offset, LogicLabel marker) {
         return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, value, offset).setMarker(marker);
     }
 
-    default MultiJumpInstruction createMultiJump(LogicVariable target, LogicLabel marker) {
+    default MultiJumpInstruction createMultiJump(LogicValue target, LogicLabel marker) {
         return (MultiJumpInstruction) createInstruction(MULTIJUMP, target, LogicNumber.ZERO, LogicNumber.ZERO).setMarker(marker);
     }
 

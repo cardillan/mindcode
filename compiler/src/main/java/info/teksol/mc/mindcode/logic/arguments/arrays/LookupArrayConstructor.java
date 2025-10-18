@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
@@ -60,7 +61,7 @@ public class LookupArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
         generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
         LogicKeyword type = instruction.getArrayLookupType();
 

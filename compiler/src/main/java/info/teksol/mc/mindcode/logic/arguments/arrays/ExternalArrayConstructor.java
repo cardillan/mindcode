@@ -3,12 +3,12 @@ package info.teksol.mc.mindcode.logic.arguments.arrays;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.ExternalArray;
+import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
-import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -37,7 +37,7 @@ public class ExternalArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
         AstContext astContext = instruction.getAstContext();
         generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1 );
         switch (instruction) {

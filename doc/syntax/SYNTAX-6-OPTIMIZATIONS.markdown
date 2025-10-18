@@ -68,58 +68,61 @@ Mindcode supports the following types of arrays:
 * **Internal arrays:** backed by processor variables, and index-based access is provided by the compiler.
 * **Remote arrays:** backed by variables residing in a remote processor. Index-based access is provided by the compiler on the current processor.
 * **Multiplexed arrays:** similar to remote arrays, but several copies of these arrays may exist in different processors. Index-based access is provided by the compiler on the current processor.
-* **Constant arrays:** individual elements of the array are constant. Index-based read-only access is provided by the compiler.
+* **Constant arrays:** individual elements of the array are constant. The compiler implements index-based read-only access.
 * **External arrays:** backed by a memory bank or a memory cell. Index-based access is provided directly by mlog instructions (`read` and `write`).
 
 **Array Implementations**
 
-The basic mechanism for providing index-based access to array elements is known as [`@counter` arrays](https://yrueii.github.io/MlogDocs/#counter-array): a separate branch for accessing each variable is created in mlog, and the array access is implemented by jumping to the desired branch using the element index and `@counter` manipulation. To distinguish arrays as a language feature from the `@counter` arrays implementation in mlog, here we call a set of branches implementing an array a `@counter` table.
+The basic mechanism for providing index-based access to array elements is known as [`@counter` arrays](https://yrueii.github.io/MlogDocs/#counter-array): a separate branch for accessing each variable is created in mlog, and the array access is implemented by jumping to the desired branch using the element index and `@counter` manipulation.
 
-A branch in a `@counter` table consists of an access instruction, which ensures reading or writing of the variable corresponding to the array element, and a jump to the place where the program execution should continue. This makes internal arrays rather expensive in terms of code size.  
+> [!NOTE]
+> To distinguish arrays as a language feature from the `@counter` arrays implementation in mlog, here we call a set of branches implementing an array a _`@counter` table_, or simply a _table_.
 
-Mindcode supports several implementations of `@counter` tables. Some are only available when compiling the code for a specific target. This optimization tries to choose the most efficient implementation for the given array type, the way it is used in the program, and the target. 
+A branch in a table consists of an access instruction, which ensures reading or writing of the variable corresponding to the array element, and a jump to the place where the program execution should continue. This makes internal arrays rather expensive in terms of code size.  
 
-Individual implementations are described here.
+Mindcode supports several implementations of `@counter` tables. Some require specific Mindustry processor capabilities and are therefore only available when compiling the code for a specific target. This optimization tries to choose the most efficient implementation for the given array type, the way it is used in the program, and the target. 
 
-### Regular `@counter` tables
+Individual `@counter` table implementations are described here.
 
-Available for every target. Generally, two `@counter` tables are needed: one for reading, one for writing. When index-based access is not used to read or write a given array, the corresponding `@counter` table is not created. A `@counter` table supporting a regular array may be used by several separate places in the code (similarly to an out-of-line function).
+### Regular tables
 
-All `@counter` tables take up instruction space proportional to the array size. As two regular `@counter` tables are needed for an array in the general case, four instructions are generated per a single array element just for the `@counter` tables.
+Available for every target. Generally, two tables are needed: one for reading, one for writing. When index-based access is not used to read or write a given array, the corresponding table is not created. A table supporting a regular array may be used by several separate places in the code (similarly to an out-of-line function).
 
-When the program needs to read or write an array element at a given index, a call into the `@counter` table is made. For this, the address of the branch is computed, and the value of the element variable is either read into a transfer variable or updated from a transfer variable. The call sets up several arguments: the index to be accessed, the transfer variable (either as input or as output), the return address as an implicit argument, and, in case of multiplexed arrays, the actual processor being accessed. Several instructions are therefore executed to access an array element.
+All regular tables take up twice as many instructions as there are elements in the array. As two regular tables are needed for an array in the general case, four instructions are generated per a single array element just for the tables.
 
-Constant arrays are also implemented using regular `@counter` tables. Here, the `@counter` table provides the (constant) element value directly, and since the array cannot be modified, no `@counter` table for writes is required or generated.
+When the program needs to read or write an array element at a given index, a call into the table is made. For this, the address of the branch is computed, and the value of the element variable is either read into a transfer variable or updated from a transfer variable. The call sets up several arguments: the index to be accessed, the transfer variable (either as input or as output), the return address as an implicit argument, and, in case of multiplexed arrays, the actual processor being accessed. Several instructions are therefore executed to access an array element.
 
-### Compact `@counter` tables
+Constant arrays are also implemented using regular tables. Here, the table provides the (constant) element value directly, and since the array cannot be modified, no table for writes is required or generated.
 
-Available for targets `8.0` and higher. Implemented as a single `@counter` table which provides the name of the variable corresponding to a given array element. The `read` and `write` instructions are then used to access the variable. The compact array can be used with both internal, remote, and multiplexed arrays. It is equally efficient for all these types of arrays, as the array element is read or written indirectly in all three cases using a single additional instruction. Due to this additional instruction requirement, the compact `@counter` table is in most cases less efficient than a regular one.  
+### Compact tables
 
-However, if an array element at the same index is accessed multiple times (say, a read-update-write pattern, e.g. `a[i]++`), Mindcode might be able to recognize this and for the second and later accesses use the name of the variable obtained through the `@counter` table for the first access, providing considerable savings in both code-size and execution time. In these cases, a compact array is more efficient than a regular array and is preferred by the compiler.  
+Available for targets `8.0` and higher. Implemented as a single table which provides the name of the variable corresponding to a given array element. The `read` and `write` instructions are then used to access the variable. The compact array can be used with both internal, remote, and multiplexed arrays. It is equally efficient for all these types of arrays, as the array element is read or written indirectly in all three cases using a single additional instruction. Due to this additional instruction requirement, the compact table is in most cases less efficient than a regular one.  
 
-Since a compact `counter` table doesn't access the array element variables directly, but accesses them through their mlog names, the variables aren't created in the processor by the `@counter table` itself (unlike regular arrays). Array elements which aren't accessed directly by the program must be explicitly created by a `draw triangle` instruction. Up to six variables can be created by a single instruction, meaning that an array implemented as a compact array may require approx. 2.17 instructions per array element for `@counter` tables. 
+However, if an array element at the same index is accessed multiple times (e.g., a read-update-write pattern such as `a[i]++`), Mindcode might be able to recognize this and for the second and later accesses use the name of the variable obtained through the table for the first access, providing considerable savings in both code-size and execution time. In these cases, a compact array is more efficient than a regular array and is preferred by the optimizer.  
 
-### Folded `@counter` tables
+Since a compact table doesn't access the array element variables directly, but accesses them through their mlog names, the variables aren't created in the processor by the table itself (unlike regular arrays). Array elements which aren't accessed directly by the program must be explicitly created by a `draw triangle` instruction. Up to six variables can be created by a single instruction, meaning that an array implemented as a compact array may require approx. 2.17 instructions per array element for tables. 
 
-Available for targets `8.1` and higher. Individual branches of the `@counter` table serves two elements from the array (the proper one is chosen through `select` from the lower or upper half of the array, based on the index).
+### Inlined tables
 
-Folded `@counter` tables can only support literals or mlog variables. Therefore, they can be used for compact tables or for reading regular tables of local arrays, including constant arrays. For remote arrays and writing `@counter` tables, folding is not possible.      
+Initially, the compiler generates only one copy of a table for a given array, which is then used as an out-of-line function wherever index-based access is required. However, calls to `@counter` tables can be inlined in the same way as calls to out-of-line functions. This means the table is duplicated at the call site, increasing the code size, but all parameters to the call are inlined into the local table, saving one or more instruction executions. When all calls to a specific table get inlined, the original table is removed from the program.
 
-Folding requires an additional step to choose the correct branch of the `@counter` table, and is therefore always slower than an unfolded table. However, folding reduces the table size in half. Since a folded compact `@counter` table serves both reads and writes, it takes only one instruction per array element (plus one-sixth of instruction for `draw triangle` element variable creation). This means arrays of 600 or 700 elements are possible while still providing some space for actual logic.
+Inlining is possible for all types of tables (compact and regular, folded and unfolded). As compact and regular tables have the same space requirements when inlined, the compact representation is only used for repeated access to the same array element, where it is more efficient both space-wise and execution-wise. Each inlined table is evaluated independently.
 
-### Inlined `@counter` tables
+### Folded tables
 
-Initially, only one copy of a `@counter` table is generated by the compiler for a given array, which is then used as an out-of-line function wherever index-based access is required. However, calls to `@counter` tables can be inlined in the same way as calls to out-of-line functions. This means the `@counter` table is duplicated at the call site, increasing the code size, but all parameters to the call are injected into the inlined `@counter` table, saving one or more instruction executions. When all calls to a specific `@counter` table get inlined, the original `@counter` table is removed from the program.
+Available for targets `8.1` and higher. Individual branches of the table serve two elements from the array (the proper one is chosen through `select` from the lower or upper half of the array, based on the index).
 
-Inlining is possible for both compact and regular `@counter` tables. As compact and regular tables have the same space requirements when inlined, the compact representation is only used for repeated access to the same array element, where it is more efficient both space-wise and execution-wise. Each inlined `@counter` table is evaluated independently.
+Folded tables can only support literals or mlog variables. Therefore, they can be used for compact tables or for reading regular tables of local arrays, including constant arrays. For remote arrays and writing tables, folding is not possible.      
+
+Folding requires an additional step to choose the correct branch of the table and is therefore always slower than an unfolded table (only when text-based jump tables are supported, this additional step can be removed for inlined tables). However, folding reduces the table size in half. Since a folded compact table serves both reads and writes, it takes only one instruction per array element (plus one-sixth of instruction for `draw triangle` element variable creation). This means arrays of 600 or 700 elements are possible while still providing some space for actual logic.
 
 ### Short arrays
 
-For short arrays, the `@counter` tables can be avoided entirely:
+For short arrays, the tables can be avoided entirely:
 * When the array has just one element, all index-based array access is resolved to that one element directly.
 * For other short arrays up to three or four elements, the array access is replaced with a sequence of `select`s or if/else statements, depending on whether the `select` instruction is available in the given target (target `8.1` or higher is required for a `select` instruction).
 
-This replacement is available for both compact and regular `@counter` tables. The compact version is used when the same element is accessed multiple times, similarly to inlined arrays.
+This replacement is available for both compact and regular tables. The compact version is used when the same element is accessed multiple times, similarly to inlined arrays.
 
 #### Using an if / else statement
 
@@ -173,16 +176,16 @@ select element*2 index equal 2 value element*2
 
 ### Lookup arrays
 
-Mindustry 8 provides a limited ability to convert indexes to variable names without `@counter` tables: first, a `lookup` instruction is used to convert an id to a Mindustry content object, and then `sensor @name` is used to get the name of the object as a string. The variable is then accessed using the `read` or `write` instruction, as is the case with compact `@counter` tables. As a consequence, the name lookup can be skipped for repeated access at the same index.
+Mindustry 8 provides a limited ability to convert indexes to variable names without tables: first, a `lookup` instruction is used to convert the element index to a Mindustry content object, and then `sensor @name` is used to get the name of the object as a string, producing the name of the element's variable. The variable is then accessed using the `read` or `write` instruction, as is the case with compact tables -- the name lookup can be likewise skipped for repeated access at the same index.
 
-Lookup arrays provide enormous savings of both code size and execution time for large arrays: each access takes either one or three instructions, and no `@counter` table is generated. However, using lookup arrays also imposes some restrictions:
+Lookup arrays provide enormous savings of both code size and execution time for large arrays: each access takes either one or three instructions, and no table is generated. However, using lookup arrays also imposes some restrictions:
 
 * The compilation target needs to be set to `8.0` or higher.
 * Each lookup array needs a specific type of Mindustry content. Therefore, at most five arrays can be used in a single program (using blocks, units, items, liquids, and teams), and for most content types, the array size is quite limited.
 * Array elements are named after Mindustry content. This has two disadvantages:
   * inspecting variable names in a Mindustry processor while debugging makes it much harder to figure out which variable represents which array element,
   * when a variable is declared using a specific mlog name (e.g. `mlog("coal") var foo`), the name becomes unavailable for lookup arrays, restricting or preventing the use of the corresponding mindustry content type for lookup arrays.    
-* Remote arrays can only be implemented as lookup arrays when explicitly declared as such, since elements of a remote array must be exactly the same in all processors and can't be reassigned by the optimizer.
+* Remote arrays can only be implemented as lookup arrays when explicitly declared as such, since the names of a remote array's elements must be exactly the same in all processors and can't be reassigned by the optimizer.
 
 The following Mindustry content types can be used for lookup arrays:
 
@@ -196,7 +199,7 @@ The following Mindustry content types can be used for lookup arrays:
 
 If a declared variable conflicts with a content name, the capacity of the corresponding content type is shortened to contain only the elements up to the first conflicting element found.   
 
-When choosing which arrays to implement using lookup, Mindcode chooses the largest array that can be converted to a lookup array given the not yet allocated content types and their capacities. If there are two or more such arrays of the same size, the array with the largest total weight of its instructions is used.
+When choosing which arrays to implement using lookup, Mindcode chooses the largest array that can be converted to a lookup array given the not yet allocated content types and their available capacities. If there are two or more such arrays of the same size, the array with the largest total weight of its instructions is used.
 
 Example of a lookup array:
 
@@ -283,173 +286,182 @@ The code size and performance of individual array accesses depend on a lot of fa
 * how/whether runtime bound checks are performed,
 * whether text jump tables are used.
 
+Runtime bound checks aren't included in the tables, as their size and execution time are independent of the array implementation and only depend on the compiler options.
+
+**Legend for the tables below**
+
 The code size and performance are described in tables. Column headers denote the factors that are considered, using this notation:
 
-* `f`: array is not folded
-* `F`: array is folded
-* `M`: multiplexed remote array (only shown when specific handling is required)
-* `s`: no symbolic labels
-* `S`: symbolic labels
+* table organization
+  * `U`: unfolded
+  * `M`: multiplexed unfolded (only shown when different from an unfolded table)
+  * `F`: folded
+* Dispatching method:
+  * `T`: Text-based jump dispatching
+  * `D`: Direct addressing
+  * `S`: symbolic labels
 
 When expressing the code size, `n` represents the number of elements in the array. For odd-sized folded arrays, `n` is rounded up to the next even number.
 
-Runtime bound checks aren't included in the tables, as their size and execution time are independent of the array implementation and only depend on the compiler options.
+The "setup index" instruction either multiplies the index by two or passes it as a shared table parameter unchanged, depending on how the table is built. 
+
+#### Non-inlined compact tables
+
+**Array access code size**
+
+| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+|------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| set return address     |   1   |   1   |       |   1   |   1   |       |
+| setup index            |       |   1   |   1   |   1   |   1   |   1   |
+| compute branch address |       |       |       |       |   1   |       |      
+| call to branch/table   |   1   |   1   |   2   |   1   |   1   |   2   |      
+| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |      
+| **TOTAL**              | **3** | **4** | **4** | **4** | **5** | **4** |      
+
+**Shared jump table code size**
+
+| Instruction            |  U/T   |  U/D   |   U/S    |  F/T  |  F/D  |   F/S   |
+|------------------------|:------:|:------:|:--------:|:-----:|:-----:|:-------:|
+| compute branch address |        |        |          |       |       |    1    |
+| jump to branch         |        |        |    1     |       |       |    1    |      
+| branches (set+return)  |   2n   |   2n   |    2n    |   n   |   n   |    n    |      
+| **TOTAL**              | **2n** | **2n** | **2n+1** | **n** | **n** | **n+2** |      
+
+**Instructions executed**
+
+| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+|------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| set return address     |   1   |   1   |       |   1   |   1   |       |
+| setup index            |       |   1   |   1   |   1   |   1   |   1   |
+| compute branch address |       |       |       |       |   1   |       |      
+| call to branch/table   |   1   |   1   |   2   |   1   |   1   |   2   |      
+| compute branch address |       |       |       |       |       |   1   |
+| jump to branch         |       |       |   1   |       |       |   1   |      
+| branch (set+return)    |   2   |   2   |   2   |   2   |   2   |   2   |      
+| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |      
+| **TOTAL**              | **5** | **6** | **7** | **6** | **7** | **8** |      
+
+#### Inlined compact tables
+
+**Array access code size**
+
+| Instruction            |   U/T    |   U/D    |   U/S    |   F/T   |   F/D   |   F/S   |
+|------------------------|:--------:|:--------:|:--------:|:-------:|:-------:|:-------:|
+| setup index            |          |    1     |    1     |         |    1    |    1    |
+| compute branch address |          |          |          |         |    1    |    1    |      
+| jump to branch         |    1     |    1     |    1     |    1    |    1    |    1    |      
+| branches (set+exit)    |   2n-1   |   2n-1   |   2n-1   |   n-1   |   n-1   |   n-1   |      
+| read/write element     |    1     |    1     |    1     |    1    |    1    |    1    |      
+| **TOTAL**              | **2n+1** | **2n+2** | **2n+2** | **n+1** | **n+3** | **n+3** |      
+
+**Instructions executed**
+
+| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+|------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| setup index            |       |   1   |   1   |       |   1   |   1   |
+| compute branch address |       |       |       |       |   1   |   1   |      
+| jump to branch         |   1   |   1   |   1   |   1   |   1   |   1   |      
+| branch (set+exit)      |   2   |   2   |   2   |   2   |   2   |   2   |      
+| read/write element     |   1   |   1   |   1   |   1   |   1   |   1   |      
+| **TOTAL**              | **4** | **5** | **5** | **4** | **6** | **6** |      
+
+#### Non-inlined regular tables
+
+In case of regular arrays, the table accessing the elements for reading may be folded, if the array is not remote. Different shared jump tables exist for both read and write operations and are generated on demand. If both jump tables are generated, both count towards the size requirement.
+
+**Array access code size**
+
+| Instruction                         |  U/T  |  U/D  |  U/S  |  M/T  |  M/D  |  M/S  |  F/T  |  F/D  |  F/S  |
+|-------------------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| set remote processor                |       |       |       |   1   |   1   |   1   |       |       |       |
+| set return address                  |   1   |   1   |       |   1   |   1   |       |   1   |   1   |       |
+| transfer write variable<sup>1</sup> |   1   |   1   |   1   |   1   |   1   |   1   |   1   |   1   |   1   |      
+| setup index                         |       |   1   |   1   |       |   1   |   1   |   1   |   1   |   1   |
+| compute branch address              |       |       |       |       |       |       |       |   1   |       |      
+| call to branch/table                |   1   |   1   |   2   |   1   |   1   |   2   |   1   |   1   |   2   |      
+| transfer read variable<sup>1</sup>  |   -   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |   -   |      
+| **TOTAL**                           | **3** | **4** | **4** | **4** | **5** | **5** | **4** | **5** | **4** |      
+
+<sup>1</sup>&nbsp;Either the _transfer read variable_ or the _transfer write variable_ instruction is generated, depending on the access type. In this table, they're accounted for in the _transfer write variable_ row.
+
+**Shared jump table code size**
+
+| Instruction            |  U/T   |  U/D   |   U/S    |  M/T   |  M/D   |   M/S    |  F/T  |  F/D  |   F/S   |
+|------------------------|:------:|:------:|:--------:|:------:|:------:|:--------:|:-----:|:-----:|:-------:|
+| compute branch address |        |        |          |        |        |          |       |       |    1    |
+| jump to branch         |        |        |    1     |        |        |    1     |       |       |    1    |      
+| branches (set+return)  |   2n   |   2n   |    2n    |   2n   |   2n   |    2n    |   n   |   n   |    n    |      
+| **TOTAL**              | **2n** | **2n** | **2n+1** | **2n** | **2n** | **2n+1** | **n** | **n** | **n+2** |      
+
+**Instructions executed**
+
+| Instruction                            |   U/T   |   U/D   |   U/S   |   M/T   |   M/D   |   M/S   |   F/T   |   F/D   |   F/S   |
+|----------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| set remote processor                   |         |         |         |    1    |    1    |    1    |         |         |         |
+| set return address                     |    1    |    1    |         |    1    |    1    |         |    1    |    1    |         |
+| transfer write variable<sup>1, 2</sup> |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |      
+| setup index                            |         |    1    |    1    |         |    1    |    1    |    1    |    1    |    1    |
+| compute branch address (local)         |         |         |         |         |         |         |         |    1    |         |      
+| call to branch/table                   |    1    |    1    |    2    |    1    |    1    |    2    |    1    |    1    |    2    |      
+| compute branch address (table)         |         |         |         |         |         |         |         |         |    1    |
+| jump to branch                         |         |         |    1    |         |         |    1    |         |         |    1    |      
+| branch (set+return)                    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |
+| transfer read variable<sup>1</sup>     |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |      
+| **TOTAL**                              | **4.8** | **5.8** | **6.8** | **5.8** | **6.8** | **7.8** | **5.8** | **6.8** | **7.8** |      
+
+<sup>1</sup>&nbsp;Either the _transfer read variable_ or the _transfer write variable_ instruction is generated, depending on the access type. In this table, they're accounted for in the _transfer write variable_ row.<br>
+<sup>2</sup>&nbsp;Depending on the code structure, the _transfer write/read variable_ instruction might be eliminated by the Data Flow Optimizer. Since Array Optimizer doesn't know whether the instruction will be actually eliminated, it must be fully accounted for regarding the code size. The expected execution speed of the regular array is lowered a bit to express this possible optimization. As a result, the optimizer might choose to convert a compact array to a regular array if there's enough instruction space.     
+
+#### Inlined regular tables
+
+Note: multiplexed remote arrays are handled equally to simple remote arrays, as the remote processor is inlined into the local code. 
+
+**Array access code size**
+
+| Instruction            |  U/T   |   U/D    |   U/S    |  F/T  |   F/D   |   F/S   |
+|------------------------|:------:|:--------:|:--------:|:-----:|:-------:|:-------:|
+| setup index            |        |    1     |    1     |       |    1    |    1    |
+| compute branch address |        |          |          |       |    1    |    1    |      
+| jump to branch         |   1    |    1     |    1     |   1   |    1    |    1    |      
+| branches (set+exit)    |  2n-1  |   2n-1   |   2n-1   |  n-1  |   n-1   |   n-1   |      
+| **TOTAL**              | **2n** | **2n+1** | **2n+1** | **n** | **n+2** | **n+2** |      
+
+**Instructions executed**
+
+| Instruction            |  U/T  |  U/D  |  U/S  |  F/T  |  F/D  |  F/S  |
+|------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
+| setup index            |       |   1   |   1   |       |   1   |   1   |
+| compute branch address |       |       |       |       |   1   |   1   |      
+| jump to branch         |   1   |   1   |   1   |   1   |   1   |   1   |      
+| branch (set+exit)      |   2   |   2   |   2   |   2   |   2   |   2   |      
+| **TOTAL**              | **3** | **4** | **4** | **3** | **5** | **5** |      
 
 #### Special cases
 
 * For repeated compact array access to the same element, the element lookup may be skipped. In this case, both code size and execution time are just a single instruction. This occurrence isn't reflected in the tables below.
 * Lookup array access always uses either three instructions or just one instruction for repeated access to the same element, the same as for compact arrays.
 * Inlining effects:
-  * The size of branches decreased by one, as the last branch doesn't end with a jump but immediately continues with the next instruction.
-  * One execution step is saved when using the last branch of the table. The last branch is used for the last element of the array, and in the case of folded even-sized arrays, for one additional element. This saving is considered by the optimizer but not shown in the table.
-
-#### Non-inlined compact `@counter` tables
-
-**Array access code size**
-
-| Instruction            |  fs   |  Fs   |  fS   |  FS   |
-|------------------------|:-----:|:-----:|:-----:|:-----:|
-| set return address     |   1   |   1   |       |       |
-| multiply index by 2    |   1   |   1   |   1   |   1   |
-| compute branch address |       |   1   |       |       |      
-| call to branch/table   |   1   |   1   |   2   |   2   |      
-| read/write element     |   1   |   1   |   1   |   1   |      
-| **TOTAL**              | **4** | **5** | **4** | **4** |      
-
-**Shared jump table code size**
-
-| Instruction            |   fs   |  Fs   |    fS    |   FS    |
-|------------------------|:------:|:-----:|:--------:|:-------:|
-| compute branch address |        |       |          |    1    |
-| jump to branch         |        |       |    1     |    1    |      
-| branches (set+return)  |   2n   |   n   |    2n    |    n    |      
-| **TOTAL**              | **2n** | **n** | **2n+1** | **n+2** |      
-
-**Instructions executed**
-
-| Instruction            |  fs   |  Fs   |  fS   |  FS   |
-|------------------------|:-----:|:-----:|:-----:|:-----:|
-| set return address     |   1   |   1   |       |       |
-| multiply index by 2    |   1   |   1   |   1   |   1   |
-| compute branch address |       |   1   |       |       |      
-| call to branch/table   |   1   |   1   |   2   |   2   |      
-| compute branch address |       |       |       |   1   |
-| jump to branch         |       |       |   1   |   1   |      
-| branch (set+return)    |   2   |   2   |   2   |   2   |      
-| read/write element     |   1   |   1   |   1   |   1   |      
-| **TOTAL**              | **6** | **7** | **7** | **8** |      
-
-#### Inlined compact `@counter` tables
-
-**Array access code size**
-
-| Instruction            |    fs    |   Fs    |    fS    |   FS    |
-|------------------------|:--------:|:-------:|:--------:|:-------:|
-| multiply index by 2    |    1     |    1    |    1     |    1    |
-| compute branch address |          |    1    |          |    1    |      
-| jump to branch         |    1     |    1    |    1     |    1    |      
-| branches (set+exit)    |   2n-1   |   n-1   |   2n-1   |   n-1   |      
-| read/write element     |    1     |    1    |    1     |    1    |      
-| **TOTAL**              | **2n+2** | **n+3** | **2n+2** | **n+3** |      
-
-**Instructions executed**
-
-| Instruction            |  fs   |  Fs   |  fS   |  FS   |
-|------------------------|:-----:|:-----:|:-----:|:-----:|
-| multiply index by 2    |   1   |   1   |   1   |   1   |
-| compute branch address |       |   1   |       |   1   |      
-| jump to branch         |   1   |   1   |   1   |   1   |      
-| branch (set+exit)      |   2   |   2   |   2   |   2   |      
-| read/write element     |   1   |   1   |   1   |   1   |      
-| **TOTAL**              | **5** | **6** | **5** | **6** |      
-
-#### Non-inlined regular `@counter` tables
-
-In case of regular arrays, the `@counter` table accessing the elements for reading may be folded, if the array is not remote. Different shared jump tables exist for both read and write operations and are generated on demand. If both jump tables are generated, both count towards the size requirement.
-
-**Array access code size**
-
-| Instruction                         |  fs   |  Fs   |  Ms   |  fS   |  FS   |  MS   |
-|-------------------------------------|:-----:|:-----:|:-----:|:-----:|:-----:|:-----:|
-| set remote processor                |       |       |   1   |       |       |   1   |
-| set return address                  |   1   |   1   |   1   |       |       |       |
-| transfer write variable<sup>1</sup> |   1   |   1   |   1   |   1   |   1   |   1   |      
-| multiply index by 2                 |   1   |   1   |   1   |   1   |   1   |   1   |
-| compute branch address              |       |   1   |       |       |       |       |      
-| call to branch/table                |   1   |   1   |   1   |   2   |   2   |   2   |      
-| transfer read variable<sup>1</sup>  |   -   |   -   |   -   |   -   |   -   |   -   |      
-| **TOTAL**                           | **4** | **5** | **5** | **4** | **4** | **5** |      
-
-<sup>1</sup>&nbsp;Either the _transfer read variable_ or the _transfer write variable_ instruction is generated, depending on the access type. In this table, they're accounted for in the _transfer write variable_ row.
-
-**Shared jump table code size**
-
-| Instruction            |   fs   |  Fs   |    fS    |   FS    |
-|------------------------|:------:|:-----:|:--------:|:-------:|
-| compute branch address |        |       |          |    1    |
-| jump to branch         |        |       |    1     |    1    |      
-| branches (set+return)  |   2n   |   n   |    2n    |    n    |      
-| **TOTAL**              | **2n** | **n** | **2n+1** | **n+2** |      
-
-**Instructions executed**
-
-| Instruction                           |   fs    |   Fs    |   Ms    |   fS    |   FS    |   MS    |
-|---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-| set remote processor                  |         |         |    1    |         |         |    1    |
-| set return address                    |    1    |    1    |    1    |         |         |         |
-| transfer write variable<sup>1,2</sup> |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |      
-| multiply index by 2                   |    1    |    1    |    1    |    1    |    1    |    1    |
-| compute branch address                |         |    1    |         |         |         |         |      
-| call to branch/table                  |    1    |    1    |    1    |    2    |    2    |    2    |      
-| compute branch address                |         |         |         |         |    1    |         |
-| jump to branch                        |         |         |         |    1    |    1    |    1    |      
-| branch (set+return)                   |    2    |    2    |    2    |    2    |    2    |    2    |
-| transfer read variable<sup>1</sup>    |    -    |    -    |    -    |    -    |    -    |    -    |      
-| **TOTAL**                             | **5.8** | **6.8** | **6.8** | **6.8** | **7.8** | **7.8** |      
-
-<sup>1</sup>&nbsp;Either the _transfer read variable_ or the _transfer write variable_ instruction is generated, depending on the access type. In this table, they're accounted for in the _transfer write variable_ row.<br>
-<sup>2</sup>&nbsp;Depending on the code structure, the _transfer write/read variable_ instruction might be eliminated by the Data Flow Optimizer. Since Array Optimizer doesn't know whether the instruction will be actually eliminated, it must be fully accounted for regarding the code size. The expected execution speed of the regular array is lowered a bit to express this possible optimization. As a result, the optimizer might choose to convert a compact array to a regular array if there's enough instruction space.     
-
-#### Inlined regular `@counter` tables
-
-Note: since the array access is inlined, multiplexed remote arrays are handled equally to simple remote arrays, as the remote processor is always the same. 
-
-**Array access code size**
-
-| Instruction            |    fs    |   Fs    |    fS    |   FS    |
-|------------------------|:--------:|:-------:|:--------:|:-------:|
-| multiply index by 2    |    1     |    1    |    1     |    1    |
-| compute branch address |          |    1    |          |    1    |      
-| jump to branch         |    1     |    1    |    1     |    1    |      
-| branches (set+exit)    |   2n-1   |   n-1   |   2n-1   |   n-1   |      
-| **TOTAL**              | **2n+1** | **n+2** | **2n+1** | **n+2** |      
-
-**Instructions executed**
-
-| Instruction            |  fs   |  Fs   |  fS   |  FS   |
-|------------------------|:-----:|:-----:|:-----:|:-----:|
-| multiply index by 2    |   1   |   1   |   1   |   1   |
-| compute branch address |       |   1   |       |   1   |      
-| jump to branch         |   1   |   1   |   1   |   1   |      
-| branch (set+exit)      |   2   |   2   |   2   |   2   |      
-| **TOTAL**              | **4** | **5** | **4** | **5** |      
+    * The size of branches decreased by one, as the last branch doesn't end with a jump but immediately continues with the next instruction.
+    * One execution step is saved when using the last branch of the table. The last branch is used for the last element of the array, and in the case of folded even-sized arrays, for one additional element. This saving is considered by the optimizer but not shown in the table.
 
 ### Optimization process
 
 The compiler initially chooses array implementations to take the least amount of space possible. The initial implementations are always non-inlined. The specific implementation depends on the capabilities of the target processor:
 
-1. Folded compact, if the `select` instruction is available (target `8.1` or higher).
+1. Folded compact, if the `select` instruction is available (target `8.1` or higher). Compact array implementations can always be folded.
 2. Compact, if indirect access is possible (target `8.0` or higher).
 3. Regular. 
 
 This table sums up the execution times of different array implementations:
 
-| Array implementation | fs  | Fs  | Ms  | fS  | FS  | MS  |
-|----------------------|:---:|:---:|:---:|:---:|:---:|:---:|
-| Non-inlined compact  |  6  |  7  |  6  |  7  |  8  |  7  |      
-| Inlined compact      |  5  |  6  |  5  |  5  |  6  |  5  |      
-| Non-inlined regular  | 5.8 | 6.8 | 6.8 | 6.8 | 7.8 | 7.8 |      
-| Inlined regular      |  4  |  5  |  4  |  4  |  5  |  4  |      
+| Array implementation | U/T | U/D | U/S | M/T | M/D | M/S | F/T | F/D | F/S |
+|----------------------|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+| Non-inlined compact  |  5  |  6  |  7  |  5  |  6  |  7  |  6  |  7  |  8  |      
+| Non-inlined regular  | 4.8 | 5.8 | 6.8 | 5.8 | 6.8 | 7.8 | 5.8 | 6.8 | 7.8 |      
+| Inlined compact      |  4  |  5  |  5  |  4  |  5  |  5  |  4  |  6  |  6  |      
+| Inlined regular      |  3  |  4  |  4  |  3  |  4  |  4  |  3  |  5  |  5  |      
+
+Code size can't be compared directly, as it depends on the number of times the array access is performed.
 
 Based on this, the following optimizations are possible:
 
@@ -459,17 +471,18 @@ Based on this, the following optimizations are possible:
 
 **Converting a compact table to regular**
 
-* This optimization doesn't take place when repeated access to the same element is detected (as it eliminates using `@counter` table for repeated access entirely).
-* For non-inlined arrays, no savings are guaranteed, except for multiplexed remote arrays. For inlined arrays, one instruction is always saved. 
-* This optimization might not require additional instruction space if only one type of the `@counter` table (read or write) is generated, or if the access is already inlined.
+* This optimization doesn't take place when repeated access to the same element is detected (as it eliminates using table for repeated access entirely).
+* For folded tables, this optimization is not possible if the array is remote.
+* For other non-inlined tables, no savings are guaranteed, but are assumed. For inlined tables, one instruction is always saved. 
+* This optimization might not require additional instruction space if only one type of the table (read or write) is generated, or if the access is already inlined.
 
 **Inlining array access**
 
-* This optimization inlines the `@counter` table to the place of array access.
+* This optimization inlines the table to the place of array access.
 * Inlining saves between one and four execution steps, depending on the original implementation of the array.
-* Inlining the last non-inlined array access means the original `@counter` table is eliminated, decreasing code size. The last non-inlined array access using a specific `@counter` table is always inlined.
+* Inlining the last non-inlined array access means the original table is eliminated, decreasing code size. The last non-inlined array access using a specific table is always inlined.
 
-The optimizer always considers global optimizations and local optimizations. Global optimization converts all usages of a specific array implementation to a faster one (for example, unfolding a compact array or inlining all array accesses). Only non-inlined occurrences are considered for global optimizations. Since the optimization converts all usages of a specific array implementation, the `@counter` table belonging to the original implementation is eliminated.
+The optimizer always considers global optimizations and local optimizations. Global optimization converts all usages of a specific array implementation to a faster one (for example, unfolding a compact array or inlining all array accesses). Only non-inlined occurrences are considered for global optimizations. Since the optimization converts all usages of a specific array implementation, the table belonging to the original implementation is eliminated.
 
 Local optimizations consider all usages in isolation. For an already inlined implementation, a faster alternative may be considered. For an access which hasn't  been inlined yet, only inlining is considered.
 
@@ -538,7 +551,7 @@ The following conditions must be met for a case expression to be processed by th
 
 #### Text-based jump tables
 
-In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings, instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
+In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings instead of building actual jump tables out of jump instruction. The following prerequisites need to be met for this optimization to be applied:
 
 * The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher.
 * The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive.

@@ -276,7 +276,10 @@ public class LogicInstructionLabelResolver {
         for (final LogicInstruction instruction : program) {
             if (instruction instanceof CommentInstruction) comments++;
 
-            if (instruction instanceof MultiCallInstruction ix) {
+            List<LogicLabel> jumpTable = instruction.getJumpTable();
+            if (!jumpTable.isEmpty()) {
+                result.add(buildTextTableJump((MultiTargetInstruction) instruction, jumpTable));
+            } else if (instruction instanceof MultiCallInstruction ix) {
                 if (resolveLabel(ix.getTarget()) instanceof LogicLabel label && label.getAddress() >= 0) {
                     LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
                             OP, Operation.ADD, LogicBuiltIn.COUNTER, LogicNumber.create(label.getAddress()), ix.getOffset());
@@ -285,20 +288,7 @@ public class LogicInstructionLabelResolver {
                     throw new MindcodeInternalError("MultiCall target '%s' is not a label.", ix.getTarget());
                 }
             } else if (instruction instanceof MultiJumpInstruction ix) {
-                List<LogicLabel> jumpTable = ix.getJumpTable();
-                if (!jumpTable.isEmpty()) {
-                    // Build the string jump table
-                    StringBuilder sbr = new StringBuilder(jumpTable.size() + 1);
-                    int index = 0;
-                    for (LogicLabel label : jumpTable) {
-                        int address = ((LogicLabel) resolveLabel(label)).getAddress();
-                        sbr.append(address == 10 ? "\\n" : (char) address);
-                    }
-                    LogicString jumpTableString = LogicString.create(ix.sourcePosition(), sbr.toString());
-                    LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
-                            READ, LogicBuiltIn.COUNTER, jumpTableString, ix.getTarget());
-                    result.add(newInstruction);
-                } else if (ix.getTarget() instanceof LogicVariable var) {
+                if (ix.getTarget() instanceof LogicVariable var) {
                     LogicInstruction newInstruction = processor.createInstruction(ix.getAstContext(),
                             SET, LogicBuiltIn.COUNTER, var);
                     result.add(newInstruction);
@@ -348,6 +338,18 @@ public class LogicInstructionLabelResolver {
         }
 
         return result;
+    }
+
+    private LogicInstruction buildTextTableJump(MultiTargetInstruction ix, List<LogicLabel> jumpTable) {
+        // Build the string jump table
+        StringBuilder sbr = new StringBuilder(jumpTable.size() + 1);
+        for (LogicLabel label : jumpTable) {
+            int address = ((LogicLabel) resolveLabel(label)).getAddress();
+            sbr.append(address == 10 ? "\\n" : (char) address);
+        }
+        LogicString jumpTableString = LogicString.create(ix.sourcePosition(), sbr.toString());
+        return processor.createInstruction(ix.getAstContext(), READ, LogicBuiltIn.COUNTER,
+                jumpTableString, ix.getTarget());
     }
 
     private List<LogicInstruction> resolveVirtualInstructions(List<LogicInstruction> program) {

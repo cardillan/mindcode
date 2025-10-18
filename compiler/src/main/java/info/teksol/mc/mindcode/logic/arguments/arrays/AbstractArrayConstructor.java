@@ -17,6 +17,7 @@ import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -32,6 +33,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected final AccessType accessType;
     protected final ArrayAccessInstruction instruction;
     protected final ArrayStore arrayStore;
+    protected final boolean useTextTables;
 
     public AbstractArrayConstructor(ArrayAccessInstruction instruction) {
         this.processor = MindcodeCompiler.getContext().instructionProcessor();
@@ -39,6 +41,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         this.accessType = instruction.getAccessType();
         this.instruction = instruction;
         this.arrayStore = instruction.getArray().getArrayStore();
+        this.useTextTables = instruction.getLocalProfile().useTextJumpTables();
 
         instruction.resetIndirectVariables();
     }
@@ -92,14 +95,15 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
             Function<ValueStore, ValueStore> arrayElementProcessor, BiConsumer<LocalContextfulInstructionsCreator, ValueStore> arrayAccessCreator,
-            Runnable createExit, boolean skipLastExit) {
+            Runnable createExit, boolean skipLastExit, List<LogicLabel> branchLabels) {
         LogicLabel nextLabel = firstLabel;
 
         List<ValueStore> elements = arrayStore.getElements();
         for (int i = 0; i < elements.size(); i++) {
             ValueStore arrayElement = elements.get(i);
             ValueStore element = arrayElementProcessor.apply(arrayElement);
-            creator.createMultiLabel(nextLabel, marker);
+            creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
+            branchLabels.add(nextLabel);
             arrayAccessCreator.accept(creator, element);
             if (i < elements.size() - 1) {
                 createExit.run();
@@ -112,20 +116,24 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     protected void generateFoldedJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
             Function<ValueStore, LogicValue> arrayElementProcessor, LogicValue index, LogicValue limit, LogicVariable target,
-            Runnable createExit, boolean inlined) {
+            Runnable createExit, boolean inlined, boolean useTextTables, List<LogicLabel> branchLabels) {
         LogicLabel nextLabel = firstLabel;
 
         List<ValueStore> elements = arrayStore.getElements();
         int count = (elements.size() + 1) / 2;
 
+        branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
         for (int i = 0; i < count; i++) {
-            creator.createMultiLabel(nextLabel, marker);
+            creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
             LogicValue element1 = arrayElementProcessor.apply(elements.get(i));
             if (i + count < elements.size()) {
                 LogicValue element2 = arrayElementProcessor.apply(elements.get(i + count));
                 creator.createSelect(target, Condition.LESS_THAN, index, limit, element1, element2);
+                branchLabels.set(i, nextLabel);
+                branchLabels.set(i + count, nextLabel);
             } else {
                 creator.createSet(target, element1);
+                branchLabels.set(i, nextLabel);
             }
 
             if (i < count - 1) {

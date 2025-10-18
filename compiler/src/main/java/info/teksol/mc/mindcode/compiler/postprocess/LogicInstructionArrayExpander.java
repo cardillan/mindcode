@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 @NullMarked
 public class LogicInstructionArrayExpander {
     private boolean expanded = false;
-    private final Map<String, List<LogicInstruction>> jumpTables = new TreeMap<>();
+    private final Map<String, JumpTable> jumpTables = new TreeMap<>();
 
     public List<LogicInstruction> expandArrayInstructions(List<LogicInstruction> program) {
         // Already expanded, do not repeat
@@ -27,6 +27,7 @@ public class LogicInstructionArrayExpander {
 
         int skip = expanded.getLast().getOpcode() == Opcode.END ? 1 : 0;
         jumpTables.values().stream()
+                .map(JumpTable::instructions)
                 .flatMap(Collection::stream)
                 .skip(skip)
                 .forEach(expanded::add);
@@ -56,6 +57,7 @@ public class LogicInstructionArrayExpander {
 
     public List<LogicInstruction> getJumpTables(boolean generateEndSeparator) {
         return jumpTables.values().stream()
+                .map(JumpTable::instructions)
                 .flatMap(Collection::stream)
                 .skip(generateEndSeparator ? 1 : 0)
                 .collect(Collectors.toList());

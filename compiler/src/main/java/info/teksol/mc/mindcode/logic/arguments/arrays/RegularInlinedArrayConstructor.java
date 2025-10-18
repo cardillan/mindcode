@@ -4,11 +4,13 @@ import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
@@ -61,7 +63,7 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
         boolean folded = folded() && instruction instanceof ReadArrInstruction;
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
 
@@ -71,17 +73,22 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
         LogicLabel firstLabel = processor.nextLabel();
         LogicLabel marker = processor.nextMarker();
         LogicVariable tmp;
-        if (folded) {
-            LogicVariable tmp0 = creator.nextTemp();
-            creator.createOp(Operation.MUL, tmp0, instruction.getIndex(), LogicNumber.TWO);
-            generateBoundsCheck(astContext, consumer, tmp0, 2);
-            tmp = creator.nextTemp();
+        if (useTextTables) {
+            generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+            tmp = LogicVariable.INVALID;  // Won't be used
+        } else if (folded) {
+            LogicVariable tmp1 = creator.nextTemp();
+            creator.createOp(Operation.MUL, tmp1, instruction.getIndex(), LogicNumber.TWO);
+            generateBoundsCheck(astContext, consumer, tmp1, 2);
+            LogicVariable tmp2 = creator.nextTemp();
             LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
-            creator.createOp(Operation.MOD, tmp, tmp0, modulo);
+            creator.createOp(Operation.MOD, tmp2, tmp1, modulo);
+            tmp = tmp2;
         } else {
-            tmp = creator.nextTemp();
-            creator.createOp(Operation.MUL, tmp, instruction.getIndex(), LogicNumber.TWO);
-            generateBoundsCheck(astContext, consumer, tmp, 2);
+            LogicVariable tmp1 = creator.nextTemp();
+            creator.createOp(Operation.MUL, tmp1, instruction.getIndex(), LogicNumber.TWO);
+            generateBoundsCheck(astContext, consumer, tmp1, 2);
+            tmp = tmp1;
         }
 
         creator.pushContext(AstContextType.JUMPS, AstSubcontextType.BASIC);
@@ -92,16 +99,23 @@ public class RegularInlinedArrayConstructor extends AbstractArrayConstructor {
             case WriteArrInstruction wix -> SideEffects.of(variables(wix.getValue()), List.of(), arrayElements());
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         };
-        creator.createMultiJump(firstLabel,tmp, LogicNumber.ZERO, marker).setSideEffects(sideEffects);
+
+        List<LogicLabel> branchLabels = new ArrayList<>();
+        if (useTextTables) {
+            creator.createMultiJump(instruction.getIndex(), marker).setSideEffects(sideEffects).setJumpTable(branchLabels);
+        } else {
+            creator.createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker).setSideEffects(sideEffects);
+        }
 
         if (folded) {
             ReadArrInstruction rix = (ReadArrInstruction) instruction;
             LogicNumber limit = LogicNumber.create((arrayStore.getSize() + 1) / 2);
             generateFoldedJumpTable(creator, firstLabel, marker, e -> e.getValue(creator),
-                    instruction.getIndex(), limit, rix.getResult(), () -> creator.createJumpUnconditional(finalLabel), true);
+                    instruction.getIndex(), limit, rix.getResult(), () -> creator.createJumpUnconditional(finalLabel),
+                    true, useTextTables, branchLabels);
         } else {
             generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(),
-                    () -> creator.createJumpUnconditional(finalLabel), true);
+                    () -> creator.createJumpUnconditional(finalLabel), true, branchLabels);
         }
 
         creator.createLabel(finalLabel);

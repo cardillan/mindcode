@@ -6,6 +6,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
+import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
@@ -14,6 +15,7 @@ import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
@@ -81,7 +83,7 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
     }
 
     @Override
-    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, List<LogicInstruction>> jumpTables) {
+    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
         if (!instruction.isCompactAccessTarget()) {
             AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
             LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
@@ -90,7 +92,10 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
             LogicLabel firstLabel = processor.nextLabel();
             LogicLabel marker = processor.nextMarker();
             LogicVariable tmp;
-            if (folded()) {
+            if (useTextTables) {
+                generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
+                tmp = LogicVariable.INVALID;  // Won't be used
+            } else if (folded()) {
                 LogicVariable tmp0 = creator.nextTemp();
                 creator.createOp(Operation.MUL, tmp0, instruction.getIndex(), LogicNumber.TWO);
                 generateBoundsCheck(astContext, consumer, tmp0, 2);
@@ -105,16 +110,22 @@ public class CompactInlinedArrayConstructor extends AbstractArrayConstructor {
 
             creator.pushContext(AstContextType.JUMPS, AstSubcontextType.BASIC);
             creator.setSubcontextType(AstSubcontextType.ARRAY, 1.0);
-            creator.createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker)
-                    .setSideEffects(SideEffects.writes(List.of(arrayElem)));
+
+            List<LogicLabel> branchLabels = new ArrayList<>();
+            if (useTextTables) {
+                creator.createMultiJump(instruction.getIndex(), marker).setSideEffects(SideEffects.writes(arrayElem)).setJumpTable(branchLabels);
+            } else {
+                creator.createMultiJump(firstLabel, tmp, LogicNumber.ZERO, marker).setSideEffects(SideEffects.writes(arrayElem));
+            }
 
             if (folded()) {
                 LogicNumber limit = LogicNumber.create((arrayStore.getSize() + 1) / 2);
                 generateFoldedJumpTable(creator, firstLabel, marker, ValueStore::getMlogVariableName,
-                        instruction.getIndex(), limit, arrayElem, () -> creator.createJumpUnconditional(finalLabel), true);
+                        instruction.getIndex(), limit, arrayElem, () -> creator.createJumpUnconditional(finalLabel),
+                        true, useTextTables, branchLabels);
             } else {
                 generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(),
-                        () -> creator.createJumpUnconditional(finalLabel), true);
+                        () -> creator.createJumpUnconditional(finalLabel), true, branchLabels);
             }
             creator.createLabel(finalLabel);
             creator.popContext();

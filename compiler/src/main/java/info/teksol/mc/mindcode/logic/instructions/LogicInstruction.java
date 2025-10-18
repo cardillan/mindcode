@@ -155,6 +155,10 @@ public interface LogicInstruction extends MlogInstruction {
         return setInfo(InstructionInfo.JUMP_TARGET, true);
     }
 
+    default LogicInstruction setJumpTarget(boolean jumpTarget) {
+        return setInfo(InstructionInfo.JUMP_TARGET, jumpTarget);
+    }
+
     default LogicLabel getCallReturn() {
         return (LogicLabel) getInfo(InstructionInfo.CALL_RETURN);
     }
