@@ -21,6 +21,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -30,16 +31,18 @@ import java.util.stream.Stream;
 public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected final InstructionProcessor processor;
     protected final CompilerProfile profile;
-    protected final AccessType accessType;
     protected final ArrayAccessInstruction instruction;
+    protected final ArrayConstruction arrayConstruction;
+    protected final AccessType accessType;
     protected final ArrayStore arrayStore;
     protected final boolean useTextTables;
 
     public AbstractArrayConstructor(ArrayAccessInstruction instruction) {
         this.processor = MindcodeCompiler.getContext().instructionProcessor();
         this.profile = instruction.getAstContext().getCompilerProfile();
-        this.accessType = instruction.getAccessType();
         this.instruction = instruction;
+        this.arrayConstruction = instruction.getArrayConstruction();
+        this.accessType = instruction.getAccessType();
         this.arrayStore = instruction.getArray().getArrayStore();
         this.useTextTables = instruction.getLocalProfile().useTextJumpTables();
 
@@ -70,8 +73,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return Stream.of(args).filter(LogicVariable.class::isInstance).map(LogicVariable.class::cast).toList();
     }
 
-    protected LogicValue transferVariable() {
-        return LogicVariable.INVALID;
+    protected List<LogicVariable> variables(LogicArgument argument) {
+        return argument instanceof LogicVariable variable ? List.of(variable) : List.of();
     }
 
     @Override
@@ -79,44 +82,108 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         return "";
     }
 
+    @Override
+    public final int getSharedTableSize() {
+        return folded()
+                ? roundUpToEven(arrayStore.getSize()) + 2 * flag(profile.isSymbolicLabels())
+                : 2 * arrayStore.getSize() + flag(profile.isSymbolicLabels());
+    }
+
     protected void computeSharedJumpTableSize(@Nullable Map<String, Integer> sharedStructures) {
         if (sharedStructures != null) {
             String key = arrayStore.getName() + getJumpTableId();
-            sharedStructures.computeIfAbsent(key, _ -> tableSize());
+            sharedStructures.computeIfAbsent(key, _ -> getSharedTableSize());
         }
     }
 
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator() {
+    protected abstract LogicValue transferVariable();
+
+    // ALL IMPLEMENTATIONS
+    ////////////////////////////////////////////////////////////////
+
+    protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {
+        RuntimeChecks boundaryChecks = profile.getBoundaryChecks();
+        if (boundaryChecks == RuntimeChecks.NONE) return;
+
+        int maxIndex = arrayStore.getSize() - 1;
+        int max = maxIndex * multiple;
+        String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
+
+        switch (boundaryChecks) {
+            case ASSERT -> createAssertRuntimeChecks(astContext, consumer, index, max, multiple, errorMessage);
+            case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max);
+            case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
+        }
+    }
+
+    // UNFOLDED TABLE
+    //
+    // A branch in an unfolded table is a full instruction. Any ValueStore can be used with an unfolded table,
+    // as long as a single instruction is capable of storing the value in a variable.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /// Provides a branch creator. Branch creator creates the instruction for a branch of an unfolded table.
+    /// It takes a value store, which is a representation of the array element to be returned by the table.
+    /// It might not be a LogicVariable, as the branch instruction can encode access to the actual value.
+    abstract protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator();
+
+    protected final BiConsumer<LocalContextfulInstructionsCreator, ValueStore> regularBranchCreator() {
         return switch (accessType) {
             case READ -> (creator, element) -> element.readValue(creator, (LogicVariable) transferVariable());
             case WRITE -> (creator, element) -> element.setValue(creator, transferVariable());
         };
     }
 
+    protected final BiConsumer<LocalContextfulInstructionsCreator, ValueStore> compactBranchCreator() {
+        // For compact arrays, the transfer variable needs to be an actual LogicVariable.
+        return (creator, element) -> creator.createSet((LogicVariable) transferVariable(), element.getMlogVariableName());
+    }
+
+    /// Provides an instance which creates a value store representation of the element to be used by the branch creator.
+    abstract protected Function<ValueStore, ValueStore> elementValueStoreExtractor();
+
     protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            Function<ValueStore, ValueStore> arrayElementProcessor, BiConsumer<LocalContextfulInstructionsCreator, ValueStore> arrayAccessCreator,
-            Runnable createExit, boolean skipLastExit, List<LogicLabel> branchLabels) {
+            Runnable createExit, boolean inline, List<LogicLabel> branchLabels) {
+        BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator = branchCreator();
+        Function<ValueStore, ValueStore> elementProcessor = elementValueStoreExtractor();
         LogicLabel nextLabel = firstLabel;
 
         List<ValueStore> elements = arrayStore.getElements();
         for (int i = 0; i < elements.size(); i++) {
             ValueStore arrayElement = elements.get(i);
-            ValueStore element = arrayElementProcessor.apply(arrayElement);
+            ValueStore element = elementProcessor.apply(arrayElement);
             creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
             branchLabels.add(nextLabel);
-            arrayAccessCreator.accept(creator, element);
+            branchCreator.accept(creator, element);
             if (i < elements.size() - 1) {
                 createExit.run();
                 nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
-            } else if (!skipLastExit) {
+            } else if (!inline) {
                 createExit.run();
             }
         }
     }
 
+    // FOLDED TABLE
+    //
+    // A branch in a folded table is a `select` instruction. Only LogicValue instances can be used with
+    // a folded table.
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    /// Provides an instance which provides a LogicValue representing the element.
+    abstract protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> elementValueExtractor();
+
+    protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> compactValueExtractor() {
+        return (_, element) -> element.getMlogVariableName();
+    }
+
+    protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> regularValueExtractor() {
+        return (creator, element) -> element.getValue(creator);
+    }
+
     protected void generateFoldedJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            Function<ValueStore, LogicValue> arrayElementProcessor, LogicValue index, LogicValue limit, LogicVariable target,
-            Runnable createExit, boolean inlined, boolean useTextTables, List<LogicLabel> branchLabels) {
+            LogicValue index, LogicValue limit, LogicVariable target, Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
+        BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> valueExtractor = elementValueExtractor();
         LogicLabel nextLabel = firstLabel;
 
         List<ValueStore> elements = arrayStore.getElements();
@@ -125,9 +192,9 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
         for (int i = 0; i < count; i++) {
             creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
-            LogicValue element1 = arrayElementProcessor.apply(elements.get(i));
+            LogicValue element1 = valueExtractor.apply(creator, elements.get(i));
             if (i + count < elements.size()) {
-                LogicValue element2 = arrayElementProcessor.apply(elements.get(i + count));
+                LogicValue element2 = valueExtractor.apply(creator, elements.get(i + count));
                 creator.createSelect(target, Condition.LESS_THAN, index, limit, element1, element2);
                 branchLabels.set(i, nextLabel);
                 branchLabels.set(i + count, nextLabel);
@@ -142,21 +209,6 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
             } else if (!inlined) {
                 createExit.run();
             }
-        }
-    }
-
-    protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {
-        RuntimeChecks boundaryChecks = profile.getBoundaryChecks();
-        if (boundaryChecks == RuntimeChecks.NONE) return;
-
-        int maxIndex = arrayStore.getSize() - 1;
-        int max = maxIndex * multiple;
-        String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
-
-        switch (boundaryChecks) {
-            case ASSERT -> createAssertRuntimeChecks(astContext, consumer, index, max, multiple, errorMessage);
-            case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max);
-            case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
         }
     }
 
@@ -222,21 +274,5 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     protected final int roundUpToEven(int value) {
         return (value + 1) / 2 * 2;
-    }
-
-    protected final int tableSize() {
-        return folded()
-                ? roundUpToEven(arrayStore.getSize()) + 2 * flag(profile.isSymbolicLabels())
-                : 2 * arrayStore.getSize() + flag(profile.isSymbolicLabels());
-    }
-
-    protected final int inlinedTableSize() {
-        return (folded() ? roundUpToEven(arrayStore.getSize()) : 2 * arrayStore.getSize()) - 1;
-    }
-
-    protected final double inlinedTableStepsSavings() {
-        // The last jump in an inlined jump table is eliminated
-        // Hit twice as often for even-sized folded arrays
-        return (folded() && arrayStore.getSize() % 2 == 0 ? 2.0 : 1.0) / arrayStore.getSize();
     }
 }

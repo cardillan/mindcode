@@ -18,7 +18,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 @NullMarked
-public class RegularShortArrayConstructor extends AbstractArrayConstructor {
+public class RegularShortArrayConstructor extends TablelessArrayConstructor {
     private final int arraySize;
     private final boolean useSelects;
 
@@ -58,14 +58,18 @@ public class RegularShortArrayConstructor extends AbstractArrayConstructor {
         };
     }
 
-    @Override
-    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
+    protected LocalContextfulInstructionsCreator prepareExpansion(Consumer<LogicInstruction> consumer) {
         generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
 
         AstContextType contextType = useSelects ? AstContextType.BODY :  AstContextType.IF;
         AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
                 contextType, AstSubcontextType.BASIC);
-        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+        return new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+    }
+
+    @Override
+    public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
+        LocalContextfulInstructionsCreator creator = prepareExpansion(consumer);
 
         if (!useSelects) {
             switch (instruction) {
@@ -138,7 +142,8 @@ public class RegularShortArrayConstructor extends AbstractArrayConstructor {
         for (int i = 0; i < arraySize; i++) {
             final int index = i;
             arrayStore.getElements().get(index).writeValue(creator,
-                    element -> creator.createSelect(element, Condition.EQUAL, instruction.getIndex(), LogicNumber.create(index), value, element));
+                    element -> creator.createSelect(element, Condition.EQUAL,
+                            instruction.getIndex(), LogicNumber.create(index), value, element));
         }
     }
 

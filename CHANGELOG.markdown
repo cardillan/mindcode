@@ -12,8 +12,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Added
 
-* Added support for implementing arrays using [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-counter-tables).
-* Added support for [lookup arrays](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays).
+* Added new internal array implementations using new Mindustry 8 logic capabilities:
+  * [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-tables),
+  * [folded `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#folded-tables),
+  * [lookup arrays](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays).
 
 ### Changed
 

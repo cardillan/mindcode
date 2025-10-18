@@ -299,7 +299,7 @@ The code size and performance are described in tables. Column headers denote the
 * Dispatching method:
   * `T`: Text-based jump dispatching
   * `D`: Direct addressing
-  * `S`: symbolic labels
+  * `S`: Symbolic labels
 
 When expressing the code size, `n` represents the number of elements in the array. For odd-sized folded arrays, `n` is rounded up to the next even number.
 

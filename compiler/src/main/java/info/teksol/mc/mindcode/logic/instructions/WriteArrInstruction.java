@@ -5,6 +5,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicValue;
 import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructor;
+import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorFactory;
 import info.teksol.mc.mindcode.logic.opcodes.InstructionParameterType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import org.jspecify.annotations.NullMarked;
@@ -38,7 +39,7 @@ public class WriteArrInstruction extends BaseInstruction implements ArrayAccessI
     protected void updateInfo(Set<InstructionInfo> types) {
         if (types.contains(InstructionInfo.ARRAY_ORGANIZATION) || types.contains(InstructionInfo.ARRAY_CONSTRUCTION)
                && !astContext.matches(AstSubcontextType.MOCK)) {
-            arrayConstructor = getArrayOrganization().getConstructor(this);
+            arrayConstructor = ArrayConstructorFactory.create(this);
             // Changing array organization alters side effects
             setSideEffects(arrayConstructor.createSideEffects());
         }

@@ -2,9 +2,6 @@ package info.teksol.mc.mindcode.logic.arguments.arrays;
 
 import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
-import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
-import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
@@ -77,12 +74,7 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
 
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
-        generateBoundsCheck(instruction.getAstContext(), consumer, instruction.getIndex(), 1 );
-
-        AstContextType contextType = useSelects ? AstContextType.BODY :  AstContextType.IF;
-        AstContext astContext = this.instruction.getAstContext().createChild(instruction.getAstContext().existingNode(),
-                contextType, AstSubcontextType.BASIC);
-        LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
+        LocalContextfulInstructionsCreator creator = prepareExpansion(consumer);
 
         if (!instruction.isCompactAccessTarget()) {
             if (useSelects) {

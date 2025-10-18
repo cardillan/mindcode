@@ -200,7 +200,7 @@ public abstract class BaseInstructionProcessor extends AbstractMessageEmitter im
                     instruction.setArrayOrganization(ArrayOrganization.LOOKUP, ArrayConstruction.COMPACT)
                             .setArrayLookupType(array.getLookupType());
                 } else if (getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
-                    instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR)
+                    instruction.setArrayOrganization(ArrayOrganization.INLINED, ArrayConstruction.REGULAR)
                             .setArrayFolded(isSupported(SELECT));
                 } else {
                     instruction.setArrayOrganization(ArrayOrganization.INTERNAL, ArrayConstruction.REGULAR);

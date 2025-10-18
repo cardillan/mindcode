@@ -13,7 +13,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @NullMarked
-public class ExternalArrayConstructor extends AbstractArrayConstructor {
+public class ExternalArrayConstructor extends TablelessArrayConstructor {
     private final LogicVariable memory;
 
     public ExternalArrayConstructor(ArrayAccessInstruction instruction) {

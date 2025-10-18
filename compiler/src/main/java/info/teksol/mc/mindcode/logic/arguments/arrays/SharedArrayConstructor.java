@@ -5,89 +5,37 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
-import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
-import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
-import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
-import info.teksol.mc.mindcode.logic.instructions.SideEffects;
+import info.teksol.mc.mindcode.logic.instructions.*;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 @NullMarked
-public class CompactArrayConstructor extends AbstractArrayConstructor {
-    private final LogicVariable arrayInd;
-    private final LogicVariable arrayRet;
-    private final LogicVariable arrayElem;
+public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
+    protected final LogicVariable arrayInd;
+    protected final LogicVariable arrayRet;
+    protected final LogicVariable arrayElem;
 
-    public CompactArrayConstructor(ArrayAccessInstruction instruction) {
+    public SharedArrayConstructor(ArrayAccessInstruction instruction, String indexSuffix, String returnSuffix, String elementSuffix) {
         super(instruction);
 
         NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
         String baseName = arrayStore.getName();
-        arrayInd = LogicVariable.arrayAccess(baseName, "*ind", nameCreator.arrayAccess(baseName, "ind"));
-        arrayRet = LogicVariable.arrayReturn(baseName, "*ret", nameCreator.arrayAccess(baseName, "ret"));
-        arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
-
-        instruction.setIndirectVariables(arrayElements());
+        arrayInd = LogicVariable.arrayAccess(baseName, "*" + indexSuffix, nameCreator.arrayAccess(baseName, indexSuffix));
+        arrayRet = LogicVariable.arrayReturn(baseName, "*" + returnSuffix, nameCreator.arrayAccess(baseName, returnSuffix));
+        arrayElem = LogicVariable.arrayAccess(baseName, "*" + elementSuffix, nameCreator.arrayAccess(baseName, elementSuffix));
     }
 
-    public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        computeSharedJumpTableSize(sharedStructures);
-        return instruction.isCompactAccessTarget()
-                ? 1
-                : profile.getBoundaryChecks().getSize() + 4 + flag(folded() && !profile.isSymbolicLabels());
-    }
+    protected abstract SideEffects createCallSideEffects();
 
     @Override
-    public double getExecutionSteps() {
-        return instruction.isCompactAccessTarget()
-                ? 1
-                : profile.getBoundaryChecks().getSize() + 6 + flag(folded()) + flag(profile.isSymbolicLabels());
-    }
-
-    @Override
-    public LogicVariable getElementNameVariable() {
+    protected LogicValue transferVariable() {
         return arrayElem;
-    }
-
-    @Override
-    public SideEffects createSideEffects() {
-        return switch (accessType) {
-            case READ -> createReadSideEffects();
-            case WRITE -> createWriteSideEffects();
-        };
-    }
-
-    private SideEffects createReadSideEffects() {
-        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? arrayElementsPlus(arrayInd) : arrayElements();
-        return SideEffects.of(reads, List.of(arrayElem), List.of());
-    }
-
-    private SideEffects createWriteSideEffects() {
-        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? List.of(arrayInd) : List.of();
-        return SideEffects.of(reads, List.of(arrayElem), arrayElements());
-    }
-
-    private SideEffects createCallSideEffects() {
-        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? List.of(arrayInd) : List.of();
-        return SideEffects.of(reads, List.of(arrayElem), List.of());
-    }
-
-    @Override
-    protected LogicVariable transferVariable() {
-        return arrayElem;
-    }
-
-    public String getJumpTableId() {
-        return arrayStore.getName() + (folded() ? "-fe" : "-e");
     }
 
     @Override
@@ -97,10 +45,6 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
         if (jumpTable == null || useTextTables && !jumpTable.usesTextTable()) {
             jumpTables.put(tableId, buildJumpTable(tableId));
         }
-    }
-
-    protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> createArrayAccessCreator() {
-        return (creator, element) -> creator.createSet(arrayElem, element.getMlogVariableName());
     }
 
     private JumpTable buildJumpTable(String tableId) {
@@ -132,11 +76,10 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
             LogicNumber limit = useTextTables
                     ? LogicNumber.create((arrayStore.getSize() + 1) / 2)
                     : LogicNumber.create(roundUpToEven(arrayStore.getSize()));
-            generateFoldedJumpTable(creator, firstLabel, marker, ValueStore::getMlogVariableName,
-                    arrayInd, limit, arrayElem, createExit, false, useTextTables, branchLabels);
+            generateFoldedJumpTable(creator, firstLabel, marker,
+                    arrayInd, limit, arrayElem, createExit, false, branchLabels);
         } else {
-            generateJumpTable(creator, firstLabel, marker, e -> e, createArrayAccessCreator(), createExit,
-                    false, branchLabels);
+            generateJumpTable(creator, firstLabel, marker, createExit, false, branchLabels);
         }
         return new JumpTable(tableId, useTextTables, startLabel, marker, instructions, branchLabels);
     }
@@ -153,35 +96,39 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
         }
     }
 
+    protected abstract void prepareTableCall(LocalContextfulInstructionsCreator creator);
+    protected abstract void finishTableCall(LocalContextfulInstructionsCreator creator);
+
     private void expandInstructionSymbolicLabels(Consumer<LogicInstruction> consumer, JumpTable jumpTable) {
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        if (!instruction.isCompactAccessTarget()) {
-            LogicLabel address = jumpTable.label();
+        if (arrayConstruction != ArrayConstruction.COMPACT || !instruction.isCompactAccessTarget()) {
+            prepareTableCall(creator);
             creator.createOp(Operation.MUL, arrayInd, instruction.getIndex(), LogicNumber.TWO);
             generateBoundsCheck(astContext, consumer, arrayInd, 2);
-            creator.createCallStackless(address, arrayRet, LogicVariable.INVALID).setSideEffects(createCallSideEffects());
+            creator.createCallStackless(jumpTable.label(), arrayRet, LogicVariable.INVALID).setSideEffects(createCallSideEffects());
         }
 
-        LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
-        createCompactAccessInstruction(creator, storageProcessor, arrayElem);
+        finishTableCall(creator);
     }
 
     private void expandInstructionDirectAddress(Consumer<LogicInstruction> consumer, JumpTable jumpTable) {
+        boolean folded = folded();
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        if (!instruction.isCompactAccessTarget()) {
+        if (arrayConstruction != ArrayConstruction.COMPACT || !instruction.isCompactAccessTarget()) {
             LogicLabel marker2 = processor.nextMarker();
             LogicLabel returnLabel = processor.nextLabel();
 
+            prepareTableCall(creator);
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
-            LogicVariable index = folded() ? arrayInd : processor.nextTemp(); //Symbolic labels not handled here
+            LogicVariable index = folded ? arrayInd : processor.nextTemp();
             creator.createOp(Operation.MUL, index, instruction.getIndex(), LogicNumber.TWO);
             generateBoundsCheck(astContext, consumer, index, 2);
-            LogicVariable branch = folded() ? creator.nextTemp() : index;
-            if (folded()) {
+            LogicVariable branch = folded ? creator.nextTemp() : index;
+            if (folded) {
                 LogicNumber modulo = LogicNumber.create(roundUpToEven(arrayStore.getSize()));
                 creator.createOp(Operation.MOD, branch, index, modulo);
             }
@@ -190,26 +137,28 @@ public class CompactArrayConstructor extends AbstractArrayConstructor {
             creator.createLabel(returnLabel);
         }
 
-        LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
-        createCompactAccessInstruction(creator, storageProcessor, arrayElem);
+        finishTableCall(creator);
     }
 
     private void expandInstructionTextTable(Consumer<LogicInstruction> consumer, JumpTable jumpTable) {
+        boolean folded = folded();
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        if (!instruction.isCompactAccessTarget()) {
+        if (arrayConstruction != ArrayConstruction.COMPACT || !instruction.isCompactAccessTarget()) {
             LogicLabel marker2 = processor.nextMarker();
             LogicLabel returnLabel = processor.nextLabel();
+            prepareTableCall(creator);
             creator.createSetAddress(arrayRet, returnLabel).setHoistId(marker2);
             generateBoundsCheck(astContext, consumer, instruction.getIndex(), 1);
-            if (folded()) creator.createSet(arrayInd, instruction.getIndex());
+            if (folded) {
+                creator.createSet(arrayInd, instruction.getIndex());
+            }
             creator.createMultiCall(instruction.getIndex(), jumpTable.marker()).setSideEffects(createCallSideEffects())
                     .setHoistId(marker2).setJumpTable(jumpTable.branchLabels());
             creator.createLabel(returnLabel);
         }
 
-        LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
-        createCompactAccessInstruction(creator, storageProcessor, arrayElem);
+        finishTableCall(creator);
     }
 }

@@ -12,8 +12,8 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @NullMarked
-public class ArraySingleConstructor extends AbstractArrayConstructor {
-    public ArraySingleConstructor(ArrayAccessInstruction instruction) {
+public class SingleElementArrayConstructor extends TablelessArrayConstructor {
+    public SingleElementArrayConstructor(ArrayAccessInstruction instruction) {
         super(instruction);
     }
 

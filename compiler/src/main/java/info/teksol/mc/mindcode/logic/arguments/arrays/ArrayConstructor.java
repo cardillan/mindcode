@@ -15,6 +15,8 @@ public interface ArrayConstructor {
 
     SideEffects createSideEffects();
 
+    int getSharedTableSize();
+
     int getInstructionSize(@Nullable Map<String, Integer> sharedStructures);
 
     double getExecutionSteps();

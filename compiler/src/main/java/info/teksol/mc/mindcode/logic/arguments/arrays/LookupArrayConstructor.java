@@ -24,7 +24,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 
 @NullMarked
-public class LookupArrayConstructor extends AbstractArrayConstructor {
+public class LookupArrayConstructor extends TablelessArrayConstructor {
     private final LogicVariable arrayElem;
 
     public LookupArrayConstructor(ArrayAccessInstruction instruction) {

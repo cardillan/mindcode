@@ -17,30 +17,28 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @NullMarked
-public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
+public class CompactSharedArrayConstructor extends SharedArrayConstructor {
     private final LogicValue storageProcessor;
 
-    public CompactInlinedArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction, "elem");
+    public CompactSharedArrayConstructor(ArrayAccessInstruction instruction) {
+        super(instruction, "ind", "ret", "elem");
         storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
         instruction.setIndirectVariables(arrayElements());
     }
 
+    @Override
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        if (instruction.isCompactAccessTarget()) return 1;
-
+        computeSharedJumpTableSize(sharedStructures);
         int checkSize = profile.getBoundaryChecks().getSize();
-        return folded()
-                ? checkSize + inlinedTableSize() + 3 - 2 * flag(useTextTables)
-                : checkSize + 2 * inlinedTableSize() + 2 - flag(useTextTables);
+        return instruction.isCompactAccessTarget() ? 1 : useTextTables
+                ? checkSize + 3 + flag(folded())
+                : checkSize + 4 + flag(folded() && !profile.isSymbolicLabels());
     }
 
     @Override
     public double getExecutionSteps() {
-        if (instruction.isCompactAccessTarget()) return 1;
-
-        int checkSteps = profile.getBoundaryChecks().getExecutionSteps();
-        return checkSteps + (useTextTables ? 4 : 5 + flag(folded())) - inlinedTableStepsSavings();
+        return instruction.isCompactAccessTarget() ? 1
+                : profile.getBoundaryChecks().getSize() + 6 - flag(useTextTables) + flag(folded()) + flag(profile.isSymbolicLabels());
     }
 
     @Override
@@ -51,16 +49,33 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
     @Override
     public SideEffects createSideEffects() {
         return switch (accessType) {
-            case READ -> SideEffects.of(arrayElements(), List.of(arrayElem), List.of());
-            case WRITE -> SideEffects.of(List.of(), List.of(arrayElem), arrayElements());
+            case READ -> createReadSideEffects();
+            case WRITE -> createWriteSideEffects();
         };
     }
 
-    @Override
-    protected LogicValue transferVariable() {
-        return arrayElem;
+    private SideEffects createReadSideEffects() {
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? arrayElementsPlus(arrayInd) : arrayElements();
+        return SideEffects.of(reads, List.of(arrayElem), List.of());
     }
 
+    private SideEffects createWriteSideEffects() {
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? List.of(arrayInd) : List.of();
+        return SideEffects.of(reads, List.of(arrayElem), arrayElements());
+    }
+
+    @Override
+    protected SideEffects createCallSideEffects() {
+        List<LogicVariable> reads = folded() || profile.isSymbolicLabels() ? List.of(arrayInd) : List.of();
+        return SideEffects.of(reads, List.of(arrayElem), List.of());
+    }
+
+    @Override
+    public String getJumpTableId() {
+        return arrayStore.getName() + (folded() ? "-fe" : "-e");
+    }
+
+    @Override
     protected BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator() {
         return compactBranchCreator();
     }
@@ -73,6 +88,11 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
     @Override
     protected BiFunction<LocalContextfulInstructionsCreator, ValueStore, LogicValue> elementValueExtractor() {
         return compactValueExtractor();
+    }
+
+    @Override
+    protected void prepareTableCall(LocalContextfulInstructionsCreator creator) {
+        // Do nothing
     }
 
     @Override
