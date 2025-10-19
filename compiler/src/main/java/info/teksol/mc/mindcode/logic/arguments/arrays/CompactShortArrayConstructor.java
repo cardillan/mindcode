@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
@@ -25,10 +24,10 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
     private final boolean useSelects;
     private final LogicVariable arrayElem;
 
-    public CompactShortArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction);
+    public CompactShortArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction);
 
-        NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
+        NameCreator nameCreator = context.nameCreator();
         String baseName = arrayStore.getName();
         arraySize = arrayStore.getSize();
         useSelects = processor.isSupported(Opcode.SELECT);
@@ -85,6 +84,7 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
         }
 
         LogicValue storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
-        createCompactAccessInstruction(creator, storageProcessor, arrayElem);
+        LocalContextfulInstructionsCreator creator2 = new LocalContextfulInstructionsCreator(processor, instruction.getAstContext(), consumer);
+        createCompactAccessInstruction(creator2, storageProcessor, arrayElem);
     }
 }

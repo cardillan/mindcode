@@ -40,6 +40,7 @@ import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
+import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorContext;
 import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.mimex.MindustryMetadata;
 import info.teksol.mc.profile.CompilerProfile;
@@ -62,7 +63,8 @@ import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
 
 @NullMarked
 public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuilderContext, PreprocessorContext,
-        CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext, VariablesContext, OptimizerContext {
+        ArrayConstructorContext, CallGraphCreatorContext, CompileTimeEvaluatorContext, CodeGeneratorContext,
+        VariablesContext, OptimizerContext {
 
     public static final String REMOTE_PROTOCOL_VERSION = "v1";
 
@@ -410,6 +412,10 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
 
     public boolean hasErrors() {
         return messageLogger.hasErrors();
+    }
+
+    public static boolean initialized() {
+        return context.get() != null;
     }
 
     // Root method for getting compiler contexts

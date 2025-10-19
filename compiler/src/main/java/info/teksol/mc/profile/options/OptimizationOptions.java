@@ -13,5 +13,7 @@ public enum OptimizationOptions {
     PASSES,
     UNSAFE_CASE_OPTIMIZATION,
     TEXT_TABLES,
+    USE_LOOKUP_ARRAYS,
+    USE_SHORT_ARRAYS,
     WEIGHT,
 }

@@ -16,13 +16,18 @@ import java.util.function.BiFunction;
 public class WriteSharedArrayConstructor extends RegularSharedArrayConstructor {
     private final WriteArrInstruction instruction;
 
-    public WriteSharedArrayConstructor(WriteArrInstruction instruction) {
-        super(instruction, "wind", "wret", "w");
+    public WriteSharedArrayConstructor(ArrayConstructorContext context, WriteArrInstruction instruction) {
+        super(context, instruction, "wind", "wret", "w");
         this.instruction = instruction;
     }
 
     @Override
-    protected boolean folded() {
+    public boolean folded() {
+        return false;
+    }
+
+    @Override
+    public boolean canFold() {
         return false;
     }
 

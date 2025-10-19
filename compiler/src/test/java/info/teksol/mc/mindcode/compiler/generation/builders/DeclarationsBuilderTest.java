@@ -565,15 +565,15 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
         @Test
         void reportsNegativeArraySize() {
             assertGeneratesMessage(
-                    "Array size out of range (1 .. 250).",
+                    "Array size out of range (1 .. 1000).",
                     "var a[-10];");
         }
 
         @Test
         void reportsTooLargeArraySize() {
             assertGeneratesMessage(
-                    "Array size out of range (1 .. 250).",
-                    "var a[1000];");
+                    "Array size out of range (1 .. 1000).",
+                    "var a[1500];");
         }
 
         @Test

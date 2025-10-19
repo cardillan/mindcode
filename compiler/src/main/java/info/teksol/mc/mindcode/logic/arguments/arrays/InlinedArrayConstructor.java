@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -11,7 +10,6 @@ import info.teksol.mc.mindcode.logic.arguments.LogicNumber;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.arguments.Operation;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
-import info.teksol.mc.mindcode.logic.instructions.ArrayConstruction;
 import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
 import org.jspecify.annotations.NullMarked;
@@ -25,14 +23,14 @@ import java.util.function.Consumer;
 public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
     protected final LogicVariable arrayElem;
 
-    public InlinedArrayConstructor(ArrayAccessInstruction instruction, LogicVariable arrayElem) {
-        super(instruction);
+    public InlinedArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction, LogicVariable arrayElem) {
+        super(context, instruction);
         this.arrayElem = arrayElem;
     }
 
-    public InlinedArrayConstructor(ArrayAccessInstruction instruction, String elementSuffix) {
-        super(instruction);
-        NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
+    public InlinedArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction, String elementSuffix) {
+        super(context, instruction);
+        NameCreator nameCreator = context.nameCreator();
         String baseName = arrayStore.getName();
         arrayElem = LogicVariable.arrayAccess(baseName, "*" + elementSuffix, nameCreator.arrayAccess(baseName, elementSuffix));
     }
@@ -41,7 +39,7 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
     @Override
     public void expandInstruction(Consumer<LogicInstruction> consumer, Map<String, JumpTable> jumpTables) {
-        if (arrayConstruction != ArrayConstruction.COMPACT || !instruction.isCompactAccessTarget()) {
+        if (!skipCompactLookup()) {
             AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
             LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 

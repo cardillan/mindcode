@@ -1,4 +1,4 @@
-    98 instructions before optimizations.
+    88 instructions before optimizations.
      1 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Jump Optimization (6 iterations).
@@ -24,10 +24,10 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
  
     60 op mod *tmp1 :countDigits:number 10
     61 set *tmp2 *tmp1
-    62 readarr<internal:compact:src> *tmp3 .array[] *tmp2
+    62 readarr<internal:folded:compact:src> *tmp3 .array[] *tmp2
 -    * set *tmp4 *tmp3
     63 op add *tmp3 *tmp3 1
-    64 writearr<internal:compact:dst> *tmp3 .array[] *tmp2
+    64 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
     65 op idiv :countDigits:number :countDigits:number 10
 
 Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 instructions):
@@ -38,13 +38,13 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-1 inst
 -    * op mod *tmp1 :countDigits:number 10
 -    * set *tmp2 *tmp1
 +   60 op mod *tmp2 :countDigits:number 10
-    61 readarr<internal:compact:src> *tmp3 .array[] *tmp2
+    61 readarr<internal:folded:compact:src> *tmp3 .array[] *tmp2
     62 op add *tmp3 *tmp3 1
-    63 writearr<internal:compact:dst> *tmp3 .array[] *tmp2
+    63 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
 
 Modifications by Iterated phase, Jump Optimization, pass 1, iteration 1 (-1 instructions):
  
-    63 writearr<internal:compact:dst> *tmp3 .array[] *tmp2
+    63 writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
     64 op idiv :countDigits:number :countDigits:number 10
     65 label *label18
 -    * op greaterThan *tmp5 :countDigits:number 0
@@ -126,8 +126,8 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1 (-1
     67 jump *label23 greaterThanEq :printArray:i 10
     68 set *tmp6 :printArray:i
     69 print "-"
--    * readarr<internal:compact> *tmp8 .array[] *tmp6
-+   70 readarr<internal:compact> *tmp8 .array[] :printArray:i
+-    * readarr<internal:folded:compact> *tmp8 .array[] *tmp6
++   70 readarr<internal:folded:compact> *tmp8 .array[] :printArray:i
     71 print *tmp8
     72 label *label22
     73 op add :printArray:i :printArray:i 1
@@ -147,18 +147,18 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-2
     66 jump *label23 greaterThanEq :printArray:i 10
 -    * set *tmp6 :printArray:i
     67 print "-"
-    68 readarr<internal:compact> *tmp8 .array[] :printArray:i
+    68 readarr<internal:folded:compact> *tmp8 .array[] :printArray:i
     69 print *tmp8
 
-Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-22 instructions):
+Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-12 instructions):
  
     47 set :countDigits:number :i
     48 label *label17
     49 op mod *tmp2 :countDigits:number 10
--    * readarr<internal:compact:src> *tmp3 .array[] *tmp2
+-    * readarr<internal:folded:compact:src> *tmp3 .array[] *tmp2
 +   50 readarr<lookup:liquid> *tmp3 .array[] *tmp2
     51 op add *tmp3 *tmp3 1
--    * writearr<internal:compact:dst> *tmp3 .array[] *tmp2
+-    * writearr<internal:folded:compact:dst> *tmp3 .array[] *tmp2
 +   52 writearr<lookup:liquid> *tmp3 .array[] *tmp2
     53 op idiv :countDigits:number :countDigits:number 10
     54 label *label18
@@ -167,7 +167,7 @@ Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-22 in
     65 label *label21
     66 jump *label23 greaterThanEq :printArray:i 10
     67 print "-"
--    * readarr<internal:compact> *tmp8 .array[] :printArray:i
+-    * readarr<internal:folded:compact> *tmp8 .array[] :printArray:i
 +   68 readarr<lookup:liquid> *tmp8 .array[] :printArray:i
     69 print *tmp8
     70 label *label22

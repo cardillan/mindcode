@@ -7,10 +7,10 @@ Final code before resolving virtual instructions:
         label *label1
     3:  jump *label3 greaterThanEq :fill:i 5
     4:  set *tmp0 :fill:i
-    5:  setaddr .a*ret *label76
-    6:  op mul *tmp85 *tmp0 2
-    7:  multicall *label51 *tmp85
-        label *label76
+    5:  setaddr .a*ret *label64
+    6:  set .a*ind *tmp0
+    7:  multicall *tmp0 0
+        label *label64
     8:  write :fill:value @this .a*elem
         label *label2
     9:  op add :fill:i :fill:i 1
@@ -29,17 +29,17 @@ Final code before resolving virtual instructions:
    19:  jump *label6 greaterThanEq :i 10
    20:  set *tmp2 :i
    21:  op add *tmp4 p :i
-   22:  setaddr .b*ret *label77
-   23:  op mul *tmp86 *tmp2 2
-   24:  multicall *label56 *tmp86
-        label *label77
+   22:  setaddr .b*ret *label65
+   23:  set .b*ind *tmp2
+   24:  multicall *tmp2 0
+        label *label65
    25:  write *tmp4 @this .b*elem
    26:  set *tmp5 :i
    27:  op add *tmp7 p :i
-   28:  setaddr .c*ret *label78
-   29:  op mul *tmp87 *tmp5 2
-   30:  multicall *label66 *tmp87
-        label *label78
+   28:  setaddr .c*ret *label66
+   29:  set .c*ind *tmp5
+   30:  multicall *tmp5 0
+        label *label66
    31:  write *tmp7 @this .c*elem
         label *label5
    32:  op add :i :i 1
@@ -51,29 +51,29 @@ Final code before resolving virtual instructions:
    36:  op sub *tmp8 9 :reverse:i
    37:  set :reverse:j *tmp8
    38:  set *tmp9 :reverse:i
-   39:  setaddr .b*ret *label79
-   40:  op mul *tmp88 *tmp9 2
-   41:  multicall *label56 *tmp88
-        label *label79
+   39:  setaddr .b*ret *label67
+   40:  set .b*ind *tmp9
+   41:  multicall *tmp9 0
+        label *label67
    42:  read *tmp10 @this .b*elem
    43:  set :reverse:t *tmp10
    44:  set *tmp11 :reverse:i
    45:  set *tmp13 :reverse:j
-   46:  setaddr .b*ret *label80
-   47:  op mul *tmp89 *tmp13 2
-   48:  multicall *label56 *tmp89
-        label *label80
+   46:  setaddr .b*ret *label68
+   47:  set .b*ind *tmp13
+   48:  multicall *tmp13 0
+        label *label68
    49:  read *tmp14 @this .b*elem
-   50:  setaddr .b*ret *label81
-   51:  op mul *tmp90 *tmp11 2
-   52:  multicall *label56 *tmp90
-        label *label81
+   50:  setaddr .b*ret *label69
+   51:  set .b*ind *tmp11
+   52:  multicall *tmp11 0
+        label *label69
    53:  write *tmp14 @this .b*elem
    54:  set *tmp15 :reverse:j
-   55:  setaddr .b*ret *label82
-   56:  op mul *tmp91 *tmp15 2
-   57:  multicall *label56 *tmp91
-        label *label82
+   55:  setaddr .b*ret *label70
+   56:  set .b*ind *tmp15
+   57:  multicall *tmp15 0
+        label *label70
    58:  write :reverse:t @this .b*elem
         label *label9
    59:  op add :reverse:i :reverse:i 1
@@ -100,10 +100,10 @@ Final code before resolving virtual instructions:
         label *label15
    77:  jump *label17 greaterThanEq :bubblesort:i 10
    78:  set *tmp17 :bubblesort:i
-   79:  setaddr .b*ret *label83
-   80:  op mul *tmp92 *tmp17 2
-   81:  multicall *label56 *tmp92
-        label *label83
+   79:  setaddr .b*ret *label71
+   80:  set .b*ind *tmp17
+   81:  multicall *tmp17 0
+        label *label71
    82:  read *tmp18 @this .b*elem
    83:  set :bubblesort:b *tmp18
    84:  jump *label18 equal :bubblesort:maxToMin false
@@ -118,16 +118,16 @@ Final code before resolving virtual instructions:
    91:  jump *label20 equal :bubblesort:condition false
    92:  op sub *tmp23 :bubblesort:i 1
    93:  set *tmp24 *tmp23
-   94:  setaddr .b*ret *label84
-   95:  op mul *tmp93 *tmp24 2
-   96:  multicall *label56 *tmp93
-        label *label84
+   94:  setaddr .b*ret *label72
+   95:  set .b*ind *tmp24
+   96:  multicall *tmp24 0
+        label *label72
    97:  write :bubblesort:b @this .b*elem
    98:  set *tmp26 :bubblesort:i
-   99:  setaddr .b*ret *label85
-  100:  op mul *tmp94 *tmp26 2
-  101:  multicall *label56 *tmp94
-        label *label85
+   99:  setaddr .b*ret *label73
+  100:  set .b*ind *tmp26
+  101:  multicall *tmp26 0
+        label *label73
   102:  write :bubblesort:a @this .b*elem
   103:  set :bubblesort:flag true
   104:  set *tmp22 :bubblesort:flag
@@ -153,10 +153,10 @@ Final code before resolving virtual instructions:
         label *label24
   118:  jump *label26 lessThan :bubblesort:i.1 0
   119:  set *tmp30 :bubblesort:i.1
-  120:  setaddr .b*ret *label86
-  121:  op mul *tmp95 *tmp30 2
-  122:  multicall *label56 *tmp95
-        label *label86
+  120:  setaddr .b*ret *label74
+  121:  set .b*ind *tmp30
+  122:  multicall *tmp30 0
+        label *label74
   123:  read *tmp31 @this .b*elem
   124:  set :bubblesort:b.1 *tmp31
   125:  jump *label27 equal :bubblesort:maxToMin false
@@ -171,16 +171,16 @@ Final code before resolving virtual instructions:
   132:  jump *label29 equal :bubblesort:condition.1 false
   133:  op add *tmp36 :bubblesort:i.1 1
   134:  set *tmp37 *tmp36
-  135:  setaddr .b*ret *label87
-  136:  op mul *tmp96 *tmp37 2
-  137:  multicall *label56 *tmp96
-        label *label87
+  135:  setaddr .b*ret *label75
+  136:  set .b*ind *tmp37
+  137:  multicall *tmp37 0
+        label *label75
   138:  write :bubblesort:b.1 @this .b*elem
   139:  set *tmp39 :bubblesort:i.1
-  140:  setaddr .b*ret *label88
-  141:  op mul *tmp97 *tmp39 2
-  142:  multicall *label56 *tmp97
-        label *label88
+  140:  setaddr .b*ret *label76
+  141:  set .b*ind *tmp39
+  142:  multicall *tmp39 0
+        label *label76
   143:  write :bubblesort:a @this .b*elem
   144:  set :bubblesort:flag true
   145:  set *tmp35 :bubblesort:flag
@@ -217,10 +217,10 @@ Final code before resolving virtual instructions:
         label *label35
   168:  jump *label37 greaterThanEq :bubblesort.1:i 10
   169:  set *tmp41 :bubblesort.1:i
-  170:  setaddr .b*ret *label89
-  171:  op mul *tmp98 *tmp41 2
-  172:  multicall *label56 *tmp98
-        label *label89
+  170:  setaddr .b*ret *label77
+  171:  set .b*ind *tmp41
+  172:  multicall *tmp41 0
+        label *label77
   173:  read *tmp42 @this .b*elem
   174:  set :bubblesort.1:b *tmp42
   175:  jump *label38 equal :bubblesort.1:maxToMin false
@@ -235,43 +235,43 @@ Final code before resolving virtual instructions:
   182:  jump *label40 equal :bubblesort.1:condition false
   183:  op sub *tmp47 :bubblesort.1:i 1
   184:  set *tmp48 *tmp47
-  185:  setaddr .b*ret *label90
-  186:  op mul *tmp99 *tmp48 2
-  187:  multicall *label56 *tmp99
-        label *label90
+  185:  setaddr .b*ret *label78
+  186:  set .b*ind *tmp48
+  187:  multicall *tmp48 0
+        label *label78
   188:  write :bubblesort.1:b @this .b*elem
   189:  set *tmp50 :bubblesort.1:i
-  190:  setaddr .b*ret *label91
-  191:  op mul *tmp100 *tmp50 2
-  192:  multicall *label56 *tmp100
-        label *label91
+  190:  setaddr .b*ret *label79
+  191:  set .b*ind *tmp50
+  192:  multicall *tmp50 0
+        label *label79
   193:  write :bubblesort.1:a @this .b*elem
   194:  op sub *tmp52 :bubblesort.1:i 1
   195:  set *tmp53 *tmp52
-  196:  setaddr .c*ret *label92
-  197:  op mul *tmp101 *tmp53 2
-  198:  multicall *label66 *tmp101
-        label *label92
+  196:  setaddr .c*ret *label80
+  197:  set .c*ind *tmp53
+  198:  multicall *tmp53 0
+        label *label80
   199:  read *tmp54 @this .c*elem
   200:  set :bubblesort.1:v *tmp54
   201:  op sub *tmp55 :bubblesort.1:i 1
   202:  set *tmp56 *tmp55
   203:  set *tmp58 :bubblesort.1:i
-  204:  setaddr .c*ret *label93
-  205:  op mul *tmp102 *tmp58 2
-  206:  multicall *label66 *tmp102
-        label *label93
+  204:  setaddr .c*ret *label81
+  205:  set .c*ind *tmp58
+  206:  multicall *tmp58 0
+        label *label81
   207:  read *tmp59 @this .c*elem
-  208:  setaddr .c*ret *label94
-  209:  op mul *tmp103 *tmp56 2
-  210:  multicall *label66 *tmp103
-        label *label94
+  208:  setaddr .c*ret *label82
+  209:  set .c*ind *tmp56
+  210:  multicall *tmp56 0
+        label *label82
   211:  write *tmp59 @this .c*elem
   212:  set *tmp60 :bubblesort.1:i
-  213:  setaddr .c*ret *label95
-  214:  op mul *tmp104 *tmp60 2
-  215:  multicall *label66 *tmp104
-        label *label95
+  213:  setaddr .c*ret *label83
+  214:  set .c*ind *tmp60
+  215:  multicall *tmp60 0
+        label *label83
   216:  write :bubblesort.1:v @this .c*elem
   217:  set :bubblesort.1:flag true
   218:  set *tmp46 :bubblesort.1:flag
@@ -297,10 +297,10 @@ Final code before resolving virtual instructions:
         label *label44
   232:  jump *label46 lessThan :bubblesort.1:i.1 0
   233:  set *tmp64 :bubblesort.1:i.1
-  234:  setaddr .b*ret *label96
-  235:  op mul *tmp105 *tmp64 2
-  236:  multicall *label56 *tmp105
-        label *label96
+  234:  setaddr .b*ret *label84
+  235:  set .b*ind *tmp64
+  236:  multicall *tmp64 0
+        label *label84
   237:  read *tmp65 @this .b*elem
   238:  set :bubblesort.1:b.1 *tmp65
   239:  jump *label47 equal :bubblesort.1:maxToMin false
@@ -315,43 +315,43 @@ Final code before resolving virtual instructions:
   246:  jump *label49 equal :bubblesort.1:condition.1 false
   247:  op add *tmp70 :bubblesort.1:i.1 1
   248:  set *tmp71 *tmp70
-  249:  setaddr .b*ret *label97
-  250:  op mul *tmp106 *tmp71 2
-  251:  multicall *label56 *tmp106
-        label *label97
+  249:  setaddr .b*ret *label85
+  250:  set .b*ind *tmp71
+  251:  multicall *tmp71 0
+        label *label85
   252:  write :bubblesort.1:b.1 @this .b*elem
   253:  set *tmp73 :bubblesort.1:i.1
-  254:  setaddr .b*ret *label98
-  255:  op mul *tmp107 *tmp73 2
-  256:  multicall *label56 *tmp107
-        label *label98
+  254:  setaddr .b*ret *label86
+  255:  set .b*ind *tmp73
+  256:  multicall *tmp73 0
+        label *label86
   257:  write :bubblesort.1:a @this .b*elem
   258:  op add *tmp75 :bubblesort.1:i.1 1
   259:  set *tmp76 *tmp75
-  260:  setaddr .c*ret *label99
-  261:  op mul *tmp108 *tmp76 2
-  262:  multicall *label66 *tmp108
-        label *label99
+  260:  setaddr .c*ret *label87
+  261:  set .c*ind *tmp76
+  262:  multicall *tmp76 0
+        label *label87
   263:  read *tmp77 @this .c*elem
   264:  set :bubblesort.1:v.1 *tmp77
   265:  op add *tmp78 :bubblesort.1:i.1 1
   266:  set *tmp79 *tmp78
   267:  set *tmp81 :bubblesort.1:i.1
-  268:  setaddr .c*ret *label100
-  269:  op mul *tmp109 *tmp81 2
-  270:  multicall *label66 *tmp109
-        label *label100
+  268:  setaddr .c*ret *label88
+  269:  set .c*ind *tmp81
+  270:  multicall *tmp81 0
+        label *label88
   271:  read *tmp82 @this .c*elem
-  272:  setaddr .c*ret *label101
-  273:  op mul *tmp110 *tmp79 2
-  274:  multicall *label66 *tmp110
-        label *label101
+  272:  setaddr .c*ret *label89
+  273:  set .c*ind *tmp79
+  274:  multicall *tmp79 0
+        label *label89
   275:  write *tmp82 @this .c*elem
   276:  set *tmp83 :bubblesort.1:i.1
-  277:  setaddr .c*ret *label102
-  278:  op mul *tmp111 *tmp83 2
-  279:  multicall *label66 *tmp111
-        label *label102
+  277:  setaddr .c*ret *label90
+  278:  set .c*ind *tmp83
+  279:  multicall *tmp83 0
+        label *label90
   280:  write :bubblesort.1:v.1 @this .c*elem
   281:  set :bubblesort.1:flag true
   282:  set *tmp69 :bubblesort.1:flag
@@ -382,79 +382,43 @@ Final code before resolving virtual instructions:
   300:  assertprints "9876543210" "Array sort 2"
   301:  end
         multilabel *label51
-  302:  set .a*elem ".a*0"
+  302:  select .a*elem lessThan .a*ind 3 ".a*0" ".a*3"
   303:  return .a*ret
         multilabel *label52
-  304:  set .a*elem ".a*1"
+  304:  select .a*elem lessThan .a*ind 3 ".a*1" ".a*4"
   305:  return .a*ret
         multilabel *label53
   306:  set .a*elem ".a*2"
   307:  return .a*ret
+  308:  end
         multilabel *label54
-  308:  set .a*elem ".a*3"
-  309:  return .a*ret
+  309:  select .b*elem lessThan .b*ind 5 ".b*0" ".b*5"
+  310:  return .b*ret
         multilabel *label55
-  310:  set .a*elem ".a*4"
-  311:  return .a*ret
-  312:  end
+  311:  select .b*elem lessThan .b*ind 5 ".b*1" ".b*6"
+  312:  return .b*ret
         multilabel *label56
-  313:  set .b*elem ".b*0"
+  313:  select .b*elem lessThan .b*ind 5 ".b*2" ".b*7"
   314:  return .b*ret
         multilabel *label57
-  315:  set .b*elem ".b*1"
+  315:  select .b*elem lessThan .b*ind 5 ".b*3" ".b*8"
   316:  return .b*ret
         multilabel *label58
-  317:  set .b*elem ".b*2"
+  317:  select .b*elem lessThan .b*ind 5 ".b*4" ".b*9"
   318:  return .b*ret
+  319:  end
         multilabel *label59
-  319:  set .b*elem ".b*3"
-  320:  return .b*ret
+  320:  select .c*elem lessThan .c*ind 5 ".c*0" ".c*5"
+  321:  return .c*ret
         multilabel *label60
-  321:  set .b*elem ".b*4"
-  322:  return .b*ret
+  322:  select .c*elem lessThan .c*ind 5 ".c*1" ".c*6"
+  323:  return .c*ret
         multilabel *label61
-  323:  set .b*elem ".b*5"
-  324:  return .b*ret
+  324:  select .c*elem lessThan .c*ind 5 ".c*2" ".c*7"
+  325:  return .c*ret
         multilabel *label62
-  325:  set .b*elem ".b*6"
-  326:  return .b*ret
+  326:  select .c*elem lessThan .c*ind 5 ".c*3" ".c*8"
+  327:  return .c*ret
         multilabel *label63
-  327:  set .b*elem ".b*7"
-  328:  return .b*ret
-        multilabel *label64
-  329:  set .b*elem ".b*8"
-  330:  return .b*ret
-        multilabel *label65
-  331:  set .b*elem ".b*9"
-  332:  return .b*ret
-  333:  end
-        multilabel *label66
-  334:  set .c*elem ".c*0"
-  335:  return .c*ret
-        multilabel *label67
-  336:  set .c*elem ".c*1"
-  337:  return .c*ret
-        multilabel *label68
-  338:  set .c*elem ".c*2"
-  339:  return .c*ret
-        multilabel *label69
-  340:  set .c*elem ".c*3"
-  341:  return .c*ret
-        multilabel *label70
-  342:  set .c*elem ".c*4"
-  343:  return .c*ret
-        multilabel *label71
-  344:  set .c*elem ".c*5"
-  345:  return .c*ret
-        multilabel *label72
-  346:  set .c*elem ".c*6"
-  347:  return .c*ret
-        multilabel *label73
-  348:  set .c*elem ".c*7"
-  349:  return .c*ret
-        multilabel *label74
-  350:  set .c*elem ".c*8"
-  351:  return .c*ret
-        multilabel *label75
-  352:  set .c*elem ".c*9"
-  353:  return .c*ret
+  328:  select .c*elem lessThan .c*ind 5 ".c*4" ".c*9"
+  329:  return .c*ret

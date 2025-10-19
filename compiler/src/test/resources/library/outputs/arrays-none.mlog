@@ -4,8 +4,8 @@ set :fill:i 0
 jump 11 greaterThanEq :fill:i 5
 set *tmp0 :fill:i
 set .a*ret 8
-op mul *tmp85 *tmp0 2
-op add @counter 302 *tmp85
+set .a*ind *tmp0
+read @counter "ĮİĲĮİ" *tmp0
 write :fill:value @this .a*elem
 op add :fill:i :fill:i 1
 jump 3 always 0 0
@@ -21,14 +21,14 @@ jump 34 greaterThanEq :i 10
 set *tmp2 :i
 op add *tmp4 p :i
 set .b*ret 25
-op mul *tmp86 *tmp2 2
-op add @counter 313 *tmp86
+set .b*ind *tmp2
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp2
 write *tmp4 @this .b*elem
 set *tmp5 :i
 op add *tmp7 p :i
 set .c*ret 31
-op mul *tmp87 *tmp5 2
-op add @counter 334 *tmp87
+set .c*ind *tmp5
+read @counter "ŀłńņňŀłńņň" *tmp5
 write *tmp7 @this .c*elem
 op add :i :i 1
 jump 19 always 0 0
@@ -38,24 +38,24 @@ op sub *tmp8 9 :reverse:i
 set :reverse:j *tmp8
 set *tmp9 :reverse:i
 set .b*ret 42
-op mul *tmp88 *tmp9 2
-op add @counter 313 *tmp88
+set .b*ind *tmp9
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp9
 read *tmp10 @this .b*elem
 set :reverse:t *tmp10
 set *tmp11 :reverse:i
 set *tmp13 :reverse:j
 set .b*ret 49
-op mul *tmp89 *tmp13 2
-op add @counter 313 *tmp89
+set .b*ind *tmp13
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp13
 read *tmp14 @this .b*elem
 set .b*ret 53
-op mul *tmp90 *tmp11 2
-op add @counter 313 *tmp90
+set .b*ind *tmp11
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp11
 write *tmp14 @this .b*elem
 set *tmp15 :reverse:j
 set .b*ret 58
-op mul *tmp91 *tmp15 2
-op add @counter 313 *tmp91
+set .b*ind *tmp15
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp15
 write :reverse:t @this .b*elem
 op add :reverse:i :reverse:i 1
 jump 35 always 0 0
@@ -78,8 +78,8 @@ set :bubblesort:i 1
 jump 110 greaterThanEq :bubblesort:i 10
 set *tmp17 :bubblesort:i
 set .b*ret 82
-op mul *tmp92 *tmp17 2
-op add @counter 313 *tmp92
+set .b*ind *tmp17
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp17
 read *tmp18 @this .b*elem
 set :bubblesort:b *tmp18
 jump 88 equal :bubblesort:maxToMin false
@@ -93,13 +93,13 @@ jump 106 equal :bubblesort:condition false
 op sub *tmp23 :bubblesort:i 1
 set *tmp24 *tmp23
 set .b*ret 97
-op mul *tmp93 *tmp24 2
-op add @counter 313 *tmp93
+set .b*ind *tmp24
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp24
 write :bubblesort:b @this .b*elem
 set *tmp26 :bubblesort:i
 set .b*ret 102
-op mul *tmp94 *tmp26 2
-op add @counter 313 *tmp94
+set .b*ind *tmp26
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp26
 write :bubblesort:a @this .b*elem
 set :bubblesort:flag true
 set *tmp22 :bubblesort:flag
@@ -119,8 +119,8 @@ op sub :bubblesort:i.1 9 1
 jump 151 lessThan :bubblesort:i.1 0
 set *tmp30 :bubblesort:i.1
 set .b*ret 123
-op mul *tmp95 *tmp30 2
-op add @counter 313 *tmp95
+set .b*ind *tmp30
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp30
 read *tmp31 @this .b*elem
 set :bubblesort:b.1 *tmp31
 jump 129 equal :bubblesort:maxToMin false
@@ -134,13 +134,13 @@ jump 147 equal :bubblesort:condition.1 false
 op add *tmp36 :bubblesort:i.1 1
 set *tmp37 *tmp36
 set .b*ret 138
-op mul *tmp96 *tmp37 2
-op add @counter 313 *tmp96
+set .b*ind *tmp37
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp37
 write :bubblesort:b.1 @this .b*elem
 set *tmp39 :bubblesort:i.1
 set .b*ret 143
-op mul *tmp97 *tmp39 2
-op add @counter 313 *tmp97
+set .b*ind *tmp39
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp39
 write :bubblesort:a @this .b*elem
 set :bubblesort:flag true
 set *tmp35 :bubblesort:flag
@@ -169,8 +169,8 @@ set :bubblesort.1:i 1
 jump 224 greaterThanEq :bubblesort.1:i 10
 set *tmp41 :bubblesort.1:i
 set .b*ret 173
-op mul *tmp98 *tmp41 2
-op add @counter 313 *tmp98
+set .b*ind *tmp41
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp41
 read *tmp42 @this .b*elem
 set :bubblesort.1:b *tmp42
 jump 179 equal :bubblesort.1:maxToMin false
@@ -184,36 +184,36 @@ jump 220 equal :bubblesort.1:condition false
 op sub *tmp47 :bubblesort.1:i 1
 set *tmp48 *tmp47
 set .b*ret 188
-op mul *tmp99 *tmp48 2
-op add @counter 313 *tmp99
+set .b*ind *tmp48
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp48
 write :bubblesort.1:b @this .b*elem
 set *tmp50 :bubblesort.1:i
 set .b*ret 193
-op mul *tmp100 *tmp50 2
-op add @counter 313 *tmp100
+set .b*ind *tmp50
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp50
 write :bubblesort.1:a @this .b*elem
 op sub *tmp52 :bubblesort.1:i 1
 set *tmp53 *tmp52
 set .c*ret 199
-op mul *tmp101 *tmp53 2
-op add @counter 334 *tmp101
+set .c*ind *tmp53
+read @counter "ŀłńņňŀłńņň" *tmp53
 read *tmp54 @this .c*elem
 set :bubblesort.1:v *tmp54
 op sub *tmp55 :bubblesort.1:i 1
 set *tmp56 *tmp55
 set *tmp58 :bubblesort.1:i
 set .c*ret 207
-op mul *tmp102 *tmp58 2
-op add @counter 334 *tmp102
+set .c*ind *tmp58
+read @counter "ŀłńņňŀłńņň" *tmp58
 read *tmp59 @this .c*elem
 set .c*ret 211
-op mul *tmp103 *tmp56 2
-op add @counter 334 *tmp103
+set .c*ind *tmp56
+read @counter "ŀłńņňŀłńņň" *tmp56
 write *tmp59 @this .c*elem
 set *tmp60 :bubblesort.1:i
 set .c*ret 216
-op mul *tmp104 *tmp60 2
-op add @counter 334 *tmp104
+set .c*ind *tmp60
+read @counter "ŀłńņňŀłńņň" *tmp60
 write :bubblesort.1:v @this .c*elem
 set :bubblesort.1:flag true
 set *tmp46 :bubblesort.1:flag
@@ -233,8 +233,8 @@ op sub :bubblesort.1:i.1 9 1
 jump 288 lessThan :bubblesort.1:i.1 0
 set *tmp64 :bubblesort.1:i.1
 set .b*ret 237
-op mul *tmp105 *tmp64 2
-op add @counter 313 *tmp105
+set .b*ind *tmp64
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp64
 read *tmp65 @this .b*elem
 set :bubblesort.1:b.1 *tmp65
 jump 243 equal :bubblesort.1:maxToMin false
@@ -248,36 +248,36 @@ jump 284 equal :bubblesort.1:condition.1 false
 op add *tmp70 :bubblesort.1:i.1 1
 set *tmp71 *tmp70
 set .b*ret 252
-op mul *tmp106 *tmp71 2
-op add @counter 313 *tmp106
+set .b*ind *tmp71
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp71
 write :bubblesort.1:b.1 @this .b*elem
 set *tmp73 :bubblesort.1:i.1
 set .b*ret 257
-op mul *tmp107 *tmp73 2
-op add @counter 313 *tmp107
+set .b*ind *tmp73
+read @counter "ĵķĹĻĽĵķĹĻĽ" *tmp73
 write :bubblesort.1:a @this .b*elem
 op add *tmp75 :bubblesort.1:i.1 1
 set *tmp76 *tmp75
 set .c*ret 263
-op mul *tmp108 *tmp76 2
-op add @counter 334 *tmp108
+set .c*ind *tmp76
+read @counter "ŀłńņňŀłńņň" *tmp76
 read *tmp77 @this .c*elem
 set :bubblesort.1:v.1 *tmp77
 op add *tmp78 :bubblesort.1:i.1 1
 set *tmp79 *tmp78
 set *tmp81 :bubblesort.1:i.1
 set .c*ret 271
-op mul *tmp109 *tmp81 2
-op add @counter 334 *tmp109
+set .c*ind *tmp81
+read @counter "ŀłńņňŀłńņň" *tmp81
 read *tmp82 @this .c*elem
 set .c*ret 275
-op mul *tmp110 *tmp79 2
-op add @counter 334 *tmp110
+set .c*ind *tmp79
+read @counter "ŀłńņňŀłńņň" *tmp79
 write *tmp82 @this .c*elem
 set *tmp83 :bubblesort.1:i.1
 set .c*ret 280
-op mul *tmp111 *tmp83 2
-op add @counter 334 *tmp111
+set .c*ind *tmp83
+read @counter "ŀłńņňŀłńņň" *tmp83
 write :bubblesort.1:v.1 @this .c*elem
 set :bubblesort.1:flag true
 set *tmp69 :bubblesort.1:flag
@@ -300,56 +300,32 @@ print .c*8
 print .c*9
 assertprints "9876543210" "Array sort 2"
 end
-set .a*elem ".a*0"
+select .a*elem lessThan .a*ind 3 ".a*0" ".a*3"
 set @counter .a*ret
-set .a*elem ".a*1"
+select .a*elem lessThan .a*ind 3 ".a*1" ".a*4"
 set @counter .a*ret
 set .a*elem ".a*2"
 set @counter .a*ret
-set .a*elem ".a*3"
-set @counter .a*ret
-set .a*elem ".a*4"
-set @counter .a*ret
 end
-set .b*elem ".b*0"
+select .b*elem lessThan .b*ind 5 ".b*0" ".b*5"
 set @counter .b*ret
-set .b*elem ".b*1"
+select .b*elem lessThan .b*ind 5 ".b*1" ".b*6"
 set @counter .b*ret
-set .b*elem ".b*2"
+select .b*elem lessThan .b*ind 5 ".b*2" ".b*7"
 set @counter .b*ret
-set .b*elem ".b*3"
+select .b*elem lessThan .b*ind 5 ".b*3" ".b*8"
 set @counter .b*ret
-set .b*elem ".b*4"
-set @counter .b*ret
-set .b*elem ".b*5"
-set @counter .b*ret
-set .b*elem ".b*6"
-set @counter .b*ret
-set .b*elem ".b*7"
-set @counter .b*ret
-set .b*elem ".b*8"
-set @counter .b*ret
-set .b*elem ".b*9"
+select .b*elem lessThan .b*ind 5 ".b*4" ".b*9"
 set @counter .b*ret
 end
-set .c*elem ".c*0"
+select .c*elem lessThan .c*ind 5 ".c*0" ".c*5"
 set @counter .c*ret
-set .c*elem ".c*1"
+select .c*elem lessThan .c*ind 5 ".c*1" ".c*6"
 set @counter .c*ret
-set .c*elem ".c*2"
+select .c*elem lessThan .c*ind 5 ".c*2" ".c*7"
 set @counter .c*ret
-set .c*elem ".c*3"
+select .c*elem lessThan .c*ind 5 ".c*3" ".c*8"
 set @counter .c*ret
-set .c*elem ".c*4"
-set @counter .c*ret
-set .c*elem ".c*5"
-set @counter .c*ret
-set .c*elem ".c*6"
-set @counter .c*ret
-set .c*elem ".c*7"
-set @counter .c*ret
-set .c*elem ".c*8"
-set @counter .c*ret
-set .c*elem ".c*9"
+select .c*elem lessThan .c*ind 5 ".c*4" ".c*9"
 set @counter .c*ret
 print "Compiled by Mindcode - github.com/cardillan/mindcode"

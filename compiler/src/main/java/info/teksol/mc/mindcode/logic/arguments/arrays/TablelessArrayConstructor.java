@@ -15,8 +15,18 @@ import java.util.function.Function;
 @NullMarked
 public abstract class TablelessArrayConstructor extends AbstractArrayConstructor {
 
-    public TablelessArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction);
+    public TablelessArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction);
+    }
+
+    @Override
+    public boolean folded() {
+        return false;
+    }
+
+    @Override
+    public boolean canFold() {
+        return false;
     }
 
     @Override

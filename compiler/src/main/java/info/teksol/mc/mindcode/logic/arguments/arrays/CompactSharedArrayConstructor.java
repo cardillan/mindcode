@@ -20,25 +20,39 @@ import java.util.function.Function;
 public class CompactSharedArrayConstructor extends SharedArrayConstructor {
     private final LogicValue storageProcessor;
 
-    public CompactSharedArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction, "ind", "ret", "elem");
+    public CompactSharedArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction, "ind", "ret", "elem");
         storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
         instruction.setIndirectVariables(arrayElements());
     }
 
     @Override
+    public boolean folded() {
+        return instruction.isArrayFolded();
+    }
+
+    @Override
+    public boolean canFold() {
+        return !instruction.isArrayFolded();
+    }
+
+    @Override
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
+        if (skipCompactLookup()) return 1;
+
         computeSharedJumpTableSize(sharedStructures);
         int checkSize = profile.getBoundaryChecks().getSize();
-        return instruction.isCompactAccessTarget() ? 1 : useTextTables
+        return useTextTables
                 ? checkSize + 3 + flag(folded())
                 : checkSize + 4 + flag(folded() && !profile.isSymbolicLabels());
     }
 
     @Override
     public double getExecutionSteps() {
-        return instruction.isCompactAccessTarget() ? 1
-                : profile.getBoundaryChecks().getSize() + 6 - flag(useTextTables) + flag(folded()) + flag(profile.isSymbolicLabels());
+        if (skipCompactLookup()) return 1;
+
+        int checkSize = profile.getBoundaryChecks().getSize();
+        return checkSize + 6 - flag(useTextTables) + flag(folded()) + flag(profile.isSymbolicLabels());
     }
 
     @Override
@@ -72,6 +86,8 @@ public class CompactSharedArrayConstructor extends SharedArrayConstructor {
 
     @Override
     public String getJumpTableId() {
+        if (skipCompactLookup()) return "";
+
         return arrayStore.getName() + (folded() ? "-fe" : "-e");
     }
 

@@ -33,4 +33,10 @@ public interface ArrayConstructor {
     default LogicVariable getElementNameVariable() {
         throw new UnsupportedOperationException("Not supported for class " + getClass().getName());
     }
+
+    /// Returns true if the `@counter` table is folded.
+    boolean folded();
+
+    /// Returns true if the `@counter` table can be folded. If it already is folded, returns false.
+    boolean canFold();
 }

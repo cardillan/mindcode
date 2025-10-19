@@ -4,6 +4,7 @@ import info.teksol.mc.messages.AbstractMessageEmitter;
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
 import info.teksol.mc.mindcode.logic.instructions.ContextlessInstructionCreator;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
@@ -14,8 +15,10 @@ import info.teksol.mc.profile.GenerationGoal;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.intellij.lang.annotations.PrintFormat;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.List;
+import java.util.Map;
 
 @NullMarked
 abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optimizer, ContextlessInstructionCreator {
@@ -191,12 +194,60 @@ abstract class AbstractOptimizer extends AbstractMessageEmitter implements Optim
     }
 
     protected record OptimizationEffect(int cost, double benefit) {
-        OptimizationEffect(int cost) {
-            this(cost, 0);
+        protected OptimizationEffect() {
+            this(0, 0.0);
         }
 
-        public OptimizationEffect sum(OptimizationEffect other) {
+        public OptimizationEffect(int cost) {
+            this(cost, 0.0);
+        }
+
+        public OptimizationEffect add(OptimizationEffect other) {
             return new OptimizationEffect(this.cost + other.cost, this.benefit + other.benefit);
         }
+
+        public OptimizationEffect add(int cost, double benefit) {
+            return new OptimizationEffect(this.cost + cost, this.benefit + benefit);
+        }
+
+        public OptimizationEffect add(int cost) {
+            return new OptimizationEffect(this.cost + cost, benefit);
+        }
+
+        public OptimizationEffect add(double benefit) {
+            return new OptimizationEffect(cost, this.benefit + benefit);
+        }
+
+        /// Returns `true` if the effect is better in at least one metric, and not worse in the other.
+        /// Such optimization should always be applied.
+        public boolean totalImprovement() {
+            return cost <= 0 && benefit >= 0.0 && improvement();
+        }
+
+        /// Returns `true` if the effect improves at least one metric.
+        /// Such optimization can be applied.
+        public boolean improvement() {
+            return cost < 0 || benefit > 0.0;
+        }
+
+        public static OptimizationEffect NONE = new OptimizationEffect();
+
+        public static OptimizationEffect fromComparison(ArrayAccessInstruction original, ArrayAccessInstruction optimized,
+                @Nullable Map<String, Integer> originalStructures, @Nullable Map<String, Integer> optimizedStructures) {
+            int originalSize = original.getRealSize(originalStructures);
+            double originalSteps = original.getExecutionSteps();
+
+            int optimizedSize = optimized.getRealSize(optimizedStructures);
+            double optimizedSteps = optimized.getExecutionSteps();
+
+            double weight = original.getAstContext().totalWeight();
+
+            return new OptimizationEffect(optimizedSize - originalSize, weight * (originalSteps - optimizedSteps));
+        }
+
+        public static OptimizationEffect fromComparison(ArrayAccessInstruction original, ArrayAccessInstruction optimized) {
+            return fromComparison(original, optimized, null, null);
+        }
+
     }
 }

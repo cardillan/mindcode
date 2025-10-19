@@ -15,14 +15,19 @@ import java.util.function.BiFunction;
 public class ReadSharedArrayConstructor extends RegularSharedArrayConstructor {
     private final ReadArrInstruction instruction;
 
-    public ReadSharedArrayConstructor(ReadArrInstruction instruction) {
-        super(instruction, "rind", "rret", "r");
+    public ReadSharedArrayConstructor(ArrayConstructorContext context, ReadArrInstruction instruction) {
+        super(context, instruction, "rind", "rret", "r");
         this.instruction = instruction;
     }
 
     @Override
-    protected boolean folded() {
+    public boolean folded() {
         return !arrayStore.isRemote() && instruction.isArrayFolded();
+    }
+
+    @Override
+    public boolean canFold() {
+        return !arrayStore.isRemote() && !instruction.isArrayFolded();
     }
 
     @Override

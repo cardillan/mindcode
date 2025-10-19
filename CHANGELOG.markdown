@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/), and this project now adheres to [Semantic Versioning](https://semver.org/).
 
-## 3.8.1 - Unreleased
+## 3.9.0 - Unreleased
 
 ### Fixed
 
@@ -16,12 +16,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-tables),
   * [folded `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#folded-tables),
   * [lookup arrays](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays).
+* Added support for using [text-based table dispatch](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-table-dispatch) in array implementations.  
 
 ### Changed
 
+* **Breaking**: specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
 * The `mlog` modifier accepts multiple expressions, allowing to specify names for individual array elements.
 * The `mlog` modifier also accepts one of the lookup keywords (`:block`, `:unit`, `:item`, `:liquid` or `:team`) in array declarations, allowing to specify the lookup type used by the array.
-* **Breaking**: specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
 * The `cached` and `noinit cached` modifiers can be used with variables declared `remote`, with the same effect as in case of variables declared `external`.  
 
 ### Deprecated
@@ -145,7 +146,7 @@ The newly added features are fully functional. There's an unfinished support for
 * Added a [`null-counter-is-noop` compiler option](/doc/syntax/SYNTAX-5-OTHER.markdown#option-null-counter-is-noop). When active, Mindcode assumes assigning a `null` to `@counter` is ignored by the processor and may produce code depending on this behavior.
 * Added support for new instruction opcodes (`setmarker textAlign` and `setmarker lineAlign`).
 * Added specific support for the new `select` instruction. The instruction is not accessible to the user directly but is used by optimizers to encode conditional expressions.
-* Added preliminary support for generating [text-based jump tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
+* Added support for generating [text-based jump tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-jump-tables).
 
 ### Changed
 

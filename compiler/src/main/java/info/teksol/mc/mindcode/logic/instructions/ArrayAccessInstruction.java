@@ -53,10 +53,16 @@ public interface ArrayAccessInstruction extends LogicInstruction {
         return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_LOOKUP_TYPE, arrayLookupType);
     }
 
+    /// True if folding @counter table of the array is requested. The table will only be folded when
+    /// possible, the flag is ignored otherwise. `ArrayConstructor.folded()` indicates whether the
+    /// table is actually folded.
     default boolean isArrayFolded() {
         return (boolean) getInfo(InstructionInfo.ARRAY_FOLDED);
     }
 
+    /// Sets the status of @counter table folding request. The table will only be folded when
+    /// possible, the flag is ignored otherwise. `ArrayConstructor.folded()` indicates whether the
+    /// table is actually folded.
     default ArrayAccessInstruction setArrayFolded(boolean folded) {
         return (ArrayAccessInstruction) setInfo(InstructionInfo.ARRAY_FOLDED, folded);
     }

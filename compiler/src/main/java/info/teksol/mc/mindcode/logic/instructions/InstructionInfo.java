@@ -27,7 +27,9 @@ public enum InstructionInfo {
     /// Array construction for ReadArr/WriteArr instructions
     ARRAY_CONSTRUCTION(ArrayConstruction.COMPACT),
 
-    /// Fold @counter table of the array (if possible)
+    /// Folding @counter table of the array is requested. The table will only be folded when
+    /// possible, the flag is ignored otherwise. `ArrayConstructor.folded()` indicates whether the
+    /// table is actually folded.
     ARRAY_FOLDED(Boolean.FALSE),
 
     /// This instruction is a compact-array access instruction, setting up the element variable name

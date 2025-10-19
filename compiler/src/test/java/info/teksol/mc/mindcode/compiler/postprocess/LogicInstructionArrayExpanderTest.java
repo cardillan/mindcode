@@ -426,55 +426,74 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
             // return addresses for the array element access), and loop unrolling second. The loop unrolling
             // must copy the setaddr instructions back into the loop. The order of the instruction matters!
             assertCompilesTo("""
-                    #set instruction-limit = 50;
+                    #set target = 7;
+                    #set instruction-limit = 60;
                     #set array-optimization = none;
-
+                    
                     const SIZE = 4;
                     var a[SIZE];
-    
-                    for i in 0 ... 3 do
+                    
+                    for i in 0 ... 4 do
                         a[floor(rand(SIZE))]++;
                     end;
-    
-                    print(a);
+                    
+                    print(a[floor(rand(SIZE))]);
                     """,
                     createInstruction(OP, "rand", tmp(0), "4"),
                     createInstruction(OP, "floor", tmp(2), tmp(0)),
-                    createInstruction(SET, ".a*ret", "5"),
-                    createInstruction(OP, "mul", tmp(5), tmp(2), "2"),
-                    createInstruction(OP, "add", "@counter", "29", tmp(5)),
-                    createInstruction(READ, tmp(3), "@this", ".a*elem"),
-                    createInstruction(OP, "add", tmp(3), tmp(3), "1"),
-                    createInstruction(WRITE, tmp(3), "@this", ".a*elem"),
+                    createInstruction(OP, "mul", tmp(10), tmp(2), "2"),
+                    createInstruction(SET, ".a*rret", "5"),
+                    createInstruction(OP, "add", "@counter", "39", tmp(10)),
+                    createInstruction(OP, "add", ".a*w", ".a*r", "1"),
+                    createInstruction(SET, ".a*wret", "8"),
+                    createInstruction(OP, "add", "@counter", "47", tmp(10)),
                     createInstruction(OP, "rand", tmp(0), "4"),
                     createInstruction(OP, "floor", tmp(2), tmp(0)),
-                    createInstruction(SET, ".a*ret", "13"),
-                    createInstruction(OP, "mul", tmp(6), tmp(2), "2"),
-                    createInstruction(OP, "add", "@counter", "29", tmp(6)),
-                    createInstruction(READ, tmp(3), "@this", ".a*elem"),
-                    createInstruction(OP, "add", tmp(3), tmp(3), "1"),
-                    createInstruction(WRITE, tmp(3), "@this", ".a*elem"),
+                    createInstruction(OP, "mul", tmp(10), tmp(2), "2"),
+                    createInstruction(SET, ".a*rret", "13"),
+                    createInstruction(OP, "add", "@counter", "39", tmp(10)),
+                    createInstruction(OP, "add", ".a*w", ".a*r", "1"),
+                    createInstruction(SET, ".a*wret", "16"),
+                    createInstruction(OP, "add", "@counter", "47", tmp(10)),
                     createInstruction(OP, "rand", tmp(0), "4"),
                     createInstruction(OP, "floor", tmp(2), tmp(0)),
-                    createInstruction(SET, ".a*ret", "21"),
-                    createInstruction(OP, "mul", tmp(7), tmp(2), "2"),
-                    createInstruction(OP, "add", "@counter", "29", tmp(7)),
-                    createInstruction(READ, tmp(3), "@this", ".a*elem"),
-                    createInstruction(OP, "add", tmp(3), tmp(3), "1"),
-                    createInstruction(WRITE, tmp(3), "@this", ".a*elem"),
-                    createInstruction(PRINT, ".a*0"),
-                    createInstruction(PRINT, ".a*1"),
-                    createInstruction(PRINT, ".a*2"),
-                    createInstruction(PRINT, ".a*3"),
+                    createInstruction(OP, "mul", tmp(10), tmp(2), "2"),
+                    createInstruction(SET, ".a*rret", "21"),
+                    createInstruction(OP, "add", "@counter", "39", tmp(10)),
+                    createInstruction(OP, "add", ".a*w", ".a*r", "1"),
+                    createInstruction(SET, ".a*wret", "24"),
+                    createInstruction(OP, "add", "@counter", "47", tmp(10)),
+                    createInstruction(OP, "rand", tmp(0), "4"),
+                    createInstruction(OP, "floor", tmp(2), tmp(0)),
+                    createInstruction(OP, "mul", tmp(10), tmp(2), "2"),
+                    createInstruction(SET, ".a*rret", "29"),
+                    createInstruction(OP, "add", "@counter", "39", tmp(10)),
+                    createInstruction(OP, "add", ".a*w", ".a*r", "1"),
+                    createInstruction(SET, ".a*wret", "32"),
+                    createInstruction(OP, "add", "@counter", "47", tmp(10)),
+                    createInstruction(OP, "rand", tmp(5), "4"),
+                    createInstruction(OP, "floor", tmp(6), tmp(5)),
+                    createInstruction(SET, ".a*rret", "37"),
+                    createInstruction(OP, "mul", tmp(12), tmp(6), "2"),
+                    createInstruction(OP, "add", "@counter", "39", tmp(12)),
+                    createInstruction(PRINT, ".a*r"),
                     createInstruction(END),
-                    createInstruction(SET, ".a*elem", q(".a*0")),
-                    createInstruction(SET, "@counter", ".a*ret"),
-                    createInstruction(SET, ".a*elem", q(".a*1")),
-                    createInstruction(SET, "@counter", ".a*ret"),
-                    createInstruction(SET, ".a*elem", q(".a*2")),
-                    createInstruction(SET, "@counter", ".a*ret"),
-                    createInstruction(SET, ".a*elem", q(".a*3")),
-                    createInstruction(SET, "@counter", ".a*ret"),
+                    createInstruction(SET, ".a*r", ".a*0"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*r", ".a*1"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*r", ".a*2"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*r", ".a*3"),
+                    createInstruction(SET, "@counter", ".a*rret"),
+                    createInstruction(SET, ".a*0", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
+                    createInstruction(SET, ".a*1", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
+                    createInstruction(SET, ".a*2", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
+                    createInstruction(SET, ".a*3", ".a*w"),
+                    createInstruction(SET, "@counter", ".a*wret"),
                     createInstruction(PRINT, q(CompilerProfile.SIGNATURE))
             );
         }

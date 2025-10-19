@@ -13,6 +13,7 @@ import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.mimex.MindustryContent;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
+import info.teksol.mc.profile.BuiltinEvaluation;
 import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -40,6 +41,7 @@ import static info.teksol.mc.mindcode.compiler.Modifier.*;
 public class Variables extends AbstractMessageEmitter {
     private final Set<AstMindcodeNode> reportedErrors = Collections.newSetFromMap(new IdentityHashMap<>());
 
+    private final GlobalCompilerProfile globalProfile;
     private final InstructionProcessor processor;
     private final NameCreator nameCreator;
     private final Map<String, ValueStore> globalVariables;
@@ -51,15 +53,15 @@ public class Variables extends AbstractMessageEmitter {
 
     public Variables(VariablesContext context) {
         super(context.messageConsumer());
+        globalProfile = context.globalCompilerProfile();
         processor = context.instructionProcessor();
         nameCreator = context.nameCreator();
         heapTracker = HeapTracker.createDefaultTracker(context);
         globalVariables = context.metadata().getIcons().createIconMapAsValueStore();
-        GlobalCompilerProfile profile = context.globalCompilerProfile();
-        putVariable("__MINDUSTRY_VERSION__", LogicString.create(profile.getProcessorVersion().mimexVersion));
-        putVariable("__TARGET_MAJOR__", LogicNumber.create(profile.getProcessorVersion().major));
-        putVariable("__TARGET_MINOR__", LogicNumber.create(profile.getProcessorVersion().minor));
-        putVariable("__PROCESSOR_EDITION__", LogicString.create(profile.getProcessorEdition().editionName()));
+        putVariable("__MINDUSTRY_VERSION__", LogicString.create(globalProfile.getProcessorVersion().mimexVersion));
+        putVariable("__TARGET_MAJOR__", LogicNumber.create(globalProfile.getProcessorVersion().major));
+        putVariable("__TARGET_MINOR__", LogicNumber.create(globalProfile.getProcessorVersion().minor));
+        putVariable("__PROCESSOR_EDITION__", LogicString.create(globalProfile.getProcessorEdition().editionName()));
     }
 
     public NameCreator nameCreator() {
@@ -469,8 +471,13 @@ public class Variables extends AbstractMessageEmitter {
                 if (mlogNames.size() > 1) {
                     error(sourceElement, ERR.MODIFIER_MLOG_TOO_MAY_VALUES);
                 }
+
                 if (!processor.getProcessorVersion().atLeast(ProcessorVersion.V8A)) {
                     error(sourceElement, ERR.LOOKUP_REQUIRES_TARGET_8);
+                }
+
+                if (globalProfile.getBuiltinEvaluation() == BuiltinEvaluation.NONE) {
+                    error(sourceElement, ERR.LOOKUP_REQUIRES_BUILTIN_EVALUATION);
                 }
 
                 Map<Integer, ? extends MindustryContent> lookupMap = processor.getMetadata().getLookupMap(keyword.getKeyword());

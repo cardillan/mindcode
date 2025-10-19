@@ -201,8 +201,9 @@ public class DiffDebugPrinter implements DebugPrinter {
                 case NONE -> {}
                 case LOOKUP -> str.append("<lookup:").append(aai.getArrayLookupType().getKeyword()).append('>');
                 default -> {
-                    str.append('<').append(aai.getArrayOrganization().getName())
-                            .append(':').append(aai.getArrayConstruction().getName());
+                    str.append('<').append(aai.getArrayOrganization().getName());
+                    if (aai.getArrayConstructor().folded()) str.append(":folded");
+                    str.append(':').append(aai.getArrayConstruction().getName());
                     if (aai.isCompactAccessSource()) str.append(":src");
                     if (aai.isCompactAccessTarget()) str.append(":dst");
                     str.append('>');

@@ -16,13 +16,18 @@ import java.util.function.BiFunction;
 public class WriteInlinedArrayConstructor extends RegularInlinedArrayConstructor {
     private final WriteArrInstruction instruction;
 
-    public WriteInlinedArrayConstructor(WriteArrInstruction instruction) {
-        super(instruction, LogicVariable.INVALID);
+    public WriteInlinedArrayConstructor(ArrayConstructorContext context, WriteArrInstruction instruction) {
+        super(context, instruction, LogicVariable.INVALID);
         this.instruction = instruction;
     }
 
     @Override
-    protected boolean folded() {
+    public boolean folded() {
+        return false;
+    }
+
+    @Override
+    public boolean canFold() {
         return false;
     }
 

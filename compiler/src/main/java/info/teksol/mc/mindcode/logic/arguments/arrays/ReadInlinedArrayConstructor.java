@@ -14,14 +14,19 @@ import java.util.function.BiFunction;
 public class ReadInlinedArrayConstructor extends RegularInlinedArrayConstructor {
     private final ReadArrInstruction instruction;
 
-    public ReadInlinedArrayConstructor(ReadArrInstruction instruction) {
-        super(instruction, instruction.getResult());
+    public ReadInlinedArrayConstructor(ArrayConstructorContext context, ReadArrInstruction instruction) {
+        super(context, instruction, instruction.getResult());
         this.instruction = instruction;
     }
 
     @Override
-    protected boolean folded() {
+    public boolean folded() {
         return !arrayStore.isRemote() && instruction.isArrayFolded();
+    }
+
+    @Override
+    public boolean canFold() {
+        return !arrayStore.isRemote() && !instruction.isArrayFolded();
     }
 
     @Override

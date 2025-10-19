@@ -225,6 +225,18 @@ public class CompilerOptionFactory {
                 OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.LOCAL,
                 OptionAvailability.UNIVERSAL, category,
                 true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_LOOKUP_ARRAYS, "",
+                "allows using the lookup mechanism for implementing internal arrays",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
+        list.add(new BooleanCompilerOptionValue(OptimizationOptions.USE_SHORT_ARRAYS, "",
+                "allows using specialized implementation of short arrays (2-4 elements)",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
     }
 
     private static void addOptimizationLevels(List<CompilerOptionValue<?>> list, boolean webApp) {

@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -27,10 +26,10 @@ import java.util.function.Consumer;
 public class LookupArrayConstructor extends TablelessArrayConstructor {
     private final LogicVariable arrayElem;
 
-    public LookupArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction);
+    public LookupArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction);
 
-        NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
+        NameCreator nameCreator = context.nameCreator();
         String baseName = arrayStore.getName();
         arrayElem = LogicVariable.arrayAccess(baseName, "*elem", nameCreator.arrayAccess(baseName, "elem"));
 

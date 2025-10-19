@@ -1,4 +1,4 @@
-   115 instructions before optimizations.
+   105 instructions before optimizations.
      2 instructions eliminated by Temp Variables Elimination (7 iterations).
      2 instructions eliminated by Dead Code Elimination (4 iterations).
      5 instructions eliminated by Jump Normalization (6 iterations).
@@ -39,8 +39,8 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
      1 label *label0
      2 jump *label2 greaterThanEq :i 10
 -    * set *tmp0 :i
--    * writearr<internal:compact> :i .array[] *tmp0
-+    3 writearr<internal:compact:src> :i .array[] :i
+-    * writearr<internal:folded:compact> :i .array[] *tmp0
++    3 writearr<internal:folded:compact:src> :i .array[] :i
      4 label *label1
      5 op add :i :i 1
      6 jump *label0 always
@@ -356,11 +356,11 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 6 (-1
     82 multijump *tmp3 0 0 (m:marker0)
     83 multilabel *label16 (m:marker0)
 
-Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-21 instructions):
+Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-11 instructions):
      0 set :i 0
      1 label *label0
      2 jump *label2 greaterThanEq :i 10
--    * writearr<internal:compact:src> :i .array[] :i
+-    * writearr<internal:folded:compact:src> :i .array[] :i
 +    3 writearr<lookup:liquid> :i .array[] :i
      4 label *label1
      5 op add :i :i 1

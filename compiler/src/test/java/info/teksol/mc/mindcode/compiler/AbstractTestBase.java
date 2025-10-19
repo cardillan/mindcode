@@ -16,6 +16,7 @@ import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
 import info.teksol.mc.mindcode.compiler.generation.variables.StandardNameCreator;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.arguments.arrays.ArrayConstructorContext;
 import info.teksol.mc.mindcode.logic.instructions.CustomInstruction;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import info.teksol.mc.mindcode.logic.instructions.InstructionProcessorFactory;
@@ -24,6 +25,7 @@ import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorEdition;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.profile.CompilerProfile;
+import info.teksol.mc.profile.GlobalCompilerProfile;
 import org.intellij.lang.annotations.Language;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
@@ -40,7 +42,12 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @NullMarked
-public abstract class AbstractTestBase {
+public abstract class AbstractTestBase extends AbstractMessageEmitter implements ArrayConstructorContext {
+
+    public AbstractTestBase() {
+        super(ExpectedMessages.throwOnMessage());
+    }
+
     public static final String SCRIPTS_BASE_DIRECTORY = "src/test/resources/info/teksol/mc/mindcode/tests";
 
     protected static final SourcePosition EMPTY = SourcePosition.EMPTY;
@@ -308,4 +315,20 @@ public abstract class AbstractTestBase {
     protected static final LogicKeyword
             color       = LogicKeyword.create("color"),
             item        = LogicKeyword.create("item");
+
+
+    @Override
+    public GlobalCompilerProfile globalCompilerProfile() {
+        return profile;
+    }
+
+    @Override
+    public InstructionProcessor instructionProcessor() {
+        return ip;
+    }
+
+    @Override
+    public NameCreator nameCreator() {
+        return nameCreator;
+    }
 }

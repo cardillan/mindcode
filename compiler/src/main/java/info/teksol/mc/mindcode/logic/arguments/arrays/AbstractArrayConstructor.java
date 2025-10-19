@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
@@ -37,8 +36,8 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected final ArrayStore arrayStore;
     protected final boolean useTextTables;
 
-    public AbstractArrayConstructor(ArrayAccessInstruction instruction) {
-        this.processor = MindcodeCompiler.getContext().instructionProcessor();
+    public AbstractArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        this.processor = context.instructionProcessor();
         this.profile = instruction.getAstContext().getCompilerProfile();
         this.instruction = instruction;
         this.arrayConstruction = instruction.getArrayConstruction();
@@ -91,8 +90,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
     protected void computeSharedJumpTableSize(@Nullable Map<String, Integer> sharedStructures) {
         if (sharedStructures != null) {
-            String key = arrayStore.getName() + getJumpTableId();
-            sharedStructures.computeIfAbsent(key, _ -> getSharedTableSize());
+            sharedStructures.computeIfAbsent(getJumpTableId(), _ -> getSharedTableSize());
         }
     }
 
@@ -114,6 +112,10 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
             case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max);
             case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
         }
+    }
+
+    protected boolean skipCompactLookup() {
+        return arrayConstruction == ArrayConstruction.COMPACT && instruction.isCompactAccessTarget();
     }
 
     // UNFOLDED TABLE
@@ -262,10 +264,6 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
             default -> throw new MindcodeInternalError("Unhandled ArrayAccessInstruction");
         }
-    }
-
-    protected boolean folded() {
-        return instruction.isArrayFolded();
     }
 
     protected final int flag(boolean flag) {

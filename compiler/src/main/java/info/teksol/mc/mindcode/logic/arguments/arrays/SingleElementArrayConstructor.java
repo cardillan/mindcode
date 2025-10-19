@@ -13,8 +13,8 @@ import java.util.function.Consumer;
 
 @NullMarked
 public class SingleElementArrayConstructor extends TablelessArrayConstructor {
-    public SingleElementArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction);
+    public SingleElementArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction);
     }
 
     @Override

@@ -1,4 +1,4 @@
-   107 instructions before optimizations.
+    87 instructions before optimizations.
      4 instructions eliminated by Temp Variables Elimination (7 iterations).
      1 instructions eliminated by Dead Code Elimination (4 iterations).
      1 instructions eliminated by Single Step Elimination (7 iterations).
@@ -12,7 +12,7 @@ Modifications by Initial phase, Dead Code Elimination, iteration 1 (-1 instructi
  
     24 label *label5
     25 set *tmp9 :lineLength
-    26 writearr<internal:compact> 1 .currentLine[] *tmp9
+    26 writearr<internal:folded:compact> 1 .currentLine[] *tmp9
 -    * set *tmp11 :lineLength
     27 op add :lineLength :lineLength 1
     28 set *tmp12 :lineLength
@@ -27,29 +27,29 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-7 inst
 -    * set *tmp4 *tmp3
 +   14 op sub *tmp4 :j 1
     15 set *tmp6 :j
-    16 readarr<internal:compact> *tmp5 .previousLine[] *tmp4
-    17 readarr<internal:compact> *tmp7 .previousLine[] *tmp6
+    16 readarr<internal:folded:compact> *tmp5 .previousLine[] *tmp4
+    17 readarr<internal:folded:compact> *tmp7 .previousLine[] *tmp6
  
     21 op add :j :j 1
     22 jump *label3 always
     23 label *label5
 -    * set *tmp9 :lineLength
--    * writearr<internal:compact> 1 .currentLine[] *tmp9
-+   24 writearr<internal:compact> 1 .currentLine[] :lineLength
+-    * writearr<internal:folded:compact> 1 .currentLine[] *tmp9
++   24 writearr<internal:folded:compact> 1 .currentLine[] :lineLength
     25 op add :lineLength :lineLength 1
     26 set *tmp12 :lineLength
     27 set :c 0
     28 label *label6
     29 jump *label8 greaterThanEq :c *tmp12
 -    * set *tmp13 :c
--    * readarr<internal:compact> *tmp14 .currentLine[] *tmp13
-+   30 readarr<internal:compact:src> *tmp14 .currentLine[] :c
+-    * readarr<internal:folded:compact> *tmp14 .currentLine[] *tmp13
++   30 readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
     31 op add :total :total *tmp14
     32 set *tmp15 :c
 -    * set *tmp17 :c
--    * readarr<internal:compact> *tmp18 .currentLine[] *tmp17
-+   33 readarr<internal:compact:dst> *tmp18 .currentLine[] :c
-    34 writearr<internal:compact> *tmp18 .previousLine[] *tmp15
+-    * readarr<internal:folded:compact> *tmp18 .currentLine[] *tmp17
++   33 readarr<internal:folded:compact:dst> *tmp18 .currentLine[] :c
+    34 writearr<internal:folded:compact> *tmp18 .previousLine[] *tmp15
     35 label *label7
     36 op add :c :c 1
 
@@ -63,12 +63,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     13 set *tmp1 :j
     14 op sub *tmp4 :j 1
     15 set *tmp6 :j
-    16 readarr<internal:compact> *tmp5 .previousLine[] *tmp4
--    * readarr<internal:compact> *tmp7 .previousLine[] *tmp6
-+   17 readarr<internal:compact> *tmp7 .previousLine[] :j
+    16 readarr<internal:folded:compact> *tmp5 .previousLine[] *tmp4
+-    * readarr<internal:folded:compact> *tmp7 .previousLine[] *tmp6
++   17 readarr<internal:folded:compact> *tmp7 .previousLine[] :j
     18 op add *tmp8 *tmp5 *tmp7
--    * writearr<internal:compact> *tmp8 .currentLine[] *tmp1
-+   19 writearr<internal:compact> *tmp8 .currentLine[] :j
+-    * writearr<internal:folded:compact> *tmp8 .currentLine[] *tmp1
++   19 writearr<internal:folded:compact> *tmp8 .currentLine[] :j
     20 label *label4
     21 op add :j :j 1
     22 jump *label3 always
@@ -78,12 +78,12 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
     28 label *label6
 -    * jump *label8 greaterThanEq :c *tmp12
 +   29 jump *label8 greaterThanEq :c :lineLength
-    30 readarr<internal:compact:src> *tmp14 .currentLine[] :c
+    30 readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
     31 op add :total :total *tmp14
     32 set *tmp15 :c
-    33 readarr<internal:compact:dst> *tmp18 .currentLine[] :c
--    * writearr<internal:compact> *tmp18 .previousLine[] *tmp15
-+   34 writearr<internal:compact> *tmp18 .previousLine[] :c
+    33 readarr<internal:folded:compact:dst> *tmp18 .currentLine[] :c
+-    * writearr<internal:folded:compact> *tmp18 .previousLine[] *tmp15
++   34 writearr<internal:folded:compact> *tmp18 .previousLine[] :c
     35 label *label7
     36 op add :c :c 1
     37 jump *label6 always
@@ -100,51 +100,51 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-5
 -    * set *tmp1 :j
     12 op sub *tmp4 :j 1
 -    * set *tmp6 :j
-    13 readarr<internal:compact> *tmp5 .previousLine[] *tmp4
-    14 readarr<internal:compact> *tmp7 .previousLine[] :j
+    13 readarr<internal:folded:compact> *tmp5 .previousLine[] *tmp4
+    14 readarr<internal:folded:compact> *tmp7 .previousLine[] :j
     15 op add *tmp8 *tmp5 *tmp7
  
     20 label *label5
-    21 writearr<internal:compact> 1 .currentLine[] :lineLength
+    21 writearr<internal:folded:compact> 1 .currentLine[] :lineLength
     22 op add :lineLength :lineLength 1
 -    * set *tmp12 :lineLength
     23 set :c 0
     24 label *label6
     25 jump *label8 greaterThanEq :c :lineLength
-    26 readarr<internal:compact:src> *tmp14 .currentLine[] :c
+    26 readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
     27 op add :total :total *tmp14
 -    * set *tmp15 :c
-    28 readarr<internal:compact:dst> *tmp18 .currentLine[] :c
-    29 writearr<internal:compact> *tmp18 .previousLine[] :c
+    28 readarr<internal:folded:compact:dst> *tmp18 .currentLine[] :c
+    29 writearr<internal:folded:compact> *tmp18 .previousLine[] :c
     30 label *label7
 
-Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-46 instructions):
+Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-26 instructions):
  
     10 label *label3
     11 jump *label5 greaterThan :j :lineLength
     12 op sub *tmp4 :j 1
--    * readarr<internal:compact> *tmp5 .previousLine[] *tmp4
--    * readarr<internal:compact> *tmp7 .previousLine[] :j
+-    * readarr<internal:folded:compact> *tmp5 .previousLine[] *tmp4
+-    * readarr<internal:folded:compact> *tmp7 .previousLine[] :j
 +   13 readarr<lookup:item> *tmp5 .previousLine[] *tmp4
 +   14 readarr<lookup:item> *tmp7 .previousLine[] :j
     15 op add *tmp8 *tmp5 *tmp7
--    * writearr<internal:compact> *tmp8 .currentLine[] :j
+-    * writearr<internal:folded:compact> *tmp8 .currentLine[] :j
 +   16 writearr<lookup:liquid> *tmp8 .currentLine[] :j
     17 label *label4
     18 op add :j :j 1
     19 jump *label3 always
     20 label *label5
--    * writearr<internal:compact> 1 .currentLine[] :lineLength
+-    * writearr<internal:folded:compact> 1 .currentLine[] :lineLength
 +   21 writearr<lookup:liquid> 1 .currentLine[] :lineLength
     22 op add :lineLength :lineLength 1
     23 set :c 0
     24 label *label6
     25 jump *label8 greaterThanEq :c :lineLength
--    * readarr<internal:compact:src> *tmp14 .currentLine[] :c
+-    * readarr<internal:folded:compact:src> *tmp14 .currentLine[] :c
 +   26 readarr<lookup:liquid> *tmp14 .currentLine[] :c
     27 op add :total :total *tmp14
--    * readarr<internal:compact:dst> *tmp18 .currentLine[] :c
--    * writearr<internal:compact> *tmp18 .previousLine[] :c
+-    * readarr<internal:folded:compact:dst> *tmp18 .currentLine[] :c
+-    * writearr<internal:folded:compact> *tmp18 .previousLine[] :c
 +   28 readarr<lookup:liquid> *tmp18 .currentLine[] :c
 +   29 writearr<lookup:item> *tmp18 .previousLine[] :c
     30 label *label7

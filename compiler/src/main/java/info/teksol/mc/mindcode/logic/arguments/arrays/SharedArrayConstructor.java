@@ -7,7 +7,10 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.postprocess.JumpTable;
 import info.teksol.mc.mindcode.logic.arguments.*;
-import info.teksol.mc.mindcode.logic.instructions.*;
+import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction;
+import info.teksol.mc.mindcode.logic.instructions.LocalContextfulInstructionsCreator;
+import info.teksol.mc.mindcode.logic.instructions.LogicInstruction;
+import info.teksol.mc.mindcode.logic.instructions.SideEffects;
 import org.jspecify.annotations.NullMarked;
 
 import java.util.ArrayList;
@@ -21,10 +24,11 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
     protected final LogicVariable arrayRet;
     protected final LogicVariable arrayElem;
 
-    public SharedArrayConstructor(ArrayAccessInstruction instruction, String indexSuffix, String returnSuffix, String elementSuffix) {
-        super(instruction);
+    public SharedArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction, String indexSuffix,
+            String returnSuffix, String elementSuffix) {
+        super(context, instruction);
 
-        NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
+        NameCreator nameCreator = context.nameCreator();
         String baseName = arrayStore.getName();
         arrayInd = LogicVariable.arrayAccess(baseName, "*" + indexSuffix, nameCreator.arrayAccess(baseName, indexSuffix));
         arrayRet = LogicVariable.arrayReturn(baseName, "*" + returnSuffix, nameCreator.arrayAccess(baseName, returnSuffix));
@@ -40,6 +44,8 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
 
     @Override
     public void generateJumpTable(Map<String, JumpTable> jumpTables) {
+        if (skipCompactLookup()) return;
+
         String tableId = getJumpTableId();
         JumpTable jumpTable = jumpTables.get(tableId);
         if (jumpTable == null || useTextTables && !jumpTable.usesTextTable()) {
@@ -103,7 +109,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         AstContext astContext = instruction.getAstContext().createSubcontext(AstSubcontextType.ARRAY, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        if (arrayConstruction != ArrayConstruction.COMPACT || !instruction.isCompactAccessTarget()) {
+        if (!skipCompactLookup()) {
             prepareTableCall(creator);
             creator.createOp(Operation.MUL, arrayInd, instruction.getIndex(), LogicNumber.TWO);
             generateBoundsCheck(astContext, consumer, arrayInd, 2);
@@ -118,7 +124,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        if (arrayConstruction != ArrayConstruction.COMPACT || !instruction.isCompactAccessTarget()) {
+        if (!skipCompactLookup()) {
             LogicLabel marker2 = processor.nextMarker();
             LogicLabel returnLabel = processor.nextLabel();
 
@@ -145,7 +151,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         AstContext astContext = instruction.getAstContext();
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, consumer);
 
-        if (arrayConstruction != ArrayConstruction.COMPACT || !instruction.isCompactAccessTarget()) {
+        if (!skipCompactLookup()) {
             LogicLabel marker2 = processor.nextMarker();
             LogicLabel returnLabel = processor.nextLabel();
             prepareTableCall(creator);

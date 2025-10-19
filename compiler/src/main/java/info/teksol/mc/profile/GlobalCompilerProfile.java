@@ -46,6 +46,10 @@ public interface GlobalCompilerProfile {
         return getBooleanValue(EnvironmentOptions.NULL_COUNTER_IS_NOOP);
     }
 
+    default int getInstructionLimit() {
+        return getIntValue(EnvironmentOptions.INSTRUCTION_LIMIT);
+    }
+
     ProcessorVersion getProcessorVersion();
 
     ProcessorEdition getProcessorEdition();
@@ -86,13 +90,16 @@ public interface GlobalCompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Optimizations Options">
-
-    default int getInstructionLimit() {
-        return getIntValue(EnvironmentOptions.INSTRUCTION_LIMIT);
-    }
-
     default int getOptimizationPasses() {
         return getIntValue(OptimizationOptions.PASSES);
+    }
+
+    default boolean useLookupArrays() {
+        return getBooleanValue(OptimizationOptions.USE_LOOKUP_ARRAYS);
+    }
+
+    default boolean useShortArrays() {
+        return getBooleanValue(OptimizationOptions.USE_SHORT_ARRAYS);
     }
     //</editor-fold>
 

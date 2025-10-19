@@ -16,8 +16,8 @@ import java.util.function.Consumer;
 public class ExternalArrayConstructor extends TablelessArrayConstructor {
     private final LogicVariable memory;
 
-    public ExternalArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction);
+    public ExternalArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction);
         memory = ((ExternalArray)instruction.getArray().getArrayStore()).getMemory();
     }
 

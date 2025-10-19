@@ -39,7 +39,7 @@ defaults:
   run: false
 
   # List of goal settings to use
-  goal: [ speed, size ]
+  goal: [ speed, neutral, size ]
 
   # List of symbolic labels settings to use
   symbolic-labels: [ false, true ]
@@ -48,18 +48,18 @@ defaults:
   case-switching-test: false
 
   # List of optimization levels for each given optimization
-  array-optimization: [ none, basic ]
+  array-optimization: [ none, basic, experimental ]
   case-expression-optimization: [ none, basic ]
-  case-switching: [ none, basic, advanced ]
-  data-flow-optimization: [ none, basic ]
+  case-switching: [ none, basic, advanced, experimental ]
+  data-flow-optimization: [ none, basic, experimental ]
   dead-code-elimination: [ none, basic ]
   expression-optimization: [ none, basic, advanced ]
   function-inlining: [ none, basic ]
-  if-expression-optimization: [ none, basic ]
+  if-expression-optimization: [ none, basic, experimental ]
   jump-normalization: [ none, basic ]
   jump-optimization: [ none, basic ]
   jump-straightening: [ none, basic ]
-  jump-threading: [ none, basic ]
+  jump-threading: [ none, basic, experimental ]
   loop-hoisting: [ none, basic ]
   loop-optimization: [ none, basic ]
   loop-unrolling: [ none, basic, advanced ]

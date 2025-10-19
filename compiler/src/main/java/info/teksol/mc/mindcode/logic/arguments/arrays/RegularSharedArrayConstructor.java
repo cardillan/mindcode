@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.RemoteVariable;
@@ -21,9 +20,10 @@ public abstract class RegularSharedArrayConstructor extends SharedArrayConstruct
     protected final LogicVariable proc;
     protected final boolean shared;
 
-    public RegularSharedArrayConstructor(ArrayAccessInstruction instruction, String indexSuffix, String returnSuffix, String elementSuffix) {
-        super(instruction, indexSuffix, returnSuffix, elementSuffix);
-        NameCreator nameCreator = MindcodeCompiler.getContext().nameCreator();
+    public RegularSharedArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction,
+            String indexSuffix, String returnSuffix, String elementSuffix) {
+        super(context, instruction, indexSuffix, returnSuffix, elementSuffix);
+        NameCreator nameCreator = context.nameCreator();
 
         String baseName = arrayStore.getName();
         proc = LogicVariable.arrayAccess(baseName, "*proc", nameCreator.arrayAccess(baseName, "proc"));

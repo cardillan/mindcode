@@ -20,24 +20,34 @@ import java.util.function.Function;
 public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
     private final LogicValue storageProcessor;
 
-    public CompactInlinedArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction, "elem");
+    public CompactInlinedArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction, "elem");
         storageProcessor = arrayStore.isRemote() ? arrayStore.getProcessor() : LogicBuiltIn.THIS;
         instruction.setIndirectVariables(arrayElements());
     }
 
+    @Override
+    public boolean folded() {
+        return instruction.isArrayFolded();
+    }
+
+    @Override
+    public boolean canFold() {
+        return !instruction.isArrayFolded();
+    }
+
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        if (instruction.isCompactAccessTarget()) return 1;
+        if (skipCompactLookup()) return 1;
 
         int checkSize = profile.getBoundaryChecks().getSize();
         return folded()
-                ? checkSize + inlinedTableSize() + 3 - 2 * flag(useTextTables)
-                : checkSize + 2 * inlinedTableSize() + 2 - flag(useTextTables);
+                ? checkSize + inlinedTableSize() + 4 - 2 * flag(useTextTables)
+                : checkSize + inlinedTableSize() + 3 - flag(useTextTables);
     }
 
     @Override
     public double getExecutionSteps() {
-        if (instruction.isCompactAccessTarget()) return 1;
+        if (skipCompactLookup()) return 1;
 
         int checkSteps = profile.getBoundaryChecks().getExecutionSteps();
         return checkSteps + (useTextTables ? 4 : 5 + flag(folded())) - inlinedTableStepsSavings();

@@ -114,7 +114,7 @@ Available for targets `8.1` and higher. Individual branches of the table serve t
 
 Folded tables can only support literals or mlog variables. Therefore, they can be used for compact tables or for reading regular tables of local arrays, including constant arrays. For remote arrays and writing tables, folding is not possible.      
 
-Folding requires an additional step to choose the correct branch of the table and is therefore always slower than an unfolded table (only when text-based jump tables are supported, this additional step can be removed for inlined tables). However, folding reduces the table size in half. Since a folded compact table serves both reads and writes, it takes only one instruction per array element (plus one-sixth of instruction for `draw triangle` element variable creation). This means arrays of 600 or 700 elements are possible while still providing some space for actual logic.
+Folding requires an additional step to choose the correct branch of the table and is therefore always slower than an unfolded table (only when [text-based table dispatch](#text-based-table-dispatch) is supported, this additional step can be removed for inlined tables). However, folding reduces the table size in half. Since a folded compact table serves both reads and writes, it takes only one instruction per array element (plus one-sixth of instruction for `draw triangle` element variable creation). This means arrays of 600 or 700 elements are possible while still providing some space for actual logic.
 
 ### Short arrays
 
@@ -122,7 +122,23 @@ For short arrays, the tables can be avoided entirely:
 * When the array has just one element, all index-based array access is resolved to that one element directly.
 * For other short arrays up to three or four elements, the array access is replaced with a sequence of `select`s or if/else statements, depending on whether the `select` instruction is available in the given target (target `8.1` or higher is required for a `select` instruction).
 
-This replacement is available for both compact and regular tables. The compact version is used when the same element is accessed multiple times, similarly to inlined arrays.
+This replacement is available for both compact and regular tables. The compact version is used when the same element is accessed multiple times, similarly to inlined arrays, and for remote arrays.
+
+**Array access code size**
+
+| Array size | Read<br>select | Write<br>select | Compact<br>select | Read<br>if | Write<br>if | Compact<br>if |
+|:----------:|:--------------:|:---------------:|:-----------------:|:----------:|:-----------:|:-------------:|
+|     2      |       1        |        2        |         2         |     4      |      4      |       5       |
+|     3      |       2        |        3        |         3         |     7      |      7      |       8       |
+|     4      |       3        |        4        |         4         |     -      |      -      |       -       |
+
+**Instructions executed**
+
+| Array size | Read<br>select | Write<br>select | Compact<br>select | Read<br>if | Write<br>if | Compact<br>if |
+|:----------:|:--------------:|:---------------:|:-----------------:|:----------:|:-----------:|:-------------:|
+|     2      |       1        |        2        |         2         |    2.5     |     2.5     |      3.5      |
+|     3      |       2        |        3        |         3         |    3.33    |    3.33     |     4.33      |
+|     4      |       3        |        4        |         4         |     -      |      -      |       -       |
 
 #### Using an if / else statement
 
@@ -274,6 +290,16 @@ format gallium
 print nitrogen
 printflush message1
 ```
+
+### Text-based table dispatch
+
+In Mindustry 8, it is possible to [read character values from a string](MINDUSTRY-8.markdown#reading-characters-from-strings) at a given index in a single operation. This allows encoding instruction addresses into strings instead of computing the target address from the element index. The following prerequisites need to be met for this optimization to be applied:
+
+* The [target](SYNTAX-5-OTHER.markdown#option-target) must be set to version `8` or higher.
+* The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive.
+* The [text-tables](SYNTAX-5-OTHER.markdown#option-text-tables) option must be active.
+
+When text-based table dispatch is possible, it is always used by the compiler, as it always performs better in terms of both code size and execution time, compared to alternatives. When used with inlined tables, text-based table dispatch even compensates for the disadvantage of folded tables, making them perform identically to unfolded tables while halving the table size.   
 
 ### Code size and performance
 
@@ -444,13 +470,15 @@ Note: multiplexed remote arrays are handled equally to simple remote arrays, as 
     * The size of branches decreased by one, as the last branch doesn't end with a jump but immediately continues with the next instruction.
     * One execution step is saved when using the last branch of the table. The last branch is used for the last element of the array, and in the case of folded even-sized arrays, for one additional element. This saving is considered by the optimizer but not shown in the table.
 
-### Optimization process
+### Optimization progression
 
 The compiler initially chooses array implementations to take the least amount of space possible. The initial implementations are always non-inlined. The specific implementation depends on the capabilities of the target processor:
 
-1. Folded compact, if the `select` instruction is available (target `8.1` or higher). Compact array implementations can always be folded.
+1. Folded compact, if the `select` instruction is available (target `8.1` or higher).
 2. Compact, if indirect access is possible (target `8.0` or higher).
-3. Regular. 
+3. Regular.
+
+For constant arrays, regular tables are initially used (folded when the `select` instruction is available).
 
 This table sums up the execution times of different array implementations:
 
@@ -461,30 +489,37 @@ This table sums up the execution times of different array implementations:
 | Inlined compact      |  4  |  5  |  5  |  4  |  5  |  5  |  4  |  6  |  6  |      
 | Inlined regular      |  3  |  4  |  4  |  3  |  4  |  4  |  3  |  5  |  5  |      
 
-Code size can't be compared directly, as it depends on the number of times the array access is performed.
+Code size can't be meaningfully compared, as it depends on the number of times the array access is performed.
 
-Based on this, the following optimizations are possible:
+Based on this, the optimizer considers the following optimizations:
 
-**Array unfolding**
+**Unfolding tables**
 
-* Unfolding approximately doubles the size of the jump table and saves one instruction execution.
+Unfolding approximately doubles the size of the jump table and saves one instruction execution. However, when [text-based table dispatch](#text-based-table-dispatch) is available, folded inlined arrays perform the same as unfolded ones and are therefore kept folded.
 
-**Converting a compact table to regular**
+**Promoting tables**
 
-* This optimization doesn't take place when repeated access to the same element is detected (as it eliminates using table for repeated access entirely).
-* For folded tables, this optimization is not possible if the array is remote.
+Compact tables can get promoted to regular ones. If the array is only read or only written to, or if the access is already inlined, promoting the table doesn't require additional space. 
+
+* This optimization doesn't take place when repeated access to the same element is detected: the second and later accesses can avoid the using table entirely, saving a lot of instructions and execution time.
+* Regular tables of remote arrays and write tables of local arrays cannot be folded. When promoting these tables, unfolding is automatically performed too.    
 * For other non-inlined tables, no savings are guaranteed, but are assumed. For inlined tables, one instruction is always saved. 
-* This optimization might not require additional instruction space if only one type of the table (read or write) is generated, or if the access is already inlined.
 
-**Inlining array access**
+**Inlining tables**
 
-* This optimization inlines the table to the place of array access.
+This optimization inlines the table to the place of array access.
+
 * Inlining saves between one and four execution steps, depending on the original implementation of the array.
 * Inlining the last non-inlined array access means the original table is eliminated, decreasing code size. The last non-inlined array access using a specific table is always inlined.
+* When [text-based table dispatch](#text-based-table-dispatch) is available, inlined arrays may also be folded if possible. 
 
-The optimizer always considers global optimizations and local optimizations. Global optimization converts all usages of a specific array implementation to a faster one (for example, unfolding a compact array or inlining all array accesses). Only non-inlined occurrences are considered for global optimizations. Since the optimization converts all usages of a specific array implementation, the table belonging to the original implementation is eliminated.
+The optimizer considers possible optimizations for the following groups of array accesses:
 
-Local optimizations consider all usages in isolation. For an already inlined implementation, a faster alternative may be considered. For an access which hasn't  been inlined yet, only inlining is considered.
+* All non-inlined array accesses sharing an instance of the table. The optimization affects either all of these instructions or none of them. When the optimization succeeds, the original table is replaced by the optimized one(s). This decreases the cost of the optimization by eliminating the original table.
+* Inlining (possibly combined with folding) of every array access is considered separately. In this case, since not all array accesses using the same table are inlined, the original table used by other, non-inlined instructions cannot be eliminated. Inlining only some instead of all instructions only happens when there isn't enough instruction space to inline all of them.
+* Unfolding or promoting each inlined array access is also considered separately. Since the array access is inlined, only its table is affected by the optimization.   
+
+Note: it doesn't make sense to consider unfolding or promoting individual, non-inlined instructions. If the optimization benefits one such instruction, it benefits all of them in the same way, and applying the optimization to all allows eliminating the original table.  
 
 The [dynamic optimization](#static-and-dynamic-optimizations) mechanism is used to choose which optimizations to perform.
 

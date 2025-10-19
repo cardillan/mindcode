@@ -27,9 +27,13 @@ public enum ArrayOrganization {
         return this == INTERNAL;
     }
 
+    public ArrayOrganization inline() {
+        return this == INTERNAL ? INLINED : this;
+    }
+
     public boolean supportsLookup() {
         return switch(this) {
-            case INTERNAL, INLINED, SINGLE, SHORT, LOOKUP -> true;
+            case INTERNAL, INLINED, SHORT, LOOKUP -> true;
             default -> false;
         };
     }

@@ -14,7 +14,7 @@ prints-values.mnd:                                 42       42     100.0%   EA63
 processesAssertBounds:                              5        5     100.0%   442250AE1653638F   56C54AE64C590C79
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   8FE79E3E7140A46C
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   EB7D6403850CF0B3
-processesGlobalVariableDataFlow:                   20       20     100.0%   A117AFBA99D093C8   7D32D66D364E3799
+processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   C5551F799CC03A47
 ranged-for-loop-break-continue.mnd:                25       62      96.0%   0E564BDD58072C70   1E61DD9C4EC01A43
 recursive-calls.mnd:                               97      266      98.9%   9CB0965E0E62F089   B6EE4C8BF2BAD9E9
 recursive-function-condition.mnd:                  17       21      94.1%   02C171DDB1F56F08   D20BCC8633ED06E8

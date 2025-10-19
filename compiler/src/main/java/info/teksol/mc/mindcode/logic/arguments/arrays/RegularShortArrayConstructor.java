@@ -22,8 +22,8 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
     private final int arraySize;
     private final boolean useSelects;
 
-    public RegularShortArrayConstructor(ArrayAccessInstruction instruction) {
-        super(instruction);
+    public RegularShortArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
+        super(context, instruction);
         arraySize = arrayStore.getSize();
         useSelects = processor.isSupported(Opcode.SELECT);
         int limit = useSelects ? 4 : 3;

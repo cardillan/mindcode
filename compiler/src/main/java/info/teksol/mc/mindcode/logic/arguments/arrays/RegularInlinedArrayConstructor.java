@@ -14,15 +14,15 @@ import java.util.function.Function;
 @NullMarked
 public abstract class RegularInlinedArrayConstructor extends InlinedArrayConstructor {
 
-    public RegularInlinedArrayConstructor(ArrayAccessInstruction instruction, LogicVariable arrayElem) {
-        super(instruction, arrayElem);
+    public RegularInlinedArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction, LogicVariable arrayElem) {
+        super(context, instruction, arrayElem);
     }
 
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         int checkSize = profile.getBoundaryChecks().getSize();
         return folded()
-                ? checkSize + inlinedTableSize() + 2 * flag(!useTextTables)
-                : checkSize + 2 * inlinedTableSize() + flag(!useTextTables);
+                ? checkSize + inlinedTableSize() + 1 + 2 * flag(!useTextTables)
+                : checkSize + inlinedTableSize() + 1 + flag(!useTextTables);
     }
 
     @Override
