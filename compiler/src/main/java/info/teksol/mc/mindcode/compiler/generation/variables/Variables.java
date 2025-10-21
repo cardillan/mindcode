@@ -245,7 +245,7 @@ public class Variables extends AbstractMessageEmitter {
             boolean isVolatile = modifiers.contains(VOLATILE) || declaredRemote;
             LogicVariable storageProcessor = modifiers.getParameters(REMOTE) instanceof LogicVariable p ? p : null;
             ArrayNameCreator arrayNameCreator = processArrayMlogModifier(modifiers, size, nameCreator);
-            result = InternalArray.create(arrayNameCreator, identifier, size, isVolatile, declaredRemote, storageProcessor, false);
+            result = InternalArray.create(processor, arrayNameCreator, identifier, size, isVolatile, declaredRemote, storageProcessor, false);
         }
 
         putVariableIfAbsent(identifier.getName(), result);

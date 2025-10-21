@@ -30,6 +30,7 @@ import java.util.stream.Stream;
 public abstract class AbstractArrayConstructor implements ArrayConstructor {
     protected final InstructionProcessor processor;
     protected final CompilerProfile profile;
+    protected final AstContext rootAstContext;
     protected final ArrayAccessInstruction instruction;
     protected final ArrayConstruction arrayConstruction;
     protected final AccessType accessType;
@@ -39,6 +40,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     public AbstractArrayConstructor(ArrayConstructorContext context, ArrayAccessInstruction instruction) {
         this.processor = context.instructionProcessor();
         this.profile = instruction.getAstContext().getCompilerProfile();
+        this.rootAstContext = context.getRootAstContext();
         this.instruction = instruction;
         this.arrayConstruction = instruction.getArrayConstruction();
         this.accessType = instruction.getAccessType();

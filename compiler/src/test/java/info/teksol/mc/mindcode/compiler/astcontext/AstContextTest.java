@@ -3,13 +3,15 @@ package info.teksol.mc.mindcode.compiler.astcontext;
 import info.teksol.mc.common.SourcePosition;
 import info.teksol.mc.mindcode.compiler.CallType;
 import info.teksol.mc.mindcode.compiler.DataType;
-import info.teksol.mc.mindcode.compiler.ast.nodes.*;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstFunctionDeclaration;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstMindcodeNode;
+import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.FunctionDefinitions;
 import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.profile.CompilerProfile;
 import org.jspecify.annotations.NullMarked;
-import org.jspecify.annotations.Nullable;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -194,8 +196,6 @@ class AstContextTest {
 
     @Test
     void findLastSubcontext() {
-        AstMindcodeNode node = new TestNode(profile, context.contextType(), AstSubcontextType.SYSTEM_CALL);
-        AstContext child1 = context.createSubcontext(AstSubcontextType.SYSTEM_CALL, 1.0);
         AstContext child2 = context.createSubcontext(AstSubcontextType.SYSTEM_CALL, 1.0);
 
         assertEquals(child2, context.findLastSubcontext(AstSubcontextType.SYSTEM_CALL));
@@ -204,9 +204,7 @@ class AstContextTest {
 
     @Test
     void findSubcontexts() {
-        AstMindcodeNode node = new TestNode(profile, context.contextType(), AstSubcontextType.SYSTEM_CALL);
         AstContext child1 = context.createSubcontext(AstSubcontextType.INIT, 1.0);
-        AstContext child2 = context.createSubcontext(AstSubcontextType.CONDITION, 1.0);
         AstContext child3 = context.createSubcontext(AstSubcontextType.INIT, 1.0);
 
         List<AstContext> subcontexts = context.findSubcontexts(AstSubcontextType.INIT);
@@ -248,60 +246,4 @@ class AstContextTest {
         assertNull(context.nextChild(child3));
     }
 
-    @NullMarked
-    private static class TestNode implements AstMindcodeNode {
-        private final AstContextType contextType;
-        private final AstSubcontextType subcontextType;
-        private CompilerProfile profile;
-
-        public TestNode(CompilerProfile profile, AstContextType contextType, AstSubcontextType subcontextType) {
-            this.profile = profile;
-            this.contextType = contextType;
-            this.subcontextType = subcontextType;
-        }
-
-        @Override
-        public AstNodeScope getScopeRestriction() {
-            return AstNodeScope.NONE;
-        }
-
-        @Override
-        public void setProfile(CompilerProfile profile) {
-            this.profile = profile;
-        }
-
-        @Override
-        public CompilerProfile getProfile() {
-            return profile;
-        }
-
-        @Override
-        public @Nullable AstDocComment getDocComment() {
-            return null;
-        }
-
-        @Override
-        public void setDocComment(@Nullable AstDocComment docComment) {
-        }
-
-        @Override
-        public List<AstMindcodeNode> getChildren() {
-            return List.of();
-        }
-
-        @Override
-        public SourcePosition sourcePosition() {
-            return SourcePosition.EMPTY;
-        }
-
-        @Override
-        public AstContextType getContextType() {
-            return contextType;
-        }
-
-        @Override
-        public AstSubcontextType getSubcontextType() {
-            return subcontextType;
-        }
-    }
 }

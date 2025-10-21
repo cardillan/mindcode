@@ -10,7 +10,9 @@ import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstModule;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
+import info.teksol.mc.mindcode.compiler.astcontext.TestNode;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.mindcode.compiler.generation.variables.NameCreator;
 import info.teksol.mc.mindcode.compiler.generation.variables.OptimizerContext;
@@ -150,8 +152,11 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
     protected final InstructionProcessor ip = InstructionProcessorFactory.getInstructionProcessorNoValidate(
             ExpectedMessages.throwOnMessage(), nameCreator, profile);
 
+    protected final TestNode testNode = new TestNode(profile, AstContextType.ROOT, AstSubcontextType.BASIC);
+
     protected final AstContext mockAstRootContext = AstContext.createRootNode(profile);
-    protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.MOCK, 1.0);
+    //protected final AstContext mockAstContext = mockAstRootContext.createSubcontext(AstSubcontextType.MOCK, 1.0);
+    protected final AstContext mockAstContext = mockAstRootContext.createChild(testNode, AstContextType.BODY);
 
     protected static LogicArgument _logic(String str) {
         return new GenericArgument(str);
@@ -330,5 +335,10 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
     @Override
     public NameCreator nameCreator() {
         return nameCreator;
+    }
+
+    @Override
+    public AstContext getRootAstContext() {
+        return mockAstRootContext;
     }
 }

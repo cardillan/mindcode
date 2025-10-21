@@ -1,13 +1,12 @@
 package info.teksol.mc.mindcode.compiler.generation.variables;
 
 import info.teksol.mc.common.SourcePosition;
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.MindcodeInternalError;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstExpression;
 import info.teksol.mc.mindcode.compiler.ast.nodes.AstIdentifier;
-import info.teksol.mc.mindcode.compiler.generation.CodeAssembler;
 import info.teksol.mc.mindcode.logic.arguments.*;
 import info.teksol.mc.mindcode.logic.instructions.ContextfulInstructionCreator;
+import info.teksol.mc.mindcode.logic.instructions.InstructionProcessor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -49,10 +48,10 @@ public class InternalArray extends AbstractArrayStore {
         logicArray = LogicArray.create(this, offset, offset + elements.size());
     }
 
-    public static InternalArray create(ArrayNameCreator nameCreator, AstIdentifier identifier, int size, boolean isVolatile,
-            boolean declaredRemote, @Nullable LogicVariable processor, boolean shared) {
+    public static InternalArray create(InstructionProcessor instructionProcessor, ArrayNameCreator nameCreator,
+            AstIdentifier identifier, int size, boolean isVolatile, boolean declaredRemote, @Nullable LogicVariable processor,
+            boolean shared) {
         if (processor != null) {
-            CodeAssembler assembler = MindcodeCompiler.getContext().assembler();
             return new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),
                     nameCreator.arrayBase(shared ? "" : processor.getName(), identifier.getName()),
                     declaredRemote, processor,
@@ -60,7 +59,7 @@ public class InternalArray extends AbstractArrayStore {
                             .mapToObj(index -> (ValueStore) new RemoteVariable(identifier.sourcePosition(), processor,
                                     processor.getName() + "." + identifier.getName() + "[" + index + "]",
                                     LogicString.create(nameCreator.remoteArrayElement(identifier.getName(), index)),
-                                    assembler.nextTemp(), false, false, false)).toList(),
+                                    instructionProcessor.nextTemp(), false, false, false)).toList(),
                     shared ? ArrayType.REMOTE_SHARED : ArrayType.REMOTE);
         } else {
             return new InternalArray(identifier.sourcePosition(), nameCreator.arrayLookupType(),

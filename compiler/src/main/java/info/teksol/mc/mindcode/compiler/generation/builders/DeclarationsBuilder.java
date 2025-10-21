@@ -331,7 +331,7 @@ public class DeclarationsBuilder extends AbstractBuilder implements
 
                 int arraySize = getArraySize(specification, modifiers, reportArrayErrors);
                 ArrayNameCreator arrayNameCreator = variables.processArrayMlogModifier(modifiers, arraySize, nameCreator);
-                InternalArray array = InternalArray.create(arrayNameCreator, identifier, arraySize, true,
+                InternalArray array = InternalArray.create(this.processor, arrayNameCreator, identifier, arraySize, true,
                         true, processor, shared);
                 structureMembers.put(name, array);
             } else {

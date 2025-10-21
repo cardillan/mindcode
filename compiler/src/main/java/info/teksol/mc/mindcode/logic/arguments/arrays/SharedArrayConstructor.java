@@ -1,6 +1,5 @@
 package info.teksol.mc.mindcode.logic.arguments.arrays;
 
-import info.teksol.mc.mindcode.compiler.MindcodeCompiler;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContextType;
 import info.teksol.mc.mindcode.compiler.astcontext.AstSubcontextType;
@@ -57,8 +56,7 @@ public abstract class SharedArrayConstructor extends AbstractArrayConstructor {
         boolean folded = folded();
         List<LogicInstruction> instructions = new ArrayList<>();
 
-        AstContext astContext = MindcodeCompiler.getContext().getRootAstContext()
-                .createSubcontext(AstContextType.JUMPS, AstSubcontextType.BASIC, 1.0);
+        AstContext astContext = rootAstContext.createSubcontext(AstContextType.JUMPS, AstSubcontextType.BASIC, 1.0);
         LocalContextfulInstructionsCreator creator = new LocalContextfulInstructionsCreator(processor, astContext, instructions::add);
 
         creator.createEnd();

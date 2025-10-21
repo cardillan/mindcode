@@ -5,7 +5,7 @@
      2 instructions eliminated by Jump Optimization (5 iterations).
     27 instructions eliminated by Single Step Elimination (3 passes, 8 iterations).
    450 instructions eliminated by Expression Optimization (3 iterations).
-   205 instructions eliminated by Data Flow Optimization (9 passes, 41 iterations).
+   205 instructions eliminated by Data Flow Optimization (9 passes, 40 iterations).
      7 instructions eliminated by Loop Optimization (3 iterations).
      7 loops improved by Loop Optimization.
    905 instructions added by Loop Unrolling (10 iterations).
