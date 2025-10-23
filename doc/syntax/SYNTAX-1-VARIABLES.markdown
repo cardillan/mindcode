@@ -471,6 +471,8 @@ mlog(@coal.@name) var coal;
 * When declaring an array, there are two possibilities:
   * A name as a constant string expression is specified for each array element. The number of names must be equal to the array size.
   * A single lookup type is specified, creating a [lookup array](SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays). Lookup arrays require target 8 or higher. The following lookup types are available:  `:block`, `:unit`, `:item`, `:liquid` or `:team`.
+* Names specified by mlog must not correspond to linked block names.
+* When a name specified by the `mlog` modifier collides with another user-defined variable or array element in the current processor, a warning is produced. 
 
 #### Lookup variables
 

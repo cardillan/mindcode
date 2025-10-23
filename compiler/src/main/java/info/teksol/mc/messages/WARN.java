@@ -15,6 +15,7 @@ public class WARN {
     public static final String MISSING_MLOG_KEYWORD_PREFIX = "Using mlog keywords without the ':' prefix is deprecated (use ':%s' instead).";
     public static final String MISSING_MODIFIER_PARENS = "Modifier '%s' requires parentheses around its arguments.";
     public static final String MISSING_PRINTFLUSH_ADDED = "Automatically added missing 'printflush(message1);' call to the end of the program.";
+    public static final String VARIABLE_MLOG_CONFLICT = "The mlog name of the variable '%s' collides with another variable.";
     public static final String NAMED_COLOR_NOT_RECOGNIZED = "Named color '%s' not recognized.";
     public static final String OPTIMIZATION_PASSES_LIMIT_REACHED = "Optimization passes limit (%d) reached.";
     public static final String PRINTF_NOT_ENOUGH_ARGUMENTS = "The 'printf' function doesn't have enough arguments for placeholders: %d placeholder(s), %d argument(s).";

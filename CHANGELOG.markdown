@@ -18,10 +18,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * [lookup arrays](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays).
 * Added support for using [text-based table dispatch](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-table-dispatch) in array implementations.
 * Added the [`use-lookup-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-lookup-arrays) and [`use-short-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-short-arrays) options.
+* Added warnings when a name specified by the `mlog` modifier collides with another user-defined variable or array element in the current processor. 
 
 ### Changed
 
 * **Breaking**: specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
+* The `mlog` variable name must not match a linked block name.
 * The `mlog` modifier accepts multiple expressions, allowing to specify names for individual array elements.
 * The `mlog` modifier also accepts one of the lookup keywords (`:block`, `:unit`, `:item`, `:liquid` or `:team`) in array declarations, allowing to specify the lookup type used by the array.
 * The `cached` and `noinit cached` modifiers can be used with variables declared `remote`, with the same effect as in case of variables declared `external`.  

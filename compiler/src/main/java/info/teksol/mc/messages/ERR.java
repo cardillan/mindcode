@@ -136,6 +136,7 @@ public class ERR {
     public static final String MLOG_FIRST_ARGUMENT_NO_MODIFIERS = "The first argument to the '%s' function must not use any modifier.";
     public static final String MLOG_IN_OUT_KEYWORD_NOT_ALLOWED = "A keyword passed to the '%s' function must not use any modifier.";
     public static final String MLOG_IN_OUT_LITERAL_NOT_ALLOWED = "A literal passed to the '%s' function must not use any modifier.";
+    public static final String MLOG_NAME_IS_BLOCK = "Mlog name '%s' collides with a linked block name.";
     public static final String MLOG_NO_LITERAL_OR_VARIABLE = "All arguments to the '%s' function must be literals or user variables.";
     public static final String MLOG_OUT_STRING_NOT_ALLOWED = "A string literal passed to the '%s' function must not use an 'out' modifier.";
     public static final String MLOG_UNSPECIFIED_ARGUMENT = "All arguments to the '%s' function need to be specified.";
@@ -187,7 +188,6 @@ public class ERR {
     public static final String VARIABLE_INCOMPATIBLE_MODIFIERS = "Modifiers %s are mutually exclusive.";
     public static final String VARIABLE_MISSING_MODIFIER = "Modifier '%s' requires the %s modifier.";
     public static final String VARIABLE_MULTIPLE_DECLARATIONS = "Multiple declarations of '%s'.";
-    public static final String VARIABLE_MULTIPLE_DECLARATIONS_REMOTE = "Variable '%s' collides with a remote function.";
     public static final String VARIABLE_MULTIPLE_SPECIFICATIONS_MLOG = "Only one variable may be specified within an `mlog` declaration.";
     public static final String VARIABLE_NAME_RESERVED_FOR_LINKS = "Name '%s' is reserved for linked blocks.";
     public static final String VARIABLE_NOINIT_CANNOT_BE_INITIALIZED = "Variable declared as 'noinit' cannot be initialized.";

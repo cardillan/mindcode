@@ -1053,10 +1053,19 @@ class DeclarationsBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesMultipleMlogVariableSpecifications() {
-            assertGeneratesMessage(
-                    "Only one variable may be specified within an `mlog` declaration.",
+            assertGeneratesMessages(expectedMessages()
+                            .add("Only one variable may be specified within an `mlog` declaration.")
+                            .add("The mlog name of the variable 'a' collides with another variable.").repeat(2),
                     """
                             mlog("a") var a, b;
+                            """);
+        }
+
+        @Test
+        void reportsInvalidMlogName() {
+            assertGeneratesMessage("Mlog name 'cell1' collides with a linked block name.",
+                    """
+                            mlog("cell1") var a;
                             """);
         }
     }

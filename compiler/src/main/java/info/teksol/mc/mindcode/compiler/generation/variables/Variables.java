@@ -47,6 +47,7 @@ public class Variables extends AbstractMessageEmitter {
     private final Map<String, ValueStore> globalVariables;
     private final Map<String, StructuredValueStore> structuredVariables = new HashMap<>();
     private final Deque<FunctionContext> contextStack = new ArrayDeque<>();
+    private final Map<String, List<SourcePosition>> mlogNames = new HashMap<>();
     private FunctionContext functionContext = new GlobalContext();
 
     private HeapTracker heapTracker;
@@ -108,11 +109,13 @@ public class Variables extends AbstractMessageEmitter {
     }
 
     private @Nullable ValueStore putVariable(String name, ValueStore variable) {
-        return globalVariables.put(name, variable);
+        return globalVariables.put(name, verifyMlogConflicts(variable));
     }
 
     private void putVariableIfAbsent(String name, ValueStore variable) {
-        globalVariables.putIfAbsent(name, variable);
+        if (!globalVariables.containsKey(name)) {
+            globalVariables.put(name, verifyMlogConflicts(variable));
+        }
     }
 
     private void putStructuredVariable(String name, StructuredValueStore variable) {
@@ -126,13 +129,6 @@ public class Variables extends AbstractMessageEmitter {
                     existing, variable);
         }
         return variable;
-    }
-
-    public void registerRemoteCallStore(AstIdentifier identifier, ValueStore variable) {
-        ValueStore existing = putVariable(identifier.getName(), variable);
-        if (existing != null) {
-            error(existing, ERR.VARIABLE_MULTIPLE_DECLARATIONS_REMOTE, identifier.getName());
-        }
     }
 
     public void registerStructuredVariable(AstIdentifier identifier, StructuredValueStore structure) {
@@ -164,7 +160,8 @@ public class Variables extends AbstractMessageEmitter {
         } else if (isGlobalVariable(identifier)) {
             return registerGlobalVariable(identifier, LogicVariable.global(identifier, nameCreator.global(identifier.getName())));
         } else {
-            return functionContext.registerFunctionVariable(identifier, VariableScope.FUNCTION, false, true);
+            return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier,
+                    VariableScope.FUNCTION, false,true));
         }
     }
 
@@ -267,8 +264,8 @@ public class Variables extends AbstractMessageEmitter {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
                 return Objects.requireNonNull(functionContext.variables().get(identifier.getName()));
             }
-            return functionContext.registerFunctionVariable(identifier, scope,
-                    modifiers.contains(NOINIT), false);
+            return verifyMlogConflicts(functionContext.registerFunctionVariable(identifier, scope,
+                    modifiers.contains(NOINIT), false));
         } else {
             if (globalVariables.containsKey(name)) {
                 error(identifier, ERR.VARIABLE_MULTIPLE_DECLARATIONS, name);
@@ -428,6 +425,12 @@ public class Variables extends AbstractMessageEmitter {
         });
     }
 
+    private void verifyMlogName(LogicString mlogName) {
+        if (processor.isBlockName(mlogName.getValue())) {
+            error(mlogName, ERR.MLOG_NAME_IS_BLOCK, mlogName.getValue());
+        }
+    }
+
     private @Nullable String processVariableMlogModifier(Modifiers modifiers) {
         if (modifiers.getParameters(MLOG) instanceof MlogSpecification(List<LogicArgument> mlogNames)) {
             if (mlogNames.isEmpty()) {
@@ -443,7 +446,10 @@ public class Variables extends AbstractMessageEmitter {
             }
 
             switch (mlogNames.getFirst()) {
-                case LogicString s -> { return s.getValue();}
+                case LogicString mlogName -> {
+                    verifyMlogName(mlogName);
+                    return mlogName.getValue();
+                }
                 case LogicKeyword kw -> {
                     error(modifiers.getNode(MLOG), ERR.INVALID_MLOG_KEYWORD);
                     return null;
@@ -522,6 +528,8 @@ public class Variables extends AbstractMessageEmitter {
                 mlogNames.stream().filter(LogicKeyword.class::isInstance)
                         .forEach(_ -> error(sourceElement, ERR.INVALID_MLOG_KEYWORD));
 
+                mlogNames.stream().filter(e -> e instanceof LogicString str).map(LogicString.class::cast).forEach(this::verifyMlogName);
+
                 return new ArrayNameCreator() {
                     @Override
                     public String arrayBase(String processorName, String arrayName) {
@@ -544,5 +552,36 @@ public class Variables extends AbstractMessageEmitter {
         } else {
             throw new MindcodeInternalError("Unexpected modifier parametrization: " + modifiers.getParameters(MLOG));
         }
+    }
+
+    private void verifyMlogConflict(LogicVariable variable, SourcePosition position) {
+        if (variable.getType() == ArgumentType.BLOCK) return;
+
+        List<SourcePosition> list = mlogNames.computeIfAbsent(variable.toMlog(), k -> new ArrayList<>());
+
+        if (list.size() == 1) {
+            warn(list.getFirst(), WARN.VARIABLE_MLOG_CONFLICT, variable.toMlog());
+        }
+        if (!list.isEmpty()) {
+            warn(position, WARN.VARIABLE_MLOG_CONFLICT, variable.toMlog());
+        }
+
+        list.add(position);
+    }
+
+    private ValueStore verifyMlogConflicts(ValueStore valueStore) {
+        ValueStore unwrapped = valueStore.unwrap();
+        switch (unwrapped) {
+            case LogicVariable variable -> verifyMlogConflict(variable, variable.sourcePosition());
+            case InternalArray array -> {
+                if (array.getArrayType() == ArrayStore.ArrayType.INTERNAL) {
+                    array.getElements().stream().filter(LogicVariable.class::isInstance)
+                            .map(LogicVariable.class::cast).forEach(variable -> verifyMlogConflict(variable, array.sourcePosition()));
+                }
+            }
+            default -> {}
+        }
+
+        return valueStore;
     }
 }
