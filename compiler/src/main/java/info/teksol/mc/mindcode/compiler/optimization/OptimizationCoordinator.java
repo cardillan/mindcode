@@ -273,8 +273,9 @@ public class OptimizationCoordinator {
     }
 
     private static final Comparator<OptimizationAction> SPEED_GOAL_COMPARATOR =
-            Comparator.comparingDouble(OptimizationAction::speedEfficiency).reversed()
-                    .thenComparingInt(OptimizationAction::cost);
+            Comparator.comparingDouble(OptimizationAction::speedEfficiency)
+                    .thenComparingDouble(OptimizationAction::benefit)
+                    .thenComparingInt(OptimizationAction::cost).reversed();
 
     /// Selects an optimization action, taking action groups into account.
     private @Nullable OptimizationAction selectActionForSpeed(List<OptimizationAction> possibleOptimizations, int costLimit, Set<OptimizationAction> considered) {

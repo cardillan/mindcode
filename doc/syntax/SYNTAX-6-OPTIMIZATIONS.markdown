@@ -299,7 +299,13 @@ In Mindustry 8, it is possible to [read character values from a string](MINDUSTR
 * The [symbolic labels](SYNTAX-5-OTHER.markdown#option-symbolic-labels) option must be inactive.
 * The [text-tables](SYNTAX-5-OTHER.markdown#option-text-tables) option must be active.
 
-When text-based table dispatch is possible, it is always used by the compiler, as it always performs better in terms of both code size and execution time, compared to alternatives. When used with inlined tables, text-based table dispatch even compensates for the disadvantage of folded tables, making them perform identically to unfolded tables while halving the table size.   
+When text-based table dispatch is possible, it is always used by the compiler, as it always performs better in terms of both code size and execution time, compared to alternatives. When used with inlined tables, text-based table dispatch even compensates for the disadvantage of folded tables, making them perform identically to unfolded tables while halving the table size.
+
+**Reversing branch order**
+
+There's no jump in the last branch of an inlined table, saving one instruction execution when accessing elements served by the last branch. When arranged in natural order, the last branch contains the last element for unfolded tables, and the last element plus the middle one for folded tables. However, if the array has an odd number of elements, the last branch of a folded table serves only one element of the array.
+
+When text-based table dispatch is used, the branches can be arranged in any order. Therefore, branches in inlined tables are reversed with text-based table dispatch. This way, it is guaranteed that the last branch of a folded table will serve two elements (the first one and the middle one), and in case of unfolded tables, it will serve the first element. This brings small improvement to odd-sized arrays implemented by folded tables, and a possible improvement from putting the first array element on the best path (as the first element is accessed the most often by most algorithms, certainly more often than the last element).    
 
 ### Code size and performance
 
@@ -421,19 +427,19 @@ In case of regular arrays, the table accessing the elements for reading may be f
 
 **Instructions executed**
 
-| Instruction                            |   U/T   |   U/D   |   U/S   |   M/T   |   M/D   |   M/S   |   F/T   |   F/D   |   F/S   |
-|----------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
-| set remote processor                   |         |         |         |    1    |    1    |    1    |         |         |         |
-| set return address                     |    1    |    1    |         |    1    |    1    |         |    1    |    1    |         |
-| transfer write variable<sup>1, 2</sup> |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |      
-| setup index                            |         |    1    |    1    |         |    1    |    1    |    1    |    1    |    1    |
-| compute branch address (local)         |         |         |         |         |         |         |         |    1    |         |      
-| call to branch/table                   |    1    |    1    |    2    |    1    |    1    |    2    |    1    |    1    |    2    |      
-| compute branch address (table)         |         |         |         |         |         |         |         |         |    1    |
-| jump to branch                         |         |         |    1    |         |         |    1    |         |         |    1    |      
-| branch (set+return)                    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |
-| transfer read variable<sup>1</sup>     |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |      
-| **TOTAL**                              | **4.8** | **5.8** | **6.8** | **5.8** | **6.8** | **7.8** | **5.8** | **6.8** | **7.8** |      
+| Instruction                           |   U/T   |   U/D   |   U/S   |   M/T   |   M/D   |   M/S   |   F/T   |   F/D   |   F/S   |
+|---------------------------------------|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|:-------:|
+| set remote processor                  |         |         |         |    1    |    1    |    1    |         |         |         |
+| set return address                    |    1    |    1    |         |    1    |    1    |         |    1    |    1    |         |
+| transfer write variable<sup>1,2</sup> |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |   0.8   |      
+| setup index                           |         |    1    |    1    |         |    1    |    1    |    1    |    1    |    1    |
+| compute branch address (local)        |         |         |         |         |         |         |         |    1    |         |      
+| call to branch/table                  |    1    |    1    |    2    |    1    |    1    |    2    |    1    |    1    |    2    |      
+| compute branch address (table)        |         |         |         |         |         |         |         |         |    1    |
+| jump to branch                        |         |         |    1    |         |         |    1    |         |         |    1    |      
+| branch (set+return)                   |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |    2    |
+| transfer read variable<sup>1</sup>    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |    -    |      
+| **TOTAL**                             | **4.8** | **5.8** | **6.8** | **5.8** | **6.8** | **7.8** | **5.8** | **6.8** | **7.8** |      
 
 <sup>1</sup>&nbsp;Either the _transfer read variable_ or the _transfer write variable_ instruction is generated, depending on the access type. In this table, they're accounted for in the _transfer write variable_ row.<br>
 <sup>2</sup>&nbsp;Depending on the code structure, the _transfer write/read variable_ instruction might be eliminated by the Data Flow Optimizer. Since Array Optimizer doesn't know whether the instruction will be actually eliminated, it must be fully accounted for regarding the code size. The expected execution speed of the regular array is lowered a bit to express this possible optimization. As a result, the optimizer might choose to convert a compact array to a regular array if there's enough instruction space.     

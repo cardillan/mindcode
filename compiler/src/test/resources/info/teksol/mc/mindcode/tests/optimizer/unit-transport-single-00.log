@@ -25,25 +25,25 @@ Pass 1: speed optimization selection (cost limit 606):
     Replicate loop condition at line 314:5                       size    +1, benefit       12.5, efficiency     12.500
 
 Pass 1: speed optimization selection (cost limit 605):
-    Replicate loop condition at line 51:1                        size    +2, benefit       25.0, efficiency     12.500
-    Replicate loop condition at line 102:5                       size    +4, benefit       12.5, efficiency      3.125
-    Replicate loop condition at line 110:9                       size    +5, benefit        6.3, efficiency      1.250
-    Replicate loop condition at line 129:1                       size    +3, benefit       25.0, efficiency      8.333
-    Replicate loop condition at line 304:1                       size    +2, benefit       25.0, efficiency     12.500
-  * Replicate loop condition at line 314:5                       size    +1, benefit       12.5, efficiency     12.500 (+1 instructions)
-
-Pass 1: speed optimization selection (cost limit 604):
   * Replicate loop condition at line 51:1                        size    +2, benefit       25.0, efficiency     12.500 (+2 instructions)
     Replicate loop condition at line 102:5                       size    +4, benefit       12.5, efficiency      3.125
     Replicate loop condition at line 110:9                       size    +5, benefit        6.3, efficiency      1.250
     Replicate loop condition at line 129:1                       size    +3, benefit       25.0, efficiency      8.333
     Replicate loop condition at line 304:1                       size    +2, benefit       25.0, efficiency     12.500
+    Replicate loop condition at line 314:5                       size    +1, benefit       12.5, efficiency     12.500
+
+Pass 1: speed optimization selection (cost limit 603):
+    Replicate loop condition at line 102:5                       size    +4, benefit       12.5, efficiency      3.125
+    Replicate loop condition at line 110:9                       size    +5, benefit        6.3, efficiency      1.250
+    Replicate loop condition at line 129:1                       size    +3, benefit       25.0, efficiency      8.333
+  * Replicate loop condition at line 304:1                       size    +2, benefit       25.0, efficiency     12.500 (+1 instructions)
+    Replicate loop condition at line 314:5                       size    +1, benefit       12.5, efficiency     12.500
 
 Pass 1: speed optimization selection (cost limit 602):
     Replicate loop condition at line 102:5                       size    +4, benefit       12.5, efficiency      3.125
     Replicate loop condition at line 110:9                       size    +5, benefit        6.3, efficiency      1.250
     Replicate loop condition at line 129:1                       size    +3, benefit       25.0, efficiency      8.333
-  * Replicate loop condition at line 304:1                       size    +2, benefit       25.0, efficiency     12.500 (+1 instructions)
+  * Replicate loop condition at line 314:5                       size    +1, benefit       12.5, efficiency     12.500 (+1 instructions)
 
 Pass 1: speed optimization selection (cost limit 601):
     Replicate loop condition at line 102:5                       size    +4, benefit       12.5, efficiency      3.125
@@ -1660,32 +1660,12 @@ Modifications by Replicate loop condition at line 43:1 (+1 instructions):
     20 label *label3
     21 sensor *tmp4 @unit @dead
 
-Modifications by Replicate loop condition at line 314:5 (+1 instructions):
- 
-   507 label *label131
-   508 sensor *tmp211 switch1 @enabled
-   509 jump *label133 notEqual *tmp211 false
-+  510 label *label137
-   511 print "[salmon]Local or remote container became invalid."
-   512 print "\n"
-   513 print "[gold]Please fix and press button to reinitialize."
- 
-   515 printflush message1
-   516 printflush message2
-   517 label *label132
--    * jump *label131 always
-+  518 sensor *tmp211 switch1 @enabled
-+  519 jump *label137 equal *tmp211 false
-   520 label *label133
-   521 label *label129
-   522 label *label130
-
 Modifications by Replicate loop condition at line 51:1 (+2 instructions):
  
     21 sensor *tmp4 @unit @dead
     22 op strictEqual *tmp6 *tmp4 0
     23 jump *label5 notEqual *tmp6 false
-+   24 label *label138
++   24 label *label137
     25 set :rebindUnit:first_unit null
     26 label *label7
     27 ubind UNIT
@@ -1696,7 +1676,7 @@ Modifications by Replicate loop condition at line 51:1 (+2 instructions):
 -    * jump *label3 always
 +   84 sensor *tmp4 @unit @dead
 +   85 op strictEqual *tmp6 *tmp4 0
-+   86 jump *label138 equal *tmp6 false
++   86 jump *label137 equal *tmp6 false
     87 label *label5
     88 sensor .UNIT_CAPACITY @unit @itemCapacity
     89 sensor *tmp25 @unit @speed
@@ -1706,7 +1686,7 @@ Modifications by Replicate loop condition at line 304:1 (+2 instructions):
    488 sensor *tmp199 .SORTER @dead
    489 op strictEqual *tmp200 *tmp199 0
    490 jump *label128 notEqual *tmp200 false
-+  491 label *label139
++  491 label *label138
    492 print "[salmon]sorter1 is missing!"
    493 print "\n"
    494 print "[gold]Please place and link sorter or inverted sorter to the processor."
@@ -1717,7 +1697,7 @@ Modifications by Replicate loop condition at line 304:1 (+2 instructions):
 -    * jump *label126 always
 +  500 sensor *tmp199 .SORTER @dead
 +  501 op strictEqual *tmp200 *tmp199 0
-+  502 jump *label139 equal *tmp200 false
++  502 jump *label138 equal *tmp200 false
    503 label *label128
    504 sensor *tmp202 .SRC @dead
    505 op strictEqual *tmp204 *tmp202 0
@@ -1730,7 +1710,7 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 1:
 -    * sensor *tmp199 .SORTER @dead
 +  500 sensor *tmp199 sorter1 @dead
    501 op strictEqual *tmp200 *tmp199 0
-   502 jump *label139 equal *tmp200 false
+   502 jump *label138 equal *tmp200 false
    503 label *label128
 
 Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1 instructions):
@@ -1742,6 +1722,26 @@ Modifications by Iterated phase, Data Flow Optimization, pass 1, iteration 2 (-1
    498 label *label127
    499 sensor *tmp199 sorter1 @dead
    500 op strictEqual *tmp200 *tmp199 0
+
+Modifications by Replicate loop condition at line 314:5 (+1 instructions):
+ 
+   512 label *label131
+   513 sensor *tmp211 switch1 @enabled
+   514 jump *label133 notEqual *tmp211 false
++  515 label *label139
+   516 print "[salmon]Local or remote container became invalid."
+   517 print "\n"
+   518 print "[gold]Please fix and press button to reinitialize."
+ 
+   520 printflush message1
+   521 printflush message2
+   522 label *label132
+-    * jump *label131 always
++  523 sensor *tmp211 switch1 @enabled
++  524 jump *label139 equal *tmp211 false
+   525 label *label133
+   526 label *label129
+   527 label *label130
 
 Modifications by Replicate loop condition at line 129:1 (+3 instructions):
  
@@ -1956,7 +1956,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label4
     73 sensor *tmp4 @unit @dead
     74 op strictEqual *tmp6 *tmp4 0
-    75 jump *label138 equal *tmp6 false
+    75 jump *label137 equal *tmp6 false
  
     82 set .CONTAINER null
     83 set .DROP_TARGET null
@@ -2167,7 +2167,7 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label127
    463 sensor *tmp199 sorter1 @dead
    464 op strictEqual *tmp200 *tmp199 0
-   465 jump *label139 equal *tmp200 false
+   465 jump *label138 equal *tmp200 false
  
    473 op or *tmp208 *tmp203 *tmp206
    474 jump *label129 equal *tmp208 false
@@ -2175,14 +2175,14 @@ Modifications by Jumps phase, Jump Normalization, pass 5, iteration 1:
 -    * label *label131
    476 sensor *tmp211 switch1 @enabled
    477 jump *label133 notEqual *tmp211 false
-   478 label *label137
+   478 label *label139
  
    482 print "\n"
    483 printflush message1
    484 printflush message2
 -    * label *label132
    485 sensor *tmp211 switch1 @enabled
-   486 jump *label137 equal *tmp211 false
+   486 jump *label139 equal *tmp211 false
    487 label *label133
    488 label *label129
 -    * label *label130
@@ -2303,7 +2303,7 @@ Modifications by Jumps phase, Jump Threading, pass 5, iteration 1:
    467 sensor *tmp211 switch1 @enabled
 -    * jump *label133 notEqual *tmp211 false
 +  468 jump __start__ notEqual *tmp211 false
-   469 label *label137
+   469 label *label139
    470 print "[salmon]Local or remote container became invalid."
    471 print "\n"
 
@@ -2346,7 +2346,7 @@ Modifications by Jumps phase, Unreachable Code Elimination, pass 5, iteration 1 
  
    468 printflush message2
    469 sensor *tmp211 switch1 @enabled
-   470 jump *label137 equal *tmp211 false
+   470 jump *label139 equal *tmp211 false
 -    * label *label133
 -    * label *label129
    471 end
@@ -2379,7 +2379,7 @@ Modifications by Jumps phase, Single Step Elimination, pass 5, iteration 1 (-4 i
  
    465 printflush message2
    466 sensor *tmp211 switch1 @enabled
-   467 jump *label137 equal *tmp211 false
+   467 jump *label139 equal *tmp211 false
 -    * end
 
 Modifications by Jumps phase, Jump Normalization, pass 6, iteration 1:
@@ -2647,7 +2647,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
  
    388 op strictEqual *tmp200 *tmp199 0
    389 jump *label128 notEqual *tmp200 false
-   390 label *label139
+   390 label *label138
 -    * print "[salmon]sorter1 is missing!"
 -    * print "\n"
 -    * print "[gold]Please place and link sorter or inverted sorter to the processor."
@@ -2659,7 +2659,7 @@ Modifications by Final phase, Print Merging, iteration 1 (-50 instructions):
  
    407 sensor *tmp211 switch1 @enabled
    408 jump __start__ notEqual *tmp211 false
-   409 label *label137
+   409 label *label139
 -    * print "[salmon]Local or remote container became invalid."
 -    * print "\n"
 -    * print "[gold]Please fix and press button to reinitialize."
@@ -2690,7 +2690,7 @@ label *label2
 sensor *tmp4 @unit @dead
 op strictEqual *tmp6 *tmp4 0
 jump *label5 notEqual *tmp6 false
-label *label138
+label *label137
 set :rebindUnit:first_unit null
 label *label7
 ubind UNIT
@@ -2732,7 +2732,7 @@ label *label17
 label *label6
 sensor *tmp4 @unit @dead
 op strictEqual *tmp6 *tmp4 0
-jump *label138 equal *tmp6 false
+jump *label137 equal *tmp6 false
 label *label5
 sensor .UNIT_CAPACITY @unit @itemCapacity
 sensor *tmp25 @unit @speed
@@ -3061,13 +3061,13 @@ label *label68
 sensor *tmp199 .SORTER @dead
 op strictEqual *tmp200 *tmp199 0
 jump *label128 notEqual *tmp200 false
-label *label139
+label *label138
 print "[salmon]sorter1 is missing!\n[gold]Please place and link sorter or inverted sorter to the processor.\n"
 printflush message1
 printflush message2
 sensor *tmp199 sorter1 @dead
 op strictEqual *tmp200 *tmp199 0
-jump *label139 equal *tmp200 false
+jump *label138 equal *tmp200 false
 label *label128
 sensor *tmp202 .SRC @dead
 op strictEqual *tmp204 *tmp202 0
@@ -3080,9 +3080,9 @@ jump __start__ equal *tmp208 false
 control enabled switch1 false
 sensor *tmp211 switch1 @enabled
 jump __start__ notEqual *tmp211 false
-label *label137
+label *label139
 print "[salmon]Local or remote container became invalid.\n[gold]Please fix and press button to reinitialize.\n"
 printflush message1
 printflush message2
 sensor *tmp211 switch1 @enabled
-jump *label137 equal *tmp211 false
+jump *label139 equal *tmp211 false

@@ -147,22 +147,27 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     abstract protected Function<ValueStore, ValueStore> elementValueStoreExtractor();
 
     protected void generateJumpTable(LocalContextfulInstructionsCreator creator, LogicLabel firstLabel, LogicLabel marker,
-            Runnable createExit, boolean inline, List<LogicLabel> branchLabels) {
+            Runnable createExit, boolean inlined, List<LogicLabel> branchLabels) {
         BiConsumer<LocalContextfulInstructionsCreator, ValueStore> branchCreator = branchCreator();
         Function<ValueStore, ValueStore> elementProcessor = elementValueStoreExtractor();
         LogicLabel nextLabel = firstLabel;
 
         List<ValueStore> elements = arrayStore.getElements();
-        for (int i = 0; i < elements.size(); i++) {
-            ValueStore arrayElement = elements.get(i);
+        int count = elements.size();
+        boolean reversed = useTextTables && inlined;
+
+        branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
+        for (int i = 0; i < count; i++) {
+            int branch = reversed ? count - i - 1 : i;
+            ValueStore arrayElement = elements.get(branch);
             ValueStore element = elementProcessor.apply(arrayElement);
             creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
-            branchLabels.add(nextLabel);
+            branchLabels.set(branch, nextLabel);
             branchCreator.accept(creator, element);
-            if (i < elements.size() - 1) {
+            if (i < count - 1) {
                 createExit.run();
                 nextLabel = processor.nextLabel();      // We'll waste one label. Meh.
-            } else if (!inline) {
+            } else if (!inlined) {
                 createExit.run();
             }
         }
@@ -192,19 +197,21 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
 
         List<ValueStore> elements = arrayStore.getElements();
         int count = (elements.size() + 1) / 2;
+        boolean reversed = useTextTables && inlined;
 
         branchLabels.addAll(Collections.nCopies(elements.size(), firstLabel));
         for (int i = 0; i < count; i++) {
+            int branch = reversed ? count - i - 1 : i;
             creator.createMultiLabel(nextLabel, marker).setJumpTarget(useTextTables);
-            LogicValue element1 = valueExtractor.apply(creator, elements.get(i));
-            if (i + count < elements.size()) {
-                LogicValue element2 = valueExtractor.apply(creator, elements.get(i + count));
+            LogicValue element1 = valueExtractor.apply(creator, elements.get(branch));
+            if (branch + count < elements.size()) {
+                LogicValue element2 = valueExtractor.apply(creator, elements.get(branch + count));
                 creator.createSelect(target, Condition.LESS_THAN, index, limit, element1, element2);
-                branchLabels.set(i, nextLabel);
-                branchLabels.set(i + count, nextLabel);
+                branchLabels.set(branch, nextLabel);
+                branchLabels.set(branch + count, nextLabel);
             } else {
                 creator.createSet(target, element1);
-                branchLabels.set(i, nextLabel);
+                branchLabels.set(branch, nextLabel);
             }
 
             if (i < count - 1) {

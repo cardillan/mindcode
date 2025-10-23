@@ -14,16 +14,16 @@
     45 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 904):
-  * Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity (-11 instructions)
-    Unroll iteration loop at *blocks:68:13                       size   -19, benefit    24375.0, efficiency   Infinity
-    Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 915):
+    Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity
   * Unroll iteration loop at *blocks:68:13                       size   -19, benefit    24375.0, efficiency   Infinity (-4 instructions)
     Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 919):
-  * Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity (-3 instructions)
+Pass 1: speed optimization selection (cost limit 908):
+    Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity
+  * Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity (-1 instructions)
+
+Pass 1: speed optimization selection (cost limit 909):
+  * Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity (-13 instructions)
 
 Final code before resolving virtual instructions:
 
@@ -43,28 +43,28 @@ Final code before resolving virtual instructions:
    11:  print :findLinkedBlocks:block
    12:  sensor :findLinkedBlocks:type :findLinkedBlocks:block @type
    13:  set :findLinkedBlocks:variable :display
-   14:  jump *label62 notEqual @large-logic-display :findLinkedBlocks:type
+   14:  jump *label41 notEqual @large-logic-display :findLinkedBlocks:type
    15:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label62
+        label *label41
    16:  set :display :findLinkedBlocks:variable
    17:  set :findLinkedBlocks:variable :message
-   18:  jump *label70 notEqual @message :findLinkedBlocks:type
+   18:  jump *label49 notEqual @message :findLinkedBlocks:type
    19:  set :findLinkedBlocks:variable :findLinkedBlocks:block
    20:  set :findLinkedBlocks:message :findLinkedBlocks:block
-        label *label70
+        label *label49
    21:  set :message :findLinkedBlocks:variable
    22:  set :findLinkedBlocks:variable :switch
-   23:  jump *label78 notEqual @switch :findLinkedBlocks:type
+   23:  jump *label57 notEqual @switch :findLinkedBlocks:type
    24:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label78
+        label *label57
    25:  set :switch :findLinkedBlocks:variable
    26:  set :findLinkedBlocks:variable :memory
-   27:  jump *label86 notEqual @memory-bank :findLinkedBlocks:type
+   27:  jump *label65 notEqual @memory-bank :findLinkedBlocks:type
    28:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label86
-   29:  jump *label94 notEqual @memory-cell :findLinkedBlocks:type
+        label *label65
+   29:  jump *label73 notEqual @memory-cell :findLinkedBlocks:type
    30:  set :findLinkedBlocks:variable :findLinkedBlocks:block
-        label *label94
+        label *label73
    31:  set :memory :findLinkedBlocks:variable
    32:  jump *label37 greaterThan :findLinkedBlocks:n 0
         label *label14

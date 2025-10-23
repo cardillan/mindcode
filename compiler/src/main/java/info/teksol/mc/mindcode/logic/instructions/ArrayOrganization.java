@@ -24,11 +24,21 @@ public enum ArrayOrganization {
     }
 
     public boolean canInline() {
-        return this == INTERNAL;
+        // Tries re-inlining short arrays too
+        return this == INTERNAL || this == SHORT;
     }
 
     public ArrayOrganization inline() {
-        return this == INTERNAL ? INLINED : this;
+        return canInline() ? INLINED : this;
+    }
+
+    public boolean canInlineShort() {
+        // Tries re-inlining short arrays too
+        return this == INTERNAL || this == INLINED;
+    }
+
+    public ArrayOrganization inlineShort() {
+        return canInlineShort() ? SHORT : this;
     }
 
     public boolean supportsLookup() {

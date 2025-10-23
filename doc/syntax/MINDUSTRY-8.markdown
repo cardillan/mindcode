@@ -219,7 +219,7 @@ Mindcode doesn't provide direct access to the select instruction, but optimizes 
 
 The `read` and `write` instructions were updated to support reading and writing data to other blocks and objects apart from memory blocks.
 
-### Reading and writing linked processor variables
+### Reading and writing processor variables
 
 Mindustry 8 allows reading and writing variables of another processor, addressing them by name. This functionality is provided as an extension to the `read` and `write` instructions, which can take processors instead of memory cells/banks, and string values representing variable names instead of numerical index.
 

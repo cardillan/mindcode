@@ -16,7 +16,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
   * [compact `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#compact-tables),
   * [folded `@counter` tables](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#folded-tables),
   * [lookup arrays](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays).
-* Added support for using [text-based table dispatch](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-table-dispatch) in array implementations.  
+* Added support for using [text-based table dispatch](/doc/syntax/SYNTAX-6-OPTIMIZATIONS.markdown#text-based-table-dispatch) in array implementations.
+* Added the [`use-lookup-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-lookup-arrays) and [`use-short-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-short-arrays) options.
 
 ### Changed
 

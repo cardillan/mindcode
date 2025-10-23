@@ -40,7 +40,7 @@ Modifications by Initial phase, Temp Variables Elimination, iteration 1 (-2 inst
      2 jump *label2 greaterThanEq :i 10
 -    * set *tmp0 :i
 -    * writearr<internal:folded:compact> :i .array[] *tmp0
-+    3 writearr<internal:folded:compact:src> :i .array[] :i
++    3 writearr<internal:folded:compact> :i .array[] :i
      4 label *label1
      5 op add :i :i 1
      6 jump *label0 always
@@ -361,7 +361,7 @@ Modifications by Iterated phase, Array Optimization, pass 1, iteration 1 (-13 in
      0 set :i 0
      1 label *label0
      2 jump *label2 greaterThanEq :i 10
--    * writearr<internal:folded:compact:src> :i .array[] :i
+-    * writearr<internal:folded:compact> :i .array[] :i
 +    3 writearr<lookup:liquid> :i .array[] :i
      4 label *label1
      5 op add :i :i 1

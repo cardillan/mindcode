@@ -509,6 +509,8 @@ optimization actions.
 | [passes](#option-passes)                                         | global | stable             |
 | [text-tables](#option-text-tables)                               | local  | stable             |
 | [unsafe-case-optimization](#option-unsafe-case-optimization)     | local  | unstable           |
+| [use-lookup-arrays](#option-use-lookup-arrays)                   | global | stable             |
+| [use-short-arrays](#option-use-short-arrays)                     | global | stable             |
 | [weight](#option-weight)                                         | local  | stable             |
 
 ### Option `case-optimization-strength`
@@ -578,6 +580,26 @@ This option instructs the compiler to drop range checking when performing case e
 
 > [!NOTE]
 > The `unsafe-case-optimization` is _semantically unstable_: when applied to an unsuitable case expression, the compiler may generate incorrect code. It is recommended to always use the option locally, by using `#setlocal` immediately before the case expression on which it is meant to be applied. 
+
+### Option `use-lookup-arrays`
+
+**Option scope: [global](#global-scope)**
+
+This option activates or deactivates the lookup mechanism for arrays. [Lookup arrays](SYNTAX-6-OPTIMIZATIONS.markdown#lookup-arrays) use the Mindustry 8 Logic ability to [read variables from processors](MINDUSTRY-8.markdown#reading-and-writing-processor-variables) for array implementation different from the usual `@counter` array mechanism. Possible values are:
+
+* `false`: lookup arrays won't be generated.
+* `true` (the default value): the compiler generates lookup arrays if possible.
+
+Note that [declaring an array explicitly to use the lookup mechanism](SYNTAX-1-VARIABLES.markdown#mlog-modifier) is possible even when this option is set to `false`.
+
+### Option `use-short-arrays`
+
+**Option scope: [global](#global-scope)**
+
+This option activates or deactivates using [specialized implementation for short arrays](SYNTAX-6-OPTIMIZATIONS.markdown#short-arrays). Possible values are:
+
+* `false`: short arrays won't be generated.
+* `true` (the default value): the compiler generates short arrays when it's appropriate.
 
 ### Option `weight`
 

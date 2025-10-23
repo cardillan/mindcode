@@ -391,13 +391,13 @@ class ArrayOptimizerTest {
                     createInstruction(OP, "add", tmp(10), "p", "3"),
                     createInstruction(MULTIJUMP, tmp(10), "0", "0"),
                     createInstruction(MULTILABEL, label(9)),
-                    createInstruction(SELECT, tmp(13), "lessThan", tmp(10), "3", "1", "4"),
+                    createInstruction(SET, tmp(13), "3"),
                     createInstruction(JUMP, label(8), "always"),
                     createInstruction(MULTILABEL, label(10)),
                     createInstruction(SELECT, tmp(13), "lessThan", tmp(10), "3", "2", "5"),
                     createInstruction(JUMP, label(8), "always"),
                     createInstruction(MULTILABEL, label(11)),
-                    createInstruction(SET, tmp(13), "3"),
+                    createInstruction(SELECT, tmp(13), "lessThan", tmp(10), "3", "1", "4"),
                     createInstruction(LABEL, label(8)),
                     createInstruction(PRINT, tmp(13)),
                     createInstruction(OP, "add", tmp(14), "p", "4"),
@@ -497,6 +497,7 @@ class ArrayOptimizerTest {
         @Test
         void detectsLookupNameConflicts() {
             assertCompilesTo("""
+                            #set goal = size;
                             const SIZE = 4;
                             var a[SIZE];
                             volatile mlog("crux") a1 = 0;

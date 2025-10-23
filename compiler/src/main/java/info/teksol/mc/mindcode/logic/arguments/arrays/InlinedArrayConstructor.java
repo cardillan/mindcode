@@ -96,7 +96,8 @@ public abstract class InlinedArrayConstructor extends AbstractArrayConstructor {
 
     protected final double inlinedTableStepsSavings() {
         // The last jump in an inlined jump table is eliminated
-        // Hit twice as often for even-sized folded arrays
-        return (folded() && arrayStore.getSize() % 2 == 0 ? 2.0 : 1.0) / arrayStore.getSize();
+        // Hit twice as often for even-sized folded arrays, or with text tables
+        boolean even = arrayStore.getSize() % 2 == 0;
+        return (folded() && (even || useTextTables) ? 2.0 : 1.0) / arrayStore.getSize();
     }
 }

@@ -295,7 +295,7 @@ class DataFlowVariableStates {
                                     }
                                 }
 
-                                if (matchingIndex) {
+                                if (matchingIndex && prevIx != thisIx) {
                                     if (!prevIx.isCompactAccessTarget()) {
                                         prevIx.setCompactAccessSource();
                                     }

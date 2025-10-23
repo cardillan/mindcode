@@ -11,6 +11,7 @@ import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import info.teksol.mc.mindcode.logic.opcodes.TypedArgument;
 import info.teksol.mc.profile.BuiltinEvaluation;
 import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -23,9 +24,11 @@ class ArrayOptimizer extends BaseOptimizer {
 
     private final Set<String> updatedArrays = new HashSet<>();
     private int invocations = 0;
+    private final boolean selectSupported;
 
     public ArrayOptimizer(OptimizationContext optimizationContext) {
         super(Optimization.ARRAY_OPTIMIZATION, optimizationContext);
+        selectSupported = instructionProcessor.isSupported(Opcode.SELECT);
     }
 
     @Override
@@ -164,23 +167,21 @@ class ArrayOptimizer extends BaseOptimizer {
     }
 
     private ArrayConstruction computeArrayConstruction(ArrayAccessInstruction ix) {
-        return ix.getArray().getArrayStore().getSize() == 1 ||
-               (ix.getArrayOrganization().isInlined() && !ix.isCompactAccessSource() && !ix.isCompactAccessTarget())
-                ? ArrayConstruction.REGULAR
-                : ix.getArrayConstruction();
+        if (ix.getArray().getArrayStore().getSize() == 1) {
+            return ArrayConstruction.REGULAR;
+        } else if (ix.getArrayOrganization().isInlined() && !ix.getArrayConstructor().folded()
+                && !ix.isCompactAccessSource() && !ix.isCompactAccessTarget()) {
+            return ArrayConstruction.REGULAR;
+        } else {
+            return ix.getArrayConstruction();
+        }
     }
 
     private ArrayOrganization computeArrayOrganization(ArrayAccessInstruction ix) {
-        ArrayOrganization current = ix.getArrayOrganization();
-        boolean useShort = getGlobalProfile().useShortArrays();
-        boolean hasSelect = instructionProcessor.isSupported(Opcode.SELECT);
-
         return switch (ix.getArray().getArrayStore().getSize()) {
             case 1 -> ArrayOrganization.SINGLE;
-            case 2 -> useShort ? ArrayOrganization.SHORT : current;
-            case 3 -> useShort && (hasSelect || !ix.getLocalProfile().useTextJumpTables()) ? ArrayOrganization.SHORT : current;
-            case 4 -> useShort && hasSelect ? ArrayOrganization.SHORT : current;
-            default -> current;
+            case 2 -> selectSupported && getGlobalProfile().useShortArrays() ? ArrayOrganization.SHORT : ix.getArrayOrganization();
+            default -> ix.getArrayOrganization();
         };
     }
 
@@ -201,12 +202,12 @@ class ArrayOptimizer extends BaseOptimizer {
         ArrayOptimization promoting = new PromotingArrayOptimization();
         ArrayOptimization inlining = new InliningArrayOptimization();
         ArrayOptimization inliningFolding = new InliningFoldingArrayOptimization();
+        ArrayOptimization inliningShort = new InliningShortArrayOptimization();
 
-        boolean canFold = instructionProcessor.isSupported(Opcode.SELECT);
-        List<ArrayOptimization> allOptimizations = canFold ? List.of(unfolding, promoting, inlining, inliningFolding)
-                : List.of(unfolding, promoting, inlining);
-        List<ArrayOptimization> inliningOptimizations = canFold ? List.of(inlining, inliningFolding)
-                : List.of(inlining);
+        List<ArrayOptimization> allOptimizations = selectSupported ? List.of(unfolding, promoting, inlining, inliningFolding, inliningShort)
+                : List.of(unfolding, promoting, inlining, inliningShort);
+        List<ArrayOptimization> inliningOptimizations = selectSupported ? List.of(inlining, inliningFolding, inliningShort)
+                : List.of(inlining, inliningShort);
         List<ArrayOptimization> inlinedOptimizations = List.of(unfolding, promoting);
 
         List<OptimizationAction> actions = new ArrayList<>();
@@ -260,6 +261,12 @@ class ArrayOptimizer extends BaseOptimizer {
         public ArrayOptimizationAction(AstContext astContext, ArrayOptimizationPlan optimizationPlan) {
             super(astContext, optimizationPlan.effect());
             this.optimizationPlan = optimizationPlan;
+        }
+
+        @Override
+        public @Nullable String getGroup() {
+            return optimizationPlan.instructions.size() <= 1 ? null
+                    : "ArrayOptimizer" + optimizationPlan.instructions.getFirst().getArray().getArrayStore().getName();
         }
 
         @Override
@@ -419,6 +426,25 @@ class ArrayOptimizer extends BaseOptimizer {
         @Override
         public String name() {
             return "Inline/fold";
+        }
+    }
+
+    private class InliningShortArrayOptimization implements ArrayOptimization {
+        private final int limit = selectSupported ? 4 : 3;
+
+        @Override
+        public boolean canApply(ArrayAccessInstruction instruction) {
+            return instruction.getArray().getSize() <= limit && instruction.getArrayOrganization().canInlineShort();
+        }
+
+        @Override
+        public ArrayAccessInstruction apply(ArrayAccessInstruction instruction) {
+            return instructionProcessor.copy(instruction).setArrayOrganization(instruction.getArrayOrganization().inlineShort());
+        }
+
+        @Override
+        public String name() {
+            return "Inline short";
         }
     }
 }

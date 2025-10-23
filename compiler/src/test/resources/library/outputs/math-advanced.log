@@ -14,10 +14,10 @@
    995 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 0):
-  * Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity (-8 instructions)
+    Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity
     Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity
   ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity
+  * Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity (+3 instructions)
   ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
@@ -30,6 +30,89 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
     Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
+  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+
+Pass 1: speed optimization selection (cost limit 0):
+    Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity
+    Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
+  * Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity (+3 instructions)
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
+  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
+  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
+  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
+  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
+  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
+  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
+
+Pass 1: speed optimization selection (cost limit 0):
+  * Unroll iteration loop at *math:121:5                         size    -5, benefit        7.0, efficiency   Infinity (-8 instructions)
+    Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
+  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
@@ -58,88 +141,6 @@ Pass 1: speed optimization selection (cost limit 0):
 
 Pass 1: speed optimization selection (cost limit 0):
   * Unroll iteration loop at *math:133:5                         size    -5, benefit        7.0, efficiency   Infinity (-9 instructions)
-  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
-
-Pass 1: speed optimization selection (cost limit 0):
-  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
-  * Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity (+3 instructions)
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
-  ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
-    Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
-  ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
-  ! Inline function 'median' defined at *math:185:1              size   +59, benefit       25.0, efficiency      0.424
-  ! Inline function 'median' defined at *math:202:1              size  +125, benefit       44.0, efficiency      0.352
-  ! Inline function call at line 52:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 53:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 54:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 55:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 56:17                           size   +15, benefit        5.0, efficiency      0.333
-  ! Inline function call at line 57:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 58:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 59:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 60:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 61:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 62:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 63:17                           size   +18, benefit        5.5, efficiency      0.306
-  ! Inline function call at line 64:17                           size   +18, benefit        5.5, efficiency      0.306
-
-Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
@@ -151,8 +152,7 @@ Pass 1: speed optimization selection (cost limit 0):
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
   ! Unroll iteration loop at *math:241:5                         size  +235, benefit       23.0, efficiency      0.098
   ! Unroll iteration loop at *math:259:5                         size    +7, benefit      575.0, efficiency     82.143
-  ! Unroll iteration loop at *math:241:5                         size  +145, benefit       23.0, efficiency      0.159
-  * Unroll iteration loop at *math:259:5                         size    -5, benefit      575.0, efficiency   Infinity (+3 instructions)
+  ! Unroll iteration loop at *math:241:5                         size  +163, benefit       23.0, efficiency      0.141
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081
   ! Unroll iteration loop at *math:259:5                         size   +10, benefit      875.0, efficiency     87.500
   ! Unroll iteration loop at *math:241:5                         size  +433, benefit       35.0, efficiency      0.081

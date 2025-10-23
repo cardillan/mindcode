@@ -15,16 +15,16 @@
     38 instructions after optimizations.
 
 Pass 1: speed optimization selection (cost limit 905):
-  * Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity (-11 instructions)
-    Unroll iteration loop at *blocks:68:13                       size   -24, benefit    24375.0, efficiency   Infinity
-    Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity
-
-Pass 1: speed optimization selection (cost limit 916):
+    Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity
   * Unroll iteration loop at *blocks:68:13                       size   -24, benefit    24375.0, efficiency   Infinity (-4 instructions)
     Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity
 
-Pass 1: speed optimization selection (cost limit 920):
-  * Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity (-3 instructions)
+Pass 1: speed optimization selection (cost limit 909):
+    Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity
+  * Unroll iteration loop at *blocks:77:9                        size    -4, benefit      975.0, efficiency   Infinity (-1 instructions)
+
+Pass 1: speed optimization selection (cost limit 910):
+  * Unroll iteration loop at *blocks:59:9                        size   -39, benefit      975.0, efficiency   Infinity (-13 instructions)
 
 Final code before resolving virtual instructions:
 
@@ -46,10 +46,10 @@ Final code before resolving virtual instructions:
    13:  select :findLinkedBlocks:variable equal @large-logic-display :findLinkedBlocks:type :findLinkedBlocks:block :display
    14:  set :display :findLinkedBlocks:variable
    15:  set :findLinkedBlocks:variable :message
-   16:  jump *label66 notEqual @message :findLinkedBlocks:type
+   16:  jump *label45 notEqual @message :findLinkedBlocks:type
    17:  set :findLinkedBlocks:variable :findLinkedBlocks:block
    18:  set :findLinkedBlocks:message :findLinkedBlocks:block
-        label *label66
+        label *label45
    19:  set :message :findLinkedBlocks:variable
    20:  select :findLinkedBlocks:variable equal @switch :findLinkedBlocks:type :findLinkedBlocks:block :switch
    21:  set :switch :findLinkedBlocks:variable
