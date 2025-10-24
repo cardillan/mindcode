@@ -348,6 +348,11 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
+    public CompilerProfile setPrintCodeSize(boolean printCodeSize) {
+        getOption(DebuggingOptions.PRINT_CODE_SIZE).setValue(printCodeSize);
+        return this;
+    }
+
     public CompilerProfile setPrintStackTrace(boolean printStackTrace) {
         getOption(DebuggingOptions.PRINT_STACKTRACE).setValue(printStackTrace);
         return this;

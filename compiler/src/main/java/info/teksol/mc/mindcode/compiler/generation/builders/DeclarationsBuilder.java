@@ -307,7 +307,8 @@ public class DeclarationsBuilder extends AbstractBuilder implements
         module.getChildren().stream()
                 .filter(AstVariablesDeclaration.class::isInstance)
                 .map(AstVariablesDeclaration.class::cast)
-                .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == EXPORT))
+                .filter(n -> n.getModifiers().stream().anyMatch(m -> m.getModifier() == EXPORT
+                        || (m.getModifier() == REMOTE && m.getParametrization() == null)))  // DEPRECATED
                 .forEach(n -> visitRemoteVariablesDeclaration(module, n, processor, shared, reportArrayErrors, structureMembers));
     }
 

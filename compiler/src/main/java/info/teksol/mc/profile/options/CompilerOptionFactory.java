@@ -298,6 +298,12 @@ public class CompilerOptionFactory {
                 OptionAvailability.DIRECTIVE, category,
                 false));
 
+        list.add(new BooleanCompilerOptionValue(DebuggingOptions.PRINT_CODE_SIZE, "",
+                "outputs final code size broken down by function",
+                OptionMultiplicity.ONCE, SemanticStability.STABLE, OptionScope.GLOBAL,
+                OptionAvailability.UNIVERSAL, category,
+                true));
+
         list.add(new EnumCompilerOptionValue<>(DebuggingOptions.PRINT_UNRESOLVED, "u",
                 "activates output of the unresolved code (before virtual instructions resolution) of given type" +
                 " (instruction numbers are included in the output)",

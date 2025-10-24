@@ -180,6 +180,12 @@ public class CodeAssembler extends AbstractMessageEmitter implements ContextfulI
         }
     }
 
+    public void enterFunctionBodyAstNode(MindcodeFunction function, AstMindcodeNode node, AstContextType contextType) {
+        if (active) {
+            astContext = astContext.createFunctionBody(function, node, contextType);
+        }
+    }
+
     public void exitAstNode(AstMindcodeNode node) {
         if (active) {
             if (node.getContextType() != AstContextType.NONE) {

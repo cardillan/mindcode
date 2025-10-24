@@ -45,6 +45,7 @@ public class SystemLibraryTest {
                 .setSyntacticMode(SyntacticMode.STRICT)
                 .setOptimizationPasses(25)
                 .setPrintStackTrace(true)
+                .setPrintCodeSize(false)
                 .setRun(true);
     }
 

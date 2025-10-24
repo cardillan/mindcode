@@ -60,12 +60,14 @@ public class FunctionDeclarationsBuilder extends AbstractBuilder {
 
     /// Used to compile a function body when the function is called implicitly
     public void placeFunctionBody(MindcodeFunction function) {
+        assembler.enterFunctionAstNode(function, function.getDeclaration(), function.getPlacementCount());
         function.setGenerated();
         enterFunction(function, List.of());
         returnStack.enterFunction(processor.nextLabel(), LogicVoid.VOID);
         compileFunctionBody(function);
         returnStack.exitFunction();
         exitFunction(function);
+        assembler.exitAstNode(function.getDeclaration());
     }
 
     private void generateCodeForFunction(MindcodeFunction function) {

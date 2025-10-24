@@ -669,12 +669,13 @@ Some optimizations performed on the `experimental` level have a global scope and
 
 Options to activate debugging features or additional output from the compiler.
 
-| Option                                                                                       | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------------------|--------|--------------------|
-| [debug-messages](#option-debug-messages)                                                     | global | stable             |
-| [parse-tree](#option-parse-tree)                                                             | global | stable             |
-| [print-unresolved](#option-print-unresolved)                                                 | global | stable             |
-| [sort-variables](#option-sort-variables)                                                     | global | stable             |
+| Option                                       | Scope  | Semantic stability |
+|----------------------------------------------|--------|--------------------|
+| [debug-messages](#option-debug-messages)     | global | stable             |
+| [parse-tree](#option-parse-tree)             | global | stable             |
+| [print-code-size](#option-print-code-size)   | global | stable             |
+| [print-unresolved](#option-print-unresolved) | global | stable             |
+| [sort-variables](#option-sort-variables)     | global | stable             |
 
 ### Option `debug-messages`
 
@@ -687,6 +688,31 @@ This option sets the detail level of debug messages emitted by individual optimi
 **Option scope: [global](#global-scope)**
 
 This option sets the detail level of parse tree output into the log file, 0 = off
+
+### Option `print-code-size`
+
+**Option scope: [global](#global-scope)**
+
+This option activates or deactivates printing the final code size broken down by function. 
+
+* `false`: don't output the code size.
+* `true` (the default value): output the final code size.
+
+The code size information looks approximately like this:
+
+```text
+Code size and number of instantiations by function:
+  Size  Times  AvgSize  Function
+   214     7x     30,6  inline def computeRowValues(in x, in y, in ore, in size)
+   196    49x      4,0  inline def tileValue(in x, in y, in ore)
+   147     1x    147,0  export def createTerrainMask(in unit, in x, in y)
+   147    49x      3,0  inline def isSolid(in x, in y)
+   125    25x      5,0  inline void updatePosition(in dx, in dy, in value, bestX, bestY, best)
+    35     1x     35,0  export def findBestPosition(in unit, in x, in y, in ore, in size, out bestX, out bestY)
+     6     1x      6,0  <no function>
+     4     4x      1,0  inline void updateRowPositionsEven(in dy, in rowSum, bestX, bestY, best)
+     3     3x      1,0  inline void updateRowPositionsOdd(in dy, in rowSum, bestX, bestY, best)
+```
 
 ### Option `print-unresolved`
 

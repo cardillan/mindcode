@@ -110,14 +110,14 @@ usage: mindcode cm [-h] [-c] [-w] [--watcher-port {0..65535}] [--watcher-timeout
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]]
-                [--run-steps {0..1000000000}] [--output-profiling [{true,false}]] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [-p {0..2}] [-d {0..3}] [--print-code-size {true,false}] [-u [{none,plain,flat-ast,deep-ast,source}]]
+                [-s] [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
+                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-invalid-counter {true,false}]
+                [--err-invalid-identifier {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-uninitialized-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
@@ -294,6 +294,8 @@ Debugging options:
                          sets the detail level of parse tree output into the log file, 0 = off
   -d, --debug-messages {0..3}
                          sets the detail level of debug messages, 0 = off
+  --print-code-size {true,false}
+                         outputs final code size broken down by function
   -u, --print-unresolved [{none,plain,flat-ast,deep-ast,source}]
                          activates output of the unresolved code (before  virtual instructions resolution) of given type
                          (instruction numbers are included in the output)
@@ -395,14 +397,14 @@ usage: mindcode cs [-h] [-c] [-o [OUTPUT]] [--output-directory OUTPUT-DIRECTORY]
                 [--jump-threading LEVEL] [--unreachable-code-elimination LEVEL] [--stack-optimization LEVEL]
                 [--print-merging LEVEL]
                 [--sort-variables [{linked,params,globals,main,locals,all,none} [{linked,params,globals,main,locals,all,none} ...]]]
-                [-p {0..2}] [-d {0..3}] [-u [{none,plain,flat-ast,deep-ast,source}]] [-s] [--run [{true,false}]]
-                [--run-steps {0..1000000000}] [--output-profiling [{true,false}]] [--trace-execution {true,false}]
-                [--dump-variables-on-stop {true,false}] [--stop-on-stop-instruction {true,false}]
-                [--stop-on-end-instruction {true,false}] [--stop-on-program-end {true,false}]
-                [--err-invalid-counter {true,false}] [--err-invalid-identifier {true,false}]
-                [--err-unsupported-opcode {true,false}] [--err-uninitialized-var {true,false}]
-                [--err-assignment-to-fixed-var {true,false}] [--err-not-an-object {true,false}]
-                [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
+                [-p {0..2}] [-d {0..3}] [--print-code-size {true,false}] [-u [{none,plain,flat-ast,deep-ast,source}]]
+                [-s] [--run [{true,false}]] [--run-steps {0..1000000000}] [--output-profiling [{true,false}]]
+                [--trace-execution {true,false}] [--dump-variables-on-stop {true,false}]
+                [--stop-on-stop-instruction {true,false}] [--stop-on-end-instruction {true,false}]
+                [--stop-on-program-end {true,false}] [--err-invalid-counter {true,false}]
+                [--err-invalid-identifier {true,false}] [--err-unsupported-opcode {true,false}]
+                [--err-uninitialized-var {true,false}] [--err-assignment-to-fixed-var {true,false}]
+                [--err-not-an-object {true,false}] [--err-not-a-number {true,false}] [--err-unknown-color {true,false}]
                 [--err-invalid-content {true,false}] [--err-invalid-link {true,false}]
                 [--err-memory-access {true,false}] [--err-unsupported-block-operation {true,false}]
                 [--err-text-buffer-overflow {true,false}] [--err-invalid-format {true,false}]
@@ -568,6 +570,8 @@ Debugging options:
                          sets the detail level of parse tree output into the log file, 0 = off
   -d, --debug-messages {0..3}
                          sets the detail level of debug messages, 0 = off
+  --print-code-size {true,false}
+                         outputs final code size broken down by function
   -u, --print-unresolved [{none,plain,flat-ast,deep-ast,source}]
                          activates output of the unresolved code (before  virtual instructions resolution) of given type
                          (instruction numbers are included in the output)

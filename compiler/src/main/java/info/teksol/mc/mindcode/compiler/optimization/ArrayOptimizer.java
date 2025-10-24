@@ -2,6 +2,7 @@ package info.teksol.mc.mindcode.compiler.optimization;
 
 import info.teksol.mc.messages.MessageLevel;
 import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
+import info.teksol.mc.mindcode.compiler.generation.variables.ArrayStore;
 import info.teksol.mc.mindcode.logic.arguments.LogicKeyword;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
 import info.teksol.mc.mindcode.logic.instructions.*;
@@ -116,8 +117,9 @@ class ArrayOptimizer extends BaseOptimizer {
         List<ArrayAccessInstruction> arrayInstructions = instructionStream()
                 .filter(ArrayAccessInstruction.class::isInstance)
                 .map(ArrayAccessInstruction.class::cast)
-                .filter(ix -> ix.getArrayOrganization().supportsLookup() && !ix.getArray().isDeclaredRemote()
-                              && ix.getArray().getArrayStore().getSize() >= MIN_LOOKUP_CAPACITY)
+                .filter(ix -> ix.getArray().getArrayStore().getArrayType() == ArrayStore.ArrayType.INTERNAL
+                        && ix.getArrayOrganization().supportsLookup() && !ix.getArray().isDeclaredRemote()
+                        && ix.getArray().getArrayStore().getSize() >= MIN_LOOKUP_CAPACITY)
                 .toList();
 
         if (arrayInstructions.isEmpty()) return;

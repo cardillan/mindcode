@@ -214,7 +214,7 @@ public class StandardFunctionCallsBuilder extends AbstractFunctionBuilder {
         final LogicLabel returnLabel = assembler.nextLabel();
         returnStack.enterFunction(returnLabel, returnValue);
 
-        assembler.enterAstNode(function.getDeclaration(), AstContextType.FUNCTION_BODY);
+        assembler.enterFunctionBodyAstNode(function, function.getDeclaration(), AstContextType.FUNCTION_BODY);
         ValueStore result = evaluateBody(function.getBody());
         if (!function.isVoid()) {
             returnValue.setValue(assembler, result.getValue(assembler));

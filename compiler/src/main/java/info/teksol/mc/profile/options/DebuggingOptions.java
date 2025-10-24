@@ -8,6 +8,7 @@ public enum DebuggingOptions {
     DEBUG_MESSAGES,
     DEBUG_OUTPUT,
     PARSE_TREE,
+    PRINT_CODE_SIZE,
     PRINT_STACKTRACE,
     PRINT_UNRESOLVED,
     SORT_VARIABLES,

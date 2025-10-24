@@ -24,6 +24,8 @@ public final class AstContext {
     }
 
     private final CompilerProfile profile;
+
+    // Marks the function and the code setting up the call to the function
     private final @Nullable MindcodeFunction function;
     private final int level;
     private final @Nullable AstMindcodeNode node;
@@ -33,8 +35,13 @@ public final class AstContext {
     private double weight;
     private final List<AstContext> children;
 
+    // For keeping track of function sizes
+    private final @Nullable MindcodeFunction functionBody;
+    private final int functionCopyNumber;
+
     private AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, int level, @Nullable AstMindcodeNode node,
-            AstContextType contextType, AstSubcontextType subcontextType, @Nullable AstContext parent, double weight, List<AstContext> children) {
+            AstContextType contextType, AstSubcontextType subcontextType, @Nullable AstContext parent, double weight,
+            @Nullable MindcodeFunction functionBody, int functionCopyNumber, List<AstContext> children) {
         this.id = counter.getAndIncrement();
         this.profile = profile;
         this.function = function;
@@ -44,17 +51,20 @@ public final class AstContext {
         this.subcontextType = subcontextType;
         this.parent = parent;
         this.weight = weight;
+        this.functionBody = functionBody;
+        this.functionCopyNumber = functionCopyNumber;
         this.children = children;
     }
 
     private AstContext(CompilerProfile profile, @Nullable MindcodeFunction function, int level, @Nullable AstMindcodeNode node,
-            AstContextType contextType, AstSubcontextType subcontextType, @Nullable AstContext parent, double weight) {
-        this(profile, function, level, node, contextType, subcontextType, parent, weight, new ArrayList<>());
+            AstContextType contextType, AstSubcontextType subcontextType, @Nullable AstContext parent, double weight,
+            @Nullable MindcodeFunction functionBody, int functionCopyNumber) {
+        this(profile, function, level, node, contextType, subcontextType, parent, weight, functionBody, functionCopyNumber, new ArrayList<>());
     }
 
     public static AstContext createRootNode(CompilerProfile profile) {
         return new AstContext(profile, null, 0, null, AstContextType.ROOT,
-                AstSubcontextType.BASIC, null, 1.0);
+                AstSubcontextType.BASIC, null, 1.0, null, 0);
     }
 
     public static AstContext createStaticRootNode() {
@@ -63,7 +73,7 @@ public final class AstContext {
 
     public AstContext createChild(AstMindcodeNode node, AstContextType contextType) {
         AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, node.getSubcontextType(),
-                this, node.getProfile().getCodeWeight());
+                this, node.getProfile().getCodeWeight(), functionBody, functionCopyNumber);
         children.add(child);
 
         return child;
@@ -71,7 +81,7 @@ public final class AstContext {
 
     public AstContext createChild(AstMindcodeNode node, AstContextType contextType, AstSubcontextType subcontextType) {
         AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, subcontextType,
-                this, node.getProfile().getCodeWeight());
+                this, node.getProfile().getCodeWeight(), functionBody, functionCopyNumber);
         children.add(child);
 
         return child;
@@ -80,51 +90,67 @@ public final class AstContext {
     public AstContext createFunctionDeclaration(MindcodeFunction function, AstMindcodeNode node,
             AstContextType contextType, double weight) {
         AstContext child = new AstContext(profile, function, level + 1, node, contextType, node.getSubcontextType(),
-                this, weight);
+                this, weight, function, function.nextCopyNumber());
         children.add(child);
+        return child;
+    }
+
+    public AstContext createFunctionBody(MindcodeFunction functionBody, AstMindcodeNode node, AstContextType contextType) {
+        AstContext child = new AstContext(node.getProfile(), function, level + 1, node, contextType, node.getSubcontextType(),
+                this, node.getProfile().getCodeWeight(), functionBody, functionBody.nextCopyNumber());
+        children.add(child);
+
         return child;
     }
 
     public AstContext createSubcontext(AstSubcontextType subcontextType, double weight) {
         // Subcontext always inherits compiler profile from parent context
-        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType, this, weight);
+        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType,
+                this, weight, functionBody, functionCopyNumber);
         children.add(child);
         return child;
     }
 
     public AstContext createSubcontext(MindcodeFunction function, AstSubcontextType subcontextType, double weight) {
         // Subcontext always inherits compiler profile from parent context
-        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType, this, weight);
+        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType,
+                this, weight, functionBody, functionCopyNumber);
         children.add(child);
         return child;
     }
 
     public AstContext createSubcontext(AstContextType contextType, AstSubcontextType subcontextType, double weight) {
         // Subcontext always inherits compiler profile from parent context
-        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType, this, weight);
+        AstContext child = new AstContext(profile, function, level, node, contextType, subcontextType,
+                this, weight, functionBody, functionCopyNumber);
         children.add(child);
         return child;
     }
 
     public Map<AstContext, AstContext> createDeepCopy() {
         Map<AstContext, AstContext> map = new IdentityHashMap<>(16);
-        createDeepCopy(map, parent);
+        Map<MindcodeFunction, Map<Integer, Integer>> functionCopyMap = new HashMap<>(16);
+        createDeepCopy(map, functionCopyMap, parent, functionBody);
         return map;
     }
 
-    private AstContext createDeepCopy(Map<AstContext, AstContext> map, @Nullable AstContext parent) {
-        AstContext copy = new AstContext(profile, function, level, node, contextType, subcontextType, parent, weight);
+    private AstContext createDeepCopy(Map<AstContext, AstContext> map, Map<MindcodeFunction, Map<Integer, Integer>> functionCopyMap,
+            @Nullable AstContext parent, @Nullable MindcodeFunction originalFunction) {
+        int newFunctionCopyNumber = functionBody == null || functionBody == originalFunction ? 0
+                : functionCopyMap.computeIfAbsent(functionBody, _ -> new HashMap<>()).computeIfAbsent(functionCopyNumber, _ -> functionBody.nextCopyNumber());
+        AstContext copy = new AstContext(profile, function, level, node, contextType, subcontextType, parent, weight, functionBody, newFunctionCopyNumber);
         children.stream()
-                .map(c -> c.createDeepCopy(map, copy))
+                .map(c -> c.createDeepCopy(map, functionCopyMap, copy, originalFunction))
                 .forEachOrdered(copy.children::add);
         map.put(this, copy);
         return copy;
     }
 
-    public Map<AstContext, AstContext> copyChildrenTo(AstContext newParent) {
+    public Map<AstContext, AstContext> copyChildrenTo(AstContext newParent, boolean functionInlining) {
         Map<AstContext, AstContext> map = new IdentityHashMap<>(16);
+        Map<MindcodeFunction, Map<Integer, Integer>> functionCopyMap = new HashMap<>(16);
         children.stream()
-                .map(c -> c.createDeepCopy(map, newParent))
+                .map(c -> c.createDeepCopy(map, functionCopyMap, newParent, functionInlining ? null : functionBody))
                 .forEachOrdered(newParent.children::add);
         map.put(this, newParent);
         return map;
@@ -360,6 +386,14 @@ public final class AstContext {
 
     public MindcodeFunction existingFunction() {
         return Objects.requireNonNull(function);
+    }
+
+    public @Nullable MindcodeFunction getFunctionBody() {
+        return functionBody;
+    }
+
+    public int getFunctionCopyNumber() {
+        return functionCopyNumber;
     }
 
     public boolean isFunction() {

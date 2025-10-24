@@ -73,10 +73,6 @@ public class MindcodeFunction {
     /// Indicates the body of the function has been generated.
     private boolean generated = false;
 
-    /// Indicates this is a remote function statically bound to a single processor,
-    /// therefore callable as a function as well as a method.
-    private boolean staticallyBound = false;
-
     /// All calls in this function, including unresolved ones
     private final List<AstFunctionCall> functionCalls = new ArrayList<>();
 
@@ -85,6 +81,9 @@ public class MindcodeFunction {
     private final Set<MindcodeFunction> directCalls = new HashSet<>();
     private final Set<MindcodeFunction> recursiveCalls = new HashSet<>();
     private final Set<MindcodeFunction> indirectCalls = new HashSet<>();
+
+    /// Keeps the number of copies of this function
+    private AtomicInteger copyNumber = new AtomicInteger();
 
     MindcodeFunction(AstFunctionDeclaration declaration, AstModule module, boolean entryPoint) {
         this.declaration = Objects.requireNonNull(declaration);
@@ -100,6 +99,7 @@ public class MindcodeFunction {
         parameterCount = other.parameterCount;
         placementCount = other.placementCount;
         visited = other.visited;
+        copyNumber = other.copyNumber;
         inlined = true;
 
         functionCalls.addAll(other.functionCalls);
@@ -115,6 +115,10 @@ public class MindcodeFunction {
     /// Prepares an inlined function for call (by setting up a prefix for it)
     public MindcodeFunction prepareInlinedForCall(NameCreator nameCreator) {
         return new MindcodeFunction(nameCreator, this);
+    }
+
+    public int nextCopyNumber() {
+        return copyNumber.getAndIncrement();
     }
 
     void addCall(AstFunctionCall call) {
@@ -294,11 +298,6 @@ public class MindcodeFunction {
         return visited;
     }
 
-    /// @return true if this function is statically bound
-    public boolean isStaticallyBound() {
-        return staticallyBound;
-    }
-
     /// @return the number of places the function is called from
     public int getPlacementCount() {
         return placementCount;
@@ -463,11 +462,6 @@ public class MindcodeFunction {
         parameters = getDeclaredParameters().stream()
                 .map(p -> (FunctionParameter) LogicVariable.parameter(p, this,
                         nameCreator.parameter(this, p.getName()), isRemote())).toList();
-    }
-
-    public void setupRemoteParameters(CodeAssembler assembler, LogicVariable processor) {
-        parameters = createRemoteParameters(assembler, processor);
-        staticallyBound = true;
     }
 
     public List<FunctionParameter> createRemoteParameters(CodeAssembler assembler, LogicVariable processor) {

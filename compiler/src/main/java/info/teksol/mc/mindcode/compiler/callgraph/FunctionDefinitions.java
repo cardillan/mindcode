@@ -90,28 +90,25 @@ public class FunctionDefinitions extends AbstractMessageEmitter {
         return functionMap.getOrDefault(name, List.of());
     }
 
-    private Predicate<MindcodeFunction> createRemoteFunctionFilter(AstFunctionCall call, boolean assumeStaticBind) {
+    private Predicate<MindcodeFunction> createRemoteFunctionFilter(AstFunctionCall call) {
         if (call.getObject() == null) {
-            return f -> f.getModule().getRemoteProcessors().size() <= (assumeStaticBind || f.isStaticallyBound() ? 1 : 0);
+            return f -> f.getModule().getRemoteProcessors().isEmpty();
         } else if (call.getObject() instanceof AstIdentifier target && !target.isExternal()) {
             return f -> f.getModule().matchesProcessor(target.getName());
         } else {
-            return f -> false;
+            return _ -> false;
         }
     }
 
     public List<MindcodeFunction> getLooseMatches(AstFunctionCall call) {
         return functionMap.getOrDefault(call.getFunctionName(), List.of())
-                .stream().filter(createRemoteFunctionFilter(call, false)).toList();
+                .stream().filter(createRemoteFunctionFilter(call)).toList();
     }
 
     public List<MindcodeFunction> getExactMatches(AstFunctionCall call, int callArgumentCount) {
-        // When callArgumentCount, the call graph builder probes all possible function calls
-        // The availability of static binding is assumed
-
         List<MindcodeFunction> list = functionMap.getOrDefault(call.getFunctionName(), List.of())
                 .stream()
-                .filter(createRemoteFunctionFilter(call, callArgumentCount < 0))
+                .filter(createRemoteFunctionFilter(call))
                 .filter(f -> f.exactMatch(call, callArgumentCount))
                 .toList();
 

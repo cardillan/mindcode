@@ -1730,15 +1730,17 @@ class OptimizationContext {
                     .toList());
         }
 
-        public LogicList duplicateToContext(AstContext newContext) {
-            return transformToContext(newContext, ix -> ix);
+        public LogicList duplicateToContext(AstContext newContext, boolean functionInlining) {
+            return transformToContext(newContext, functionInlining, ix -> ix);
         }
 
-        public @Nullable LogicList duplicateToContext(AstContext newContext, Predicate<LogicInstruction> matcher) {
-            return transformToContext(newContext, ix -> matcher.test(ix) ? ix : null);
+        public @Nullable LogicList duplicateToContext(AstContext newContext, boolean functionInlining,
+                Predicate<LogicInstruction> matcher) {
+            return transformToContext(newContext, functionInlining, ix -> matcher.test(ix) ? ix : null);
         }
 
-        public LogicList transformToContext(AstContext newContext, Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
+        public LogicList transformToContext(AstContext newContext, boolean functionInlining,
+                Function<LogicInstruction, @Nullable LogicInstruction> transformer) {
             if (astContext == null) {
                 throw new MindcodeInternalError("No astContext");
             }
@@ -1746,7 +1748,7 @@ class OptimizationContext {
             // Duplicate labels
             Map<LogicLabel, LogicLabel> labelMap = duplicateLabels();
 
-            Map<AstContext, AstContext> contextMap = astContext.copyChildrenTo(newContext);
+            Map<AstContext, AstContext> contextMap = astContext.copyChildrenTo(newContext, functionInlining);
             return new LogicList(contextMap.get(astContext), stream()
                     .map(transformer)
                     .filter(Objects::nonNull)

@@ -177,7 +177,7 @@ class IfExpressionOptimizer extends BaseOptimizer {
         if (flowControl.getFirst() instanceof JumpInstruction jump2 && jump2.isUnconditional()
                 || (falseContent.isEmpty() && flowControl.getFirst() instanceof EmptyInstruction)) {
             AstContext targetContext = Objects.requireNonNull(ifExpression.parent()).createChild(ifExpression.existingNode(), OPERATOR);
-            LogicList instructions = condition.subList(0, condition.size() - 1).duplicateToContext(targetContext);
+            LogicList instructions = condition.subList(0, condition.size() - 1).duplicateToContext(targetContext, false);
 
             JumpInstruction invertedJump = negateCompoundCondition(condition);
             if (invertedJump != null) {

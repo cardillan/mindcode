@@ -155,7 +155,7 @@ class FunctionInliner extends BaseOptimizer {
             assert call.parent() != null;
             AstContext newContext = call.parent().createSubcontext(INLINE_CALL, 1.0);
             int insertionPoint = firstInstructionIndex(call);
-            LogicList newBody = body.duplicateToContext(newContext);
+            LogicList newBody = body.duplicateToContext(newContext, true);
             insertInstructions(insertionPoint, newBody);
             // Remove original call instructions
             removeMatchingInstructions(ix -> ix.belongsTo(call));
@@ -243,7 +243,7 @@ class FunctionInliner extends BaseOptimizer {
         AstContext newContext = Objects.requireNonNull(call.parent())
                 .createSubcontext(INLINE_CALL, 1.0);
         int insertionPoint = firstInstructionIndex(call);
-        LogicList newBody = body.duplicateToContext(newContext);
+        LogicList newBody = body.duplicateToContext(newContext, true);
         insertInstructions(insertionPoint, newBody);
         // Remove original call instructions, including hoisted ones
         removeMatchingInstructions(ix -> ix.belongsTo(call));

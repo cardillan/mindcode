@@ -23,6 +23,7 @@ import info.teksol.mc.mindcode.compiler.astcontext.AstContext;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraph;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraphCreator;
 import info.teksol.mc.mindcode.compiler.callgraph.CallGraphCreatorContext;
+import info.teksol.mc.mindcode.compiler.callgraph.MindcodeFunction;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluator;
 import info.teksol.mc.mindcode.compiler.evaluator.CompileTimeEvaluatorContext;
 import info.teksol.mc.mindcode.compiler.generation.*;
@@ -36,7 +37,6 @@ import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionLabelResolve
 import info.teksol.mc.mindcode.compiler.postprocess.LogicInstructionPrinter;
 import info.teksol.mc.mindcode.compiler.preprocess.DirectivePreprocessor;
 import info.teksol.mc.mindcode.compiler.preprocess.PreprocessorContext;
-import info.teksol.mc.mindcode.logic.arguments.LogicArgument;
 import info.teksol.mc.mindcode.logic.arguments.LogicBuiltIn;
 import info.teksol.mc.mindcode.logic.arguments.LogicLabel;
 import info.teksol.mc.mindcode.logic.arguments.LogicVariable;
@@ -56,7 +56,6 @@ import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static info.teksol.mc.mindcode.logic.opcodes.Opcode.*;
@@ -339,8 +338,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         instructions = resolver.resolveLabels(instructions, forcedVariables);
         executableInstructions = instructions.stream().filter(ix -> !(ix instanceof CommentInstruction)).toList();
 
-        // Set of all user variables in the program
-        generateUnusedVolatileWarnings();
+        if (globalProfile.isPrintCodeSize()) {
+            outputFunctionSizes();
+        }
 
         output = LogicInstructionPrinter.toString(instructionProcessor, resolver.generateSymbolicLabels(instructions),
                 globalProfile.isSymbolicLabels(), globalProfile.getMlogIndent());
@@ -361,16 +361,41 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         }
     }
 
-    private void generateUnusedVolatileWarnings() {
-        Set<LogicArgument> existing = instructions.stream()
-                .flatMap(ix -> ix.inputOutputArgumentsStream().filter(LogicArgument::isUserVariable))
-                .collect(Collectors.toSet());
+    private String functionName(LogicInstruction  instruction) {
+        MindcodeFunction function = instruction.getAstContext().getFunctionBody();
+        return function == null || function.isMain()
+                ? "<no function>"
+                : function.getDeclaration().toSourceCode();
+    }
 
-        assert variables != null;
-        variables.getVolatileVariables().stream()
-                .filter(Predicate.not(existing::contains))
-                .sorted(Comparator.comparing(LogicVariable::sourcePosition))
-                .forEach(v -> warn(v.sourcePosition(), WARN.VOLATILE_VARIABLE_NOT_USED, v.getName()));
+    private int functionCopyNumber(LogicInstruction instruction) {
+        return instruction.getAstContext().getFunctionCopyNumber();
+    }
+
+    private void outputFunctionSizes() {
+        List<LogicInstruction> list = executableInstructions.stream().filter(ix -> ix.getOpcode() != LABEL).toList();
+        Map<String, Integer> sizes = list.stream()
+                .collect(Collectors.groupingBy(this::functionName, Collectors.summingInt(_ -> 1)));
+
+        Map<String, Integer> instances = list.stream().collect(Collectors.groupingBy(this::functionName,
+                Collectors.collectingAndThen(Collectors.mapping(this::functionCopyNumber,
+                        Collectors.toSet()), Set::size)));
+
+        StringBuilder sbr = new StringBuilder()
+                .append("\nCode size and number of instantiations by function:")
+                .append("\n  Size  Times  AvgSize  Function");
+        Formatter fmt = new Formatter(sbr);
+        sizes.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue(Comparator.reverseOrder())
+                        .thenComparing(Map.Entry.comparingByKey()))
+                .forEach(e -> {
+                    int size = e.getValue();
+                    int number = instances.getOrDefault(e.getKey(), 1);
+                    fmt.format("\n%6d  %4dx  %7.1f  %s", e.getValue(), number, (double) size / number, e.getKey());
+                });
+        fmt.close();
+
+        info("%s", sbr);
     }
 
     private Processor createEmulator() {

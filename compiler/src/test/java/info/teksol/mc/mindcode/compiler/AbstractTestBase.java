@@ -90,6 +90,7 @@ public abstract class AbstractTestBase extends AbstractMessageEmitter implements
                 .setAutoPrintflush(false)
                 .setDebugMessages(3)
                 .setPrintStackTrace(true)
+                .setPrintCodeSize(false)
                 .setRun(true);
 
     }

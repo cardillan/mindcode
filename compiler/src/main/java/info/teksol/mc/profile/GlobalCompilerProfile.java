@@ -130,6 +130,10 @@ public interface GlobalCompilerProfile {
         return getIntValue(DebuggingOptions.PARSE_TREE);
     }
 
+    default boolean isPrintCodeSize() {
+        return getBooleanValue(DebuggingOptions.PRINT_CODE_SIZE);
+    }
+
     default boolean isPrintStackTrace() {
         return getBooleanValue(DebuggingOptions.PRINT_STACKTRACE);
     }
