@@ -12,11 +12,15 @@ import info.teksol.mc.mindcode.compiler.generation.variables.FunctionArgument;
 import info.teksol.mc.mindcode.compiler.generation.variables.MissingValue;
 import info.teksol.mc.mindcode.compiler.generation.variables.ValueStore;
 import info.teksol.mc.mindcode.logic.arguments.*;
+import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.mindcode.logic.opcodes.ProcessorVersion;
 import org.jspecify.annotations.NullMarked;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Pattern;
 
 import static info.teksol.mc.messages.ERR.*;
@@ -101,6 +105,98 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
 
         assembler.clearSubcontextType();
         return result;
+    }
+
+    public ValueStore handleError(AstFunctionCall call) {
+        assembler.setSubcontextType(AstSubcontextType.ARGUMENTS, 1.0);
+        List<FunctionArgument> arguments = processArguments(call);
+        FunctionArgument.validateAsInput(messageConsumer(), arguments);
+
+        if (arguments.isEmpty()) {
+            error(call, FUNCTION_CALL_NOT_ENOUGH_ARGS, call.getFunctionName(), 1, call.getArguments().size());
+        } else {
+            assembler.setSubcontextType(AstSubcontextType.SYSTEM_CALL, 1.0);
+            List<LogicValue> finalArgs = arguments.getFirst().unwrap() instanceof FormattableContent formattable
+                    ? createFormattableErrorOutput(
+                    evaluateExpressionsUncached(formattable.getParts()), arguments.subList(1, arguments.size()))
+                    : createPlainErrorOutput(arguments);
+
+            if (call.getProfile().isErrorFunction()) {
+                Consumer<List<LogicValue>> errorAssembler = switch (call.getProfile().getErrorReporting()) {
+                    case NONE -> _ -> {};
+                    case ASSERT -> mlogAssertionsErrorAssembler();
+                    case MINIMAL, SIMPLE, DESCRIBED -> builtinErrorAssembler();
+                };
+
+                errorAssembler.accept(finalArgs);
+            }
+        }
+
+        assembler.clearSubcontextType();
+        return LogicVoid.VOID;
+    }
+
+    private List<LogicValue> createFormattableErrorOutput(List<ValueStore> parts, List<FunctionArgument> arguments) {
+        int index = 0;
+        StringBuilder sbr = new StringBuilder();
+        List<LogicValue> values = new ArrayList<>();
+        for (ValueStore part : parts) {
+            if (part instanceof LogicString str) {
+                sbr.append(str.getValue());
+            } else {
+                LogicValue value;
+                if (part instanceof MissingValue) {
+                    if (index == arguments.size()) {
+                        error(part, FORMATTABLE_NOT_ENOUGH_ARGS);
+                        continue;
+                    }
+                    value = arguments.get(index++).getValue(assembler);
+                } else {
+                    value = part.getValue(assembler);
+                }
+
+                if (value instanceof LogicLiteral lit) {
+                    sbr.append(lit.format(processor));
+                } else {
+                    values.add(value);
+                    sbr.append("[[").append(values.size()).append("]");
+                }
+            }
+        }
+
+        if (index < arguments.size()) {
+            error(pos(arguments.get(index), arguments.getLast()), FORMATTABLE_TOO_MANY_ARGS);
+        }
+
+        values.addFirst(LogicString.create(sbr.toString()));
+        return values;
+    }
+
+
+
+
+    private List<LogicValue> createPlainErrorOutput(List<FunctionArgument> arguments) {
+        return arguments.stream().map(argument -> argument.getValue(assembler)).toList();
+    }
+
+    private Consumer<List<LogicValue>> builtinErrorAssembler() {
+        return values -> {
+            for (int index = 0; index < values.size(); index++) {
+                assembler.createSet(LogicVariable.error(index), values.get(index));
+            }
+            assembler.createStop();
+        };
+    }
+
+    private Consumer<List<LogicValue>> mlogAssertionsErrorAssembler() {
+        return values -> {
+            List<LogicArgument> list = new ArrayList<>(Collections.nCopies(10, LogicString.create("")));
+            for (int index = 0; index < 10; index++) {
+                if (index >= values.size()) break;
+                list.set(index, values.get(index));
+            }
+            assembler.createInstruction(Opcode.ERROR, list);
+        };
     }
 
     public ValueStore handlePrintf(AstFunctionCall call) {
@@ -253,5 +349,9 @@ public class BuiltinFunctionTextOutputBuilder extends AbstractFunctionBuilder {
         boolean requiresParameter() {
             return this != PRINTLN;
         }
+    }
+
+    private interface ErrorAssembler {
+        void create(CodeAssembler assembler, List<ValueStore> values);
     }
 }

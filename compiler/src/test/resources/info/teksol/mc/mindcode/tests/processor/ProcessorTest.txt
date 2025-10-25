@@ -11,7 +11,7 @@ function-inlining.mnd:                            900      900     100.0%   B3AB
 iterated-for-loop-break-continue.mnd:              37      168      97.2%   80825B23266F8FF3   94CEA6A155EAA7FA
 loops-in-conditions.mnd:                            4        4     100.0%   25F777AD40847D3B   BC62EAD7A86062D4
 prints-values.mnd:                                 42       42     100.0%   EA633A3540E9449B   C5E6438467DE4671
-processesAssertBounds:                              5        5     100.0%   442250AE1653638F   56C54AE64C590C79
+processesAssertBounds:                              5        5     100.0%   95377598091542AF   56C54AE64C590C79
 processesBasicCode2:                                3        3     100.0%   B406896E6E3CDCB7   8FE79E3E7140A46C
 processesBasicCode:                                 4        4     100.0%   A4E4C088A4510A90   EB7D6403850CF0B3
 processesGlobalVariableDataFlow:                   24       24     100.0%   A117AFBA99D093C8   C5551F799CC03A47

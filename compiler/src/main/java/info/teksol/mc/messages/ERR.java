@@ -80,7 +80,7 @@ public class ERR {
     public static final String EXT_STORAGE_MUTABLE_RANGE = "External storage declaration must specify constant range.";
     public static final String EXT_STORAGE_NON_INTEGER_INDEX = "External storage declaration must specify integer index.";
     public static final String EXT_STORAGE_NON_INTEGER_RANGE = "External storage declaration must specify integer range.";
-    public static final String FORMATTABLE_FORBIDDEN = "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.";
+    public static final String FORMATTABLE_FORBIDDEN = "A formattable string literal can only be used as a first argument to the print(), println(), remark() or error() functions.";
     public static final String FORMATTABLE_NOT_ENOUGH_ARGS = "Not enough arguments for formattable placeholders.";
     public static final String FORMATTABLE_TOO_MANY_ARGS = "Too many arguments for formattable placeholders.";
     public static final String FOR_EACH_UNBALANCED_GROUPS = "Not enough values to supply this iterator group (provided: %d, required: %d).";

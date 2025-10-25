@@ -48,7 +48,7 @@ public abstract class ProcessorTestBase extends AbstractProcessorTest {
         testCode(expectedMessages()
                         .add("Failed runtime check: 'position 4:1: index out of bounds (0 to 0)'."),
                 """
-                        #set boundary-checks = assert;
+                        #set error-reporting = assert;
                         #set err-runtime-check-failed = false;
                         var a[1];
                         a[1 + rand(0)] = 10;

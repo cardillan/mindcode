@@ -34,9 +34,9 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         if (useSelects) {
             // If the array is not remote, we save one instruction on read
-            return profile.getBoundaryChecks().getSize() + arraySize - flag(!arrayStore.isRemote() && accessType == AccessType.READ);
+            return boundsCheckSize() + arraySize - flag(!arrayStore.isRemote() && accessType == AccessType.READ);
         } else {
-            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 4 : 7);
+            return boundsCheckSize() + (arraySize == 2 ? 4 : 7);
         }
     }
 
@@ -44,9 +44,9 @@ public class RegularShortArrayConstructor extends TablelessArrayConstructor {
     public double getExecutionSteps() {
         if (useSelects) {
             // If the array is not remote, we save one instruction on read
-            return profile.getBoundaryChecks().getExecutionSteps() + arraySize - flag(!arrayStore.isRemote() && accessType == AccessType.READ);
+            return boundsCheckExecutionSteps() + arraySize - flag(!arrayStore.isRemote() && accessType == AccessType.READ);
         } else {
-            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 2.5 : (3 + 4 + 3) / 3.0);
+            return boundsCheckExecutionSteps() + (arraySize == 2 ? 2.5 : (3 + 4 + 3) / 3.0);
         }
     }
 

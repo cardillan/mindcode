@@ -321,6 +321,11 @@ public class LogicVariable extends AbstractArgument implements LogicValue, Logic
                 arrayName + suffix, mlog, false, true, false);
     }
 
+    public static LogicVariable error(int index) {
+        return new LogicVariable(EMPTY, GLOBAL_PRESERVED, ValueMutability.MUTABLE,
+                "ERROR_" + index, "*ERROR_" + index);
+    }
+
     /// Return the variable passed as an argument to unused instruction parameters.
     /// @return variable for unused instruction parameters
     public static LogicVariable unusedVariable() {

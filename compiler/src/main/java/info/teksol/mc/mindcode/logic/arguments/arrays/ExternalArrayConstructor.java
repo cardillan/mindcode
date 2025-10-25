@@ -28,12 +28,12 @@ public class ExternalArrayConstructor extends TablelessArrayConstructor {
 
     @Override
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        return profile.getBoundaryChecks().getSize() + 1;
+        return boundsCheckSize() + 1;
     }
 
     @Override
     public double getExecutionSteps() {
-        return profile.getBoundaryChecks().getExecutionSteps() + 1;
+        return boundsCheckExecutionSteps() + 1;
     }
 
     @Override

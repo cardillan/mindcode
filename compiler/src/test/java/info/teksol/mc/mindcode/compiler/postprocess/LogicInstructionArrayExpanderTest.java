@@ -3,7 +3,7 @@ package info.teksol.mc.mindcode.compiler.postprocess;
 import info.teksol.mc.mindcode.compiler.CompilationPhase;
 import info.teksol.mc.mindcode.compiler.generation.AbstractCodeGeneratorTest;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mc.profile.RuntimeChecks;
+import info.teksol.mc.profile.RuntimeErrorReporting;
 import org.jspecify.annotations.NullMarked;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,10 +18,10 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         return CompilationPhase.ALL;
     }
 
-    private String createCode(RuntimeChecks checks, boolean external) {
+    private String createCode(RuntimeErrorReporting checks, boolean external) {
         return """
                 #set target = 7;
-                #set boundary-checks = %s;
+                #set error-reporting = %s;
                 #set array-optimization = none;
                 allocate heap in cell1;
                 param LIMIT = 3;
@@ -44,7 +44,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccess() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.NONE, external),
+                    createCode(RuntimeErrorReporting.NONE, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
@@ -85,7 +85,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckAssert() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.ASSERT, external),
+                    createCode(RuntimeErrorReporting.ASSERT, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
@@ -128,7 +128,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckMinimal() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.MINIMAL, external),
+                    createCode(RuntimeErrorReporting.MINIMAL, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
@@ -173,7 +173,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckSimple() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.SIMPLE, external),
+                    createCode(RuntimeErrorReporting.SIMPLE, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
@@ -220,7 +220,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckDescribed() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.DESCRIBED, external),
+                    createCode(RuntimeErrorReporting.DESCRIBED, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(SET, ".a*0", "1"),
@@ -274,7 +274,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccess() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.NONE, external),
+                    createCode(RuntimeErrorReporting.NONE, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
@@ -299,7 +299,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckAssert() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.ASSERT, external),
+                    createCode(RuntimeErrorReporting.ASSERT, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
@@ -326,7 +326,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckMinimal() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.MINIMAL, external),
+                    createCode(RuntimeErrorReporting.MINIMAL, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
@@ -355,7 +355,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckSimple() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.SIMPLE, external),
+                    createCode(RuntimeErrorReporting.SIMPLE, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),
@@ -386,7 +386,7 @@ class LogicInstructionArrayExpanderTest extends AbstractCodeGeneratorTest {
         @Test
         void expandsArrayAccessWithBoundCheckDescribed() {
             assertCompilesTo(
-                    createCode(RuntimeChecks.DESCRIBED, external),
+                    createCode(RuntimeErrorReporting.DESCRIBED, external),
 
                     createInstruction(SET, "LIMIT", "3"),
                     createInstruction(WRITE, "1", "cell1", "0"),

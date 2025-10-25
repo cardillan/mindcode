@@ -40,8 +40,16 @@ public interface LocalCompilerProfile {
     //</editor-fold>
 
     //<editor-fold desc="Compiler Options">
-    default RuntimeChecks getBoundaryChecks() {
-        return getEnumValue(CompilerOptions.BOUNDARY_CHECKS);
+    default boolean isBoundaryChecks() {
+        return getBooleanValue(CompilerOptions.BOUNDARY_CHECKS);
+    }
+
+    default boolean isErrorFunction() {
+        return getBooleanValue(CompilerOptions.ERROR_FUNCTION);
+    }
+
+    default RuntimeErrorReporting getErrorReporting() {
+        return getEnumValue(CompilerOptions.ERROR_REPORTING);
     }
 
     default Remarks getRemarks() {

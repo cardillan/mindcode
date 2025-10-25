@@ -1,4 +1,4 @@
-#set syntax = STRICT;
+#set syntax = strict;
 
 // Import system libraries for advanced units and blocks functions
 require units;

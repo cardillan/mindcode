@@ -8,7 +8,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 
 ### Fixed
 
-* Fixed the compiler not rejecting integer and double compiler option values outside the allowed range. 
+* Fixed the compiler not rejecting integer and double compiler option values outside the allowed range.
+* Fixed the compiler not stopping the compilation when an error in compiler directive gets detected. 
 
 ### Added
 
@@ -22,9 +23,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/), and this
 * Added the [`use-lookup-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-lookup-arrays) and [`use-short-arrays`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-use-short-arrays) options.
 * Added warnings when a name specified by the `mlog` modifier collides with another user-defined variable or array element in the current processor.
 * Added the ability to output the final code size broken down by function and an accompanying [`print-code-size`](/doc/syntax/SYNTAX-5-OTHER.markdown#option-print-code-size) options.
+* Added the [`error()` function](/doc/syntax/TROUBLESHOOTING.markdown#the-error-function), which can be used to report errors detected at runtime.
 
 ### Changed
 
+* **Breaking**: change to options governing runtime check generation:
+    * the `error-reporting` option now specifies the mechanism to be used by the compiler to report runtime errors. When set to `none`, no runtime checks occur, regardless of other settings. This was previously governed by the `boundary-checks` option.
+    * the `boundary-checks` option now takes a value of `true` or `false`, activating/deactivating boundary checks on array accesses.
+    * the `error-function` option takes a value of `true` or `false`. When `true`, the error is reported using the mechanism specified by `error-reporting`; when false`, the `error()` function has no effect.
 * **Breaking**: specifying the mlog name of a variable using the `remote` modifier is no longer supported. The `remote` modifier now takes only the name of the remote processor as a parameter, enclosed in parentheses. Use the [`mlog` modifier](doc/syntax/SYNTAX-1-VARIABLES.markdown#mlog-modifier) to specify the mlog name of the remote variable.
 * The `mlog` variable name must not match a linked block name.
 * The `mlog` modifier accepts multiple expressions, allowing to specify names for individual array elements.

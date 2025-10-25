@@ -38,12 +38,12 @@ public class LookupArrayConstructor extends TablelessArrayConstructor {
 
     @Override
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        return profile.getBoundaryChecks().getSize() + (instruction.isCompactAccessTarget() ? 1 : 3);
+        return boundsCheckSize() + (instruction.isCompactAccessTarget() ? 1 : 3);
     }
 
     @Override
     public double getExecutionSteps() {
-        return profile.getBoundaryChecks().getExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : 3);
+        return boundsCheckExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : 3);
     }
 
     @Override

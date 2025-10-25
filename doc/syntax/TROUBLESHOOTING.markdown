@@ -40,7 +40,60 @@ You can ask for help here even if you don't suspect there's an error in Mindcode
 
 ## Debugging the compiled code
 
-Mindcode provides two tools for making debugging the compiled code a bit easier.
+Mindcode provides several tools for making debugging the compiled code a bit easier.
+
+### The `error()` function
+
+The built-in `error()` function serves for logging diagnostic information when an unexpected situation is encountered by the program. The infromation is stored in special variables or displayed in-game, and the processor is stopped.
+
+> [!NOTE]
+> When the `error-function` option is set to `false`, or the `error-reporting` option is set to `none`, calls to the `error()` function are ignored and not compiled into the source code.
+
+When the first parameter to the error function is a formattable string literal, the string and other function arguments are [formatted at compile-time](SYNTAX-4-FUNCTIONS.markdown#compile-time-formatting). All constant values are embedded into the string literal, and remaining values are accumulated and referenced from the string literal as `[1]`, `[2]`, and so on.
+
+When the first parameter to the error function is not a formattable string literal, all parameters to the function are simply taken as is.
+
+How the function is compiled depends on the `error-reporting` compiler option:
+
+* when set to `minimal`, `simple` or `described`, the function parameters are stored in variables `*ERROR_n`, where `n` is an index starting at 0. When the formattable string literal was used, the formatted string is stored in `*ERROR_0` and the rest in `*ERROR_1`, `*ERROR_2` etc. After that, a `stop` instruction is emitted.
+* when set to `assert`, an `error` instruction is produced, taking up to 10 of the accumulated parameters as arguments. When the formattable string literal was used, the formatted string is used as the first argument. This instruction is then handled by the **Mlog Assertions** mod, which displays the message and stops the processor.
+
+Example:
+
+```Mindcode
+#set error-reporting = simple;
+#set symbolic-labels = true;
+
+const min = 0;
+param max = 8;
+param i = 10;
+
+if i < min or i > max then
+    error($"Index $i of array $ is out of bounds ($, $)!", "foo", min, max);
+end;
+
+print(i);
+```
+
+gets compiled to
+
+```mlog
+# Mlog code compiled with support for symbolic labels
+# You can safely add/remove instructions, in most parts of the program
+# Pay closer attention to sections of the program manipulating @counter
+    set max 8
+    set i 10
+    op lessThan *tmp0 i 0
+    op greaterThan *tmp1 i max
+    op or *tmp2 *tmp0 *tmp1
+    jump label_10 equal *tmp2 false
+        set *ERROR_0 "Index [[1] of array foo is out of bounds (0, [[2])!"
+        set *ERROR_1 i
+        set *ERROR_2 max
+        stop
+    label_10:
+    print i
+```
 
 ### Running the compiled code in an emulator
 

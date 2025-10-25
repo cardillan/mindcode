@@ -24,10 +24,6 @@ public class DirectiveProcessor extends AbstractMessageEmitter {
 
     private OptionScope scopeLimit = OptionScope.GLOBAL;
 
-    private interface OptionHandler {
-        void handle(CompilerProfile profile, AstDirectiveSet directive);
-    }
-
     public DirectiveProcessor(MessageConsumer messageConsumer) {
         super(messageConsumer);
     }

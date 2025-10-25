@@ -56,12 +56,12 @@ Semantically unstable compiler options are handled specifically in these context
 Options to specify the target environment for the code being compiled. This includes the Mindustry version,
 as well as prescribing which specific processor features may or may not be used.
 
-| Option                                                                           | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------|--------|--------------------|
-| [builtin-evaluation](#option-builtin-evaluation)                                 | global | stable             |
-| [instruction-limit](#option-instruction-limit)                                   | global | stable             |
-| [null-counter-is-noop](#option-null-counter-is-noop)                             | global | stable             |
-| [target](#option-target)                                                         | module | stable             |
+| Option                                                                                       | Scope  | Semantic stability |
+|----------------------------------------------------------------------------------------------|--------|--------------------|
+| [builtin-evaluation](#option-builtin-evaluation)                                             | global | stable             |
+| [instruction-limit](#option-instruction-limit)                                               | global | stable             |
+| [null-counter-is-noop](#option-null-counter-is-noop)                                         | global | stable             |
+| [target](#option-target)                                                                     | module | stable             |
 
 ### Option `builtin-evaluation`
 
@@ -204,11 +204,11 @@ Future targets will be compatible with all higher targets, unless a backwards-in
 
 Options determining how the mlog code is generated and formatted.
 
-| Option                                                                           | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------|--------|--------------------|
-| [function-prefix](#option-function-prefix)                                       | global | stable             |
-| [mlog-indent](#option-mlog-indent)                                               | global | stable             |
-| [symbolic-labels](#option-symbolic-labels)                                       | global | stable             |
+| Option                                                                                       | Scope  | Semantic stability |
+|----------------------------------------------------------------------------------------------|--------|--------------------|
+| [function-prefix](#option-function-prefix)                                                   | global | stable             |
+| [mlog-indent](#option-mlog-indent)                                                           | global | stable             |
+| [symbolic-labels](#option-symbolic-labels)                                                   | global | stable             |
 
 ### Option `function-prefix`
 
@@ -406,13 +406,16 @@ label_3:
 
 Options which affect the way the source code is compiled.
 
-| Option                                                                           | Scope  | Semantic stability |
-|----------------------------------------------------------------------------------|--------|--------------------|
-| [auto-printflush](#option-auto-printflush)                                       | global | stable             |
-| [boundary-checks](#option-boundary-checks)                                       | local  | stable             |
-| [remarks](#option-remarks)                                                       | local  | stable             |
-| [syntax](#option-syntax)                                                         | module | stable             |
-| [target-guard](#option-target-guard)                                             | global | stable             |
+| Option                                                                                       | Scope  | Semantic stability |
+|----------------------------------------------------------------------------------------------|--------|--------------------|
+| [auto-printflush](#option-auto-printflush)                                                   | global | stable             |
+| [boundary-checks](#option-boundary-checks)                                                   | local  | stable             |
+| [emulate-strict-not-equal](#option-emulate-strict-not-equal)                                 | global | stable             |
+| [error-function](#option-error-function)                                                     | local  | stable             |
+| [error-reporting](#option-error-reporting)                                                   | local  | stable             |
+| [remarks](#option-remarks)                                                                   | local  | stable             |
+| [syntax](#option-syntax)                                                                     | module | stable             |
+| [target-guard](#option-target-guard)                                                         | global | stable             |
 
 ### Option `auto-printflush`
 
@@ -424,6 +427,18 @@ Activates/deactivates automatic flushing of print output. Possible values are:
 * `true` (the default value): When the program contains at least one `print` or `printchar` instruction, and no `printflush` or `draw print` instructions, Mindcode adds a `printflush message1` instruction at the end of the main program body, and generates a warning.
 
 This feature is meant for small, test scripts, where a call to `printflush()` is easily missed. This situation would otherwise require new compilation and code injection into the mlog processor when detected.
+
+### Option `boundary-checks`
+
+**Option scope: [local](#local-scope)**
+
+his option activates/deactivates runtime checks when accessing internal or external array by index.
+
+* `false`: no boundary checks are performed.
+* `true` (the default value): boundary checks are performed according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case no runtime checks are performed.
+
+> [!NOTE]
+> No runtime checks are generated when accessing memory block directly without a declared array, for example `cell1[index]` or `memory[index]` (where `memory` is a variable and not an external array) do not have runtime checks generated.
 
 ### Option `emulate-strict-not-equal`
 
@@ -457,20 +472,32 @@ jump 2 strictEqual *tmp0 1
 print "Found!"
 ```
 
-### Option `boundary-checks`
+### Option `error-function`
 
 **Option scope: [local](#local-scope)**
 
-This option activates/deactivates runtime checks and specifies which mechanism to use when runtime checks are active. Runtime checks are a debug feature and should be only active when developing/debugging your scripts, as they make the code larger and slower.
+Specifies how calls to the [`error()` function](TROUBLESHOOTING.markdown#the-error-function) are handled:
 
-Currently, runtime checks are generated for these operations:
+* `false`: call to `error()` are ignored.
+* `true` (the default value): calls to `error()` are reported according to the error-reporting mechanism, unless `error-reporting` is set to `none`, in which case the calls are also ignored. 
 
-* Accessing an element of an internal or external array by index: the check makes sure the index lies within bounds. Note that no runtime checks are generated when accessing memory block directly without a declared array, for example `cell1[index]` or `memory[index]`, where `memory` is a variable and not an external array do not have runtime checks generated.
+### Option `error-reporting`
 
-Possible values for the `boundary-checks` directive are:
+**Option scope: [local](#local-scope)**
+
+This option specifies the mechanism to be used by the compiler to report failing runtime checks. Runtime checks are a debug feature and should be only active when developing/debugging your scripts, as they make the code larger and slower.
+
+Which runtime checks are performed is governed by other compiler options. Only when `error-reporting` is set to `none`, no runtime checks are performed, regardless of other option values.  
+
+The following compiler options govern which runtime checks are performed:
+
+* `boundary-checks`: when accessing an element of an internal or external array by index, a runtime-check is generated to make sure the index lies within bounds.
+* `error-function`: when a call to the [`error()` function](TROUBLESHOOTING.markdown#the-error-function) is made, this option specifies how the error is reported.
+
+Possible values for the `error-reporting` option are:
 
 * `none` (the default value): no runtime checks are generated.
-* `assert`: runtime checks are generated using instructions provided by the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions). The mod is available for Mindustry 7. If the mod is not installed, no runtime checks are performed, but otherwise the code runs as expected. Each runtime check takes one instruction. When the runtime check fails, the mod displays an error message over the processor for easier detection.
+* `assert`: runtime checks are generated using instructions provided by the [MlogAssertions mod](https://github.com/cardillan/MlogAssertions). The mod is available for Mindustry 7 and latest Mindustry 8 Beta. If the mod is not installed, no runtime checks are performed, but otherwise the code runs as expected. Each runtime check takes one instruction. When the runtime check fails, the mod displays an error message over the processor for easier detection.
 * `minimal`: when the runtime check fails, the program execution stops on a `jump` instruction (this instruction permanently jumps to itself, which can be determined by inspecting the `@counter` variable in the **Vars** screen). Each runtime check takes two instructions.
 * `simple`: when the runtime check fails, the program execution stops on a `stop` instruction (again, this can be determined by inspecting the `@counter` variable). Each runtime check takes three instructions.
 * `described`: when the runtime check fails, the program execution stops on a `stop` instruction. However, a `print` instruction containing an error message is generated just before the `stop` instruction; after locating the faulting `stop` instruction, the error message can be read. Each runtime check takes four instructions.
@@ -533,17 +560,17 @@ The jump target (`0`) is replaced with proper instruction address when it's not 
 Options guiding the overall optimization of the compiled code or activating/deactivating specific
 optimization actions.
 
-| Option                                                           | Scope  | Semantic stability |
-|------------------------------------------------------------------|--------|--------------------|
-| [case-optimization-strength](#option-case-optimization-strength) | local  | stable             |
-| [goal](#option-goal)                                             | local  | stable             |
-| [mlog-block-optimization](#option-mlog-block-optimization)       | local  | stable             |
-| [passes](#option-passes)                                         | global | stable             |
-| [text-tables](#option-text-tables)                               | local  | stable             |
-| [unsafe-case-optimization](#option-unsafe-case-optimization)     | local  | unstable           |
-| [use-lookup-arrays](#option-use-lookup-arrays)                   | global | stable             |
-| [use-short-arrays](#option-use-short-arrays)                     | global | stable             |
-| [weight](#option-weight)                                         | local  | stable             |
+| Option                                                                                       | Scope  | Semantic stability |
+|----------------------------------------------------------------------------------------------|--------|--------------------|
+| [case-optimization-strength](#option-case-optimization-strength)                             | local  | stable             |
+| [goal](#option-goal)                                                                         | local  | stable             |
+| [mlog-block-optimization](#option-mlog-block-optimization)                                   | local  | stable             |
+| [passes](#option-passes)                                                                     | global | stable             |
+| [text-tables](#option-text-tables)                                                           | local  | stable             |
+| [unsafe-case-optimization](#option-unsafe-case-optimization)                                 | local  | unstable           |
+| [use-lookup-arrays](#option-use-lookup-arrays)                                               | global | stable             |
+| [use-short-arrays](#option-use-short-arrays)                                                 | global | stable             |
+| [weight](#option-weight)                                                                     | local  | stable             |
 
 ### Option `case-optimization-strength`
 
@@ -701,13 +728,13 @@ Some optimizations performed on the `experimental` level have a global scope and
 
 Options to activate debugging features or additional output from the compiler.
 
-| Option                                       | Scope  | Semantic stability |
-|----------------------------------------------|--------|--------------------|
-| [debug-messages](#option-debug-messages)     | global | stable             |
-| [parse-tree](#option-parse-tree)             | global | stable             |
-| [print-code-size](#option-print-code-size)   | global | stable             |
-| [print-unresolved](#option-print-unresolved) | global | stable             |
-| [sort-variables](#option-sort-variables)     | global | stable             |
+| Option                                                                                       | Scope  | Semantic stability |
+|----------------------------------------------------------------------------------------------|--------|--------------------|
+| [debug-messages](#option-debug-messages)                                                     | global | stable             |
+| [parse-tree](#option-parse-tree)                                                             | global | stable             |
+| [print-code-size](#option-print-code-size)                                                   | global | stable             |
+| [print-unresolved](#option-print-unresolved)                                                 | global | stable             |
+| [sort-variables](#option-sort-variables)                                                     | global | stable             |
 
 ### Option `debug-messages`
 

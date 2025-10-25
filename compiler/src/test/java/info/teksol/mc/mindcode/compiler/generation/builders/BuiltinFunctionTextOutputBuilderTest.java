@@ -74,8 +74,8 @@ class BuiltinFunctionTextOutputBuilderTest extends AbstractCodeGeneratorTest {
 
         @Test
         void refusesSecondFormattable() {
-            assertGeneratesMessage(
-                    "A formattable string literal can only be used as a first argument to the print(), println() or remark() functions.",
+            assertGeneratesMessageRegex(
+                    "A formattable string literal can only be used as a first argument to the .* functions\\.",
                     "print($\"Hello, $\", $\"Hello $name\");");
         }
     }

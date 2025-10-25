@@ -11,7 +11,7 @@ import info.teksol.mc.mindcode.logic.instructions.*;
 import info.teksol.mc.mindcode.logic.instructions.ArrayAccessInstruction.AccessType;
 import info.teksol.mc.mindcode.logic.opcodes.Opcode;
 import info.teksol.mc.profile.CompilerProfile;
-import info.teksol.mc.profile.RuntimeChecks;
+import info.teksol.mc.profile.RuntimeErrorReporting;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;
 
@@ -101,15 +101,23 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
     // ALL IMPLEMENTATIONS
     ////////////////////////////////////////////////////////////////
 
+    protected int boundsCheckSize() {
+        return profile.isBoundaryChecks() ? profile.getErrorReporting().getSize() : 0;
+    }
+
+    protected int boundsCheckExecutionSteps() {
+        return profile.isBoundaryChecks() ? profile.getErrorReporting().getExecutionSteps() : 0;
+    }
+
     protected void generateBoundsCheck(AstContext astContext, Consumer<LogicInstruction> consumer, LogicValue index, int multiple) {
-        RuntimeChecks boundaryChecks = profile.getBoundaryChecks();
-        if (boundaryChecks == RuntimeChecks.NONE) return;
+        RuntimeErrorReporting errorReporting = profile.getErrorReporting();
+        if (errorReporting == RuntimeErrorReporting.NONE || !profile.isBoundaryChecks()) return;
 
         int maxIndex = arrayStore.getSize() - 1;
         int max = maxIndex * multiple;
         String errorMessage = String.format("%s: index out of bounds (%d to %d)", instruction.sourcePosition().formatForMlog(), 0, maxIndex);
 
-        switch (boundaryChecks) {
+        switch (errorReporting) {
             case ASSERT -> createAssertRuntimeChecks(astContext, consumer, index, max, multiple, errorMessage);
             case MINIMAL -> createMinimalRuntimeCheck(astContext, consumer, index, max);
             case SIMPLE, DESCRIBED -> createSimpleOrDescribedRuntimeCheck(astContext, consumer, index, max, errorMessage);
@@ -253,7 +261,7 @@ public abstract class AbstractArrayConstructor implements ArrayConstructor {
         consumer.accept(processor.createJump(ctx, logicLabelStop, Condition.LESS_THAN, index, LogicNumber.ZERO));
         consumer.accept(processor.createJump(ctx, logicLabelRun, Condition.LESS_THAN_EQ, index, LogicNumber.create(max)));
         consumer.accept(processor.createLabel(ctx, logicLabelStop));
-        if (profile.getBoundaryChecks() == RuntimeChecks.DESCRIBED) {
+        if (profile.getErrorReporting() == RuntimeErrorReporting.DESCRIBED) {
             consumer.accept(processor.createPrint(ctx, LogicString.create(errorMessage)));
         }
         consumer.accept(processor.createStop(ctx));

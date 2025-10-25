@@ -132,9 +132,9 @@ public class MindcodeCompiler extends AbstractMessageEmitter implements AstBuild
         this.targetPhase = targetPhase;
         this.globalProfile = globalProfile;
         this.inputFiles = inputFiles;
-        this.directiveProcessor = new DirectiveProcessor(messageConsumer);
+        this.directiveProcessor = new DirectiveProcessor(messageLogger);
         returnStack = new ReturnStack();
-        stackTracker = new StackTracker(messageConsumer);
+        stackTracker = new StackTracker(messageLogger);
 
         context.set(this);
     }

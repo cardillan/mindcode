@@ -158,6 +158,7 @@ public class FunctionCallsBuilder extends AbstractBuilder implements
         map.put("ascii",            call -> textBuilder.get().handleAscii(call));
         map.put("char",             call -> textBuilder.get().handleChar(call));
         map.put("encode",           call -> textBuilder.get().handleEncode(call));
+        map.put("error",            call -> textBuilder.get().handleError(call));
         map.put("printf",           call -> textBuilder.get().handlePrintf(call));
         map.put("print",            call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINT));
         map.put("println",          call -> textBuilder.get().handleTextOutput(call, BuiltinFunctionTextOutputBuilder.Formatter.PRINTLN));

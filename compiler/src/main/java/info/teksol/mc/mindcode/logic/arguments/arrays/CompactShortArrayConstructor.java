@@ -43,18 +43,18 @@ public class CompactShortArrayConstructor extends RegularShortArrayConstructor {
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         if (useSelects) {
             // It's always a "read" select list, plus one instruction for actual variable access
-            return profile.getBoundaryChecks().getSize() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+            return boundsCheckSize() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
         } else {
-            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 5 : 8);
+            return boundsCheckSize() + (arraySize == 2 ? 5 : 8);
         }
     }
 
     @Override
     public double getExecutionSteps() {
         if (useSelects) {
-            return profile.getBoundaryChecks().getExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
+            return boundsCheckExecutionSteps() + (instruction.isCompactAccessTarget() ? 1 : arraySize);
         } else {
-            return profile.getBoundaryChecks().getSize() + (arraySize == 2 ? 3.5 : (4 + 5 + 4) / 3.0);
+            return boundsCheckExecutionSteps() + (arraySize == 2 ? 3.5 : (4 + 5 + 4) / 3.0);
         }
     }
 

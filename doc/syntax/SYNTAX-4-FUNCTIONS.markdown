@@ -576,6 +576,10 @@ printflush message1
 > [!NOTE]
 > Data encoded with the `encode()` function may not be easily readable in a text editor or the game interface. Some text editors may not be able to display the encoded data correctly, or may even damage the data when copying them to the clipboard. If you suspect this is happening, use the Mlog Watcher mod, or create schematics containing a processor with your code, to avoid the clipboard. 
 
+## The `error()` function
+
+The `error()` function, which can be used to report errors detected at runtime, is described [here](TROUBLESHOOTING.markdown#the-error-function).
+
 ## Remote calls
 
 The built-in functions `async()`, `finished()` and `await()` are part of the Remote Function framework and are described [here](REMOTE-CALLS.markdown#asynchronous-remote-calls).   

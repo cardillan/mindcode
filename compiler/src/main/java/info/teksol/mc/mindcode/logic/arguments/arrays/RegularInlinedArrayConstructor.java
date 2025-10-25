@@ -19,7 +19,7 @@ public abstract class RegularInlinedArrayConstructor extends InlinedArrayConstru
     }
 
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
-        int checkSize = profile.getBoundaryChecks().getSize();
+        int checkSize = boundsCheckSize();
         return folded()
                 ? checkSize + inlinedTableSize() + 1 + 2 * flag(!useTextTables)
                 : checkSize + inlinedTableSize() + 1 + flag(!useTextTables);
@@ -27,7 +27,7 @@ public abstract class RegularInlinedArrayConstructor extends InlinedArrayConstru
 
     @Override
     public double getExecutionSteps() {
-        int checkSteps = profile.getBoundaryChecks().getExecutionSteps();
+        int checkSteps = boundsCheckExecutionSteps();
         return checkSteps + (useTextTables ? 3 : 4 + flag(folded())) - inlinedTableStepsSavings();
     }
 

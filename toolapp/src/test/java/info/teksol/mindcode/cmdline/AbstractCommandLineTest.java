@@ -364,35 +364,35 @@ public abstract class AbstractCommandLineTest {
         }
 
         @Nested
-        class BoundaryArgumentTest {
+        class ErrorReportingArgumentTest {
             @Test
             public void longArgumentNone() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--boundary-checks none");
-                assertEquals(RuntimeChecks.NONE, profile.getBoundaryChecks());
+                CompilerProfile profile = parseToProfile("--error-reporting none");
+                assertEquals(RuntimeErrorReporting.NONE, profile.getErrorReporting());
             }
 
             @Test
             public void longArgumentAssert() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--boundary-checks assert");
-                assertEquals(RuntimeChecks.ASSERT, profile.getBoundaryChecks());
+                CompilerProfile profile = parseToProfile("--error-reporting assert");
+                assertEquals(RuntimeErrorReporting.ASSERT, profile.getErrorReporting());
             }
 
             @Test
             public void longArgumentMinimal() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--boundary-checks minimal");
-                assertEquals(RuntimeChecks.MINIMAL, profile.getBoundaryChecks());
+                CompilerProfile profile = parseToProfile("--error-reporting minimal");
+                assertEquals(RuntimeErrorReporting.MINIMAL, profile.getErrorReporting());
             }
 
             @Test
             public void longArgumentSimple() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--boundary-checks simple");
-                assertEquals(RuntimeChecks.SIMPLE, profile.getBoundaryChecks());
+                CompilerProfile profile = parseToProfile("--error-reporting simple");
+                assertEquals(RuntimeErrorReporting.SIMPLE, profile.getErrorReporting());
             }
 
             @Test
             public void longArgumentDescribed() throws ArgumentParserException {
-                CompilerProfile profile = parseToProfile("--boundary-checks described");
-                assertEquals(RuntimeChecks.DESCRIBED, profile.getBoundaryChecks());
+                CompilerProfile profile = parseToProfile("--error-reporting described");
+                assertEquals(RuntimeErrorReporting.DESCRIBED, profile.getErrorReporting());
             }
         }
 

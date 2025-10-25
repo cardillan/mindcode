@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @NullMarked
-public enum RuntimeChecks {
+public enum RuntimeErrorReporting {
     NONE        (0),
     ASSERT      (1),
     MINIMAL     (2),
@@ -18,7 +18,7 @@ public enum RuntimeChecks {
 
     private final int size;
 
-    RuntimeChecks(int size) {
+    RuntimeErrorReporting(int size) {
         this.size = size;
     }
 
@@ -30,17 +30,17 @@ public enum RuntimeChecks {
         return Math.min(size, 2);
     }
 
-    private static final Map<String, RuntimeChecks> VALUE_MAP = createValueMap();
+    private static final Map<String, RuntimeErrorReporting> VALUE_MAP = createValueMap();
 
-    private static Map<String, RuntimeChecks> createValueMap() {
+    private static Map<String, RuntimeErrorReporting> createValueMap() {
         return EnumUtils.createValueMap(values());
     }
 
-    public static @Nullable RuntimeChecks byName(String level) {
+    public static @Nullable RuntimeErrorReporting byName(String level) {
         return VALUE_MAP.get(level.toLowerCase());
     }
 
-    public static RuntimeChecks byName(String level, RuntimeChecks defaultValue) {
+    public static RuntimeErrorReporting byName(String level, RuntimeErrorReporting defaultValue) {
         return VALUE_MAP.getOrDefault(level.toLowerCase(), defaultValue);
     }
 

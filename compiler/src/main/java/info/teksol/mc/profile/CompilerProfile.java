@@ -241,8 +241,18 @@ public class CompilerProfile implements GlobalCompilerProfile, LocalCompilerProf
         return this;
     }
 
-    public CompilerProfile setBoundaryChecks(RuntimeChecks boundaryChecks) {
+    public CompilerProfile setBoundaryChecks(boolean boundaryChecks) {
         getOption(CompilerOptions.BOUNDARY_CHECKS).setValue(boundaryChecks);
+        return this;
+    }
+
+    public CompilerProfile setErrorFunction(boolean errorFunction) {
+        getOption(CompilerOptions.ERROR_FUNCTION).setValue(errorFunction);
+        return this;
+    }
+
+    public CompilerProfile setErrorReporting(RuntimeErrorReporting errorReporting) {
+        getOption(CompilerOptions.ERROR_REPORTING).setValue(errorReporting);
         return this;
     }
 

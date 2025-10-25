@@ -58,11 +58,11 @@ class DirectivePreprocessorTest extends AbstractCodeGeneratorTest {
     }
 
     @Test
-    void processesDirectiveBoundaryChecks() {
+    void processesDirectiveErrorReporting() {
         CompilerProfile profile = CompilerProfile.noOptimizations(false);
-        profile.setBoundaryChecks(RuntimeChecks.NONE);
-        processDirective(profile, "boundary-checks", "assert");
-        assertEquals(RuntimeChecks.ASSERT, profile.getBoundaryChecks());
+        profile.setErrorReporting(RuntimeErrorReporting.NONE);
+        processDirective(profile, "error-reporting", "assert");
+        assertEquals(RuntimeErrorReporting.ASSERT, profile.getErrorReporting());
     }
 
     @Test

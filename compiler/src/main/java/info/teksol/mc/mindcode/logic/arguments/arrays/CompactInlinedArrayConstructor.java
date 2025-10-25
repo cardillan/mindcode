@@ -39,7 +39,7 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
     public int getInstructionSize(@Nullable Map<String, Integer> sharedStructures) {
         if (skipCompactLookup()) return 1;
 
-        int checkSize = profile.getBoundaryChecks().getSize();
+        int checkSize = boundsCheckSize();
         return folded()
                 ? checkSize + inlinedTableSize() + 4 - 2 * flag(useTextTables)
                 : checkSize + inlinedTableSize() + 3 - flag(useTextTables);
@@ -49,7 +49,7 @@ public class CompactInlinedArrayConstructor extends InlinedArrayConstructor {
     public double getExecutionSteps() {
         if (skipCompactLookup()) return 1;
 
-        int checkSteps = profile.getBoundaryChecks().getExecutionSteps();
+        int checkSteps = boundsCheckExecutionSteps();
         return checkSteps + (useTextTables ? 4 : 5 + flag(folded())) - inlinedTableStepsSavings();
     }
 
